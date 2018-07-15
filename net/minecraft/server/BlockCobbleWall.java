@@ -1,189 +1,89 @@
 package net.minecraft.server;
 
-import java.util.List;
-import javax.annotation.Nullable;
+public class BlockCobbleWall extends BlockTall {
 
-public class BlockCobbleWall extends Block {
+    public static final BlockStateBoolean UP = BlockProperties.A;
+    private final VoxelShape[] v;
+    private final VoxelShape[] w;
 
-    public static final BlockStateBoolean UP = BlockStateBoolean.of("up");
-    public static final BlockStateBoolean NORTH = BlockStateBoolean.of("north");
-    public static final BlockStateBoolean EAST = BlockStateBoolean.of("east");
-    public static final BlockStateBoolean SOUTH = BlockStateBoolean.of("south");
-    public static final BlockStateBoolean WEST = BlockStateBoolean.of("west");
-    public static final BlockStateEnum<BlockCobbleWall.EnumCobbleVariant> VARIANT = BlockStateEnum.of("variant", BlockCobbleWall.EnumCobbleVariant.class);
-    protected static final AxisAlignedBB[] g = new AxisAlignedBB[] { new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.3125D, 0.0D, 0.0D, 0.6875D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.75D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.75D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.25D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.3125D, 1.0D, 0.875D, 0.6875D), new AxisAlignedBB(0.0D, 0.0D, 0.25D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.25D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.75D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
-    protected static final AxisAlignedBB[] B = new AxisAlignedBB[] { BlockCobbleWall.g[0].e(1.5D), BlockCobbleWall.g[1].e(1.5D), BlockCobbleWall.g[2].e(1.5D), BlockCobbleWall.g[3].e(1.5D), BlockCobbleWall.g[4].e(1.5D), BlockCobbleWall.g[5].e(1.5D), BlockCobbleWall.g[6].e(1.5D), BlockCobbleWall.g[7].e(1.5D), BlockCobbleWall.g[8].e(1.5D), BlockCobbleWall.g[9].e(1.5D), BlockCobbleWall.g[10].e(1.5D), BlockCobbleWall.g[11].e(1.5D), BlockCobbleWall.g[12].e(1.5D), BlockCobbleWall.g[13].e(1.5D), BlockCobbleWall.g[14].e(1.5D), BlockCobbleWall.g[15].e(1.5D)};
-
-    public BlockCobbleWall(Block block) {
-        super(block.material);
-        this.w(this.blockStateList.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(false)).set(BlockCobbleWall.NORTH, Boolean.valueOf(false)).set(BlockCobbleWall.EAST, Boolean.valueOf(false)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false)).set(BlockCobbleWall.WEST, Boolean.valueOf(false)).set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.NORMAL));
-        this.c(block.strength);
-        this.b(block.durability / 3.0F);
-        this.a(block.stepSound);
-        this.a(CreativeModeTab.c);
+    public BlockCobbleWall(Block.Info block_info) {
+        super(0.0F, 3.0F, 0.0F, 14.0F, 24.0F, block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCobbleWall.UP, Boolean.valueOf(true))).set(BlockCobbleWall.NORTH, Boolean.valueOf(false))).set(BlockCobbleWall.EAST, Boolean.valueOf(false))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false))).set(BlockCobbleWall.WEST, Boolean.valueOf(false))).set(BlockCobbleWall.q, Boolean.valueOf(false)));
+        this.v = this.a(4.0F, 3.0F, 16.0F, 0.0F, 14.0F);
+        this.w = this.a(4.0F, 3.0F, 24.0F, 0.0F, 24.0F);
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockCobbleWall.g[x(iblockdata)];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.v[this.j(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        if (!flag) {
-            iblockdata = this.updateState(iblockdata, world, blockposition);
-        }
-
-        a(blockposition, axisalignedbb, list, BlockCobbleWall.B[x(iblockdata)]);
+    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.w[this.j(iblockdata)] : super.f(iblockdata, iblockaccess, blockposition);
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
-        return BlockCobbleWall.B[x(iblockdata)];
-    }
-
-    private static int x(IBlockData iblockdata) {
-        int i = 0;
-
-        if (((Boolean) iblockdata.get(BlockCobbleWall.NORTH)).booleanValue()) {
-            i |= 1 << EnumDirection.NORTH.get2DRotationValue();
-        }
-
-        if (((Boolean) iblockdata.get(BlockCobbleWall.EAST)).booleanValue()) {
-            i |= 1 << EnumDirection.EAST.get2DRotationValue();
-        }
-
-        if (((Boolean) iblockdata.get(BlockCobbleWall.SOUTH)).booleanValue()) {
-            i |= 1 << EnumDirection.SOUTH.get2DRotationValue();
-        }
-
-        if (((Boolean) iblockdata.get(BlockCobbleWall.WEST)).booleanValue()) {
-            i |= 1 << EnumDirection.WEST.get2DRotationValue();
-        }
-
-        return i;
-    }
-
-    public String getName() {
-        return LocaleI18n.get(this.a() + "." + BlockCobbleWall.EnumCobbleVariant.NORMAL.c() + ".name");
-    }
-
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return false;
-    }
-
-    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition);
+    private boolean a(IBlockData iblockdata, EnumBlockFaceShape enumblockfaceshape) {
         Block block = iblockdata.getBlock();
-        EnumBlockFaceShape enumblockfaceshape = iblockdata.d(iblockaccess, blockposition, enumdirection);
         boolean flag = enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE_THICK || enumblockfaceshape == EnumBlockFaceShape.MIDDLE_POLE && block instanceof BlockFenceGate;
 
-        return !e(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
+        return !f(block) && enumblockfaceshape == EnumBlockFaceShape.SOLID || flag;
     }
 
-    protected static boolean e(Block block) {
-        return Block.c(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN;
+    public static boolean f(Block block) {
+        return Block.b(block) || block == Blocks.BARRIER || block == Blocks.MELON || block == Blocks.PUMPKIN || block == Blocks.CARVED_PUMPKIN || block == Blocks.JACK_O_LANTERN || block == Blocks.FROSTED_ICE || block == Blocks.TNT;
     }
 
-    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
-        BlockCobbleWall.EnumCobbleVariant[] ablockcobblewall_enumcobblevariant = BlockCobbleWall.EnumCobbleVariant.values();
-        int i = ablockcobblewall_enumcobblevariant.length;
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        World world = blockactioncontext.getWorld();
+        BlockPosition blockposition = blockactioncontext.getClickPosition();
+        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        BlockPosition blockposition1 = blockposition.north();
+        BlockPosition blockposition2 = blockposition.east();
+        BlockPosition blockposition3 = blockposition.south();
+        BlockPosition blockposition4 = blockposition.west();
+        IBlockData iblockdata = world.getType(blockposition1);
+        IBlockData iblockdata1 = world.getType(blockposition2);
+        IBlockData iblockdata2 = world.getType(blockposition3);
+        IBlockData iblockdata3 = world.getType(blockposition4);
+        boolean flag = this.a(iblockdata, iblockdata.c(world, blockposition1, EnumDirection.SOUTH));
+        boolean flag1 = this.a(iblockdata1, iblockdata1.c(world, blockposition2, EnumDirection.WEST));
+        boolean flag2 = this.a(iblockdata2, iblockdata2.c(world, blockposition3, EnumDirection.NORTH));
+        boolean flag3 = this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.EAST));
+        boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
 
-        for (int j = 0; j < i; ++j) {
-            BlockCobbleWall.EnumCobbleVariant blockcobblewall_enumcobblevariant = ablockcobblewall_enumcobblevariant[j];
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(flag4 || !world.isEmpty(blockposition.up())))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag))).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2))).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3))).set(BlockCobbleWall.q, Boolean.valueOf(fluid.c() == FluidTypes.c));
+    }
 
-            nonnulllist.add(new ItemStack(this, 1, blockcobblewall_enumcobblevariant.a()));
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (((Boolean) iblockdata.get(BlockCobbleWall.q)).booleanValue()) {
+            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
+        if (enumdirection == EnumDirection.DOWN) {
+            return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        } else {
+            boolean flag = enumdirection == EnumDirection.NORTH ? this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite())) : ((Boolean) iblockdata.get(BlockCobbleWall.NORTH)).booleanValue();
+            boolean flag1 = enumdirection == EnumDirection.EAST ? this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite())) : ((Boolean) iblockdata.get(BlockCobbleWall.EAST)).booleanValue();
+            boolean flag2 = enumdirection == EnumDirection.SOUTH ? this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite())) : ((Boolean) iblockdata.get(BlockCobbleWall.SOUTH)).booleanValue();
+            boolean flag3 = enumdirection == EnumDirection.WEST ? this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite())) : ((Boolean) iblockdata.get(BlockCobbleWall.WEST)).booleanValue();
+            boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
+
+            return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockCobbleWall.UP, Boolean.valueOf(flag4 || !generatoraccess.isEmpty(blockposition.up())))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag))).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2))).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3));
+        }
     }
 
-    public int getDropData(IBlockData iblockdata) {
-        return ((BlockCobbleWall.EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockCobbleWall.VARIANT, BlockCobbleWall.EnumCobbleVariant.a(i));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((BlockCobbleWall.EnumCobbleVariant) iblockdata.get(BlockCobbleWall.VARIANT)).a();
-    }
-
-    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        boolean flag = this.a(iblockaccess, blockposition.north(), EnumDirection.SOUTH);
-        boolean flag1 = this.a(iblockaccess, blockposition.east(), EnumDirection.WEST);
-        boolean flag2 = this.a(iblockaccess, blockposition.south(), EnumDirection.NORTH);
-        boolean flag3 = this.a(iblockaccess, blockposition.west(), EnumDirection.EAST);
-        boolean flag4 = flag && !flag1 && flag2 && !flag3 || !flag && flag1 && !flag2 && flag3;
-
-        return iblockdata.set(BlockCobbleWall.UP, Boolean.valueOf(!flag4 || !iblockaccess.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag)).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1)).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2)).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3));
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.VARIANT});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.q});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return enumdirection != EnumDirection.UP && enumdirection != EnumDirection.DOWN ? EnumBlockFaceShape.MIDDLE_POLE_THICK : EnumBlockFaceShape.CENTER_BIG;
-    }
-
-    public static enum EnumCobbleVariant implements INamable {
-
-        NORMAL(0, "cobblestone", "normal"), MOSSY(1, "mossy_cobblestone", "mossy");
-
-        private static final BlockCobbleWall.EnumCobbleVariant[] c = new BlockCobbleWall.EnumCobbleVariant[values().length];
-        private final int d;
-        private final String e;
-        private final String f;
-
-        private EnumCobbleVariant(int i, String s, String s1) {
-            this.d = i;
-            this.e = s;
-            this.f = s1;
-        }
-
-        public int a() {
-            return this.d;
-        }
-
-        public String toString() {
-            return this.e;
-        }
-
-        public static BlockCobbleWall.EnumCobbleVariant a(int i) {
-            if (i < 0 || i >= BlockCobbleWall.EnumCobbleVariant.c.length) {
-                i = 0;
-            }
-
-            return BlockCobbleWall.EnumCobbleVariant.c[i];
-        }
-
-        public String getName() {
-            return this.e;
-        }
-
-        public String c() {
-            return this.f;
-        }
-
-        static {
-            BlockCobbleWall.EnumCobbleVariant[] ablockcobblewall_enumcobblevariant = values();
-            int i = ablockcobblewall_enumcobblevariant.length;
-
-            for (int j = 0; j < i; ++j) {
-                BlockCobbleWall.EnumCobbleVariant blockcobblewall_enumcobblevariant = ablockcobblewall_enumcobblevariant[j];
-
-                BlockCobbleWall.EnumCobbleVariant.c[blockcobblewall_enumcobblevariant.a()] = blockcobblewall_enumcobblevariant;
-            }
-
-        }
     }
 }

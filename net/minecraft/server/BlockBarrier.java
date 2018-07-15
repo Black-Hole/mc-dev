@@ -2,21 +2,21 @@ package net.minecraft.server;
 
 public class BlockBarrier extends Block {
 
-    protected BlockBarrier() {
-        super(Material.BANNER);
-        this.j();
-        this.b(6000001.0F);
-        this.p();
-        this.n = true;
+    protected BlockBarrier(Block.Info block_info) {
+        super(block_info);
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
+    public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
+    }
+
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean f(IBlockData iblockdata) {
         return false;
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
 }

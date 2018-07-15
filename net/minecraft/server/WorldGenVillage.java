@@ -1,143 +1,121 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Map.Entry;
 
-public class WorldGenVillage extends StructureGenerator {
+public class WorldGenVillage extends StructureGenerator<WorldGenFeatureVillageConfiguration> {
 
-    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.c, Biomes.d, Biomes.K, Biomes.g});
-    private int b;
-    private int d;
-    private final int h;
-
-    public WorldGenVillage() {
-        this.d = 32;
-        this.h = 8;
-    }
-
-    public WorldGenVillage(Map<String, String> map) {
-        this();
-        Iterator iterator = map.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
-
-            if (((String) entry.getKey()).equals("size")) {
-                this.b = MathHelper.a((String) entry.getValue(), this.b, 0);
-            } else if (((String) entry.getKey()).equals("distance")) {
-                this.d = MathHelper.a((String) entry.getValue(), this.d, 9);
-            }
-        }
-
-    }
+    public WorldGenVillage() {}
 
     public String a() {
         return "Village";
     }
 
-    protected boolean a(int i, int j) {
-        int k = i;
-        int l = j;
-
-        if (i < 0) {
-            i -= this.d - 1;
-        }
-
-        if (j < 0) {
-            j -= this.d - 1;
-        }
-
-        int i1 = i / this.d;
-        int j1 = j / this.d;
-        Random random = this.g.a(i1, j1, 10387312);
-
-        i1 *= this.d;
-        j1 *= this.d;
-        i1 += random.nextInt(this.d - 8);
-        j1 += random.nextInt(this.d - 8);
-        if (k == i1 && l == j1) {
-            boolean flag = this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 0, WorldGenVillage.a);
-
-            if (flag) {
-                return true;
-            }
-        }
-
-        return false;
+    public int b() {
+        return 8;
     }
 
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
-        this.g = world;
-        return a(world, this, blockposition, this.d, 8, 10387312, false, 100, flag);
+    protected boolean a(GeneratorAccess generatoraccess) {
+        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
     }
 
-    protected StructureStart b(int i, int j) {
-        return new WorldGenVillage.WorldGenVillageStart(this.g, this.f, i, j, this.b);
+    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
+        int i1 = chunkgenerator.getSettings().a();
+        int j1 = chunkgenerator.getSettings().b();
+        int k1 = i + i1 * k;
+        int l1 = j + i1 * l;
+        int i2 = k1 < 0 ? k1 - i1 - 1 : k1;
+        int j2 = l1 < 0 ? l1 - i1 - 1 : l1;
+        int k2 = i2 / i1;
+        int l2 = j2 / i1;
+
+        ((SeededRandom) random).a(chunkgenerator.getSeed(), k2, l2, 10387312);
+        k2 *= i1;
+        l2 *= i1;
+        k2 += random.nextInt(i1 - j1);
+        l2 += random.nextInt(i1 - j1);
+        return new ChunkCoordIntPair(k2, l2);
     }
 
-    public static class WorldGenVillageStart extends StructureStart {
+    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
-        private boolean c;
+        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
+            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
 
-        public WorldGenVillageStart() {}
+            return chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.e);
+        } else {
+            return false;
+        }
+    }
 
-        public WorldGenVillageStart(World world, Random random, int i, int j, int k) {
-            super(i, j);
-            List list = WorldGenVillagePieces.a(random, k);
-            WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece = new WorldGenVillagePieces.WorldGenVillageStartPiece(world.getWorldChunkManager(), 0, random, (i << 4) + 2, (j << 4) + 2, list, k);
+    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
+
+        return new WorldGenVillage.a(generatoraccess, chunkgenerator, seededrandom, i, j, biomebase);
+    }
+
+    public static class a extends StructureStart {
+
+        private boolean e;
+
+        public a() {}
+
+        public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
+            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
+            WorldGenFeatureVillageConfiguration worldgenfeaturevillageconfiguration = (WorldGenFeatureVillageConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.e);
+            List list = WorldGenVillagePieces.a(seededrandom, worldgenfeaturevillageconfiguration.a);
+            WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece = new WorldGenVillagePieces.WorldGenVillageStartPiece(0, seededrandom, (i << 4) + 2, (j << 4) + 2, list, worldgenfeaturevillageconfiguration);
 
             this.a.add(worldgenvillagepieces_worldgenvillagestartpiece);
-            worldgenvillagepieces_worldgenvillagestartpiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, random);
-            List list1 = worldgenvillagepieces_worldgenvillagestartpiece.f;
-            List list2 = worldgenvillagepieces_worldgenvillagestartpiece.e;
+            worldgenvillagepieces_worldgenvillagestartpiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, (Random) seededrandom);
+            List list1 = worldgenvillagepieces_worldgenvillagestartpiece.e;
+            List list2 = worldgenvillagepieces_worldgenvillagestartpiece.d;
 
-            int l;
+            int k;
 
             while (!list1.isEmpty() || !list2.isEmpty()) {
                 StructurePiece structurepiece;
 
                 if (list1.isEmpty()) {
-                    l = random.nextInt(list2.size());
-                    structurepiece = (StructurePiece) list2.remove(l);
-                    structurepiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, random);
+                    k = seededrandom.nextInt(list2.size());
+                    structurepiece = (StructurePiece) list2.remove(k);
+                    structurepiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, (Random) seededrandom);
                 } else {
-                    l = random.nextInt(list1.size());
-                    structurepiece = (StructurePiece) list1.remove(l);
-                    structurepiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, random);
+                    k = seededrandom.nextInt(list1.size());
+                    structurepiece = (StructurePiece) list1.remove(k);
+                    structurepiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, (Random) seededrandom);
                 }
             }
 
-            this.d();
-            l = 0;
+            this.a((IBlockAccess) generatoraccess);
+            k = 0;
             Iterator iterator = this.a.iterator();
 
             while (iterator.hasNext()) {
                 StructurePiece structurepiece1 = (StructurePiece) iterator.next();
 
                 if (!(structurepiece1 instanceof WorldGenVillagePieces.WorldGenVillageRoadPiece)) {
-                    ++l;
+                    ++k;
                 }
             }
 
-            this.c = l > 2;
+            this.e = k > 2;
         }
 
-        public boolean a() {
-            return this.c;
+        public boolean b() {
+            return this.e;
         }
 
         public void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
-            nbttagcompound.setBoolean("Valid", this.c);
+            nbttagcompound.setBoolean("Valid", this.e);
         }
 
         public void b(NBTTagCompound nbttagcompound) {
             super.b(nbttagcompound);
-            this.c = nbttagcompound.getBoolean("Valid");
+            this.e = nbttagcompound.getBoolean("Valid");
         }
     }
 }

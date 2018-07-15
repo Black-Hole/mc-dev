@@ -4,7 +4,6 @@ public class EnchantmentDigging extends Enchantment {
 
     protected EnchantmentDigging(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.DIGGER, aenumitemslot);
-        this.c("digging");
     }
 
     public int a(int i) {

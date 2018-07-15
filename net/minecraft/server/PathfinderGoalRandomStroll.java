@@ -25,7 +25,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.bW() >= 100) {
+            if (this.a.ci() >= 100) {
                 return false;
             }
 
@@ -34,7 +34,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
             }
         }
 
-        Vec3D vec3d = this.f();
+        Vec3D vec3d = this.g();
 
         if (vec3d == null) {
             return false;
@@ -48,12 +48,12 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
     }
 
     @Nullable
-    protected Vec3D f() {
+    protected Vec3D g() {
         return RandomPositionGenerator.a(this.a, 10, 7);
     }
 
     public boolean b() {
-        return !this.a.getNavigation().o();
+        return !this.a.getNavigation().q();
     }
 
     public void c() {

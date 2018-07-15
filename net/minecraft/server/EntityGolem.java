@@ -4,14 +4,14 @@ import javax.annotation.Nullable;
 
 public abstract class EntityGolem extends EntityCreature implements IAnimal {
 
-    public EntityGolem(World world) {
-        super(world);
+    protected EntityGolem(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    public void e(float f, float f1) {}
+    public void c(float f, float f1) {}
 
     @Nullable
-    protected SoundEffect F() {
+    protected SoundEffect D() {
         return null;
     }
 
@@ -21,11 +21,11 @@ public abstract class EntityGolem extends EntityCreature implements IAnimal {
     }
 
     @Nullable
-    protected SoundEffect cf() {
+    protected SoundEffect cr() {
         return null;
     }
 
-    public int C() {
+    public int z() {
         return 120;
     }
 

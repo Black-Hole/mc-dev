@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
@@ -13,27 +12,16 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class PlayerChunkMap {
 
-    private static final Predicate<EntityPlayer> a = new Predicate() {
-        public boolean a(@Nullable EntityPlayer entityplayer) {
-            return entityplayer != null && !entityplayer.isSpectator();
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((EntityPlayer) object);
-        }
+    private static final Predicate<EntityPlayer> a = (entityplayer) -> {
+        return entityplayer != null && !entityplayer.isSpectator();
     };
-    private static final Predicate<EntityPlayer> b = new Predicate() {
-        public boolean a(@Nullable EntityPlayer entityplayer) {
-            return entityplayer != null && (!entityplayer.isSpectator() || entityplayer.x().getGameRules().getBoolean("spectatorsGenerateChunks"));
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((EntityPlayer) object);
-        }
+    private static final Predicate<EntityPlayer> b = (entityplayer) -> {
+        return entityplayer != null && (!entityplayer.isSpectator() || entityplayer.getWorldServer().getGameRules().getBoolean("spectatorsGenerateChunks"));
     };
     private final WorldServer world;
     private final List<EntityPlayer> managedPlayers = Lists.newArrayList();
@@ -70,11 +58,7 @@ public class PlayerChunkMap {
                             continue;
                         }
 
-                        if (!chunk.v() && chunk.isDone()) {
-                            return chunk;
-                        }
-
-                        if (!chunk.j()) {
+                        if (!chunk.v()) {
                             return chunk;
                         }
 
@@ -123,32 +107,20 @@ public class PlayerChunkMap {
 
         if (this.l && i % 4L == 0L) {
             this.l = false;
-            Collections.sort(this.h, new Comparator() {
-                public int a(PlayerChunk playerchunk, PlayerChunk playerchunk1) {
-                    return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
-                }
-
-                public int compare(Object object, Object object1) {
-                    return this.a((PlayerChunk) object, (PlayerChunk) object1);
-                }
+            Collections.sort(this.h, (playerchunk, playerchunk1) -> {
+                return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
             });
         }
 
         if (this.m && i % 4L == 2L) {
             this.m = false;
-            Collections.sort(this.g, new Comparator() {
-                public int a(PlayerChunk playerchunk, PlayerChunk playerchunk1) {
-                    return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
-                }
-
-                public int compare(Object object, Object object1) {
-                    return this.a((PlayerChunk) object, (PlayerChunk) object1);
-                }
+            Collections.sort(this.g, (playerchunk, playerchunk1) -> {
+                return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
             });
         }
 
         if (!this.h.isEmpty()) {
-            long k = System.nanoTime() + 50000000L;
+            long k = SystemUtils.c() + 50000000L;
             int l = 49;
             Iterator iterator1 = this.h.iterator();
 
@@ -165,7 +137,7 @@ public class PlayerChunkMap {
                         }
 
                         --l;
-                        if (l < 0 || System.nanoTime() > k) {
+                        if (l < 0 || SystemUtils.c() > k) {
                             break;
                         }
                     }
@@ -193,7 +165,7 @@ public class PlayerChunkMap {
         if (this.managedPlayers.isEmpty()) {
             WorldProvider worldprovider = this.world.worldProvider;
 
-            if (!worldprovider.e()) {
+            if (!worldprovider.p()) {
                 this.world.getChunkProviderServer().b();
             }
         }

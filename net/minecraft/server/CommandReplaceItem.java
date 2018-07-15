@@ -1,182 +1,91 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class CommandReplaceItem extends CommandAbstract {
+public class CommandReplaceItem {
 
-    private static final Map<String, Integer> a = Maps.newHashMap();
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.replaceitem.block.failed", new Object[0]));
+    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("commands.replaceitem.slot.inapplicable", new Object[] { object});
+    });
+    private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
+        return new ChatMessage("commands.replaceitem.entity.failed", new Object[] { object, object1});
+    });
 
-    public CommandReplaceItem() {}
-
-    public String getCommand() {
-        return "replaceitem";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("replaceitem").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("slot", (ArgumentType) ArgumentInventorySlot.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("item", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(1, false));
+        })).then(CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(1, 64)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(IntegerArgumentType.getInteger(commandcontext, "count"), true));
+        }))))))).then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("slot", (ArgumentType) ArgumentInventorySlot.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("item", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(1, false));
+        })).then(CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(1, 64)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(IntegerArgumentType.getInteger(commandcontext, "count"), true));
+        })))))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition, int i, ItemStack itemstack) throws CommandSyntaxException {
+        TileEntity tileentity = commandlistenerwrapper.getWorld().getTileEntity(blockposition);
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.replaceitem.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 1) {
-            throw new ExceptionUsage("commands.replaceitem.usage", new Object[0]);
+        if (!(tileentity instanceof IInventory)) {
+            throw CommandReplaceItem.a.create();
         } else {
-            boolean flag;
+            IInventory iinventory = (IInventory) tileentity;
 
-            if ("entity".equals(astring[0])) {
-                flag = false;
+            if (i >= 0 && i < iinventory.getSize()) {
+                iinventory.setItem(i, itemstack);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), itemstack.A()}), true);
+                return 1;
             } else {
-                if (!"block".equals(astring[0])) {
-                    throw new ExceptionUsage("commands.replaceitem.usage", new Object[0]);
-                }
-
-                flag = true;
+                throw CommandReplaceItem.b.create(Integer.valueOf(i));
             }
-
-            byte b0;
-
-            if (flag) {
-                if (astring.length < 6) {
-                    throw new ExceptionUsage("commands.replaceitem.block.usage", new Object[0]);
-                }
-
-                b0 = 4;
-            } else {
-                if (astring.length < 4) {
-                    throw new ExceptionUsage("commands.replaceitem.entity.usage", new Object[0]);
-                }
-
-                b0 = 2;
-            }
-
-            String s = astring[b0];
-            int i = b0 + 1;
-            int j = this.e(astring[b0]);
-
-            Item item;
-
-            try {
-                item = a(icommandlistener, astring[i]);
-            } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
-                if (Block.getByName(astring[i]) != Blocks.AIR) {
-                    throw exceptioninvalidnumber;
-                }
-
-                item = null;
-            }
-
-            ++i;
-            int k = astring.length > i ? a(astring[i++], 1, item.getMaxStackSize()) : 1;
-            int l = astring.length > i ? a(astring[i++]) : 0;
-            ItemStack itemstack = new ItemStack(item, k, l);
-
-            if (astring.length > i) {
-                String s1 = a(astring, i);
-
-                try {
-                    itemstack.setTag(MojangsonParser.parse(s1));
-                } catch (MojangsonParseException mojangsonparseexception) {
-                    throw new CommandException("commands.replaceitem.tagError", new Object[] { mojangsonparseexception.getMessage()});
-                }
-            }
-
-            if (flag) {
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
-                BlockPosition blockposition = a(icommandlistener, astring, 1, false);
-                World world = icommandlistener.getWorld();
-                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                if (tileentity == null || !(tileentity instanceof IInventory)) {
-                    throw new CommandException("commands.replaceitem.noContainer", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
-                }
-
-                IInventory iinventory = (IInventory) tileentity;
-
-                if (j >= 0 && j < iinventory.getSize()) {
-                    iinventory.setItem(j, itemstack);
-                }
-            } else {
-                Entity entity = c(minecraftserver, icommandlistener, astring[1]);
-
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, 0);
-                if (entity instanceof EntityHuman) {
-                    ((EntityHuman) entity).defaultContainer.b();
-                }
-
-                if (!entity.c(j, itemstack)) {
-                    throw new CommandException("commands.replaceitem.failed", new Object[] { s, Integer.valueOf(k), itemstack.isEmpty() ? "Air" : itemstack.C()});
-                }
-
-                if (entity instanceof EntityHuman) {
-                    ((EntityHuman) entity).defaultContainer.b();
-                }
-            }
-
-            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, k);
-            a(icommandlistener, (ICommand) this, "commands.replaceitem.success", new Object[] { s, Integer.valueOf(k), itemstack.isEmpty() ? "Air" : itemstack.C()});
         }
     }
 
-    private int e(String s) throws CommandException {
-        if (!CommandReplaceItem.a.containsKey(s)) {
-            throw new CommandException("commands.generic.parameter.invalid", new Object[] { s});
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, int i, ItemStack itemstack) throws CommandSyntaxException {
+        int j = 0;
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+
+            if (entity instanceof EntityPlayer) {
+                ((EntityPlayer) entity).defaultContainer.b();
+            }
+
+            if (entity.c(i, itemstack.cloneItemStack())) {
+                ++j;
+                if (entity instanceof EntityPlayer) {
+                    ((EntityPlayer) entity).defaultContainer.b();
+                }
+            }
+        }
+
+        if (j == 0) {
+            throw CommandReplaceItem.c.create(itemstack.A(), Integer.valueOf(i));
         } else {
-            return ((Integer) CommandReplaceItem.a.get(s)).intValue();
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), itemstack.A()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { Integer.valueOf(collection.size()), itemstack.A()}), true);
+            }
+
+            return j;
         }
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "entity", "block"}) : (astring.length == 2 && "entity".equals(astring[0]) ? a(astring, minecraftserver.getPlayers()) : (astring.length >= 2 && astring.length <= 4 && "block".equals(astring[0]) ? a(astring, 1, blockposition) : ((astring.length != 3 || !"entity".equals(astring[0])) && (astring.length != 5 || !"block".equals(astring[0])) ? ((astring.length != 4 || !"entity".equals(astring[0])) && (astring.length != 6 || !"block".equals(astring[0])) ? Collections.emptyList() : a(astring, (Collection) Item.REGISTRY.keySet())) : a(astring, (Collection) CommandReplaceItem.a.keySet()))));
-    }
-
-    public boolean isListStart(String[] astring, int i) {
-        return astring.length > 0 && "entity".equals(astring[0]) && i == 1;
-    }
-
-    static {
-        int i;
-
-        for (i = 0; i < 54; ++i) {
-            CommandReplaceItem.a.put("slot.container." + i, Integer.valueOf(i));
-        }
-
-        for (i = 0; i < 9; ++i) {
-            CommandReplaceItem.a.put("slot.hotbar." + i, Integer.valueOf(i));
-        }
-
-        for (i = 0; i < 27; ++i) {
-            CommandReplaceItem.a.put("slot.inventory." + i, Integer.valueOf(9 + i));
-        }
-
-        for (i = 0; i < 27; ++i) {
-            CommandReplaceItem.a.put("slot.enderchest." + i, Integer.valueOf(200 + i));
-        }
-
-        for (i = 0; i < 8; ++i) {
-            CommandReplaceItem.a.put("slot.villager." + i, Integer.valueOf(300 + i));
-        }
-
-        for (i = 0; i < 15; ++i) {
-            CommandReplaceItem.a.put("slot.horse." + i, Integer.valueOf(500 + i));
-        }
-
-        CommandReplaceItem.a.put("slot.weapon", Integer.valueOf(98));
-        CommandReplaceItem.a.put("slot.weapon.mainhand", Integer.valueOf(98));
-        CommandReplaceItem.a.put("slot.weapon.offhand", Integer.valueOf(99));
-        CommandReplaceItem.a.put("slot.armor.head", Integer.valueOf(100 + EnumItemSlot.HEAD.b()));
-        CommandReplaceItem.a.put("slot.armor.chest", Integer.valueOf(100 + EnumItemSlot.CHEST.b()));
-        CommandReplaceItem.a.put("slot.armor.legs", Integer.valueOf(100 + EnumItemSlot.LEGS.b()));
-        CommandReplaceItem.a.put("slot.armor.feet", Integer.valueOf(100 + EnumItemSlot.FEET.b()));
-        CommandReplaceItem.a.put("slot.horse.saddle", Integer.valueOf(400));
-        CommandReplaceItem.a.put("slot.horse.armor", Integer.valueOf(401));
-        CommandReplaceItem.a.put("slot.horse.chest", Integer.valueOf(499));
     }
 }

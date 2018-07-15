@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public class PathfinderGoalOcelotAttack extends PathfinderGoal {
 
-    World a;
-    EntityInsentient b;
-    EntityLiving c;
-    int d;
+    private final IBlockAccess a;
+    private final EntityInsentient b;
+    private EntityLiving c;
+    private int d;
 
     public PathfinderGoalOcelotAttack(EntityInsentient entityinsentient) {
         this.b = entityinsentient;
@@ -25,12 +25,12 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.c.isAlive() ? false : (this.b.h(this.c) > 225.0D ? false : !this.b.getNavigation().o() || this.a());
+        return !this.c.isAlive() ? false : (this.b.h(this.c) > 225.0D ? false : !this.b.getNavigation().q() || this.a());
     }
 
     public void d() {
         this.c = null;
-        this.b.getNavigation().p();
+        this.b.getNavigation().r();
     }
 
     public void e() {

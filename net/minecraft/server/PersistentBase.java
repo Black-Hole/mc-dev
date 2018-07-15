@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public abstract class PersistentBase {
 
-    public final String id;
+    private final String id;
     private boolean b;
 
     public PersistentBase(String s) {
@@ -23,5 +23,9 @@ public abstract class PersistentBase {
 
     public boolean d() {
         return this.b;
+    }
+
+    public String getId() {
+        return this.id;
     }
 }

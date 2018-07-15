@@ -49,9 +49,9 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
     }
 
     public CriterionTriggerUsedEnderEye.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("distance"));
+        CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject.get("distance"));
 
-        return new CriterionTriggerUsedEnderEye.b(criterionconditionvalue);
+        return new CriterionTriggerUsedEnderEye.b(criterionconditionvalue_c);
     }
 
     public void a(EntityPlayer entityplayer, BlockPosition blockposition) {
@@ -122,11 +122,11 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue a;
+        private final CriterionConditionValue.c a;
 
-        public b(CriterionConditionValue criterionconditionvalue) {
+        public b(CriterionConditionValue.c criterionconditionvalue_c) {
             super(CriterionTriggerUsedEnderEye.a);
-            this.a = criterionconditionvalue;
+            this.a = criterionconditionvalue_c;
         }
 
         public boolean a(double d0) {

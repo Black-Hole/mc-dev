@@ -25,6 +25,7 @@ public class NonNullList<E> extends AbstractList<E> {
         return new NonNullList(Arrays.asList(aobject), e0);
     }
 
+    @SafeVarargs
     public static <E> NonNullList<E> a(E e0, E... ae) {
         return new NonNullList(Arrays.asList(ae), e0);
     }

@@ -1,131 +1,253 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
+import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.AmbiguityConsumer;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.ResultConsumer;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.RootCommandNode;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class CommandDispatcher extends CommandHandler implements ICommandDispatcher {
+public class CommandDispatcher {
 
-    private final MinecraftServer a;
+    private static final Logger a = LogManager.getLogger();
+    private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> b = new com.mojang.brigadier.CommandDispatcher();
 
-    public CommandDispatcher(MinecraftServer minecraftserver) {
-        this.a = minecraftserver;
-        this.a((ICommand) (new CommandTime()));
-        this.a((ICommand) (new CommandGamemode()));
-        this.a((ICommand) (new CommandDifficulty()));
-        this.a((ICommand) (new CommandGamemodeDefault()));
-        this.a((ICommand) (new CommandKill()));
-        this.a((ICommand) (new CommandToggleDownfall()));
-        this.a((ICommand) (new CommandWeather()));
-        this.a((ICommand) (new CommandXp()));
-        this.a((ICommand) (new CommandTp()));
-        this.a((ICommand) (new CommandTeleport()));
-        this.a((ICommand) (new CommandGive()));
-        this.a((ICommand) (new CommandReplaceItem()));
-        this.a((ICommand) (new CommandStats()));
-        this.a((ICommand) (new CommandEffect()));
-        this.a((ICommand) (new CommandEnchant()));
-        this.a((ICommand) (new CommandParticle()));
-        this.a((ICommand) (new CommandMe()));
-        this.a((ICommand) (new CommandSeed()));
-        this.a((ICommand) (new CommandHelp()));
-        this.a((ICommand) (new CommandDebug()));
-        this.a((ICommand) (new CommandTell()));
-        this.a((ICommand) (new CommandSay()));
-        this.a((ICommand) (new CommandSpawnpoint()));
-        this.a((ICommand) (new CommandSetWorldSpawn()));
-        this.a((ICommand) (new CommandGamerule()));
-        this.a((ICommand) (new CommandClear()));
-        this.a((ICommand) (new CommandTestFor()));
-        this.a((ICommand) (new CommandSpreadPlayers()));
-        this.a((ICommand) (new CommandPlaySound()));
-        this.a((ICommand) (new CommandScoreboard()));
-        this.a((ICommand) (new CommandExecute()));
-        this.a((ICommand) (new CommandTrigger()));
-        this.a((ICommand) (new CommandAdvancement()));
-        this.a((ICommand) (new CommandRecipe()));
-        this.a((ICommand) (new CommandSummon()));
-        this.a((ICommand) (new CommandSetBlock()));
-        this.a((ICommand) (new CommandFill()));
-        this.a((ICommand) (new CommandClone()));
-        this.a((ICommand) (new CommandTestForBlocks()));
-        this.a((ICommand) (new CommandBlockData()));
-        this.a((ICommand) (new CommandTestForBlock()));
-        this.a((ICommand) (new CommandTellRaw()));
-        this.a((ICommand) (new CommandWorldBorder()));
-        this.a((ICommand) (new CommandTitle()));
-        this.a((ICommand) (new CommandEntityData()));
-        this.a((ICommand) (new CommandStopSound()));
-        this.a((ICommand) (new CommandLocate()));
-        this.a((ICommand) (new CommandReload()));
-        this.a((ICommand) (new CommandFunction()));
-        if (minecraftserver.aa()) {
-            this.a((ICommand) (new CommandOp()));
-            this.a((ICommand) (new CommandDeop()));
-            this.a((ICommand) (new CommandStop()));
-            this.a((ICommand) (new CommandSaveAll()));
-            this.a((ICommand) (new CommandSaveOff()));
-            this.a((ICommand) (new CommandSaveOn()));
-            this.a((ICommand) (new CommandBanIp()));
-            this.a((ICommand) (new CommandPardonIP()));
-            this.a((ICommand) (new CommandBan()));
-            this.a((ICommand) (new CommandBanList()));
-            this.a((ICommand) (new CommandPardon()));
-            this.a((ICommand) (new CommandKick()));
-            this.a((ICommand) (new CommandList()));
-            this.a((ICommand) (new CommandWhitelist()));
-            this.a((ICommand) (new CommandIdleTimeout()));
-        } else {
-            this.a((ICommand) (new CommandPublish()));
+    public CommandDispatcher(boolean flag) {
+        CommandAdvancement.a(this.b);
+        CommandExecute.a(this.b);
+        CommmandBossBar.a(this.b);
+        CommandClear.a(this.b);
+        CommandClone.a(this.b);
+        CommandData.a(this.b);
+        CommandDatapack.a(this.b);
+        CommandDebug.a(this.b);
+        CommandGamemodeDefault.a(this.b);
+        CommandDifficulty.a(this.b);
+        CommandEffect.a(this.b);
+        CommandMe.a(this.b);
+        CommandEnchant.a(this.b);
+        CommandXp.a(this.b);
+        CommandFill.a(this.b);
+        CommandFunction.a(this.b);
+        CommandGamemode.a(this.b);
+        CommandGamerule.a(this.b);
+        CommandGive.a(this.b);
+        CommandHelp.a(this.b);
+        CommandKick.a(this.b);
+        CommandKill.a(this.b);
+        CommandList.a(this.b);
+        CommandLocate.a(this.b);
+        CommandTell.a(this.b);
+        CommandParticle.a(this.b);
+        CommandPlaySound.a(this.b);
+        CommandPublish.a(this.b);
+        CommandReload.a(this.b);
+        CommandRecipe.a(this.b);
+        CommandReplaceItem.a(this.b);
+        CommandSay.a(this.b);
+        CommandScoreboard.a(this.b);
+        CommandSeed.a(this.b);
+        CommandSetBlock.a(this.b);
+        CommandSpawnpoint.a(this.b);
+        CommandSetWorldSpawn.a(this.b);
+        CommandSpreadPlayers.a(this.b);
+        CommandStopSound.a(this.b);
+        CommandSummon.a(this.b);
+        CommandTag.a(this.b);
+        CommandTeam.a(this.b);
+        CommandTeleport.a(this.b);
+        CommandTellRaw.a(this.b);
+        CommandTime.a(this.b);
+        CommandTitle.a(this.b);
+        CommandTrigger.a(this.b);
+        CommandWeather.a(this.b);
+        CommandWorldBorder.a(this.b);
+        if (flag) {
+            CommandBanIp.a(this.b);
+            CommandBanList.a(this.b);
+            CommandBan.a(this.b);
+            CommandDeop.a(this.b);
+            CommandOp.a(this.b);
+            CommandPardon.a(this.b);
+            CommandPardonIP.a(this.b);
+            CommandSaveAll.a(this.b);
+            CommandSaveOff.a(this.b);
+            CommandSaveOn.a(this.b);
+            CommandIdleTimeout.a(this.b);
+            CommandStop.a(this.b);
+            CommandWhitelist.a(this.b);
         }
 
-        CommandAbstract.a((ICommandDispatcher) this);
+        this.b.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
+            CommandDispatcher.a.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
+        });
+        this.b.setConsumer((commandcontext, flag, i) -> {
+            ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag, i);
+        });
     }
 
-    public void a(ICommandListener icommandlistener, ICommand icommand, int i, String s, Object... aobject) {
-        boolean flag = true;
-        MinecraftServer minecraftserver = this.a;
-
-        if (!icommandlistener.getSendCommandFeedback()) {
-            flag = false;
+    public void a(File file) {
+        try {
+            Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(this.b, (CommandNode) this.b.getRoot())), file, StandardCharsets.UTF_8);
+        } catch (IOException ioexception) {
+            CommandDispatcher.a.error("Couldn\'t write out command tree!", ioexception);
         }
 
-        ChatMessage chatmessage = new ChatMessage("chat.type.admin", new Object[] { icommandlistener.getName(), new ChatMessage(s, aobject)});
+    }
 
-        chatmessage.getChatModifier().setColor(EnumChatFormat.GRAY);
-        chatmessage.getChatModifier().setItalic(Boolean.valueOf(true));
-        if (flag) {
-            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
+    public int a(CommandListenerWrapper commandlistenerwrapper, String s) {
+        String s1 = s;
 
-            while (iterator.hasNext()) {
-                EntityHuman entityhuman = (EntityHuman) iterator.next();
+        if (s.startsWith("/")) {
+            s = s.substring(1);
+        }
 
-                if (entityhuman != icommandlistener && minecraftserver.getPlayerList().isOp(entityhuman.getProfile()) && icommand.canUse(this.a, icommandlistener)) {
-                    boolean flag1 = icommandlistener instanceof MinecraftServer && this.a.s();
-                    boolean flag2 = icommandlistener instanceof RemoteControlCommandListener && this.a.r();
+        commandlistenerwrapper.getServer().methodProfiler.a(s);
 
-                    if (flag1 || flag2 || !(icommandlistener instanceof RemoteControlCommandListener) && !(icommandlistener instanceof MinecraftServer)) {
-                        entityhuman.sendMessage(chatmessage);
+        byte b0;
+
+        try {
+            byte b1;
+            ChatComponentText chatcomponenttext;
+
+            try {
+                int i = this.b.execute(s, commandlistenerwrapper);
+
+                return i;
+            } catch (CommandException commandexception) {
+                commandlistenerwrapper.sendFailureMessage(commandexception.a());
+                b1 = 0;
+                return b1;
+            } catch (CommandSyntaxException commandsyntaxexception) {
+                commandlistenerwrapper.sendFailureMessage(ChatComponentUtils.a(commandsyntaxexception.getRawMessage()));
+                if (commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
+                    int j = Math.min(commandsyntaxexception.getInput().length(), commandsyntaxexception.getCursor());
+                    IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).a(EnumChatFormat.GRAY).a((chatmodifier) -> {
+                        chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, s));
+                    });
+
+                    if (j > 10) {
+                        ichatbasecomponent.a("...");
                     }
+
+                    ichatbasecomponent.a(commandsyntaxexception.getInput().substring(Math.max(0, j - 10), j));
+                    if (j < commandsyntaxexception.getInput().length()) {
+                        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
+
+                        ichatbasecomponent.addSibling(ichatbasecomponent1);
+                    }
+
+                    ichatbasecomponent.addSibling((new ChatMessage("command.context.here", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}));
+                    commandlistenerwrapper.sendFailureMessage(ichatbasecomponent);
+                }
+
+                b1 = 0;
+                return b1;
+            } catch (Exception exception) {
+                chatcomponenttext = new ChatComponentText;
+            }
+
+            chatcomponenttext.<init>(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
+            ChatComponentText chatcomponenttext1 = chatcomponenttext;
+
+            if (CommandDispatcher.a.isDebugEnabled()) {
+                StackTraceElement[] astacktraceelement = exception.getStackTrace();
+
+                for (int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
+                    chatcomponenttext1.a("\n\n").a(astacktraceelement[k].getMethodName()).a("\n ").a(astacktraceelement[k].getFileName()).a(":").a(String.valueOf(astacktraceelement[k].getLineNumber()));
+                }
+            }
+
+            commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
+                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
+            }));
+            b0 = 0;
+        } finally {
+            commandlistenerwrapper.getServer().methodProfiler.e();
+        }
+
+        return b0;
+    }
+
+    public void a(EntityPlayer entityplayer) {
+        HashMap hashmap = Maps.newHashMap();
+        RootCommandNode rootcommandnode = new RootCommandNode();
+
+        hashmap.put(this.b.getRoot(), rootcommandnode);
+        this.a(this.b.getRoot(), rootcommandnode, entityplayer.getCommandListener(), (Map) hashmap);
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutCommands(rootcommandnode));
+    }
+
+    private void a(CommandNode<CommandListenerWrapper> commandnode, CommandNode<ICompletionProvider> commandnode1, CommandListenerWrapper commandlistenerwrapper, Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> map) {
+        Iterator iterator = commandnode.getChildren().iterator();
+
+        while (iterator.hasNext()) {
+            CommandNode commandnode2 = (CommandNode) iterator.next();
+
+            if (commandnode2.canUse(commandlistenerwrapper)) {
+                ArgumentBuilder argumentbuilder = commandnode2.createBuilder();
+
+                argumentbuilder.requires((icompletionprovider) -> {
+                    return true;
+                });
+                if (argumentbuilder.getCommand() != null) {
+                    argumentbuilder.executes((commandcontext) -> {
+                        return 0;
+                    });
+                }
+
+                if (argumentbuilder instanceof RequiredArgumentBuilder) {
+                    RequiredArgumentBuilder requiredargumentbuilder = (RequiredArgumentBuilder) argumentbuilder;
+
+                    if (requiredargumentbuilder.getSuggestionsProvider() != null) {
+                        requiredargumentbuilder.suggests(CompletionProviders.b(requiredargumentbuilder.getSuggestionsProvider()));
+                    }
+                }
+
+                if (argumentbuilder.getRedirect() != null) {
+                    argumentbuilder.redirect((CommandNode) map.get(argumentbuilder.getRedirect()));
+                }
+
+                CommandNode commandnode3 = argumentbuilder.build();
+
+                map.put(commandnode2, commandnode3);
+                commandnode1.addChild(commandnode3);
+                if (!commandnode2.getChildren().isEmpty()) {
+                    this.a(commandnode2, commandnode3, commandlistenerwrapper, map);
                 }
             }
         }
 
-        if (icommandlistener != minecraftserver && minecraftserver.worldServer[0].getGameRules().getBoolean("logAdminCommands")) {
-            minecraftserver.sendMessage(chatmessage);
-        }
-
-        boolean flag3 = minecraftserver.worldServer[0].getGameRules().getBoolean("sendCommandFeedback");
-
-        if (icommandlistener instanceof CommandBlockListenerAbstract) {
-            flag3 = ((CommandBlockListenerAbstract) icommandlistener).n();
-        }
-
-        if ((i & 1) != 1 && flag3 || icommandlistener instanceof MinecraftServer) {
-            icommandlistener.sendMessage(new ChatMessage(s, aobject));
-        }
-
     }
 
-    protected MinecraftServer a() {
-        return this.a;
+    public static LiteralArgumentBuilder<CommandListenerWrapper> a(String s) {
+        return LiteralArgumentBuilder.literal(s);
+    }
+
+    public static <T> RequiredArgumentBuilder<CommandListenerWrapper, T> a(String s, ArgumentType<T> argumenttype) {
+        return RequiredArgumentBuilder.argument(s, argumenttype);
+    }
+
+    public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> a() {
+        return this.b;
     }
 }

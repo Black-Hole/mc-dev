@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ChatHoverable {
 
@@ -31,14 +33,14 @@ public class ChatHoverable {
                 return false;
             } else {
                 if (this.b != null) {
-                    if (!this.b.equals(chathoverable.b)) {
-                        return false;
+                    if (this.b.equals(chathoverable.b)) {
+                        return true;
                     }
-                } else if (chathoverable.b != null) {
-                    return false;
+                } else if (chathoverable.b == null) {
+                    return true;
                 }
 
-                return true;
+                return false;
             }
         } else {
             return false;
@@ -60,7 +62,9 @@ public class ChatHoverable {
 
         SHOW_TEXT("show_text", true), SHOW_ITEM("show_item", true), SHOW_ENTITY("show_entity", true);
 
-        private static final Map<String, ChatHoverable.EnumHoverAction> d = Maps.newHashMap();
+        private static final Map<String, ChatHoverable.EnumHoverAction> d = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatHoverable.EnumHoverAction::b, (chathoverable_enumhoveraction) -> {
+            return chathoverable_enumhoveraction;
+        }));
         private final boolean e;
         private final String f;
 
@@ -79,18 +83,6 @@ public class ChatHoverable {
 
         public static ChatHoverable.EnumHoverAction a(String s) {
             return (ChatHoverable.EnumHoverAction) ChatHoverable.EnumHoverAction.d.get(s);
-        }
-
-        static {
-            ChatHoverable.EnumHoverAction[] achathoverable_enumhoveraction = values();
-            int i = achathoverable_enumhoveraction.length;
-
-            for (int j = 0; j < i; ++j) {
-                ChatHoverable.EnumHoverAction chathoverable_enumhoveraction = achathoverable_enumhoveraction[j];
-
-                ChatHoverable.EnumHoverAction.d.put(chathoverable_enumhoveraction.b(), chathoverable_enumhoveraction);
-            }
-
         }
     }
 }

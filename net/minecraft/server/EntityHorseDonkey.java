@@ -5,35 +5,31 @@ import javax.annotation.Nullable;
 public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
     public EntityHorseDonkey(World world) {
-        super(world);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityHorseChestedAbstract.b(dataconvertermanager, EntityHorseDonkey.class);
+        super(EntityTypes.DONKEY, world);
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.H;
+    protected MinecraftKey G() {
+        return LootTables.O;
     }
 
-    protected SoundEffect F() {
-        super.F();
-        return SoundEffects.aC;
+    protected SoundEffect D() {
+        super.D();
+        return SoundEffects.ENTITY_DONKEY_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        super.cf();
-        return SoundEffects.aF;
+    protected SoundEffect cr() {
+        super.cr();
+        return SoundEffects.ENTITY_DONKEY_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         super.d(damagesource);
-        return SoundEffects.aG;
+        return SoundEffects.ENTITY_DONKEY_HURT;
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.dL() && ((EntityHorseAbstract) entityanimal).dL());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.eb() && ((EntityHorseAbstract) entityanimal).eb());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

@@ -14,10 +14,10 @@ public class PathfinderGoalPerch extends PathfinderGoal {
         EntityLiving entityliving = this.a.getOwner();
         boolean flag = entityliving != null && !((EntityHuman) entityliving).isSpectator() && !((EntityHuman) entityliving).abilities.isFlying && !entityliving.isInWater();
 
-        return !this.a.isSitting() && flag && this.a.dw();
+        return !this.a.isSitting() && flag && this.a.dK();
     }
 
-    public boolean g() {
+    public boolean f() {
         return !this.c;
     }
 

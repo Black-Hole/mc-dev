@@ -104,16 +104,16 @@ public abstract class Container {
 
             this.g = c(j);
             if ((i1 != 1 || this.g != 2) && i1 != this.g) {
-                this.d();
+                this.c();
             } else if (playerinventory.getCarried().isEmpty()) {
-                this.d();
+                this.c();
             } else if (this.g == 0) {
                 this.dragType = b(j);
                 if (a(this.dragType, entityhuman)) {
                     this.g = 1;
                     this.h.clear();
                 } else {
-                    this.d();
+                    this.c();
                 }
             } else if (this.g == 1) {
                 Slot slot = (Slot) this.slots.get(i);
@@ -151,12 +151,12 @@ public abstract class Container {
                     playerinventory.setCarried(itemstack2);
                 }
 
-                this.d();
+                this.c();
             } else {
-                this.d();
+                this.c();
             }
         } else if (this.g != 0) {
-            this.d();
+            this.c();
         } else {
             Slot slot2;
             int k1;
@@ -223,7 +223,7 @@ public abstract class Container {
                                     slot2.a(entityhuman, playerinventory.getCarried());
                                 }
                             } else if (slot2.isAllowed(itemstack1)) {
-                                if (itemstack2.getItem() == itemstack1.getItem() && itemstack2.getData() == itemstack1.getData() && ItemStack.equals(itemstack2, itemstack1)) {
+                                if (a(itemstack2, itemstack1)) {
                                     k1 = j == 0 ? itemstack1.getCount() : 1;
                                     if (k1 > slot2.getMaxStackSize(itemstack1) - itemstack2.getCount()) {
                                         k1 = slot2.getMaxStackSize(itemstack1) - itemstack2.getCount();
@@ -239,7 +239,7 @@ public abstract class Container {
                                     slot2.set(itemstack1);
                                     playerinventory.setCarried(itemstack2);
                                 }
-                            } else if (itemstack2.getItem() == itemstack1.getItem() && itemstack1.getMaxStackSize() > 1 && (!itemstack2.usesData() || itemstack2.getData() == itemstack1.getData()) && ItemStack.equals(itemstack2, itemstack1) && !itemstack2.isEmpty()) {
+                            } else if (itemstack1.getMaxStackSize() > 1 && a(itemstack2, itemstack1) && !itemstack2.isEmpty()) {
                                 k1 = itemstack2.getCount();
                                 if (k1 + itemstack1.getCount() <= itemstack1.getMaxStackSize()) {
                                     itemstack1.add(k1);
@@ -344,6 +344,10 @@ public abstract class Container {
         return itemstack;
     }
 
+    public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
+        return itemstack.getItem() == itemstack1.getItem() && ItemStack.equals(itemstack, itemstack1);
+    }
+
     public boolean a(ItemStack itemstack, Slot slot) {
         return true;
     }
@@ -361,7 +365,7 @@ public abstract class Container {
     protected void a(EntityHuman entityhuman, World world, IInventory iinventory) {
         int i;
 
-        if (entityhuman.isAlive() && (!(entityhuman instanceof EntityPlayer) || !((EntityPlayer) entityhuman).t())) {
+        if (entityhuman.isAlive() && (!(entityhuman instanceof EntityPlayer) || !((EntityPlayer) entityhuman).o())) {
             for (i = 0; i < iinventory.getSize(); ++i) {
                 entityhuman.inventory.a(world, iinventory.splitWithoutUpdate(i));
             }
@@ -420,7 +424,7 @@ public abstract class Container {
 
                 slot = (Slot) this.slots.get(k);
                 itemstack1 = slot.getItem();
-                if (!itemstack1.isEmpty() && itemstack1.getItem() == itemstack.getItem() && (!itemstack.usesData() || itemstack.getData() == itemstack1.getData()) && ItemStack.equals(itemstack, itemstack1)) {
+                if (!itemstack1.isEmpty() && a(itemstack, itemstack1)) {
                     int l = itemstack1.getCount() + itemstack.getCount();
 
                     if (l <= itemstack.getMaxStackSize()) {
@@ -497,7 +501,7 @@ public abstract class Container {
         return i == 0 ? true : (i == 1 ? true : i == 2 && entityhuman.abilities.canInstantlyBuild);
     }
 
-    protected void d() {
+    protected void c() {
         this.g = 0;
         this.h.clear();
     }
@@ -554,15 +558,14 @@ public abstract class Container {
         }
     }
 
-    protected void a(World world, EntityHuman entityhuman, InventoryCrafting inventorycrafting, InventoryCraftResult inventorycraftresult) {
+    protected void a(World world, EntityHuman entityhuman, IInventory iinventory, InventoryCraftResult inventorycraftresult) {
         if (!world.isClientSide) {
             EntityPlayer entityplayer = (EntityPlayer) entityhuman;
             ItemStack itemstack = ItemStack.a;
-            IRecipe irecipe = CraftingManager.b(inventorycrafting, world);
+            IRecipe irecipe = world.getMinecraftServer().getCraftingManager().b(iinventory, world);
 
-            if (irecipe != null && (irecipe.c() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayer.F().b(irecipe))) {
-                inventorycraftresult.a(irecipe);
-                itemstack = irecipe.craftItem(inventorycrafting);
+            if (inventorycraftresult.a(world, entityplayer, irecipe) && irecipe != null) {
+                itemstack = irecipe.craftItem(iinventory);
             }
 
             inventorycraftresult.setItem(0, itemstack);

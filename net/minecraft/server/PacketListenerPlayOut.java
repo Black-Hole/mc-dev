@@ -34,8 +34,6 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutChat packetplayoutchat);
 
-    void a(PacketPlayOutTabComplete packetplayouttabcomplete);
-
     void a(PacketPlayOutMultiBlockChange packetplayoutmultiblockchange);
 
     void a(PacketPlayOutMap packetplayoutmap);
@@ -130,6 +128,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutEntityEffect packetplayoutentityeffect);
 
+    void a(PacketPlayOutTags packetplayouttags);
+
     void a(PacketPlayOutCombatEvent packetplayoutcombatevent);
 
     void a(PacketPlayOutServerDifficulty packetplayoutserverdifficulty);
@@ -155,4 +155,16 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutSelectAdvancementTab packetplayoutselectadvancementtab);
 
     void a(PacketPlayOutAutoRecipe packetplayoutautorecipe);
+
+    void a(PacketPlayOutCommands packetplayoutcommands);
+
+    void a(PacketPlayOutStopSound packetplayoutstopsound);
+
+    void a(PacketPlayOutTabComplete packetplayouttabcomplete);
+
+    void a(PacketPlayOutRecipeUpdate packetplayoutrecipeupdate);
+
+    void a(PacketPlayOutLookAt packetplayoutlookat);
+
+    void a(PacketPlayOutNBTQuery packetplayoutnbtquery);
 }

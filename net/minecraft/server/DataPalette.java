@@ -2,14 +2,16 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public interface DataPalette {
+public interface DataPalette<T> {
 
-    int a(IBlockData iblockdata);
+    int a(T t0);
 
     @Nullable
-    IBlockData a(int i);
+    T a(int i);
 
     void b(PacketDataSerializer packetdataserializer);
 
     int a();
+
+    void a(NBTTagList nbttaglist);
 }

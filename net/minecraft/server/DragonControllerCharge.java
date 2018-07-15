@@ -23,7 +23,7 @@ public class DragonControllerCharge extends AbstractDragonController {
         } else {
             double d0 = this.c.c(this.a.locX, this.a.locY, this.a.locZ);
 
-            if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.B) {
+            if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.C) {
                 ++this.d;
             }
 

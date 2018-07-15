@@ -10,6 +10,7 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
 
     protected final RegistryID<V> a = new RegistryID(256);
     protected final Map<V, K> b;
+    private int d;
 
     public RegistryMaterials() {
         this.b = ((BiMap) this.c).inverse();
@@ -17,7 +18,15 @@ public class RegistryMaterials<K, V> extends RegistrySimple<K, V> implements Reg
 
     public void a(int i, K k0, V v0) {
         this.a.a(v0, i);
-        this.a(k0, v0);
+        super.a(k0, v0);
+        if (this.d <= i) {
+            this.d = i + 1;
+        }
+
+    }
+
+    public void a(K k0, V v0) {
+        this.a(this.d, k0, v0);
     }
 
     protected Map<K, V> b() {

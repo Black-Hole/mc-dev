@@ -1,19 +1,25 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.longs.LongSet;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 
-public class NBTTagLongArray extends NBTBase {
+public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
-    private long[] b;
+    private long[] f;
 
     NBTTagLongArray() {}
 
     public NBTTagLongArray(long[] along) {
-        this.b = along;
+        this.f = along;
+    }
+
+    public NBTTagLongArray(LongSet longset) {
+        this.f = longset.toLongArray();
     }
 
     public NBTTagLongArray(List<Long> list) {
@@ -32,9 +38,9 @@ public class NBTTagLongArray extends NBTBase {
         return along;
     }
 
-    void write(DataOutput dataoutput) throws IOException {
-        dataoutput.writeInt(this.b.length);
-        long[] along = this.b;
+    public void write(DataOutput dataoutput) throws IOException {
+        dataoutput.writeInt(this.f.length);
+        long[] along = this.f;
         int i = along.length;
 
         for (int j = 0; j < i; ++j) {
@@ -45,15 +51,15 @@ public class NBTTagLongArray extends NBTBase {
 
     }
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         nbtreadlimiter.a(192L);
         int j = datainput.readInt();
 
         nbtreadlimiter.a((long) (64 * j));
-        this.b = new long[j];
+        this.f = new long[j];
 
         for (int k = 0; k < j; ++k) {
-            this.b[k] = datainput.readLong();
+            this.f[k] = datainput.readLong();
         }
 
     }
@@ -65,30 +71,71 @@ public class NBTTagLongArray extends NBTBase {
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("[L;");
 
-        for (int i = 0; i < this.b.length; ++i) {
+        for (int i = 0; i < this.f.length; ++i) {
             if (i != 0) {
                 stringbuilder.append(',');
             }
 
-            stringbuilder.append(this.b[i]).append('L');
+            stringbuilder.append(this.f[i]).append('L');
         }
 
         return stringbuilder.append(']').toString();
     }
 
     public NBTTagLongArray c() {
-        long[] along = new long[this.b.length];
+        long[] along = new long[this.f.length];
 
-        System.arraycopy(this.b, 0, along, 0, this.b.length);
+        System.arraycopy(this.f, 0, along, 0, this.f.length);
         return new NBTTagLongArray(along);
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) && Arrays.equals(this.b, ((NBTTagLongArray) object).b);
+        return this == object ? true : object instanceof NBTTagLongArray && Arrays.equals(this.f, ((NBTTagLongArray) object).f);
     }
 
     public int hashCode() {
-        return super.hashCode() ^ Arrays.hashCode(this.b);
+        return Arrays.hashCode(this.f);
+    }
+
+    public IChatBaseComponent a(String s, int i) {
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("L")).a(NBTTagLongArray.e);
+        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
+
+        for (int j = 0; j < this.f.length; ++j) {
+            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.f[j]))).a(NBTTagLongArray.d);
+
+            ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
+            if (j != this.f.length - 1) {
+                ichatbasecomponent1.a(",");
+            }
+        }
+
+        ichatbasecomponent1.a("]");
+        return ichatbasecomponent1;
+    }
+
+    public long[] d() {
+        return this.f;
+    }
+
+    public int size() {
+        return this.f.length;
+    }
+
+    public NBTTagLong a(int i) {
+        return new NBTTagLong(this.f[i]);
+    }
+
+    public void a(int i, NBTBase nbtbase) {
+        this.f[i] = ((NBTNumber) nbtbase).d();
+    }
+
+    public void b(int i) {
+        this.f = ArrayUtils.remove(this.f, i);
+    }
+
+    public NBTBase c(int i) {
+        return this.a(i);
     }
 
     public NBTBase clone() {

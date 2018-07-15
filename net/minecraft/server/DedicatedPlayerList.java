@@ -14,20 +14,20 @@ public class DedicatedPlayerList extends PlayerList {
         this.a(dedicatedserver.a("view-distance", 10));
         this.maxPlayers = dedicatedserver.a("max-players", 20);
         this.setHasWhitelist(dedicatedserver.a("white-list", false));
-        if (!dedicatedserver.R()) {
+        if (!dedicatedserver.J()) {
             this.getProfileBans().a(true);
             this.getIPBans().a(true);
         }
 
+        this.B();
+        this.z();
         this.A();
         this.y();
-        this.z();
-        this.x();
-        this.B();
-        this.D();
         this.C();
+        this.E();
+        this.D();
         if (!this.getWhitelist().c().exists()) {
-            this.E();
+            this.F();
         }
 
     }
@@ -35,34 +35,24 @@ public class DedicatedPlayerList extends PlayerList {
     public void setHasWhitelist(boolean flag) {
         super.setHasWhitelist(flag);
         this.getServer().a("white-list", (Object) Boolean.valueOf(flag));
-        this.getServer().a();
+        this.getServer().c_();
     }
 
     public void addOp(GameProfile gameprofile) {
         super.addOp(gameprofile);
-        this.C();
+        this.D();
     }
 
     public void removeOp(GameProfile gameprofile) {
         super.removeOp(gameprofile);
-        this.C();
-    }
-
-    public void removeWhitelist(GameProfile gameprofile) {
-        super.removeWhitelist(gameprofile);
-        this.E();
-    }
-
-    public void addWhitelist(GameProfile gameprofile) {
-        super.addWhitelist(gameprofile);
-        this.E();
-    }
-
-    public void reloadWhitelist() {
         this.D();
     }
 
-    private void x() {
+    public void reloadWhitelist() {
+        this.E();
+    }
+
+    private void y() {
         try {
             this.getIPBans().save();
         } catch (IOException ioexception) {
@@ -71,7 +61,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void y() {
+    private void z() {
         try {
             this.getProfileBans().save();
         } catch (IOException ioexception) {
@@ -80,7 +70,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void z() {
+    private void A() {
         try {
             this.getIPBans().load();
         } catch (IOException ioexception) {
@@ -89,7 +79,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void A() {
+    private void B() {
         try {
             this.getProfileBans().load();
         } catch (IOException ioexception) {
@@ -98,7 +88,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void B() {
+    private void C() {
         try {
             this.getOPs().load();
         } catch (Exception exception) {
@@ -107,7 +97,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void C() {
+    private void D() {
         try {
             this.getOPs().save();
         } catch (Exception exception) {
@@ -116,7 +106,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void D() {
+    private void E() {
         try {
             this.getWhitelist().load();
         } catch (Exception exception) {
@@ -125,7 +115,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void E() {
+    private void F() {
         try {
             this.getWhitelist().save();
         } catch (Exception exception) {

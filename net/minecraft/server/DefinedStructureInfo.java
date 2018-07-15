@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 
@@ -7,25 +8,32 @@ public class DefinedStructureInfo {
 
     private EnumBlockMirror a;
     private EnumBlockRotation b;
-    private boolean c;
+    private BlockPosition c;
+    private boolean d;
     @Nullable
-    private Block d;
+    private Block e;
     @Nullable
-    private ChunkCoordIntPair e;
+    private ChunkCoordIntPair f;
     @Nullable
-    private StructureBoundingBox f;
-    private boolean g;
-    private float h;
+    private StructureBoundingBox g;
+    private boolean h;
+    private boolean i;
+    private float j;
     @Nullable
-    private Random i;
+    private Random k;
     @Nullable
-    private Long j;
+    private Long l;
+    @Nullable
+    private Integer m;
+    private int n;
 
     public DefinedStructureInfo() {
         this.a = EnumBlockMirror.NONE;
         this.b = EnumBlockRotation.NONE;
-        this.g = true;
-        this.h = 1.0F;
+        this.c = new BlockPosition(0, 0, 0);
+        this.h = true;
+        this.i = true;
+        this.j = 1.0F;
     }
 
     public DefinedStructureInfo a() {
@@ -41,6 +49,10 @@ public class DefinedStructureInfo {
         definedstructureinfo.h = this.h;
         definedstructureinfo.i = this.i;
         definedstructureinfo.j = this.j;
+        definedstructureinfo.k = this.k;
+        definedstructureinfo.l = this.l;
+        definedstructureinfo.m = this.m;
+        definedstructureinfo.n = this.n;
         return definedstructureinfo;
     }
 
@@ -54,38 +66,43 @@ public class DefinedStructureInfo {
         return this;
     }
 
+    public DefinedStructureInfo a(BlockPosition blockposition) {
+        this.c = blockposition;
+        return this;
+    }
+
     public DefinedStructureInfo a(boolean flag) {
-        this.c = flag;
+        this.d = flag;
         return this;
     }
 
     public DefinedStructureInfo a(Block block) {
-        this.d = block;
+        this.e = block;
         return this;
     }
 
     public DefinedStructureInfo a(ChunkCoordIntPair chunkcoordintpair) {
-        this.e = chunkcoordintpair;
+        this.f = chunkcoordintpair;
         return this;
     }
 
     public DefinedStructureInfo a(StructureBoundingBox structureboundingbox) {
-        this.f = structureboundingbox;
+        this.g = structureboundingbox;
         return this;
     }
 
     public DefinedStructureInfo a(@Nullable Long olong) {
-        this.j = olong;
+        this.l = olong;
         return this;
     }
 
     public DefinedStructureInfo a(@Nullable Random random) {
-        this.i = random;
+        this.k = random;
         return this;
     }
 
     public DefinedStructureInfo a(float f) {
-        this.h = f;
+        this.j = f;
         return this;
     }
 
@@ -93,8 +110,8 @@ public class DefinedStructureInfo {
         return this.a;
     }
 
-    public DefinedStructureInfo b(boolean flag) {
-        this.g = flag;
+    public DefinedStructureInfo c(boolean flag) {
+        this.h = flag;
         return this;
     }
 
@@ -102,55 +119,65 @@ public class DefinedStructureInfo {
         return this.b;
     }
 
-    public Random a(@Nullable BlockPosition blockposition) {
-        if (this.i != null) {
-            return this.i;
-        } else if (this.j != null) {
-            return this.j.longValue() == 0L ? new Random(System.currentTimeMillis()) : new Random(this.j.longValue());
-        } else if (blockposition == null) {
-            return new Random(System.currentTimeMillis());
-        } else {
-            int i = blockposition.getX();
-            int j = blockposition.getZ();
-
-            return new Random((long) (i * i * 4987142 + i * 5947611) + (long) (j * j) * 4392871L + (long) (j * 389711) ^ 987234911L);
-        }
-    }
-
-    public float f() {
-        return this.h;
-    }
-
-    public boolean g() {
+    public BlockPosition d() {
         return this.c;
     }
 
-    @Nullable
-    public Block h() {
+    public Random b(@Nullable BlockPosition blockposition) {
+        return this.k != null ? this.k : (this.l != null ? (this.l.longValue() == 0L ? new Random(SystemUtils.b()) : new Random(this.l.longValue())) : (blockposition == null ? new Random(SystemUtils.b()) : SeededRandom.a(blockposition.getX(), blockposition.getZ(), 0L, 987234911L)));
+    }
+
+    public float g() {
+        return this.j;
+    }
+
+    public boolean h() {
         return this.d;
     }
 
     @Nullable
-    public StructureBoundingBox i() {
-        if (this.f == null && this.e != null) {
-            this.k();
-        }
-
-        return this.f;
+    public Block i() {
+        return this.e;
     }
 
-    public boolean j() {
+    @Nullable
+    public StructureBoundingBox j() {
+        if (this.g == null && this.f != null) {
+            this.l();
+        }
+
         return this.g;
     }
 
-    void k() {
-        this.f = this.b(this.e);
+    public boolean k() {
+        return this.h;
+    }
+
+    void l() {
+        if (this.f != null) {
+            this.g = this.b(this.f);
+        }
+
+    }
+
+    public boolean m() {
+        return this.i;
+    }
+
+    public List<DefinedStructure.BlockInfo> a(List<List<DefinedStructure.BlockInfo>> list, @Nullable BlockPosition blockposition) {
+        this.m = Integer.valueOf(8);
+        if (this.m != null && this.m.intValue() >= 0 && this.m.intValue() < list.size()) {
+            return (List) list.get(this.m.intValue());
+        } else {
+            this.m = Integer.valueOf(this.b(blockposition).nextInt(list.size()));
+            return (List) list.get(this.m.intValue());
+        }
     }
 
     @Nullable
     private StructureBoundingBox b(@Nullable ChunkCoordIntPair chunkcoordintpair) {
         if (chunkcoordintpair == null) {
-            return null;
+            return this.g;
         } else {
             int i = chunkcoordintpair.x * 16;
             int j = chunkcoordintpair.z * 16;

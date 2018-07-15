@@ -1,106 +1,50 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.google.common.collect.Iterables;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.tree.CommandNode;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import javax.annotation.Nullable;
 
-public class CommandHelp extends CommandAbstract {
+public class CommandHelp {
 
-    private static final String[] a = new String[] { "Yolo", "Ask for help on twitter", "/deop @p", "Scoreboard deleted, commands blocked", "Contact helpdesk for help", "/testfornoob @p", "/trigger warning", "Oh my god, it\'s full of stats", "/kill @p[name=!Searge]", "Have you tried turning it off and on again?", "Sorry, no help today"};
-    private final Random b = new Random();
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.help.failed", new Object[0]));
 
-    public CommandHelp() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("help").executes((commandcontext) -> {
+            Map map = com_mojang_brigadier_commanddispatcher.getSmartUsage(com_mojang_brigadier_commanddispatcher.getRoot(), commandcontext.getSource());
+            Iterator iterator = map.values().iterator();
 
-    public String getCommand() {
-        return "help";
-    }
+            while (iterator.hasNext()) {
+                String s = (String) iterator.next();
 
-    public int a() {
-        return 0;
-    }
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatComponentText("/" + s), false);
+            }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.help.usage";
-    }
+            return map.size();
+        })).then(CommandDispatcher.a("command", (ArgumentType) StringArgumentType.greedyString()).executes((commandcontext) -> {
+            ParseResults parseresults = com_mojang_brigadier_commanddispatcher.parse(StringArgumentType.getString(commandcontext, "command"), commandcontext.getSource());
 
-    public List<String> getAliases() {
-        return Arrays.asList(new String[] { "?"});
-    }
+            if (parseresults.getContext().getNodes().isEmpty()) {
+                throw CommandHelp.a.create();
+            } else {
+                Map map = com_mojang_brigadier_commanddispatcher.getSmartUsage((CommandNode) Iterables.getLast(parseresults.getContext().getNodes().keySet()), commandcontext.getSource());
+                Iterator iterator = map.values().iterator();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (icommandlistener instanceof CommandBlockListenerAbstract) {
-            icommandlistener.sendMessage((new ChatComponentText("Searge says: ")).a(CommandHelp.a[this.b.nextInt(CommandHelp.a.length) % CommandHelp.a.length]));
-        } else {
-            List list = this.a(icommandlistener, minecraftserver);
-            boolean flag = true;
-            int i = (list.size() - 1) / 7;
-            boolean flag1 = false;
+                while (iterator.hasNext()) {
+                    String s = (String) iterator.next();
 
-            int j;
-
-            try {
-                j = astring.length == 0 ? 0 : a(astring[0], 1, i + 1) - 1;
-            } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
-                Map map = this.a(minecraftserver);
-                ICommand icommand = (ICommand) map.get(astring[0]);
-
-                if (icommand != null) {
-                    throw new ExceptionUsage(icommand.getUsage(icommandlistener), new Object[0]);
+                    ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatComponentText("/" + parseresults.getReader().getString() + " " + s), false);
                 }
 
-                if (MathHelper.a(astring[0], -1) == -1 && MathHelper.a(astring[0], -2) == -2) {
-                    throw new ExceptionUnknownCommand();
-                }
-
-                throw exceptioninvalidnumber;
+                return map.size();
             }
-
-            int k = Math.min((j + 1) * 7, list.size());
-            ChatMessage chatmessage = new ChatMessage("commands.help.header", new Object[] { Integer.valueOf(j + 1), Integer.valueOf(i + 1)});
-
-            chatmessage.getChatModifier().setColor(EnumChatFormat.DARK_GREEN);
-            icommandlistener.sendMessage(chatmessage);
-
-            for (int l = j * 7; l < k; ++l) {
-                ICommand icommand1 = (ICommand) list.get(l);
-                ChatMessage chatmessage1 = new ChatMessage(icommand1.getUsage(icommandlistener), new Object[0]);
-
-                chatmessage1.getChatModifier().setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/" + icommand1.getCommand() + " "));
-                icommandlistener.sendMessage(chatmessage1);
-            }
-
-            if (j == 0) {
-                ChatMessage chatmessage2 = new ChatMessage("commands.help.footer", new Object[0]);
-
-                chatmessage2.getChatModifier().setColor(EnumChatFormat.GREEN);
-                icommandlistener.sendMessage(chatmessage2);
-            }
-
-        }
-    }
-
-    protected List<ICommand> a(ICommandListener icommandlistener, MinecraftServer minecraftserver) {
-        List list = minecraftserver.getCommandHandler().a(icommandlistener);
-
-        Collections.sort(list);
-        return list;
-    }
-
-    protected Map<String, ICommand> a(MinecraftServer minecraftserver) {
-        return minecraftserver.getCommandHandler().getCommands();
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        if (astring.length == 1) {
-            Set set = this.a(minecraftserver).keySet();
-
-            return a(astring, (String[]) set.toArray(new String[set.size()]));
-        } else {
-            return Collections.emptyList();
-        }
+        })));
     }
 }

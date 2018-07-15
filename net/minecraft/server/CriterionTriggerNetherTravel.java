@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -60,7 +61,7 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
         CriterionTriggerNetherTravel.a criteriontriggernethertravel_a = (CriterionTriggerNetherTravel.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggernethertravel_a != null) {
-            criteriontriggernethertravel_a.a(entityplayer.x(), vec3d, entityplayer.locX, entityplayer.locY, entityplayer.locZ);
+            criteriontriggernethertravel_a.a(entityplayer.getWorldServer(), vec3d, entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         }
 
     }
@@ -132,8 +133,21 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
             this.c = criterionconditiondistance;
         }
 
+        public static CriterionTriggerNetherTravel.b a(CriterionConditionDistance criterionconditiondistance) {
+            return new CriterionTriggerNetherTravel.b(CriterionConditionLocation.a, CriterionConditionLocation.a, criterionconditiondistance);
+        }
+
         public boolean a(WorldServer worldserver, Vec3D vec3d, double d0, double d1, double d2) {
             return !this.a.a(worldserver, vec3d.x, vec3d.y, vec3d.z) ? false : (!this.b.a(worldserver, d0, d1, d2) ? false : this.c.a(vec3d.x, vec3d.y, vec3d.z, d0, d1, d2));
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("entered", this.a.a());
+            jsonobject.add("exited", this.b.a());
+            jsonobject.add("distance", this.c.a());
+            return jsonobject;
         }
     }
 }

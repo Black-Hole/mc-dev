@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 public class TileEntityDropper extends TileEntityDispenser {
 
-    public TileEntityDropper() {}
-
-    public static void b(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityDropper.class, new String[] { "Items"})));
+    public TileEntityDropper() {
+        super(TileEntityTypes.h);
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.o : "container.dropper";
+    public IChatBaseComponent getDisplayName() {
+        IChatBaseComponent ichatbasecomponent = this.getCustomName();
+
+        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage("container.dropper", new Object[0]));
     }
 
     public String getContainerName() {

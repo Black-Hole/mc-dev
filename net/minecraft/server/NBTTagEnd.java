@@ -4,15 +4,15 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class NBTTagEnd extends NBTBase {
+public class NBTTagEnd implements NBTBase {
 
-    NBTTagEnd() {}
+    public NBTTagEnd() {}
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         nbtreadlimiter.a(64L);
     }
 
-    void write(DataOutput dataoutput) throws IOException {}
+    public void write(DataOutput dataoutput) throws IOException {}
 
     public byte getTypeId() {
         return (byte) 0;
@@ -24,6 +24,18 @@ public class NBTTagEnd extends NBTBase {
 
     public NBTTagEnd c() {
         return new NBTTagEnd();
+    }
+
+    public IChatBaseComponent a(String s, int i) {
+        return new ChatComponentText("");
+    }
+
+    public boolean equals(Object object) {
+        return object instanceof NBTTagEnd;
+    }
+
+    public int hashCode() {
+        return this.getTypeId();
     }
 
     public NBTBase clone() {

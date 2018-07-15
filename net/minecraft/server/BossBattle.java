@@ -21,11 +21,11 @@ public abstract class BossBattle {
         this.b = 1.0F;
     }
 
-    public UUID d() {
+    public UUID i() {
         return this.h;
     }
 
-    public IChatBaseComponent e() {
+    public IChatBaseComponent j() {
         return this.title;
     }
 
@@ -41,15 +41,23 @@ public abstract class BossBattle {
         this.b = f;
     }
 
-    public BossBattle.BarColor g() {
+    public BossBattle.BarColor l() {
         return this.color;
     }
 
-    public BossBattle.BarStyle h() {
+    public void a(BossBattle.BarColor bossbattle_barcolor) {
+        this.color = bossbattle_barcolor;
+    }
+
+    public BossBattle.BarStyle m() {
         return this.style;
     }
 
-    public boolean i() {
+    public void a(BossBattle.BarStyle bossbattle_barstyle) {
+        this.style = bossbattle_barstyle;
+    }
+
+    public boolean n() {
         return this.e;
     }
 
@@ -58,7 +66,7 @@ public abstract class BossBattle {
         return this;
     }
 
-    public boolean j() {
+    public boolean o() {
         return this.f;
     }
 
@@ -72,21 +80,73 @@ public abstract class BossBattle {
         return this;
     }
 
-    public boolean k() {
+    public boolean p() {
         return this.g;
     }
 
     public static enum BarStyle {
 
-        PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20;
+        PROGRESS("progress"), NOTCHED_6("notched_6"), NOTCHED_10("notched_10"), NOTCHED_12("notched_12"), NOTCHED_20("notched_20");
 
-        private BarStyle() {}
+        private final String f;
+
+        private BarStyle(String s) {
+            this.f = s;
+        }
+
+        public String a() {
+            return this.f;
+        }
+
+        public static BossBattle.BarStyle a(String s) {
+            BossBattle.BarStyle[] abossbattle_barstyle = values();
+            int i = abossbattle_barstyle.length;
+
+            for (int j = 0; j < i; ++j) {
+                BossBattle.BarStyle bossbattle_barstyle = abossbattle_barstyle[j];
+
+                if (bossbattle_barstyle.f.equals(s)) {
+                    return bossbattle_barstyle;
+                }
+            }
+
+            return BossBattle.BarStyle.PROGRESS;
+        }
     }
 
     public static enum BarColor {
 
-        PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE;
+        PINK("pink", EnumChatFormat.RED), BLUE("blue", EnumChatFormat.BLUE), RED("red", EnumChatFormat.DARK_RED), GREEN("green", EnumChatFormat.GREEN), YELLOW("yellow", EnumChatFormat.YELLOW), PURPLE("purple", EnumChatFormat.DARK_BLUE), WHITE("white", EnumChatFormat.WHITE);
 
-        private BarColor() {}
+        private final String h;
+        private final EnumChatFormat i;
+
+        private BarColor(String s, EnumChatFormat enumchatformat) {
+            this.h = s;
+            this.i = enumchatformat;
+        }
+
+        public EnumChatFormat a() {
+            return this.i;
+        }
+
+        public String b() {
+            return this.h;
+        }
+
+        public static BossBattle.BarColor a(String s) {
+            BossBattle.BarColor[] abossbattle_barcolor = values();
+            int i = abossbattle_barcolor.length;
+
+            for (int j = 0; j < i; ++j) {
+                BossBattle.BarColor bossbattle_barcolor = abossbattle_barcolor[j];
+
+                if (bossbattle_barcolor.h.equals(s)) {
+                    return bossbattle_barcolor;
+                }
+            }
+
+            return BossBattle.BarColor.WHITE;
+        }
     }
 }

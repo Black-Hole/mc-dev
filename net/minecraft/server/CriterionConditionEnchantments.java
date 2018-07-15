@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import java.util.Iterator;
@@ -12,16 +13,16 @@ public class CriterionConditionEnchantments {
 
     public static final CriterionConditionEnchantments a = new CriterionConditionEnchantments();
     private final Enchantment b;
-    private final CriterionConditionValue c;
+    private final CriterionConditionValue.d c;
 
     public CriterionConditionEnchantments() {
         this.b = null;
-        this.c = CriterionConditionValue.a;
+        this.c = CriterionConditionValue.d.e;
     }
 
-    public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue criterionconditionvalue) {
+    public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue.d criterionconditionvalue_d) {
         this.b = enchantment;
-        this.c = criterionconditionvalue;
+        this.c = criterionconditionvalue_d;
     }
 
     public boolean a(Map<Enchantment, Integer> map) {
@@ -32,7 +33,7 @@ public class CriterionConditionEnchantments {
 
             int i = ((Integer) map.get(this.b)).intValue();
 
-            if (this.c != null && !this.c.a((float) i)) {
+            if (this.c != null && !this.c.d(i)) {
                 return false;
             }
         } else if (this.c != null) {
@@ -46,12 +47,27 @@ public class CriterionConditionEnchantments {
                 }
 
                 integer = (Integer) iterator.next();
-            } while (!this.c.a((float) integer.intValue()));
+            } while (!this.c.d(integer.intValue()));
 
             return true;
         }
 
         return true;
+    }
+
+    public JsonElement a() {
+        if (this == CriterionConditionEnchantments.a) {
+            return JsonNull.INSTANCE;
+        } else {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.b != null) {
+                jsonobject.addProperty("enchantment", ((MinecraftKey) Enchantment.enchantments.b(this.b)).toString());
+            }
+
+            jsonobject.add("levels", this.c.d());
+            return jsonobject;
+        }
     }
 
     public static CriterionConditionEnchantments a(@Nullable JsonElement jsonelement) {
@@ -68,9 +84,9 @@ public class CriterionConditionEnchantments {
                 }
             }
 
-            CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("levels"));
+            CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("levels"));
 
-            return new CriterionConditionEnchantments(enchantment, criterionconditionvalue);
+            return new CriterionConditionEnchantments(enchantment, criterionconditionvalue_d);
         } else {
             return CriterionConditionEnchantments.a;
         }

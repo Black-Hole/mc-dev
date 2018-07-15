@@ -2,26 +2,26 @@ package net.minecraft.server;
 
 public class ItemBow extends Item {
 
-    public ItemBow() {
-        this.maxStackSize = 1;
-        this.setMaxDurability(384);
-        this.b(CreativeModeTab.j);
-        this.a(new MinecraftKey("pull"), new IDynamicTexture() {
+    public ItemBow(Item.Info item_info) {
+        super(item_info);
+        this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
+            return entityliving == null ? 0.0F : (entityliving.cV().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.cW()) / 20.0F);
         });
-        this.a(new MinecraftKey("pulling"), new IDynamicTexture() {
+        this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
+            return entityliving != null && entityliving.isHandRaised() && entityliving.cV() == itemstack ? 1.0F : 0.0F;
         });
     }
 
     private ItemStack a(EntityHuman entityhuman) {
-        if (this.d(entityhuman.b(EnumHand.OFF_HAND))) {
+        if (this.e_(entityhuman.b(EnumHand.OFF_HAND))) {
             return entityhuman.b(EnumHand.OFF_HAND);
-        } else if (this.d(entityhuman.b(EnumHand.MAIN_HAND))) {
+        } else if (this.e_(entityhuman.b(EnumHand.MAIN_HAND))) {
             return entityhuman.b(EnumHand.MAIN_HAND);
         } else {
             for (int i = 0; i < entityhuman.inventory.getSize(); ++i) {
                 ItemStack itemstack = entityhuman.inventory.getItem(i);
 
-                if (this.d(itemstack)) {
+                if (this.e_(itemstack)) {
                     return itemstack;
                 }
             }
@@ -30,7 +30,7 @@ public class ItemBow extends Item {
         }
     }
 
-    protected boolean d(ItemStack itemstack) {
+    protected boolean e_(ItemStack itemstack) {
         return itemstack.getItem() instanceof ItemArrow;
     }
 
@@ -45,8 +45,8 @@ public class ItemBow extends Item {
                     itemstack1 = new ItemStack(Items.ARROW);
                 }
 
-                int j = this.e(itemstack) - i;
-                float f = b(j);
+                int j = this.c(itemstack) - i;
+                float f = a(j);
 
                 if ((double) f >= 0.1D) {
                     boolean flag1 = flag && itemstack1.getItem() == Items.ARROW;
@@ -63,7 +63,7 @@ public class ItemBow extends Item {
                         int k = EnchantmentManager.getEnchantmentLevel(Enchantments.ARROW_DAMAGE, itemstack);
 
                         if (k > 0) {
-                            entityarrow.c(entityarrow.k() + (double) k * 0.5D + 0.5D);
+                            entityarrow.setDamage(entityarrow.getDamage() + (double) k * 0.5D + 0.5D);
                         }
 
                         int l = EnchantmentManager.getEnchantmentLevel(Enchantments.ARROW_KNOCKBACK, itemstack);
@@ -84,7 +84,7 @@ public class ItemBow extends Item {
                         world.addEntity(entityarrow);
                     }
 
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.w, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.j.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.k.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(1);
                         if (itemstack1.isEmpty()) {
@@ -92,13 +92,13 @@ public class ItemBow extends Item {
                         }
                     }
 
-                    entityhuman.b(StatisticList.b((Item) this));
+                    entityhuman.b(StatisticList.ITEM_USED.b(this));
                 }
             }
         }
     }
 
-    public static float b(int i) {
+    public static float a(int i) {
         float f = (float) i / 20.0F;
 
         f = (f * f + f * 2.0F) / 3.0F;
@@ -109,11 +109,11 @@ public class ItemBow extends Item {
         return f;
     }
 
-    public int e(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         return 72000;
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.BOW;
     }
 

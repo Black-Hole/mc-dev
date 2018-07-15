@@ -1,48 +1,47 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityShulker extends EntityGolem implements IMonster {
 
-    private static final UUID bz = UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF27F");
-    private static final AttributeModifier bA = (new AttributeModifier(EntityShulker.bz, "Covered armor bonus", 20.0D, 0)).a(false);
-    protected static final DataWatcherObject<EnumDirection> a = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.l);
-    protected static final DataWatcherObject<Optional<BlockPosition>> b = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.k);
+    private static final UUID bD = UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF27F");
+    private static final AttributeModifier bE = (new AttributeModifier(EntityShulker.bD, "Covered armor bonus", 20.0D, 0)).a(false);
+    protected static final DataWatcherObject<EnumDirection> a = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.n);
+    protected static final DataWatcherObject<Optional<BlockPosition>> b = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.m);
     protected static final DataWatcherObject<Byte> c = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.a);
     public static final DataWatcherObject<Byte> COLOR = DataWatcher.a(EntityShulker.class, DataWatcherRegistry.a);
-    public static final EnumColor by = EnumColor.PURPLE;
-    private float bB;
-    private float bC;
-    private BlockPosition bD;
-    private int bE;
+    private float bF;
+    private float bG;
+    private BlockPosition bH;
+    private int bI;
 
     public EntityShulker(World world) {
-        super(world);
+        super(EntityTypes.SHULKER, world);
         this.setSize(1.0F, 1.0F);
-        this.aO = 180.0F;
-        this.aN = 180.0F;
+        this.aR = 180.0F;
+        this.aQ = 180.0F;
         this.fireProof = true;
-        this.bD = null;
+        this.bH = null;
         this.b_ = 5;
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
-        this.aN = 180.0F;
-        this.aO = 180.0F;
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        this.aQ = 180.0F;
+        this.aR = 180.0F;
         this.yaw = 180.0F;
         this.lastYaw = 180.0F;
-        this.aP = 180.0F;
-        this.aQ = 180.0F;
-        return super.prepare(difficultydamagescaler, groupdataentity);
+        this.aS = 180.0F;
+        this.aT = 180.0F;
+        return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
     }
 
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(1, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(4, new EntityShulker.a());
         this.goalSelector.a(7, new EntityShulker.e(null));
@@ -56,35 +55,35 @@ public class EntityShulker extends EntityGolem implements IMonster {
         return false;
     }
 
-    public SoundCategory bK() {
+    public SoundCategory bV() {
         return SoundCategory.HOSTILE;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.gA;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_SHULKER_AMBIENT;
     }
 
-    public void D() {
-        if (!this.ds()) {
-            super.D();
+    public void A() {
+        if (!this.dG()) {
+            super.A();
         }
 
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.gG;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_SHULKER_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.ds() ? SoundEffects.gI : SoundEffects.gH;
+        return this.dG() ? SoundEffects.ENTITY_SHULKER_HURT_CLOSED : SoundEffects.ENTITY_SHULKER_HURT;
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityShulker.a, EnumDirection.DOWN);
-        this.datawatcher.register(EntityShulker.b, Optional.absent());
+        this.datawatcher.register(EntityShulker.b, Optional.empty());
         this.datawatcher.register(EntityShulker.c, Byte.valueOf((byte) 0));
-        this.datawatcher.register(EntityShulker.COLOR, Byte.valueOf((byte) EntityShulker.by.getColorIndex()));
+        this.datawatcher.register(EntityShulker.COLOR, Byte.valueOf((byte) 16));
     }
 
     protected void initAttributes() {
@@ -92,12 +91,8 @@ public class EntityShulker extends EntityGolem implements IMonster {
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(30.0D);
     }
 
-    protected EntityAIBodyControl s() {
+    protected EntityAIBodyControl o() {
         return new EntityShulker.b(this);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityShulker.class);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -112,7 +107,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
             this.datawatcher.set(EntityShulker.b, Optional.of(new BlockPosition(i, j, k)));
         } else {
-            this.datawatcher.set(EntityShulker.b, Optional.absent());
+            this.datawatcher.set(EntityShulker.b, Optional.empty());
         }
 
     }
@@ -122,7 +117,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         nbttagcompound.setByte("AttachFace", (byte) ((EnumDirection) this.datawatcher.get(EntityShulker.a)).a());
         nbttagcompound.setByte("Peek", ((Byte) this.datawatcher.get(EntityShulker.c)).byteValue());
         nbttagcompound.setByte("Color", ((Byte) this.datawatcher.get(EntityShulker.COLOR)).byteValue());
-        BlockPosition blockposition = this.dm();
+        BlockPosition blockposition = this.dz();
 
         if (blockposition != null) {
             nbttagcompound.setInt("APX", blockposition.getX());
@@ -132,9 +127,9 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
     }
 
-    public void B_() {
-        super.B_();
-        BlockPosition blockposition = (BlockPosition) ((Optional) this.datawatcher.get(EntityShulker.b)).orNull();
+    public void tick() {
+        super.tick();
+        BlockPosition blockposition = (BlockPosition) ((Optional) this.datawatcher.get(EntityShulker.b)).orElse((Object) null);
 
         if (blockposition == null && !this.world.isClientSide) {
             blockposition = new BlockPosition(this);
@@ -145,24 +140,24 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
         if (this.isPassenger()) {
             blockposition = null;
-            f = this.bJ().yaw;
+            f = this.getVehicle().yaw;
             this.yaw = f;
-            this.aN = f;
-            this.aO = f;
-            this.bE = 0;
+            this.aQ = f;
+            this.aR = f;
+            this.bI = 0;
         } else if (!this.world.isClientSide) {
             IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (iblockdata.getMaterial() != Material.AIR) {
+            if (!iblockdata.isAir()) {
                 EnumDirection enumdirection;
 
-                if (iblockdata.getBlock() == Blocks.PISTON_EXTENSION) {
+                if (iblockdata.getBlock() == Blocks.MOVING_PISTON) {
                     enumdirection = (EnumDirection) iblockdata.get(BlockPiston.FACING);
                     if (this.world.isEmpty(blockposition.shift(enumdirection))) {
                         blockposition = blockposition.shift(enumdirection);
                         this.datawatcher.set(EntityShulker.b, Optional.of(blockposition));
                     } else {
-                        this.p();
+                        this.l();
                     }
                 } else if (iblockdata.getBlock() == Blocks.PISTON_HEAD) {
                     enumdirection = (EnumDirection) iblockdata.get(BlockPistonExtension.FACING);
@@ -170,16 +165,16 @@ public class EntityShulker extends EntityGolem implements IMonster {
                         blockposition = blockposition.shift(enumdirection);
                         this.datawatcher.set(EntityShulker.b, Optional.of(blockposition));
                     } else {
-                        this.p();
+                        this.l();
                     }
                 } else {
-                    this.p();
+                    this.l();
                 }
             }
 
-            BlockPosition blockposition1 = blockposition.shift(this.dl());
+            BlockPosition blockposition1 = blockposition.shift(this.dy());
 
-            if (!this.world.d(blockposition1, false)) {
+            if (!this.world.q(blockposition1)) {
                 boolean flag = false;
                 EnumDirection[] aenumdirection = EnumDirection.values();
                 int i = aenumdirection.length;
@@ -188,7 +183,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
                     EnumDirection enumdirection1 = aenumdirection[j];
 
                     blockposition1 = blockposition.shift(enumdirection1);
-                    if (this.world.d(blockposition1, false)) {
+                    if (this.world.q(blockposition1)) {
                         this.datawatcher.set(EntityShulker.a, enumdirection1);
                         flag = true;
                         break;
@@ -196,31 +191,31 @@ public class EntityShulker extends EntityGolem implements IMonster {
                 }
 
                 if (!flag) {
-                    this.p();
+                    this.l();
                 }
             }
 
-            BlockPosition blockposition2 = blockposition.shift(this.dl().opposite());
+            BlockPosition blockposition2 = blockposition.shift(this.dy().opposite());
 
-            if (this.world.d(blockposition2, false)) {
-                this.p();
+            if (this.world.q(blockposition2)) {
+                this.l();
             }
         }
 
-        f = (float) this.dn() * 0.01F;
-        this.bB = this.bC;
-        if (this.bC > f) {
-            this.bC = MathHelper.a(this.bC - 0.05F, f, 1.0F);
-        } else if (this.bC < f) {
-            this.bC = MathHelper.a(this.bC + 0.05F, 0.0F, f);
+        f = (float) this.dA() * 0.01F;
+        this.bF = this.bG;
+        if (this.bG > f) {
+            this.bG = MathHelper.a(this.bG - 0.05F, f, 1.0F);
+        } else if (this.bG < f) {
+            this.bG = MathHelper.a(this.bG + 0.05F, 0.0F, f);
         }
 
         if (blockposition != null) {
             if (this.world.isClientSide) {
-                if (this.bE > 0 && this.bD != null) {
-                    --this.bE;
+                if (this.bI > 0 && this.bH != null) {
+                    --this.bI;
                 } else {
-                    this.bD = blockposition;
+                    this.bH = blockposition;
                 }
             }
 
@@ -230,16 +225,16 @@ public class EntityShulker extends EntityGolem implements IMonster {
             this.lastX = this.locX;
             this.lastY = this.locY;
             this.lastZ = this.locZ;
-            this.M = this.locX;
-            this.N = this.locY;
-            this.O = this.locZ;
-            double d0 = 0.5D - (double) MathHelper.sin((0.5F + this.bC) * 3.1415927F) * 0.5D;
-            double d1 = 0.5D - (double) MathHelper.sin((0.5F + this.bB) * 3.1415927F) * 0.5D;
+            this.N = this.locX;
+            this.O = this.locY;
+            this.P = this.locZ;
+            double d0 = 0.5D - (double) MathHelper.sin((0.5F + this.bG) * 3.1415927F) * 0.5D;
+            double d1 = 0.5D - (double) MathHelper.sin((0.5F + this.bF) * 3.1415927F) * 0.5D;
             double d2 = d0 - d1;
             double d3 = 0.0D;
             double d4 = 0.0D;
             double d5 = 0.0D;
-            EnumDirection enumdirection2 = this.dl();
+            EnumDirection enumdirection2 = this.dy();
 
             switch (enumdirection2) {
             case DOWN:
@@ -293,7 +288,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
     public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
         if (enummovetype == EnumMoveType.SHULKER_BOX) {
-            this.p();
+            this.l();
         } else {
             super.move(enummovetype, d0, d1, d2);
         }
@@ -315,14 +310,14 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    protected boolean p() {
+    protected boolean l() {
         if (!this.isNoAI() && this.isAlive()) {
             BlockPosition blockposition = new BlockPosition(this);
 
             for (int i = 0; i < 5; ++i) {
                 BlockPosition blockposition1 = blockposition.a(8 - this.random.nextInt(17), 8 - this.random.nextInt(17), 8 - this.random.nextInt(17));
 
-                if (blockposition1.getY() > 0 && this.world.isEmpty(blockposition1) && this.world.g(this) && this.world.getCubes(this, new AxisAlignedBB(blockposition1)).isEmpty()) {
+                if (blockposition1.getY() > 0 && this.world.isEmpty(blockposition1) && this.world.i((Entity) this) && this.world.getCubes(this, new AxisAlignedBB(blockposition1))) {
                     boolean flag = false;
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int j = aenumdirection.length;
@@ -330,7 +325,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
                     for (int k = 0; k < j; ++k) {
                         EnumDirection enumdirection = aenumdirection[k];
 
-                        if (this.world.d(blockposition1.shift(enumdirection), false)) {
+                        if (this.world.q(blockposition1.shift(enumdirection))) {
                             this.datawatcher.set(EntityShulker.a, enumdirection);
                             flag = true;
                             break;
@@ -338,7 +333,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
                     }
 
                     if (flag) {
-                        this.a(SoundEffects.gL, 1.0F, 1.0F);
+                        this.a(SoundEffects.ENTITY_SHULKER_TELEPORT, 1.0F, 1.0F);
                         this.datawatcher.set(EntityShulker.b, Optional.of(blockposition1));
                         this.datawatcher.set(EntityShulker.c, Byte.valueOf((byte) 0));
                         this.setGoalTarget((EntityLiving) null);
@@ -353,25 +348,25 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    public void n() {
-        super.n();
+    public void k() {
+        super.k();
         this.motX = 0.0D;
         this.motY = 0.0D;
         this.motZ = 0.0D;
-        this.aO = 180.0F;
-        this.aN = 180.0F;
+        this.aR = 180.0F;
+        this.aQ = 180.0F;
         this.yaw = 180.0F;
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityShulker.b.equals(datawatcherobject) && this.world.isClientSide && !this.isPassenger()) {
-            BlockPosition blockposition = this.dm();
+            BlockPosition blockposition = this.dz();
 
             if (blockposition != null) {
-                if (this.bD == null) {
-                    this.bD = blockposition;
+                if (this.bH == null) {
+                    this.bH = blockposition;
                 } else {
-                    this.bE = 6;
+                    this.bI = 6;
                 }
 
                 this.locX = (double) blockposition.getX() + 0.5D;
@@ -380,9 +375,9 @@ public class EntityShulker extends EntityGolem implements IMonster {
                 this.lastX = this.locX;
                 this.lastY = this.locY;
                 this.lastZ = this.locZ;
-                this.M = this.locX;
-                this.N = this.locY;
-                this.O = this.locZ;
+                this.N = this.locX;
+                this.O = this.locY;
+                this.P = this.locZ;
             }
         }
 
@@ -390,8 +385,8 @@ public class EntityShulker extends EntityGolem implements IMonster {
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (this.ds()) {
-            Entity entity = damagesource.i();
+        if (this.dG()) {
+            Entity entity = damagesource.j();
 
             if (entity instanceof EntityArrow) {
                 return false;
@@ -400,7 +395,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
         if (super.damageEntity(damagesource, f)) {
             if ((double) this.getHealth() < (double) this.getMaxHealth() * 0.5D && this.random.nextInt(4) == 0) {
-                this.p();
+                this.l();
             }
 
             return true;
@@ -409,8 +404,8 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    private boolean ds() {
-        return this.dn() == 0;
+    private boolean dG() {
+        return this.dA() == 0;
     }
 
     @Nullable
@@ -418,31 +413,31 @@ public class EntityShulker extends EntityGolem implements IMonster {
         return this.isAlive() ? this.getBoundingBox() : null;
     }
 
-    public EnumDirection dl() {
+    public EnumDirection dy() {
         return (EnumDirection) this.datawatcher.get(EntityShulker.a);
     }
 
     @Nullable
-    public BlockPosition dm() {
-        return (BlockPosition) ((Optional) this.datawatcher.get(EntityShulker.b)).orNull();
+    public BlockPosition dz() {
+        return (BlockPosition) ((Optional) this.datawatcher.get(EntityShulker.b)).orElse((Object) null);
     }
 
     public void g(@Nullable BlockPosition blockposition) {
-        this.datawatcher.set(EntityShulker.b, Optional.fromNullable(blockposition));
+        this.datawatcher.set(EntityShulker.b, Optional.ofNullable(blockposition));
     }
 
-    public int dn() {
+    public int dA() {
         return ((Byte) this.datawatcher.get(EntityShulker.c)).byteValue();
     }
 
     public void a(int i) {
         if (!this.world.isClientSide) {
-            this.getAttributeInstance(GenericAttributes.h).c(EntityShulker.bA);
+            this.getAttributeInstance(GenericAttributes.h).c(EntityShulker.bE);
             if (i == 0) {
-                this.getAttributeInstance(GenericAttributes.h).b(EntityShulker.bA);
-                this.a(SoundEffects.gF, 1.0F, 1.0F);
+                this.getAttributeInstance(GenericAttributes.h).b(EntityShulker.bE);
+                this.a(SoundEffects.ENTITY_SHULKER_CLOSE, 1.0F, 1.0F);
             } else {
-                this.a(SoundEffects.gJ, 1.0F, 1.0F);
+                this.a(SoundEffects.ENTITY_SHULKER_OPEN, 1.0F, 1.0F);
             }
         }
 
@@ -453,45 +448,39 @@ public class EntityShulker extends EntityGolem implements IMonster {
         return 0.5F;
     }
 
-    public int N() {
+    public int K() {
         return 180;
     }
 
-    public int O() {
+    public int L() {
         return 180;
     }
 
     public void collide(Entity entity) {}
 
-    public float aI() {
+    public float aM() {
         return 0.0F;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.z;
+    protected MinecraftKey G() {
+        return LootTables.F;
     }
 
     static class c extends PathfinderGoalNearestAttackableTarget<EntityLiving> {
 
         public c(EntityShulker entityshulker) {
-            super(entityshulker, EntityLiving.class, 10, true, false, new Predicate() {
-                public boolean a(@Nullable EntityLiving entityliving) {
-                    return entityliving instanceof IMonster;
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((EntityLiving) object);
-                }
+            super(entityshulker, EntityLiving.class, 10, true, false, (entityliving) -> {
+                return entityliving instanceof IMonster;
             });
         }
 
         public boolean a() {
-            return this.e.aY() == null ? false : super.a();
+            return this.e.be() == null ? false : super.a();
         }
 
         protected AxisAlignedBB a(double d0) {
-            EnumDirection enumdirection = ((EntityShulker) this.e).dl();
+            EnumDirection enumdirection = ((EntityShulker) this.e).dy();
 
             return enumdirection.k() == EnumDirection.EnumAxis.X ? this.e.getBoundingBox().grow(4.0D, d0, d0) : (enumdirection.k() == EnumDirection.EnumAxis.Z ? this.e.getBoundingBox().grow(d0, d0, 4.0D) : this.e.getBoundingBox().grow(d0, 4.0D, d0));
         }
@@ -508,7 +497,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
 
         protected AxisAlignedBB a(double d0) {
-            EnumDirection enumdirection = ((EntityShulker) this.e).dl();
+            EnumDirection enumdirection = ((EntityShulker) this.e).dy();
 
             return enumdirection.k() == EnumDirection.EnumAxis.X ? this.e.getBoundingBox().grow(4.0D, d0, d0) : (enumdirection.k() == EnumDirection.EnumAxis.Z ? this.e.getBoundingBox().grow(d0, d0, 4.0D) : this.e.getBoundingBox().grow(d0, 4.0D, d0));
         }
@@ -548,10 +537,10 @@ public class EntityShulker extends EntityGolem implements IMonster {
                 if (d0 < 400.0D) {
                     if (this.b <= 0) {
                         this.b = 20 + EntityShulker.this.random.nextInt(10) * 20 / 2;
-                        EntityShulkerBullet entityshulkerbullet = new EntityShulkerBullet(EntityShulker.this.world, EntityShulker.this, entityliving, EntityShulker.this.dl().k());
+                        EntityShulkerBullet entityshulkerbullet = new EntityShulkerBullet(EntityShulker.this.world, EntityShulker.this, entityliving, EntityShulker.this.dy().k());
 
                         EntityShulker.this.world.addEntity(entityshulkerbullet);
-                        EntityShulker.this.a(SoundEffects.gK, 2.0F, (EntityShulker.this.random.nextFloat() - EntityShulker.this.random.nextFloat()) * 0.2F + 1.0F);
+                        EntityShulker.this.a(SoundEffects.ENTITY_SHULKER_SHOOT, 2.0F, (EntityShulker.this.random.nextFloat() - EntityShulker.this.random.nextFloat()) * 0.2F + 1.0F);
                     }
                 } else {
                     EntityShulker.this.setGoalTarget((EntityLiving) null);

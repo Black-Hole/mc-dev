@@ -45,7 +45,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.a() || !this.a.getNavigation().o();
+        return this.a() || !this.a.getNavigation().q();
     }
 
     public void d() {
@@ -65,7 +65,7 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
         }
 
         if (d0 <= (double) this.j && this.f >= 20) {
-            this.a.getNavigation().p();
+            this.a.getNavigation().r();
         } else {
             this.a.getNavigation().a((Entity) this.c, this.e);
         }

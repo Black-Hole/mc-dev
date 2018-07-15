@@ -5,34 +5,30 @@ import javax.annotation.Nullable;
 public class EntityHorseMule extends EntityHorseChestedAbstract {
 
     public EntityHorseMule(World world) {
-        super(world);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityHorseChestedAbstract.b(dataconvertermanager, EntityHorseMule.class);
+        super(EntityTypes.MULE, world);
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.I;
+    protected MinecraftKey G() {
+        return LootTables.P;
     }
 
-    protected SoundEffect F() {
-        super.F();
-        return SoundEffects.ej;
+    protected SoundEffect D() {
+        super.D();
+        return SoundEffects.ENTITY_MULE_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        super.cf();
-        return SoundEffects.el;
+    protected SoundEffect cr() {
+        super.cr();
+        return SoundEffects.ENTITY_MULE_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         super.d(damagesource);
-        return SoundEffects.em;
+        return SoundEffects.ENTITY_MULE_HURT;
     }
 
-    protected void dp() {
-        this.a(SoundEffects.ek, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    protected void dC() {
+        this.a(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 }

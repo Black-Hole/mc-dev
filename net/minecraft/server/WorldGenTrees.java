@@ -2,30 +2,31 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenTrees extends WorldGenTreeAbstract {
+public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.OAK);
-    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-    private final int c;
+    private static final IBlockData b = Blocks.OAK_LOG.getBlockData();
+    private static final IBlockData c = Blocks.OAK_LEAVES.getBlockData();
+    protected final int a;
     private final boolean d;
-    private final IBlockData e;
-    private final IBlockData f;
+    private final IBlockData aH;
+    private final IBlockData aI;
 
     public WorldGenTrees(boolean flag) {
-        this(flag, 4, WorldGenTrees.a, WorldGenTrees.b, false);
+        this(flag, 4, WorldGenTrees.b, WorldGenTrees.c, false);
     }
 
     public WorldGenTrees(boolean flag, int i, IBlockData iblockdata, IBlockData iblockdata1, boolean flag1) {
         super(flag);
-        this.c = i;
-        this.e = iblockdata;
-        this.f = iblockdata1;
+        this.a = i;
+        this.aH = iblockdata;
+        this.aI = iblockdata1;
         this.d = flag1;
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        int i = random.nextInt(3) + this.c;
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+        int i = this.a(random);
         boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
@@ -48,7 +49,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                 for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
                     for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
                         if (l >= 0 && l < 256) {
-                            if (!this.a(world.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
+                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -61,10 +62,10 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block = world.getType(blockposition.down()).getBlock();
+                Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
-                    this.a(world, blockposition.down());
+                if ((block == Blocks.GRASS_BLOCK || Block.d(block) || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
+                    this.a(generatoraccess, blockposition.down());
                     boolean flag1 = true;
                     boolean flag2 = false;
 
@@ -85,10 +86,11 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
 
                                 if (Math.abs(j1) != i1 || Math.abs(i2) != i1 || random.nextInt(2) != 0 && k != 0) {
                                     blockposition1 = new BlockPosition(l1, j, k1);
-                                    Material material = world.getType(blockposition1).getMaterial();
+                                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
+                                    Material material = iblockdata.getMaterial();
 
-                                    if (material == Material.AIR || material == Material.LEAVES || material == Material.REPLACEABLE_PLANT) {
-                                        this.a(world, blockposition1, this.f);
+                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E) || material == Material.REPLACEABLE_PLANT) {
+                                        this.a(generatoraccess, blockposition1, this.aI);
                                     }
                                 }
                             }
@@ -96,25 +98,26 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                     }
 
                     for (j = 0; j < i; ++j) {
-                        Material material1 = world.getType(blockposition.up(j)).getMaterial();
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(j));
+                        Material material1 = iblockdata1.getMaterial();
 
-                        if (material1 == Material.AIR || material1 == Material.LEAVES || material1 == Material.REPLACEABLE_PLANT) {
-                            this.a(world, blockposition.up(j), this.e);
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E) || material1 == Material.REPLACEABLE_PLANT) {
+                            this.a(set, generatoraccess, blockposition.up(j), this.aH);
                             if (this.d && j > 0) {
-                                if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(-1, j, 0))) {
-                                    this.a(world, blockposition.a(-1, j, 0), BlockVine.EAST);
+                                if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition.a(-1, j, 0))) {
+                                    this.a(generatoraccess, blockposition.a(-1, j, 0), BlockVine.EAST);
                                 }
 
-                                if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(1, j, 0))) {
-                                    this.a(world, blockposition.a(1, j, 0), BlockVine.WEST);
+                                if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition.a(1, j, 0))) {
+                                    this.a(generatoraccess, blockposition.a(1, j, 0), BlockVine.WEST);
                                 }
 
-                                if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(0, j, -1))) {
-                                    this.a(world, blockposition.a(0, j, -1), BlockVine.SOUTH);
+                                if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition.a(0, j, -1))) {
+                                    this.a(generatoraccess, blockposition.a(0, j, -1), BlockVine.SOUTH);
                                 }
 
-                                if (random.nextInt(3) > 0 && world.isEmpty(blockposition.a(0, j, 1))) {
-                                    this.a(world, blockposition.a(0, j, 1), BlockVine.NORTH);
+                                if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition.a(0, j, 1))) {
+                                    this.a(generatoraccess, blockposition.a(0, j, 1), BlockVine.NORTH);
                                 }
                             }
                         }
@@ -129,27 +132,27 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                             for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
                                 for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1; ++k1) {
                                     blockposition_mutableblockposition1.c(j1, j, k1);
-                                    if (world.getType(blockposition_mutableblockposition1).getMaterial() == Material.LEAVES) {
+                                    if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.E)) {
                                         BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                         blockposition1 = blockposition_mutableblockposition1.east();
                                         BlockPosition blockposition3 = blockposition_mutableblockposition1.north();
                                         BlockPosition blockposition4 = blockposition_mutableblockposition1.south();
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition2).getMaterial() == Material.AIR) {
-                                            this.b(world, blockposition2, BlockVine.EAST);
+                                        if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition2).isAir()) {
+                                            this.b(generatoraccess, blockposition2, BlockVine.EAST);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition1).getMaterial() == Material.AIR) {
-                                            this.b(world, blockposition1, BlockVine.WEST);
+                                        if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition1).isAir()) {
+                                            this.b(generatoraccess, blockposition1, BlockVine.WEST);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition3).getMaterial() == Material.AIR) {
-                                            this.b(world, blockposition3, BlockVine.SOUTH);
+                                        if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition3).isAir()) {
+                                            this.b(generatoraccess, blockposition3, BlockVine.SOUTH);
                                         }
 
-                                        if (random.nextInt(4) == 0 && world.getType(blockposition4).getMaterial() == Material.AIR) {
-                                            this.b(world, blockposition4, BlockVine.NORTH);
+                                        if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition4).isAir()) {
+                                            this.b(generatoraccess, blockposition4, BlockVine.NORTH);
                                         }
                                     }
                                 }
@@ -166,7 +169,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
                                     if (random.nextInt(4 - j) == 0) {
                                         EnumDirection enumdirection1 = enumdirection.opposite();
 
-                                        this.a(world, random.nextInt(3), blockposition.a(enumdirection1.getAdjacentX(), i - 5 + j, enumdirection1.getAdjacentZ()), enumdirection);
+                                        this.a(generatoraccess, random.nextInt(3), blockposition.a(enumdirection1.getAdjacentX(), i - 5 + j, enumdirection1.getAdjacentZ()), enumdirection);
                                     }
                                 }
                             }
@@ -183,20 +186,24 @@ public class WorldGenTrees extends WorldGenTreeAbstract {
         }
     }
 
-    private void a(World world, int i, BlockPosition blockposition, EnumDirection enumdirection) {
-        this.a(world, blockposition, Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, Integer.valueOf(i)).set(BlockCocoa.FACING, enumdirection));
+    protected int a(Random random) {
+        return this.a + random.nextInt(3);
     }
 
-    private void a(World world, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
-        this.a(world, blockposition, Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true)));
+    private void a(GeneratorAccess generatoraccess, int i, BlockPosition blockposition, EnumDirection enumdirection) {
+        this.a(generatoraccess, blockposition, (IBlockData) ((IBlockData) Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, Integer.valueOf(i))).set(BlockCocoa.FACING, enumdirection));
     }
 
-    private void b(World world, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
-        this.a(world, blockposition, blockstateboolean);
+    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
+        this.a(generatoraccess, blockposition, (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true)));
+    }
+
+    private void b(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
+        this.a(generatoraccess, blockposition, blockstateboolean);
         int i = 4;
 
-        for (blockposition = blockposition.down(); world.getType(blockposition).getMaterial() == Material.AIR && i > 0; --i) {
-            this.a(world, blockposition, blockstateboolean);
+        for (blockposition = blockposition.down(); generatoraccess.getType(blockposition).isAir() && i > 0; --i) {
+            this.a(generatoraccess, blockposition, blockstateboolean);
             blockposition = blockposition.down();
         }
 

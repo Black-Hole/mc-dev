@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,9 +50,9 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
     }
 
     public CriterionTriggerConstructBeacon.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("level"));
+        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("level"));
 
-        return new CriterionTriggerConstructBeacon.b(criterionconditionvalue);
+        return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_d);
     }
 
     public void a(EntityPlayer entityplayer, TileEntityBeacon tileentitybeacon) {
@@ -119,15 +120,26 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue a;
+        private final CriterionConditionValue.d a;
 
-        public b(CriterionConditionValue criterionconditionvalue) {
+        public b(CriterionConditionValue.d criterionconditionvalue_d) {
             super(CriterionTriggerConstructBeacon.a);
-            this.a = criterionconditionvalue;
+            this.a = criterionconditionvalue_d;
+        }
+
+        public static CriterionTriggerConstructBeacon.b a(CriterionConditionValue.d criterionconditionvalue_d) {
+            return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_d);
         }
 
         public boolean a(TileEntityBeacon tileentitybeacon) {
-            return this.a.a((float) tileentitybeacon.s());
+            return this.a.d(tileentitybeacon.s());
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("level", this.a.d());
+            return jsonobject;
         }
     }
 }

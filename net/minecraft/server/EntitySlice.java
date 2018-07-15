@@ -23,7 +23,7 @@ public class EntitySlice<T> extends AbstractSet<T> {
         this.d = oclass;
         this.c.add(oclass);
         this.b.put(oclass, this.e);
-        Iterator iterator = EntitySlice.a.iterator();
+        Iterator iterator = Lists.newArrayList(EntitySlice.a).iterator();
 
         while (iterator.hasNext()) {
             Class oclass1 = (Class) iterator.next();
@@ -109,18 +109,16 @@ public class EntitySlice<T> extends AbstractSet<T> {
         return Iterators.contains(this.c(object.getClass()).iterator(), object);
     }
 
-    public <S> Iterable<S> c(final Class<S> oclass) {
-        return new Iterable() {
-            public Iterator<S> iterator() {
-                List list = (List) EntitySlice.this.b.get(EntitySlice.this.b(oclass));
+    public <S> Iterable<S> c(Class<S> oclass) {
+        return () -> {
+            List list = (List) this.b.get(this.b(oclass));
 
-                if (list == null) {
-                    return Collections.emptyIterator();
-                } else {
-                    Iterator iterator = list.iterator();
+            if (list == null) {
+                return Collections.emptyIterator();
+            } else {
+                Iterator iterator = list.iterator();
 
-                    return Iterators.filter(iterator, oclass);
-                }
+                return Iterators.filter(iterator, oclass);
             }
         };
     }

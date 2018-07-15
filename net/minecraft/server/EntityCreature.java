@@ -1,35 +1,33 @@
 package net.minecraft.server;
 
-import java.util.UUID;
-
 public abstract class EntityCreature extends EntityInsentient {
 
-    public static final UUID bv = UUID.fromString("E199AD21-BA8A-4C53-8D13-6182D5C69D3A");
-    public static final AttributeModifier bw = (new AttributeModifier(EntityCreature.bv, "Fleeing speed bonus", 2.0D, 2)).a(false);
     private BlockPosition a;
     private float b;
-    private final float c;
 
-    public EntityCreature(World world) {
-        super(world);
+    protected EntityCreature(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.a = BlockPosition.ZERO;
         this.b = -1.0F;
-        this.c = PathType.WATER.a();
     }
 
     public float a(BlockPosition blockposition) {
+        return this.a(blockposition, (IWorldReader) this.world);
+    }
+
+    public float a(BlockPosition blockposition, IWorldReader iworldreader) {
         return 0.0F;
     }
 
-    public boolean P() {
-        return super.P() && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ)) >= 0.0F;
+    public boolean a(GeneratorAccess generatoraccess) {
+        return super.a(generatoraccess) && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean de() {
-        return !this.navigation.o();
+    public boolean dr() {
+        return !this.navigation.q();
     }
 
-    public boolean df() {
+    public boolean ds() {
         return this.f(new BlockPosition(this));
     }
 
@@ -42,24 +40,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition dg() {
+    public BlockPosition dt() {
         return this.a;
     }
 
-    public float dh() {
+    public float du() {
         return this.b;
     }
 
-    public void di() {
+    public void dv() {
         this.b = -1.0F;
     }
 
-    public boolean dj() {
+    public boolean dw() {
         return this.b != -1.0F;
     }
 
-    protected void cZ() {
-        super.cZ();
+    protected void dl() {
+        super.dl();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -74,7 +72,7 @@ public abstract class EntityCreature extends EntityInsentient {
                 return;
             }
 
-            this.q(f);
+            this.u(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
                 this.goalSelector.c(1);
@@ -91,15 +89,15 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dk());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dx());
             }
         }
 
     }
 
-    protected double dk() {
+    protected double dx() {
         return 1.0D;
     }
 
-    protected void q(float f) {}
+    protected void u(float f) {}
 }

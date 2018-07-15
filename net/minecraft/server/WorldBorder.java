@@ -33,7 +33,7 @@ public class WorldBorder {
     }
 
     public boolean isInBounds(ChunkCoordIntPair chunkcoordintpair) {
-        return (double) chunkcoordintpair.e() > this.b() && (double) chunkcoordintpair.c() < this.d() && (double) chunkcoordintpair.f() > this.c() && (double) chunkcoordintpair.d() < this.e();
+        return (double) chunkcoordintpair.f() > this.b() && (double) chunkcoordintpair.d() < this.d() && (double) chunkcoordintpair.g() > this.c() && (double) chunkcoordintpair.e() < this.e();
     }
 
     public boolean a(AxisAlignedBB axisalignedbb) {
@@ -122,7 +122,7 @@ public class WorldBorder {
 
     public double getSize() {
         if (this.getState() != EnumWorldBorderState.STATIONARY) {
-            double d0 = (double) ((float) (System.currentTimeMillis() - this.g) / (float) (this.f - this.g));
+            double d0 = (double) ((float) (SystemUtils.b() - this.g) / (float) (this.f - this.g));
 
             if (d0 < 1.0D) {
                 return this.d + (this.e - this.d) * d0;
@@ -135,7 +135,7 @@ public class WorldBorder {
     }
 
     public long i() {
-        return this.getState() == EnumWorldBorderState.STATIONARY ? 0L : this.f - System.currentTimeMillis();
+        return this.getState() == EnumWorldBorderState.STATIONARY ? 0L : this.f - SystemUtils.b();
     }
 
     public double j() {
@@ -145,7 +145,7 @@ public class WorldBorder {
     public void setSize(double d0) {
         this.d = d0;
         this.e = d0;
-        this.f = System.currentTimeMillis();
+        this.f = SystemUtils.b();
         this.g = this.f;
         Iterator iterator = this.k().iterator();
 
@@ -160,7 +160,7 @@ public class WorldBorder {
     public void transitionSizeBetween(double d0, double d1, long i) {
         this.d = d0;
         this.e = d1;
-        this.g = System.currentTimeMillis();
+        this.g = SystemUtils.b();
         this.f = this.g + i;
         Iterator iterator = this.k().iterator();
 

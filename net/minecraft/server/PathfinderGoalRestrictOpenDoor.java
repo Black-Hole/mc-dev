@@ -13,11 +13,11 @@ public class PathfinderGoalRestrictOpenDoor extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (this.a.world.D()) {
+        if (this.a.world.K()) {
             return false;
         } else {
             BlockPosition blockposition = new BlockPosition(this.a);
-            Village village = this.a.world.ak().getClosestVillage(blockposition, 16);
+            Village village = this.a.world.ae().getClosestVillage(blockposition, 16);
 
             if (village == null) {
                 return false;
@@ -29,7 +29,7 @@ public class PathfinderGoalRestrictOpenDoor extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.a.world.D() ? false : !this.b.i() && this.b.c(new BlockPosition(this.a));
+        return this.a.world.K() ? false : !this.b.i() && this.b.c(new BlockPosition(this.a));
     }
 
     public void c() {

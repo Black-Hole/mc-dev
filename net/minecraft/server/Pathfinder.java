@@ -9,7 +9,7 @@ public class Pathfinder {
     private final Path a = new Path();
     private final Set<PathPoint> b = Sets.newHashSet();
     private final PathPoint[] c = new PathPoint[32];
-    private final PathfinderAbstract d;
+    private PathfinderAbstract d;
 
     public Pathfinder(PathfinderAbstract pathfinderabstract) {
         this.d = pathfinderabstract;

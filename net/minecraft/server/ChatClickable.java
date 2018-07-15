@@ -1,7 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ChatClickable {
 
@@ -31,14 +33,14 @@ public class ChatClickable {
                 return false;
             } else {
                 if (this.b != null) {
-                    if (!this.b.equals(chatclickable.b)) {
-                        return false;
+                    if (this.b.equals(chatclickable.b)) {
+                        return true;
                     }
-                } else if (chatclickable.b != null) {
-                    return false;
+                } else if (chatclickable.b == null) {
+                    return true;
                 }
 
-                return true;
+                return false;
             }
         } else {
             return false;
@@ -60,7 +62,9 @@ public class ChatClickable {
 
         OPEN_URL("open_url", true), OPEN_FILE("open_file", false), RUN_COMMAND("run_command", true), SUGGEST_COMMAND("suggest_command", true), CHANGE_PAGE("change_page", true);
 
-        private static final Map<String, ChatClickable.EnumClickAction> f = Maps.newHashMap();
+        private static final Map<String, ChatClickable.EnumClickAction> f = (Map) Arrays.stream(values()).collect(Collectors.toMap(ChatClickable.EnumClickAction::b, (chatclickable_enumclickaction) -> {
+            return chatclickable_enumclickaction;
+        }));
         private final boolean g;
         private final String h;
 
@@ -79,18 +83,6 @@ public class ChatClickable {
 
         public static ChatClickable.EnumClickAction a(String s) {
             return (ChatClickable.EnumClickAction) ChatClickable.EnumClickAction.f.get(s);
-        }
-
-        static {
-            ChatClickable.EnumClickAction[] achatclickable_enumclickaction = values();
-            int i = achatclickable_enumclickaction.length;
-
-            for (int j = 0; j < i; ++j) {
-                ChatClickable.EnumClickAction chatclickable_enumclickaction = achatclickable_enumclickaction[j];
-
-                ChatClickable.EnumClickAction.f.put(chatclickable_enumclickaction.b(), chatclickable_enumclickaction);
-            }
-
         }
     }
 }

@@ -3,10 +3,10 @@ package net.minecraft.server;
 public class ServerCommand {
 
     public final String command;
-    public final ICommandListener source;
+    public final CommandListenerWrapper source;
 
-    public ServerCommand(String s, ICommandListener icommandlistener) {
+    public ServerCommand(String s, CommandListenerWrapper commandlistenerwrapper) {
         this.command = s;
-        this.source = icommandlistener;
+        this.source = commandlistenerwrapper;
     }
 }

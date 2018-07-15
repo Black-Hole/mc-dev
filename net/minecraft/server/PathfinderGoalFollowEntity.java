@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public class PathfinderGoalFollowEntity extends PathfinderGoal {
 
@@ -17,16 +16,10 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     private float h;
     private final float i;
 
-    public PathfinderGoalFollowEntity(final EntityInsentient entityinsentient, double d0, float f, float f1) {
+    public PathfinderGoalFollowEntity(EntityInsentient entityinsentient, double d0, float f, float f1) {
         this.a = entityinsentient;
-        this.b = new Predicate() {
-            public boolean a(@Nullable EntityInsentient entityinsentient) {
-                return entityinsentient != null && entityinsentient1.getClass() != entityinsentient.getClass();
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((EntityInsentient) object);
-            }
+        this.b = (entityinsentient) -> {
+            return entityinsentient != null && entityinsentient1.getClass() != entityinsentient.getClass();
         };
         this.d = d0;
         this.e = entityinsentient.getNavigation();
@@ -58,7 +51,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.c != null && !this.e.o() && this.a.h(this.c) > (double) (this.g * this.g);
+        return this.c != null && !this.e.q() && this.a.h(this.c) > (double) (this.g * this.g);
     }
 
     public void c() {
@@ -69,13 +62,13 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
 
     public void d() {
         this.c = null;
-        this.e.p();
+        this.e.r();
         this.a.a(PathType.WATER, this.h);
     }
 
     public void e() {
         if (this.c != null && !this.a.isLeashed()) {
-            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.N());
+            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.K());
             if (--this.f <= 0) {
                 this.f = 10;
                 double d0 = this.a.locX - this.c.locX;
@@ -86,7 +79,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
                 if (d3 > (double) (this.g * this.g)) {
                     this.e.a((Entity) this.c, this.d);
                 } else {
-                    this.e.p();
+                    this.e.r();
                     ControllerLook controllerlook = this.c.getControllerLook();
 
                     if (d3 <= (double) this.g || controllerlook.e() == this.a.locX && controllerlook.f() == this.a.locY && controllerlook.g() == this.a.locZ) {

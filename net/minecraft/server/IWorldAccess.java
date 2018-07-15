@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public interface IWorldAccess {
 
-    void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i);
+    void a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i);
 
     void a(BlockPosition blockposition);
 
@@ -14,9 +14,9 @@ public interface IWorldAccess {
 
     void a(SoundEffect soundeffect, BlockPosition blockposition);
 
-    void a(int i, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5, int... aint);
+    void a(ParticleParam particleparam, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5);
 
-    void a(int i, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5, int... aint);
+    void a(ParticleParam particleparam, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5);
 
     void a(Entity entity);
 

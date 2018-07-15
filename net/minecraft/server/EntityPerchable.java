@@ -2,10 +2,10 @@ package net.minecraft.server;
 
 public abstract class EntityPerchable extends EntityTameableAnimal {
 
-    private int bB;
+    private int bG;
 
-    public EntityPerchable(World world) {
-        super(world);
+    protected EntityPerchable(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public boolean g(EntityHuman entityhuman) {
@@ -21,12 +21,12 @@ public abstract class EntityPerchable extends EntityTameableAnimal {
         }
     }
 
-    public void B_() {
-        ++this.bB;
-        super.B_();
+    public void tick() {
+        ++this.bG;
+        super.tick();
     }
 
-    public boolean dw() {
-        return this.bB > 100;
+    public boolean dK() {
+        return this.bG > 100;
     }
 }

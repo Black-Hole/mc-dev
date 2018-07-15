@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Lists;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.concurrent.Immutable;
 import org.apache.logging.log4j.LogManager;
@@ -151,45 +150,43 @@ public class BlockPosition extends BaseBlockPosition {
         return a(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
     }
 
-    public static Iterable<BlockPosition> a(final int i, final int j, final int k, final int l, final int i1, final int j1) {
-        return new Iterable() {
-            public Iterator<BlockPosition> iterator() {
-                return new AbstractIterator() {
-                    private boolean b = true;
-                    private int c;
-                    private int d;
-                    private int e;
+    public static Iterable<BlockPosition> a(int i, int j, int k, int l, int i1, int j1) {
+        return () -> {
+            return new AbstractIterator() {
+                private boolean g = true;
+                private int h;
+                private int i;
+                private int j;
 
-                    protected BlockPosition a() {
-                        if (this.b) {
-                            this.b = false;
-                            this.c = i;
-                            this.d = j;
-                            this.e = k;
-                            return new BlockPosition(i, j, k);
-                        } else if (this.c == l && this.d == i1 && this.e == j1) {
-                            return (BlockPosition) this.endOfData();
-                        } else {
-                            if (this.c < l) {
-                                ++this.c;
-                            } else if (this.d < i1) {
-                                this.c = i;
-                                ++this.d;
-                            } else if (this.e < j1) {
-                                this.c = i;
-                                this.d = j;
-                                ++this.e;
-                            }
-
-                            return new BlockPosition(this.c, this.d, this.e);
+                protected BlockPosition a() {
+                    if (this.g) {
+                        this.g = false;
+                        this.h = i;
+                        this.i = j;
+                        this.j = k;
+                        return new BlockPosition(i, j, k);
+                    } else if (this.h == l && this.i == i1 && this.j == j1) {
+                        return (BlockPosition) this.endOfData();
+                    } else {
+                        if (this.h < l) {
+                            ++this.h;
+                        } else if (this.i < i1) {
+                            this.h = i;
+                            ++this.i;
+                        } else if (this.j < j1) {
+                            this.h = i;
+                            this.i = j;
+                            ++this.j;
                         }
-                    }
 
-                    protected Object computeNext() {
-                        return this.a();
+                        return new BlockPosition(this.h, this.i, this.j);
                     }
-                };
-            }
+                }
+
+                protected Object computeNext() {
+                    return this.a();
+                }
+            };
         };
     }
 
@@ -201,39 +198,34 @@ public class BlockPosition extends BaseBlockPosition {
         return b(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()), Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
     }
 
-    public static Iterable<BlockPosition.MutableBlockPosition> b(final int i, final int j, final int k, final int l, final int i1, final int j1) {
-        return new Iterable() {
-            public Iterator<BlockPosition.MutableBlockPosition> iterator() {
-                return new AbstractIterator() {
-                    private BlockPosition.MutableBlockPosition b;
+    public static Iterable<BlockPosition.MutableBlockPosition> b(int i, int j, int k, int l, int i1, int j1) {
+        return () -> {
+            return new AbstractIterator() {
+                private BlockPosition.MutableBlockPosition g;
 
-                    protected BlockPosition.MutableBlockPosition a() {
-                        if (this.b == null) {
-                            this.b = new BlockPosition.MutableBlockPosition(i, j, k);
-                            return this.b;
-                        } else if (this.b.b == l && this.b.c == i1 && this.b.d == j1) {
-                            return (BlockPosition.MutableBlockPosition) this.endOfData();
-                        } else {
-                            if (this.b.b < l) {
-                                ++this.b.b;
-                            } else if (this.b.c < i1) {
-                                this.b.b = i;
-                                ++this.b.c;
-                            } else if (this.b.d < j1) {
-                                this.b.b = i;
-                                this.b.c = j;
-                                ++this.b.d;
-                            }
-
-                            return this.b;
+                protected BlockPosition.MutableBlockPosition a() {
+                    if (this.g == null) {
+                        this.g = new BlockPosition.MutableBlockPosition(i, j, k);
+                        return this.g;
+                    } else if (this.g.b == l && this.g.c == i1 && this.g.d == j1) {
+                        return (BlockPosition.MutableBlockPosition) this.endOfData();
+                    } else {
+                        if (this.g.b < l) {
+                            ++this.g.b;
+                        } else if (this.g.c < i1) {
+                            ++this.g.c;
+                        } else if (this.g.d < j1) {
+                            ++this.g.d;
                         }
-                    }
 
-                    protected Object computeNext() {
-                        return this.a();
+                        return this.g;
                     }
-                };
-            }
+                }
+
+                protected Object computeNext() {
+                    return this.a();
+                }
+            };
         };
     }
 
@@ -241,76 +233,83 @@ public class BlockPosition extends BaseBlockPosition {
         return this.c(baseblockposition);
     }
 
-    public static final class PooledBlockPosition extends BlockPosition.MutableBlockPosition {
+    public static final class b extends BlockPosition.MutableBlockPosition implements AutoCloseable {
 
         private boolean f;
-        private static final List<BlockPosition.PooledBlockPosition> g = Lists.newArrayList();
+        private static final List<BlockPosition.b> g = Lists.newArrayList();
 
-        private PooledBlockPosition(int i, int j, int k) {
+        private b(int i, int j, int k) {
             super(i, j, k);
         }
 
-        public static BlockPosition.PooledBlockPosition s() {
+        public static BlockPosition.b r() {
             return e(0, 0, 0);
         }
 
-        public static BlockPosition.PooledBlockPosition d(double d0, double d1, double d2) {
+        public static BlockPosition.b b(Entity entity) {
+            return d(entity.locX, entity.locY, entity.locZ);
+        }
+
+        public static BlockPosition.b d(double d0, double d1, double d2) {
             return e(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
         }
 
-        public static BlockPosition.PooledBlockPosition e(int i, int j, int k) {
-            List list = BlockPosition.PooledBlockPosition.g;
+        public static BlockPosition.b e(int i, int j, int k) {
+            List list = BlockPosition.b.g;
 
-            synchronized (BlockPosition.PooledBlockPosition.g) {
-                if (!BlockPosition.PooledBlockPosition.g.isEmpty()) {
-                    BlockPosition.PooledBlockPosition blockposition_pooledblockposition = (BlockPosition.PooledBlockPosition) BlockPosition.PooledBlockPosition.g.remove(BlockPosition.PooledBlockPosition.g.size() - 1);
+            synchronized (BlockPosition.b.g) {
+                if (!BlockPosition.b.g.isEmpty()) {
+                    BlockPosition.b blockposition_b = (BlockPosition.b) BlockPosition.b.g.remove(BlockPosition.b.g.size() - 1);
 
-                    if (blockposition_pooledblockposition != null && blockposition_pooledblockposition.f) {
-                        blockposition_pooledblockposition.f = false;
-                        blockposition_pooledblockposition.f(i, j, k);
-                        return blockposition_pooledblockposition;
+                    if (blockposition_b != null && blockposition_b.f) {
+                        blockposition_b.f = false;
+                        blockposition_b.f(i, j, k);
+                        return blockposition_b;
                     }
                 }
             }
 
-            return new BlockPosition.PooledBlockPosition(i, j, k);
+            return new BlockPosition.b(i, j, k);
         }
 
-        public void t() {
-            List list = BlockPosition.PooledBlockPosition.g;
+        public BlockPosition.b f(int i, int j, int k) {
+            return (BlockPosition.b) super.c(i, j, k);
+        }
 
-            synchronized (BlockPosition.PooledBlockPosition.g) {
-                if (BlockPosition.PooledBlockPosition.g.size() < 100) {
-                    BlockPosition.PooledBlockPosition.g.add(this);
+        public BlockPosition.b e(double d0, double d1, double d2) {
+            return (BlockPosition.b) super.c(d0, d1, d2);
+        }
+
+        public BlockPosition.b j(BaseBlockPosition baseblockposition) {
+            return (BlockPosition.b) super.g(baseblockposition);
+        }
+
+        public BlockPosition.b d(EnumDirection enumdirection) {
+            return (BlockPosition.b) super.c(enumdirection);
+        }
+
+        public BlockPosition.b d(EnumDirection enumdirection, int i) {
+            return (BlockPosition.b) super.c(enumdirection, i);
+        }
+
+        public BlockPosition.b g(int i, int j, int k) {
+            return (BlockPosition.b) super.d(i, j, k);
+        }
+
+        public void close() {
+            List list = BlockPosition.b.g;
+
+            synchronized (BlockPosition.b.g) {
+                if (BlockPosition.b.g.size() < 100) {
+                    BlockPosition.b.g.add(this);
                 }
 
                 this.f = true;
             }
         }
 
-        public BlockPosition.PooledBlockPosition f(int i, int j, int k) {
-            if (this.f) {
-                BlockPosition.b.error("PooledMutableBlockPosition modified after it was released.", new Throwable());
-                this.f = false;
-            }
-
-            return (BlockPosition.PooledBlockPosition) super.c(i, j, k);
-        }
-
-        public BlockPosition.PooledBlockPosition e(double d0, double d1, double d2) {
-            return (BlockPosition.PooledBlockPosition) super.c(d0, d1, d2);
-        }
-
-        public BlockPosition.PooledBlockPosition j(BaseBlockPosition baseblockposition) {
-            return (BlockPosition.PooledBlockPosition) super.g(baseblockposition);
-        }
-
-        public BlockPosition.PooledBlockPosition d(EnumDirection enumdirection) {
-            return (BlockPosition.PooledBlockPosition) super.c(enumdirection);
-        }
-
-        public BlockPosition.PooledBlockPosition d(EnumDirection enumdirection, int i) {
-            return (BlockPosition.PooledBlockPosition) super.c(enumdirection, i);
+        public BlockPosition.MutableBlockPosition d(int i, int j, int k) {
+            return this.g(i, j, k);
         }
 
         public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection, int i) {
@@ -404,6 +403,10 @@ public class BlockPosition extends BaseBlockPosition {
 
         public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection, int i) {
             return this.c(this.b + enumdirection.getAdjacentX() * i, this.c + enumdirection.getAdjacentY() * i, this.d + enumdirection.getAdjacentZ() * i);
+        }
+
+        public BlockPosition.MutableBlockPosition d(int i, int j, int k) {
+            return this.c(this.b + i, this.c + j, this.d + k);
         }
 
         public void p(int i) {

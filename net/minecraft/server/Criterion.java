@@ -83,4 +83,12 @@ public class Criterion {
     public CriterionInstance a() {
         return this.a;
     }
+
+    public JsonElement b() {
+        JsonObject jsonobject = new JsonObject();
+
+        jsonobject.addProperty("trigger", this.a.a().toString());
+        jsonobject.add("conditions", this.a.b());
+        return jsonobject;
+    }
 }

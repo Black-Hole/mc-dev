@@ -1,73 +1,40 @@
 package net.minecraft.server;
 
-import java.util.Random;
-import javax.annotation.Nullable;
-
 public class BlockPlant extends Block {
 
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.6000000238418579D, 0.699999988079071D);
-
-    protected BlockPlant() {
-        this(Material.PLANT);
+    protected BlockPlant(Block.Info block_info) {
+        super(block_info);
     }
 
-    protected BlockPlant(Material material) {
-        this(material, material.r());
+    protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Block block = iblockdata.getBlock();
+
+        return block == Blocks.GRASS_BLOCK || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.FARMLAND;
     }
 
-    protected BlockPlant(Material material, MaterialMapColor materialmapcolor) {
-        super(material, materialmapcolor);
-        this.a(true);
-        this.a(CreativeModeTab.c);
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return super.canPlace(world, blockposition) && this.x(world.getType(blockposition.down()));
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        BlockPosition blockposition1 = blockposition.down();
+
+        return this.b(iworldreader.getType(blockposition1), iworldreader, blockposition1);
     }
 
-    protected boolean x(IBlockData iblockdata) {
-        return iblockdata.getBlock() == Blocks.GRASS || iblockdata.getBlock() == Blocks.DIRT || iblockdata.getBlock() == Blocks.FARMLAND;
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        super.a(iblockdata, world, blockposition, block, blockposition1);
-        this.e(world, blockposition, iblockdata);
-    }
-
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        this.e(world, blockposition, iblockdata);
-    }
-
-    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.f(world, blockposition, iblockdata)) {
-            this.b(world, blockposition, iblockdata, 0);
-            world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
-        }
-
-    }
-
-    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.x(world.getType(blockposition.down()));
-    }
-
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockPlant.b;
-    }
-
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockPlant.k;
-    }
-
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
+    public TextureType c() {
+        return TextureType.CUTOUT;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return EnumBlockFaceShape.UNDEFINED;
+    }
+
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return 0;
     }
 }

@@ -4,7 +4,6 @@ public class EnchantmentSilkTouch extends Enchantment {
 
     protected EnchantmentSilkTouch(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.DIGGER, aenumitemslot);
-        this.c("untouching");
     }
 
     public int a(int i) {

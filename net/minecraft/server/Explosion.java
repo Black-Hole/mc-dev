@@ -21,10 +21,11 @@ public class Explosion {
     private final double posZ;
     public final Entity source;
     private final float size;
+    private DamageSource j;
     private final List<BlockPosition> blocks = Lists.newArrayList();
-    private final Map<EntityHuman, Vec3D> k = Maps.newHashMap();
+    private final Map<EntityHuman, Vec3D> l = Maps.newHashMap();
 
-    public Explosion(World world, Entity entity, double d0, double d1, double d2, float f, boolean flag, boolean flag1) {
+    public Explosion(World world, @Nullable Entity entity, double d0, double d1, double d2, float f, boolean flag, boolean flag1) {
         this.world = world;
         this.source = entity;
         this.size = f;
@@ -33,6 +34,7 @@ public class Explosion {
         this.posZ = d2;
         this.a = flag;
         this.b = flag1;
+        this.j = DamageSource.explosion(this);
     }
 
     public void a() {
@@ -62,9 +64,13 @@ public class Explosion {
                         for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
                             BlockPosition blockposition = new BlockPosition(d4, d5, d6);
                             IBlockData iblockdata = this.world.getType(blockposition);
+                            Fluid fluid = this.world.b(blockposition);
+                            float f2 = Math.max(iblockdata.getBlock().j(), fluid.l());
 
-                            if (iblockdata.getMaterial() != Material.AIR) {
-                                float f2 = this.source != null ? this.source.a(this, this.world, blockposition, iblockdata) : iblockdata.getBlock().a((Entity) null);
+                            if (f2 > 0.0F) {
+                                if (this.source != null) {
+                                    f2 = this.source.a(this, this.world, blockposition, iblockdata, fluid, f2);
+                                }
 
                                 f -= (f2 + 0.3F) * 0.3F;
                             }
@@ -97,7 +103,7 @@ public class Explosion {
         for (int l1 = 0; l1 < list.size(); ++l1) {
             Entity entity = (Entity) list.get(l1);
 
-            if (!entity.bB()) {
+            if (!entity.bL()) {
                 double d7 = entity.e(this.posX, this.posY, this.posZ) / (double) f3;
 
                 if (d7 <= 1.0D) {
@@ -113,7 +119,7 @@ public class Explosion {
                         double d12 = (double) this.world.a(vec3d, entity.getBoundingBox());
                         double d13 = (1.0D - d7) * d12;
 
-                        entity.damageEntity(DamageSource.explosion(this), (float) ((int) ((d13 * d13 + d13) / 2.0D * 7.0D * (double) f3 + 1.0D)));
+                        entity.damageEntity(this.b(), (float) ((int) ((d13 * d13 + d13) / 2.0D * 7.0D * (double) f3 + 1.0D)));
                         double d14 = d13;
 
                         if (entity instanceof EntityLiving) {
@@ -126,8 +132,8 @@ public class Explosion {
                         if (entity instanceof EntityHuman) {
                             EntityHuman entityhuman = (EntityHuman) entity;
 
-                            if (!entityhuman.isSpectator() && (!entityhuman.z() || !entityhuman.abilities.isFlying)) {
-                                this.k.put(entityhuman, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
+                            if (!entityhuman.isSpectator() && (!entityhuman.u() || !entityhuman.abilities.isFlying)) {
+                                this.l.put(entityhuman, new Vec3D(d8 * d13, d9 * d13, d10 * d13));
                             }
                         }
                     }
@@ -138,11 +144,11 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.bV, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
+        this.world.a((EntityHuman) null, this.posX, this.posY, this.posZ, SoundEffects.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F);
         if (this.size >= 2.0F && this.b) {
-            this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
+            this.world.addParticle(Particles.t, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D);
         } else {
-            this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
+            this.world.addParticle(Particles.u, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D);
         }
 
         Iterator iterator;
@@ -174,13 +180,13 @@ public class Explosion {
                     d3 *= d7;
                     d4 *= d7;
                     d5 *= d7;
-                    this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, (d0 + this.posX) / 2.0D, (d1 + this.posY) / 2.0D, (d2 + this.posZ) / 2.0D, d3, d4, d5, new int[0]);
-                    this.world.addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+                    this.world.addParticle(Particles.J, (d0 + this.posX) / 2.0D, (d1 + this.posY) / 2.0D, (d2 + this.posZ) / 2.0D, d3, d4, d5);
+                    this.world.addParticle(Particles.M, d0, d1, d2, d3, d4, d5);
                 }
 
-                if (iblockdata.getMaterial() != Material.AIR) {
+                if (!iblockdata.isAir()) {
                     if (block.a(this)) {
-                        block.dropNaturally(this.world, blockposition, this.world.getType(blockposition), 1.0F / this.size, 0);
+                        iblockdata.dropNaturally(this.world, blockposition, 1.0F / this.size, 0);
                     }
 
                     this.world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
@@ -194,7 +200,7 @@ public class Explosion {
 
             while (iterator.hasNext()) {
                 blockposition = (BlockPosition) iterator.next();
-                if (this.world.getType(blockposition).getMaterial() == Material.AIR && this.world.getType(blockposition.down()).b() && this.c.nextInt(3) == 0) {
+                if (this.world.getType(blockposition).isAir() && this.world.getType(blockposition.down()).f(this.world, blockposition.down()) && this.c.nextInt(3) == 0) {
                     this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
                 }
             }
@@ -202,8 +208,16 @@ public class Explosion {
 
     }
 
-    public Map<EntityHuman, Vec3D> b() {
-        return this.k;
+    public DamageSource b() {
+        return this.j;
+    }
+
+    public void a(DamageSource damagesource) {
+        this.j = damagesource;
+    }
+
+    public Map<EntityHuman, Vec3D> c() {
+        return this.l;
     }
 
     @Nullable

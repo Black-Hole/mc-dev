@@ -26,11 +26,11 @@ public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public PacketPlayInEntityAction.EnumPlayerAction b() {
+    public PacketPlayInEntityAction.EnumPlayerAction c() {
         return this.animation;
     }
 
-    public int c() {
+    public int d() {
         return this.c;
     }
 

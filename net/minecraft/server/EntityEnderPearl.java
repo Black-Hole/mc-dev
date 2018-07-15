@@ -7,16 +7,12 @@ public class EntityEnderPearl extends EntityProjectile {
     private EntityLiving e;
 
     public EntityEnderPearl(World world) {
-        super(world);
+        super(EntityTypes.ENDER_PEARL, world);
     }
 
     public EntityEnderPearl(World world, EntityLiving entityliving) {
-        super(world, entityliving);
+        super(EntityTypes.ENDER_PEARL, entityliving, world);
         this.e = entityliving;
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityProjectile.a(dataconvertermanager, "ThrownEnderpearl");
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
@@ -53,7 +49,7 @@ public class EntityEnderPearl extends EntityProjectile {
         }
 
         for (int i = 0; i < 32; ++i) {
-            this.world.addParticle(EnumParticle.PORTAL, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian(), new int[0]);
+            this.world.addParticle(Particles.K, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
         }
 
         if (!this.world.isClientSide) {
@@ -87,23 +83,23 @@ public class EntityEnderPearl extends EntityProjectile {
 
     }
 
-    public void B_() {
+    public void tick() {
         EntityLiving entityliving = this.getShooter();
 
         if (entityliving != null && entityliving instanceof EntityHuman && !entityliving.isAlive()) {
             this.die();
         } else {
-            super.B_();
+            super.tick();
         }
 
     }
 
     @Nullable
-    public Entity b(int i) {
+    public Entity d(int i) {
         if (this.shooter.dimension != i) {
             this.shooter = null;
         }
 
-        return super.b(i);
+        return super.d(i);
     }
 }

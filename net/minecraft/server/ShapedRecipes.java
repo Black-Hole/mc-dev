@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.annotation.Nullable;
 
 public class ShapedRecipes implements IRecipe {
 
@@ -21,57 +20,57 @@ public class ShapedRecipes implements IRecipe {
     private final int height;
     private final NonNullList<RecipeItemStack> items;
     private final ItemStack result;
-    private final String e;
+    private final MinecraftKey e;
+    private final String f;
 
-    public ShapedRecipes(String s, int i, int j, NonNullList<RecipeItemStack> nonnulllist, ItemStack itemstack) {
-        this.e = s;
+    public ShapedRecipes(MinecraftKey minecraftkey, String s, int i, int j, NonNullList<RecipeItemStack> nonnulllist, ItemStack itemstack) {
+        this.e = minecraftkey;
+        this.f = s;
         this.width = i;
         this.height = j;
         this.items = nonnulllist;
         this.result = itemstack;
     }
 
-    public ItemStack b() {
+    public MinecraftKey getKey() {
+        return this.e;
+    }
+
+    public RecipeSerializer<?> a() {
+        return RecipeSerializers.a;
+    }
+
+    public ItemStack d() {
         return this.result;
     }
 
-    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
-
-        for (int i = 0; i < nonnulllist.size(); ++i) {
-            ItemStack itemstack = inventorycrafting.getItem(i);
-
-            if (itemstack.getItem().r()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
-            }
-        }
-
-        return nonnulllist;
-    }
-
-    public NonNullList<RecipeItemStack> d() {
+    public NonNullList<RecipeItemStack> e() {
         return this.items;
     }
 
-    public boolean a(InventoryCrafting inventorycrafting, World world) {
-        for (int i = 0; i <= 3 - this.width; ++i) {
-            for (int j = 0; j <= 3 - this.height; ++j) {
-                if (this.a(inventorycrafting, i, j, true)) {
-                    return true;
-                }
+    public boolean a(IInventory iinventory, World world) {
+        if (!(iinventory instanceof InventoryCrafting)) {
+            return false;
+        } else {
+            for (int i = 0; i <= iinventory.U_() - this.width; ++i) {
+                for (int j = 0; j <= iinventory.n() - this.height; ++j) {
+                    if (this.a(iinventory, i, j, true)) {
+                        return true;
+                    }
 
-                if (this.a(inventorycrafting, i, j, false)) {
-                    return true;
+                    if (this.a(iinventory, i, j, false)) {
+                        return true;
+                    }
                 }
             }
-        }
 
-        return false;
+            return false;
+        }
     }
 
-    private boolean a(InventoryCrafting inventorycrafting, int i, int j, boolean flag) {
-        for (int k = 0; k < 3; ++k) {
-            for (int l = 0; l < 3; ++l) {
+    private boolean a(IInventory iinventory, int i, int j, boolean flag) {
+        for (int k = 0; k < iinventory.U_(); ++k) {
+            for (int l = 0; l < iinventory.n(); ++l) {
                 int i1 = k - i;
                 int j1 = l - j;
                 RecipeItemStack recipeitemstack = RecipeItemStack.a;
@@ -84,7 +83,7 @@ public class ShapedRecipes implements IRecipe {
                     }
                 }
 
-                if (!recipeitemstack.a(inventorycrafting.c(k, l))) {
+                if (!recipeitemstack.a(iinventory.getItem(k + l * iinventory.U_()))) {
                     return false;
                 }
             }
@@ -93,31 +92,19 @@ public class ShapedRecipes implements IRecipe {
         return true;
     }
 
-    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-        return this.b().cloneItemStack();
-    }
-
-    public int f() {
-        return this.width;
+    public ItemStack craftItem(IInventory iinventory) {
+        return this.d().cloneItemStack();
     }
 
     public int g() {
+        return this.width;
+    }
+
+    public int h() {
         return this.height;
     }
 
-    public static ShapedRecipes a(JsonObject jsonobject) {
-        String s = ChatDeserializer.a(jsonobject, "group", "");
-        Map map = b(ChatDeserializer.t(jsonobject, "key"));
-        String[] astring = a(a(ChatDeserializer.u(jsonobject, "pattern")));
-        int i = astring[0].length();
-        int j = astring.length;
-        NonNullList nonnulllist = a(astring, map, i, j);
-        ItemStack itemstack = a(ChatDeserializer.t(jsonobject, "result"), true);
-
-        return new ShapedRecipes(s, i, j, nonnulllist, itemstack);
-    }
-
-    private static NonNullList<RecipeItemStack> a(String[] astring, Map<String, RecipeItemStack> map, int i, int j) {
+    private static NonNullList<RecipeItemStack> b(String[] astring, Map<String, RecipeItemStack> map, int i, int j) {
         NonNullList nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
         HashSet hashset = Sets.newHashSet(map.keySet());
 
@@ -202,7 +189,7 @@ public class ShapedRecipes implements IRecipe {
         return i;
     }
 
-    private static String[] a(JsonArray jsonarray) {
+    private static String[] b(JsonArray jsonarray) {
         String[] astring = new String[jsonarray.size()];
 
         if (astring.length > 3) {
@@ -228,7 +215,7 @@ public class ShapedRecipes implements IRecipe {
         }
     }
 
-    private static Map<String, RecipeItemStack> b(JsonObject jsonobject) {
+    private static Map<String, RecipeItemStack> c(JsonObject jsonobject) {
         HashMap hashmap = Maps.newHashMap();
         Iterator iterator = jsonobject.entrySet().iterator();
 
@@ -243,52 +230,84 @@ public class ShapedRecipes implements IRecipe {
                 throw new JsonSyntaxException("Invalid key entry: \' \' is a reserved symbol.");
             }
 
-            hashmap.put(entry.getKey(), a((JsonElement) entry.getValue()));
+            hashmap.put(entry.getKey(), RecipeItemStack.a((JsonElement) entry.getValue()));
         }
 
         hashmap.put(" ", RecipeItemStack.a);
         return hashmap;
     }
 
-    public static RecipeItemStack a(@Nullable JsonElement jsonelement) {
-        if (jsonelement != null && !jsonelement.isJsonNull()) {
-            if (jsonelement.isJsonObject()) {
-                return RecipeItemStack.a(new ItemStack[] { a(jsonelement.getAsJsonObject(), false)});
-            } else if (!jsonelement.isJsonArray()) {
-                throw new JsonSyntaxException("Expected item to be object or array of objects");
-            } else {
-                JsonArray jsonarray = jsonelement.getAsJsonArray();
-
-                if (jsonarray.size() == 0) {
-                    throw new JsonSyntaxException("Item array cannot be empty, at least one item must be defined");
-                } else {
-                    ItemStack[] aitemstack = new ItemStack[jsonarray.size()];
-
-                    for (int i = 0; i < jsonarray.size(); ++i) {
-                        aitemstack[i] = a(ChatDeserializer.m(jsonarray.get(i), "item"), false);
-                    }
-
-                    return RecipeItemStack.a(aitemstack);
-                }
-            }
-        } else {
-            throw new JsonSyntaxException("Item cannot be null");
-        }
-    }
-
-    public static ItemStack a(JsonObject jsonobject, boolean flag) {
+    public static ItemStack a(JsonObject jsonobject) {
         String s = ChatDeserializer.h(jsonobject, "item");
         Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
 
         if (item == null) {
             throw new JsonSyntaxException("Unknown item \'" + s + "\'");
-        } else if (item.k() && !jsonobject.has("data")) {
-            throw new JsonParseException("Missing data for item \'" + s + "\'");
+        } else if (jsonobject.has("data")) {
+            throw new JsonParseException("Disallowed data tag found");
         } else {
-            int i = ChatDeserializer.a(jsonobject, "data", 0);
-            int j = flag ? ChatDeserializer.a(jsonobject, "count", 1) : 1;
+            int i = ChatDeserializer.a(jsonobject, "count", 1);
 
-            return new ItemStack(item, j, i);
+            return new ItemStack(item, i);
+        }
+    }
+
+    public static class a implements RecipeSerializer<ShapedRecipes> {
+
+        public a() {}
+
+        public ShapedRecipes b(MinecraftKey minecraftkey, JsonObject jsonobject) {
+            String s = ChatDeserializer.a(jsonobject, "group", "");
+            Map map = ShapedRecipes.c(ChatDeserializer.t(jsonobject, "key"));
+            String[] astring = ShapedRecipes.a(ShapedRecipes.b(ChatDeserializer.u(jsonobject, "pattern")));
+            int i = astring[0].length();
+            int j = astring.length;
+            NonNullList nonnulllist = ShapedRecipes.b(astring, map, i, j);
+            ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"));
+
+            return new ShapedRecipes(minecraftkey, s, i, j, nonnulllist, itemstack);
+        }
+
+        public String a() {
+            return "crafting_shaped";
+        }
+
+        public ShapedRecipes b(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+            int i = packetdataserializer.g();
+            int j = packetdataserializer.g();
+            String s = packetdataserializer.e(32767);
+            NonNullList nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
+
+            for (int k = 0; k < nonnulllist.size(); ++k) {
+                nonnulllist.set(k, RecipeItemStack.b(packetdataserializer));
+            }
+
+            ItemStack itemstack = packetdataserializer.k();
+
+            return new ShapedRecipes(minecraftkey, s, i, j, nonnulllist, itemstack);
+        }
+
+        public void a(PacketDataSerializer packetdataserializer, ShapedRecipes shapedrecipes) {
+            packetdataserializer.d(shapedrecipes.width);
+            packetdataserializer.d(shapedrecipes.height);
+            packetdataserializer.a(shapedrecipes.f);
+            Iterator iterator = shapedrecipes.items.iterator();
+
+            while (iterator.hasNext()) {
+                RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
+
+                recipeitemstack.a(packetdataserializer);
+            }
+
+            packetdataserializer.a(shapedrecipes.result);
+        }
+
+        public IRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+            return this.b(minecraftkey, packetdataserializer);
+        }
+
+        public IRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
+            return this.b(minecraftkey, jsonobject);
         }
     }
 }

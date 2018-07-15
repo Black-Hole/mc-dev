@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenForest extends WorldGenTreeAbstract {
+public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.BIRCH);
-    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.BIRCH).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData a = Blocks.BIRCH_LOG.getBlockData();
+    private static final IBlockData b = Blocks.BIRCH_LEAVES.getBlockData();
     private final boolean c;
 
     public WorldGenForest(boolean flag, boolean flag1) {
@@ -13,7 +14,7 @@ public class WorldGenForest extends WorldGenTreeAbstract {
         this.c = flag1;
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i = random.nextInt(3) + 5;
 
         if (this.c) {
@@ -42,7 +43,7 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                 for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
                     for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
                         if (l >= 0 && l < 256) {
-                            if (!this.a(world.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
+                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -55,10 +56,10 @@ public class WorldGenForest extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block = world.getType(blockposition.down()).getBlock();
+                Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
-                    this.a(world, blockposition.down());
+                if ((block == Blocks.GRASS_BLOCK || Block.d(block) || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
+                    this.a(generatoraccess, blockposition.down());
 
                     int i1;
 
@@ -75,10 +76,10 @@ public class WorldGenForest extends WorldGenTreeAbstract {
 
                                 if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
                                     BlockPosition blockposition1 = new BlockPosition(k, i1, l1);
-                                    Material material = world.getType(blockposition1).getMaterial();
+                                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                                    if (material == Material.AIR || material == Material.LEAVES) {
-                                        this.a(world, blockposition1, WorldGenForest.b);
+                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                                        this.a(generatoraccess, blockposition1, WorldGenForest.b);
                                     }
                                 }
                             }
@@ -86,10 +87,10 @@ public class WorldGenForest extends WorldGenTreeAbstract {
                     }
 
                     for (i1 = 0; i1 < i; ++i1) {
-                        Material material1 = world.getType(blockposition.up(i1)).getMaterial();
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
 
-                        if (material1 == Material.AIR || material1 == Material.LEAVES) {
-                            this.a(world, blockposition.up(i1), WorldGenForest.a);
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                            this.a(set, generatoraccess, blockposition.up(i1), WorldGenForest.a);
                         }
                     }
 

@@ -2,9 +2,8 @@ package net.minecraft.server;
 
 public class ItemEnderPearl extends Item {
 
-    public ItemEnderPearl() {
-        this.maxStackSize = 16;
-        this.b(CreativeModeTab.f);
+    public ItemEnderPearl(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -14,7 +13,7 @@ public class ItemEnderPearl extends Item {
             itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bn, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemEnderPearl.k.nextFloat() * 0.4F + 0.8F));
         entityhuman.getCooldownTracker().a(this, 20);
         if (!world.isClientSide) {
             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
@@ -23,7 +22,7 @@ public class ItemEnderPearl extends Item {
             world.addEntity(entityenderpearl);
         }
 
-        entityhuman.b(StatisticList.b((Item) this));
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

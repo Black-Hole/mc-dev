@@ -13,7 +13,7 @@ public class PathfinderGoalSit extends PathfinderGoal {
     public boolean a() {
         if (!this.entity.isTamed()) {
             return false;
-        } else if (this.entity.isInWater()) {
+        } else if (this.entity.aq()) {
             return false;
         } else if (!this.entity.onGround) {
             return false;
@@ -25,7 +25,7 @@ public class PathfinderGoalSit extends PathfinderGoal {
     }
 
     public void c() {
-        this.entity.getNavigation().p();
+        this.entity.getNavigation().r();
         this.entity.setSitting(true);
     }
 

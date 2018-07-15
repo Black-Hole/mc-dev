@@ -1,35 +1,39 @@
 package net.minecraft.server;
 
-public class CommandSaveOn extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.function.Predicate;
 
-    public CommandSaveOn() {}
+public class CommandSaveOn {
 
-    public String getCommand() {
-        return "save-on";
-    }
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.alreadyOn", new Object[0]));
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.save-on.usage";
-    }
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("save-on").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(4);
+        })).executes((commandcontext) -> {
+            CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
+            boolean flag = false;
+            WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
+            int i = aworldserver.length;
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        boolean flag = false;
+            for (int j = 0; j < i; ++j) {
+                WorldServer worldserver = aworldserver[j];
 
-        for (int i = 0; i < minecraftserver.worldServer.length; ++i) {
-            if (minecraftserver.worldServer[i] != null) {
-                WorldServer worldserver = minecraftserver.worldServer[i];
-
-                if (worldserver.savingDisabled) {
+                if (worldserver != null && worldserver.savingDisabled) {
                     worldserver.savingDisabled = false;
                     flag = true;
                 }
             }
-        }
 
-        if (flag) {
-            a(icommandlistener, (ICommand) this, "commands.save.enabled", new Object[0]);
-        } else {
-            throw new CommandException("commands.save-on.alreadyOn", new Object[0]);
-        }
+            if (!flag) {
+                throw CommandSaveOn.a.create();
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.enabled", new Object[0]), true);
+                return 1;
+            }
+        }));
     }
 }

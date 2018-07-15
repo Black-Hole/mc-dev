@@ -4,7 +4,6 @@ public class EnchantmentWaterWorker extends Enchantment {
 
     public EnchantmentWaterWorker(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_HEAD, aenumitemslot);
-        this.c("waterWorker");
     }
 
     public int a(int i) {

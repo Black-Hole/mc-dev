@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 public class ChatComponentKeybind extends ChatBaseComponent {
 
-    public static Function<String, Supplier<String>> b = (var0) -> {
+    public static Function<String, Supplier<String>> b = (s) -> {
         return () -> {
             return s;
         };
@@ -26,7 +26,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return (String) this.d.get();
     }
 
-    public ChatComponentKeybind g() {
+    public ChatComponentKeybind f() {
         ChatComponentKeybind chatcomponentkeybind = new ChatComponentKeybind(this.c);
 
         chatcomponentkeybind.setChatModifier(this.getChatModifier().clone());
@@ -35,7 +35,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            chatcomponentkeybind.addSibling(ichatbasecomponent.f());
+            chatcomponentkeybind.addSibling(ichatbasecomponent.e());
         }
 
         return chatcomponentkeybind;
@@ -57,11 +57,11 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return "KeybindComponent{keybind=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String h() {
+    public String g() {
         return this.c;
     }
 
-    public IChatBaseComponent f() {
-        return this.g();
+    public IChatBaseComponent e() {
+        return this.f();
     }
 }

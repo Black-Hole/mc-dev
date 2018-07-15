@@ -22,10 +22,8 @@ public class GuiStatsComponent extends JComponent {
         this.setPreferredSize(new Dimension(456, 246));
         this.setMinimumSize(new Dimension(456, 246));
         this.setMaximumSize(new Dimension(456, 246));
-        (new Timer(500, new ActionListener() {
-            public void actionPerformed(ActionEvent actionevent) {
-                GuiStatsComponent.this.a();
-            }
+        (new Timer(500, (actionevent) -> {
+            this.a();
         })).start();
         this.setBackground(Color.BLACK);
     }
@@ -35,7 +33,7 @@ public class GuiStatsComponent extends JComponent {
 
         System.gc();
         this.d[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.h) * 1.0E-6D) + " ms";
+        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.e) * 1.0E-6D) + " ms";
         this.b[this.c++ & 255] = (int) (i * 100L / Runtime.getRuntime().maxMemory());
         this.repaint();
     }

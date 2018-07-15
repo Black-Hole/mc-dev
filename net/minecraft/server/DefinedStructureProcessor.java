@@ -5,5 +5,5 @@ import javax.annotation.Nullable;
 public interface DefinedStructureProcessor {
 
     @Nullable
-    DefinedStructure.BlockInfo a(World world, BlockPosition blockposition, DefinedStructure.BlockInfo definedstructure_blockinfo);
+    DefinedStructure.BlockInfo a(IBlockAccess iblockaccess, BlockPosition blockposition, DefinedStructure.BlockInfo definedstructure_blockinfo);
 }

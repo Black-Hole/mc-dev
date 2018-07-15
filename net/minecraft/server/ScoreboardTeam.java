@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class ScoreboardTeam extends ScoreboardTeamBase {
@@ -11,8 +12,8 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     private final String b;
     private final Set<String> c = Sets.newHashSet();
     private String d;
-    private String e = "";
-    private String f = "";
+    private IChatBaseComponent e = new ChatComponentText("");
+    private IChatBaseComponent f = new ChatComponentText("");
     private boolean g = true;
     private boolean h = true;
     private ScoreboardTeamBase.EnumNameTagVisibility i;
@@ -38,6 +39,19 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.d;
     }
 
+    public IChatBaseComponent d() {
+        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((new ChatComponentText(this.d)).a((chatmodifier) -> {
+            chatmodifier.setInsertion(this.b).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
+        }));
+        EnumChatFormat enumchatformat = this.getColor();
+
+        if (enumchatformat != EnumChatFormat.RESET) {
+            ichatbasecomponent.a(enumchatformat);
+        }
+
+        return ichatbasecomponent;
+    }
+
     public void setDisplayName(String s) {
         if (s == null) {
             throw new IllegalArgumentException("Name cannot be null");
@@ -47,38 +61,41 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         }
     }
 
+    public void a(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.e = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
+        this.a.handleTeamChanged(this);
+    }
+
+    public IChatBaseComponent e() {
+        return this.e;
+    }
+
+    public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.f = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
+        this.a.handleTeamChanged(this);
+    }
+
+    public IChatBaseComponent f() {
+        return this.f;
+    }
+
     public Collection<String> getPlayerNameSet() {
         return this.c;
     }
 
-    public String getPrefix() {
-        return this.e;
-    }
+    public IChatBaseComponent getFormattedName(IChatBaseComponent ichatbasecomponent) {
+        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("")).addSibling(this.e).addSibling(ichatbasecomponent).addSibling(this.f);
+        EnumChatFormat enumchatformat = this.getColor();
 
-    public void setPrefix(String s) {
-        if (s == null) {
-            throw new IllegalArgumentException("Prefix cannot be null");
-        } else {
-            this.e = s;
-            this.a.handleTeamChanged(this);
+        if (enumchatformat != EnumChatFormat.RESET) {
+            ichatbasecomponent1.a(enumchatformat);
         }
+
+        return ichatbasecomponent1;
     }
 
-    public String getSuffix() {
-        return this.f;
-    }
-
-    public void setSuffix(String s) {
-        this.f = s;
-        this.a.handleTeamChanged(this);
-    }
-
-    public String getFormattedName(String s) {
-        return this.getPrefix() + s + this.getSuffix();
-    }
-
-    public static String getPlayerDisplayName(@Nullable ScoreboardTeamBase scoreboardteambase, String s) {
-        return scoreboardteambase == null ? s : scoreboardteambase.getFormattedName(s);
+    public static IChatBaseComponent a(@Nullable ScoreboardTeamBase scoreboardteambase, IChatBaseComponent ichatbasecomponent) {
+        return scoreboardteambase == null ? ichatbasecomponent.e() : scoreboardteambase.getFormattedName(ichatbasecomponent);
     }
 
     public boolean allowFriendlyFire() {
@@ -142,6 +159,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
 
     public void setColor(EnumChatFormat enumchatformat) {
         this.k = enumchatformat;
+        this.a.handleTeamChanged(this);
     }
 
     public EnumChatFormat getColor() {

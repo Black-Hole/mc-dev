@@ -29,11 +29,11 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
         packethandshakinginlistener.a(this);
     }
 
-    public EnumProtocol a() {
+    public EnumProtocol b() {
         return this.d;
     }
 
-    public int b() {
+    public int c() {
         return this.a;
     }
 }

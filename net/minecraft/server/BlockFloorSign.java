@@ -2,38 +2,36 @@ package net.minecraft.server;
 
 public class BlockFloorSign extends BlockSign {
 
-    public static final BlockStateInteger ROTATION = BlockStateInteger.of("rotation", 0, 15);
+    public static final BlockStateInteger ROTATION = BlockProperties.am;
 
-    public BlockFloorSign() {
-        this.w(this.blockStateList.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(0)));
+    public BlockFloorSign(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFloorSign.ROTATION, Integer.valueOf(0))).set(BlockFloorSign.a, Boolean.valueOf(false)));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!world.getType(blockposition.down()).getMaterial().isBuildable()) {
-            this.b(world, blockposition, iblockdata, 0);
-            world.setAir(blockposition);
-        }
-
-        super.a(iblockdata, world, blockposition, block, blockposition1);
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        return iworldreader.getType(blockposition.down()).getMaterial().isBuildable();
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(i));
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockFloorSign.ROTATION, Integer.valueOf(MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15))).set(BlockFloorSign.a, Boolean.valueOf(fluid.c() == FluidTypes.c));
     }
 
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue();
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == EnumDirection.DOWN && !this.canPlace(iblockdata, generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockFloorSign.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockFloorSign.ROTATION)).intValue(), 16)));
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockFloorSign.ROTATION});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockFloorSign.ROTATION, BlockFloorSign.a});
     }
 }

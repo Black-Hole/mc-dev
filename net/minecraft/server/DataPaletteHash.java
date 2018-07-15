@@ -1,26 +1,33 @@
 package net.minecraft.server;
 
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
-public class DataPaletteHash implements DataPalette {
+public class DataPaletteHash<T> implements DataPalette<T> {
 
-    private final RegistryID<IBlockData> a;
-    private final DataPaletteExpandable b;
-    private final int c;
+    private final RegistryBlockID<T> a;
+    private final RegistryID<T> b;
+    private final DataPaletteExpandable<T> c;
+    private final Function<NBTTagCompound, T> d;
+    private final Function<T, NBTTagCompound> e;
+    private final int f;
 
-    public DataPaletteHash(int i, DataPaletteExpandable datapaletteexpandable) {
-        this.c = i;
-        this.b = datapaletteexpandable;
-        this.a = new RegistryID(1 << i);
+    public DataPaletteHash(RegistryBlockID<T> registryblockid, int i, DataPaletteExpandable<T> datapaletteexpandable, Function<NBTTagCompound, T> function, Function<T, NBTTagCompound> function1) {
+        this.a = registryblockid;
+        this.f = i;
+        this.c = datapaletteexpandable;
+        this.d = function;
+        this.e = function1;
+        this.b = new RegistryID(1 << i);
     }
 
-    public int a(IBlockData iblockdata) {
-        int i = this.a.getId(iblockdata);
+    public int a(T t0) {
+        int i = this.b.getId(t0);
 
         if (i == -1) {
-            i = this.a.c(iblockdata);
-            if (i >= 1 << this.c) {
-                i = this.b.a(this.c + 1, iblockdata);
+            i = this.b.c(t0);
+            if (i >= 1 << this.f) {
+                i = this.c.onResize(this.f + 1, t0);
             }
         }
 
@@ -28,28 +35,48 @@ public class DataPaletteHash implements DataPalette {
     }
 
     @Nullable
-    public IBlockData a(int i) {
-        return (IBlockData) this.a.fromId(i);
+    public T a(int i) {
+        return this.b.fromId(i);
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        int i = this.a.b();
+        int i = this.b();
 
         packetdataserializer.d(i);
 
         for (int j = 0; j < i; ++j) {
-            packetdataserializer.d(Block.REGISTRY_ID.getId(this.a.fromId(j)));
+            packetdataserializer.d(this.a.getId(this.b.fromId(j)));
         }
 
     }
 
     public int a() {
-        int i = PacketDataSerializer.a(this.a.b());
+        int i = PacketDataSerializer.a(this.b());
 
-        for (int j = 0; j < this.a.b(); ++j) {
-            i += PacketDataSerializer.a(Block.REGISTRY_ID.getId(this.a.fromId(j)));
+        for (int j = 0; j < this.b(); ++j) {
+            i += PacketDataSerializer.a(this.a.getId(this.b.fromId(j)));
         }
 
         return i;
+    }
+
+    public int b() {
+        return this.b.b();
+    }
+
+    public void a(NBTTagList nbttaglist) {
+        this.b.a();
+
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            this.b.c(this.d.apply(nbttaglist.getCompound(i)));
+        }
+
+    }
+
+    public void b(NBTTagList nbttaglist) {
+        for (int i = 0; i < this.b(); ++i) {
+            nbttaglist.add((NBTBase) this.e.apply(this.b.fromId(i)));
+        }
+
     }
 }

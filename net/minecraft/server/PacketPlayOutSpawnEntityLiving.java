@@ -26,13 +26,13 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
         this.b = entityliving.getUniqueID();
-        this.c = EntityTypes.b.a((Object) entityliving.getClass());
+        this.c = EntityTypes.REGISTRY.a((Object) entityliving.P());
         this.d = entityliving.locX;
         this.e = entityliving.locY;
         this.f = entityliving.locZ;
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aP * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aS * 256.0F / 360.0F));
         double d0 = 3.9D;
         double d1 = entityliving.motX;
         double d2 = entityliving.motY;

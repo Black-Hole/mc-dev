@@ -2,26 +2,25 @@ package net.minecraft.server;
 
 public class ItemElytra extends Item {
 
-    public ItemElytra() {
-        this.maxStackSize = 1;
-        this.setMaxDurability(432);
-        this.b(CreativeModeTab.e);
-        this.a(new MinecraftKey("broken"), new IDynamicTexture() {
+    public ItemElytra(Item.Info item_info) {
+        super(item_info);
+        this.a(new MinecraftKey("broken"), (itemstack, world, entityliving) -> {
+            return e(itemstack) ? 0.0F : 1.0F;
         });
-        BlockDispenser.REGISTRY.a(this, ItemArmor.b);
+        BlockDispenser.a((IMaterial) this, ItemArmor.a);
     }
 
-    public static boolean d(ItemStack itemstack) {
-        return itemstack.i() < itemstack.k() - 1;
+    public static boolean e(ItemStack itemstack) {
+        return itemstack.getDamage() < itemstack.h() - 1;
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack1.getItem() == Items.LEATHER;
+        return itemstack1.getItem() == Items.PHANTOM_MEMBRANE;
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
+        EnumItemSlot enumitemslot = EntityInsentient.e(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
         if (itemstack1.isEmpty()) {

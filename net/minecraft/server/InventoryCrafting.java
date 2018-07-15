@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
-public class InventoryCrafting implements IInventory {
+public class InventoryCrafting implements IInventory, AutoRecipeOutput {
 
     private final NonNullList<ItemStack> items;
     private final int b;
@@ -20,7 +21,7 @@ public class InventoryCrafting implements IInventory {
         return this.items.size();
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -40,20 +41,17 @@ public class InventoryCrafting implements IInventory {
         return i >= this.getSize() ? ItemStack.a : (ItemStack) this.items.get(i);
     }
 
-    public ItemStack c(int i, int j) {
-        return i >= 0 && i < this.b && j >= 0 && j <= this.c ? this.getItem(i + j * this.b) : ItemStack.a;
-    }
-
-    public String getName() {
-        return "container.crafting";
+    public IChatBaseComponent getDisplayName() {
+        return new ChatMessage("container.crafting", new Object[0]);
     }
 
     public boolean hasCustomName() {
         return false;
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return null;
     }
 
     public ItemStack splitWithoutUpdate(int i) {
@@ -107,11 +105,11 @@ public class InventoryCrafting implements IInventory {
         this.items.clear();
     }
 
-    public int i() {
+    public int n() {
         return this.c;
     }
 
-    public int j() {
+    public int U_() {
         return this.b;
     }
 

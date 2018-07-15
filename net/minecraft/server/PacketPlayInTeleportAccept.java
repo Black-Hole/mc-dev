@@ -20,7 +20,7 @@ public class PacketPlayInTeleportAccept implements Packet<PacketListenerPlayIn> 
         packetlistenerplayin.a(this);
     }
 
-    public int a() {
+    public int b() {
         return this.a;
     }
 }

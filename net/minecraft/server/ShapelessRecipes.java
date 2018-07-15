@@ -1,107 +1,138 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import java.util.ArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.Iterator;
 
 public class ShapelessRecipes implements IRecipe {
 
+    private final MinecraftKey a;
+    private final String b;
     private final ItemStack result;
     private final NonNullList<RecipeItemStack> ingredients;
-    private final String c;
 
-    public ShapelessRecipes(String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
-        this.c = s;
+    public ShapelessRecipes(MinecraftKey minecraftkey, String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
+        this.a = minecraftkey;
+        this.b = s;
         this.result = itemstack;
         this.ingredients = nonnulllist;
     }
 
-    public ItemStack b() {
+    public MinecraftKey getKey() {
+        return this.a;
+    }
+
+    public RecipeSerializer<?> a() {
+        return RecipeSerializers.b;
+    }
+
+    public ItemStack d() {
         return this.result;
     }
 
-    public NonNullList<RecipeItemStack> d() {
+    public NonNullList<RecipeItemStack> e() {
         return this.ingredients;
     }
 
-    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-        NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
+    public boolean a(IInventory iinventory, World world) {
+        if (!(iinventory instanceof InventoryCrafting)) {
+            return false;
+        } else {
+            AutoRecipeStackManager autorecipestackmanager = new AutoRecipeStackManager();
+            int i = 0;
 
-        for (int i = 0; i < nonnulllist.size(); ++i) {
-            ItemStack itemstack = inventorycrafting.getItem(i);
+            for (int j = 0; j < iinventory.n(); ++j) {
+                for (int k = 0; k < iinventory.U_(); ++k) {
+                    ItemStack itemstack = iinventory.getItem(k + j * iinventory.U_());
 
-            if (itemstack.getItem().r()) {
-                nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
-            }
-        }
-
-        return nonnulllist;
-    }
-
-    public boolean a(InventoryCrafting inventorycrafting, World world) {
-        ArrayList arraylist = Lists.newArrayList(this.ingredients);
-
-        for (int i = 0; i < inventorycrafting.i(); ++i) {
-            for (int j = 0; j < inventorycrafting.j(); ++j) {
-                ItemStack itemstack = inventorycrafting.c(j, i);
-
-                if (!itemstack.isEmpty()) {
-                    boolean flag = false;
-                    Iterator iterator = arraylist.iterator();
-
-                    while (iterator.hasNext()) {
-                        RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
-
-                        if (recipeitemstack.a(itemstack)) {
-                            flag = true;
-                            arraylist.remove(recipeitemstack);
-                            break;
-                        }
-                    }
-
-                    if (!flag) {
-                        return false;
+                    if (!itemstack.isEmpty()) {
+                        ++i;
+                        autorecipestackmanager.b(new ItemStack(itemstack.getItem()));
                     }
                 }
             }
-        }
 
-        return arraylist.isEmpty();
+            return i == this.ingredients.size() && autorecipestackmanager.a(this, (IntList) null);
+        }
     }
 
-    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
+    public ItemStack craftItem(IInventory iinventory) {
         return this.result.cloneItemStack();
     }
 
-    public static ShapelessRecipes a(JsonObject jsonobject) {
-        String s = ChatDeserializer.a(jsonobject, "group", "");
-        NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
+    public static class a implements RecipeSerializer<ShapelessRecipes> {
 
-        if (nonnulllist.isEmpty()) {
-            throw new JsonParseException("No ingredients for shapeless recipe");
-        } else if (nonnulllist.size() > 9) {
-            throw new JsonParseException("Too many ingredients for shapeless recipe");
-        } else {
-            ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"), true);
+        public a() {}
 
-            return new ShapelessRecipes(s, itemstack, nonnulllist);
-        }
-    }
+        public ShapelessRecipes b(MinecraftKey minecraftkey, JsonObject jsonobject) {
+            String s = ChatDeserializer.a(jsonobject, "group", "");
+            NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
 
-    private static NonNullList<RecipeItemStack> a(JsonArray jsonarray) {
-        NonNullList nonnulllist = NonNullList.a();
+            if (nonnulllist.isEmpty()) {
+                throw new JsonParseException("No ingredients for shapeless recipe");
+            } else if (nonnulllist.size() > 9) {
+                throw new JsonParseException("Too many ingredients for shapeless recipe");
+            } else {
+                ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"));
 
-        for (int i = 0; i < jsonarray.size(); ++i) {
-            RecipeItemStack recipeitemstack = ShapedRecipes.a(jsonarray.get(i));
-
-            if (recipeitemstack != RecipeItemStack.a) {
-                nonnulllist.add(recipeitemstack);
+                return new ShapelessRecipes(minecraftkey, s, itemstack, nonnulllist);
             }
         }
 
-        return nonnulllist;
+        private static NonNullList<RecipeItemStack> a(JsonArray jsonarray) {
+            NonNullList nonnulllist = NonNullList.a();
+
+            for (int i = 0; i < jsonarray.size(); ++i) {
+                RecipeItemStack recipeitemstack = RecipeItemStack.a(jsonarray.get(i));
+
+                if (!recipeitemstack.d()) {
+                    nonnulllist.add(recipeitemstack);
+                }
+            }
+
+            return nonnulllist;
+        }
+
+        public String a() {
+            return "crafting_shapeless";
+        }
+
+        public ShapelessRecipes b(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+            String s = packetdataserializer.e(32767);
+            int i = packetdataserializer.g();
+            NonNullList nonnulllist = NonNullList.a(i, RecipeItemStack.a);
+
+            for (int j = 0; j < nonnulllist.size(); ++j) {
+                nonnulllist.set(j, RecipeItemStack.b(packetdataserializer));
+            }
+
+            ItemStack itemstack = packetdataserializer.k();
+
+            return new ShapelessRecipes(minecraftkey, s, itemstack, nonnulllist);
+        }
+
+        public void a(PacketDataSerializer packetdataserializer, ShapelessRecipes shapelessrecipes) {
+            packetdataserializer.a(shapelessrecipes.b);
+            packetdataserializer.d(shapelessrecipes.ingredients.size());
+            Iterator iterator = shapelessrecipes.ingredients.iterator();
+
+            while (iterator.hasNext()) {
+                RecipeItemStack recipeitemstack = (RecipeItemStack) iterator.next();
+
+                recipeitemstack.a(packetdataserializer);
+            }
+
+            packetdataserializer.a(shapelessrecipes.result);
+        }
+
+        public IRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+            return this.b(minecraftkey, packetdataserializer);
+        }
+
+        public IRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
+            return this.b(minecraftkey, jsonobject);
+        }
     }
 }

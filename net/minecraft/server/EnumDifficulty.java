@@ -1,10 +1,17 @@
 package net.minecraft.server;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.IntFunction;
+import java.util.function.ToIntFunction;
+
 public enum EnumDifficulty {
 
-    PEACEFUL(0, "options.difficulty.peaceful"), EASY(1, "options.difficulty.easy"), NORMAL(2, "options.difficulty.normal"), HARD(3, "options.difficulty.hard");
+    PEACEFUL(0, "peaceful"), EASY(1, "easy"), NORMAL(2, "normal"), HARD(3, "hard");
 
-    private static final EnumDifficulty[] e = new EnumDifficulty[values().length];
+    private static final EnumDifficulty[] e = (EnumDifficulty[]) Arrays.stream(values()).sorted(Comparator.comparingInt(EnumDifficulty::a)).toArray((i) -> {
+        return new EnumDifficulty[i];
+    });
     private final int f;
     private final String g;
 
@@ -17,23 +24,15 @@ public enum EnumDifficulty {
         return this.f;
     }
 
+    public IChatBaseComponent b() {
+        return new ChatMessage("options.difficulty." + this.g, new Object[0]);
+    }
+
     public static EnumDifficulty getById(int i) {
         return EnumDifficulty.e[i % EnumDifficulty.e.length];
     }
 
-    public String b() {
+    public String c() {
         return this.g;
-    }
-
-    static {
-        EnumDifficulty[] aenumdifficulty = values();
-        int i = aenumdifficulty.length;
-
-        for (int j = 0; j < i; ++j) {
-            EnumDifficulty enumdifficulty = aenumdifficulty[j];
-
-            EnumDifficulty.e[enumdifficulty.f] = enumdifficulty;
-        }
-
     }
 }

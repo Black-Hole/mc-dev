@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DataFixer;
 import java.io.File;
 import javax.annotation.Nullable;
 
 public class ServerNBTManager extends WorldNBTStorage {
 
-    public ServerNBTManager(File file, String s, boolean flag, DataConverterManager dataconvertermanager) {
-        super(file, s, flag, dataconvertermanager);
+    public ServerNBTManager(File file, String s, @Nullable MinecraftServer minecraftserver, DataFixer datafixer) {
+        super(file, s, minecraftserver, datafixer);
     }
 
     public IChunkLoader createChunkLoader(WorldProvider worldprovider) {
@@ -27,7 +28,7 @@ public class ServerNBTManager extends WorldNBTStorage {
     }
 
     public void saveWorldData(WorldData worlddata, @Nullable NBTTagCompound nbttagcompound) {
-        worlddata.e(19133);
+        worlddata.d(19133);
         super.saveWorldData(worlddata, nbttagcompound);
     }
 

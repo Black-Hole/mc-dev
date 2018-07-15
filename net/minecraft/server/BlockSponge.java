@@ -1,58 +1,42 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class BlockSponge extends Block {
 
-    public static final BlockStateBoolean WET = BlockStateBoolean.of("wet");
-
-    protected BlockSponge() {
-        super(Material.SPONGE);
-        this.w(this.blockStateList.getBlockData().set(BlockSponge.WET, Boolean.valueOf(false)));
-        this.a(CreativeModeTab.b);
+    protected BlockSponge(Block.Info block_info) {
+        super(block_info);
     }
 
-    public String getName() {
-        return LocaleI18n.get(this.a() + ".dry.name");
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+            this.a(world, blockposition);
+        }
     }
 
-    public int getDropData(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() ? 1 : 0;
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        this.a(world, blockposition);
+        super.doPhysics(iblockdata, world, blockposition, block, blockposition1);
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.e(world, blockposition, iblockdata);
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        this.e(world, blockposition, iblockdata);
-        super.a(iblockdata, world, blockposition, block, blockposition1);
-    }
-
-    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() && this.b(world, blockposition)) {
-            world.setTypeAndData(blockposition, iblockdata.set(BlockSponge.WET, Boolean.valueOf(true)), 2);
-            world.triggerEffect(2001, blockposition, Block.getId(Blocks.WATER));
+    protected void a(World world, BlockPosition blockposition) {
+        if (this.b(world, blockposition)) {
+            world.setTypeAndData(blockposition, Blocks.WET_SPONGE.getBlockData(), 2);
+            world.triggerEffect(2001, blockposition, Block.getCombinedId(Blocks.WATER.getBlockData()));
         }
 
     }
 
     private boolean b(World world, BlockPosition blockposition) {
         LinkedList linkedlist = Lists.newLinkedList();
-        ArrayList arraylist = Lists.newArrayList();
 
         linkedlist.add(new Tuple(blockposition, Integer.valueOf(0)));
         int i = 0;
 
-        BlockPosition blockposition1;
-
         while (!linkedlist.isEmpty()) {
             Tuple tuple = (Tuple) linkedlist.poll();
-
-            blockposition1 = (BlockPosition) tuple.a();
+            BlockPosition blockposition1 = (BlockPosition) tuple.a();
             int j = ((Integer) tuple.b()).intValue();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int k = aenumdirection.length;
@@ -60,13 +44,29 @@ public class BlockSponge extends Block {
             for (int l = 0; l < k; ++l) {
                 EnumDirection enumdirection = aenumdirection[l];
                 BlockPosition blockposition2 = blockposition1.shift(enumdirection);
+                IBlockData iblockdata = world.getType(blockposition2);
+                Fluid fluid = world.b(blockposition2);
+                Material material = iblockdata.getMaterial();
 
-                if (world.getType(blockposition2).getMaterial() == Material.WATER) {
-                    world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 2);
-                    arraylist.add(blockposition2);
-                    ++i;
-                    if (j < 6) {
-                        linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                if (fluid.a(TagsFluid.a)) {
+                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).b(world, blockposition2, iblockdata) != FluidTypes.a) {
+                        ++i;
+                        if (j < 6) {
+                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                        }
+                    } else if (iblockdata.getBlock() instanceof BlockFluids) {
+                        world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
+                        ++i;
+                        if (j < 6) {
+                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                        }
+                    } else if (material == Material.f || material == Material.h) {
+                        iblockdata.a(world, blockposition2, 0);
+                        world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
+                        ++i;
+                        if (j < 6) {
+                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                        }
                     }
                 }
             }
@@ -76,30 +76,6 @@ public class BlockSponge extends Block {
             }
         }
 
-        Iterator iterator = arraylist.iterator();
-
-        while (iterator.hasNext()) {
-            blockposition1 = (BlockPosition) iterator.next();
-            world.applyPhysics(blockposition1, Blocks.AIR, false);
-        }
-
         return i > 0;
-    }
-
-    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
-        nonnulllist.add(new ItemStack(this, 1, 0));
-        nonnulllist.add(new ItemStack(this, 1, 1));
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockSponge.WET, Boolean.valueOf((i & 1) == 1));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockSponge.WET)).booleanValue() ? 1 : 0;
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockSponge.WET});
     }
 }

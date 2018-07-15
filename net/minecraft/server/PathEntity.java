@@ -7,6 +7,7 @@ public class PathEntity {
     private final PathPoint[] a;
     private PathPoint[] b = new PathPoint[0];
     private PathPoint[] c = new PathPoint[0];
+    private PathPoint d;
     private int e;
     private int f;
 
@@ -84,5 +85,10 @@ public class PathEntity {
 
             return true;
         }
+    }
+
+    @Nullable
+    public PathPoint i() {
+        return this.d;
     }
 }

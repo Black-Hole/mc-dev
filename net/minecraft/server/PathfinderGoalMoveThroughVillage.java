@@ -24,11 +24,11 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public boolean a() {
-        this.f();
-        if (this.e && this.a.world.D()) {
+        this.g();
+        if (this.e && this.a.world.K()) {
             return false;
         } else {
-            Village village = this.a.world.ak().getClosestVillage(new BlockPosition(this.a), 0);
+            Village village = this.a.world.ae().getClosestVillage(new BlockPosition(this.a), 0);
 
             if (village == null) {
                 return false;
@@ -63,7 +63,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public boolean b() {
-        if (this.a.getNavigation().o()) {
+        if (this.a.getNavigation().q()) {
             return false;
         } else {
             float f = this.a.width + 4.0F;
@@ -77,7 +77,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public void d() {
-        if (this.a.getNavigation().o() || this.a.c(this.d.d()) < 16.0D) {
+        if (this.a.getNavigation().q() || this.a.c(this.d.d()) < 16.0D) {
             this.f.add(this.d);
         }
 
@@ -118,7 +118,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
         return true;
     }
 
-    private void f() {
+    private void g() {
         if (this.f.size() > 15) {
             this.f.remove(0);
         }

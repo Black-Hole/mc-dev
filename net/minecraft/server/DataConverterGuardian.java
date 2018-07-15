@@ -1,22 +1,17 @@
 package net.minecraft.server;
 
-public class DataConverterGuardian implements IDataConverter {
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
 
-    public DataConverterGuardian() {}
+public class DataConverterGuardian extends DataConverterEntityNameAbstract {
 
-    public int a() {
-        return 700;
+    public DataConverterGuardian(Schema schema, boolean flag) {
+        super("EntityElderGuardianSplitFix", schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("Guardian".equals(nbttagcompound.getString("id"))) {
-            if (nbttagcompound.getBoolean("Elder")) {
-                nbttagcompound.setString("id", "ElderGuardian");
-            }
-
-            nbttagcompound.remove("Elder");
-        }
-
-        return nbttagcompound;
+    protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
+        return Pair.of(Objects.equals(s, "Guardian") && dynamic.getBoolean("Elder") ? "ElderGuardian" : s, dynamic);
     }
 }

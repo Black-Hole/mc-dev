@@ -1,17 +1,18 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenTaiga1 extends WorldGenTreeAbstract {
+public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.SPRUCE);
-    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.SPRUCE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData a = Blocks.SPRUCE_LOG.getBlockData();
+    private static final IBlockData b = Blocks.SPRUCE_LEAVES.getBlockData();
 
     public WorldGenTaiga1() {
         super(false);
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i = random.nextInt(5) + 7;
         int j = i - random.nextInt(2) - 3;
         int k = i - j;
@@ -38,7 +39,7 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                 for (i1 = blockposition.getX() - k1; i1 <= blockposition.getX() + k1 && flag; ++i1) {
                     for (j1 = blockposition.getZ() - k1; j1 <= blockposition.getZ() + k1 && flag; ++j1) {
                         if (l1 >= 0 && l1 < 256) {
-                            if (!this.a(world.getType(blockposition_mutableblockposition.c(i1, l1, j1)).getBlock())) {
+                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(i1, l1, j1)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -51,10 +52,10 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block = world.getType(blockposition.down()).getBlock();
+                Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                if ((block == Blocks.GRASS || block == Blocks.DIRT) && blockposition.getY() < 256 - i - 1) {
-                    this.a(world, blockposition.down());
+                if ((block == Blocks.GRASS_BLOCK || Block.d(block)) && blockposition.getY() < 256 - i - 1) {
+                    this.a(generatoraccess, blockposition.down());
                     k1 = 0;
 
                     int i2;
@@ -69,8 +70,8 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                                 if (Math.abs(j1) != k1 || Math.abs(k2) != k1 || k1 <= 0) {
                                     BlockPosition blockposition1 = new BlockPosition(i1, i2, j2);
 
-                                    if (!world.getType(blockposition1).b()) {
-                                        this.a(world, blockposition1, WorldGenTaiga1.b);
+                                    if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
+                                        this.a(generatoraccess, blockposition1, WorldGenTaiga1.b);
                                     }
                                 }
                             }
@@ -84,10 +85,10 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract {
                     }
 
                     for (i2 = 0; i2 < i - 1; ++i2) {
-                        Material material = world.getType(blockposition.up(i2)).getMaterial();
+                        IBlockData iblockdata = generatoraccess.getType(blockposition.up(i2));
 
-                        if (material == Material.AIR || material == Material.LEAVES) {
-                            this.a(world, blockposition.up(i2), WorldGenTaiga1.a);
+                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                            this.a(set, generatoraccess, blockposition.up(i2), WorldGenTaiga1.a);
                         }
                     }
 

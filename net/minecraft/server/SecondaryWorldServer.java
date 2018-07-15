@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.function.Function;
+
 public class SecondaryWorldServer extends WorldServer {
 
     private final WorldServer a;
@@ -40,13 +42,10 @@ public class SecondaryWorldServer extends WorldServer {
 
     protected void a() {}
 
-    public World b() {
-        this.worldMaps = this.a.Z();
-        this.scoreboard = this.a.getScoreboard();
-        this.B = this.a.getLootTableRegistry();
-        this.C = this.a.z();
+    public GeneratorAccess b() {
+        this.worldMaps = this.a.s_();
         String s = PersistentVillage.a(this.worldProvider);
-        PersistentVillage persistentvillage = (PersistentVillage) this.worldMaps.get(PersistentVillage.class, s);
+        PersistentVillage persistentvillage = (PersistentVillage) this.worldMaps.get(PersistentVillage::new, s);
 
         if (persistentvillage == null) {
             this.villages = new PersistentVillage(this);
@@ -59,7 +58,7 @@ public class SecondaryWorldServer extends WorldServer {
         return this;
     }
 
-    public void c() {
-        this.worldProvider.r();
+    public void t_() {
+        this.worldProvider.k();
     }
 }

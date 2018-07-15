@@ -13,15 +13,15 @@ public class Vector3f {
     }
 
     public Vector3f(NBTTagList nbttaglist) {
-        this(nbttaglist.g(0), nbttaglist.g(1), nbttaglist.g(2));
+        this(nbttaglist.l(0), nbttaglist.l(1), nbttaglist.l(2));
     }
 
     public NBTTagList a() {
         NBTTagList nbttaglist = new NBTTagList();
 
-        nbttaglist.add(new NBTTagFloat(this.x));
-        nbttaglist.add(new NBTTagFloat(this.y));
-        nbttaglist.add(new NBTTagFloat(this.z));
+        nbttaglist.add((NBTBase) (new NBTTagFloat(this.x)));
+        nbttaglist.add((NBTBase) (new NBTTagFloat(this.y)));
+        nbttaglist.add((NBTBase) (new NBTTagFloat(this.z)));
         return nbttaglist;
     }
 

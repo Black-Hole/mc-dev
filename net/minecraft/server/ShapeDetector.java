@@ -1,11 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Predicate;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ShapeDetector {
@@ -49,7 +49,7 @@ public class ShapeDetector {
         for (int i = 0; i < this.d; ++i) {
             for (int j = 0; j < this.c; ++j) {
                 for (int k = 0; k < this.b; ++k) {
-                    if (!this.a[k][j][i].apply(loadingcache.getUnchecked(a(blockposition, enumdirection, enumdirection1, i, j, k)))) {
+                    if (!this.a[k][j][i].test(loadingcache.getUnchecked(a(blockposition, enumdirection, enumdirection1, i, j, k)))) {
                         return null;
                     }
                 }
@@ -60,8 +60,8 @@ public class ShapeDetector {
     }
 
     @Nullable
-    public ShapeDetector.ShapeDetectorCollection a(World world, BlockPosition blockposition) {
-        LoadingCache loadingcache = a(world, false);
+    public ShapeDetector.ShapeDetectorCollection a(IWorldReader iworldreader, BlockPosition blockposition) {
+        LoadingCache loadingcache = a(iworldreader, false);
         int i = Math.max(Math.max(this.d, this.c), this.b);
         Iterator iterator = BlockPosition.a(blockposition, blockposition.a(i - 1, i - 1, i - 1)).iterator();
 
@@ -92,8 +92,8 @@ public class ShapeDetector {
         return null;
     }
 
-    public static LoadingCache<BlockPosition, ShapeDetectorBlock> a(World world, boolean flag) {
-        return CacheBuilder.newBuilder().build(new ShapeDetector.BlockLoader(world, flag));
+    public static LoadingCache<BlockPosition, ShapeDetectorBlock> a(IWorldReader iworldreader, boolean flag) {
+        return CacheBuilder.newBuilder().build(new ShapeDetector.BlockLoader(iworldreader, flag));
     }
 
     protected static BlockPosition a(BlockPosition blockposition, EnumDirection enumdirection, EnumDirection enumdirection1, int i, int j, int k) {
@@ -159,11 +159,11 @@ public class ShapeDetector {
 
     static class BlockLoader extends CacheLoader<BlockPosition, ShapeDetectorBlock> {
 
-        private final World a;
+        private final IWorldReader a;
         private final boolean b;
 
-        public BlockLoader(World world, boolean flag) {
-            this.a = world;
+        public BlockLoader(IWorldReader iworldreader, boolean flag) {
+            this.a = iworldreader;
             this.b = flag;
         }
 

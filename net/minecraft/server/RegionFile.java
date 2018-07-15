@@ -206,7 +206,7 @@ public class RegionFile {
                 }
             }
 
-            this.b(i, j, (int) (MinecraftServer.aw() / 1000L));
+            this.b(i, j, (int) (SystemUtils.d() / 1000L));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }

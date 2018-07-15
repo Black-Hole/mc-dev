@@ -1,87 +1,46 @@
 package net.minecraft.server;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.Objects;
+import javax.annotation.Nullable;
 
-public class Statistic {
+public class Statistic<T> extends IScoreboardCriteria {
 
-    public final String name;
-    private final IChatBaseComponent g;
-    public boolean b;
-    private final Counter h;
-    private final IScoreboardCriteria i;
-    private Class<? extends IJsonStatistic> j;
-    private static final NumberFormat k = NumberFormat.getIntegerInstance(Locale.US);
-    public static Counter c = new Counter() {
-    };
-    private static final DecimalFormat l = new DecimalFormat("########0.00");
-    public static Counter d = new Counter() {
-    };
-    public static Counter e = new Counter() {
-    };
-    public static Counter f = new Counter() {
-    };
+    private final Counter o;
+    private final T p;
+    private final StatisticWrapper<T> q;
 
-    public Statistic(String s, IChatBaseComponent ichatbasecomponent, Counter counter) {
-        this.name = s;
-        this.g = ichatbasecomponent;
-        this.h = counter;
-        this.i = new ScoreboardStatisticCriteria(this);
-        IScoreboardCriteria.criteria.put(this.i.getName(), this.i);
+    protected Statistic(StatisticWrapper<T> statisticwrapper, T t0, Counter counter) {
+        super(a(statisticwrapper, t0));
+        this.q = statisticwrapper;
+        this.o = counter;
+        this.p = t0;
     }
 
-    public Statistic(String s, IChatBaseComponent ichatbasecomponent) {
-        this(s, ichatbasecomponent, Statistic.c);
+    public static <T> String a(StatisticWrapper<T> statisticwrapper, T t0) {
+        return a((MinecraftKey) StatisticList.REGISTRY.b(statisticwrapper)) + ":" + a((MinecraftKey) statisticwrapper.a().b(t0));
     }
 
-    public Statistic c() {
-        this.b = true;
-        return this;
+    private static <T> String a(@Nullable MinecraftKey minecraftkey) {
+        return minecraftkey.toString().replace(':', '.');
     }
 
-    public Statistic a() {
-        if (StatisticList.a.containsKey(this.name)) {
-            throw new RuntimeException("Duplicate stat id: \"" + ((Statistic) StatisticList.a.get(this.name)).g + "\" and \"" + this.g + "\" at id " + this.name);
-        } else {
-            StatisticList.stats.add(this);
-            StatisticList.a.put(this.name, this);
-            return this;
-        }
+    public StatisticWrapper<T> a() {
+        return this.q;
     }
 
-    public IChatBaseComponent d() {
-        IChatBaseComponent ichatbasecomponent = this.g.f();
-
-        ichatbasecomponent.getChatModifier().setColor(EnumChatFormat.GRAY);
-        return ichatbasecomponent;
+    public T b() {
+        return this.p;
     }
 
     public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        } else if (object != null && this.getClass() == object.getClass()) {
-            Statistic statistic = (Statistic) object;
-
-            return this.name.equals(statistic.name);
-        } else {
-            return false;
-        }
+        return this == object || object instanceof Statistic && Objects.equals(this.getName(), ((Statistic) object).getName());
     }
 
     public int hashCode() {
-        return this.name.hashCode();
+        return this.getName().hashCode();
     }
 
     public String toString() {
-        return "Stat{id=" + this.name + ", nameId=" + this.g + ", awardLocallyOnly=" + this.b + ", formatter=" + this.h + ", objectiveCriteria=" + this.i + '}';
-    }
-
-    public IScoreboardCriteria f() {
-        return this.i;
-    }
-
-    public Class<? extends IJsonStatistic> g() {
-        return this.j;
+        return "Stat{name=" + this.getName() + ", formatter=" + this.o + '}';
     }
 }

@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenGroundBush extends WorldGenTrees {
+public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
     private final IBlockData a;
     private final IBlockData b;
@@ -13,16 +14,16 @@ public class WorldGenGroundBush extends WorldGenTrees {
         this.a = iblockdata1;
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (IBlockData iblockdata = world.getType(blockposition); (iblockdata.getMaterial() == Material.AIR || iblockdata.getMaterial() == Material.LEAVES) && blockposition.getY() > 0; iblockdata = world.getType(blockposition)) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 
-        Block block = world.getType(blockposition).getBlock();
+        Block block = generatoraccess.getType(blockposition).getBlock();
 
-        if (block == Blocks.DIRT || block == Blocks.GRASS) {
+        if (Block.d(block) || block == Blocks.GRASS_BLOCK) {
             blockposition = blockposition.up();
-            this.a(world, blockposition, this.b);
+            this.a(set, generatoraccess, blockposition, this.b);
 
             for (int i = blockposition.getY(); i <= blockposition.getY() + 2; ++i) {
                 int j = i - blockposition.getY();
@@ -36,10 +37,10 @@ public class WorldGenGroundBush extends WorldGenTrees {
 
                         if (Math.abs(i1) != k || Math.abs(k1) != k || random.nextInt(2) != 0) {
                             BlockPosition blockposition1 = new BlockPosition(l, i, j1);
-                            Material material = world.getType(blockposition1).getMaterial();
+                            IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
-                            if (material == Material.AIR || material == Material.LEAVES) {
-                                this.a(world, blockposition1, this.a);
+                            if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                                this.a(generatoraccess, blockposition1, this.a);
                             }
                         }
                     }

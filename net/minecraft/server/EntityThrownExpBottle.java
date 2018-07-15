@@ -3,22 +3,18 @@ package net.minecraft.server;
 public class EntityThrownExpBottle extends EntityProjectile {
 
     public EntityThrownExpBottle(World world) {
-        super(world);
+        super(EntityTypes.EXPERIENCE_BOTTLE, world);
     }
 
     public EntityThrownExpBottle(World world, EntityLiving entityliving) {
-        super(world, entityliving);
+        super(EntityTypes.EXPERIENCE_BOTTLE, entityliving, world);
     }
 
     public EntityThrownExpBottle(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
+        super(EntityTypes.EXPERIENCE_BOTTLE, d0, d1, d2, world);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityProjectile.a(dataconvertermanager, "ThrowableExpBottle");
-    }
-
-    protected float j() {
+    protected float f() {
         return 0.07F;
     }
 

@@ -1,29 +1,25 @@
 package net.minecraft.server;
 
-public class CommandIdleTimeout extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Predicate;
 
-    public CommandIdleTimeout() {}
+public class CommandIdleTimeout {
 
-    public String getCommand() {
-        return "setidletimeout";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("setidletimeout").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(3);
+        })).then(CommandDispatcher.a("minutes", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "minutes"));
+        })));
     }
 
-    public int a() {
-        return 3;
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.setidletimeout.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length != 1) {
-            throw new ExceptionUsage("commands.setidletimeout.usage", new Object[0]);
-        } else {
-            int i = a(astring[0], 0);
-
-            minecraftserver.setIdleTimeout(i);
-            a(icommandlistener, (ICommand) this, "commands.setidletimeout.success", new Object[] { Integer.valueOf(i)});
-        }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, int i) {
+        commandlistenerwrapper.getServer().setIdleTimeout(i);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.setidletimeout.success", new Object[] { Integer.valueOf(i)}), true);
+        return i;
     }
 }

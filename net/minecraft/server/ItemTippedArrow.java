@@ -4,12 +4,14 @@ import java.util.Iterator;
 
 public class ItemTippedArrow extends ItemArrow {
 
-    public ItemTippedArrow() {}
+    public ItemTippedArrow(Item.Info item_info) {
+        super(item_info);
+    }
 
     public EntityArrow a(World world, ItemStack itemstack, EntityLiving entityliving) {
         EntityTippedArrow entitytippedarrow = new EntityTippedArrow(world, entityliving);
 
-        entitytippedarrow.a(itemstack);
+        entitytippedarrow.b(itemstack);
         return entitytippedarrow;
     }
 
@@ -28,7 +30,7 @@ public class ItemTippedArrow extends ItemArrow {
 
     }
 
-    public String b(ItemStack itemstack) {
-        return LocaleI18n.get(PotionUtil.d(itemstack).b("tipped_arrow.effect."));
+    public String h(ItemStack itemstack) {
+        return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
     }
 }

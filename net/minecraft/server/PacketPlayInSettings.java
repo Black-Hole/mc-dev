@@ -35,19 +35,19 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public String a() {
+    public String b() {
         return this.a;
     }
 
-    public EntityHuman.EnumChatVisibility c() {
+    public EntityHuman.EnumChatVisibility d() {
         return this.c;
     }
 
-    public boolean d() {
+    public boolean e() {
         return this.d;
     }
 
-    public int e() {
+    public int f() {
         return this.e;
     }
 

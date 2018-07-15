@@ -1,72 +1,53 @@
 package net.minecraft.server;
 
-public class GenLayerIsland extends GenLayer {
+public enum GenLayerIsland implements AreaTransformer4 {
 
-    public GenLayerIsland(long i, GenLayer genlayer) {
-        super(i);
-        this.a = genlayer;
-    }
+    INSTANCE;
 
-    public int[] a(int i, int j, int k, int l) {
-        int i1 = i - 1;
-        int j1 = j - 1;
-        int k1 = k + 2;
-        int l1 = l + 2;
-        int[] aint = this.a.a(i1, j1, k1, l1);
-        int[] aint1 = IntCache.a(k * l);
+    private GenLayerIsland() {}
 
-        for (int i2 = 0; i2 < l; ++i2) {
-            for (int j2 = 0; j2 < k; ++j2) {
-                int k2 = aint[j2 + 0 + (i2 + 0) * k1];
-                int l2 = aint[j2 + 2 + (i2 + 0) * k1];
-                int i3 = aint[j2 + 0 + (i2 + 2) * k1];
-                int j3 = aint[j2 + 2 + (i2 + 2) * k1];
-                int k3 = aint[j2 + 1 + (i2 + 1) * k1];
+    public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
+        if (GenLayers.b(i1) && (!GenLayers.b(l) || !GenLayers.b(k) || !GenLayers.b(i) || !GenLayers.b(j))) {
+            int j1 = 1;
+            int k1 = 1;
 
-                this.a((long) (j2 + i), (long) (i2 + j));
-                if (k3 == 0 && (k2 != 0 || l2 != 0 || i3 != 0 || j3 != 0)) {
-                    int l3 = 1;
-                    int i4 = 1;
+            if (!GenLayers.b(l) && worldgencontext.a(j1++) == 0) {
+                k1 = l;
+            }
 
-                    if (k2 != 0 && this.a(l3++) == 0) {
-                        i4 = k2;
-                    }
+            if (!GenLayers.b(k) && worldgencontext.a(j1++) == 0) {
+                k1 = k;
+            }
 
-                    if (l2 != 0 && this.a(l3++) == 0) {
-                        i4 = l2;
-                    }
+            if (!GenLayers.b(i) && worldgencontext.a(j1++) == 0) {
+                k1 = i;
+            }
 
-                    if (i3 != 0 && this.a(l3++) == 0) {
-                        i4 = i3;
-                    }
+            if (!GenLayers.b(j) && worldgencontext.a(j1++) == 0) {
+                k1 = j;
+            }
 
-                    if (j3 != 0 && this.a(l3++) == 0) {
-                        i4 = j3;
-                    }
+            return worldgencontext.a(3) == 0 ? k1 : (k1 == 4 ? 4 : i1);
+        } else {
+            if (!GenLayers.b(i1) && (GenLayers.b(l) || GenLayers.b(i) || GenLayers.b(k) || GenLayers.b(j)) && worldgencontext.a(5) == 0) {
+                if (GenLayers.b(l)) {
+                    return i1 == 4 ? 4 : l;
+                }
 
-                    if (this.a(3) == 0) {
-                        aint1[j2 + i2 * k] = i4;
-                    } else if (i4 == 4) {
-                        aint1[j2 + i2 * k] = 4;
-                    } else {
-                        aint1[j2 + i2 * k] = 0;
-                    }
-                } else if (k3 > 0 && (k2 == 0 || l2 == 0 || i3 == 0 || j3 == 0)) {
-                    if (this.a(5) == 0) {
-                        if (k3 == 4) {
-                            aint1[j2 + i2 * k] = 4;
-                        } else {
-                            aint1[j2 + i2 * k] = 0;
-                        }
-                    } else {
-                        aint1[j2 + i2 * k] = k3;
-                    }
-                } else {
-                    aint1[j2 + i2 * k] = k3;
+                if (GenLayers.b(i)) {
+                    return i1 == 4 ? 4 : i;
+                }
+
+                if (GenLayers.b(k)) {
+                    return i1 == 4 ? 4 : k;
+                }
+
+                if (GenLayers.b(j)) {
+                    return i1 == 4 ? 4 : j;
                 }
             }
-        }
 
-        return aint1;
+            return i1;
+        }
     }
 }

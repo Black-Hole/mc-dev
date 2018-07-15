@@ -1,42 +1,37 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.Objects;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOut> {
 
     private String a = "";
-    private String b = "";
+    @Nullable
+    private String b;
     private int c;
-    private PacketPlayOutScoreboardScore.EnumScoreboardAction d;
+    private ScoreboardServer.Action d;
 
     public PacketPlayOutScoreboardScore() {}
 
-    public PacketPlayOutScoreboardScore(ScoreboardScore scoreboardscore) {
-        this.a = scoreboardscore.getPlayerName();
-        this.b = scoreboardscore.getObjective().getName();
-        this.c = scoreboardscore.getScore();
-        this.d = PacketPlayOutScoreboardScore.EnumScoreboardAction.CHANGE;
-    }
-
-    public PacketPlayOutScoreboardScore(String s) {
-        this.a = s;
-        this.b = "";
-        this.c = 0;
-        this.d = PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE;
-    }
-
-    public PacketPlayOutScoreboardScore(String s, ScoreboardObjective scoreboardobjective) {
-        this.a = s;
-        this.b = scoreboardobjective.getName();
-        this.c = 0;
-        this.d = PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE;
+    public PacketPlayOutScoreboardScore(ScoreboardServer.Action scoreboardserver_action, @Nullable String s, String s1, int i) {
+        if (scoreboardserver_action != ScoreboardServer.Action.REMOVE && s == null) {
+            throw new IllegalArgumentException("Need an objective name");
+        } else {
+            this.a = s1;
+            this.b = s;
+            this.c = i;
+            this.d = scoreboardserver_action;
+        }
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(40);
-        this.d = (PacketPlayOutScoreboardScore.EnumScoreboardAction) packetdataserializer.a(PacketPlayOutScoreboardScore.EnumScoreboardAction.class);
-        this.b = packetdataserializer.e(16);
-        if (this.d != PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE) {
+        this.d = (ScoreboardServer.Action) packetdataserializer.a(ScoreboardServer.Action.class);
+        String s = packetdataserializer.e(16);
+
+        this.b = Objects.equals(s, "") ? null : s;
+        if (this.d != ScoreboardServer.Action.REMOVE) {
             this.c = packetdataserializer.g();
         }
 
@@ -45,8 +40,8 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.d);
-        packetdataserializer.a(this.b);
-        if (this.d != PacketPlayOutScoreboardScore.EnumScoreboardAction.REMOVE) {
+        packetdataserializer.a(this.b == null ? "" : this.b);
+        if (this.d != ScoreboardServer.Action.REMOVE) {
             packetdataserializer.d(this.c);
         }
 
@@ -54,12 +49,5 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public static enum EnumScoreboardAction {
-
-        CHANGE, REMOVE;
-
-        private EnumScoreboardAction() {}
     }
 }

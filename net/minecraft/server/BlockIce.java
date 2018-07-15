@@ -5,58 +5,63 @@ import javax.annotation.Nullable;
 
 public class BlockIce extends BlockHalfTransparent {
 
-    public BlockIce() {
-        super(Material.ICE, false);
-        this.frictionFactor = 0.98F;
-        this.a(true);
-        this.a(CreativeModeTab.b);
+    public BlockIce(Block.Info block_info) {
+        super(block_info);
+    }
+
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return Blocks.WATER.getBlockData().b(iblockaccess, blockposition);
+    }
+
+    public TextureType c() {
+        return TextureType.TRANSLUCENT;
     }
 
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
-        entityhuman.b(StatisticList.a((Block) this));
+        entityhuman.b(StatisticList.BLOCK_MINED.b(this));
         entityhuman.applyExhaustion(0.005F);
-        if (this.n() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            a(world, blockposition, this.u(iblockdata));
+        if (this.k() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
+            a(world, blockposition, this.s(iblockdata));
         } else {
-            if (world.worldProvider.l()) {
+            if (world.worldProvider.isNether()) {
                 world.setAir(blockposition);
                 return;
             }
 
             int i = EnchantmentManager.getEnchantmentLevel(Enchantments.LOOT_BONUS_BLOCKS, itemstack);
 
-            this.b(world, blockposition, iblockdata, i);
+            iblockdata.a(world, blockposition, i);
             Material material = world.getType(blockposition.down()).getMaterial();
 
             if (material.isSolid() || material.isLiquid()) {
-                world.setTypeUpdate(blockposition, Blocks.FLOWING_WATER.getBlockData());
+                world.setTypeUpdate(blockposition, Blocks.WATER.getBlockData());
             }
         }
 
     }
 
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 0;
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11 - this.getBlockData().c()) {
-            this.b(world, blockposition);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11 - iblockdata.b(world, blockposition)) {
+            this.b(iblockdata, world, blockposition);
         }
 
     }
 
-    protected void b(World world, BlockPosition blockposition) {
-        if (world.worldProvider.l()) {
+    protected void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        if (world.worldProvider.isNether()) {
             world.setAir(blockposition);
         } else {
-            this.b(world, blockposition, world.getType(blockposition), 0);
+            iblockdata.a(world, blockposition, 0);
             world.setTypeUpdate(blockposition, Blocks.WATER.getBlockData());
-            world.a(blockposition, (Block) Blocks.WATER, blockposition);
+            world.a(blockposition, Blocks.WATER, blockposition);
         }
     }
 
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.NORMAL;
     }
 }

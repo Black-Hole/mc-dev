@@ -98,7 +98,7 @@ public class OldChunkLoader {
                 nbttagcompound1.setByteArray("Data", nibblearray.asBytes());
                 nbttagcompound1.setByteArray("SkyLight", nibblearray1.asBytes());
                 nbttagcompound1.setByteArray("BlockLight", nibblearray2.asBytes());
-                nbttaglist.add(nbttagcompound1);
+                nbttaglist.add((NBTBase) nbttagcompound1);
             }
         }
 

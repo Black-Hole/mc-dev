@@ -2,7 +2,9 @@ package net.minecraft.server;
 
 public class ItemSpectralArrow extends ItemArrow {
 
-    public ItemSpectralArrow() {}
+    public ItemSpectralArrow(Item.Info item_info) {
+        super(item_info);
+    }
 
     public EntityArrow a(World world, ItemStack itemstack, EntityLiving entityliving) {
         return new EntitySpectralArrow(world, entityliving);

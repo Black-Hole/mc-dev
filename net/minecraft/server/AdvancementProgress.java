@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class AdvancementProgress implements Comparable<AdvancementProgress> {
@@ -28,23 +29,17 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
 
     public void a(Map<String, Criterion> map, String[][] astring) {
         Set set = map.keySet();
-        Iterator iterator = this.a.entrySet().iterator();
 
-        while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
-
-            if (!set.contains(entry.getKey())) {
-                iterator.remove();
-            }
-        }
-
-        iterator = set.iterator();
+        this.a.entrySet().removeIf((entry) -> {
+            return !set.contains(entry.getKey());
+        });
+        Iterator iterator = set.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
             if (!this.a.containsKey(s)) {
-                this.a.put(s, new CriterionProgress(this));
+                this.a.put(s, new CriterionProgress());
             }
         }
 
@@ -152,7 +147,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
         int i = packetdataserializer.g();
 
         for (int j = 0; j < i; ++j) {
-            advancementprogress.a.put(packetdataserializer.e(32767), CriterionProgress.a(packetdataserializer, advancementprogress));
+            advancementprogress.a.put(packetdataserializer.e(32767), CriterionProgress.b(packetdataserializer));
         }
 
         return advancementprogress;
@@ -256,7 +251,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
                 Entry entry = (Entry) iterator.next();
                 String s = (String) entry.getKey();
 
-                advancementprogress.a.put(s, CriterionProgress.a(advancementprogress, ChatDeserializer.a((JsonElement) entry.getValue(), s)));
+                advancementprogress.a.put(s, CriterionProgress.a(ChatDeserializer.a((JsonElement) entry.getValue(), s)));
             }
 
             return advancementprogress;

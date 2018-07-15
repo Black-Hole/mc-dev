@@ -9,4 +9,6 @@ public interface PacketLoginOutListener extends PacketListener {
     void a(PacketLoginOutDisconnect packetloginoutdisconnect);
 
     void a(PacketLoginOutSetCompression packetloginoutsetcompression);
+
+    void a(PacketLoginOutCustomPayload packetloginoutcustompayload);
 }

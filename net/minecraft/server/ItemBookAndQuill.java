@@ -1,20 +1,22 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBookAndQuill extends Item {
 
-    public ItemBookAndQuill() {
-        this.d(1);
+    public ItemBookAndQuill(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         entityhuman.a(itemstack, enumhand);
-        entityhuman.b(StatisticList.b((Item) this));
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 
-    public static boolean b(NBTTagCompound nbttagcompound) {
+    public static boolean b(@Nullable NBTTagCompound nbttagcompound) {
         if (nbttagcompound == null) {
             return false;
         } else if (!nbttagcompound.hasKeyOfType("pages", 9)) {

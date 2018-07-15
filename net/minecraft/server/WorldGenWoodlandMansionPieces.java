@@ -238,18 +238,19 @@ public class WorldGenWoodlandMansionPieces {
 
         @Nullable
         public EnumDirection b(WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g, int i, int j, int k, int l) {
-            EnumDirection[] aenumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
-            int i1 = aenumdirection.length;
+            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-            for (int j1 = 0; j1 < i1; ++j1) {
-                EnumDirection enumdirection = aenumdirection[j1];
+            EnumDirection enumdirection;
 
-                if (this.a(worldgenwoodlandmansionpieces_g, i + enumdirection.getAdjacentX(), j + enumdirection.getAdjacentZ(), k, l)) {
-                    return enumdirection;
+            do {
+                if (!iterator.hasNext()) {
+                    return null;
                 }
-            }
 
-            return null;
+                enumdirection = (EnumDirection) iterator.next();
+            } while (!this.a(worldgenwoodlandmansionpieces_g, i + enumdirection.getAdjacentX(), j + enumdirection.getAdjacentZ(), k, l));
+
+            return enumdirection;
         }
 
         private void a(WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g, int i, int j, EnumDirection enumdirection, int k) {
@@ -363,11 +364,10 @@ public class WorldGenWoodlandMansionPieces {
                 }
 
                 ArrayList arraylist1 = Lists.newArrayList();
-                EnumDirection[] aenumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
-                int l1 = aenumdirection.length;
+                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                for (int i2 = 0; i2 < l1; ++i2) {
-                    EnumDirection enumdirection1 = aenumdirection[i2];
+                while (iterator.hasNext()) {
+                    EnumDirection enumdirection1 = (EnumDirection) iterator.next();
 
                     if (this.c.a(j + enumdirection1.getAdjacentX(), i1 + enumdirection1.getAdjacentZ()) == 0) {
                         arraylist1.add(enumdirection1);
@@ -554,8 +554,8 @@ public class WorldGenWoodlandMansionPieces {
                 BlockPosition blockposition1 = blockposition.up(8 * k + (k == 2 ? 3 : 0));
                 WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g2 = worldgenwoodlandmansionpieces_c.d[k];
                 WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g3 = k == 2 ? worldgenwoodlandmansionpieces_g1 : worldgenwoodlandmansionpieces_g;
-                String s = k == 0 ? "carpet_south" : "carpet_south_2";
-                String s1 = k == 0 ? "carpet_west" : "carpet_west_2";
+                String s = k == 0 ? "carpet_south_1" : "carpet_south_2";
+                String s1 = k == 0 ? "carpet_west_1" : "carpet_west_2";
 
                 for (int i1 = 0; i1 < worldgenwoodlandmansionpieces_g3.c; ++i1) {
                     for (int j1 = 0; j1 < worldgenwoodlandmansionpieces_g3.b; ++j1) {
@@ -583,8 +583,8 @@ public class WorldGenWoodlandMansionPieces {
                     }
                 }
 
-                String s2 = k == 0 ? "indoors_wall" : "indoors_wall_2";
-                String s3 = k == 0 ? "indoors_door" : "indoors_door_2";
+                String s2 = k == 0 ? "indoors_wall_1" : "indoors_wall_2";
+                String s3 = k == 0 ? "indoors_door_1" : "indoors_door_2";
                 ArrayList arraylist = Lists.newArrayList();
 
                 for (int k1 = 0; k1 < worldgenwoodlandmansionpieces_g3.c; ++k1) {
@@ -599,11 +599,10 @@ public class WorldGenWoodlandMansionPieces {
                             flag1 = flag1 && (i2 & 8388608) == 8388608;
                             arraylist.clear();
                             if ((i2 & 2097152) == 2097152) {
-                                EnumDirection[] aenumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
-                                int l2 = aenumdirection.length;
+                                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                                for (int i3 = 0; i3 < l2; ++i3) {
-                                    EnumDirection enumdirection = aenumdirection[i3];
+                                while (iterator.hasNext()) {
+                                    EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                                     if (worldgenwoodlandmansionpieces_g3.a(l1 + enumdirection.getAdjacentX(), k1 + enumdirection.getAdjacentZ()) == 1) {
                                         arraylist.add(enumdirection);
@@ -1049,7 +1048,7 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         private void a(DefinedStructureManager definedstructuremanager) {
-            DefinedStructure definedstructure = definedstructuremanager.a((MinecraftServer) null, new MinecraftKey("mansion/" + this.d));
+            DefinedStructure definedstructure = definedstructuremanager.a(new MinecraftKey("woodland_mansion/" + this.d));
             DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(true).a(this.e).a(this.f);
 
             this.a(definedstructure, this.c, definedstructureinfo);
@@ -1070,37 +1069,37 @@ public class WorldGenWoodlandMansionPieces {
             this.a(definedstructuremanager);
         }
 
-        protected void a(String s, BlockPosition blockposition, World world, Random random, StructureBoundingBox structureboundingbox) {
+        protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if (s.startsWith("Chest")) {
                 EnumBlockRotation enumblockrotation = this.b.c();
                 IBlockData iblockdata = Blocks.CHEST.getBlockData();
 
                 if ("ChestWest".equals(s)) {
-                    iblockdata = iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.WEST));
+                    iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.WEST));
                 } else if ("ChestEast".equals(s)) {
-                    iblockdata = iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.EAST));
+                    iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.EAST));
                 } else if ("ChestSouth".equals(s)) {
-                    iblockdata = iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.SOUTH));
+                    iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.SOUTH));
                 } else if ("ChestNorth".equals(s)) {
-                    iblockdata = iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.NORTH));
+                    iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.NORTH));
                 }
 
-                this.a(world, structureboundingbox, random, blockposition, LootTables.o, iblockdata);
+                this.a(generatoraccess, structureboundingbox, random, blockposition, LootTables.o, iblockdata);
             } else if ("Mage".equals(s)) {
-                EntityEvoker entityevoker = new EntityEvoker(world);
+                EntityEvoker entityevoker = new EntityEvoker(generatoraccess.getMinecraftWorld());
 
-                entityevoker.cW();
+                entityevoker.di();
                 entityevoker.setPositionRotation(blockposition, 0.0F, 0.0F);
-                world.addEntity(entityevoker);
-                world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
+                generatoraccess.addEntity(entityevoker);
+                generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
             } else if ("Warrior".equals(s)) {
-                EntityVindicator entityvindicator = new EntityVindicator(world);
+                EntityVindicator entityvindicator = new EntityVindicator(generatoraccess.getMinecraftWorld());
 
-                entityvindicator.cW();
+                entityvindicator.di();
                 entityvindicator.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entityvindicator.prepare(world.D(new BlockPosition(entityvindicator)), (GroupDataEntity) null);
-                world.addEntity(entityvindicator);
-                world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
+                entityvindicator.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityvindicator)), (GroupDataEntity) null, (NBTTagCompound) null);
+                generatoraccess.addEntity(entityvindicator);
+                generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
             }
 
         }

@@ -1,11 +1,12 @@
 package net.minecraft.server;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.function.Function;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
@@ -60,7 +61,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return Iterators.concat(Iterators.forArray(new ChatBaseComponent[] { this}), a((Iterable) this.a));
     }
 
-    public final String toPlainText() {
+    public final String getString() {
         StringBuilder stringbuilder = new StringBuilder();
         Iterator iterator = this.iterator();
 
@@ -73,30 +74,31 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return stringbuilder.toString();
     }
 
+    public final String c() {
+        StringBuilder stringbuilder = new StringBuilder();
+        Iterator iterator = this.iterator();
+
+        while (iterator.hasNext()) {
+            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
+            String s = ichatbasecomponent.getText();
+
+            if (!s.isEmpty()) {
+                stringbuilder.append(ichatbasecomponent.getChatModifier().k());
+                stringbuilder.append(s);
+                stringbuilder.append(EnumChatFormat.RESET);
+            }
+        }
+
+        return stringbuilder.toString();
+    }
+
     public static Iterator<IChatBaseComponent> a(Iterable<IChatBaseComponent> iterable) {
-        Iterator iterator = Iterators.concat(Iterators.transform(iterable.iterator(), new Function() {
-            public Iterator<IChatBaseComponent> a(@Nullable IChatBaseComponent ichatbasecomponent) {
-                return ichatbasecomponent.iterator();
-            }
+        return Streams.stream(iterable).flatMap(Streams::stream).map((ichatbasecomponent) -> {
+            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.e();
 
-            public Object apply(@Nullable Object object) {
-                return this.a((IChatBaseComponent) object);
-            }
-        }));
-
-        iterator = Iterators.transform(iterator, new Function() {
-            public IChatBaseComponent a(@Nullable IChatBaseComponent ichatbasecomponent) {
-                IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.f();
-
-                ichatbasecomponent1.setChatModifier(ichatbasecomponent1.getChatModifier().n());
-                return ichatbasecomponent1;
-            }
-
-            public Object apply(@Nullable Object object) {
-                return this.a((IChatBaseComponent) object);
-            }
-        });
-        return iterator;
+            ichatbasecomponent1.setChatModifier(ichatbasecomponent.getChatModifier().n());
+            return ichatbasecomponent1;
+        }).iterator();
     }
 
     public boolean equals(Object object) {
@@ -112,7 +114,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
     }
 
     public int hashCode() {
-        return 31 * this.b.hashCode() + this.a.hashCode();
+        return Objects.hash(new Object[] { this.getChatModifier(), this.a});
     }
 
     public String toString() {

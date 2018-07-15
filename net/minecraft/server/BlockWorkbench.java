@@ -1,18 +1,19 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockWorkbench extends Block {
 
-    protected BlockWorkbench() {
-        super(Material.WOOD);
-        this.a(CreativeModeTab.c);
+    protected BlockWorkbench(Block.Info block_info) {
+        super(block_info);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
             entityhuman.openTileEntity(new BlockWorkbench.TileEntityContainerWorkbench(world, blockposition));
-            entityhuman.b(StatisticList.Z);
+            entityhuman.a(StatisticList.INTERACT_WITH_CRAFTING_TABLE);
             return true;
         }
     }
@@ -27,16 +28,17 @@ public class BlockWorkbench extends Block {
             this.b = blockposition;
         }
 
-        public String getName() {
-            return "crafting_table";
+        public IChatBaseComponent getDisplayName() {
+            return new ChatMessage(Blocks.CRAFTING_TABLE.m() + ".name", new Object[0]);
         }
 
         public boolean hasCustomName() {
             return false;
         }
 
-        public IChatBaseComponent getScoreboardDisplayName() {
-            return new ChatMessage(Blocks.CRAFTING_TABLE.a() + ".name", new Object[0]);
+        @Nullable
+        public IChatBaseComponent getCustomName() {
+            return null;
         }
 
         public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {

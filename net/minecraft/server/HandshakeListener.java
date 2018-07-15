@@ -11,17 +11,17 @@ public class HandshakeListener implements PacketHandshakingInListener {
     }
 
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
-        switch (packethandshakinginsetprotocol.a()) {
+        switch (packethandshakinginsetprotocol.b()) {
         case LOGIN:
             this.b.setProtocol(EnumProtocol.LOGIN);
             ChatMessage chatmessage;
 
-            if (packethandshakinginsetprotocol.b() > 340) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { "1.12.2"});
+            if (packethandshakinginsetprotocol.c() > 389) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { "1.13-pre7"});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
-            } else if (packethandshakinginsetprotocol.b() < 340) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { "1.12.2"});
+            } else if (packethandshakinginsetprotocol.c() < 389) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { "1.13-pre7"});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
             } else {
@@ -35,7 +35,7 @@ public class HandshakeListener implements PacketHandshakingInListener {
             break;
 
         default:
-            throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.a());
+            throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.b());
         }
 
     }

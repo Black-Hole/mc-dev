@@ -6,31 +6,38 @@ public class ItemHanging extends Item {
 
     private final Class<? extends EntityHanging> a;
 
-    public ItemHanging(Class<? extends EntityHanging> oclass) {
+    public ItemHanging(Class<? extends EntityHanging> oclass, Item.Info item_info) {
+        super(item_info);
         this.a = oclass;
-        this.b(CreativeModeTab.c);
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        ItemStack itemstack = entityhuman.b(enumhand);
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        BlockPosition blockposition = itemactioncontext.getClickPosition();
+        EnumDirection enumdirection = itemactioncontext.getClickedFace();
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
+        EntityHuman entityhuman = itemactioncontext.getEntity();
 
-        if (enumdirection != EnumDirection.DOWN && enumdirection != EnumDirection.UP && entityhuman.a(blockposition1, enumdirection, itemstack)) {
+        if (entityhuman != null && !this.a(entityhuman, enumdirection, itemactioncontext.getItemStack(), blockposition1)) {
+            return EnumInteractionResult.FAIL;
+        } else {
+            World world = itemactioncontext.getWorld();
             EntityHanging entityhanging = this.a(world, blockposition1, enumdirection);
 
             if (entityhanging != null && entityhanging.survives()) {
                 if (!world.isClientSide) {
-                    entityhanging.p();
+                    entityhanging.m();
                     world.addEntity(entityhanging);
                 }
 
-                itemstack.subtract(1);
+                itemactioncontext.getItemStack().subtract(1);
             }
 
             return EnumInteractionResult.SUCCESS;
-        } else {
-            return EnumInteractionResult.FAIL;
         }
+    }
+
+    protected boolean a(EntityHuman entityhuman, EnumDirection enumdirection, ItemStack itemstack, BlockPosition blockposition) {
+        return !enumdirection.k().b() && entityhuman.a(blockposition, enumdirection, itemstack);
     }
 
     @Nullable

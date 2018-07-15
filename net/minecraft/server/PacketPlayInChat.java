@@ -28,7 +28,7 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public String a() {
+    public String b() {
         return this.a;
     }
 }

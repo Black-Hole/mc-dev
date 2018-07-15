@@ -1,18 +1,23 @@
 package net.minecraft.server;
 
-public class RecipiesShield {    public static class Decoration implements IRecipe {
+public class RecipiesShield extends IRecipeComplex {
 
-        public Decoration() {}
+    public RecipiesShield(MinecraftKey minecraftkey) {
+        super(minecraftkey);
+    }
 
-        public boolean a(InventoryCrafting inventorycrafting, World world) {
+    public boolean a(IInventory iinventory, World world) {
+        if (!(iinventory instanceof InventoryCrafting)) {
+            return false;
+        } else {
             ItemStack itemstack = ItemStack.a;
             ItemStack itemstack1 = ItemStack.a;
 
-            for (int i = 0; i < inventorycrafting.getSize(); ++i) {
-                ItemStack itemstack2 = inventorycrafting.getItem(i);
+            for (int i = 0; i < iinventory.getSize(); ++i) {
+                ItemStack itemstack2 = iinventory.getItem(i);
 
                 if (!itemstack2.isEmpty()) {
-                    if (itemstack2.getItem() == Items.BANNER) {
+                    if (itemstack2.getItem() instanceof ItemBanner) {
                         if (!itemstack1.isEmpty()) {
                             return false;
                         }
@@ -27,7 +32,7 @@ public class RecipiesShield {    public static class Decoration implements IReci
                             return false;
                         }
 
-                        if (itemstack2.d("BlockEntityTag") != null) {
+                        if (itemstack2.b("BlockEntityTag") != null) {
                             return false;
                         }
 
@@ -42,55 +47,37 @@ public class RecipiesShield {    public static class Decoration implements IReci
                 return false;
             }
         }
+    }
 
-        public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-            ItemStack itemstack = ItemStack.a;
-            ItemStack itemstack1 = ItemStack.a;
+    public ItemStack craftItem(IInventory iinventory) {
+        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack1 = ItemStack.a;
 
-            for (int i = 0; i < inventorycrafting.getSize(); ++i) {
-                ItemStack itemstack2 = inventorycrafting.getItem(i);
+        for (int i = 0; i < iinventory.getSize(); ++i) {
+            ItemStack itemstack2 = iinventory.getItem(i);
 
-                if (!itemstack2.isEmpty()) {
-                    if (itemstack2.getItem() == Items.BANNER) {
-                        itemstack = itemstack2;
-                    } else if (itemstack2.getItem() == Items.SHIELD) {
-                        itemstack1 = itemstack2.cloneItemStack();
-                    }
+            if (!itemstack2.isEmpty()) {
+                if (itemstack2.getItem() instanceof ItemBanner) {
+                    itemstack = itemstack2;
+                } else if (itemstack2.getItem() == Items.SHIELD) {
+                    itemstack1 = itemstack2.cloneItemStack();
                 }
             }
-
-            if (itemstack1.isEmpty()) {
-                return itemstack1;
-            } else {
-                NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
-                NBTTagCompound nbttagcompound1 = nbttagcompound == null ? new NBTTagCompound() : nbttagcompound.g();
-
-                nbttagcompound1.setInt("Base", itemstack.getData() & 15);
-                itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound1);
-                return itemstack1;
-            }
         }
 
-        public ItemStack b() {
-            return ItemStack.a;
+        if (itemstack1.isEmpty()) {
+            return itemstack1;
+        } else {
+            NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
+            NBTTagCompound nbttagcompound1 = nbttagcompound == null ? new NBTTagCompound() : nbttagcompound.clone();
+
+            nbttagcompound1.setInt("Base", ((ItemBanner) itemstack.getItem()).b().getColorIndex());
+            itemstack1.a("BlockEntityTag", (NBTBase) nbttagcompound1);
+            return itemstack1;
         }
+    }
 
-        public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-            NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
-
-            for (int i = 0; i < nonnulllist.size(); ++i) {
-                ItemStack itemstack = inventorycrafting.getItem(i);
-
-                if (itemstack.getItem().r()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
-                }
-            }
-
-            return nonnulllist;
-        }
-
-        public boolean c() {
-            return true;
-        }
+    public RecipeSerializer<?> a() {
+        return RecipeSerializers.n;
     }
 }

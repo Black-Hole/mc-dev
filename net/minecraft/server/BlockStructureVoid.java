@@ -1,39 +1,28 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class BlockStructureVoid extends Block {
 
-    private static final AxisAlignedBB a = new AxisAlignedBB(0.3D, 0.3D, 0.3D, 0.7D, 0.7D, 0.7D);
+    private static final VoxelShape a = Block.a(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
-    protected BlockStructureVoid() {
-        super(Material.J);
+    protected BlockStructureVoid(Block.Info block_info) {
+        super(block_info);
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockStructureVoid.k;
-    }
-
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockStructureVoid.a;
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
-
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
 

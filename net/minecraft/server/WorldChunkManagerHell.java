@@ -1,58 +1,59 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Sets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class WorldChunkManagerHell extends WorldChunkManager {
 
-    private final BiomeBase a;
+    private final BiomeBase c;
 
-    public WorldChunkManagerHell(BiomeBase biomebase) {
-        this.a = biomebase;
+    public WorldChunkManagerHell(BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration) {
+        this.c = biomelayoutfixedconfiguration.a();
     }
 
-    public BiomeBase getBiome(BlockPosition blockposition) {
-        return this.a;
+    public BiomeBase getBiome(BlockPosition blockposition, @Nullable BiomeBase biomebase) {
+        return this.c;
     }
 
-    public BiomeBase[] getBiomes(BiomeBase[] abiomebase, int i, int j, int k, int l) {
-        if (abiomebase == null || abiomebase.length < k * l) {
-            abiomebase = new BiomeBase[k * l];
-        }
+    public BiomeBase[] getBiomes(int i, int j, int k, int l) {
+        return this.getBiomeBlock(i, j, k, l);
+    }
 
-        Arrays.fill(abiomebase, 0, k * l, this.a);
+    public BiomeBase[] a(int i, int j, int k, int l, boolean flag) {
+        BiomeBase[] abiomebase = new BiomeBase[k * l];
+
+        Arrays.fill(abiomebase, 0, k * l, this.c);
         return abiomebase;
-    }
-
-    public BiomeBase[] getBiomeBlock(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l) {
-        if (abiomebase == null || abiomebase.length < k * l) {
-            abiomebase = new BiomeBase[k * l];
-        }
-
-        Arrays.fill(abiomebase, 0, k * l, this.a);
-        return abiomebase;
-    }
-
-    public BiomeBase[] a(@Nullable BiomeBase[] abiomebase, int i, int j, int k, int l, boolean flag) {
-        return this.getBiomeBlock(abiomebase, i, j, k, l);
     }
 
     @Nullable
     public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
-        return list.contains(this.a) ? new BlockPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
+        return list.contains(this.c) ? new BlockPosition(i - k + random.nextInt(k * 2 + 1), 0, j - k + random.nextInt(k * 2 + 1)) : null;
     }
 
-    public boolean a(int i, int j, int k, List<BiomeBase> list) {
-        return list.contains(this.a);
+    public boolean a(StructureGenerator<?> structuregenerator) {
+        Map map = this.a;
+        BiomeBase biomebase = this.c;
+
+        this.c.getClass();
+        return ((Boolean) map.computeIfAbsent(structuregenerator, biomebase::a)).booleanValue();
     }
 
-    public boolean c() {
-        return true;
+    public Set<IBlockData> b() {
+        if (this.b.isEmpty()) {
+            this.b.add(this.c.r().a());
+        }
+
+        return this.b;
     }
 
-    public BiomeBase d() {
-        return this.a;
+    public Set<BiomeBase> a(int i, int j, int k) {
+        return Sets.newHashSet(new BiomeBase[] { this.c});
     }
 }

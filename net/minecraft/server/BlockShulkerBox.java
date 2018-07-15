@@ -1,38 +1,36 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockShulkerBox extends BlockTileEntity {
 
-    public static final BlockStateEnum<EnumDirection> a = BlockStateDirection.of("facing");
+    public static final BlockStateEnum<EnumDirection> a = BlockDirectional.FACING;
+    @Nullable
     public final EnumColor color;
 
-    public BlockShulkerBox(EnumColor enumcolor) {
-        super(Material.STONE, MaterialMapColor.c);
+    public BlockShulkerBox(@Nullable EnumColor enumcolor, Block.Info block_info) {
+        super(block_info);
         this.color = enumcolor;
-        this.a(CreativeModeTab.c);
-        this.w(this.blockStateList.getBlockData().set(BlockShulkerBox.a, EnumDirection.UP));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockShulkerBox.a, EnumDirection.UP));
     }
 
-    public TileEntity a(World world, int i) {
+    public TileEntity a(IBlockAccess iblockaccess) {
         return new TileEntityShulkerBox(this.color);
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return false;
-    }
-
-    public boolean t(IBlockData iblockdata) {
+    public boolean p(IBlockData iblockdata) {
         return true;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else if (entityhuman.isSpectator()) {
@@ -44,16 +42,16 @@ public class BlockShulkerBox extends BlockTileEntity {
                 EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
                 boolean flag;
 
-                if (((TileEntityShulkerBox) tileentity).p() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
-                    AxisAlignedBB axisalignedbb = BlockShulkerBox.j.b((double) (0.5F * (float) enumdirection1.getAdjacentX()), (double) (0.5F * (float) enumdirection1.getAdjacentY()), (double) (0.5F * (float) enumdirection1.getAdjacentZ())).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
+                if (((TileEntityShulkerBox) tileentity).r() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
+                    AxisAlignedBB axisalignedbb = VoxelShapes.b().a().b((double) (0.5F * (float) enumdirection1.getAdjacentX()), (double) (0.5F * (float) enumdirection1.getAdjacentY()), (double) (0.5F * (float) enumdirection1.getAdjacentZ())).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
 
-                    flag = !world.a(axisalignedbb.a(blockposition.shift(enumdirection1)));
+                    flag = world.getCubes((Entity) null, axisalignedbb.a(blockposition.shift(enumdirection1)));
                 } else {
                     flag = true;
                 }
 
                 if (flag) {
-                    entityhuman.b(StatisticList.ac);
+                    entityhuman.a(StatisticList.OPEN_SHULKER_BOX);
                     entityhuman.openContainer((IInventory) tileentity);
                 }
 
@@ -64,22 +62,12 @@ public class BlockShulkerBox extends BlockTileEntity {
         }
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockShulkerBox.a, enumdirection);
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return (IBlockData) this.getBlockData().set(BlockShulkerBox.a, blockactioncontext.getClickedFace());
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockShulkerBox.a});
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumDirection) iblockdata.get(BlockShulkerBox.a)).a();
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        EnumDirection enumdirection = EnumDirection.fromType1(i);
-
-        return this.getBlockData().set(BlockShulkerBox.a, enumdirection);
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockShulkerBox.a});
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
@@ -90,9 +78,10 @@ public class BlockShulkerBox extends BlockTileEntity {
             tileentityshulkerbox.d(entityhuman);
         }
 
+        super.a(world, blockposition, iblockdata, entityhuman);
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         if (itemstack.hasName()) {
@@ -105,55 +94,58 @@ public class BlockShulkerBox extends BlockTileEntity {
 
     }
 
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityShulkerBox) {
-            TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
+            if (tileentity instanceof TileEntityShulkerBox) {
+                TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
 
-            if (!tileentityshulkerbox.r() && tileentityshulkerbox.F()) {
-                ItemStack itemstack = new ItemStack(Item.getItemOf(this));
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                if (!tileentityshulkerbox.s() && tileentityshulkerbox.G()) {
+                    ItemStack itemstack = new ItemStack(this);
 
-                nbttagcompound.set("BlockEntityTag", ((TileEntityShulkerBox) tileentity).f(nbttagcompound1));
-                itemstack.setTag(nbttagcompound);
-                if (tileentityshulkerbox.hasCustomName()) {
-                    itemstack.g(tileentityshulkerbox.getName());
-                    tileentityshulkerbox.setCustomName("");
+                    itemstack.getOrCreateTag().set("BlockEntityTag", ((TileEntityShulkerBox) tileentity).g(new NBTTagCompound()));
+                    if (tileentityshulkerbox.hasCustomName()) {
+                        itemstack.a(tileentityshulkerbox.getCustomName());
+                        tileentityshulkerbox.setCustomName((IChatBaseComponent) null);
+                    }
+
+                    a(world, blockposition, itemstack);
                 }
 
-                a(world, blockposition, itemstack);
+                world.updateAdjacentComparators(blockposition, iblockdata.getBlock());
             }
 
-            world.updateAdjacentComparators(blockposition, iblockdata.getBlock());
+            super.remove(iblockdata, world, blockposition, iblockdata1, flag);
         }
-
-        super.remove(world, blockposition, iblockdata);
     }
 
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
-        return tileentity instanceof TileEntityShulkerBox ? ((TileEntityShulkerBox) tileentity).a(iblockdata) : BlockShulkerBox.j;
+        return tileentity instanceof TileEntityShulkerBox ? VoxelShapes.a(((TileEntityShulkerBox) tileentity).a(iblockdata)) : VoxelShapes.b();
+    }
+
+    public boolean f(IBlockData iblockdata) {
+        return false;
     }
 
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.b((IInventory) world.getTileEntity(blockposition));
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        ItemStack itemstack = super.a(world, blockposition, iblockdata);
-        TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) world.getTileEntity(blockposition);
-        NBTTagCompound nbttagcompound = tileentityshulkerbox.f(new NBTTagCompound());
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        ItemStack itemstack = super.a(iblockaccess, blockposition, iblockdata);
+        TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) iblockaccess.getTileEntity(blockposition);
+        NBTTagCompound nbttagcompound = tileentityshulkerbox.g(new NBTTagCompound());
 
         if (!nbttagcompound.isEmpty()) {
             itemstack.a("BlockEntityTag", (NBTBase) nbttagcompound);
@@ -163,55 +155,59 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     public static Block a(EnumColor enumcolor) {
-        switch (enumcolor) {
-        case WHITE:
-            return Blocks.WHITE_SHULKER_BOX;
+        if (enumcolor == null) {
+            return Blocks.SHULKER_BOX;
+        } else {
+            switch (enumcolor) {
+            case WHITE:
+                return Blocks.WHITE_SHULKER_BOX;
 
-        case ORANGE:
-            return Blocks.dm;
+            case ORANGE:
+                return Blocks.ORANGE_SHULKER_BOX;
 
-        case MAGENTA:
-            return Blocks.dn;
+            case MAGENTA:
+                return Blocks.MAGENTA_SHULKER_BOX;
 
-        case LIGHT_BLUE:
-            return Blocks.LIGHT_BLUE_SHULKER_BOX;
+            case LIGHT_BLUE:
+                return Blocks.LIGHT_BLUE_SHULKER_BOX;
 
-        case YELLOW:
-            return Blocks.dp;
+            case YELLOW:
+                return Blocks.YELLOW_SHULKER_BOX;
 
-        case LIME:
-            return Blocks.dq;
+            case LIME:
+                return Blocks.LIME_SHULKER_BOX;
 
-        case PINK:
-            return Blocks.dr;
+            case PINK:
+                return Blocks.PINK_SHULKER_BOX;
 
-        case GRAY:
-            return Blocks.ds;
+            case GRAY:
+                return Blocks.GRAY_SHULKER_BOX;
 
-        case SILVER:
-            return Blocks.dt;
+            case LIGHT_GRAY:
+                return Blocks.LIGHT_GRAY_SHULKER_BOX;
 
-        case CYAN:
-            return Blocks.du;
+            case CYAN:
+                return Blocks.CYAN_SHULKER_BOX;
 
-        case PURPLE:
-        default:
-            return Blocks.dv;
+            case PURPLE:
+            default:
+                return Blocks.PURPLE_SHULKER_BOX;
 
-        case BLUE:
-            return Blocks.dw;
+            case BLUE:
+                return Blocks.BLUE_SHULKER_BOX;
 
-        case BROWN:
-            return Blocks.dx;
+            case BROWN:
+                return Blocks.BROWN_SHULKER_BOX;
 
-        case GREEN:
-            return Blocks.dy;
+            case GREEN:
+                return Blocks.GREEN_SHULKER_BOX;
 
-        case RED:
-            return Blocks.dz;
+            case RED:
+                return Blocks.RED_SHULKER_BOX;
 
-        case BLACK:
-            return Blocks.dA;
+            case BLACK:
+                return Blocks.BLACK_SHULKER_BOX;
+            }
         }
     }
 
@@ -220,7 +216,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockShulkerBox.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockShulkerBox.a)));
+        return (IBlockData) iblockdata.set(BlockShulkerBox.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockShulkerBox.a)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
@@ -228,9 +224,8 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
-        TileEntityShulkerBox.AnimationPhase tileentityshulkerbox_animationphase = ((TileEntityShulkerBox) iblockaccess.getTileEntity(blockposition)).p();
+        TileEntityShulkerBox.AnimationPhase tileentityshulkerbox_animationphase = ((TileEntityShulkerBox) iblockaccess.getTileEntity(blockposition)).r();
 
         return tileentityshulkerbox_animationphase != TileEntityShulkerBox.AnimationPhase.CLOSED && (tileentityshulkerbox_animationphase != TileEntityShulkerBox.AnimationPhase.OPENED || enumdirection1 != enumdirection.opposite() && enumdirection1 != enumdirection) ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
     }

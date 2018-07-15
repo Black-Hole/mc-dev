@@ -15,13 +15,13 @@ public class PathfinderGoalMoveIndoors extends PathfinderGoal {
     public boolean a() {
         BlockPosition blockposition = new BlockPosition(this.a);
 
-        if ((!this.a.world.D() || this.a.world.isRaining() && !this.a.world.getBiome(blockposition).d()) && this.a.world.worldProvider.m()) {
+        if ((!this.a.world.K() || this.a.world.isRaining() && this.a.world.getBiome(blockposition).c() != BiomeBase.Precipitation.RAIN) && this.a.world.worldProvider.g()) {
             if (this.a.getRandom().nextInt(50) != 0) {
                 return false;
             } else if (this.c != -1 && this.a.d((double) this.c, this.a.locY, (double) this.d) < 4.0D) {
                 return false;
             } else {
-                Village village = this.a.world.ak().getClosestVillage(blockposition, 14);
+                Village village = this.a.world.ae().getClosestVillage(blockposition, 14);
 
                 if (village == null) {
                     return false;
@@ -36,7 +36,7 @@ public class PathfinderGoalMoveIndoors extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().o();
+        return !this.a.getNavigation().q();
     }
 
     public void c() {

@@ -3,129 +3,129 @@ package net.minecraft.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class GenLayerRegionHills extends GenLayer {
+public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffset1 {
 
-    private static final Logger c = LogManager.getLogger();
-    private final GenLayer d;
+    INSTANCE;
 
-    public GenLayerRegionHills(long i, GenLayer genlayer, GenLayer genlayer1) {
-        super(i);
-        this.a = genlayer;
-        this.d = genlayer1;
-    }
+    private static final Logger b = LogManager.getLogger();
+    private static final int c = BiomeBase.a(Biomes.C);
+    private static final int d = BiomeBase.a(Biomes.D);
+    private static final int e = BiomeBase.a(Biomes.d);
+    private static final int f = BiomeBase.a(Biomes.s);
+    private static final int g = BiomeBase.a(Biomes.e);
+    private static final int h = BiomeBase.a(Biomes.J);
+    private static final int i = BiomeBase.a(Biomes.f);
+    private static final int j = BiomeBase.a(Biomes.t);
+    private static final int k = BiomeBase.a(Biomes.n);
+    private static final int l = BiomeBase.a(Biomes.o);
+    private static final int m = BiomeBase.a(Biomes.w);
+    private static final int n = BiomeBase.a(Biomes.x);
+    private static final int o = BiomeBase.a(Biomes.M);
+    private static final int p = BiomeBase.a(Biomes.N);
+    private static final int q = BiomeBase.a(Biomes.c);
+    private static final int r = BiomeBase.a(Biomes.H);
+    private static final int s = BiomeBase.a(Biomes.I);
+    private static final int t = BiomeBase.a(Biomes.E);
+    private static final int u = BiomeBase.a(Biomes.K);
+    private static final int v = BiomeBase.a(Biomes.L);
+    private static final int w = BiomeBase.a(Biomes.g);
+    private static final int x = BiomeBase.a(Biomes.F);
+    private static final int y = BiomeBase.a(Biomes.G);
+    private static final int z = BiomeBase.a(Biomes.u);
 
-    public int[] a(int i, int j, int k, int l) {
-        int[] aint = this.a.a(i - 1, j - 1, k + 2, l + 2);
-        int[] aint1 = this.d.a(i - 1, j - 1, k + 2, l + 2);
-        int[] aint2 = IntCache.a(k * l);
+    private GenLayerRegionHills() {}
 
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                this.a((long) (j1 + i), (long) (i1 + j));
-                int k1 = aint[j1 + 1 + (i1 + 1) * (k + 2)];
-                int l1 = aint1[j1 + 1 + (i1 + 1) * (k + 2)];
-                boolean flag = (l1 - 2) % 29 == 0;
+    public int a(WorldGenContext worldgencontext, AreaDimension areadimension, Area area, Area area1, int i, int j) {
+        int k = area.a(i + 1, j + 1);
+        int l = area1.a(i + 1, j + 1);
 
-                if (k1 > 255) {
-                    GenLayerRegionHills.c.debug("old! {}", Integer.valueOf(k1));
+        if (k > 255) {
+            GenLayerRegionHills.b.debug("old! {}", Integer.valueOf(k));
+        }
+
+        int i1 = (l - 2) % 29;
+        BiomeBase biomebase;
+
+        if (!GenLayers.b(k) && l >= 2 && i1 == 1) {
+            BiomeBase biomebase1 = BiomeBase.a(k);
+
+            if (biomebase1 == null || !biomebase1.b()) {
+                biomebase = BiomeBase.b(biomebase1);
+                return biomebase == null ? k : BiomeBase.a(biomebase);
+            }
+        }
+
+        if (worldgencontext.a(3) == 0 || i1 == 0) {
+            int j1 = k;
+
+            if (k == GenLayerRegionHills.e) {
+                j1 = GenLayerRegionHills.f;
+            } else if (k == GenLayerRegionHills.i) {
+                j1 = GenLayerRegionHills.j;
+            } else if (k == GenLayerRegionHills.c) {
+                j1 = GenLayerRegionHills.d;
+            } else if (k == GenLayerRegionHills.t) {
+                j1 = GenLayerRegionHills.q;
+            } else if (k == GenLayerRegionHills.w) {
+                j1 = GenLayerRegionHills.z;
+            } else if (k == GenLayerRegionHills.r) {
+                j1 = GenLayerRegionHills.s;
+            } else if (k == GenLayerRegionHills.x) {
+                j1 = GenLayerRegionHills.y;
+            } else if (k == GenLayerRegionHills.q) {
+                j1 = worldgencontext.a(3) == 0 ? GenLayerRegionHills.j : GenLayerRegionHills.i;
+            } else if (k == GenLayerRegionHills.k) {
+                j1 = GenLayerRegionHills.l;
+            } else if (k == GenLayerRegionHills.m) {
+                j1 = GenLayerRegionHills.n;
+            } else if (k == GenLayers.c) {
+                j1 = GenLayers.h;
+            } else if (k == GenLayers.b) {
+                j1 = GenLayers.g;
+            } else if (k == GenLayers.d) {
+                j1 = GenLayers.i;
+            } else if (k == GenLayers.e) {
+                j1 = GenLayers.j;
+            } else if (k == GenLayerRegionHills.g) {
+                j1 = GenLayerRegionHills.h;
+            } else if (k == GenLayerRegionHills.u) {
+                j1 = GenLayerRegionHills.v;
+            } else if (GenLayers.a(k, GenLayerRegionHills.p)) {
+                j1 = GenLayerRegionHills.o;
+            } else if ((k == GenLayers.h || k == GenLayers.g || k == GenLayers.i || k == GenLayers.j) && worldgencontext.a(3) == 0) {
+                j1 = worldgencontext.a(2) == 0 ? GenLayerRegionHills.q : GenLayerRegionHills.i;
+            }
+
+            if (i1 == 0 && j1 != k) {
+                biomebase = BiomeBase.b(BiomeBase.a(j1));
+                j1 = biomebase == null ? k : BiomeBase.a(biomebase);
+            }
+
+            if (j1 != k) {
+                int k1 = 0;
+
+                if (GenLayers.a(area.a(i + 1, j + 0), k)) {
+                    ++k1;
                 }
 
-                BiomeBase biomebase = BiomeBase.a(k1);
-                boolean flag1 = biomebase != null && biomebase.b();
-                BiomeBase biomebase1;
+                if (GenLayers.a(area.a(i + 2, j + 1), k)) {
+                    ++k1;
+                }
 
-                if (k1 != 0 && l1 >= 2 && (l1 - 2) % 29 == 1 && !flag1) {
-                    biomebase1 = BiomeBase.b(biomebase);
-                    aint2[j1 + i1 * k] = biomebase1 == null ? k1 : BiomeBase.a(biomebase1);
-                } else if (this.a(3) != 0 && !flag) {
-                    aint2[j1 + i1 * k] = k1;
-                } else {
-                    biomebase1 = biomebase;
-                    int i2;
+                if (GenLayers.a(area.a(i + 0, j + 1), k)) {
+                    ++k1;
+                }
 
-                    if (biomebase == Biomes.d) {
-                        biomebase1 = Biomes.s;
-                    } else if (biomebase == Biomes.f) {
-                        biomebase1 = Biomes.t;
-                    } else if (biomebase == Biomes.C) {
-                        biomebase1 = Biomes.D;
-                    } else if (biomebase == Biomes.E) {
-                        biomebase1 = Biomes.c;
-                    } else if (biomebase == Biomes.g) {
-                        biomebase1 = Biomes.u;
-                    } else if (biomebase == Biomes.H) {
-                        biomebase1 = Biomes.I;
-                    } else if (biomebase == Biomes.F) {
-                        biomebase1 = Biomes.G;
-                    } else if (biomebase == Biomes.c) {
-                        if (this.a(3) == 0) {
-                            biomebase1 = Biomes.t;
-                        } else {
-                            biomebase1 = Biomes.f;
-                        }
-                    } else if (biomebase == Biomes.n) {
-                        biomebase1 = Biomes.o;
-                    } else if (biomebase == Biomes.w) {
-                        biomebase1 = Biomes.x;
-                    } else if (biomebase == Biomes.a) {
-                        biomebase1 = Biomes.z;
-                    } else if (biomebase == Biomes.e) {
-                        biomebase1 = Biomes.J;
-                    } else if (biomebase == Biomes.K) {
-                        biomebase1 = Biomes.L;
-                    } else if (a(k1, BiomeBase.a(Biomes.N))) {
-                        biomebase1 = Biomes.M;
-                    } else if (biomebase == Biomes.z && this.a(3) == 0) {
-                        i2 = this.a(2);
-                        if (i2 == 0) {
-                            biomebase1 = Biomes.c;
-                        } else {
-                            biomebase1 = Biomes.f;
-                        }
-                    }
+                if (GenLayers.a(area.a(i + 1, j + 2), k)) {
+                    ++k1;
+                }
 
-                    i2 = BiomeBase.a(biomebase1);
-                    if (flag && i2 != k1) {
-                        BiomeBase biomebase2 = BiomeBase.b(biomebase1);
-
-                        i2 = biomebase2 == null ? k1 : BiomeBase.a(biomebase2);
-                    }
-
-                    if (i2 == k1) {
-                        aint2[j1 + i1 * k] = k1;
-                    } else {
-                        int j2 = aint[j1 + 1 + (i1 + 0) * (k + 2)];
-                        int k2 = aint[j1 + 2 + (i1 + 1) * (k + 2)];
-                        int l2 = aint[j1 + 0 + (i1 + 1) * (k + 2)];
-                        int i3 = aint[j1 + 1 + (i1 + 2) * (k + 2)];
-                        int j3 = 0;
-
-                        if (a(j2, k1)) {
-                            ++j3;
-                        }
-
-                        if (a(k2, k1)) {
-                            ++j3;
-                        }
-
-                        if (a(l2, k1)) {
-                            ++j3;
-                        }
-
-                        if (a(i3, k1)) {
-                            ++j3;
-                        }
-
-                        if (j3 >= 3) {
-                            aint2[j1 + i1 * k] = i2;
-                        } else {
-                            aint2[j1 + i1 * k] = k1;
-                        }
-                    }
+                if (k1 >= 3) {
+                    return j1;
                 }
             }
         }
 
-        return aint2;
+        return k;
     }
 }

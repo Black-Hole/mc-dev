@@ -1,15 +1,24 @@
 package net.minecraft.server;
 
-public class DataConverterVBO implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import java.util.function.Function;
 
-    public DataConverterVBO() {}
+public class DataConverterVBO extends DataFix {
 
-    public int a() {
-        return 505;
+    public DataConverterVBO(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setString("useVbo", "true");
-        return nbttagcompound;
+    public TypeRewriteRule makeRule() {
+        return this.fixTypeEverywhereTyped("OptionsForceVBOFix", this.getInputSchema().getType(DataConverterTypes.e), (typed) -> {
+            return typed.update(DSL.remainderFinder(), (dynamic) -> {
+                return dynamic.set("useVbo", dynamic.createString("true"));
+            });
+        });
     }
 }

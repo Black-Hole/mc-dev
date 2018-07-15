@@ -11,6 +11,6 @@ public enum EnumMainHand {
     }
 
     public String toString() {
-        return this.c.toPlainText();
+        return this.c.getString();
     }
 }

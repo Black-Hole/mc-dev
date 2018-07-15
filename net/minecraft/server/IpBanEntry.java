@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.gson.JsonObject;
 import java.util.Date;
+import javax.annotation.Nullable;
 
 public class IpBanEntry extends ExpirableListEntry<String> {
 
@@ -9,8 +10,12 @@ public class IpBanEntry extends ExpirableListEntry<String> {
         this(s, (Date) null, (String) null, (Date) null, (String) null);
     }
 
-    public IpBanEntry(String s, Date date, String s1, Date date1, String s2) {
+    public IpBanEntry(String s, @Nullable Date date, @Nullable String s1, @Nullable Date date1, @Nullable String s2) {
         super(s, date, s1, date1, s2);
+    }
+
+    public IChatBaseComponent e() {
+        return new ChatComponentText((String) this.getKey());
     }
 
     public IpBanEntry(JsonObject jsonobject) {

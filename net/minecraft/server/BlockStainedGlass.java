@@ -4,69 +4,52 @@ import java.util.Random;
 
 public class BlockStainedGlass extends BlockHalfTransparent {
 
-    public static final BlockStateEnum<EnumColor> COLOR = BlockStateEnum.of("color", EnumColor.class);
+    private final EnumColor color;
 
-    public BlockStainedGlass(Material material) {
-        super(material, false);
-        this.w(this.blockStateList.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.WHITE));
-        this.a(CreativeModeTab.b);
+    public BlockStainedGlass(EnumColor enumcolor, Block.Info block_info) {
+        super(block_info);
+        this.color = enumcolor;
     }
 
-    public int getDropData(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).getColorIndex();
-    }
-
-    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
-        EnumColor[] aenumcolor = EnumColor.values();
-        int i = aenumcolor.length;
-
-        for (int j = 0; j < i; ++j) {
-            EnumColor enumcolor = aenumcolor[j];
-
-            nonnulllist.add(new ItemStack(this, 1, enumcolor.getColorIndex()));
-        }
-
-    }
-
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockStainedGlass.COLOR));
-    }
-
-    public int a(Random random) {
-        return 0;
-    }
-
-    protected boolean n() {
+    public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public EnumColor b() {
+        return this.color;
+    }
+
+    public TextureType c() {
+        return TextureType.TRANSLUCENT;
+    }
+
+    public int a(IBlockData iblockdata, Random random) {
+        return 0;
+    }
+
+    protected boolean k() {
+        return true;
+    }
+
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockStainedGlass.COLOR, EnumColor.fromColorIndex(i));
-    }
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        if (iblockdata1.getBlock() != iblockdata.getBlock()) {
+            if (!world.isClientSide) {
+                BlockBeacon.a(world, blockposition);
+            }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isClientSide) {
-            BlockBeacon.c(world, blockposition);
         }
-
     }
 
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isClientSide) {
-            BlockBeacon.c(world, blockposition);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            if (!world.isClientSide) {
+                BlockBeacon.a(world, blockposition);
+            }
+
         }
-
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).getColorIndex();
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockStainedGlass.COLOR});
     }
 }

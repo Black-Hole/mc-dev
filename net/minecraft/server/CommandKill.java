@@ -1,44 +1,38 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandKill extends CommandAbstract {
+public class CommandKill {
 
-    public CommandKill() {}
-
-    public String getCommand() {
-        return "kill";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("kill").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"));
+        })));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection) {
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.kill.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length == 0) {
-            EntityPlayer entityplayer = a(icommandlistener);
-
-            entityplayer.killEntity();
-            a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entityplayer.getScoreboardDisplayName()});
-        } else {
-            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
 
             entity.killEntity();
-            a(icommandlistener, (ICommand) this, "commands.kill.successful", new Object[] { entity.getScoreboardDisplayName()});
         }
-    }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
-    }
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.kill.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.kill.success.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+        }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
+        return collection.size();
     }
 }

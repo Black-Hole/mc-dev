@@ -1,22 +1,21 @@
 package net.minecraft.server;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.function.Supplier;
 
 public enum DimensionManager {
 
-    OVERWORLD(0, "overworld", "", WorldProviderNormal.class), NETHER(-1, "the_nether", "_nether", WorldProviderHell.class), THE_END(1, "the_end", "_end", WorldProviderTheEnd.class);
+    OVERWORLD(0, "overworld", "", WorldProviderNormal::new), NETHER(-1, "the_nether", "_nether", WorldProviderHell::new), THE_END(1, "the_end", "_end", WorldProviderTheEnd::new);
 
     private final int d;
     private final String e;
     private final String f;
-    private final Class<? extends WorldProvider> g;
+    private final Supplier<? extends WorldProvider> g;
 
-    private DimensionManager(int i, String s, String s1, Class<? extends WorldProvider> oclass) {
+    private DimensionManager(int i, String s, String s1, Supplier supplier) {
         this.d = i;
         this.e = s;
         this.f = s1;
-        this.g = oclass;
+        this.g = supplier;
     }
 
     public int getDimensionID() {
@@ -32,19 +31,7 @@ public enum DimensionManager {
     }
 
     public WorldProvider d() {
-        try {
-            Constructor constructor = this.g.getConstructor(new Class[0]);
-
-            return (WorldProvider) constructor.newInstance(new Object[0]);
-        } catch (NoSuchMethodException nosuchmethodexception) {
-            throw new Error("Could not create new dimension", nosuchmethodexception);
-        } catch (InvocationTargetException invocationtargetexception) {
-            throw new Error("Could not create new dimension", invocationtargetexception);
-        } catch (InstantiationException instantiationexception) {
-            throw new Error("Could not create new dimension", instantiationexception);
-        } catch (IllegalAccessException illegalaccessexception) {
-            throw new Error("Could not create new dimension", illegalaccessexception);
-        }
+        return (WorldProvider) this.g.get();
     }
 
     public static DimensionManager a(int i) {

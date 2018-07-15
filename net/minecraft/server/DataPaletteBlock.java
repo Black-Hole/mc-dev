@@ -1,16 +1,52 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class DataPaletteBlock implements DataPaletteExpandable {
+public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
 
-    private static final DataPalette d = new DataPaletteGlobal();
-    protected static final IBlockData a = Blocks.AIR.getBlockData();
-    protected DataBits b;
-    protected DataPalette c;
-    private int e;
+    private final DataPalette<T> b;
+    private final DataPaletteExpandable<T> c = (i, object) -> {
+        return 0;
+    };
+    private final RegistryBlockID<T> d;
+    private final Function<NBTTagCompound, T> e;
+    private final Function<T, NBTTagCompound> f;
+    private final T g;
+    protected DataBits a;
+    private DataPalette<T> h;
+    private int i;
+    private final ReentrantLock j = new ReentrantLock();
 
-    public DataPaletteBlock() {
+    private void b() {
+        if (this.j.isLocked() && !this.j.isHeldByCurrentThread()) {
+            String s = (String) Thread.getAllStackTraces().keySet().stream().filter(Objects::nonNull).map((thread) -> {
+                return thread.getName() + ": \n\tat " + (String) Arrays.stream(thread.getStackTrace()).map(Object::toString).collect(Collectors.joining("\n\tat "));
+            }).collect(Collectors.joining("\n"));
+            CrashReport crashreport = new CrashReport("Writing into PalettedContainer from multiple threads", new IllegalStateException());
+            CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread dumps");
+
+            crashreportsystemdetails.a("Thread dumps", (Object) s);
+            throw new ReportedException(crashreport);
+        } else {
+            this.j.lock();
+        }
+    }
+
+    private void c() {
+        this.j.unlock();
+    }
+
+    public DataPaletteBlock(DataPalette<T> datapalette, RegistryBlockID<T> registryblockid, Function<NBTTagCompound, T> function, Function<T, NBTTagCompound> function1, T t0) {
+        this.b = datapalette;
+        this.d = registryblockid;
+        this.e = function;
+        this.f = function1;
+        this.g = t0;
         this.b(4);
     }
 
@@ -19,105 +55,137 @@ public class DataPaletteBlock implements DataPaletteExpandable {
     }
 
     private void b(int i) {
-        if (i != this.e) {
-            this.e = i;
-            if (this.e <= 4) {
-                this.e = 4;
-                this.c = new DataPaletteLinear(this.e, this);
-            } else if (this.e <= 8) {
-                this.c = new DataPaletteHash(this.e, this);
+        if (i != this.i) {
+            this.i = i;
+            if (this.i <= 4) {
+                this.i = 4;
+                this.h = new DataPaletteLinear(this.d, this.i, this, this.e);
+            } else if (this.i < 9) {
+                this.h = new DataPaletteHash(this.d, this.i, this, this.e, this.f);
             } else {
-                this.c = DataPaletteBlock.d;
-                this.e = MathHelper.d(Block.REGISTRY_ID.a());
+                this.h = this.b;
+                this.i = MathHelper.d(this.d.a());
             }
 
-            this.c.a(DataPaletteBlock.a);
-            this.b = new DataBits(this.e, 4096);
+            this.h.a(this.g);
+            this.a = new DataBits(this.i, 4096);
         }
     }
 
-    public int a(int i, IBlockData iblockdata) {
-        DataBits databits = this.b;
-        DataPalette datapalette = this.c;
+    public int onResize(int i, T t0) {
+        this.b();
+        DataBits databits = this.a;
+        DataPalette datapalette = this.h;
 
         this.b(i);
 
-        for (int j = 0; j < databits.b(); ++j) {
-            IBlockData iblockdata1 = datapalette.a(databits.a(j));
+        int j;
 
-            if (iblockdata1 != null) {
-                this.setBlockIndex(j, iblockdata1);
+        for (j = 0; j < databits.b(); ++j) {
+            Object object = datapalette.a(databits.a(j));
+
+            if (object != null) {
+                this.setBlockIndex(j, object);
             }
         }
 
-        return this.c.a(iblockdata);
+        j = this.h.a(t0);
+        this.c();
+        return j;
     }
 
-    public void setBlock(int i, int j, int k, IBlockData iblockdata) {
-        this.setBlockIndex(b(i, j, k), iblockdata);
+    public void setBlock(int i, int j, int k, T t0) {
+        this.b();
+        this.setBlockIndex(b(i, j, k), t0);
+        this.c();
     }
 
-    protected void setBlockIndex(int i, IBlockData iblockdata) {
-        int j = this.c.a(iblockdata);
+    protected void setBlockIndex(int i, T t0) {
+        int j = this.h.a(t0);
 
-        this.b.a(i, j);
+        this.a.a(i, j);
     }
 
-    public IBlockData a(int i, int j, int k) {
+    public T a(int i, int j, int k) {
         return this.a(b(i, j, k));
     }
 
-    protected IBlockData a(int i) {
-        IBlockData iblockdata = this.c.a(this.b.a(i));
+    protected T a(int i) {
+        Object object = this.h.a(this.a.a(i));
 
-        return iblockdata == null ? DataPaletteBlock.a : iblockdata;
+        return object == null ? this.g : object;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeByte(this.e);
-        this.c.b(packetdataserializer);
-        packetdataserializer.a(this.b.a());
+        this.b();
+        packetdataserializer.writeByte(this.i);
+        this.h.b(packetdataserializer);
+        packetdataserializer.a(this.a.a());
+        this.c();
     }
 
-    @Nullable
-    public NibbleArray exportData(byte[] abyte, NibbleArray nibblearray) {
-        NibbleArray nibblearray1 = null;
+    public void a(NBTTagCompound nbttagcompound, String s, String s1) {
+        this.b();
+        NBTTagList nbttaglist = nbttagcompound.getList(s, 10);
+        int i = Math.max(4, MathHelper.d(nbttaglist.size()));
 
-        for (int i = 0; i < 4096; ++i) {
-            int j = Block.REGISTRY_ID.getId(this.a(i));
-            int k = i & 15;
-            int l = i >> 8 & 15;
-            int i1 = i >> 4 & 15;
+        if (i != this.i) {
+            this.b(i);
+        }
 
-            if ((j >> 12 & 15) != 0) {
-                if (nibblearray1 == null) {
-                    nibblearray1 = new NibbleArray();
-                }
+        this.h.a(nbttaglist);
+        long[] along = nbttagcompound.o(s1);
+        int j = along.length * 64 / 4096;
 
-                nibblearray1.a(k, l, i1, j >> 12 & 15);
+        if (this.h == this.b) {
+            DataPaletteHash datapalettehash = new DataPaletteHash(this.d, i, this.c, this.e, this.f);
+
+            datapalettehash.a(nbttaglist);
+            DataBits databits = new DataBits(i, 4096, along);
+
+            for (int k = 0; k < 4096; ++k) {
+                this.a.a(k, this.b.a(datapalettehash.a(databits.a(k))));
             }
+        } else if (j == this.i) {
+            System.arraycopy(along, 0, this.a.a(), 0, along.length);
+        } else {
+            DataBits databits1 = new DataBits(j, 4096, along);
 
-            abyte[i] = (byte) (j >> 4 & 255);
-            nibblearray.a(k, l, i1, j & 15);
+            for (int l = 0; l < 4096; ++l) {
+                this.a.a(l, databits1.a(l));
+            }
         }
 
-        return nibblearray1;
+        this.c();
     }
 
-    public void a(byte[] abyte, NibbleArray nibblearray, @Nullable NibbleArray nibblearray1) {
-        for (int i = 0; i < 4096; ++i) {
-            int j = i & 15;
-            int k = i >> 8 & 15;
-            int l = i >> 4 & 15;
-            int i1 = nibblearray1 == null ? 0 : nibblearray1.a(j, k, l);
-            int j1 = i1 << 12 | (abyte[i] & 255) << 4 | nibblearray.a(j, k, l);
+    public void b(NBTTagCompound nbttagcompound, String s, String s1) {
+        this.b();
+        DataPaletteHash datapalettehash = new DataPaletteHash(this.d, this.i, this.c, this.e, this.f);
 
-            this.setBlockIndex(i, (IBlockData) Block.REGISTRY_ID.fromId(j1));
+        datapalettehash.a(this.g);
+        int[] aint = new int[4096];
+
+        for (int i = 0; i < 4096; ++i) {
+            aint[i] = datapalettehash.a(this.a(i));
         }
 
+        NBTTagList nbttaglist = new NBTTagList();
+
+        datapalettehash.b(nbttaglist);
+        nbttagcompound.set(s, nbttaglist);
+        int j = Math.max(4, MathHelper.d(nbttaglist.size()));
+        DataBits databits = new DataBits(j, 4096);
+
+        for (int k = 0; k < aint.length; ++k) {
+            databits.a(k, aint[k]);
+        }
+
+        nbttagcompound.a(s1, databits.a());
+        this.c();
     }
 
     public int a() {
-        return 1 + this.c.a() + PacketDataSerializer.a(this.b.b()) + this.b.a().length * 8;
+        return 1 + this.h.a() + PacketDataSerializer.a(this.a.b()) + this.a.a().length * 8;
     }
 }

@@ -1,16 +1,18 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-
 public abstract class BlockFacingHorizontal extends Block {
 
-    public static final BlockStateDirection FACING = BlockStateDirection.of("facing", (Predicate) EnumDirection.EnumDirectionLimit.HORIZONTAL);
+    public static final BlockStateDirection FACING = BlockProperties.I;
 
-    protected BlockFacingHorizontal(Material material) {
-        super(material);
+    protected BlockFacingHorizontal(Block.Info block_info) {
+        super(block_info);
     }
 
-    protected BlockFacingHorizontal(Material material, MaterialMapColor materialmapcolor) {
-        super(material, materialmapcolor);
+    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
+        return (IBlockData) iblockdata.set(BlockFacingHorizontal.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockFacingHorizontal.FACING)));
+    }
+
+    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockFacingHorizontal.FACING)));
     }
 }

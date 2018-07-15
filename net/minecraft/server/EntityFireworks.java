@@ -5,24 +5,24 @@ import java.util.List;
 
 public class EntityFireworks extends Entity {
 
-    public static final DataWatcherObject<ItemStack> FIREWORK_ITEM = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.f);
+    public static final DataWatcherObject<ItemStack> FIREWORK_ITEM = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.b);
     private int ticksFlown;
     public int expectedLifespan;
     private EntityLiving e;
 
     public EntityFireworks(World world) {
-        super(world);
+        super(EntityTypes.FIREWORK_ROCKET, world);
         this.setSize(0.25F, 0.25F);
     }
 
-    protected void i() {
+    protected void x_() {
         this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.a);
         this.datawatcher.register(EntityFireworks.b, Integer.valueOf(0));
     }
 
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        super(world);
+        super(EntityTypes.FIREWORK_ROCKET, world);
         this.ticksFlown = 0;
         this.setSize(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
@@ -30,10 +30,7 @@ public class EntityFireworks extends Entity {
 
         if (!itemstack.isEmpty() && itemstack.hasTag()) {
             this.datawatcher.set(EntityFireworks.FIREWORK_ITEM, itemstack.cloneItemStack());
-            NBTTagCompound nbttagcompound = itemstack.getTag();
-            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Fireworks");
-
-            i += nbttagcompound1.getByte("Flight");
+            i += itemstack.a("Fireworks").getByte("Flight");
         }
 
         this.motX = this.random.nextGaussian() * 0.001D;
@@ -48,12 +45,12 @@ public class EntityFireworks extends Entity {
         this.e = entityliving;
     }
 
-    public void B_() {
-        this.M = this.locX;
-        this.N = this.locY;
-        this.O = this.locZ;
-        super.B_();
-        if (this.j()) {
+    public void tick() {
+        this.N = this.locX;
+        this.O = this.locY;
+        this.P = this.locZ;
+        super.tick();
+        if (this.f()) {
             if (this.e == null) {
                 Entity entity = this.world.getEntity(((Integer) this.datawatcher.get(EntityFireworks.b)).intValue());
 
@@ -63,8 +60,8 @@ public class EntityFireworks extends Entity {
             }
 
             if (this.e != null) {
-                if (this.e.cP()) {
-                    Vec3D vec3d = this.e.aJ();
+                if (this.e.db()) {
+                    Vec3D vec3d = this.e.aN();
                     double d0 = 1.5D;
                     double d1 = 0.1D;
 
@@ -108,26 +105,26 @@ public class EntityFireworks extends Entity {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         if (this.ticksFlown == 0 && !this.isSilent()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.bI, SoundCategory.AMBIENT, 3.0F, 1.0F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;
         if (this.world.isClientSide && this.ticksFlown % 2 < 2) {
-            this.world.addParticle(EnumParticle.FIREWORKS_SPARK, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.motY * 0.5D, this.random.nextGaussian() * 0.05D, new int[0]);
+            this.world.addParticle(Particles.w, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.motY * 0.5D, this.random.nextGaussian() * 0.05D);
         }
 
         if (!this.world.isClientSide && this.ticksFlown > this.expectedLifespan) {
             this.world.broadcastEntityEffect(this, (byte) 17);
-            this.k();
+            this.i();
             this.die();
         }
 
     }
 
-    private void k() {
+    private void i() {
         float f = 0.0F;
         ItemStack itemstack = (ItemStack) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM);
-        NBTTagCompound nbttagcompound = itemstack.isEmpty() ? null : itemstack.d("Fireworks");
+        NBTTagCompound nbttagcompound = itemstack.isEmpty() ? null : itemstack.b("Fireworks");
         NBTTagList nbttaglist = nbttagcompound != null ? nbttagcompound.getList("Explosions", 10) : null;
 
         if (nbttaglist != null && !nbttaglist.isEmpty()) {
@@ -136,7 +133,7 @@ public class EntityFireworks extends Entity {
 
         if (f > 0.0F) {
             if (this.e != null) {
-                this.e.damageEntity(DamageSource.t, (float) (5 + nbttaglist.size() * 2));
+                this.e.damageEntity(DamageSource.FIREWORKS, (float) (5 + nbttaglist.size() * 2));
             }
 
             double d0 = 5.0D;
@@ -151,7 +148,7 @@ public class EntityFireworks extends Entity {
                     boolean flag = false;
 
                     for (int i = 0; i < 2; ++i) {
-                        MovingObjectPosition movingobjectposition = this.world.rayTrace(vec3d, new Vec3D(entityliving.locX, entityliving.locY + (double) entityliving.length * 0.5D * (double) i, entityliving.locZ), false, true, false);
+                        MovingObjectPosition movingobjectposition = this.world.rayTrace(vec3d, new Vec3D(entityliving.locX, entityliving.locY + (double) entityliving.length * 0.5D * (double) i, entityliving.locZ), FluidCollisionOption.NEVER, true, false);
 
                         if (movingobjectposition == null || movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.MISS) {
                             flag = true;
@@ -162,7 +159,7 @@ public class EntityFireworks extends Entity {
                     if (flag) {
                         float f1 = f * (float) Math.sqrt((5.0D - (double) this.g(entityliving)) / 5.0D);
 
-                        entityliving.damageEntity(DamageSource.t, f1);
+                        entityliving.damageEntity(DamageSource.FIREWORKS, f1);
                     }
                 }
             }
@@ -170,12 +167,8 @@ public class EntityFireworks extends Entity {
 
     }
 
-    public boolean j() {
+    public boolean f() {
         return ((Integer) this.datawatcher.get(EntityFireworks.b)).intValue() > 0;
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem(EntityFireworks.class, new String[] { "FireworksItem"})));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -192,19 +185,15 @@ public class EntityFireworks extends Entity {
     public void a(NBTTagCompound nbttagcompound) {
         this.ticksFlown = nbttagcompound.getInt("Life");
         this.expectedLifespan = nbttagcompound.getInt("LifeTime");
-        NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("FireworksItem");
+        ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("FireworksItem"));
 
-        if (nbttagcompound1 != null) {
-            ItemStack itemstack = new ItemStack(nbttagcompound1);
-
-            if (!itemstack.isEmpty()) {
-                this.datawatcher.set(EntityFireworks.FIREWORK_ITEM, itemstack);
-            }
+        if (!itemstack.isEmpty()) {
+            this.datawatcher.set(EntityFireworks.FIREWORK_ITEM, itemstack);
         }
 
     }
 
-    public boolean bd() {
+    public boolean bk() {
         return false;
     }
 }

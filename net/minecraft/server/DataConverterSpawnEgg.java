@@ -1,42 +1,24 @@
 package net.minecraft.server;
 
-public class DataConverterSpawnEgg implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.OpticFinder;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-    private static final String[] a = new String[256];
+public class DataConverterSpawnEgg extends DataFix {
 
-    public DataConverterSpawnEgg() {}
-
-    public int a() {
-        return 105;
-    }
-
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("minecraft:spawn_egg".equals(nbttagcompound.getString("id"))) {
-            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("tag");
-            NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("EntityTag");
-            short short0 = nbttagcompound.getShort("Damage");
-
-            if (!nbttagcompound2.hasKeyOfType("id", 8)) {
-                String s = DataConverterSpawnEgg.a[short0 & 255];
-
-                if (s != null) {
-                    nbttagcompound2.setString("id", s);
-                    nbttagcompound1.set("EntityTag", nbttagcompound2);
-                    nbttagcompound.set("tag", nbttagcompound1);
-                }
-            }
-
-            if (short0 != 0) {
-                nbttagcompound.setShort("Damage", (short) 0);
-            }
-        }
-
-        return nbttagcompound;
-    }
-
-    static {
-        String[] astring = DataConverterSpawnEgg.a;
-
+    public static final String[] ID_MAPPING = (String[]) DataFixUtils.make(new String[256], (astring) -> {
         astring[1] = "Item";
         astring[2] = "XPOrb";
         astring[7] = "ThrownEgg";
@@ -104,5 +86,61 @@ public class DataConverterSpawnEgg implements IDataConverter {
         astring[101] = "Rabbit";
         astring[120] = "Villager";
         astring[200] = "EnderCrystal";
+    });
+
+    public DataConverterSpawnEgg(Schema schema, boolean flag) {
+        super(schema, flag);
+    }
+
+    public TypeRewriteRule makeRule() {
+        Schema schema = this.getInputSchema();
+        Type type = schema.getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder opticfinder1 = DSL.fieldFinder("id", DSL.string());
+        OpticFinder opticfinder2 = type.findField("tag");
+        OpticFinder opticfinder3 = opticfinder2.type().findField("EntityTag");
+        OpticFinder opticfinder4 = DSL.typeFinder(schema.getTypeRaw(DataConverterTypes.ENTITY));
+
+        return this.fixTypeEverywhereTyped("ItemSpawnEggFix", type, (typed) -> {
+            Optional optional = typed.getOptional(opticfinder);
+
+            if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:spawn_egg")) {
+                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                short short0 = dynamic.getShort("Damage");
+                Optional optional1 = typed.getOptionalTyped(opticfinder1);
+                Optional optional2 = optional1.flatMap((typedx) -> {
+                    return typedx.getOptionalTyped(opticfinder);
+                });
+                Optional optional3 = optional2.flatMap((typedx) -> {
+                    return typedx.getOptionalTyped(opticfinder);
+                });
+                Optional optional4 = optional3.flatMap((typedx) -> {
+                    return typedx.getOptional(opticfinder);
+                });
+                Typed typed1 = typed;
+                String s = DataConverterSpawnEgg.ID_MAPPING[short0 & 255];
+
+                if (s != null && (!optional4.isPresent() || !Objects.equals(optional4.get(), s))) {
+                    Typed typed2 = typed.getOrCreateTyped(opticfinder1);
+                    Typed typed3 = typed2.getOrCreateTyped(opticfinder2);
+                    Typed typed4 = typed3.getOrCreateTyped(opticfinder3);
+                    Dynamic dynamic1 = typed4.write().set("id", dynamic.createString(s));
+                    Typed typed5 = (Typed) ((Optional) this.getOutputSchema().getTypeRaw(DataConverterTypes.ENTITY).readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                        return new IllegalStateException("Could not parse new entity");
+                    });
+
+                    typed1 = typed.set(opticfinder1, typed2.set(opticfinder2, typed3.set(opticfinder3, typed5)));
+                }
+
+                if (short0 != 0) {
+                    dynamic = dynamic.set("Damage", dynamic.createShort((short) 0));
+                    typed1 = typed1.set(DSL.remainderFinder(), dynamic);
+                }
+
+                return typed1;
+            } else {
+                return typed;
+            }
+        });
     }
 }

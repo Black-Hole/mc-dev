@@ -8,11 +8,11 @@ public class EntityVex extends EntityMonster {
     private EntityInsentient b;
     @Nullable
     private BlockPosition c;
-    private boolean bx;
-    private int by;
+    private boolean bC;
+    private int bD;
 
     public EntityVex(World world) {
-        super(world);
+        super(EntityTypes.VEX, world);
         this.fireProof = true;
         this.moveController = new EntityVex.c(this);
         this.setSize(0.4F, 0.8F);
@@ -24,20 +24,20 @@ public class EntityVex extends EntityMonster {
         this.checkBlockCollisions();
     }
 
-    public void B_() {
+    public void tick() {
         this.noclip = true;
-        super.B_();
+        super.tick();
         this.noclip = false;
         this.setNoGravity(true);
-        if (this.bx && --this.by <= 0) {
-            this.by = 20;
+        if (this.bC && --this.bD <= 0) {
+            this.bD = 20;
             this.damageEntity(DamageSource.STARVE, 1.0F);
         }
 
     }
 
-    protected void r() {
-        super.r();
+    protected void n() {
+        super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new EntityVex.a());
         this.goalSelector.a(8, new EntityVex.d());
@@ -54,13 +54,9 @@ public class EntityVex extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityVex.a, Byte.valueOf((byte) 0));
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityVex.class);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -83,18 +79,18 @@ public class EntityVex extends EntityMonster {
             nbttagcompound.setInt("BoundZ", this.c.getZ());
         }
 
-        if (this.bx) {
-            nbttagcompound.setInt("LifeTicks", this.by);
+        if (this.bC) {
+            nbttagcompound.setInt("LifeTicks", this.bD);
         }
 
     }
 
-    public EntityInsentient p() {
+    public EntityInsentient l() {
         return this.b;
     }
 
     @Nullable
-    public BlockPosition dm() {
+    public BlockPosition dz() {
         return this.c;
     }
 
@@ -102,7 +98,7 @@ public class EntityVex extends EntityMonster {
         this.c = blockposition;
     }
 
-    private boolean c(int i) {
+    private boolean b(int i) {
         byte b0 = ((Byte) this.datawatcher.get(EntityVex.a)).byteValue();
 
         return (b0 & i) != 0;
@@ -121,8 +117,8 @@ public class EntityVex extends EntityMonster {
         this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
     }
 
-    public boolean dn() {
-        return this.c(1);
+    public boolean dA() {
+        return this.b(1);
     }
 
     public void a(boolean flag) {
@@ -134,36 +130,36 @@ public class EntityVex extends EntityMonster {
     }
 
     public void a(int i) {
-        this.bx = true;
-        this.by = i;
+        this.bC = true;
+        this.bD = i;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.ig;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_VEX_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.ii;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_VEX_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.ij;
+        return SoundEffects.ENTITY_VEX_HURT;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.ay;
+    protected MinecraftKey G() {
+        return LootTables.aG;
     }
 
-    public float aw() {
+    public float az() {
         return 1.0F;
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        return super.prepare(difficultydamagescaler, groupdataentity);
+        return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
@@ -202,7 +198,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dm();
+            BlockPosition blockposition = EntityVex.this.dz();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -234,16 +230,16 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean b() {
-            return EntityVex.this.getControllerMove().b() && EntityVex.this.dn() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.dA() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         public void c() {
             EntityLiving entityliving = EntityVex.this.getGoalTarget();
-            Vec3D vec3d = entityliving.f(1.0F);
+            Vec3D vec3d = entityliving.i(1.0F);
 
             EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
             EntityVex.this.a(true);
-            EntityVex.this.a(SoundEffects.ih, 1.0F, 1.0F);
+            EntityVex.this.a(SoundEffects.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
         }
 
         public void d() {
@@ -260,7 +256,7 @@ public class EntityVex extends EntityMonster {
                 double d0 = EntityVex.this.h((Entity) entityliving);
 
                 if (d0 < 9.0D) {
-                    Vec3D vec3d = entityliving.f(1.0F);
+                    Vec3D vec3d = entityliving.i(1.0F);
 
                     EntityVex.this.moveController.a(vec3d.x, vec3d.y, vec3d.z, 1.0D);
                 }
@@ -294,13 +290,13 @@ public class EntityVex extends EntityMonster {
                     EntityVex.this.motZ += d2 / d3 * 0.05D * this.e;
                     if (EntityVex.this.getGoalTarget() == null) {
                         EntityVex.this.yaw = -((float) MathHelper.c(EntityVex.this.motX, EntityVex.this.motZ)) * 57.295776F;
-                        EntityVex.this.aN = EntityVex.this.yaw;
+                        EntityVex.this.aQ = EntityVex.this.yaw;
                     } else {
                         double d4 = EntityVex.this.getGoalTarget().locX - EntityVex.this.locX;
                         double d5 = EntityVex.this.getGoalTarget().locZ - EntityVex.this.locZ;
 
                         EntityVex.this.yaw = -((float) MathHelper.c(d4, d5)) * 57.295776F;
-                        EntityVex.this.aN = EntityVex.this.yaw;
+                        EntityVex.this.aQ = EntityVex.this.yaw;
                     }
                 }
 

@@ -2,17 +2,16 @@ package net.minecraft.server;
 
 public class ItemMilkBucket extends Item {
 
-    public ItemMilkBucket() {
-        this.d(1);
-        this.b(CreativeModeTab.f);
+    public ItemMilkBucket(Item.Info item_info) {
+        super(item_info);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
         if (entityliving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityliving;
 
-            CriterionTriggers.y.a(entityplayer, itemstack);
-            entityplayer.b(StatisticList.b((Item) this));
+            CriterionTriggers.z.a(entityplayer, itemstack);
+            entityplayer.b(StatisticList.ITEM_USED.b(this));
         }
 
         if (entityliving instanceof EntityHuman && !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
@@ -26,11 +25,11 @@ public class ItemMilkBucket extends Item {
         return itemstack.isEmpty() ? new ItemStack(Items.BUCKET) : itemstack;
     }
 
-    public int e(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 

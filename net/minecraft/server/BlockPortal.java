@@ -4,36 +4,30 @@ import com.google.common.cache.LoadingCache;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-public class BlockPortal extends BlockHalfTransparent {
+public class BlockPortal extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockStateEnum.of("axis", EnumDirection.EnumAxis.class, new EnumDirection.EnumAxis[] { EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z});
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB d = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.y;
+    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
+    protected static final VoxelShape c = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 
-    public BlockPortal() {
-        super(Material.PORTAL, false);
-        this.w(this.blockStateList.getBlockData().set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
-        this.a(true);
+    public BlockPortal(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
-        case X:
-            return BlockPortal.b;
-
-        case Y:
-        default:
-            return BlockPortal.d;
-
         case Z:
             return BlockPortal.c;
+
+        case X:
+        default:
+            return BlockPortal.b;
         }
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        super.b(world, blockposition, iblockdata, random);
-        if (world.worldProvider.d() && world.getGameRules().getBoolean("doMobSpawning") && random.nextInt(2000) < world.getDifficulty().a()) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (world.worldProvider.o() && world.getGameRules().getBoolean("doMobSpawning") && random.nextInt(2000) < world.getDifficulty().a()) {
             int i = blockposition.getY();
 
             BlockPosition blockposition1;
@@ -42,87 +36,70 @@ public class BlockPortal extends BlockHalfTransparent {
                 ;
             }
 
-            if (i > 0 && !world.getType(blockposition1.up()).l()) {
-                Entity entity = ItemMonsterEgg.a(world, EntityTypes.getName(EntityPigZombie.class), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 1.1D, (double) blockposition1.getZ() + 0.5D);
+            if (i > 0 && !world.getType(blockposition1.up()).isOccluding()) {
+                Entity entity = EntityTypes.ZOMBIE_PIGMAN.a(world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition1.up(), false, false);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aM();
+                    entity.portalCooldown = entity.aQ();
                 }
             }
         }
 
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockPortal.k;
-    }
-
-    public static int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis == EnumDirection.EnumAxis.X ? 1 : (enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 2 : 0);
-    }
-
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean b(World world, BlockPosition blockposition) {
-        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        BlockPortal.Shape blockportal_shape = this.b(generatoraccess, blockposition);
 
-        if (blockportal_shape.d() && blockportal_shape.e == 0) {
+        if (blockportal_shape != null) {
             blockportal_shape.createPortal();
             return true;
         } else {
-            BlockPortal.Shape blockportal_shape1 = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
-
-            if (blockportal_shape1.d() && blockportal_shape1.e == 0) {
-                blockportal_shape1.createPortal();
-                return true;
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
-        BlockPortal.Shape blockportal_shape;
+    @Nullable
+    public BlockPortal.Shape b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(generatoraccess, blockposition, EnumDirection.EnumAxis.X);
 
-        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
-            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
-                world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
-            }
-        } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
-            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.width * blockportal_shape.height) {
-                world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
-            }
+        if (blockportal_shape.d() && blockportal_shape.e == 0) {
+            return blockportal_shape;
+        } else {
+            BlockPortal.Shape blockportal_shape1 = new BlockPortal.Shape(generatoraccess, blockposition, EnumDirection.EnumAxis.Z);
+
+            return blockportal_shape1.d() && blockportal_shape1.e == 0 ? blockportal_shape1 : null;
         }
-
     }
 
-    public int a(Random random) {
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+        EnumDirection.EnumAxis enumdirection_enumaxis1 = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
+        boolean flag = enumdirection_enumaxis1 != enumdirection_enumaxis && enumdirection_enumaxis.c();
+
+        return !flag && iblockdata1.getBlock() != this && !(new BlockPortal.Shape(generatoraccess, blockposition, enumdirection_enumaxis1)).f() ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public int a(IBlockData iblockdata, Random random) {
         return 0;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.bf()) {
+    public TextureType c() {
+        return TextureType.TRANSLUCENT;
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.bm()) {
             entity.e(blockposition);
         }
 
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return ItemStack.a;
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPortal.AXIS, (i & 3) == 2 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return a((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -130,11 +107,11 @@ public class BlockPortal extends BlockHalfTransparent {
         case COUNTERCLOCKWISE_90:
         case CLOCKWISE_90:
             switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
-            case X:
-                return iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
-
             case Z:
-                return iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
+                return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
+
+            case X:
+                return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
 
             default:
                 return iblockdata;
@@ -145,18 +122,18 @@ public class BlockPortal extends BlockHalfTransparent {
         }
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockPortal.AXIS});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockPortal.AXIS});
     }
 
-    public ShapeDetector.ShapeDetectorCollection c(World world, BlockPosition blockposition) {
+    public ShapeDetector.ShapeDetectorCollection c(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         EnumDirection.EnumAxis enumdirection_enumaxis = EnumDirection.EnumAxis.Z;
-        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
-        LoadingCache loadingcache = ShapeDetector.a(world, true);
+        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(generatoraccess, blockposition, EnumDirection.EnumAxis.X);
+        LoadingCache loadingcache = ShapeDetector.a(generatoraccess, true);
 
         if (!blockportal_shape.d()) {
             enumdirection_enumaxis = EnumDirection.EnumAxis.X;
-            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
+            blockportal_shape = new BlockPortal.Shape(generatoraccess, blockposition, EnumDirection.EnumAxis.Z);
         }
 
         if (!blockportal_shape.d()) {
@@ -178,7 +155,7 @@ public class BlockPortal extends BlockHalfTransparent {
                     for (int l = 0; l < blockportal_shape.a(); ++l) {
                         ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(k, l, 1);
 
-                        if (shapedetectorblock.a() != null && shapedetectorblock.a().getMaterial() != Material.AIR) {
+                        if (!shapedetectorblock.a().isAir()) {
                             ++aint[enumdirection_enumaxisdirection.ordinal()];
                         }
                     }
@@ -208,7 +185,7 @@ public class BlockPortal extends BlockHalfTransparent {
 
     public static class Shape {
 
-        private final World a;
+        private final GeneratorAccess a;
         private final EnumDirection.EnumAxis b;
         private final EnumDirection c;
         private final EnumDirection d;
@@ -217,8 +194,8 @@ public class BlockPortal extends BlockHalfTransparent {
         private int height;
         private int width;
 
-        public Shape(World world, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
-            this.a = world;
+        public Shape(GeneratorAccess generatoraccess, BlockPosition blockposition, EnumDirection.EnumAxis enumdirection_enumaxis) {
+            this.a = generatoraccess;
             this.b = enumdirection_enumaxis;
             if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
                 this.d = EnumDirection.EAST;
@@ -228,7 +205,7 @@ public class BlockPortal extends BlockHalfTransparent {
                 this.c = EnumDirection.SOUTH;
             }
 
-            for (BlockPosition blockposition1 = blockposition; blockposition.getY() > blockposition1.getY() - 21 && blockposition.getY() > 0 && this.a(world.getType(blockposition.down()).getBlock()); blockposition = blockposition.down()) {
+            for (BlockPosition blockposition1 = blockposition; blockposition.getY() > blockposition1.getY() - 21 && blockposition.getY() > 0 && this.a(generatoraccess.getType(blockposition.down())); blockposition = blockposition.down()) {
                 ;
             }
 
@@ -255,7 +232,7 @@ public class BlockPortal extends BlockHalfTransparent {
             for (i = 0; i < 22; ++i) {
                 BlockPosition blockposition1 = blockposition.shift(enumdirection, i);
 
-                if (!this.a(this.a.getType(blockposition1).getBlock()) || this.a.getType(blockposition1.down()).getBlock() != Blocks.OBSIDIAN) {
+                if (!this.a(this.a.getType(blockposition1)) || this.a.getType(blockposition1.down()).getBlock() != Blocks.OBSIDIAN) {
                     break;
                 }
             }
@@ -280,13 +257,15 @@ public class BlockPortal extends BlockHalfTransparent {
             for (this.height = 0; this.height < 21; ++this.height) {
                 for (i = 0; i < this.width; ++i) {
                     BlockPosition blockposition = this.position.shift(this.c, i).up(this.height);
-                    Block block = this.a.getType(blockposition).getBlock();
+                    IBlockData iblockdata = this.a.getType(blockposition);
 
-                    if (!this.a(block)) {
+                    if (!this.a(iblockdata)) {
                         break label56;
                     }
 
-                    if (block == Blocks.PORTAL) {
+                    Block block = iblockdata.getBlock();
+
+                    if (block == Blocks.NETHER_PORTAL) {
                         ++this.e;
                     }
 
@@ -321,8 +300,10 @@ public class BlockPortal extends BlockHalfTransparent {
             }
         }
 
-        protected boolean a(Block block) {
-            return block.material == Material.AIR || block == Blocks.FIRE || block == Blocks.PORTAL;
+        protected boolean a(IBlockData iblockdata) {
+            Block block = iblockdata.getBlock();
+
+            return iblockdata.isAir() || block == Blocks.FIRE || block == Blocks.NETHER_PORTAL;
         }
 
         public boolean d() {
@@ -334,10 +315,18 @@ public class BlockPortal extends BlockHalfTransparent {
                 BlockPosition blockposition = this.position.shift(this.c, i);
 
                 for (int j = 0; j < this.height; ++j) {
-                    this.a.setTypeAndData(blockposition.up(j), Blocks.PORTAL.getBlockData().set(BlockPortal.AXIS, this.b), 2);
+                    this.a.setTypeAndData(blockposition.up(j), (IBlockData) Blocks.NETHER_PORTAL.getBlockData().set(BlockPortal.AXIS, this.b), 18);
                 }
             }
 
+        }
+
+        private boolean g() {
+            return this.e >= this.width * this.height;
+        }
+
+        public boolean f() {
+            return this.d() && this.g();
         }
     }
 }

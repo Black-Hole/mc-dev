@@ -4,7 +4,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
 public class LootSelectorLootTable extends LotoSelectorEntry {
@@ -17,10 +16,9 @@ public class LootSelectorLootTable extends LotoSelectorEntry {
     }
 
     public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
-        LootTable loottable = loottableinfo.e().a(this.a);
-        List list = loottable.a(random, loottableinfo);
+        LootTable loottable = loottableinfo.f().a(this.a);
 
-        collection.addAll(list);
+        collection.addAll(loottable.a(random, loottableinfo));
     }
 
     protected void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {

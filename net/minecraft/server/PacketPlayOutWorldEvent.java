@@ -13,7 +13,7 @@ public class PacketPlayOutWorldEvent implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutWorldEvent(int i, BlockPosition blockposition, int j, boolean flag) {
         this.a = i;
-        this.b = blockposition;
+        this.b = blockposition.h();
         this.c = j;
         this.d = flag;
     }

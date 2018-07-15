@@ -13,6 +13,7 @@ public class MobEffect implements Comparable<MobEffect> {
     private boolean splash;
     private boolean ambient;
     private boolean h;
+    private boolean i;
 
     public MobEffect(MobEffectList mobeffectlist) {
         this(mobeffectlist, 0, 0);
@@ -27,11 +28,16 @@ public class MobEffect implements Comparable<MobEffect> {
     }
 
     public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1) {
+        this(mobeffectlist, i, j, flag, flag1, flag1);
+    }
+
+    public MobEffect(MobEffectList mobeffectlist, int i, int j, boolean flag, boolean flag1, boolean flag2) {
         this.b = mobeffectlist;
         this.duration = i;
         this.amplification = j;
         this.ambient = flag;
         this.h = flag1;
+        this.i = flag2;
     }
 
     public MobEffect(MobEffect mobeffect) {
@@ -40,23 +46,41 @@ public class MobEffect implements Comparable<MobEffect> {
         this.amplification = mobeffect.amplification;
         this.ambient = mobeffect.ambient;
         this.h = mobeffect.h;
+        this.i = mobeffect.i;
     }
 
-    public void a(MobEffect mobeffect) {
+    public boolean a(MobEffect mobeffect) {
         if (this.b != mobeffect.b) {
             MobEffect.a.warn("This method should only be called for matching effects!");
         }
 
+        boolean flag = false;
+
         if (mobeffect.amplification > this.amplification) {
             this.amplification = mobeffect.amplification;
             this.duration = mobeffect.duration;
+            flag = true;
         } else if (mobeffect.amplification == this.amplification && this.duration < mobeffect.duration) {
             this.duration = mobeffect.duration;
-        } else if (!mobeffect.ambient && this.ambient) {
-            this.ambient = mobeffect.ambient;
+            flag = true;
         }
 
-        this.h = mobeffect.h;
+        if (!mobeffect.ambient && this.ambient) {
+            this.ambient = mobeffect.ambient;
+            flag = true;
+        }
+
+        if (mobeffect.h != this.h) {
+            this.h = mobeffect.h;
+            flag = true;
+        }
+
+        if (mobeffect.i != this.i) {
+            this.i = mobeffect.i;
+            flag = true;
+        }
+
+        return flag;
     }
 
     public MobEffectList getMobEffect() {
@@ -79,19 +103,23 @@ public class MobEffect implements Comparable<MobEffect> {
         return this.h;
     }
 
+    public boolean f() {
+        return this.i;
+    }
+
     public boolean tick(EntityLiving entityliving) {
         if (this.duration > 0) {
             if (this.b.a(this.duration, this.amplification)) {
                 this.b(entityliving);
             }
 
-            this.h();
+            this.i();
         }
 
         return this.duration > 0;
     }
 
-    private int h() {
+    private int i() {
         return --this.duration;
     }
 
@@ -102,17 +130,17 @@ public class MobEffect implements Comparable<MobEffect> {
 
     }
 
-    public String f() {
-        return this.b.a();
+    public String g() {
+        return this.b.c();
     }
 
     public String toString() {
         String s;
 
         if (this.amplification > 0) {
-            s = this.f() + " x " + (this.amplification + 1) + ", Duration: " + this.duration;
+            s = this.g() + " x " + (this.amplification + 1) + ", Duration: " + this.duration;
         } else {
-            s = this.f() + ", Duration: " + this.duration;
+            s = this.g() + ", Duration: " + this.duration;
         }
 
         if (this.splash) {
@@ -121,6 +149,10 @@ public class MobEffect implements Comparable<MobEffect> {
 
         if (!this.h) {
             s = s + ", Particles: false";
+        }
+
+        if (!this.i) {
+            s = s + ", Show Icon: false";
         }
 
         return s;
@@ -154,6 +186,7 @@ public class MobEffect implements Comparable<MobEffect> {
         nbttagcompound.setInt("Duration", this.getDuration());
         nbttagcompound.setBoolean("Ambient", this.isAmbient());
         nbttagcompound.setBoolean("ShowParticles", this.isShowParticles());
+        nbttagcompound.setBoolean("ShowIcon", this.f());
         return nbttagcompound;
     }
 
@@ -173,7 +206,13 @@ public class MobEffect implements Comparable<MobEffect> {
                 flag1 = nbttagcompound.getBoolean("ShowParticles");
             }
 
-            return new MobEffect(mobeffectlist, i, b1 < 0 ? 0 : b1, flag, flag1);
+            boolean flag2 = flag1;
+
+            if (nbttagcompound.hasKeyOfType("ShowIcon", 1)) {
+                flag2 = nbttagcompound.getBoolean("ShowIcon");
+            }
+
+            return new MobEffect(mobeffectlist, i, b1 < 0 ? 0 : b1, flag, flag1, flag2);
         }
     }
 

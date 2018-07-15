@@ -1,16 +1,20 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public interface IChunkLoader {
 
     @Nullable
-    Chunk a(World world, int i, int j) throws IOException;
+    Chunk a(GeneratorAccess generatoraccess, int i, int j, Consumer<Chunk> consumer) throws IOException;
 
-    void saveChunk(World world, Chunk chunk) throws IOException, ExceptionWorldConflict;
+    @Nullable
+    ProtoChunk b(GeneratorAccess generatoraccess, int i, int j, Consumer<IChunkAccess> consumer) throws IOException;
 
-    void b(World world, Chunk chunk) throws IOException;
+    void saveChunk(World world, IChunkAccess ichunkaccess) throws IOException, ExceptionWorldConflict;
+
+    void a(IBlockAccess iblockaccess, Chunk chunk) throws IOException;
 
     void b();
 

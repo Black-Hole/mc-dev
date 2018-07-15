@@ -4,66 +4,62 @@ import java.util.Random;
 
 public class BlockRedstoneOre extends Block {
 
-    private final boolean a;
+    public static final BlockStateBoolean a = BlockRedstoneTorch.LIT;
 
-    public BlockRedstoneOre(boolean flag) {
-        super(Material.STONE);
-        if (flag) {
-            this.a(true);
-        }
-
-        this.a = flag;
+    public BlockRedstoneOre(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, Boolean.valueOf(false)));
     }
 
-    public int a(World world) {
-        return 30;
+    public int l(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue() ? super.l(iblockdata) : 0;
     }
 
-    public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        this.interact(world, blockposition);
-        super.attack(world, blockposition, entityhuman);
+    public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
+        interact(iblockdata, world, blockposition);
+        super.attack(iblockdata, world, blockposition, entityhuman);
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        this.interact(world, blockposition);
+        interact(world.getType(blockposition), world, blockposition);
         super.stepOn(world, blockposition, entity);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        this.interact(world, blockposition);
-        return super.interact(world, blockposition, iblockdata, entityhuman, enumhand, enumdirection, f, f1, f2);
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        interact(iblockdata, world, blockposition);
+        return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, enumdirection, f, f1, f2);
     }
 
-    private void interact(World world, BlockPosition blockposition) {
-        this.playEffect(world, blockposition);
-        if (this == Blocks.REDSTONE_ORE) {
-            world.setTypeUpdate(blockposition, Blocks.LIT_REDSTONE_ORE.getBlockData());
+    private static void interact(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        playEffect(world, blockposition);
+        if (!((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue()) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, Boolean.valueOf(true)), 3);
         }
 
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (this == Blocks.LIT_REDSTONE_ORE) {
-            world.setTypeUpdate(blockposition, Blocks.REDSTONE_ORE.getBlockData());
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue()) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, Boolean.valueOf(false)), 3);
         }
 
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
         return Items.REDSTONE;
     }
 
-    public int getDropCount(int i, Random random) {
-        return this.a(random) + random.nextInt(i + 1);
+    public int getDropCount(IBlockData iblockdata, int i, World world, BlockPosition blockposition, Random random) {
+        return this.a(iblockdata, random) + random.nextInt(i + 1);
     }
 
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 4 + random.nextInt(2);
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        super.dropNaturally(world, blockposition, iblockdata, f, i);
-        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
+        super.dropNaturally(iblockdata, world, blockposition, f, i);
+        if (this.getDropType(iblockdata, world, blockposition, i) != this) {
             int j = 1 + world.random.nextInt(5);
 
             this.dropExperience(world, blockposition, j);
@@ -71,51 +67,29 @@ public class BlockRedstoneOre extends Block {
 
     }
 
-    private void playEffect(World world, BlockPosition blockposition) {
+    private static void playEffect(World world, BlockPosition blockposition) {
+        double d0 = 0.5625D;
         Random random = world.random;
-        double d0 = 0.0625D;
+        EnumDirection[] aenumdirection = EnumDirection.values();
+        int i = aenumdirection.length;
 
-        for (int i = 0; i < 6; ++i) {
-            double d1 = (double) ((float) blockposition.getX() + random.nextFloat());
-            double d2 = (double) ((float) blockposition.getY() + random.nextFloat());
-            double d3 = (double) ((float) blockposition.getZ() + random.nextFloat());
+        for (int j = 0; j < i; ++j) {
+            EnumDirection enumdirection = aenumdirection[j];
+            BlockPosition blockposition1 = blockposition.shift(enumdirection);
 
-            if (i == 0 && !world.getType(blockposition.up()).p()) {
-                d2 = (double) blockposition.getY() + 0.0625D + 1.0D;
-            }
+            if (!world.getType(blockposition1).f(world, blockposition1)) {
+                EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+                double d1 = enumdirection_enumaxis == EnumDirection.EnumAxis.X ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentX() : (double) random.nextFloat();
+                double d2 = enumdirection_enumaxis == EnumDirection.EnumAxis.Y ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentY() : (double) random.nextFloat();
+                double d3 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z ? 0.5D + 0.5625D * (double) enumdirection.getAdjacentZ() : (double) random.nextFloat();
 
-            if (i == 1 && !world.getType(blockposition.down()).p()) {
-                d2 = (double) blockposition.getY() - 0.0625D;
-            }
-
-            if (i == 2 && !world.getType(blockposition.south()).p()) {
-                d3 = (double) blockposition.getZ() + 0.0625D + 1.0D;
-            }
-
-            if (i == 3 && !world.getType(blockposition.north()).p()) {
-                d3 = (double) blockposition.getZ() - 0.0625D;
-            }
-
-            if (i == 4 && !world.getType(blockposition.east()).p()) {
-                d1 = (double) blockposition.getX() + 0.0625D + 1.0D;
-            }
-
-            if (i == 5 && !world.getType(blockposition.west()).p()) {
-                d1 = (double) blockposition.getX() - 0.0625D;
-            }
-
-            if (d1 < (double) blockposition.getX() || d1 > (double) (blockposition.getX() + 1) || d2 < 0.0D || d2 > (double) (blockposition.getY() + 1) || d3 < (double) blockposition.getZ() || d3 > (double) (blockposition.getZ() + 1)) {
-                world.addParticle(EnumParticle.REDSTONE, d1, d2, d3, 0.0D, 0.0D, 0.0D, new int[0]);
+                world.addParticle(ParticleParamRedstone.a, (double) blockposition.getX() + d1, (double) blockposition.getY() + d2, (double) blockposition.getZ() + d3, 0.0D, 0.0D, 0.0D);
             }
         }
 
     }
 
-    protected ItemStack u(IBlockData iblockdata) {
-        return new ItemStack(Blocks.REDSTONE_ORE);
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(Item.getItemOf(Blocks.REDSTONE_ORE), 1, this.getDropData(iblockdata));
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockRedstoneOre.a});
     }
 }

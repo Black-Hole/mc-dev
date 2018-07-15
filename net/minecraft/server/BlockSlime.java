@@ -2,24 +2,26 @@ package net.minecraft.server;
 
 public class BlockSlime extends BlockHalfTransparent {
 
-    public BlockSlime() {
-        super(Material.CLAY, false, MaterialMapColor.d);
-        this.a(CreativeModeTab.c);
-        this.frictionFactor = 0.8F;
+    public BlockSlime(Block.Info block_info) {
+        super(block_info);
+    }
+
+    public TextureType c() {
+        return TextureType.TRANSLUCENT;
     }
 
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (entity.isSneaking()) {
             super.fallOn(world, blockposition, entity, f);
         } else {
-            entity.e(f, 0.0F);
+            entity.c(f, 0.0F);
         }
 
     }
 
-    public void a(World world, Entity entity) {
+    public void a(IBlockAccess iblockaccess, Entity entity) {
         if (entity.isSneaking()) {
-            super.a(world, entity);
+            super.a(iblockaccess, entity);
         } else if (entity.motY < 0.0D) {
             entity.motY = -entity.motY;
             if (!(entity instanceof EntityLiving)) {
@@ -38,5 +40,9 @@ public class BlockSlime extends BlockHalfTransparent {
         }
 
         super.stepOn(world, blockposition, entity);
+    }
+
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return 0;
     }
 }

@@ -4,7 +4,6 @@ public class EnchantmentInfiniteArrows extends Enchantment {
 
     public EnchantmentInfiniteArrows(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
-        this.c("arrowInfinite");
     }
 
     public int a(int i) {

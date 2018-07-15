@@ -5,14 +5,15 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class WorldGenDungeons extends WorldGenerator {
+public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final Logger a = LogManager.getLogger();
-    private static final MinecraftKey[] b = new MinecraftKey[] { EntityTypes.getName(EntitySkeleton.class), EntityTypes.getName(EntityZombie.class), EntityTypes.getName(EntityZombie.class), EntityTypes.getName(EntitySpider.class)};
+    private static final EntityTypes<?>[] b = new EntityTypes[] { EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
+    private static final IBlockData c = Blocks.CAVE_AIR.getBlockData();
 
     public WorldGenDungeons() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         boolean flag = true;
         int i = random.nextInt(2) + 2;
         int j = -i - 1;
@@ -33,7 +34,7 @@ public class WorldGenDungeons extends WorldGenerator {
             for (i2 = -1; i2 <= 4; ++i2) {
                 for (j2 = i1; j2 <= j1; ++j2) {
                     blockposition1 = blockposition.a(l1, i2, j2);
-                    Material material = world.getType(blockposition1).getMaterial();
+                    Material material = generatoraccess.getType(blockposition1).getMaterial();
                     boolean flag3 = material.isBuildable();
 
                     if (i2 == -1 && !flag3) {
@@ -44,7 +45,7 @@ public class WorldGenDungeons extends WorldGenerator {
                         return false;
                     }
 
-                    if ((l1 == j || l1 == k || j2 == i1 || j2 == j1) && i2 == 0 && world.isEmpty(blockposition1) && world.isEmpty(blockposition1.up())) {
+                    if ((l1 == j || l1 == k || j2 == i1 || j2 == j1) && i2 == 0 && generatoraccess.isEmpty(blockposition1) && generatoraccess.isEmpty(blockposition1.up())) {
                         ++k1;
                     }
                 }
@@ -57,16 +58,16 @@ public class WorldGenDungeons extends WorldGenerator {
                     for (j2 = i1; j2 <= j1; ++j2) {
                         blockposition1 = blockposition.a(l1, i2, j2);
                         if (l1 != j && i2 != -1 && j2 != i1 && l1 != k && i2 != 4 && j2 != j1) {
-                            if (world.getType(blockposition1).getBlock() != Blocks.CHEST) {
-                                world.setAir(blockposition1);
+                            if (generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
+                                generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.c, 2);
                             }
-                        } else if (blockposition1.getY() >= 0 && !world.getType(blockposition1.down()).getMaterial().isBuildable()) {
-                            world.setAir(blockposition1);
-                        } else if (world.getType(blockposition1).getMaterial().isBuildable() && world.getType(blockposition1).getBlock() != Blocks.CHEST) {
+                        } else if (blockposition1.getY() >= 0 && !generatoraccess.getType(blockposition1.down()).getMaterial().isBuildable()) {
+                            generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.c, 2);
+                        } else if (generatoraccess.getType(blockposition1).getMaterial().isBuildable() && generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
                             if (i2 == -1 && random.nextInt(4) != 0) {
-                                world.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
+                                generatoraccess.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
                             } else {
-                                world.setTypeAndData(blockposition1, Blocks.COBBLESTONE.getBlockData(), 2);
+                                generatoraccess.setTypeAndData(blockposition1, Blocks.COBBLESTONE.getBlockData(), 2);
                             }
                         }
                     }
@@ -80,32 +81,29 @@ public class WorldGenDungeons extends WorldGenerator {
 
                 while (true) {
                     if (i2 < 3) {
-                        label197: {
+                        label98:
+                        {
                             j2 = blockposition.getX() + random.nextInt(i * 2 + 1) - i;
                             int k2 = blockposition.getY();
                             int l2 = blockposition.getZ() + random.nextInt(l * 2 + 1) - l;
                             BlockPosition blockposition2 = new BlockPosition(j2, k2, l2);
 
-                            if (world.isEmpty(blockposition2)) {
+                            if (generatoraccess.isEmpty(blockposition2)) {
                                 int i3 = 0;
                                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                                 while (iterator.hasNext()) {
                                     EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                                    if (world.getType(blockposition2.shift(enumdirection)).getMaterial().isBuildable()) {
+                                    if (generatoraccess.getType(blockposition2.shift(enumdirection)).getMaterial().isBuildable()) {
                                         ++i3;
                                     }
                                 }
 
                                 if (i3 == 1) {
-                                    world.setTypeAndData(blockposition2, Blocks.CHEST.f(world, blockposition2, Blocks.CHEST.getBlockData()), 2);
-                                    TileEntity tileentity = world.getTileEntity(blockposition2);
-
-                                    if (tileentity instanceof TileEntityChest) {
-                                        ((TileEntityChest) tileentity).a(LootTables.d, random.nextLong());
-                                    }
-                                    break label197;
+                                    generatoraccess.setTypeAndData(blockposition2, StructurePiece.a((IBlockAccess) generatoraccess, blockposition2, Blocks.CHEST.getBlockData()), 2);
+                                    TileEntityLootable.a(generatoraccess, random, blockposition2, LootTables.d);
+                                    break label98;
                                 }
                             }
 
@@ -119,11 +117,11 @@ public class WorldGenDungeons extends WorldGenerator {
                 }
             }
 
-            world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
-            TileEntity tileentity1 = world.getTileEntity(blockposition);
+            generatoraccess.setTypeAndData(blockposition, Blocks.SPAWNER.getBlockData(), 2);
+            TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
-            if (tileentity1 instanceof TileEntityMobSpawner) {
-                ((TileEntityMobSpawner) tileentity1).getSpawner().setMobName(this.a(random));
+            if (tileentity instanceof TileEntityMobSpawner) {
+                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(this.a(random));
             } else {
                 WorldGenDungeons.a.error("Failed to fetch mob spawner entity at ({}, {}, {})", Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()));
             }
@@ -134,7 +132,7 @@ public class WorldGenDungeons extends WorldGenerator {
         }
     }
 
-    private MinecraftKey a(Random random) {
+    private EntityTypes<?> a(Random random) {
         return WorldGenDungeons.b[random.nextInt(WorldGenDungeons.b.length)];
     }
 }

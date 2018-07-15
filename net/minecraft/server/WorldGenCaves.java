@@ -1,217 +1,177 @@
 package net.minecraft.server;
 
-import com.google.common.base.MoreObjects;
+import java.util.BitSet;
 import java.util.Random;
 
-public class WorldGenCaves extends WorldGenBase {
-
-    protected static final IBlockData a = Blocks.LAVA.getBlockData();
-    protected static final IBlockData b = Blocks.AIR.getBlockData();
-    protected static final IBlockData c = Blocks.SANDSTONE.getBlockData();
-    protected static final IBlockData d = Blocks.RED_SANDSTONE.getBlockData();
+public class WorldGenCaves extends WorldGenCarverAbstract<WorldGenFeatureConfigurationChance> {
 
     public WorldGenCaves() {}
 
-    protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2) {
-        this.a(i, j, k, chunksnapshot, d0, d1, d2, 1.0F + this.f.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
+    public boolean a(IBlockAccess iblockaccess, Random random, int i, int j, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
+        return random.nextFloat() <= worldgenfeatureconfigurationchance.a;
     }
 
-    protected void a(long i, int j, int k, ChunkSnapshot chunksnapshot, double d0, double d1, double d2, float f, float f1, float f2, int l, int i1, double d3) {
-        double d4 = (double) (j * 16 + 8);
-        double d5 = (double) (k * 16 + 8);
-        float f3 = 0.0F;
-        float f4 = 0.0F;
-        Random random = new Random(i);
+    public boolean a(GeneratorAccess generatoraccess, Random random, int i, int j, int k, int l, BitSet bitset, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {
+        int i1 = (this.a() * 2 - 1) * 16;
+        int j1 = random.nextInt(random.nextInt(random.nextInt(15) + 1) + 1);
 
-        if (i1 <= 0) {
-            int j1 = this.e * 16 - 16;
+        for (int k1 = 0; k1 < j1; ++k1) {
+            double d0 = (double) (i * 16 + random.nextInt(16));
+            double d1 = (double) random.nextInt(random.nextInt(120) + 8);
+            double d2 = (double) (j * 16 + random.nextInt(16));
+            int l1 = 1;
+            float f;
 
-            i1 = j1 - random.nextInt(j1 / 4);
-        }
+            if (random.nextInt(4) == 0) {
+                double d3 = 0.5D;
 
-        boolean flag = false;
-
-        if (l == -1) {
-            l = i1 / 2;
-            flag = true;
-        }
-
-        int k1 = random.nextInt(i1 / 2) + i1 / 4;
-
-        for (boolean flag1 = random.nextInt(6) == 0; l < i1; ++l) {
-            double d6 = 1.5D + (double) (MathHelper.sin((float) l * 3.1415927F / (float) i1) * f);
-            double d7 = d6 * d3;
-            float f5 = MathHelper.cos(f2);
-            float f6 = MathHelper.sin(f2);
-
-            d0 += (double) (MathHelper.cos(f1) * f5);
-            d1 += (double) f6;
-            d2 += (double) (MathHelper.sin(f1) * f5);
-            if (flag1) {
-                f2 *= 0.92F;
-            } else {
-                f2 *= 0.7F;
+                f = 1.0F + random.nextFloat() * 6.0F;
+                this.a(generatoraccess, random.nextLong(), k, l, d0, d1, d2, f, 0.5D, bitset);
+                l1 += random.nextInt(4);
             }
 
+            for (int i2 = 0; i2 < l1; ++i2) {
+                float f1 = random.nextFloat() * 6.2831855F;
+
+                f = (random.nextFloat() - 0.5F) / 4.0F;
+                double d4 = 1.0D;
+                float f2 = random.nextFloat() * 2.0F + random.nextFloat();
+
+                if (random.nextInt(10) == 0) {
+                    f2 *= random.nextFloat() * random.nextFloat() * 3.0F + 1.0F;
+                }
+
+                int j2 = i1 - random.nextInt(i1 / 4);
+                boolean flag = false;
+
+                this.a(generatoraccess, random.nextLong(), k, l, d0, d1, d2, f2, f1, f, 0, j2, 1.0D, bitset);
+            }
+        }
+
+        return true;
+    }
+
+    protected void a(GeneratorAccess generatoraccess, long i, int j, int k, double d0, double d1, double d2, float f, double d3, BitSet bitset) {
+        double d4 = 1.5D + (double) (MathHelper.sin(1.5707964F) * f);
+        double d5 = d4 * d3;
+
+        this.a(generatoraccess, i, j, k, d0 + 1.0D, d1, d2, d4, d5, bitset);
+    }
+
+    protected void a(GeneratorAccess generatoraccess, long i, int j, int k, double d0, double d1, double d2, float f, float f1, float f2, int l, int i1, double d3, BitSet bitset) {
+        Random random = new Random(i);
+        int j1 = random.nextInt(i1 / 2) + i1 / 4;
+        boolean flag = random.nextInt(6) == 0;
+        float f3 = 0.0F;
+        float f4 = 0.0F;
+
+        for (int k1 = l; k1 < i1; ++k1) {
+            double d4 = 1.5D + (double) (MathHelper.sin(3.1415927F * (float) k1 / (float) i1) * f);
+            double d5 = d4 * d3;
+            float f5 = MathHelper.cos(f2);
+
+            d0 += (double) (MathHelper.cos(f1) * f5);
+            d1 += (double) MathHelper.sin(f2);
+            d2 += (double) (MathHelper.sin(f1) * f5);
+            f2 *= flag ? 0.92F : 0.7F;
             f2 += f4 * 0.1F;
             f1 += f3 * 0.1F;
             f4 *= 0.9F;
             f3 *= 0.75F;
             f4 += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 2.0F;
             f3 += (random.nextFloat() - random.nextFloat()) * random.nextFloat() * 4.0F;
-            if (!flag && l == k1 && f > 1.0F && i1 > 0) {
-                this.a(random.nextLong(), j, k, chunksnapshot, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 - 1.5707964F, f2 / 3.0F, l, i1, 1.0D);
-                this.a(random.nextLong(), j, k, chunksnapshot, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 + 1.5707964F, f2 / 3.0F, l, i1, 1.0D);
+            if (k1 == j1 && f > 1.0F) {
+                this.a(generatoraccess, random.nextLong(), j, k, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 - 1.5707964F, f2 / 3.0F, k1, i1, 1.0D, bitset);
+                this.a(generatoraccess, random.nextLong(), j, k, d0, d1, d2, random.nextFloat() * 0.5F + 0.5F, f1 + 1.5707964F, f2 / 3.0F, k1, i1, 1.0D, bitset);
                 return;
             }
 
-            if (flag || random.nextInt(4) != 0) {
-                double d8 = d0 - d4;
-                double d9 = d2 - d5;
-                double d10 = (double) (i1 - l);
-                double d11 = (double) (f + 2.0F + 16.0F);
-
-                if (d8 * d8 + d9 * d9 - d10 * d10 > d11 * d11) {
+            if (random.nextInt(4) != 0) {
+                if (!this.a(j, k, d0, d2, k1, i1, f)) {
                     return;
                 }
 
-                if (d0 >= d4 - 16.0D - d6 * 2.0D && d2 >= d5 - 16.0D - d6 * 2.0D && d0 <= d4 + 16.0D + d6 * 2.0D && d2 <= d5 + 16.0D + d6 * 2.0D) {
-                    int l1 = MathHelper.floor(d0 - d6) - j * 16 - 1;
-                    int i2 = MathHelper.floor(d0 + d6) - j * 16 + 1;
-                    int j2 = MathHelper.floor(d1 - d7) - 1;
-                    int k2 = MathHelper.floor(d1 + d7) + 1;
-                    int l2 = MathHelper.floor(d2 - d6) - k * 16 - 1;
-                    int i3 = MathHelper.floor(d2 + d6) - k * 16 + 1;
+                this.a(generatoraccess, i, j, k, d0, d1, d2, d4, d5, bitset);
+            }
+        }
 
-                    if (l1 < 0) {
-                        l1 = 0;
-                    }
+    }
 
-                    if (i2 > 16) {
-                        i2 = 16;
-                    }
+    protected boolean a(GeneratorAccess generatoraccess, long i, int j, int k, double d0, double d1, double d2, double d3, double d4, BitSet bitset) {
+        double d5 = (double) (j * 16 + 8);
+        double d6 = (double) (k * 16 + 8);
 
-                    if (j2 < 1) {
-                        j2 = 1;
-                    }
+        if (d0 >= d5 - 16.0D - d3 * 2.0D && d2 >= d6 - 16.0D - d3 * 2.0D && d0 <= d5 + 16.0D + d3 * 2.0D && d2 <= d6 + 16.0D + d3 * 2.0D) {
+            int l = Math.max(MathHelper.floor(d0 - d3) - j * 16 - 1, 0);
+            int i1 = Math.min(MathHelper.floor(d0 + d3) - j * 16 + 1, 16);
+            int j1 = Math.max(MathHelper.floor(d1 - d4) - 1, 1);
+            int k1 = Math.min(MathHelper.floor(d1 + d4) + 1, 248);
+            int l1 = Math.max(MathHelper.floor(d2 - d3) - k * 16 - 1, 0);
+            int i2 = Math.min(MathHelper.floor(d2 + d3) - k * 16 + 1, 16);
 
-                    if (k2 > 248) {
-                        k2 = 248;
-                    }
+            if (this.a(generatoraccess, j, k, l, i1, j1, k1, l1, i2)) {
+                return false;
+            } else {
+                boolean flag = false;
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition2 = new BlockPosition.MutableBlockPosition();
 
-                    if (l2 < 0) {
-                        l2 = 0;
-                    }
+                for (int j2 = l; j2 < i1; ++j2) {
+                    int k2 = j2 + j * 16;
+                    double d7 = ((double) k2 + 0.5D - d0) / d3;
 
-                    if (i3 > 16) {
-                        i3 = 16;
-                    }
+                    for (int l2 = l1; l2 < i2; ++l2) {
+                        int i3 = l2 + k * 16;
+                        double d8 = ((double) i3 + 0.5D - d2) / d3;
 
-                    boolean flag2 = false;
+                        if (d7 * d7 + d8 * d8 < 1.0D) {
+                            boolean flag1 = false;
 
-                    int j3;
+                            for (int j3 = k1; j3 > j1; --j3) {
+                                double d9 = ((double) j3 - 0.5D - d1) / d4;
 
-                    for (int k3 = l1; !flag2 && k3 < i2; ++k3) {
-                        for (j3 = l2; !flag2 && j3 < i3; ++j3) {
-                            for (int l3 = k2 + 1; !flag2 && l3 >= j2 - 1; --l3) {
-                                if (l3 >= 0 && l3 < 256) {
-                                    IBlockData iblockdata = chunksnapshot.a(k3, l3, j3);
+                                if (d9 > -0.7D && d7 * d7 + d9 * d9 + d8 * d8 < 1.0D) {
+                                    int k3 = j2 | l2 << 4 | j3 << 8;
 
-                                    if (iblockdata.getBlock() == Blocks.FLOWING_WATER || iblockdata.getBlock() == Blocks.WATER) {
-                                        flag2 = true;
-                                    }
+                                    if (!bitset.get(k3)) {
+                                        bitset.set(k3);
+                                        blockposition_mutableblockposition.c(k2, j3, i3);
+                                        IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition);
+                                        IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition1.g(blockposition_mutableblockposition).c(EnumDirection.UP));
 
-                                    if (l3 != j2 - 1 && k3 != l1 && k3 != i2 - 1 && j3 != l2 && j3 != i3 - 1) {
-                                        l3 = j2;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                                        if (iblockdata.getBlock() == Blocks.GRASS_BLOCK || iblockdata.getBlock() == Blocks.MYCELIUM) {
+                                            flag1 = true;
+                                        }
 
-                    if (!flag2) {
-                        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+                                        if (this.a(iblockdata, iblockdata1)) {
+                                            if (j3 < 11) {
+                                                generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenCaves.d.i(), 2);
+                                            } else {
+                                                generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenCaves.b, 2);
+                                                if (flag1) {
+                                                    blockposition_mutableblockposition2.g(blockposition_mutableblockposition).c(EnumDirection.DOWN);
+                                                    if (generatoraccess.getType(blockposition_mutableblockposition2).getBlock() == Blocks.DIRT) {
+                                                        IBlockData iblockdata2 = generatoraccess.getBiome(blockposition_mutableblockposition).r().a();
 
-                        for (j3 = l1; j3 < i2; ++j3) {
-                            double d12 = ((double) (j3 + j * 16) + 0.5D - d0) / d6;
-
-                            for (int i4 = l2; i4 < i3; ++i4) {
-                                double d13 = ((double) (i4 + k * 16) + 0.5D - d2) / d6;
-                                boolean flag3 = false;
-
-                                if (d12 * d12 + d13 * d13 < 1.0D) {
-                                    for (int j4 = k2; j4 > j2; --j4) {
-                                        double d14 = ((double) (j4 - 1) + 0.5D - d1) / d7;
-
-                                        if (d14 > -0.7D && d12 * d12 + d14 * d14 + d13 * d13 < 1.0D) {
-                                            IBlockData iblockdata1 = chunksnapshot.a(j3, j4, i4);
-                                            IBlockData iblockdata2 = (IBlockData) MoreObjects.firstNonNull(chunksnapshot.a(j3, j4 + 1, i4), WorldGenCaves.b);
-
-                                            if (iblockdata1.getBlock() == Blocks.GRASS || iblockdata1.getBlock() == Blocks.MYCELIUM) {
-                                                flag3 = true;
-                                            }
-
-                                            if (this.a(iblockdata1, iblockdata2)) {
-                                                if (j4 - 1 < 10) {
-                                                    chunksnapshot.a(j3, j4, i4, WorldGenCaves.a);
-                                                } else {
-                                                    chunksnapshot.a(j3, j4, i4, WorldGenCaves.b);
-                                                    if (flag3 && chunksnapshot.a(j3, j4 - 1, i4).getBlock() == Blocks.DIRT) {
-                                                        blockposition_mutableblockposition.c(j3 + j * 16, 0, i4 + k * 16);
-                                                        chunksnapshot.a(j3, j4 - 1, i4, this.g.getBiome(blockposition_mutableblockposition).q.getBlock().getBlockData());
+                                                        generatoraccess.setTypeAndData(blockposition_mutableblockposition2, iblockdata2, 2);
                                                     }
                                                 }
                                             }
+
+                                            flag = true;
                                         }
                                     }
                                 }
                             }
                         }
-
-                        if (flag) {
-                            break;
-                        }
                     }
                 }
+
+                return flag;
             }
+        } else {
+            return false;
         }
-
-    }
-
-    protected boolean a(IBlockData iblockdata, IBlockData iblockdata1) {
-        return iblockdata.getBlock() == Blocks.STONE ? true : (iblockdata.getBlock() == Blocks.DIRT ? true : (iblockdata.getBlock() == Blocks.GRASS ? true : (iblockdata.getBlock() == Blocks.HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.STAINED_HARDENED_CLAY ? true : (iblockdata.getBlock() == Blocks.SANDSTONE ? true : (iblockdata.getBlock() == Blocks.RED_SANDSTONE ? true : (iblockdata.getBlock() == Blocks.MYCELIUM ? true : (iblockdata.getBlock() == Blocks.SNOW_LAYER ? true : (iblockdata.getBlock() == Blocks.SAND || iblockdata.getBlock() == Blocks.GRAVEL) && iblockdata1.getMaterial() != Material.WATER))))))));
-    }
-
-    protected void a(World world, int i, int j, int k, int l, ChunkSnapshot chunksnapshot) {
-        int i1 = this.f.nextInt(this.f.nextInt(this.f.nextInt(15) + 1) + 1);
-
-        if (this.f.nextInt(7) != 0) {
-            i1 = 0;
-        }
-
-        for (int j1 = 0; j1 < i1; ++j1) {
-            double d0 = (double) (i * 16 + this.f.nextInt(16));
-            double d1 = (double) this.f.nextInt(this.f.nextInt(120) + 8);
-            double d2 = (double) (j * 16 + this.f.nextInt(16));
-            int k1 = 1;
-
-            if (this.f.nextInt(4) == 0) {
-                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2);
-                k1 += this.f.nextInt(4);
-            }
-
-            for (int l1 = 0; l1 < k1; ++l1) {
-                float f = this.f.nextFloat() * 6.2831855F;
-                float f1 = (this.f.nextFloat() - 0.5F) * 2.0F / 8.0F;
-                float f2 = this.f.nextFloat() * 2.0F + this.f.nextFloat();
-
-                if (this.f.nextInt(10) == 0) {
-                    f2 *= this.f.nextFloat() * this.f.nextFloat() * 3.0F + 1.0F;
-                }
-
-                this.a(this.f.nextLong(), k, l, chunksnapshot, d0, d1, d2, f2, f, f1, 0, 0, 1.0D);
-            }
-        }
-
     }
 }

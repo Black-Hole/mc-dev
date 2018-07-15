@@ -16,9 +16,9 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             Vec3D vec3d = this.a.a(1.0F).a();
 
             vec3d.b(-0.7853982F);
-            double d0 = this.a.bw.locX;
-            double d1 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
-            double d2 = this.a.bw.locZ;
+            double d0 = this.a.bD.locX;
+            double d1 = this.a.bD.locY + (double) (this.a.bD.length / 2.0F);
+            double d2 = this.a.bD.locZ;
 
             for (int i = 0; i < 8; ++i) {
                 double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
@@ -26,7 +26,7 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
                 double d5 = d2 + this.a.getRandom().nextGaussian() / 2.0D;
 
                 for (int j = 0; j < 6; ++j) {
-                    this.a.world.addParticle(EnumParticle.DRAGON_BREATH, d3, d4, d5, -vec3d.x * 0.07999999821186066D * (double) j, -vec3d.y * 0.6000000238418579D, -vec3d.z * 0.07999999821186066D * (double) j, new int[0]);
+                    this.a.world.addParticle(Particles.j, d3, d4, d5, -vec3d.x * 0.07999999821186066D * (double) j, -vec3d.y * 0.6000000238418579D, -vec3d.z * 0.07999999821186066D * (double) j);
                 }
 
                 vec3d.b(0.19634955F);
@@ -44,11 +44,11 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.g);
             }
         } else if (this.b == 10) {
-            Vec3D vec3d = (new Vec3D(this.a.bw.locX - this.a.locX, 0.0D, this.a.bw.locZ - this.a.locZ)).a();
+            Vec3D vec3d = (new Vec3D(this.a.bD.locX - this.a.locX, 0.0D, this.a.bD.locZ - this.a.locZ)).a();
             float f = 5.0F;
-            double d0 = this.a.bw.locX + vec3d.x * 5.0D / 2.0D;
-            double d1 = this.a.bw.locZ + vec3d.z * 5.0D / 2.0D;
-            double d2 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
+            double d0 = this.a.bD.locX + vec3d.x * 5.0D / 2.0D;
+            double d1 = this.a.bD.locZ + vec3d.z * 5.0D / 2.0D;
+            double d2 = this.a.bD.locY + (double) (this.a.bD.length / 2.0F);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(d0), MathHelper.floor(d2), MathHelper.floor(d1));
 
             while (this.a.world.isEmpty(blockposition_mutableblockposition)) {
@@ -61,7 +61,7 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
             this.d.setSource(this.a);
             this.d.setRadius(5.0F);
             this.d.setDuration(200);
-            this.d.setParticle(EnumParticle.DRAGON_BREATH);
+            this.d.setParticle(Particles.j);
             this.d.a(new MobEffect(MobEffects.HARM));
             this.a.world.addEntity(this.d);
         }

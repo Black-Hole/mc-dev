@@ -1,17 +1,18 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenForestTree extends WorldGenTreeAbstract {
+public class WorldGenForestTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG2.getBlockData().set(BlockLog2.VARIANT, BlockWood.EnumLogVariant.DARK_OAK);
-    private static final IBlockData b = Blocks.LEAVES2.getBlockData().set(BlockLeaves2.VARIANT, BlockWood.EnumLogVariant.DARK_OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData a = Blocks.DARK_OAK_LOG.getBlockData();
+    private static final IBlockData b = Blocks.DARK_OAK_LEAVES.getBlockData();
 
     public WorldGenForestTree(boolean flag) {
         super(flag);
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i = random.nextInt(3) + random.nextInt(2) + 6;
         int j = blockposition.getX();
         int k = blockposition.getY();
@@ -19,17 +20,17 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
 
         if (k >= 1 && k + i + 1 < 256) {
             BlockPosition blockposition1 = blockposition.down();
-            Block block = world.getType(blockposition1).getBlock();
+            Block block = generatoraccess.getType(blockposition1).getBlock();
 
-            if (block != Blocks.GRASS && block != Blocks.DIRT) {
+            if (block != Blocks.GRASS_BLOCK && !Block.d(block)) {
                 return false;
-            } else if (!this.a(world, blockposition, i)) {
+            } else if (!this.a(generatoraccess, blockposition, i)) {
                 return false;
             } else {
-                this.a(world, blockposition1);
-                this.a(world, blockposition1.east());
-                this.a(world, blockposition1.south());
-                this.a(world, blockposition1.south().east());
+                this.a(generatoraccess, blockposition1);
+                this.a(generatoraccess, blockposition1.east());
+                this.a(generatoraccess, blockposition1.south());
+                this.a(generatoraccess, blockposition1.south().east());
                 EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
                 int i1 = i - random.nextInt(4);
                 int j1 = 2 - random.nextInt(3);
@@ -49,13 +50,13 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
 
                     k2 = k + j2;
                     BlockPosition blockposition2 = new BlockPosition(k1, k2, l1);
-                    Material material = world.getType(blockposition2).getMaterial();
+                    IBlockData iblockdata = generatoraccess.getType(blockposition2);
 
-                    if (material == Material.AIR || material == Material.LEAVES) {
-                        this.b(world, blockposition2);
-                        this.b(world, blockposition2.east());
-                        this.b(world, blockposition2.south());
-                        this.b(world, blockposition2.east().south());
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                        this.a(set, generatoraccess, blockposition2);
+                        this.a(set, generatoraccess, blockposition2.east());
+                        this.a(set, generatoraccess, blockposition2.south());
+                        this.a(set, generatoraccess, blockposition2.east().south());
                     }
                 }
 
@@ -63,32 +64,32 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
                     for (k2 = -2; k2 <= 0; ++k2) {
                         byte b0 = -1;
 
-                        this.a(world, k1 + j2, i2 + b0, l1 + k2);
-                        this.a(world, 1 + k1 - j2, i2 + b0, l1 + k2);
-                        this.a(world, k1 + j2, i2 + b0, 1 + l1 - k2);
-                        this.a(world, 1 + k1 - j2, i2 + b0, 1 + l1 - k2);
+                        this.a(generatoraccess, k1 + j2, i2 + b0, l1 + k2);
+                        this.a(generatoraccess, 1 + k1 - j2, i2 + b0, l1 + k2);
+                        this.a(generatoraccess, k1 + j2, i2 + b0, 1 + l1 - k2);
+                        this.a(generatoraccess, 1 + k1 - j2, i2 + b0, 1 + l1 - k2);
                         if ((j2 > -2 || k2 > -1) && (j2 != -1 || k2 != -2)) {
                             byte b1 = 1;
 
-                            this.a(world, k1 + j2, i2 + b1, l1 + k2);
-                            this.a(world, 1 + k1 - j2, i2 + b1, l1 + k2);
-                            this.a(world, k1 + j2, i2 + b1, 1 + l1 - k2);
-                            this.a(world, 1 + k1 - j2, i2 + b1, 1 + l1 - k2);
+                            this.a(generatoraccess, k1 + j2, i2 + b1, l1 + k2);
+                            this.a(generatoraccess, 1 + k1 - j2, i2 + b1, l1 + k2);
+                            this.a(generatoraccess, k1 + j2, i2 + b1, 1 + l1 - k2);
+                            this.a(generatoraccess, 1 + k1 - j2, i2 + b1, 1 + l1 - k2);
                         }
                     }
                 }
 
                 if (random.nextBoolean()) {
-                    this.a(world, k1, i2 + 2, l1);
-                    this.a(world, k1 + 1, i2 + 2, l1);
-                    this.a(world, k1 + 1, i2 + 2, l1 + 1);
-                    this.a(world, k1, i2 + 2, l1 + 1);
+                    this.a(generatoraccess, k1, i2 + 2, l1);
+                    this.a(generatoraccess, k1 + 1, i2 + 2, l1);
+                    this.a(generatoraccess, k1 + 1, i2 + 2, l1 + 1);
+                    this.a(generatoraccess, k1, i2 + 2, l1 + 1);
                 }
 
                 for (j2 = -3; j2 <= 4; ++j2) {
                     for (k2 = -3; k2 <= 4; ++k2) {
                         if ((j2 != -3 || k2 != -3) && (j2 != -3 || k2 != 4) && (j2 != 4 || k2 != -3) && (j2 != 4 || k2 != 4) && (Math.abs(j2) < 3 || Math.abs(k2) < 3)) {
-                            this.a(world, k1 + j2, i2, l1 + k2);
+                            this.a(generatoraccess, k1 + j2, i2, l1 + k2);
                         }
                     }
                 }
@@ -101,21 +102,21 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
                             int i3;
 
                             for (i3 = 0; i3 < l2; ++i3) {
-                                this.b(world, new BlockPosition(j + j2, i2 - i3 - 1, l + k2));
+                                this.a(set, generatoraccess, new BlockPosition(j + j2, i2 - i3 - 1, l + k2));
                             }
 
                             int j3;
 
                             for (i3 = -1; i3 <= 1; ++i3) {
                                 for (j3 = -1; j3 <= 1; ++j3) {
-                                    this.a(world, k1 + j2 + i3, i2, l1 + k2 + j3);
+                                    this.a(generatoraccess, k1 + j2 + i3, i2, l1 + k2 + j3);
                                 }
                             }
 
                             for (i3 = -2; i3 <= 2; ++i3) {
                                 for (j3 = -2; j3 <= 2; ++j3) {
                                     if (Math.abs(i3) != 2 || Math.abs(j3) != 2) {
-                                        this.a(world, k1 + j2 + i3, i2 - 1, l1 + k2 + j3);
+                                        this.a(generatoraccess, k1 + j2 + i3, i2 - 1, l1 + k2 + j3);
                                     }
                                 }
                             }
@@ -130,7 +131,7 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
         }
     }
 
-    private boolean a(World world, BlockPosition blockposition, int i) {
+    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
         int j = blockposition.getX();
         int k = blockposition.getY();
         int l = blockposition.getZ();
@@ -149,7 +150,7 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
 
             for (int j1 = -b0; j1 <= b0; ++j1) {
                 for (int k1 = -b0; k1 <= b0; ++k1) {
-                    if (!this.a(world.getType(blockposition_mutableblockposition.c(j + j1, k + i1, l + k1)).getBlock())) {
+                    if (!this.a(iblockaccess.getType(blockposition_mutableblockposition.c(j + j1, k + i1, l + k1)).getBlock())) {
                         return false;
                     }
                 }
@@ -159,19 +160,18 @@ public class WorldGenForestTree extends WorldGenTreeAbstract {
         return true;
     }
 
-    private void b(World world, BlockPosition blockposition) {
-        if (this.a(world.getType(blockposition).getBlock())) {
-            this.a(world, blockposition, WorldGenForestTree.a);
+    private void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        if (this.a(generatoraccess.getType(blockposition).getBlock())) {
+            this.a(set, generatoraccess, blockposition, WorldGenForestTree.a);
         }
 
     }
 
-    private void a(World world, int i, int j, int k) {
+    private void a(GeneratorAccess generatoraccess, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
-        Material material = world.getType(blockposition).getMaterial();
 
-        if (material == Material.AIR) {
-            this.a(world, blockposition, WorldGenForestTree.b);
+        if (generatoraccess.getType(blockposition).isAir()) {
+            this.a(generatoraccess, blockposition, WorldGenForestTree.b);
         }
 
     }

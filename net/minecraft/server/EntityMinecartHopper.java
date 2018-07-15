@@ -4,29 +4,29 @@ import java.util.List;
 
 public class EntityMinecartHopper extends EntityMinecartContainer implements IHopper {
 
-    private boolean a = true;
-    private int b = -1;
-    private final BlockPosition c;
+    private boolean d = true;
+    private int e = -1;
+    private final BlockPosition f;
 
     public EntityMinecartHopper(World world) {
-        super(world);
-        this.c = BlockPosition.ZERO;
+        super(EntityTypes.HOPPER_MINECART, world);
+        this.f = BlockPosition.ZERO;
     }
 
     public EntityMinecartHopper(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-        this.c = BlockPosition.ZERO;
+        super(EntityTypes.HOPPER_MINECART, d0, d1, d2, world);
+        this.f = BlockPosition.ZERO;
     }
 
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.HOPPER;
     }
 
-    public IBlockData x() {
+    public IBlockData z() {
         return Blocks.HOPPER.getBlockData();
     }
 
-    public int z() {
+    public int B() {
         return 1;
     }
 
@@ -52,43 +52,43 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     }
 
     public boolean isEnabled() {
-        return this.a;
+        return this.d;
     }
 
     public void setEnabled(boolean flag) {
-        this.a = flag;
+        this.d = flag;
     }
 
     public World getWorld() {
         return this.world;
     }
 
-    public double E() {
+    public double G() {
         return this.locX;
     }
 
-    public double F() {
+    public double H() {
         return this.locY + 0.5D;
     }
 
-    public double G() {
+    public double I() {
         return this.locZ;
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (!this.world.isClientSide && this.isAlive() && this.isEnabled()) {
             BlockPosition blockposition = new BlockPosition(this);
 
-            if (blockposition.equals(this.c)) {
-                --this.b;
+            if (blockposition.equals(this.f)) {
+                --this.e;
             } else {
                 this.setCooldown(0);
             }
 
-            if (!this.J()) {
+            if (!this.K()) {
                 this.setCooldown(0);
-                if (this.H()) {
+                if (this.J()) {
                     this.setCooldown(4);
                     this.update();
                 }
@@ -97,14 +97,14 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
 
     }
 
-    public boolean H() {
+    public boolean J() {
         if (TileEntityHopper.a((IHopper) this)) {
             return true;
         } else {
             List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(0.25D, 0.0D, 0.25D), IEntitySelector.a);
 
             if (!list.isEmpty()) {
-                TileEntityHopper.a((IInventory) null, this, (EntityItem) list.get(0));
+                TileEntityHopper.a((IInventory) this, (EntityItem) list.get(0));
             }
 
             return false;
@@ -114,33 +114,29 @@ public class EntityMinecartHopper extends EntityMinecartContainer implements IHo
     public void a(DamageSource damagesource) {
         super.a(damagesource);
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(Item.getItemOf(Blocks.HOPPER), 1, 0.0F);
+            this.a((IMaterial) Blocks.HOPPER);
         }
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartContainer.b(dataconvertermanager, EntityMinecartHopper.class);
-    }
-
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("TransferCooldown", this.b);
-        nbttagcompound.setBoolean("Enabled", this.a);
+        nbttagcompound.setInt("TransferCooldown", this.e);
+        nbttagcompound.setBoolean("Enabled", this.d);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.b = nbttagcompound.getInt("TransferCooldown");
-        this.a = nbttagcompound.hasKey("Enabled") ? nbttagcompound.getBoolean("Enabled") : true;
+        this.e = nbttagcompound.getInt("TransferCooldown");
+        this.d = nbttagcompound.hasKey("Enabled") ? nbttagcompound.getBoolean("Enabled") : true;
     }
 
     public void setCooldown(int i) {
-        this.b = i;
+        this.e = i;
     }
 
-    public boolean J() {
-        return this.b > 0;
+    public boolean K() {
+        return this.e > 0;
     }
 
     public String getContainerName() {

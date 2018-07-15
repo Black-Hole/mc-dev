@@ -10,7 +10,7 @@ public class ContainerAnvil extends Container {
 
     private static final Logger f = LogManager.getLogger();
     private final IInventory g = new InventoryCraftResult();
-    private final IInventory h = new InventorySubcontainer("Repair", true, 2) {
+    private final IInventory h = new InventorySubcontainer(new ChatComponentText("Repair"), 2) {
         public void update() {
             super.update();
             ContainerAnvil.this.a((IInventory) this);
@@ -60,19 +60,20 @@ public class ContainerAnvil extends Container {
                 ContainerAnvil.this.levelCost = 0;
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (!entityhuman.abilities.canInstantlyBuild && !world.isClientSide && iblockdata.getBlock() == Blocks.ANVIL && entityhuman.getRandom().nextFloat() < 0.12F) {
-                    int i = ((Integer) iblockdata.get(BlockAnvil.DAMAGE)).intValue();
+                if (!world.isClientSide) {
+                    if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.x) && entityhuman.getRandom().nextFloat() < 0.12F) {
+                        IBlockData iblockdata1 = BlockAnvil.a_(iblockdata);
 
-                    ++i;
-                    if (i > 2) {
-                        world.setAir(blockposition);
-                        world.triggerEffect(1029, blockposition, 0);
+                        if (iblockdata1 == null) {
+                            world.setAir(blockposition);
+                            world.triggerEffect(1029, blockposition, 0);
+                        } else {
+                            world.setTypeAndData(blockposition, iblockdata1, 2);
+                            world.triggerEffect(1030, blockposition, 0);
+                        }
                     } else {
-                        world.setTypeAndData(blockposition, iblockdata.set(BlockAnvil.DAMAGE, Integer.valueOf(i)), 2);
                         world.triggerEffect(1030, blockposition, 0);
                     }
-                } else if (!world.isClientSide) {
-                    world.triggerEffect(1030, blockposition, 0);
                 }
 
                 return itemstack;
@@ -96,12 +97,12 @@ public class ContainerAnvil extends Container {
     public void a(IInventory iinventory) {
         super.a(iinventory);
         if (iinventory == this.h) {
-            this.e();
+            this.d();
         }
 
     }
 
-    public void e() {
+    public void d() {
         ItemStack itemstack = this.h.getItem(0);
 
         this.levelCost = 1;
@@ -120,13 +121,13 @@ public class ContainerAnvil extends Container {
 
             this.k = 0;
             if (!itemstack2.isEmpty()) {
-                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.h(itemstack2).isEmpty();
+                boolean flag = itemstack2.getItem() == Items.ENCHANTED_BOOK && !ItemEnchantedBook.e(itemstack2).isEmpty();
                 int k;
                 int l;
                 int i1;
 
-                if (itemstack1.f() && itemstack1.getItem().a(itemstack, itemstack2)) {
-                    k = Math.min(itemstack1.i(), itemstack1.k() / 4);
+                if (itemstack1.e() && itemstack1.getItem().a(itemstack, itemstack2)) {
+                    k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     if (k <= 0) {
                         this.g.setItem(0, ItemStack.a);
                         this.levelCost = 0;
@@ -134,33 +135,33 @@ public class ContainerAnvil extends Container {
                     }
 
                     for (l = 0; k > 0 && l < itemstack2.getCount(); ++l) {
-                        i1 = itemstack1.i() - k;
-                        itemstack1.setData(i1);
+                        i1 = itemstack1.getDamage() - k;
+                        itemstack1.setDamage(i1);
                         ++i;
-                        k = Math.min(itemstack1.i(), itemstack1.k() / 4);
+                        k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     }
 
                     this.k = l;
                 } else {
-                    if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.f())) {
+                    if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
                         this.g.setItem(0, ItemStack.a);
                         this.levelCost = 0;
                         return;
                     }
 
-                    if (itemstack1.f() && !flag) {
-                        k = itemstack.k() - itemstack.i();
-                        l = itemstack2.k() - itemstack2.i();
-                        i1 = l + itemstack1.k() * 12 / 100;
+                    if (itemstack1.e() && !flag) {
+                        k = itemstack.h() - itemstack.getDamage();
+                        l = itemstack2.h() - itemstack2.getDamage();
+                        i1 = l + itemstack1.h() * 12 / 100;
                         int j1 = k + i1;
-                        int k1 = itemstack1.k() - j1;
+                        int k1 = itemstack1.h() - j1;
 
                         if (k1 < 0) {
                             k1 = 0;
                         }
 
-                        if (k1 < itemstack1.getData()) {
-                            itemstack1.setData(k1);
+                        if (k1 < itemstack1.getDamage()) {
+                            itemstack1.setDamage(k1);
                             i += 2;
                         }
                     }
@@ -189,7 +190,7 @@ public class ContainerAnvil extends Container {
                             while (iterator1.hasNext()) {
                                 Enchantment enchantment1 = (Enchantment) iterator1.next();
 
-                                if (enchantment1 != enchantment && !enchantment.c(enchantment1)) {
+                                if (enchantment1 != enchantment && !enchantment.b(enchantment1)) {
                                     flag3 = false;
                                     ++i;
                                 }
@@ -206,7 +207,7 @@ public class ContainerAnvil extends Container {
                                 map.put(enchantment, Integer.valueOf(i2));
                                 int j2 = 0;
 
-                                switch (enchantment.e()) {
+                                switch (enchantment.d()) {
                                 case COMMON:
                                     j2 = 1;
                                     break;
@@ -247,12 +248,12 @@ public class ContainerAnvil extends Container {
                 if (itemstack.hasName()) {
                     b1 = 1;
                     i += b1;
-                    itemstack1.s();
+                    itemstack1.r();
                 }
-            } else if (!this.renameText.equals(itemstack.getName())) {
+            } else if (!this.renameText.equals(itemstack.getName().getString())) {
                 b1 = 1;
                 i += b1;
-                itemstack1.g(this.renameText);
+                itemstack1.a((IChatBaseComponent) (new ChatComponentText(this.renameText)));
             }
 
             this.levelCost = j + i;
@@ -301,7 +302,7 @@ public class ContainerAnvil extends Container {
     }
 
     public boolean canUse(EntityHuman entityhuman) {
-        return this.i.getType(this.j).getBlock() != Blocks.ANVIL ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
+        return !this.i.getType(this.j).a(TagsBlock.x) ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
     }
 
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
@@ -348,12 +349,12 @@ public class ContainerAnvil extends Container {
             ItemStack itemstack = this.getSlot(2).getItem();
 
             if (StringUtils.isBlank(s)) {
-                itemstack.s();
+                itemstack.r();
             } else {
-                itemstack.g(this.renameText);
+                itemstack.a((IChatBaseComponent) (new ChatComponentText(this.renameText)));
             }
         }
 
-        this.e();
+        this.d();
     }
 }

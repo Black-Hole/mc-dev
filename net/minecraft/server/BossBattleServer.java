@@ -27,6 +27,22 @@ public class BossBattleServer extends BossBattle {
 
     }
 
+    public void a(BossBattle.BarColor bossbattle_barcolor) {
+        if (bossbattle_barcolor != this.color) {
+            super.a(bossbattle_barcolor);
+            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+        }
+
+    }
+
+    public void a(BossBattle.BarStyle bossbattle_barstyle) {
+        if (bossbattle_barstyle != this.style) {
+            super.a(bossbattle_barstyle);
+            this.sendUpdate(PacketPlayOutBoss.Action.UPDATE_STYLE);
+        }
+
+    }
+
     public BossBattle setDarkenSky(boolean flag) {
         if (flag != this.e) {
             super.a(flag);
@@ -88,6 +104,23 @@ public class BossBattleServer extends BossBattle {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutBoss(PacketPlayOutBoss.Action.REMOVE, this));
         }
 
+    }
+
+    public void b() {
+        if (!this.h.isEmpty()) {
+            Iterator iterator = this.h.iterator();
+
+            while (iterator.hasNext()) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                this.removePlayer(entityplayer);
+            }
+        }
+
+    }
+
+    public boolean g() {
+        return this.visible;
     }
 
     public void setVisible(boolean flag) {

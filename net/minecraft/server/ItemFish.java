@@ -1,27 +1,24 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
-import java.util.Map;
-
 public class ItemFish extends ItemFood {
 
-    private final boolean b;
+    private final boolean a;
+    private final ItemFish.EnumFish b;
 
-    public ItemFish(boolean flag) {
-        super(0, 0.0F, false);
-        this.b = flag;
+    public ItemFish(ItemFish.EnumFish itemfish_enumfish, boolean flag, Item.Info item_info) {
+        super(0, 0.0F, false, item_info);
+        this.b = itemfish_enumfish;
+        this.a = flag;
     }
 
     public int getNutrition(ItemStack itemstack) {
         ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
 
-        return this.b && itemfish_enumfish.g() ? itemfish_enumfish.e() : itemfish_enumfish.c();
+        return this.a && itemfish_enumfish.e() ? itemfish_enumfish.c() : itemfish_enumfish.a();
     }
 
     public float getSaturationModifier(ItemStack itemstack) {
-        ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
-
-        return this.b && itemfish_enumfish.g() ? itemfish_enumfish.f() : itemfish_enumfish.d();
+        return this.a && this.b.e() ? this.b.d() : this.b.b();
     }
 
     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
@@ -36,109 +33,52 @@ public class ItemFish extends ItemFood {
         super.a(itemstack, world, entityhuman);
     }
 
-    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
-        if (this.a(creativemodetab)) {
-            ItemFish.EnumFish[] aitemfish_enumfish = ItemFish.EnumFish.values();
-            int i = aitemfish_enumfish.length;
-
-            for (int j = 0; j < i; ++j) {
-                ItemFish.EnumFish itemfish_enumfish = aitemfish_enumfish[j];
-
-                if (!this.b || itemfish_enumfish.g()) {
-                    nonnulllist.add(new ItemStack(this, 1, itemfish_enumfish.a()));
-                }
-            }
-        }
-
-    }
-
-    public String a(ItemStack itemstack) {
-        ItemFish.EnumFish itemfish_enumfish = ItemFish.EnumFish.a(itemstack);
-
-        return this.getName() + "." + itemfish_enumfish.b() + "." + (this.b && itemfish_enumfish.g() ? "cooked" : "raw");
-    }
-
     public static enum EnumFish {
 
-        COD(0, "cod", 2, 0.1F, 5, 0.6F), SALMON(1, "salmon", 2, 0.1F, 6, 0.8F), CLOWNFISH(2, "clownfish", 1, 0.1F), PUFFERFISH(3, "pufferfish", 1, 0.1F);
+        COD(2, 0.1F, 5, 0.6F), SALMON(2, 0.1F, 6, 0.8F), TROPICAL_FISH(1, 0.1F), PUFFERFISH(1, 0.1F);
 
-        private static final Map<Integer, ItemFish.EnumFish> e = Maps.newHashMap();
-        private final int f;
-        private final String g;
-        private final int h;
-        private final float i;
-        private final int j;
-        private final float k;
-        private final boolean l;
+        private final int e;
+        private final float f;
+        private final int g;
+        private final float h;
+        private final boolean i;
 
-        private EnumFish(int i, String s, int j, float f, int k, float f1) {
-            this.f = i;
-            this.g = s;
-            this.h = j;
-            this.i = f;
-            this.j = k;
-            this.k = f1;
-            this.l = true;
+        private EnumFish(int i, float f, int j, float f1) {
+            this.e = i;
+            this.f = f;
+            this.g = j;
+            this.h = f1;
+            this.i = j != 0;
         }
 
-        private EnumFish(int i, String s, int j, float f) {
-            this.f = i;
-            this.g = s;
-            this.h = j;
-            this.i = f;
-            this.j = 0;
-            this.k = 0.0F;
-            this.l = false;
+        private EnumFish(int i, float f) {
+            this(i, f, 0, 0.0F);
         }
 
         public int a() {
+            return this.e;
+        }
+
+        public float b() {
             return this.f;
         }
 
-        public String b() {
+        public int c() {
             return this.g;
         }
 
-        public int c() {
+        public float d() {
             return this.h;
         }
 
-        public float d() {
+        public boolean e() {
             return this.i;
         }
 
-        public int e() {
-            return this.j;
-        }
-
-        public float f() {
-            return this.k;
-        }
-
-        public boolean g() {
-            return this.l;
-        }
-
-        public static ItemFish.EnumFish a(int i) {
-            ItemFish.EnumFish itemfish_enumfish = (ItemFish.EnumFish) ItemFish.EnumFish.e.get(Integer.valueOf(i));
-
-            return itemfish_enumfish == null ? ItemFish.EnumFish.COD : itemfish_enumfish;
-        }
-
         public static ItemFish.EnumFish a(ItemStack itemstack) {
-            return itemstack.getItem() instanceof ItemFish ? a(itemstack.getData()) : ItemFish.EnumFish.COD;
-        }
+            Item item = itemstack.getItem();
 
-        static {
-            ItemFish.EnumFish[] aitemfish_enumfish = values();
-            int i = aitemfish_enumfish.length;
-
-            for (int j = 0; j < i; ++j) {
-                ItemFish.EnumFish itemfish_enumfish = aitemfish_enumfish[j];
-
-                ItemFish.EnumFish.e.put(Integer.valueOf(itemfish_enumfish.a()), itemfish_enumfish);
-            }
-
+            return item instanceof ItemFish ? ((ItemFish) item).b : ItemFish.EnumFish.COD;
         }
     }
 }

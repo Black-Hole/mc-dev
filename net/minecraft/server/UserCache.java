@@ -120,7 +120,6 @@ public class UserCache {
             date = calendar.getTime();
         }
 
-        String s = gameprofile.getName().toLowerCase(Locale.ROOT);
         UserCache.UserCacheEntry usercache_usercacheentry = new UserCache.UserCacheEntry(gameprofile, date, null);
 
         if (this.e.containsKey(uuid)) {
@@ -164,12 +163,6 @@ public class UserCache {
 
         this.c();
         return usercache_usercacheentry == null ? null : usercache_usercacheentry.a();
-    }
-
-    public String[] a() {
-        ArrayList arraylist = Lists.newArrayList(this.d.keySet());
-
-        return (String[]) arraylist.toArray(new String[arraylist.size()]);
     }
 
     @Nullable

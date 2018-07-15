@@ -9,7 +9,7 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
     private UUID b;
     private BlockPosition c;
     private EnumDirection d;
-    private String e;
+    private int e;
 
     public PacketPlayOutSpawnEntityPainting() {}
 
@@ -18,13 +18,13 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
         this.b = entitypainting.getUniqueID();
         this.c = entitypainting.getBlockPosition();
         this.d = entitypainting.direction;
-        this.e = entitypainting.art.B;
+        this.e = Paintings.a.a((Object) entitypainting.art);
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.g();
         this.b = packetdataserializer.i();
-        this.e = packetdataserializer.e(EntityPainting.EnumArt.A);
+        this.e = packetdataserializer.g();
         this.c = packetdataserializer.e();
         this.d = EnumDirection.fromType2(packetdataserializer.readUnsignedByte());
     }
@@ -32,7 +32,7 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
-        packetdataserializer.a(this.e);
+        packetdataserializer.d(this.e);
         packetdataserializer.a(this.c);
         packetdataserializer.writeByte(this.d.get2DRotationValue());
     }

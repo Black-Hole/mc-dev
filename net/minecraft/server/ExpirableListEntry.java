@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.annotation.Nullable;
 
 public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
 
@@ -13,7 +14,7 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
     protected final Date d;
     protected final String e;
 
-    public ExpirableListEntry(T t0, Date date, String s, Date date1, String s1) {
+    public ExpirableListEntry(T t0, @Nullable Date date, @Nullable String s, @Nullable Date date1, @Nullable String s1) {
         super(t0);
         this.b = date == null ? new Date() : date;
         this.c = s == null ? "(Unknown)" : s;
@@ -47,6 +48,10 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
         this.e = jsonobject.has("reason") ? jsonobject.get("reason").getAsString() : "Banned by an operator.";
     }
 
+    public String b() {
+        return this.c;
+    }
+
     public Date getExpires() {
         return this.d;
     }
@@ -54,6 +59,8 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
     public String getReason() {
         return this.e;
     }
+
+    public abstract IChatBaseComponent e();
 
     boolean hasExpired() {
         return this.d == null ? false : this.d.before(new Date());

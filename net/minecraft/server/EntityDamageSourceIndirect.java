@@ -12,8 +12,8 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
     }
 
     @Nullable
-    public Entity i() {
-        return this.v;
+    public Entity j() {
+        return this.w;
     }
 
     @Nullable
@@ -22,11 +22,11 @@ public class EntityDamageSourceIndirect extends EntityDamageSource {
     }
 
     public IChatBaseComponent getLocalizedDeathMessage(EntityLiving entityliving) {
-        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.v.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
+        IChatBaseComponent ichatbasecomponent = this.owner == null ? this.w.getScoreboardDisplayName() : this.owner.getScoreboardDisplayName();
         ItemStack itemstack = this.owner instanceof EntityLiving ? ((EntityLiving) this.owner).getItemInMainHand() : ItemStack.a;
         String s = "death.attack." + this.translationIndex;
         String s1 = s + ".item";
 
-        return !itemstack.isEmpty() && itemstack.hasName() && LocaleI18n.c(s1) ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.C()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent});
+        return !itemstack.isEmpty() && itemstack.hasName() ? new ChatMessage(s1, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent, itemstack.A()}) : new ChatMessage(s, new Object[] { entityliving.getScoreboardDisplayName(), ichatbasecomponent});
     }
 }

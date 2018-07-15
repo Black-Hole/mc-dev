@@ -1,10 +1,17 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public interface INamableTileEntity {
 
-    String getName();
+    IChatBaseComponent getDisplayName();
 
     boolean hasCustomName();
 
-    IChatBaseComponent getScoreboardDisplayName();
+    default IChatBaseComponent getScoreboardDisplayName() {
+        return this.getDisplayName();
+    }
+
+    @Nullable
+    IChatBaseComponent getCustomName();
 }

@@ -28,11 +28,11 @@ public class PacketPlayInBoatMove implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public boolean a() {
+    public boolean b() {
         return this.a;
     }
 
-    public boolean b() {
+    public boolean c() {
         return this.b;
     }
 }

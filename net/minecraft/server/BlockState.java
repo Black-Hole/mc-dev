@@ -6,6 +6,7 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
 
     private final Class<T> a;
     private final String b;
+    private Integer c;
 
     protected BlockState(String s, Class<T> oclass) {
         this.a = oclass;
@@ -21,7 +22,7 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
     }
 
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("name", this.b).add("clazz", this.a).add("values", this.c()).toString();
+        return MoreObjects.toStringHelper(this).add("name", this.b).add("clazz", this.a).add("values", this.d()).toString();
     }
 
     public boolean equals(Object object) {
@@ -36,7 +37,15 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
         }
     }
 
-    public int hashCode() {
+    public final int hashCode() {
+        if (this.c == null) {
+            this.c = Integer.valueOf(this.c());
+        }
+
+        return this.c.intValue();
+    }
+
+    public int c() {
         return 31 * this.a.hashCode() + this.b.hashCode();
     }
 }

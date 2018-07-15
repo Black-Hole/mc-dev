@@ -2,24 +2,19 @@ package net.minecraft.server;
 
 public class ItemFood extends Item {
 
-    public final int a;
-    private final int b;
-    private final float c;
-    private final boolean d;
+    private final int a;
+    private final float b;
+    private final boolean c;
+    private boolean d;
     private boolean e;
-    private MobEffect f;
-    private float n;
+    private MobEffect l;
+    private float m;
 
-    public ItemFood(int i, float f, boolean flag) {
-        this.a = 32;
-        this.b = i;
-        this.d = flag;
-        this.c = f;
-        this.b(CreativeModeTab.h);
-    }
-
-    public ItemFood(int i, boolean flag) {
-        this(i, 0.6F, flag);
+    public ItemFood(int i, float f, boolean flag, Item.Info item_info) {
+        super(item_info);
+        this.a = i;
+        this.c = flag;
+        this.b = f;
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
@@ -27,11 +22,11 @@ public class ItemFood extends Item {
             EntityHuman entityhuman = (EntityHuman) entityliving;
 
             entityhuman.getFoodData().a(this, itemstack);
-            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.fD, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+            world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
             this.a(itemstack, world, entityhuman);
-            entityhuman.b(StatisticList.b((Item) this));
+            entityhuman.b(StatisticList.ITEM_USED.b(this));
             if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.y.a((EntityPlayer) entityhuman, itemstack);
+                CriterionTriggers.z.a((EntityPlayer) entityhuman, itemstack);
             }
         }
 
@@ -40,24 +35,24 @@ public class ItemFood extends Item {
     }
 
     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isClientSide && this.f != null && world.random.nextFloat() < this.n) {
-            entityhuman.addEffect(new MobEffect(this.f));
+        if (!world.isClientSide && this.l != null && world.random.nextFloat() < this.m) {
+            entityhuman.addEffect(new MobEffect(this.l));
         }
 
     }
 
-    public int e(ItemStack itemstack) {
-        return 32;
+    public int c(ItemStack itemstack) {
+        return this.e ? 16 : 32;
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.EAT;
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (entityhuman.n(this.e)) {
+        if (entityhuman.q(this.d)) {
             entityhuman.c(enumhand);
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
@@ -66,24 +61,29 @@ public class ItemFood extends Item {
     }
 
     public int getNutrition(ItemStack itemstack) {
-        return this.b;
+        return this.a;
     }
 
     public float getSaturationModifier(ItemStack itemstack) {
+        return this.b;
+    }
+
+    public boolean d() {
         return this.c;
     }
 
-    public boolean g() {
-        return this.d;
-    }
-
     public ItemFood a(MobEffect mobeffect, float f) {
-        this.f = mobeffect;
-        this.n = f;
+        this.l = mobeffect;
+        this.m = f;
         return this;
     }
 
-    public ItemFood h() {
+    public ItemFood e() {
+        this.d = true;
+        return this;
+    }
+
+    public ItemFood f() {
         this.e = true;
         return this;
     }

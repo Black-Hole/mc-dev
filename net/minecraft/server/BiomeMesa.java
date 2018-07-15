@@ -1,269 +1,53 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
-import java.util.Random;
+import com.google.common.collect.Lists;
 
-public class BiomeMesa extends BiomeBase {
+public final class BiomeMesa extends BiomeBase {
 
-    protected static final IBlockData x = Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.COARSE_DIRT);
-    protected static final IBlockData y = Blocks.GRASS.getBlockData();
-    protected static final IBlockData z = Blocks.HARDENED_CLAY.getBlockData();
-    protected static final IBlockData A = Blocks.STAINED_HARDENED_CLAY.getBlockData();
-    protected static final IBlockData B = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.ORANGE);
-    protected static final IBlockData C = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.RED_SAND);
-    private IBlockData[] D;
-    private long E;
-    private NoiseGenerator3 F;
-    private NoiseGenerator3 G;
-    private NoiseGenerator3 H;
-    private final boolean I;
-    private final boolean J;
-
-    public BiomeMesa(boolean flag, boolean flag1, BiomeBase.a biomebase_a) {
-        super(biomebase_a);
-        this.I = flag;
-        this.J = flag1;
-        this.u.clear();
-        this.q = BiomeMesa.C;
-        this.r = BiomeMesa.A;
-        this.s.z = -999;
-        this.s.D = 20;
-        this.s.F = 3;
-        this.s.G = 5;
-        this.s.B = 0;
-        this.u.clear();
-        if (flag1) {
-            this.s.z = 5;
-        }
-
-    }
-
-    protected BiomeDecorator a() {
-        return new BiomeMesa.a(null);
-    }
-
-    public WorldGenTreeAbstract a(Random random) {
-        return BiomeMesa.m;
-    }
-
-    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        if (this.D == null || this.E != world.getSeed()) {
-            this.a(world.getSeed());
-        }
-
-        if (this.F == null || this.G == null || this.E != world.getSeed()) {
-            Random random1 = new Random(this.E);
-
-            this.F = new NoiseGenerator3(random1, 4);
-            this.G = new NoiseGenerator3(random1, 1);
-        }
-
-        this.E = world.getSeed();
-        double d1 = 0.0D;
-        int k;
-        int l;
-
-        if (this.I) {
-            k = (i & -16) + (j & 15);
-            l = (j & -16) + (i & 15);
-            double d2 = Math.min(Math.abs(d0), this.F.a((double) k * 0.25D, (double) l * 0.25D));
-
-            if (d2 > 0.0D) {
-                double d3 = 0.001953125D;
-                double d4 = Math.abs(this.G.a((double) k * 0.001953125D, (double) l * 0.001953125D));
-
-                d1 = d2 * d2 * 2.5D;
-                double d5 = Math.ceil(d4 * 50.0D) + 14.0D;
-
-                if (d1 > d5) {
-                    d1 = d5;
-                }
-
-                d1 += 64.0D;
-            }
-        }
-
-        k = i & 15;
-        l = j & 15;
-        int i1 = world.getSeaLevel();
-        IBlockData iblockdata = BiomeMesa.A;
-        IBlockData iblockdata1 = this.r;
-        int j1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
-        boolean flag = Math.cos(d0 / 3.0D * 3.141592653589793D) > 0.0D;
-        int k1 = -1;
-        boolean flag1 = false;
-        int l1 = 0;
-
-        for (int i2 = 255; i2 >= 0; --i2) {
-            if (chunksnapshot.a(l, i2, k).getMaterial() == Material.AIR && i2 < (int) d1) {
-                chunksnapshot.a(l, i2, k, BiomeMesa.a);
-            }
-
-            if (i2 <= random.nextInt(5)) {
-                chunksnapshot.a(l, i2, k, BiomeMesa.c);
-            } else if (l1 < 15 || this.I) {
-                IBlockData iblockdata2 = chunksnapshot.a(l, i2, k);
-
-                if (iblockdata2.getMaterial() == Material.AIR) {
-                    k1 = -1;
-                } else if (iblockdata2.getBlock() == Blocks.STONE) {
-                    if (k1 == -1) {
-                        flag1 = false;
-                        if (j1 <= 0) {
-                            iblockdata = BiomeMesa.b;
-                            iblockdata1 = BiomeMesa.a;
-                        } else if (i2 >= i1 - 4 && i2 <= i1 + 1) {
-                            iblockdata = BiomeMesa.A;
-                            iblockdata1 = this.r;
-                        }
-
-                        if (i2 < i1 && (iblockdata == null || iblockdata.getMaterial() == Material.AIR)) {
-                            iblockdata = BiomeMesa.h;
-                        }
-
-                        k1 = j1 + Math.max(0, i2 - i1);
-                        if (i2 >= i1 - 1) {
-                            if (this.J && i2 > 86 + j1 * 2) {
-                                if (flag) {
-                                    chunksnapshot.a(l, i2, k, BiomeMesa.x);
-                                } else {
-                                    chunksnapshot.a(l, i2, k, BiomeMesa.y);
-                                }
-                            } else if (i2 > i1 + 3 + j1) {
-                                IBlockData iblockdata3;
-
-                                if (i2 >= 64 && i2 <= 127) {
-                                    if (flag) {
-                                        iblockdata3 = BiomeMesa.z;
-                                    } else {
-                                        iblockdata3 = this.a(i, i2, j);
-                                    }
-                                } else {
-                                    iblockdata3 = BiomeMesa.B;
-                                }
-
-                                chunksnapshot.a(l, i2, k, iblockdata3);
-                            } else {
-                                chunksnapshot.a(l, i2, k, this.q);
-                                flag1 = true;
-                            }
-                        } else {
-                            chunksnapshot.a(l, i2, k, iblockdata1);
-                            if (iblockdata1.getBlock() == Blocks.STAINED_HARDENED_CLAY) {
-                                chunksnapshot.a(l, i2, k, BiomeMesa.B);
-                            }
-                        }
-                    } else if (k1 > 0) {
-                        --k1;
-                        if (flag1) {
-                            chunksnapshot.a(l, i2, k, BiomeMesa.B);
-                        } else {
-                            chunksnapshot.a(l, i2, k, this.a(i, i2, j));
-                        }
-                    }
-
-                    ++l1;
-                }
-            }
-        }
-
-    }
-
-    private void a(long i) {
-        this.D = new IBlockData[64];
-        Arrays.fill(this.D, BiomeMesa.z);
-        Random random = new Random(i);
-
-        this.H = new NoiseGenerator3(random, 1);
-
-        int j;
-
-        for (j = 0; j < 64; ++j) {
-            j += random.nextInt(5) + 1;
-            if (j < 64) {
-                this.D[j] = BiomeMesa.B;
-            }
-        }
-
-        j = random.nextInt(4) + 2;
-
-        int k;
-        int l;
-        int i1;
-        int j1;
-
-        for (k = 0; k < j; ++k) {
-            l = random.nextInt(3) + 1;
-            i1 = random.nextInt(64);
-
-            for (j1 = 0; i1 + j1 < 64 && j1 < l; ++j1) {
-                this.D[i1 + j1] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.YELLOW);
-            }
-        }
-
-        k = random.nextInt(4) + 2;
-
-        int k1;
-
-        for (l = 0; l < k; ++l) {
-            i1 = random.nextInt(3) + 2;
-            j1 = random.nextInt(64);
-
-            for (k1 = 0; j1 + k1 < 64 && k1 < i1; ++k1) {
-                this.D[j1 + k1] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.BROWN);
-            }
-        }
-
-        l = random.nextInt(4) + 2;
-
-        for (i1 = 0; i1 < l; ++i1) {
-            j1 = random.nextInt(3) + 1;
-            k1 = random.nextInt(64);
-
-            for (int l1 = 0; k1 + l1 < 64 && l1 < j1; ++l1) {
-                this.D[k1 + l1] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.RED);
-            }
-        }
-
-        i1 = random.nextInt(3) + 3;
-        j1 = 0;
-
-        for (k1 = 0; k1 < i1; ++k1) {
-            boolean flag = true;
-
-            j1 += random.nextInt(16) + 4;
-
-            for (int i2 = 0; j1 + i2 < 64 && i2 < 1; ++i2) {
-                this.D[j1 + i2] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.WHITE);
-                if (j1 + i2 > 1 && random.nextBoolean()) {
-                    this.D[j1 + i2 - 1] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.SILVER);
-                }
-
-                if (j1 + i2 < 63 && random.nextBoolean()) {
-                    this.D[j1 + i2 + 1] = BiomeMesa.A.set(BlockCloth.COLOR, EnumColor.SILVER);
-                }
-            }
-        }
-
-    }
-
-    private IBlockData a(int i, int j, int k) {
-        int l = (int) Math.round(this.H.a((double) i / 512.0D, (double) i / 512.0D) * 2.0D);
-
-        return this.D[(j + l + 64) % 64];
-    }
-
-    class a extends BiomeDecorator {
-
-        private a() {}
-
-        protected void a(World world, Random random) {
-            super.a(world, random);
-            this.a(world, random, 20, this.n, 32, 80);
-        }
-
-        a(Object object) {
-            this();
-        }
+    public BiomeMesa() {
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeMesa.aB, BiomeMesa.ar)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.1F).b(0.2F).c(2.0F).d(0.0F).a(4159204).b(329011).a((String) null));
+        this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.MESA)));
+        this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeMesa.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeMesa.d, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.02F))));
+        this.a();
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeMesa.L, new WorldGenDecoratorLakeChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeMesa.K, new WorldGenDecoratorLakeChanceConfiguration(80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES, a(WorldGenerator.ad, WorldGenFeatureConfiguration.e, BiomeMesa.M, new WorldGenDecoratorDungeonConfiguration(8)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIRT.getBlockData(), 33), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRAVEL.getBlockData(), 33), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRANITE.getBlockData(), 33), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIORITE.getBlockData(), 33), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.ANDESITE.getBlockData(), 33), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.COAL_ORE.getBlockData(), 17), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 128)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.IRON_ORE.getBlockData(), 9), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 64)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(2, 0, 0, 32)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.REDSTONE_ORE.getBlockData(), 8), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIAMOND_ORE.getBlockData(), 8), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(1, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.LAPIS_ORE.getBlockData(), 7), BiomeMesa.B, new WorldGenDecoratorHeightAverageConfiguration(1, 16, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeMesa.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 32, 32, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.SAND, 7, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeMesa.h, new WorldGenDecoratorFrequencyConfiguration(3)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.CLAY, 4, 1, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.CLAY})), BiomeMesa.h, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL, 6, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeMesa.h, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.M, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), BiomeMesa.j, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.P, WorldGenFeatureConfiguration.e, BiomeMesa.j, new WorldGenDecoratorFrequencyConfiguration(20)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeMesa.q, new WorldGenDecoratorChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeMesa.q, new WorldGenDecoratorChanceConfiguration(8)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeMesa.j, new WorldGenDecoratorFrequencyConfiguration(13)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeMesa.q, new WorldGenDecoratorChanceConfiguration(32)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.O, WorldGenFeatureConfiguration.e, BiomeMesa.j, new WorldGenDecoratorFrequencyConfiguration(5)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeMesa.v, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeMesa.w, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeMesa.o, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SQUID, 10, 1, 2));
+        this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE, 95, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_VILLAGER, 5, 1, 1));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.CREEPER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SLIME, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ENDERMAN, 10, 1, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.WITCH, 5, 1, 1));
     }
 }

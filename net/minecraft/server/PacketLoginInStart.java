@@ -26,7 +26,7 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
         packetlogininlistener.a(this);
     }
 
-    public GameProfile a() {
+    public GameProfile b() {
         return this.a;
     }
 }

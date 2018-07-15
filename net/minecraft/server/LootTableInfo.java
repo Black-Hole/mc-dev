@@ -19,15 +19,18 @@ public class LootTableInfo {
     private final EntityHuman e;
     @Nullable
     private final DamageSource f;
-    private final Set<LootTable> g = Sets.newLinkedHashSet();
+    @Nullable
+    private final BlockPosition g;
+    private final Set<LootTable> h = Sets.newLinkedHashSet();
 
-    public LootTableInfo(float f, WorldServer worldserver, LootTableRegistry loottableregistry, @Nullable Entity entity, @Nullable EntityHuman entityhuman, @Nullable DamageSource damagesource) {
+    public LootTableInfo(float f, WorldServer worldserver, LootTableRegistry loottableregistry, @Nullable Entity entity, @Nullable EntityHuman entityhuman, @Nullable DamageSource damagesource, @Nullable BlockPosition blockposition) {
         this.a = f;
         this.b = worldserver;
         this.c = loottableregistry;
         this.d = entity;
         this.e = entityhuman;
         this.f = damagesource;
+        this.g = blockposition;
     }
 
     @Nullable
@@ -45,20 +48,29 @@ public class LootTableInfo {
         return this.f == null ? null : this.f.getEntity();
     }
 
+    @Nullable
+    public BlockPosition e() {
+        return this.g;
+    }
+
     public boolean a(LootTable loottable) {
-        return this.g.add(loottable);
+        return this.h.add(loottable);
     }
 
     public void b(LootTable loottable) {
-        this.g.remove(loottable);
+        this.h.remove(loottable);
     }
 
-    public LootTableRegistry e() {
+    public LootTableRegistry f() {
         return this.c;
     }
 
-    public float f() {
+    public float g() {
         return this.a;
+    }
+
+    public WorldServer h() {
+        return this.b;
     }
 
     @Nullable
@@ -132,6 +144,7 @@ public class LootTableInfo {
         private Entity c;
         private EntityHuman d;
         private DamageSource e;
+        private BlockPosition f;
 
         public a(WorldServer worldserver) {
             this.a = worldserver;
@@ -157,8 +170,13 @@ public class LootTableInfo {
             return this;
         }
 
+        public LootTableInfo.a a(BlockPosition blockposition) {
+            this.f = blockposition;
+            return this;
+        }
+
         public LootTableInfo a() {
-            return new LootTableInfo(this.b, this.a, this.a.getLootTableRegistry(), this.c, this.d, this.e);
+            return new LootTableInfo(this.b, this.a, this.a.getMinecraftServer().aP(), this.c, this.d, this.e, this.f);
         }
     }
 }

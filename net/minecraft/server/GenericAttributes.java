@@ -28,7 +28,7 @@ public class GenericAttributes {
         while (iterator.hasNext()) {
             AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
 
-            nbttaglist.add(a(attributeinstance));
+            nbttaglist.add((NBTBase) a(attributeinstance));
         }
 
         return nbttaglist;
@@ -50,7 +50,7 @@ public class GenericAttributes {
                 AttributeModifier attributemodifier = (AttributeModifier) iterator.next();
 
                 if (attributemodifier.e()) {
-                    nbttaglist.add(a(attributemodifier));
+                    nbttaglist.add((NBTBase) a(attributemodifier));
                 }
             }
 
@@ -72,7 +72,7 @@ public class GenericAttributes {
 
     public static void a(AttributeMapBase attributemapbase, NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
             AttributeInstance attributeinstance = attributemapbase.a(nbttagcompound.getString("Name"));
 
             if (attributeinstance == null) {
@@ -90,7 +90,7 @@ public class GenericAttributes {
             NBTTagList nbttaglist = nbttagcompound.getList("Modifiers", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                AttributeModifier attributemodifier = a(nbttaglist.get(i));
+                AttributeModifier attributemodifier = a(nbttaglist.getCompound(i));
 
                 if (attributemodifier != null) {
                     AttributeModifier attributemodifier1 = attributeinstance.a(attributemodifier.a());

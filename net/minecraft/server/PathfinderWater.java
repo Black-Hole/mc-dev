@@ -4,14 +4,18 @@ import javax.annotation.Nullable;
 
 public class PathfinderWater extends PathfinderAbstract {
 
-    public PathfinderWater() {}
+    private final boolean j;
+
+    public PathfinderWater(boolean flag) {
+        this.j = flag;
+    }
 
     public PathPoint b() {
-        return this.a(MathHelper.floor(this.b.getBoundingBox().a), MathHelper.floor(this.b.getBoundingBox().b + 0.5D), MathHelper.floor(this.b.getBoundingBox().c));
+        return super.a(MathHelper.floor(this.b.getBoundingBox().a), MathHelper.floor(this.b.getBoundingBox().b + 0.5D), MathHelper.floor(this.b.getBoundingBox().c));
     }
 
     public PathPoint a(double d0, double d1, double d2) {
-        return this.a(MathHelper.floor(d0 - (double) (this.b.width / 2.0F)), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2 - (double) (this.b.width / 2.0F)));
+        return super.a(MathHelper.floor(d0 - (double) (this.b.width / 2.0F)), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2 - (double) (this.b.width / 2.0F)));
     }
 
     public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
@@ -32,18 +36,40 @@ public class PathfinderWater extends PathfinderAbstract {
     }
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1) {
-        return PathType.WATER;
+        return this.a(iblockaccess, i, j, k);
     }
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
-        return PathType.WATER;
+        BlockPosition blockposition = new BlockPosition(i, j, k);
+        Fluid fluid = iblockaccess.b(blockposition);
+        IBlockData iblockdata = iblockaccess.getType(blockposition);
+
+        return fluid.e() && iblockdata.a(iblockaccess, blockposition.down(), PathMode.WATER) && iblockdata.isAir() ? PathType.BREACH : (fluid.a(TagsFluid.a) && iblockdata.a(iblockaccess, blockposition, PathMode.WATER) ? PathType.WATER : PathType.BLOCKED);
     }
 
     @Nullable
     private PathPoint b(int i, int j, int k) {
         PathType pathtype = this.c(i, j, k);
 
-        return pathtype == PathType.WATER ? this.a(i, j, k) : null;
+        return (!this.j || pathtype != PathType.BREACH) && pathtype != PathType.WATER ? null : this.a(i, j, k);
+    }
+
+    @Nullable
+    protected PathPoint a(int i, int j, int k) {
+        PathPoint pathpoint = null;
+        PathType pathtype = this.a(this.b.world, i, j, k);
+        float f = this.b.a(pathtype);
+
+        if (f >= 0.0F) {
+            pathpoint = super.a(i, j, k);
+            pathpoint.m = pathtype;
+            pathpoint.l = Math.max(pathpoint.l, f);
+            if (this.a.b(new BlockPosition(i, j, k)).e()) {
+                pathpoint.l += 8.0F;
+            }
+        }
+
+        return pathtype == PathType.OPEN ? pathpoint : pathpoint;
     }
 
     private PathType c(int i, int j, int k) {
@@ -52,15 +78,26 @@ public class PathfinderWater extends PathfinderAbstract {
         for (int l = i; l < i + this.d; ++l) {
             for (int i1 = j; i1 < j + this.e; ++i1) {
                 for (int j1 = k; j1 < k + this.f; ++j1) {
+                    Fluid fluid = this.a.b(blockposition_mutableblockposition.c(l, i1, j1));
                     IBlockData iblockdata = this.a.getType(blockposition_mutableblockposition.c(l, i1, j1));
 
-                    if (iblockdata.getMaterial() != Material.WATER) {
+                    if (fluid.e() && iblockdata.a(this.a, blockposition_mutableblockposition.down(), PathMode.WATER) && iblockdata.isAir()) {
+                        return PathType.BREACH;
+                    }
+
+                    if (!fluid.a(TagsFluid.a)) {
                         return PathType.BLOCKED;
                     }
                 }
             }
         }
 
-        return PathType.WATER;
+        IBlockData iblockdata1 = this.a.getType(blockposition_mutableblockposition);
+
+        if (iblockdata1.a(this.a, blockposition_mutableblockposition, PathMode.WATER)) {
+            return PathType.WATER;
+        } else {
+            return PathType.BLOCKED;
+        }
     }
 }

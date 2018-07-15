@@ -2,25 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenPackedIce1 extends WorldGenerator {
+public class WorldGenPackedIce1 extends WorldGenerator<WorldGenFeatureRadiusConfiguration> {
 
     private final Block a;
-    private final int b;
 
-    public WorldGenPackedIce1(int i) {
+    public WorldGenPackedIce1() {
         this.a = Blocks.PACKED_ICE;
-        this.b = i;
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        while (world.isEmpty(blockposition) && blockposition.getY() > 2) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRadiusConfiguration worldgenfeatureradiusconfiguration) {
+        while (generatoraccess.isEmpty(blockposition) && blockposition.getY() > 2) {
             blockposition = blockposition.down();
         }
 
-        if (world.getType(blockposition).getBlock() != Blocks.SNOW) {
+        if (generatoraccess.getType(blockposition).getBlock() != Blocks.SNOW_BLOCK) {
             return false;
         } else {
-            int i = random.nextInt(this.b - 2) + 2;
+            int i = random.nextInt(worldgenfeatureradiusconfiguration.a) + 2;
             boolean flag = true;
 
             for (int j = blockposition.getX() - i; j <= blockposition.getX() + i; ++j) {
@@ -31,10 +29,10 @@ public class WorldGenPackedIce1 extends WorldGenerator {
                     if (l * l + i1 * i1 <= i * i) {
                         for (int j1 = blockposition.getY() - 1; j1 <= blockposition.getY() + 1; ++j1) {
                             BlockPosition blockposition1 = new BlockPosition(j, j1, k);
-                            Block block = world.getType(blockposition1).getBlock();
+                            Block block = generatoraccess.getType(blockposition1).getBlock();
 
-                            if (block == Blocks.DIRT || block == Blocks.SNOW || block == Blocks.ICE) {
-                                world.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
+                            if (Block.d(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
+                                generatoraccess.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
                             }
                         }
                     }

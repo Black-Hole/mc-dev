@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
+import java.util.Optional;
 
 public class BlockStateBoolean extends BlockState<Boolean> {
 
@@ -12,7 +12,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         super(s, Boolean.class);
     }
 
-    public Collection<Boolean> c() {
+    public Collection<Boolean> d() {
         return this.a;
     }
 
@@ -21,7 +21,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
     }
 
     public Optional<Boolean> b(String s) {
-        return !"true".equals(s) && !"false".equals(s) ? Optional.absent() : Optional.of(Boolean.valueOf(s));
+        return !"true".equals(s) && !"false".equals(s) ? Optional.empty() : Optional.of(Boolean.valueOf(s));
     }
 
     public String a(Boolean obool) {
@@ -40,7 +40,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         }
     }
 
-    public int hashCode() {
-        return 31 * super.hashCode() + this.a.hashCode();
+    public int c() {
+        return 31 * super.c() + this.a.hashCode();
     }
 }

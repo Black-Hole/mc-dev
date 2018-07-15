@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.io.IOException;
-import java.util.Locale;
 import javax.annotation.Nullable;
 
 public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
@@ -67,35 +66,5 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
         TITLE, SUBTITLE, ACTIONBAR, TIMES, CLEAR, RESET;
 
         private EnumTitleAction() {}
-
-        public static PacketPlayOutTitle.EnumTitleAction a(String s) {
-            PacketPlayOutTitle.EnumTitleAction[] apacketplayouttitle_enumtitleaction = values();
-            int i = apacketplayouttitle_enumtitleaction.length;
-
-            for (int j = 0; j < i; ++j) {
-                PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = apacketplayouttitle_enumtitleaction[j];
-
-                if (packetplayouttitle_enumtitleaction.name().equalsIgnoreCase(s)) {
-                    return packetplayouttitle_enumtitleaction;
-                }
-            }
-
-            return PacketPlayOutTitle.EnumTitleAction.TITLE;
-        }
-
-        public static String[] a() {
-            String[] astring = new String[values().length];
-            int i = 0;
-            PacketPlayOutTitle.EnumTitleAction[] apacketplayouttitle_enumtitleaction = values();
-            int j = apacketplayouttitle_enumtitleaction.length;
-
-            for (int k = 0; k < j; ++k) {
-                PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = apacketplayouttitle_enumtitleaction[k];
-
-                astring[i++] = packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT);
-            }
-
-            return astring;
-        }
     }
 }

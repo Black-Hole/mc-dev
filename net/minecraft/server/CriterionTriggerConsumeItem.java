@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,9 +50,7 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
     }
 
     public CriterionTriggerConsumeItem.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
-
-        return new CriterionTriggerConsumeItem.b(criterionconditionitem);
+        return new CriterionTriggerConsumeItem.b(CriterionConditionItem.a(jsonobject.get("item")));
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack) {
@@ -126,8 +125,23 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
             this.a = criterionconditionitem;
         }
 
+        public static CriterionTriggerConsumeItem.b c() {
+            return new CriterionTriggerConsumeItem.b(CriterionConditionItem.a);
+        }
+
+        public static CriterionTriggerConsumeItem.b a(IMaterial imaterial) {
+            return new CriterionTriggerConsumeItem.b(new CriterionConditionItem((Tag) null, imaterial.getItem(), CriterionConditionValue.d.e, CriterionConditionValue.d.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a));
+        }
+
         public boolean a(ItemStack itemstack) {
             return this.a.a(itemstack);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("item", this.a.a());
+            return jsonobject;
         }
     }
 }

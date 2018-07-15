@@ -8,15 +8,20 @@ public class TileEntityDispenser extends TileEntityLootable {
     private static final Random a = new Random();
     private NonNullList<ItemStack> items;
 
-    public TileEntityDispenser() {
+    protected TileEntityDispenser(TileEntityTypes<?> tileentitytypes) {
+        super(tileentitytypes);
         this.items = NonNullList.a(9, ItemStack.a);
+    }
+
+    public TileEntityDispenser() {
+        this(TileEntityTypes.g);
     }
 
     public int getSize() {
         return 9;
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -32,7 +37,7 @@ public class TileEntityDispenser extends TileEntityLootable {
         return false;
     }
 
-    public int o() {
+    public int p() {
         this.d((EntityHuman) null);
         int i = -1;
         int j = 1;
@@ -57,35 +62,35 @@ public class TileEntityDispenser extends TileEntityLootable {
         return -1;
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.o : "container.dispenser";
-    }
+    public IChatBaseComponent getDisplayName() {
+        IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityDispenser.class, new String[] { "Items"})));
+        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage("container.dispenser", new Object[0]));
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.c(nbttagcompound)) {
+        if (!this.d(nbttagcompound)) {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.o = nbttagcompound.getString("CustomName");
+            this.i = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (!this.d(nbttagcompound)) {
+        if (!this.e(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 
-        if (this.hasCustomName()) {
-            nbttagcompound.setString("CustomName", this.o);
+        IChatBaseComponent ichatbasecomponent = this.getCustomName();
+
+        if (ichatbasecomponent != null) {
+            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
         }
 
         return nbttagcompound;
@@ -106,5 +111,9 @@ public class TileEntityDispenser extends TileEntityLootable {
 
     protected NonNullList<ItemStack> q() {
         return this.items;
+    }
+
+    protected void a(NonNullList<ItemStack> nonnulllist) {
+        this.items = nonnulllist;
     }
 }

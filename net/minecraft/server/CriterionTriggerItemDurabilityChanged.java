@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,10 +51,10 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
 
     public CriterionTriggerItemDurabilityChanged.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("durability"));
-        CriterionConditionValue criterionconditionvalue1 = CriterionConditionValue.a(jsonobject.get("delta"));
+        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("durability"));
+        CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("delta"));
 
-        return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue, criterionconditionvalue1);
+        return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_d, criterionconditionvalue_d1);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
@@ -122,18 +123,31 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionItem a;
-        private final CriterionConditionValue b;
-        private final CriterionConditionValue c;
+        private final CriterionConditionValue.d b;
+        private final CriterionConditionValue.d c;
 
-        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue criterionconditionvalue, CriterionConditionValue criterionconditionvalue1) {
+        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1) {
             super(CriterionTriggerItemDurabilityChanged.a);
             this.a = criterionconditionitem;
-            this.b = criterionconditionvalue;
-            this.c = criterionconditionvalue1;
+            this.b = criterionconditionvalue_d;
+            this.c = criterionconditionvalue_d1;
+        }
+
+        public static CriterionTriggerItemDurabilityChanged.b a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d) {
+            return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_d, CriterionConditionValue.d.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {
-            return !this.a.a(itemstack) ? false : (!this.b.a((float) (itemstack.k() - i)) ? false : this.c.a((float) (itemstack.i() - i)));
+            return !this.a.a(itemstack) ? false : (!this.b.d(itemstack.h() - i) ? false : this.c.d(itemstack.getDamage() - i));
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("item", this.a.a());
+            jsonobject.add("durability", this.b.d());
+            jsonobject.add("delta", this.c.d());
+            return jsonobject;
         }
     }
 }

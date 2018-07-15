@@ -26,11 +26,11 @@ public class PacketPlayInTransaction implements Packet<PacketListenerPlayIn> {
         packetdataserializer.writeByte(this.c ? 1 : 0);
     }
 
-    public int a() {
+    public int b() {
         return this.a;
     }
 
-    public short b() {
+    public short c() {
         return this.b;
     }
 }

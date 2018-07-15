@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.annotations.VisibleForTesting;
+import java.util.Iterator;
 import javax.annotation.Nullable;
 
 public class AxisAlignedBB {
@@ -29,8 +29,12 @@ public class AxisAlignedBB {
         this((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
     }
 
-    public AxisAlignedBB e(double d0) {
-        return new AxisAlignedBB(this.a, this.b, this.c, this.d, d0, this.f);
+    public double a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+        return enumdirection_enumaxis.a(this.a, this.b, this.c);
+    }
+
+    public double b(EnumDirection.EnumAxis enumdirection_enumaxis) {
+        return enumdirection_enumaxis.a(this.d, this.e, this.f);
     }
 
     public boolean equals(Object object) {
@@ -169,72 +173,6 @@ public class AxisAlignedBB {
         return this.d(vec3d.x, vec3d.y, vec3d.z);
     }
 
-    public double a(AxisAlignedBB axisalignedbb, double d0) {
-        if (axisalignedbb.e > this.b && axisalignedbb.b < this.e && axisalignedbb.f > this.c && axisalignedbb.c < this.f) {
-            double d1;
-
-            if (d0 > 0.0D && axisalignedbb.d <= this.a) {
-                d1 = this.a - axisalignedbb.d;
-                if (d1 < d0) {
-                    d0 = d1;
-                }
-            } else if (d0 < 0.0D && axisalignedbb.a >= this.d) {
-                d1 = this.d - axisalignedbb.a;
-                if (d1 > d0) {
-                    d0 = d1;
-                }
-            }
-
-            return d0;
-        } else {
-            return d0;
-        }
-    }
-
-    public double b(AxisAlignedBB axisalignedbb, double d0) {
-        if (axisalignedbb.d > this.a && axisalignedbb.a < this.d && axisalignedbb.f > this.c && axisalignedbb.c < this.f) {
-            double d1;
-
-            if (d0 > 0.0D && axisalignedbb.e <= this.b) {
-                d1 = this.b - axisalignedbb.e;
-                if (d1 < d0) {
-                    d0 = d1;
-                }
-            } else if (d0 < 0.0D && axisalignedbb.b >= this.e) {
-                d1 = this.e - axisalignedbb.b;
-                if (d1 > d0) {
-                    d0 = d1;
-                }
-            }
-
-            return d0;
-        } else {
-            return d0;
-        }
-    }
-
-    public double c(AxisAlignedBB axisalignedbb, double d0) {
-        if (axisalignedbb.d > this.a && axisalignedbb.a < this.d && axisalignedbb.e > this.b && axisalignedbb.b < this.e) {
-            double d1;
-
-            if (d0 > 0.0D && axisalignedbb.f <= this.c) {
-                d1 = this.c - axisalignedbb.f;
-                if (d1 < d0) {
-                    d0 = d1;
-                }
-            } else if (d0 < 0.0D && axisalignedbb.c >= this.f) {
-                d1 = this.f - axisalignedbb.c;
-                if (d1 > d0) {
-                    d0 = d1;
-                }
-            }
-
-            return d0;
-        } else {
-            return d0;
-        }
-    }
-
     public boolean c(AxisAlignedBB axisalignedbb) {
         return this.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, axisalignedbb.e, axisalignedbb.f);
     }
@@ -244,7 +182,11 @@ public class AxisAlignedBB {
     }
 
     public boolean b(Vec3D vec3d) {
-        return vec3d.x > this.a && vec3d.x < this.d ? (vec3d.y > this.b && vec3d.y < this.e ? vec3d.z > this.c && vec3d.z < this.f : false) : false;
+        return this.e(vec3d.x, vec3d.y, vec3d.z);
+    }
+
+    public boolean e(double d0, double d1, double d2) {
+        return d0 >= this.a && d0 < this.d && d1 >= this.b && d1 < this.e && d2 >= this.c && d2 < this.f;
     }
 
     public double a() {
@@ -255,90 +197,95 @@ public class AxisAlignedBB {
         return (d0 + d1 + d2) / 3.0D;
     }
 
+    public AxisAlignedBB f(double d0, double d1, double d2) {
+        return this.grow(-d0, -d1, -d2);
+    }
+
     public AxisAlignedBB shrink(double d0) {
         return this.g(-d0);
     }
 
     @Nullable
     public MovingObjectPosition b(Vec3D vec3d, Vec3D vec3d1) {
-        Vec3D vec3d2 = this.a(this.a, vec3d, vec3d1);
-        EnumDirection enumdirection = EnumDirection.WEST;
-        Vec3D vec3d3 = this.a(this.d, vec3d, vec3d1);
-
-        if (vec3d3 != null && this.a(vec3d, vec3d2, vec3d3)) {
-            vec3d2 = vec3d3;
-            enumdirection = EnumDirection.EAST;
-        }
-
-        vec3d3 = this.b(this.b, vec3d, vec3d1);
-        if (vec3d3 != null && this.a(vec3d, vec3d2, vec3d3)) {
-            vec3d2 = vec3d3;
-            enumdirection = EnumDirection.DOWN;
-        }
-
-        vec3d3 = this.b(this.e, vec3d, vec3d1);
-        if (vec3d3 != null && this.a(vec3d, vec3d2, vec3d3)) {
-            vec3d2 = vec3d3;
-            enumdirection = EnumDirection.UP;
-        }
-
-        vec3d3 = this.c(this.c, vec3d, vec3d1);
-        if (vec3d3 != null && this.a(vec3d, vec3d2, vec3d3)) {
-            vec3d2 = vec3d3;
-            enumdirection = EnumDirection.NORTH;
-        }
-
-        vec3d3 = this.c(this.f, vec3d, vec3d1);
-        if (vec3d3 != null && this.a(vec3d, vec3d2, vec3d3)) {
-            vec3d2 = vec3d3;
-            enumdirection = EnumDirection.SOUTH;
-        }
-
-        return vec3d2 == null ? null : new MovingObjectPosition(vec3d2, enumdirection);
-    }
-
-    @VisibleForTesting
-    boolean a(Vec3D vec3d, @Nullable Vec3D vec3d1, Vec3D vec3d2) {
-        return vec3d1 == null || vec3d.distanceSquared(vec3d2) < vec3d.distanceSquared(vec3d1);
+        return this.a(vec3d, vec3d1, (BlockPosition) null);
     }
 
     @Nullable
-    @VisibleForTesting
-    Vec3D a(double d0, Vec3D vec3d, Vec3D vec3d1) {
-        Vec3D vec3d2 = vec3d.a(vec3d1, d0);
+    public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1, @Nullable BlockPosition blockposition) {
+        double[] adouble = new double[] { 1.0D};
+        EnumDirection enumdirection = null;
+        double d0 = vec3d1.x - vec3d.x;
+        double d1 = vec3d1.y - vec3d.y;
+        double d2 = vec3d1.z - vec3d.z;
 
-        return vec3d2 != null && this.c(vec3d2) ? vec3d2 : null;
+        enumdirection = a(blockposition == null ? this : this.a(blockposition), vec3d, adouble, enumdirection, d0, d1, d2);
+        if (enumdirection == null) {
+            return null;
+        } else {
+            double d3 = adouble[0];
+
+            return new MovingObjectPosition(vec3d.add(d3 * d0, d3 * d1, d3 * d2), enumdirection, blockposition == null ? BlockPosition.ZERO : blockposition);
+        }
     }
 
     @Nullable
-    @VisibleForTesting
-    Vec3D b(double d0, Vec3D vec3d, Vec3D vec3d1) {
-        Vec3D vec3d2 = vec3d.b(vec3d1, d0);
+    public static MovingObjectPosition a(Iterable<AxisAlignedBB> iterable, Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
+        double[] adouble = new double[] { 1.0D};
+        EnumDirection enumdirection = null;
+        double d0 = vec3d1.x - vec3d.x;
+        double d1 = vec3d1.y - vec3d.y;
+        double d2 = vec3d1.z - vec3d.z;
 
-        return vec3d2 != null && this.d(vec3d2) ? vec3d2 : null;
+        AxisAlignedBB axisalignedbb;
+
+        for (Iterator iterator = iterable.iterator(); iterator.hasNext(); enumdirection = a(axisalignedbb.a(blockposition), vec3d, adouble, enumdirection, d0, d1, d2)) {
+            axisalignedbb = (AxisAlignedBB) iterator.next();
+        }
+
+        if (enumdirection == null) {
+            return null;
+        } else {
+            double d3 = adouble[0];
+
+            return new MovingObjectPosition(vec3d.add(d3 * d0, d3 * d1, d3 * d2), enumdirection, blockposition);
+        }
     }
 
     @Nullable
-    @VisibleForTesting
-    Vec3D c(double d0, Vec3D vec3d, Vec3D vec3d1) {
-        Vec3D vec3d2 = vec3d.c(vec3d1, d0);
+    private static EnumDirection a(AxisAlignedBB axisalignedbb, Vec3D vec3d, double[] adouble, @Nullable EnumDirection enumdirection, double d0, double d1, double d2) {
+        if (d0 > 1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.a, axisalignedbb.b, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, EnumDirection.WEST, vec3d.x, vec3d.y, vec3d.z);
+        } else if (d0 < -1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, EnumDirection.EAST, vec3d.x, vec3d.y, vec3d.z);
+        }
 
-        return vec3d2 != null && this.e(vec3d2) ? vec3d2 : null;
+        if (d1 > 1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.b, axisalignedbb.c, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, EnumDirection.DOWN, vec3d.y, vec3d.z, vec3d.x);
+        } else if (d1 < -1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, EnumDirection.UP, vec3d.y, vec3d.z, vec3d.x);
+        }
+
+        if (d2 > 1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.c, axisalignedbb.a, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, EnumDirection.NORTH, vec3d.z, vec3d.x, vec3d.y);
+        } else if (d2 < -1.0E-7D) {
+            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, EnumDirection.SOUTH, vec3d.z, vec3d.x, vec3d.y);
+        }
+
+        return enumdirection;
     }
 
-    @VisibleForTesting
-    public boolean c(Vec3D vec3d) {
-        return vec3d.y >= this.b && vec3d.y <= this.e && vec3d.z >= this.c && vec3d.z <= this.f;
-    }
+    @Nullable
+    private static EnumDirection a(double[] adouble, @Nullable EnumDirection enumdirection, double d0, double d1, double d2, double d3, double d4, double d5, double d6, double d7, EnumDirection enumdirection1, double d8, double d9, double d10) {
+        double d11 = (d3 - d8) / d0;
+        double d12 = d9 + d11 * d1;
+        double d13 = d10 + d11 * d2;
 
-    @VisibleForTesting
-    public boolean d(Vec3D vec3d) {
-        return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.z >= this.c && vec3d.z <= this.f;
-    }
-
-    @VisibleForTesting
-    public boolean e(Vec3D vec3d) {
-        return vec3d.x >= this.a && vec3d.x <= this.d && vec3d.y >= this.b && vec3d.y <= this.e;
+        if (0.0D < d11 && d11 < adouble[0] && d4 - 1.0E-7D < d12 && d12 < d5 + 1.0E-7D && d6 - 1.0E-7D < d13 && d13 < d7 + 1.0E-7D) {
+            adouble[0] = d11;
+            return enumdirection1;
+        } else {
+            return enumdirection;
+        }
     }
 
     public String toString() {

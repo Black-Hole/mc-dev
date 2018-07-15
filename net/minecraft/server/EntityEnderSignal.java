@@ -2,25 +2,24 @@ package net.minecraft.server;
 
 public class EntityEnderSignal extends Entity {
 
-    private double a;
-    private double b;
-    private double c;
-    private int d;
-    private boolean e;
+    public double targetX;
+    public double targetY;
+    public double targetZ;
+    public int despawnTimer;
+    public boolean shouldDropItem;
 
     public EntityEnderSignal(World world) {
-        super(world);
+        super(EntityTypes.EYE_OF_ENDER, world);
         this.setSize(0.25F, 0.25F);
     }
-
-    protected void i() {}
 
     public EntityEnderSignal(World world, double d0, double d1, double d2) {
-        super(world);
-        this.d = 0;
-        this.setSize(0.25F, 0.25F);
+        this(world);
+        this.despawnTimer = 0;
         this.setPosition(d0, d1, d2);
     }
+
+    protected void x_() {}
 
     public void a(BlockPosition blockposition) {
         double d0 = (double) blockposition.getX();
@@ -31,24 +30,24 @@ public class EntityEnderSignal extends Entity {
         float f = MathHelper.sqrt(d2 * d2 + d3 * d3);
 
         if (f > 12.0F) {
-            this.a = this.locX + d2 / (double) f * 12.0D;
-            this.c = this.locZ + d3 / (double) f * 12.0D;
-            this.b = this.locY + 8.0D;
+            this.targetX = this.locX + d2 / (double) f * 12.0D;
+            this.targetZ = this.locZ + d3 / (double) f * 12.0D;
+            this.targetY = this.locY + 8.0D;
         } else {
-            this.a = d0;
-            this.b = (double) i;
-            this.c = d1;
+            this.targetX = d0;
+            this.targetY = (double) i;
+            this.targetZ = d1;
         }
 
-        this.d = 0;
-        this.e = this.random.nextInt(5) > 0;
+        this.despawnTimer = 0;
+        this.shouldDropItem = this.random.nextInt(5) > 0;
     }
 
-    public void B_() {
-        this.M = this.locX;
-        this.N = this.locY;
-        this.O = this.locZ;
-        super.B_();
+    public void tick() {
+        this.N = this.locX;
+        this.O = this.locY;
+        this.P = this.locZ;
+        super.tick();
         this.locX += this.motX;
         this.locY += this.motY;
         this.locZ += this.motZ;
@@ -75,8 +74,8 @@ public class EntityEnderSignal extends Entity {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         if (!this.world.isClientSide) {
-            double d0 = this.a - this.locX;
-            double d1 = this.c - this.locZ;
+            double d0 = this.targetX - this.locX;
+            double d1 = this.targetZ - this.locZ;
             float f1 = (float) Math.sqrt(d0 * d0 + d1 * d1);
             float f2 = (float) MathHelper.c(d1, d0);
             double d2 = (double) f + (double) (f1 - f) * 0.0025D;
@@ -88,7 +87,7 @@ public class EntityEnderSignal extends Entity {
 
             this.motX = Math.cos((double) f2) * d2;
             this.motZ = Math.sin((double) f2) * d2;
-            if (this.locY < this.b) {
+            if (this.locY < this.targetY) {
                 this.motY += (1.0D - this.motY) * 0.014999999664723873D;
             } else {
                 this.motY += (-1.0D - this.motY) * 0.014999999664723873D;
@@ -99,19 +98,19 @@ public class EntityEnderSignal extends Entity {
 
         if (this.isInWater()) {
             for (int i = 0; i < 4; ++i) {
-                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ, new int[0]);
+                this.world.addParticle(Particles.e, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ);
             }
         } else {
-            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * 0.25D - 0.5D, this.locZ - this.motZ * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
+            this.world.addParticle(Particles.K, this.locX - this.motX * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * 0.25D - 0.5D, this.locZ - this.motZ * 0.25D + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ);
         }
 
         if (!this.world.isClientSide) {
             this.setPosition(this.locX, this.locY, this.locZ);
-            ++this.d;
-            if (this.d > 80 && !this.world.isClientSide) {
-                this.a(SoundEffects.bb, 1.0F, 1.0F);
+            ++this.despawnTimer;
+            if (this.despawnTimer > 80 && !this.world.isClientSide) {
+                this.a(SoundEffects.ENTITY_ENDER_EYE_DEATH, 1.0F, 1.0F);
                 this.die();
-                if (this.e) {
+                if (this.shouldDropItem) {
                     this.world.addEntity(new EntityItem(this.world, this.locX, this.locY, this.locZ, new ItemStack(Items.ENDER_EYE)));
                 } else {
                     this.world.triggerEffect(2003, new BlockPosition(this), 0);
@@ -125,11 +124,11 @@ public class EntityEnderSignal extends Entity {
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public float aw() {
+    public float az() {
         return 1.0F;
     }
 
-    public boolean bd() {
+    public boolean bk() {
         return false;
     }
 }

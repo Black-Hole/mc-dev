@@ -32,11 +32,15 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    public boolean b() {
+    public boolean c() {
         return this.b == ChatMessageType.SYSTEM || this.b == ChatMessageType.GAME_INFO;
     }
 
-    public ChatMessageType c() {
+    public ChatMessageType d() {
         return this.b;
+    }
+
+    public boolean a() {
+        return true;
     }
 }

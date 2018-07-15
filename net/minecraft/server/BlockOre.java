@@ -4,40 +4,35 @@ import java.util.Random;
 
 public class BlockOre extends Block {
 
-    public BlockOre() {
-        this(Material.STONE.r());
+    public BlockOre(Block.Info block_info) {
+        super(block_info);
     }
 
-    public BlockOre(MaterialMapColor materialmapcolor) {
-        super(Material.STONE, materialmapcolor);
-        this.a(CreativeModeTab.b);
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return (IMaterial) (this == Blocks.COAL_ORE ? Items.COAL : (this == Blocks.DIAMOND_ORE ? Items.DIAMOND : (this == Blocks.LAPIS_ORE ? Items.LAPIS_LAZULI : (this == Blocks.EMERALD_ORE ? Items.EMERALD : (this == Blocks.NETHER_QUARTZ_ORE ? Items.QUARTZ : this)))));
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return this == Blocks.COAL_ORE ? Items.COAL : (this == Blocks.DIAMOND_ORE ? Items.DIAMOND : (this == Blocks.LAPIS_ORE ? Items.DYE : (this == Blocks.EMERALD_ORE ? Items.EMERALD : (this == Blocks.QUARTZ_ORE ? Items.QUARTZ : Item.getItemOf(this)))));
-    }
-
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return this == Blocks.LAPIS_ORE ? 4 + random.nextInt(5) : 1;
     }
 
-    public int getDropCount(int i, Random random) {
-        if (i > 0 && Item.getItemOf(this) != this.getDropType((IBlockData) this.s().a().iterator().next(), random, i)) {
+    public int getDropCount(IBlockData iblockdata, int i, World world, BlockPosition blockposition, Random random) {
+        if (i > 0 && this != this.getDropType((IBlockData) this.getStates().a().iterator().next(), world, blockposition, i)) {
             int j = random.nextInt(i + 2) - 1;
 
             if (j < 0) {
                 j = 0;
             }
 
-            return this.a(random) * (j + 1);
+            return this.a(iblockdata, random) * (j + 1);
         } else {
-            return this.a(random);
+            return this.a(iblockdata, random);
         }
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        super.dropNaturally(world, blockposition, iblockdata, f, i);
-        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
+        super.dropNaturally(iblockdata, world, blockposition, f, i);
+        if (this.getDropType(iblockdata, world, blockposition, i) != this) {
             int j = 0;
 
             if (this == Blocks.COAL_ORE) {
@@ -48,7 +43,7 @@ public class BlockOre extends Block {
                 j = MathHelper.nextInt(world.random, 3, 7);
             } else if (this == Blocks.LAPIS_ORE) {
                 j = MathHelper.nextInt(world.random, 2, 5);
-            } else if (this == Blocks.QUARTZ_ORE) {
+            } else if (this == Blocks.NETHER_QUARTZ_ORE) {
                 j = MathHelper.nextInt(world.random, 2, 5);
             }
 
@@ -57,11 +52,7 @@ public class BlockOre extends Block {
 
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return new ItemStack(this);
-    }
-
-    public int getDropData(IBlockData iblockdata) {
-        return this == Blocks.LAPIS_ORE ? EnumColor.BLUE.getInvColorIndex() : 0;
     }
 }

@@ -8,12 +8,12 @@ public class EntityEndermite extends EntityMonster {
     private boolean b;
 
     public EntityEndermite(World world) {
-        super(world);
+        super(EntityTypes.ENDERMITE, world);
         this.b_ = 3;
         this.setSize(0.4F, 0.3F);
     }
 
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(3, new PathfinderGoalRandomStrollLand(this, 1.0D));
@@ -38,29 +38,25 @@ public class EntityEndermite extends EntityMonster {
         return false;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.bj;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_ENDERMITE_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.bl;
+        return SoundEffects.ENTITY_ENDERMITE_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.bk;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_ENDERMITE_DEATH;
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.bm, 0.15F, 1.0F);
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(SoundEffects.ENTITY_ENDERMITE_STEP, 0.15F, 1.0F);
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.al;
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityEndermite.class);
+    protected MinecraftKey G() {
+        return LootTables.as;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -75,21 +71,21 @@ public class EntityEndermite extends EntityMonster {
         nbttagcompound.setBoolean("PlayerSpawned", this.b);
     }
 
-    public void B_() {
-        this.aN = this.yaw;
-        super.B_();
+    public void tick() {
+        this.aQ = this.yaw;
+        super.tick();
     }
 
-    public void h(float f) {
+    public void k(float f) {
         this.yaw = f;
-        super.h(f);
+        super.k(f);
     }
 
-    public double aF() {
+    public double aI() {
         return 0.1D;
     }
 
-    public boolean p() {
+    public boolean l() {
         return this.b;
     }
 
@@ -97,11 +93,11 @@ public class EntityEndermite extends EntityMonster {
         this.b = flag;
     }
 
-    public void n() {
-        super.n();
+    public void k() {
+        super.k();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(EnumParticle.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D, new int[0]);
+                this.world.addParticle(Particles.K, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {
@@ -115,13 +111,13 @@ public class EntityEndermite extends EntityMonster {
 
     }
 
-    protected boolean s_() {
+    protected boolean K_() {
         return true;
     }
 
-    public boolean P() {
-        if (super.P()) {
-            EntityHuman entityhuman = this.world.findNearbyPlayer(this, 5.0D);
+    public boolean a(GeneratorAccess generatoraccess) {
+        if (super.a(generatoraccess)) {
+            EntityHuman entityhuman = generatoraccess.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;
         } else {

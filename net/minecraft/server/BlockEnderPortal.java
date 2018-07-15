@@ -1,53 +1,40 @@
 package net.minecraft.server;
 
-import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockEnderPortal extends BlockTileEntity {
 
-    protected static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
+    protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
 
-    protected BlockEnderPortal(Material material) {
-        super(material);
-        this.a(1.0F);
+    protected BlockEnderPortal(Block.Info block_info) {
+        super(block_info);
     }
 
-    public TileEntity a(World world, int i) {
+    public TileEntity a(IBlockAccess iblockaccess) {
         return new TileEntityEnderPortal();
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockEnderPortal.a;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {}
-
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
-
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 0;
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.bf() && entity.getBoundingBox().c(iblockdata.e(world, blockposition).a(blockposition))) {
-            entity.b(1);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
+        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.bm() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.g(world, blockposition), OperatorBoolean.AND)) {
+            entity.d(1);
         }
 
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return ItemStack.a;
-    }
-
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.F;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

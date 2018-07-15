@@ -7,15 +7,11 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     private static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySnowman.class, DataWatcherRegistry.a);
 
     public EntitySnowman(World world) {
-        super(world);
+        super(EntityTypes.SNOW_GOLEM, world);
         this.setSize(0.7F, 1.9F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySnowman.class);
-    }
-
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(1, new PathfinderGoalArrowAttack(this, 1.25D, 20, 10.0F));
         this.goalSelector.a(2, new PathfinderGoalRandomStrollLand(this, 1.0D, 1.0000001E-5F));
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -29,8 +25,8 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntitySnowman.a, Byte.valueOf((byte) 16));
     }
 
@@ -47,18 +43,18 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     }
 
-    public void n() {
-        super.n();
+    public void k() {
+        super.k();
         if (!this.world.isClientSide) {
             int i = MathHelper.floor(this.locX);
             int j = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.an()) {
+            if (this.ap()) {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
-            if (this.world.getBiome(new BlockPosition(i, 0, k)).a(new BlockPosition(i, j, k)) > 1.0F) {
+            if (this.world.getBiome(new BlockPosition(i, 0, k)).c(new BlockPosition(i, j, k)) > 1.0F) {
                 this.damageEntity(DamageSource.BURN, 1.0F);
             }
 
@@ -66,14 +62,16 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
                 return;
             }
 
+            IBlockData iblockdata = Blocks.SNOW.getBlockData();
+
             for (int l = 0; l < 4; ++l) {
                 i = MathHelper.floor(this.locX + (double) ((float) (l % 2 * 2 - 1) * 0.25F));
                 j = MathHelper.floor(this.locY);
                 k = MathHelper.floor(this.locZ + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
                 BlockPosition blockposition = new BlockPosition(i, j, k);
 
-                if (this.world.getType(blockposition).getMaterial() == Material.AIR && this.world.getBiome(blockposition).a(blockposition) < 0.8F && Blocks.SNOW_LAYER.canPlace(this.world, blockposition)) {
-                    this.world.setTypeUpdate(blockposition, Blocks.SNOW_LAYER.getBlockData());
+                if (this.world.getType(blockposition).isAir() && this.world.getBiome(blockposition).c(blockposition) < 0.8F && iblockdata.canPlace(this.world, blockposition)) {
+                    this.world.setTypeUpdate(blockposition, iblockdata);
                 }
             }
         }
@@ -81,8 +79,8 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.B;
+    protected MinecraftKey G() {
+        return LootTables.H;
     }
 
     public void a(EntityLiving entityliving, float f) {
@@ -94,7 +92,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         float f1 = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
 
         entitysnowball.shoot(d1, d2 + (double) f1, d3, 1.6F, 12.0F);
-        this.a(SoundEffects.ht, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.ENTITY_SNOW_GOLEM_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entitysnowball);
     }
 
@@ -129,19 +127,19 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Nullable
-    protected SoundEffect F() {
-        return SoundEffects.hq;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_SNOW_GOLEM_AMBIENT;
     }
 
     @Nullable
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.hs;
+        return SoundEffects.ENTITY_SNOW_GOLEM_HURT;
     }
 
     @Nullable
-    protected SoundEffect cf() {
-        return SoundEffects.hr;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_SNOW_GOLEM_DEATH;
     }
 
-    public void p(boolean flag) {}
+    public void s(boolean flag) {}
 }

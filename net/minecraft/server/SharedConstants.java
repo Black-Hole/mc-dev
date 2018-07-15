@@ -1,12 +1,15 @@
 package net.minecraft.server;
 
+import com.google.common.base.Function;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.datafixers.types.constant.NamespacedStringType;
 import io.netty.util.ResourceLeakDetector;
 import io.netty.util.ResourceLeakDetector.Level;
 
 public class SharedConstants {
 
     public static final Level a = Level.DISABLED;
-    public static final char[] b = new char[] { '.', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"'};
+    public static boolean b;
     public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
 
     public static boolean isAllowedChatCharacter(char c0) {
@@ -31,5 +34,8 @@ public class SharedConstants {
 
     static {
         ResourceLeakDetector.setLevel(SharedConstants.a);
+        CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES = false;
+        CommandSyntaxException.BUILT_IN_EXCEPTIONS = new CommandExceptionProvider();
+        NamespacedStringType.ENSURE_NAMESPACE = DataConverterSchemaNamed::a;
     }
 }

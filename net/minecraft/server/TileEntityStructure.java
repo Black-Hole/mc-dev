@@ -1,108 +1,110 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public class TileEntityStructure extends TileEntity {
 
-    private String a = "";
-    private String f = "";
-    private String g = "";
-    private BlockPosition h = new BlockPosition(0, 1, 0);
-    private BlockPosition i;
-    private EnumBlockMirror j;
-    private EnumBlockRotation k;
-    private TileEntityStructure.UsageMode l;
-    private boolean m;
-    private boolean n;
-    private boolean o;
-    private boolean p;
-    private float q;
-    private long r;
+    private MinecraftKey structureName;
+    public String author = "";
+    public String metadata = "";
+    public BlockPosition relativePosition = new BlockPosition(0, 1, 0);
+    public BlockPosition size;
+    public EnumBlockMirror mirror;
+    public EnumBlockRotation rotation;
+    private BlockPropertyStructureMode usageMode;
+    public boolean ignoreEntities;
+    private boolean powered;
+    public boolean showAir;
+    public boolean showBoundingBox;
+    public float integrity;
+    public long seed;
 
     public TileEntityStructure() {
-        this.i = BlockPosition.ZERO;
-        this.j = EnumBlockMirror.NONE;
-        this.k = EnumBlockRotation.NONE;
-        this.l = TileEntityStructure.UsageMode.DATA;
-        this.m = true;
-        this.p = true;
-        this.q = 1.0F;
+        super(TileEntityTypes.u);
+        this.size = BlockPosition.ZERO;
+        this.mirror = EnumBlockMirror.NONE;
+        this.rotation = EnumBlockRotation.NONE;
+        this.usageMode = BlockPropertyStructureMode.DATA;
+        this.ignoreEntities = true;
+        this.showBoundingBox = true;
+        this.integrity = 1.0F;
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        nbttagcompound.setString("name", this.a);
-        nbttagcompound.setString("author", this.f);
-        nbttagcompound.setString("metadata", this.g);
-        nbttagcompound.setInt("posX", this.h.getX());
-        nbttagcompound.setInt("posY", this.h.getY());
-        nbttagcompound.setInt("posZ", this.h.getZ());
-        nbttagcompound.setInt("sizeX", this.i.getX());
-        nbttagcompound.setInt("sizeY", this.i.getY());
-        nbttagcompound.setInt("sizeZ", this.i.getZ());
-        nbttagcompound.setString("rotation", this.k.toString());
-        nbttagcompound.setString("mirror", this.j.toString());
-        nbttagcompound.setString("mode", this.l.toString());
-        nbttagcompound.setBoolean("ignoreEntities", this.m);
-        nbttagcompound.setBoolean("powered", this.n);
-        nbttagcompound.setBoolean("showair", this.o);
-        nbttagcompound.setBoolean("showboundingbox", this.p);
-        nbttagcompound.setFloat("integrity", this.q);
-        nbttagcompound.setLong("seed", this.r);
+        nbttagcompound.setString("name", this.getStructureName());
+        nbttagcompound.setString("author", this.author);
+        nbttagcompound.setString("metadata", this.metadata);
+        nbttagcompound.setInt("posX", this.relativePosition.getX());
+        nbttagcompound.setInt("posY", this.relativePosition.getY());
+        nbttagcompound.setInt("posZ", this.relativePosition.getZ());
+        nbttagcompound.setInt("sizeX", this.size.getX());
+        nbttagcompound.setInt("sizeY", this.size.getY());
+        nbttagcompound.setInt("sizeZ", this.size.getZ());
+        nbttagcompound.setString("rotation", this.rotation.toString());
+        nbttagcompound.setString("mirror", this.mirror.toString());
+        nbttagcompound.setString("mode", this.usageMode.toString());
+        nbttagcompound.setBoolean("ignoreEntities", this.ignoreEntities);
+        nbttagcompound.setBoolean("powered", this.powered);
+        nbttagcompound.setBoolean("showair", this.showAir);
+        nbttagcompound.setBoolean("showboundingbox", this.showBoundingBox);
+        nbttagcompound.setFloat("integrity", this.integrity);
+        nbttagcompound.setLong("seed", this.seed);
         return nbttagcompound;
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.a(nbttagcompound.getString("name"));
-        this.f = nbttagcompound.getString("author");
-        this.g = nbttagcompound.getString("metadata");
+        this.setStructureName(nbttagcompound.getString("name"));
+        this.author = nbttagcompound.getString("author");
+        this.metadata = nbttagcompound.getString("metadata");
         int i = MathHelper.clamp(nbttagcompound.getInt("posX"), -32, 32);
         int j = MathHelper.clamp(nbttagcompound.getInt("posY"), -32, 32);
         int k = MathHelper.clamp(nbttagcompound.getInt("posZ"), -32, 32);
 
-        this.h = new BlockPosition(i, j, k);
+        this.relativePosition = new BlockPosition(i, j, k);
         int l = MathHelper.clamp(nbttagcompound.getInt("sizeX"), 0, 32);
         int i1 = MathHelper.clamp(nbttagcompound.getInt("sizeY"), 0, 32);
         int j1 = MathHelper.clamp(nbttagcompound.getInt("sizeZ"), 0, 32);
 
-        this.i = new BlockPosition(l, i1, j1);
+        this.size = new BlockPosition(l, i1, j1);
 
         try {
-            this.k = EnumBlockRotation.valueOf(nbttagcompound.getString("rotation"));
+            this.rotation = EnumBlockRotation.valueOf(nbttagcompound.getString("rotation"));
         } catch (IllegalArgumentException illegalargumentexception) {
-            this.k = EnumBlockRotation.NONE;
+            this.rotation = EnumBlockRotation.NONE;
         }
 
         try {
-            this.j = EnumBlockMirror.valueOf(nbttagcompound.getString("mirror"));
+            this.mirror = EnumBlockMirror.valueOf(nbttagcompound.getString("mirror"));
         } catch (IllegalArgumentException illegalargumentexception1) {
-            this.j = EnumBlockMirror.NONE;
+            this.mirror = EnumBlockMirror.NONE;
         }
 
         try {
-            this.l = TileEntityStructure.UsageMode.valueOf(nbttagcompound.getString("mode"));
+            this.usageMode = BlockPropertyStructureMode.valueOf(nbttagcompound.getString("mode"));
         } catch (IllegalArgumentException illegalargumentexception2) {
-            this.l = TileEntityStructure.UsageMode.DATA;
+            this.usageMode = BlockPropertyStructureMode.DATA;
         }
 
-        this.m = nbttagcompound.getBoolean("ignoreEntities");
-        this.n = nbttagcompound.getBoolean("powered");
-        this.o = nbttagcompound.getBoolean("showair");
-        this.p = nbttagcompound.getBoolean("showboundingbox");
+        this.ignoreEntities = nbttagcompound.getBoolean("ignoreEntities");
+        this.powered = nbttagcompound.getBoolean("powered");
+        this.showAir = nbttagcompound.getBoolean("showair");
+        this.showBoundingBox = nbttagcompound.getBoolean("showboundingbox");
         if (nbttagcompound.hasKey("integrity")) {
-            this.q = nbttagcompound.getFloat("integrity");
+            this.integrity = nbttagcompound.getFloat("integrity");
         } else {
-            this.q = 1.0F;
+            this.integrity = 1.0F;
         }
 
-        this.r = nbttagcompound.getLong("seed");
+        this.seed = nbttagcompound.getLong("seed");
         this.J();
     }
 
@@ -112,7 +114,7 @@ public class TileEntityStructure extends TileEntity {
             IBlockData iblockdata = this.world.getType(blockposition);
 
             if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
-                this.world.setTypeAndData(blockposition, iblockdata.set(BlockStructure.a, this.l), 2);
+                this.world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStructure.a, this.usageMode), 2);
             }
 
         }
@@ -120,10 +122,10 @@ public class TileEntityStructure extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 7, this.d());
+        return new PacketPlayOutTileEntityData(this.position, 7, this.Z_());
     }
 
-    public NBTTagCompound d() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
@@ -139,79 +141,74 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public String a() {
-        return this.a;
+    public String getStructureName() {
+        return this.structureName == null ? "" : this.structureName.toString();
     }
 
-    public void a(String s) {
-        String s1 = s;
-        char[] achar = SharedConstants.b;
-        int i = achar.length;
-
-        for (int j = 0; j < i; ++j) {
-            char c0 = achar[j];
-
-            s1 = s1.replace(c0, '_');
-        }
-
-        this.a = s1;
+    public boolean d() {
+        return this.structureName != null;
     }
 
-    public void a(EntityLiving entityliving) {
-        if (!UtilColor.b(entityliving.getName())) {
-            this.f = entityliving.getName();
-        }
+    public void setStructureName(@Nullable String s) {
+        this.a(UtilColor.b(s) ? null : MinecraftKey.a(s));
+    }
 
+    public void a(@Nullable MinecraftKey minecraftkey) {
+        this.structureName = minecraftkey;
+    }
+
+    public void setAuthor(EntityLiving entityliving) {
+        this.author = entityliving.getDisplayName().getString();
     }
 
     public void b(BlockPosition blockposition) {
-        this.h = blockposition;
+        this.relativePosition = blockposition;
     }
 
     public void c(BlockPosition blockposition) {
-        this.i = blockposition;
+        this.size = blockposition;
     }
 
     public void b(EnumBlockMirror enumblockmirror) {
-        this.j = enumblockmirror;
+        this.mirror = enumblockmirror;
     }
 
     public void b(EnumBlockRotation enumblockrotation) {
-        this.k = enumblockrotation;
+        this.rotation = enumblockrotation;
     }
 
     public void b(String s) {
-        this.g = s;
+        this.metadata = s;
     }
 
-    public TileEntityStructure.UsageMode k() {
-        return this.l;
+    public BlockPropertyStructureMode getUsageMode() {
+        return this.usageMode;
     }
 
-    public void a(TileEntityStructure.UsageMode tileentitystructure_usagemode) {
-        this.l = tileentitystructure_usagemode;
+    public void setUsageMode(BlockPropertyStructureMode blockpropertystructuremode) {
+        this.usageMode = blockpropertystructuremode;
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK) {
-            this.world.setTypeAndData(this.getPosition(), iblockdata.set(BlockStructure.a, tileentitystructure_usagemode), 2);
+            this.world.setTypeAndData(this.getPosition(), (IBlockData) iblockdata.set(BlockStructure.a, blockpropertystructuremode), 2);
         }
 
     }
 
     public void a(boolean flag) {
-        this.m = flag;
+        this.ignoreEntities = flag;
     }
 
     public void a(float f) {
-        this.q = f;
+        this.integrity = f;
     }
 
     public void a(long i) {
-        this.r = i;
+        this.seed = i;
     }
 
     public boolean p() {
-        if (this.l != TileEntityStructure.UsageMode.SAVE) {
+        if (this.usageMode != BlockPropertyStructureMode.SAVE) {
             return false;
         } else {
             BlockPosition blockposition = this.getPosition();
@@ -227,8 +224,8 @@ public class TileEntityStructure extends TileEntity {
                 StructureBoundingBox structureboundingbox = this.a(blockposition, list1);
 
                 if (structureboundingbox.d - structureboundingbox.a > 1 && structureboundingbox.e - structureboundingbox.b > 1 && structureboundingbox.f - structureboundingbox.c > 1) {
-                    this.h = new BlockPosition(structureboundingbox.a - blockposition.getX() + 1, structureboundingbox.b - blockposition.getY() + 1, structureboundingbox.c - blockposition.getZ() + 1);
-                    this.i = new BlockPosition(structureboundingbox.d - structureboundingbox.a - 1, structureboundingbox.e - structureboundingbox.b - 1, structureboundingbox.f - structureboundingbox.c - 1);
+                    this.relativePosition = new BlockPosition(structureboundingbox.a - blockposition.getX() + 1, structureboundingbox.b - blockposition.getY() + 1, structureboundingbox.c - blockposition.getZ() + 1);
+                    this.size = new BlockPosition(structureboundingbox.d - structureboundingbox.a - 1, structureboundingbox.e - structureboundingbox.b - 1, structureboundingbox.f - structureboundingbox.c - 1);
                     this.update();
                     IBlockData iblockdata = this.world.getType(blockposition);
 
@@ -242,17 +239,11 @@ public class TileEntityStructure extends TileEntity {
     }
 
     private List<TileEntityStructure> a(List<TileEntityStructure> list) {
-        Iterable iterable = Iterables.filter(list, new Predicate() {
-            public boolean a(@Nullable TileEntityStructure tileentitystructure) {
-                return tileentitystructure.l == TileEntityStructure.UsageMode.CORNER && TileEntityStructure.this.a.equals(tileentitystructure.a);
-            }
+        Predicate predicate = (tileentitystructure) -> {
+            return tileentitystructure.usageMode == BlockPropertyStructureMode.CORNER && Objects.equals(this.structureName, tileentitystructure.structureName);
+        };
 
-            public boolean apply(@Nullable Object object) {
-                return this.a((TileEntityStructure) object);
-            }
-        });
-
-        return Lists.newArrayList(iterable);
+        return (List) list.stream().filter(predicate).collect(Collectors.toList());
     }
 
     private List<TileEntityStructure> a(BlockPosition blockposition, BlockPosition blockposition1) {
@@ -319,16 +310,30 @@ public class TileEntityStructure extends TileEntity {
     }
 
     public boolean b(boolean flag) {
-        if (this.l == TileEntityStructure.UsageMode.SAVE && !this.world.isClientSide && !UtilColor.b(this.a)) {
-            BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.h);
+        if (this.usageMode == BlockPropertyStructureMode.SAVE && !this.world.isClientSide && this.structureName != null) {
+            BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            MinecraftServer minecraftserver = this.world.getMinecraftServer();
-            DefinedStructureManager definedstructuremanager = worldserver.y();
-            DefinedStructure definedstructure = definedstructuremanager.a(minecraftserver, new MinecraftKey(this.a));
+            DefinedStructureManager definedstructuremanager = worldserver.C();
 
-            definedstructure.a(this.world, blockposition, this.i, !this.m, Blocks.dj);
-            definedstructure.a(this.f);
-            return !flag || definedstructuremanager.c(minecraftserver, new MinecraftKey(this.a));
+            DefinedStructure definedstructure;
+
+            try {
+                definedstructure = definedstructuremanager.a(this.structureName);
+            } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+                return false;
+            }
+
+            definedstructure.a(this.world, blockposition, this.size, !this.ignoreEntities, Blocks.STRUCTURE_VOID);
+            definedstructure.a(this.author);
+            if (flag) {
+                try {
+                    return definedstructuremanager.c(this.structureName);
+                } catch (ResourceKeyInvalidException resourcekeyinvalidexception1) {
+                    return false;
+                }
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
@@ -339,26 +344,32 @@ public class TileEntityStructure extends TileEntity {
     }
 
     public boolean c(boolean flag) {
-        if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide && !UtilColor.b(this.a)) {
+        if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             BlockPosition blockposition = this.getPosition();
-            BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) this.h);
+            BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            MinecraftServer minecraftserver = this.world.getMinecraftServer();
-            DefinedStructureManager definedstructuremanager = worldserver.y();
-            DefinedStructure definedstructure = definedstructuremanager.b(minecraftserver, new MinecraftKey(this.a));
+            DefinedStructureManager definedstructuremanager = worldserver.C();
+
+            DefinedStructure definedstructure;
+
+            try {
+                definedstructure = definedstructuremanager.b(this.structureName);
+            } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+                return false;
+            }
 
             if (definedstructure == null) {
                 return false;
             } else {
                 if (!UtilColor.b(definedstructure.b())) {
-                    this.f = definedstructure.b();
+                    this.author = definedstructure.b();
                 }
 
                 BlockPosition blockposition2 = definedstructure.a();
-                boolean flag1 = this.i.equals(blockposition2);
+                boolean flag1 = this.size.equals(blockposition2);
 
                 if (!flag1) {
-                    this.i = blockposition2;
+                    this.size = blockposition2;
                     this.update();
                     IBlockData iblockdata = this.world.getType(blockposition);
 
@@ -368,13 +379,13 @@ public class TileEntityStructure extends TileEntity {
                 if (flag && !flag1) {
                     return false;
                 } else {
-                    DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.j).a(this.k).a(this.m).a((ChunkCoordIntPair) null).a((Block) null).b(false);
+                    DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities).a((ChunkCoordIntPair) null).a((Block) null).c(false);
 
-                    if (this.q < 1.0F) {
-                        definedstructureinfo.a(MathHelper.a(this.q, 0.0F, 1.0F)).a(Long.valueOf(this.r));
+                    if (this.integrity < 1.0F) {
+                        definedstructureinfo.a(MathHelper.a(this.integrity, 0.0F, 1.0F)).a(Long.valueOf(this.seed));
                     }
 
-                    definedstructure.a(this.world, blockposition1, definedstructureinfo);
+                    definedstructure.a((GeneratorAccess) this.world, blockposition1, definedstructureinfo);
                     return true;
                 }
             }
@@ -384,80 +395,49 @@ public class TileEntityStructure extends TileEntity {
     }
 
     public void s() {
-        WorldServer worldserver = (WorldServer) this.world;
-        DefinedStructureManager definedstructuremanager = worldserver.y();
+        if (this.structureName != null) {
+            WorldServer worldserver = (WorldServer) this.world;
+            DefinedStructureManager definedstructuremanager = worldserver.C();
 
-        definedstructuremanager.b(new MinecraftKey(this.a));
+            definedstructuremanager.d(this.structureName);
+        }
     }
 
-    public boolean E() {
-        if (this.l == TileEntityStructure.UsageMode.LOAD && !this.world.isClientSide) {
+    public boolean D() {
+        if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            MinecraftServer minecraftserver = this.world.getMinecraftServer();
-            DefinedStructureManager definedstructuremanager = worldserver.y();
+            DefinedStructureManager definedstructuremanager = worldserver.C();
 
-            return definedstructuremanager.b(minecraftserver, new MinecraftKey(this.a)) != null;
+            try {
+                return definedstructuremanager.b(this.structureName) != null;
+            } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+                return false;
+            }
         } else {
             return false;
         }
     }
 
-    public boolean F() {
-        return this.n;
+    public boolean E() {
+        return this.powered;
     }
 
     public void d(boolean flag) {
-        this.n = flag;
+        this.powered = flag;
     }
 
     public void e(boolean flag) {
-        this.o = flag;
+        this.showAir = flag;
     }
 
     public void f(boolean flag) {
-        this.p = flag;
+        this.showBoundingBox = flag;
     }
 
-    @Nullable
-    public IChatBaseComponent i_() {
-        return new ChatMessage("structure_block.hover." + this.l.f, new Object[] { this.l == TileEntityStructure.UsageMode.DATA ? this.g : this.a});
-    }
+    public static enum UpdateType {
 
-    public static enum UsageMode implements INamable {
+        UPDATE_DATA, SAVE_AREA, LOAD_AREA, SCAN_AREA;
 
-        SAVE("save", 0), LOAD("load", 1), CORNER("corner", 2), DATA("data", 3);
-
-        private static final TileEntityStructure.UsageMode[] e = new TileEntityStructure.UsageMode[values().length];
-        private final String f;
-        private final int g;
-
-        private UsageMode(String s, int i) {
-            this.f = s;
-            this.g = i;
-        }
-
-        public String getName() {
-            return this.f;
-        }
-
-        public int a() {
-            return this.g;
-        }
-
-        public static TileEntityStructure.UsageMode a(int i) {
-            return i >= 0 && i < TileEntityStructure.UsageMode.e.length ? TileEntityStructure.UsageMode.e[i] : TileEntityStructure.UsageMode.e[0];
-        }
-
-        static {
-            TileEntityStructure.UsageMode[] atileentitystructure_usagemode = values();
-            int i = atileentitystructure_usagemode.length;
-
-            for (int j = 0; j < i; ++j) {
-                TileEntityStructure.UsageMode tileentitystructure_usagemode = atileentitystructure_usagemode[j];
-
-                TileEntityStructure.UsageMode.e[tileentitystructure_usagemode.a()] = tileentitystructure_usagemode;
-            }
-
-        }
+        private UpdateType() {}
     }
 }

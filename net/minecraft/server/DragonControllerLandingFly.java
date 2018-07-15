@@ -23,7 +23,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
     public void c() {
         double d0 = this.c == null ? 0.0D : this.c.c(this.a.locX, this.a.locY, this.a.locZ);
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.B) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.C) {
             this.j();
         }
 
@@ -36,8 +36,8 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
     private void j() {
         if (this.b == null || this.b.b()) {
-            int i = this.a.p();
-            BlockPosition blockposition = this.a.world.q(WorldGenEndTrophy.a);
+            int i = this.a.l();
+            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
             EntityHuman entityhuman = this.a.world.a(blockposition, 128.0D, 128.0D);
             int j;
 

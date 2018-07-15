@@ -10,11 +10,20 @@ public class DataBits {
     private final int d;
 
     public DataBits(int i, int j) {
+        this(i, j, new long[MathHelper.c(j * i, 64) / 64]);
+    }
+
+    public DataBits(int i, int j, long[] along) {
         Validate.inclusiveBetween(1L, 32L, (long) i);
         this.d = j;
         this.b = i;
+        this.a = along;
         this.c = (1L << i) - 1L;
-        this.a = new long[MathHelper.c(j * i, 64) / 64];
+        int k = MathHelper.c(j * i, 64) / 64;
+
+        if (along.length != k) {
+            throw new RuntimeException("Invalid length given for storage, got: " + along.length + " but expected: " + k);
+        }
     }
 
     public void a(int i, int j) {
@@ -57,5 +66,9 @@ public class DataBits {
 
     public int b() {
         return this.d;
+    }
+
+    public int c() {
+        return this.b;
     }
 }

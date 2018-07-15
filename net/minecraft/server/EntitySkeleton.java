@@ -5,32 +5,28 @@ import javax.annotation.Nullable;
 public class EntitySkeleton extends EntitySkeletonAbstract {
 
     public EntitySkeleton(World world) {
-        super(world);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySkeleton.class);
+        super(EntityTypes.SKELETON, world);
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.ao;
+    protected MinecraftKey G() {
+        return LootTables.av;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.gQ;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_SKELETON_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.gV;
+        return SoundEffects.ENTITY_SKELETON_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.gR;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_SKELETON_DEATH;
     }
 
-    SoundEffect p() {
-        return SoundEffects.gX;
+    SoundEffect l() {
+        return SoundEffects.ENTITY_SKELETON_STEP;
     }
 
     public void die(DamageSource damagesource) {
@@ -40,7 +36,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
 
             if (entitycreeper.isPowered() && entitycreeper.canCauseHeadDrop()) {
                 entitycreeper.setCausedHeadDrop();
-                this.a(new ItemStack(Items.SKULL, 1, 0), 0.0F);
+                this.a((IMaterial) Items.SKELETON_SKULL);
             }
         }
 
@@ -58,7 +54,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
             EntityArrow entityarrow = super.a(f);
 
             if (itemstack.getItem() == Items.TIPPED_ARROW && entityarrow instanceof EntityTippedArrow) {
-                ((EntityTippedArrow) entityarrow).a(itemstack);
+                ((EntityTippedArrow) entityarrow).b(itemstack);
             }
 
             return entityarrow;

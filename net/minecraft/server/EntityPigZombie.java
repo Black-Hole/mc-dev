@@ -5,14 +5,14 @@ import javax.annotation.Nullable;
 
 public class EntityPigZombie extends EntityZombie {
 
-    private static final UUID b = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
-    private static final AttributeModifier c = (new AttributeModifier(EntityPigZombie.b, "Attacking speed boost", 0.05D, 0)).a(false);
+    private static final UUID a = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
+    private static final AttributeModifier b = (new AttributeModifier(EntityPigZombie.a, "Attacking speed boost", 0.05D, 0)).a(false);
     public int angerLevel;
     private int soundDelay;
     private UUID hurtBy;
 
     public EntityPigZombie(World world) {
-        super(world);
+        super(EntityTypes.ZOMBIE_PIGMAN, world);
         this.fireProof = true;
     }
 
@@ -24,33 +24,39 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    protected void do_() {
+    protected void l() {
+        this.goalSelector.a(2, new PathfinderGoalZombieAttack(this, 1.0D, false));
+        this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.targetSelector.a(1, new EntityPigZombie.PathfinderGoalAngerOther(this));
         this.targetSelector.a(2, new EntityPigZombie.PathfinderGoalAnger(this));
     }
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(EntityPigZombie.a).setValue(0.0D);
+        this.getAttributeInstance(EntityPigZombie.c).setValue(0.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
     }
 
-    protected void M() {
+    protected boolean dC() {
+        return false;
+    }
+
+    protected void mobTick() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-        if (this.dp()) {
-            if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.c)) {
-                attributeinstance.b(EntityPigZombie.c);
+        if (this.dF()) {
+            if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.b)) {
+                attributeinstance.b(EntityPigZombie.b);
             }
 
             --this.angerLevel;
-        } else if (attributeinstance.a(EntityPigZombie.c)) {
-            attributeinstance.c(EntityPigZombie.c);
+        } else if (attributeinstance.a(EntityPigZombie.b)) {
+            attributeinstance.c(EntityPigZombie.b);
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.a(SoundEffects.jt, this.cq() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.a(SoundEffects.ENTITY_ZOMBIE_PIGMAN_ANGRY, this.cC() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -58,22 +64,18 @@ public class EntityPigZombie extends EntityZombie {
 
             this.a((EntityLiving) entityhuman);
             this.killer = entityhuman;
-            this.lastDamageByPlayerTime = this.bT();
+            this.lastDamageByPlayerTime = this.cf();
         }
 
-        super.M();
+        super.mobTick();
     }
 
-    public boolean P() {
-        return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean a(GeneratorAccess generatoraccess) {
+        return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public boolean canSpawn() {
-        return this.world.a(this.getBoundingBox(), (Entity) this) && this.world.getCubes(this, this.getBoundingBox()).isEmpty() && !this.world.containsLiquid(this.getBoundingBox());
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityPigZombie.class);
+    public boolean a(IWorldReader iworldreader) {
+        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -99,7 +101,7 @@ public class EntityPigZombie extends EntityZombie {
             this.a((EntityLiving) entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
-                this.lastDamageByPlayerTime = this.bT();
+                this.lastDamageByPlayerTime = this.cf();
             }
         }
 
@@ -111,7 +113,7 @@ public class EntityPigZombie extends EntityZombie {
         } else {
             Entity entity = damagesource.getEntity();
 
-            if (entity instanceof EntityHuman) {
+            if (entity instanceof EntityHuman && !((EntityHuman) entity).u()) {
                 this.a(entity);
             }
 
@@ -128,25 +130,25 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    public boolean dp() {
+    public boolean dF() {
         return this.angerLevel > 0;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.js;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_ZOMBIE_PIGMAN_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.jv;
+        return SoundEffects.ENTITY_ZOMBIE_PIGMAN_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.ju;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_ZOMBIE_PIGMAN_DEATH;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.an;
+    protected MinecraftKey G() {
+        return LootTables.au;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
@@ -157,12 +159,12 @@ public class EntityPigZombie extends EntityZombie {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
     }
 
-    protected ItemStack dn() {
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 
     public boolean c(EntityHuman entityhuman) {
-        return this.dp();
+        return this.dF();
     }
 
     static class PathfinderGoalAnger extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
@@ -172,7 +174,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         public boolean a() {
-            return ((EntityPigZombie) this.e).dp() && super.a();
+            return ((EntityPigZombie) this.e).dF() && super.a();
         }
     }
 

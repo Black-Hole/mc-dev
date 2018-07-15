@@ -4,31 +4,31 @@ import java.util.Iterator;
 
 public class ItemEnchantedBook extends Item {
 
-    public ItemEnchantedBook() {}
+    public ItemEnchantedBook(Item.Info item_info) {
+        super(item_info);
+    }
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean a(ItemStack itemstack) {
         return false;
     }
 
-    public EnumItemRarity g(ItemStack itemstack) {
-        return h(itemstack).isEmpty() ? super.g(itemstack) : EnumItemRarity.UNCOMMON;
-    }
-
-    public static NBTTagList h(ItemStack itemstack) {
+    public static NBTTagList e(ItemStack itemstack) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
         return nbttagcompound != null ? nbttagcompound.getList("StoredEnchantments", 10) : new NBTTagList();
     }
 
     public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
-        NBTTagList nbttaglist = h(itemstack);
+        NBTTagList nbttaglist = e(itemstack);
         boolean flag = true;
+        MinecraftKey minecraftkey = (MinecraftKey) Enchantment.enchantments.b(weightedrandomenchant.enchantment);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
+            MinecraftKey minecraftkey1 = MinecraftKey.a(nbttagcompound.getString("id"));
 
-            if (Enchantment.c(nbttagcompound.getShort("id")) == weightedrandomenchant.enchantment) {
-                if (nbttagcompound.getShort("lvl") < weightedrandomenchant.level) {
+            if (minecraftkey1 != null && minecraftkey1.equals(minecraftkey)) {
+                if (nbttagcompound.getInt("lvl") < weightedrandomenchant.level) {
                     nbttagcompound.setShort("lvl", (short) weightedrandomenchant.level);
                 }
 
@@ -40,16 +40,12 @@ public class ItemEnchantedBook extends Item {
         if (flag) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.setShort("id", (short) Enchantment.getId(weightedrandomenchant.enchantment));
+            nbttagcompound1.setString("id", String.valueOf(minecraftkey));
             nbttagcompound1.setShort("lvl", (short) weightedrandomenchant.level);
-            nbttaglist.add(nbttagcompound1);
+            nbttaglist.add((NBTBase) nbttagcompound1);
         }
 
-        if (!itemstack.hasTag()) {
-            itemstack.setTag(new NBTTagCompound());
-        }
-
-        itemstack.getTag().set("StoredEnchantments", nbttaglist);
+        itemstack.getOrCreateTag().set("StoredEnchantments", nbttaglist);
     }
 
     public static ItemStack a(WeightedRandomEnchant weightedrandomenchant) {
@@ -74,7 +70,7 @@ public class ItemEnchantedBook extends Item {
                     }
                 }
             }
-        } else if (creativemodetab.n().length != 0) {
+        } else if (creativemodetab.o().length != 0) {
             iterator = Enchantment.enchantments.iterator();
 
             while (iterator.hasNext()) {

@@ -3,27 +3,35 @@ package net.minecraft.server;
 import io.netty.util.internal.ThreadLocalRandom;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Supplier;
 import org.apache.commons.lang3.Validate;
 
 public class AttributeModifier {
 
     private final double a;
     private final int b;
-    private final String c;
+    private final Supplier<String> c;
     private final UUID d;
     private boolean e;
 
     public AttributeModifier(String s, double d0, int i) {
-        this(MathHelper.a((Random) ThreadLocalRandom.current()), s, d0, i);
+        this(MathHelper.a((Random) ThreadLocalRandom.current()), () -> {
+            return s;
+        }, d0, i);
     }
 
     public AttributeModifier(UUID uuid, String s, double d0, int i) {
+        this(uuid, () -> {
+            return s;
+        }, d0, i);
+    }
+
+    public AttributeModifier(UUID uuid, Supplier<String> supplier, double d0, int i) {
         this.e = true;
         this.d = uuid;
-        this.c = s;
+        this.c = supplier;
         this.a = d0;
         this.b = i;
-        Validate.notEmpty(s, "Modifier name cannot be empty", new Object[0]);
         Validate.inclusiveBetween(0L, 2L, (long) i, "Invalid operation");
     }
 
@@ -32,7 +40,7 @@ public class AttributeModifier {
     }
 
     public String b() {
-        return this.c;
+        return (String) this.c.get();
     }
 
     public int c() {
@@ -59,14 +67,14 @@ public class AttributeModifier {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
             if (this.d != null) {
-                if (!this.d.equals(attributemodifier.d)) {
-                    return false;
+                if (this.d.equals(attributemodifier.d)) {
+                    return true;
                 }
-            } else if (attributemodifier.d != null) {
-                return false;
+            } else if (attributemodifier.d == null) {
+                return true;
             }
 
-            return true;
+            return false;
         } else {
             return false;
         }
@@ -77,6 +85,6 @@ public class AttributeModifier {
     }
 
     public String toString() {
-        return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name=\'" + this.c + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
+        return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name=\'" + (String) this.c.get() + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
     }
 }

@@ -8,28 +8,32 @@ import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-public class Item {
+public class Item implements IMaterial {
 
     public static final RegistryMaterials<MinecraftKey, Item> REGISTRY = new RegistryMaterials();
-    private static final Map<Block, Item> a = Maps.newHashMap();
-    private static final IDynamicTexture b = new IDynamicTexture() {
+    public static final Map<Block, Item> g = Maps.newHashMap();
+    private static final IDynamicTexture a = (itemstack, world, entityliving) -> {
+        return itemstack.f() ? 1.0F : 0.0F;
     };
-    private static final IDynamicTexture c = new IDynamicTexture() {
+    private static final IDynamicTexture b = (itemstack, world, entityliving) -> {
+        return MathHelper.a((float) itemstack.getDamage() / (float) itemstack.h(), 0.0F, 1.0F);
     };
-    private static final IDynamicTexture d = new IDynamicTexture() {
+    private static final IDynamicTexture c = (itemstack, world, entityliving) -> {
+        return entityliving != null && entityliving.getMainHand() != EnumMainHand.RIGHT ? 1.0F : 0.0F;
     };
-    private static final IDynamicTexture e = new IDynamicTexture() {
+    private static final IDynamicTexture d = (itemstack, world, entityliving) -> {
+        return entityliving instanceof EntityHuman ? ((EntityHuman) entityliving).getCooldownTracker().a(itemstack.getItem(), 0.0F) : 0.0F;
     };
-    private final IRegistry<MinecraftKey, IDynamicTexture> f = new RegistrySimple();
+    private final IRegistry<MinecraftKey, IDynamicTexture> e = new RegistrySimple();
     protected static final UUID h = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
     protected static final UUID i = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-    private CreativeModeTab n;
-    protected static Random j = new Random();
-    protected int maxStackSize = 64;
-    private int durability;
-    protected boolean l;
-    protected boolean m;
-    private Item craftingResult;
+    protected final CreativeModeTab j;
+    private final EnumItemRarity l;
+    protected static Random k = new Random();
+    private final int maxStackSize;
+    private final int durability;
+    private final Item craftingResult;
+    @Nullable
     private String name;
 
     public static int getId(Item item) {
@@ -40,46 +44,45 @@ public class Item {
         return (Item) Item.REGISTRY.getId(i);
     }
 
+    @Deprecated
     public static Item getItemOf(Block block) {
-        Item item = (Item) Item.a.get(block);
+        Item item = (Item) Item.g.get(block);
 
-        return item == null ? Items.a : item;
-    }
-
-    @Nullable
-    public static Item b(String s) {
-        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
-
-        if (item == null) {
-            try {
-                return getById(Integer.parseInt(s));
-            } catch (NumberFormatException numberformatexception) {
-                ;
-            }
-        }
-
-        return item;
+        return item == null ? Items.AIR : item;
     }
 
     public final void a(MinecraftKey minecraftkey, IDynamicTexture idynamictexture) {
-        this.f.a(minecraftkey, idynamictexture);
+        this.e.a(minecraftkey, idynamictexture);
     }
 
     public boolean a(NBTTagCompound nbttagcompound) {
         return false;
     }
 
-    public Item() {
-        this.a(new MinecraftKey("lefthanded"), Item.d);
-        this.a(new MinecraftKey("cooldown"), Item.e);
+    public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
+        return true;
     }
 
-    public Item d(int i) {
-        this.maxStackSize = i;
+    public Item getItem() {
         return this;
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public Item(Item.Info item_info) {
+        this.a(new MinecraftKey("lefthanded"), Item.c);
+        this.a(new MinecraftKey("cooldown"), Item.d);
+        this.j = item_info.d;
+        this.l = item_info.e;
+        this.craftingResult = item_info.c;
+        this.durability = item_info.b;
+        this.maxStackSize = item_info.a;
+        if (this.durability > 0) {
+            this.a(new MinecraftKey("damaged"), Item.a);
+            this.a(new MinecraftKey("damage"), Item.b);
+        }
+
+    }
+
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         return EnumInteractionResult.PASS;
     }
 
@@ -95,39 +98,16 @@ public class Item {
         return itemstack;
     }
 
-    public int getMaxStackSize() {
+    public final int getMaxStackSize() {
         return this.maxStackSize;
     }
 
-    public int filterData(int i) {
-        return 0;
-    }
-
-    public boolean k() {
-        return this.m;
-    }
-
-    protected Item a(boolean flag) {
-        this.m = flag;
-        return this;
-    }
-
-    public int getMaxDurability() {
+    public final int getMaxDurability() {
         return this.durability;
     }
 
-    protected Item setMaxDurability(int i) {
-        this.durability = i;
-        if (i > 0) {
-            this.a(new MinecraftKey("damaged"), Item.b);
-            this.a(new MinecraftKey("damage"), Item.c);
-        }
-
-        return this;
-    }
-
     public boolean usesDurability() {
-        return this.durability > 0 && (!this.m || this.maxStackSize == 1);
+        return this.durability > 0;
     }
 
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
@@ -146,43 +126,32 @@ public class Item {
         return false;
     }
 
-    public Item n() {
-        this.l = true;
-        return this;
-    }
+    protected String m() {
+        if (this.name == null) {
+            this.name = SystemUtils.a("item", (MinecraftKey) Item.REGISTRY.b(this));
+        }
 
-    public Item c(String s) {
-        this.name = s;
-        return this;
-    }
-
-    public String j(ItemStack itemstack) {
-        return LocaleI18n.get(this.a(itemstack));
+        return this.name;
     }
 
     public String getName() {
-        return "item." + this.name;
+        return this.m();
     }
 
-    public String a(ItemStack itemstack) {
-        return "item." + this.name;
+    public String h(ItemStack itemstack) {
+        return this.getName();
     }
 
-    public Item b(Item item) {
-        this.craftingResult = item;
-        return this;
-    }
-
-    public boolean p() {
+    public boolean n() {
         return true;
     }
 
     @Nullable
-    public Item q() {
+    public final Item o() {
         return this.craftingResult;
     }
 
-    public boolean r() {
+    public boolean p() {
         return this.craftingResult != null;
     }
 
@@ -190,32 +159,48 @@ public class Item {
 
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {}
 
-    public boolean f() {
+    public boolean W_() {
         return false;
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.NONE;
     }
 
-    public int e(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         return 0;
     }
 
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {}
 
-    public String b(ItemStack itemstack) {
-        return LocaleI18n.get(this.j(itemstack) + ".name").trim();
+    public IChatBaseComponent i(ItemStack itemstack) {
+        return new ChatMessage(this.h(itemstack), new Object[0]);
     }
 
-    public EnumItemRarity g(ItemStack itemstack) {
-        return itemstack.hasEnchantments() ? EnumItemRarity.RARE : EnumItemRarity.COMMON;
+    public EnumItemRarity j(ItemStack itemstack) {
+        if (!itemstack.hasEnchantments()) {
+            return this.l;
+        } else {
+            switch (this.l) {
+            case COMMON:
+            case UNCOMMON:
+                return EnumItemRarity.RARE;
+
+            case RARE:
+                return EnumItemRarity.EPIC;
+
+            case EPIC:
+            default:
+                return this.l;
+            }
+        }
     }
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean a(ItemStack itemstack) {
         return this.getMaxStackSize() == 1 && this.usesDurability();
     }
 
+    @Nullable
     protected MovingObjectPosition a(World world, EntityHuman entityhuman, boolean flag) {
         float f = entityhuman.pitch;
         float f1 = entityhuman.yaw;
@@ -232,7 +217,7 @@ public class Item {
         double d3 = 5.0D;
         Vec3D vec3d1 = vec3d.add((double) f6 * 5.0D, (double) f5 * 5.0D, (double) f7 * 5.0D);
 
-        return world.rayTrace(vec3d, vec3d1, flag, !flag, false);
+        return world.rayTrace(vec3d, vec3d1, flag ? FluidCollisionOption.SOURCE_ONLY : FluidCollisionOption.NEVER, false, false);
     }
 
     public int c() {
@@ -247,23 +232,14 @@ public class Item {
     }
 
     protected boolean a(CreativeModeTab creativemodetab) {
-        CreativeModeTab creativemodetab1 = this.b();
+        CreativeModeTab creativemodetab1 = this.q();
 
         return creativemodetab1 != null && (creativemodetab == CreativeModeTab.g || creativemodetab == creativemodetab1);
     }
 
     @Nullable
-    public CreativeModeTab b() {
-        return this.n;
-    }
-
-    public Item b(CreativeModeTab creativemodetab) {
-        this.n = creativemodetab;
-        return this;
-    }
-
-    public boolean s() {
-        return false;
+    public final CreativeModeTab q() {
+        return this.j;
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
@@ -274,549 +250,869 @@ public class Item {
         return HashMultimap.create();
     }
 
-    public static void t() {
-        a(Blocks.AIR, (Item) (new ItemAir(Blocks.AIR)));
-        a(Blocks.STONE, (new ItemMultiTexture(Blocks.STONE, Blocks.STONE, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockStone.EnumStoneVariant.a(itemstack.getData()).d();
-            }
-        })).c("stone"));
-        a((Block) Blocks.GRASS, (Item) (new ItemWithAuxData(Blocks.GRASS, false)));
-        a(Blocks.DIRT, (new ItemMultiTexture(Blocks.DIRT, Blocks.DIRT, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockDirt.EnumDirtVariant.a(itemstack.getData()).c();
-            }
-        })).c("dirt"));
-        b(Blocks.COBBLESTONE);
-        a(Blocks.PLANKS, (new ItemMultiTexture(Blocks.PLANKS, Blocks.PLANKS, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
-            }
-        })).c("wood"));
-        a(Blocks.SAPLING, (new ItemMultiTexture(Blocks.SAPLING, Blocks.SAPLING, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
-            }
-        })).c("sapling"));
-        b(Blocks.BEDROCK);
-        a((Block) Blocks.SAND, (new ItemMultiTexture(Blocks.SAND, Blocks.SAND, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockSand.EnumSandVariant.a(itemstack.getData()).e();
-            }
-        })).c("sand"));
-        b(Blocks.GRAVEL);
-        b(Blocks.GOLD_ORE);
-        b(Blocks.IRON_ORE);
-        b(Blocks.COAL_ORE);
-        a(Blocks.LOG, (new ItemMultiTexture(Blocks.LOG, Blocks.LOG, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockWood.EnumLogVariant.a(itemstack.getData()).d();
-            }
-        })).c("log"));
-        a(Blocks.LOG2, (new ItemMultiTexture(Blocks.LOG2, Blocks.LOG2, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockWood.EnumLogVariant.a(itemstack.getData() + 4).d();
-            }
-        })).c("log"));
-        a((Block) Blocks.LEAVES, (new ItemLeaves(Blocks.LEAVES)).c("leaves"));
-        a((Block) Blocks.LEAVES2, (new ItemLeaves(Blocks.LEAVES2)).c("leaves"));
-        a(Blocks.SPONGE, (new ItemMultiTexture(Blocks.SPONGE, Blocks.SPONGE, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return (itemstack.getData() & 1) == 1 ? "wet" : "dry";
-            }
-        })).c("sponge"));
-        b(Blocks.GLASS);
-        b(Blocks.LAPIS_ORE);
-        b(Blocks.LAPIS_BLOCK);
-        b(Blocks.DISPENSER);
-        a(Blocks.SANDSTONE, (new ItemMultiTexture(Blocks.SANDSTONE, Blocks.SANDSTONE, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockSandStone.EnumSandstoneVariant.a(itemstack.getData()).c();
-            }
-        })).c("sandStone"));
-        b(Blocks.NOTEBLOCK);
-        b(Blocks.GOLDEN_RAIL);
-        b(Blocks.DETECTOR_RAIL);
-        a((Block) Blocks.STICKY_PISTON, (Item) (new ItemPiston(Blocks.STICKY_PISTON)));
-        b(Blocks.WEB);
-        a((Block) Blocks.TALLGRASS, (Item) (new ItemWithAuxData(Blocks.TALLGRASS, true)).a(new String[] { "shrub", "grass", "fern"}));
-        b((Block) Blocks.DEADBUSH);
-        a((Block) Blocks.PISTON, (Item) (new ItemPiston(Blocks.PISTON)));
-        a(Blocks.WOOL, (new ItemCloth(Blocks.WOOL)).c("cloth"));
-        a((Block) Blocks.YELLOW_FLOWER, (new ItemMultiTexture(Blocks.YELLOW_FLOWER, Blocks.YELLOW_FLOWER, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.YELLOW, itemstack.getData()).d();
-            }
-        })).c("flower"));
-        a((Block) Blocks.RED_FLOWER, (new ItemMultiTexture(Blocks.RED_FLOWER, Blocks.RED_FLOWER, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockFlowers.EnumFlowerVarient.a(BlockFlowers.EnumFlowerType.RED, itemstack.getData()).d();
-            }
-        })).c("rose"));
-        b((Block) Blocks.BROWN_MUSHROOM);
-        b((Block) Blocks.RED_MUSHROOM);
-        b(Blocks.GOLD_BLOCK);
-        b(Blocks.IRON_BLOCK);
-        a((Block) Blocks.STONE_SLAB, (new ItemStep(Blocks.STONE_SLAB, Blocks.STONE_SLAB, Blocks.DOUBLE_STONE_SLAB)).c("stoneSlab"));
-        b(Blocks.BRICK_BLOCK);
-        b(Blocks.TNT);
-        b(Blocks.BOOKSHELF);
-        b(Blocks.MOSSY_COBBLESTONE);
-        b(Blocks.OBSIDIAN);
-        b(Blocks.TORCH);
-        b(Blocks.END_ROD);
-        b(Blocks.CHORUS_PLANT);
-        b(Blocks.CHORUS_FLOWER);
-        b(Blocks.PURPUR_BLOCK);
-        b(Blocks.PURPUR_PILLAR);
-        b(Blocks.PURPUR_STAIRS);
-        a((Block) Blocks.PURPUR_SLAB, (new ItemStep(Blocks.PURPUR_SLAB, Blocks.PURPUR_SLAB, Blocks.PURPUR_DOUBLE_SLAB)).c("purpurSlab"));
-        b(Blocks.MOB_SPAWNER);
-        b(Blocks.OAK_STAIRS);
-        b((Block) Blocks.CHEST);
-        b(Blocks.DIAMOND_ORE);
-        b(Blocks.DIAMOND_BLOCK);
-        b(Blocks.CRAFTING_TABLE);
-        b(Blocks.FARMLAND);
-        b(Blocks.FURNACE);
-        b(Blocks.LADDER);
-        b(Blocks.RAIL);
-        b(Blocks.STONE_STAIRS);
-        b(Blocks.LEVER);
-        b(Blocks.STONE_PRESSURE_PLATE);
-        b(Blocks.WOODEN_PRESSURE_PLATE);
-        b(Blocks.REDSTONE_ORE);
-        b(Blocks.REDSTONE_TORCH);
-        b(Blocks.STONE_BUTTON);
-        a(Blocks.SNOW_LAYER, (Item) (new ItemSnow(Blocks.SNOW_LAYER)));
-        b(Blocks.ICE);
-        b(Blocks.SNOW);
-        b((Block) Blocks.CACTUS);
-        b(Blocks.CLAY);
-        b(Blocks.JUKEBOX);
-        b(Blocks.FENCE);
-        b(Blocks.SPRUCE_FENCE);
-        b(Blocks.BIRCH_FENCE);
-        b(Blocks.JUNGLE_FENCE);
-        b(Blocks.DARK_OAK_FENCE);
-        b(Blocks.ACACIA_FENCE);
-        b(Blocks.PUMPKIN);
-        b(Blocks.NETHERRACK);
-        b(Blocks.SOUL_SAND);
-        b(Blocks.GLOWSTONE);
-        b(Blocks.LIT_PUMPKIN);
-        b(Blocks.TRAPDOOR);
-        a(Blocks.MONSTER_EGG, (new ItemMultiTexture(Blocks.MONSTER_EGG, Blocks.MONSTER_EGG, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockMonsterEggs.EnumMonsterEggVarient.a(itemstack.getData()).c();
-            }
-        })).c("monsterStoneEgg"));
-        a(Blocks.STONEBRICK, (new ItemMultiTexture(Blocks.STONEBRICK, Blocks.STONEBRICK, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockSmoothBrick.EnumStonebrickType.a(itemstack.getData()).c();
-            }
-        })).c("stonebricksmooth"));
-        b(Blocks.BROWN_MUSHROOM_BLOCK);
-        b(Blocks.RED_MUSHROOM_BLOCK);
-        b(Blocks.IRON_BARS);
-        b(Blocks.GLASS_PANE);
-        b(Blocks.MELON_BLOCK);
-        a(Blocks.VINE, (Item) (new ItemWithAuxData(Blocks.VINE, false)));
-        b(Blocks.FENCE_GATE);
-        b(Blocks.SPRUCE_FENCE_GATE);
-        b(Blocks.BIRCH_FENCE_GATE);
-        b(Blocks.JUNGLE_FENCE_GATE);
-        b(Blocks.DARK_OAK_FENCE_GATE);
-        b(Blocks.ACACIA_FENCE_GATE);
-        b(Blocks.BRICK_STAIRS);
-        b(Blocks.STONE_BRICK_STAIRS);
-        b((Block) Blocks.MYCELIUM);
-        a(Blocks.WATERLILY, (Item) (new ItemWaterLily(Blocks.WATERLILY)));
-        b(Blocks.NETHER_BRICK);
-        b(Blocks.NETHER_BRICK_FENCE);
-        b(Blocks.NETHER_BRICK_STAIRS);
-        b(Blocks.ENCHANTING_TABLE);
-        b(Blocks.END_PORTAL_FRAME);
-        b(Blocks.END_STONE);
-        b(Blocks.END_BRICKS);
-        b(Blocks.DRAGON_EGG);
-        b(Blocks.REDSTONE_LAMP);
-        a((Block) Blocks.WOODEN_SLAB, (new ItemStep(Blocks.WOODEN_SLAB, Blocks.WOODEN_SLAB, Blocks.DOUBLE_WOODEN_SLAB)).c("woodSlab"));
-        b(Blocks.SANDSTONE_STAIRS);
-        b(Blocks.EMERALD_ORE);
-        b(Blocks.ENDER_CHEST);
-        b((Block) Blocks.TRIPWIRE_HOOK);
-        b(Blocks.EMERALD_BLOCK);
-        b(Blocks.SPRUCE_STAIRS);
-        b(Blocks.BIRCH_STAIRS);
-        b(Blocks.JUNGLE_STAIRS);
-        b(Blocks.COMMAND_BLOCK);
-        b((Block) Blocks.BEACON);
-        a(Blocks.COBBLESTONE_WALL, (new ItemMultiTexture(Blocks.COBBLESTONE_WALL, Blocks.COBBLESTONE_WALL, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockCobbleWall.EnumCobbleVariant.a(itemstack.getData()).c();
-            }
-        })).c("cobbleWall"));
-        b(Blocks.WOODEN_BUTTON);
-        a(Blocks.ANVIL, (new ItemAnvil(Blocks.ANVIL)).c("anvil"));
-        b(Blocks.TRAPPED_CHEST);
-        b(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE);
-        b(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
-        b((Block) Blocks.DAYLIGHT_DETECTOR);
-        b(Blocks.REDSTONE_BLOCK);
-        b(Blocks.QUARTZ_ORE);
-        b((Block) Blocks.HOPPER);
-        a(Blocks.QUARTZ_BLOCK, (new ItemMultiTexture(Blocks.QUARTZ_BLOCK, Blocks.QUARTZ_BLOCK, new String[] { "default", "chiseled", "lines"})).c("quartzBlock"));
-        b(Blocks.QUARTZ_STAIRS);
-        b(Blocks.ACTIVATOR_RAIL);
-        b(Blocks.DROPPER);
-        a(Blocks.STAINED_HARDENED_CLAY, (new ItemCloth(Blocks.STAINED_HARDENED_CLAY)).c("clayHardenedStained"));
+    public static void r() {
+        a(Blocks.AIR, (Item) (new ItemAir(Blocks.AIR, new Item.Info())));
+        a(Blocks.STONE, CreativeModeTab.b);
+        a(Blocks.GRANITE, CreativeModeTab.b);
+        a(Blocks.POLISHED_GRANITE, CreativeModeTab.b);
+        a(Blocks.DIORITE, CreativeModeTab.b);
+        a(Blocks.POLISHED_DIORITE, CreativeModeTab.b);
+        a(Blocks.ANDESITE, CreativeModeTab.b);
+        a(Blocks.POLISHED_ANDESITE, CreativeModeTab.b);
+        a(Blocks.GRASS_BLOCK, CreativeModeTab.b);
+        a(Blocks.DIRT, CreativeModeTab.b);
+        a(Blocks.COARSE_DIRT, CreativeModeTab.b);
+        a(Blocks.PODZOL, CreativeModeTab.b);
+        a(Blocks.COBBLESTONE, CreativeModeTab.b);
+        a(Blocks.OAK_PLANKS, CreativeModeTab.b);
+        a(Blocks.SPRUCE_PLANKS, CreativeModeTab.b);
+        a(Blocks.BIRCH_PLANKS, CreativeModeTab.b);
+        a(Blocks.JUNGLE_PLANKS, CreativeModeTab.b);
+        a(Blocks.ACACIA_PLANKS, CreativeModeTab.b);
+        a(Blocks.DARK_OAK_PLANKS, CreativeModeTab.b);
+        a(Blocks.OAK_SAPLING, CreativeModeTab.c);
+        a(Blocks.SPRUCE_SAPLING, CreativeModeTab.c);
+        a(Blocks.BIRCH_SAPLING, CreativeModeTab.c);
+        a(Blocks.JUNGLE_SAPLING, CreativeModeTab.c);
+        a(Blocks.ACACIA_SAPLING, CreativeModeTab.c);
+        a(Blocks.DARK_OAK_SAPLING, CreativeModeTab.c);
+        a(Blocks.BEDROCK, CreativeModeTab.b);
+        a(Blocks.SAND, CreativeModeTab.b);
+        a(Blocks.RED_SAND, CreativeModeTab.b);
+        a(Blocks.GRAVEL, CreativeModeTab.b);
+        a(Blocks.GOLD_ORE, CreativeModeTab.b);
+        a(Blocks.IRON_ORE, CreativeModeTab.b);
+        a(Blocks.COAL_ORE, CreativeModeTab.b);
+        a(Blocks.OAK_LOG, CreativeModeTab.b);
+        a(Blocks.SPRUCE_LOG, CreativeModeTab.b);
+        a(Blocks.BIRCH_LOG, CreativeModeTab.b);
+        a(Blocks.JUNGLE_LOG, CreativeModeTab.b);
+        a(Blocks.ACACIA_LOG, CreativeModeTab.b);
+        a(Blocks.DARK_OAK_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_OAK_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_SPRUCE_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_BIRCH_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_JUNGLE_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_ACACIA_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_DARK_OAK_LOG, CreativeModeTab.b);
+        a(Blocks.STRIPPED_OAK_WOOD, CreativeModeTab.b);
+        a(Blocks.STRIPPED_SPRUCE_WOOD, CreativeModeTab.b);
+        a(Blocks.STRIPPED_BIRCH_WOOD, CreativeModeTab.b);
+        a(Blocks.STRIPPED_JUNGLE_WOOD, CreativeModeTab.b);
+        a(Blocks.STRIPPED_ACACIA_WOOD, CreativeModeTab.b);
+        a(Blocks.STRIPPED_DARK_OAK_WOOD, CreativeModeTab.b);
+        a(Blocks.OAK_WOOD, CreativeModeTab.b);
+        a(Blocks.SPRUCE_WOOD, CreativeModeTab.b);
+        a(Blocks.BIRCH_WOOD, CreativeModeTab.b);
+        a(Blocks.JUNGLE_WOOD, CreativeModeTab.b);
+        a(Blocks.ACACIA_WOOD, CreativeModeTab.b);
+        a(Blocks.DARK_OAK_WOOD, CreativeModeTab.b);
+        a(Blocks.OAK_LEAVES, CreativeModeTab.c);
+        a(Blocks.SPRUCE_LEAVES, CreativeModeTab.c);
+        a(Blocks.BIRCH_LEAVES, CreativeModeTab.c);
+        a(Blocks.JUNGLE_LEAVES, CreativeModeTab.c);
+        a(Blocks.ACACIA_LEAVES, CreativeModeTab.c);
+        a(Blocks.DARK_OAK_LEAVES, CreativeModeTab.c);
+        a(Blocks.SPONGE, CreativeModeTab.b);
+        a(Blocks.WET_SPONGE, CreativeModeTab.b);
+        a(Blocks.GLASS, CreativeModeTab.b);
+        a(Blocks.LAPIS_ORE, CreativeModeTab.b);
+        a(Blocks.LAPIS_BLOCK, CreativeModeTab.b);
+        a(Blocks.DISPENSER, CreativeModeTab.d);
+        a(Blocks.SANDSTONE, CreativeModeTab.b);
+        a(Blocks.CHISELED_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.CUT_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.NOTE_BLOCK, CreativeModeTab.d);
+        a(Blocks.POWERED_RAIL, CreativeModeTab.e);
+        a(Blocks.DETECTOR_RAIL, CreativeModeTab.e);
+        a(Blocks.STICKY_PISTON, CreativeModeTab.d);
+        a(Blocks.COBWEB, CreativeModeTab.c);
+        a(Blocks.GRASS, CreativeModeTab.c);
+        a(Blocks.FERN, CreativeModeTab.c);
+        a(Blocks.DEAD_BUSH, CreativeModeTab.c);
+        a(Blocks.SEAGRASS, CreativeModeTab.c);
+        a(Blocks.SEA_PICKLE, CreativeModeTab.c);
+        a(Blocks.PISTON, CreativeModeTab.d);
+        a(Blocks.WHITE_WOOL, CreativeModeTab.b);
+        a(Blocks.ORANGE_WOOL, CreativeModeTab.b);
+        a(Blocks.MAGENTA_WOOL, CreativeModeTab.b);
+        a(Blocks.LIGHT_BLUE_WOOL, CreativeModeTab.b);
+        a(Blocks.YELLOW_WOOL, CreativeModeTab.b);
+        a(Blocks.LIME_WOOL, CreativeModeTab.b);
+        a(Blocks.PINK_WOOL, CreativeModeTab.b);
+        a(Blocks.GRAY_WOOL, CreativeModeTab.b);
+        a(Blocks.LIGHT_GRAY_WOOL, CreativeModeTab.b);
+        a(Blocks.CYAN_WOOL, CreativeModeTab.b);
+        a(Blocks.PURPLE_WOOL, CreativeModeTab.b);
+        a(Blocks.BLUE_WOOL, CreativeModeTab.b);
+        a(Blocks.BROWN_WOOL, CreativeModeTab.b);
+        a(Blocks.GREEN_WOOL, CreativeModeTab.b);
+        a(Blocks.RED_WOOL, CreativeModeTab.b);
+        a(Blocks.BLACK_WOOL, CreativeModeTab.b);
+        a(Blocks.DANDELION, CreativeModeTab.c);
+        a(Blocks.POPPY, CreativeModeTab.c);
+        a(Blocks.BLUE_ORCHID, CreativeModeTab.c);
+        a(Blocks.ALLIUM, CreativeModeTab.c);
+        a(Blocks.AZURE_BLUET, CreativeModeTab.c);
+        a(Blocks.RED_TULIP, CreativeModeTab.c);
+        a(Blocks.ORANGE_TULIP, CreativeModeTab.c);
+        a(Blocks.WHITE_TULIP, CreativeModeTab.c);
+        a(Blocks.PINK_TULIP, CreativeModeTab.c);
+        a(Blocks.OXEYE_DAISY, CreativeModeTab.c);
+        a(Blocks.BROWN_MUSHROOM, CreativeModeTab.c);
+        a(Blocks.RED_MUSHROOM, CreativeModeTab.c);
+        a(Blocks.GOLD_BLOCK, CreativeModeTab.b);
+        a(Blocks.IRON_BLOCK, CreativeModeTab.b);
+        a(Blocks.OAK_SLAB, CreativeModeTab.b);
+        a(Blocks.SPRUCE_SLAB, CreativeModeTab.b);
+        a(Blocks.BIRCH_SLAB, CreativeModeTab.b);
+        a(Blocks.JUNGLE_SLAB, CreativeModeTab.b);
+        a(Blocks.ACACIA_SLAB, CreativeModeTab.b);
+        a(Blocks.DARK_OAK_SLAB, CreativeModeTab.b);
+        a(Blocks.STONE_SLAB, CreativeModeTab.b);
+        a(Blocks.SANDSTONE_SLAB, CreativeModeTab.b);
+        a(Blocks.PETRIFIED_OAK_SLAB, CreativeModeTab.b);
+        a(Blocks.COBBLESTONE_SLAB, CreativeModeTab.b);
+        a(Blocks.BRICK_SLAB, CreativeModeTab.b);
+        a(Blocks.STONE_BRICK_SLAB, CreativeModeTab.b);
+        a(Blocks.NETHER_BRICK_SLAB, CreativeModeTab.b);
+        a(Blocks.QUARTZ_SLAB, CreativeModeTab.b);
+        a(Blocks.RED_SANDSTONE_SLAB, CreativeModeTab.b);
+        a(Blocks.PURPUR_SLAB, CreativeModeTab.b);
+        a(Blocks.PRISMARINE_SLAB, CreativeModeTab.b);
+        a(Blocks.PRISMARINE_BRICK_SLAB, CreativeModeTab.b);
+        a(Blocks.DARK_PRISMARINE_SLAB, CreativeModeTab.b);
+        a(Blocks.SMOOTH_QUARTZ, CreativeModeTab.b);
+        a(Blocks.SMOOTH_RED_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.SMOOTH_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.SMOOTH_STONE, CreativeModeTab.b);
+        a(Blocks.BRICKS, CreativeModeTab.b);
+        a(Blocks.TNT, CreativeModeTab.d);
+        a(Blocks.BOOKSHELF, CreativeModeTab.b);
+        a(Blocks.MOSSY_COBBLESTONE, CreativeModeTab.b);
+        a(Blocks.OBSIDIAN, CreativeModeTab.b);
+        a((ItemBlock) (new ItemBlockWallable(Blocks.TORCH, Blocks.WALL_TORCH, (new Item.Info()).a(CreativeModeTab.c))));
+        a(Blocks.END_ROD, CreativeModeTab.c);
+        a(Blocks.CHORUS_PLANT, CreativeModeTab.c);
+        a(Blocks.CHORUS_FLOWER, CreativeModeTab.c);
+        a(Blocks.PURPUR_BLOCK, CreativeModeTab.b);
+        a(Blocks.PURPUR_PILLAR, CreativeModeTab.b);
+        a(Blocks.PURPUR_STAIRS, CreativeModeTab.b);
+        b(Blocks.SPAWNER);
+        a(Blocks.OAK_STAIRS, CreativeModeTab.b);
+        a(Blocks.CHEST, CreativeModeTab.c);
+        a(Blocks.DIAMOND_ORE, CreativeModeTab.b);
+        a(Blocks.DIAMOND_BLOCK, CreativeModeTab.b);
+        a(Blocks.CRAFTING_TABLE, CreativeModeTab.c);
+        a(Blocks.FARMLAND, CreativeModeTab.c);
+        a(Blocks.FURNACE, CreativeModeTab.c);
+        a(Blocks.LADDER, CreativeModeTab.c);
+        a(Blocks.RAIL, CreativeModeTab.e);
+        a(Blocks.COBBLESTONE_STAIRS, CreativeModeTab.b);
+        a(Blocks.LEVER, CreativeModeTab.d);
+        a(Blocks.STONE_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.OAK_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.SPRUCE_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.BIRCH_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.JUNGLE_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.ACACIA_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.DARK_OAK_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.REDSTONE_ORE, CreativeModeTab.b);
+        a((ItemBlock) (new ItemBlockWallable(Blocks.REDSTONE_TORCH, Blocks.REDSTONE_WALL_TORCH, (new Item.Info()).a(CreativeModeTab.d))));
+        a(Blocks.STONE_BUTTON, CreativeModeTab.d);
+        a(Blocks.SNOW, CreativeModeTab.c);
+        a(Blocks.ICE, CreativeModeTab.b);
+        a(Blocks.SNOW_BLOCK, CreativeModeTab.b);
+        a(Blocks.CACTUS, CreativeModeTab.c);
+        a(Blocks.CLAY, CreativeModeTab.b);
+        a(Blocks.JUKEBOX, CreativeModeTab.c);
+        a(Blocks.OAK_FENCE, CreativeModeTab.c);
+        a(Blocks.SPRUCE_FENCE, CreativeModeTab.c);
+        a(Blocks.BIRCH_FENCE, CreativeModeTab.c);
+        a(Blocks.JUNGLE_FENCE, CreativeModeTab.c);
+        a(Blocks.ACACIA_FENCE, CreativeModeTab.c);
+        a(Blocks.DARK_OAK_FENCE, CreativeModeTab.c);
+        a(Blocks.PUMPKIN, CreativeModeTab.b);
+        a(Blocks.CARVED_PUMPKIN, CreativeModeTab.b);
+        a(Blocks.NETHERRACK, CreativeModeTab.b);
+        a(Blocks.SOUL_SAND, CreativeModeTab.b);
+        a(Blocks.GLOWSTONE, CreativeModeTab.b);
+        a(Blocks.JACK_O_LANTERN, CreativeModeTab.b);
+        a(Blocks.OAK_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.SPRUCE_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.BIRCH_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.JUNGLE_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.ACACIA_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.DARK_OAK_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.INFESTED_STONE, CreativeModeTab.c);
+        a(Blocks.INFESTED_COBBLESTONE, CreativeModeTab.c);
+        a(Blocks.INFESTED_STONE_BRICKS, CreativeModeTab.c);
+        a(Blocks.INFESTED_MOSSY_STONE_BRICKS, CreativeModeTab.c);
+        a(Blocks.INFESTED_CRACKED_STONE_BRICKS, CreativeModeTab.c);
+        a(Blocks.INFESTED_CHISELED_STONE_BRICKS, CreativeModeTab.c);
+        a(Blocks.STONE_BRICKS, CreativeModeTab.b);
+        a(Blocks.MOSSY_STONE_BRICKS, CreativeModeTab.b);
+        a(Blocks.CRACKED_STONE_BRICKS, CreativeModeTab.b);
+        a(Blocks.CHISELED_STONE_BRICKS, CreativeModeTab.b);
+        a(Blocks.BROWN_MUSHROOM_BLOCK, CreativeModeTab.c);
+        a(Blocks.RED_MUSHROOM_BLOCK, CreativeModeTab.c);
+        a(Blocks.MUSHROOM_STEM, CreativeModeTab.c);
+        a(Blocks.IRON_BARS, CreativeModeTab.c);
+        a(Blocks.GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.MELON, CreativeModeTab.b);
+        a(Blocks.VINE, CreativeModeTab.c);
+        a(Blocks.OAK_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.SPRUCE_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.BIRCH_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.JUNGLE_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.ACACIA_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.DARK_OAK_FENCE_GATE, CreativeModeTab.d);
+        a(Blocks.BRICK_STAIRS, CreativeModeTab.b);
+        a(Blocks.STONE_BRICK_STAIRS, CreativeModeTab.b);
+        a(Blocks.MYCELIUM, CreativeModeTab.b);
+        a((ItemBlock) (new ItemWaterLily(Blocks.LILY_PAD, (new Item.Info()).a(CreativeModeTab.c))));
+        a(Blocks.NETHER_BRICKS, CreativeModeTab.b);
+        a(Blocks.NETHER_BRICK_FENCE, CreativeModeTab.c);
+        a(Blocks.NETHER_BRICK_STAIRS, CreativeModeTab.b);
+        a(Blocks.ENCHANTING_TABLE, CreativeModeTab.c);
+        a(Blocks.END_PORTAL_FRAME, CreativeModeTab.c);
+        a(Blocks.END_STONE, CreativeModeTab.b);
+        a(Blocks.END_STONE_BRICKS, CreativeModeTab.b);
+        a(new ItemBlock(Blocks.DRAGON_EGG, (new Item.Info()).a(EnumItemRarity.EPIC)));
+        a(Blocks.REDSTONE_LAMP, CreativeModeTab.d);
+        a(Blocks.SANDSTONE_STAIRS, CreativeModeTab.b);
+        a(Blocks.EMERALD_ORE, CreativeModeTab.b);
+        a(Blocks.ENDER_CHEST, CreativeModeTab.c);
+        a(Blocks.TRIPWIRE_HOOK, CreativeModeTab.d);
+        a(Blocks.EMERALD_BLOCK, CreativeModeTab.b);
+        a(Blocks.SPRUCE_STAIRS, CreativeModeTab.b);
+        a(Blocks.BIRCH_STAIRS, CreativeModeTab.b);
+        a(Blocks.JUNGLE_STAIRS, CreativeModeTab.b);
+        a((ItemBlock) (new ItemRestricted(Blocks.COMMAND_BLOCK, (new Item.Info()).a(EnumItemRarity.EPIC))));
+        a(new ItemBlock(Blocks.BEACON, (new Item.Info()).a(CreativeModeTab.f).a(EnumItemRarity.RARE)));
+        a(Blocks.COBBLESTONE_WALL, CreativeModeTab.c);
+        a(Blocks.MOSSY_COBBLESTONE_WALL, CreativeModeTab.c);
+        a(Blocks.OAK_BUTTON, CreativeModeTab.d);
+        a(Blocks.SPRUCE_BUTTON, CreativeModeTab.d);
+        a(Blocks.BIRCH_BUTTON, CreativeModeTab.d);
+        a(Blocks.JUNGLE_BUTTON, CreativeModeTab.d);
+        a(Blocks.ACACIA_BUTTON, CreativeModeTab.d);
+        a(Blocks.DARK_OAK_BUTTON, CreativeModeTab.d);
+        a(Blocks.ANVIL, CreativeModeTab.c);
+        a(Blocks.CHIPPED_ANVIL, CreativeModeTab.c);
+        a(Blocks.DAMAGED_ANVIL, CreativeModeTab.c);
+        a(Blocks.TRAPPED_CHEST, CreativeModeTab.d);
+        a(Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, CreativeModeTab.d);
+        a(Blocks.DAYLIGHT_DETECTOR, CreativeModeTab.d);
+        a(Blocks.REDSTONE_BLOCK, CreativeModeTab.d);
+        a(Blocks.NETHER_QUARTZ_ORE, CreativeModeTab.b);
+        a(Blocks.HOPPER, CreativeModeTab.d);
+        a(Blocks.CHISELED_QUARTZ_BLOCK, CreativeModeTab.b);
+        a(Blocks.QUARTZ_BLOCK, CreativeModeTab.b);
+        a(Blocks.QUARTZ_PILLAR, CreativeModeTab.b);
+        a(Blocks.QUARTZ_STAIRS, CreativeModeTab.b);
+        a(Blocks.ACTIVATOR_RAIL, CreativeModeTab.e);
+        a(Blocks.DROPPER, CreativeModeTab.d);
+        a(Blocks.WHITE_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.ORANGE_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.MAGENTA_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.LIGHT_BLUE_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.YELLOW_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.LIME_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.PINK_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.GRAY_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.LIGHT_GRAY_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.CYAN_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.PURPLE_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.BLUE_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.BROWN_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.GREEN_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.RED_TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.BLACK_TERRACOTTA, CreativeModeTab.b);
         b(Blocks.BARRIER);
-        b(Blocks.IRON_TRAPDOOR);
-        b(Blocks.HAY_BLOCK);
-        a(Blocks.CARPET, (new ItemCloth(Blocks.CARPET)).c("woolCarpet"));
-        b(Blocks.HARDENED_CLAY);
-        b(Blocks.COAL_BLOCK);
-        b(Blocks.PACKED_ICE);
-        b(Blocks.ACACIA_STAIRS);
-        b(Blocks.DARK_OAK_STAIRS);
-        b(Blocks.SLIME);
-        b(Blocks.GRASS_PATH);
-        a((Block) Blocks.DOUBLE_PLANT, (new ItemMultiTexture(Blocks.DOUBLE_PLANT, Blocks.DOUBLE_PLANT, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockTallPlant.EnumTallFlowerVariants.a(itemstack.getData()).c();
-            }
-        })).c("doublePlant"));
-        a((Block) Blocks.STAINED_GLASS, (new ItemCloth(Blocks.STAINED_GLASS)).c("stainedGlass"));
-        a((Block) Blocks.STAINED_GLASS_PANE, (new ItemCloth(Blocks.STAINED_GLASS_PANE)).c("stainedGlassPane"));
-        a(Blocks.PRISMARINE, (new ItemMultiTexture(Blocks.PRISMARINE, Blocks.PRISMARINE, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockPrismarine.EnumPrismarineVariant.a(itemstack.getData()).c();
-            }
-        })).c("prismarine"));
-        b(Blocks.SEA_LANTERN);
-        a(Blocks.RED_SANDSTONE, (new ItemMultiTexture(Blocks.RED_SANDSTONE, Blocks.RED_SANDSTONE, new ItemMultiTexture.a() {
-            public String a(ItemStack itemstack) {
-                return BlockRedSandstone.EnumRedSandstoneVariant.a(itemstack.getData()).c();
-            }
-        })).c("redSandStone"));
-        b(Blocks.RED_SANDSTONE_STAIRS);
-        a((Block) Blocks.STONE_SLAB2, (new ItemStep(Blocks.STONE_SLAB2, Blocks.STONE_SLAB2, Blocks.DOUBLE_STONE_SLAB2)).c("stoneSlab2"));
-        b(Blocks.dc);
-        b(Blocks.dd);
-        b(Blocks.df);
-        b(Blocks.dg);
-        b(Blocks.dh);
-        b(Blocks.di);
-        b(Blocks.dj);
-        b(Blocks.dk);
-        a(Blocks.WHITE_SHULKER_BOX, (Item) (new ItemShulkerBox(Blocks.WHITE_SHULKER_BOX)));
-        a(Blocks.dm, (Item) (new ItemShulkerBox(Blocks.dm)));
-        a(Blocks.dn, (Item) (new ItemShulkerBox(Blocks.dn)));
-        a(Blocks.LIGHT_BLUE_SHULKER_BOX, (Item) (new ItemShulkerBox(Blocks.LIGHT_BLUE_SHULKER_BOX)));
-        a(Blocks.dp, (Item) (new ItemShulkerBox(Blocks.dp)));
-        a(Blocks.dq, (Item) (new ItemShulkerBox(Blocks.dq)));
-        a(Blocks.dr, (Item) (new ItemShulkerBox(Blocks.dr)));
-        a(Blocks.ds, (Item) (new ItemShulkerBox(Blocks.ds)));
-        a(Blocks.dt, (Item) (new ItemShulkerBox(Blocks.dt)));
-        a(Blocks.du, (Item) (new ItemShulkerBox(Blocks.du)));
-        a(Blocks.dv, (Item) (new ItemShulkerBox(Blocks.dv)));
-        a(Blocks.dw, (Item) (new ItemShulkerBox(Blocks.dw)));
-        a(Blocks.dx, (Item) (new ItemShulkerBox(Blocks.dx)));
-        a(Blocks.dy, (Item) (new ItemShulkerBox(Blocks.dy)));
-        a(Blocks.dz, (Item) (new ItemShulkerBox(Blocks.dz)));
-        a(Blocks.dA, (Item) (new ItemShulkerBox(Blocks.dA)));
-        b(Blocks.dB);
-        b(Blocks.dC);
-        b(Blocks.dD);
-        b(Blocks.dE);
-        b(Blocks.dF);
-        b(Blocks.dG);
-        b(Blocks.dH);
-        b(Blocks.dI);
-        b(Blocks.dJ);
-        b(Blocks.dK);
-        b(Blocks.dL);
-        b(Blocks.dM);
-        b(Blocks.dN);
-        b(Blocks.dO);
-        b(Blocks.dP);
-        b(Blocks.dQ);
-        a(Blocks.dR, (new ItemCloth(Blocks.dR)).c("concrete"));
-        a(Blocks.dS, (new ItemCloth(Blocks.dS)).c("concrete_powder"));
-        b(Blocks.STRUCTURE_BLOCK);
-        a(256, "iron_shovel", (new ItemSpade(Item.EnumToolMaterial.IRON)).c("shovelIron"));
-        a(257, "iron_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.IRON)).c("pickaxeIron"));
-        a(258, "iron_axe", (new ItemAxe(Item.EnumToolMaterial.IRON)).c("hatchetIron"));
-        a(259, "flint_and_steel", (new ItemFlintAndSteel()).c("flintAndSteel"));
-        a(260, "apple", (new ItemFood(4, 0.3F, false)).c("apple"));
-        a(261, "bow", (new ItemBow()).c("bow"));
-        a(262, "arrow", (new ItemArrow()).c("arrow"));
-        a(263, "coal", (new ItemCoal()).c("coal"));
-        a(264, "diamond", (new Item()).c("diamond").b(CreativeModeTab.l));
-        a(265, "iron_ingot", (new Item()).c("ingotIron").b(CreativeModeTab.l));
-        a(266, "gold_ingot", (new Item()).c("ingotGold").b(CreativeModeTab.l));
-        a(267, "iron_sword", (new ItemSword(Item.EnumToolMaterial.IRON)).c("swordIron"));
-        a(268, "wooden_sword", (new ItemSword(Item.EnumToolMaterial.WOOD)).c("swordWood"));
-        a(269, "wooden_shovel", (new ItemSpade(Item.EnumToolMaterial.WOOD)).c("shovelWood"));
-        a(270, "wooden_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.WOOD)).c("pickaxeWood"));
-        a(271, "wooden_axe", (new ItemAxe(Item.EnumToolMaterial.WOOD)).c("hatchetWood"));
-        a(272, "stone_sword", (new ItemSword(Item.EnumToolMaterial.STONE)).c("swordStone"));
-        a(273, "stone_shovel", (new ItemSpade(Item.EnumToolMaterial.STONE)).c("shovelStone"));
-        a(274, "stone_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.STONE)).c("pickaxeStone"));
-        a(275, "stone_axe", (new ItemAxe(Item.EnumToolMaterial.STONE)).c("hatchetStone"));
-        a(276, "diamond_sword", (new ItemSword(Item.EnumToolMaterial.DIAMOND)).c("swordDiamond"));
-        a(277, "diamond_shovel", (new ItemSpade(Item.EnumToolMaterial.DIAMOND)).c("shovelDiamond"));
-        a(278, "diamond_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.DIAMOND)).c("pickaxeDiamond"));
-        a(279, "diamond_axe", (new ItemAxe(Item.EnumToolMaterial.DIAMOND)).c("hatchetDiamond"));
-        a(280, "stick", (new Item()).n().c("stick").b(CreativeModeTab.l));
-        a(281, "bowl", (new Item()).c("bowl").b(CreativeModeTab.l));
-        a(282, "mushroom_stew", (new ItemSoup(6)).c("mushroomStew"));
-        a(283, "golden_sword", (new ItemSword(Item.EnumToolMaterial.GOLD)).c("swordGold"));
-        a(284, "golden_shovel", (new ItemSpade(Item.EnumToolMaterial.GOLD)).c("shovelGold"));
-        a(285, "golden_pickaxe", (new ItemPickaxe(Item.EnumToolMaterial.GOLD)).c("pickaxeGold"));
-        a(286, "golden_axe", (new ItemAxe(Item.EnumToolMaterial.GOLD)).c("hatchetGold"));
-        a(287, "string", (new ItemReed(Blocks.TRIPWIRE)).c("string").b(CreativeModeTab.l));
-        a(288, "feather", (new Item()).c("feather").b(CreativeModeTab.l));
-        a(289, "gunpowder", (new Item()).c("sulphur").b(CreativeModeTab.l));
-        a(290, "wooden_hoe", (new ItemHoe(Item.EnumToolMaterial.WOOD)).c("hoeWood"));
-        a(291, "stone_hoe", (new ItemHoe(Item.EnumToolMaterial.STONE)).c("hoeStone"));
-        a(292, "iron_hoe", (new ItemHoe(Item.EnumToolMaterial.IRON)).c("hoeIron"));
-        a(293, "diamond_hoe", (new ItemHoe(Item.EnumToolMaterial.DIAMOND)).c("hoeDiamond"));
-        a(294, "golden_hoe", (new ItemHoe(Item.EnumToolMaterial.GOLD)).c("hoeGold"));
-        a(295, "wheat_seeds", (new ItemSeeds(Blocks.WHEAT, Blocks.FARMLAND)).c("seeds"));
-        a(296, "wheat", (new Item()).c("wheat").b(CreativeModeTab.l));
-        a(297, "bread", (new ItemFood(5, 0.6F, false)).c("bread"));
-        a(298, "leather_helmet", (new ItemArmor(ItemArmor.EnumArmorMaterial.LEATHER, 0, EnumItemSlot.HEAD)).c("helmetCloth"));
-        a(299, "leather_chestplate", (new ItemArmor(ItemArmor.EnumArmorMaterial.LEATHER, 0, EnumItemSlot.CHEST)).c("chestplateCloth"));
-        a(300, "leather_leggings", (new ItemArmor(ItemArmor.EnumArmorMaterial.LEATHER, 0, EnumItemSlot.LEGS)).c("leggingsCloth"));
-        a(301, "leather_boots", (new ItemArmor(ItemArmor.EnumArmorMaterial.LEATHER, 0, EnumItemSlot.FEET)).c("bootsCloth"));
-        a(302, "chainmail_helmet", (new ItemArmor(ItemArmor.EnumArmorMaterial.CHAIN, 1, EnumItemSlot.HEAD)).c("helmetChain"));
-        a(303, "chainmail_chestplate", (new ItemArmor(ItemArmor.EnumArmorMaterial.CHAIN, 1, EnumItemSlot.CHEST)).c("chestplateChain"));
-        a(304, "chainmail_leggings", (new ItemArmor(ItemArmor.EnumArmorMaterial.CHAIN, 1, EnumItemSlot.LEGS)).c("leggingsChain"));
-        a(305, "chainmail_boots", (new ItemArmor(ItemArmor.EnumArmorMaterial.CHAIN, 1, EnumItemSlot.FEET)).c("bootsChain"));
-        a(306, "iron_helmet", (new ItemArmor(ItemArmor.EnumArmorMaterial.IRON, 2, EnumItemSlot.HEAD)).c("helmetIron"));
-        a(307, "iron_chestplate", (new ItemArmor(ItemArmor.EnumArmorMaterial.IRON, 2, EnumItemSlot.CHEST)).c("chestplateIron"));
-        a(308, "iron_leggings", (new ItemArmor(ItemArmor.EnumArmorMaterial.IRON, 2, EnumItemSlot.LEGS)).c("leggingsIron"));
-        a(309, "iron_boots", (new ItemArmor(ItemArmor.EnumArmorMaterial.IRON, 2, EnumItemSlot.FEET)).c("bootsIron"));
-        a(310, "diamond_helmet", (new ItemArmor(ItemArmor.EnumArmorMaterial.DIAMOND, 3, EnumItemSlot.HEAD)).c("helmetDiamond"));
-        a(311, "diamond_chestplate", (new ItemArmor(ItemArmor.EnumArmorMaterial.DIAMOND, 3, EnumItemSlot.CHEST)).c("chestplateDiamond"));
-        a(312, "diamond_leggings", (new ItemArmor(ItemArmor.EnumArmorMaterial.DIAMOND, 3, EnumItemSlot.LEGS)).c("leggingsDiamond"));
-        a(313, "diamond_boots", (new ItemArmor(ItemArmor.EnumArmorMaterial.DIAMOND, 3, EnumItemSlot.FEET)).c("bootsDiamond"));
-        a(314, "golden_helmet", (new ItemArmor(ItemArmor.EnumArmorMaterial.GOLD, 4, EnumItemSlot.HEAD)).c("helmetGold"));
-        a(315, "golden_chestplate", (new ItemArmor(ItemArmor.EnumArmorMaterial.GOLD, 4, EnumItemSlot.CHEST)).c("chestplateGold"));
-        a(316, "golden_leggings", (new ItemArmor(ItemArmor.EnumArmorMaterial.GOLD, 4, EnumItemSlot.LEGS)).c("leggingsGold"));
-        a(317, "golden_boots", (new ItemArmor(ItemArmor.EnumArmorMaterial.GOLD, 4, EnumItemSlot.FEET)).c("bootsGold"));
-        a(318, "flint", (new Item()).c("flint").b(CreativeModeTab.l));
-        a(319, "porkchop", (new ItemFood(3, 0.3F, true)).c("porkchopRaw"));
-        a(320, "cooked_porkchop", (new ItemFood(8, 0.8F, true)).c("porkchopCooked"));
-        a(321, "painting", (new ItemHanging(EntityPainting.class)).c("painting"));
-        a(322, "golden_apple", (new ItemGoldenApple(4, 1.2F, false)).h().c("appleGold"));
-        a(323, "sign", (new ItemSign()).c("sign"));
-        a(324, "wooden_door", (new ItemDoor(Blocks.WOODEN_DOOR)).c("doorOak"));
-        Item item = (new ItemBucket(Blocks.AIR)).c("bucket").d(16);
+        a(Blocks.IRON_TRAPDOOR, CreativeModeTab.d);
+        a(Blocks.HAY_BLOCK, CreativeModeTab.b);
+        a(Blocks.WHITE_CARPET, CreativeModeTab.c);
+        a(Blocks.ORANGE_CARPET, CreativeModeTab.c);
+        a(Blocks.MAGENTA_CARPET, CreativeModeTab.c);
+        a(Blocks.LIGHT_BLUE_CARPET, CreativeModeTab.c);
+        a(Blocks.YELLOW_CARPET, CreativeModeTab.c);
+        a(Blocks.LIME_CARPET, CreativeModeTab.c);
+        a(Blocks.PINK_CARPET, CreativeModeTab.c);
+        a(Blocks.GRAY_CARPET, CreativeModeTab.c);
+        a(Blocks.LIGHT_GRAY_CARPET, CreativeModeTab.c);
+        a(Blocks.CYAN_CARPET, CreativeModeTab.c);
+        a(Blocks.PURPLE_CARPET, CreativeModeTab.c);
+        a(Blocks.BLUE_CARPET, CreativeModeTab.c);
+        a(Blocks.BROWN_CARPET, CreativeModeTab.c);
+        a(Blocks.GREEN_CARPET, CreativeModeTab.c);
+        a(Blocks.RED_CARPET, CreativeModeTab.c);
+        a(Blocks.BLACK_CARPET, CreativeModeTab.c);
+        a(Blocks.TERRACOTTA, CreativeModeTab.b);
+        a(Blocks.COAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.PACKED_ICE, CreativeModeTab.b);
+        a(Blocks.ACACIA_STAIRS, CreativeModeTab.b);
+        a(Blocks.DARK_OAK_STAIRS, CreativeModeTab.b);
+        a(Blocks.SLIME_BLOCK, CreativeModeTab.c);
+        a(Blocks.GRASS_PATH, CreativeModeTab.c);
+        a((ItemBlock) (new ItemBisected(Blocks.SUNFLOWER, (new Item.Info()).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBisected(Blocks.LILAC, (new Item.Info()).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBisected(Blocks.ROSE_BUSH, (new Item.Info()).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBisected(Blocks.PEONY, (new Item.Info()).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBisected(Blocks.TALL_GRASS, (new Item.Info()).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBisected(Blocks.LARGE_FERN, (new Item.Info()).a(CreativeModeTab.c))));
+        a(Blocks.WHITE_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.ORANGE_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.MAGENTA_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.LIGHT_BLUE_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.YELLOW_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.LIME_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.PINK_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.GRAY_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.LIGHT_GRAY_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.CYAN_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.PURPLE_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.BLUE_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.BROWN_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.GREEN_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.RED_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.BLACK_STAINED_GLASS, CreativeModeTab.b);
+        a(Blocks.WHITE_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.ORANGE_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.MAGENTA_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.LIGHT_BLUE_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.YELLOW_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.LIME_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.PINK_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.GRAY_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.LIGHT_GRAY_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.CYAN_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.PURPLE_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.BLUE_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.BROWN_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.GREEN_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.RED_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.BLACK_STAINED_GLASS_PANE, CreativeModeTab.c);
+        a(Blocks.PRISMARINE, CreativeModeTab.b);
+        a(Blocks.PRISMARINE_BRICKS, CreativeModeTab.b);
+        a(Blocks.DARK_PRISMARINE, CreativeModeTab.b);
+        a(Blocks.PRISMARINE_STAIRS, CreativeModeTab.b);
+        a(Blocks.PRISMARINE_BRICK_STAIRS, CreativeModeTab.b);
+        a(Blocks.DARK_PRISMARINE_STAIRS, CreativeModeTab.b);
+        a(Blocks.SEA_LANTERN, CreativeModeTab.b);
+        a(Blocks.RED_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.CHISELED_RED_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.CUT_RED_SANDSTONE, CreativeModeTab.b);
+        a(Blocks.RED_SANDSTONE_STAIRS, CreativeModeTab.b);
+        a((ItemBlock) (new ItemRestricted(Blocks.REPEATING_COMMAND_BLOCK, (new Item.Info()).a(EnumItemRarity.EPIC))));
+        a((ItemBlock) (new ItemRestricted(Blocks.CHAIN_COMMAND_BLOCK, (new Item.Info()).a(EnumItemRarity.EPIC))));
+        a(Blocks.MAGMA_BLOCK, CreativeModeTab.b);
+        a(Blocks.NETHER_WART_BLOCK, CreativeModeTab.b);
+        a(Blocks.RED_NETHER_BRICKS, CreativeModeTab.b);
+        a(Blocks.BONE_BLOCK, CreativeModeTab.b);
+        b(Blocks.STRUCTURE_VOID);
+        a(Blocks.OBSERVER, CreativeModeTab.d);
+        a(new ItemBlock(Blocks.SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.WHITE_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.ORANGE_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.MAGENTA_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.LIGHT_BLUE_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.YELLOW_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.LIME_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.PINK_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.GRAY_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.LIGHT_GRAY_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.CYAN_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.PURPLE_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.BLUE_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.BROWN_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.GREEN_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.RED_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(new ItemBlock(Blocks.BLACK_SHULKER_BOX, (new Item.Info()).a(1).a(CreativeModeTab.c)));
+        a(Blocks.WHITE_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.ORANGE_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.MAGENTA_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.YELLOW_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.LIME_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.PINK_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.GRAY_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.LIGHT_GRAY_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.CYAN_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.PURPLE_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.BLUE_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.BROWN_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.GREEN_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.RED_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.BLACK_GLAZED_TERRACOTTA, CreativeModeTab.c);
+        a(Blocks.WHITE_CONCRETE, CreativeModeTab.b);
+        a(Blocks.ORANGE_CONCRETE, CreativeModeTab.b);
+        a(Blocks.MAGENTA_CONCRETE, CreativeModeTab.b);
+        a(Blocks.LIGHT_BLUE_CONCRETE, CreativeModeTab.b);
+        a(Blocks.YELLOW_CONCRETE, CreativeModeTab.b);
+        a(Blocks.LIME_CONCRETE, CreativeModeTab.b);
+        a(Blocks.PINK_CONCRETE, CreativeModeTab.b);
+        a(Blocks.GRAY_CONCRETE, CreativeModeTab.b);
+        a(Blocks.LIGHT_GRAY_CONCRETE, CreativeModeTab.b);
+        a(Blocks.CYAN_CONCRETE, CreativeModeTab.b);
+        a(Blocks.PURPLE_CONCRETE, CreativeModeTab.b);
+        a(Blocks.BLUE_CONCRETE, CreativeModeTab.b);
+        a(Blocks.BROWN_CONCRETE, CreativeModeTab.b);
+        a(Blocks.GREEN_CONCRETE, CreativeModeTab.b);
+        a(Blocks.RED_CONCRETE, CreativeModeTab.b);
+        a(Blocks.BLACK_CONCRETE, CreativeModeTab.b);
+        a(Blocks.WHITE_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.ORANGE_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.MAGENTA_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.LIGHT_BLUE_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.YELLOW_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.LIME_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.PINK_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.GRAY_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.LIGHT_GRAY_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.CYAN_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.PURPLE_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.BLUE_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.BROWN_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.GREEN_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.RED_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.BLACK_CONCRETE_POWDER, CreativeModeTab.b);
+        a(Blocks.TURTLE_EGG, CreativeModeTab.f);
+        a(Blocks.DEAD_TUBE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.DEAD_BRAIN_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.DEAD_BUBBLE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.DEAD_FIRE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.DEAD_HORN_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.TUBE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.BRAIN_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.BUBBLE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.FIRE_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.HORN_CORAL_BLOCK, CreativeModeTab.b);
+        a(Blocks.TUBE_CORAL, CreativeModeTab.c);
+        a(Blocks.BRAIN_CORAL, CreativeModeTab.c);
+        a(Blocks.BUBBLE_CORAL, CreativeModeTab.c);
+        a(Blocks.FIRE_CORAL, CreativeModeTab.c);
+        a(Blocks.HORN_CORAL, CreativeModeTab.c);
+        a(Blocks.TUBE_CORAL_FAN, CreativeModeTab.c);
+        a(Blocks.BRAIN_CORAL_FAN, CreativeModeTab.c);
+        a(Blocks.BUBBLE_CORAL_FAN, CreativeModeTab.c);
+        a(Blocks.FIRE_CORAL_FAN, CreativeModeTab.c);
+        a(Blocks.HORN_CORAL_FAN, CreativeModeTab.c);
+        a(Blocks.BLUE_ICE, CreativeModeTab.b);
+        a(new ItemBlock(Blocks.CONDUIT, (new Item.Info()).a(CreativeModeTab.f).a(EnumItemRarity.RARE)));
+        a((ItemBlock) (new ItemBisected(Blocks.IRON_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.OAK_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.SPRUCE_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.BIRCH_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.JUNGLE_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.ACACIA_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a((ItemBlock) (new ItemBisected(Blocks.DARK_OAK_DOOR, (new Item.Info()).a(CreativeModeTab.d))));
+        a(Blocks.REPEATER, CreativeModeTab.d);
+        a(Blocks.COMPARATOR, CreativeModeTab.d);
+        a((ItemBlock) (new ItemRestricted(Blocks.STRUCTURE_BLOCK, (new Item.Info()).a(EnumItemRarity.EPIC))));
+        a("turtle_helmet", (Item) (new ItemArmor(EnumArmorMaterial.TURTLE, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("scute", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("iron_shovel", (Item) (new ItemSpade(EnumToolMaterial.IRON, 1.5F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("iron_pickaxe", (Item) (new ItemPickaxe(EnumToolMaterial.IRON, 1, -2.8F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("iron_axe", (Item) (new ItemAxe(EnumToolMaterial.IRON, 6.0F, -3.1F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("flint_and_steel", (Item) (new ItemFlintAndSteel((new Item.Info()).c(64).a(CreativeModeTab.i))));
+        a("apple", (Item) (new ItemFood(4, 0.3F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("bow", (Item) (new ItemBow((new Item.Info()).c(384).a(CreativeModeTab.j))));
+        a("arrow", (Item) (new ItemArrow((new Item.Info()).a(CreativeModeTab.j))));
+        a("coal", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("charcoal", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("diamond", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("iron_ingot", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("gold_ingot", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("iron_sword", (Item) (new ItemSword(EnumToolMaterial.IRON, 3, -2.4F, (new Item.Info()).a(CreativeModeTab.j))));
+        a("wooden_sword", (Item) (new ItemSword(EnumToolMaterial.WOOD, 3, -2.4F, (new Item.Info()).a(CreativeModeTab.j))));
+        a("wooden_shovel", (Item) (new ItemSpade(EnumToolMaterial.WOOD, 1.5F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("wooden_pickaxe", (Item) (new ItemPickaxe(EnumToolMaterial.WOOD, 1, -2.8F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("wooden_axe", (Item) (new ItemAxe(EnumToolMaterial.WOOD, 6.0F, -3.2F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("stone_sword", (Item) (new ItemSword(EnumToolMaterial.STONE, 3, -2.4F, (new Item.Info()).a(CreativeModeTab.j))));
+        a("stone_shovel", (Item) (new ItemSpade(EnumToolMaterial.STONE, 1.5F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("stone_pickaxe", (Item) (new ItemPickaxe(EnumToolMaterial.STONE, 1, -2.8F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("stone_axe", (Item) (new ItemAxe(EnumToolMaterial.STONE, 7.0F, -3.2F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("diamond_sword", (Item) (new ItemSword(EnumToolMaterial.DIAMOND, 3, -2.4F, (new Item.Info()).a(CreativeModeTab.j))));
+        a("diamond_shovel", (Item) (new ItemSpade(EnumToolMaterial.DIAMOND, 1.5F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("diamond_pickaxe", (Item) (new ItemPickaxe(EnumToolMaterial.DIAMOND, 1, -2.8F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("diamond_axe", (Item) (new ItemAxe(EnumToolMaterial.DIAMOND, 5.0F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("stick", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("bowl", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("mushroom_stew", (Item) (new ItemSoup(6, (new Item.Info()).a(1).a(CreativeModeTab.h))));
+        a("golden_sword", (Item) (new ItemSword(EnumToolMaterial.GOLD, 3, -2.4F, (new Item.Info()).a(CreativeModeTab.j))));
+        a("golden_shovel", (Item) (new ItemSpade(EnumToolMaterial.GOLD, 1.5F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("golden_pickaxe", (Item) (new ItemPickaxe(EnumToolMaterial.GOLD, 1, -2.8F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("golden_axe", (Item) (new ItemAxe(EnumToolMaterial.GOLD, 6.0F, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("string", (Item) (new ItemString((new Item.Info()).a(CreativeModeTab.f))));
+        a("feather", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("gunpowder", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("wooden_hoe", (Item) (new ItemHoe(EnumToolMaterial.WOOD, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("stone_hoe", (Item) (new ItemHoe(EnumToolMaterial.STONE, -2.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("iron_hoe", (Item) (new ItemHoe(EnumToolMaterial.IRON, -1.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("diamond_hoe", (Item) (new ItemHoe(EnumToolMaterial.DIAMOND, 0.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("golden_hoe", (Item) (new ItemHoe(EnumToolMaterial.GOLD, -3.0F, (new Item.Info()).a(CreativeModeTab.i))));
+        a("wheat_seeds", (Item) (new ItemSeeds(Blocks.WHEAT, (new Item.Info()).a(CreativeModeTab.l))));
+        a("wheat", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("bread", (Item) (new ItemFood(5, 0.6F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("leather_helmet", (Item) (new ItemArmorColorable(EnumArmorMaterial.LEATHER, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("leather_chestplate", (Item) (new ItemArmorColorable(EnumArmorMaterial.LEATHER, EnumItemSlot.CHEST, (new Item.Info()).a(CreativeModeTab.j))));
+        a("leather_leggings", (Item) (new ItemArmorColorable(EnumArmorMaterial.LEATHER, EnumItemSlot.LEGS, (new Item.Info()).a(CreativeModeTab.j))));
+        a("leather_boots", (Item) (new ItemArmorColorable(EnumArmorMaterial.LEATHER, EnumItemSlot.FEET, (new Item.Info()).a(CreativeModeTab.j))));
+        a("chainmail_helmet", (Item) (new ItemArmor(EnumArmorMaterial.CHAIN, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("chainmail_chestplate", (Item) (new ItemArmor(EnumArmorMaterial.CHAIN, EnumItemSlot.CHEST, (new Item.Info()).a(CreativeModeTab.j))));
+        a("chainmail_leggings", (Item) (new ItemArmor(EnumArmorMaterial.CHAIN, EnumItemSlot.LEGS, (new Item.Info()).a(CreativeModeTab.j))));
+        a("chainmail_boots", (Item) (new ItemArmor(EnumArmorMaterial.CHAIN, EnumItemSlot.FEET, (new Item.Info()).a(CreativeModeTab.j))));
+        a("iron_helmet", (Item) (new ItemArmor(EnumArmorMaterial.IRON, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("iron_chestplate", (Item) (new ItemArmor(EnumArmorMaterial.IRON, EnumItemSlot.CHEST, (new Item.Info()).a(CreativeModeTab.j))));
+        a("iron_leggings", (Item) (new ItemArmor(EnumArmorMaterial.IRON, EnumItemSlot.LEGS, (new Item.Info()).a(CreativeModeTab.j))));
+        a("iron_boots", (Item) (new ItemArmor(EnumArmorMaterial.IRON, EnumItemSlot.FEET, (new Item.Info()).a(CreativeModeTab.j))));
+        a("diamond_helmet", (Item) (new ItemArmor(EnumArmorMaterial.DIAMOND, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("diamond_chestplate", (Item) (new ItemArmor(EnumArmorMaterial.DIAMOND, EnumItemSlot.CHEST, (new Item.Info()).a(CreativeModeTab.j))));
+        a("diamond_leggings", (Item) (new ItemArmor(EnumArmorMaterial.DIAMOND, EnumItemSlot.LEGS, (new Item.Info()).a(CreativeModeTab.j))));
+        a("diamond_boots", (Item) (new ItemArmor(EnumArmorMaterial.DIAMOND, EnumItemSlot.FEET, (new Item.Info()).a(CreativeModeTab.j))));
+        a("golden_helmet", (Item) (new ItemArmor(EnumArmorMaterial.GOLD, EnumItemSlot.HEAD, (new Item.Info()).a(CreativeModeTab.j))));
+        a("golden_chestplate", (Item) (new ItemArmor(EnumArmorMaterial.GOLD, EnumItemSlot.CHEST, (new Item.Info()).a(CreativeModeTab.j))));
+        a("golden_leggings", (Item) (new ItemArmor(EnumArmorMaterial.GOLD, EnumItemSlot.LEGS, (new Item.Info()).a(CreativeModeTab.j))));
+        a("golden_boots", (Item) (new ItemArmor(EnumArmorMaterial.GOLD, EnumItemSlot.FEET, (new Item.Info()).a(CreativeModeTab.j))));
+        a("flint", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("porkchop", (Item) (new ItemFood(3, 0.3F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_porkchop", (Item) (new ItemFood(8, 0.8F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("painting", (Item) (new ItemHanging(EntityPainting.class, (new Item.Info()).a(CreativeModeTab.c))));
+        a("golden_apple", (Item) (new ItemGoldenApple(4, 1.2F, false, (new Item.Info()).a(CreativeModeTab.h).a(EnumItemRarity.RARE))).e());
+        a("enchanted_golden_apple", (Item) (new ItemGoldenAppleEnchanted(4, 1.2F, false, (new Item.Info()).a(CreativeModeTab.h).a(EnumItemRarity.EPIC))).e());
+        a("sign", (Item) (new ItemSign((new Item.Info()).a(16).a(CreativeModeTab.c))));
+        ItemBucket itembucket = new ItemBucket(FluidTypes.a, (new Item.Info()).a(16).a(CreativeModeTab.f));
 
-        a(325, "bucket", item);
-        a(326, "water_bucket", (new ItemBucket(Blocks.FLOWING_WATER)).c("bucketWater").b(item));
-        a(327, "lava_bucket", (new ItemBucket(Blocks.FLOWING_LAVA)).c("bucketLava").b(item));
-        a(328, "minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.RIDEABLE)).c("minecart"));
-        a(329, "saddle", (new ItemSaddle()).c("saddle"));
-        a(330, "iron_door", (new ItemDoor(Blocks.IRON_DOOR)).c("doorIron"));
-        a(331, "redstone", (new ItemRedstone()).c("redstone"));
-        a(332, "snowball", (new ItemSnowball()).c("snowball"));
-        a(333, "boat", new ItemBoat(EntityBoat.EnumBoatType.OAK));
-        a(334, "leather", (new Item()).c("leather").b(CreativeModeTab.l));
-        a(335, "milk_bucket", (new ItemMilkBucket()).c("milk").b(item));
-        a(336, "brick", (new Item()).c("brick").b(CreativeModeTab.l));
-        a(337, "clay_ball", (new Item()).c("clay").b(CreativeModeTab.l));
-        a(338, "reeds", (new ItemReed(Blocks.REEDS)).c("reeds").b(CreativeModeTab.l));
-        a(339, "paper", (new Item()).c("paper").b(CreativeModeTab.f));
-        a(340, "book", (new ItemBook()).c("book").b(CreativeModeTab.f));
-        a(341, "slime_ball", (new Item()).c("slimeball").b(CreativeModeTab.f));
-        a(342, "chest_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.CHEST)).c("minecartChest"));
-        a(343, "furnace_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.FURNACE)).c("minecartFurnace"));
-        a(344, "egg", (new ItemEgg()).c("egg"));
-        a(345, "compass", (new ItemCompass()).c("compass").b(CreativeModeTab.i));
-        a(346, "fishing_rod", (new ItemFishingRod()).c("fishingRod"));
-        a(347, "clock", (new ItemClock()).c("clock").b(CreativeModeTab.i));
-        a(348, "glowstone_dust", (new Item()).c("yellowDust").b(CreativeModeTab.l));
-        a(349, "fish", (new ItemFish(false)).c("fish").a(true));
-        a(350, "cooked_fish", (new ItemFish(true)).c("fish").a(true));
-        a(351, "dye", (new ItemDye()).c("dyePowder"));
-        a(352, "bone", (new Item()).c("bone").n().b(CreativeModeTab.f));
-        a(353, "sugar", (new Item()).c("sugar").b(CreativeModeTab.l));
-        a(354, "cake", (new ItemReed(Blocks.CAKE)).d(1).c("cake").b(CreativeModeTab.h));
-        a(355, "bed", (new ItemBed()).d(1).c("bed"));
-        a(356, "repeater", (new ItemReed(Blocks.UNPOWERED_REPEATER)).c("diode").b(CreativeModeTab.d));
-        a(357, "cookie", (new ItemFood(2, 0.1F, false)).c("cookie"));
-        a(358, "filled_map", (new ItemWorldMap()).c("map"));
-        a(359, "shears", (new ItemShears()).c("shears"));
-        a(360, "melon", (new ItemFood(2, 0.3F, false)).c("melon"));
-        a(361, "pumpkin_seeds", (new ItemSeeds(Blocks.PUMPKIN_STEM, Blocks.FARMLAND)).c("seeds_pumpkin"));
-        a(362, "melon_seeds", (new ItemSeeds(Blocks.MELON_STEM, Blocks.FARMLAND)).c("seeds_melon"));
-        a(363, "beef", (new ItemFood(3, 0.3F, true)).c("beefRaw"));
-        a(364, "cooked_beef", (new ItemFood(8, 0.8F, true)).c("beefCooked"));
-        a(365, "chicken", (new ItemFood(2, 0.3F, true)).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.3F).c("chickenRaw"));
-        a(366, "cooked_chicken", (new ItemFood(6, 0.6F, true)).c("chickenCooked"));
-        a(367, "rotten_flesh", (new ItemFood(4, 0.1F, true)).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.8F).c("rottenFlesh"));
-        a(368, "ender_pearl", (new ItemEnderPearl()).c("enderPearl"));
-        a(369, "blaze_rod", (new Item()).c("blazeRod").b(CreativeModeTab.l).n());
-        a(370, "ghast_tear", (new Item()).c("ghastTear").b(CreativeModeTab.k));
-        a(371, "gold_nugget", (new Item()).c("goldNugget").b(CreativeModeTab.l));
-        a(372, "nether_wart", (new ItemSeeds(Blocks.NETHER_WART, Blocks.SOUL_SAND)).c("netherStalkSeeds"));
-        a(373, "potion", (new ItemPotion()).c("potion"));
-        Item item1 = (new ItemGlassBottle()).c("glassBottle");
+        a("bucket", (Item) itembucket);
+        a("water_bucket", (Item) (new ItemBucket(FluidTypes.c, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
+        a("lava_bucket", (Item) (new ItemBucket(FluidTypes.e, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
+        a("minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.RIDEABLE, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("saddle", (Item) (new ItemSaddle((new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("redstone", (Item) (new ItemBlock(Blocks.REDSTONE_WIRE, (new Item.Info()).a(CreativeModeTab.d))));
+        a("snowball", (Item) (new ItemSnowball((new Item.Info()).a(16).a(CreativeModeTab.f))));
+        a("oak_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.OAK, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("leather", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("milk_bucket", (Item) (new ItemMilkBucket((new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
+        a("pufferfish_bucket", (Item) (new ItemFishBucket(EntityTypes.PUFFERFISH, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("salmon_bucket", (Item) (new ItemFishBucket(EntityTypes.SALMON, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("cod_bucket", (Item) (new ItemFishBucket(EntityTypes.COD, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("tropical_fish_bucket", (Item) (new ItemFishBucket(EntityTypes.TROPICAL_FISH, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("brick", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("clay_ball", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a(Blocks.SUGAR_CANE, CreativeModeTab.f);
+        a(Blocks.KELP, CreativeModeTab.f);
+        a(Blocks.DRIED_KELP_BLOCK, CreativeModeTab.b);
+        a("paper", new Item((new Item.Info()).a(CreativeModeTab.f)));
+        a("book", (Item) (new ItemBook((new Item.Info()).a(CreativeModeTab.f))));
+        a("slime_ball", new Item((new Item.Info()).a(CreativeModeTab.f)));
+        a("chest_minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.CHEST, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("furnace_minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.FURNACE, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("egg", (Item) (new ItemEgg((new Item.Info()).a(16).a(CreativeModeTab.l))));
+        a("compass", (Item) (new ItemCompass((new Item.Info()).a(CreativeModeTab.i))));
+        a("fishing_rod", (Item) (new ItemFishingRod((new Item.Info()).c(64).a(CreativeModeTab.i))));
+        a("clock", (Item) (new ItemClock((new Item.Info()).a(CreativeModeTab.i))));
+        a("glowstone_dust", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("cod", (Item) (new ItemFish(ItemFish.EnumFish.COD, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("salmon", (Item) (new ItemFish(ItemFish.EnumFish.SALMON, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("tropical_fish", (Item) (new ItemFish(ItemFish.EnumFish.TROPICAL_FISH, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("pufferfish", (Item) (new ItemFish(ItemFish.EnumFish.PUFFERFISH, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_cod", (Item) (new ItemFish(ItemFish.EnumFish.COD, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_salmon", (Item) (new ItemFish(ItemFish.EnumFish.SALMON, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("ink_sac", (Item) (new ItemDye(EnumColor.BLACK, (new Item.Info()).a(CreativeModeTab.l))));
+        a("rose_red", (Item) (new ItemDye(EnumColor.RED, (new Item.Info()).a(CreativeModeTab.l))));
+        a("cactus_green", (Item) (new ItemDye(EnumColor.GREEN, (new Item.Info()).a(CreativeModeTab.l))));
+        a("cocoa_beans", (Item) (new ItemCocoa(EnumColor.BROWN, (new Item.Info()).a(CreativeModeTab.l))));
+        a("lapis_lazuli", (Item) (new ItemDye(EnumColor.BLUE, (new Item.Info()).a(CreativeModeTab.l))));
+        a("purple_dye", (Item) (new ItemDye(EnumColor.PURPLE, (new Item.Info()).a(CreativeModeTab.l))));
+        a("cyan_dye", (Item) (new ItemDye(EnumColor.CYAN, (new Item.Info()).a(CreativeModeTab.l))));
+        a("light_gray_dye", (Item) (new ItemDye(EnumColor.LIGHT_GRAY, (new Item.Info()).a(CreativeModeTab.l))));
+        a("gray_dye", (Item) (new ItemDye(EnumColor.GRAY, (new Item.Info()).a(CreativeModeTab.l))));
+        a("pink_dye", (Item) (new ItemDye(EnumColor.PINK, (new Item.Info()).a(CreativeModeTab.l))));
+        a("lime_dye", (Item) (new ItemDye(EnumColor.LIME, (new Item.Info()).a(CreativeModeTab.l))));
+        a("dandelion_yellow", (Item) (new ItemDye(EnumColor.YELLOW, (new Item.Info()).a(CreativeModeTab.l))));
+        a("light_blue_dye", (Item) (new ItemDye(EnumColor.LIGHT_BLUE, (new Item.Info()).a(CreativeModeTab.l))));
+        a("magenta_dye", (Item) (new ItemDye(EnumColor.MAGENTA, (new Item.Info()).a(CreativeModeTab.l))));
+        a("orange_dye", (Item) (new ItemDye(EnumColor.ORANGE, (new Item.Info()).a(CreativeModeTab.l))));
+        a("bone_meal", (Item) (new ItemBoneMeal(EnumColor.WHITE, (new Item.Info()).a(CreativeModeTab.l))));
+        a("bone", new Item((new Item.Info()).a(CreativeModeTab.f)));
+        a("sugar", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a(new ItemBlock(Blocks.CAKE, (new Item.Info()).a(1).a(CreativeModeTab.h)));
+        a((ItemBlock) (new ItemBed(Blocks.WHITE_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.ORANGE_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.MAGENTA_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.LIGHT_BLUE_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.YELLOW_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.LIME_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.PINK_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.GRAY_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.LIGHT_GRAY_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.CYAN_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.PURPLE_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.BLUE_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.BROWN_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.GREEN_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.RED_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a((ItemBlock) (new ItemBed(Blocks.BLACK_BED, (new Item.Info()).a(1).a(CreativeModeTab.c))));
+        a("cookie", (Item) (new ItemFood(2, 0.1F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("filled_map", (Item) (new ItemWorldMap(new Item.Info())));
+        a("shears", (Item) (new ItemShears((new Item.Info()).c(238).a(CreativeModeTab.i))));
+        a("melon_slice", (Item) (new ItemFood(2, 0.3F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("dried_kelp", (Item) (new ItemFood(1, 0.3F, false, (new Item.Info()).a(CreativeModeTab.h))).f());
+        a("pumpkin_seeds", (Item) (new ItemSeeds(Blocks.PUMPKIN_STEM, (new Item.Info()).a(CreativeModeTab.l))));
+        a("melon_seeds", (Item) (new ItemSeeds(Blocks.MELON_STEM, (new Item.Info()).a(CreativeModeTab.l))));
+        a("beef", (Item) (new ItemFood(3, 0.3F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_beef", (Item) (new ItemFood(8, 0.8F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("chicken", (Item) (new ItemFood(2, 0.3F, true, (new Item.Info()).a(CreativeModeTab.h))).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.3F));
+        a("cooked_chicken", (Item) (new ItemFood(6, 0.6F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("rotten_flesh", (Item) (new ItemFood(4, 0.1F, true, (new Item.Info()).a(CreativeModeTab.h))).a(new MobEffect(MobEffects.HUNGER, 600, 0), 0.8F));
+        a("ender_pearl", (Item) (new ItemEnderPearl((new Item.Info()).a(16).a(CreativeModeTab.f))));
+        a("blaze_rod", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("ghast_tear", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("gold_nugget", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("nether_wart", (Item) (new ItemSeeds(Blocks.NETHER_WART, (new Item.Info()).a(CreativeModeTab.l))));
+        a("potion", (Item) (new ItemPotion((new Item.Info()).a(1).a(CreativeModeTab.k))));
+        ItemGlassBottle itemglassbottle = new ItemGlassBottle((new Item.Info()).a(CreativeModeTab.k));
 
-        a(374, "glass_bottle", item1);
-        a(375, "spider_eye", (new ItemFood(2, 0.8F, false)).a(new MobEffect(MobEffects.POISON, 100, 0), 1.0F).c("spiderEye"));
-        a(376, "fermented_spider_eye", (new Item()).c("fermentedSpiderEye").b(CreativeModeTab.k));
-        a(377, "blaze_powder", (new Item()).c("blazePowder").b(CreativeModeTab.k));
-        a(378, "magma_cream", (new Item()).c("magmaCream").b(CreativeModeTab.k));
-        a(379, "brewing_stand", (new ItemReed(Blocks.BREWING_STAND)).c("brewingStand").b(CreativeModeTab.k));
-        a(380, "cauldron", (new ItemReed(Blocks.cauldron)).c("cauldron").b(CreativeModeTab.k));
-        a(381, "ender_eye", (new ItemEnderEye()).c("eyeOfEnder"));
-        a(382, "speckled_melon", (new Item()).c("speckledMelon").b(CreativeModeTab.k));
-        a(383, "spawn_egg", (new ItemMonsterEgg()).c("monsterPlacer"));
-        a(384, "experience_bottle", (new ItemExpBottle()).c("expBottle"));
-        a(385, "fire_charge", (new ItemFireball()).c("fireball"));
-        a(386, "writable_book", (new ItemBookAndQuill()).c("writingBook").b(CreativeModeTab.f));
-        a(387, "written_book", (new ItemWrittenBook()).c("writtenBook").d(16));
-        a(388, "emerald", (new Item()).c("emerald").b(CreativeModeTab.l));
-        a(389, "item_frame", (new ItemHanging(EntityItemFrame.class)).c("frame"));
-        a(390, "flower_pot", (new ItemReed(Blocks.FLOWER_POT)).c("flowerPot").b(CreativeModeTab.c));
-        a(391, "carrot", (new ItemSeedFood(3, 0.6F, Blocks.CARROTS, Blocks.FARMLAND)).c("carrots"));
-        a(392, "potato", (new ItemSeedFood(1, 0.3F, Blocks.POTATOES, Blocks.FARMLAND)).c("potato"));
-        a(393, "baked_potato", (new ItemFood(5, 0.6F, false)).c("potatoBaked"));
-        a(394, "poisonous_potato", (new ItemFood(2, 0.3F, false)).a(new MobEffect(MobEffects.POISON, 100, 0), 0.6F).c("potatoPoisonous"));
-        a(395, "map", (new ItemMapEmpty()).c("emptyMap"));
-        a(396, "golden_carrot", (new ItemFood(6, 1.2F, false)).c("carrotGolden").b(CreativeModeTab.k));
-        a(397, "skull", (new ItemSkull()).c("skull"));
-        a(398, "carrot_on_a_stick", (new ItemCarrotStick()).c("carrotOnAStick"));
-        a(399, "nether_star", (new ItemNetherStar()).c("netherStar").b(CreativeModeTab.l));
-        a(400, "pumpkin_pie", (new ItemFood(8, 0.3F, false)).c("pumpkinPie").b(CreativeModeTab.h));
-        a(401, "fireworks", (new ItemFireworks()).c("fireworks"));
-        a(402, "firework_charge", (new ItemFireworksCharge()).c("fireworksCharge").b(CreativeModeTab.f));
-        a(403, "enchanted_book", (new ItemEnchantedBook()).d(1).c("enchantedBook"));
-        a(404, "comparator", (new ItemReed(Blocks.UNPOWERED_COMPARATOR)).c("comparator").b(CreativeModeTab.d));
-        a(405, "netherbrick", (new Item()).c("netherbrick").b(CreativeModeTab.l));
-        a(406, "quartz", (new Item()).c("netherquartz").b(CreativeModeTab.l));
-        a(407, "tnt_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.TNT)).c("minecartTnt"));
-        a(408, "hopper_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.HOPPER)).c("minecartHopper"));
-        a(409, "prismarine_shard", (new Item()).c("prismarineShard").b(CreativeModeTab.l));
-        a(410, "prismarine_crystals", (new Item()).c("prismarineCrystals").b(CreativeModeTab.l));
-        a(411, "rabbit", (new ItemFood(3, 0.3F, true)).c("rabbitRaw"));
-        a(412, "cooked_rabbit", (new ItemFood(5, 0.6F, true)).c("rabbitCooked"));
-        a(413, "rabbit_stew", (new ItemSoup(10)).c("rabbitStew"));
-        a(414, "rabbit_foot", (new Item()).c("rabbitFoot").b(CreativeModeTab.k));
-        a(415, "rabbit_hide", (new Item()).c("rabbitHide").b(CreativeModeTab.l));
-        a(416, "armor_stand", (new ItemArmorStand()).c("armorStand").d(16));
-        a(417, "iron_horse_armor", (new Item()).c("horsearmormetal").d(1).b(CreativeModeTab.f));
-        a(418, "golden_horse_armor", (new Item()).c("horsearmorgold").d(1).b(CreativeModeTab.f));
-        a(419, "diamond_horse_armor", (new Item()).c("horsearmordiamond").d(1).b(CreativeModeTab.f));
-        a(420, "lead", (new ItemLeash()).c("leash"));
-        a(421, "name_tag", (new ItemNameTag()).c("nameTag"));
-        a(422, "command_block_minecart", (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK)).c("minecartCommandBlock").b((CreativeModeTab) null));
-        a(423, "mutton", (new ItemFood(2, 0.3F, true)).c("muttonRaw"));
-        a(424, "cooked_mutton", (new ItemFood(6, 0.8F, true)).c("muttonCooked"));
-        a(425, "banner", (new ItemBanner()).c("banner"));
-        a(426, "end_crystal", new ItemEndCrystal());
-        a(427, "spruce_door", (new ItemDoor(Blocks.SPRUCE_DOOR)).c("doorSpruce"));
-        a(428, "birch_door", (new ItemDoor(Blocks.BIRCH_DOOR)).c("doorBirch"));
-        a(429, "jungle_door", (new ItemDoor(Blocks.JUNGLE_DOOR)).c("doorJungle"));
-        a(430, "acacia_door", (new ItemDoor(Blocks.ACACIA_DOOR)).c("doorAcacia"));
-        a(431, "dark_oak_door", (new ItemDoor(Blocks.DARK_OAK_DOOR)).c("doorDarkOak"));
-        a(432, "chorus_fruit", (new ItemChorusFruit(4, 0.3F)).h().c("chorusFruit").b(CreativeModeTab.l));
-        a(433, "chorus_fruit_popped", (new Item()).c("chorusFruitPopped").b(CreativeModeTab.l));
-        a(434, "beetroot", (new ItemFood(1, 0.6F, false)).c("beetroot"));
-        a(435, "beetroot_seeds", (new ItemSeeds(Blocks.BEETROOT, Blocks.FARMLAND)).c("beetroot_seeds"));
-        a(436, "beetroot_soup", (new ItemSoup(6)).c("beetroot_soup"));
-        a(437, "dragon_breath", (new Item()).b(CreativeModeTab.k).c("dragon_breath").b(item1));
-        a(438, "splash_potion", (new ItemSplashPotion()).c("splash_potion"));
-        a(439, "spectral_arrow", (new ItemSpectralArrow()).c("spectral_arrow"));
-        a(440, "tipped_arrow", (new ItemTippedArrow()).c("tipped_arrow"));
-        a(441, "lingering_potion", (new ItemLingeringPotion()).c("lingering_potion"));
-        a(442, "shield", (new ItemShield()).c("shield"));
-        a(443, "elytra", (new ItemElytra()).c("elytra"));
-        a(444, "spruce_boat", new ItemBoat(EntityBoat.EnumBoatType.SPRUCE));
-        a(445, "birch_boat", new ItemBoat(EntityBoat.EnumBoatType.BIRCH));
-        a(446, "jungle_boat", new ItemBoat(EntityBoat.EnumBoatType.JUNGLE));
-        a(447, "acacia_boat", new ItemBoat(EntityBoat.EnumBoatType.ACACIA));
-        a(448, "dark_oak_boat", new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK));
-        a(449, "totem_of_undying", (new Item()).c("totem").d(1).b(CreativeModeTab.j));
-        a(450, "shulker_shell", (new Item()).c("shulkerShell").b(CreativeModeTab.l));
-        a(452, "iron_nugget", (new Item()).c("ironNugget").b(CreativeModeTab.l));
-        a(453, "knowledge_book", (new ItemKnowledgeBook()).c("knowledgeBook"));
-        a(2256, "record_13", (new ItemRecord("13", SoundEffects.gb)).c("record"));
-        a(2257, "record_cat", (new ItemRecord("cat", SoundEffects.gd)).c("record"));
-        a(2258, "record_blocks", (new ItemRecord("blocks", SoundEffects.gc)).c("record"));
-        a(2259, "record_chirp", (new ItemRecord("chirp", SoundEffects.ge)).c("record"));
-        a(2260, "record_far", (new ItemRecord("far", SoundEffects.gf)).c("record"));
-        a(2261, "record_mall", (new ItemRecord("mall", SoundEffects.gg)).c("record"));
-        a(2262, "record_mellohi", (new ItemRecord("mellohi", SoundEffects.gh)).c("record"));
-        a(2263, "record_stal", (new ItemRecord("stal", SoundEffects.gi)).c("record"));
-        a(2264, "record_strad", (new ItemRecord("strad", SoundEffects.gj)).c("record"));
-        a(2265, "record_ward", (new ItemRecord("ward", SoundEffects.gl)).c("record"));
-        a(2266, "record_11", (new ItemRecord("11", SoundEffects.ga)).c("record"));
-        a(2267, "record_wait", (new ItemRecord("wait", SoundEffects.gk)).c("record"));
+        a("glass_bottle", (Item) itemglassbottle);
+        a("spider_eye", (Item) (new ItemFood(2, 0.8F, false, (new Item.Info()).a(CreativeModeTab.h))).a(new MobEffect(MobEffects.POISON, 100, 0), 1.0F));
+        a("fermented_spider_eye", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("blaze_powder", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("magma_cream", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a(Blocks.BREWING_STAND, CreativeModeTab.k);
+        a(Blocks.CAULDRON, CreativeModeTab.k);
+        a("ender_eye", (Item) (new ItemEnderEye((new Item.Info()).a(CreativeModeTab.f))));
+        a("glistering_melon_slice", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("bat_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.BAT, 4996656, 986895, (new Item.Info()).a(CreativeModeTab.f))));
+        a("blaze_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.BLAZE, 16167425, 16775294, (new Item.Info()).a(CreativeModeTab.f))));
+        a("cave_spider_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.CAVE_SPIDER, 803406, 11013646, (new Item.Info()).a(CreativeModeTab.f))));
+        a("chicken_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.CHICKEN, 10592673, 16711680, (new Item.Info()).a(CreativeModeTab.f))));
+        a("cod_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.COD, 12691306, 15058059, (new Item.Info()).a(CreativeModeTab.f))));
+        a("cow_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.COW, 4470310, 10592673, (new Item.Info()).a(CreativeModeTab.f))));
+        a("creeper_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.CREEPER, 894731, 0, (new Item.Info()).a(CreativeModeTab.f))));
+        a("dolphin_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.DOLPHIN, 2243405, 16382457, (new Item.Info()).a(CreativeModeTab.f))));
+        a("donkey_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.DONKEY, 5457209, 8811878, (new Item.Info()).a(CreativeModeTab.f))));
+        a("drowned_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.DROWNED, 9433559, 7969893, (new Item.Info()).a(CreativeModeTab.f))));
+        a("elder_guardian_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ELDER_GUARDIAN, 13552826, 7632531, (new Item.Info()).a(CreativeModeTab.f))));
+        a("enderman_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ENDERMAN, 1447446, 0, (new Item.Info()).a(CreativeModeTab.f))));
+        a("endermite_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ENDERMITE, 1447446, 7237230, (new Item.Info()).a(CreativeModeTab.f))));
+        a("evoker_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.EVOKER, 9804699, 1973274, (new Item.Info()).a(CreativeModeTab.f))));
+        a("ghast_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.GHAST, 16382457, 12369084, (new Item.Info()).a(CreativeModeTab.f))));
+        a("guardian_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.GUARDIAN, 5931634, 15826224, (new Item.Info()).a(CreativeModeTab.f))));
+        a("horse_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.HORSE, 12623485, 15656192, (new Item.Info()).a(CreativeModeTab.f))));
+        a("husk_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.HUSK, 7958625, 15125652, (new Item.Info()).a(CreativeModeTab.f))));
+        a("llama_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.LLAMA, 12623485, 10051392, (new Item.Info()).a(CreativeModeTab.f))));
+        a("magma_cube_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.MAGMA_CUBE, 3407872, 16579584, (new Item.Info()).a(CreativeModeTab.f))));
+        a("mooshroom_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.MOOSHROOM, 10489616, 12040119, (new Item.Info()).a(CreativeModeTab.f))));
+        a("mule_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.MULE, 1769984, 5321501, (new Item.Info()).a(CreativeModeTab.f))));
+        a("ocelot_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.OCELOT, 15720061, 5653556, (new Item.Info()).a(CreativeModeTab.f))));
+        a("parrot_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.PARROT, 894731, 16711680, (new Item.Info()).a(CreativeModeTab.f))));
+        a("phantom_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.PHANTOM, 4411786, 8978176, (new Item.Info()).a(CreativeModeTab.f))));
+        a("pig_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.PIG, 15771042, 14377823, (new Item.Info()).a(CreativeModeTab.f))));
+        a("polar_bear_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.POLAR_BEAR, 15921906, 9803152, (new Item.Info()).a(CreativeModeTab.f))));
+        a("pufferfish_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.PUFFERFISH, 16167425, 3654642, (new Item.Info()).a(CreativeModeTab.f))));
+        a("rabbit_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.RABBIT, 10051392, 7555121, (new Item.Info()).a(CreativeModeTab.f))));
+        a("salmon_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SALMON, 10489616, 951412, (new Item.Info()).a(CreativeModeTab.f))));
+        a("sheep_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SHEEP, 15198183, 16758197, (new Item.Info()).a(CreativeModeTab.f))));
+        a("shulker_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SHULKER, 9725844, 5060690, (new Item.Info()).a(CreativeModeTab.f))));
+        a("silverfish_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SILVERFISH, 7237230, 3158064, (new Item.Info()).a(CreativeModeTab.f))));
+        a("skeleton_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SKELETON, 12698049, 4802889, (new Item.Info()).a(CreativeModeTab.f))));
+        a("skeleton_horse_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SKELETON_HORSE, 6842447, 15066584, (new Item.Info()).a(CreativeModeTab.f))));
+        a("slime_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SLIME, 5349438, 8306542, (new Item.Info()).a(CreativeModeTab.f))));
+        a("spider_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SPIDER, 3419431, 11013646, (new Item.Info()).a(CreativeModeTab.f))));
+        a("squid_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SQUID, 2243405, 7375001, (new Item.Info()).a(CreativeModeTab.f))));
+        a("stray_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.STRAY, 6387319, 14543594, (new Item.Info()).a(CreativeModeTab.f))));
+        a("tropical_fish_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.TROPICAL_FISH, 15690005, 16775663, (new Item.Info()).a(CreativeModeTab.f))));
+        a("turtle_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.TURTLE, 15198183, '\uafaf', (new Item.Info()).a(CreativeModeTab.f))));
+        a("vex_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VEX, 8032420, 15265265, (new Item.Info()).a(CreativeModeTab.f))));
+        a("villager_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VILLAGER, 5651507, 12422002, (new Item.Info()).a(CreativeModeTab.f))));
+        a("vindicator_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VINDICATOR, 9804699, 2580065, (new Item.Info()).a(CreativeModeTab.f))));
+        a("witch_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WITCH, 3407872, 5349438, (new Item.Info()).a(CreativeModeTab.f))));
+        a("wither_skeleton_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WITHER_SKELETON, 1315860, 4672845, (new Item.Info()).a(CreativeModeTab.f))));
+        a("wolf_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WOLF, 14144467, 13545366, (new Item.Info()).a(CreativeModeTab.f))));
+        a("zombie_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE, '\uafaf', 7969893, (new Item.Info()).a(CreativeModeTab.f))));
+        a("zombie_horse_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_HORSE, 3232308, 9945732, (new Item.Info()).a(CreativeModeTab.f))));
+        a("zombie_pigman_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_PIGMAN, 15373203, 5009705, (new Item.Info()).a(CreativeModeTab.f))));
+        a("zombie_villager_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_VILLAGER, 5651507, 7969893, (new Item.Info()).a(CreativeModeTab.f))));
+        a("experience_bottle", (Item) (new ItemExpBottle((new Item.Info()).a(CreativeModeTab.f).a(EnumItemRarity.UNCOMMON))));
+        a("fire_charge", (Item) (new ItemFireball((new Item.Info()).a(CreativeModeTab.f))));
+        a("writable_book", (Item) (new ItemBookAndQuill((new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("written_book", (Item) (new ItemWrittenBook((new Item.Info()).a(16))));
+        a("emerald", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("item_frame", (Item) (new ItemItemFrame((new Item.Info()).a(CreativeModeTab.c))));
+        a(Blocks.FLOWER_POT, CreativeModeTab.c);
+        a("carrot", (Item) (new ItemSeedFood(3, 0.6F, Blocks.CARROTS, (new Item.Info()).a(CreativeModeTab.h))));
+        a("potato", (Item) (new ItemSeedFood(1, 0.3F, Blocks.POTATOES, (new Item.Info()).a(CreativeModeTab.h))));
+        a("baked_potato", (Item) (new ItemFood(5, 0.6F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("poisonous_potato", (Item) (new ItemFood(2, 0.3F, false, (new Item.Info()).a(CreativeModeTab.h))).a(new MobEffect(MobEffects.POISON, 100, 0), 0.6F));
+        a("map", (Item) (new ItemMapEmpty((new Item.Info()).a(CreativeModeTab.f))));
+        a("golden_carrot", (Item) (new ItemFood(6, 1.2F, false, (new Item.Info()).a(CreativeModeTab.k))));
+        a((ItemBlock) (new ItemBlockWallable(Blocks.SKELETON_SKULL, Blocks.SKELETON_WALL_SKULL, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a((ItemBlock) (new ItemBlockWallable(Blocks.WITHER_SKELETON_SKULL, Blocks.WITHER_SKELETON_WALL_SKULL, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a((ItemBlock) (new ItemSkullPlayer(Blocks.PLAYER_HEAD, Blocks.PLAYER_WALL_HEAD, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a((ItemBlock) (new ItemBlockWallable(Blocks.ZOMBIE_HEAD, Blocks.ZOMBIE_WALL_HEAD, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a((ItemBlock) (new ItemBlockWallable(Blocks.CREEPER_HEAD, Blocks.CREEPER_WALL_HEAD, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a((ItemBlock) (new ItemBlockWallable(Blocks.DRAGON_HEAD, Blocks.DRAGON_WALL_HEAD, (new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.UNCOMMON))));
+        a("carrot_on_a_stick", (Item) (new ItemCarrotStick((new Item.Info()).c(25).a(CreativeModeTab.e))));
+        a("nether_star", (Item) (new ItemNetherStar((new Item.Info()).a(CreativeModeTab.l).a(EnumItemRarity.UNCOMMON))));
+        a("pumpkin_pie", (Item) (new ItemFood(8, 0.3F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("firework_rocket", (Item) (new ItemFireworks((new Item.Info()).a(CreativeModeTab.f))));
+        a("firework_star", (Item) (new ItemFireworksCharge((new Item.Info()).a(CreativeModeTab.f))));
+        a("enchanted_book", (Item) (new ItemEnchantedBook((new Item.Info()).a(1).a(EnumItemRarity.UNCOMMON))));
+        a("nether_brick", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("quartz", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("tnt_minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.TNT, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("hopper_minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.HOPPER, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("prismarine_shard", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("prismarine_crystals", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("rabbit", (Item) (new ItemFood(3, 0.3F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_rabbit", (Item) (new ItemFood(5, 0.6F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("rabbit_stew", (Item) (new ItemSoup(10, (new Item.Info()).a(1).a(CreativeModeTab.h))));
+        a("rabbit_foot", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("rabbit_hide", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("armor_stand", (Item) (new ItemArmorStand((new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("iron_horse_armor", new Item((new Item.Info()).a(1).a(CreativeModeTab.f)));
+        a("golden_horse_armor", new Item((new Item.Info()).a(1).a(CreativeModeTab.f)));
+        a("diamond_horse_armor", new Item((new Item.Info()).a(1).a(CreativeModeTab.f)));
+        a("lead", (Item) (new ItemLeash((new Item.Info()).a(CreativeModeTab.i))));
+        a("name_tag", (Item) (new ItemNameTag((new Item.Info()).a(CreativeModeTab.i))));
+        a("command_block_minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK, (new Item.Info()).a(1))));
+        a("mutton", (Item) (new ItemFood(2, 0.3F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("cooked_mutton", (Item) (new ItemFood(6, 0.8F, true, (new Item.Info()).a(CreativeModeTab.h))));
+        a("white_banner", (Item) (new ItemBanner(Blocks.WHITE_BANNER, Blocks.WHITE_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("orange_banner", (Item) (new ItemBanner(Blocks.ORANGE_BANNER, Blocks.ORANGE_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("magenta_banner", (Item) (new ItemBanner(Blocks.MAGENTA_BANNER, Blocks.MAGENTA_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("light_blue_banner", (Item) (new ItemBanner(Blocks.LIGHT_BLUE_BANNER, Blocks.LIGHT_BLUE_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("yellow_banner", (Item) (new ItemBanner(Blocks.YELLOW_BANNER, Blocks.YELLOW_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("lime_banner", (Item) (new ItemBanner(Blocks.LIME_BANNER, Blocks.LIME_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("pink_banner", (Item) (new ItemBanner(Blocks.PINK_BANNER, Blocks.PINK_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("gray_banner", (Item) (new ItemBanner(Blocks.GRAY_BANNER, Blocks.GRAY_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("light_gray_banner", (Item) (new ItemBanner(Blocks.LIGHT_GRAY_BANNER, Blocks.LIGHT_GRAY_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("cyan_banner", (Item) (new ItemBanner(Blocks.CYAN_BANNER, Blocks.CYAN_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("purple_banner", (Item) (new ItemBanner(Blocks.PURPLE_BANNER, Blocks.PURPLE_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("blue_banner", (Item) (new ItemBanner(Blocks.BLUE_BANNER, Blocks.BLUE_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("brown_banner", (Item) (new ItemBanner(Blocks.BROWN_BANNER, Blocks.BROWN_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("green_banner", (Item) (new ItemBanner(Blocks.GREEN_BANNER, Blocks.GREEN_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("red_banner", (Item) (new ItemBanner(Blocks.RED_BANNER, Blocks.RED_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("black_banner", (Item) (new ItemBanner(Blocks.BLACK_BANNER, Blocks.BLACK_WALL_BANNER, (new Item.Info()).a(16).a(CreativeModeTab.c))));
+        a("end_crystal", (Item) (new ItemEndCrystal((new Item.Info()).a(CreativeModeTab.c).a(EnumItemRarity.RARE))));
+        a("chorus_fruit", (Item) (new ItemChorusFruit(4, 0.3F, (new Item.Info()).a(CreativeModeTab.l))).e());
+        a("popped_chorus_fruit", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("beetroot", (Item) (new ItemFood(1, 0.6F, false, (new Item.Info()).a(CreativeModeTab.h))));
+        a("beetroot_seeds", (Item) (new ItemSeeds(Blocks.BEETROOTS, (new Item.Info()).a(CreativeModeTab.l))));
+        a("beetroot_soup", (Item) (new ItemSoup(6, (new Item.Info()).a(1).a(CreativeModeTab.h))));
+        a("dragon_breath", new Item((new Item.Info()).a((Item) itemglassbottle).a(CreativeModeTab.k).a(EnumItemRarity.UNCOMMON)));
+        a("splash_potion", (Item) (new ItemSplashPotion((new Item.Info()).a(1).a(CreativeModeTab.k))));
+        a("spectral_arrow", (Item) (new ItemSpectralArrow((new Item.Info()).a(CreativeModeTab.j))));
+        a("tipped_arrow", (Item) (new ItemTippedArrow((new Item.Info()).a(CreativeModeTab.j))));
+        a("lingering_potion", (Item) (new ItemLingeringPotion((new Item.Info()).a(1).a(CreativeModeTab.k))));
+        a("shield", (Item) (new ItemShield((new Item.Info()).c(336).a(CreativeModeTab.j))));
+        a("elytra", (Item) (new ItemElytra((new Item.Info()).c(432).a(CreativeModeTab.e).a(EnumItemRarity.UNCOMMON))));
+        a("spruce_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.SPRUCE, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("birch_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.BIRCH, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("jungle_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.JUNGLE, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("acacia_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.ACACIA, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("dark_oak_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.DARK_OAK, (new Item.Info()).a(1).a(CreativeModeTab.e))));
+        a("totem_of_undying", new Item((new Item.Info()).a(1).a(CreativeModeTab.j).a(EnumItemRarity.UNCOMMON)));
+        a("shulker_shell", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("iron_nugget", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("knowledge_book", (Item) (new ItemKnowledgeBook((new Item.Info()).a(1))));
+        a("debug_stick", (Item) (new ItemDebugStick((new Item.Info()).a(1))));
+        a("music_disc_13", (Item) (new ItemRecord(1, SoundEffects.MUSIC_DISC_13, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_cat", (Item) (new ItemRecord(2, SoundEffects.MUSIC_DISC_CAT, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_blocks", (Item) (new ItemRecord(3, SoundEffects.MUSIC_DISC_BLOCKS, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_chirp", (Item) (new ItemRecord(4, SoundEffects.MUSIC_DISC_CHIRP, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_far", (Item) (new ItemRecord(5, SoundEffects.MUSIC_DISC_FAR, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_mall", (Item) (new ItemRecord(6, SoundEffects.MUSIC_DISC_MALL, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_mellohi", (Item) (new ItemRecord(7, SoundEffects.MUSIC_DISC_MELLOHI, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_stal", (Item) (new ItemRecord(8, SoundEffects.MUSIC_DISC_STAL, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_strad", (Item) (new ItemRecord(9, SoundEffects.MUSIC_DISC_STRAD, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_ward", (Item) (new ItemRecord(10, SoundEffects.MUSIC_DISC_WARD, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_11", (Item) (new ItemRecord(11, SoundEffects.MUSIC_DISC_11, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("music_disc_wait", (Item) (new ItemRecord(12, SoundEffects.MUSIC_DISC_WAIT, (new Item.Info()).a(1).a(CreativeModeTab.f).a(EnumItemRarity.RARE))));
+        a("trident", (Item) (new ItemTrident((new Item.Info()).c(250).a(CreativeModeTab.j))));
+        a("phantom_membrane", new Item((new Item.Info()).a(CreativeModeTab.k)));
+        a("nautilus_shell", new Item((new Item.Info()).a(CreativeModeTab.l)));
+        a("heart_of_the_sea", new Item((new Item.Info()).a(CreativeModeTab.l).a(EnumItemRarity.UNCOMMON)));
     }
 
     private static void b(Block block) {
-        a(block, (Item) (new ItemBlock(block)));
+        a(new ItemBlock(block, new Item.Info()));
+    }
+
+    private static void a(Block block, CreativeModeTab creativemodetab) {
+        a(new ItemBlock(block, (new Item.Info()).a(creativemodetab)));
+    }
+
+    private static void a(ItemBlock itemblock) {
+        a(itemblock.getBlock(), (Item) itemblock);
     }
 
     protected static void a(Block block, Item item) {
-        a(Block.getId(block), (MinecraftKey) Block.REGISTRY.b(block), item);
-        Item.a.put(block, item);
+        a((MinecraftKey) Block.REGISTRY.b(block), item);
     }
 
-    private static void a(int i, String s, Item item) {
-        a(i, new MinecraftKey(s), item);
+    private static void a(String s, Item item) {
+        a(new MinecraftKey(s), item);
     }
 
-    private static void a(int i, MinecraftKey minecraftkey, Item item) {
-        Item.REGISTRY.a(i, minecraftkey, item);
+    private static void a(MinecraftKey minecraftkey, Item item) {
+        if (item instanceof ItemBlock) {
+            ((ItemBlock) item).a(Item.g, item);
+        }
+
+        Item.REGISTRY.a(minecraftkey, item);
     }
 
-    public static enum EnumToolMaterial {
+    public boolean a(Tag<Item> tag) {
+        return tag.isTagged(this);
+    }
 
-        WOOD(0, 59, 2.0F, 0.0F, 15), STONE(1, 131, 4.0F, 1.0F, 5), IRON(2, 250, 6.0F, 2.0F, 14), DIAMOND(3, 1561, 8.0F, 3.0F, 10), GOLD(0, 32, 12.0F, 0.0F, 22);
+    public static class Info {
 
-        private final int f;
-        private final int g;
-        private final float h;
-        private final float i;
-        private final int j;
+        private int a = 64;
+        private int b;
+        private Item c;
+        private CreativeModeTab d;
+        private EnumItemRarity e;
 
-        private EnumToolMaterial(int i, int j, float f, float f1, int k) {
-            this.f = i;
-            this.g = j;
-            this.h = f;
-            this.i = f1;
-            this.j = k;
+        public Info() {
+            this.e = EnumItemRarity.COMMON;
         }
 
-        public int a() {
-            return this.g;
+        public Item.Info a(int i) {
+            if (this.b > 0) {
+                throw new RuntimeException("Unable to have damage AND stack.");
+            } else {
+                this.a = i;
+                return this;
+            }
         }
 
-        public float b() {
-            return this.h;
+        public Item.Info b(int i) {
+            return this.b == 0 ? this.c(i) : this;
         }
 
-        public float c() {
-            return this.i;
+        private Item.Info c(int i) {
+            this.b = i;
+            this.a = 1;
+            return this;
         }
 
-        public int d() {
-            return this.f;
+        public Item.Info a(Item item) {
+            this.c = item;
+            return this;
         }
 
-        public int e() {
-            return this.j;
+        public Item.Info a(CreativeModeTab creativemodetab) {
+            this.d = creativemodetab;
+            return this;
         }
 
-        public Item f() {
-            return this == Item.EnumToolMaterial.WOOD ? Item.getItemOf(Blocks.PLANKS) : (this == Item.EnumToolMaterial.STONE ? Item.getItemOf(Blocks.COBBLESTONE) : (this == Item.EnumToolMaterial.GOLD ? Items.GOLD_INGOT : (this == Item.EnumToolMaterial.IRON ? Items.IRON_INGOT : (this == Item.EnumToolMaterial.DIAMOND ? Items.DIAMOND : null))));
+        public Item.Info a(EnumItemRarity enumitemrarity) {
+            this.e = enumitemrarity;
+            return this;
         }
     }
 }

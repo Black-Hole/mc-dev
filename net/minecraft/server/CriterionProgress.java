@@ -11,60 +11,57 @@ import java.util.Date;
 public class CriterionProgress {
 
     private static final SimpleDateFormat a = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-    private final AdvancementProgress b;
-    private Date c;
+    private Date b;
 
-    public CriterionProgress(AdvancementProgress advancementprogress) {
-        this.b = advancementprogress;
-    }
+    public CriterionProgress() {}
 
     public boolean a() {
-        return this.c != null;
+        return this.b != null;
     }
 
     public void b() {
-        this.c = new Date();
+        this.b = new Date();
     }
 
     public void c() {
-        this.c = null;
+        this.b = null;
     }
 
     public Date getDate() {
-        return this.c;
+        return this.b;
     }
 
     public String toString() {
-        return "CriterionProgress{obtained=" + (this.c == null ? "false" : this.c) + '}';
+        return "CriterionProgress{obtained=" + (this.b == null ? "false" : this.b) + '}';
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.writeBoolean(this.c != null);
-        if (this.c != null) {
-            packetdataserializer.a(this.c);
+        packetdataserializer.writeBoolean(this.b != null);
+        if (this.b != null) {
+            packetdataserializer.a(this.b);
         }
 
     }
 
     public JsonElement e() {
-        return (JsonElement) (this.c != null ? new JsonPrimitive(CriterionProgress.a.format(this.c)) : JsonNull.INSTANCE);
+        return (JsonElement) (this.b != null ? new JsonPrimitive(CriterionProgress.a.format(this.b)) : JsonNull.INSTANCE);
     }
 
-    public static CriterionProgress a(PacketDataSerializer packetdataserializer, AdvancementProgress advancementprogress) {
-        CriterionProgress criterionprogress = new CriterionProgress(advancementprogress);
+    public static CriterionProgress b(PacketDataSerializer packetdataserializer) {
+        CriterionProgress criterionprogress = new CriterionProgress();
 
         if (packetdataserializer.readBoolean()) {
-            criterionprogress.c = packetdataserializer.m();
+            criterionprogress.b = packetdataserializer.m();
         }
 
         return criterionprogress;
     }
 
-    public static CriterionProgress a(AdvancementProgress advancementprogress, String s) {
-        CriterionProgress criterionprogress = new CriterionProgress(advancementprogress);
+    public static CriterionProgress a(String s) {
+        CriterionProgress criterionprogress = new CriterionProgress();
 
         try {
-            criterionprogress.c = CriterionProgress.a.parse(s);
+            criterionprogress.b = CriterionProgress.a.parse(s);
             return criterionprogress;
         } catch (ParseException parseexception) {
             throw new JsonSyntaxException("Invalid datetime: " + s, parseexception);

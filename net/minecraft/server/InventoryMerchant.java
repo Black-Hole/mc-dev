@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class InventoryMerchant implements IInventory {
 
@@ -20,7 +21,7 @@ public class InventoryMerchant implements IInventory {
         return this.itemsInSlots.size();
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.itemsInSlots.iterator();
 
         ItemStack itemstack;
@@ -76,16 +77,17 @@ public class InventoryMerchant implements IInventory {
 
     }
 
-    public String getName() {
-        return "mob.villager";
+    public IChatBaseComponent getDisplayName() {
+        return new ChatMessage("mob.villager", new Object[0]);
     }
 
     public boolean hasCustomName() {
         return false;
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return null;
     }
 
     public int getMaxStackSize() {

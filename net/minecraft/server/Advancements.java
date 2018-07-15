@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class Advancements {
                 Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) entry.getValue();
 
                 if (advancement_serializedadvancement.a((java.util.function.Function) function)) {
-                    Advancement advancement = advancement_serializedadvancement.a(minecraftkey);
+                    Advancement advancement = advancement_serializedadvancement.b(minecraftkey);
 
                     this.advancements.put(minecraftkey, advancement);
                     flag = true;
@@ -66,12 +67,12 @@ public class Advancements {
                     }
 
                     entry = (Entry) iterator.next();
-                    Advancements.a.error("Couldn\'t load advancement " + entry.getKey() + ": " + entry.getValue());
+                    Advancements.a.error("Couldn\'t load advancement {}: {}", entry.getKey(), entry.getValue());
                 }
             }
         }
 
-        Advancements.a.info("Loaded " + this.advancements.size() + " advancements");
+        Advancements.a.info("Loaded {} advancements", Integer.valueOf(this.advancements.size()));
     }
 
     public void a() {
@@ -88,7 +89,7 @@ public class Advancements {
         return this.c;
     }
 
-    public Iterable<Advancement> c() {
+    public Collection<Advancement> c() {
         return this.advancements.values();
     }
 

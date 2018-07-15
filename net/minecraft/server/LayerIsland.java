@@ -1,25 +1,12 @@
 package net.minecraft.server;
 
-public class LayerIsland extends GenLayer {
+public enum LayerIsland implements AreaTransformer1 {
 
-    public LayerIsland(long i) {
-        super(i);
-    }
+    INSTANCE;
 
-    public int[] a(int i, int j, int k, int l) {
-        int[] aint = IntCache.a(k * l);
+    private LayerIsland() {}
 
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                this.a((long) (i + j1), (long) (j + i1));
-                aint[j1 + i1 * k] = this.a(10) == 0 ? 1 : 0;
-            }
-        }
-
-        if (i > -k && i <= 0 && j > -l && j <= 0) {
-            aint[-i + -j * k] = 1;
-        }
-
-        return aint;
+    public int a(WorldGenContext worldgencontext, AreaDimension areadimension, int i, int j) {
+        return i == -areadimension.a() && j == -areadimension.b() && areadimension.a() > -areadimension.c() && areadimension.a() <= 0 && areadimension.b() > -areadimension.d() && areadimension.b() <= 0 ? 1 : (worldgencontext.a(10) == 0 ? 1 : GenLayers.c);
     }
 }

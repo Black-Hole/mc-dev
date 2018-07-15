@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class ContainerWorkbench extends Container {
+public class ContainerWorkbench extends ContainerRecipeBook {
 
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 3, 3);
     public InventoryCraftResult resultInventory = new InventoryCraftResult();
@@ -37,6 +37,19 @@ public class ContainerWorkbench extends Container {
 
     public void a(IInventory iinventory) {
         this.a(this.g, this.i, this.craftInventory, this.resultInventory);
+    }
+
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
+        this.craftInventory.a(autorecipestackmanager);
+    }
+
+    public void d() {
+        this.craftInventory.clear();
+        this.resultInventory.clear();
+    }
+
+    public boolean a(IRecipe irecipe) {
+        return irecipe.a(this.craftInventory, this.i.world);
     }
 
     public void b(EntityHuman entityhuman) {
@@ -99,5 +112,17 @@ public class ContainerWorkbench extends Container {
 
     public boolean a(ItemStack itemstack, Slot slot) {
         return slot.inventory != this.resultInventory && super.a(itemstack, slot);
+    }
+
+    public int e() {
+        return 0;
+    }
+
+    public int f() {
+        return this.craftInventory.U_();
+    }
+
+    public int g() {
+        return this.craftInventory.n();
     }
 }

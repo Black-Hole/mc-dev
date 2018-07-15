@@ -5,12 +5,8 @@ import javax.annotation.Nullable;
 public class EntityGiantZombie extends EntityMonster {
 
     public EntityGiantZombie(World world) {
-        super(world);
+        super(EntityTypes.GIANT, world);
         this.setSize(this.width * 6.0F, this.length * 6.0F);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityGiantZombie.class);
     }
 
     public float getHeadHeight() {
@@ -24,12 +20,12 @@ public class EntityGiantZombie extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(50.0D);
     }
 
-    public float a(BlockPosition blockposition) {
-        return this.world.n(blockposition) - 0.5F;
+    public float a(BlockPosition blockposition, IWorldReader iworldreader) {
+        return iworldreader.A(blockposition) - 0.5F;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.u;
+    protected MinecraftKey G() {
+        return LootTables.A;
     }
 }

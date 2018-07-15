@@ -27,7 +27,7 @@ public class ContainerUtil {
 
                 nbttagcompound1.setByte("Slot", (byte) i);
                 itemstack.save(nbttagcompound1);
-                nbttaglist.add(nbttagcompound1);
+                nbttaglist.add((NBTBase) nbttagcompound1);
             }
         }
 
@@ -42,11 +42,11 @@ public class ContainerUtil {
         NBTTagList nbttaglist = nbttagcompound.getList("Items", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             int j = nbttagcompound1.getByte("Slot") & 255;
 
             if (j >= 0 && j < nonnulllist.size()) {
-                nonnulllist.set(j, new ItemStack(nbttagcompound1));
+                nonnulllist.set(j, ItemStack.a(nbttagcompound1));
             }
         }
 

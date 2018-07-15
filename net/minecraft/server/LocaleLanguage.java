@@ -1,68 +1,55 @@
 package net.minecraft.server;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
-import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LocaleLanguage {
 
-    private static final Pattern a = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
-    private static final Splitter b = Splitter.on('=').limit(2);
+    private static final Logger a = LogManager.getLogger();
+    private static final Pattern b = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
     private static final LocaleLanguage c = new LocaleLanguage();
     private final Map<String, String> d = Maps.newHashMap();
     private long e;
 
     public LocaleLanguage() {
         try {
-            InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang");
-            Iterator iterator = IOUtils.readLines(inputstream, StandardCharsets.UTF_8).iterator();
+            InputStream inputstream = LocaleLanguage.class.getResourceAsStream("/assets/minecraft/lang/en_us.json");
+            JsonElement jsonelement = (JsonElement) (new Gson()).fromJson(new InputStreamReader(inputstream, StandardCharsets.UTF_8), JsonElement.class);
+            JsonObject jsonobject = ChatDeserializer.m(jsonelement, "strings");
+            Iterator iterator = jsonobject.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                String s = (String) iterator.next();
+                Entry entry = (Entry) iterator.next();
+                String s = LocaleLanguage.b.matcher(ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey())).replaceAll("%$1s");
 
-                if (!s.isEmpty() && s.charAt(0) != 35) {
-                    String[] astring = (String[]) Iterables.toArray(LocaleLanguage.b.split(s), String.class);
-
-                    if (astring != null && astring.length == 2) {
-                        String s1 = astring[0];
-                        String s2 = LocaleLanguage.a.matcher(astring[1]).replaceAll("%$1s");
-
-                        this.d.put(s1, s2);
-                    }
-                }
+                this.d.put(entry.getKey(), s);
             }
 
-            this.e = System.currentTimeMillis();
-        } catch (IOException ioexception) {
-            ;
+            this.e = SystemUtils.b();
+        } catch (JsonParseException jsonparseexception) {
+            LocaleLanguage.a.error("Couldn\'t read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
         }
 
     }
 
-    static LocaleLanguage a() {
+    public static LocaleLanguage a() {
         return LocaleLanguage.c;
     }
 
     public synchronized String a(String s) {
         return this.c(s);
-    }
-
-    public synchronized String a(String s, Object... aobject) {
-        String s1 = this.c(s);
-
-        try {
-            return String.format(s1, aobject);
-        } catch (IllegalFormatException illegalformatexception) {
-            return "Format error: " + s1;
-        }
     }
 
     private String c(String s) {
@@ -75,7 +62,7 @@ public class LocaleLanguage {
         return this.d.containsKey(s);
     }
 
-    public long c() {
+    public long b() {
         return this.e;
     }
 }

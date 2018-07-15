@@ -4,45 +4,45 @@ import java.util.Random;
 
 public class BlockBeetroot extends BlockCrops {
 
-    public static final BlockStateInteger a = BlockStateInteger.of("age", 0, 3);
-    private static final AxisAlignedBB[] d = new AxisAlignedBB[] { new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D)};
+    public static final BlockStateInteger a = BlockProperties.T;
+    private static final VoxelShape[] c = new VoxelShape[] { Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D)};
 
-    public BlockBeetroot() {}
+    public BlockBeetroot(Block.Info block_info) {
+        super(block_info);
+    }
 
-    protected BlockStateInteger e() {
+    public BlockStateInteger b() {
         return BlockBeetroot.a;
     }
 
-    public int g() {
+    public int d() {
         return 3;
     }
 
-    protected Item h() {
+    protected IMaterial e() {
         return Items.BEETROOT_SEEDS;
     }
 
-    protected Item i() {
+    protected IMaterial f() {
         return Items.BEETROOT;
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (random.nextInt(3) == 0) {
-            this.e(world, blockposition, iblockdata);
-        } else {
-            super.b(world, blockposition, iblockdata, random);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (random.nextInt(3) != 0) {
+            super.a(iblockdata, world, blockposition, random);
         }
 
     }
 
-    protected int b(World world) {
-        return super.b(world) / 3;
+    protected int a(World world) {
+        return super.a(world) / 3;
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockBeetroot.a});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockBeetroot.a});
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockBeetroot.d[((Integer) iblockdata.get(this.e())).intValue()];
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockBeetroot.c[((Integer) iblockdata.get(this.b())).intValue()];
     }
 }

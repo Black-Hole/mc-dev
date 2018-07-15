@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public interface IProgressUpdate {
 
-    void a(String s);
+    void a(IChatBaseComponent ichatbasecomponent);
 
-    void c(String s);
+    void c(IChatBaseComponent ichatbasecomponent);
 
     void a(int i);
 }

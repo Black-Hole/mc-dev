@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class ScoreboardServer extends Scoreboard {
 
@@ -21,7 +22,7 @@ public class ScoreboardServer extends Scoreboard {
     public void handleScoreChanged(ScoreboardScore scoreboardscore) {
         super.handleScoreChanged(scoreboardscore);
         if (this.b.contains(scoreboardscore.getObjective())) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(scoreboardscore));
+            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
         }
 
         this.b();
@@ -29,17 +30,20 @@ public class ScoreboardServer extends Scoreboard {
 
     public void handlePlayerRemoved(String s) {
         super.handlePlayerRemoved(s);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(s));
+        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, (String) null, s, 0));
         this.b();
     }
 
     public void a(String s, ScoreboardObjective scoreboardobjective) {
         super.a(s, scoreboardobjective);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(s, scoreboardobjective));
+        if (this.b.contains(scoreboardobjective)) {
+            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.REMOVE, scoreboardobjective.getName(), s, 0));
+        }
+
         this.b();
     }
 
-    public void setDisplaySlot(int i, ScoreboardObjective scoreboardobjective) {
+    public void setDisplaySlot(int i, @Nullable ScoreboardObjective scoreboardobjective) {
         ScoreboardObjective scoreboardobjective1 = this.getObjectiveForSlot(i);
 
         super.setDisplaySlot(i, scoreboardobjective);
@@ -62,10 +66,8 @@ public class ScoreboardServer extends Scoreboard {
         this.b();
     }
 
-    public boolean addPlayerToTeam(String s, String s1) {
-        if (super.addPlayerToTeam(s, s1)) {
-            ScoreboardTeam scoreboardteam = this.getTeam(s1);
-
+    public boolean addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
+        if (super.addPlayerToTeam(s, scoreboardteam)) {
             this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 3));
             this.b();
             return true;
@@ -154,7 +156,7 @@ public class ScoreboardServer extends Scoreboard {
         while (iterator.hasNext()) {
             ScoreboardScore scoreboardscore = (ScoreboardScore) iterator.next();
 
-            arraylist.add(new PacketPlayOutScoreboardScore(scoreboardscore));
+            arraylist.add(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
         }
 
         return arraylist;
@@ -220,5 +222,12 @@ public class ScoreboardServer extends Scoreboard {
         }
 
         return i;
+    }
+
+    public static enum Action {
+
+        CHANGE, REMOVE;
+
+        private Action() {}
     }
 }

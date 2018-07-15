@@ -1,114 +1,73 @@
 package net.minecraft.server;
 
-public class GenLayerMushroomShore extends GenLayer {
+public enum GenLayerMushroomShore implements AreaTransformer7 {
 
-    public GenLayerMushroomShore(long i, GenLayer genlayer) {
-        super(i);
-        this.a = genlayer;
-    }
+    INSTANCE;
 
-    public int[] a(int i, int j, int k, int l) {
-        int[] aint = this.a.a(i - 1, j - 1, k + 2, l + 2);
-        int[] aint1 = IntCache.a(k * l);
+    private static final int b = BiomeBase.a(Biomes.r);
+    private static final int c = BiomeBase.a(Biomes.B);
+    private static final int d = BiomeBase.a(Biomes.d);
+    private static final int e = BiomeBase.a(Biomes.e);
+    private static final int f = BiomeBase.a(Biomes.J);
+    private static final int g = BiomeBase.a(Biomes.f);
+    private static final int h = BiomeBase.a(Biomes.w);
+    private static final int i = BiomeBase.a(Biomes.y);
+    private static final int j = BiomeBase.a(Biomes.x);
+    private static final int k = BiomeBase.a(Biomes.M);
+    private static final int l = BiomeBase.a(Biomes.N);
+    private static final int m = BiomeBase.a(Biomes.O);
+    private static final int n = BiomeBase.a(Biomes.at);
+    private static final int o = BiomeBase.a(Biomes.au);
+    private static final int p = BiomeBase.a(Biomes.av);
+    private static final int q = BiomeBase.a(Biomes.p);
+    private static final int r = BiomeBase.a(Biomes.q);
+    private static final int s = BiomeBase.a(Biomes.i);
+    private static final int t = BiomeBase.a(Biomes.v);
+    private static final int u = BiomeBase.a(Biomes.A);
+    private static final int v = BiomeBase.a(Biomes.h);
+    private static final int w = BiomeBase.a(Biomes.g);
 
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                this.a((long) (j1 + i), (long) (i1 + j));
-                int k1 = aint[j1 + 1 + (i1 + 1) * (k + 2)];
-                BiomeBase biomebase = BiomeBase.getBiome(k1);
-                int l1;
-                int i2;
-                int j2;
-                int k2;
+    private GenLayerMushroomShore() {}
 
-                if (k1 == BiomeBase.a(Biomes.p)) {
-                    l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                    i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                    j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                    k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                    if (l1 != BiomeBase.a(Biomes.a) && i2 != BiomeBase.a(Biomes.a) && j2 != BiomeBase.a(Biomes.a) && k2 != BiomeBase.a(Biomes.a)) {
-                        aint1[j1 + i1 * k] = k1;
-                    } else {
-                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.q);
-                    }
-                } else if (biomebase != null && biomebase.g() == BiomeJungle.class) {
-                    l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                    i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                    j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                    k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                    if (this.c(l1) && this.c(i2) && this.c(j2) && this.c(k2)) {
-                        if (!b(l1) && !b(i2) && !b(j2) && !b(k2)) {
-                            aint1[j1 + i1 * k] = k1;
-                        } else {
-                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.r);
-                        }
-                    } else {
-                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.y);
-                    }
-                } else if (k1 != BiomeBase.a(Biomes.e) && k1 != BiomeBase.a(Biomes.J) && k1 != BiomeBase.a(Biomes.v)) {
-                    if (biomebase != null && biomebase.p()) {
-                        this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.B));
-                    } else if (k1 != BiomeBase.a(Biomes.M) && k1 != BiomeBase.a(Biomes.N)) {
-                        if (k1 != BiomeBase.a(Biomes.a) && k1 != BiomeBase.a(Biomes.z) && k1 != BiomeBase.a(Biomes.i) && k1 != BiomeBase.a(Biomes.h)) {
-                            l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                            i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                            j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                            k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                            if (!b(l1) && !b(i2) && !b(j2) && !b(k2)) {
-                                aint1[j1 + i1 * k] = k1;
-                            } else {
-                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.r);
-                            }
-                        } else {
-                            aint1[j1 + i1 * k] = k1;
-                        }
-                    } else {
-                        l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                        i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                        j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                        k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                        if (!b(l1) && !b(i2) && !b(j2) && !b(k2)) {
-                            if (this.d(l1) && this.d(i2) && this.d(j2) && this.d(k2)) {
-                                aint1[j1 + i1 * k] = k1;
-                            } else {
-                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.d);
-                            }
-                        } else {
-                            aint1[j1 + i1 * k] = k1;
-                        }
-                    }
-                } else {
-                    this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.A));
+    public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
+        BiomeBase biomebase = BiomeBase.getBiome(i1);
+
+        if (i1 == GenLayerMushroomShore.q) {
+            if (GenLayers.b(i) || GenLayers.b(j) || GenLayers.b(k) || GenLayers.b(l)) {
+                return GenLayerMushroomShore.r;
+            }
+        } else if (biomebase != null && biomebase.p() == BiomeBase.Geography.JUNGLE) {
+            if (!a(i) || !a(j) || !a(k) || !a(l)) {
+                return GenLayerMushroomShore.i;
+            }
+
+            if (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l)) {
+                return GenLayerMushroomShore.b;
+            }
+        } else if (i1 != GenLayerMushroomShore.e && i1 != GenLayerMushroomShore.f && i1 != GenLayerMushroomShore.t) {
+            if (biomebase != null && biomebase.c() == BiomeBase.Precipitation.SNOW) {
+                if (!GenLayers.a(i1) && (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l))) {
+                    return GenLayerMushroomShore.c;
                 }
+            } else if (i1 != GenLayerMushroomShore.k && i1 != GenLayerMushroomShore.l) {
+                if (!GenLayers.a(i1) && i1 != GenLayerMushroomShore.s && i1 != GenLayerMushroomShore.v && (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l))) {
+                    return GenLayerMushroomShore.b;
+                }
+            } else if (!GenLayers.a(i) && !GenLayers.a(j) && !GenLayers.a(k) && !GenLayers.a(l) && (!this.b(i) || !this.b(j) || !this.b(k) || !this.b(l))) {
+                return GenLayerMushroomShore.d;
             }
+        } else if (!GenLayers.a(i1) && (GenLayers.a(i) || GenLayers.a(j) || GenLayers.a(k) || GenLayers.a(l))) {
+            return GenLayerMushroomShore.u;
         }
 
-        return aint1;
+        return i1;
     }
 
-    private void a(int[] aint, int[] aint1, int i, int j, int k, int l, int i1) {
-        if (b(l)) {
-            aint1[i + j * k] = l;
-        } else {
-            int j1 = aint[i + 1 + (j + 1 - 1) * (k + 2)];
-            int k1 = aint[i + 1 + 1 + (j + 1) * (k + 2)];
-            int l1 = aint[i + 1 - 1 + (j + 1) * (k + 2)];
-            int i2 = aint[i + 1 + (j + 1 + 1) * (k + 2)];
-
-            if (!b(j1) && !b(k1) && !b(l1) && !b(i2)) {
-                aint1[i + j * k] = l;
-            } else {
-                aint1[i + j * k] = i1;
-            }
-
-        }
+    private static boolean a(int i) {
+        return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(i).p() == BiomeBase.Geography.JUNGLE ? true : i == GenLayerMushroomShore.i || i == GenLayerMushroomShore.h || i == GenLayerMushroomShore.j || i == GenLayerMushroomShore.g || i == GenLayerMushroomShore.w || GenLayers.a(i);
     }
 
-    private boolean c(int i) {
-        return BiomeBase.getBiome(i) != null && BiomeBase.getBiome(i).g() == BiomeJungle.class ? true : i == BiomeBase.a(Biomes.y) || i == BiomeBase.a(Biomes.w) || i == BiomeBase.a(Biomes.x) || i == BiomeBase.a(Biomes.f) || i == BiomeBase.a(Biomes.g) || b(i);
-    }
-
-    private boolean d(int i) {
-        return BiomeBase.getBiome(i) instanceof BiomeMesa;
+    private boolean b(int i) {
+        return i == GenLayerMushroomShore.k || i == GenLayerMushroomShore.l || i == GenLayerMushroomShore.m || i == GenLayerMushroomShore.n || i == GenLayerMushroomShore.o || i == GenLayerMushroomShore.p;
     }
 }

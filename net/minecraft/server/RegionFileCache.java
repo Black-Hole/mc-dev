@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class RegionFileCache {
 
@@ -74,12 +75,14 @@ public class RegionFileCache {
         RegionFileCache.a.clear();
     }
 
+    @Nullable
     public static DataInputStream d(File file, int i, int j) {
         RegionFile regionfile = a(file, i, j);
 
         return regionfile.a(i & 31, j & 31);
     }
 
+    @Nullable
     public static DataOutputStream e(File file, int i, int j) {
         RegionFile regionfile = a(file, i, j);
 

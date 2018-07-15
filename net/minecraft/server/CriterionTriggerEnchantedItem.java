@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,9 +51,9 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
 
     public CriterionTriggerEnchantedItem.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("levels"));
+        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("levels"));
 
-        return new CriterionTriggerEnchantedItem.b(criterionconditionitem, criterionconditionvalue);
+        return new CriterionTriggerEnchantedItem.b(criterionconditionitem, criterionconditionvalue_d);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
@@ -121,16 +122,28 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionItem a;
-        private final CriterionConditionValue b;
+        private final CriterionConditionValue.d b;
 
-        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue criterionconditionvalue) {
+        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d) {
             super(CriterionTriggerEnchantedItem.a);
             this.a = criterionconditionitem;
-            this.b = criterionconditionvalue;
+            this.b = criterionconditionvalue_d;
+        }
+
+        public static CriterionTriggerEnchantedItem.b c() {
+            return new CriterionTriggerEnchantedItem.b(CriterionConditionItem.a, CriterionConditionValue.d.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {
-            return !this.a.a(itemstack) ? false : this.b.a((float) i);
+            return !this.a.a(itemstack) ? false : this.b.d(i);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("item", this.a.a());
+            jsonobject.add("levels", this.b.d());
+            return jsonobject;
         }
     }
 }

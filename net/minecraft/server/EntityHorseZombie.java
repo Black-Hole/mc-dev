@@ -5,49 +5,49 @@ import javax.annotation.Nullable;
 public class EntityHorseZombie extends EntityHorseAbstract {
 
     public EntityHorseZombie(World world) {
-        super(world);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityHorseAbstract.c(dataconvertermanager, EntityHorseZombie.class);
+        super(EntityTypes.ZOMBIE_HORSE, world);
     }
 
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.dN());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ed());
     }
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.UNDEAD;
     }
 
-    protected SoundEffect F() {
-        super.F();
-        return SoundEffects.jn;
+    protected SoundEffect D() {
+        super.D();
+        return SoundEffects.ENTITY_ZOMBIE_HORSE_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        super.cf();
-        return SoundEffects.jo;
+    protected SoundEffect cr() {
+        super.cr();
+        return SoundEffects.ENTITY_ZOMBIE_HORSE_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         super.d(damagesource);
-        return SoundEffects.jp;
+        return SoundEffects.ENTITY_ZOMBIE_HORSE_HURT;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.J;
+    protected MinecraftKey G() {
+        return LootTables.Q;
+    }
+
+    @Nullable
+    public EntityAgeable createChild(EntityAgeable entityageable) {
+        return new EntityHorseZombie(this.world);
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        boolean flag = !itemstack.isEmpty();
 
-        if (flag && itemstack.getItem() == Items.SPAWN_EGG) {
+        if (itemstack.getItem() instanceof ItemMonsterEgg) {
             return super.a(entityhuman, enumhand);
         } else if (!this.isTamed()) {
             return false;
@@ -59,8 +59,8 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         } else if (this.isVehicle()) {
             return super.a(entityhuman, enumhand);
         } else {
-            if (flag) {
-                if (!this.dG() && itemstack.getItem() == Items.SADDLE) {
+            if (!itemstack.isEmpty()) {
+                if (!this.dV() && itemstack.getItem() == Items.SADDLE) {
                     this.c(entityhuman);
                     return true;
                 }
@@ -74,4 +74,6 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return true;
         }
     }
+
+    protected void dI() {}
 }

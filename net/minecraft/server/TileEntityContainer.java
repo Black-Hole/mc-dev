@@ -4,7 +4,8 @@ public abstract class TileEntityContainer extends TileEntity implements ITileInv
 
     private ChestLock a;
 
-    public TileEntityContainer() {
+    protected TileEntityContainer(TileEntityTypes<?> tileentitytypes) {
+        super(tileentitytypes);
         this.a = ChestLock.a;
     }
 
@@ -32,9 +33,5 @@ public abstract class TileEntityContainer extends TileEntity implements ITileInv
 
     public void setLock(ChestLock chestlock) {
         this.a = chestlock;
-    }
-
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 }

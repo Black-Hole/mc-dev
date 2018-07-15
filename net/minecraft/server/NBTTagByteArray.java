@@ -5,8 +5,9 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 
-public class NBTTagByteArray extends NBTBase {
+public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
     private byte[] data;
 
@@ -32,12 +33,12 @@ public class NBTTagByteArray extends NBTBase {
         return abyte;
     }
 
-    void write(DataOutput dataoutput) throws IOException {
+    public void write(DataOutput dataoutput) throws IOException {
         dataoutput.writeInt(this.data.length);
         dataoutput.write(this.data);
     }
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         nbtreadlimiter.a(192L);
         int j = datainput.readInt();
 
@@ -72,14 +73,51 @@ public class NBTTagByteArray extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) && Arrays.equals(this.data, ((NBTTagByteArray) object).data);
+        return this == object ? true : object instanceof NBTTagByteArray && Arrays.equals(this.data, ((NBTTagByteArray) object).data);
     }
 
     public int hashCode() {
-        return super.hashCode() ^ Arrays.hashCode(this.data);
+        return Arrays.hashCode(this.data);
+    }
+
+    public IChatBaseComponent a(String s, int i) {
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("B")).a(NBTTagByteArray.e);
+        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("[")).addSibling(ichatbasecomponent).a(";");
+
+        for (int j = 0; j < this.data.length; ++j) {
+            IChatBaseComponent ichatbasecomponent2 = (new ChatComponentText(String.valueOf(this.data[j]))).a(NBTTagByteArray.d);
+
+            ichatbasecomponent1.a(" ").addSibling(ichatbasecomponent2).addSibling(ichatbasecomponent);
+            if (j != this.data.length - 1) {
+                ichatbasecomponent1.a(",");
+            }
+        }
+
+        ichatbasecomponent1.a("]");
+        return ichatbasecomponent1;
     }
 
     public byte[] c() {
         return this.data;
+    }
+
+    public int size() {
+        return this.data.length;
+    }
+
+    public NBTTagByte a(int i) {
+        return new NBTTagByte(this.data[i]);
+    }
+
+    public void a(int i, NBTBase nbtbase) {
+        this.data[i] = ((NBTNumber) nbtbase).g();
+    }
+
+    public void b(int i) {
+        this.data = ArrayUtils.remove(this.data, i);
+    }
+
+    public NBTBase c(int i) {
+        return this.a(i);
     }
 }

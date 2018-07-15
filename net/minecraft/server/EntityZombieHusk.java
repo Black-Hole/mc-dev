@@ -5,47 +5,43 @@ import javax.annotation.Nullable;
 public class EntityZombieHusk extends EntityZombie {
 
     public EntityZombieHusk(World world) {
-        super(world);
+        super(EntityTypes.HUSK, world);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityZombieHusk.class);
+    public boolean a(GeneratorAccess generatoraccess) {
+        return super.a(generatoraccess) && generatoraccess.e(new BlockPosition(this));
     }
 
-    public boolean P() {
-        return super.P() && this.world.h(new BlockPosition(this));
-    }
-
-    protected boolean p() {
+    protected boolean L_() {
         return false;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.cY;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_HUSK_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.da;
+        return SoundEffects.ENTITY_HUSK_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.cZ;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_HUSK_DEATH;
     }
 
-    protected SoundEffect dm() {
-        return SoundEffects.db;
+    protected SoundEffect dA() {
+        return SoundEffects.ENTITY_HUSK_STEP;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.ar;
+    protected MinecraftKey G() {
+        return LootTables.ay;
     }
 
     public boolean B(Entity entity) {
         boolean flag = super.B(entity);
 
         if (flag && this.getItemInMainHand().isEmpty() && entity instanceof EntityLiving) {
-            float f = this.world.D(new BlockPosition(this)).b();
+            float f = this.world.getDamageScaler(new BlockPosition(this)).b();
 
             ((EntityLiving) entity).addEffect(new MobEffect(MobEffects.HUNGER, 140 * (int) f));
         }
@@ -53,7 +49,16 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected ItemStack dn() {
+    protected boolean dC() {
+        return true;
+    }
+
+    protected void dE() {
+        this.a(new EntityZombie(this.world));
+        this.world.a((EntityHuman) null, 1041, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
+    }
+
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 }

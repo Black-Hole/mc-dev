@@ -6,8 +6,6 @@ public interface PacketListenerPlayIn extends PacketListener {
 
     void a(PacketPlayInChat packetplayinchat);
 
-    void a(PacketPlayInTabComplete packetplayintabcomplete);
-
     void a(PacketPlayInClientCommand packetplayinclientcommand);
 
     void a(PacketPlayInSettings packetplayinsettings);
@@ -61,4 +59,26 @@ public interface PacketListenerPlayIn extends PacketListener {
     void a(PacketPlayInRecipeDisplayed packetplayinrecipedisplayed);
 
     void a(PacketPlayInAdvancements packetplayinadvancements);
+
+    void a(PacketPlayInTabComplete packetplayintabcomplete);
+
+    void a(PacketPlayInSetCommandBlock packetplayinsetcommandblock);
+
+    void a(PacketPlayInSetCommandMinecart packetplayinsetcommandminecart);
+
+    void a(PacketPlayInPickItem packetplayinpickitem);
+
+    void a(PacketPlayInItemName packetplayinitemname);
+
+    void a(PacketPlayInBeacon packetplayinbeacon);
+
+    void a(PacketPlayInStruct packetplayinstruct);
+
+    void a(PacketPlayInTrSel packetplayintrsel);
+
+    void a(PacketPlayInBEdit packetplayinbedit);
+
+    void a(PacketPlayInEntityNBTQuery packetplayinentitynbtquery);
+
+    void a(PacketPlayInTileNBTQuery packetplayintilenbtquery);
 }

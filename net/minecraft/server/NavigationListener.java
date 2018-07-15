@@ -10,15 +10,15 @@ public class NavigationListener implements IWorldAccess {
 
     public NavigationListener() {}
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
-        if (this.a(world, blockposition, iblockdata, iblockdata1)) {
+    public void a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
+        if (this.a(iblockaccess, blockposition, iblockdata, iblockdata1)) {
             int j = 0;
 
             for (int k = this.a.size(); j < k; ++j) {
                 NavigationAbstract navigationabstract = (NavigationAbstract) this.a.get(j);
 
-                if (navigationabstract != null && !navigationabstract.j()) {
-                    PathEntity pathentity = navigationabstract.l();
+                if (navigationabstract != null && !navigationabstract.l()) {
+                    PathEntity pathentity = navigationabstract.n();
 
                     if (pathentity != null && !pathentity.b() && pathentity.d() != 0) {
                         PathPoint pathpoint = navigationabstract.c.c();
@@ -26,7 +26,7 @@ public class NavigationListener implements IWorldAccess {
                         int l = (pathentity.d() - pathentity.e()) * (pathentity.d() - pathentity.e());
 
                         if (d0 < (double) l) {
-                            navigationabstract.k();
+                            navigationabstract.m();
                         }
                     }
                 }
@@ -35,11 +35,11 @@ public class NavigationListener implements IWorldAccess {
         }
     }
 
-    protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        AxisAlignedBB axisalignedbb = iblockdata.d(world, blockposition);
-        AxisAlignedBB axisalignedbb1 = iblockdata1.d(world, blockposition);
+    protected boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
+        VoxelShape voxelshape = iblockdata.h(iblockaccess, blockposition);
+        VoxelShape voxelshape1 = iblockdata1.h(iblockaccess, blockposition);
 
-        return axisalignedbb != axisalignedbb1 && (axisalignedbb == null || !axisalignedbb.equals(axisalignedbb1));
+        return VoxelShapes.c(voxelshape, voxelshape1, OperatorBoolean.NOT_SAME);
     }
 
     public void a(BlockPosition blockposition) {}
@@ -48,9 +48,9 @@ public class NavigationListener implements IWorldAccess {
 
     public void a(@Nullable EntityHuman entityhuman, SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {}
 
-    public void a(int i, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
+    public void a(ParticleParam particleparam, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5) {}
 
-    public void a(int i, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
+    public void a(ParticleParam particleparam, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5) {}
 
     public void a(Entity entity) {
         if (entity instanceof EntityInsentient) {

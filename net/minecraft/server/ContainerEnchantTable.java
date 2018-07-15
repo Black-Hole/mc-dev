@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class ContainerEnchantTable extends Container {
 
-    public IInventory enchantSlots = new InventorySubcontainer("Enchant", true, 2) {
+    public IInventory enchantSlots = new InventorySubcontainer(new ChatComponentText("Enchant"), 2) {
         public int getMaxStackSize() {
             return 64;
         }
@@ -26,7 +26,7 @@ public class ContainerEnchantTable extends Container {
     public ContainerEnchantTable(PlayerInventory playerinventory, World world, BlockPosition blockposition) {
         this.world = world;
         this.position = blockposition;
-        this.f = playerinventory.player.dg();
+        this.f = playerinventory.player.dt();
         this.a(new Slot(this.enchantSlots, 0, 15, 47) {
             public boolean isAllowed(ItemStack itemstack) {
                 return true;
@@ -38,7 +38,7 @@ public class ContainerEnchantTable extends Container {
         });
         this.a(new Slot(this.enchantSlots, 1, 35, 47) {
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack.getData()) == EnumColor.BLUE;
+                return itemstack.getItem() == Items.LAPIS_LAZULI;
             }
         });
 
@@ -146,7 +146,7 @@ public class ContainerEnchantTable extends Container {
                             if (list != null && !list.isEmpty()) {
                                 WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.l.nextInt(list.size()));
 
-                                this.h[j] = Enchantment.getId(weightedrandomenchant.enchantment);
+                                this.h[j] = Enchantment.enchantments.a((Object) weightedrandomenchant.enchantment);
                                 this.i[j] = weightedrandomenchant.level;
                             }
                         }
@@ -202,15 +202,15 @@ public class ContainerEnchantTable extends Container {
                         }
                     }
 
-                    entityhuman.b(StatisticList.W);
+                    entityhuman.a(StatisticList.ENCHANT_ITEM);
                     if (entityhuman instanceof EntityPlayer) {
                         CriterionTriggers.i.a((EntityPlayer) entityhuman, itemstack, j);
                     }
 
                     this.enchantSlots.update();
-                    this.f = entityhuman.dg();
+                    this.f = entityhuman.dt();
                     this.a(this.enchantSlots);
-                    this.world.a((EntityHuman) null, this.position, SoundEffects.aR, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                    this.world.a((EntityHuman) null, this.position, SoundEffects.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, this.world.random.nextFloat() * 0.1F + 0.9F);
                 }
             }
 
@@ -258,7 +258,7 @@ public class ContainerEnchantTable extends Container {
                 if (!this.a(itemstack1, 2, 38, true)) {
                     return ItemStack.a;
                 }
-            } else if (itemstack1.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack1.getData()) == EnumColor.BLUE) {
+            } else if (itemstack1.getItem() == Items.LAPIS_LAZULI) {
                 if (!this.a(itemstack1, 1, 2, true)) {
                     return ItemStack.a;
                 }
@@ -271,7 +271,7 @@ public class ContainerEnchantTable extends Container {
                     ((Slot) this.slots.get(0)).set(itemstack1.cloneItemStack());
                     itemstack1.setCount(0);
                 } else if (!itemstack1.isEmpty()) {
-                    ((Slot) this.slots.get(0)).set(new ItemStack(itemstack1.getItem(), 1, itemstack1.getData()));
+                    ((Slot) this.slots.get(0)).set(new ItemStack(itemstack1.getItem()));
                     itemstack1.subtract(1);
                 }
             }

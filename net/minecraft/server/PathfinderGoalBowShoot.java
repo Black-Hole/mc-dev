@@ -25,28 +25,28 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
     }
 
     public boolean a() {
-        return this.a.getGoalTarget() == null ? false : this.f();
+        return this.a.getGoalTarget() == null ? false : this.g();
     }
 
-    protected boolean f() {
+    protected boolean g() {
         return !this.a.getItemInMainHand().isEmpty() && this.a.getItemInMainHand().getItem() == Items.BOW;
     }
 
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().o()) && this.f();
+        return (this.a() || !this.a.getNavigation().q()) && this.g();
     }
 
     public void c() {
         super.c();
-        ((IRangedEntity) this.a).p(true);
+        ((IRangedEntity) this.a).s(true);
     }
 
     public void d() {
         super.d();
-        ((IRangedEntity) this.a).p(false);
+        ((IRangedEntity) this.a).s(false);
         this.f = 0;
         this.e = -1;
-        this.a.cN();
+        this.a.cZ();
     }
 
     public void e() {
@@ -68,7 +68,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
             }
 
             if (d0 <= (double) this.d && this.f >= 20) {
-                this.a.getNavigation().p();
+                this.a.getNavigation().r();
                 ++this.i;
             } else {
                 this.a.getNavigation().a((Entity) entityliving, this.b);
@@ -102,13 +102,13 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.cN();
+                    this.a.cZ();
                 } else if (flag) {
-                    int i = this.a.cL();
+                    int i = this.a.cX();
 
                     if (i >= 20) {
-                        this.a.cN();
-                        ((IRangedEntity) this.a).a(entityliving, ItemBow.b(i));
+                        this.a.cZ();
+                        ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }
                 }

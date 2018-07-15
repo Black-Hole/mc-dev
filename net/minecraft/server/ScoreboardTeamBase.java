@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public abstract class ScoreboardTeamBase {
@@ -15,7 +17,7 @@ public abstract class ScoreboardTeamBase {
 
     public abstract String getName();
 
-    public abstract String getFormattedName(String s);
+    public abstract IChatBaseComponent getFormattedName(IChatBaseComponent ichatbasecomponent);
 
     public abstract boolean allowFriendlyFire();
 
@@ -29,15 +31,15 @@ public abstract class ScoreboardTeamBase {
 
     public static enum EnumTeamPush {
 
-        ALWAYS("always", 0), NEVER("never", 1), HIDE_FOR_OTHER_TEAMS("pushOtherTeams", 2), HIDE_FOR_OWN_TEAM("pushOwnTeam", 3);
+        ALWAYS("always", 0), NEVER("never", 1), PUSH_OTHER_TEAMS("pushOtherTeams", 2), PUSH_OWN_TEAM("pushOwnTeam", 3);
 
-        private static final Map<String, ScoreboardTeamBase.EnumTeamPush> g = Maps.newHashMap();
+        private static final Map<String, ScoreboardTeamBase.EnumTeamPush> g = (Map) Arrays.stream(values()).collect(Collectors.toMap((scoreboardteambase_enumteampush) -> {
+            return scoreboardteambase_enumteampush.e;
+        }, (scoreboardteambase_enumteampush) -> {
+            return scoreboardteambase_enumteampush;
+        }));
         public final String e;
         public final int f;
-
-        public static String[] a() {
-            return (String[]) ScoreboardTeamBase.EnumTeamPush.g.keySet().toArray(new String[ScoreboardTeamBase.EnumTeamPush.g.size()]);
-        }
 
         @Nullable
         public static ScoreboardTeamBase.EnumTeamPush a(String s) {
@@ -49,16 +51,8 @@ public abstract class ScoreboardTeamBase {
             this.f = i;
         }
 
-        static {
-            ScoreboardTeamBase.EnumTeamPush[] ascoreboardteambase_enumteampush = values();
-            int i = ascoreboardteambase_enumteampush.length;
-
-            for (int j = 0; j < i; ++j) {
-                ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = ascoreboardteambase_enumteampush[j];
-
-                ScoreboardTeamBase.EnumTeamPush.g.put(scoreboardteambase_enumteampush.e, scoreboardteambase_enumteampush);
-            }
-
+        public IChatBaseComponent b() {
+            return new ChatMessage("team.collision." + this.e, new Object[0]);
         }
     }
 
@@ -66,13 +60,13 @@ public abstract class ScoreboardTeamBase {
 
         ALWAYS("always", 0), NEVER("never", 1), HIDE_FOR_OTHER_TEAMS("hideForOtherTeams", 2), HIDE_FOR_OWN_TEAM("hideForOwnTeam", 3);
 
-        private static final Map<String, ScoreboardTeamBase.EnumNameTagVisibility> g = Maps.newHashMap();
+        private static final Map<String, ScoreboardTeamBase.EnumNameTagVisibility> g = (Map) Arrays.stream(values()).collect(Collectors.toMap((scoreboardteambase_enumnametagvisibility) -> {
+            return scoreboardteambase_enumnametagvisibility.e;
+        }, (scoreboardteambase_enumnametagvisibility) -> {
+            return scoreboardteambase_enumnametagvisibility;
+        }));
         public final String e;
         public final int f;
-
-        public static String[] a() {
-            return (String[]) ScoreboardTeamBase.EnumNameTagVisibility.g.keySet().toArray(new String[ScoreboardTeamBase.EnumNameTagVisibility.g.size()]);
-        }
 
         @Nullable
         public static ScoreboardTeamBase.EnumNameTagVisibility a(String s) {
@@ -84,16 +78,8 @@ public abstract class ScoreboardTeamBase {
             this.f = i;
         }
 
-        static {
-            ScoreboardTeamBase.EnumNameTagVisibility[] ascoreboardteambase_enumnametagvisibility = values();
-            int i = ascoreboardteambase_enumnametagvisibility.length;
-
-            for (int j = 0; j < i; ++j) {
-                ScoreboardTeamBase.EnumNameTagVisibility scoreboardteambase_enumnametagvisibility = ascoreboardteambase_enumnametagvisibility[j];
-
-                ScoreboardTeamBase.EnumNameTagVisibility.g.put(scoreboardteambase_enumnametagvisibility.e, scoreboardteambase_enumnametagvisibility);
-            }
-
+        public IChatBaseComponent b() {
+            return new ChatMessage("team.visibility." + this.e, new Object[0]);
         }
     }
 }

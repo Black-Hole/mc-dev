@@ -5,34 +5,30 @@ import javax.annotation.Nullable;
 public class EntitySkeletonWither extends EntitySkeletonAbstract {
 
     public EntitySkeletonWither(World world) {
-        super(world);
+        super(EntityTypes.WITHER_SKELETON, world);
         this.setSize(0.7F, 2.4F);
         this.fireProof = true;
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySkeletonWither.class);
-    }
-
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.ap;
+    protected MinecraftKey G() {
+        return LootTables.aw;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.iH;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_WITHER_SKELETON_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.iJ;
+        return SoundEffects.ENTITY_WITHER_SKELETON_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.iI;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_WITHER_SKELETON_DEATH;
     }
 
-    SoundEffect p() {
-        return SoundEffects.iK;
+    SoundEffect l() {
+        return SoundEffects.ENTITY_WITHER_SKELETON_STEP;
     }
 
     public void die(DamageSource damagesource) {
@@ -42,7 +38,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
 
             if (entitycreeper.isPowered() && entitycreeper.canCauseHeadDrop()) {
                 entitycreeper.setCausedHeadDrop();
-                this.a(new ItemStack(Items.SKULL, 1, 1), 0.0F);
+                this.a((IMaterial) Items.WITHER_SKELETON_SKULL);
             }
         }
 
@@ -55,11 +51,11 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     protected void b(DifficultyDamageScaler difficultydamagescaler) {}
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
-        GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity);
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.dm();
+        this.dz();
         return groupdataentity1;
     }
 

@@ -2,22 +2,24 @@ package net.minecraft.server;
 
 public class ItemSeeds extends Item {
 
-    private final Block a;
-    private final Block b;
+    private final IBlockData a;
 
-    public ItemSeeds(Block block, Block block1) {
-        this.a = block;
-        this.b = block1;
-        this.b(CreativeModeTab.l);
+    public ItemSeeds(Block block, Item.Info item_info) {
+        super(item_info);
+        this.a = block.getBlockData();
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        ItemStack itemstack = entityhuman.b(enumhand);
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+        BlockPosition blockposition = itemactioncontext.getClickPosition().up();
 
-        if (enumdirection == EnumDirection.UP && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && world.getType(blockposition).getBlock() == this.b && world.isEmpty(blockposition.up())) {
-            world.setTypeUpdate(blockposition.up(), this.a.getBlockData());
+        if (itemactioncontext.getClickedFace() == EnumDirection.UP && world.isEmpty(blockposition) && this.a.canPlace(world, blockposition)) {
+            world.setTypeAndData(blockposition, this.a, 11);
+            ItemStack itemstack = itemactioncontext.getItemStack();
+            EntityHuman entityhuman = itemactioncontext.getEntity();
+
             if (entityhuman instanceof EntityPlayer) {
-                CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition.up(), itemstack);
+                CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
             }
 
             itemstack.subtract(1);

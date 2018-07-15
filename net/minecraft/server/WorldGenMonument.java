@@ -2,150 +2,133 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map.Entry;
 
-public class WorldGenMonument extends StructureGenerator {
+public class WorldGenMonument extends StructureGenerator<WorldGenMonumentConfiguration> {
 
-    private int d;
-    private int h;
-    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.a, Biomes.z, Biomes.i, Biomes.l, Biomes.m});
-    public static final List<BiomeBase> b = Arrays.asList(new BiomeBase[] { Biomes.z});
-    private static final List<BiomeBase.BiomeMeta> i = Lists.newArrayList();
+    private static final List<BiomeBase.BiomeMeta> b = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.GUARDIAN, 1, 2, 4)});
 
-    public WorldGenMonument() {
-        this.d = 32;
-        this.h = 5;
+    public WorldGenMonument() {}
+
+    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
+        int i1 = chunkgenerator.getSettings().c();
+        int j1 = chunkgenerator.getSettings().d();
+        int k1 = i + i1 * k;
+        int l1 = j + i1 * l;
+        int i2 = k1 < 0 ? k1 - i1 - 1 : k1;
+        int j2 = l1 < 0 ? l1 - i1 - 1 : l1;
+        int k2 = i2 / i1;
+        int l2 = j2 / i1;
+
+        ((SeededRandom) random).a(chunkgenerator.getSeed(), k2, l2, 10387313);
+        k2 *= i1;
+        l2 *= i1;
+        k2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        l2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        return new ChunkCoordIntPair(k2, l2);
     }
 
-    public WorldGenMonument(Map<String, String> map) {
-        this();
-        Iterator iterator = map.entrySet().iterator();
+    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
-        while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
+            Set set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 16);
+            Iterator iterator = set.iterator();
 
-            if (((String) entry.getKey()).equals("spacing")) {
-                this.d = MathHelper.a((String) entry.getValue(), this.d, 1);
-            } else if (((String) entry.getKey()).equals("separation")) {
-                this.h = MathHelper.a((String) entry.getValue(), this.h, 1);
-            }
+            BiomeBase biomebase;
+
+            do {
+                if (!iterator.hasNext()) {
+                    Set set1 = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 29);
+                    Iterator iterator1 = set1.iterator();
+
+                    BiomeBase biomebase1;
+
+                    do {
+                        if (!iterator1.hasNext()) {
+                            return true;
+                        }
+
+                        biomebase1 = (BiomeBase) iterator1.next();
+                    } while (biomebase1.p() == BiomeBase.Geography.OCEAN || biomebase1.p() == BiomeBase.Geography.RIVER);
+
+                    return false;
+                }
+
+                biomebase = (BiomeBase) iterator.next();
+            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.n));
+
+            return false;
+        } else {
+            return false;
         }
-
     }
 
-    public String a() {
+    protected boolean a(GeneratorAccess generatoraccess) {
+        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
+    }
+
+    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
+
+        return new WorldGenMonument.a(generatoraccess, seededrandom, i, j, biomebase);
+    }
+
+    protected String a() {
         return "Monument";
     }
 
-    protected boolean a(int i, int j) {
-        int k = i;
-        int l = j;
+    public int b() {
+        return 8;
+    }
 
-        if (i < 0) {
-            i -= this.d - 1;
+    public List<BiomeBase.BiomeMeta> d() {
+        return WorldGenMonument.b;
+    }
+
+    public static class a extends StructureStart {
+
+        private final Set<ChunkCoordIntPair> e = Sets.newHashSet();
+        private boolean f;
+
+        public a() {}
+
+        public a(GeneratorAccess generatoraccess, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
+            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
+            this.b(generatoraccess, seededrandom, i, j);
         }
 
-        if (j < 0) {
-            j -= this.d - 1;
-        }
-
-        int i1 = i / this.d;
-        int j1 = j / this.d;
-        Random random = this.g.a(i1, j1, 10387313);
-
-        i1 *= this.d;
-        j1 *= this.d;
-        i1 += (random.nextInt(this.d - this.h) + random.nextInt(this.d - this.h)) / 2;
-        j1 += (random.nextInt(this.d - this.h) + random.nextInt(this.d - this.h)) / 2;
-        if (k == i1 && l == j1) {
-            if (!this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 16, WorldGenMonument.b)) {
-                return false;
-            }
-
-            boolean flag = this.g.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 29, WorldGenMonument.a);
-
-            if (flag) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
-        this.g = world;
-        return a(world, this, blockposition, this.d, this.h, 10387313, true, 100, flag);
-    }
-
-    protected StructureStart b(int i, int j) {
-        return new WorldGenMonument.WorldGenMonumentStart(this.g, this.f, i, j);
-    }
-
-    public List<BiomeBase.BiomeMeta> b() {
-        return WorldGenMonument.i;
-    }
-
-    static {
-        WorldGenMonument.i.add(new BiomeBase.BiomeMeta(EntityGuardian.class, 1, 2, 4));
-    }
-
-    public static class WorldGenMonumentStart extends StructureStart {
-
-        private final Set<ChunkCoordIntPair> c = Sets.newHashSet();
-        private boolean d;
-
-        public WorldGenMonumentStart() {}
-
-        public WorldGenMonumentStart(World world, Random random, int i, int j) {
-            super(i, j);
-            this.b(world, random, i, j);
-        }
-
-        private void b(World world, Random random, int i, int j) {
-            random.setSeed(world.getSeed());
-            long k = random.nextLong();
-            long l = random.nextLong();
-            long i1 = (long) i * k;
-            long j1 = (long) j * l;
-
-            random.setSeed(i1 ^ j1 ^ world.getSeed());
-            int k1 = i * 16 + 8 - 29;
-            int l1 = j * 16 + 8 - 29;
+        private void b(IBlockAccess iblockaccess, Random random, int i, int j) {
+            int k = i * 16 - 29;
+            int l = j * 16 - 29;
             EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
 
-            this.a.add(new WorldGenMonumentPieces.WorldGenMonumentPiece1(random, k1, l1, enumdirection));
-            this.d();
-            this.d = true;
+            this.a.add(new WorldGenMonumentPieces.WorldGenMonumentPiece1(random, k, l, enumdirection));
+            this.a(iblockaccess);
+            this.f = true;
         }
 
-        public void a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            if (!this.d) {
+        public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+            if (!this.f) {
                 this.a.clear();
-                this.b(world, random, this.e(), this.f());
+                this.b(generatoraccess, random, this.e(), this.f());
             }
 
-            super.a(world, random, structureboundingbox);
-        }
-
-        public boolean a(ChunkCoordIntPair chunkcoordintpair) {
-            return this.c.contains(chunkcoordintpair) ? false : super.a(chunkcoordintpair);
+            super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
         }
 
         public void b(ChunkCoordIntPair chunkcoordintpair) {
             super.b(chunkcoordintpair);
-            this.c.add(chunkcoordintpair);
+            this.e.add(chunkcoordintpair);
         }
 
         public void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
             NBTTagList nbttaglist = new NBTTagList();
-            Iterator iterator = this.c.iterator();
+            Iterator iterator = this.e.iterator();
 
             while (iterator.hasNext()) {
                 ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
@@ -153,7 +136,7 @@ public class WorldGenMonument extends StructureGenerator {
 
                 nbttagcompound1.setInt("X", chunkcoordintpair.x);
                 nbttagcompound1.setInt("Z", chunkcoordintpair.z);
-                nbttaglist.add(nbttagcompound1);
+                nbttaglist.add((NBTBase) nbttagcompound1);
             }
 
             nbttagcompound.set("Processed", nbttaglist);
@@ -165,9 +148,9 @@ public class WorldGenMonument extends StructureGenerator {
                 NBTTagList nbttaglist = nbttagcompound.getList("Processed", 10);
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
-                    NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+                    NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
 
-                    this.c.add(new ChunkCoordIntPair(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Z")));
+                    this.e.add(new ChunkCoordIntPair(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Z")));
                 }
             }
 

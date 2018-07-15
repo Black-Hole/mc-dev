@@ -3,7 +3,9 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import java.util.Iterator;
 import java.util.Random;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,18 +21,39 @@ public class LootItemFunctionSmelt extends LootItemFunction {
         if (itemstack.isEmpty()) {
             return itemstack;
         } else {
-            ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
+            IRecipe irecipe = a(loottableinfo, itemstack);
 
-            if (itemstack1.isEmpty()) {
-                LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", itemstack);
-                return itemstack;
-            } else {
-                ItemStack itemstack2 = itemstack1.cloneItemStack();
+            if (irecipe != null) {
+                ItemStack itemstack1 = irecipe.d();
 
-                itemstack2.setCount(itemstack.getCount());
-                return itemstack2;
+                if (!itemstack1.isEmpty()) {
+                    ItemStack itemstack2 = itemstack1.cloneItemStack();
+
+                    itemstack2.setCount(itemstack.getCount());
+                    return itemstack2;
+                }
             }
+
+            LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", itemstack);
+            return itemstack;
         }
+    }
+
+    @Nullable
+    public static IRecipe a(LootTableInfo loottableinfo, ItemStack itemstack) {
+        Iterator iterator = loottableinfo.h().D().b().iterator();
+
+        IRecipe irecipe;
+
+        do {
+            if (!iterator.hasNext()) {
+                return null;
+            }
+
+            irecipe = (IRecipe) iterator.next();
+        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).a(itemstack));
+
+        return irecipe;
     }
 
     public static class a extends LootItemFunction.a<LootItemFunctionSmelt> {

@@ -1,59 +1,52 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 2);
-    protected static final AxisAlignedBB[] b = new AxisAlignedBB[] { new AxisAlignedBB(0.6875D, 0.4375D, 0.375D, 0.9375D, 0.75D, 0.625D), new AxisAlignedBB(0.5625D, 0.3125D, 0.3125D, 0.9375D, 0.75D, 0.6875D), new AxisAlignedBB(0.4375D, 0.1875D, 0.25D, 0.9375D, 0.75D, 0.75D)};
-    protected static final AxisAlignedBB[] c = new AxisAlignedBB[] { new AxisAlignedBB(0.0625D, 0.4375D, 0.375D, 0.3125D, 0.75D, 0.625D), new AxisAlignedBB(0.0625D, 0.3125D, 0.3125D, 0.4375D, 0.75D, 0.6875D), new AxisAlignedBB(0.0625D, 0.1875D, 0.25D, 0.5625D, 0.75D, 0.75D)};
-    protected static final AxisAlignedBB[] d = new AxisAlignedBB[] { new AxisAlignedBB(0.375D, 0.4375D, 0.0625D, 0.625D, 0.75D, 0.3125D), new AxisAlignedBB(0.3125D, 0.3125D, 0.0625D, 0.6875D, 0.75D, 0.4375D), new AxisAlignedBB(0.25D, 0.1875D, 0.0625D, 0.75D, 0.75D, 0.5625D)};
-    protected static final AxisAlignedBB[] e = new AxisAlignedBB[] { new AxisAlignedBB(0.375D, 0.4375D, 0.6875D, 0.625D, 0.75D, 0.9375D), new AxisAlignedBB(0.3125D, 0.3125D, 0.5625D, 0.6875D, 0.75D, 0.9375D), new AxisAlignedBB(0.25D, 0.1875D, 0.4375D, 0.75D, 0.75D, 0.9375D)};
+    public static final BlockStateInteger AGE = BlockProperties.S;
+    protected static final VoxelShape[] b = new VoxelShape[] { Block.a(11.0D, 7.0D, 6.0D, 15.0D, 12.0D, 10.0D), Block.a(9.0D, 5.0D, 5.0D, 15.0D, 12.0D, 11.0D), Block.a(7.0D, 3.0D, 4.0D, 15.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] c = new VoxelShape[] { Block.a(1.0D, 7.0D, 6.0D, 5.0D, 12.0D, 10.0D), Block.a(1.0D, 5.0D, 5.0D, 7.0D, 12.0D, 11.0D), Block.a(1.0D, 3.0D, 4.0D, 9.0D, 12.0D, 12.0D)};
+    protected static final VoxelShape[] p = new VoxelShape[] { Block.a(6.0D, 7.0D, 1.0D, 10.0D, 12.0D, 5.0D), Block.a(5.0D, 5.0D, 1.0D, 11.0D, 12.0D, 7.0D), Block.a(4.0D, 3.0D, 1.0D, 12.0D, 12.0D, 9.0D)};
+    protected static final VoxelShape[] q = new VoxelShape[] { Block.a(6.0D, 7.0D, 11.0D, 10.0D, 12.0D, 15.0D), Block.a(5.0D, 5.0D, 9.0D, 11.0D, 12.0D, 15.0D), Block.a(4.0D, 3.0D, 7.0D, 12.0D, 12.0D, 15.0D)};
 
-    public BlockCocoa() {
-        super(Material.PLANT);
-        this.w(this.blockStateList.getBlockData().set(BlockCocoa.FACING, EnumDirection.NORTH).set(BlockCocoa.AGE, Integer.valueOf(0)));
-        this.a(true);
+    public BlockCocoa(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, Integer.valueOf(0)));
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!this.e(world, blockposition, iblockdata)) {
-            this.f(world, blockposition, iblockdata);
-        } else if (world.random.nextInt(5) == 0) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (world.random.nextInt(5) == 0) {
             int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
 
             if (i < 2) {
-                world.setTypeAndData(blockposition, iblockdata.set(BlockCocoa.AGE, Integer.valueOf(i + 1)), 2);
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, Integer.valueOf(i + 1)), 2);
             }
         }
 
     }
 
-    public boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        blockposition = blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING));
-        IBlockData iblockdata1 = world.getType(blockposition);
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        Block block = iworldreader.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING))).getBlock();
 
-        return iblockdata1.getBlock() == Blocks.LOG && iblockdata1.get(BlockLog1.VARIANT) == BlockWood.EnumLogVariant.JUNGLE;
+        return block == Blocks.JUNGLE_LOG || block == Blocks.JUNGLE_WOOD || block == Blocks.STRIPPED_JUNGLE_LOG;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return false;
-    }
-
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
 
         switch ((EnumDirection) iblockdata.get(BlockCocoa.FACING)) {
         case SOUTH:
-            return BlockCocoa.e[i];
+            return BlockCocoa.q[i];
 
         case NORTH:
         default:
-            return BlockCocoa.d[i];
+            return BlockCocoa.p[i];
 
         case WEST:
             return BlockCocoa.c[i];
@@ -63,41 +56,33 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         }
     }
 
-    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockCocoa.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockCocoa.FACING)));
-    }
+    @Nullable
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        IBlockData iblockdata = this.getBlockData();
+        World world = blockactioncontext.getWorld();
+        BlockPosition blockposition = blockactioncontext.getClickPosition();
+        EnumDirection[] aenumdirection = blockactioncontext.e();
+        int i = aenumdirection.length;
 
-    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockCocoa.FACING)));
-    }
+        for (int j = 0; j < i; ++j) {
+            EnumDirection enumdirection = aenumdirection[j];
 
-    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        EnumDirection enumdirection = EnumDirection.fromAngle((double) entityliving.yaw);
-
-        world.setTypeAndData(blockposition, iblockdata.set(BlockCocoa.FACING, enumdirection), 2);
-    }
-
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        if (!enumdirection.k().c()) {
-            enumdirection = EnumDirection.NORTH;
+            if (enumdirection.k().c()) {
+                iblockdata = (IBlockData) iblockdata.set(BlockCocoa.FACING, enumdirection);
+                if (iblockdata.canPlace(world, blockposition)) {
+                    return iblockdata;
+                }
+            }
         }
 
-        return this.getBlockData().set(BlockCocoa.FACING, enumdirection.opposite()).set(BlockCocoa.AGE, Integer.valueOf(0));
+        return null;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!this.e(world, blockposition, iblockdata)) {
-            this.f(world, blockposition, iblockdata);
-        }
-
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == iblockdata.get(BlockCocoa.FACING) && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    private void f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
-        this.b(world, blockposition, iblockdata, 0);
-    }
-
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
         int j = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
         byte b0 = 1;
 
@@ -106,16 +91,16 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
         }
 
         for (int k = 0; k < b0; ++k) {
-            a(world, blockposition, new ItemStack(Items.DYE, 1, EnumColor.BROWN.getInvColorIndex()));
+            a(world, blockposition, new ItemStack(Items.COCOA_BEANS));
         }
 
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(Items.DYE, 1, EnumColor.BROWN.getInvColorIndex());
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+        return new ItemStack(Items.COCOA_BEANS);
     }
 
-    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() < 2;
     }
 
@@ -124,23 +109,15 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        world.setTypeAndData(blockposition, iblockdata.set(BlockCocoa.AGE, Integer.valueOf(((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() + 1)), 2);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, Integer.valueOf(((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() + 1)), 2);
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockCocoa.FACING, EnumDirection.fromType2(i)).set(BlockCocoa.AGE, Integer.valueOf((i & 15) >> 2));
+    public TextureType c() {
+        return TextureType.CUTOUT;
     }
 
-    public int toLegacyData(IBlockData iblockdata) {
-        byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockCocoa.FACING)).get2DRotationValue();
-
-        i |= ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() << 2;
-        return i;
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockCocoa.FACING, BlockCocoa.AGE});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockCocoa.FACING, BlockCocoa.AGE});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

@@ -1,19 +1,20 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class DefinedStructure {
 
-    private final List<DefinedStructure.BlockInfo> a = Lists.newArrayList();
+    private final List<List<DefinedStructure.BlockInfo>> a = Lists.newArrayList();
     private final List<DefinedStructure.EntityInfo> b = Lists.newArrayList();
     private BlockPosition c;
     private String d;
@@ -62,7 +63,7 @@ public class DefinedStructure {
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
                         arraylist1.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, nbttagcompound));
-                    } else if (!iblockdata.b() && !iblockdata.g()) {
+                    } else if (!iblockdata.f(world, blockposition_mutableblockposition) && !iblockdata.g()) {
                         arraylist2.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
                     } else {
                         arraylist.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
@@ -70,10 +71,13 @@ public class DefinedStructure {
                 }
             }
 
+            ArrayList arraylist3 = Lists.newArrayList();
+
+            arraylist3.addAll(arraylist);
+            arraylist3.addAll(arraylist1);
+            arraylist3.addAll(arraylist2);
             this.a.clear();
-            this.a.addAll(arraylist);
-            this.a.addAll(arraylist1);
-            this.a.addAll(arraylist2);
+            this.a.add(arraylist3);
             if (flag) {
                 this.a(world, blockposition3, blockposition4.a(1, 1, 1));
             } else {
@@ -84,14 +88,8 @@ public class DefinedStructure {
     }
 
     private void a(World world, BlockPosition blockposition, BlockPosition blockposition1) {
-        List list = world.a(Entity.class, new AxisAlignedBB(blockposition, blockposition1), new Predicate() {
-            public boolean a(@Nullable Entity entity) {
-                return !(entity instanceof EntityHuman);
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((Entity) object);
-            }
+        List list = world.a(Entity.class, new AxisAlignedBB(blockposition, blockposition1), (entity) -> {
+            return !(entity instanceof EntityHuman);
         });
 
         this.b.clear();
@@ -117,8 +115,8 @@ public class DefinedStructure {
 
     public Map<BlockPosition, String> a(BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
         HashMap hashmap = Maps.newHashMap();
-        StructureBoundingBox structureboundingbox = definedstructureinfo.i();
-        Iterator iterator = this.a.iterator();
+        StructureBoundingBox structureboundingbox = definedstructureinfo.j();
+        Iterator iterator = definedstructureinfo.a(this.a, blockposition).iterator();
 
         while (iterator.hasNext()) {
             DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
@@ -128,9 +126,9 @@ public class DefinedStructure {
                 IBlockData iblockdata = definedstructure_blockinfo.b;
 
                 if (iblockdata.getBlock() == Blocks.STRUCTURE_BLOCK && definedstructure_blockinfo.c != null) {
-                    TileEntityStructure.UsageMode tileentitystructure_usagemode = TileEntityStructure.UsageMode.valueOf(definedstructure_blockinfo.c.getString("mode"));
+                    BlockPropertyStructureMode blockpropertystructuremode = BlockPropertyStructureMode.valueOf(definedstructure_blockinfo.c.getString("mode"));
 
-                    if (tileentitystructure_usagemode == TileEntityStructure.UsageMode.DATA) {
+                    if (blockpropertystructuremode == BlockPropertyStructureMode.DATA) {
                         hashmap.put(blockposition1, definedstructure_blockinfo.c.getString("metadata"));
                     }
                 }
@@ -148,80 +146,178 @@ public class DefinedStructure {
     }
 
     public static BlockPosition a(DefinedStructureInfo definedstructureinfo, BlockPosition blockposition) {
-        return b(blockposition, definedstructureinfo.b(), definedstructureinfo.c());
+        return a(blockposition, definedstructureinfo.b(), definedstructureinfo.c(), definedstructureinfo.d());
     }
 
-    public void a(World world, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
-        definedstructureinfo.k();
-        this.b(world, blockposition, definedstructureinfo);
+    public void a(GeneratorAccess generatoraccess, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
+        definedstructureinfo.l();
+        this.b(generatoraccess, blockposition, definedstructureinfo);
     }
 
-    public void b(World world, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
-        this.a(world, blockposition, new DefinedStructureProcessorRotation(blockposition, definedstructureinfo), definedstructureinfo, 2);
+    public void b(GeneratorAccess generatoraccess, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
+        this.a(generatoraccess, blockposition, new DefinedStructureProcessorRotation(blockposition, definedstructureinfo), definedstructureinfo, 2);
     }
 
-    public void a(World world, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo, int i) {
-        this.a(world, blockposition, new DefinedStructureProcessorRotation(blockposition, definedstructureinfo), definedstructureinfo, i);
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo, int i) {
+        return this.a(generatoraccess, blockposition, new DefinedStructureProcessorRotation(blockposition, definedstructureinfo), definedstructureinfo, i);
     }
 
-    public void a(World world, BlockPosition blockposition, @Nullable DefinedStructureProcessor definedstructureprocessor, DefinedStructureInfo definedstructureinfo, int i) {
-        if ((!this.a.isEmpty() || !definedstructureinfo.g() && !this.b.isEmpty()) && this.c.getX() >= 1 && this.c.getY() >= 1 && this.c.getZ() >= 1) {
-            Block block = definedstructureinfo.h();
-            StructureBoundingBox structureboundingbox = definedstructureinfo.i();
-            Iterator iterator = this.a.iterator();
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, @Nullable DefinedStructureProcessor definedstructureprocessor, DefinedStructureInfo definedstructureinfo, int i) {
+        if (this.a.isEmpty()) {
+            return false;
+        } else {
+            List list = definedstructureinfo.a(this.a, blockposition);
 
-            DefinedStructure.BlockInfo definedstructure_blockinfo;
-            BlockPosition blockposition1;
+            if ((!list.isEmpty() || !definedstructureinfo.h() && !this.b.isEmpty()) && this.c.getX() >= 1 && this.c.getY() >= 1 && this.c.getZ() >= 1) {
+                Block block = definedstructureinfo.i();
+                StructureBoundingBox structureboundingbox = definedstructureinfo.j();
+                ArrayList arraylist = Lists.newArrayListWithCapacity(definedstructureinfo.m() ? list.size() : 0);
+                ArrayList arraylist1 = Lists.newArrayListWithCapacity(list.size());
+                int j = Integer.MAX_VALUE;
+                int k = Integer.MAX_VALUE;
+                int l = Integer.MAX_VALUE;
+                int i1 = Integer.MIN_VALUE;
+                int j1 = Integer.MIN_VALUE;
+                int k1 = Integer.MIN_VALUE;
+                Iterator iterator = list.iterator();
 
-            while (iterator.hasNext()) {
-                definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
-                blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
-                DefinedStructure.BlockInfo definedstructure_blockinfo1 = definedstructureprocessor != null ? definedstructureprocessor.a(world, blockposition1, definedstructure_blockinfo) : definedstructure_blockinfo;
+                while (iterator.hasNext()) {
+                    DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
+                    BlockPosition blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
+                    DefinedStructure.BlockInfo definedstructure_blockinfo1 = definedstructureprocessor != null ? definedstructureprocessor.a(generatoraccess, blockposition1, definedstructure_blockinfo) : definedstructure_blockinfo;
 
-                if (definedstructure_blockinfo1 != null) {
-                    Block block1 = definedstructure_blockinfo1.b.getBlock();
+                    if (definedstructure_blockinfo1 != null) {
+                        Block block1 = definedstructure_blockinfo1.b.getBlock();
 
-                    if ((block == null || block != block1) && (!definedstructureinfo.j() || block1 != Blocks.STRUCTURE_BLOCK) && (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1))) {
-                        IBlockData iblockdata = definedstructure_blockinfo1.b.a(definedstructureinfo.b());
-                        IBlockData iblockdata1 = iblockdata.a(definedstructureinfo.c());
-                        TileEntity tileentity;
+                        if ((block == null || block != block1) && (!definedstructureinfo.k() || block1 != Blocks.STRUCTURE_BLOCK) && (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1))) {
+                            Fluid fluid = definedstructureinfo.m() ? generatoraccess.b(blockposition1) : null;
+                            IBlockData iblockdata = definedstructure_blockinfo1.b.a(definedstructureinfo.b());
+                            IBlockData iblockdata1 = iblockdata.a(definedstructureinfo.c());
+                            TileEntity tileentity;
 
-                        if (definedstructure_blockinfo1.c != null) {
-                            tileentity = world.getTileEntity(blockposition1);
-                            if (tileentity != null) {
+                            if (definedstructure_blockinfo1.c != null) {
+                                tileentity = generatoraccess.getTileEntity(blockposition1);
                                 if (tileentity instanceof IInventory) {
                                     ((IInventory) tileentity).clear();
                                 }
 
-                                world.setTypeAndData(blockposition1, Blocks.BARRIER.getBlockData(), 4);
+                                generatoraccess.setTypeAndData(blockposition1, Blocks.BARRIER.getBlockData(), 4);
                             }
-                        }
 
-                        if (world.setTypeAndData(blockposition1, iblockdata1, i) && definedstructure_blockinfo1.c != null) {
-                            tileentity = world.getTileEntity(blockposition1);
-                            if (tileentity != null) {
-                                definedstructure_blockinfo1.c.setInt("x", blockposition1.getX());
-                                definedstructure_blockinfo1.c.setInt("y", blockposition1.getY());
-                                definedstructure_blockinfo1.c.setInt("z", blockposition1.getZ());
-                                tileentity.load(definedstructure_blockinfo1.c);
-                                tileentity.a(definedstructureinfo.b());
-                                tileentity.a(definedstructureinfo.c());
+                            if (generatoraccess.setTypeAndData(blockposition1, iblockdata1, i)) {
+                                j = Math.min(j, blockposition1.getX());
+                                k = Math.min(k, blockposition1.getY());
+                                l = Math.min(l, blockposition1.getZ());
+                                i1 = Math.max(i1, blockposition1.getX());
+                                j1 = Math.max(j1, blockposition1.getY());
+                                k1 = Math.max(k1, blockposition1.getZ());
+                                arraylist1.add(Pair.of(blockposition1, definedstructure_blockinfo.c));
+                                if (definedstructure_blockinfo1.c != null) {
+                                    tileentity = generatoraccess.getTileEntity(blockposition1);
+                                    if (tileentity != null) {
+                                        definedstructure_blockinfo1.c.setInt("x", blockposition1.getX());
+                                        definedstructure_blockinfo1.c.setInt("y", blockposition1.getY());
+                                        definedstructure_blockinfo1.c.setInt("z", blockposition1.getZ());
+                                        tileentity.load(definedstructure_blockinfo1.c);
+                                        tileentity.a(definedstructureinfo.b());
+                                        tileentity.a(definedstructureinfo.c());
+                                    }
+                                }
+
+                                if (fluid != null && iblockdata1.getBlock() instanceof IFluidContainer) {
+                                    ((IFluidContainer) iblockdata1.getBlock()).a(generatoraccess, blockposition1, iblockdata1, fluid);
+                                    if (!fluid.d()) {
+                                        arraylist.add(blockposition1);
+                                    }
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            iterator = this.a.iterator();
+                boolean flag = true;
+                EnumDirection[] aenumdirection = new EnumDirection[] { EnumDirection.UP, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST};
 
-            while (iterator.hasNext()) {
-                definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
-                if (block == null || block != definedstructure_blockinfo.b.getBlock()) {
-                    blockposition1 = a(definedstructureinfo, definedstructure_blockinfo.a).a((BaseBlockPosition) blockposition);
-                    if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1)) {
-                        world.update(blockposition1, definedstructure_blockinfo.b.getBlock(), false);
-                        if (definedstructure_blockinfo.c != null) {
-                            TileEntity tileentity1 = world.getTileEntity(blockposition1);
+                int l1;
+
+                while (flag && !arraylist.isEmpty()) {
+                    flag = false;
+                    Iterator iterator1 = arraylist.iterator();
+
+                    while (iterator1.hasNext()) {
+                        BlockPosition blockposition2 = (BlockPosition) iterator1.next();
+                        Fluid fluid1 = generatoraccess.b(blockposition2);
+
+                        for (l1 = 0; l1 < aenumdirection.length && !fluid1.d(); ++l1) {
+                            Fluid fluid2 = generatoraccess.b(blockposition2.shift(aenumdirection[l1]));
+
+                            if (fluid2.f() > fluid1.f() || fluid2.d() && !fluid1.d()) {
+                                fluid1 = fluid2;
+                            }
+                        }
+
+                        if (fluid1.d()) {
+                            IBlockData iblockdata2 = generatoraccess.getType(blockposition2);
+
+                            if (iblockdata2.getBlock() instanceof IFluidContainer) {
+                                ((IFluidContainer) iblockdata2.getBlock()).a(generatoraccess, blockposition2, iblockdata2, fluid1);
+                                flag = true;
+                                iterator1.remove();
+                            }
+                        }
+                    }
+                }
+
+                if (j <= i1) {
+                    VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(i1 - j + 1, j1 - k + 1, k1 - l + 1);
+                    int i2 = j;
+                    int j2 = k;
+
+                    l1 = l;
+                    Iterator iterator2 = arraylist1.iterator();
+
+                    Pair pair;
+                    BlockPosition blockposition3;
+
+                    while (iterator2.hasNext()) {
+                        pair = (Pair) iterator2.next();
+                        blockposition3 = (BlockPosition) pair.getFirst();
+                        voxelshapebitset.a(blockposition3.getX() - i2, blockposition3.getY() - j2, blockposition3.getZ() - l1, true, true);
+                    }
+
+                    voxelshapebitset.a((enumdirection, i, j, k) -> {
+                        BlockPosition blockposition = new BlockPosition(l + i, i1 + j, j1 + k);
+                        BlockPosition blockposition1 = blockposition.shift(enumdirection);
+                        IBlockData iblockdata = generatoraccess.getType(blockposition);
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
+                        IBlockData iblockdata2 = iblockdata.updateState(enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+
+                        if (iblockdata != iblockdata2) {
+                            generatoraccess.setTypeAndData(blockposition, iblockdata2, k1 & -2 | 16);
+                        }
+
+                        IBlockData iblockdata3 = iblockdata1.updateState(enumdirection.opposite(), iblockdata2, generatoraccess, blockposition1, blockposition);
+
+                        if (iblockdata1 != iblockdata3) {
+                            generatoraccess.setTypeAndData(blockposition1, iblockdata3, k1 & -2 | 16);
+                        }
+
+                    });
+                    iterator2 = arraylist1.iterator();
+
+                    while (iterator2.hasNext()) {
+                        pair = (Pair) iterator2.next();
+                        blockposition3 = (BlockPosition) pair.getFirst();
+                        IBlockData iblockdata3 = generatoraccess.getType(blockposition3);
+                        IBlockData iblockdata4 = Block.a(iblockdata3, generatoraccess, blockposition3);
+
+                        if (iblockdata3 != iblockdata4) {
+                            generatoraccess.setTypeAndData(blockposition3, iblockdata4, i & -2 | 16);
+                        }
+
+                        generatoraccess.update(blockposition3, iblockdata4.getBlock());
+                        if (pair.getSecond() != null) {
+                            TileEntity tileentity1 = generatoraccess.getTileEntity(blockposition3);
 
                             if (tileentity1 != null) {
                                 tileentity1.update();
@@ -229,38 +325,41 @@ public class DefinedStructure {
                         }
                     }
                 }
-            }
 
-            if (!definedstructureinfo.g()) {
-                this.a(world, blockposition, definedstructureinfo.b(), definedstructureinfo.c(), structureboundingbox);
-            }
+                if (!definedstructureinfo.h()) {
+                    this.a(generatoraccess, blockposition, definedstructureinfo.b(), definedstructureinfo.c(), definedstructureinfo.d(), structureboundingbox);
+                }
 
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    private void a(World world, BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, @Nullable StructureBoundingBox structureboundingbox) {
+    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, BlockPosition blockposition1, @Nullable StructureBoundingBox structureboundingbox) {
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {
             DefinedStructure.EntityInfo definedstructure_entityinfo = (DefinedStructure.EntityInfo) iterator.next();
-            BlockPosition blockposition1 = b(definedstructure_entityinfo.b, enumblockmirror, enumblockrotation).a((BaseBlockPosition) blockposition);
+            BlockPosition blockposition2 = a(definedstructure_entityinfo.b, enumblockmirror, enumblockrotation, blockposition1).a((BaseBlockPosition) blockposition);
 
-            if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1)) {
+            if (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition2)) {
                 NBTTagCompound nbttagcompound = definedstructure_entityinfo.c;
-                Vec3D vec3d = a(definedstructure_entityinfo.a, enumblockmirror, enumblockrotation);
+                Vec3D vec3d = a(definedstructure_entityinfo.a, enumblockmirror, enumblockrotation, blockposition1);
                 Vec3D vec3d1 = vec3d.add((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
                 NBTTagList nbttaglist = new NBTTagList();
 
-                nbttaglist.add(new NBTTagDouble(vec3d1.x));
-                nbttaglist.add(new NBTTagDouble(vec3d1.y));
-                nbttaglist.add(new NBTTagDouble(vec3d1.z));
+                nbttaglist.add((NBTBase) (new NBTTagDouble(vec3d1.x)));
+                nbttaglist.add((NBTBase) (new NBTTagDouble(vec3d1.y)));
+                nbttaglist.add((NBTBase) (new NBTTagDouble(vec3d1.z)));
                 nbttagcompound.set("Pos", nbttaglist);
                 nbttagcompound.a("UUID", UUID.randomUUID());
 
                 Entity entity;
 
                 try {
-                    entity = EntityTypes.a(nbttagcompound, world);
+                    entity = EntityTypes.a(nbttagcompound, generatoraccess.getMinecraftWorld());
                 } catch (Exception exception) {
                     entity = null;
                 }
@@ -270,7 +369,7 @@ public class DefinedStructure {
 
                     f += entity.yaw - entity.a(enumblockrotation);
                     entity.setPositionRotation(vec3d1.x, vec3d1.y, vec3d1.z, f, entity.pitch);
-                    world.addEntity(entity);
+                    generatoraccess.addEntity(entity);
                 }
             }
         }
@@ -288,7 +387,7 @@ public class DefinedStructure {
         }
     }
 
-    private static BlockPosition b(BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation) {
+    public static BlockPosition a(BlockPosition blockposition, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, BlockPosition blockposition1) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -307,22 +406,25 @@ public class DefinedStructure {
             flag = false;
         }
 
+        int l = blockposition1.getX();
+        int i1 = blockposition1.getZ();
+
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
-            return new BlockPosition(k, j, -i);
+            return new BlockPosition(l - i1 + k, j, l + i1 - i);
 
         case CLOCKWISE_90:
-            return new BlockPosition(-k, j, i);
+            return new BlockPosition(l + i1 - k, j, i1 - l + i);
 
         case CLOCKWISE_180:
-            return new BlockPosition(-i, j, -k);
+            return new BlockPosition(l + l - i, j, i1 + i1 - k);
 
         default:
             return flag ? new BlockPosition(i, j, k) : blockposition;
         }
     }
 
-    private static Vec3D a(Vec3D vec3d, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation) {
+    private static Vec3D a(Vec3D vec3d, EnumBlockMirror enumblockmirror, EnumBlockRotation enumblockrotation, BlockPosition blockposition) {
         double d0 = vec3d.x;
         double d1 = vec3d.y;
         double d2 = vec3d.z;
@@ -341,15 +443,18 @@ public class DefinedStructure {
             flag = false;
         }
 
+        int i = blockposition.getX();
+        int j = blockposition.getZ();
+
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
-            return new Vec3D(d2, d1, 1.0D - d0);
+            return new Vec3D((double) (i - j) + d2, d1, (double) (i + j + 1) - d0);
 
         case CLOCKWISE_90:
-            return new Vec3D(1.0D - d2, d1, d0);
+            return new Vec3D((double) (i + j + 1) - d2, d1, (double) (j - i) + d0);
 
         case CLOCKWISE_180:
-            return new Vec3D(1.0D - d0, d1, 1.0D - d2);
+            return new Vec3D((double) (i + i + 1) - d0, d1, (double) (j + j + 1) - d2);
 
         default:
             return flag ? new Vec3D(d0, d1, d2) : vec3d;
@@ -387,63 +492,87 @@ public class DefinedStructure {
         return blockposition1;
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.STRUCTURE, new DataInspector() {
-            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                NBTTagList nbttaglist;
-                int j;
-                NBTTagCompound nbttagcompound1;
-
-                if (nbttagcompound.hasKeyOfType("entities", 9)) {
-                    nbttaglist = nbttagcompound.getList("entities", 10);
-
-                    for (j = 0; j < nbttaglist.size(); ++j) {
-                        nbttagcompound1 = (NBTTagCompound) nbttaglist.i(j);
-                        if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
-                            nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.ENTITY, nbttagcompound1.getCompound("nbt"), i));
-                        }
-                    }
-                }
-
-                if (nbttagcompound.hasKeyOfType("blocks", 9)) {
-                    nbttaglist = nbttagcompound.getList("blocks", 10);
-
-                    for (j = 0; j < nbttaglist.size(); ++j) {
-                        nbttagcompound1 = (NBTTagCompound) nbttaglist.i(j);
-                        if (nbttagcompound1.hasKeyOfType("nbt", 10)) {
-                            nbttagcompound1.set("nbt", dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound1.getCompound("nbt"), i));
-                        }
-                    }
-                }
-
-                return nbttagcompound;
-            }
-        });
-    }
-
     public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
-        NBTTagList nbttaglist = new NBTTagList();
+        if (this.a.isEmpty()) {
+            nbttagcompound.set("blocks", new NBTTagList());
+            nbttagcompound.set("palette", new NBTTagList());
+        } else {
+            ArrayList arraylist = Lists.newArrayList();
+            DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
 
-        NBTTagCompound nbttagcompound1;
+            arraylist.add(definedstructure_a);
 
-        for (Iterator iterator = this.a.iterator(); iterator.hasNext(); nbttaglist.add(nbttagcompound1)) {
-            DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) iterator.next();
+            for (int i = 1; i < this.a.size(); ++i) {
+                arraylist.add(new DefinedStructure.a(null));
+            }
 
-            nbttagcompound1 = new NBTTagCompound();
-            nbttagcompound1.set("pos", this.a(new int[] { definedstructure_blockinfo.a.getX(), definedstructure_blockinfo.a.getY(), definedstructure_blockinfo.a.getZ()}));
-            nbttagcompound1.setInt("state", definedstructure_a.a(definedstructure_blockinfo.b));
-            if (definedstructure_blockinfo.c != null) {
-                nbttagcompound1.set("nbt", definedstructure_blockinfo.c);
+            NBTTagList nbttaglist = new NBTTagList();
+            List list = (List) this.a.get(0);
+
+            for (int j = 0; j < list.size(); ++j) {
+                DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) list.get(j);
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+
+                nbttagcompound1.set("pos", this.a(new int[] { definedstructure_blockinfo.a.getX(), definedstructure_blockinfo.a.getY(), definedstructure_blockinfo.a.getZ()}));
+                int k = definedstructure_a.a(definedstructure_blockinfo.b);
+
+                nbttagcompound1.setInt("state", k);
+                if (definedstructure_blockinfo.c != null) {
+                    nbttagcompound1.set("nbt", definedstructure_blockinfo.c);
+                }
+
+                nbttaglist.add((NBTBase) nbttagcompound1);
+
+                for (int l = 1; l < this.a.size(); ++l) {
+                    DefinedStructure.a definedstructure_a1 = (DefinedStructure.a) arraylist.get(l);
+
+                    definedstructure_a1.a(((DefinedStructure.BlockInfo) ((List) this.a.get(j)).get(j)).b, k);
+                }
+            }
+
+            nbttagcompound.set("blocks", nbttaglist);
+            NBTTagList nbttaglist1;
+            Iterator iterator;
+
+            if (arraylist.size() == 1) {
+                nbttaglist1 = new NBTTagList();
+                iterator = definedstructure_a.iterator();
+
+                while (iterator.hasNext()) {
+                    IBlockData iblockdata = (IBlockData) iterator.next();
+
+                    nbttaglist1.add((NBTBase) GameProfileSerializer.a(iblockdata));
+                }
+
+                nbttagcompound.set("palette", nbttaglist1);
+            } else {
+                nbttaglist1 = new NBTTagList();
+                iterator = arraylist.iterator();
+
+                while (iterator.hasNext()) {
+                    DefinedStructure.a definedstructure_a2 = (DefinedStructure.a) iterator.next();
+                    NBTTagList nbttaglist2 = new NBTTagList();
+                    Iterator iterator1 = definedstructure_a2.iterator();
+
+                    while (iterator1.hasNext()) {
+                        IBlockData iblockdata1 = (IBlockData) iterator1.next();
+
+                        nbttaglist2.add((NBTBase) GameProfileSerializer.a(iblockdata1));
+                    }
+
+                    nbttaglist1.add((NBTBase) nbttaglist2);
+                }
+
+                nbttagcompound.set("palettes", nbttaglist1);
             }
         }
 
-        NBTTagList nbttaglist1 = new NBTTagList();
+        NBTTagList nbttaglist3 = new NBTTagList();
 
         NBTTagCompound nbttagcompound2;
 
-        for (Iterator iterator1 = this.b.iterator(); iterator1.hasNext(); nbttaglist1.add(nbttagcompound2)) {
-            DefinedStructure.EntityInfo definedstructure_entityinfo = (DefinedStructure.EntityInfo) iterator1.next();
+        for (Iterator iterator2 = this.b.iterator(); iterator2.hasNext(); nbttaglist3.add((NBTBase) nbttagcompound2)) {
+            DefinedStructure.EntityInfo definedstructure_entityinfo = (DefinedStructure.EntityInfo) iterator2.next();
 
             nbttagcompound2 = new NBTTagCompound();
             nbttagcompound2.set("pos", this.a(new double[] { definedstructure_entityinfo.a.x, definedstructure_entityinfo.a.y, definedstructure_entityinfo.a.z}));
@@ -453,21 +582,9 @@ public class DefinedStructure {
             }
         }
 
-        NBTTagList nbttaglist2 = new NBTTagList();
-        Iterator iterator2 = definedstructure_a.iterator();
-
-        while (iterator2.hasNext()) {
-            IBlockData iblockdata = (IBlockData) iterator2.next();
-
-            nbttaglist2.add(GameProfileSerializer.a(new NBTTagCompound(), iblockdata));
-        }
-
-        nbttagcompound.set("palette", nbttaglist2);
-        nbttagcompound.set("blocks", nbttaglist);
-        nbttagcompound.set("entities", nbttaglist1);
+        nbttagcompound.set("entities", nbttaglist3);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
-        nbttagcompound.setString("author", this.d);
-        nbttagcompound.setInt("DataVersion", 1343);
+        nbttagcompound.setInt("DataVersion", 1513);
         return nbttagcompound;
     }
 
@@ -476,49 +593,66 @@ public class DefinedStructure {
         this.b.clear();
         NBTTagList nbttaglist = nbttagcompound.getList("size", 3);
 
-        this.c = new BlockPosition(nbttaglist.c(0), nbttaglist.c(1), nbttaglist.c(2));
-        this.d = nbttagcompound.getString("author");
-        DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
-        NBTTagList nbttaglist1 = nbttagcompound.getList("palette", 10);
+        this.c = new BlockPosition(nbttaglist.h(0), nbttaglist.h(1), nbttaglist.h(2));
+        NBTTagList nbttaglist1 = nbttagcompound.getList("blocks", 10);
+        NBTTagList nbttaglist2;
+        int i;
 
-        for (int i = 0; i < nbttaglist1.size(); ++i) {
-            definedstructure_a.a(GameProfileSerializer.d(nbttaglist1.get(i)), i);
+        if (nbttagcompound.hasKeyOfType("palettes", 9)) {
+            nbttaglist2 = nbttagcompound.getList("palettes", 9);
+
+            for (i = 0; i < nbttaglist2.size(); ++i) {
+                this.a(nbttaglist2.f(i), nbttaglist1);
+            }
+        } else {
+            this.a(nbttagcompound.getList("palette", 10), nbttaglist1);
         }
 
-        NBTTagList nbttaglist2 = nbttagcompound.getList("blocks", 10);
+        nbttaglist2 = nbttagcompound.getList("entities", 10);
 
-        for (int j = 0; j < nbttaglist2.size(); ++j) {
-            NBTTagCompound nbttagcompound1 = nbttaglist2.get(j);
-            NBTTagList nbttaglist3 = nbttagcompound1.getList("pos", 3);
-            BlockPosition blockposition = new BlockPosition(nbttaglist3.c(0), nbttaglist3.c(1), nbttaglist3.c(2));
-            IBlockData iblockdata = definedstructure_a.a(nbttagcompound1.getInt("state"));
-            NBTTagCompound nbttagcompound2;
+        for (i = 0; i < nbttaglist2.size(); ++i) {
+            NBTTagCompound nbttagcompound1 = nbttaglist2.getCompound(i);
+            NBTTagList nbttaglist3 = nbttagcompound1.getList("pos", 6);
+            Vec3D vec3d = new Vec3D(nbttaglist3.k(0), nbttaglist3.k(1), nbttaglist3.k(2));
+            NBTTagList nbttaglist4 = nbttagcompound1.getList("blockPos", 3);
+            BlockPosition blockposition = new BlockPosition(nbttaglist4.h(0), nbttaglist4.h(1), nbttaglist4.h(2));
 
             if (nbttagcompound1.hasKey("nbt")) {
-                nbttagcompound2 = nbttagcompound1.getCompound("nbt");
+                NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("nbt");
+
+                this.b.add(new DefinedStructure.EntityInfo(vec3d, blockposition, nbttagcompound2));
+            }
+        }
+
+    }
+
+    private void a(NBTTagList nbttaglist, NBTTagList nbttaglist1) {
+        DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
+        ArrayList arraylist = Lists.newArrayList();
+
+        int i;
+
+        for (i = 0; i < nbttaglist.size(); ++i) {
+            definedstructure_a.a(GameProfileSerializer.d(nbttaglist.getCompound(i)), i);
+        }
+
+        for (i = 0; i < nbttaglist1.size(); ++i) {
+            NBTTagCompound nbttagcompound = nbttaglist1.getCompound(i);
+            NBTTagList nbttaglist2 = nbttagcompound.getList("pos", 3);
+            BlockPosition blockposition = new BlockPosition(nbttaglist2.h(0), nbttaglist2.h(1), nbttaglist2.h(2));
+            IBlockData iblockdata = definedstructure_a.a(nbttagcompound.getInt("state"));
+            NBTTagCompound nbttagcompound1;
+
+            if (nbttagcompound.hasKey("nbt")) {
+                nbttagcompound1 = nbttagcompound.getCompound("nbt");
             } else {
-                nbttagcompound2 = null;
+                nbttagcompound1 = null;
             }
 
-            this.a.add(new DefinedStructure.BlockInfo(blockposition, iblockdata, nbttagcompound2));
+            arraylist.add(new DefinedStructure.BlockInfo(blockposition, iblockdata, nbttagcompound1));
         }
 
-        NBTTagList nbttaglist4 = nbttagcompound.getList("entities", 10);
-
-        for (int k = 0; k < nbttaglist4.size(); ++k) {
-            NBTTagCompound nbttagcompound3 = nbttaglist4.get(k);
-            NBTTagList nbttaglist5 = nbttagcompound3.getList("pos", 6);
-            Vec3D vec3d = new Vec3D(nbttaglist5.f(0), nbttaglist5.f(1), nbttaglist5.f(2));
-            NBTTagList nbttaglist6 = nbttagcompound3.getList("blockPos", 3);
-            BlockPosition blockposition1 = new BlockPosition(nbttaglist6.c(0), nbttaglist6.c(1), nbttaglist6.c(2));
-
-            if (nbttagcompound3.hasKey("nbt")) {
-                NBTTagCompound nbttagcompound4 = nbttagcompound3.getCompound("nbt");
-
-                this.b.add(new DefinedStructure.EntityInfo(vec3d, blockposition1, nbttagcompound4));
-            }
-        }
-
+        this.a.add(arraylist);
     }
 
     private NBTTagList a(int... aint) {
@@ -529,7 +663,7 @@ public class DefinedStructure {
         for (int j = 0; j < i; ++j) {
             int k = aint1[j];
 
-            nbttaglist.add(new NBTTagInt(k));
+            nbttaglist.add((NBTBase) (new NBTTagInt(k)));
         }
 
         return nbttaglist;
@@ -543,7 +677,7 @@ public class DefinedStructure {
         for (int j = 0; j < i; ++j) {
             double d0 = adouble1[j];
 
-            nbttaglist.add(new NBTTagDouble(d0));
+            nbttaglist.add((NBTBase) (new NBTTagDouble(d0)));
         }
 
         return nbttaglist;
@@ -578,7 +712,7 @@ public class DefinedStructure {
     static class a implements Iterable<IBlockData> {
 
         public static final IBlockData a = Blocks.AIR.getBlockData();
-        final RegistryBlockID<IBlockData> b;
+        private final RegistryBlockID<IBlockData> b;
         private int c;
 
         private a() {

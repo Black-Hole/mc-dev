@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,6 +83,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
     }
 
+    @Nullable
     public V get(K k0) {
         this.h();
         return (JsonListEntry) this.d.get(this.a(k0));
@@ -96,6 +98,10 @@ public class JsonList<K, V extends JsonListEntry<K>> {
             JsonList.a.warn("Could not save the list after removing a user.", ioexception);
         }
 
+    }
+
+    public void b(JsonListEntry<K> jsonlistentry) {
+        this.remove(jsonlistentry.getKey());
     }
 
     public String[] getEntries() {
@@ -131,7 +137,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         while (iterator.hasNext()) {
             Object object = iterator.next();
 
-            this.d.remove(object);
+            this.d.remove(this.a(object));
         }
 
     }
@@ -140,8 +146,8 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         return new JsonListEntry((Object) null, jsonobject);
     }
 
-    protected Map<String, V> e() {
-        return this.d;
+    public Collection<V> e() {
+        return this.d.values();
     }
 
     public void save() throws IOException {
@@ -160,27 +166,26 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
     public void load() throws FileNotFoundException {
         if (this.c.exists()) {
-            Collection collection = null;
             BufferedReader bufferedreader = null;
 
             try {
                 bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
-                collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
-            } finally {
-                IOUtils.closeQuietly(bufferedreader);
-            }
+                Collection collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
 
-            if (collection != null) {
-                this.d.clear();
-                Iterator iterator = collection.iterator();
+                if (collection != null) {
+                    this.d.clear();
+                    Iterator iterator = collection.iterator();
 
-                while (iterator.hasNext()) {
-                    JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
+                    while (iterator.hasNext()) {
+                        JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
 
-                    if (jsonlistentry.getKey() != null) {
-                        this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                        if (jsonlistentry.getKey() != null) {
+                            this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);
+                        }
                     }
                 }
+            } finally {
+                IOUtils.closeQuietly(bufferedreader);
             }
 
         }

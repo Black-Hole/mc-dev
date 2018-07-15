@@ -6,15 +6,15 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     private static final DataWatcherObject<Byte> c = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
     protected int b;
-    private EntityIllagerWizard.Spell bx;
+    private EntityIllagerWizard.Spell bC;
 
-    public EntityIllagerWizard(World world) {
-        super(world);
-        this.bx = EntityIllagerWizard.Spell.NONE;
+    protected EntityIllagerWizard(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
+        this.bC = EntityIllagerWizard.Spell.NONE;
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityIllagerWizard.c, Byte.valueOf((byte) 0));
     }
 
@@ -28,49 +28,49 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         nbttagcompound.setInt("SpellTicks", this.b);
     }
 
-    public boolean dn() {
+    public boolean dA() {
         return this.world.isClientSide ? ((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue() > 0 : this.b > 0;
     }
 
     public void setSpell(EntityIllagerWizard.Spell entityillagerwizard_spell) {
-        this.bx = entityillagerwizard_spell;
+        this.bC = entityillagerwizard_spell;
         this.datawatcher.set(EntityIllagerWizard.c, Byte.valueOf((byte) entityillagerwizard_spell.g));
     }
 
     public EntityIllagerWizard.Spell getSpell() {
-        return !this.world.isClientSide ? this.bx : EntityIllagerWizard.Spell.a(((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue());
+        return !this.world.isClientSide ? this.bC : EntityIllagerWizard.Spell.a(((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue());
     }
 
-    protected void M() {
-        super.M();
+    protected void mobTick() {
+        super.mobTick();
         if (this.b > 0) {
             --this.b;
         }
 
     }
 
-    public void B_() {
-        super.B_();
-        if (this.world.isClientSide && this.dn()) {
+    public void tick() {
+        super.tick();
+        if (this.world.isClientSide && this.dA()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.h[0];
             double d1 = entityillagerwizard_spell.h[1];
             double d2 = entityillagerwizard_spell.h[2];
-            float f = this.aN * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
+            float f = this.aQ * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
 
-            this.world.addParticle(EnumParticle.SPELL_MOB, this.locX + (double) f1 * 0.6D, this.locY + 1.8D, this.locZ + (double) f2 * 0.6D, d0, d1, d2, new int[0]);
-            this.world.addParticle(EnumParticle.SPELL_MOB, this.locX - (double) f1 * 0.6D, this.locY + 1.8D, this.locZ - (double) f2 * 0.6D, d0, d1, d2, new int[0]);
+            this.world.addParticle(Particles.s, this.locX + (double) f1 * 0.6D, this.locY + 1.8D, this.locZ + (double) f2 * 0.6D, d0, d1, d2);
+            this.world.addParticle(Particles.s, this.locX - (double) f1 * 0.6D, this.locY + 1.8D, this.locZ - (double) f2 * 0.6D, d0, d1, d2);
         }
 
     }
 
-    protected int dp() {
+    protected int dC() {
         return this.b;
     }
 
-    protected abstract SoundEffect dm();
+    protected abstract SoundEffect dz();
 
     public static enum Spell {
 
@@ -79,7 +79,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         private final int g;
         private final double[] h;
 
-        private Spell(int i, double d0, double param5, double d1) {
+        private Spell(int i, double d0, double d1, double d2) {
             this.g = i;
             this.h = new double[] { d0, d1, d2};
         }
@@ -102,23 +102,23 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     public abstract class c extends PathfinderGoal {
 
+        protected int b;
         protected int c;
-        protected int d;
 
         protected c() {}
 
         public boolean a() {
-            return EntityIllagerWizard.this.getGoalTarget() == null ? false : (EntityIllagerWizard.this.dn() ? false : EntityIllagerWizard.this.ticksLived >= this.d);
+            return EntityIllagerWizard.this.getGoalTarget() == null ? false : (EntityIllagerWizard.this.dA() ? false : EntityIllagerWizard.this.ticksLived >= this.c);
         }
 
         public boolean b() {
-            return EntityIllagerWizard.this.getGoalTarget() != null && this.c > 0;
+            return EntityIllagerWizard.this.getGoalTarget() != null && this.b > 0;
         }
 
         public void c() {
-            this.c = this.m();
-            EntityIllagerWizard.this.b = this.f();
-            this.d = EntityIllagerWizard.this.ticksLived + this.i();
+            this.b = this.m();
+            EntityIllagerWizard.this.b = this.g();
+            this.c = EntityIllagerWizard.this.ticksLived + this.i();
             SoundEffect soundeffect = this.k();
 
             if (soundeffect != null) {
@@ -129,10 +129,10 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         }
 
         public void e() {
-            --this.c;
-            if (this.c == 0) {
+            --this.b;
+            if (this.b == 0) {
                 this.j();
-                EntityIllagerWizard.this.a(EntityIllagerWizard.this.dm(), 1.0F, 1.0F);
+                EntityIllagerWizard.this.a(EntityIllagerWizard.this.dz(), 1.0F, 1.0F);
             }
 
         }
@@ -143,7 +143,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
             return 20;
         }
 
-        protected abstract int f();
+        protected abstract int g();
 
         protected abstract int i();
 
@@ -160,12 +160,12 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
         }
 
         public boolean a() {
-            return EntityIllagerWizard.this.dp() > 0;
+            return EntityIllagerWizard.this.dC() > 0;
         }
 
         public void c() {
             super.c();
-            EntityIllagerWizard.this.navigation.p();
+            EntityIllagerWizard.this.navigation.r();
         }
 
         public void d() {
@@ -175,7 +175,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.O(), (float) EntityIllagerWizard.this.N());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.L(), (float) EntityIllagerWizard.this.K());
             }
 
         }

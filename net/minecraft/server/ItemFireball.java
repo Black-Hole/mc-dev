@@ -2,31 +2,25 @@ package net.minecraft.server;
 
 public class ItemFireball extends Item {
 
-    public ItemFireball() {
-        this.b(CreativeModeTab.f);
+    public ItemFireball(Item.Info item_info) {
+        super(item_info);
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+
         if (world.isClientSide) {
             return EnumInteractionResult.SUCCESS;
         } else {
-            blockposition = blockposition.shift(enumdirection);
-            ItemStack itemstack = entityhuman.b(enumhand);
+            BlockPosition blockposition = itemactioncontext.getClickPosition().shift(itemactioncontext.getClickedFace());
 
-            if (!entityhuman.a(blockposition, enumdirection, itemstack)) {
-                return EnumInteractionResult.FAIL;
-            } else {
-                if (world.getType(blockposition).getMaterial() == Material.AIR) {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.bD, SoundCategory.BLOCKS, 1.0F, (ItemFireball.j.nextFloat() - ItemFireball.j.nextFloat()) * 0.2F + 1.0F);
-                    world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-                }
-
-                if (!entityhuman.abilities.canInstantlyBuild) {
-                    itemstack.subtract(1);
-                }
-
-                return EnumInteractionResult.SUCCESS;
+            if (world.getType(blockposition).isAir()) {
+                world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (ItemFireball.k.nextFloat() - ItemFireball.k.nextFloat()) * 0.2F + 1.0F);
+                world.setTypeUpdate(blockposition, ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition));
             }
+
+            itemactioncontext.getItemStack().subtract(1);
+            return EnumInteractionResult.SUCCESS;
         }
     }
 }

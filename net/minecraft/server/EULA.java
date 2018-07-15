@@ -16,7 +16,7 @@ public class EULA {
 
     public EULA(File file) {
         this.b = file;
-        this.c = this.a(file);
+        this.c = SharedConstants.b || this.a(file);
     }
 
     private boolean a(File file) {
@@ -44,19 +44,21 @@ public class EULA {
     }
 
     public void b() {
-        FileOutputStream fileoutputstream = null;
+        if (!SharedConstants.b) {
+            FileOutputStream fileoutputstream = null;
 
-        try {
-            Properties properties = new Properties();
+            try {
+                Properties properties = new Properties();
 
-            fileoutputstream = new FileOutputStream(this.b);
-            properties.setProperty("eula", "false");
-            properties.store(fileoutputstream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
-        } catch (Exception exception) {
-            EULA.a.warn("Failed to save {}", this.b, exception);
-        } finally {
-            IOUtils.closeQuietly(fileoutputstream);
+                fileoutputstream = new FileOutputStream(this.b);
+                properties.setProperty("eula", "false");
+                properties.store(fileoutputstream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
+            } catch (Exception exception) {
+                EULA.a.warn("Failed to save {}", this.b, exception);
+            } finally {
+                IOUtils.closeQuietly(fileoutputstream);
+            }
+
         }
-
     }
 }

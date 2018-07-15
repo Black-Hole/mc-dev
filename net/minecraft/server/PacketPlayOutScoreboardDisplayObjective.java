@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.io.IOException;
+import javax.annotation.Nullable;
 
 public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketListenerPlayOut> {
 
@@ -9,7 +10,7 @@ public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketLis
 
     public PacketPlayOutScoreboardDisplayObjective() {}
 
-    public PacketPlayOutScoreboardDisplayObjective(int i, ScoreboardObjective scoreboardobjective) {
+    public PacketPlayOutScoreboardDisplayObjective(int i, @Nullable ScoreboardObjective scoreboardobjective) {
         this.a = i;
         if (scoreboardobjective == null) {
             this.b = "";

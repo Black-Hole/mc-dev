@@ -1,115 +1,75 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import it.unimi.dsi.fastutil.longs.LongIterator;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 import javax.annotation.Nullable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public abstract class StructureGenerator extends WorldGenBase {
+public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration> extends WorldGenerator<C> {
 
-    private PersistentStructure a;
-    protected Long2ObjectMap<StructureStart> c = new Long2ObjectOpenHashMap(1024);
+    private static final Logger b = LogManager.getLogger();
+    public static final StructureStart a = new StructureStart() {
+        public boolean b() {
+            return false;
+        }
+    };
 
     public StructureGenerator() {}
 
-    public abstract String a();
-
-    protected final synchronized void a(World world, final int i, final int j, int k, int l, ChunkSnapshot chunksnapshot) {
-        this.a(world);
-        if (!this.c.containsKey(ChunkCoordIntPair.a(i, j))) {
-            this.f.nextInt();
-
-            try {
-                if (this.a(i, j)) {
-                    StructureStart structurestart = this.b(i, j);
-
-                    this.c.put(ChunkCoordIntPair.a(i, j), structurestart);
-                    if (structurestart.a()) {
-                        this.a(i, j, structurestart);
-                    }
-                }
-
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Exception preparing structure feature");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Feature being prepared");
-
-                crashreportsystemdetails.a("Is feature chunk", new CrashReportCallable() {
-                    public String a() throws Exception {
-                        return StructureGenerator.this.a(i, j) ? "True" : "False";
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                crashreportsystemdetails.a("Chunk location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
-                crashreportsystemdetails.a("Chunk pos hash", new CrashReportCallable() {
-                    public String a() throws Exception {
-                        return String.valueOf(ChunkCoordIntPair.a(i, j));
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                crashreportsystemdetails.a("Structure type", new CrashReportCallable() {
-                    public String a() throws Exception {
-                        return StructureGenerator.this.getClass().getCanonicalName();
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                throw new ReportedException(crashreport);
-            }
-        }
-    }
-
-    public synchronized boolean a(World world, Random random, ChunkCoordIntPair chunkcoordintpair) {
-        this.a(world);
-        int i = (chunkcoordintpair.x << 4) + 8;
-        int j = (chunkcoordintpair.z << 4) + 8;
-        boolean flag = false;
-        ObjectIterator objectiterator = this.c.values().iterator();
-
-        while (objectiterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) objectiterator.next();
-
-            if (structurestart.a() && structurestart.a(chunkcoordintpair) && structurestart.b().a(i, j, i + 15, j + 15)) {
-                structurestart.a(world, random, new StructureBoundingBox(i, j, i + 15, j + 15));
-                structurestart.b(chunkcoordintpair);
-                flag = true;
-                this.a(structurestart.e(), structurestart.f(), structurestart);
-            }
-        }
-
-        return flag;
-    }
-
-    public boolean b(BlockPosition blockposition) {
-        if (this.g == null) {
+    public boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, C c0) {
+        if (!this.a(generatoraccess)) {
             return false;
         } else {
-            this.a(this.g);
-            return this.c(blockposition) != null;
+            int i = this.b();
+            int j = blockposition.getX() >> 4;
+            int k = blockposition.getZ() >> 4;
+            int l = j << 4;
+            int i1 = k << 4;
+            long j1 = ChunkCoordIntPair.a(j, k);
+            boolean flag = false;
+
+            for (int k1 = j - i; k1 <= j + i; ++k1) {
+                for (int l1 = k - i; l1 <= k + i; ++l1) {
+                    long i2 = ChunkCoordIntPair.a(k1, l1);
+                    StructureStart structurestart = this.a(generatoraccess, chunkgenerator, (SeededRandom) random, i2);
+
+                    if (structurestart != StructureGenerator.a && structurestart.c().a(l, i1, l + 15, i1 + 15)) {
+                        ((LongSet) chunkgenerator.getStructureCache(this).computeIfAbsent(Long.valueOf(j1), (olong) -> {
+                            return new LongOpenHashSet();
+                        })).add(i2);
+                        generatoraccess.getChunkProvider().d(j, k).a(this.a(), i2);
+                        structurestart.a(generatoraccess, random, new StructureBoundingBox(l, i1, l + 15, i1 + 15), new ChunkCoordIntPair(j, k));
+                        structurestart.b(new ChunkCoordIntPair(j, k));
+                        flag = true;
+                    }
+                }
+            }
+
+            return flag;
         }
     }
 
-    @Nullable
-    protected StructureStart c(BlockPosition blockposition) {
-        ObjectIterator objectiterator = this.c.values().iterator();
+    protected StructureStart a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        List list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        Iterator iterator = list.iterator();
 
-        while (objectiterator.hasNext()) {
-            StructureStart structurestart = (StructureStart) objectiterator.next();
+        while (iterator.hasNext()) {
+            StructureStart structurestart = (StructureStart) iterator.next();
 
-            if (structurestart.a() && structurestart.b().b((BaseBlockPosition) blockposition)) {
-                Iterator iterator = structurestart.c().iterator();
+            if (structurestart.b() && structurestart.c().b((BaseBlockPosition) blockposition)) {
+                Iterator iterator1 = structurestart.d().iterator();
 
-                while (iterator.hasNext()) {
-                    StructurePiece structurepiece = (StructurePiece) iterator.next();
+                while (iterator1.hasNext()) {
+                    StructurePiece structurepiece = (StructurePiece) iterator1.next();
 
                     if (structurepiece.d().b((BaseBlockPosition) blockposition)) {
                         return structurestart;
@@ -118,127 +78,163 @@ public abstract class StructureGenerator extends WorldGenBase {
             }
         }
 
-        return null;
+        return StructureGenerator.a;
     }
 
-    public boolean a(World world, BlockPosition blockposition) {
-        this.a(world);
-        ObjectIterator objectiterator = this.c.values().iterator();
+    public boolean b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        List list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        Iterator iterator = list.iterator();
 
         StructureStart structurestart;
 
         do {
-            if (!objectiterator.hasNext()) {
+            if (!iterator.hasNext()) {
                 return false;
             }
 
-            structurestart = (StructureStart) objectiterator.next();
-        } while (!structurestart.a() || !structurestart.b().b((BaseBlockPosition) blockposition));
+            structurestart = (StructureStart) iterator.next();
+        } while (!structurestart.b() || !structurestart.c().b((BaseBlockPosition) blockposition));
 
         return true;
     }
 
+    public boolean c(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        return this.a(generatoraccess, blockposition).b();
+    }
+
     @Nullable
-    public abstract BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag);
+    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, BlockPosition blockposition, int i) {
+        if (!chunkgenerator.getWorldChunkManager().a(this)) {
+            return null;
+        } else {
+            int j = blockposition.getX() >> 4;
+            int k = blockposition.getZ() >> 4;
+            int l = 0;
+            SeededRandom seededrandom = new SeededRandom();
 
-    protected void a(World world) {
-        if (this.a == null && world != null) {
-            this.a = (PersistentStructure) world.a(PersistentStructure.class, this.a());
-            if (this.a == null) {
-                this.a = new PersistentStructure(this.a());
-                world.a(this.a(), (PersistentBase) this.a);
-            } else {
-                NBTTagCompound nbttagcompound = this.a.a();
-                Iterator iterator = nbttagcompound.c().iterator();
+            while (l <= i) {
+                int i1 = -l;
 
-                while (iterator.hasNext()) {
-                    String s = (String) iterator.next();
-                    NBTBase nbtbase = nbttagcompound.get(s);
+                while (true) {
+                    if (i1 <= l) {
+                        boolean flag = i1 == -l || i1 == l;
 
-                    if (nbtbase.getTypeId() == 10) {
-                        NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase;
+                        for (int j1 = -l; j1 <= l; ++j1) {
+                            boolean flag1 = j1 == -l || j1 == l;
 
-                        if (nbttagcompound1.hasKey("ChunkX") && nbttagcompound1.hasKey("ChunkZ")) {
-                            int i = nbttagcompound1.getInt("ChunkX");
-                            int j = nbttagcompound1.getInt("ChunkZ");
-                            StructureStart structurestart = WorldGenFactory.a(nbttagcompound1, world);
+                            if (flag || flag1) {
+                                ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, seededrandom, j, k, i1, j1);
+                                StructureStart structurestart = this.a(world, chunkgenerator, seededrandom, chunkcoordintpair.a());
 
-                            if (structurestart != null) {
-                                this.c.put(ChunkCoordIntPair.a(i, j), structurestart);
+                                if (structurestart != StructureGenerator.a) {
+                                    return structurestart.a();
+                                }
+
+                                if (l == 0) {
+                                    break;
+                                }
                             }
                         }
-                    }
-                }
-            }
-        }
 
-    }
-
-    private void a(int i, int j, StructureStart structurestart) {
-        this.a.a(structurestart.a(i, j), i, j);
-        this.a.c();
-    }
-
-    protected abstract boolean a(int i, int j);
-
-    protected abstract StructureStart b(int i, int j);
-
-    protected static BlockPosition a(World world, StructureGenerator structuregenerator, BlockPosition blockposition, int i, int j, int k, boolean flag, int l, boolean flag1) {
-        int i1 = blockposition.getX() >> 4;
-        int j1 = blockposition.getZ() >> 4;
-        int k1 = 0;
-
-        for (Random random = new Random(); k1 <= l; ++k1) {
-            for (int l1 = -k1; l1 <= k1; ++l1) {
-                boolean flag2 = l1 == -k1 || l1 == k1;
-
-                for (int i2 = -k1; i2 <= k1; ++i2) {
-                    boolean flag3 = i2 == -k1 || i2 == k1;
-
-                    if (flag2 || flag3) {
-                        int j2 = i1 + i * l1;
-                        int k2 = j1 + i * i2;
-
-                        if (j2 < 0) {
-                            j2 -= i - 1;
-                        }
-
-                        if (k2 < 0) {
-                            k2 -= i - 1;
-                        }
-
-                        int l2 = j2 / i;
-                        int i3 = k2 / i;
-                        Random random1 = world.a(l2, i3, k);
-
-                        l2 *= i;
-                        i3 *= i;
-                        if (flag) {
-                            l2 += (random1.nextInt(i - j) + random1.nextInt(i - j)) / 2;
-                            i3 += (random1.nextInt(i - j) + random1.nextInt(i - j)) / 2;
-                        } else {
-                            l2 += random1.nextInt(i - j);
-                            i3 += random1.nextInt(i - j);
-                        }
-
-                        WorldGenBase.a(world.getSeed(), random, l2, i3);
-                        random.nextInt();
-                        if (structuregenerator.a(l2, i3)) {
-                            if (!flag1 || !world.b(l2, i3)) {
-                                return new BlockPosition((l2 << 4) + 8, 64, (i3 << 4) + 8);
-                            }
-                        } else if (k1 == 0) {
-                            break;
+                        if (l != 0) {
+                            ++i1;
+                            continue;
                         }
                     }
-                }
 
-                if (k1 == 0) {
+                    ++l;
                     break;
                 }
             }
+
+            return null;
+        }
+    }
+
+    private List<StructureStart> a(GeneratorAccess generatoraccess, int i, int j) {
+        ArrayList arraylist = Lists.newArrayList();
+        Long2ObjectMap long2objectmap = generatoraccess.getChunkProvider().getChunkGenerator().getStructureStartCache(this);
+        Long2ObjectMap long2objectmap1 = generatoraccess.getChunkProvider().getChunkGenerator().getStructureCache(this);
+        long k = ChunkCoordIntPair.a(i, j);
+        LongSet longset = (LongSet) long2objectmap1.get(k);
+
+        if (longset == null) {
+            longset = generatoraccess.getChunkProvider().d(i, j).b(this.a());
+            long2objectmap1.put(k, longset);
         }
 
-        return null;
+        LongIterator longiterator = longset.iterator();
+
+        while (longiterator.hasNext()) {
+            Long olong = (Long) longiterator.next();
+            StructureStart structurestart = (StructureStart) long2objectmap.get(olong);
+
+            if (structurestart != null) {
+                arraylist.add(structurestart);
+            } else {
+                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong.longValue());
+                IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z);
+
+                structurestart = ichunkaccess.a(this.a());
+                if (structurestart != null) {
+                    long2objectmap.put(olong, structurestart);
+                    arraylist.add(structurestart);
+                }
+            }
+        }
+
+        return arraylist;
     }
+
+    private StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, SeededRandom seededrandom, long i) {
+        if (!chunkgenerator.getWorldChunkManager().a(this)) {
+            return StructureGenerator.a;
+        } else {
+            Long2ObjectMap long2objectmap = chunkgenerator.getStructureStartCache(this);
+            StructureStart structurestart = (StructureStart) long2objectmap.get(i);
+
+            if (structurestart != null) {
+                return structurestart;
+            } else {
+                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
+
+                if (generatoraccess.getChunkProvider().f(chunkcoordintpair.x, chunkcoordintpair.z)) {
+                    structurestart = generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z).a(this.a());
+                    if (structurestart != null) {
+                        long2objectmap.put(i, structurestart);
+                        return structurestart;
+                    }
+                }
+
+                if (this.a(chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z)) {
+                    StructureStart structurestart1 = this.a(generatoraccess, chunkgenerator, seededrandom, chunkcoordintpair.x, chunkcoordintpair.z);
+
+                    structurestart = structurestart1.b() ? structurestart1 : StructureGenerator.a;
+                } else {
+                    structurestart = StructureGenerator.a;
+                }
+
+                if (structurestart.b()) {
+                    generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z).a(this.a(), structurestart);
+                }
+
+                long2objectmap.put(i, structurestart);
+                return structurestart;
+            }
+        }
+    }
+
+    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
+        return new ChunkCoordIntPair(i + k, j + l);
+    }
+
+    protected abstract boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j);
+
+    protected abstract boolean a(GeneratorAccess generatoraccess);
+
+    protected abstract StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j);
+
+    protected abstract String a();
+
+    public abstract int b();
 }

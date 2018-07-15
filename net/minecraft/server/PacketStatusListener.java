@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PacketStatusListener implements PacketStatusInListener {
 
-    private static final IChatBaseComponent a = new ChatComponentText("Status request has been handled.");
+    private static final IChatBaseComponent a = new ChatMessage("multiplayer.status.request_handled", new Object[0]);
     private final MinecraftServer minecraftServer;
     private final NetworkManager networkManager;
     private boolean d;
@@ -24,7 +24,7 @@ public class PacketStatusListener implements PacketStatusInListener {
     }
 
     public void a(PacketStatusInPing packetstatusinping) {
-        this.networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.a()));
+        this.networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.b()));
         this.networkManager.close(PacketStatusListener.a);
     }
 }

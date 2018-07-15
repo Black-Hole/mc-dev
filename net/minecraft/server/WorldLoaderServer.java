@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.DataFixer;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -11,23 +12,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class WorldLoaderServer extends WorldLoader {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger e = LogManager.getLogger();
 
-    public WorldLoaderServer(File file, DataConverterManager dataconvertermanager) {
-        super(file, dataconvertermanager);
+    public WorldLoaderServer(java.nio.file.Path java_nio_file_path, java.nio.file.Path java_nio_file_path1, DataFixer datafixer) {
+        super(java_nio_file_path, java_nio_file_path1, datafixer);
     }
 
     protected int c() {
         return 19133;
     }
 
-    public IDataManager a(String s, boolean flag) {
-        return new ServerNBTManager(this.a, s, flag, this.b);
+    public IDataManager a(String s, @Nullable MinecraftServer minecraftserver) {
+        return new ServerNBTManager(this.a.toFile(), s, minecraftserver, this.c);
     }
 
     public boolean isConvertable(String s) {
@@ -41,11 +43,11 @@ public class WorldLoaderServer extends WorldLoader {
         ArrayList arraylist = Lists.newArrayList();
         ArrayList arraylist1 = Lists.newArrayList();
         ArrayList arraylist2 = Lists.newArrayList();
-        File file = new File(this.a, s);
+        File file = new File(this.a.toFile(), s);
         File file1 = new File(file, "DIM-1");
         File file2 = new File(file, "DIM1");
 
-        WorldLoaderServer.c.info("Scanning folders...");
+        WorldLoaderServer.e.info("Scanning folders...");
         this.a(file, (Collection) arraylist);
         if (file1.exists()) {
             this.a(file1, (Collection) arraylist1);
@@ -57,46 +59,48 @@ public class WorldLoaderServer extends WorldLoader {
 
         int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 
-        WorldLoaderServer.c.info("Total conversion count is {}", Integer.valueOf(i));
+        WorldLoaderServer.e.info("Total conversion count is {}", Integer.valueOf(i));
         WorldData worlddata = this.c(s);
-        Object object;
+        BiomeLayout biomelayout = BiomeLayout.c;
+        BiomeLayout biomelayout1 = BiomeLayout.d;
+        WorldChunkManager worldchunkmanager;
 
         if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
-            object = new WorldChunkManagerHell(Biomes.c);
+            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.c));
         } else {
-            object = new WorldChunkManager(worlddata);
+            worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.b.a()));
         }
 
-        this.a(new File(file, "region"), (Iterable) arraylist, (WorldChunkManager) object, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(Biomes.j), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(Biomes.k), arraylist.size() + arraylist1.size(), i, iprogressupdate);
-        worlddata.e(19133);
+        this.a(new File(file, "region"), (Iterable) arraylist, worldchunkmanager, 0, i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.j)), arraylist.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.k)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        worlddata.d(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);
         }
 
-        this.g(s);
-        IDataManager idatamanager = this.a(s, false);
+        this.i(s);
+        IDataManager idatamanager = this.a(s, (MinecraftServer) null);
 
         idatamanager.saveWorldData(worlddata);
         return true;
     }
 
-    private void g(String s) {
-        File file = new File(this.a, s);
+    private void i(String s) {
+        File file = new File(this.a.toFile(), s);
 
         if (!file.exists()) {
-            WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
+            WorldLoaderServer.e.warn("Unable to create level.dat_mcr backup");
         } else {
             File file1 = new File(file, "level.dat");
 
             if (!file1.exists()) {
-                WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
+                WorldLoaderServer.e.warn("Unable to create level.dat_mcr backup");
             } else {
                 File file2 = new File(file, "level.dat_mcr");
 
                 if (!file1.renameTo(file2)) {
-                    WorldLoaderServer.c.warn("Unable to create level.dat_mcr backup");
+                    WorldLoaderServer.e.warn("Unable to create level.dat_mcr backup");
                 }
 
             }
@@ -132,7 +136,7 @@ public class WorldLoaderServer extends WorldLoader {
                         DataInputStream datainputstream = regionfile.a(k, l);
 
                         if (datainputstream == null) {
-                            WorldLoaderServer.c.warn("Failed to fetch input stream");
+                            WorldLoaderServer.e.warn("Failed to fetch input stream");
                         } else {
                             NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
 
@@ -170,10 +174,8 @@ public class WorldLoaderServer extends WorldLoader {
 
     private void a(File file, Collection<File> collection) {
         File file1 = new File(file, "region");
-        File[] afile = file1.listFiles(new FilenameFilter() {
-            public boolean accept(File file, String s) {
-                return s.endsWith(".mcr");
-            }
+        File[] afile = file1.listFiles((file, s) -> {
+            return s.endsWith(".mcr");
         });
 
         if (afile != null) {

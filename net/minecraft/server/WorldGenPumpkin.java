@@ -2,19 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenPumpkin extends WorldGenerator {
+public class WorldGenPumpkin extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public WorldGenPumpkin() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (int i = 0; i < 64; ++i) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        int i = 0;
+        IBlockData iblockdata = Blocks.PUMPKIN.getBlockData();
+
+        for (int j = 0; j < 64; ++j) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(blockposition1) && world.getType(blockposition1.down()).getBlock() == Blocks.GRASS && Blocks.PUMPKIN.canPlace(world, blockposition1)) {
-                world.setTypeAndData(blockposition1, Blocks.PUMPKIN.getBlockData().set(BlockPumpkin.FACING, EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random)), 2);
+            if (generatoraccess.isEmpty(blockposition1) && generatoraccess.getType(blockposition1.down()).getBlock() == Blocks.GRASS_BLOCK) {
+                generatoraccess.setTypeAndData(blockposition1, iblockdata, 2);
+                ++i;
             }
         }
 
-        return true;
+        return i > 0;
     }
 }

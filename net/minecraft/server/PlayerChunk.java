@@ -1,10 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,7 +112,7 @@ public class PlayerChunk {
         long i = this.playerChunkMap.getWorld().getTime();
 
         if (this.chunk != null) {
-            this.chunk.c(this.chunk.x() + i - this.i);
+            this.chunk.b(this.chunk.m() + i - this.i);
         }
 
         this.i = i;
@@ -206,7 +205,7 @@ public class PlayerChunk {
     }
 
     public boolean a(Predicate<EntityPlayer> predicate) {
-        return Iterables.tryFind(this.c, predicate).isPresent();
+        return this.c.stream().anyMatch(predicate);
     }
 
     public boolean a(double d0, Predicate<EntityPlayer> predicate) {
@@ -215,7 +214,7 @@ public class PlayerChunk {
         for (int j = this.c.size(); i < j; ++i) {
             EntityPlayer entityplayer = (EntityPlayer) this.c.get(i);
 
-            if (predicate.apply(entityplayer) && this.location.a(entityplayer) < d0 * d0) {
+            if (predicate.test(entityplayer) && this.location.a(entityplayer) < d0 * d0) {
                 return true;
             }
         }

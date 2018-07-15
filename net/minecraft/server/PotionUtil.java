@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,7 +45,7 @@ public class PotionUtil {
             NBTTagList nbttaglist = nbttagcompound.getList("CustomPotionEffects", 10);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+                NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
                 MobEffect mobeffect = MobEffect.b(nbttagcompound1);
 
                 if (mobeffect != null) {
@@ -114,20 +113,11 @@ public class PotionUtil {
 
     public static ItemStack a(ItemStack itemstack, PotionRegistry potionregistry) {
         MinecraftKey minecraftkey = (MinecraftKey) PotionRegistry.a.b(potionregistry);
-        NBTTagCompound nbttagcompound;
 
         if (potionregistry == Potions.EMPTY) {
-            if (itemstack.hasTag()) {
-                nbttagcompound = itemstack.getTag();
-                nbttagcompound.remove("Potion");
-                if (nbttagcompound.isEmpty()) {
-                    itemstack.setTag((NBTTagCompound) null);
-                }
-            }
+            itemstack.c("Potion");
         } else {
-            nbttagcompound = itemstack.hasTag() ? itemstack.getTag() : new NBTTagCompound();
-            nbttagcompound.setString("Potion", minecraftkey.toString());
-            itemstack.setTag(nbttagcompound);
+            itemstack.getOrCreateTag().setString("Potion", minecraftkey.toString());
         }
 
         return itemstack;
@@ -137,18 +127,17 @@ public class PotionUtil {
         if (collection.isEmpty()) {
             return itemstack;
         } else {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) MoreObjects.firstNonNull(itemstack.getTag(), new NBTTagCompound());
+            NBTTagCompound nbttagcompound = itemstack.getOrCreateTag();
             NBTTagList nbttaglist = nbttagcompound.getList("CustomPotionEffects", 9);
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) iterator.next();
 
-                nbttaglist.add(mobeffect.a(new NBTTagCompound()));
+                nbttaglist.add((NBTBase) mobeffect.a(new NBTTagCompound()));
             }
 
             nbttagcompound.set("CustomPotionEffects", nbttaglist);
-            itemstack.setTag(nbttagcompound);
             return itemstack;
         }
     }

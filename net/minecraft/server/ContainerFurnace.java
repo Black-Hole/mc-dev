@@ -1,15 +1,19 @@
 package net.minecraft.server;
 
-public class ContainerFurnace extends Container {
+import java.util.Iterator;
+
+public class ContainerFurnace extends ContainerRecipeBook {
 
     private final IInventory furnace;
-    private int f;
+    private final World f;
     private int g;
     private int h;
     private int i;
+    private int j;
 
     public ContainerFurnace(PlayerInventory playerinventory, IInventory iinventory) {
         this.furnace = iinventory;
+        this.f = playerinventory.player.world;
         this.a(new Slot(iinventory, 0, 56, 17));
         this.a((Slot) (new SlotFurnaceFuel(iinventory, 1, 56, 53)));
         this.a((Slot) (new SlotFurnaceResult(playerinventory.player, iinventory, 2, 116, 35)));
@@ -33,33 +37,61 @@ public class ContainerFurnace extends Container {
         icrafting.setContainerData(this, this.furnace);
     }
 
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
+        if (this.furnace instanceof AutoRecipeOutput) {
+            ((AutoRecipeOutput) this.furnace).a(autorecipestackmanager);
+        }
+
+    }
+
+    public void d() {
+        this.furnace.clear();
+    }
+
+    public boolean a(IRecipe irecipe) {
+        return irecipe.a(this.furnace, this.f);
+    }
+
+    public int e() {
+        return 2;
+    }
+
+    public int f() {
+        return 1;
+    }
+
+    public int g() {
+        return 1;
+    }
+
     public void b() {
         super.b();
+        Iterator iterator = this.listeners.iterator();
 
-        for (int i = 0; i < this.listeners.size(); ++i) {
-            ICrafting icrafting = (ICrafting) this.listeners.get(i);
+        while (iterator.hasNext()) {
+            ICrafting icrafting = (ICrafting) iterator.next();
 
-            if (this.f != this.furnace.getProperty(2)) {
+            if (this.g != this.furnace.getProperty(2)) {
                 icrafting.setContainerData(this, 2, this.furnace.getProperty(2));
             }
 
-            if (this.h != this.furnace.getProperty(0)) {
+            if (this.i != this.furnace.getProperty(0)) {
                 icrafting.setContainerData(this, 0, this.furnace.getProperty(0));
             }
 
-            if (this.i != this.furnace.getProperty(1)) {
+            if (this.j != this.furnace.getProperty(1)) {
                 icrafting.setContainerData(this, 1, this.furnace.getProperty(1));
             }
 
-            if (this.g != this.furnace.getProperty(3)) {
+            if (this.h != this.furnace.getProperty(3)) {
                 icrafting.setContainerData(this, 3, this.furnace.getProperty(3));
             }
         }
 
-        this.f = this.furnace.getProperty(2);
-        this.h = this.furnace.getProperty(0);
-        this.i = this.furnace.getProperty(1);
-        this.g = this.furnace.getProperty(3);
+        this.g = this.furnace.getProperty(2);
+        this.i = this.furnace.getProperty(0);
+        this.j = this.furnace.getProperty(1);
+        this.h = this.furnace.getProperty(3);
     }
 
     public boolean canUse(EntityHuman entityhuman) {
@@ -81,7 +113,7 @@ public class ContainerFurnace extends Container {
 
                 slot.a(itemstack1, itemstack);
             } else if (i != 1 && i != 0) {
-                if (!RecipesFurnace.getInstance().getResult(itemstack1).isEmpty()) {
+                if (this.a(itemstack1)) {
                     if (!this.a(itemstack1, 0, 1, false)) {
                         return ItemStack.a;
                     }
@@ -114,5 +146,21 @@ public class ContainerFurnace extends Container {
         }
 
         return itemstack;
+    }
+
+    private boolean a(ItemStack itemstack) {
+        Iterator iterator = this.f.D().b().iterator();
+
+        IRecipe irecipe;
+
+        do {
+            if (!iterator.hasNext()) {
+                return false;
+            }
+
+            irecipe = (IRecipe) iterator.next();
+        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).a(itemstack));
+
+        return true;
     }
 }

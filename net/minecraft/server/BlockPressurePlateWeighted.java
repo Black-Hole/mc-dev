@@ -2,20 +2,16 @@ package net.minecraft.server;
 
 public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
-    public static final BlockStateInteger POWER = BlockStateInteger.of("power", 0, 15);
+    public static final BlockStateInteger POWER = BlockProperties.ak;
     private final int weight;
 
-    protected BlockPressurePlateWeighted(Material material, int i) {
-        this(material, i, material.r());
-    }
-
-    protected BlockPressurePlateWeighted(Material material, int i, MaterialMapColor materialmapcolor) {
-        super(material, materialmapcolor);
-        this.w(this.blockStateList.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
+    protected BlockPressurePlateWeighted(int i, Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
         this.weight = i;
     }
 
-    protected int e(World world, BlockPosition blockposition) {
+    protected int b(World world, BlockPosition blockposition) {
         int i = Math.min(world.a(Entity.class, BlockPressurePlateWeighted.c.a(blockposition)).size(), this.weight);
 
         if (i > 0) {
@@ -27,12 +23,12 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
         }
     }
 
-    protected void b(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.ee, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
+    protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.90000004F);
     }
 
-    protected void c(World world, BlockPosition blockposition) {
-        world.a((EntityHuman) null, blockposition, SoundEffects.ed, SoundCategory.BLOCKS, 0.3F, 0.75F);
+    protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.75F);
     }
 
     protected int getPower(IBlockData iblockdata) {
@@ -40,22 +36,14 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     }
 
     protected IBlockData a(IBlockData iblockdata, int i) {
-        return iblockdata.set(BlockPressurePlateWeighted.POWER, Integer.valueOf(i));
+        return (IBlockData) iblockdata.set(BlockPressurePlateWeighted.POWER, Integer.valueOf(i));
     }
 
-    public int a(World world) {
+    public int a(IWorldReader iworldreader) {
         return 10;
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPressurePlateWeighted.POWER, Integer.valueOf(i));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockPressurePlateWeighted.POWER)).intValue();
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockPressurePlateWeighted.POWER});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockPressurePlateWeighted.POWER});
     }
 }

@@ -1,42 +1,58 @@
 package net.minecraft.server;
 
-public class DataConverterHorse implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
-    public DataConverterHorse() {}
+public class DataConverterHorse extends DataConverterEntityName {
 
-    public int a() {
-        return 703;
+    public DataConverterHorse(Schema schema, boolean flag) {
+        super("EntityHorseSplitFix", schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("EntityHorse".equals(nbttagcompound.getString("id"))) {
-            int i = nbttagcompound.getInt("Type");
+    protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
+        Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+
+        if (Objects.equals("EntityHorse", s)) {
+            int i = dynamic.getInt("Type");
+            String s1;
 
             switch (i) {
             case 0:
             default:
-                nbttagcompound.setString("id", "Horse");
+                s1 = "Horse";
                 break;
 
             case 1:
-                nbttagcompound.setString("id", "Donkey");
+                s1 = "Donkey";
                 break;
 
             case 2:
-                nbttagcompound.setString("id", "Mule");
+                s1 = "Mule";
                 break;
 
             case 3:
-                nbttagcompound.setString("id", "ZombieHorse");
+                s1 = "ZombieHorse";
                 break;
 
             case 4:
-                nbttagcompound.setString("id", "SkeletonHorse");
+                s1 = "SkeletonHorse";
             }
 
-            nbttagcompound.remove("Type");
-        }
+            dynamic.remove("Type");
+            Type type = (Type) this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY).types().get(s1);
 
-        return nbttagcompound;
+            return Pair.of(s1, ((Optional) type.readTyped(typed.write()).getSecond()).orElseThrow(() -> {
+                return new IllegalStateException("Could not parse the new horse");
+            }));
+        } else {
+            return Pair.of(s, typed);
+        }
     }
 }

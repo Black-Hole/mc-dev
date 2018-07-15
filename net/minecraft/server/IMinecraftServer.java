@@ -8,25 +8,25 @@ public interface IMinecraftServer {
 
     void a(String s, Object object);
 
-    void a();
-
-    String b();
+    void c_();
 
     String d_();
 
-    int e_();
+    String e();
 
-    String f_();
+    int f();
+
+    String e_();
 
     String getVersion();
 
-    int H();
+    int A();
 
-    int I();
+    int B();
 
     String[] getPlayers();
 
-    String S();
+    String K();
 
     String getPlugins();
 
@@ -38,7 +38,7 @@ public interface IMinecraftServer {
 
     void warning(String s);
 
-    void g(String s);
+    void f(String s);
 
-    void h(String s);
+    void g(String s);
 }

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -10,70 +11,83 @@ import org.apache.logging.log4j.Logger;
 
 public class RecipeBookServer extends RecipeBook {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger g = LogManager.getLogger();
+    private final CraftingManager h;
 
-    public RecipeBookServer() {}
+    public RecipeBookServer(CraftingManager craftingmanager) {
+        this.h = craftingmanager;
+    }
 
-    public void a(List<IRecipe> list, EntityPlayer entityplayer) {
+    public int a(Collection<IRecipe> collection, EntityPlayer entityplayer) {
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = list.iterator();
+        int i = 0;
+        Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
+            MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (!this.a.get(d(irecipe)) && !irecipe.c()) {
-                this.a(irecipe);
-                this.g(irecipe);
-                arraylist.add(irecipe);
+            if (!this.a.contains(minecraftkey) && !irecipe.c()) {
+                this.a(minecraftkey);
+                this.c(minecraftkey);
+                arraylist.add(minecraftkey);
                 CriterionTriggers.f.a(entityplayer, irecipe);
+                ++i;
             }
         }
 
         this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, arraylist);
+        return i;
     }
 
-    public void b(List<IRecipe> list, EntityPlayer entityplayer) {
+    public int b(Collection<IRecipe> collection, EntityPlayer entityplayer) {
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = list.iterator();
+        int i = 0;
+        Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             IRecipe irecipe = (IRecipe) iterator.next();
+            MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (this.a.get(d(irecipe))) {
-                this.c(irecipe);
-                arraylist.add(irecipe);
+            if (this.a.contains(minecraftkey)) {
+                this.b(minecraftkey);
+                arraylist.add(minecraftkey);
+                ++i;
             }
         }
 
         this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, arraylist);
+        return i;
     }
 
-    private void a(PacketPlayOutRecipes.Action packetplayoutrecipes_action, EntityPlayer entityplayer, List<IRecipe> list) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.c, this.d));
+    private void a(PacketPlayOutRecipes.Action packetplayoutrecipes_action, EntityPlayer entityplayer, List<MinecraftKey> list) {
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.c, this.d, this.e, this.f));
     }
 
-    public NBTTagCompound c() {
+    public NBTTagCompound e() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setBoolean("isGuiOpen", this.c);
         nbttagcompound.setBoolean("isFilteringCraftable", this.d);
+        nbttagcompound.setBoolean("isFurnaceGuiOpen", this.e);
+        nbttagcompound.setBoolean("isFurnaceFilteringCraftable", this.f);
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.d().iterator();
+        Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {
-            IRecipe irecipe = (IRecipe) iterator.next();
+            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
 
-            nbttaglist.add(new NBTTagString(((MinecraftKey) CraftingManager.recipes.b(irecipe)).toString()));
+            nbttaglist.add((NBTBase) (new NBTTagString(minecraftkey.toString())));
         }
 
         nbttagcompound.set("recipes", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator1 = this.e().iterator();
+        Iterator iterator1 = this.b.iterator();
 
         while (iterator1.hasNext()) {
-            IRecipe irecipe1 = (IRecipe) iterator1.next();
+            MinecraftKey minecraftkey1 = (MinecraftKey) iterator1.next();
 
-            nbttaglist1.add(new NBTTagString(((MinecraftKey) CraftingManager.recipes.b(irecipe1)).toString()));
+            nbttaglist1.add((NBTBase) (new NBTTagString(minecraftkey1.toString())));
         }
 
         nbttagcompound.set("toBeDisplayed", nbttaglist1);
@@ -83,14 +97,16 @@ public class RecipeBookServer extends RecipeBook {
     public void a(NBTTagCompound nbttagcompound) {
         this.c = nbttagcompound.getBoolean("isGuiOpen");
         this.d = nbttagcompound.getBoolean("isFilteringCraftable");
+        this.e = nbttagcompound.getBoolean("isFurnaceGuiOpen");
+        this.f = nbttagcompound.getBoolean("isFurnaceFilteringCraftable");
         NBTTagList nbttaglist = nbttagcompound.getList("recipes", 8);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             MinecraftKey minecraftkey = new MinecraftKey(nbttaglist.getString(i));
-            IRecipe irecipe = CraftingManager.a(minecraftkey);
+            IRecipe irecipe = this.h.a(minecraftkey);
 
             if (irecipe == null) {
-                RecipeBookServer.e.info("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
+                RecipeBookServer.g.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
             } else {
                 this.a(irecipe);
             }
@@ -100,38 +116,18 @@ public class RecipeBookServer extends RecipeBook {
 
         for (int j = 0; j < nbttaglist1.size(); ++j) {
             MinecraftKey minecraftkey1 = new MinecraftKey(nbttaglist1.getString(j));
-            IRecipe irecipe1 = CraftingManager.a(minecraftkey1);
+            IRecipe irecipe1 = this.h.a(minecraftkey1);
 
             if (irecipe1 == null) {
-                RecipeBookServer.e.info("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
+                RecipeBookServer.g.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
             } else {
-                this.g(irecipe1);
+                this.f(irecipe1);
             }
         }
 
     }
 
-    private List<IRecipe> d() {
-        ArrayList arraylist = Lists.newArrayList();
-
-        for (int i = this.a.nextSetBit(0); i >= 0; i = this.a.nextSetBit(i + 1)) {
-            arraylist.add(CraftingManager.recipes.getId(i));
-        }
-
-        return arraylist;
-    }
-
-    private List<IRecipe> e() {
-        ArrayList arraylist = Lists.newArrayList();
-
-        for (int i = this.b.nextSetBit(0); i >= 0; i = this.b.nextSetBit(i + 1)) {
-            arraylist.add(CraftingManager.recipes.getId(i));
-        }
-
-        return arraylist;
-    }
-
     public void a(EntityPlayer entityplayer) {
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.d(), this.e(), this.c, this.d));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(PacketPlayOutRecipes.Action.INIT, this.a, this.b, this.c, this.d, this.e, this.f));
     }
 }

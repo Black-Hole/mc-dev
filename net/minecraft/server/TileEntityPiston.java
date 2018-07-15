@@ -1,18 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class TileEntityPiston extends TileEntity implements ITickable {
 
     private IBlockData a;
-    private EnumDirection f;
+    private EnumDirection e;
+    private boolean f;
     private boolean g;
-    private boolean h;
-    private static final ThreadLocal<EnumDirection> i = new ThreadLocal() {
+    private static final ThreadLocal<EnumDirection> h = new ThreadLocal() {
         protected EnumDirection a() {
             return null;
         }
@@ -21,76 +18,65 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             return this.a();
         }
     };
+    private float i;
     private float j;
-    private float k;
+    private long k;
 
-    public TileEntityPiston() {}
+    public TileEntityPiston() {
+        super(TileEntityTypes.k);
+    }
 
     public TileEntityPiston(IBlockData iblockdata, EnumDirection enumdirection, boolean flag, boolean flag1) {
+        this();
         this.a = iblockdata;
-        this.f = enumdirection;
-        this.g = flag;
-        this.h = flag1;
+        this.e = enumdirection;
+        this.f = flag;
+        this.g = flag1;
     }
 
-    public IBlockData a() {
-        return this.a;
-    }
-
-    public NBTTagCompound d() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
-    public int v() {
-        return 0;
+    public boolean c() {
+        return this.f;
     }
 
     public boolean f() {
         return this.g;
     }
 
-    public EnumDirection h() {
-        return this.f;
-    }
+    public float a(float f) {
+        if (f > 1.0F) {
+            f = 1.0F;
+        }
 
-    public boolean i() {
-        return this.h;
+        return this.j + (this.i - this.j) * f;
     }
 
     private float e(float f) {
-        return this.g ? f - 1.0F : 1.0F - f;
+        return this.f ? f - 1.0F : 1.0F - f;
     }
 
-    public AxisAlignedBB a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.a(iblockaccess, blockposition, this.j).b(this.a(iblockaccess, blockposition, this.k));
-    }
-
-    public AxisAlignedBB a(IBlockAccess iblockaccess, BlockPosition blockposition, float f) {
-        f = this.e(f);
-        IBlockData iblockdata = this.k();
-
-        return iblockdata.e(iblockaccess, blockposition).d((double) (f * (float) this.f.getAdjacentX()), (double) (f * (float) this.f.getAdjacentY()), (double) (f * (float) this.f.getAdjacentZ()));
-    }
-
-    private IBlockData k() {
-        return !this.f() && this.i() ? Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
+    private IBlockData l() {
+        return !this.c() && this.f() ? (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
     }
 
     private void f(float f) {
-        EnumDirection enumdirection = this.g ? this.f : this.f.opposite();
-        double d0 = (double) (f - this.j);
-        ArrayList arraylist = Lists.newArrayList();
+        EnumDirection enumdirection = this.h();
+        double d0 = (double) (f - this.i);
+        VoxelShape voxelshape = this.l().h(this.world, this.getPosition());
 
-        this.k().a(this.world, BlockPosition.ZERO, new AxisAlignedBB(BlockPosition.ZERO), arraylist, (Entity) null, true);
-        if (!arraylist.isEmpty()) {
-            AxisAlignedBB axisalignedbb = this.a(this.a((List) arraylist));
-            List list = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
+        if (!voxelshape.b()) {
+            List list = voxelshape.d();
+            AxisAlignedBB axisalignedbb = this.a(this.a(list));
+            List list1 = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
 
-            if (!list.isEmpty()) {
-                boolean flag = this.a.getBlock() == Blocks.SLIME;
+            if (!list1.isEmpty()) {
+                boolean flag = this.a.getBlock() == Blocks.SLIME_BLOCK;
 
-                for (int i = 0; i < list.size(); ++i) {
-                    Entity entity = (Entity) list.get(i);
+                for (int i = 0; i < list1.size(); ++i) {
+                    Entity entity = (Entity) list1.get(i);
 
                     if (entity.getPushReaction() != EnumPistonReaction.IGNORE) {
                         if (flag) {
@@ -110,8 +96,8 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
                         double d1 = 0.0D;
 
-                        for (int j = 0; j < arraylist.size(); ++j) {
-                            AxisAlignedBB axisalignedbb1 = this.a(this.a((AxisAlignedBB) arraylist.get(j)), enumdirection, d0);
+                        for (int j = 0; j < list.size(); ++j) {
+                            AxisAlignedBB axisalignedbb1 = this.a(this.a((AxisAlignedBB) list.get(j)), enumdirection, d0);
                             AxisAlignedBB axisalignedbb2 = entity.getBoundingBox();
 
                             if (axisalignedbb1.c(axisalignedbb2)) {
@@ -124,10 +110,10 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
                         if (d1 > 0.0D) {
                             d1 = Math.min(d1, d0) + 0.01D;
-                            TileEntityPiston.i.set(enumdirection);
+                            TileEntityPiston.h.set(enumdirection);
                             entity.move(EnumMoveType.PISTON, d1 * (double) enumdirection.getAdjacentX(), d1 * (double) enumdirection.getAdjacentY(), d1 * (double) enumdirection.getAdjacentZ());
-                            TileEntityPiston.i.set((Object) null);
-                            if (!this.g && this.h) {
+                            TileEntityPiston.h.set((Object) null);
+                            if (!this.f && this.g) {
                                 this.a(entity, enumdirection, d0);
                             }
                         }
@@ -136,6 +122,10 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
             }
         }
+    }
+
+    public EnumDirection h() {
+        return this.f ? this.e : this.e.opposite();
     }
 
     private AxisAlignedBB a(List<AxisAlignedBB> list) {
@@ -175,9 +165,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     }
 
     private AxisAlignedBB a(AxisAlignedBB axisalignedbb) {
-        double d0 = (double) this.e(this.j);
+        double d0 = (double) this.e(this.i);
 
-        return axisalignedbb.d((double) this.position.getX() + d0 * (double) this.f.getAdjacentX(), (double) this.position.getY() + d0 * (double) this.f.getAdjacentY(), (double) this.position.getZ() + d0 * (double) this.f.getAdjacentZ());
+        return axisalignedbb.d((double) this.position.getX() + d0 * (double) this.e.getAdjacentX(), (double) this.position.getY() + d0 * (double) this.e.getAdjacentY(), (double) this.position.getZ() + d0 * (double) this.e.getAdjacentZ());
     }
 
     private AxisAlignedBB a(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, double d0) {
@@ -209,7 +199,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     private void a(Entity entity, EnumDirection enumdirection, double d0) {
         AxisAlignedBB axisalignedbb = entity.getBoundingBox();
-        AxisAlignedBB axisalignedbb1 = Block.j.a(this.position);
+        AxisAlignedBB axisalignedbb1 = VoxelShapes.b().a().a(this.position);
 
         if (axisalignedbb.c(axisalignedbb1)) {
             EnumDirection enumdirection1 = enumdirection.opposite();
@@ -218,9 +208,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
             if (Math.abs(d1 - d2) < 0.01D) {
                 d1 = Math.min(d1, d0) + 0.01D;
-                TileEntityPiston.i.set(enumdirection);
+                TileEntityPiston.h.set(enumdirection);
                 entity.move(EnumMoveType.PISTON, d1 * (double) enumdirection1.getAdjacentX(), d1 * (double) enumdirection1.getAdjacentY(), d1 * (double) enumdirection1.getAdjacentZ());
-                TileEntityPiston.i.set((Object) null);
+                TileEntityPiston.h.set((Object) null);
             }
         }
 
@@ -238,93 +228,118 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.f - axisalignedbb1.c : axisalignedbb1.f - axisalignedbb.c;
     }
 
+    public IBlockData i() {
+        return this.a;
+    }
+
     public void j() {
-        if (this.k < 1.0F && this.world != null) {
-            this.j = 1.0F;
-            this.k = this.j;
-            this.world.s(this.position);
-            this.z();
-            if (this.world.getType(this.position).getBlock() == Blocks.PISTON_EXTENSION) {
-                this.world.setTypeAndData(this.position, this.a, 3);
-                this.world.a(this.position, this.a.getBlock(), this.position);
+        if (this.j < 1.0F && this.world != null) {
+            this.i = 1.0F;
+            this.j = this.i;
+            this.world.n(this.position);
+            this.y();
+            if (this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
+                IBlockData iblockdata;
+
+                if (this.g) {
+                    iblockdata = Blocks.AIR.getBlockData();
+                } else {
+                    iblockdata = Block.a(this.a, (GeneratorAccess) this.world, this.position);
+                }
+
+                this.world.setTypeAndData(this.position, iblockdata, 3);
+                this.world.a(this.position, iblockdata.getBlock(), this.position);
             }
         }
 
     }
 
-    public void e() {
-        this.k = this.j;
-        if (this.k >= 1.0F) {
-            this.world.s(this.position);
-            this.z();
-            if (this.world.getType(this.position).getBlock() == Blocks.PISTON_EXTENSION) {
-                this.world.setTypeAndData(this.position, this.a, 3);
-                this.world.a(this.position, this.a.getBlock(), this.position);
+    public void X_() {
+        this.k = this.world.getTime();
+        this.j = this.i;
+        if (this.j >= 1.0F) {
+            this.world.n(this.position);
+            this.y();
+            if (this.a != null && this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
+                IBlockData iblockdata = Block.a(this.a, (GeneratorAccess) this.world, this.position);
+
+                if (iblockdata.isAir()) {
+                    this.world.setTypeAndData(this.position, this.a, 20);
+                    Block.a(this.a, iblockdata, this.world, this.position, 3);
+                } else {
+                    if (iblockdata.b(BlockProperties.x) && ((Boolean) iblockdata.get(BlockProperties.x)).booleanValue()) {
+                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.x, Boolean.valueOf(false));
+                    }
+
+                    this.world.setTypeAndData(this.position, iblockdata, 3);
+                    this.world.a(this.position, iblockdata.getBlock(), this.position);
+                }
             }
 
         } else {
-            float f = this.j + 0.5F;
+            float f = this.i + 0.5F;
 
             this.f(f);
-            this.j = f;
-            if (this.j >= 1.0F) {
-                this.j = 1.0F;
+            this.i = f;
+            if (this.i >= 1.0F) {
+                this.i = 1.0F;
             }
 
         }
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {}
-
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.a = Block.getById(nbttagcompound.getInt("blockId")).fromLegacyData(nbttagcompound.getInt("blockData"));
-        this.f = EnumDirection.fromType1(nbttagcompound.getInt("facing"));
-        this.j = nbttagcompound.getFloat("progress");
-        this.k = this.j;
-        this.g = nbttagcompound.getBoolean("extending");
-        this.h = nbttagcompound.getBoolean("source");
+        this.a = GameProfileSerializer.d(nbttagcompound.getCompound("blockState"));
+        this.e = EnumDirection.fromType1(nbttagcompound.getInt("facing"));
+        this.i = nbttagcompound.getFloat("progress");
+        this.j = this.i;
+        this.f = nbttagcompound.getBoolean("extending");
+        this.g = nbttagcompound.getBoolean("source");
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        nbttagcompound.setInt("blockId", Block.getId(this.a.getBlock()));
-        nbttagcompound.setInt("blockData", this.a.getBlock().toLegacyData(this.a));
-        nbttagcompound.setInt("facing", this.f.a());
-        nbttagcompound.setFloat("progress", this.k);
-        nbttagcompound.setBoolean("extending", this.g);
-        nbttagcompound.setBoolean("source", this.h);
+        nbttagcompound.set("blockState", GameProfileSerializer.a(this.a));
+        nbttagcompound.setInt("facing", this.e.a());
+        nbttagcompound.setFloat("progress", this.j);
+        nbttagcompound.setBoolean("extending", this.f);
+        nbttagcompound.setBoolean("source", this.g);
         return nbttagcompound;
     }
 
-    public void a(World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity) {
-        if (!this.g && this.h) {
-            this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true)).a(world, blockposition, axisalignedbb, list, entity, false);
+    public VoxelShape a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        VoxelShape voxelshape;
+
+        if (!this.f && this.g) {
+            voxelshape = ((IBlockData) this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true))).h(iblockaccess, blockposition);
+        } else {
+            voxelshape = VoxelShapes.a();
         }
 
-        EnumDirection enumdirection = (EnumDirection) TileEntityPiston.i.get();
+        EnumDirection enumdirection = (EnumDirection) TileEntityPiston.h.get();
 
-        if ((double) this.j >= 1.0D || enumdirection != (this.g ? this.f : this.f.opposite())) {
-            int i = list.size();
+        if ((double) this.i < 1.0D && enumdirection == this.h()) {
+            return voxelshape;
+        } else {
             IBlockData iblockdata;
 
-            if (this.i()) {
-                iblockdata = Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.f).set(BlockPistonExtension.SHORT, Boolean.valueOf(this.g != 1.0F - this.j < 0.25F));
+            if (this.f()) {
+                iblockdata = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.e)).set(BlockPistonExtension.SHORT, Boolean.valueOf(this.f != 1.0F - this.i < 4.0F));
             } else {
                 iblockdata = this.a;
             }
 
-            float f = this.e(this.j);
-            double d0 = (double) ((float) this.f.getAdjacentX() * f);
-            double d1 = (double) ((float) this.f.getAdjacentY() * f);
-            double d2 = (double) ((float) this.f.getAdjacentZ() * f);
+            float f = this.e(this.i);
+            double d0 = (double) ((float) this.e.getAdjacentX() * f);
+            double d1 = (double) ((float) this.e.getAdjacentY() * f);
+            double d2 = (double) ((float) this.e.getAdjacentZ() * f);
 
-            iblockdata.a(world, blockposition, axisalignedbb.d(-d0, -d1, -d2), list, entity, true);
-
-            for (int j = i; j < list.size(); ++j) {
-                list.set(j, ((AxisAlignedBB) list.get(j)).d(d0, d1, d2));
-            }
-
+            return VoxelShapes.a(voxelshape, iblockdata.h(iblockaccess, blockposition).a(d0, d1, d2));
         }
+    }
+
+    public long k() {
+        return this.k;
     }
 }

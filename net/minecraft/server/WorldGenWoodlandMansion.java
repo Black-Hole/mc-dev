@@ -1,85 +1,83 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenWoodlandMansion extends StructureGenerator {
+public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionConfiguration> {
 
-    private final int b = 80;
-    private final int d = 20;
-    public static final List<BiomeBase> a = Arrays.asList(new BiomeBase[] { Biomes.E, Biomes.ab});
-    private final ChunkProviderGenerate h;
+    public WorldGenWoodlandMansion() {}
 
-    public WorldGenWoodlandMansion(ChunkProviderGenerate chunkprovidergenerate) {
-        this.h = chunkprovidergenerate;
+    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
+        int i1 = chunkgenerator.getSettings().p();
+        int j1 = chunkgenerator.getSettings().q();
+        int k1 = i + i1 * k;
+        int l1 = j + i1 * l;
+        int i2 = k1 < 0 ? k1 - i1 - 1 : k1;
+        int j2 = l1 < 0 ? l1 - i1 - 1 : l1;
+        int k2 = i2 / i1;
+        int l2 = j2 / i1;
+
+        ((SeededRandom) random).a(chunkgenerator.getSeed(), k2, l2, 10387319);
+        k2 *= i1;
+        l2 *= i1;
+        k2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        l2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        return new ChunkCoordIntPair(k2, l2);
     }
 
-    public String a() {
+    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
+
+        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
+            Set set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 32);
+            Iterator iterator = set.iterator();
+
+            BiomeBase biomebase;
+
+            do {
+                if (!iterator.hasNext()) {
+                    return true;
+                }
+
+                biomebase = (BiomeBase) iterator.next();
+            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.g));
+
+            return false;
+        } else {
+            return false;
+        }
+    }
+
+    protected boolean a(GeneratorAccess generatoraccess) {
+        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
+    }
+
+    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
+
+        return new WorldGenWoodlandMansion.a(generatoraccess, chunkgenerator, seededrandom, i, j, biomebase);
+    }
+
+    protected String a() {
         return "Mansion";
     }
 
-    protected boolean a(int i, int j) {
-        int k = i;
-        int l = j;
-
-        if (i < 0) {
-            k = i - 79;
-        }
-
-        if (j < 0) {
-            l = j - 79;
-        }
-
-        int i1 = k / 80;
-        int j1 = l / 80;
-        Random random = this.g.a(i1, j1, 10387319);
-
-        i1 *= 80;
-        j1 *= 80;
-        i1 += (random.nextInt(60) + random.nextInt(60)) / 2;
-        j1 += (random.nextInt(60) + random.nextInt(60)) / 2;
-        if (i == i1 && j == j1) {
-            boolean flag = this.g.getWorldChunkManager().a(i * 16 + 8, j * 16 + 8, 32, WorldGenWoodlandMansion.a);
-
-            if (flag) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
-        this.g = world;
-        WorldChunkManager worldchunkmanager = world.getWorldChunkManager();
-
-        return worldchunkmanager.c() && worldchunkmanager.d() != Biomes.E ? null : a(world, this, blockposition, 80, 20, 10387319, true, 100, flag);
-    }
-
-    protected StructureStart b(int i, int j) {
-        return new WorldGenWoodlandMansion.a(this.g, this.h, this.f, i, j);
+    public int b() {
+        return 8;
     }
 
     public static class a extends StructureStart {
 
-        private boolean c;
+        private boolean e;
 
         public a() {}
 
-        public a(World world, ChunkProviderGenerate chunkprovidergenerate, Random random, int i, int j) {
-            super(i, j);
-            this.a(world, chunkprovidergenerate, random, i, j);
-        }
-
-        private void a(World world, ChunkProviderGenerate chunkprovidergenerate, Random random, int i, int j) {
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[random.nextInt(EnumBlockRotation.values().length)];
-            ChunkSnapshot chunksnapshot = new ChunkSnapshot();
-
-            chunkprovidergenerate.a(i, j, chunksnapshot);
+        public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
+            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[seededrandom.nextInt(EnumBlockRotation.values().length)];
             byte b0 = 5;
             byte b1 = 5;
 
@@ -92,41 +90,44 @@ public class WorldGenWoodlandMansion extends StructureGenerator {
                 b1 = -5;
             }
 
-            int k = chunksnapshot.a(7, 7);
-            int l = chunksnapshot.a(7, 7 + b1);
-            int i1 = chunksnapshot.a(7 + b0, 7);
-            int j1 = chunksnapshot.a(7 + b0, 7 + b1);
+            ProtoChunk protochunk = new ProtoChunk(new ChunkCoordIntPair(i, j), ChunkConverter.a);
+
+            chunkgenerator.createChunk(protochunk);
+            int k = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7);
+            int l = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7 + b1);
+            int i1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7);
+            int j1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7 + b1);
             int k1 = Math.min(Math.min(k, l), Math.min(i1, j1));
 
             if (k1 < 60) {
-                this.c = false;
+                this.e = false;
             } else {
                 BlockPosition blockposition = new BlockPosition(i * 16 + 8, k1 + 1, j * 16 + 8);
                 LinkedList linkedlist = Lists.newLinkedList();
 
-                WorldGenWoodlandMansionPieces.a(world.getDataManager().h(), blockposition, enumblockrotation, linkedlist, random);
+                WorldGenWoodlandMansionPieces.a(generatoraccess.getDataManager().h(), blockposition, enumblockrotation, linkedlist, seededrandom);
                 this.a.addAll(linkedlist);
-                this.d();
-                this.c = true;
+                this.a((IBlockAccess) generatoraccess);
+                this.e = true;
             }
         }
 
-        public void a(World world, Random random, StructureBoundingBox structureboundingbox) {
-            super.a(world, random, structureboundingbox);
+        public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+            super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
             int i = this.b.b;
 
             for (int j = structureboundingbox.a; j <= structureboundingbox.d; ++j) {
                 for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
                     BlockPosition blockposition = new BlockPosition(j, i, k);
 
-                    if (!world.isEmpty(blockposition) && this.b.b((BaseBlockPosition) blockposition)) {
+                    if (!generatoraccess.isEmpty(blockposition) && this.b.b((BaseBlockPosition) blockposition)) {
                         boolean flag = false;
                         Iterator iterator = this.a.iterator();
 
                         while (iterator.hasNext()) {
                             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-                            if (structurepiece.l.b((BaseBlockPosition) blockposition)) {
+                            if (structurepiece.d().b((BaseBlockPosition) blockposition)) {
                                 flag = true;
                                 break;
                             }
@@ -136,11 +137,11 @@ public class WorldGenWoodlandMansion extends StructureGenerator {
                             for (int l = i - 1; l > 1; --l) {
                                 BlockPosition blockposition1 = new BlockPosition(j, l, k);
 
-                                if (!world.isEmpty(blockposition1) && !world.getType(blockposition1).getMaterial().isLiquid()) {
+                                if (!generatoraccess.isEmpty(blockposition1) && !generatoraccess.getType(blockposition1).getMaterial().isLiquid()) {
                                     break;
                                 }
 
-                                world.setTypeAndData(blockposition1, Blocks.COBBLESTONE.getBlockData(), 2);
+                                generatoraccess.setTypeAndData(blockposition1, Blocks.COBBLESTONE.getBlockData(), 2);
                             }
                         }
                     }
@@ -149,8 +150,8 @@ public class WorldGenWoodlandMansion extends StructureGenerator {
 
         }
 
-        public boolean a() {
-            return this.c;
+        public boolean b() {
+            return this.e;
         }
     }
 }

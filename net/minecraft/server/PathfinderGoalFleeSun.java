@@ -20,16 +20,16 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (!this.f.D()) {
+        if (!this.f.K()) {
             return false;
         } else if (!this.a.isBurning()) {
             return false;
-        } else if (!this.f.h(new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ))) {
+        } else if (!this.f.e(new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ))) {
             return false;
         } else if (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             return false;
         } else {
-            Vec3D vec3d = this.f();
+            Vec3D vec3d = this.g();
 
             if (vec3d == null) {
                 return false;
@@ -43,7 +43,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().o();
+        return !this.a.getNavigation().q();
     }
 
     public void c() {
@@ -51,14 +51,14 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     @Nullable
-    private Vec3D f() {
+    private Vec3D g() {
         Random random = this.a.getRandom();
         BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ);
 
         for (int i = 0; i < 10; ++i) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);
 
-            if (!this.f.h(blockposition1) && this.a.a(blockposition1) < 0.0F) {
+            if (!this.f.e(blockposition1) && this.a.a(blockposition1) < 0.0F) {
                 return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
             }
         }

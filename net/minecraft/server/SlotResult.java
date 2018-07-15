@@ -1,8 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.List;
-
 public class SlotResult extends Slot {
 
     private final InventoryCrafting a;
@@ -41,20 +38,13 @@ public class SlotResult extends Slot {
             itemstack.a(this.b.world, this.b, this.c);
         }
 
+        ((RecipeHolder) this.inventory).d(this.b);
         this.c = 0;
-        InventoryCraftResult inventorycraftresult = (InventoryCraftResult) this.inventory;
-        IRecipe irecipe = inventorycraftresult.i();
-
-        if (irecipe != null && !irecipe.c()) {
-            this.b.a((List) Lists.newArrayList(new IRecipe[] { irecipe}));
-            inventorycraftresult.a((IRecipe) null);
-        }
-
     }
 
     public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
-        NonNullList nonnulllist = CraftingManager.c(this.a, entityhuman.world);
+        NonNullList nonnulllist = entityhuman.world.D().c(this.a, entityhuman.world);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack1 = this.a.getItem(i);

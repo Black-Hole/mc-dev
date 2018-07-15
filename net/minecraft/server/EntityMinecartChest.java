@@ -3,21 +3,17 @@ package net.minecraft.server;
 public class EntityMinecartChest extends EntityMinecartContainer {
 
     public EntityMinecartChest(World world) {
-        super(world);
+        super(EntityTypes.CHEST_MINECART, world);
     }
 
     public EntityMinecartChest(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartContainer.b(dataconvertermanager, EntityMinecartChest.class);
+        super(EntityTypes.CHEST_MINECART, d0, d1, d2, world);
     }
 
     public void a(DamageSource damagesource) {
         super.a(damagesource);
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(Item.getItemOf(Blocks.CHEST), 1, 0.0F);
+            this.a((IMaterial) Blocks.CHEST);
         }
 
     }
@@ -30,11 +26,11 @@ public class EntityMinecartChest extends EntityMinecartContainer {
         return EntityMinecartAbstract.EnumMinecartType.CHEST;
     }
 
-    public IBlockData x() {
-        return Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
+    public IBlockData z() {
+        return (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
-    public int z() {
+    public int B() {
         return 8;
     }
 

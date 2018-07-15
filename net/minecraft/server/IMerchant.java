@@ -18,7 +18,7 @@ public interface IMerchant {
 
     IChatBaseComponent getScoreboardDisplayName();
 
-    World u_();
+    World getWorld();
 
-    BlockPosition v_();
+    BlockPosition getPosition();
 }

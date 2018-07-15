@@ -1,31 +1,37 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandGamemodeDefault extends CommandGamemode {
+public class CommandGamemodeDefault {
 
-    public CommandGamemodeDefault() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        LiteralArgumentBuilder literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("defaultgamemode").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        });
+        EnumGamemode[] aenumgamemode = EnumGamemode.values();
+        int i = aenumgamemode.length;
 
-    public String getCommand() {
-        return "defaultgamemode";
-    }
+        for (int j = 0; j < i; ++j) {
+            EnumGamemode enumgamemode = aenumgamemode[j];
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.defaultgamemode.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length <= 0) {
-            throw new ExceptionUsage("commands.defaultgamemode.usage", new Object[0]);
-        } else {
-            EnumGamemode enumgamemode = this.c(icommandlistener, astring[0]);
-
-            this.a(enumgamemode, minecraftserver);
-            a(icommandlistener, (ICommand) this, "commands.defaultgamemode.success", new Object[] { new ChatMessage("gameMode." + enumgamemode.b(), new Object[0])});
+            if (enumgamemode != EnumGamemode.NOT_SET) {
+                literalargumentbuilder.then(CommandDispatcher.a(enumgamemode.b()).executes((commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), enumgamemode);
+                }));
+            }
         }
+
+        com_mojang_brigadier_commanddispatcher.register(literalargumentbuilder);
     }
 
-    protected void a(EnumGamemode enumgamemode, MinecraftServer minecraftserver) {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, EnumGamemode enumgamemode) {
+        int i = 0;
+        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
+
         minecraftserver.setGamemode(enumgamemode);
         if (minecraftserver.getForceGamemode()) {
             Iterator iterator = minecraftserver.getPlayerList().v().iterator();
@@ -33,9 +39,14 @@ public class CommandGamemodeDefault extends CommandGamemode {
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.a(enumgamemode);
+                if (entityplayer.playerInteractManager.getGameMode() != enumgamemode) {
+                    entityplayer.a(enumgamemode);
+                    ++i;
+                }
             }
         }
 
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.defaultgamemode.success", new Object[] { enumgamemode.c()}), true);
+        return i;
     }
 }

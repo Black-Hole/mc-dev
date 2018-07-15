@@ -1,80 +1,90 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandPlaySound extends CommandAbstract {
+public class CommandPlaySound {
 
-    public CommandPlaySound() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.playsound.failed", new Object[0]));
 
-    public String getCommand() {
-        return "playsound";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        RequiredArgumentBuilder requiredargumentbuilder = CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c);
+        SoundCategory[] asoundcategory = SoundCategory.values();
+        int i = asoundcategory.length;
+
+        for (int j = 0; j < i; ++j) {
+            SoundCategory soundcategory = asoundcategory[j];
+
+            requiredargumentbuilder.then(a(soundcategory));
+        }
+
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("playsound").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(requiredargumentbuilder));
     }
 
-    public int a() {
-        return 2;
+    private static LiteralArgumentBuilder<CommandListenerWrapper> a(SoundCategory soundcategory) {
+        return (LiteralArgumentBuilder) CommandDispatcher.a(soundcategory.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ((CommandListenerWrapper) commandcontext.getSource()).getPosition(), 1.0F, 1.0F, 0.0F);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), 1.0F, 1.0F, 0.0F);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("volume", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), ((Float) commandcontext.getArgument("volume", Float.class)).floatValue(), 1.0F, 0.0F);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("pitch", (ArgumentType) FloatArgumentType.floatArg(0.0F, 2.0F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), ((Float) commandcontext.getArgument("volume", Float.class)).floatValue(), ((Float) commandcontext.getArgument("pitch", Float.class)).floatValue(), 0.0F);
+        })).then(CommandDispatcher.a("minVolume", (ArgumentType) FloatArgumentType.floatArg(0.0F, 1.0F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"), soundcategory, ArgumentVec3.a(commandcontext, "pos"), ((Float) commandcontext.getArgument("volume", Float.class)).floatValue(), ((Float) commandcontext.getArgument("pitch", Float.class)).floatValue(), ((Float) commandcontext.getArgument("minVolume", Float.class)).floatValue());
+        }))))));
     }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.playsound.usage";
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, MinecraftKey minecraftkey, SoundCategory soundcategory, Vec3D vec3d, float f, float f1, float f2) throws CommandSyntaxException {
+        double d0 = Math.pow(f > 1.0F ? (double) (f * 16.0F) : 16.0D, 2.0D);
+        int i = 0;
+        Iterator iterator = collection.iterator();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage(this.getUsage(icommandlistener), new Object[0]);
-        } else {
-            byte b0 = 0;
-            int i = b0 + 1;
-            String s = astring[b0];
-            String s1 = astring[i++];
-            SoundCategory soundcategory = SoundCategory.a(s1);
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+            double d1 = vec3d.x - entityplayer.locX;
+            double d2 = vec3d.y - entityplayer.locY;
+            double d3 = vec3d.z - entityplayer.locZ;
+            double d4 = d1 * d1 + d2 * d2 + d3 * d3;
+            Vec3D vec3d1 = vec3d;
+            float f3 = f;
 
-            if (soundcategory == null) {
-                throw new CommandException("commands.playsound.unknownSoundSource", new Object[] { s1});
-            } else {
-                EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[i++]);
-                Vec3D vec3d = icommandlistener.d();
-                double d0 = astring.length > i ? b(vec3d.x, astring[i++], true) : vec3d.x;
-                double d1 = astring.length > i ? b(vec3d.y, astring[i++], 0, 0, false) : vec3d.y;
-                double d2 = astring.length > i ? b(vec3d.z, astring[i++], true) : vec3d.z;
-                double d3 = astring.length > i ? a(astring[i++], 0.0D, 3.4028234663852886E38D) : 1.0D;
-                double d4 = astring.length > i ? a(astring[i++], 0.0D, 2.0D) : 1.0D;
-                double d5 = astring.length > i ? a(astring[i], 0.0D, 1.0D) : 0.0D;
-                double d6 = d3 > 1.0D ? d3 * 16.0D : 16.0D;
-                double d7 = entityplayer.e(d0, d1, d2);
-
-                if (d7 > d6) {
-                    if (d5 <= 0.0D) {
-                        throw new CommandException("commands.playsound.playerTooFar", new Object[] { entityplayer.getName()});
-                    }
-
-                    double d8 = d0 - entityplayer.locX;
-                    double d9 = d1 - entityplayer.locY;
-                    double d10 = d2 - entityplayer.locZ;
-                    double d11 = Math.sqrt(d8 * d8 + d9 * d9 + d10 * d10);
-
-                    if (d11 > 0.0D) {
-                        d0 = entityplayer.locX + d8 / d11 * 2.0D;
-                        d1 = entityplayer.locY + d9 / d11 * 2.0D;
-                        d2 = entityplayer.locZ + d10 / d11 * 2.0D;
-                    }
-
-                    d3 = d5;
+            if (d4 > d0) {
+                if (f2 <= 0.0F) {
+                    continue;
                 }
 
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomSoundEffect(s, soundcategory, d0, d1, d2, (float) d3, (float) d4));
-                a(icommandlistener, (ICommand) this, "commands.playsound.success", new Object[] { s, entityplayer.getName()});
+                double d5 = (double) MathHelper.sqrt(d4);
+
+                vec3d1 = new Vec3D(entityplayer.locX + d1 / d5 * 2.0D, entityplayer.locY + d2 / d5 * 2.0D, entityplayer.locZ + d3 / d5 * 2.0D);
+                f3 = f2;
             }
+
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomSoundEffect(minecraftkey, soundcategory, vec3d1, f3, f1));
+            ++i;
         }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, (Collection) SoundEffect.a.keySet()) : (astring.length == 2 ? a(astring, (Collection) SoundCategory.b()) : (astring.length == 3 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : Collections.emptyList())));
-    }
+        if (i == 0) {
+            throw CommandPlaySound.a.create();
+        } else {
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[] { minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.playsound.success.single", new Object[] { minecraftkey, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 2;
+            return i;
+        }
     }
 }

@@ -4,7 +4,6 @@ public class EnchantmentFire extends Enchantment {
 
     protected EnchantmentFire(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.WEAPON, aenumitemslot);
-        this.c("fire");
     }
 
     public int a(int i) {

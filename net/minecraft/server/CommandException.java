@@ -1,19 +1,17 @@
 package net.minecraft.server;
 
-public class CommandException extends Exception {
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-    private final Object[] a;
+public class CommandException extends RuntimeException {
 
-    public CommandException(String s, Object... aobject) {
-        super(s);
-        this.a = aobject;
+    private final IChatBaseComponent a;
+
+    public CommandException(IChatBaseComponent ichatbasecomponent) {
+        super(ichatbasecomponent.getText(), (Throwable) null, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES, CommandSyntaxException.ENABLE_COMMAND_STACK_TRACES);
+        this.a = ichatbasecomponent;
     }
 
-    public Object[] getArgs() {
+    public IChatBaseComponent a() {
         return this.a;
-    }
-
-    public synchronized Throwable fillInStackTrace() {
-        return this;
     }
 }

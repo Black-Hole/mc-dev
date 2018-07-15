@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class PlayerInventory implements IInventory {
@@ -20,7 +21,7 @@ public class PlayerInventory implements IInventory {
         this.items = NonNullList.a(36, ItemStack.a);
         this.armor = NonNullList.a(4, ItemStack.a);
         this.extraSlots = NonNullList.a(1, ItemStack.a);
-        this.f = Arrays.asList(new NonNullList[] { this.items, this.armor, this.extraSlots});
+        this.f = ImmutableList.of(this.items, this.armor, this.extraSlots);
         this.carried = ItemStack.a;
         this.player = entityhuman;
     }
@@ -38,7 +39,7 @@ public class PlayerInventory implements IInventory {
     }
 
     private boolean b(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack.getItem() == itemstack1.getItem() && (!itemstack.usesData() || itemstack.getData() == itemstack1.getData()) && ItemStack.equals(itemstack, itemstack1);
+        return itemstack.getItem() == itemstack1.getItem() && ItemStack.equals(itemstack, itemstack1);
     }
 
     public int getFirstEmptySlotIndex() {
@@ -67,7 +68,7 @@ public class PlayerInventory implements IInventory {
         for (int i = 0; i < this.items.size(); ++i) {
             ItemStack itemstack1 = (ItemStack) this.items.get(i);
 
-            if (!((ItemStack) this.items.get(i)).isEmpty() && this.b(itemstack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).h() && !itemstack1.hasEnchantments() && !itemstack1.hasName()) {
+            if (!((ItemStack) this.items.get(i)).isEmpty() && this.b(itemstack, (ItemStack) this.items.get(i)) && !((ItemStack) this.items.get(i)).f() && !itemstack1.hasEnchantments() && !itemstack1.hasName()) {
                 return i;
             }
         }
@@ -96,59 +97,47 @@ public class PlayerInventory implements IInventory {
         return this.itemInHandIndex;
     }
 
-    public int a(@Nullable Item item, int i, int j, @Nullable NBTTagCompound nbttagcompound) {
-        int k = 0;
+    public int a(Predicate<ItemStack> predicate, int i) {
+        int j = 0;
 
-        int l;
+        int k;
 
-        for (l = 0; l < this.getSize(); ++l) {
-            ItemStack itemstack = this.getItem(l);
+        for (k = 0; k < this.getSize(); ++k) {
+            ItemStack itemstack = this.getItem(k);
 
-            if (!itemstack.isEmpty() && (item == null || itemstack.getItem() == item) && (i <= -1 || itemstack.getData() == i) && (nbttagcompound == null || GameProfileSerializer.a(nbttagcompound, itemstack.getTag(), true))) {
-                int i1 = j <= 0 ? itemstack.getCount() : Math.min(j - k, itemstack.getCount());
+            if (!itemstack.isEmpty() && predicate.test(itemstack)) {
+                int l = i <= 0 ? itemstack.getCount() : Math.min(i - j, itemstack.getCount());
 
-                k += i1;
-                if (j != 0) {
-                    itemstack.subtract(i1);
+                j += l;
+                if (i != 0) {
+                    itemstack.subtract(l);
                     if (itemstack.isEmpty()) {
-                        this.setItem(l, ItemStack.a);
+                        this.setItem(k, ItemStack.a);
                     }
 
-                    if (j > 0 && k >= j) {
-                        return k;
+                    if (i > 0 && j >= i) {
+                        return j;
                     }
                 }
             }
         }
 
-        if (!this.carried.isEmpty()) {
-            if (item != null && this.carried.getItem() != item) {
-                return k;
-            }
-
-            if (i > -1 && this.carried.getData() != i) {
-                return k;
-            }
-
-            if (nbttagcompound != null && !GameProfileSerializer.a(nbttagcompound, this.carried.getTag(), true)) {
-                return k;
-            }
-
-            l = j <= 0 ? this.carried.getCount() : Math.min(j - k, this.carried.getCount());
-            k += l;
-            if (j != 0) {
-                this.carried.subtract(l);
+        if (!this.carried.isEmpty() && predicate.test(this.carried)) {
+            k = i <= 0 ? this.carried.getCount() : Math.min(i - j, this.carried.getCount());
+            j += k;
+            if (i != 0) {
+                this.carried.subtract(k);
                 if (this.carried.isEmpty()) {
                     this.carried = ItemStack.a;
                 }
 
-                if (j > 0 && k >= j) {
-                    return k;
+                if (i > 0 && j >= i) {
+                    return j;
                 }
             }
         }
 
-        return k;
+        return j;
     }
 
     private int i(ItemStack itemstack) {
@@ -167,9 +156,9 @@ public class PlayerInventory implements IInventory {
         ItemStack itemstack1 = this.getItem(i);
 
         if (itemstack1.isEmpty()) {
-            itemstack1 = new ItemStack(item, 0, itemstack.getData());
+            itemstack1 = new ItemStack(item, 0);
             if (itemstack.hasTag()) {
-                itemstack1.setTag(itemstack.getTag().g());
+                itemstack1.setTag(itemstack.getTag().clone());
             }
 
             this.setItem(i, itemstack1);
@@ -211,7 +200,7 @@ public class PlayerInventory implements IInventory {
         }
     }
 
-    public void n() {
+    public void p() {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
@@ -230,12 +219,12 @@ public class PlayerInventory implements IInventory {
         return this.c(-1, itemstack);
     }
 
-    public boolean c(int i, final ItemStack itemstack) {
+    public boolean c(int i, ItemStack itemstack) {
         if (itemstack.isEmpty()) {
             return false;
         } else {
             try {
-                if (itemstack.h()) {
+                if (itemstack.f()) {
                     if (i == -1) {
                         i = this.getFirstEmptySlotIndex();
                     }
@@ -275,15 +264,9 @@ public class PlayerInventory implements IInventory {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Item being added");
 
                 crashreportsystemdetails.a("Item ID", (Object) Integer.valueOf(Item.getId(itemstack.getItem())));
-                crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getData()));
-                crashreportsystemdetails.a("Item name", new CrashReportCallable() {
-                    public String a() throws Exception {
-                        return itemstack.getName();
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
+                crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getDamage()));
+                crashreportsystemdetails.a("Item name", () -> {
+                    return itemstack.getName().getString();
                 });
                 throw new ReportedException(crashreport);
             }
@@ -389,13 +372,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public float a(IBlockData iblockdata) {
-        float f = 1.0F;
-
-        if (!((ItemStack) this.items.get(this.itemInHandIndex)).isEmpty()) {
-            f *= ((ItemStack) this.items.get(this.itemInHandIndex)).a(iblockdata);
-        }
-
-        return f;
+        return ((ItemStack) this.items.get(this.itemInHandIndex)).a(iblockdata);
     }
 
     public NBTTagList a(NBTTagList nbttaglist) {
@@ -407,7 +384,7 @@ public class PlayerInventory implements IInventory {
                 nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte("Slot", (byte) i);
                 ((ItemStack) this.items.get(i)).save(nbttagcompound);
-                nbttaglist.add(nbttagcompound);
+                nbttaglist.add((NBTBase) nbttagcompound);
             }
         }
 
@@ -416,7 +393,7 @@ public class PlayerInventory implements IInventory {
                 nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte("Slot", (byte) (i + 100));
                 ((ItemStack) this.armor.get(i)).save(nbttagcompound);
-                nbttaglist.add(nbttagcompound);
+                nbttaglist.add((NBTBase) nbttagcompound);
             }
         }
 
@@ -425,7 +402,7 @@ public class PlayerInventory implements IInventory {
                 nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte("Slot", (byte) (i + 150));
                 ((ItemStack) this.extraSlots.get(i)).save(nbttagcompound);
-                nbttaglist.add(nbttagcompound);
+                nbttaglist.add((NBTBase) nbttagcompound);
             }
         }
 
@@ -438,9 +415,9 @@ public class PlayerInventory implements IInventory {
         this.extraSlots.clear();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
             int j = nbttagcompound.getByte("Slot") & 255;
-            ItemStack itemstack = new ItemStack(nbttagcompound);
+            ItemStack itemstack = ItemStack.a(nbttagcompound);
 
             if (!itemstack.isEmpty()) {
                 if (j >= 0 && j < this.items.size()) {
@@ -459,7 +436,7 @@ public class PlayerInventory implements IInventory {
         return this.items.size() + this.armor.size() + this.extraSlots.size();
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -511,16 +488,17 @@ public class PlayerInventory implements IInventory {
         return nonnulllist == null ? ItemStack.a : (ItemStack) nonnulllist.get(i);
     }
 
-    public String getName() {
-        return "container.inventory";
+    public IChatBaseComponent getDisplayName() {
+        return new ChatMessage("container.inventory", new Object[0]);
+    }
+
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return null;
     }
 
     public boolean hasCustomName() {
         return false;
-    }
-
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
     }
 
     public int getMaxStackSize() {
@@ -528,13 +506,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public boolean b(IBlockData iblockdata) {
-        if (iblockdata.getMaterial().isAlwaysDestroyable()) {
-            return true;
-        } else {
-            ItemStack itemstack = this.getItem(this.itemInHandIndex);
-
-            return !itemstack.isEmpty() ? itemstack.b(iblockdata) : false;
-        }
+        return this.getItem(this.itemInHandIndex).b(iblockdata);
     }
 
     public void a(float f) {
@@ -553,7 +525,7 @@ public class PlayerInventory implements IInventory {
 
     }
 
-    public void o() {
+    public void q() {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
@@ -643,17 +615,13 @@ public class PlayerInventory implements IInventory {
 
     }
 
-    public void a(AutoRecipeStackManager autorecipestackmanager, boolean flag) {
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
         Iterator iterator = this.items.iterator();
 
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();
 
             autorecipestackmanager.a(itemstack);
-        }
-
-        if (flag) {
-            autorecipestackmanager.a((ItemStack) this.extraSlots.get(0));
         }
 
     }

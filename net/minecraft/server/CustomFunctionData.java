@@ -1,173 +1,260 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.io.Files;
-import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CustomFunctionData implements ITickable {
+public class CustomFunctionData implements ITickable, IResourcePackListener {
 
-    private static final Logger a = LogManager.getLogger();
-    private final File b;
-    private final MinecraftServer c;
-    private final Map<MinecraftKey, CustomFunction> d = Maps.newHashMap();
-    private String e = "-";
-    private CustomFunction f;
-    private final ArrayDeque<CustomFunctionData.a> g = new ArrayDeque();
-    private boolean h = false;
-    private final ICommandListener i = new ICommandListener() {
-        public String getName() {
-            return CustomFunctionData.this.e;
-        }
+    private static final Logger c = LogManager.getLogger();
+    private static final MinecraftKey d = new MinecraftKey("tick");
+    private static final MinecraftKey e = new MinecraftKey("load");
+    public static final int a = "functions/".length();
+    public static final int b = ".mcfunction".length();
+    private final MinecraftServer f;
+    private final Map<MinecraftKey, CustomFunction> g = Maps.newHashMap();
+    private final ArrayDeque<CustomFunctionData.a> h = new ArrayDeque();
+    private boolean i;
+    private final Tags<CustomFunction> j = new Tags((minecraftkey) -> {
+        return this.a(minecraftkey) != null;
+    }, this::a, "tags/functions", true, "function");
+    private final List<CustomFunction> k = Lists.newArrayList();
+    private boolean l;
 
-        public boolean a(int i, String s) {
-            return i <= 2;
-        }
-
-        public World getWorld() {
-            return CustomFunctionData.this.c.worldServer[0];
-        }
-
-        public MinecraftServer C_() {
-            return CustomFunctionData.this.c;
-        }
-    };
-
-    public CustomFunctionData(@Nullable File file, MinecraftServer minecraftserver) {
-        this.b = file;
-        this.c = minecraftserver;
-        this.f();
+    public CustomFunctionData(MinecraftServer minecraftserver) {
+        this.f = minecraftserver;
     }
 
     @Nullable
     public CustomFunction a(MinecraftKey minecraftkey) {
-        return (CustomFunction) this.d.get(minecraftkey);
+        return (CustomFunction) this.g.get(minecraftkey);
     }
 
-    public ICommandHandler a() {
-        return this.c.getCommandHandler();
+    public MinecraftServer a() {
+        return this.f;
     }
 
-    public int c() {
-        return this.c.worldServer[0].getGameRules().c("maxCommandChainLength");
+    public int b() {
+        return this.f.aQ().c("maxCommandChainLength");
     }
 
-    public Map<MinecraftKey, CustomFunction> d() {
-        return this.d;
+    public Map<MinecraftKey, CustomFunction> c() {
+        return this.g;
     }
 
-    public void e() {
-        String s = this.c.worldServer[0].getGameRules().get("gameLoopFunction");
+    public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> d() {
+        return this.f.getCommandDispatcher().a();
+    }
 
-        if (!s.equals(this.e)) {
-            this.e = s;
-            this.f = this.a(new MinecraftKey(s));
+    public void X_() {
+        MethodProfiler methodprofiler = this.f.methodProfiler;
+        MinecraftKey minecraftkey = CustomFunctionData.d;
+
+        CustomFunctionData.d.getClass();
+        methodprofiler.a(minecraftkey::toString);
+        Iterator iterator = this.k.iterator();
+
+        while (iterator.hasNext()) {
+            CustomFunction customfunction = (CustomFunction) iterator.next();
+
+            this.a(customfunction, this.f());
         }
 
-        if (this.f != null) {
-            this.a(this.f, this.i);
+        this.f.methodProfiler.e();
+        if (this.l) {
+            this.l = false;
+            Collection collection = this.g().b(CustomFunctionData.e).a();
+
+            methodprofiler = this.f.methodProfiler;
+            minecraftkey = CustomFunctionData.e;
+            CustomFunctionData.e.getClass();
+            methodprofiler.a(minecraftkey::toString);
+            Iterator iterator1 = collection.iterator();
+
+            while (iterator1.hasNext()) {
+                CustomFunction customfunction1 = (CustomFunction) iterator1.next();
+
+                this.a(customfunction1, this.f());
+            }
+
+            this.f.methodProfiler.e();
         }
 
     }
 
-    public int a(CustomFunction customfunction, ICommandListener icommandlistener) {
-        int i = this.c();
+    public int a(CustomFunction customfunction, CommandListenerWrapper commandlistenerwrapper) {
+        int i = this.b();
 
-        if (this.h) {
-            if (this.g.size() < i) {
-                this.g.addFirst(new CustomFunctionData.a(this, icommandlistener, new CustomFunction.d(customfunction)));
+        if (this.i) {
+            if (this.h.size() < i) {
+                this.h.addFirst(new CustomFunctionData.a(this, commandlistenerwrapper, new CustomFunction.d(customfunction)));
             }
 
             return 0;
         } else {
-            int j;
+            try {
+                this.i = true;
+                int j = 0;
+                CustomFunction.c[] acustomfunction_c = customfunction.b();
+
+                int k;
+
+                for (k = acustomfunction_c.length - 1; k >= 0; --k) {
+                    this.h.push(new CustomFunctionData.a(this, commandlistenerwrapper, acustomfunction_c[k]));
+                }
+
+                while (!this.h.isEmpty()) {
+                    try {
+                        CustomFunctionData.a customfunctiondata_a = (CustomFunctionData.a) this.h.removeFirst();
+
+                        this.f.methodProfiler.a(customfunctiondata_a::toString);
+                        customfunctiondata_a.a(this.h, i);
+                    } finally {
+                        this.f.methodProfiler.e();
+                    }
+
+                    ++j;
+                    if (j >= i) {
+                        k = j;
+                        return k;
+                    }
+                }
+
+                k = j;
+                return k;
+            } finally {
+                this.h.clear();
+                this.i = false;
+            }
+        }
+    }
+
+    public void a(IResourceManager iresourcemanager) {
+        this.g.clear();
+        this.k.clear();
+        this.j.b();
+        Collection collection = iresourcemanager.a("functions", (s) -> {
+            return s.endsWith(".mcfunction");
+        });
+        ArrayList arraylist = Lists.newArrayList();
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
+            String s = minecraftkey.getKey();
+            MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(CustomFunctionData.a, s.length() - CustomFunctionData.b));
+
+            arraylist.add(CompletableFuture.supplyAsync(() -> {
+                return a(iresourcemanager, minecraftkey);
+            }, Resource.a).thenApplyAsync((list) -> {
+                return CustomFunction.a(minecraftkey, this, list);
+            }).handle((customfunction, throwable) -> {
+                return this.a(customfunction, throwable, minecraftkey);
+            }));
+        }
+
+        CompletableFuture.allOf((CompletableFuture[]) arraylist.toArray(new CompletableFuture[0])).join();
+        if (!this.g.isEmpty()) {
+            CustomFunctionData.c.info("Loaded {} custom command functions", Integer.valueOf(this.g.size()));
+        }
+
+        this.j.a(iresourcemanager);
+        this.k.addAll(this.j.b(CustomFunctionData.d).a());
+        this.l = true;
+    }
+
+    @Nullable
+    private CustomFunction a(CustomFunction customfunction, @Nullable Throwable throwable, MinecraftKey minecraftkey) {
+        if (throwable != null) {
+            CustomFunctionData.c.error("Couldn\'t load function at {}", minecraftkey, throwable);
+            return null;
+        } else {
+            Map map = this.g;
+
+            synchronized (this.g) {
+                this.g.put(customfunction.a(), customfunction);
+                return customfunction;
+            }
+        }
+    }
+
+    private static List<String> a(IResourceManager iresourcemanager, MinecraftKey minecraftkey) {
+        try {
+            IResource iresource = iresourcemanager.a(minecraftkey);
+            Throwable throwable = null;
+
+            List list;
 
             try {
-                this.h = true;
-                int k = 0;
-                CustomFunction.c[] acustomfunction_c = customfunction.a();
-
-                for (j = acustomfunction_c.length - 1; j >= 0; --j) {
-                    this.g.push(new CustomFunctionData.a(this, icommandlistener, acustomfunction_c[j]));
-                }
-
-                do {
-                    if (this.g.isEmpty()) {
-                        j = k;
-                        return j;
-                    }
-
-                    ((CustomFunctionData.a) this.g.removeFirst()).a(this.g, i);
-                    ++k;
-                } while (k < i);
-
-                j = k;
+                list = IOUtils.readLines(iresource.b(), StandardCharsets.UTF_8);
+            } catch (Throwable throwable1) {
+                throwable = throwable1;
+                throw throwable1;
             } finally {
-                this.g.clear();
-                this.h = false;
-            }
-
-            return j;
-        }
-    }
-
-    public void f() {
-        this.d.clear();
-        this.f = null;
-        this.e = "-";
-        this.h();
-    }
-
-    private void h() {
-        if (this.b != null) {
-            this.b.mkdirs();
-            Iterator iterator = FileUtils.listFiles(this.b, new String[] { "mcfunction"}, true).iterator();
-
-            while (iterator.hasNext()) {
-                File file = (File) iterator.next();
-                String s = FilenameUtils.removeExtension(this.b.toURI().relativize(file.toURI()).toString());
-                String[] astring = s.split("/", 2);
-
-                if (astring.length == 2) {
-                    MinecraftKey minecraftkey = new MinecraftKey(astring[0], astring[1]);
-
-                    try {
-                        this.d.put(minecraftkey, CustomFunction.a(this, Files.readLines(file, StandardCharsets.UTF_8)));
-                    } catch (Throwable throwable) {
-                        CustomFunctionData.a.error("Couldn\'t read custom function " + minecraftkey + " from " + file, throwable);
+                if (iresource != null) {
+                    if (throwable != null) {
+                        try {
+                            iresource.close();
+                        } catch (Throwable throwable2) {
+                            throwable.addSuppressed(throwable2);
+                        }
+                    } else {
+                        iresource.close();
                     }
                 }
+
             }
 
-            if (!this.d.isEmpty()) {
-                CustomFunctionData.a.info("Loaded " + this.d.size() + " custom command functions");
-            }
-
+            return list;
+        } catch (IOException ioexception) {
+            throw new CompletionException(ioexception);
         }
+    }
+
+    public CommandListenerWrapper f() {
+        return this.f.getServerCommandListener().a(2).a();
+    }
+
+    public Tags<CustomFunction> g() {
+        return this.j;
     }
 
     public static class a {
 
         private final CustomFunctionData a;
-        private final ICommandListener b;
+        private final CommandListenerWrapper b;
         private final CustomFunction.c c;
 
-        public a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, CustomFunction.c customfunction_c) {
+        public a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, CustomFunction.c customfunction_c) {
             this.a = customfunctiondata;
-            this.b = icommandlistener;
+            this.b = commandlistenerwrapper;
             this.c = customfunction_c;
         }
 
         public void a(ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
-            this.c.a(this.a, this.b, arraydeque, i);
+            try {
+                this.c.a(this.a, this.b, arraydeque, i);
+            } catch (Throwable throwable) {
+                ;
+            }
+
         }
 
         public String toString() {

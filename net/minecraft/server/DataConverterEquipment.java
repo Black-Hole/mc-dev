@@ -1,57 +1,90 @@
 package net.minecraft.server;
 
-public class DataConverterEquipment implements IDataConverter {
+import com.google.common.collect.Lists;
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.OpticFinder;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Pair;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-    public DataConverterEquipment() {}
+public class DataConverterEquipment extends DataFix {
 
-    public int a() {
-        return 100;
+    public DataConverterEquipment(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        NBTTagList nbttaglist = nbttagcompound.getList("Equipment", 10);
-        NBTTagList nbttaglist1;
+    public TypeRewriteRule makeRule() {
+        return this.a(this.getInputSchema().getTypeRaw(DataConverterTypes.ITEM_STACK));
+    }
 
-        if (!nbttaglist.isEmpty() && !nbttagcompound.hasKeyOfType("HandItems", 10)) {
-            nbttaglist1 = new NBTTagList();
-            nbttaglist1.add(nbttaglist.i(0));
-            nbttaglist1.add(new NBTTagCompound());
-            nbttagcompound.set("HandItems", nbttaglist1);
-        }
+    private <IS> TypeRewriteRule a(Type<IS> type) {
+        Type type1 = DSL.and(DSL.optional(DSL.field("Equipment", DSL.list(type))), DSL.remainderType());
+        Type type2 = DSL.and(DSL.optional(DSL.field("ArmorItems", DSL.list(type))), DSL.optional(DSL.field("HandItems", DSL.list(type))), DSL.remainderType());
+        OpticFinder opticfinder = DSL.typeFinder(type1);
+        OpticFinder opticfinder1 = DSL.fieldFinder("Equipment", DSL.list(type));
 
-        if (nbttaglist.size() > 1 && !nbttagcompound.hasKeyOfType("ArmorItem", 10)) {
-            nbttaglist1 = new NBTTagList();
-            nbttaglist1.add(nbttaglist.get(1));
-            nbttaglist1.add(nbttaglist.get(2));
-            nbttaglist1.add(nbttaglist.get(3));
-            nbttaglist1.add(nbttaglist.get(4));
-            nbttagcompound.set("ArmorItems", nbttaglist1);
-        }
+        return this.fixTypeEverywhereTyped("EntityEquipmentToArmorAndHandFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), this.getOutputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
+            Either either = Either.right(DSL.unit());
+            Either either1 = Either.right(DSL.unit());
+            Dynamic dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
+            Optional optional = typed.getOptional(opticfinder);
 
-        nbttagcompound.remove("Equipment");
-        if (nbttagcompound.hasKeyOfType("DropChances", 9)) {
-            nbttaglist1 = nbttagcompound.getList("DropChances", 5);
-            NBTTagList nbttaglist2;
+            if (optional.isPresent()) {
+                List list = (List) optional.get();
+                Object object = ((Optional) type.read(dynamic.emptyMap()).getSecond()).orElseThrow(() -> {
+                    return new IllegalStateException("Could not parse newly created empty itemstack.");
+                });
 
-            if (!nbttagcompound.hasKeyOfType("HandDropChances", 10)) {
-                nbttaglist2 = new NBTTagList();
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(0)));
-                nbttaglist2.add(new NBTTagFloat(0.0F));
-                nbttagcompound.set("HandDropChances", nbttaglist2);
+                if (!list.isEmpty()) {
+                    either = Either.left(Lists.newArrayList(new Object[] { list.get(0), object}));
+                }
+
+                if (list.size() > 1) {
+                    ArrayList arraylist = Lists.newArrayList(new Object[] { object, object, object, object});
+
+                    for (int i = 1; i < Math.min(list.size(), 5); ++i) {
+                        arraylist.set(i - 1, list.get(i));
+                    }
+
+                    either1 = Either.left(arraylist);
+                }
             }
 
-            if (!nbttagcompound.hasKeyOfType("ArmorDropChances", 10)) {
-                nbttaglist2 = new NBTTagList();
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(1)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(2)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(3)));
-                nbttaglist2.add(new NBTTagFloat(nbttaglist1.g(4)));
-                nbttagcompound.set("ArmorDropChances", nbttaglist2);
+            Optional optional1 = dynamic.get("DropChances").flatMap(Dynamic::getStream);
+
+            if (optional1.isPresent()) {
+                Iterator iterator = Stream.concat((Stream) optional1.get(), Stream.generate(() -> {
+                    return dynamic.createInt(0);
+                })).iterator();
+                float f = ((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue();
+                Dynamic dynamic1;
+
+                if (!dynamic.get("HandDropChances").isPresent()) {
+                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(f)).merge(dynamic.createFloat(0.0F));
+                    dynamic = dynamic.set("HandDropChances", dynamic1);
+                }
+
+                if (!dynamic.get("ArmorDropChances").isPresent()) {
+                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue()));
+                    dynamic = dynamic.set("ArmorDropChances", dynamic1);
+                }
+
+                dynamic = dynamic.remove("DropChances");
             }
 
-            nbttagcompound.remove("DropChances");
-        }
-
-        return nbttagcompound;
+            return typed.set(opticfinder1, type1, Pair.of(either, Pair.of(either1, dynamic)));
+        });
     }
 }

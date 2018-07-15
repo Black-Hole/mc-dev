@@ -78,7 +78,7 @@ public class SecondaryWorldData extends WorldData {
 
     public void a(String s) {}
 
-    public void e(int i) {}
+    public void d(int i) {}
 
     public void setThundering(boolean flag) {}
 

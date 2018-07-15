@@ -4,12 +4,12 @@ public abstract class EntityIllagerAbstract extends EntityMonster {
 
     protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIllagerAbstract.class, DataWatcherRegistry.a);
 
-    public EntityIllagerAbstract(World world) {
-        super(world);
+    protected EntityIllagerAbstract(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityIllagerAbstract.a, Byte.valueOf((byte) 0));
     }
 

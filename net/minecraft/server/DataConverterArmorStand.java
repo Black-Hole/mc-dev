@@ -1,18 +1,22 @@
 package net.minecraft.server;
 
-public class DataConverterArmorStand implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import java.util.function.Function;
 
-    public DataConverterArmorStand() {}
+public class DataConverterArmorStand extends DataConverterNamedEntity {
 
-    public int a() {
-        return 147;
+    public DataConverterArmorStand(Schema schema, boolean flag) {
+        super(schema, flag, "EntityArmorStandSilentFix", DataConverterTypes.ENTITY, "ArmorStand");
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("ArmorStand".equals(nbttagcompound.getString("id")) && nbttagcompound.getBoolean("Silent") && !nbttagcompound.getBoolean("Marker")) {
-            nbttagcompound.remove("Silent");
-        }
+    public Dynamic<?> a(Dynamic<?> dynamic) {
+        return dynamic.getBoolean("Silent") && !dynamic.getBoolean("Marker") ? dynamic.remove("Silent") : dynamic;
+    }
 
-        return nbttagcompound;
+    protected Typed<?> a(Typed<?> typed) {
+        return typed.update(DSL.remainderFinder(), this::a);
     }
 }

@@ -1,29 +1,31 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Random;
 
-public class WorldGenVines extends WorldGenerator {
+public class WorldGenVines extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public WorldGenVines() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (; blockposition.getY() < 128; blockposition = blockposition.up()) {
-            if (world.isEmpty(blockposition)) {
-                EnumDirection[] aenumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a();
-                int i = aenumdirection.length;
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
 
-                for (int j = 0; j < i; ++j) {
-                    EnumDirection enumdirection = aenumdirection[j];
+        for (int i = blockposition.getY(); i < 256; ++i) {
+            blockposition_mutableblockposition.g(blockposition);
+            blockposition_mutableblockposition.d(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
+            blockposition_mutableblockposition.p(i);
+            if (generatoraccess.isEmpty(blockposition_mutableblockposition)) {
+                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                    if (Blocks.VINE.canPlace(world, blockposition, enumdirection)) {
-                        IBlockData iblockdata = Blocks.VINE.getBlockData().set(BlockVine.NORTH, Boolean.valueOf(enumdirection == EnumDirection.NORTH)).set(BlockVine.EAST, Boolean.valueOf(enumdirection == EnumDirection.EAST)).set(BlockVine.SOUTH, Boolean.valueOf(enumdirection == EnumDirection.SOUTH)).set(BlockVine.WEST, Boolean.valueOf(enumdirection == EnumDirection.WEST));
+                while (iterator.hasNext()) {
+                    EnumDirection enumdirection = (EnumDirection) iterator.next();
+                    IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.getDirection(enumdirection), Boolean.valueOf(true));
 
-                        world.setTypeAndData(blockposition, iblockdata, 2);
+                    if (iblockdata.canPlace(generatoraccess, blockposition_mutableblockposition)) {
+                        generatoraccess.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);
                         break;
                     }
                 }
-            } else {
-                blockposition = blockposition.a(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
             }
         }
 

@@ -13,9 +13,9 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     }
 
     public void e() {
-        DifficultyDamageScaler difficultydamagescaler = this.a.world.D(new BlockPosition(this.a));
+        DifficultyDamageScaler difficultydamagescaler = this.a.world.getDamageScaler(new BlockPosition(this.a));
 
-        this.a.p(false);
+        this.a.s(false);
         this.a.setTamed(true);
         this.a.setAgeRaw(0);
         this.a.world.strikeLightning(new EntityLightning(this.a.world, this.a.locX, this.a.locY, this.a.locZ, true));
@@ -36,10 +36,10 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     private EntityHorseAbstract a(DifficultyDamageScaler difficultydamagescaler) {
         EntityHorseSkeleton entityhorseskeleton = new EntityHorseSkeleton(this.a.world);
 
-        entityhorseskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
+        entityhorseskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null, (NBTTagCompound) null);
         entityhorseskeleton.setPosition(this.a.locX, this.a.locY, this.a.locZ);
         entityhorseskeleton.noDamageTicks = 60;
-        entityhorseskeleton.cW();
+        entityhorseskeleton.di();
         entityhorseskeleton.setTamed(true);
         entityhorseskeleton.setAgeRaw(0);
         entityhorseskeleton.world.addEntity(entityhorseskeleton);
@@ -49,10 +49,10 @@ public class PathfinderGoalHorseTrap extends PathfinderGoal {
     private EntitySkeleton a(DifficultyDamageScaler difficultydamagescaler, EntityHorseAbstract entityhorseabstract) {
         EntitySkeleton entityskeleton = new EntitySkeleton(entityhorseabstract.world);
 
-        entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
+        entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null, (NBTTagCompound) null);
         entityskeleton.setPosition(entityhorseabstract.locX, entityhorseabstract.locY, entityhorseabstract.locZ);
         entityskeleton.noDamageTicks = 60;
-        entityskeleton.cW();
+        entityskeleton.di();
         if (entityskeleton.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             entityskeleton.setSlot(EnumItemSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         }

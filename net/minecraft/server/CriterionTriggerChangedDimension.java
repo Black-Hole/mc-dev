@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -98,7 +99,7 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
 
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
-                if (((CriterionTriggerChangedDimension.b) criteriontrigger_a.a()).a(dimensionmanager, dimensionmanager1)) {
+                if (((CriterionTriggerChangedDimension.b) criteriontrigger_a.a()).b(dimensionmanager, dimensionmanager1)) {
                     if (arraylist == null) {
                         arraylist = Lists.newArrayList();
                     }
@@ -132,8 +133,26 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
             this.b = dimensionmanager1;
         }
 
-        public boolean a(DimensionManager dimensionmanager, DimensionManager dimensionmanager1) {
+        public static CriterionTriggerChangedDimension.b a(DimensionManager dimensionmanager) {
+            return new CriterionTriggerChangedDimension.b((DimensionManager) null, dimensionmanager);
+        }
+
+        public boolean b(DimensionManager dimensionmanager, DimensionManager dimensionmanager1) {
             return this.a != null && this.a != dimensionmanager ? false : this.b == null || this.b == dimensionmanager1;
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.a != null) {
+                jsonobject.addProperty("from", this.a.b());
+            }
+
+            if (this.b != null) {
+                jsonobject.addProperty("to", this.b.b());
+            }
+
+            return jsonobject;
         }
     }
 }

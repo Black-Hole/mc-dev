@@ -16,9 +16,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
         this.b = NonNullList.a(nonnulllist.size(), ItemStack.a);
 
         for (int j = 0; j < this.b.size(); ++j) {
-            ItemStack itemstack = (ItemStack) nonnulllist.get(j);
-
-            this.b.set(j, itemstack.cloneItemStack());
+            this.b.set(j, ((ItemStack) nonnulllist.get(j)).cloneItemStack());
         }
 
     }

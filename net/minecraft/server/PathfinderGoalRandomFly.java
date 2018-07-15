@@ -10,10 +10,10 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
     }
 
     @Nullable
-    protected Vec3D f() {
+    protected Vec3D g() {
         Vec3D vec3d = null;
 
-        if (this.a.isInWater() || this.a.ap()) {
+        if (this.a.isInWater()) {
             vec3d = RandomPositionGenerator.b(this.a, 15, 15);
         }
 
@@ -21,7 +21,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
             vec3d = this.j();
         }
 
-        return vec3d == null ? super.f() : vec3d;
+        return vec3d == null ? super.g() : vec3d;
     }
 
     @Nullable
@@ -37,7 +37,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
 
             if (!blockposition.equals(blockposition1)) {
                 Block block = this.a.world.getType(blockposition_mutableblockposition1.g(blockposition1).c(EnumDirection.DOWN)).getBlock();
-                boolean flag = block instanceof BlockLeaves || block == Blocks.LOG || block == Blocks.LOG2;
+                boolean flag = block instanceof BlockLeaves || block.a(TagsBlock.m);
 
                 if (flag && this.a.world.isEmpty(blockposition1) && this.a.world.isEmpty(blockposition_mutableblockposition.g(blockposition1).c(EnumDirection.UP))) {
                     return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());

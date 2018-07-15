@@ -4,11 +4,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTriggerBredAnimals.b> {
 
@@ -56,7 +58,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
         return new CriterionTriggerBredAnimals.b(criterionconditionentity, criterionconditionentity1, criterionconditionentity2);
     }
 
-    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, EntityAgeable entityageable) {
+    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
         CriterionTriggerBredAnimals.a criteriontriggerbredanimals_a = (CriterionTriggerBredAnimals.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggerbredanimals_a != null) {
@@ -90,7 +92,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
             this.b.remove(criteriontrigger_a);
         }
 
-        public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, EntityAgeable entityageable) {
+        public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
             ArrayList arraylist = null;
             Iterator iterator = this.b.iterator();
 
@@ -132,8 +134,25 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
             this.c = criterionconditionentity2;
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, EntityAgeable entityageable) {
+        public static CriterionTriggerBredAnimals.b c() {
+            return new CriterionTriggerBredAnimals.b(CriterionConditionEntity.a, CriterionConditionEntity.a, CriterionConditionEntity.a);
+        }
+
+        public static CriterionTriggerBredAnimals.b a(CriterionConditionEntity.a criterionconditionentity_a) {
+            return new CriterionTriggerBredAnimals.b(criterionconditionentity_a.b(), CriterionConditionEntity.a, CriterionConditionEntity.a);
+        }
+
+        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
             return !this.c.a(entityplayer, entityageable) ? false : this.a.a(entityplayer, entityanimal) && this.b.a(entityplayer, entityanimal1) || this.a.a(entityplayer, entityanimal1) && this.b.a(entityplayer, entityanimal);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("parent", this.a.a());
+            jsonobject.add("partner", this.b.a());
+            jsonobject.add("child", this.c.a());
+            return jsonobject;
         }
     }
 }

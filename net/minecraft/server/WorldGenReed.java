@@ -2,29 +2,32 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenReed extends WorldGenerator {
+public class WorldGenReed extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public WorldGenReed() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (int i = 0; i < 20; ++i) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        int i = 0;
+
+        for (int j = 0; j < 20; ++j) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
 
-            if (world.isEmpty(blockposition1)) {
+            if (generatoraccess.isEmpty(blockposition1)) {
                 BlockPosition blockposition2 = blockposition1.down();
 
-                if (world.getType(blockposition2.west()).getMaterial() == Material.WATER || world.getType(blockposition2.east()).getMaterial() == Material.WATER || world.getType(blockposition2.north()).getMaterial() == Material.WATER || world.getType(blockposition2.south()).getMaterial() == Material.WATER) {
-                    int j = 2 + random.nextInt(random.nextInt(3) + 1);
+                if (generatoraccess.b(blockposition2.west()).a(TagsFluid.a) || generatoraccess.b(blockposition2.east()).a(TagsFluid.a) || generatoraccess.b(blockposition2.north()).a(TagsFluid.a) || generatoraccess.b(blockposition2.south()).a(TagsFluid.a)) {
+                    int k = 2 + random.nextInt(random.nextInt(3) + 1);
 
-                    for (int k = 0; k < j; ++k) {
-                        if (Blocks.REEDS.b(world, blockposition1)) {
-                            world.setTypeAndData(blockposition1.up(k), Blocks.REEDS.getBlockData(), 2);
+                    for (int l = 0; l < k; ++l) {
+                        if (Blocks.SUGAR_CANE.getBlockData().canPlace(generatoraccess, blockposition1)) {
+                            generatoraccess.setTypeAndData(blockposition1.up(l), Blocks.SUGAR_CANE.getBlockData(), 2);
+                            ++i;
                         }
                     }
                 }
             }
         }
 
-        return true;
+        return i > 0;
     }
 }

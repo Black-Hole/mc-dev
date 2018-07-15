@@ -22,7 +22,7 @@ public class CombatTracker {
 
     public void a() {
         this.k();
-        if (this.b.m_()) {
+        if (this.b.z_()) {
             Block block = this.b.world.getType(new BlockPosition(this.b.locX, this.b.getBoundingBox().b, this.b.locZ)).getBlock();
 
             if (block == Blocks.LADDER) {
@@ -72,7 +72,7 @@ public class CombatTracker {
                         ItemStack itemstack = entity1 instanceof EntityLiving ? ((EntityLiving) entity1).getItemInMainHand() : ItemStack.a;
 
                         if (!itemstack.isEmpty() && itemstack.hasName()) {
-                            object = new ChatMessage("death.fell.assist.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.C()});
+                            object = new ChatMessage("death.fell.assist.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1, itemstack.A()});
                         } else {
                             object = new ChatMessage("death.fell.assist", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent1});
                         }
@@ -80,7 +80,7 @@ public class CombatTracker {
                         ItemStack itemstack1 = entity instanceof EntityLiving ? ((EntityLiving) entity).getItemInMainHand() : ItemStack.a;
 
                         if (!itemstack1.isEmpty() && itemstack1.hasName()) {
-                            object = new ChatMessage("death.fell.finish.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.C()});
+                            object = new ChatMessage("death.fell.finish.item", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent, itemstack1.A()});
                         } else {
                             object = new ChatMessage("death.fell.finish", new Object[] { this.b.getScoreboardDisplayName(), ichatbasecomponent});
                         }

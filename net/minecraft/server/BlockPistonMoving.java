@@ -1,22 +1,19 @@
 package net.minecraft.server;
 
-import java.util.List;
-import java.util.Random;
 import javax.annotation.Nullable;
 
 public class BlockPistonMoving extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockPistonExtension.FACING;
-    public static final BlockStateEnum<BlockPistonExtension.EnumPistonType> TYPE = BlockPistonExtension.TYPE;
+    public static final BlockStateDirection a = BlockPistonExtension.FACING;
+    public static final BlockStateEnum<BlockPropertyPistonType> b = BlockPistonExtension.TYPE;
 
-    public BlockPistonMoving() {
-        super(Material.PISTON);
-        this.w(this.blockStateList.getBlockData().set(BlockPistonMoving.FACING, EnumDirection.NORTH).set(BlockPistonMoving.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT));
-        this.c(-1.0F);
+    public BlockPistonMoving(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
     }
 
     @Nullable
-    public TileEntity a(World world, int i) {
+    public TileEntity a(IBlockAccess iblockaccess) {
         return null;
     }
 
@@ -24,44 +21,38 @@ public class BlockPistonMoving extends BlockTileEntity {
         return new TileEntityPiston(iblockdata, enumdirection, flag, flag1);
     }
 
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityPiston) {
-            ((TileEntityPiston) tileentity).j();
-        } else {
-            super.remove(world, blockposition, iblockdata);
+            if (tileentity instanceof TileEntityPiston) {
+                ((TileEntityPiston) tileentity).j();
+            } else {
+                super.remove(iblockdata, world, blockposition, iblockdata1, flag);
+            }
+
         }
-
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return false;
-    }
-
-    public boolean canPlace(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return false;
-    }
-
-    public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)).opposite());
-        IBlockData iblockdata1 = world.getType(blockposition1);
+    public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.a)).opposite());
+        IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
         if (iblockdata1.getBlock() instanceof BlockPiston && ((Boolean) iblockdata1.get(BlockPiston.EXTENDED)).booleanValue()) {
-            world.setAir(blockposition1);
+            generatoraccess.setAir(blockposition1);
         }
 
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean f(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
             world.setAir(blockposition);
             return true;
@@ -70,95 +61,58 @@ public class BlockPistonMoving extends BlockTileEntity {
         }
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Items.a;
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return Items.AIR;
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
         if (!world.isClientSide) {
-            TileEntityPiston tileentitypiston = this.c(world, blockposition);
+            TileEntityPiston tileentitypiston = this.a((IBlockAccess) world, blockposition);
 
             if (tileentitypiston != null) {
-                IBlockData iblockdata1 = tileentitypiston.a();
-
-                iblockdata1.getBlock().b(world, blockposition, iblockdata1, 0);
+                tileentitypiston.i().a(world, blockposition, 0);
             }
         }
     }
 
-    @Nullable
-    public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        return null;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return VoxelShapes.a();
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!world.isClientSide) {
-            world.getTileEntity(blockposition);
-        }
+    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        TileEntityPiston tileentitypiston = this.a(iblockaccess, blockposition);
 
-    }
-
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        TileEntityPiston tileentitypiston = this.c(iblockaccess, blockposition);
-
-        return tileentitypiston == null ? null : tileentitypiston.a(iblockaccess, blockposition);
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        TileEntityPiston tileentitypiston = this.c(world, blockposition);
-
-        if (tileentitypiston != null) {
-            tileentitypiston.a(world, blockposition, axisalignedbb, list, entity);
-        }
-
-    }
-
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        TileEntityPiston tileentitypiston = this.c(iblockaccess, blockposition);
-
-        return tileentitypiston != null ? tileentitypiston.a(iblockaccess, blockposition) : BlockPistonMoving.j;
+        return tileentitypiston != null ? tileentitypiston.a(iblockaccess, blockposition) : VoxelShapes.a();
     }
 
     @Nullable
-    private TileEntityPiston c(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private TileEntityPiston a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityPiston ? (TileEntityPiston) tileentity : null;
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return ItemStack.a;
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockPistonMoving.FACING, BlockPistonExtension.b(i)).set(BlockPistonMoving.TYPE, (i & 8) > 0 ? BlockPistonExtension.EnumPistonType.STICKY : BlockPistonExtension.EnumPistonType.DEFAULT);
-    }
-
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockPistonMoving.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)));
+        return (IBlockData) iblockdata.set(BlockPistonMoving.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)));
+        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
     }
 
-    public int toLegacyData(IBlockData iblockdata) {
-        byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockPistonMoving.FACING)).a();
-
-        if (iblockdata.get(BlockPistonMoving.TYPE) == BlockPistonExtension.EnumPistonType.STICKY) {
-            i |= 8;
-        }
-
-        return i;
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockPistonMoving.FACING, BlockPistonMoving.TYPE});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockPistonMoving.a, BlockPistonMoving.b});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return EnumBlockFaceShape.UNDEFINED;
+    }
+
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

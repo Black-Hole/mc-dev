@@ -4,18 +4,22 @@ import javax.annotation.Nullable;
 
 public class EntitySlime extends EntityInsentient implements IMonster {
 
-    private static final DataWatcherObject<Integer> bv = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bC = DataWatcher.a(EntitySlime.class, DataWatcherRegistry.b);
     public float a;
     public float b;
     public float c;
-    private boolean bw;
+    private boolean bD;
 
-    public EntitySlime(World world) {
-        super(world);
+    protected EntitySlime(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.moveController = new EntitySlime.ControllerMoveSlime(this);
     }
 
-    protected void r() {
+    public EntitySlime(World world) {
+        this(EntityTypes.SLIME, world);
+    }
+
+    protected void n() {
         this.goalSelector.a(1, new EntitySlime.PathfinderGoalSlimeRandomJump(this));
         this.goalSelector.a(2, new EntitySlime.PathfinderGoalSlimeNearestPlayer(this));
         this.goalSelector.a(3, new EntitySlime.PathfinderGoalSlimeRandomDirection(this));
@@ -24,13 +28,13 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         this.targetSelector.a(3, new PathfinderGoalNearestAttackableTargetInsentient(this, EntityIronGolem.class));
     }
 
-    protected void i() {
-        super.i();
-        this.datawatcher.register(EntitySlime.bv, Integer.valueOf(1));
+    protected void x_() {
+        super.x_();
+        this.datawatcher.register(EntitySlime.bC, Integer.valueOf(1));
     }
 
     public void setSize(int i, boolean flag) {
-        this.datawatcher.set(EntitySlime.bv, Integer.valueOf(i));
+        this.datawatcher.set(EntitySlime.bC, Integer.valueOf(i));
         this.setSize(0.51000005F * (float) i, 0.51000005F * (float) i);
         this.setPosition(this.locX, this.locY, this.locZ);
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) (i * i));
@@ -43,17 +47,13 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     public int getSize() {
-        return ((Integer) this.datawatcher.get(EntitySlime.bv)).intValue();
-    }
-
-    public static void c(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySlime.class);
+        return ((Integer) this.datawatcher.get(EntitySlime.bC)).intValue();
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("Size", this.getSize() - 1);
-        nbttagcompound.setBoolean("wasOnGround", this.bw);
+        nbttagcompound.setBoolean("wasOnGround", this.bD);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -65,26 +65,26 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         }
 
         this.setSize(i + 1, false);
-        this.bw = nbttagcompound.getBoolean("wasOnGround");
+        this.bD = nbttagcompound.getBoolean("wasOnGround");
     }
 
-    public boolean dm() {
+    public boolean dy() {
         return this.getSize() <= 1;
     }
 
-    protected EnumParticle p() {
-        return EnumParticle.SLIME;
+    protected ParticleParam l() {
+        return Particles.D;
     }
 
-    public void B_() {
+    public void tick() {
         if (!this.world.isClientSide && this.world.getDifficulty() == EnumDifficulty.PEACEFUL && this.getSize() > 0) {
             this.dead = true;
         }
 
         this.b += (this.a - this.b) * 0.5F;
         this.c = this.b;
-        super.B_();
-        if (this.onGround && !this.bw) {
+        super.tick();
+        if (this.onGround && !this.bD) {
             int i = this.getSize();
 
             for (int j = 0; j < i * 8; ++j) {
@@ -93,48 +93,48 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                 float f2 = MathHelper.sin(f) * (float) i * 0.5F * f1;
                 float f3 = MathHelper.cos(f) * (float) i * 0.5F * f1;
                 World world = this.world;
-                EnumParticle enumparticle = this.p();
+                ParticleParam particleparam = this.l();
                 double d0 = this.locX + (double) f2;
                 double d1 = this.locZ + (double) f3;
 
-                world.addParticle(enumparticle, d0, this.getBoundingBox().b, d1, 0.0D, 0.0D, 0.0D, new int[0]);
+                world.addParticle(particleparam, d0, this.getBoundingBox().b, d1, 0.0D, 0.0D, 0.0D);
             }
 
-            this.a(this.dj(), this.cq(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
+            this.a(this.dv(), this.cC(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
             this.a = -0.5F;
-        } else if (!this.onGround && this.bw) {
+        } else if (!this.onGround && this.bD) {
             this.a = 1.0F;
         }
 
-        this.bw = this.onGround;
-        this.dg();
+        this.bD = this.onGround;
+        this.ds();
     }
 
-    protected void dg() {
+    protected void ds() {
         this.a *= 0.6F;
     }
 
-    protected int df() {
+    protected int dr() {
         return this.random.nextInt(20) + 10;
     }
 
-    protected EntitySlime de() {
-        return new EntitySlime(this.world);
-    }
-
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntitySlime.bv.equals(datawatcherobject)) {
+        if (EntitySlime.bC.equals(datawatcherobject)) {
             int i = this.getSize();
 
             this.setSize(0.51000005F * (float) i, 0.51000005F * (float) i);
-            this.yaw = this.aP;
-            this.aN = this.aP;
+            this.yaw = this.aS;
+            this.aQ = this.aS;
             if (this.isInWater() && this.random.nextInt(20) == 0) {
-                this.ar();
+                this.au();
             }
         }
 
         super.a(datawatcherobject);
+    }
+
+    public EntityTypes<? extends EntitySlime> P() {
+        return super.P();
     }
 
     public void die() {
@@ -146,14 +146,14 @@ public class EntitySlime extends EntityInsentient implements IMonster {
             for (int k = 0; k < j; ++k) {
                 float f = ((float) (k % 2) - 0.5F) * (float) i / 4.0F;
                 float f1 = ((float) (k / 2) - 0.5F) * (float) i / 4.0F;
-                EntitySlime entityslime = this.de();
+                EntitySlime entityslime = (EntitySlime) this.P().a(this.world);
 
                 if (this.hasCustomName()) {
                     entityslime.setCustomName(this.getCustomName());
                 }
 
                 if (this.isPersistent()) {
-                    entityslime.cW();
+                    entityslime.di();
                 }
 
                 entityslime.setSize(i / 2, true);
@@ -167,24 +167,24 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     public void collide(Entity entity) {
         super.collide(entity);
-        if (entity instanceof EntityIronGolem && this.dh()) {
-            this.e((EntityLiving) entity);
+        if (entity instanceof EntityIronGolem && this.dt()) {
+            this.f((EntityLiving) entity);
         }
 
     }
 
     public void d(EntityHuman entityhuman) {
-        if (this.dh()) {
-            this.e((EntityLiving) entityhuman);
+        if (this.dt()) {
+            this.f((EntityLiving) entityhuman);
         }
 
     }
 
-    protected void e(EntityLiving entityliving) {
+    protected void f(EntityLiving entityliving) {
         int i = this.getSize();
 
-        if (this.hasLineOfSight(entityliving) && this.h(entityliving) < 0.6D * (double) i * 0.6D * (double) i && entityliving.damageEntity(DamageSource.mobAttack(this), (float) this.di())) {
-            this.a(SoundEffects.gY, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+        if (this.hasLineOfSight(entityliving) && this.h(entityliving) < 0.6D * (double) i * 0.6D * (double) i && entityliving.damageEntity(DamageSource.mobAttack(this), (float) this.du())) {
+            this.a(SoundEffects.ENTITY_SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             this.a((EntityLiving) this, (Entity) entityliving);
         }
 
@@ -194,51 +194,53 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         return 0.625F * this.length;
     }
 
-    protected boolean dh() {
-        return !this.dm();
+    protected boolean dt() {
+        return !this.dy();
     }
 
-    protected int di() {
+    protected int du() {
         return this.getSize();
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.dm() ? SoundEffects.hm : SoundEffects.hd;
+        return this.dy() ? SoundEffects.ENTITY_SLIME_HURT_SMALL : SoundEffects.ENTITY_SLIME_HURT;
     }
 
-    protected SoundEffect cf() {
-        return this.dm() ? SoundEffects.hl : SoundEffects.ha;
+    protected SoundEffect cr() {
+        return this.dy() ? SoundEffects.ENTITY_SLIME_DEATH_SMALL : SoundEffects.ENTITY_SLIME_DEATH;
     }
 
-    protected SoundEffect dj() {
-        return this.dm() ? SoundEffects.ho : SoundEffects.hg;
+    protected SoundEffect dv() {
+        return this.dy() ? SoundEffects.ENTITY_SLIME_SQUISH_SMALL : SoundEffects.ENTITY_SLIME_SQUISH;
     }
 
     protected Item getLoot() {
-        return this.getSize() == 1 ? Items.SLIME : null;
+        return this.getSize() == 1 ? Items.SLIME_BALL : null;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return this.getSize() == 1 ? LootTables.ah : LootTables.a;
+    protected MinecraftKey G() {
+        return this.getSize() == 1 ? LootTables.ao : LootTables.a;
     }
 
-    public boolean P() {
+    public boolean a(GeneratorAccess generatoraccess) {
         BlockPosition blockposition = new BlockPosition(MathHelper.floor(this.locX), 0, MathHelper.floor(this.locZ));
-        Chunk chunk = this.world.getChunkAtWorldCoords(blockposition);
 
-        if (this.world.getWorldData().getType() == WorldType.FLAT && this.random.nextInt(4) != 1) {
+        if (generatoraccess.getWorldData().getType() == WorldType.FLAT && this.random.nextInt(4) != 1) {
             return false;
         } else {
-            if (this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-                BiomeBase biomebase = this.world.getBiome(blockposition);
+            if (generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL) {
+                BiomeBase biomebase = generatoraccess.getBiome(blockposition);
 
-                if (biomebase == Biomes.h && this.locY > 50.0D && this.locY < 70.0D && this.random.nextFloat() < 0.5F && this.random.nextFloat() < this.world.G() && this.world.getLightLevel(new BlockPosition(this)) <= this.random.nextInt(8)) {
-                    return super.P();
+                if (biomebase == Biomes.h && this.locY > 50.0D && this.locY < 70.0D && this.random.nextFloat() < 0.5F && this.random.nextFloat() < generatoraccess.af() && generatoraccess.getLightLevel(new BlockPosition(this)) <= this.random.nextInt(8)) {
+                    return super.a(generatoraccess);
                 }
 
-                if (this.random.nextInt(10) == 0 && chunk.a(987234911L).nextInt(10) == 0 && this.locY < 40.0D) {
-                    return super.P();
+                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition);
+                boolean flag = SeededRandom.a(chunkcoordintpair.x, chunkcoordintpair.z, generatoraccess.getSeed(), 987234911L).nextInt(10) == 0;
+
+                if (this.random.nextInt(10) == 0 && flag && this.locY < 40.0D) {
+                    return super.a(generatoraccess);
                 }
             }
 
@@ -246,25 +248,25 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         }
     }
 
-    protected float cq() {
+    protected float cC() {
         return 0.4F * (float) this.getSize();
     }
 
-    public int N() {
+    public int K() {
         return 0;
     }
 
-    protected boolean dn() {
+    protected boolean dz() {
         return this.getSize() > 0;
     }
 
-    protected void cu() {
+    protected void cG() {
         this.motY = 0.41999998688697815D;
         this.impulse = true;
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         int i = this.random.nextInt(3);
 
         if (i < 2 && this.random.nextFloat() < 0.5F * difficultydamagescaler.d()) {
@@ -274,11 +276,11 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         int j = 1 << i;
 
         this.setSize(j, true);
-        return super.prepare(difficultydamagescaler, groupdataentity);
+        return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
     }
 
-    protected SoundEffect dk() {
-        return this.dm() ? SoundEffects.hn : SoundEffects.he;
+    protected SoundEffect dw() {
+        return this.dy() ? SoundEffects.ENTITY_SLIME_JUMP_SMALL : SoundEffects.ENTITY_SLIME_JUMP;
     }
 
     static class PathfinderGoalSlimeIdle extends PathfinderGoal {
@@ -310,7 +312,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         }
 
         public boolean a() {
-            return this.a.isInWater() || this.a.au();
+            return this.a.isInWater() || this.a.ax();
         }
 
         public void e() {
@@ -334,7 +336,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
         }
 
         public boolean a() {
-            return this.a.getGoalTarget() == null && (this.a.onGround || this.a.isInWater() || this.a.au() || this.a.hasEffect(MobEffects.LEVITATION));
+            return this.a.getGoalTarget() == null && (this.a.onGround || this.a.isInWater() || this.a.ax() || this.a.hasEffect(MobEffects.LEVITATION));
         }
 
         public void e() {
@@ -376,7 +378,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
         public void e() {
             this.a.a((Entity) this.a.getGoalTarget(), 10.0F, 10.0F);
-            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(this.a.yaw, this.a.dh());
+            ((EntitySlime.ControllerMoveSlime) this.a.getControllerMove()).a(this.a.yaw, this.a.dt());
         }
     }
 
@@ -405,31 +407,31 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
         public void a() {
             this.a.yaw = this.a(this.a.yaw, this.i, 90.0F);
-            this.a.aP = this.a.yaw;
-            this.a.aN = this.a.yaw;
+            this.a.aS = this.a.yaw;
+            this.a.aQ = this.a.yaw;
             if (this.h != ControllerMove.Operation.MOVE_TO) {
-                this.a.n(0.0F);
+                this.a.r(0.0F);
             } else {
                 this.h = ControllerMove.Operation.WAIT;
                 if (this.a.onGround) {
-                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+                    this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
                     if (this.j-- <= 0) {
-                        this.j = this.k.df();
+                        this.j = this.k.dr();
                         if (this.l) {
                             this.j /= 3;
                         }
 
                         this.k.getControllerJump().a();
-                        if (this.k.dn()) {
-                            this.k.a(this.k.dk(), this.k.cq(), ((this.k.getRandom().nextFloat() - this.k.getRandom().nextFloat()) * 0.2F + 1.0F) * 0.8F);
+                        if (this.k.dz()) {
+                            this.k.a(this.k.dw(), this.k.cC(), ((this.k.getRandom().nextFloat() - this.k.getRandom().nextFloat()) * 0.2F + 1.0F) * 0.8F);
                         }
                     } else {
-                        this.k.be = 0.0F;
-                        this.k.bg = 0.0F;
-                        this.a.k(0.0F);
+                        this.k.bh = 0.0F;
+                        this.k.bj = 0.0F;
+                        this.a.o(0.0F);
                     }
                 } else {
-                    this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+                    this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
                 }
 
             }

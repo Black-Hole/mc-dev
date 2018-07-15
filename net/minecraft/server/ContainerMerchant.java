@@ -28,7 +28,7 @@ public class ContainerMerchant extends Container {
 
     }
 
-    public InventoryMerchant e() {
+    public InventoryMerchant d() {
         return this.f;
     }
 

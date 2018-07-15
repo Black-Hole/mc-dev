@@ -2,80 +2,57 @@ package net.minecraft.server;
 
 public class BlockEndRod extends BlockDirectional {
 
-    protected static final AxisAlignedBB a = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.375D, 0.375D, 0.0D, 0.625D, 0.625D, 1.0D);
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.375D, 0.375D, 1.0D, 0.625D, 0.625D);
+    protected static final VoxelShape b = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape c = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D);
+    protected static final VoxelShape p = Block.a(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
 
-    protected BlockEndRod() {
-        super(Material.ORIENTABLE);
-        this.w(this.blockStateList.getBlockData().set(BlockEndRod.FACING, EnumDirection.UP));
-        this.a(CreativeModeTab.c);
+    protected BlockEndRod(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockEndRod.FACING, EnumDirection.UP));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockEndRod.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockEndRod.FACING)));
+        return (IBlockData) iblockdata.set(BlockEndRod.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockEndRod.FACING)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.set(BlockEndRod.FACING, enumblockmirror.b((EnumDirection) iblockdata.get(BlockEndRod.FACING)));
+        return (IBlockData) iblockdata.set(BlockEndRod.FACING, enumblockmirror.b((EnumDirection) iblockdata.get(BlockEndRod.FACING)));
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k()) {
         case X:
         default:
-            return BlockEndRod.c;
+            return BlockEndRod.p;
 
         case Z:
-            return BlockEndRod.b;
+            return BlockEndRod.c;
 
         case Y:
-            return BlockEndRod.a;
+            return BlockEndRod.b;
         }
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        EnumDirection enumdirection = blockactioncontext.getClickedFace();
+        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(enumdirection.opposite()));
+
+        return iblockdata.getBlock() == this && iblockdata.get(BlockEndRod.FACING) == enumdirection ? (IBlockData) this.getBlockData().set(BlockEndRod.FACING, enumdirection.opposite()) : (IBlockData) this.getBlockData().set(BlockEndRod.FACING, enumdirection);
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return true;
+    public TextureType c() {
+        return TextureType.CUTOUT;
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        IBlockData iblockdata = world.getType(blockposition.shift(enumdirection.opposite()));
-
-        if (iblockdata.getBlock() == Blocks.END_ROD) {
-            EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockEndRod.FACING);
-
-            if (enumdirection1 == enumdirection) {
-                return this.getBlockData().set(BlockEndRod.FACING, enumdirection.opposite());
-            }
-        }
-
-        return this.getBlockData().set(BlockEndRod.FACING, enumdirection);
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockEndRod.FACING});
     }
 
-    public IBlockData fromLegacyData(int i) {
-        IBlockData iblockdata = this.getBlockData();
-
-        iblockdata = iblockdata.set(BlockEndRod.FACING, EnumDirection.fromType1(i));
-        return iblockdata;
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumDirection) iblockdata.get(BlockEndRod.FACING)).a();
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockEndRod.FACING});
-    }
-
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.NORMAL;
     }
 

@@ -1,21 +1,22 @@
 package net.minecraft.server;
 
+import java.util.Objects;
+import javax.annotation.Nullable;
+
 public class MapIcon {
 
     private final MapIcon.Type type;
     private byte x;
     private byte y;
     private byte rotation;
+    private final IChatBaseComponent e;
 
-    public MapIcon(MapIcon.Type mapicon_type, byte b0, byte b1, byte b2) {
+    public MapIcon(MapIcon.Type mapicon_type, byte b0, byte b1, byte b2, @Nullable IChatBaseComponent ichatbasecomponent) {
         this.type = mapicon_type;
         this.x = b0;
         this.y = b1;
         this.rotation = b2;
-    }
-
-    public byte getType() {
-        return this.type.a();
+        this.e = ichatbasecomponent;
     }
 
     public MapIcon.Type b() {
@@ -34,6 +35,11 @@ public class MapIcon {
         return this.rotation;
     }
 
+    @Nullable
+    public IChatBaseComponent g() {
+        return this.e;
+    }
+
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -42,7 +48,7 @@ public class MapIcon {
         } else {
             MapIcon mapicon = (MapIcon) object;
 
-            return this.type != mapicon.type ? false : (this.rotation != mapicon.rotation ? false : (this.x != mapicon.x ? false : this.y == mapicon.y));
+            return this.type != mapicon.type ? false : (this.rotation != mapicon.rotation ? false : (this.x != mapicon.x ? false : (this.y != mapicon.y ? false : Objects.equals(this.e, mapicon.e))));
         }
     }
 
@@ -52,37 +58,38 @@ public class MapIcon {
 
         i = 31 * i + this.y;
         i = 31 * i + this.rotation;
+        i = 31 * i + Objects.hashCode(this.e);
         return i;
     }
 
     public static enum Type {
 
-        PLAYER(false), FRAME(true), RED_MARKER(false), BLUE_MARKER(false), TARGET_X(true), TARGET_POINT(true), PLAYER_OFF_MAP(false), PLAYER_OFF_LIMITS(false), MANSION(true, 5393476), MONUMENT(true, 3830373);
+        PLAYER(false), FRAME(true), RED_MARKER(false), BLUE_MARKER(false), TARGET_X(true), TARGET_POINT(true), PLAYER_OFF_MAP(false), PLAYER_OFF_LIMITS(false), MANSION(true, 5393476), MONUMENT(true, 3830373), BANNER_WHITE(true), BANNER_ORANGE(true), BANNER_MAGENTA(true), BANNER_LIGHT_BLUE(true), BANNER_YELLOW(true), BANNER_LIME(true), BANNER_PINK(true), BANNER_GRAY(true), BANNER_LIGHT_GRAY(true), BANNER_CYAN(true), BANNER_PURPLE(true), BANNER_BLUE(true), BANNER_BROWN(true), BANNER_GREEN(true), BANNER_RED(true), BANNER_BLACK(true), RED_X(true);
 
-        private final byte k;
-        private final boolean l;
-        private final int m;
+        private final byte B;
+        private final boolean C;
+        private final int D;
 
         private Type(boolean flag) {
             this(flag, -1);
         }
 
         private Type(boolean flag, int i) {
-            this.k = (byte) this.ordinal();
-            this.l = flag;
-            this.m = i;
+            this.B = (byte) this.ordinal();
+            this.C = flag;
+            this.D = i;
         }
 
         public byte a() {
-            return this.k;
+            return this.B;
         }
 
         public boolean c() {
-            return this.m >= 0;
+            return this.D >= 0;
         }
 
         public int d() {
-            return this.m;
+            return this.D;
         }
 
         public static MapIcon.Type a(byte b0) {

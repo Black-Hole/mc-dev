@@ -5,12 +5,8 @@ import javax.annotation.Nullable;
 public class EntityCaveSpider extends EntitySpider {
 
     public EntityCaveSpider(World world) {
-        super(world);
+        super(EntityTypes.CAVE_SPIDER, world);
         this.setSize(0.7F, 0.5F);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityCaveSpider.class);
     }
 
     protected void initAttributes() {
@@ -41,7 +37,7 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         return groupdataentity;
     }
 
@@ -50,7 +46,7 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.t;
+    protected MinecraftKey G() {
+        return LootTables.z;
     }
 }

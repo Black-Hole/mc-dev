@@ -2,71 +2,65 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenHellLava extends WorldGenerator {
+public class WorldGenHellLava extends WorldGenerator<WorldGenFeatureHellFlowingLavaConfiguration> {
 
-    private final Block a;
-    private final boolean b;
+    private static final IBlockData a = Blocks.NETHERRACK.getBlockData();
 
-    public WorldGenHellLava(Block block, boolean flag) {
-        this.a = block;
-        this.b = flag;
-    }
+    public WorldGenHellLava() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        if (world.getType(blockposition.up()).getBlock() != Blocks.NETHERRACK) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
+        if (generatoraccess.getType(blockposition.up()) != WorldGenHellLava.a) {
             return false;
-        } else if (world.getType(blockposition).getMaterial() != Material.AIR && world.getType(blockposition).getBlock() != Blocks.NETHERRACK) {
+        } else if (!generatoraccess.getType(blockposition).isAir() && generatoraccess.getType(blockposition) != WorldGenHellLava.a) {
             return false;
         } else {
             int i = 0;
 
-            if (world.getType(blockposition.west()).getBlock() == Blocks.NETHERRACK) {
+            if (generatoraccess.getType(blockposition.west()) == WorldGenHellLava.a) {
                 ++i;
             }
 
-            if (world.getType(blockposition.east()).getBlock() == Blocks.NETHERRACK) {
+            if (generatoraccess.getType(blockposition.east()) == WorldGenHellLava.a) {
                 ++i;
             }
 
-            if (world.getType(blockposition.north()).getBlock() == Blocks.NETHERRACK) {
+            if (generatoraccess.getType(blockposition.north()) == WorldGenHellLava.a) {
                 ++i;
             }
 
-            if (world.getType(blockposition.south()).getBlock() == Blocks.NETHERRACK) {
+            if (generatoraccess.getType(blockposition.south()) == WorldGenHellLava.a) {
                 ++i;
             }
 
-            if (world.getType(blockposition.down()).getBlock() == Blocks.NETHERRACK) {
+            if (generatoraccess.getType(blockposition.down()) == WorldGenHellLava.a) {
                 ++i;
             }
 
             int j = 0;
 
-            if (world.isEmpty(blockposition.west())) {
+            if (generatoraccess.isEmpty(blockposition.west())) {
                 ++j;
             }
 
-            if (world.isEmpty(blockposition.east())) {
+            if (generatoraccess.isEmpty(blockposition.east())) {
                 ++j;
             }
 
-            if (world.isEmpty(blockposition.north())) {
+            if (generatoraccess.isEmpty(blockposition.north())) {
                 ++j;
             }
 
-            if (world.isEmpty(blockposition.south())) {
+            if (generatoraccess.isEmpty(blockposition.south())) {
                 ++j;
             }
 
-            if (world.isEmpty(blockposition.down())) {
+            if (generatoraccess.isEmpty(blockposition.down())) {
                 ++j;
             }
 
-            if (!this.b && i == 4 && j == 1 || i == 5) {
-                IBlockData iblockdata = this.a.getBlockData();
-
-                world.setTypeAndData(blockposition, iblockdata, 2);
-                world.a(blockposition, iblockdata, random);
+            if (!worldgenfeaturehellflowinglavaconfiguration.a && i == 4 && j == 1 || i == 5) {
+                generatoraccess.setTypeAndData(blockposition, Blocks.LAVA.getBlockData(), 2);
+                generatoraccess.H().a(blockposition, FluidTypes.e, 0);
             }
 
             return true;

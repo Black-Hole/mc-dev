@@ -2,64 +2,70 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenEndCity extends StructureGenerator {
+public class WorldGenEndCity extends StructureGenerator<WorldGenEndCityConfiguration> {
 
-    private final int a = 20;
-    private final int b = 11;
-    private final ChunkProviderTheEnd d;
+    public WorldGenEndCity() {}
 
-    public WorldGenEndCity(ChunkProviderTheEnd chunkprovidertheend) {
-        this.d = chunkprovidertheend;
+    protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
+        int i1 = chunkgenerator.getSettings().n();
+        int j1 = chunkgenerator.getSettings().o();
+        int k1 = i + i1 * k;
+        int l1 = j + i1 * l;
+        int i2 = k1 < 0 ? k1 - i1 - 1 : k1;
+        int j2 = l1 < 0 ? l1 - i1 - 1 : l1;
+        int k2 = i2 / i1;
+        int l2 = j2 / i1;
+
+        ((SeededRandom) random).a(chunkgenerator.getSeed(), k2, l2, 10387313);
+        k2 *= i1;
+        l2 *= i1;
+        k2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        l2 += (random.nextInt(i1 - j1) + random.nextInt(i1 - j1)) / 2;
+        return new ChunkCoordIntPair(k2, l2);
     }
 
-    public String a() {
-        return "EndCity";
-    }
+    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
-    protected boolean a(int i, int j) {
-        int k = i;
-        int l = j;
+        if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
+            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
 
-        if (i < 0) {
-            i -= 19;
-        }
+            if (!chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.q)) {
+                return false;
+            } else {
+                int k = b(i, j, chunkgenerator);
 
-        if (j < 0) {
-            j -= 19;
-        }
-
-        int i1 = i / 20;
-        int j1 = j / 20;
-        Random random = this.g.a(i1, j1, 10387313);
-
-        i1 *= 20;
-        j1 *= 20;
-        i1 += (random.nextInt(9) + random.nextInt(9)) / 2;
-        j1 += (random.nextInt(9) + random.nextInt(9)) / 2;
-        if (k == i1 && l == j1 && this.d.c(k, l)) {
-            int k1 = b(k, l, this.d);
-
-            return k1 >= 60;
+                return k >= 60;
+            }
         } else {
             return false;
         }
     }
 
-    protected StructureStart b(int i, int j) {
-        return new WorldGenEndCity.Start(this.g, this.d, this.f, i, j);
+    protected boolean a(GeneratorAccess generatoraccess) {
+        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
     }
 
-    public BlockPosition getNearestGeneratedFeature(World world, BlockPosition blockposition, boolean flag) {
-        this.g = world;
-        return a(world, this, blockposition, 20, 11, 10387313, true, 100, flag);
+    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
+
+        return new WorldGenEndCity.a(generatoraccess, chunkgenerator, seededrandom, i, j, biomebase);
     }
 
-    private static int b(int i, int j, ChunkProviderTheEnd chunkprovidertheend) {
+    protected String a() {
+        return "EndCity";
+    }
+
+    public int b() {
+        return 9;
+    }
+
+    private static int b(int i, int j, ChunkGenerator<?> chunkgenerator) {
         Random random = new Random((long) (i + j * 10387313));
         EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[random.nextInt(EnumBlockRotation.values().length)];
-        ChunkSnapshot chunksnapshot = new ChunkSnapshot();
+        ProtoChunk protochunk = new ProtoChunk(new ChunkCoordIntPair(i, j), ChunkConverter.a);
 
-        chunkprovidertheend.a(i, j, chunksnapshot);
+        chunkgenerator.createChunk(protochunk);
         byte b0 = 5;
         byte b1 = 5;
 
@@ -72,44 +78,38 @@ public class WorldGenEndCity extends StructureGenerator {
             b1 = -5;
         }
 
-        int k = chunksnapshot.a(7, 7);
-        int l = chunksnapshot.a(7, 7 + b1);
-        int i1 = chunksnapshot.a(7 + b0, 7);
-        int j1 = chunksnapshot.a(7 + b0, 7 + b1);
-        int k1 = Math.min(Math.min(k, l), Math.min(i1, j1));
+        int k = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7);
+        int l = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7 + b1);
+        int i1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7);
+        int j1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7 + b1);
 
-        return k1;
+        return Math.min(Math.min(k, l), Math.min(i1, j1));
     }
 
-    public static class Start extends StructureStart {
+    public static class a extends StructureStart {
 
-        private boolean c;
+        private boolean e;
 
-        public Start() {}
+        public a() {}
 
-        public Start(World world, ChunkProviderTheEnd chunkprovidertheend, Random random, int i, int j) {
-            super(i, j);
-            this.a(world, chunkprovidertheend, random, i, j);
-        }
-
-        private void a(World world, ChunkProviderTheEnd chunkprovidertheend, Random random, int i, int j) {
-            Random random1 = new Random((long) (i + j * 10387313));
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[random1.nextInt(EnumBlockRotation.values().length)];
-            int k = WorldGenEndCity.b(i, j, chunkprovidertheend);
+        public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
+            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[seededrandom.nextInt(EnumBlockRotation.values().length)];
+            int k = WorldGenEndCity.b(i, j, chunkgenerator);
 
             if (k < 60) {
-                this.c = false;
+                this.e = false;
             } else {
                 BlockPosition blockposition = new BlockPosition(i * 16 + 8, k, j * 16 + 8);
 
-                WorldGenEndCityPieces.a(world.getDataManager().h(), blockposition, enumblockrotation, this.a, random);
-                this.d();
-                this.c = true;
+                WorldGenEndCityPieces.a(generatoraccess.getDataManager().h(), blockposition, enumblockrotation, this.a, seededrandom);
+                this.a((IBlockAccess) generatoraccess);
+                this.e = true;
             }
         }
 
-        public boolean a() {
-            return this.c;
+        public boolean b() {
+            return this.e;
         }
     }
 }

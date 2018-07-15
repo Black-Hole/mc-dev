@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
+import java.util.Arrays;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
@@ -140,6 +141,13 @@ public class RegistryID<K> implements Registry<K> {
 
     public Iterator<K> iterator() {
         return Iterators.filter(Iterators.forArray(this.d), Predicates.notNull());
+    }
+
+    public void a() {
+        Arrays.fill(this.b, (Object) null);
+        Arrays.fill(this.d, (Object) null);
+        this.e = 0;
+        this.f = 0;
     }
 
     public int b() {

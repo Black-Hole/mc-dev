@@ -2,39 +2,26 @@ package net.minecraft.server;
 
 public class EntityWitherSkull extends EntityFireball {
 
-    private static final DataWatcherObject<Boolean> e = DataWatcher.a(EntityWitherSkull.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> e = DataWatcher.a(EntityWitherSkull.class, DataWatcherRegistry.i);
 
     public EntityWitherSkull(World world) {
-        super(world);
-        this.setSize(0.3125F, 0.3125F);
+        super(EntityTypes.WITHER_SKULL, world, 0.3125F, 0.3125F);
     }
 
     public EntityWitherSkull(World world, EntityLiving entityliving, double d0, double d1, double d2) {
-        super(world, entityliving, d0, d1, d2);
-        this.setSize(0.3125F, 0.3125F);
+        super(EntityTypes.WITHER_SKULL, entityliving, d0, d1, d2, world, 0.3125F, 0.3125F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityFireball.a(dataconvertermanager, "WitherSkull");
-    }
-
-    protected float l() {
-        return this.isCharged() ? 0.73F : super.l();
+    protected float k() {
+        return this.isCharged() ? 0.73F : super.k();
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    public float a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata) {
-        float f = super.a(explosion, world, blockposition, iblockdata);
-        Block block = iblockdata.getBlock();
-
-        if (this.isCharged() && EntityWither.a(block)) {
-            f = Math.min(0.8F, f);
-        }
-
-        return f;
+    public float a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid, float f) {
+        return this.isCharged() && EntityWither.a(iblockdata.getBlock()) ? Math.min(0.8F, f) : f;
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
@@ -81,7 +68,7 @@ public class EntityWitherSkull extends EntityFireball {
         return false;
     }
 
-    protected void i() {
+    protected void x_() {
         this.datawatcher.register(EntityWitherSkull.e, Boolean.valueOf(false));
     }
 
@@ -93,7 +80,7 @@ public class EntityWitherSkull extends EntityFireball {
         this.datawatcher.set(EntityWitherSkull.e, Boolean.valueOf(flag));
     }
 
-    protected boolean k() {
+    protected boolean f() {
         return false;
     }
 }

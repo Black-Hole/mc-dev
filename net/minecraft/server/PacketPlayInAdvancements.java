@@ -29,11 +29,11 @@ public class PacketPlayInAdvancements implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public PacketPlayInAdvancements.Status b() {
+    public PacketPlayInAdvancements.Status c() {
         return this.a;
     }
 
-    public MinecraftKey c() {
+    public MinecraftKey d() {
         return this.b;
     }
 

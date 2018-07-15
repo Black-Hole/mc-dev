@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal {
@@ -16,19 +15,22 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     private PathEntity g;
     private final NavigationAbstract h;
     private final Class<T> i;
-    private final Predicate<? super T> j;
+    private final Predicate<? super Entity> j;
+    private final Predicate<? super Entity> k;
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, float f, double d0, double d1) {
-        this(entitycreature, oclass, Predicates.alwaysTrue(), f, d0, d1);
+        this(entitycreature, oclass, (entity) -> {
+            return true;
+        }, f, d0, d1, IEntitySelector.d);
     }
 
-    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super T> predicate, float f, double d0, double d1) {
+    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super Entity> predicate, float f, double d0, double d1, Predicate<Entity> predicate1) {
         this.c = new Predicate() {
             public boolean a(@Nullable Entity entity) {
                 return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity) && !PathfinderGoalAvoidTarget.this.a.r(entity);
             }
 
-            public boolean apply(@Nullable Object object) {
+            public boolean test(@Nullable Object object) {
                 return this.a((Entity) object);
             }
         };
@@ -38,12 +40,21 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
         this.f = f;
         this.d = d0;
         this.e = d1;
+        this.k = predicate1;
         this.h = entitycreature.getNavigation();
         this.a(1);
     }
 
+    public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, float f, double d0, double d1, Predicate<Entity> predicate) {
+        this(entitycreature, oclass, (entity) -> {
+            return true;
+        }, f, d0, d1, predicate);
+    }
+
     public boolean a() {
-        List list = this.a.world.a(this.i, this.a.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), Predicates.and(new Predicate[] { IEntitySelector.d, this.c, this.j}));
+        List list = this.a.world.a(this.i, this.a.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), (entity) -> {
+            return this.k.test(entity) && this.c.test(entity) && this.j.test(entity);
+        });
 
         if (list.isEmpty()) {
             return false;
@@ -63,7 +74,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     }
 
     public boolean b() {
-        return !this.h.o();
+        return !this.h.q();
     }
 
     public void c() {

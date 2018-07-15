@@ -2,9 +2,8 @@ package net.minecraft.server;
 
 public class ItemSaddle extends Item {
 
-    public ItemSaddle() {
-        this.maxStackSize = 1;
-        this.b(CreativeModeTab.e);
+    public ItemSaddle(Item.Info item_info) {
+        super(item_info);
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
@@ -13,7 +12,7 @@ public class ItemSaddle extends Item {
 
             if (!entitypig.hasSaddle() && !entitypig.isBaby()) {
                 entitypig.setSaddle(true);
-                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.fr, SoundCategory.NEUTRAL, 0.5F, 1.0F);
+                entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.ENTITY_PIG_SADDLE, SoundCategory.NEUTRAL, 0.5F, 1.0F);
                 itemstack.subtract(1);
             }
 

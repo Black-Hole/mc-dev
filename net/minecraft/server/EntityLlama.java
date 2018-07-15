@@ -1,37 +1,37 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEntity {
 
-    private static final DataWatcherObject<Integer> bH = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Integer> bI = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Integer> bJ = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
-    private boolean bK;
+    private static final DataWatcherObject<Integer> bM = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bN = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> bO = DataWatcher.a(EntityLlama.class, DataWatcherRegistry.b);
+    private boolean bP;
     @Nullable
-    private EntityLlama bL;
+    private EntityLlama bQ;
     @Nullable
-    private EntityLlama bM;
+    private EntityLlama bR;
 
     public EntityLlama(World world) {
-        super(world);
+        super(EntityTypes.LLAMA, world);
         this.setSize(0.9F, 1.87F);
     }
 
     public void setStrength(int i) {
-        this.datawatcher.set(EntityLlama.bH, Integer.valueOf(Math.max(1, Math.min(5, i))));
+        this.datawatcher.set(EntityLlama.bM, Integer.valueOf(Math.max(1, Math.min(5, i))));
     }
 
-    private void dY() {
+    private void eo() {
         int i = this.random.nextFloat() < 0.04F ? 5 : 3;
 
         this.setStrength(1 + this.random.nextInt(i));
     }
 
     public int getStrength() {
-        return ((Integer) this.datawatcher.get(EntityLlama.bH)).intValue();
+        return ((Integer) this.datawatcher.get(EntityLlama.bM)).intValue();
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -49,13 +49,13 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         super.a(nbttagcompound);
         this.setVariant(nbttagcompound.getInt("Variant"));
         if (nbttagcompound.hasKeyOfType("DecorItem", 10)) {
-            this.inventoryChest.setItem(1, new ItemStack(nbttagcompound.getCompound("DecorItem")));
+            this.inventoryChest.setItem(1, ItemStack.a(nbttagcompound.getCompound("DecorItem")));
         }
 
-        this.dD();
+        this.dS();
     }
 
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalTame(this, 1.2D));
         this.goalSelector.a(2, new PathfinderGoalLlamaFollow(this, 2.0999999046325684D));
@@ -75,40 +75,40 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(40.0D);
     }
 
-    protected void i() {
-        super.i();
-        this.datawatcher.register(EntityLlama.bH, Integer.valueOf(0));
-        this.datawatcher.register(EntityLlama.bI, Integer.valueOf(-1));
-        this.datawatcher.register(EntityLlama.bJ, Integer.valueOf(0));
+    protected void x_() {
+        super.x_();
+        this.datawatcher.register(EntityLlama.bM, Integer.valueOf(0));
+        this.datawatcher.register(EntityLlama.bN, Integer.valueOf(-1));
+        this.datawatcher.register(EntityLlama.bO, Integer.valueOf(0));
     }
 
     public int getVariant() {
-        return MathHelper.clamp(((Integer) this.datawatcher.get(EntityLlama.bJ)).intValue(), 0, 3);
+        return MathHelper.clamp(((Integer) this.datawatcher.get(EntityLlama.bO)).intValue(), 0, 3);
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityLlama.bJ, Integer.valueOf(i));
+        this.datawatcher.set(EntityLlama.bO, Integer.valueOf(i));
     }
 
-    protected int dn() {
-        return this.isCarryingChest() ? 2 + 3 * this.dt() : super.dn();
+    protected int dA() {
+        return this.isCarryingChest() ? 2 + 3 * this.dH() : super.dA();
     }
 
     public void k(Entity entity) {
         if (this.w(entity)) {
-            float f = MathHelper.cos(this.aN * 0.017453292F);
-            float f1 = MathHelper.sin(this.aN * 0.017453292F);
+            float f = MathHelper.cos(this.aQ * 0.017453292F);
+            float f1 = MathHelper.sin(this.aQ * 0.017453292F);
             float f2 = 0.3F;
 
-            entity.setPosition(this.locX + (double) (0.3F * f1), this.locY + this.aG() + entity.aF(), this.locZ - (double) (0.3F * f));
+            entity.setPosition(this.locX + (double) (0.3F * f1), this.locY + this.aJ() + entity.aI(), this.locZ - (double) (0.3F * f));
         }
     }
 
-    public double aG() {
+    public double aJ() {
         return (double) this.length * 0.67D;
     }
 
-    public boolean cV() {
+    public boolean dh() {
         return false;
     }
 
@@ -123,7 +123,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             b0 = 10;
             b1 = 3;
             f = 2.0F;
-        } else if (item == Item.getItemOf(Blocks.HAY_BLOCK)) {
+        } else if (item == Blocks.HAY_BLOCK.getItem()) {
             b0 = 90;
             b1 = 6;
             f = 10.0F;
@@ -139,7 +139,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         }
 
         if (this.isBaby() && b0 > 0) {
-            this.world.addParticle(EnumParticle.VILLAGER_HAPPY, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.world.addParticle(Particles.z, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D);
             if (!this.world.isClientSide) {
                 this.setAge(b0);
             }
@@ -150,26 +150,26 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         if (b1 > 0 && (flag || !this.isTamed()) && this.getTemper() < this.getMaxDomestication()) {
             flag = true;
             if (!this.world.isClientSide) {
-                this.n(b1);
+                this.s(b1);
             }
         }
 
         if (flag && !this.isSilent()) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dQ, this.bK(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LLAMA_EAT, this.bV(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }
 
         return flag;
     }
 
     protected boolean isFrozen() {
-        return this.getHealth() <= 0.0F || this.dy();
+        return this.getHealth() <= 0.0F || this.dN();
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
-        Object object = super.prepare(difficultydamagescaler, groupdataentity);
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        Object object = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
-        this.dY();
+        this.eo();
         int i;
 
         if (object instanceof EntityLlama.b) {
@@ -183,95 +183,95 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         return (GroupDataEntity) object;
     }
 
-    protected SoundEffect do_() {
-        return SoundEffects.dN;
+    protected SoundEffect dB() {
+        return SoundEffects.ENTITY_LLAMA_ANGRY;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.dM;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_LLAMA_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.dR;
+        return SoundEffects.ENTITY_LLAMA_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.dP;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_LLAMA_DEATH;
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.dT, 0.15F, 1.0F);
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(SoundEffects.ENTITY_LLAMA_STEP, 0.15F, 1.0F);
     }
 
-    protected void dp() {
-        this.a(SoundEffects.dO, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+    protected void dC() {
+        this.a(SoundEffects.ENTITY_LLAMA_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public void dK() {
-        SoundEffect soundeffect = this.do_();
+    public void dZ() {
+        SoundEffect soundeffect = this.dB();
 
         if (soundeffect != null) {
-            this.a(soundeffect, this.cq(), this.cr());
+            this.a(soundeffect, this.cC(), this.cD());
         }
 
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.aw;
+    protected MinecraftKey G() {
+        return LootTables.aD;
     }
 
-    public int dt() {
+    public int dH() {
         return this.getStrength();
     }
 
-    public boolean dP() {
+    public boolean ef() {
         return true;
     }
 
-    public boolean f(ItemStack itemstack) {
-        return itemstack.getItem() == Item.getItemOf(Blocks.CARPET);
+    public boolean g(ItemStack itemstack) {
+        Item item = itemstack.getItem();
+
+        return TagsItem.f.isTagged(item);
     }
 
-    public boolean dF() {
+    public boolean dU() {
         return false;
     }
 
     public void a(IInventory iinventory) {
-        EnumColor enumcolor = this.dT();
+        EnumColor enumcolor = this.ej();
 
         super.a(iinventory);
-        EnumColor enumcolor1 = this.dT();
+        EnumColor enumcolor1 = this.ej();
 
         if (this.ticksLived > 20 && enumcolor1 != null && enumcolor1 != enumcolor) {
-            this.a(SoundEffects.dU, 0.5F, 1.0F);
+            this.a(SoundEffects.ENTITY_LLAMA_SWAG, 0.5F, 1.0F);
         }
 
     }
 
-    protected void dD() {
+    protected void dS() {
         if (!this.world.isClientSide) {
-            super.dD();
-            this.g(this.inventoryChest.getItem(1));
+            super.dS();
+            this.a(h(this.inventoryChest.getItem(1)));
         }
     }
 
     private void a(@Nullable EnumColor enumcolor) {
-        this.datawatcher.set(EntityLlama.bI, Integer.valueOf(enumcolor == null ? -1 : enumcolor.getColorIndex()));
-    }
-
-    private void g(ItemStack itemstack) {
-        if (this.f(itemstack)) {
-            this.a(EnumColor.fromColorIndex(itemstack.getData()));
-        } else {
-            this.a((EnumColor) null);
-        }
-
+        this.datawatcher.set(EntityLlama.bN, Integer.valueOf(enumcolor == null ? -1 : enumcolor.getColorIndex()));
     }
 
     @Nullable
-    public EnumColor dT() {
-        int i = ((Integer) this.datawatcher.get(EntityLlama.bI)).intValue();
+    private static EnumColor h(ItemStack itemstack) {
+        Block block = Block.asBlock(itemstack.getItem());
+
+        return block instanceof BlockCarpet ? ((BlockCarpet) block).b() : null;
+    }
+
+    @Nullable
+    public EnumColor ej() {
+        int i = ((Integer) this.datawatcher.get(EntityLlama.bN)).intValue();
 
         return i == -1 ? null : EnumColor.fromColorIndex(i);
     }
@@ -281,7 +281,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal != this && entityanimal instanceof EntityLlama && this.dL() && ((EntityLlama) entityanimal).dL();
+        return entityanimal != this && entityanimal instanceof EntityLlama && this.eb() && ((EntityLlama) entityanimal).eb();
     }
 
     public EntityLlama b(EntityAgeable entityageable) {
@@ -300,7 +300,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         return entityllama;
     }
 
-    private void e(EntityLiving entityliving) {
+    private void f(EntityLiving entityliving) {
         EntityLlamaSpit entityllamaspit = new EntityLlamaSpit(this.world, this);
         double d0 = entityliving.locX - this.locX;
         double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entityllamaspit.locY;
@@ -308,23 +308,23 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         float f = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
 
         entityllamaspit.shoot(d0, d1 + (double) f, d2, 1.5F, 10.0F);
-        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dS, this.bK(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+        this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LLAMA_SPIT, this.bV(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         this.world.addEntity(entityllamaspit);
-        this.bK = true;
+        this.bP = true;
     }
 
-    private void y(boolean flag) {
-        this.bK = flag;
+    private void B(boolean flag) {
+        this.bP = flag;
     }
 
-    public void e(float f, float f1) {
+    public void c(float f, float f1) {
         int i = MathHelper.f((f * 0.5F - 3.0F) * f1);
 
         if (i > 0) {
             if (f >= 6.0F) {
                 this.damageEntity(DamageSource.FALL, (float) i);
                 if (this.isVehicle()) {
-                    Iterator iterator = this.bG().iterator();
+                    Iterator iterator = this.bQ().iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();
@@ -337,61 +337,61 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             IBlockData iblockdata = this.world.getType(new BlockPosition(this.locX, this.locY - 0.2D - (double) this.lastYaw, this.locZ));
             Block block = iblockdata.getBlock();
 
-            if (iblockdata.getMaterial() != Material.AIR && !this.isSilent()) {
+            if (!iblockdata.isAir() && !this.isSilent()) {
                 SoundEffectType soundeffecttype = block.getStepSound();
 
-                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, soundeffecttype.d(), this.bK(), soundeffecttype.a() * 0.5F, soundeffecttype.b() * 0.75F);
+                this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, soundeffecttype.d(), this.bV(), soundeffecttype.a() * 0.5F, soundeffecttype.b() * 0.75F);
             }
 
         }
     }
 
-    public void dU() {
-        if (this.bL != null) {
-            this.bL.bM = null;
+    public void ek() {
+        if (this.bQ != null) {
+            this.bQ.bR = null;
         }
 
-        this.bL = null;
+        this.bQ = null;
     }
 
     public void a(EntityLlama entityllama) {
-        this.bL = entityllama;
-        this.bL.bM = this;
+        this.bQ = entityllama;
+        this.bQ.bR = this;
     }
 
-    public boolean dV() {
-        return this.bM != null;
+    public boolean el() {
+        return this.bR != null;
     }
 
-    public boolean dW() {
-        return this.bL != null;
+    public boolean em() {
+        return this.bQ != null;
     }
 
     @Nullable
-    public EntityLlama dX() {
-        return this.bL;
+    public EntityLlama en() {
+        return this.bQ;
     }
 
-    protected double dk() {
+    protected double dx() {
         return 2.0D;
     }
 
-    protected void dI() {
-        if (!this.dW() && this.isBaby()) {
-            super.dI();
+    protected void dX() {
+        if (!this.em() && this.isBaby()) {
+            super.dX();
         }
 
     }
 
-    public boolean dJ() {
+    public boolean dY() {
         return false;
     }
 
     public void a(EntityLiving entityliving, float f) {
-        this.e(entityliving);
+        this.f(entityliving);
     }
 
-    public void p(boolean flag) {}
+    public void s(boolean flag) {}
 
     public EntityAgeable createChild(EntityAgeable entityageable) {
         return this.b(entityageable);
@@ -427,8 +427,8 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             if (this.e instanceof EntityLlama) {
                 EntityLlama entityllama = (EntityLlama) this.e;
 
-                if (entityllama.bK) {
-                    entityllama.y(false);
+                if (entityllama.bP) {
+                    entityllama.B(false);
                     return false;
                 }
             }

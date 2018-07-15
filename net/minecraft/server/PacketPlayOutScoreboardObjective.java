@@ -14,7 +14,7 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
     public PacketPlayOutScoreboardObjective(ScoreboardObjective scoreboardobjective, int i) {
         this.a = scoreboardobjective.getName();
         this.b = scoreboardobjective.getDisplayName();
-        this.c = scoreboardobjective.getCriteria().c();
+        this.c = scoreboardobjective.f();
         this.d = i;
     }
 
@@ -23,7 +23,7 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
         this.d = packetdataserializer.readByte();
         if (this.d == 0 || this.d == 2) {
             this.b = packetdataserializer.e(32);
-            this.c = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(packetdataserializer.e(16));
+            this.c = (IScoreboardCriteria.EnumScoreboardHealthDisplay) packetdataserializer.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.class);
         }
 
     }
@@ -33,7 +33,7 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
         packetdataserializer.writeByte(this.d);
         if (this.d == 0 || this.d == 2) {
             packetdataserializer.a(this.b);
-            packetdataserializer.a(this.c.a());
+            packetdataserializer.a((Enum) this.c);
         }
 
     }

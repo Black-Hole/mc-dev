@@ -4,13 +4,11 @@ import java.util.Random;
 
 public class BlockPackedIce extends Block {
 
-    public BlockPackedIce() {
-        super(Material.SNOW_LAYER);
-        this.frictionFactor = 0.98F;
-        this.a(CreativeModeTab.b);
+    public BlockPackedIce(Block.Info block_info) {
+        super(block_info);
     }
 
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 0;
     }
 }

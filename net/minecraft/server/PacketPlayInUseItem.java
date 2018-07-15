@@ -35,27 +35,27 @@ public class PacketPlayInUseItem implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public BlockPosition a() {
+    public BlockPosition b() {
         return this.a;
     }
 
-    public EnumDirection b() {
+    public EnumDirection c() {
         return this.b;
     }
 
-    public EnumHand c() {
+    public EnumHand d() {
         return this.c;
     }
 
-    public float d() {
+    public float e() {
         return this.d;
     }
 
-    public float e() {
+    public float f() {
         return this.e;
     }
 
-    public float f() {
+    public float g() {
         return this.f;
     }
 }

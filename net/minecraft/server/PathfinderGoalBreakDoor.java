@@ -2,45 +2,26 @@ package net.minecraft.server;
 
 public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
 
-    private int g;
-    private int h = -1;
+    private int d;
+    private int e = -1;
 
     public PathfinderGoalBreakDoor(EntityInsentient entityinsentient) {
         super(entityinsentient);
     }
 
     public boolean a() {
-        if (!super.a()) {
-            return false;
-        } else if (!this.a.world.getGameRules().getBoolean("mobGriefing")) {
-            return false;
-        } else {
-            BlockDoor blockdoor = this.c;
-
-            return !BlockDoor.d(this.a.world, this.b);
-        }
+        return !super.a() ? false : (!this.a.world.getGameRules().getBoolean("mobGriefing") ? false : !this.g());
     }
 
     public void c() {
         super.c();
-        this.g = 0;
+        this.d = 0;
     }
 
     public boolean b() {
         double d0 = this.a.c(this.b);
-        boolean flag;
 
-        if (this.g <= 240) {
-            BlockDoor blockdoor = this.c;
-
-            if (!BlockDoor.d(this.a.world, this.b) && d0 < 4.0D) {
-                flag = true;
-                return flag;
-            }
-        }
-
-        flag = false;
-        return flag;
+        return this.d <= 240 && !this.g() && d0 < 4.0D;
     }
 
     public void d() {
@@ -54,18 +35,18 @@ public class PathfinderGoalBreakDoor extends PathfinderGoalDoorInteract {
             this.a.world.triggerEffect(1019, this.b, 0);
         }
 
-        ++this.g;
-        int i = (int) ((float) this.g / 240.0F * 10.0F);
+        ++this.d;
+        int i = (int) ((float) this.d / 240.0F * 10.0F);
 
-        if (i != this.h) {
+        if (i != this.e) {
             this.a.world.c(this.a.getId(), this.b, i);
-            this.h = i;
+            this.e = i;
         }
 
-        if (this.g == 240 && this.a.world.getDifficulty() == EnumDifficulty.HARD) {
+        if (this.d == 240 && this.a.world.getDifficulty() == EnumDifficulty.HARD) {
             this.a.world.setAir(this.b);
             this.a.world.triggerEffect(1021, this.b, 0);
-            this.a.world.triggerEffect(2001, this.b, Block.getId(this.c));
+            this.a.world.triggerEffect(2001, this.b, Block.getCombinedId(this.a.world.getType(this.b)));
         }
 
     }

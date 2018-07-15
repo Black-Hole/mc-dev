@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 public class PersistentVillage extends PersistentBase {
 
     private World world;
-    private final List<BlockPosition> c = Lists.newArrayList();
-    private final List<VillageDoor> d = Lists.newArrayList();
+    private final List<BlockPosition> b = Lists.newArrayList();
+    private final List<VillageDoor> c = Lists.newArrayList();
     private final List<Village> villages = Lists.newArrayList();
     private int time;
 
@@ -36,9 +36,9 @@ public class PersistentVillage extends PersistentBase {
     }
 
     public void a(BlockPosition blockposition) {
-        if (this.c.size() <= 64) {
-            if (!this.e(blockposition)) {
-                this.c.add(blockposition);
+        if (this.b.size() <= 64) {
+            if (!this.d(blockposition)) {
+                this.b.add(blockposition);
             }
 
         }
@@ -54,16 +54,16 @@ public class PersistentVillage extends PersistentBase {
             village.a(this.time);
         }
 
-        this.e();
         this.f();
         this.g();
+        this.h();
         if (this.time % 400 == 0) {
             this.c();
         }
 
     }
 
-    private void e() {
+    private void f() {
         Iterator iterator = this.villages.iterator();
 
         while (iterator.hasNext()) {
@@ -103,15 +103,15 @@ public class PersistentVillage extends PersistentBase {
         return village;
     }
 
-    private void f() {
-        if (!this.c.isEmpty()) {
-            this.b((BlockPosition) this.c.remove(0));
+    private void g() {
+        if (!this.b.isEmpty()) {
+            this.b((BlockPosition) this.b.remove(0));
         }
     }
 
-    private void g() {
-        for (int i = 0; i < this.d.size(); ++i) {
-            VillageDoor villagedoor = (VillageDoor) this.d.get(i);
+    private void h() {
+        for (int i = 0; i < this.c.size(); ++i) {
+            VillageDoor villagedoor = (VillageDoor) this.c.get(i);
             Village village = this.getClosestVillage(villagedoor.d(), 32);
 
             if (village == null) {
@@ -123,28 +123,27 @@ public class PersistentVillage extends PersistentBase {
             village.a(villagedoor);
         }
 
-        this.d.clear();
+        this.c.clear();
     }
 
     private void b(BlockPosition blockposition) {
         boolean flag = true;
         boolean flag1 = true;
         boolean flag2 = true;
+        Iterable iterable = BlockPosition.b(blockposition.getX() - 16, blockposition.getY() - 4, blockposition.getZ() - 16, blockposition.getX() + 16, blockposition.getY() + 4, blockposition.getZ() + 16);
+        Iterator iterator = iterable.iterator();
 
-        for (int i = -16; i < 16; ++i) {
-            for (int j = -4; j < 4; ++j) {
-                for (int k = -16; k < 16; ++k) {
-                    BlockPosition blockposition1 = blockposition.a(i, j, k);
+        while (iterator.hasNext()) {
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
+            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition);
 
-                    if (this.f(blockposition1)) {
-                        VillageDoor villagedoor = this.c(blockposition1);
+            if (this.a(iblockdata)) {
+                VillageDoor villagedoor = this.c(blockposition_mutableblockposition);
 
-                        if (villagedoor == null) {
-                            this.d(blockposition1);
-                        } else {
-                            villagedoor.a(this.time);
-                        }
-                    }
+                if (villagedoor == null) {
+                    this.a(iblockdata, blockposition_mutableblockposition);
+                } else {
+                    villagedoor.a(this.time);
                 }
             }
         }
@@ -153,7 +152,7 @@ public class PersistentVillage extends PersistentBase {
 
     @Nullable
     private VillageDoor c(BlockPosition blockposition) {
-        Iterator iterator = this.d.iterator();
+        Iterator iterator = this.c.iterator();
 
         VillageDoor villagedoor;
 
@@ -182,14 +181,14 @@ public class PersistentVillage extends PersistentBase {
         return villagedoor;
     }
 
-    private void d(BlockPosition blockposition) {
-        EnumDirection enumdirection = BlockDoor.f(this.world, blockposition);
+    private void a(IBlockData iblockdata, BlockPosition blockposition) {
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDoor.FACING);
         EnumDirection enumdirection1 = enumdirection.opposite();
         int i = this.a(blockposition, enumdirection, 5);
         int j = this.a(blockposition, enumdirection1, i + 1);
 
         if (i != j) {
-            this.d.add(new VillageDoor(blockposition, i < j ? enumdirection : enumdirection1, this.time));
+            this.c.add(new VillageDoor(blockposition, i < j ? enumdirection : enumdirection1, this.time));
         }
 
     }
@@ -198,7 +197,7 @@ public class PersistentVillage extends PersistentBase {
         int j = 0;
 
         for (int k = 1; k <= 5; ++k) {
-            if (this.world.h(blockposition.shift(enumdirection, k))) {
+            if (this.world.e(blockposition.shift(enumdirection, k))) {
                 ++j;
                 if (j >= i) {
                     return j;
@@ -209,8 +208,8 @@ public class PersistentVillage extends PersistentBase {
         return j;
     }
 
-    private boolean e(BlockPosition blockposition) {
-        Iterator iterator = this.c.iterator();
+    private boolean d(BlockPosition blockposition) {
+        Iterator iterator = this.b.iterator();
 
         BlockPosition blockposition1;
 
@@ -225,11 +224,8 @@ public class PersistentVillage extends PersistentBase {
         return true;
     }
 
-    private boolean f(BlockPosition blockposition) {
-        IBlockData iblockdata = this.world.getType(blockposition);
-        Block block = iblockdata.getBlock();
-
-        return block instanceof BlockDoor ? iblockdata.getMaterial() == Material.WOOD : false;
+    private boolean a(IBlockData iblockdata) {
+        return iblockdata.getBlock() instanceof BlockDoor && iblockdata.getMaterial() == Material.WOOD;
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -237,7 +233,7 @@ public class PersistentVillage extends PersistentBase {
         NBTTagList nbttaglist = nbttagcompound.getList("Villages", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             Village village = new Village();
 
             village.a(nbttagcompound1);
@@ -256,7 +252,7 @@ public class PersistentVillage extends PersistentBase {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
             village.b(nbttagcompound1);
-            nbttaglist.add(nbttagcompound1);
+            nbttaglist.add((NBTBase) nbttagcompound1);
         }
 
         nbttagcompound.set("Villages", nbttaglist);

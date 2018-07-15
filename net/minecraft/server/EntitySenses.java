@@ -5,9 +5,9 @@ import java.util.List;
 
 public class EntitySenses {
 
-    EntityInsentient a;
-    List<Entity> b = Lists.newArrayList();
-    List<Entity> c = Lists.newArrayList();
+    private final EntityInsentient a;
+    private final List<Entity> b = Lists.newArrayList();
+    private final List<Entity> c = Lists.newArrayList();
 
     public EntitySenses(EntityInsentient entityinsentient) {
         this.a = entityinsentient;
@@ -27,7 +27,7 @@ public class EntitySenses {
             this.a.world.methodProfiler.a("canSee");
             boolean flag = this.a.hasLineOfSight(entity);
 
-            this.a.world.methodProfiler.b();
+            this.a.world.methodProfiler.e();
             if (flag) {
                 this.b.add(entity);
             } else {

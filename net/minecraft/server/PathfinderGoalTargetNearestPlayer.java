@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,42 +20,36 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
             PathfinderGoalTargetNearestPlayer.a.warn("Use NearestAttackableTargetGoal.class for PathfinerMob mobs!");
         }
 
-        this.c = new Predicate() {
-            public boolean a(@Nullable Entity entity) {
-                if (!(entity instanceof EntityHuman)) {
-                    return false;
-                } else if (((EntityHuman) entity).abilities.isInvulnerable) {
-                    return false;
-                } else {
-                    double d0 = PathfinderGoalTargetNearestPlayer.this.f();
+        this.c = (entity) -> {
+            if (!(entity instanceof EntityHuman)) {
+                return false;
+            } else if (((EntityHuman) entity).abilities.isInvulnerable) {
+                return false;
+            } else {
+                double d0 = this.g();
 
-                    if (entity.isSneaking()) {
-                        d0 *= 0.800000011920929D;
-                    }
-
-                    if (entity.isInvisible()) {
-                        float f = ((EntityHuman) entity).cW();
-
-                        if (f < 0.1F) {
-                            f = 0.1F;
-                        }
-
-                        d0 *= (double) (0.7F * f);
-                    }
-
-                    return (double) entity.g(PathfinderGoalTargetNearestPlayer.this.b) > d0 ? false : PathfinderGoalTarget.a(PathfinderGoalTargetNearestPlayer.this.b, (EntityLiving) entity, false, true);
+                if (entity.isSneaking()) {
+                    d0 *= 0.800000011920929D;
                 }
-            }
 
-            public boolean apply(@Nullable Object object) {
-                return this.a((Entity) object);
+                if (entity.isInvisible()) {
+                    float f = ((EntityHuman) entity).dj();
+
+                    if (f < 0.1F) {
+                        f = 0.1F;
+                    }
+
+                    d0 *= (double) (0.7F * f);
+                }
+
+                return (double) entity.g(this.b) > d0 ? false : PathfinderGoalTarget.a(this.b, (EntityLiving) entity, false, true);
             }
         };
         this.d = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entityinsentient);
     }
 
     public boolean a() {
-        double d0 = this.f();
+        double d0 = this.g();
         List list = this.b.world.a(EntityHuman.class, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
 
         Collections.sort(list, this.d);
@@ -78,13 +71,13 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.b.aY();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.aY();
+            ScoreboardTeamBase scoreboardteambase = this.b.be();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.be();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;
             } else {
-                double d0 = this.f();
+                double d0 = this.g();
 
                 return this.b.h(entityliving) > d0 * d0 ? false : !(entityliving instanceof EntityPlayer) || !((EntityPlayer) entityliving).playerInteractManager.isCreative();
             }
@@ -101,7 +94,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         super.c();
     }
 
-    protected double f() {
+    protected double g() {
         AttributeInstance attributeinstance = this.b.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
 
         return attributeinstance == null ? 16.0D : attributeinstance.getValue();

@@ -2,10 +2,8 @@ package net.minecraft.server;
 
 public class ItemCarrotStick extends Item {
 
-    public ItemCarrotStick() {
-        this.b(CreativeModeTab.e);
-        this.d(1);
-        this.setMaxDurability(25);
+    public ItemCarrotStick(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -14,10 +12,10 @@ public class ItemCarrotStick extends Item {
         if (world.isClientSide) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
-            if (entityhuman.isPassenger() && entityhuman.bJ() instanceof EntityPig) {
-                EntityPig entitypig = (EntityPig) entityhuman.bJ();
+            if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
+                EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
-                if (itemstack.k() - itemstack.getData() >= 7 && entitypig.dm()) {
+                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dz()) {
                     itemstack.damage(7, entityhuman);
                     if (itemstack.isEmpty()) {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
@@ -30,7 +28,7 @@ public class ItemCarrotStick extends Item {
                 }
             }
 
-            entityhuman.b(StatisticList.b((Item) this));
+            entityhuman.b(StatisticList.ITEM_USED.b(this));
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         }
     }

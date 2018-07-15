@@ -19,10 +19,10 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
         String[] astring = new String[this.e().size()];
         int i = 0;
 
-        OpListEntry oplistentry;
+        JsonListEntry jsonlistentry;
 
-        for (Iterator iterator = this.e().values().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) oplistentry.getKey()).getName()) {
-            oplistentry = (OpListEntry) iterator.next();
+        for (Iterator iterator = this.e().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) jsonlistentry.getKey()).getName()) {
+            jsonlistentry = (JsonListEntry) iterator.next();
         }
 
         return astring;
@@ -42,22 +42,6 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
 
     protected String c(GameProfile gameprofile) {
         return gameprofile.getId().toString();
-    }
-
-    public GameProfile a(String s) {
-        Iterator iterator = this.e().values().iterator();
-
-        OpListEntry oplistentry;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            oplistentry = (OpListEntry) iterator.next();
-        } while (!s.equalsIgnoreCase(((GameProfile) oplistentry.getKey()).getName()));
-
-        return (GameProfile) oplistentry.getKey();
     }
 
     protected String a(Object object) {

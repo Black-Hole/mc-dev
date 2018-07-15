@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 public class EntityLeash extends EntityHanging {
 
     public EntityLeash(World world) {
-        super(world);
+        super(EntityTypes.LEASH_KNOT, world);
     }
 
     public EntityLeash(World world, BlockPosition blockposition) {
-        super(world, blockposition);
+        super(EntityTypes.LEASH_KNOT, world, blockposition);
         this.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
         float f = 0.125F;
         float f1 = 0.1875F;
@@ -46,11 +46,7 @@ public class EntityLeash extends EntityHanging {
     }
 
     public void a(@Nullable Entity entity) {
-        this.a(SoundEffects.dG, 1.0F, 1.0F);
-    }
-
-    public boolean d(NBTTagCompound nbttagcompound) {
-        return false;
+        this.a(SoundEffects.ENTITY_LEASH_KNOT_BREAK, 1.0F, 1.0F);
     }
 
     public void b(NBTTagCompound nbttagcompound) {}
@@ -102,7 +98,7 @@ public class EntityLeash extends EntityHanging {
         EntityLeash entityleash = new EntityLeash(world, blockposition);
 
         world.addEntity(entityleash);
-        entityleash.p();
+        entityleash.m();
         return entityleash;
     }
 
@@ -127,7 +123,7 @@ public class EntityLeash extends EntityHanging {
         return entityleash;
     }
 
-    public void p() {
-        this.a(SoundEffects.dH, 1.0F, 1.0F);
+    public void m() {
+        this.a(SoundEffects.ENTITY_LEASH_KNOT_PLACE, 1.0F, 1.0F);
     }
 }

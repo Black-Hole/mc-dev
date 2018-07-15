@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 public class Vec3D {
 
@@ -10,18 +10,6 @@ public class Vec3D {
     public final double z;
 
     public Vec3D(double d0, double d1, double d2) {
-        if (d0 == -0.0D) {
-            d0 = 0.0D;
-        }
-
-        if (d1 == -0.0D) {
-            d1 = 0.0D;
-        }
-
-        if (d2 == -0.0D) {
-            d2 = 0.0D;
-        }
-
         this.x = d0;
         this.y = d1;
         this.z = d2;
@@ -43,6 +31,10 @@ public class Vec3D {
 
     public double b(Vec3D vec3d) {
         return this.x * vec3d.x + this.y * vec3d.y + this.z * vec3d.z;
+    }
+
+    public Vec3D c(Vec3D vec3d) {
+        return new Vec3D(this.y * vec3d.z - this.z * vec3d.y, this.z * vec3d.x - this.x * vec3d.z, this.x * vec3d.y - this.y * vec3d.x);
     }
 
     public Vec3D d(Vec3D vec3d) {
@@ -93,49 +85,8 @@ public class Vec3D {
         return (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    @Nullable
-    public Vec3D a(Vec3D vec3d, double d0) {
-        double d1 = vec3d.x - this.x;
-        double d2 = vec3d.y - this.y;
-        double d3 = vec3d.z - this.z;
-
-        if (d1 * d1 < 1.0000000116860974E-7D) {
-            return null;
-        } else {
-            double d4 = (d0 - this.x) / d1;
-
-            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.x + d1 * d4, this.y + d2 * d4, this.z + d3 * d4) : null;
-        }
-    }
-
-    @Nullable
-    public Vec3D b(Vec3D vec3d, double d0) {
-        double d1 = vec3d.x - this.x;
-        double d2 = vec3d.y - this.y;
-        double d3 = vec3d.z - this.z;
-
-        if (d2 * d2 < 1.0000000116860974E-7D) {
-            return null;
-        } else {
-            double d4 = (d0 - this.y) / d2;
-
-            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.x + d1 * d4, this.y + d2 * d4, this.z + d3 * d4) : null;
-        }
-    }
-
-    @Nullable
-    public Vec3D c(Vec3D vec3d, double d0) {
-        double d1 = vec3d.x - this.x;
-        double d2 = vec3d.y - this.y;
-        double d3 = vec3d.z - this.z;
-
-        if (d3 * d3 < 1.0000000116860974E-7D) {
-            return null;
-        } else {
-            double d4 = (d0 - this.z) / d3;
-
-            return d4 >= 0.0D && d4 <= 1.0D ? new Vec3D(this.x + d1 * d4, this.y + d2 * d4, this.z + d3 * d4) : null;
-        }
+    public double c() {
+        return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
     public boolean equals(Object object) {
@@ -181,6 +132,14 @@ public class Vec3D {
         double d0 = this.x * (double) f1 + this.z * (double) f2;
         double d1 = this.y;
         double d2 = this.z * (double) f1 - this.x * (double) f2;
+
+        return new Vec3D(d0, d1, d2);
+    }
+
+    public Vec3D a(EnumSet<EnumDirection.EnumAxis> enumset) {
+        double d0 = enumset.contains(EnumDirection.EnumAxis.X) ? (double) MathHelper.floor(this.x) : this.x;
+        double d1 = enumset.contains(EnumDirection.EnumAxis.Y) ? (double) MathHelper.floor(this.y) : this.y;
+        double d2 = enumset.contains(EnumDirection.EnumAxis.Z) ? (double) MathHelper.floor(this.z) : this.z;
 
         return new Vec3D(d0, d1, d2);
     }

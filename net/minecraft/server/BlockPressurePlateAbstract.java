@@ -1,74 +1,44 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public abstract class BlockPressurePlateAbstract extends Block {
 
-    protected static final AxisAlignedBB a = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.03125D, 0.9375D);
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.0625D, 0.9375D);
+    protected static final VoxelShape a = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 0.5D, 15.0D);
+    protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 1.0D, 15.0D);
     protected static final AxisAlignedBB c = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.25D, 0.875D);
 
-    protected BlockPressurePlateAbstract(Material material) {
-        this(material, material.r());
+    protected BlockPressurePlateAbstract(Block.Info block_info) {
+        super(block_info);
     }
 
-    protected BlockPressurePlateAbstract(Material material, MaterialMapColor materialmapcolor) {
-        super(material, materialmapcolor);
-        this.a(CreativeModeTab.d);
-        this.a(true);
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return this.getPower(iblockdata) > 0 ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        boolean flag = this.getPower(iblockdata) > 0;
-
-        return flag ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
-    }
-
-    public int a(World world) {
+    public int a(IWorldReader iworldreader) {
         return 20;
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockPressurePlateAbstract.k;
-    }
-
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
-
-    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean a() {
         return true;
     }
 
-    public boolean d() {
-        return true;
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return this.i(world, blockposition.down());
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
+
+        return iblockdata1.q() || iblockdata1.getBlock() instanceof BlockFence;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!this.i(world, blockposition.down())) {
-            this.b(world, blockposition, iblockdata, 0);
-            world.setAir(blockposition);
-        }
-
-    }
-
-    private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition).q() || world.getType(blockposition).getBlock() instanceof BlockFence;
-    }
-
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
-
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
             int i = this.getPower(iblockdata);
 
@@ -79,7 +49,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         }
     }
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide) {
             int i = this.getPower(iblockdata);
 
@@ -91,51 +61,53 @@ public abstract class BlockPressurePlateAbstract extends Block {
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
-        int j = this.e(world, blockposition);
+        int j = this.b(world, blockposition);
         boolean flag = i > 0;
         boolean flag1 = j > 0;
 
         if (i != j) {
             iblockdata = this.a(iblockdata, j);
             world.setTypeAndData(blockposition, iblockdata, 2);
-            this.d(world, blockposition);
-            world.b(blockposition, blockposition);
+            this.a(world, blockposition);
+            world.a(blockposition, blockposition);
         }
 
         if (!flag1 && flag) {
-            this.c(world, blockposition);
+            this.b((GeneratorAccess) world, blockposition);
         } else if (flag1 && !flag) {
-            this.b(world, blockposition);
+            this.a((GeneratorAccess) world, blockposition);
         }
 
         if (flag1) {
-            world.a(new BlockPosition(blockposition), (Block) this, this.a(world));
+            world.I().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
         }
 
     }
 
-    protected abstract void b(World world, BlockPosition blockposition);
+    protected abstract void a(GeneratorAccess generatoraccess, BlockPosition blockposition);
 
-    protected abstract void c(World world, BlockPosition blockposition);
+    protected abstract void b(GeneratorAccess generatoraccess, BlockPosition blockposition);
 
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.getPower(iblockdata) > 0) {
-            this.d(world, blockposition);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+            if (this.getPower(iblockdata) > 0) {
+                this.a(world, blockposition);
+            }
+
+            super.remove(iblockdata, world, blockposition, iblockdata1, flag);
         }
-
-        super.remove(world, blockposition, iblockdata);
     }
 
-    protected void d(World world, BlockPosition blockposition) {
-        world.applyPhysics(blockposition, this, false);
-        world.applyPhysics(blockposition.down(), this, false);
+    protected void a(World world, BlockPosition blockposition) {
+        world.applyPhysics(blockposition, this);
+        world.applyPhysics(blockposition.down(), this);
     }
 
-    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return this.getPower(iblockdata);
     }
 
-    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return enumdirection == EnumDirection.UP ? this.getPower(iblockdata) : 0;
     }
 
@@ -143,11 +115,11 @@ public abstract class BlockPressurePlateAbstract extends Block {
         return true;
     }
 
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
 
-    protected abstract int e(World world, BlockPosition blockposition);
+    protected abstract int b(World world, BlockPosition blockposition);
 
     protected abstract int getPower(IBlockData iblockdata);
 

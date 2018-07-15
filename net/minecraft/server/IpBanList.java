@@ -20,6 +20,10 @@ public class IpBanList extends JsonList<String, IpBanEntry> {
         return this.d(s);
     }
 
+    public boolean a(String s) {
+        return this.d(s);
+    }
+
     public IpBanEntry get(SocketAddress socketaddress) {
         String s = this.c(socketaddress);
 

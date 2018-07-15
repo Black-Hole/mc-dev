@@ -20,7 +20,7 @@ public class PacketPlayInKeepAlive implements Packet<PacketListenerPlayIn> {
         packetdataserializer.writeLong(this.a);
     }
 
-    public long a() {
+    public long b() {
         return this.a;
     }
 }

@@ -1,26 +1,35 @@
 package net.minecraft.server;
 
-public class CommandList extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.List;
+import java.util.function.Function;
 
-    public CommandList() {}
+public class CommandList {
 
-    public String getCommand() {
-        return "list";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("list").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource());
+        })).then(CommandDispatcher.a("uuids").executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource());
+        })));
     }
 
-    public int a() {
-        return 0;
+    private static int a(CommandListenerWrapper commandlistenerwrapper) {
+        return a(commandlistenerwrapper, EntityHuman::getScoreboardDisplayName);
     }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.players.usage";
+    private static int b(CommandListenerWrapper commandlistenerwrapper) {
+        return a(commandlistenerwrapper, EntityHuman::dB);
     }
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        int i = minecraftserver.H();
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {
+        PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
+        List list = playerlist.v();
+        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
-        icommandlistener.sendMessage(new ChatMessage("commands.players.list", new Object[] { Integer.valueOf(i), Integer.valueOf(minecraftserver.I())}));
-        icommandlistener.sendMessage(new ChatComponentText(minecraftserver.getPlayerList().b(astring.length > 0 && "uuids".equalsIgnoreCase(astring[0]))));
-        icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { Integer.valueOf(list.size()), Integer.valueOf(playerlist.getMaxPlayers()), ichatbasecomponent}), false);
+        return list.size();
     }
 }

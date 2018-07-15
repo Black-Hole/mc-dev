@@ -11,14 +11,14 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     private MinecraftKey c;
     private long d;
 
-    public EntityMinecartContainer(World world) {
-        super(world);
+    protected EntityMinecartContainer(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.items = NonNullList.a(36, ItemStack.a);
         this.b = true;
     }
 
-    public EntityMinecartContainer(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
+    protected EntityMinecartContainer(EntityTypes<?> entitytypes, double d0, double d1, double d2, World world) {
+        super(entitytypes, world, d0, d1, d2);
         this.items = NonNullList.a(36, ItemStack.a);
         this.b = true;
     }
@@ -31,7 +31,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -97,9 +97,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Nullable
-    public Entity b(int i) {
+    public Entity d(int i) {
         this.b = false;
-        return super.b(i);
+        return super.d(i);
     }
 
     public void die() {
@@ -112,11 +112,6 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     public void b(boolean flag) {
         this.b = flag;
-    }
-
-    public static void b(DataConverterManager dataconvertermanager, Class<?> oclass) {
-        EntityMinecartAbstract.a(dataconvertermanager, oclass);
-        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItemList(oclass, new String[] { "Items"})));
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -187,8 +182,8 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     public void f(@Nullable EntityHuman entityhuman) {
-        if (this.c != null) {
-            LootTable loottable = this.world.getLootTableRegistry().a(this.c);
+        if (this.c != null && this.world.getMinecraftServer() != null) {
+            LootTable loottable = this.world.getMinecraftServer().aP().a(this.c);
 
             this.c = null;
             Random random;
@@ -199,10 +194,10 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
                 random = new Random(this.d);
             }
 
-            LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
+            LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a(new BlockPosition(this));
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.du());
+                loottableinfo_a.a(entityhuman.dI());
             }
 
             loottable.a(this, random, loottableinfo_a.a());
@@ -220,7 +215,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         this.d = i;
     }
 
-    public MinecraftKey b() {
+    public MinecraftKey Q_() {
         return this.c;
     }
 }

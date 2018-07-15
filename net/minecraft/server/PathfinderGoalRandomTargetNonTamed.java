@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 public class PathfinderGoalRandomTargetNonTamed<T extends EntityLiving> extends PathfinderGoalNearestAttackableTarget<T> {
 
@@ -13,5 +13,9 @@ public class PathfinderGoalRandomTargetNonTamed<T extends EntityLiving> extends 
 
     public boolean a() {
         return !this.i.isTamed() && super.a();
+    }
+
+    public boolean b() {
+        return this.c != null ? this.c.test(this.d) : super.b();
     }
 }

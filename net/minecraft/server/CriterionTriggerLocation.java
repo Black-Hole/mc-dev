@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,7 +52,7 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
     }
 
     public CriterionTriggerLocation.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject);
+        CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a((JsonElement) jsonobject);
 
         return new CriterionTriggerLocation.b(this.a, criterionconditionlocation);
     }
@@ -60,7 +61,7 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
         CriterionTriggerLocation.a criteriontriggerlocation_a = (CriterionTriggerLocation.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggerlocation_a != null) {
-            criteriontriggerlocation_a.a(entityplayer.x(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
+            criteriontriggerlocation_a.a(entityplayer.getWorldServer(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         }
 
     }
@@ -128,8 +129,20 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
             this.a = criterionconditionlocation;
         }
 
+        public static CriterionTriggerLocation.b a(CriterionConditionLocation criterionconditionlocation) {
+            return new CriterionTriggerLocation.b(CriterionTriggers.p.a, criterionconditionlocation);
+        }
+
+        public static CriterionTriggerLocation.b c() {
+            return new CriterionTriggerLocation.b(CriterionTriggers.q.a, CriterionConditionLocation.a);
+        }
+
         public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
             return this.a.a(worldserver, d0, d1, d2);
+        }
+
+        public JsonElement b() {
+            return this.a.a();
         }
     }
 }

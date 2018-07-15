@@ -1,22 +1,19 @@
 package net.minecraft.server;
 
-public class CommandStop extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Predicate;
 
-    public CommandStop() {}
+public class CommandStop {
 
-    public String getCommand() {
-        return "stop";
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.stop.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (minecraftserver.worldServer != null) {
-            a(icommandlistener, (ICommand) this, "commands.stop.start", new Object[0]);
-        }
-
-        minecraftserver.safeShutdown();
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("stop").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(4);
+        })).executes((commandcontext) -> {
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.stop.stopping", new Object[0]), true);
+            ((CommandListenerWrapper) commandcontext.getSource()).getServer().safeShutdown();
+            return 1;
+        }));
     }
 }

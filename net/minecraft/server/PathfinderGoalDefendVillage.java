@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
 
-    EntityIronGolem a;
-    EntityLiving b;
+    private final EntityIronGolem a;
+    private EntityLiving b;
 
     public PathfinderGoalDefendVillage(EntityIronGolem entityirongolem) {
         super(entityirongolem, false, true);
@@ -12,7 +12,7 @@ public class PathfinderGoalDefendVillage extends PathfinderGoalTarget {
     }
 
     public boolean a() {
-        Village village = this.a.p();
+        Village village = this.a.l();
 
         if (village == null) {
             return false;

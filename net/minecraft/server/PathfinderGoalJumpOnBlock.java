@@ -2,62 +2,46 @@ package net.minecraft.server;
 
 public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
 
-    private final EntityOcelot c;
+    private final EntityOcelot f;
 
     public PathfinderGoalJumpOnBlock(EntityOcelot entityocelot, double d0) {
         super(entityocelot, d0, 8);
-        this.c = entityocelot;
+        this.f = entityocelot;
     }
 
     public boolean a() {
-        return this.c.isTamed() && !this.c.isSitting() && super.a();
+        return this.f.isTamed() && !this.f.isSitting() && super.a();
     }
 
     public void c() {
         super.c();
-        this.c.getGoalSit().setSitting(false);
+        this.f.getGoalSit().setSitting(false);
     }
 
     public void d() {
         super.d();
-        this.c.setSitting(false);
+        this.f.setSitting(false);
     }
 
     public void e() {
         super.e();
-        this.c.getGoalSit().setSitting(false);
-        if (!this.f()) {
-            this.c.setSitting(false);
-        } else if (!this.c.isSitting()) {
-            this.c.setSitting(true);
+        this.f.getGoalSit().setSitting(false);
+        if (!this.k()) {
+            this.f.setSitting(false);
+        } else if (!this.f.isSitting()) {
+            this.f.setSitting(true);
         }
 
     }
 
-    protected boolean a(World world, BlockPosition blockposition) {
-        if (!world.isEmpty(blockposition.up())) {
+    protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
+        if (!iworldreader.isEmpty(blockposition.up())) {
             return false;
         } else {
-            IBlockData iblockdata = world.getType(blockposition);
+            IBlockData iblockdata = iworldreader.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (block == Blocks.CHEST) {
-                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                if (tileentity instanceof TileEntityChest && ((TileEntityChest) tileentity).l < 1) {
-                    return true;
-                }
-            } else {
-                if (block == Blocks.LIT_FURNACE) {
-                    return true;
-                }
-
-                if (block == Blocks.BED && iblockdata.get(BlockBed.PART) != BlockBed.EnumBedPart.HEAD) {
-                    return true;
-                }
-            }
-
-            return false;
+            return block == Blocks.CHEST ? TileEntityChest.a((IBlockAccess) iworldreader, blockposition) < 1 : (block == Blocks.FURNACE && ((Boolean) iblockdata.get(BlockFurnace.LIT)).booleanValue() ? true : block instanceof BlockBed && iblockdata.get(BlockBed.PART) != BlockPropertyBedPart.HEAD);
         }
     }
 }

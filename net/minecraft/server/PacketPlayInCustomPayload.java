@@ -5,40 +5,33 @@ import java.io.IOException;
 
 public class PacketPlayInCustomPayload implements Packet<PacketListenerPlayIn> {
 
-    private String a;
-    private PacketDataSerializer b;
+    public static final MinecraftKey a = new MinecraftKey("minecraft:brand");
+    public MinecraftKey tag;
+    public PacketDataSerializer data;
 
     public PacketPlayInCustomPayload() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.e(20);
+        this.tag = packetdataserializer.l();
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 32767) {
-            this.b = new PacketDataSerializer(packetdataserializer.readBytes(i));
+            this.data = new PacketDataSerializer(packetdataserializer.readBytes(i));
         } else {
             throw new IOException("Payload may not be larger than 32767 bytes");
         }
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.writeBytes((ByteBuf) this.b);
+        packetdataserializer.a(this.tag);
+        packetdataserializer.writeBytes((ByteBuf) this.data);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
-        if (this.b != null) {
-            this.b.release();
+        if (this.data != null) {
+            this.data.release();
         }
 
-    }
-
-    public String a() {
-        return this.a;
-    }
-
-    public PacketDataSerializer b() {
-        return this.b;
     }
 }

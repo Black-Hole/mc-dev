@@ -25,7 +25,7 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
         packetdataserializer.a(this.b);
     }
 
-    public int a() {
+    public int b() {
         return this.slot;
     }
 

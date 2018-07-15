@@ -1,53 +1,65 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class WorldProviderTheEnd extends WorldProvider {
 
+    public static final BlockPosition g = new BlockPosition(100, 50, 0);
     private EnderDragonBattle h;
 
     public WorldProviderTheEnd() {}
 
-    public void b() {
-        this.c = new WorldChunkManagerHell(Biomes.k);
+    public void m() {
         NBTTagCompound nbttagcompound = this.b.getWorldData().a(DimensionManager.THE_END);
 
         this.h = this.b instanceof WorldServer ? new EnderDragonBattle((WorldServer) this.b, nbttagcompound.getCompound("DragonFight")) : null;
+        this.e = false;
     }
 
-    public ChunkGenerator getChunkGenerator() {
-        return new ChunkProviderTheEnd(this.b, this.b.getWorldData().shouldGenerateMapFeatures(), this.b.getSeed(), this.h());
+    public ChunkGenerator<?> getChunkGenerator() {
+        GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) ChunkGeneratorType.d.a();
+
+        generatorsettingsend.a(Blocks.END_STONE.getBlockData());
+        generatorsettingsend.b(Blocks.AIR.getBlockData());
+        generatorsettingsend.a(this.d());
+        return ChunkGeneratorType.d.create(this.b, BiomeLayout.e.a(((BiomeLayoutTheEndConfiguration) BiomeLayout.e.a()).a(this.b.getSeed())), generatorsettingsend);
     }
 
     public float a(long i, float f) {
         return 0.0F;
     }
 
-    public boolean e() {
+    public boolean p() {
         return false;
     }
 
-    public boolean d() {
+    public boolean o() {
         return false;
     }
 
-    public boolean canSpawn(int i, int j) {
-        return this.b.c(new BlockPosition(i, 0, j)).getMaterial().isSolid();
+    @Nullable
+    public BlockPosition a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+        Random random = new Random(this.b.getSeed());
+        BlockPosition blockposition = new BlockPosition(chunkcoordintpair.d() + random.nextInt(15), 0, chunkcoordintpair.g() + random.nextInt(15));
+
+        return this.b.i(blockposition).getMaterial().isSolid() ? blockposition : null;
     }
 
-    public BlockPosition h() {
-        return new BlockPosition(100, 50, 0);
+    public BlockPosition d() {
+        return WorldProviderTheEnd.g;
     }
 
-    public int getSeaLevel() {
-        return 50;
+    @Nullable
+    public BlockPosition a(int i, int j, boolean flag) {
+        return this.a(new ChunkCoordIntPair(i >> 4, j >> 4), flag);
     }
 
     public DimensionManager getDimensionManager() {
         return DimensionManager.THE_END;
     }
 
-    public void r() {
+    public void k() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         if (this.h != null) {
@@ -57,7 +69,7 @@ public class WorldProviderTheEnd extends WorldProvider {
         this.b.getWorldData().a(DimensionManager.THE_END, nbttagcompound);
     }
 
-    public void s() {
+    public void l() {
         if (this.h != null) {
             this.h.b();
         }
@@ -65,7 +77,7 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     @Nullable
-    public EnderDragonBattle t() {
+    public EnderDragonBattle r() {
         return this.h;
     }
 }

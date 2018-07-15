@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
@@ -74,7 +74,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
                 throw new JsonSyntaxException("Can\'t define block state without a specific block type");
             }
 
-            BlockStateList blockstatelist = block.s();
+            BlockStateList blockstatelist = block.getStates();
 
             IBlockState iblockstate;
             Optional optional;
@@ -111,7 +111,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
         CriterionTriggerPlacedBlock.a criteriontriggerplacedblock_a = (CriterionTriggerPlacedBlock.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggerplacedblock_a != null) {
-            criteriontriggerplacedblock_a.a(iblockdata, blockposition, entityplayer.x(), itemstack);
+            criteriontriggerplacedblock_a.a(iblockdata, blockposition, entityplayer.getWorldServer(), itemstack);
         }
 
     }
@@ -185,6 +185,10 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
             this.d = criterionconditionitem;
         }
 
+        public static CriterionTriggerPlacedBlock.b a(Block block) {
+            return new CriterionTriggerPlacedBlock.b(block, (Map) null, CriterionConditionLocation.a, CriterionConditionItem.a);
+        }
+
         public boolean a(IBlockData iblockdata, BlockPosition blockposition, WorldServer worldserver, ItemStack itemstack) {
             if (this.a != null && iblockdata.getBlock() != this.a) {
                 return false;
@@ -203,6 +207,31 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
                 return !this.c.a(worldserver, (float) blockposition.getX(), (float) blockposition.getY(), (float) blockposition.getZ()) ? false : this.d.a(itemstack);
             }
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.a != null) {
+                jsonobject.addProperty("block", ((MinecraftKey) Block.REGISTRY.b(this.a)).toString());
+            }
+
+            if (this.b != null) {
+                JsonObject jsonobject1 = new JsonObject();
+                Iterator iterator = this.b.entrySet().iterator();
+
+                while (iterator.hasNext()) {
+                    Entry entry = (Entry) iterator.next();
+
+                    jsonobject1.addProperty(((IBlockState) entry.getKey()).a(), SystemUtils.a((IBlockState) entry.getKey(), entry.getValue()));
+                }
+
+                jsonobject.add("state", jsonobject1);
+            }
+
+            jsonobject.add("location", this.c.a());
+            jsonobject.add("item", this.d.a());
+            return jsonobject;
         }
     }
 }

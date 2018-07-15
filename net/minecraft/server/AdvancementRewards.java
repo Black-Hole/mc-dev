@@ -1,15 +1,18 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import javax.annotation.Nullable;
 
 public class AdvancementRewards {
 
@@ -26,29 +29,29 @@ public class AdvancementRewards {
         this.e = customfunction_a;
     }
 
-    public void a(final EntityPlayer entityplayer) {
+    public void a(EntityPlayer entityplayer) {
         entityplayer.giveExp(this.b);
-        LootTableInfo loottableinfo = (new LootTableInfo.a(entityplayer.x())).a((Entity) entityplayer).a();
+        LootTableInfo loottableinfo = (new LootTableInfo.a(entityplayer.getWorldServer())).a((Entity) entityplayer).a(new BlockPosition(entityplayer)).a();
         boolean flag = false;
         MinecraftKey[] aminecraftkey = this.c;
         int i = aminecraftkey.length;
 
         for (int j = 0; j < i; ++j) {
             MinecraftKey minecraftkey = aminecraftkey[j];
-            Iterator iterator = entityplayer.world.getLootTableRegistry().a(minecraftkey).a(entityplayer.getRandom(), loottableinfo).iterator();
+            Iterator iterator = entityplayer.server.aP().a(minecraftkey).a(entityplayer.getRandom(), loottableinfo).iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
 
-                if (entityplayer.c(itemstack)) {
-                    entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.dx, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                if (entityplayer.d(itemstack)) {
+                    entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     flag = true;
                 } else {
                     EntityItem entityitem = entityplayer.drop(itemstack, false);
 
                     if (entityitem != null) {
-                        entityitem.r();
-                        entityitem.d(entityplayer.getName());
+                        entityitem.o();
+                        entityitem.b(entityplayer.getUniqueID());
                     }
                 }
             }
@@ -62,55 +65,11 @@ public class AdvancementRewards {
             entityplayer.a(this.d);
         }
 
-        final MinecraftServer minecraftserver = entityplayer.server;
-        CustomFunction customfunction = this.e.a(minecraftserver.aL());
+        MinecraftServer minecraftserver = entityplayer.server;
+        CustomFunction customfunction = this.e.a(minecraftserver.aD());
 
         if (customfunction != null) {
-            ICommandListener icommandlistener = new ICommandListener() {
-                public String getName() {
-                    return entityplayer.getName();
-                }
-
-                public IChatBaseComponent getScoreboardDisplayName() {
-                    return entityplayer.getScoreboardDisplayName();
-                }
-
-                public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
-
-                public boolean a(int i, String s) {
-                    return i <= 2;
-                }
-
-                public BlockPosition getChunkCoordinates() {
-                    return entityplayer.getChunkCoordinates();
-                }
-
-                public Vec3D d() {
-                    return entityplayer.d();
-                }
-
-                public World getWorld() {
-                    return entityplayer.world;
-                }
-
-                public Entity f() {
-                    return entityplayer;
-                }
-
-                public boolean getSendCommandFeedback() {
-                    return minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput");
-                }
-
-                public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-                    entityplayer.a(commandobjectiveexecutor_enumcommandresult, i);
-                }
-
-                public MinecraftServer C_() {
-                    return entityplayer.C_();
-                }
-            };
-
-            minecraftserver.aL().a(customfunction, icommandlistener);
+            minecraftserver.aD().a(customfunction, entityplayer.getCommandListener().a().a(2));
         }
 
     }
@@ -119,9 +78,92 @@ public class AdvancementRewards {
         return "AdvancementRewards{experience=" + this.b + ", loot=" + Arrays.toString(this.c) + ", recipes=" + Arrays.toString(this.d) + ", function=" + this.e + '}';
     }
 
-    public static class a implements JsonDeserializer<AdvancementRewards> {
+    public JsonElement b() {
+        if (this == AdvancementRewards.a) {
+            return JsonNull.INSTANCE;
+        } else {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.b != 0) {
+                jsonobject.addProperty("experience", Integer.valueOf(this.b));
+            }
+
+            JsonArray jsonarray;
+            MinecraftKey[] aminecraftkey;
+            int i;
+            int j;
+            MinecraftKey minecraftkey;
+
+            if (this.c.length > 0) {
+                jsonarray = new JsonArray();
+                aminecraftkey = this.c;
+                i = aminecraftkey.length;
+
+                for (j = 0; j < i; ++j) {
+                    minecraftkey = aminecraftkey[j];
+                    jsonarray.add(minecraftkey.toString());
+                }
+
+                jsonobject.add("loot", jsonarray);
+            }
+
+            if (this.d.length > 0) {
+                jsonarray = new JsonArray();
+                aminecraftkey = this.d;
+                i = aminecraftkey.length;
+
+                for (j = 0; j < i; ++j) {
+                    minecraftkey = aminecraftkey[j];
+                    jsonarray.add(minecraftkey.toString());
+                }
+
+                jsonobject.add("recipes", jsonarray);
+            }
+
+            if (this.e.a() != null) {
+                jsonobject.addProperty("function", this.e.a().toString());
+            }
+
+            return jsonobject;
+        }
+    }
+
+    public static class a {
+
+        private int a;
+        private final List<MinecraftKey> b = Lists.newArrayList();
+        private final List<MinecraftKey> c = Lists.newArrayList();
+        @Nullable
+        private MinecraftKey d;
 
         public a() {}
+
+        public static AdvancementRewards.a a(int i) {
+            return (new AdvancementRewards.a()).b(i);
+        }
+
+        public AdvancementRewards.a b(int i) {
+            this.a += i;
+            return this;
+        }
+
+        public static AdvancementRewards.a c(MinecraftKey minecraftkey) {
+            return (new AdvancementRewards.a()).d(minecraftkey);
+        }
+
+        public AdvancementRewards.a d(MinecraftKey minecraftkey) {
+            this.c.add(minecraftkey);
+            return this;
+        }
+
+        public AdvancementRewards a() {
+            return new AdvancementRewards(this.a, (MinecraftKey[]) this.b.toArray(new MinecraftKey[0]), (MinecraftKey[]) this.c.toArray(new MinecraftKey[0]), this.d == null ? CustomFunction.a.a : new CustomFunction.a(this.d));
+        }
+    }
+
+    public static class b implements JsonDeserializer<AdvancementRewards> {
+
+        public b() {}
 
         public AdvancementRewards a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "rewards");
@@ -138,11 +180,6 @@ public class AdvancementRewards {
 
             for (int k = 0; k < aminecraftkey1.length; ++k) {
                 aminecraftkey1[k] = new MinecraftKey(ChatDeserializer.a(jsonarray1.get(k), "recipes[" + k + "]"));
-                IRecipe irecipe = CraftingManager.a(aminecraftkey1[k]);
-
-                if (irecipe == null) {
-                    throw new JsonSyntaxException("Unknown recipe \'" + aminecraftkey1[k] + "\'");
-                }
             }
 
             CustomFunction.a customfunction_a;

@@ -1,27 +1,19 @@
 package net.minecraft.server;
 
-public class CommandReload extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Predicate;
 
-    public CommandReload() {}
+public class CommandReload {
 
-    public String getCommand() {
-        return "reload";
-    }
-
-    public int a() {
-        return 3;
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.reload.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length > 0) {
-            throw new ExceptionUsage("commands.reload.usage", new Object[0]);
-        } else {
-            minecraftserver.reload();
-            a(icommandlistener, (ICommand) this, "commands.reload.success", new Object[0]);
-        }
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("reload").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(3);
+        })).executes((commandcontext) -> {
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.reload.success", new Object[0]), true);
+            ((CommandListenerWrapper) commandcontext.getSource()).getServer().reload();
+            return 0;
+        }));
     }
 }

@@ -47,7 +47,7 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         return this.hasLook ? this.pitch : f;
     }
 
-    public boolean a() {
+    public boolean b() {
         return this.f;
     }
 

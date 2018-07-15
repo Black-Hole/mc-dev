@@ -1,46 +1,47 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
-import javax.annotation.Nullable;
 
-public class CommandPardonIP extends CommandAbstract {
+public class CommandPardonIP {
 
-    public CommandPardonIP() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.invalid", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.pardonip.failed", new Object[0]));
 
-    public String getCommand() {
-        return "pardon-ip";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("pardon-ip").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.getServer().getPlayerList().getIPBans().isEnabled() && commandlistenerwrapper.hasPermission(3);
+        })).then(CommandDispatcher.a("target", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
+            return ICompletionProvider.a(((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getIPBans().getEntries(), suggestionsbuilder);
+        }).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "target"));
+        })));
     }
 
-    public int a() {
-        return 3;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
+        Matcher matcher = CommandBanIp.a.matcher(s);
 
-    public boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener) {
-        return minecraftserver.getPlayerList().getIPBans().isEnabled() && super.canUse(minecraftserver, icommandlistener);
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.unbanip.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length == 1 && astring[0].length() > 1) {
-            Matcher matcher = CommandBanIp.a.matcher(astring[0]);
-
-            if (matcher.matches()) {
-                minecraftserver.getPlayerList().getIPBans().remove(astring[0]);
-                a(icommandlistener, (ICommand) this, "commands.unbanip.success", new Object[] { astring[0]});
-            } else {
-                throw new ExceptionInvalidSyntax("commands.unbanip.invalid", new Object[0]);
-            }
+        if (!matcher.matches()) {
+            throw CommandPardonIP.a.create();
         } else {
-            throw new ExceptionUsage("commands.unbanip.usage", new Object[0]);
-        }
-    }
+            IpBanList ipbanlist = commandlistenerwrapper.getServer().getPlayerList().getIPBans();
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayerList().getIPBans().getEntries()) : Collections.emptyList();
+            if (!ipbanlist.a(s)) {
+                throw CommandPardonIP.b.create();
+            } else {
+                ipbanlist.remove(s);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.pardonip.success", new Object[] { s}), true);
+                return 1;
+            }
+        }
     }
 }

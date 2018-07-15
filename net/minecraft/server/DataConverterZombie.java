@@ -1,44 +1,43 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
 import java.util.Random;
+import java.util.function.Function;
 
-public class DataConverterZombie implements IDataConverter {
+public class DataConverterZombie extends DataConverterNamedEntity {
 
     private static final Random a = new Random();
 
-    public DataConverterZombie() {}
-
-    public int a() {
-        return 502;
+    public DataConverterZombie(Schema schema, boolean flag) {
+        super(schema, flag, "EntityZombieVillagerTypeFix", DataConverterTypes.ENTITY, "Zombie");
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("Zombie".equals(nbttagcompound.getString("id")) && nbttagcompound.getBoolean("IsVillager")) {
-            if (!nbttagcompound.hasKeyOfType("ZombieType", 99)) {
-                int i = -1;
-
-                if (nbttagcompound.hasKeyOfType("VillagerProfession", 99)) {
-                    try {
-                        i = this.a(nbttagcompound.getInt("VillagerProfession"));
-                    } catch (RuntimeException runtimeexception) {
-                        ;
-                    }
-                }
+    public Dynamic<?> a(Dynamic<?> dynamic) {
+        if (dynamic.getBoolean("IsVillager")) {
+            if (!dynamic.get("ZombieType").isPresent()) {
+                int i = this.a(dynamic.getInt("VillagerProfession", -1));
 
                 if (i == -1) {
                     i = this.a(DataConverterZombie.a.nextInt(6));
                 }
 
-                nbttagcompound.setInt("ZombieType", i);
+                dynamic = dynamic.set("ZombieType", dynamic.createInt(i));
             }
 
-            nbttagcompound.remove("IsVillager");
+            dynamic = dynamic.remove("IsVillager");
         }
 
-        return nbttagcompound;
+        return dynamic;
     }
 
     private int a(int i) {
         return i >= 0 && i < 6 ? i : -1;
+    }
+
+    protected Typed<?> a(Typed<?> typed) {
+        return typed.update(DSL.remainderFinder(), this::a);
     }
 }

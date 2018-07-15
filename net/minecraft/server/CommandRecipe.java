@@ -1,91 +1,77 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.ArrayList;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
-public class CommandRecipe extends CommandAbstract {
+public class CommandRecipe {
 
-    public CommandRecipe() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.give.failed", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.recipe.take.failed", new Object[0]));
 
-    public String getCommand() {
-        return "recipe";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("recipe").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("give").then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.b).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), Collections.singleton(ArgumentMinecraftKeyRegistered.b(commandcontext, "recipe")));
+        }))).then(CommandDispatcher.a("*").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager().b());
+        }))))).then(CommandDispatcher.a("take").then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("recipe", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.b).executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), Collections.singleton(ArgumentMinecraftKeyRegistered.b(commandcontext, "recipe")));
+        }))).then(CommandDispatcher.a("*").executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager().b());
+        })))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe> collection1) throws CommandSyntaxException {
+        int i = 0;
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.recipe.usage";
-    }
+        EntityPlayer entityplayer;
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.recipe.usage", new Object[0]);
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.a(collection1)) {
+            entityplayer = (EntityPlayer) iterator.next();
+        }
+
+        if (i == 0) {
+            throw CommandRecipe.a.create();
         } else {
-            boolean flag = "give".equalsIgnoreCase(astring[0]);
-            boolean flag1 = "take".equalsIgnoreCase(astring[0]);
-
-            if (!flag && !flag1) {
-                throw new ExceptionUsage("commands.recipe.usage", new Object[0]);
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.single", new Object[] { Integer.valueOf(collection1.size()), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                List list = a(minecraftserver, icommandlistener, astring[1]);
-                Iterator iterator = list.iterator();
-
-                while (iterator.hasNext()) {
-                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
-
-                    if ("*".equals(astring[2])) {
-                        if (flag) {
-                            entityplayer.a(this.d());
-                            a(icommandlistener, (ICommand) this, "commands.recipe.give.success.all", new Object[] { entityplayer.getName()});
-                        } else {
-                            entityplayer.b(this.d());
-                            a(icommandlistener, (ICommand) this, "commands.recipe.take.success.all", new Object[] { entityplayer.getName()});
-                        }
-                    } else {
-                        IRecipe irecipe = CraftingManager.a(new MinecraftKey(astring[2]));
-
-                        if (irecipe == null) {
-                            throw new CommandException("commands.recipe.unknownrecipe", new Object[] { astring[2]});
-                        }
-
-                        if (irecipe.c()) {
-                            throw new CommandException("commands.recipe.unsupported", new Object[] { astring[2]});
-                        }
-
-                        ArrayList arraylist = Lists.newArrayList(new IRecipe[] { irecipe});
-
-                        if (flag == entityplayer.F().b(irecipe)) {
-                            String s = flag ? "commands.recipe.alreadyHave" : "commands.recipe.dontHave";
-
-                            throw new CommandException(s, new Object[] { entityplayer.getName(), irecipe.b().getName()});
-                        }
-
-                        if (flag) {
-                            entityplayer.a((List) arraylist);
-                            a(icommandlistener, (ICommand) this, "commands.recipe.give.success.one", new Object[] { entityplayer.getName(), irecipe.b().getName()});
-                        } else {
-                            entityplayer.b((List) arraylist);
-                            a(icommandlistener, (ICommand) this, "commands.recipe.take.success.one", new Object[] { irecipe.b().getName(), entityplayer.getName()});
-                        }
-                    }
-                }
-
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.give.success.multiple", new Object[] { Integer.valueOf(collection1.size()), Integer.valueOf(collection.size())}), true);
             }
+
+            return i;
         }
     }
 
-    private List<IRecipe> d() {
-        return Lists.newArrayList(CraftingManager.recipes);
-    }
+    private static int b(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe> collection1) throws CommandSyntaxException {
+        int i = 0;
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "give", "take"}) : (astring.length == 2 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 3 ? a(astring, (Collection) CraftingManager.recipes.keySet()) : Collections.emptyList()));
+        EntityPlayer entityplayer;
+
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.b(collection1)) {
+            entityplayer = (EntityPlayer) iterator.next();
+        }
+
+        if (i == 0) {
+            throw CommandRecipe.b.create();
+        } else {
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.single", new Object[] { Integer.valueOf(collection1.size()), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.recipe.take.success.multiple", new Object[] { Integer.valueOf(collection1.size()), Integer.valueOf(collection.size())}), true);
+            }
+
+            return i;
+        }
     }
 }

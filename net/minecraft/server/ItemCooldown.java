@@ -20,7 +20,7 @@ public class ItemCooldown {
         ItemCooldown.Info itemcooldown_info = (ItemCooldown.Info) this.cooldowns.get(item);
 
         if (itemcooldown_info != null) {
-            float f1 = (float) (itemcooldown_info.endTick - itemcooldown_info.a);
+            float f1 = (float) (itemcooldown_info.endTick - itemcooldown_info.b);
             float f2 = (float) itemcooldown_info.endTick - ((float) this.currentTick + f);
 
             return MathHelper.a(f2 / f1, 0.0F, 1.0F);
@@ -57,11 +57,11 @@ public class ItemCooldown {
 
     public class Info {
 
-        final int a;
+        private final int b;
         public final int endTick;
 
         private Info(int i, int j) {
-            this.a = i;
+            this.b = i;
             this.endTick = j;
         }
 

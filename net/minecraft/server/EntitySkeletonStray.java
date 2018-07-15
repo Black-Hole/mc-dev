@@ -5,36 +5,32 @@ import javax.annotation.Nullable;
 public class EntitySkeletonStray extends EntitySkeletonAbstract {
 
     public EntitySkeletonStray(World world) {
-        super(world);
+        super(EntityTypes.STRAY, world);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySkeletonStray.class);
-    }
-
-    public boolean P() {
-        return super.P() && this.world.h(new BlockPosition(this));
+    public boolean a(GeneratorAccess generatoraccess) {
+        return super.a(generatoraccess) && generatoraccess.e(new BlockPosition(this));
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.aq;
+    protected MinecraftKey G() {
+        return LootTables.ax;
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.hR;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_STRAY_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.hT;
+        return SoundEffects.ENTITY_STRAY_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.hS;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_STRAY_DEATH;
     }
 
-    SoundEffect p() {
-        return SoundEffects.hU;
+    SoundEffect l() {
+        return SoundEffects.ENTITY_STRAY_STEP;
     }
 
     protected EntityArrow a(float f) {

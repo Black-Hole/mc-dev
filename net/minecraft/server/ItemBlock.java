@@ -1,49 +1,74 @@
 package net.minecraft.server;
 
+import java.util.Map;
 import javax.annotation.Nullable;
 
 public class ItemBlock extends Item {
 
-    protected final Block a;
+    @Deprecated
+    private final Block a;
 
-    public ItemBlock(Block block) {
+    public ItemBlock(Block block, Item.Info item_info) {
+        super(item_info);
         this.a = block;
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        IBlockData iblockdata = world.getType(blockposition);
-        Block block = iblockdata.getBlock();
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        return this.a(new BlockActionContext(itemactioncontext));
+    }
 
-        if (!block.a((IBlockAccess) world, blockposition)) {
-            blockposition = blockposition.shift(enumdirection);
-        }
+    public EnumInteractionResult a(BlockActionContext blockactioncontext) {
+        if (!blockactioncontext.b()) {
+            return EnumInteractionResult.FAIL;
+        } else {
+            IBlockData iblockdata = this.b(blockactioncontext);
 
-        ItemStack itemstack = entityhuman.b(enumhand);
+            if (iblockdata == null) {
+                return EnumInteractionResult.FAIL;
+            } else if (!this.a(blockactioncontext, iblockdata)) {
+                return EnumInteractionResult.FAIL;
+            } else {
+                BlockPosition blockposition = blockactioncontext.getClickPosition();
+                World world = blockactioncontext.getWorld();
+                EntityHuman entityhuman = blockactioncontext.getEntity();
+                ItemStack itemstack = blockactioncontext.getItemStack();
+                IBlockData iblockdata1 = world.getType(blockposition);
+                Block block = iblockdata1.getBlock();
 
-        if (!itemstack.isEmpty() && entityhuman.a(blockposition, enumdirection, itemstack) && world.a(this.a, blockposition, false, enumdirection, (Entity) null)) {
-            int i = this.filterData(itemstack.getData());
-            IBlockData iblockdata1 = this.a.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityhuman);
-
-            if (world.setTypeAndData(blockposition, iblockdata1, 11)) {
-                iblockdata1 = world.getType(blockposition);
-                if (iblockdata1.getBlock() == this.a) {
-                    a(world, entityhuman, blockposition, itemstack);
-                    this.a.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
+                if (block == iblockdata.getBlock()) {
+                    this.a(blockposition, world, entityhuman, itemstack, iblockdata1);
+                    block.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
                     if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                        CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
                     }
                 }
 
-                SoundEffectType soundeffecttype = this.a.getStepSound();
+                SoundEffectType soundeffecttype = block.getStepSound();
 
                 world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
                 itemstack.subtract(1);
+                return EnumInteractionResult.SUCCESS;
             }
-
-            return EnumInteractionResult.SUCCESS;
-        } else {
-            return EnumInteractionResult.FAIL;
         }
+    }
+
+    protected boolean a(BlockPosition blockposition, World world, @Nullable EntityHuman entityhuman, ItemStack itemstack, IBlockData iblockdata) {
+        return a(world, entityhuman, blockposition, itemstack);
+    }
+
+    @Nullable
+    protected IBlockData b(BlockActionContext blockactioncontext) {
+        IBlockData iblockdata = this.getBlock().getPlacedState(blockactioncontext);
+
+        return iblockdata != null && this.b(blockactioncontext, iblockdata) ? iblockdata : null;
+    }
+
+    protected boolean b(BlockActionContext blockactioncontext, IBlockData iblockdata) {
+        return iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition());
+    }
+
+    protected boolean a(BlockActionContext blockactioncontext, IBlockData iblockdata) {
+        return blockactioncontext.getWorld().setTypeAndData(blockactioncontext.getClickPosition(), iblockdata, 11);
     }
 
     public static boolean a(World world, @Nullable EntityHuman entityhuman, BlockPosition blockposition, ItemStack itemstack) {
@@ -52,7 +77,7 @@ public class ItemBlock extends Item {
         if (minecraftserver == null) {
             return false;
         } else {
-            NBTTagCompound nbttagcompound = itemstack.d("BlockEntityTag");
+            NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
 
             if (nbttagcompound != null) {
                 TileEntity tileentity = world.getTileEntity(blockposition);
@@ -63,7 +88,7 @@ public class ItemBlock extends Item {
                     }
 
                     NBTTagCompound nbttagcompound1 = tileentity.save(new NBTTagCompound());
-                    NBTTagCompound nbttagcompound2 = nbttagcompound1.g();
+                    NBTTagCompound nbttagcompound2 = nbttagcompound1.clone();
 
                     nbttagcompound1.a(nbttagcompound);
                     nbttagcompound1.setInt("x", blockposition.getX());
@@ -81,26 +106,22 @@ public class ItemBlock extends Item {
         }
     }
 
-    public String a(ItemStack itemstack) {
-        return this.a.a();
-    }
-
     public String getName() {
-        return this.a.a();
-    }
-
-    public CreativeModeTab b() {
-        return this.a.q();
+        return this.getBlock().m();
     }
 
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         if (this.a(creativemodetab)) {
-            this.a.a(creativemodetab, nonnulllist);
+            this.getBlock().a(creativemodetab, nonnulllist);
         }
 
     }
 
     public Block getBlock() {
         return this.a;
+    }
+
+    public void a(Map<Block, Item> map, Item item) {
+        map.put(this.getBlock(), item);
     }
 }

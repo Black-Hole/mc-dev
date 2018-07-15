@@ -11,20 +11,20 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
     private NBTTagCompound b;
 
     public EntityLlamaSpit(World world) {
-        super(world);
-    }
-
-    public EntityLlamaSpit(World world, EntityLlama entityllama) {
-        super(world);
-        this.shooter = entityllama;
-        this.setPosition(entityllama.locX - (double) (entityllama.width + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aN * 0.017453292F), entityllama.locY + (double) entityllama.getHeadHeight() - 0.10000000149011612D, entityllama.locZ + (double) (entityllama.width + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aN * 0.017453292F));
+        super(EntityTypes.LLAMA_SPIT, world);
         this.setSize(0.25F, 0.25F);
     }
 
-    public void B_() {
-        super.B_();
+    public EntityLlamaSpit(World world, EntityLlama entityllama) {
+        this(world);
+        this.shooter = entityllama;
+        this.setPosition(entityllama.locX - (double) (entityllama.width + 1.0F) * 0.5D * (double) MathHelper.sin(entityllama.aQ * 0.017453292F), entityllama.locY + (double) entityllama.getHeadHeight() - 0.10000000149011612D, entityllama.locZ + (double) (entityllama.width + 1.0F) * 0.5D * (double) MathHelper.cos(entityllama.aQ * 0.017453292F));
+    }
+
+    public void tick() {
+        super.tick();
         if (this.b != null) {
-            this.j();
+            this.f();
         }
 
         Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -77,7 +77,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
         if (!this.world.a(this.getBoundingBox(), Material.AIR)) {
             this.die();
-        } else if (this.isInWater()) {
+        } else if (this.aq()) {
             this.die();
         } else {
             this.motX *= 0.9900000095367432D;
@@ -144,7 +144,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
     public void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity != null && this.shooter != null) {
-            movingobjectposition.entity.damageEntity(DamageSource.a(this, this.shooter).b(), 1.0F);
+            movingobjectposition.entity.damageEntity(DamageSource.a(this, (EntityLiving) this.shooter).c(), 1.0F);
         }
 
         if (!this.world.isClientSide) {
@@ -153,7 +153,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
     }
 
-    protected void i() {}
+    protected void x_() {}
 
     protected void a(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("Owner", 10)) {
@@ -173,7 +173,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
 
     }
 
-    private void j() {
+    private void f() {
         if (this.b != null && this.b.b("OwnerUUID")) {
             UUID uuid = this.b.a("OwnerUUID");
             List list = this.world.a(EntityLlama.class, this.getBoundingBox().g(15.0D));

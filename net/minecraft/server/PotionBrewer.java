@@ -1,35 +1,29 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PotionBrewer {
 
     private static final List<PotionBrewer.PredicatedCombination<PotionRegistry>> a = Lists.newArrayList();
     private static final List<PotionBrewer.PredicatedCombination<Item>> b = Lists.newArrayList();
     private static final List<RecipeItemStack> c = Lists.newArrayList();
-    private static final Predicate<ItemStack> d = new Predicate() {
-        public boolean a(ItemStack itemstack) {
-            Iterator iterator = PotionBrewer.c.iterator();
+    private static final Predicate<ItemStack> d = (itemstack) -> {
+        Iterator iterator = PotionBrewer.c.iterator();
 
-            RecipeItemStack recipeitemstack;
+        RecipeItemStack recipeitemstack;
 
-            do {
-                if (!iterator.hasNext()) {
-                    return false;
-                }
+        do {
+            if (!iterator.hasNext()) {
+                return false;
+            }
 
-                recipeitemstack = (RecipeItemStack) iterator.next();
-            } while (!recipeitemstack.a(itemstack));
+            recipeitemstack = (RecipeItemStack) iterator.next();
+        } while (!recipeitemstack.a(itemstack));
 
-            return true;
-        }
-
-        public boolean apply(Object object) {
-            return this.a((ItemStack) object);
-        }
+        return true;
     };
 
     public static boolean a(ItemStack itemstack) {
@@ -61,7 +55,7 @@ public class PotionBrewer {
     }
 
     public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return !PotionBrewer.d.apply(itemstack) ? false : b(itemstack, itemstack1) || c(itemstack, itemstack1);
+        return !PotionBrewer.d.test(itemstack) ? false : b(itemstack, itemstack1) || c(itemstack, itemstack1);
     }
 
     protected static boolean b(ItemStack itemstack, ItemStack itemstack1) {
@@ -106,7 +100,7 @@ public class PotionBrewer {
             for (j = PotionBrewer.b.size(); i < j; ++i) {
                 potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
                 if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.a(itemstack)) {
-                    return PotionUtil.a(new ItemStack((Item) potionbrewer_predicatedcombination.c), potionregistry);
+                    return PotionUtil.a(new ItemStack((IMaterial) potionbrewer_predicatedcombination.c), potionregistry);
                 }
             }
 
@@ -129,7 +123,7 @@ public class PotionBrewer {
         a(Items.LINGERING_POTION);
         a(Items.POTION, Items.GUNPOWDER, Items.SPLASH_POTION);
         a(Items.SPLASH_POTION, Items.DRAGON_BREATH, Items.LINGERING_POTION);
-        a(Potions.b, Items.SPECKLED_MELON, Potions.c);
+        a(Potions.b, Items.GLISTERING_MELON_SLICE, Potions.c);
         a(Potions.b, Items.GHAST_TEAR, Potions.c);
         a(Potions.b, Items.RABBIT_FOOT, Potions.c);
         a(Potions.b, Items.BLAZE_POWDER, Potions.c);
@@ -152,55 +146,67 @@ public class PotionBrewer {
         a(Potions.j, Items.FERMENTED_SPIDER_EYE, Potions.r);
         a(Potions.k, Items.FERMENTED_SPIDER_EYE, Potions.s);
         a(Potions.r, Items.REDSTONE, Potions.s);
+        a(Potions.r, Items.GLOWSTONE_DUST, Potions.t);
+        a(Potions.e, Items.TURTLE_HELMET, Potions.u);
+        a(Potions.u, Items.REDSTONE, Potions.v);
+        a(Potions.u, Items.GLOWSTONE_DUST, Potions.w);
         a(Potions.o, Items.FERMENTED_SPIDER_EYE, Potions.r);
         a(Potions.p, Items.FERMENTED_SPIDER_EYE, Potions.s);
         a(Potions.e, Items.SUGAR, Potions.o);
         a(Potions.o, Items.REDSTONE, Potions.p);
         a(Potions.o, Items.GLOWSTONE_DUST, Potions.q);
-        a(Potions.e, RecipeItemStack.a(new ItemStack[] { new ItemStack(Items.FISH, 1, ItemFish.EnumFish.PUFFERFISH.a())}), Potions.t);
-        a(Potions.t, Items.REDSTONE, Potions.u);
-        a(Potions.e, Items.SPECKLED_MELON, Potions.v);
-        a(Potions.v, Items.GLOWSTONE_DUST, Potions.w);
-        a(Potions.v, Items.FERMENTED_SPIDER_EYE, Potions.x);
-        a(Potions.w, Items.FERMENTED_SPIDER_EYE, Potions.y);
-        a(Potions.x, Items.GLOWSTONE_DUST, Potions.y);
-        a(Potions.z, Items.FERMENTED_SPIDER_EYE, Potions.x);
-        a(Potions.A, Items.FERMENTED_SPIDER_EYE, Potions.x);
-        a(Potions.B, Items.FERMENTED_SPIDER_EYE, Potions.y);
-        a(Potions.e, Items.SPIDER_EYE, Potions.z);
-        a(Potions.z, Items.REDSTONE, Potions.A);
-        a(Potions.z, Items.GLOWSTONE_DUST, Potions.B);
-        a(Potions.e, Items.GHAST_TEAR, Potions.C);
-        a(Potions.C, Items.REDSTONE, Potions.D);
-        a(Potions.C, Items.GLOWSTONE_DUST, Potions.E);
-        a(Potions.e, Items.BLAZE_POWDER, Potions.F);
-        a(Potions.F, Items.REDSTONE, Potions.G);
-        a(Potions.F, Items.GLOWSTONE_DUST, Potions.H);
-        a(Potions.b, Items.FERMENTED_SPIDER_EYE, Potions.I);
-        a(Potions.I, Items.REDSTONE, Potions.J);
+        a(Potions.e, Items.PUFFERFISH, Potions.x);
+        a(Potions.x, Items.REDSTONE, Potions.y);
+        a(Potions.e, Items.GLISTERING_MELON_SLICE, Potions.z);
+        a(Potions.z, Items.GLOWSTONE_DUST, Potions.A);
+        a(Potions.z, Items.FERMENTED_SPIDER_EYE, Potions.B);
+        a(Potions.A, Items.FERMENTED_SPIDER_EYE, Potions.C);
+        a(Potions.B, Items.GLOWSTONE_DUST, Potions.C);
+        a(Potions.D, Items.FERMENTED_SPIDER_EYE, Potions.B);
+        a(Potions.E, Items.FERMENTED_SPIDER_EYE, Potions.B);
+        a(Potions.F, Items.FERMENTED_SPIDER_EYE, Potions.C);
+        a(Potions.e, Items.SPIDER_EYE, Potions.D);
+        a(Potions.D, Items.REDSTONE, Potions.E);
+        a(Potions.D, Items.GLOWSTONE_DUST, Potions.F);
+        a(Potions.e, Items.GHAST_TEAR, Potions.G);
+        a(Potions.G, Items.REDSTONE, Potions.H);
+        a(Potions.G, Items.GLOWSTONE_DUST, Potions.I);
+        a(Potions.e, Items.BLAZE_POWDER, Potions.J);
+        a(Potions.J, Items.REDSTONE, Potions.K);
+        a(Potions.J, Items.GLOWSTONE_DUST, Potions.L);
+        a(Potions.b, Items.FERMENTED_SPIDER_EYE, Potions.M);
+        a(Potions.M, Items.REDSTONE, Potions.N);
+        a(Potions.e, Items.PHANTOM_MEMBRANE, Potions.O);
+        a(Potions.O, Items.REDSTONE, Potions.P);
     }
 
-    private static void a(ItemPotion itempotion, Item item, ItemPotion itempotion1) {
-        PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(itempotion, RecipeItemStack.a(new Item[] { item}), itempotion1));
+    private static void a(Item item, Item item1, Item item2) {
+        if (!(item instanceof ItemPotion)) {
+            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item));
+        } else if (!(item2 instanceof ItemPotion)) {
+            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item2));
+        } else {
+            PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(item, RecipeItemStack.a(new IMaterial[] { item1}), item2));
+        }
     }
 
-    private static void a(ItemPotion itempotion) {
-        PotionBrewer.c.add(RecipeItemStack.a(new Item[] { itempotion}));
+    private static void a(Item item) {
+        if (!(item instanceof ItemPotion)) {
+            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item));
+        } else {
+            PotionBrewer.c.add(RecipeItemStack.a(new IMaterial[] { item}));
+        }
     }
 
     private static void a(PotionRegistry potionregistry, Item item, PotionRegistry potionregistry1) {
-        a(potionregistry, RecipeItemStack.a(new Item[] { item}), potionregistry1);
-    }
-
-    private static void a(PotionRegistry potionregistry, RecipeItemStack recipeitemstack, PotionRegistry potionregistry1) {
-        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, recipeitemstack, potionregistry1));
+        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, RecipeItemStack.a(new IMaterial[] { item}), potionregistry1));
     }
 
     static class PredicatedCombination<T> {
 
-        final T a;
-        final RecipeItemStack b;
-        final T c;
+        private final T a;
+        private final RecipeItemStack b;
+        private final T c;
 
         public PredicatedCombination(T t0, RecipeItemStack recipeitemstack, T t1) {
             this.a = t0;

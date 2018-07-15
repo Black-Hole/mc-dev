@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,9 +51,9 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
 
     public CriterionTriggerLevitation.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject.get("duration"));
+        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("duration"));
 
-        return new CriterionTriggerLevitation.b(criterionconditiondistance, criterionconditionvalue);
+        return new CriterionTriggerLevitation.b(criterionconditiondistance, criterionconditionvalue_d);
     }
 
     public void a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
@@ -121,16 +122,28 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionDistance a;
-        private final CriterionConditionValue b;
+        private final CriterionConditionValue.d b;
 
-        public b(CriterionConditionDistance criterionconditiondistance, CriterionConditionValue criterionconditionvalue) {
+        public b(CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.d criterionconditionvalue_d) {
             super(CriterionTriggerLevitation.a);
             this.a = criterionconditiondistance;
-            this.b = criterionconditionvalue;
+            this.b = criterionconditionvalue_d;
+        }
+
+        public static CriterionTriggerLevitation.b a(CriterionConditionDistance criterionconditiondistance) {
+            return new CriterionTriggerLevitation.b(criterionconditiondistance, CriterionConditionValue.d.e);
         }
 
         public boolean a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
-            return !this.a.a(vec3d.x, vec3d.y, vec3d.z, entityplayer.locX, entityplayer.locY, entityplayer.locZ) ? false : this.b.a((float) i);
+            return !this.a.a(vec3d.x, vec3d.y, vec3d.z, entityplayer.locX, entityplayer.locY, entityplayer.locZ) ? false : this.b.d(i);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("distance", this.a.a());
+            jsonobject.add("duration", this.b.d());
+            return jsonobject;
         }
     }
 }

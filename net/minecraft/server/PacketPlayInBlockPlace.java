@@ -24,7 +24,7 @@ public class PacketPlayInBlockPlace implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public EnumHand a() {
+    public EnumHand b() {
         return this.a;
     }
 }

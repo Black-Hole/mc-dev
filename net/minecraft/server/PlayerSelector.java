@@ -1,720 +1,607 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ComparisonChain;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.Objects;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.annotation.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class PlayerSelector {
 
-    private static final Pattern a = Pattern.compile("^@([pares])(?:\\[([^ ]*)\\])?$");
-    private static final Splitter b = Splitter.on(',').omitEmptyStrings();
-    private static final Splitter c = Splitter.on('=').limit(2);
-    private static final Set<String> d = Sets.newHashSet();
-    private static final String e = c("r");
-    private static final String f = c("rm");
-    private static final String g = c("l");
-    private static final String h = c("lm");
-    private static final String i = c("x");
-    private static final String j = c("y");
-    private static final String k = c("z");
-    private static final String l = c("dx");
-    private static final String m = c("dy");
-    private static final String n = c("dz");
-    private static final String o = c("rx");
-    private static final String p = c("rxm");
-    private static final String q = c("ry");
-    private static final String r = c("rym");
-    private static final String s = c("c");
-    private static final String t = c("m");
-    private static final String u = c("team");
-    private static final String v = c("name");
-    private static final String w = c("type");
-    private static final String x = c("tag");
-    private static final Predicate<String> y = new Predicate() {
-        public boolean a(@Nullable String s) {
-            return s != null && (PlayerSelector.d.contains(s) || s.length() > "score_".length() && s.startsWith("score_"));
-        }
+    private static final Map<String, PlayerSelector.b> i = Maps.newHashMap();
+    public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("argument.entity.options.unknown", new Object[] { object});
+    });
+    public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("argument.entity.options.inapplicable", new Object[] { object});
+    });
+    public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.distance.negative", new Object[0]));
+    public static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.level.negative", new Object[0]));
+    public static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("argument.entity.options.limit.toosmall", new Object[0]));
+    public static final DynamicCommandExceptionType f = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("argument.entity.options.sort.irreversible", new Object[] { object});
+    });
+    public static final DynamicCommandExceptionType g = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("argument.entity.options.mode.invalid", new Object[] { object});
+    });
+    public static final DynamicCommandExceptionType h = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("argument.entity.options.type.invalid", new Object[] { object});
+    });
 
-        public boolean apply(@Nullable Object object) {
-            return this.a((String) object);
-        }
-    };
-    private static final Set<String> z = Sets.newHashSet(new String[] { PlayerSelector.i, PlayerSelector.j, PlayerSelector.k, PlayerSelector.l, PlayerSelector.m, PlayerSelector.n, PlayerSelector.f, PlayerSelector.e});
-
-    private static String c(String s) {
-        PlayerSelector.d.add(s);
-        return s;
+    private static void a(String s, PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
+        PlayerSelector.i.put(s, new PlayerSelector.b(playerselector_a, predicate, ichatbasecomponent, null));
     }
 
-    @Nullable
-    public static EntityPlayer getPlayer(ICommandListener icommandlistener, String s) throws CommandException {
-        return (EntityPlayer) getEntity(icommandlistener, s, EntityPlayer.class);
-    }
+    public static void a() {
+        if (PlayerSelector.i.isEmpty()) {
+            a("name", (argumentparserselector) -> {
+                int i = argumentparserselector.f().getCursor();
+                boolean flag = argumentparserselector.e();
+                String s = argumentparserselector.f().readString();
 
-    public static List<EntityPlayer> b(ICommandListener icommandlistener, String s) throws CommandException {
-        return getPlayers(icommandlistener, s, EntityPlayer.class);
-    }
+                if (argumentparserselector.v() && !flag) {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "name");
+                } else {
+                    if (flag) {
+                        argumentparserselector.d(true);
+                    } else {
+                        argumentparserselector.c(true);
+                    }
 
-    @Nullable
-    public static <T extends Entity> T getEntity(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws CommandException {
-        List list = getPlayers(icommandlistener, s, oclass);
+                    argumentparserselector.a((entity) -> {
+                        return entity.getDisplayName().getText().equals(s) != flag;
+                    });
+                }
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.u();
+            }, new ChatMessage("argument.entity.options.name.description", new Object[0]));
+            a("distance", (argumentparserselector) -> {
+                int i = argumentparserselector.f().getCursor();
+                CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(argumentparserselector.f());
 
-        return list.size() == 1 ? (Entity) list.get(0) : null;
-    }
+                if ((criterionconditionvalue_c.a() == null || ((Float) criterionconditionvalue_c.a()).floatValue() >= 0.0F) && (criterionconditionvalue_c.b() == null || ((Float) criterionconditionvalue_c.b()).floatValue() >= 0.0F)) {
+                    argumentparserselector.a(criterionconditionvalue_c);
+                    argumentparserselector.g();
+                } else {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.c.createWithContext(argumentparserselector.f());
+                }
+            }, (argumentparserselector) -> {
+                return argumentparserselector.h().c();
+            }, new ChatMessage("argument.entity.options.distance.description", new Object[0]));
+            a("level", (argumentparserselector) -> {
+                int i = argumentparserselector.f().getCursor();
+                CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(argumentparserselector.f());
 
-    @Nullable
-    public static IChatBaseComponent getPlayerNames(ICommandListener icommandlistener, String s) throws CommandException {
-        List list = getPlayers(icommandlistener, s, Entity.class);
+                if ((criterionconditionvalue_d.a() == null || ((Integer) criterionconditionvalue_d.a()).intValue() >= 0) && (criterionconditionvalue_d.b() == null || ((Integer) criterionconditionvalue_d.b()).intValue() >= 0)) {
+                    argumentparserselector.a(criterionconditionvalue_d);
+                    argumentparserselector.a(false);
+                } else {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.d.createWithContext(argumentparserselector.f());
+                }
+            }, (argumentparserselector) -> {
+                return argumentparserselector.i().c();
+            }, new ChatMessage("argument.entity.options.level.description", new Object[0]));
+            a("x", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.a(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.l() == null;
+            }, new ChatMessage("argument.entity.options.x.description", new Object[0]));
+            a("y", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.b(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.m() == null;
+            }, new ChatMessage("argument.entity.options.y.description", new Object[0]));
+            a("z", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.c(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.n() == null;
+            }, new ChatMessage("argument.entity.options.z.description", new Object[0]));
+            a("dx", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.d(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.o() == null;
+            }, new ChatMessage("argument.entity.options.dx.description", new Object[0]));
+            a("dy", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.e(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.p() == null;
+            }, new ChatMessage("argument.entity.options.dy.description", new Object[0]));
+            a("dz", (argumentparserselector) -> {
+                argumentparserselector.g();
+                argumentparserselector.f(argumentparserselector.f().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.q() == null;
+            }, new ChatMessage("argument.entity.options.dz.description", new Object[0]));
+            a("x_rotation", (argumentparserselector) -> {
+                argumentparserselector.a(CriterionConditionRange.a(argumentparserselector.f(), true, MathHelper::g));
+            }, (argumentparserselector) -> {
+                return argumentparserselector.j() == CriterionConditionRange.a;
+            }, new ChatMessage("argument.entity.options.x_rotation.description", new Object[0]));
+            a("y_rotation", (argumentparserselector) -> {
+                argumentparserselector.b(CriterionConditionRange.a(argumentparserselector.f(), true, MathHelper::g));
+            }, (argumentparserselector) -> {
+                return argumentparserselector.k() == CriterionConditionRange.a;
+            }, new ChatMessage("argument.entity.options.y_rotation.description", new Object[0]));
+            a("limit", (argumentparserselector) -> {
+                int i = argumentparserselector.f().getCursor();
+                int j = argumentparserselector.f().readInt();
 
-        if (list.isEmpty()) {
-            return null;
-        } else {
-            ArrayList arraylist = Lists.newArrayList();
-            Iterator iterator = list.iterator();
+                if (j < 1) {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.e.createWithContext(argumentparserselector.f());
+                } else {
+                    argumentparserselector.a(j);
+                    argumentparserselector.e(true);
+                }
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.t() && !argumentparserselector.w();
+            }, new ChatMessage("argument.entity.options.limit.description", new Object[0]));
+            a("sort", (argumentparserselector) -> {
+                int i = argumentparserselector.f().getCursor();
+                String s = argumentparserselector.f().readUnquotedString();
 
-            while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
+                argumentparserselector.a((suggestionsbuilder, consumer) -> {
+                    return ICompletionProvider.b(Arrays.asList(new String[] { "nearest", "furthest", "random", "arbitrary"}), suggestionsbuilder);
+                });
+                byte b0 = -1;
 
-                arraylist.add(entity.getScoreboardDisplayName());
-            }
+                switch (s.hashCode()) {
+                case -938285885:
+                    if (s.equals("random")) {
+                        b0 = 2;
+                    }
+                    break;
 
-            return CommandAbstract.a((List) arraylist);
-        }
-    }
+                case 1510793967:
+                    if (s.equals("furthest")) {
+                        b0 = 1;
+                    }
+                    break;
 
-    public static <T extends Entity> List<T> getPlayers(ICommandListener icommandlistener, String s, Class<? extends T> oclass) throws CommandException {
-        Matcher matcher = PlayerSelector.a.matcher(s);
+                case 1780188658:
+                    if (s.equals("arbitrary")) {
+                        b0 = 3;
+                    }
+                    break;
 
-        if (matcher.matches() && icommandlistener.a(1, "@")) {
-            Map map = d(matcher.group(2));
+                case 1825779806:
+                    if (s.equals("nearest")) {
+                        b0 = 0;
+                    }
+                }
 
-            if (!b(icommandlistener, map)) {
-                return Collections.emptyList();
-            } else {
-                String s1 = matcher.group(1);
-                BlockPosition blockposition = a(map, icommandlistener.getChunkCoordinates());
-                Vec3D vec3d = b(map, icommandlistener.d());
-                List list = a(icommandlistener, map);
-                ArrayList arraylist = Lists.newArrayList();
-                Iterator iterator = list.iterator();
+                BiConsumer biconsumer;
 
-                while (iterator.hasNext()) {
-                    World world = (World) iterator.next();
+                switch (b0) {
+                case 0:
+                    biconsumer = ArgumentParserSelector.h;
+                    break;
 
-                    if (world != null) {
-                        ArrayList arraylist1 = Lists.newArrayList();
+                case 1:
+                    biconsumer = ArgumentParserSelector.i;
+                    break;
 
-                        arraylist1.addAll(a(map, s1));
-                        arraylist1.addAll(b(map));
-                        arraylist1.addAll(c(map));
-                        arraylist1.addAll(d(map));
-                        arraylist1.addAll(c(icommandlistener, map));
-                        arraylist1.addAll(e(map));
-                        arraylist1.addAll(f(map));
-                        arraylist1.addAll(a(map, vec3d));
-                        arraylist1.addAll(g(map));
-                        if ("s".equalsIgnoreCase(s1)) {
-                            Entity entity = icommandlistener.f();
+                case 2:
+                    biconsumer = ArgumentParserSelector.j;
+                    break;
 
-                            if (entity != null && oclass.isAssignableFrom(entity.getClass())) {
-                                if (map.containsKey(PlayerSelector.l) || map.containsKey(PlayerSelector.m) || map.containsKey(PlayerSelector.n)) {
-                                    int i = a(map, PlayerSelector.l, 0);
-                                    int j = a(map, PlayerSelector.m, 0);
-                                    int k = a(map, PlayerSelector.n, 0);
-                                    AxisAlignedBB axisalignedbb = a(blockposition, i, j, k);
+                case 3:
+                    biconsumer = ArgumentParserSelector.g;
+                    break;
 
-                                    if (!axisalignedbb.c(entity.getBoundingBox())) {
-                                        return Collections.emptyList();
-                                    }
-                                }
+                default:
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.f.createWithContext(argumentparserselector.f(), s);
+                }
 
-                                Iterator iterator1 = arraylist1.iterator();
+                argumentparserselector.a(biconsumer);
+                argumentparserselector.f(true);
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.t() && !argumentparserselector.x();
+            }, new ChatMessage("argument.entity.options.sort.description", new Object[0]));
+            a("gamemode", (argumentparserselector) -> {
+                argumentparserselector.a((suggestionsbuilder, consumer) -> {
+                    String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
+                    boolean flag = !argumentparserselector.z();
+                    boolean flag1 = true;
 
-                                Predicate predicate;
+                    if (!s.isEmpty()) {
+                        if (s.charAt(0) == 33) {
+                            flag = false;
+                            s = s.substring(1);
+                        } else {
+                            flag1 = false;
+                        }
+                    }
 
-                                do {
-                                    if (!iterator1.hasNext()) {
-                                        return Lists.newArrayList(new Entity[] { entity});
-                                    }
+                    EnumGamemode[] aenumgamemode = EnumGamemode.values();
+                    int i = aenumgamemode.length;
 
-                                    predicate = (Predicate) iterator1.next();
-                                } while (predicate.apply(entity));
+                    for (int j = 0; j < i; ++j) {
+                        EnumGamemode enumgamemode = aenumgamemode[j];
 
-                                return Collections.emptyList();
+                        if (enumgamemode != EnumGamemode.NOT_SET && enumgamemode.b().toLowerCase(Locale.ROOT).startsWith(s)) {
+                            if (flag1) {
+                                suggestionsbuilder.suggest('!' + enumgamemode.b());
                             }
 
-                            return Collections.emptyList();
+                            if (flag) {
+                                suggestionsbuilder.suggest(enumgamemode.b());
+                            }
+                        }
+                    }
+
+                    return suggestionsbuilder.buildFuture();
+                });
+                int i = argumentparserselector.f().getCursor();
+                boolean flag = argumentparserselector.e();
+
+                if (argumentparserselector.z() && !flag) {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "gamemode");
+                } else {
+                    String s = argumentparserselector.f().readUnquotedString();
+                    EnumGamemode enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
+
+                    if (enumgamemode == EnumGamemode.NOT_SET) {
+                        argumentparserselector.f().setCursor(i);
+                        throw PlayerSelector.g.createWithContext(argumentparserselector.f(), s);
+                    } else {
+                        argumentparserselector.a(false);
+                        argumentparserselector.a((entity) -> {
+                            if (!(entity instanceof EntityPlayer)) {
+                                return false;
+                            } else {
+                                EnumGamemode enumgamemode = ((EntityPlayer) entity).playerInteractManager.getGameMode();
+
+                                return flag ? enumgamemode != enumgamemode1 : enumgamemode == enumgamemode1;
+                            }
+                        });
+                        if (flag) {
+                            argumentparserselector.h(true);
+                        } else {
+                            argumentparserselector.g(true);
                         }
 
-                        arraylist.addAll(a(map, oclass, (List) arraylist1, s1, world, blockposition));
                     }
                 }
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.y();
+            }, new ChatMessage("argument.entity.options.gamemode.description", new Object[0]));
+            a("team", (argumentparserselector) -> {
+                boolean flag = argumentparserselector.e();
+                String s = argumentparserselector.f().readUnquotedString();
 
-                return a((List) arraylist, map, icommandlistener, oclass, s1, vec3d);
-            }
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    private static List<World> a(ICommandListener icommandlistener, Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-
-        if (h(map)) {
-            arraylist.add(icommandlistener.getWorld());
-        } else {
-            Collections.addAll(arraylist, icommandlistener.C_().worldServer);
-        }
-
-        return arraylist;
-    }
-
-    private static <T extends Entity> boolean b(ICommandListener icommandlistener, Map<String, String> map) {
-        String s = b(map, PlayerSelector.w);
-
-        if (s == null) {
-            return true;
-        } else {
-            MinecraftKey minecraftkey = new MinecraftKey(s.startsWith("!") ? s.substring(1) : s);
-
-            if (EntityTypes.b(minecraftkey)) {
-                return true;
-            } else {
-                ChatMessage chatmessage = new ChatMessage("commands.generic.entity.invalidType", new Object[] { minecraftkey});
-
-                chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-                icommandlistener.sendMessage(chatmessage);
-                return false;
-            }
-        }
-    }
-
-    private static List<Predicate<Entity>> a(Map<String, String> map, String s) {
-        String s1 = b(map, PlayerSelector.w);
-
-        if (s1 != null && (s.equals("e") || s.equals("r") || s.equals("s"))) {
-            final boolean flag = s1.startsWith("!");
-            final MinecraftKey minecraftkey = new MinecraftKey(flag ? s1.substring(1) : s1);
-
-            return Collections.singletonList(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    return EntityTypes.a(entity, minecraftkey) != flag;
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        } else {
-            return !s.equals("e") && !s.equals("s") ? Collections.singletonList(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    return entity instanceof EntityHuman;
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            }) : Collections.emptyList();
-        }
-    }
-
-    private static List<Predicate<Entity>> b(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        final int i = a(map, PlayerSelector.h, -1);
-        final int j = a(map, PlayerSelector.g, -1);
-
-        if (i > -1 || j > -1) {
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    if (!(entity instanceof EntityPlayer)) {
-                        return false;
-                    } else {
-                        EntityPlayer entityplayer = (EntityPlayer) entity;
-
-                        return (i <= -1 || entityplayer.expLevel >= i) && (j <= -1 || entityplayer.expLevel <= j);
-                    }
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        return arraylist;
-    }
-
-    private static List<Predicate<Entity>> c(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        String s = b(map, PlayerSelector.t);
-
-        if (s == null) {
-            return arraylist;
-        } else {
-            final boolean flag = s.startsWith("!");
-
-            if (flag) {
-                s = s.substring(1);
-            }
-
-            final EnumGamemode enumgamemode;
-
-            try {
-                int i = Integer.parseInt(s);
-
-                enumgamemode = EnumGamemode.a(i, EnumGamemode.NOT_SET);
-            } catch (Throwable throwable) {
-                enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
-            }
-
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    if (!(entity instanceof EntityPlayer)) {
-                        return false;
-                    } else {
-                        EntityPlayer entityplayer = (EntityPlayer) entity;
-                        EnumGamemode enumgamemode = entityplayer.playerInteractManager.getGameMode();
-
-                        return flag ? enumgamemode != enumgamemode1 : enumgamemode == enumgamemode1;
-                    }
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-            return arraylist;
-        }
-    }
-
-    private static List<Predicate<Entity>> d(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, PlayerSelector.u);
-        final boolean flag = s != null && s.startsWith("!");
-
-        if (flag) {
-            s = s.substring(1);
-        }
-
-        if (s != null) {
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
+                argumentparserselector.a((entity) -> {
                     if (!(entity instanceof EntityLiving)) {
                         return false;
                     } else {
-                        EntityLiving entityliving = (EntityLiving) entity;
-                        ScoreboardTeamBase scoreboardteambase = entityliving.aY();
+                        ScoreboardTeamBase scoreboardteambase = entity.be();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
                     }
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        return arraylist;
-    }
-
-    private static List<Predicate<Entity>> c(final ICommandListener icommandlistener, Map<String, String> map) {
-        final Map map1 = a(map);
-
-        return (List) (map1.isEmpty() ? Collections.emptyList() : Lists.newArrayList(new Predicate[] { new Predicate() {
-            public boolean a(@Nullable Entity entity) {
-                if (entity == null) {
-                    return false;
+                });
+                if (flag) {
+                    argumentparserselector.j(true);
                 } else {
-                    Scoreboard scoreboard = icommandlistener.C_().getWorldServer(0).getScoreboard();
-                    Iterator iterator = map.entrySet().iterator();
-
-                    Entry entry;
-                    boolean flag;
-                    int i;
-
-                    do {
-                        if (!iterator.hasNext()) {
-                            return true;
-                        }
-
-                        entry = (Entry) iterator.next();
-                        String s = (String) entry.getKey();
-
-                        flag = false;
-                        if (s.endsWith("_min") && s.length() > 4) {
-                            flag = true;
-                            s = s.substring(0, s.length() - 4);
-                        }
-
-                        ScoreboardObjective scoreboardobjective = scoreboard.getObjective(s);
-
-                        if (scoreboardobjective == null) {
-                            return false;
-                        }
-
-                        String s1 = entity instanceof EntityPlayer ? entity.getName() : entity.bn();
-
-                        if (!scoreboard.b(s1, scoreboardobjective)) {
-                            return false;
-                        }
-
-                        ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s1, scoreboardobjective);
-
-                        i = scoreboardscore.getScore();
-                        if (i < ((Integer) entry.getValue()).intValue() && flag) {
-                            return false;
-                        }
-                    } while (i <= ((Integer) entry.getValue()).intValue() || flag);
-
-                    return false;
-                }
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((Entity) object);
-            }
-        }}));
-    }
-
-    private static List<Predicate<Entity>> e(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, PlayerSelector.v);
-        final boolean flag = s != null && s.startsWith("!");
-
-        if (flag) {
-            s = s.substring(1);
-        }
-
-        if (s != null) {
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    return entity != null && entity.getName().equals(s) != flag;
+                    argumentparserselector.i(true);
                 }
 
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        return arraylist;
-    }
-
-    private static List<Predicate<Entity>> f(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        final String s = b(map, PlayerSelector.x);
-        final boolean flag = s != null && s.startsWith("!");
-
-        if (flag) {
-            s = s.substring(1);
-        }
-
-        if (s != null) {
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    return entity == null ? false : ("".equals(s) ? entity.getScoreboardTags().isEmpty() != flag : entity.getScoreboardTags().contains(s) != flag);
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        return arraylist;
-    }
-
-    private static List<Predicate<Entity>> a(Map<String, String> map, final Vec3D vec3d) {
-        double d0 = (double) a(map, PlayerSelector.f, -1);
-        double d1 = (double) a(map, PlayerSelector.e, -1);
-        final boolean flag = d0 < -0.5D;
-        final boolean flag1 = d1 < -0.5D;
-
-        if (flag && flag1) {
-            return Collections.emptyList();
-        } else {
-            double d2 = Math.max(d0, 1.0E-4D);
-            final double d3 = d2 * d2;
-            double d4 = Math.max(d1, 1.0E-4D);
-            final double d5 = d4 * d4;
-
-            return Lists.newArrayList(new Predicate[] { new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    if (entity == null) {
-                        return false;
-                    } else {
-                        double d0 = vec3d.c(entity.locX, entity.locY, entity.locZ);
-
-                        return (flag || d0 >= d1) && (flag1 || d0 <= d2);
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.A();
+            }, new ChatMessage("argument.entity.options.team.description", new Object[0]));
+            a("type", (argumentparserselector) -> {
+                argumentparserselector.a((suggestionsbuilder, consumer) -> {
+                    ICompletionProvider.a((Iterable) EntityTypes.REGISTRY.keySet(), suggestionsbuilder, String.valueOf('!'));
+                    if (!argumentparserselector.F()) {
+                        ICompletionProvider.a((Iterable) EntityTypes.REGISTRY.keySet(), suggestionsbuilder);
                     }
-                }
 
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            }});
-        }
-    }
+                    return suggestionsbuilder.buildFuture();
+                });
+                int i = argumentparserselector.f().getCursor();
+                boolean flag = argumentparserselector.e();
 
-    private static List<Predicate<Entity>> g(Map<String, String> map) {
-        ArrayList arraylist = Lists.newArrayList();
-        final int i;
-        final int j;
-
-        if (map.containsKey(PlayerSelector.r) || map.containsKey(PlayerSelector.q)) {
-            i = MathHelper.b(a(map, PlayerSelector.r, 0));
-            j = MathHelper.b(a(map, PlayerSelector.q, 359));
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    if (entity == null) {
-                        return false;
-                    } else {
-                        int i = MathHelper.b(MathHelper.d(entity.yaw));
-
-                        return j > k ? i >= j || i <= k : i >= j && i <= k;
-                    }
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        if (map.containsKey(PlayerSelector.p) || map.containsKey(PlayerSelector.o)) {
-            i = MathHelper.b(a(map, PlayerSelector.p, 0));
-            j = MathHelper.b(a(map, PlayerSelector.o, 359));
-            arraylist.add(new Predicate() {
-                public boolean a(@Nullable Entity entity) {
-                    if (entity == null) {
-                        return false;
-                    } else {
-                        int i = MathHelper.b(MathHelper.d(entity.pitch));
-
-                        return j > k ? i >= j || i <= k : i >= j && i <= k;
-                    }
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((Entity) object);
-                }
-            });
-        }
-
-        return arraylist;
-    }
-
-    private static <T extends Entity> List<T> a(Map<String, String> map, Class<? extends T> oclass, List<Predicate<Entity>> list, String s, World world, BlockPosition blockposition) {
-        ArrayList arraylist = Lists.newArrayList();
-        String s1 = b(map, PlayerSelector.w);
-
-        s1 = s1 != null && s1.startsWith("!") ? s1.substring(1) : s1;
-        boolean flag = !s.equals("e");
-        boolean flag1 = s.equals("r") && s1 != null;
-        int i = a(map, PlayerSelector.l, 0);
-        int j = a(map, PlayerSelector.m, 0);
-        int k = a(map, PlayerSelector.n, 0);
-        int l = a(map, PlayerSelector.e, -1);
-        Predicate predicate = Predicates.and(list);
-        Predicate predicate1 = Predicates.and(IEntitySelector.a, predicate);
-        final AxisAlignedBB axisalignedbb;
-
-        if (!map.containsKey(PlayerSelector.l) && !map.containsKey(PlayerSelector.m) && !map.containsKey(PlayerSelector.n)) {
-            if (l >= 0) {
-                axisalignedbb = new AxisAlignedBB((double) (blockposition.getX() - l), (double) (blockposition.getY() - l), (double) (blockposition.getZ() - l), (double) (blockposition.getX() + l + 1), (double) (blockposition.getY() + l + 1), (double) (blockposition.getZ() + l + 1));
-                if (flag && !flag1) {
-                    arraylist.addAll(world.b(oclass, predicate1));
+                if (argumentparserselector.F() && !flag) {
+                    argumentparserselector.f().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "type");
                 } else {
-                    arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
+                    MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.f());
+                    EntityTypes entitytypes = (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey);
+
+                    if (entitytypes == null) {
+                        argumentparserselector.f().setCursor(i);
+                        throw PlayerSelector.h.createWithContext(argumentparserselector.f(), minecraftkey.toString());
+                    } else {
+                        if (Objects.equals(EntityTypes.PLAYER, entitytypes) && !flag) {
+                            argumentparserselector.a(false);
+                        }
+
+                        argumentparserselector.a((entity) -> {
+                            return Objects.equals(entitytypes, entity.P()) != flag;
+                        });
+                        if (flag) {
+                            argumentparserselector.C();
+                        } else {
+                            argumentparserselector.a(entitytypes.c());
+                        }
+
+                    }
                 }
-            } else if (s.equals("a")) {
-                arraylist.addAll(world.b(oclass, predicate));
-            } else if (!s.equals("p") && (!s.equals("r") || flag1)) {
-                arraylist.addAll(world.a(oclass, predicate1));
-            } else {
-                arraylist.addAll(world.b(oclass, predicate1));
-            }
-        } else {
-            axisalignedbb = a(blockposition, i, j, k);
-            if (flag && !flag1) {
-                Predicate predicate2 = new Predicate() {
-                    public boolean a(@Nullable Entity entity) {
-                        return entity != null && axisalignedbb.c(entity.getBoundingBox());
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.E();
+            }, new ChatMessage("argument.entity.options.type.description", new Object[0]));
+            a("tag", (argumentparserselector) -> {
+                boolean flag = argumentparserselector.e();
+                String s = argumentparserselector.f().readUnquotedString();
+
+                argumentparserselector.a((entity) -> {
+                    return "".equals(s) ? entity.getScoreboardTags().isEmpty() != flag : entity.getScoreboardTags().contains(s) != flag;
+                });
+            }, (argumentparserselector) -> {
+                return true;
+            }, new ChatMessage("argument.entity.options.tag.description", new Object[0]));
+            a("nbt", (argumentparserselector) -> {
+                boolean flag = argumentparserselector.e();
+                NBTTagCompound nbttagcompound = (new MojangsonParser(argumentparserselector.f())).f();
+
+                argumentparserselector.a((entity) -> {
+                    NBTTagCompound nbttagcompound = entity.save(new NBTTagCompound());
+
+                    if (entity instanceof EntityPlayer) {
+                        ItemStack itemstack = ((EntityPlayer) entity).inventory.getItemInHand();
+
+                        if (!itemstack.isEmpty()) {
+                            nbttagcompound.set("SelectedItem", itemstack.save(new NBTTagCompound()));
+                        }
                     }
 
-                    public boolean apply(@Nullable Object object) {
-                        return this.a((Entity) object);
+                    return GameProfileSerializer.a(nbttagcompound1, nbttagcompound, true) != flag;
+                });
+            }, (argumentparserselector) -> {
+                return true;
+            }, new ChatMessage("argument.entity.options.nbt.description", new Object[0]));
+            a("scores", (argumentparserselector) -> {
+                StringReader stringreader = argumentparserselector.f();
+                HashMap hashmap = Maps.newHashMap();
+
+                stringreader.expect('{');
+                stringreader.skipWhitespace();
+
+                while (stringreader.canRead() && stringreader.peek() != 125) {
+                    stringreader.skipWhitespace();
+                    String s = stringreader.readUnquotedString();
+
+                    stringreader.skipWhitespace();
+                    stringreader.expect('=');
+                    stringreader.skipWhitespace();
+                    CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(stringreader);
+
+                    hashmap.put(s, criterionconditionvalue_d);
+                    stringreader.skipWhitespace();
+                    if (stringreader.canRead() && stringreader.peek() == 44) {
+                        stringreader.skip();
                     }
-                };
+                }
 
-                arraylist.addAll(world.b(oclass, Predicates.and(predicate1, predicate2)));
-            } else {
-                arraylist.addAll(world.a(oclass, axisalignedbb, predicate1));
-            }
+                stringreader.expect('}');
+                if (!hashmap.isEmpty()) {
+                    argumentparserselector.a((entity) -> {
+                        ScoreboardServer scoreboardserver = entity.bK().getScoreboard();
+                        String s = entity.getName();
+                        Iterator iterator = map.entrySet().iterator();
+
+                        Entry entry;
+                        int i;
+
+                        do {
+                            if (!iterator.hasNext()) {
+                                return true;
+                            }
+
+                            entry = (Entry) iterator.next();
+                            ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective((String) entry.getKey());
+
+                            if (scoreboardobjective == null) {
+                                return false;
+                            }
+
+                            if (!scoreboardserver.b(s, scoreboardobjective)) {
+                                return false;
+                            }
+
+                            ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
+
+                            i = scoreboardscore.getScore();
+                        } while (((CriterionConditionValue.d) entry.getValue()).d(i));
+
+                        return false;
+                    });
+                }
+
+                argumentparserselector.k(true);
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.G();
+            }, new ChatMessage("argument.entity.options.scores.description", new Object[0]));
+            a("advancements", (argumentparserselector) -> {
+                StringReader stringreader = argumentparserselector.f();
+                HashMap hashmap = Maps.newHashMap();
+
+                stringreader.expect('{');
+                stringreader.skipWhitespace();
+
+                while (stringreader.canRead() && stringreader.peek() != 125) {
+                    stringreader.skipWhitespace();
+                    MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
+
+                    stringreader.skipWhitespace();
+                    stringreader.expect('=');
+                    stringreader.skipWhitespace();
+                    if (stringreader.canRead() && stringreader.peek() == 123) {
+                        HashMap hashmap1 = Maps.newHashMap();
+
+                        stringreader.skipWhitespace();
+                        stringreader.expect('{');
+                        stringreader.skipWhitespace();
+
+                        while (stringreader.canRead() && stringreader.peek() != 125) {
+                            stringreader.skipWhitespace();
+                            String s = stringreader.readUnquotedString();
+
+                            stringreader.skipWhitespace();
+                            stringreader.expect('=');
+                            stringreader.skipWhitespace();
+                            boolean flag = stringreader.readBoolean();
+
+                            hashmap1.put(s, (criterionprogress) -> {
+                                return criterionprogress.a() == flag;
+                            });
+                            stringreader.skipWhitespace();
+                            if (stringreader.canRead() && stringreader.peek() == 44) {
+                                stringreader.skip();
+                            }
+                        }
+
+                        stringreader.skipWhitespace();
+                        stringreader.expect('}');
+                        stringreader.skipWhitespace();
+                        hashmap.put(minecraftkey, (advancementprogress) -> {
+                            Iterator iterator = map.entrySet().iterator();
+
+                            Entry entry;
+                            CriterionProgress criterionprogress;
+
+                            do {
+                                if (!iterator.hasNext()) {
+                                    return true;
+                                }
+
+                                entry = (Entry) iterator.next();
+                                criterionprogress = advancementprogress.getCriterionProgress((String) entry.getKey());
+                            } while (criterionprogress != null && ((Predicate) entry.getValue()).test(criterionprogress));
+
+                            return false;
+                        });
+                    } else {
+                        boolean flag1 = stringreader.readBoolean();
+
+                        hashmap.put(minecraftkey, (advancementprogress) -> {
+                            return advancementprogress.isDone() == flag;
+                        });
+                    }
+
+                    stringreader.skipWhitespace();
+                    if (stringreader.canRead() && stringreader.peek() == 44) {
+                        stringreader.skip();
+                    }
+                }
+
+                stringreader.expect('}');
+                if (!hashmap.isEmpty()) {
+                    argumentparserselector.a((entity) -> {
+                        if (!(entity instanceof EntityPlayer)) {
+                            return false;
+                        } else {
+                            EntityPlayer entityplayer = (EntityPlayer) entity;
+                            AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
+                            AdvancementDataWorld advancementdataworld = entityplayer.bK().getAdvancementData();
+                            Iterator iterator = map.entrySet().iterator();
+
+                            Entry entry;
+                            Advancement advancement;
+
+                            do {
+                                if (!iterator.hasNext()) {
+                                    return true;
+                                }
+
+                                entry = (Entry) iterator.next();
+                                advancement = advancementdataworld.a((MinecraftKey) entry.getKey());
+                            } while (advancement != null && ((Predicate) entry.getValue()).test(advancementdataplayer.getProgress(advancement)));
+
+                            return false;
+                        }
+                    });
+                    argumentparserselector.a(false);
+                }
+
+                argumentparserselector.l(true);
+            }, (argumentparserselector) -> {
+                return !argumentparserselector.H();
+            }, new ChatMessage("argument.entity.options.advancements.description", new Object[0]));
         }
-
-        return arraylist;
     }
 
-    private static <T extends Entity> List<T> a(List<T> list, Map<String, String> map, ICommandListener icommandlistener, Class<? extends T> oclass, String s, final Vec3D vec3d) {
-        int i = a(map, PlayerSelector.s, !s.equals("a") && !s.equals("e") ? 1 : 0);
+    public static PlayerSelector.a a(ArgumentParserSelector argumentparserselector, String s, int i) throws CommandSyntaxException {
+        PlayerSelector.b playerselector_b = (PlayerSelector.b) PlayerSelector.i.get(s);
 
-        if (!s.equals("p") && !s.equals("a") && !s.equals("e")) {
-            if (s.equals("r")) {
-                Collections.shuffle((List) list);
+        if (playerselector_b != null) {
+            if (playerselector_b.b.test(argumentparserselector)) {
+                return playerselector_b.a;
+            } else {
+                throw PlayerSelector.b.createWithContext(argumentparserselector.f(), s);
             }
         } else {
-            Collections.sort((List) list, new Comparator() {
-                public int a(Entity entity, Entity entity1) {
-                    return ComparisonChain.start().compare(entity.d(vec3d.x, vec3d.y, vec3d.z), entity1.d(vec3d.x, vec3d.y, vec3d.z)).result();
-                }
-
-                public int compare(Object object, Object object1) {
-                    return this.a((Entity) object, (Entity) object1);
-                }
-            });
+            argumentparserselector.f().setCursor(i);
+            throw PlayerSelector.a.createWithContext(argumentparserselector.f(), s);
         }
-
-        Entity entity = icommandlistener.f();
-
-        if (entity != null && oclass.isAssignableFrom(entity.getClass()) && i == 1 && ((List) list).contains(entity) && !"r".equals(s)) {
-            list = Lists.newArrayList(new Entity[] { entity});
-        }
-
-        if (i != 0) {
-            if (i < 0) {
-                Collections.reverse((List) list);
-            }
-
-            list = ((List) list).subList(0, Math.min(Math.abs(i), ((List) list).size()));
-        }
-
-        return (List) list;
     }
 
-    private static AxisAlignedBB a(BlockPosition blockposition, int i, int j, int k) {
-        boolean flag = i < 0;
-        boolean flag1 = j < 0;
-        boolean flag2 = k < 0;
-        int l = blockposition.getX() + (flag ? i : 0);
-        int i1 = blockposition.getY() + (flag1 ? j : 0);
-        int j1 = blockposition.getZ() + (flag2 ? k : 0);
-        int k1 = blockposition.getX() + (flag ? 0 : i) + 1;
-        int l1 = blockposition.getY() + (flag1 ? 0 : j) + 1;
-        int i2 = blockposition.getZ() + (flag2 ? 0 : k) + 1;
-
-        return new AxisAlignedBB((double) l, (double) i1, (double) j1, (double) k1, (double) l1, (double) i2);
-    }
-
-    private static BlockPosition a(Map<String, String> map, BlockPosition blockposition) {
-        return new BlockPosition(a(map, PlayerSelector.i, blockposition.getX()), a(map, PlayerSelector.j, blockposition.getY()), a(map, PlayerSelector.k, blockposition.getZ()));
-    }
-
-    private static Vec3D b(Map<String, String> map, Vec3D vec3d) {
-        return new Vec3D(a(map, PlayerSelector.i, vec3d.x, true), a(map, PlayerSelector.j, vec3d.y, false), a(map, PlayerSelector.k, vec3d.z, true));
-    }
-
-    private static double a(Map<String, String> map, String s, double d0, boolean flag) {
-        return map.containsKey(s) ? (double) MathHelper.a((String) map.get(s), MathHelper.floor(d0)) + (flag ? 0.5D : 0.0D) : d0;
-    }
-
-    private static boolean h(Map<String, String> map) {
-        Iterator iterator = PlayerSelector.z.iterator();
-
-        String s;
-
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            s = (String) iterator.next();
-        } while (!map.containsKey(s));
-
-        return true;
-    }
-
-    private static int a(Map<String, String> map, String s, int i) {
-        return map.containsKey(s) ? MathHelper.a((String) map.get(s), i) : i;
-    }
-
-    @Nullable
-    private static String b(Map<String, String> map, String s) {
-        return (String) map.get(s);
-    }
-
-    public static Map<String, Integer> a(Map<String, String> map) {
-        HashMap hashmap = Maps.newHashMap();
-        Iterator iterator = map.keySet().iterator();
+    public static void a(ArgumentParserSelector argumentparserselector, SuggestionsBuilder suggestionsbuilder) {
+        String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
+        Iterator iterator = PlayerSelector.i.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            String s = (String) iterator.next();
+            Entry entry = (Entry) iterator.next();
 
-            if (s.startsWith("score_") && s.length() > "score_".length()) {
-                hashmap.put(s.substring("score_".length()), Integer.valueOf(MathHelper.a((String) map.get(s), 1)));
+            if (((PlayerSelector.b) entry.getValue()).b.test(argumentparserselector) && ((String) entry.getKey()).toLowerCase(Locale.ROOT).startsWith(s)) {
+                suggestionsbuilder.suggest((String) entry.getKey() + '=', ((PlayerSelector.b) entry.getValue()).c);
             }
         }
 
-        return hashmap;
     }
 
-    public static boolean isList(String s) throws CommandException {
-        Matcher matcher = PlayerSelector.a.matcher(s);
+    static class b {
 
-        if (!matcher.matches()) {
-            return false;
-        } else {
-            Map map = d(matcher.group(2));
-            String s1 = matcher.group(1);
-            int i = !"a".equals(s1) && !"e".equals(s1) ? 1 : 0;
+        public final PlayerSelector.a a;
+        public final Predicate<ArgumentParserSelector> b;
+        public final IChatBaseComponent c;
 
-            return a(map, PlayerSelector.s, i) != 1;
+        private b(PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
+            this.a = playerselector_a;
+            this.b = predicate;
+            this.c = ichatbasecomponent;
+        }
+
+        b(PlayerSelector.a playerselector_a, Predicate predicate, IChatBaseComponent ichatbasecomponent, Object object) {
+            this(playerselector_a, predicate, ichatbasecomponent);
         }
     }
 
-    public static boolean isPattern(String s) {
-        return PlayerSelector.a.matcher(s).matches();
-    }
+    public interface a {
 
-    private static Map<String, String> d(@Nullable String s) throws CommandException {
-        HashMap hashmap = Maps.newHashMap();
-
-        if (s == null) {
-            return hashmap;
-        } else {
-            Iterator iterator = PlayerSelector.b.split(s).iterator();
-
-            while (iterator.hasNext()) {
-                String s1 = (String) iterator.next();
-                Iterator iterator1 = PlayerSelector.c.split(s1).iterator();
-                String s2 = (String) iterator1.next();
-
-                if (!PlayerSelector.y.apply(s2)) {
-                    throw new CommandException("commands.generic.selector_argument", new Object[] { s1});
-                }
-
-                hashmap.put(s2, iterator1.hasNext() ? (String) iterator1.next() : "");
-            }
-
-            return hashmap;
-        }
+        void handle(ArgumentParserSelector argumentparserselector) throws CommandSyntaxException;
     }
 }

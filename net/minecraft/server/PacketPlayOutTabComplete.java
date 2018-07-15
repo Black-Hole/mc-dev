@@ -1,35 +1,58 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.brigadier.context.StringRange;
+import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.suggestion.Suggestions;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
 
-    private String[] a;
+    private int a;
+    private Suggestions b;
 
     public PacketPlayOutTabComplete() {}
 
-    public PacketPlayOutTabComplete(String[] astring) {
-        this.a = astring;
+    public PacketPlayOutTabComplete(int i, Suggestions suggestions) {
+        this.a = i;
+        this.b = suggestions;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new String[packetdataserializer.g()];
+        this.a = packetdataserializer.g();
+        int i = packetdataserializer.g();
+        int j = packetdataserializer.g();
+        StringRange stringrange = StringRange.between(i, i + j);
+        int k = packetdataserializer.g();
+        ArrayList arraylist = Lists.newArrayListWithCapacity(k);
 
-        for (int i = 0; i < this.a.length; ++i) {
-            this.a[i] = packetdataserializer.e(32767);
+        for (int l = 0; l < k; ++l) {
+            String s = packetdataserializer.e(32767);
+            IChatBaseComponent ichatbasecomponent = packetdataserializer.readBoolean() ? packetdataserializer.f() : null;
+
+            arraylist.add(new Suggestion(stringrange, s, ichatbasecomponent));
         }
 
+        this.b = new Suggestions(stringrange, arraylist);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.d(this.a.length);
-        String[] astring = this.a;
-        int i = astring.length;
+        packetdataserializer.d(this.a);
+        packetdataserializer.d(this.b.getRange().getStart());
+        packetdataserializer.d(this.b.getRange().getLength());
+        packetdataserializer.d(this.b.getList().size());
+        Iterator iterator = this.b.getList().iterator();
 
-        for (int j = 0; j < i; ++j) {
-            String s = astring[j];
+        while (iterator.hasNext()) {
+            Suggestion suggestion = (Suggestion) iterator.next();
 
-            packetdataserializer.a(s);
+            packetdataserializer.a(suggestion.getText());
+            packetdataserializer.writeBoolean(suggestion.getTooltip() != null);
+            if (suggestion.getTooltip() != null) {
+                packetdataserializer.a(ChatComponentUtils.a(suggestion.getTooltip()));
+            }
         }
 
     }

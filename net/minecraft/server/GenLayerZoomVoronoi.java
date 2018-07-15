@@ -1,83 +1,50 @@
 package net.minecraft.server;
 
-public class GenLayerZoomVoronoi extends GenLayer {
+public enum GenLayerZoomVoronoi implements AreaTransformer2 {
 
-    public GenLayerZoomVoronoi(long i, GenLayer genlayer) {
-        super(i);
-        super.a = genlayer;
+    INSTANCE;
+
+    private GenLayerZoomVoronoi() {}
+
+    public int a(AreaContextTransformed<?> areacontexttransformed, AreaDimension areadimension, Area area, int i, int j) {
+        int k = i + areadimension.a() - 2;
+        int l = j + areadimension.b() - 2;
+        int i1 = areadimension.a() >> 2;
+        int j1 = areadimension.b() >> 2;
+        int k1 = (k >> 2) - i1;
+        int l1 = (l >> 2) - j1;
+
+        areacontexttransformed.a((long) (k1 + i1 << 2), (long) (l1 + j1 << 2));
+        double d0 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+        double d1 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+
+        areacontexttransformed.a((long) (k1 + i1 + 1 << 2), (long) (l1 + j1 << 2));
+        double d2 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
+        double d3 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+
+        areacontexttransformed.a((long) (k1 + i1 << 2), (long) (l1 + j1 + 1 << 2));
+        double d4 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
+        double d5 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
+
+        areacontexttransformed.a((long) (k1 + i1 + 1 << 2), (long) (l1 + j1 + 1 << 2));
+        double d6 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
+        double d7 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
+        int i2 = k & 3;
+        int j2 = l & 3;
+        double d8 = ((double) j2 - d1) * ((double) j2 - d1) + ((double) i2 - d0) * ((double) i2 - d0);
+        double d9 = ((double) j2 - d3) * ((double) j2 - d3) + ((double) i2 - d2) * ((double) i2 - d2);
+        double d10 = ((double) j2 - d5) * ((double) j2 - d5) + ((double) i2 - d4) * ((double) i2 - d4);
+        double d11 = ((double) j2 - d7) * ((double) j2 - d7) + ((double) i2 - d6) * ((double) i2 - d6);
+
+        return d8 < d9 && d8 < d10 && d8 < d11 ? area.a(k1 + 0, l1 + 0) : (d9 < d8 && d9 < d10 && d9 < d11 ? area.a(k1 + 1, l1 + 0) & 255 : (d10 < d8 && d10 < d9 && d10 < d11 ? area.a(k1 + 0, l1 + 1) : area.a(k1 + 1, l1 + 1) & 255));
     }
 
-    public int[] a(int i, int j, int k, int l) {
-        i -= 2;
-        j -= 2;
-        int i1 = i >> 2;
-        int j1 = j >> 2;
-        int k1 = (k >> 2) + 2;
-        int l1 = (l >> 2) + 2;
-        int[] aint = this.a.a(i1, j1, k1, l1);
-        int i2 = k1 - 1 << 2;
-        int j2 = l1 - 1 << 2;
-        int[] aint1 = IntCache.a(i2 * j2);
+    public AreaDimension a(AreaDimension areadimension) {
+        int i = areadimension.a() >> 2;
+        int j = areadimension.b() >> 2;
+        int k = (areadimension.c() >> 2) + 2;
+        int l = (areadimension.d() >> 2) + 2;
 
-        int k2;
-
-        for (int l2 = 0; l2 < l1 - 1; ++l2) {
-            k2 = 0;
-            int i3 = aint[k2 + 0 + (l2 + 0) * k1];
-
-            for (int j3 = aint[k2 + 0 + (l2 + 1) * k1]; k2 < k1 - 1; ++k2) {
-                double d0 = 3.6D;
-
-                this.a((long) (k2 + i1 << 2), (long) (l2 + j1 << 2));
-                double d1 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D;
-                double d2 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D;
-
-                this.a((long) (k2 + i1 + 1 << 2), (long) (l2 + j1 << 2));
-                double d3 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-                double d4 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D;
-
-                this.a((long) (k2 + i1 << 2), (long) (l2 + j1 + 1 << 2));
-                double d5 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D;
-                double d6 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-
-                this.a((long) (k2 + i1 + 1 << 2), (long) (l2 + j1 + 1 << 2));
-                double d7 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-                double d8 = ((double) this.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
-                int k3 = aint[k2 + 1 + (l2 + 0) * k1] & 255;
-                int l3 = aint[k2 + 1 + (l2 + 1) * k1] & 255;
-
-                for (int i4 = 0; i4 < 4; ++i4) {
-                    int j4 = ((l2 << 2) + i4) * i2 + (k2 << 2);
-
-                    for (int k4 = 0; k4 < 4; ++k4) {
-                        double d9 = ((double) i4 - d2) * ((double) i4 - d2) + ((double) k4 - d1) * ((double) k4 - d1);
-                        double d10 = ((double) i4 - d4) * ((double) i4 - d4) + ((double) k4 - d3) * ((double) k4 - d3);
-                        double d11 = ((double) i4 - d6) * ((double) i4 - d6) + ((double) k4 - d5) * ((double) k4 - d5);
-                        double d12 = ((double) i4 - d8) * ((double) i4 - d8) + ((double) k4 - d7) * ((double) k4 - d7);
-
-                        if (d9 < d10 && d9 < d11 && d9 < d12) {
-                            aint1[j4++] = i3;
-                        } else if (d10 < d9 && d10 < d11 && d10 < d12) {
-                            aint1[j4++] = k3;
-                        } else if (d11 < d9 && d11 < d10 && d11 < d12) {
-                            aint1[j4++] = j3;
-                        } else {
-                            aint1[j4++] = l3;
-                        }
-                    }
-                }
-
-                i3 = k3;
-                j3 = l3;
-            }
-        }
-
-        int[] aint2 = IntCache.a(k * l);
-
-        for (k2 = 0; k2 < l; ++k2) {
-            System.arraycopy(aint1, (k2 + (j & 3)) * i2 + (i & 3), aint2, k2 * k, k);
-        }
-
-        return aint2;
+        return new AreaDimension(i, j, k, l);
     }
 }

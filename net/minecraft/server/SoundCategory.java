@@ -1,14 +1,15 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public enum SoundCategory {
 
     MASTER("master"), MUSIC("music"), RECORDS("record"), WEATHER("weather"), BLOCKS("block"), HOSTILE("hostile"), NEUTRAL("neutral"), PLAYERS("player"), AMBIENT("ambient"), VOICE("voice");
 
-    private static final Map<String, SoundCategory> k = Maps.newHashMap();
+    private static final Map<String, SoundCategory> k = (Map) Arrays.stream(values()).collect(Collectors.toMap(SoundCategory::a, Function.identity()));
     private final String l;
 
     private SoundCategory(String s) {
@@ -17,29 +18,5 @@ public enum SoundCategory {
 
     public String a() {
         return this.l;
-    }
-
-    public static SoundCategory a(String s) {
-        return (SoundCategory) SoundCategory.k.get(s);
-    }
-
-    public static Set<String> b() {
-        return SoundCategory.k.keySet();
-    }
-
-    static {
-        SoundCategory[] asoundcategory = values();
-        int i = asoundcategory.length;
-
-        for (int j = 0; j < i; ++j) {
-            SoundCategory soundcategory = asoundcategory[j];
-
-            if (SoundCategory.k.containsKey(soundcategory.a())) {
-                throw new Error("Clash in Sound Category name pools! Cannot insert " + soundcategory);
-            }
-
-            SoundCategory.k.put(soundcategory.a(), soundcategory);
-        }
-
     }
 }

@@ -9,4 +9,8 @@ public interface Packet<T extends PacketListener> {
     void b(PacketDataSerializer packetdataserializer) throws IOException;
 
     void a(T t0);
+
+    default boolean a() {
+        return false;
+    }
 }

@@ -1,53 +1,72 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
 
 public class CustomFunction {
 
     private final CustomFunction.c[] a;
+    private final MinecraftKey b;
 
-    public CustomFunction(CustomFunction.c[] acustomfunction_c) {
+    public CustomFunction(MinecraftKey minecraftkey, CustomFunction.c[] acustomfunction_c) {
+        this.b = minecraftkey;
         this.a = acustomfunction_c;
     }
 
-    public CustomFunction.c[] a() {
+    public MinecraftKey a() {
+        return this.b;
+    }
+
+    public CustomFunction.c[] b() {
         return this.a;
     }
 
-    public static CustomFunction a(CustomFunctionData customfunctiondata, List<String> list) {
+    public static CustomFunction a(MinecraftKey minecraftkey, CustomFunctionData customfunctiondata, List<String> list) {
         ArrayList arraylist = Lists.newArrayListWithCapacity(list.size());
-        Iterator iterator = list.iterator();
 
-        while (iterator.hasNext()) {
-            String s = (String) iterator.next();
+        for (int i = 0; i < list.size(); ++i) {
+            String s = ((String) list.get(i)).trim();
 
-            s = s.trim();
             if (!s.startsWith("#") && !s.isEmpty()) {
                 String[] astring = s.split(" ", 2);
                 String s1 = astring[0];
 
-                if (!customfunctiondata.a().getCommands().containsKey(s1)) {
-                    if (s1.startsWith("//")) {
-                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (if you intended to make a comment, use \'#\' not \'//\')");
-                    }
-
-                    if (s1.startsWith("/") && s1.length() > 1) {
-                        throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
-                    }
-
-                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\'");
+                if (s1.startsWith("//")) {
+                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' on line " + i + " (if you intended to make a comment, use \'#\' not \'//\')");
                 }
 
-                arraylist.add(new CustomFunction.b(s));
+                if (s1.startsWith("/") && s1.length() > 1) {
+                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' on line " + i + " (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
+                }
+
+                try {
+                    ParseResults parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(s, customfunctiondata.f());
+
+                    if (parseresults.getReader().canRead()) {
+                        if (parseresults.getExceptions().size() == 1) {
+                            throw (CommandSyntaxException) parseresults.getExceptions().values().iterator().next();
+                        }
+
+                        if (parseresults.getContext().getRange().isEmpty()) {
+                            throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownCommand().createWithContext(parseresults.getReader());
+                        }
+
+                        throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader());
+                    }
+
+                    arraylist.add(new CustomFunction.b(parseresults));
+                } catch (CommandSyntaxException commandsyntaxexception) {
+                    throw new IllegalArgumentException("Whilst parsing command on line " + i + ": " + commandsyntaxexception.getMessage());
+                }
             }
         }
 
-        return new CustomFunction((CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[arraylist.size()]));
+        return new CustomFunction(minecraftkey, (CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[arraylist.size()]));
     }
 
     public static class a {
@@ -80,8 +99,9 @@ public class CustomFunction {
             return this.d;
         }
 
-        public String toString() {
-            return String.valueOf(this.b);
+        @Nullable
+        public MinecraftKey a() {
+            return this.d != null ? this.d.b : this.b;
         }
     }
 
@@ -93,45 +113,45 @@ public class CustomFunction {
             this.a = new CustomFunction.a(customfunction);
         }
 
-        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
+        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
             CustomFunction customfunction = this.a.a(customfunctiondata);
 
             if (customfunction != null) {
-                CustomFunction.c[] acustomfunction_c = customfunction.a();
+                CustomFunction.c[] acustomfunction_c = customfunction.b();
                 int j = i - arraydeque.size();
                 int k = Math.min(acustomfunction_c.length, j);
 
                 for (int l = k - 1; l >= 0; --l) {
-                    arraydeque.addFirst(new CustomFunctionData.a(customfunctiondata, icommandlistener, acustomfunction_c[l]));
+                    arraydeque.addFirst(new CustomFunctionData.a(customfunctiondata, commandlistenerwrapper, acustomfunction_c[l]));
                 }
             }
 
         }
 
         public String toString() {
-            return "/function " + this.a;
+            return "function " + this.a.a();
         }
     }
 
     public static class b implements CustomFunction.c {
 
-        private final String a;
+        private final ParseResults<CommandListenerWrapper> a;
 
-        public b(String s) {
-            this.a = s;
+        public b(ParseResults<CommandListenerWrapper> parseresults) {
+            this.a = parseresults;
         }
 
-        public void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i) {
-            customfunctiondata.a().a(icommandlistener, this.a);
+        public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException {
+            customfunctiondata.d().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getReader(), this.a.getExceptions()));
         }
 
         public String toString() {
-            return "/" + this.a;
+            return this.a.getReader().getString();
         }
     }
 
     public interface c {
 
-        void a(CustomFunctionData customfunctiondata, ICommandListener icommandlistener, ArrayDeque<CustomFunctionData.a> arraydeque, int i);
+        void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException;
     }
 }

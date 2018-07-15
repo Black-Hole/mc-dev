@@ -1,24 +1,24 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
 public abstract class EntityTameableAnimal extends EntityAnimal implements EntityOwnable {
 
-    protected static final DataWatcherObject<Byte> bx = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.a);
-    protected static final DataWatcherObject<Optional<UUID>> by = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.m);
+    protected static final DataWatcherObject<Byte> bC = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.a);
+    protected static final DataWatcherObject<Optional<UUID>> bD = DataWatcher.a(EntityTameableAnimal.class, DataWatcherRegistry.o);
     protected PathfinderGoalSit goalSit;
 
-    public EntityTameableAnimal(World world) {
-        super(world);
-        this.dm();
+    protected EntityTameableAnimal(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
+        this.dz();
     }
 
-    protected void i() {
-        super.i();
-        this.datawatcher.register(EntityTameableAnimal.bx, Byte.valueOf((byte) 0));
-        this.datawatcher.register(EntityTameableAnimal.by, Optional.absent());
+    protected void x_() {
+        super.x_();
+        this.datawatcher.register(EntityTameableAnimal.bC, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityTameableAnimal.bD, Optional.empty());
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -41,7 +41,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         } else {
             String s1 = nbttagcompound.getString("Owner");
 
-            s = NameReferencingFileConverter.a(this.C_(), s1);
+            s = NameReferencingFileConverter.a(this.bK(), s1);
         }
 
         if (!s.isEmpty()) {
@@ -64,11 +64,11 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         return !this.isLeashed();
     }
 
-    protected void p(boolean flag) {
-        EnumParticle enumparticle = EnumParticle.HEART;
+    protected void s(boolean flag) {
+        ParticleType particletype = Particles.A;
 
         if (!flag) {
-            enumparticle = EnumParticle.SMOKE_NORMAL;
+            particletype = Particles.M;
         }
 
         for (int i = 0; i < 7; ++i) {
@@ -76,58 +76,58 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
 
-            this.world.addParticle(enumparticle, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
+            this.world.addParticle(particletype, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
 
     }
 
     public boolean isTamed() {
-        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bx)).byteValue() & 4) != 0;
+        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue() & 4) != 0;
     }
 
     public void setTamed(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bx)).byteValue();
+        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue();
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bx, Byte.valueOf((byte) (b0 | 4)));
+            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 | 4)));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bx, Byte.valueOf((byte) (b0 & -5)));
+            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 & -5)));
         }
 
-        this.dm();
+        this.dz();
     }
 
-    protected void dm() {}
+    protected void dz() {}
 
     public boolean isSitting() {
-        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bx)).byteValue() & 1) != 0;
+        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue() & 1) != 0;
     }
 
     public void setSitting(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bx)).byteValue();
+        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue();
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bx, Byte.valueOf((byte) (b0 | 1)));
+            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 | 1)));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bx, Byte.valueOf((byte) (b0 & -2)));
+            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 & -2)));
         }
 
     }
 
     @Nullable
     public UUID getOwnerUUID() {
-        return (UUID) ((Optional) this.datawatcher.get(EntityTameableAnimal.by)).orNull();
+        return (UUID) ((Optional) this.datawatcher.get(EntityTameableAnimal.bD)).orElse((Object) null);
     }
 
     public void setOwnerUUID(@Nullable UUID uuid) {
-        this.datawatcher.set(EntityTameableAnimal.by, Optional.fromNullable(uuid));
+        this.datawatcher.set(EntityTameableAnimal.bD, Optional.ofNullable(uuid));
     }
 
     public void c(EntityHuman entityhuman) {
         this.setTamed(true);
         this.setOwnerUUID(entityhuman.getUniqueID());
         if (entityhuman instanceof EntityPlayer) {
-            CriterionTriggers.w.a((EntityPlayer) entityhuman, (EntityAnimal) this);
+            CriterionTriggers.x.a((EntityPlayer) entityhuman, (EntityAnimal) this);
         }
 
     }
@@ -143,7 +143,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         }
     }
 
-    public boolean e(EntityLiving entityliving) {
+    public boolean f(EntityLiving entityliving) {
         return entityliving == this.getOwner();
     }
 
@@ -155,16 +155,16 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         return true;
     }
 
-    public ScoreboardTeamBase aY() {
+    public ScoreboardTeamBase be() {
         if (this.isTamed()) {
             EntityLiving entityliving = this.getOwner();
 
             if (entityliving != null) {
-                return entityliving.aY();
+                return entityliving.be();
             }
         }
 
-        return super.aY();
+        return super.be();
     }
 
     public boolean r(Entity entity) {

@@ -1,36 +1,30 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
 
 public abstract class EntityHanging extends Entity {
 
-    private static final Predicate<Entity> c = new Predicate() {
-        public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityHanging;
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((Entity) object);
-        }
+    protected static final Predicate<Entity> a = (entity) -> {
+        return entity instanceof EntityHanging;
     };
     private int d;
     public BlockPosition blockPosition;
     @Nullable
     public EnumDirection direction;
 
-    public EntityHanging(World world) {
-        super(world);
+    protected EntityHanging(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.setSize(0.5F, 0.5F);
     }
 
-    public EntityHanging(World world, BlockPosition blockposition) {
-        this(world);
+    protected EntityHanging(EntityTypes<?> entitytypes, World world, BlockPosition blockposition) {
+        this(entitytypes, world);
         this.blockPosition = blockposition;
     }
 
-    protected void i() {}
+    protected void x_() {}
 
     public void setDirection(EnumDirection enumdirection) {
         Validate.notNull(enumdirection);
@@ -81,7 +75,7 @@ public abstract class EntityHanging extends Entity {
         return i % 32 == 0 ? 0.5D : 0.0D;
     }
 
-    public void B_() {
+    public void tick() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -96,7 +90,7 @@ public abstract class EntityHanging extends Entity {
     }
 
     public boolean survives() {
-        if (!this.world.getCubes(this, this.getBoundingBox()).isEmpty()) {
+        if (!this.world.getCubes(this, this.getBoundingBox())) {
             return false;
         } else {
             int i = Math.max(1, this.getWidth() / 16);
@@ -119,7 +113,7 @@ public abstract class EntityHanging extends Entity {
                 }
             }
 
-            return this.world.getEntities(this, this.getBoundingBox(), EntityHanging.c).isEmpty();
+            return this.world.getEntities(this, this.getBoundingBox(), EntityHanging.a).isEmpty();
         }
     }
 
@@ -141,7 +135,7 @@ public abstract class EntityHanging extends Entity {
         } else {
             if (!this.dead && !this.world.isClientSide) {
                 this.die();
-                this.ax();
+                this.aA();
                 this.a(damagesource.getEntity());
             }
 
@@ -185,17 +179,17 @@ public abstract class EntityHanging extends Entity {
 
     public abstract void a(@Nullable Entity entity);
 
-    public abstract void p();
+    public abstract void m();
 
     public EntityItem a(ItemStack itemstack, float f) {
         EntityItem entityitem = new EntityItem(this.world, this.locX + (double) ((float) this.direction.getAdjacentX() * 0.15F), this.locY + (double) f, this.locZ + (double) ((float) this.direction.getAdjacentZ() * 0.15F), itemstack);
 
-        entityitem.q();
+        entityitem.n();
         this.world.addEntity(entityitem);
         return entityitem;
     }
 
-    protected boolean aA() {
+    protected boolean aD() {
         return false;
     }
 

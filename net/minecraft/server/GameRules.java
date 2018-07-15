@@ -1,80 +1,99 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import javax.annotation.Nullable;
 
 public class GameRules {
 
-    private final TreeMap<String, GameRules.GameRuleValue> a = new TreeMap();
+    private static final TreeMap<String, GameRules.b> a = (TreeMap) SystemUtils.a((Object) (new TreeMap()), (treemap) -> {
+        treemap.put("doFireTick", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("mobGriefing", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("keepInventory", new GameRules.b("false", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doMobSpawning", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doMobLoot", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doTileDrops", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doEntityDrops", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("commandBlockOutput", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("naturalRegeneration", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doDaylightCycle", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("logAdminCommands", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("showDeathMessages", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("randomTickSpeed", new GameRules.b("3", GameRules.EnumGameRuleType.NUMERICAL_VALUE));
+        treemap.put("sendCommandFeedback", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("reducedDebugInfo", new GameRules.b("false", GameRules.EnumGameRuleType.BOOLEAN_VALUE, (minecraftserver, gamerules_gamerulevalue) -> {
+            int i = gamerules_gamerulevalue.b() ? 22 : 23;
+            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
+
+            while (iterator.hasNext()) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityStatus(entityplayer, (byte) i));
+            }
+
+        }));
+        treemap.put("spectatorsGenerateChunks", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("spawnRadius", new GameRules.b("10", GameRules.EnumGameRuleType.NUMERICAL_VALUE));
+        treemap.put("disableElytraMovementCheck", new GameRules.b("false", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("maxEntityCramming", new GameRules.b("24", GameRules.EnumGameRuleType.NUMERICAL_VALUE));
+        treemap.put("doWeatherCycle", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("doLimitedCrafting", new GameRules.b("false", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+        treemap.put("maxCommandChainLength", new GameRules.b("65536", GameRules.EnumGameRuleType.NUMERICAL_VALUE));
+        treemap.put("announceAdvancements", new GameRules.b("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
+    });
+    private final TreeMap<String, GameRules.GameRuleValue> b = new TreeMap();
 
     public GameRules() {
-        this.a("doFireTick", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("mobGriefing", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("keepInventory", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doMobSpawning", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doMobLoot", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doTileDrops", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doEntityDrops", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("commandBlockOutput", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("naturalRegeneration", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doDaylightCycle", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("logAdminCommands", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("showDeathMessages", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("randomTickSpeed", "3", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
-        this.a("sendCommandFeedback", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("reducedDebugInfo", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("spectatorsGenerateChunks", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("spawnRadius", "10", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
-        this.a("disableElytraMovementCheck", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("maxEntityCramming", "24", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
-        this.a("doWeatherCycle", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("doLimitedCrafting", "false", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("maxCommandChainLength", "65536", GameRules.EnumGameRuleType.NUMERICAL_VALUE);
-        this.a("announceAdvancements", "true", GameRules.EnumGameRuleType.BOOLEAN_VALUE);
-        this.a("gameLoopFunction", "-", GameRules.EnumGameRuleType.FUNCTION);
-    }
+        Iterator iterator = GameRules.a.entrySet().iterator();
 
-    public void a(String s, String s1, GameRules.EnumGameRuleType gamerules_enumgameruletype) {
-        this.a.put(s, new GameRules.GameRuleValue(s1, gamerules_enumgameruletype));
-    }
+        while (iterator.hasNext()) {
+            Entry entry = (Entry) iterator.next();
 
-    public void set(String s, String s1) {
-        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
-
-        if (gamerules_gamerulevalue != null) {
-            gamerules_gamerulevalue.a(s1);
-        } else {
-            this.a(s, s1, GameRules.EnumGameRuleType.ANY_VALUE);
+            this.b.put(entry.getKey(), ((GameRules.b) entry.getValue()).a());
         }
 
     }
 
-    public String get(String s) {
-        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
+    public void set(String s, String s1, @Nullable MinecraftServer minecraftserver) {
+        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
-        return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.a() : "";
+        if (gamerules_gamerulevalue != null) {
+            gamerules_gamerulevalue.a(s1, minecraftserver);
+        }
+
     }
 
     public boolean getBoolean(String s) {
-        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
+        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
         return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.b() : false;
     }
 
     public int c(String s) {
-        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
+        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
         return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.c() : 0;
     }
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
-        Iterator iterator = this.a.keySet().iterator();
+        Iterator iterator = this.b.keySet().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
+            GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
             nbttagcompound.setString(s, gamerules_gamerulevalue.a());
         }
@@ -83,54 +102,68 @@ public class GameRules {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        Set set = nbttagcompound.c();
+        Set set = nbttagcompound.getKeys();
         Iterator iterator = set.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
-            this.set(s, nbttagcompound.getString(s));
+            this.set(s, nbttagcompound.getString(s), (MinecraftServer) null);
         }
 
     }
 
-    public String[] getGameRules() {
-        Set set = this.a.keySet();
-
-        return (String[]) set.toArray(new String[set.size()]);
+    public GameRules.GameRuleValue get(String s) {
+        return (GameRules.GameRuleValue) this.b.get(s);
     }
 
-    public boolean contains(String s) {
-        return this.a.containsKey(s);
-    }
-
-    public boolean a(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype) {
-        GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.a.get(s);
-
-        return gamerules_gamerulevalue != null && (gamerules_gamerulevalue.e() == gamerules_enumgameruletype || gamerules_enumgameruletype == GameRules.EnumGameRuleType.ANY_VALUE);
+    public static TreeMap<String, GameRules.b> getGameRules() {
+        return GameRules.a;
     }
 
     public static enum EnumGameRuleType {
 
-        ANY_VALUE, BOOLEAN_VALUE, NUMERICAL_VALUE, FUNCTION;
+        ANY_VALUE(StringArgumentType::greedyString, (commandcontext, s) -> {
+            return (String) commandcontext.getArgument(s, String.class);
+        }), BOOLEAN_VALUE(BoolArgumentType::bool, (commandcontext, s) -> {
+            return ((Boolean) commandcontext.getArgument(s, Boolean.class)).toString();
+        }), NUMERICAL_VALUE(IntegerArgumentType::integer, (commandcontext, s) -> {
+            return ((Integer) commandcontext.getArgument(s, Integer.class)).toString();
+        });
 
-        private EnumGameRuleType() {}
+        private final Supplier<ArgumentType<?>> d;
+        private final BiFunction<CommandContext<CommandListenerWrapper>, String, String> e;
+
+        private EnumGameRuleType(Supplier supplier, BiFunction bifunction) {
+            this.d = supplier;
+            this.e = bifunction;
+        }
+
+        public RequiredArgumentBuilder<CommandListenerWrapper, ?> a(String s) {
+            return CommandDispatcher.a(s, (ArgumentType) this.d.get());
+        }
+
+        public void a(CommandContext<CommandListenerWrapper> commandcontext, String s, GameRules.GameRuleValue gamerules_gamerulevalue) {
+            gamerules_gamerulevalue.a((String) this.e.apply(commandcontext, s), ((CommandListenerWrapper) commandcontext.getSource()).getServer());
+        }
     }
 
-    static class GameRuleValue {
+    public static class GameRuleValue {
 
         private String a;
         private boolean b;
         private int c;
         private double d;
         private final GameRules.EnumGameRuleType e;
+        private final BiConsumer<MinecraftServer, GameRules.GameRuleValue> f;
 
-        public GameRuleValue(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype) {
+        public GameRuleValue(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype, BiConsumer<MinecraftServer, GameRules.GameRuleValue> biconsumer) {
             this.e = gamerules_enumgameruletype;
-            this.a(s);
+            this.f = biconsumer;
+            this.a(s, (MinecraftServer) null);
         }
 
-        public void a(String s) {
+        public void a(String s, @Nullable MinecraftServer minecraftserver) {
             this.a = s;
             this.b = Boolean.parseBoolean(s);
             this.c = this.b ? 1 : 0;
@@ -145,6 +178,10 @@ public class GameRules {
                 this.d = Double.parseDouble(s);
             } catch (NumberFormatException numberformatexception1) {
                 ;
+            }
+
+            if (minecraftserver != null) {
+                this.f.accept(minecraftserver, this);
             }
 
         }
@@ -163,6 +200,32 @@ public class GameRules {
 
         public GameRules.EnumGameRuleType e() {
             return this.e;
+        }
+    }
+
+    public static class b {
+
+        private final GameRules.EnumGameRuleType a;
+        private final String b;
+        private final BiConsumer<MinecraftServer, GameRules.GameRuleValue> c;
+
+        public b(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype) {
+            this(s, gamerules_enumgameruletype, (minecraftserver, gamerules_gamerulevalue) -> {
+            });
+        }
+
+        public b(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype, BiConsumer<MinecraftServer, GameRules.GameRuleValue> biconsumer) {
+            this.a = gamerules_enumgameruletype;
+            this.b = s;
+            this.c = biconsumer;
+        }
+
+        public GameRules.GameRuleValue a() {
+            return new GameRules.GameRuleValue(this.b, this.a, this.c);
+        }
+
+        public GameRules.EnumGameRuleType b() {
+            return this.a;
         }
     }
 }

@@ -1,17 +1,21 @@
 package net.minecraft.server;
 
+import java.util.function.Function;
+
 public class ChunkSection {
 
+    public static final DataPalette<IBlockData> GLOBAL_PALETTE = new DataPaletteGlobal(Block.REGISTRY_ID, Blocks.AIR.getBlockData());
     private final int yPos;
     private int nonEmptyBlockCount;
     private int tickingBlockCount;
-    private final DataPaletteBlock blockIds;
+    private int e;
+    private final DataPaletteBlock<IBlockData> blockIds;
     private NibbleArray emittedLight;
     private NibbleArray skyLight;
 
     public ChunkSection(int i, boolean flag) {
         this.yPos = i;
-        this.blockIds = new DataPaletteBlock();
+        this.blockIds = new DataPaletteBlock(ChunkSection.GLOBAL_PALETTE, Block.REGISTRY_ID, GameProfileSerializer::d, GameProfileSerializer::a, Blocks.AIR.getBlockData());
         this.emittedLight = new NibbleArray();
         if (flag) {
             this.skyLight = new NibbleArray();
@@ -20,26 +24,38 @@ public class ChunkSection {
     }
 
     public IBlockData getType(int i, int j, int k) {
-        return this.blockIds.a(i, j, k);
+        return (IBlockData) this.blockIds.a(i, j, k);
+    }
+
+    public Fluid b(int i, int j, int k) {
+        return ((IBlockData) this.blockIds.a(i, j, k)).s();
     }
 
     public void setType(int i, int j, int k, IBlockData iblockdata) {
         IBlockData iblockdata1 = this.getType(i, j, k);
-        Block block = iblockdata1.getBlock();
-        Block block1 = iblockdata.getBlock();
+        Fluid fluid = this.b(i, j, k);
+        Fluid fluid1 = iblockdata.s();
 
-        if (block != Blocks.AIR) {
+        if (!iblockdata1.isAir()) {
             --this.nonEmptyBlockCount;
-            if (block.isTicking()) {
+            if (iblockdata1.t()) {
                 --this.tickingBlockCount;
             }
         }
 
-        if (block1 != Blocks.AIR) {
+        if (!fluid.e()) {
+            --this.e;
+        }
+
+        if (!iblockdata.isAir()) {
             ++this.nonEmptyBlockCount;
-            if (block1.isTicking()) {
+            if (iblockdata.t()) {
                 ++this.tickingBlockCount;
             }
+        }
+
+        if (!fluid1.e()) {
+            --this.e;
         }
 
         this.blockIds.setBlock(i, j, k, iblockdata);
@@ -49,8 +65,16 @@ public class ChunkSection {
         return this.nonEmptyBlockCount == 0;
     }
 
+    public boolean b() {
+        return this.shouldTick() || this.d();
+    }
+
     public boolean shouldTick() {
         return this.tickingBlockCount > 0;
+    }
+
+    public boolean d() {
+        return this.e > 0;
     }
 
     public int getYPosition() {
@@ -61,7 +85,7 @@ public class ChunkSection {
         this.skyLight.a(i, j, k, l);
     }
 
-    public int b(int i, int j, int k) {
+    public int c(int i, int j, int k) {
         return this.skyLight.a(i, j, k);
     }
 
@@ -69,23 +93,32 @@ public class ChunkSection {
         this.emittedLight.a(i, j, k, l);
     }
 
-    public int c(int i, int j, int k) {
+    public int d(int i, int j, int k) {
         return this.emittedLight.a(i, j, k);
     }
 
     public void recalcBlockCounts() {
         this.nonEmptyBlockCount = 0;
         this.tickingBlockCount = 0;
+        this.e = 0;
 
         for (int i = 0; i < 16; ++i) {
             for (int j = 0; j < 16; ++j) {
                 for (int k = 0; k < 16; ++k) {
-                    Block block = this.getType(i, j, k).getBlock();
+                    IBlockData iblockdata = this.getType(i, j, k);
+                    Fluid fluid = this.b(i, j, k);
 
-                    if (block != Blocks.AIR) {
+                    if (!iblockdata.isAir()) {
                         ++this.nonEmptyBlockCount;
-                        if (block.isTicking()) {
+                        if (iblockdata.t()) {
                             ++this.tickingBlockCount;
+                        }
+                    }
+
+                    if (!fluid.e()) {
+                        ++this.nonEmptyBlockCount;
+                        if (fluid.h()) {
+                            ++this.e;
                         }
                     }
                 }
@@ -94,7 +127,7 @@ public class ChunkSection {
 
     }
 
-    public DataPaletteBlock getBlocks() {
+    public DataPaletteBlock<IBlockData> getBlocks() {
         return this.blockIds;
     }
 

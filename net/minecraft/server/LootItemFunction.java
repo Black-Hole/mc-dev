@@ -15,7 +15,7 @@ public abstract class LootItemFunction {
 
     public abstract ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo);
 
-    public LootItemCondition[] a() {
+    public LootItemCondition[] b() {
         return this.a;
     }
 

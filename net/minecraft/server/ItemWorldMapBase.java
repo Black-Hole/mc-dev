@@ -4,9 +4,11 @@ import javax.annotation.Nullable;
 
 public class ItemWorldMapBase extends Item {
 
-    protected ItemWorldMapBase() {}
+    public ItemWorldMapBase(Item.Info item_info) {
+        super(item_info);
+    }
 
-    public boolean f() {
+    public boolean W_() {
         return true;
     }
 

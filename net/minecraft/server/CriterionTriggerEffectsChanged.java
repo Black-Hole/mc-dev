@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -126,8 +127,19 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
             this.a = criterionconditionmobeffect;
         }
 
+        public static CriterionTriggerEffectsChanged.b a(CriterionConditionMobEffect criterionconditionmobeffect) {
+            return new CriterionTriggerEffectsChanged.b(criterionconditionmobeffect);
+        }
+
         public boolean a(EntityPlayer entityplayer) {
             return this.a.a((EntityLiving) entityplayer);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("effects", this.a.b());
+            return jsonobject;
         }
     }
 }

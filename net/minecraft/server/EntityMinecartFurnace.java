@@ -2,34 +2,31 @@ package net.minecraft.server;
 
 public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
-    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityMinecartFurnace.class, DataWatcherRegistry.i);
     private int d;
     public double a;
     public double b;
+    private static final RecipeItemStack e = RecipeItemStack.a(new IMaterial[] { Items.COAL, Items.CHARCOAL});
 
     public EntityMinecartFurnace(World world) {
-        super(world);
+        super(EntityTypes.FURNACE_MINECART, world);
     }
 
     public EntityMinecartFurnace(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartFurnace.class);
+        super(EntityTypes.FURNACE_MINECART, world, d0, d1, d2);
     }
 
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.FURNACE;
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityMinecartFurnace.c, Boolean.valueOf(false));
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (this.d > 0) {
             --this.d;
         }
@@ -39,9 +36,9 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
             this.b = 0.0D;
         }
 
-        this.l(this.d > 0);
-        if (this.j() && this.random.nextInt(4) == 0) {
-            this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        this.o(this.d > 0);
+        if (this.f() && this.random.nextInt(4) == 0) {
+            this.world.addParticle(Particles.F, this.locX, this.locY + 0.8D, this.locZ, 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -53,13 +50,13 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     public void a(DamageSource damagesource) {
         super.a(damagesource);
         if (!damagesource.isExplosion() && this.world.getGameRules().getBoolean("doEntityDrops")) {
-            this.a(new ItemStack(Blocks.FURNACE, 1), 0.0F);
+            this.a((IMaterial) Blocks.FURNACE);
         }
 
     }
 
-    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        super.a(blockposition, iblockdata);
+    protected void b(BlockPosition blockposition, IBlockData iblockdata) {
+        super.b(blockposition, iblockdata);
         double d0 = this.a * this.a + this.b * this.b;
 
         if (d0 > 1.0E-4D && this.motX * this.motX + this.motZ * this.motZ > 0.001D) {
@@ -105,7 +102,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (itemstack.getItem() == Items.COAL && this.d + 3600 <= 32000) {
+        if (EntityMinecartFurnace.e.a(itemstack) && this.d + 3600 <= 32000) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -132,15 +129,15 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
         this.d = nbttagcompound.getShort("Fuel");
     }
 
-    protected boolean j() {
+    protected boolean f() {
         return ((Boolean) this.datawatcher.get(EntityMinecartFurnace.c)).booleanValue();
     }
 
-    protected void l(boolean flag) {
+    protected void o(boolean flag) {
         this.datawatcher.set(EntityMinecartFurnace.c, Boolean.valueOf(flag));
     }
 
-    public IBlockData x() {
-        return (this.j() ? Blocks.LIT_FURNACE : Blocks.FURNACE).getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH);
+    public IBlockData z() {
+        return (IBlockData) ((IBlockData) Blocks.FURNACE.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, Boolean.valueOf(this.f()));
     }
 }

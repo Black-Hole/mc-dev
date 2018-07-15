@@ -1,17 +1,18 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenTaiga2 extends WorldGenTreeAbstract {
+public class WorldGenTaiga2 extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.SPRUCE);
-    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.SPRUCE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData a = Blocks.SPRUCE_LOG.getBlockData();
+    private static final IBlockData b = Blocks.SPRUCE_LEAVES.getBlockData();
 
     public WorldGenTaiga2(boolean flag) {
         super(flag);
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i = random.nextInt(4) + 6;
         int j = 1 + random.nextInt(2);
         int k = i - j;
@@ -34,9 +35,9 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                 for (int l1 = blockposition.getX() - i1; l1 <= blockposition.getX() + i1 && flag; ++l1) {
                     for (j1 = blockposition.getZ() - i1; j1 <= blockposition.getZ() + i1 && flag; ++j1) {
                         if (k1 >= 0 && k1 < 256) {
-                            Material material = world.getType(blockposition_mutableblockposition.c(l1, k1, j1)).getMaterial();
+                            IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(l1, k1, j1));
 
-                            if (material != Material.AIR && material != Material.LEAVES) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.E)) {
                                 flag = false;
                             }
                         } else {
@@ -49,10 +50,10 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block = world.getType(blockposition.down()).getBlock();
+                Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                if ((block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
-                    this.a(world, blockposition.down());
+                if ((block == Blocks.GRASS_BLOCK || Block.d(block) || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
+                    this.a(generatoraccess, blockposition.down());
                     i1 = random.nextInt(2);
                     int i2 = 1;
                     byte b0 = 0;
@@ -71,8 +72,8 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                                 if (Math.abs(l2) != i1 || Math.abs(j3) != i1 || i1 <= 0) {
                                     BlockPosition blockposition1 = new BlockPosition(k2, j2, i3);
 
-                                    if (!world.getType(blockposition1).b()) {
-                                        this.a(world, blockposition1, WorldGenTaiga2.b);
+                                    if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
+                                        this.a(generatoraccess, blockposition1, WorldGenTaiga2.b);
                                     }
                                 }
                             }
@@ -93,10 +94,10 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract {
                     j1 = random.nextInt(3);
 
                     for (j2 = 0; j2 < i - j1; ++j2) {
-                        Material material1 = world.getType(blockposition.up(j2)).getMaterial();
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(j2));
 
-                        if (material1 == Material.AIR || material1 == Material.LEAVES) {
-                            this.a(world, blockposition.up(j2), WorldGenTaiga2.a);
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                            this.a(set, generatoraccess, blockposition.up(j2), WorldGenTaiga2.a);
                         }
                     }
 

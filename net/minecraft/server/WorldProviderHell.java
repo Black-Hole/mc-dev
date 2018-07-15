@@ -1,13 +1,15 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class WorldProviderHell extends WorldProvider {
 
     public WorldProviderHell() {}
 
-    public void b() {
-        this.c = new WorldChunkManagerHell(Biomes.j);
+    public void m() {
+        this.c = true;
         this.d = true;
-        this.e = true;
+        this.e = false;
     }
 
     protected void a() {
@@ -16,28 +18,38 @@ public class WorldProviderHell extends WorldProvider {
         for (int i = 0; i <= 15; ++i) {
             float f1 = 1.0F - (float) i / 15.0F;
 
-            this.g[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 0.9F + 0.1F;
+            this.f[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * 0.9F + 0.1F;
         }
 
     }
 
-    public ChunkGenerator getChunkGenerator() {
-        return new ChunkProviderHell(this.b, this.b.getWorldData().shouldGenerateMapFeatures(), this.b.getSeed());
+    public ChunkGenerator<?> getChunkGenerator() {
+        GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) ChunkGeneratorType.c.a();
+
+        generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
+        generatorsettingsnether.b(Blocks.LAVA.getBlockData());
+        return ChunkGeneratorType.c.create(this.b, BiomeLayout.c.a(((BiomeLayoutFixedConfiguration) BiomeLayout.c.a()).a(Biomes.j)), generatorsettingsnether);
     }
 
-    public boolean d() {
+    public boolean o() {
         return false;
     }
 
-    public boolean canSpawn(int i, int j) {
-        return false;
+    @Nullable
+    public BlockPosition a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+        return null;
+    }
+
+    @Nullable
+    public BlockPosition a(int i, int j, boolean flag) {
+        return null;
     }
 
     public float a(long i, float f) {
         return 0.5F;
     }
 
-    public boolean e() {
+    public boolean p() {
         return false;
     }
 

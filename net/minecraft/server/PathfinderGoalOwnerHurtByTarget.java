@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
 
-    EntityTameableAnimal a;
-    EntityLiving b;
+    private final EntityTameableAnimal a;
+    private EntityLiving b;
     private int c;
 
     public PathfinderGoalOwnerHurtByTarget(EntityTameableAnimal entitytameableanimal) {
@@ -22,7 +22,7 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
                 return false;
             } else {
                 this.b = entityliving.getLastDamager();
-                int i = entityliving.bT();
+                int i = entityliving.cf();
 
                 return i != this.c && this.a(this.b, false) && this.a.a(this.b, entityliving);
             }
@@ -34,7 +34,7 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
         EntityLiving entityliving = this.a.getOwner();
 
         if (entityliving != null) {
-            this.c = entityliving.bT();
+            this.c = entityliving.cf();
         }
 
         super.c();

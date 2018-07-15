@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 public class ChatModifier {
@@ -111,6 +112,10 @@ public class ChatModifier {
         public ChatModifier n() {
             return this;
         }
+
+        public String k() {
+            return "";
+        }
     };
 
     public ChatModifier() {}
@@ -209,6 +214,40 @@ public class ChatModifier {
         return this;
     }
 
+    public String k() {
+        if (this.g()) {
+            return this.a != null ? this.a.k() : "";
+        } else {
+            StringBuilder stringbuilder = new StringBuilder();
+
+            if (this.getColor() != null) {
+                stringbuilder.append(this.getColor());
+            }
+
+            if (this.isBold()) {
+                stringbuilder.append(EnumChatFormat.BOLD);
+            }
+
+            if (this.isItalic()) {
+                stringbuilder.append(EnumChatFormat.ITALIC);
+            }
+
+            if (this.isUnderlined()) {
+                stringbuilder.append(EnumChatFormat.UNDERLINE);
+            }
+
+            if (this.isRandom()) {
+                stringbuilder.append(EnumChatFormat.OBFUSCATED);
+            }
+
+            if (this.isStrikethrough()) {
+                stringbuilder.append(EnumChatFormat.STRIKETHROUGH);
+            }
+
+            return stringbuilder.toString();
+        }
+    }
+
     private ChatModifier o() {
         return this.a == null ? ChatModifier.k : this.a;
     }
@@ -227,7 +266,8 @@ public class ChatModifier {
             boolean flag;
 
             if (this.isBold() == chatmodifier.isBold() && this.getColor() == chatmodifier.getColor() && this.isItalic() == chatmodifier.isItalic() && this.isRandom() == chatmodifier.isRandom() && this.isStrikethrough() == chatmodifier.isStrikethrough() && this.isUnderlined() == chatmodifier.isUnderlined()) {
-                label65: {
+                label65:
+                {
                     if (this.h() != null) {
                         if (!this.h().equals(chatmodifier.h())) {
                             break label65;
@@ -263,17 +303,7 @@ public class ChatModifier {
     }
 
     public int hashCode() {
-        int i = this.b.hashCode();
-
-        i = 31 * i + this.c.hashCode();
-        i = 31 * i + this.d.hashCode();
-        i = 31 * i + this.e.hashCode();
-        i = 31 * i + this.f.hashCode();
-        i = 31 * i + this.g.hashCode();
-        i = 31 * i + this.h.hashCode();
-        i = 31 * i + this.i.hashCode();
-        i = 31 * i + this.j.hashCode();
-        return i;
+        return Objects.hash(new Object[] { this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j});
     }
 
     public ChatModifier clone() {

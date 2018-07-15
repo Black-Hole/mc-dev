@@ -4,23 +4,21 @@ import java.util.Random;
 
 public class BlockSnowBlock extends Block {
 
-    protected BlockSnowBlock() {
-        super(Material.SNOW_BLOCK);
-        this.a(true);
-        this.a(CreativeModeTab.b);
+    protected BlockSnowBlock(Block.Info block_info) {
+        super(block_info);
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
         return Items.SNOWBALL;
     }
 
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 4;
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (world.getBrightness(EnumSkyBlock.BLOCK, blockposition) > 11) {
-            this.b(world, blockposition, world.getType(blockposition), 0);
+            iblockdata.a(world, blockposition, 0);
             world.setAir(blockposition);
         }
 

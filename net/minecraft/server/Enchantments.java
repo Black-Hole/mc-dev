@@ -32,8 +32,12 @@ public class Enchantments {
     public static final Enchantment ARROW_INFINITE = a("infinity");
     public static final Enchantment LUCK = a("luck_of_the_sea");
     public static final Enchantment LURE = a("lure");
-    public static final Enchantment C = a("mending");
-    public static final Enchantment D = a("vanishing_curse");
+    public static final Enchantment C = a("loyalty");
+    public static final Enchantment D = a("impaling");
+    public static final Enchantment E = a("riptide");
+    public static final Enchantment F = a("channeling");
+    public static final Enchantment G = a("mending");
+    public static final Enchantment H = a("vanishing_curse");
 
     @Nullable
     private static Enchantment a(String s) {

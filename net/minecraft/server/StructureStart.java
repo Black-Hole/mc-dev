@@ -7,40 +7,48 @@ import java.util.Random;
 
 public abstract class StructureStart {
 
-    protected List<StructurePiece> a = Lists.newLinkedList();
+    protected final List<StructurePiece> a = Lists.newArrayList();
     protected StructureBoundingBox b;
-    private int c;
-    private int d;
+    protected int c;
+    protected int d;
+    private BiomeBase e;
 
     public StructureStart() {}
 
-    public StructureStart(int i, int j) {
+    public StructureStart(int i, int j, BiomeBase biomebase, SeededRandom seededrandom, long k) {
         this.c = i;
         this.d = j;
+        this.e = biomebase;
+        seededrandom.c(k, this.c, this.d);
     }
 
-    public StructureBoundingBox b() {
+    public StructureBoundingBox c() {
         return this.b;
     }
 
-    public List<StructurePiece> c() {
+    public List<StructurePiece> d() {
         return this.a;
     }
 
-    public void a(World world, Random random, StructureBoundingBox structureboundingbox) {
-        Iterator iterator = this.a.iterator();
+    public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
+        List list = this.a;
 
-        while (iterator.hasNext()) {
-            StructurePiece structurepiece = (StructurePiece) iterator.next();
+        synchronized (this.a) {
+            Iterator iterator = this.a.iterator();
 
-            if (structurepiece.d().a(structureboundingbox) && !structurepiece.a(world, random, structureboundingbox)) {
-                iterator.remove();
+            while (iterator.hasNext()) {
+                StructurePiece structurepiece = (StructurePiece) iterator.next();
+
+                if (structurepiece.d().a(structureboundingbox) && !structurepiece.a(generatoraccess, random, structureboundingbox, chunkcoordintpair)) {
+                    iterator.remove();
+                }
             }
-        }
 
+            this.a((IBlockAccess) generatoraccess);
+        }
     }
 
-    protected void d() {
+    protected void a(IBlockAccess iblockaccess) {
         this.b = StructureBoundingBox.a();
         Iterator iterator = this.a.iterator();
 
@@ -55,29 +63,40 @@ public abstract class StructureStart {
     public NBTTagCompound a(int i, int j) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", WorldGenFactory.a(this));
-        nbttagcompound.setInt("ChunkX", i);
-        nbttagcompound.setInt("ChunkZ", j);
-        nbttagcompound.set("BB", this.b.g());
-        NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = this.a.iterator();
+        if (this.b()) {
+            nbttagcompound.setString("id", WorldGenFactory.a(this));
+            nbttagcompound.setString("biome", ((MinecraftKey) BiomeBase.REGISTRY_ID.b(this.e)).toString());
+            nbttagcompound.setInt("ChunkX", i);
+            nbttagcompound.setInt("ChunkZ", j);
+            nbttagcompound.set("BB", this.b.g());
+            NBTTagList nbttaglist = new NBTTagList();
+            List list = this.a;
 
-        while (iterator.hasNext()) {
-            StructurePiece structurepiece = (StructurePiece) iterator.next();
+            synchronized (this.a) {
+                Iterator iterator = this.a.iterator();
 
-            nbttaglist.add(structurepiece.c());
+                while (iterator.hasNext()) {
+                    StructurePiece structurepiece = (StructurePiece) iterator.next();
+
+                    nbttaglist.add((NBTBase) structurepiece.c());
+                }
+            }
+
+            nbttagcompound.set("Children", nbttaglist);
+            this.a(nbttagcompound);
+            return nbttagcompound;
+        } else {
+            nbttagcompound.setString("id", "INVALID");
+            return nbttagcompound;
         }
-
-        nbttagcompound.set("Children", nbttaglist);
-        this.a(nbttagcompound);
-        return nbttagcompound;
     }
 
     public void a(NBTTagCompound nbttagcompound) {}
 
-    public void a(World world, NBTTagCompound nbttagcompound) {
+    public void a(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound) {
         this.c = nbttagcompound.getInt("ChunkX");
         this.d = nbttagcompound.getInt("ChunkZ");
+        this.e = nbttagcompound.hasKey("biome") ? (BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(nbttagcompound.getString("biome"))) : generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9), Biomes.c);
         if (nbttagcompound.hasKey("BB")) {
             this.b = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
         }
@@ -85,7 +104,7 @@ public abstract class StructureStart {
         NBTTagList nbttaglist = nbttagcompound.getList("Children", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            this.a.add(WorldGenFactory.b(nbttaglist.get(i), world));
+            this.a.add(WorldGenFactory.b(nbttaglist.getCompound(i), generatoraccess));
         }
 
         this.b(nbttagcompound);
@@ -93,8 +112,8 @@ public abstract class StructureStart {
 
     public void b(NBTTagCompound nbttagcompound) {}
 
-    protected void a(World world, Random random, int i) {
-        int j = world.getSeaLevel() - i;
+    protected void a(IWorldReader iworldreader, Random random, int i) {
+        int j = iworldreader.getSeaLevel() - i;
         int k = this.b.d() + 1;
 
         if (k < j) {
@@ -114,7 +133,7 @@ public abstract class StructureStart {
 
     }
 
-    protected void a(World world, Random random, int i, int j) {
+    protected void a(IBlockAccess iblockaccess, Random random, int i, int j) {
         int k = j - i + 1 - this.b.d();
         int l;
 
@@ -137,11 +156,7 @@ public abstract class StructureStart {
 
     }
 
-    public boolean a() {
-        return true;
-    }
-
-    public boolean a(ChunkCoordIntPair chunkcoordintpair) {
+    public boolean b() {
         return true;
     }
 
@@ -153,5 +168,9 @@ public abstract class StructureStart {
 
     public int f() {
         return this.d;
+    }
+
+    public BlockPosition a() {
+        return new BlockPosition(this.c << 4, 0, this.d << 4);
     }
 }

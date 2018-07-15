@@ -1,24 +1,24 @@
 package net.minecraft.server;
 
-public abstract class EntityWaterAnimal extends EntityInsentient implements IAnimal {
+public abstract class EntityWaterAnimal extends EntityCreature implements IAnimal {
 
-    public EntityWaterAnimal(World world) {
-        super(world);
+    protected EntityWaterAnimal(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    public boolean bN() {
+    public boolean bZ() {
         return true;
     }
 
-    public boolean P() {
-        return true;
+    public EnumMonsterType getMonsterType() {
+        return EnumMonsterType.e;
     }
 
-    public boolean canSpawn() {
-        return this.world.a(this.getBoundingBox(), (Entity) this);
+    public boolean a(IWorldReader iworldreader) {
+        return iworldreader.b(this, this.getBoundingBox());
     }
 
-    public int C() {
+    public int z() {
         return 120;
     }
 
@@ -30,13 +30,9 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
         return 1 + this.world.random.nextInt(3);
     }
 
-    public void Y() {
-        int i = this.getAirTicks();
-
-        super.Y();
-        if (this.isAlive() && !this.isInWater()) {
-            --i;
-            this.setAirTicks(i);
+    protected void a(int i) {
+        if (this.isAlive() && !this.aq()) {
+            this.setAirTicks(i - 1);
             if (this.getAirTicks() == -20) {
                 this.setAirTicks(0);
                 this.damageEntity(DamageSource.DROWN, 2.0F);
@@ -47,7 +43,18 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
 
     }
 
-    public boolean bo() {
+    public void W() {
+        int i = this.getAirTicks();
+
+        super.W();
+        this.a(i);
+    }
+
+    public boolean bw() {
+        return false;
+    }
+
+    public boolean a(EntityHuman entityhuman) {
         return false;
     }
 }

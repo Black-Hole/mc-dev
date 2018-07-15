@@ -4,59 +4,19 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     public static final DataWatcherObject<String> COMMAND = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.d);
     private static final DataWatcherObject<IChatBaseComponent> b = DataWatcher.a(EntityMinecartCommandBlock.class, DataWatcherRegistry.e);
-    private final CommandBlockListenerAbstract c = new CommandBlockListenerAbstract() {
-        public void i() {
-            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommand());
-            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.l());
-        }
-
-        public BlockPosition getChunkCoordinates() {
-            return new BlockPosition(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY + 0.5D, EntityMinecartCommandBlock.this.locZ);
-        }
-
-        public Vec3D d() {
-            return new Vec3D(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY, EntityMinecartCommandBlock.this.locZ);
-        }
-
-        public World getWorld() {
-            return EntityMinecartCommandBlock.this.world;
-        }
-
-        public Entity f() {
-            return EntityMinecartCommandBlock.this;
-        }
-
-        public MinecraftServer C_() {
-            return EntityMinecartCommandBlock.this.world.getMinecraftServer();
-        }
-    };
+    private final CommandBlockListenerAbstract c = new EntityMinecartCommandBlock.a();
     private int d;
 
     public EntityMinecartCommandBlock(World world) {
-        super(world);
+        super(EntityTypes.COMMAND_BLOCK_MINECART, world);
     }
 
     public EntityMinecartCommandBlock(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
+        super(EntityTypes.COMMAND_BLOCK_MINECART, world, d0, d1, d2);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartCommandBlock.class);
-        dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
-            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                if (TileEntity.a(TileEntityCommand.class).equals(new MinecraftKey(nbttagcompound.getString("id")))) {
-                    nbttagcompound.setString("id", "Control");
-                    dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
-                    nbttagcompound.setString("id", "MinecartCommandBlock");
-                }
-
-                return nbttagcompound;
-            }
-        });
-    }
-
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.getDataWatcher().register(EntityMinecartCommandBlock.COMMAND, "");
         this.getDataWatcher().register(EntityMinecartCommandBlock.b, new ChatComponentText(""));
     }
@@ -65,7 +25,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         super.a(nbttagcompound);
         this.c.b(nbttagcompound);
         this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommandBlock().getCommand());
-        this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.getCommandBlock().l());
+        this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.getCommandBlock().j());
     }
 
     protected void b(NBTTagCompound nbttagcompound) {
@@ -77,7 +37,7 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
         return EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK;
     }
 
-    public IBlockData x() {
+    public IBlockData z() {
         return Blocks.COMMAND_BLOCK.getBlockData();
     }
 
@@ -95,14 +55,14 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         this.c.a(entityhuman);
-        return false;
+        return true;
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         super.a(datawatcherobject);
         if (EntityMinecartCommandBlock.b.equals(datawatcherobject)) {
             try {
-                this.c.b((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.b));
+                this.c.c((IChatBaseComponent) this.getDataWatcher().get(EntityMinecartCommandBlock.b));
             } catch (Throwable throwable) {
                 ;
             }
@@ -112,7 +72,25 @@ public class EntityMinecartCommandBlock extends EntityMinecartAbstract {
 
     }
 
-    public boolean bC() {
+    public boolean bM() {
         return true;
+    }
+
+    public class a extends CommandBlockListenerAbstract {
+
+        public a() {}
+
+        public WorldServer d() {
+            return (WorldServer) EntityMinecartCommandBlock.this.world;
+        }
+
+        public void e() {
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.COMMAND, this.getCommand());
+            EntityMinecartCommandBlock.this.getDataWatcher().set(EntityMinecartCommandBlock.b, this.j());
+        }
+
+        public CommandListenerWrapper getWrapper() {
+            return new CommandListenerWrapper(this, new Vec3D(EntityMinecartCommandBlock.this.locX, EntityMinecartCommandBlock.this.locY, EntityMinecartCommandBlock.this.locZ), EntityMinecartCommandBlock.this.aO(), this.d(), 2, this.getName().getString(), EntityMinecartCommandBlock.this.getScoreboardDisplayName(), this.d().getMinecraftServer(), EntityMinecartCommandBlock.this);
+        }
     }
 }

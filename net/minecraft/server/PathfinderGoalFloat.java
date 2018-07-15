@@ -16,7 +16,7 @@ public class PathfinderGoalFloat extends PathfinderGoal {
     }
 
     public boolean a() {
-        return this.a.isInWater() || this.a.au();
+        return this.a.isInWater() || this.a.ax();
     }
 
     public void e() {

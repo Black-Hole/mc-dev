@@ -9,7 +9,7 @@ public class EntityBlaze extends EntityMonster {
     private static final DataWatcherObject<Byte> c = DataWatcher.a(EntityBlaze.class, DataWatcherRegistry.a);
 
     public EntityBlaze(World world) {
-        super(world);
+        super(EntityTypes.BLAZE, world);
         this.a(PathType.WATER, -1.0F);
         this.a(PathType.LAVA, 8.0F);
         this.a(PathType.DANGER_FIRE, 0.0F);
@@ -18,11 +18,7 @@ public class EntityBlaze extends EntityMonster {
         this.b_ = 10;
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityBlaze.class);
-    }
-
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(4, new EntityBlaze.PathfinderGoalBlazeFireball(this));
         this.goalSelector.a(5, new PathfinderGoalMoveTowardsRestriction(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D, 0.0F));
@@ -39,47 +35,47 @@ public class EntityBlaze extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(48.0D);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityBlaze.c, Byte.valueOf((byte) 0));
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.C;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_BLAZE_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.F;
+        return SoundEffects.ENTITY_BLAZE_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.E;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_BLAZE_DEATH;
     }
 
-    public float aw() {
+    public float az() {
         return 1.0F;
     }
 
-    public void n() {
+    public void k() {
         if (!this.onGround && this.motY < 0.0D) {
             this.motY *= 0.6D;
         }
 
         if (this.world.isClientSide) {
             if (this.random.nextInt(24) == 0 && !this.isSilent()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.D, this.bK(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, SoundEffects.ENTITY_BLAZE_BURN, this.bV(), 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+                this.world.addParticle(Particles.F, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
             }
         }
 
-        super.n();
+        super.k();
     }
 
-    protected void M() {
-        if (this.an()) {
+    protected void mobTick() {
+        if (this.ap()) {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
@@ -96,21 +92,21 @@ public class EntityBlaze extends EntityMonster {
             this.impulse = true;
         }
 
-        super.M();
+        super.mobTick();
     }
 
-    public void e(float f, float f1) {}
+    public void c(float f, float f1) {}
 
     public boolean isBurning() {
-        return this.p();
+        return this.l();
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.q;
+    protected MinecraftKey G() {
+        return LootTables.w;
     }
 
-    public boolean p() {
+    public boolean l() {
         return (((Byte) this.datawatcher.get(EntityBlaze.c)).byteValue() & 1) != 0;
     }
 
@@ -126,7 +122,7 @@ public class EntityBlaze extends EntityMonster {
         this.datawatcher.set(EntityBlaze.c, Byte.valueOf(b0));
     }
 
-    protected boolean s_() {
+    protected boolean K_() {
         return true;
     }
 
@@ -167,7 +163,7 @@ public class EntityBlaze extends EntityMonster {
                 }
 
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
-            } else if (d0 < this.f() * this.f()) {
+            } else if (d0 < this.g() * this.g()) {
                 double d1 = entityliving.locX - this.a.locX;
                 double d2 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (this.a.locY + (double) (this.a.length / 2.0F));
                 double d3 = entityliving.locZ - this.a.locZ;
@@ -201,14 +197,14 @@ public class EntityBlaze extends EntityMonster {
 
                 this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
             } else {
-                this.a.getNavigation().p();
+                this.a.getNavigation().r();
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
             }
 
             super.e();
         }
 
-        private double f() {
+        private double g() {
             AttributeInstance attributeinstance = this.a.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
 
             return attributeinstance == null ? 16.0D : attributeinstance.getValue();

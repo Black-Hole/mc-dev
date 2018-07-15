@@ -2,33 +2,30 @@ package net.minecraft.server;
 
 public class PathfinderGoalOpenDoor extends PathfinderGoalDoorInteract {
 
-    boolean g;
-    int h;
+    private final boolean d;
+    private int e;
 
     public PathfinderGoalOpenDoor(EntityInsentient entityinsentient, boolean flag) {
         super(entityinsentient);
         this.a = entityinsentient;
-        this.g = flag;
+        this.d = flag;
     }
 
     public boolean b() {
-        return this.g && this.h > 0 && super.b();
+        return this.d && this.e > 0 && super.b();
     }
 
     public void c() {
-        this.h = 20;
-        this.c.setDoor(this.a.world, this.b, true);
+        this.e = 20;
+        this.a(true);
     }
 
     public void d() {
-        if (this.g) {
-            this.c.setDoor(this.a.world, this.b, false);
-        }
-
+        this.a(false);
     }
 
     public void e() {
-        --this.h;
+        --this.e;
         super.e();
     }
 }

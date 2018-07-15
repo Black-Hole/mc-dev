@@ -3,7 +3,9 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,12 +52,12 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     public CriterionTriggerInventoryChanged.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "slots", new JsonObject());
-        CriterionConditionValue criterionconditionvalue = CriterionConditionValue.a(jsonobject1.get("occupied"));
-        CriterionConditionValue criterionconditionvalue1 = CriterionConditionValue.a(jsonobject1.get("full"));
-        CriterionConditionValue criterionconditionvalue2 = CriterionConditionValue.a(jsonobject1.get("empty"));
+        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject1.get("occupied"));
+        CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject1.get("full"));
+        CriterionConditionValue.d criterionconditionvalue_d2 = CriterionConditionValue.d.a(jsonobject1.get("empty"));
         CriterionConditionItem[] acriterionconditionitem = CriterionConditionItem.b(jsonobject.get("items"));
 
-        return new CriterionTriggerInventoryChanged.b(criterionconditionvalue, criterionconditionvalue1, criterionconditionvalue2, acriterionconditionitem);
+        return new CriterionTriggerInventoryChanged.b(criterionconditionvalue_d, criterionconditionvalue_d1, criterionconditionvalue_d2, acriterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, PlayerInventory playerinventory) {
@@ -123,17 +125,60 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue a;
-        private final CriterionConditionValue b;
-        private final CriterionConditionValue c;
+        private final CriterionConditionValue.d a;
+        private final CriterionConditionValue.d b;
+        private final CriterionConditionValue.d c;
         private final CriterionConditionItem[] d;
 
-        public b(CriterionConditionValue criterionconditionvalue, CriterionConditionValue criterionconditionvalue1, CriterionConditionValue criterionconditionvalue2, CriterionConditionItem[] acriterionconditionitem) {
+        public b(CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1, CriterionConditionValue.d criterionconditionvalue_d2, CriterionConditionItem[] acriterionconditionitem) {
             super(CriterionTriggerInventoryChanged.a);
-            this.a = criterionconditionvalue;
-            this.b = criterionconditionvalue1;
-            this.c = criterionconditionvalue2;
+            this.a = criterionconditionvalue_d;
+            this.b = criterionconditionvalue_d1;
+            this.c = criterionconditionvalue_d2;
             this.d = acriterionconditionitem;
+        }
+
+        public static CriterionTriggerInventoryChanged.b a(CriterionConditionItem... acriterionconditionitem) {
+            return new CriterionTriggerInventoryChanged.b(CriterionConditionValue.d.e, CriterionConditionValue.d.e, CriterionConditionValue.d.e, acriterionconditionitem);
+        }
+
+        public static CriterionTriggerInventoryChanged.b a(IMaterial... aimaterial) {
+            CriterionConditionItem[] acriterionconditionitem = new CriterionConditionItem[aimaterial.length];
+
+            for (int i = 0; i < aimaterial.length; ++i) {
+                acriterionconditionitem[i] = new CriterionConditionItem((Tag) null, aimaterial[i].getItem(), CriterionConditionValue.d.e, CriterionConditionValue.d.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a);
+            }
+
+            return a(acriterionconditionitem);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (!this.a.c() || !this.b.c() || !this.c.c()) {
+                JsonObject jsonobject1 = new JsonObject();
+
+                jsonobject1.add("occupied", this.a.d());
+                jsonobject1.add("full", this.b.d());
+                jsonobject1.add("empty", this.c.d());
+                jsonobject.add("slots", jsonobject1);
+            }
+
+            if (this.d.length > 0) {
+                JsonArray jsonarray = new JsonArray();
+                CriterionConditionItem[] acriterionconditionitem = this.d;
+                int i = acriterionconditionitem.length;
+
+                for (int j = 0; j < i; ++j) {
+                    CriterionConditionItem criterionconditionitem = acriterionconditionitem[j];
+
+                    jsonarray.add(criterionconditionitem.a());
+                }
+
+                jsonobject.add("items", jsonarray);
+            }
+
+            return jsonobject;
         }
 
         public boolean a(PlayerInventory playerinventory) {
@@ -165,11 +210,11 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
                 }
             }
 
-            if (!this.b.a((float) i)) {
+            if (!this.b.d(i)) {
                 return false;
-            } else if (!this.c.a((float) j)) {
+            } else if (!this.c.d(j)) {
                 return false;
-            } else if (!this.a.a((float) k)) {
+            } else if (!this.a.d(k)) {
                 return false;
             } else if (!arraylist.isEmpty()) {
                 return false;

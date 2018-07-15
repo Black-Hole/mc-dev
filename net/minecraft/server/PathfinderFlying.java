@@ -27,7 +27,7 @@ public class PathfinderFlying extends PathfinderNormal {
             i = (int) this.b.getBoundingBox().b;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
 
-            for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
+            for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
                 ++i;
                 blockposition_mutableblockposition.c(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
             }
@@ -249,7 +249,7 @@ public class PathfinderFlying extends PathfinderNormal {
             Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
             PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
 
-            if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.df && pathtype1 != PathType.LAVA) {
+            if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.MAGMA_BLOCK && pathtype1 != PathType.LAVA) {
                 if (pathtype1 == PathType.DAMAGE_CACTUS) {
                     pathtype = PathType.DAMAGE_CACTUS;
                 } else {

@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class IntHashMap<V> {
 
-    private transient IntHashMap.IntHashMapEntry<V>[] a = new IntHashMap.IntHashMapEntry[16];
+    private transient IntHashMap.IntHashMapEntry<V>[] a = (IntHashMap.IntHashMapEntry[]) (new IntHashMap.IntHashMapEntry[16]);
     private transient int b;
     private int c = 12;
     private final float d = 0.75F;
@@ -71,7 +71,7 @@ public class IntHashMap<V> {
         if (j == 1073741824) {
             this.c = Integer.MAX_VALUE;
         } else {
-            IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry1 = new IntHashMap.IntHashMapEntry[i];
+            IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry1 = (IntHashMap.IntHashMapEntry[]) (new IntHashMap.IntHashMapEntry[i]);
 
             this.a(ainthashmap_inthashmapentry1);
             this.a = ainthashmap_inthashmapentry1;
@@ -161,10 +161,10 @@ public class IntHashMap<V> {
 
     static class IntHashMapEntry<V> {
 
-        final int a;
-        V b;
-        IntHashMap.IntHashMapEntry<V> c;
-        final int d;
+        private final int a;
+        private V b;
+        private IntHashMap.IntHashMapEntry<V> c;
+        private final int d;
 
         IntHashMapEntry(int i, int j, V v0, IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry) {
             this.b = v0;

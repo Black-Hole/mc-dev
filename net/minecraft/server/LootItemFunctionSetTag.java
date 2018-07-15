@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Random;
 
 public class LootItemFunctionSetTag extends LootItemFunction {
@@ -16,15 +17,7 @@ public class LootItemFunctionSetTag extends LootItemFunction {
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        NBTTagCompound nbttagcompound = itemstack.getTag();
-
-        if (nbttagcompound == null) {
-            nbttagcompound = this.a.g();
-        } else {
-            nbttagcompound.a(this.a);
-        }
-
-        itemstack.setTag(nbttagcompound);
+        itemstack.getOrCreateTag().a(this.a);
         return itemstack;
     }
 
@@ -43,8 +36,8 @@ public class LootItemFunctionSetTag extends LootItemFunction {
                 NBTTagCompound nbttagcompound = MojangsonParser.parse(ChatDeserializer.h(jsonobject, "tag"));
 
                 return new LootItemFunctionSetTag(alootitemcondition, nbttagcompound);
-            } catch (MojangsonParseException mojangsonparseexception) {
-                throw new JsonSyntaxException(mojangsonparseexception);
+            } catch (CommandSyntaxException commandsyntaxexception) {
+                throw new JsonSyntaxException(commandsyntaxexception.getMessage());
             }
         }
 

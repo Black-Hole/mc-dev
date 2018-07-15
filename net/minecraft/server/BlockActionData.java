@@ -9,25 +9,25 @@ public class BlockActionData {
 
     public BlockActionData(BlockPosition blockposition, Block block, int i, int j) {
         this.a = blockposition;
+        this.b = block;
         this.c = i;
         this.d = j;
-        this.b = block;
     }
 
     public BlockPosition a() {
         return this.a;
     }
 
-    public int b() {
-        return this.c;
+    public Block b() {
+        return this.b;
     }
 
     public int c() {
-        return this.d;
+        return this.c;
     }
 
-    public Block d() {
-        return this.b;
+    public int d() {
+        return this.d;
     }
 
     public boolean equals(Object object) {

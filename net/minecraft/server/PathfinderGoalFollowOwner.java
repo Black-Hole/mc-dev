@@ -2,23 +2,23 @@ package net.minecraft.server;
 
 public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
-    private final EntityTameableAnimal d;
-    private EntityLiving e;
-    World a;
-    private final double f;
-    private final NavigationAbstract g;
-    private int h;
-    float b;
-    float c;
+    private final EntityTameableAnimal b;
+    private EntityLiving c;
+    protected final IWorldReader a;
+    private final double d;
+    private final NavigationAbstract e;
+    private int f;
+    private final float g;
+    private final float h;
     private float i;
 
     public PathfinderGoalFollowOwner(EntityTameableAnimal entitytameableanimal, double d0, float f, float f1) {
-        this.d = entitytameableanimal;
+        this.b = entitytameableanimal;
         this.a = entitytameableanimal.world;
-        this.f = d0;
-        this.g = entitytameableanimal.getNavigation();
-        this.c = f;
-        this.b = f1;
+        this.d = d0;
+        this.e = entitytameableanimal.getNavigation();
+        this.h = f;
+        this.g = f1;
         this.a(3);
         if (!(entitytameableanimal.getNavigation() instanceof Navigation) && !(entitytameableanimal.getNavigation() instanceof NavigationFlying)) {
             throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
@@ -26,55 +26,55 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     public boolean a() {
-        EntityLiving entityliving = this.d.getOwner();
+        EntityLiving entityliving = this.b.getOwner();
 
         if (entityliving == null) {
             return false;
         } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).isSpectator()) {
             return false;
-        } else if (this.d.isSitting()) {
+        } else if (this.b.isSitting()) {
             return false;
-        } else if (this.d.h(entityliving) < (double) (this.c * this.c)) {
+        } else if (this.b.h(entityliving) < (double) (this.h * this.h)) {
             return false;
         } else {
-            this.e = entityliving;
+            this.c = entityliving;
             return true;
         }
     }
 
     public boolean b() {
-        return !this.g.o() && this.d.h(this.e) > (double) (this.b * this.b) && !this.d.isSitting();
+        return !this.e.q() && this.b.h(this.c) > (double) (this.g * this.g) && !this.b.isSitting();
     }
 
     public void c() {
-        this.h = 0;
-        this.i = this.d.a(PathType.WATER);
-        this.d.a(PathType.WATER, 0.0F);
+        this.f = 0;
+        this.i = this.b.a(PathType.WATER);
+        this.b.a(PathType.WATER, 0.0F);
     }
 
     public void d() {
-        this.e = null;
-        this.g.p();
-        this.d.a(PathType.WATER, this.i);
+        this.c = null;
+        this.e.r();
+        this.b.a(PathType.WATER, this.i);
     }
 
     public void e() {
-        this.d.getControllerLook().a(this.e, 10.0F, (float) this.d.N());
-        if (!this.d.isSitting()) {
-            if (--this.h <= 0) {
-                this.h = 10;
-                if (!this.g.a((Entity) this.e, this.f)) {
-                    if (!this.d.isLeashed() && !this.d.isPassenger()) {
-                        if (this.d.h(this.e) >= 144.0D) {
-                            int i = MathHelper.floor(this.e.locX) - 2;
-                            int j = MathHelper.floor(this.e.locZ) - 2;
-                            int k = MathHelper.floor(this.e.getBoundingBox().b);
+        this.b.getControllerLook().a(this.c, 10.0F, (float) this.b.K());
+        if (!this.b.isSitting()) {
+            if (--this.f <= 0) {
+                this.f = 10;
+                if (!this.e.a((Entity) this.c, this.d)) {
+                    if (!this.b.isLeashed() && !this.b.isPassenger()) {
+                        if (this.b.h(this.c) >= 144.0D) {
+                            int i = MathHelper.floor(this.c.locX) - 2;
+                            int j = MathHelper.floor(this.c.locZ) - 2;
+                            int k = MathHelper.floor(this.c.getBoundingBox().b);
 
                             for (int l = 0; l <= 4; ++l) {
                                 for (int i1 = 0; i1 <= 4; ++i1) {
                                     if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.a(i, j, k, l, i1)) {
-                                        this.d.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.d.yaw, this.d.pitch);
-                                        this.g.p();
+                                        this.b.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.b.yaw, this.b.pitch);
+                                        this.e.r();
                                         return;
                                     }
                                 }
@@ -91,6 +91,6 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
         BlockPosition blockposition = new BlockPosition(i + l, k - 1, j + i1);
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        return iblockdata.d(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && iblockdata.a((Entity) this.d) && this.a.isEmpty(blockposition.up()) && this.a.isEmpty(blockposition.up(2));
+        return iblockdata.c(this.a, blockposition, EnumDirection.DOWN) == EnumBlockFaceShape.SOLID && iblockdata.a((Entity) this.b) && this.a.isEmpty(blockposition.up()) && this.a.isEmpty(blockposition.up(2));
     }
 }

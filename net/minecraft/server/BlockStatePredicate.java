@@ -1,32 +1,26 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class BlockStatePredicate implements Predicate<IBlockData> {
 
-    public static final Predicate<IBlockData> a = new Predicate() {
-        public boolean a(@Nullable IBlockData iblockdata) {
-            return true;
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((IBlockData) object);
-        }
+    public static final Predicate<IBlockData> a = (iblockdata) -> {
+        return true;
     };
-    private final BlockStateList b;
-    private final Map<IBlockState<?>, Predicate<?>> c = Maps.newHashMap();
+    private final BlockStateList<Block, IBlockData> b;
+    private final Map<IBlockState<?>, Predicate<Object>> c = Maps.newHashMap();
 
-    private BlockStatePredicate(BlockStateList blockstatelist) {
+    private BlockStatePredicate(BlockStateList<Block, IBlockData> blockstatelist) {
         this.b = blockstatelist;
     }
 
     public static BlockStatePredicate a(Block block) {
-        return new BlockStatePredicate(block.s());
+        return new BlockStatePredicate(block.getStates());
     }
 
     public boolean a(@Nullable IBlockData iblockdata) {
@@ -53,11 +47,13 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
         }
     }
 
-    protected <T extends Comparable<T>> boolean a(IBlockData iblockdata, IBlockState<T> iblockstate, Predicate<?> predicate) {
-        return predicate.apply(iblockdata.get(iblockstate));
+    protected <T extends Comparable<T>> boolean a(IBlockData iblockdata, IBlockState<T> iblockstate, Predicate<Object> predicate) {
+        Comparable comparable = iblockdata.get(iblockstate);
+
+        return predicate.test(comparable);
     }
 
-    public <V extends Comparable<V>> BlockStatePredicate a(IBlockState<V> iblockstate, Predicate<? extends V> predicate) {
+    public <V extends Comparable<V>> BlockStatePredicate a(IBlockState<V> iblockstate, Predicate<Object> predicate) {
         if (!this.b.d().contains(iblockstate)) {
             throw new IllegalArgumentException(this.b + " cannot support property " + iblockstate);
         } else {
@@ -66,7 +62,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
         }
     }
 
-    public boolean apply(@Nullable Object object) {
+    public boolean test(@Nullable Object object) {
         return this.a((IBlockData) object);
     }
 }

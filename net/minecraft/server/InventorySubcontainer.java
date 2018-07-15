@@ -3,18 +3,18 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
-public class InventorySubcontainer implements IInventory {
+public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
-    private String a;
+    private final IChatBaseComponent a;
     private final int b;
     public final NonNullList<ItemStack> items;
     private List<IInventoryListener> d;
-    private boolean e;
+    private IChatBaseComponent e;
 
-    public InventorySubcontainer(String s, boolean flag, int i) {
-        this.a = s;
-        this.e = flag;
+    public InventorySubcontainer(IChatBaseComponent ichatbasecomponent, int i) {
+        this.a = ichatbasecomponent;
         this.b = i;
         this.items = NonNullList.a(i, ItemStack.a);
     }
@@ -103,7 +103,7 @@ public class InventorySubcontainer implements IInventory {
         return this.b;
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -119,21 +119,21 @@ public class InventorySubcontainer implements IInventory {
         return false;
     }
 
-    public String getName() {
-        return this.a;
+    public IChatBaseComponent getDisplayName() {
+        return this.e != null ? this.e : this.a;
     }
 
-    public boolean hasCustomName() {
+    @Nullable
+    public IChatBaseComponent getCustomName() {
         return this.e;
     }
 
-    public void a(String s) {
-        this.e = true;
-        this.a = s;
+    public boolean hasCustomName() {
+        return this.e != null;
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    public void a(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.e = ichatbasecomponent;
     }
 
     public int getMaxStackSize() {
@@ -173,5 +173,16 @@ public class InventorySubcontainer implements IInventory {
 
     public void clear() {
         this.items.clear();
+    }
+
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
+        Iterator iterator = this.items.iterator();
+
+        while (iterator.hasNext()) {
+            ItemStack itemstack = (ItemStack) iterator.next();
+
+            autorecipestackmanager.b(itemstack);
+        }
+
     }
 }

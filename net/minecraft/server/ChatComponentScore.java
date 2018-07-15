@@ -1,63 +1,84 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
 public class ChatComponentScore extends ChatBaseComponent {
 
     private final String b;
-    private final String c;
-    private String d = "";
+    @Nullable
+    private final EntitySelector c;
+    private final String d;
+    private String e = "";
 
     public ChatComponentScore(String s, String s1) {
         this.b = s;
-        this.c = s1;
+        this.d = s1;
+        EntitySelector entityselector = null;
+
+        try {
+            ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(new StringReader(s));
+
+            entityselector = argumentparserselector.s();
+        } catch (CommandSyntaxException commandsyntaxexception) {
+            ;
+        }
+
+        this.c = entityselector;
     }
 
-    public String g() {
+    public String f() {
         return this.b;
     }
 
-    public String h() {
+    @Nullable
+    public EntitySelector g() {
         return this.c;
     }
 
-    public void b(String s) {
-        this.d = s;
-    }
-
-    public String getText() {
+    public String h() {
         return this.d;
     }
 
-    public void a(ICommandListener icommandlistener) {
-        MinecraftServer minecraftserver = icommandlistener.C_();
+    public void b(String s) {
+        this.e = s;
+    }
 
-        if (minecraftserver != null && minecraftserver.M() && UtilColor.b(this.d)) {
-            Scoreboard scoreboard = minecraftserver.getWorldServer(0).getScoreboard();
-            ScoreboardObjective scoreboardobjective = scoreboard.getObjective(this.c);
+    public String getText() {
+        return this.e;
+    }
 
-            if (scoreboard.b(this.b, scoreboardobjective)) {
-                ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(this.b, scoreboardobjective);
+    public void b(CommandListenerWrapper commandlistenerwrapper) {
+        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
+
+        if (minecraftserver != null && minecraftserver.F() && UtilColor.b(this.e)) {
+            ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
+            ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
+
+            if (scoreboardserver.b(this.b, scoreboardobjective)) {
+                ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(this.b, scoreboardobjective);
 
                 this.b(String.format("%d", new Object[] { Integer.valueOf(scoreboardscore.getScore())}));
             } else {
-                this.d = "";
+                this.e = "";
             }
         }
 
     }
 
     public ChatComponentScore i() {
-        ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.c);
+        ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.d);
 
-        chatcomponentscore.b(this.d);
+        chatcomponentscore.b(this.e);
         chatcomponentscore.setChatModifier(this.getChatModifier().clone());
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            chatcomponentscore.addSibling(ichatbasecomponent.f());
+            chatcomponentscore.addSibling(ichatbasecomponent.e());
         }
 
         return chatcomponentscore;
@@ -71,15 +92,15 @@ public class ChatComponentScore extends ChatBaseComponent {
         } else {
             ChatComponentScore chatcomponentscore = (ChatComponentScore) object;
 
-            return this.b.equals(chatcomponentscore.b) && this.c.equals(chatcomponentscore.c) && super.equals(object);
+            return this.b.equals(chatcomponentscore.b) && this.d.equals(chatcomponentscore.d) && super.equals(object);
         }
     }
 
     public String toString() {
-        return "ScoreComponent{name=\'" + this.b + '\'' + "objective=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "ScoreComponent{name=\'" + this.b + '\'' + "objective=\'" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public IChatBaseComponent f() {
+    public IChatBaseComponent e() {
         return this.i();
     }
 }

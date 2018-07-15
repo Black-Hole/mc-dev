@@ -87,9 +87,7 @@ public class LootTable {
             }
         }
 
-        i -= list.size();
-
-        while (i > 0 && !arraylist.isEmpty()) {
+        while (i - list.size() - arraylist.size() > 0 && !arraylist.isEmpty()) {
             ItemStack itemstack1 = (ItemStack) arraylist.remove(MathHelper.nextInt(random, 0, arraylist.size() - 1));
             int j = MathHelper.nextInt(random, 1, itemstack1.getCount() / 2);
             ItemStack itemstack2 = itemstack1.cloneAndSubtract(j);

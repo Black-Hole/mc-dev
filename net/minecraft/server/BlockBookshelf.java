@@ -4,16 +4,15 @@ import java.util.Random;
 
 public class BlockBookshelf extends Block {
 
-    public BlockBookshelf() {
-        super(Material.WOOD);
-        this.a(CreativeModeTab.b);
+    public BlockBookshelf(Block.Info block_info) {
+        super(block_info);
     }
 
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return 3;
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
         return Items.BOOK;
     }
 }

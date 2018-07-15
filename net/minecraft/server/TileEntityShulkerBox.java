@@ -2,70 +2,74 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.IntStream;
 import javax.annotation.Nullable;
 
-public class TileEntityShulkerBox extends TileEntityLootable implements ITickable, IWorldInventory {
+public class TileEntityShulkerBox extends TileEntityLootable implements IWorldInventory, ITickable {
 
-    private static final int[] a = new int[27];
-    private NonNullList<ItemStack> f;
-    private boolean g;
-    private int h;
-    private TileEntityShulkerBox.AnimationPhase i;
-    private float j;
-    private float k;
-    private EnumColor l;
+    private static final int[] a = IntStream.range(0, 27).toArray();
+    private NonNullList<ItemStack> e;
+    private boolean f;
+    private int j;
+    private TileEntityShulkerBox.AnimationPhase k;
+    private float l;
+    private float m;
+    private EnumColor n;
+    private boolean o;
     private boolean p;
+
+    public TileEntityShulkerBox(@Nullable EnumColor enumcolor) {
+        super(TileEntityTypes.x);
+        this.e = NonNullList.a(27, ItemStack.a);
+        this.k = TileEntityShulkerBox.AnimationPhase.CLOSED;
+        this.n = enumcolor;
+    }
 
     public TileEntityShulkerBox() {
         this((EnumColor) null);
+        this.o = true;
     }
 
-    public TileEntityShulkerBox(@Nullable EnumColor enumcolor) {
-        this.f = NonNullList.a(27, ItemStack.a);
-        this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
-        this.l = enumcolor;
-    }
-
-    public void e() {
-        this.o();
-        if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.G();
+    public void X_() {
+        this.p();
+        if (this.k == TileEntityShulkerBox.AnimationPhase.OPENING || this.k == TileEntityShulkerBox.AnimationPhase.CLOSING) {
+            this.H();
         }
 
     }
 
-    protected void o() {
-        this.k = this.j;
-        switch (this.i) {
+    protected void p() {
+        this.m = this.l;
+        switch (this.k) {
         case CLOSED:
-            this.j = 0.0F;
+            this.l = 0.0F;
             break;
 
         case OPENING:
-            this.j += 0.1F;
-            if (this.j >= 1.0F) {
-                this.G();
-                this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
-                this.j = 1.0F;
+            this.l += 0.1F;
+            if (this.l >= 1.0F) {
+                this.H();
+                this.k = TileEntityShulkerBox.AnimationPhase.OPENED;
+                this.l = 1.0F;
             }
             break;
 
         case CLOSING:
-            this.j -= 0.1F;
-            if (this.j <= 0.0F) {
-                this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
-                this.j = 0.0F;
+            this.l -= 0.1F;
+            if (this.l <= 0.0F) {
+                this.k = TileEntityShulkerBox.AnimationPhase.CLOSED;
+                this.l = 0.0F;
             }
             break;
 
         case OPENED:
-            this.j = 1.0F;
+            this.l = 1.0F;
         }
 
     }
 
-    public TileEntityShulkerBox.AnimationPhase p() {
-        return this.i;
+    public TileEntityShulkerBox.AnimationPhase r() {
+        return this.k;
     }
 
     public AxisAlignedBB a(IBlockData iblockdata) {
@@ -73,7 +77,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
     }
 
     public AxisAlignedBB b(EnumDirection enumdirection) {
-        return Block.j.b((double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentX()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentY()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentZ()));
+        return VoxelShapes.b().a().b((double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentX()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentY()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentZ()));
     }
 
     private AxisAlignedBB c(EnumDirection enumdirection) {
@@ -82,7 +86,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
     }
 
-    private void G() {
+    private void H() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
@@ -140,7 +144,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
     }
 
     public int getSize() {
-        return this.f.size();
+        return this.e.size();
     }
 
     public int getMaxStackSize() {
@@ -149,13 +153,13 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
 
     public boolean c(int i, int j) {
         if (i == 1) {
-            this.h = j;
+            this.j = j;
             if (j == 0) {
-                this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
+                this.k = TileEntityShulkerBox.AnimationPhase.CLOSING;
             }
 
             if (j == 1) {
-                this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
+                this.k = TileEntityShulkerBox.AnimationPhase.OPENING;
             }
 
             return true;
@@ -166,14 +170,14 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
 
     public void startOpen(EntityHuman entityhuman) {
         if (!entityhuman.isSpectator()) {
-            if (this.h < 0) {
-                this.h = 0;
+            if (this.j < 0) {
+                this.j = 0;
             }
 
-            ++this.h;
-            this.world.playBlockAction(this.position, this.getBlock(), 1, this.h);
-            if (this.h == 1) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.gC, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            ++this.j;
+            this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.j);
+            if (this.j == 1) {
+                this.world.a((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -181,10 +185,10 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
 
     public void closeContainer(EntityHuman entityhuman) {
         if (!entityhuman.isSpectator()) {
-            --this.h;
-            this.world.playBlockAction(this.position, this.getBlock(), 1, this.h);
-            if (this.h <= 0) {
-                this.world.a((EntityHuman) null, this.position, SoundEffects.gB, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            --this.j;
+            this.world.playBlockAction(this.position, this.getBlock().getBlock(), 1, this.j);
+            if (this.j <= 0) {
+                this.world.a((EntityHuman) null, this.position, SoundEffects.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
             }
         }
 
@@ -198,43 +202,43 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         return "minecraft:shulker_box";
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.o : "container.shulkerBox";
-    }
+    public IChatBaseComponent getDisplayName() {
+        IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityShulkerBox.class, new String[] { "Items"})));
+        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage("container.shulkerBox", new Object[0]));
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.e(nbttagcompound);
+        this.f(nbttagcompound);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        return this.f(nbttagcompound);
+        return this.g(nbttagcompound);
     }
 
-    public void e(NBTTagCompound nbttagcompound) {
-        this.f = NonNullList.a(this.getSize(), ItemStack.a);
-        if (!this.c(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
-            ContainerUtil.b(nbttagcompound, this.f);
+    public void f(NBTTagCompound nbttagcompound) {
+        this.e = NonNullList.a(this.getSize(), ItemStack.a);
+        if (!this.d(nbttagcompound) && nbttagcompound.hasKeyOfType("Items", 9)) {
+            ContainerUtil.b(nbttagcompound, this.e);
         }
 
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.o = nbttagcompound.getString("CustomName");
+            this.i = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
     }
 
-    public NBTTagCompound f(NBTTagCompound nbttagcompound) {
-        if (!this.d(nbttagcompound)) {
-            ContainerUtil.a(nbttagcompound, this.f, false);
+    public NBTTagCompound g(NBTTagCompound nbttagcompound) {
+        if (!this.e(nbttagcompound)) {
+            ContainerUtil.a(nbttagcompound, this.e, false);
         }
 
-        if (this.hasCustomName()) {
-            nbttagcompound.setString("CustomName", this.o);
+        IChatBaseComponent ichatbasecomponent = this.getCustomName();
+
+        if (ichatbasecomponent != null) {
+            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
         }
 
         if (!nbttagcompound.hasKey("Lock") && this.isLocked()) {
@@ -245,11 +249,15 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
     }
 
     protected NonNullList<ItemStack> q() {
-        return this.f;
+        return this.e;
     }
 
-    public boolean x_() {
-        Iterator iterator = this.f.iterator();
+    protected void a(NonNullList<ItemStack> nonnulllist) {
+        this.e = nonnulllist;
+    }
+
+    public boolean P_() {
+        Iterator iterator = this.e.iterator();
 
         ItemStack itemstack;
 
@@ -268,7 +276,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         return TileEntityShulkerBox.a;
     }
 
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, @Nullable EnumDirection enumdirection) {
         return !(Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox);
     }
 
@@ -277,21 +285,21 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
     }
 
     public void clear() {
-        this.g = true;
+        this.f = true;
         super.clear();
     }
 
-    public boolean r() {
-        return this.g;
+    public boolean s() {
+        return this.f;
     }
 
     public float a(float f) {
-        return this.k + (this.j - this.k) * f;
+        return this.m + (this.l - this.m) * f;
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 10, this.d());
+        return new PacketPlayOutTileEntityData(this.position, 10, this.Z_());
     }
 
     public boolean E() {
@@ -302,15 +310,8 @@ public class TileEntityShulkerBox extends TileEntityLootable implements ITickabl
         this.p = flag;
     }
 
-    public boolean F() {
-        return !this.E() || !this.x_() || this.hasCustomName() || this.m != null;
-    }
-
-    static {
-        for (int i = 0; i < TileEntityShulkerBox.a.length; TileEntityShulkerBox.a[i] = i++) {
-            ;
-        }
-
+    public boolean G() {
+        return !this.E() || !this.P_() || this.hasCustomName() || this.g != null;
     }
 
     public static enum AnimationPhase {

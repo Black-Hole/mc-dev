@@ -21,8 +21,15 @@ public class AutoRecipeStackManager {
     public AutoRecipeStackManager() {}
 
     public void a(ItemStack itemstack) {
-        if (!itemstack.isEmpty() && !itemstack.h() && !itemstack.hasEnchantments() && !itemstack.hasName()) {
-            int i = b(itemstack);
+        if (!itemstack.f() && !itemstack.hasEnchantments() && !itemstack.hasName()) {
+            this.b(itemstack);
+        }
+
+    }
+
+    public void b(ItemStack itemstack) {
+        if (!itemstack.isEmpty()) {
+            int i = c(itemstack);
             int j = itemstack.getCount();
 
             this.b(i, j);
@@ -30,11 +37,8 @@ public class AutoRecipeStackManager {
 
     }
 
-    public static int b(ItemStack itemstack) {
-        Item item = itemstack.getItem();
-        int i = item.k() ? itemstack.getData() : 0;
-
-        return Item.REGISTRY.a((Object) item) << 16 | i & '\uffff';
+    public static int c(ItemStack itemstack) {
+        return Item.REGISTRY.a((Object) itemstack.getItem());
     }
 
     public boolean a(int i) {
@@ -73,7 +77,7 @@ public class AutoRecipeStackManager {
     }
 
     public static ItemStack b(int i) {
-        return i == 0 ? ItemStack.a : new ItemStack(Item.getById(i >> 16 & '\uffff'), 1, i & '\uffff');
+        return i == 0 ? ItemStack.a : new ItemStack(Item.getById(i));
     }
 
     public void a() {
@@ -88,14 +92,12 @@ public class AutoRecipeStackManager {
         private final int[] e;
         private final int f;
         private final BitSet g;
-        private IntList h = new IntArrayList();
+        private final IntList h = new IntArrayList();
 
         public a(IRecipe irecipe) {
             this.b = irecipe;
-            this.c.addAll(irecipe.d());
-            this.c.removeIf((var0) -> {
-                return recipeitemstack == RecipeItemStack.a;
-            });
+            this.c.addAll(irecipe.e());
+            this.c.removeIf(RecipeItemStack::d);
             this.d = this.c.size();
             this.e = this.a();
             this.f = this.e.length;
@@ -142,10 +144,10 @@ public class AutoRecipeStackManager {
 
                 this.g.clear(0, this.d + this.f + this.d);
                 int i1 = 0;
-                NonNullList nonnulllist = this.b.d();
+                NonNullList nonnulllist = this.b.e();
 
                 for (int j1 = 0; j1 < nonnulllist.size(); ++j1) {
-                    if (flag1 && nonnulllist.get(j1) == RecipeItemStack.a) {
+                    if (flag1 && ((RecipeItemStack) nonnulllist.get(j1)).d()) {
                         intlist.add(0);
                     } else {
                         for (int k1 = 0; k1 < this.f; ++k1) {

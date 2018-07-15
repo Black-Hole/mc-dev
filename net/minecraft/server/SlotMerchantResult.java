@@ -46,7 +46,7 @@ public class SlotMerchantResult extends Slot {
 
             if (this.a(merchantrecipe, itemstack1, itemstack2) || this.a(merchantrecipe, itemstack2, itemstack1)) {
                 this.h.a(merchantrecipe);
-                entityhuman.b(StatisticList.G);
+                entityhuman.a(StatisticList.TRADED_WITH_VILLAGER);
                 this.a.setItem(0, itemstack1);
                 this.a.setItem(1, itemstack2);
             }

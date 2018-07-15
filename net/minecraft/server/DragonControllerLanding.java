@@ -14,16 +14,16 @@ public class DragonControllerLanding extends AbstractDragonController {
         Vec3D vec3d = this.a.a(1.0F).a();
 
         vec3d.b(-0.7853982F);
-        double d0 = this.a.bw.locX;
-        double d1 = this.a.bw.locY + (double) (this.a.bw.length / 2.0F);
-        double d2 = this.a.bw.locZ;
+        double d0 = this.a.bD.locX;
+        double d1 = this.a.bD.locY + (double) (this.a.bD.length / 2.0F);
+        double d2 = this.a.bD.locZ;
 
         for (int i = 0; i < 8; ++i) {
             double d3 = d0 + this.a.getRandom().nextGaussian() / 2.0D;
             double d4 = d1 + this.a.getRandom().nextGaussian() / 2.0D;
             double d5 = d2 + this.a.getRandom().nextGaussian() / 2.0D;
 
-            this.a.world.addParticle(EnumParticle.DRAGON_BREATH, d3, d4, d5, -vec3d.x * 0.07999999821186066D + this.a.motX, -vec3d.y * 0.30000001192092896D + this.a.motY, -vec3d.z * 0.07999999821186066D + this.a.motZ, new int[0]);
+            this.a.world.addParticle(Particles.j, d3, d4, d5, -vec3d.x * 0.07999999821186066D + this.a.motX, -vec3d.y * 0.30000001192092896D + this.a.motY, -vec3d.z * 0.07999999821186066D + this.a.motZ);
             vec3d.b(0.19634955F);
         }
 
@@ -31,7 +31,7 @@ public class DragonControllerLanding extends AbstractDragonController {
 
     public void c() {
         if (this.b == null) {
-            this.b = new Vec3D(this.a.world.q(WorldGenEndTrophy.a));
+            this.b = new Vec3D(this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a));
         }
 
         if (this.b.c(this.a.locX, this.a.locY, this.a.locZ) < 1.0D) {

@@ -1,8 +1,11 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import javax.annotation.Nullable;
 
 public class AdvancementDisplay {
@@ -77,9 +80,24 @@ public class AdvancementDisplay {
             throw new JsonSyntaxException("Unsupported icon type, currently only items are supported (add \'item\' key)");
         } else {
             Item item = ChatDeserializer.i(jsonobject, "item");
-            int i = ChatDeserializer.a(jsonobject, "data", 0);
 
-            return new ItemStack(item, 1, i);
+            if (jsonobject.has("data")) {
+                throw new JsonParseException("Disallowed data tag found");
+            } else {
+                ItemStack itemstack = new ItemStack(item);
+
+                if (jsonobject.has("nbt")) {
+                    try {
+                        NBTTagCompound nbttagcompound = MojangsonParser.parse(ChatDeserializer.a(jsonobject.get("nbt"), "nbt"));
+
+                        itemstack.setTag(nbttagcompound);
+                    } catch (CommandSyntaxException commandsyntaxexception) {
+                        throw new JsonSyntaxException("Invalid nbt tag: " + commandsyntaxexception.getMessage());
+                    }
+                }
+
+                return itemstack;
+            }
         }
     }
 
@@ -124,5 +142,29 @@ public class AdvancementDisplay {
 
         advancementdisplay.a(packetdataserializer.readFloat(), packetdataserializer.readFloat());
         return advancementdisplay;
+    }
+
+    public JsonElement k() {
+        JsonObject jsonobject = new JsonObject();
+
+        jsonobject.add("icon", this.l());
+        jsonobject.add("title", IChatBaseComponent.ChatSerializer.b(this.a));
+        jsonobject.add("description", IChatBaseComponent.ChatSerializer.b(this.b));
+        jsonobject.addProperty("frame", this.e.a());
+        jsonobject.addProperty("show_toast", Boolean.valueOf(this.f));
+        jsonobject.addProperty("announce_to_chat", Boolean.valueOf(this.g));
+        jsonobject.addProperty("hidden", Boolean.valueOf(this.h));
+        if (this.d != null) {
+            jsonobject.addProperty("background", this.d.toString());
+        }
+
+        return jsonobject;
+    }
+
+    private JsonObject l() {
+        JsonObject jsonobject = new JsonObject();
+
+        jsonobject.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.c.getItem())).toString());
+        return jsonobject;
     }
 }

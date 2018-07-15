@@ -18,7 +18,7 @@ public class VillageDoor {
     }
 
     public VillageDoor(BlockPosition blockposition, EnumDirection enumdirection, int i) {
-        this.a = blockposition;
+        this.a = blockposition.h();
         this.c = enumdirection;
         this.b = blockposition.shift(enumdirection, 2);
         this.d = i;

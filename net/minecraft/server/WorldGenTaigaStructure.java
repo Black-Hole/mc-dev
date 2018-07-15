@@ -3,25 +3,19 @@ package net.minecraft.server;
 import java.util.Iterator;
 import java.util.Random;
 
-public class WorldGenTaigaStructure extends WorldGenerator {
+public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockOffsetConfiguration> {
 
-    private final Block a;
-    private final int b;
+    public WorldGenTaigaStructure() {}
 
-    public WorldGenTaigaStructure(Block block, int i) {
-        super(false);
-        this.a = block;
-        this.b = i;
-    }
-
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
         while (true) {
             if (blockposition.getY() > 3) {
-                label47: {
-                    if (!world.isEmpty(blockposition.down())) {
-                        Block block = world.getType(blockposition.down()).getBlock();
+                label47:
+                {
+                    if (!generatoraccess.isEmpty(blockposition.down())) {
+                        Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                        if (block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.STONE) {
+                        if (block == Blocks.GRASS_BLOCK || Block.d(block) || Block.c(block)) {
                             break label47;
                         }
                     }
@@ -35,7 +29,7 @@ public class WorldGenTaigaStructure extends WorldGenerator {
                 return false;
             }
 
-            int i = this.b;
+            int i = worldgenfeatureblockoffsetconfiguration.b;
 
             for (int j = 0; i >= 0 && j < 3; ++j) {
                 int k = i + random.nextInt(2);
@@ -48,7 +42,7 @@ public class WorldGenTaigaStructure extends WorldGenerator {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
                     if (blockposition1.n(blockposition) <= (double) (f * f)) {
-                        world.setTypeAndData(blockposition1, this.a.getBlockData(), 4);
+                        generatoraccess.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.a.getBlockData(), 4);
                     }
                 }
 

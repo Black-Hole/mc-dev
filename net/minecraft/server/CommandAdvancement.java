@@ -1,302 +1,183 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class CommandAdvancement extends CommandAbstract {
+public class CommandAdvancement {
 
-    public CommandAdvancement() {}
+    private static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
+        Collection collection = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b();
+        List list = (List) collection.stream().map(Advancement::getName).map(MinecraftKey::toString).collect(Collectors.toList());
 
-    public String getCommand() {
-        return "advancement";
+        return ICompletionProvider.b(list, suggestionsbuilder);
+    };
+
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("advancement").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("grant").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("only").then(((RequiredArgumentBuilder) CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
+        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
+            return ICompletionProvider.b(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
+        }).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
+        }))))).then(CommandDispatcher.a("from").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.FROM));
+        })))).then(CommandDispatcher.a("until").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.UNTIL));
+        })))).then(CommandDispatcher.a("through").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.THROUGH));
+        })))).then(CommandDispatcher.a("everything").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b());
+        }))))).then(CommandDispatcher.a("revoke").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("only").then(((RequiredArgumentBuilder) CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
+        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
+            return ICompletionProvider.b(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
+        }).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
+        }))))).then(CommandDispatcher.a("from").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.FROM));
+        })))).then(CommandDispatcher.a("until").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.UNTIL));
+        })))).then(CommandDispatcher.a("through").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.THROUGH));
+        })))).then(CommandDispatcher.a("everything").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b());
+        })))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, CommandAdvancement.Action commandadvancement_action, Collection<Advancement> collection1) {
+        int i = 0;
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.advancement.usage";
-    }
+        EntityPlayer entityplayer;
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 1) {
-            throw new ExceptionUsage("commands.advancement.usage", new Object[0]);
-        } else {
-            CommandAdvancement.Action commandadvancement_action = CommandAdvancement.Action.a(astring[0]);
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += commandadvancement_action.a(entityplayer, (Iterable) collection1)) {
+            entityplayer = (EntityPlayer) iterator.next();
+        }
 
-            if (commandadvancement_action != null) {
-                if (astring.length < 3) {
-                    throw commandadvancement_action.a();
-                }
-
-                EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[1]);
-                CommandAdvancement.Filter commandadvancement_filter = CommandAdvancement.Filter.a(astring[2]);
-
-                if (commandadvancement_filter == null) {
-                    throw commandadvancement_action.a();
-                }
-
-                this.a(minecraftserver, icommandlistener, astring, entityplayer, commandadvancement_action, commandadvancement_filter);
-            } else {
-                if (!"test".equals(astring[0])) {
-                    throw new ExceptionUsage("commands.advancement.usage", new Object[0]);
-                }
-
-                if (astring.length == 3) {
-                    this.a(icommandlistener, b(minecraftserver, icommandlistener, astring[1]), a(minecraftserver, astring[2]));
+        if (i == 0) {
+            if (collection1.size() == 1) {
+                if (collection.size() == 1) {
+                    throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".one.to.one.failure", new Object[] { ((Advancement) collection1.iterator().next()).j(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}));
                 } else {
-                    if (astring.length != 4) {
-                        throw new ExceptionUsage("commands.advancement.test.usage", new Object[0]);
-                    }
-
-                    this.a(icommandlistener, b(minecraftserver, icommandlistener, astring[1]), a(minecraftserver, astring[2]), astring[3]);
+                    throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".one.to.many.failure", new Object[] { ((Advancement) collection1.iterator().next()).j(), Integer.valueOf(collection.size())}));
                 }
-            }
-
-        }
-    }
-
-    private void a(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, EntityPlayer entityplayer, CommandAdvancement.Action commandadvancement_action, CommandAdvancement.Filter commandadvancement_filter) throws CommandException {
-        if (commandadvancement_filter == CommandAdvancement.Filter.EVERYTHING) {
-            if (astring.length == 3) {
-                int i = commandadvancement_action.a(entityplayer, minecraftserver.getAdvancementData().c());
-
-                if (i == 0) {
-                    throw commandadvancement_filter.a(commandadvancement_action, new Object[] { entityplayer.getName()});
-                } else {
-                    commandadvancement_filter.a(icommandlistener, this, commandadvancement_action, new Object[] { entityplayer.getName(), Integer.valueOf(i)});
-                }
+            } else if (collection.size() == 1) {
+                throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".many.to.one.failure", new Object[] { Integer.valueOf(collection1.size()), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}));
             } else {
-                throw commandadvancement_filter.a(commandadvancement_action);
+                throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".many.to.many.failure", new Object[] { Integer.valueOf(collection1.size()), Integer.valueOf(collection.size())}));
             }
-        } else if (astring.length < 4) {
-            throw commandadvancement_filter.a(commandadvancement_action);
         } else {
-            Advancement advancement = a(minecraftserver, astring[3]);
-
-            if (commandadvancement_filter == CommandAdvancement.Filter.ONLY && astring.length == 5) {
-                String s = astring[4];
-
-                if (!advancement.getCriteria().keySet().contains(s)) {
-                    throw new CommandException("commands.advancement.criterionNotFound", new Object[] { advancement.getName(), astring[4]});
+            if (collection1.size() == 1) {
+                if (collection.size() == 1) {
+                    commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".one.to.one.success", new Object[] { ((Advancement) collection1.iterator().next()).j(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                } else {
+                    commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".one.to.many.success", new Object[] { ((Advancement) collection1.iterator().next()).j(), Integer.valueOf(collection.size())}), true);
                 }
-
-                if (!commandadvancement_action.a(entityplayer, advancement, s)) {
-                    throw new CommandException(commandadvancement_action.d + ".criterion.failed", new Object[] { advancement.getName(), entityplayer.getName(), s});
-                }
-
-                a(icommandlistener, (ICommand) this, commandadvancement_action.d + ".criterion.success", new Object[] { advancement.getName(), entityplayer.getName(), s});
+            } else if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".many.to.one.success", new Object[] { Integer.valueOf(collection1.size()), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                if (astring.length != 4) {
-                    throw commandadvancement_filter.a(commandadvancement_action);
-                }
-
-                List list = this.a(advancement, commandadvancement_filter);
-                int j = commandadvancement_action.a(entityplayer, (Iterable) list);
-
-                if (j == 0) {
-                    throw commandadvancement_filter.a(commandadvancement_action, new Object[] { advancement.getName(), entityplayer.getName()});
-                }
-
-                commandadvancement_filter.a(icommandlistener, this, commandadvancement_action, new Object[] { advancement.getName(), entityplayer.getName(), Integer.valueOf(j)});
+                commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".many.to.many.success", new Object[] { Integer.valueOf(collection1.size()), Integer.valueOf(collection.size())}), true);
             }
 
+            return i;
         }
     }
 
-    private void a(Advancement advancement, List<Advancement> list) {
-        Iterator iterator = advancement.e().iterator();
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, CommandAdvancement.Action commandadvancement_action, Advancement advancement, String s) {
+        int i = 0;
 
-        while (iterator.hasNext()) {
-            Advancement advancement1 = (Advancement) iterator.next();
+        if (!advancement.getCriteria().containsKey(s)) {
+            throw new CommandException(new ChatMessage("commands.advancement.criterionNotFound", new Object[] { advancement.j(), s}));
+        } else {
+            Iterator iterator = collection.iterator();
 
-            list.add(advancement1);
-            this.a(advancement1, list);
+            while (iterator.hasNext()) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+                if (commandadvancement_action.a(entityplayer, advancement, s)) {
+                    ++i;
+                }
+            }
+
+            if (i == 0) {
+                if (collection.size() == 1) {
+                    throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".criterion.to.one.failure", new Object[] { s, advancement.j(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}));
+                } else {
+                    throw new CommandException(new ChatMessage(commandadvancement_action.a() + ".criterion.to.many.failure", new Object[] { s, advancement.j(), Integer.valueOf(collection.size())}));
+                }
+            } else {
+                if (collection.size() == 1) {
+                    commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".criterion.to.one.success", new Object[] { s, advancement.j(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                } else {
+                    commandlistenerwrapper.sendMessage(new ChatMessage(commandadvancement_action.a() + ".criterion.to.many.success", new Object[] { s, advancement.j(), Integer.valueOf(collection.size())}), true);
+                }
+
+                return i;
+            }
         }
-
     }
 
-    private List<Advancement> a(Advancement advancement, CommandAdvancement.Filter commandadvancement_filter) {
+    private static List<Advancement> a(Advancement advancement, CommandAdvancement.Filter commandadvancement_filter) {
         ArrayList arraylist = Lists.newArrayList();
 
-        if (commandadvancement_filter.h) {
+        if (commandadvancement_filter.f) {
             for (Advancement advancement1 = advancement.b(); advancement1 != null; advancement1 = advancement1.b()) {
                 arraylist.add(advancement1);
             }
         }
 
         arraylist.add(advancement);
-        if (commandadvancement_filter.i) {
-            this.a(advancement, (List) arraylist);
+        if (commandadvancement_filter.g) {
+            a(advancement, (List) arraylist);
         }
 
         return arraylist;
     }
 
-    private void a(ICommandListener icommandlistener, EntityPlayer entityplayer, Advancement advancement, String s) throws CommandException {
-        AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
-        CriterionProgress criterionprogress = advancementdataplayer.getProgress(advancement).getCriterionProgress(s);
-
-        if (criterionprogress == null) {
-            throw new CommandException("commands.advancement.criterionNotFound", new Object[] { advancement.getName(), s});
-        } else if (!criterionprogress.a()) {
-            throw new CommandException("commands.advancement.test.criterion.notDone", new Object[] { entityplayer.getName(), advancement.getName(), s});
-        } else {
-            a(icommandlistener, (ICommand) this, "commands.advancement.test.criterion.success", new Object[] { entityplayer.getName(), advancement.getName(), s});
-        }
-    }
-
-    private void a(ICommandListener icommandlistener, EntityPlayer entityplayer, Advancement advancement) throws CommandException {
-        AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
-
-        if (!advancementprogress.isDone()) {
-            throw new CommandException("commands.advancement.test.advancement.notDone", new Object[] { entityplayer.getName(), advancement.getName()});
-        } else {
-            a(icommandlistener, (ICommand) this, "commands.advancement.test.advancement.success", new Object[] { entityplayer.getName(), advancement.getName()});
-        }
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        if (astring.length == 1) {
-            return a(astring, new String[] { "grant", "revoke", "test"});
-        } else {
-            CommandAdvancement.Action commandadvancement_action = CommandAdvancement.Action.a(astring[0]);
-
-            if (commandadvancement_action != null) {
-                if (astring.length == 2) {
-                    return a(astring, minecraftserver.getPlayers());
-                }
-
-                if (astring.length == 3) {
-                    return a(astring, CommandAdvancement.Filter.f);
-                }
-
-                CommandAdvancement.Filter commandadvancement_filter = CommandAdvancement.Filter.a(astring[2]);
-
-                if (commandadvancement_filter != null && commandadvancement_filter != CommandAdvancement.Filter.EVERYTHING) {
-                    if (astring.length == 4) {
-                        return a(astring, (Collection) this.a(minecraftserver));
-                    }
-
-                    if (astring.length == 5 && commandadvancement_filter == CommandAdvancement.Filter.ONLY) {
-                        Advancement advancement = minecraftserver.getAdvancementData().a(new MinecraftKey(astring[3]));
-
-                        if (advancement != null) {
-                            return a(astring, (Collection) advancement.getCriteria().keySet());
-                        }
-                    }
-                }
-            }
-
-            if ("test".equals(astring[0])) {
-                if (astring.length == 2) {
-                    return a(astring, minecraftserver.getPlayers());
-                }
-
-                if (astring.length == 3) {
-                    return a(astring, (Collection) this.a(minecraftserver));
-                }
-
-                if (astring.length == 4) {
-                    Advancement advancement1 = minecraftserver.getAdvancementData().a(new MinecraftKey(astring[2]));
-
-                    if (advancement1 != null) {
-                        return a(astring, (Collection) advancement1.getCriteria().keySet());
-                    }
-                }
-            }
-
-            return Collections.emptyList();
-        }
-    }
-
-    private List<MinecraftKey> a(MinecraftServer minecraftserver) {
-        ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = minecraftserver.getAdvancementData().c().iterator();
+    private static void a(Advancement advancement, List<Advancement> list) {
+        Iterator iterator = advancement.e().iterator();
 
         while (iterator.hasNext()) {
-            Advancement advancement = (Advancement) iterator.next();
+            Advancement advancement1 = (Advancement) iterator.next();
 
-            arraylist.add(advancement.getName());
+            list.add(advancement1);
+            a(advancement1, list);
         }
 
-        return arraylist;
-    }
-
-    public boolean isListStart(String[] astring, int i) {
-        return astring.length > 1 && ("grant".equals(astring[0]) || "revoke".equals(astring[0]) || "test".equals(astring[0])) && i == 1;
-    }
-
-    public static Advancement a(MinecraftServer minecraftserver, String s) throws CommandException {
-        Advancement advancement = minecraftserver.getAdvancementData().a(new MinecraftKey(s));
-
-        if (advancement == null) {
-            throw new CommandException("commands.advancement.advancementNotFound", new Object[] { s});
-        } else {
-            return advancement;
-        }
     }
 
     static enum Filter {
 
-        ONLY("only", false, false), THROUGH("through", true, true), FROM("from", false, true), UNTIL("until", true, false), EVERYTHING("everything", true, true);
+        ONLY(false, false), THROUGH(true, true), FROM(false, true), UNTIL(true, false), EVERYTHING(true, true);
 
-        static final String[] f = new String[values().length];
-        final String g;
-        final boolean h;
-        final boolean i;
+        private final boolean f;
+        private final boolean g;
 
-        private Filter(String s, boolean flag, boolean flag1) {
-            this.g = s;
-            this.h = flag;
-            this.i = flag1;
-        }
-
-        CommandException a(CommandAdvancement.Action commandadvancement_action, Object... aobject) {
-            return new CommandException(commandadvancement_action.d + "." + this.g + ".failed", aobject);
-        }
-
-        CommandException a(CommandAdvancement.Action commandadvancement_action) {
-            return new CommandException(commandadvancement_action.d + "." + this.g + ".usage", new Object[0]);
-        }
-
-        void a(ICommandListener icommandlistener, CommandAdvancement commandadvancement, CommandAdvancement.Action commandadvancement_action, Object... aobject) {
-            CommandAbstract.a(icommandlistener, (ICommand) commandadvancement, commandadvancement_action.d + "." + this.g + ".success", aobject);
-        }
-
-        @Nullable
-        static CommandAdvancement.Filter a(String s) {
-            CommandAdvancement.Filter[] acommandadvancement_filter = values();
-            int i = acommandadvancement_filter.length;
-
-            for (int j = 0; j < i; ++j) {
-                CommandAdvancement.Filter commandadvancement_filter = acommandadvancement_filter[j];
-
-                if (commandadvancement_filter.g.equals(s)) {
-                    return commandadvancement_filter;
-                }
-            }
-
-            return null;
-        }
-
-        static {
-            for (int i = 0; i < values().length; ++i) {
-                CommandAdvancement.Filter.f[i] = values()[i].g;
-            }
-
+        private Filter(boolean flag, boolean flag1) {
+            this.f = flag;
+            this.g = flag1;
         }
     }
 
     static enum Action {
 
-        GRANT("grant") {;
+        GRANT("grant") {
+            ;
             protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
                 AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
@@ -318,56 +199,36 @@ public class CommandAdvancement extends CommandAbstract {
             protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
                 return entityplayer.getAdvancementData().grantCriteria(advancement, s);
             }
-        }, REVOKE("revoke") {;
-    protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
-        AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
+        },
+        REVOKE("revoke") {
+            ;
+            protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
+                AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
-        if (!advancementprogress.b()) {
-            return false;
-        } else {
-            Iterator iterator = advancementprogress.getAwardedCriteria().iterator();
+                if (!advancementprogress.b()) {
+                    return false;
+                } else {
+                    Iterator iterator = advancementprogress.getAwardedCriteria().iterator();
 
-            while (iterator.hasNext()) {
-                String s = (String) iterator.next();
+                    while (iterator.hasNext()) {
+                        String s = (String) iterator.next();
 
-                entityplayer.getAdvancementData().revokeCritera(advancement, s);
-            }
+                        entityplayer.getAdvancementData().revokeCritera(advancement, s);
+                    }
 
-            return true;
-        }
-    }
-
-    protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
-        return entityplayer.getAdvancementData().revokeCritera(advancement, s);
-    }
-};
-
-        final String c;
-        final String d;
-
-        private Action(String s) {
-            this.c = s;
-            this.d = "commands.advancement." + s;
-        }
-
-        @Nullable
-        static CommandAdvancement.Action a(String s) {
-            CommandAdvancement.Action[] acommandadvancement_action = values();
-            int i = acommandadvancement_action.length;
-
-            for (int j = 0; j < i; ++j) {
-                CommandAdvancement.Action commandadvancement_action = acommandadvancement_action[j];
-
-                if (commandadvancement_action.c.equals(s)) {
-                    return commandadvancement_action;
+                    return true;
                 }
             }
 
-            return null;
-        }
+            protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
+                return entityplayer.getAdvancementData().revokeCritera(advancement, s);
+            }
+        };
 
-        CommandException a() {
-            return new CommandException(this.d + ".usage", new Object[0]);
+        private final String c;
+
+        private Action(String s) {
+            this.c = "commands.advancement." + s;
         }
 
         public int a(EntityPlayer entityplayer, Iterable<Advancement> iterable) {
@@ -388,6 +249,10 @@ public class CommandAdvancement extends CommandAbstract {
         protected abstract boolean a(EntityPlayer entityplayer, Advancement advancement);
 
         protected abstract boolean a(EntityPlayer entityplayer, Advancement advancement, String s);
+
+        protected String a() {
+            return this.c;
+        }
 
         Action(String s, Object object) {
             this(s);

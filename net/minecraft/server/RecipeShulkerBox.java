@@ -1,21 +1,26 @@
 package net.minecraft.server;
 
-public class RecipeShulkerBox {    public static class Dye implements IRecipe {
+public class RecipeShulkerBox extends IRecipeComplex {
 
-        public Dye() {}
+    public RecipeShulkerBox(MinecraftKey minecraftkey) {
+        super(minecraftkey);
+    }
 
-        public boolean a(InventoryCrafting inventorycrafting, World world) {
+    public boolean a(IInventory iinventory, World world) {
+        if (!(iinventory instanceof InventoryCrafting)) {
+            return false;
+        } else {
             int i = 0;
             int j = 0;
 
-            for (int k = 0; k < inventorycrafting.getSize(); ++k) {
-                ItemStack itemstack = inventorycrafting.getItem(k);
+            for (int k = 0; k < iinventory.getSize(); ++k) {
+                ItemStack itemstack = iinventory.getItem(k);
 
                 if (!itemstack.isEmpty()) {
                     if (Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox) {
                         ++i;
                     } else {
-                        if (itemstack.getItem() != Items.DYE) {
+                        if (!(itemstack.getItem() instanceof ItemDye)) {
                             return false;
                         }
 
@@ -30,52 +35,36 @@ public class RecipeShulkerBox {    public static class Dye implements IRecipe {
 
             return i == 1 && j == 1;
         }
+    }
 
-        public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-            ItemStack itemstack = ItemStack.a;
-            ItemStack itemstack1 = ItemStack.a;
+    public ItemStack craftItem(IInventory iinventory) {
+        ItemStack itemstack = ItemStack.a;
+        ItemDye itemdye = (ItemDye) Items.BONE_MEAL;
 
-            for (int i = 0; i < inventorycrafting.getSize(); ++i) {
-                ItemStack itemstack2 = inventorycrafting.getItem(i);
+        for (int i = 0; i < iinventory.getSize(); ++i) {
+            ItemStack itemstack1 = iinventory.getItem(i);
 
-                if (!itemstack2.isEmpty()) {
-                    if (Block.asBlock(itemstack2.getItem()) instanceof BlockShulkerBox) {
-                        itemstack = itemstack2;
-                    } else if (itemstack2.getItem() == Items.DYE) {
-                        itemstack1 = itemstack2;
-                    }
+            if (!itemstack1.isEmpty()) {
+                Item item = itemstack1.getItem();
+
+                if (Block.asBlock(item) instanceof BlockShulkerBox) {
+                    itemstack = itemstack1;
+                } else if (item instanceof ItemDye) {
+                    itemdye = (ItemDye) item;
                 }
             }
-
-            ItemStack itemstack3 = BlockShulkerBox.b(EnumColor.fromInvColorIndex(itemstack1.getData()));
-
-            if (itemstack.hasTag()) {
-                itemstack3.setTag(itemstack.getTag().g());
-            }
-
-            return itemstack3;
         }
 
-        public ItemStack b() {
-            return ItemStack.a;
+        ItemStack itemstack2 = BlockShulkerBox.b(itemdye.d());
+
+        if (itemstack.hasTag()) {
+            itemstack2.setTag(itemstack.getTag().clone());
         }
 
-        public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-            NonNullList nonnulllist = NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
+        return itemstack2;
+    }
 
-            for (int i = 0; i < nonnulllist.size(); ++i) {
-                ItemStack itemstack = inventorycrafting.getItem(i);
-
-                if (itemstack.getItem().r()) {
-                    nonnulllist.set(i, new ItemStack(itemstack.getItem().q()));
-                }
-            }
-
-            return nonnulllist;
-        }
-
-        public boolean c() {
-            return true;
-        }
+    public RecipeSerializer<?> a() {
+        return RecipeSerializers.o;
     }
 }

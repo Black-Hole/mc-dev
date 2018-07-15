@@ -29,7 +29,11 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
 
         if (i % 24000L == 500L) {
             if (j <= 6L) {
-                this.player.sendMessage(new ChatMessage("demo.day." + j, new Object[0]));
+                if (j == 6L) {
+                    this.player.playerConnection.sendPacket(new PacketPlayOutGameStateChange(5, 104.0F));
+                } else {
+                    this.player.sendMessage(new ChatMessage("demo.day." + j, new Object[0]));
+                }
             }
         } else if (j == 1L) {
             if (i == 100L) {

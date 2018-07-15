@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DataFixTypes;
+import com.mojang.datafixers.DataFixer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -18,30 +20,30 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     private final File baseDir;
     private final File playerDir;
     private final File dataDir;
-    private final long sessionId = MinecraftServer.aw();
+    private final long sessionId = SystemUtils.b();
     private final String g;
     private final DefinedStructureManager h;
-    protected final DataConverterManager a;
+    protected final DataFixer a;
 
-    public WorldNBTStorage(File file, String s, boolean flag, DataConverterManager dataconvertermanager) {
-        this.a = dataconvertermanager;
+    public WorldNBTStorage(File file, String s, @Nullable MinecraftServer minecraftserver, DataFixer datafixer) {
+        this.a = datafixer;
         this.baseDir = new File(file, s);
         this.baseDir.mkdirs();
         this.playerDir = new File(this.baseDir, "playerdata");
         this.dataDir = new File(this.baseDir, "data");
         this.dataDir.mkdirs();
         this.g = s;
-        if (flag) {
+        if (minecraftserver != null) {
             this.playerDir.mkdirs();
-            this.h = new DefinedStructureManager((new File(this.baseDir, "structures")).toString(), dataconvertermanager);
+            this.h = new DefinedStructureManager(minecraftserver, this.baseDir, datafixer);
         } else {
             this.h = null;
         }
 
-        this.i();
+        this.j();
     }
 
-    private void i() {
+    private void j() {
         try {
             File file = new File(this.baseDir, "session.lock");
             DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
@@ -138,8 +140,8 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     public void save(EntityHuman entityhuman) {
         try {
             NBTTagCompound nbttagcompound = entityhuman.save(new NBTTagCompound());
-            File file = new File(this.playerDir, entityhuman.bn() + ".dat.tmp");
-            File file1 = new File(this.playerDir, entityhuman.bn() + ".dat");
+            File file = new File(this.playerDir, entityhuman.bu() + ".dat.tmp");
+            File file1 = new File(this.playerDir, entityhuman.bu() + ".dat");
 
             NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file)));
             if (file1.exists()) {
@@ -148,7 +150,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
             file.renameTo(file1);
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to save player data for {}", entityhuman.getName());
+            WorldNBTStorage.b.warn("Failed to save player data for {}", entityhuman.getDisplayName().getString());
         }
 
     }
@@ -158,17 +160,19 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         NBTTagCompound nbttagcompound = null;
 
         try {
-            File file = new File(this.playerDir, entityhuman.bn() + ".dat");
+            File file = new File(this.playerDir, entityhuman.bu() + ".dat");
 
             if (file.exists() && file.isFile()) {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
             }
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to load player data for {}", entityhuman.getName());
+            WorldNBTStorage.b.warn("Failed to load player data for {}", entityhuman.getDisplayName().getString());
         }
 
         if (nbttagcompound != null) {
-            entityhuman.f(this.a.a((DataConverterType) DataConverterTypes.PLAYER, nbttagcompound));
+            int i = nbttagcompound.hasKeyOfType("DataVersion", 3) ? nbttagcompound.getInt("DataVersion") : -1;
+
+            entityhuman.f(GameProfileSerializer.a(this.a, DataFixTypes.PLAYER, nbttagcompound, i));
         }
 
         return nbttagcompound;
@@ -202,5 +206,9 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
     public DefinedStructureManager h() {
         return this.h;
+    }
+
+    public DataFixer i() {
+        return this.a;
     }
 }

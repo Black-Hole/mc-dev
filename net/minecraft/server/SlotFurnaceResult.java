@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 public class SlotFurnaceResult extends Slot {
 
     private final EntityHuman a;
@@ -36,26 +39,41 @@ public class SlotFurnaceResult extends Slot {
     protected void c(ItemStack itemstack) {
         itemstack.a(this.a.world, this.a, this.b);
         if (!this.a.world.isClientSide) {
-            int i = this.b;
-            float f = RecipesFurnace.getInstance().b(itemstack);
-            int j;
+            Iterator iterator = ((TileEntityFurnace) this.inventory).q().entrySet().iterator();
 
-            if (f == 0.0F) {
-                i = 0;
-            } else if (f < 1.0F) {
-                j = MathHelper.d((float) i * f);
-                if (j < MathHelper.f((float) i * f) && Math.random() < (double) ((float) i * f - (float) j)) {
-                    ++j;
+            while (iterator.hasNext()) {
+                Entry entry = (Entry) iterator.next();
+                FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.a.world.D().a((MinecraftKey) entry.getKey());
+                float f;
+
+                if (furnacerecipe != null) {
+                    f = furnacerecipe.g();
+                } else {
+                    f = 0.0F;
                 }
 
-                i = j;
+                int i = ((Integer) entry.getValue()).intValue();
+                int j;
+
+                if (f == 0.0F) {
+                    i = 0;
+                } else if (f < 1.0F) {
+                    j = MathHelper.d((float) i * f);
+                    if (j < MathHelper.f((float) i * f) && Math.random() < (double) ((float) i * f - (float) j)) {
+                        ++j;
+                    }
+
+                    i = j;
+                }
+
+                while (i > 0) {
+                    j = EntityExperienceOrb.getOrbValue(i);
+                    i -= j;
+                    this.a.world.addEntity(new EntityExperienceOrb(this.a.world, this.a.locX, this.a.locY + 0.5D, this.a.locZ + 0.5D, j));
+                }
             }
 
-            while (i > 0) {
-                j = EntityExperienceOrb.getOrbValue(i);
-                i -= j;
-                this.a.world.addEntity(new EntityExperienceOrb(this.a.world, this.a.locX, this.a.locY + 0.5D, this.a.locZ + 0.5D, j));
-            }
+            ((RecipeHolder) this.inventory).d(this.a);
         }
 
         this.b = 0;

@@ -1,81 +1,149 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
-public abstract class BlockStepAbstract extends Block {
+public class BlockStepAbstract extends Block implements IFluidSource, IFluidContainer {
 
-    public static final BlockStateEnum<BlockStepAbstract.EnumSlabHalf> HALF = BlockStateEnum.of("half", BlockStepAbstract.EnumSlabHalf.class);
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
+    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.at;
+    public static final BlockStateBoolean b = BlockProperties.x;
+    protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+    protected static final VoxelShape p = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
-    public BlockStepAbstract(Material material) {
-        this(material, material.r());
+    public BlockStepAbstract(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, Boolean.valueOf(false)));
     }
 
-    public BlockStepAbstract(Material material, MaterialMapColor materialmapcolor) {
-        super(material, materialmapcolor);
-        this.l = this.e();
-        this.e(255);
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.J();
     }
 
-    protected boolean n() {
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockStepAbstract.a, BlockStepAbstract.b});
+    }
+
+    protected boolean k() {
         return false;
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.e() ? BlockStepAbstract.j : (iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP ? BlockStepAbstract.c : BlockStepAbstract.b);
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
+
+        switch (blockpropertyslabtype) {
+        case DOUBLE:
+            return VoxelShapes.b();
+
+        case TOP:
+            return BlockStepAbstract.p;
+
+        default:
+            return BlockStepAbstract.c;
+        }
     }
 
-    public boolean k(IBlockData iblockdata) {
-        return ((BlockStepAbstract) iblockdata.getBlock()).e() || iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP;
+    public boolean q(IBlockData iblockdata) {
+        return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.DOUBLE || iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.TOP;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((BlockStepAbstract) iblockdata.getBlock()).e() ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.UP && iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.TOP ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.DOWN && iblockdata.get(BlockStepAbstract.HALF) == BlockStepAbstract.EnumSlabHalf.BOTTOM ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED));
+        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
+
+        return blockpropertyslabtype == BlockPropertySlabType.DOUBLE ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.UP && blockpropertyslabtype == BlockPropertySlabType.TOP ? EnumBlockFaceShape.SOLID : (enumdirection == EnumDirection.DOWN && blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED));
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return this.e();
+    @Nullable
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
+
+        if (iblockdata.getBlock() == this) {
+            return (IBlockData) ((IBlockData) iblockdata.set(BlockStepAbstract.a, BlockPropertySlabType.DOUBLE)).set(BlockStepAbstract.b, Boolean.valueOf(false));
+        } else {
+            Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, Boolean.valueOf(fluid.c() == FluidTypes.c));
+            EnumDirection enumdirection = blockactioncontext.getClickedFace();
+
+            return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.a, BlockPropertySlabType.TOP);
+        }
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving).set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.BOTTOM);
-
-        return this.e() ? iblockdata : (enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata : iblockdata.set(BlockStepAbstract.HALF, BlockStepAbstract.EnumSlabHalf.TOP));
+    public int a(IBlockData iblockdata, Random random) {
+        return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.DOUBLE ? 2 : 1;
     }
 
-    public int a(Random random) {
-        return this.e() ? 2 : 1;
+    public boolean a(IBlockData iblockdata) {
+        return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.DOUBLE;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return this.e();
+    public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
+        ItemStack itemstack = blockactioncontext.getItemStack();
+        BlockPropertySlabType blockpropertyslabtype = (BlockPropertySlabType) iblockdata.get(BlockStepAbstract.a);
+
+        if (blockpropertyslabtype != BlockPropertySlabType.DOUBLE && itemstack.getItem() == this.getItem()) {
+            if (blockactioncontext.c()) {
+                boolean flag = (double) blockactioncontext.n() > 0.5D;
+                EnumDirection enumdirection = blockactioncontext.getClickedFace();
+
+                return blockpropertyslabtype == BlockPropertySlabType.BOTTOM ? enumdirection == EnumDirection.UP || flag && enumdirection.k().c() : enumdirection == EnumDirection.DOWN || !flag && enumdirection.k().c();
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
-    public abstract String b(int i);
+    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        if (((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue()) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, Boolean.valueOf(false)), 3);
+            return FluidTypes.c;
+        } else {
+            return FluidTypes.a;
+        }
+    }
 
-    public abstract boolean e();
+    public Fluid t(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    }
 
-    public abstract IBlockState<?> g();
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() && fluidtype == FluidTypes.c;
+    }
 
-    public abstract Comparable<?> a(ItemStack itemstack);
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+        if (iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() && fluid.c() == FluidTypes.c) {
+            if (!generatoraccess.e()) {
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, Boolean.valueOf(true)), 3);
+                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+            }
 
-    public static enum EnumSlabHalf implements INamable {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        TOP("top"), BOTTOM("bottom");
-
-        private final String c;
-
-        private EnumSlabHalf(String s) {
-            this.c = s;
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue()) {
+            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
-        public String toString() {
-            return this.c;
-        }
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
 
-        public String getName() {
-            return this.c;
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        switch (pathmode) {
+        case LAND:
+            return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.BOTTOM;
+
+        case WATER:
+            return iblockaccess.b(blockposition).a(TagsFluid.a);
+
+        case AIR:
+            return false;
+
+        default:
+            return false;
         }
     }
 }

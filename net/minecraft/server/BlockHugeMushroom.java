@@ -1,273 +1,55 @@
 package net.minecraft.server;
 
+import java.util.Map;
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockHugeMushroom extends Block {
 
-    public static final BlockStateEnum<BlockHugeMushroom.EnumHugeMushroomVariant> VARIANT = BlockStateEnum.of("variant", BlockHugeMushroom.EnumHugeMushroomVariant.class);
-    private final Block b;
+    public static final BlockStateBoolean a = BlockSprawling.a;
+    public static final BlockStateBoolean b = BlockSprawling.b;
+    public static final BlockStateBoolean c = BlockSprawling.c;
+    public static final BlockStateBoolean p = BlockSprawling.p;
+    public static final BlockStateBoolean q = BlockSprawling.q;
+    public static final BlockStateBoolean r = BlockSprawling.r;
+    private static final Map<EnumDirection, BlockStateBoolean> s = BlockSprawling.s;
+    @Nullable
+    private final Block t;
 
-    public BlockHugeMushroom(Material material, MaterialMapColor materialmapcolor, Block block) {
-        super(material, materialmapcolor);
-        this.w(this.blockStateList.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.ALL_OUTSIDE));
-        this.b = block;
+    public BlockHugeMushroom(@Nullable Block block, Block.Info block_info) {
+        super(block_info);
+        this.t = block;
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, Boolean.valueOf(true))).set(BlockHugeMushroom.b, Boolean.valueOf(true))).set(BlockHugeMushroom.c, Boolean.valueOf(true))).set(BlockHugeMushroom.p, Boolean.valueOf(true))).set(BlockHugeMushroom.q, Boolean.valueOf(true))).set(BlockHugeMushroom.r, Boolean.valueOf(true)));
     }
 
-    public int a(Random random) {
-        return Math.max(0, random.nextInt(10) - 7);
+    public int a(IBlockData iblockdata, Random random) {
+        return Math.max(0, random.nextInt(9) - 6);
     }
 
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
-        case ALL_STEM:
-            return MaterialMapColor.f;
-
-        case ALL_INSIDE:
-            return MaterialMapColor.e;
-
-        case STEM:
-            return MaterialMapColor.e;
-
-        default:
-            return super.c(iblockdata, iblockaccess, blockposition);
-        }
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return (IMaterial) (this.t == null ? Items.AIR : this.t);
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Item.getItemOf(this.b);
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        World world = blockactioncontext.getWorld();
+        BlockPosition blockposition = blockactioncontext.getClickPosition();
+
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockHugeMushroom.r, Boolean.valueOf(this != world.getType(blockposition.down()).getBlock()))).set(BlockHugeMushroom.q, Boolean.valueOf(this != world.getType(blockposition.up()).getBlock()))).set(BlockHugeMushroom.a, Boolean.valueOf(this != world.getType(blockposition.north()).getBlock()))).set(BlockHugeMushroom.b, Boolean.valueOf(this != world.getType(blockposition.east()).getBlock()))).set(BlockHugeMushroom.c, Boolean.valueOf(this != world.getType(blockposition.south()).getBlock()))).set(BlockHugeMushroom.p, Boolean.valueOf(this != world.getType(blockposition.west()).getBlock()));
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(this.b);
-    }
-
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData();
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.a(i));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)).a();
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return iblockdata1.getBlock() == this ? (IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.s.get(enumdirection), Boolean.valueOf(false)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        switch (enumblockrotation) {
-        case CLOCKWISE_180:
-            switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
-            case STEM:
-                break;
-
-            case NORTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST);
-
-            case NORTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH);
-
-            case NORTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST);
-
-            case WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.EAST);
-
-            case EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.WEST);
-
-            case SOUTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST);
-
-            case SOUTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH);
-
-            case SOUTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST);
-
-            default:
-                return iblockdata;
-            }
-
-        case COUNTERCLOCKWISE_90:
-            switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
-            case STEM:
-                break;
-
-            case NORTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST);
-
-            case NORTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.WEST);
-
-            case NORTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST);
-
-            case WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH);
-
-            case EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH);
-
-            case SOUTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST);
-
-            case SOUTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.EAST);
-
-            case SOUTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST);
-
-            default:
-                return iblockdata;
-            }
-
-        case CLOCKWISE_90:
-            switch ((BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT)) {
-            case STEM:
-                break;
-
-            case NORTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST);
-
-            case NORTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.EAST);
-
-            case NORTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST);
-
-            case WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH);
-
-            case EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH);
-
-            case SOUTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST);
-
-            case SOUTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.WEST);
-
-            case SOUTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST);
-
-            default:
-                return iblockdata;
-            }
-
-        default:
-            return iblockdata;
-        }
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.NORTH)), iblockdata.get(BlockHugeMushroom.a))).set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.SOUTH)), iblockdata.get(BlockHugeMushroom.c))).set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.EAST)), iblockdata.get(BlockHugeMushroom.b))).set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.WEST)), iblockdata.get(BlockHugeMushroom.p))).set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.UP)), iblockdata.get(BlockHugeMushroom.q))).set((IBlockState) BlockHugeMushroom.s.get(enumblockrotation.a(EnumDirection.DOWN)), iblockdata.get(BlockHugeMushroom.r));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        BlockHugeMushroom.EnumHugeMushroomVariant blockhugemushroom_enumhugemushroomvariant = (BlockHugeMushroom.EnumHugeMushroomVariant) iblockdata.get(BlockHugeMushroom.VARIANT);
-
-        switch (enumblockmirror) {
-        case LEFT_RIGHT:
-            switch (blockhugemushroom_enumhugemushroomvariant) {
-            case NORTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST);
-
-            case NORTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH);
-
-            case NORTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST);
-
-            case WEST:
-            case EAST:
-            default:
-                return super.a(iblockdata, enumblockmirror);
-
-            case SOUTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST);
-
-            case SOUTH:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH);
-
-            case SOUTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST);
-            }
-
-        case FRONT_BACK:
-            switch (blockhugemushroom_enumhugemushroomvariant) {
-            case NORTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_EAST);
-
-            case NORTH:
-            case SOUTH:
-            default:
-                break;
-
-            case NORTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.NORTH_WEST);
-
-            case WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.EAST);
-
-            case EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.WEST);
-
-            case SOUTH_WEST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_EAST);
-
-            case SOUTH_EAST:
-                return iblockdata.set(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumHugeMushroomVariant.SOUTH_WEST);
-            }
-        }
-
-        return super.a(iblockdata, enumblockmirror);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.NORTH)), iblockdata.get(BlockHugeMushroom.a))).set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.SOUTH)), iblockdata.get(BlockHugeMushroom.c))).set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.EAST)), iblockdata.get(BlockHugeMushroom.b))).set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.WEST)), iblockdata.get(BlockHugeMushroom.p))).set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.UP)), iblockdata.get(BlockHugeMushroom.q))).set((IBlockState) BlockHugeMushroom.s.get(enumblockmirror.b(EnumDirection.DOWN)), iblockdata.get(BlockHugeMushroom.r));
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockHugeMushroom.VARIANT});
-    }
-
-    public static enum EnumHugeMushroomVariant implements INamable {
-
-        NORTH_WEST(1, "north_west"), NORTH(2, "north"), NORTH_EAST(3, "north_east"), WEST(4, "west"), CENTER(5, "center"), EAST(6, "east"), SOUTH_WEST(7, "south_west"), SOUTH(8, "south"), SOUTH_EAST(9, "south_east"), STEM(10, "stem"), ALL_INSIDE(0, "all_inside"), ALL_OUTSIDE(14, "all_outside"), ALL_STEM(15, "all_stem");
-
-        private static final BlockHugeMushroom.EnumHugeMushroomVariant[] n = new BlockHugeMushroom.EnumHugeMushroomVariant[16];
-        private final int o;
-        private final String p;
-
-        private EnumHugeMushroomVariant(int i, String s) {
-            this.o = i;
-            this.p = s;
-        }
-
-        public int a() {
-            return this.o;
-        }
-
-        public String toString() {
-            return this.p;
-        }
-
-        public static BlockHugeMushroom.EnumHugeMushroomVariant a(int i) {
-            if (i < 0 || i >= BlockHugeMushroom.EnumHugeMushroomVariant.n.length) {
-                i = 0;
-            }
-
-            BlockHugeMushroom.EnumHugeMushroomVariant blockhugemushroom_enumhugemushroomvariant = BlockHugeMushroom.EnumHugeMushroomVariant.n[i];
-
-            return blockhugemushroom_enumhugemushroomvariant == null ? BlockHugeMushroom.EnumHugeMushroomVariant.n[0] : blockhugemushroom_enumhugemushroomvariant;
-        }
-
-        public String getName() {
-            return this.p;
-        }
-
-        static {
-            BlockHugeMushroom.EnumHugeMushroomVariant[] ablockhugemushroom_enumhugemushroomvariant = values();
-            int i = ablockhugemushroom_enumhugemushroomvariant.length;
-
-            for (int j = 0; j < i; ++j) {
-                BlockHugeMushroom.EnumHugeMushroomVariant blockhugemushroom_enumhugemushroomvariant = ablockhugemushroom_enumhugemushroomvariant[j];
-
-                BlockHugeMushroom.EnumHugeMushroomVariant.n[blockhugemushroom_enumhugemushroomvariant.a()] = blockhugemushroom_enumhugemushroomvariant;
-            }
-
-        }
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockHugeMushroom.q, BlockHugeMushroom.r, BlockHugeMushroom.a, BlockHugeMushroom.b, BlockHugeMushroom.c, BlockHugeMushroom.p});
     }
 }

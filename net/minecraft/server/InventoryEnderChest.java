@@ -5,7 +5,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
     private TileEntityEnderChest a;
 
     public InventoryEnderChest() {
-        super("container.enderchest", false, 27);
+        super(new ChatMessage("container.enderchest", new Object[0]), 27);
     }
 
     public void a(TileEntityEnderChest tileentityenderchest) {
@@ -20,11 +20,11 @@ public class InventoryEnderChest extends InventorySubcontainer {
         }
 
         for (i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
             int j = nbttagcompound.getByte("Slot") & 255;
 
             if (j >= 0 && j < this.getSize()) {
-                this.setItem(j, new ItemStack(nbttagcompound));
+                this.setItem(j, ItemStack.a(nbttagcompound));
             }
         }
 
@@ -41,7 +41,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
                 nbttagcompound.setByte("Slot", (byte) i);
                 itemstack.save(nbttagcompound);
-                nbttaglist.add(nbttagcompound);
+                nbttaglist.add((NBTBase) nbttagcompound);
             }
         }
 
@@ -54,7 +54,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     public void startOpen(EntityHuman entityhuman) {
         if (this.a != null) {
-            this.a.a();
+            this.a.c();
         }
 
         super.startOpen(entityhuman);
@@ -62,7 +62,7 @@ public class InventoryEnderChest extends InventorySubcontainer {
 
     public void closeContainer(EntityHuman entityhuman) {
         if (this.a != null) {
-            this.a.f();
+            this.a.d();
         }
 
         super.closeContainer(entityhuman);

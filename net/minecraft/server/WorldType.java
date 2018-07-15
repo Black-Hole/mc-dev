@@ -3,19 +3,21 @@ package net.minecraft.server;
 public class WorldType {
 
     public static final WorldType[] types = new WorldType[16];
-    public static final WorldType NORMAL = (new WorldType(0, "default", 1)).i();
-    public static final WorldType FLAT = new WorldType(1, "flat");
+    public static final WorldType NORMAL = (new WorldType(0, "default", 1)).j();
+    public static final WorldType FLAT = (new WorldType(1, "flat")).a(true);
     public static final WorldType LARGE_BIOMES = new WorldType(2, "largeBiomes");
-    public static final WorldType AMPLIFIED = (new WorldType(3, "amplified")).j();
-    public static final WorldType CUSTOMIZED = new WorldType(4, "customized");
-    public static final WorldType DEBUG_ALL_BLOCK_STATES = new WorldType(5, "debug_all_block_states");
-    public static final WorldType NORMAL_1_1 = (new WorldType(8, "default_1_1", 0)).a(false);
-    private final int i;
+    public static final WorldType AMPLIFIED = (new WorldType(3, "amplified")).k();
+    public static final WorldType CUSTOMIZED = (new WorldType(4, "customized")).a(true).b(false);
+    public static final WorldType g = (new WorldType(5, "buffet")).a(true);
+    public static final WorldType DEBUG_ALL_BLOCK_STATES = new WorldType(6, "debug_all_block_states");
+    public static final WorldType NORMAL_1_1 = (new WorldType(8, "default_1_1", 0)).b(false);
+    private final int j;
     private final String name;
     private final int version;
-    private boolean l;
     private boolean m;
     private boolean n;
+    private boolean o;
+    private boolean p;
 
     private WorldType(int i, String s) {
         this(i, s, 0);
@@ -24,8 +26,8 @@ public class WorldType {
     private WorldType(int i, String s, int j) {
         this.name = s;
         this.version = j;
-        this.l = true;
-        this.i = i;
+        this.m = true;
+        this.j = i;
         WorldType.types[i] = this;
     }
 
@@ -41,18 +43,23 @@ public class WorldType {
         return this == WorldType.NORMAL && i == 0 ? WorldType.NORMAL_1_1 : this;
     }
 
-    private WorldType a(boolean flag) {
-        this.l = flag;
+    public WorldType a(boolean flag) {
+        this.p = flag;
         return this;
     }
 
-    private WorldType i() {
-        this.m = true;
+    private WorldType b(boolean flag) {
+        this.m = flag;
         return this;
     }
 
-    public boolean f() {
-        return this.m;
+    private WorldType j() {
+        this.n = true;
+        return this;
+    }
+
+    public boolean g() {
+        return this.n;
     }
 
     public static WorldType getType(String s) {
@@ -70,12 +77,12 @@ public class WorldType {
         return null;
     }
 
-    public int g() {
-        return this.i;
+    public int h() {
+        return this.j;
     }
 
-    private WorldType j() {
-        this.n = true;
+    private WorldType k() {
+        this.o = true;
         return this;
     }
 }

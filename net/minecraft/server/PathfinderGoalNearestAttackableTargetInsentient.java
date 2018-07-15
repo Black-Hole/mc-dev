@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,26 +22,20 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
             PathfinderGoalNearestAttackableTargetInsentient.a.warn("Use NearestAttackableTargetGoal.class for PathfinerMob mobs!");
         }
 
-        this.c = new Predicate() {
-            public boolean a(@Nullable EntityLiving entityliving) {
-                double d0 = PathfinderGoalNearestAttackableTargetInsentient.this.f();
+        this.c = (entityliving) -> {
+            double d0 = this.g();
 
-                if (entityliving.isSneaking()) {
-                    d0 *= 0.800000011920929D;
-                }
-
-                return entityliving.isInvisible() ? false : ((double) entityliving.g(PathfinderGoalNearestAttackableTargetInsentient.this.b) > d0 ? false : PathfinderGoalTarget.a(PathfinderGoalNearestAttackableTargetInsentient.this.b, entityliving, false, true));
+            if (entityliving.isSneaking()) {
+                d0 *= 0.800000011920929D;
             }
 
-            public boolean apply(@Nullable Object object) {
-                return this.a((EntityLiving) object);
-            }
+            return entityliving.isInvisible() ? false : ((double) entityliving.g(this.b) > d0 ? false : PathfinderGoalTarget.a(this.b, entityliving, false, true));
         };
         this.d = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entityinsentient);
     }
 
     public boolean a() {
-        double d0 = this.f();
+        double d0 = this.g();
         List list = this.b.world.a(this.f, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
 
         Collections.sort(list, this.d);
@@ -62,7 +55,7 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
         } else if (!entityliving.isAlive()) {
             return false;
         } else {
-            double d0 = this.f();
+            double d0 = this.g();
 
             return this.b.h(entityliving) > d0 * d0 ? false : !(entityliving instanceof EntityPlayer) || !((EntityPlayer) entityliving).playerInteractManager.isCreative();
         }
@@ -78,7 +71,7 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
         super.c();
     }
 
-    protected double f() {
+    protected double g() {
         AttributeInstance attributeinstance = this.b.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
 
         return attributeinstance == null ? 16.0D : attributeinstance.getValue();

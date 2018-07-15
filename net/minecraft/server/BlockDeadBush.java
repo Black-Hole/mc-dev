@@ -5,43 +5,37 @@ import javax.annotation.Nullable;
 
 public class BlockDeadBush extends BlockPlant {
 
-    protected static final AxisAlignedBB a = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
+    protected static final VoxelShape a = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
-    protected BlockDeadBush() {
-        super(Material.REPLACEABLE_PLANT);
+    protected BlockDeadBush(Block.Info block_info) {
+        super(block_info);
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockDeadBush.a;
     }
 
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.p;
+    protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Block block = iblockdata.getBlock();
+
+        return block == Blocks.SAND || block == Blocks.RED_SAND || block == Blocks.TERRACOTTA || block == Blocks.WHITE_TERRACOTTA || block == Blocks.ORANGE_TERRACOTTA || block == Blocks.MAGENTA_TERRACOTTA || block == Blocks.LIGHT_BLUE_TERRACOTTA || block == Blocks.YELLOW_TERRACOTTA || block == Blocks.LIME_TERRACOTTA || block == Blocks.PINK_TERRACOTTA || block == Blocks.GRAY_TERRACOTTA || block == Blocks.LIGHT_GRAY_TERRACOTTA || block == Blocks.CYAN_TERRACOTTA || block == Blocks.PURPLE_TERRACOTTA || block == Blocks.BLUE_TERRACOTTA || block == Blocks.BROWN_TERRACOTTA || block == Blocks.GREEN_TERRACOTTA || block == Blocks.RED_TERRACOTTA || block == Blocks.BLACK_TERRACOTTA || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL;
     }
 
-    protected boolean x(IBlockData iblockdata) {
-        return iblockdata.getBlock() == Blocks.SAND || iblockdata.getBlock() == Blocks.HARDENED_CLAY || iblockdata.getBlock() == Blocks.STAINED_HARDENED_CLAY || iblockdata.getBlock() == Blocks.DIRT;
-    }
-
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return true;
-    }
-
-    public int a(Random random) {
+    public int a(IBlockData iblockdata, Random random) {
         return random.nextInt(3);
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
         return Items.STICK;
     }
 
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
-        if (!world.isClientSide && itemstack.getItem() == Items.SHEARS) {
-            entityhuman.b(StatisticList.a((Block) this));
-            a(world, blockposition, new ItemStack(Blocks.DEADBUSH, 1, 0));
-        } else {
-            super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
+        boolean flag = !world.isClientSide && itemstack.getItem() == Items.SHEARS;
+
+        if (flag) {
+            a(world, blockposition, new ItemStack(Blocks.DEAD_BUSH));
         }
 
+        super.a(world, entityhuman, blockposition, flag ? Blocks.AIR.getBlockData() : iblockdata, tileentity, itemstack);
     }
 }

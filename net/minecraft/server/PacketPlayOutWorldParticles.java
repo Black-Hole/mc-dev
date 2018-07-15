@@ -4,76 +4,67 @@ import java.io.IOException;
 
 public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut> {
 
-    private EnumParticle a;
+    private float a;
     private float b;
     private float c;
     private float d;
     private float e;
     private float f;
     private float g;
-    private float h;
-    private int i;
-    private boolean j;
-    private int[] k;
+    private int h;
+    private boolean i;
+    private ParticleParam j;
 
     public PacketPlayOutWorldParticles() {}
 
-    public PacketPlayOutWorldParticles(EnumParticle enumparticle, boolean flag, float f, float f1, float f2, float f3, float f4, float f5, float f6, int i, int... aint) {
-        this.a = enumparticle;
-        this.j = flag;
-        this.b = f;
-        this.c = f1;
-        this.d = f2;
-        this.e = f3;
-        this.f = f4;
-        this.g = f5;
-        this.h = f6;
-        this.i = i;
-        this.k = aint;
+    public <T extends ParticleParam> PacketPlayOutWorldParticles(T t0, boolean flag, float f, float f1, float f2, float f3, float f4, float f5, float f6, int i) {
+        this.j = t0;
+        this.i = flag;
+        this.a = f;
+        this.b = f1;
+        this.c = f2;
+        this.d = f3;
+        this.e = f4;
+        this.f = f5;
+        this.g = f6;
+        this.h = i;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = EnumParticle.a(packetdataserializer.readInt());
-        if (this.a == null) {
-            this.a = EnumParticle.BARRIER;
+        Object object = (Particle) Particle.REGISTRY.getId(packetdataserializer.readInt());
+
+        if (object == null) {
+            object = Particles.c;
         }
 
-        this.j = packetdataserializer.readBoolean();
+        this.i = packetdataserializer.readBoolean();
+        this.a = packetdataserializer.readFloat();
         this.b = packetdataserializer.readFloat();
         this.c = packetdataserializer.readFloat();
         this.d = packetdataserializer.readFloat();
         this.e = packetdataserializer.readFloat();
         this.f = packetdataserializer.readFloat();
         this.g = packetdataserializer.readFloat();
-        this.h = packetdataserializer.readFloat();
-        this.i = packetdataserializer.readInt();
-        int i = this.a.d();
+        this.h = packetdataserializer.readInt();
+        this.j = this.a(packetdataserializer, (Particle) object);
+    }
 
-        this.k = new int[i];
-
-        for (int j = 0; j < i; ++j) {
-            this.k[j] = packetdataserializer.g();
-        }
-
+    private <T extends ParticleParam> T a(PacketDataSerializer packetdataserializer, Particle<T> particle) {
+        return particle.f().b(particle, packetdataserializer);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a.c());
-        packetdataserializer.writeBoolean(this.j);
+        packetdataserializer.writeInt(Particle.REGISTRY.a((Object) this.j.b()));
+        packetdataserializer.writeBoolean(this.i);
+        packetdataserializer.writeFloat(this.a);
         packetdataserializer.writeFloat(this.b);
         packetdataserializer.writeFloat(this.c);
         packetdataserializer.writeFloat(this.d);
         packetdataserializer.writeFloat(this.e);
         packetdataserializer.writeFloat(this.f);
         packetdataserializer.writeFloat(this.g);
-        packetdataserializer.writeFloat(this.h);
-        packetdataserializer.writeInt(this.i);
-        int i = this.a.d();
-
-        for (int j = 0; j < i; ++j) {
-            packetdataserializer.d(this.k[j]);
-        }
-
+        packetdataserializer.writeInt(this.h);
+        this.j.a(packetdataserializer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

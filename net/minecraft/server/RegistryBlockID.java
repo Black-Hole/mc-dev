@@ -10,44 +10,53 @@ import javax.annotation.Nullable;
 
 public class RegistryBlockID<T> implements Registry<T> {
 
-    private final IdentityHashMap<T, Integer> a;
-    private final List<T> b;
+    private int a;
+    private final IdentityHashMap<T, Integer> b;
+    private final List<T> c;
 
     public RegistryBlockID() {
         this(512);
     }
 
     public RegistryBlockID(int i) {
-        this.b = Lists.newArrayListWithExpectedSize(i);
-        this.a = new IdentityHashMap(i);
+        this.c = Lists.newArrayListWithExpectedSize(i);
+        this.b = new IdentityHashMap(i);
     }
 
     public void a(T t0, int i) {
-        this.a.put(t0, Integer.valueOf(i));
+        this.b.put(t0, Integer.valueOf(i));
 
-        while (this.b.size() <= i) {
-            this.b.add((Object) null);
+        while (this.c.size() <= i) {
+            this.c.add((Object) null);
         }
 
-        this.b.set(i, t0);
+        this.c.set(i, t0);
+        if (this.a <= i) {
+            this.a = i + 1;
+        }
+
+    }
+
+    public void b(T t0) {
+        this.a(t0, this.a);
     }
 
     public int getId(T t0) {
-        Integer integer = (Integer) this.a.get(t0);
+        Integer integer = (Integer) this.b.get(t0);
 
         return integer == null ? -1 : integer.intValue();
     }
 
     @Nullable
     public final T fromId(int i) {
-        return i >= 0 && i < this.b.size() ? this.b.get(i) : null;
+        return i >= 0 && i < this.c.size() ? this.c.get(i) : null;
     }
 
     public Iterator<T> iterator() {
-        return Iterators.filter(this.b.iterator(), Predicates.notNull());
+        return Iterators.filter(this.c.iterator(), Predicates.notNull());
     }
 
     public int a() {
-        return this.a.size();
+        return this.b.size();
     }
 }

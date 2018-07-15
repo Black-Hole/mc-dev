@@ -23,10 +23,10 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         this.a = chunk.locX;
         this.b = chunk.locZ;
         this.f = i == '\uffff';
-        boolean flag = chunk.getWorld().worldProvider.m();
+        boolean flag = chunk.getWorld().worldProvider.g();
 
         this.d = new byte[this.a(chunk, flag, i)];
-        this.c = this.a(new PacketDataSerializer(this.g()), chunk, flag, i);
+        this.c = this.a(new PacketDataSerializer(this.h()), chunk, flag, i);
         this.e = Lists.newArrayList();
         Iterator iterator = chunk.getTileEntities().entrySet().iterator();
 
@@ -36,8 +36,8 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             TileEntity tileentity = (TileEntity) entry.getValue();
             int j = blockposition.getY() >> 4;
 
-            if (this.e() || (i & 1 << j) != 0) {
-                NBTTagCompound nbttagcompound = tileentity.d();
+            if (this.f() || (i & 1 << j) != 0) {
+                NBTTagCompound nbttagcompound = tileentity.Z_();
 
                 this.e.add(nbttagcompound);
             }
@@ -90,7 +90,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    private ByteBuf g() {
+    private ByteBuf h() {
         ByteBuf bytebuf = Unpooled.wrappedBuffer(this.d);
 
         bytebuf.writerIndex(0);
@@ -102,10 +102,12 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         ChunkSection[] achunksection = chunk.getSections();
         int k = 0;
 
-        for (int l = achunksection.length; k < l; ++k) {
+        int l;
+
+        for (l = achunksection.length; k < l; ++k) {
             ChunkSection chunksection = achunksection[k];
 
-            if (chunksection != Chunk.a && (!this.e() || !chunksection.a()) && (i & 1 << k) != 0) {
+            if (chunksection != Chunk.a && (!this.f() || !chunksection.a()) && (i & 1 << k) != 0) {
                 j |= 1 << k;
                 chunksection.getBlocks().b(packetdataserializer);
                 packetdataserializer.writeBytes(chunksection.getEmittedLightArray().asBytes());
@@ -115,8 +117,12 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             }
         }
 
-        if (this.e()) {
-            packetdataserializer.writeBytes(chunk.getBiomeIndex());
+        if (this.f()) {
+            BiomeBase[] abiomebase = chunk.getBiomeIndex();
+
+            for (l = 0; l < abiomebase.length; ++l) {
+                packetdataserializer.writeInt(BiomeBase.REGISTRY_ID.a((Object) abiomebase[l]));
+            }
         }
 
         return j;
@@ -130,7 +136,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         for (int l = achunksection.length; k < l; ++k) {
             ChunkSection chunksection = achunksection[k];
 
-            if (chunksection != Chunk.a && (!this.e() || !chunksection.a()) && (i & 1 << k) != 0) {
+            if (chunksection != Chunk.a && (!this.f() || !chunksection.a()) && (i & 1 << k) != 0) {
                 j += chunksection.getBlocks().a();
                 j += chunksection.getEmittedLightArray().asBytes().length;
                 if (flag) {
@@ -139,14 +145,14 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
             }
         }
 
-        if (this.e()) {
-            j += chunk.getBiomeIndex().length;
+        if (this.f()) {
+            j += chunk.getBiomeIndex().length * 4;
         }
 
         return j;
     }
 
-    public boolean e() {
+    public boolean f() {
         return this.f;
     }
 }

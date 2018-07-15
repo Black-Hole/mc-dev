@@ -1,62 +1,61 @@
 package net.minecraft.server;
 
-import java.util.Random;
+import com.google.common.collect.Lists;
 
-public class BiomeSwamp extends BiomeBase {
+public final class BiomeSwamp extends BiomeBase {
 
-    protected static final IBlockData x = Blocks.WATERLILY.getBlockData();
-
-    protected BiomeSwamp(BiomeBase.a biomebase_a) {
-        super(biomebase_a);
-        this.s.z = 2;
-        this.s.B = 1;
-        this.s.D = 1;
-        this.s.E = 8;
-        this.s.F = 10;
-        this.s.J = 1;
-        this.s.y = 4;
-        this.s.I = 0;
-        this.s.H = 0;
-        this.s.C = 5;
-        this.t.add(new BiomeBase.BiomeMeta(EntitySlime.class, 1, 1, 1));
-    }
-
-    public WorldGenTreeAbstract a(Random random) {
-        return BiomeSwamp.o;
-    }
-
-    public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
-        return BlockFlowers.EnumFlowerVarient.BLUE_ORCHID;
-    }
-
-    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        double d1 = BiomeSwamp.k.a((double) i * 0.25D, (double) j * 0.25D);
-
-        if (d1 > 0.0D) {
-            int k = i & 15;
-            int l = j & 15;
-
-            for (int i1 = 255; i1 >= 0; --i1) {
-                if (chunksnapshot.a(l, i1, k).getMaterial() != Material.AIR) {
-                    if (i1 == 62 && chunksnapshot.a(l, i1, k).getBlock() != Blocks.WATER) {
-                        chunksnapshot.a(l, i1, k, BiomeSwamp.h);
-                        if (d1 < 0.12D) {
-                            chunksnapshot.a(l, i1 + 1, k, BiomeSwamp.x);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        this.b(world, random, chunksnapshot, i, j, d0);
-    }
-
-    public void a(World world, Random random, BlockPosition blockposition) {
-        super.a(world, random, blockposition);
-        if (random.nextInt(64) == 0) {
-            (new WorldGenFossils()).generate(world, random, blockposition);
-        }
-
+    protected BiomeSwamp() {
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeSwamp.aA, BiomeSwamp.aj)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.SWAMP).a(-0.2F).b(0.1F).c(0.8F).d(0.9F).a(6388580).b(2302743).a((String) null));
+        this.a(WorldGenerator.l, (WorldGenFeatureConfiguration) (new WorldGenFeatureSwampHutConfiguration()));
+        this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSwamp.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSwamp.d, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.02F))));
+        this.a();
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeSwamp.L, new WorldGenDecoratorLakeChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeSwamp.K, new WorldGenDecoratorLakeChanceConfiguration(80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES, a(WorldGenerator.ad, WorldGenFeatureConfiguration.e, BiomeSwamp.M, new WorldGenDecoratorDungeonConfiguration(8)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIRT.getBlockData(), 33), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRAVEL.getBlockData(), 33), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRANITE.getBlockData(), 33), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIORITE.getBlockData(), 33), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.ANDESITE.getBlockData(), 33), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.COAL_ORE.getBlockData(), 17), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 128)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.IRON_ORE.getBlockData(), 9), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 64)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(2, 0, 0, 32)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.REDSTONE_ORE.getBlockData(), 8), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIAMOND_ORE.getBlockData(), 8), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(1, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.LAPIS_ORE.getBlockData(), 7), BiomeSwamp.B, new WorldGenDecoratorHeightAverageConfiguration(1, 16, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.CLAY, 4, 1, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.CLAY})), BiomeSwamp.h, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.B, WorldGenFeatureConfiguration.e, BiomeSwamp.t, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, (WorldGenFeatureComposite) a(WorldGenerator.J, BiomeSwamp.i, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.M, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), BiomeSwamp.j, new WorldGenDecoratorFrequencyConfiguration(5)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.P, WorldGenFeatureConfiguration.e, BiomeSwamp.j, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ac, WorldGenFeatureConfiguration.e, BiomeSwamp.j, new WorldGenDecoratorFrequencyConfiguration(4)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeSwamp.z, new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.25F)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeSwamp.A, new WorldGenDecoratorFrequencyChanceConfiguration(8, 0.125F)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeSwamp.q, new WorldGenDecoratorChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeSwamp.q, new WorldGenDecoratorChanceConfiguration(8)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeSwamp.j, new WorldGenDecoratorFrequencyConfiguration(20)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeSwamp.q, new WorldGenDecoratorChanceConfiguration(32)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeSwamp.v, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeSwamp.w, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ay, new WorldGenFeatureSeaGrassConfiguration(64, 0.6D), BiomeSwamp.C, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.R, WorldGenFeatureConfiguration.e, BiomeSwamp.r, new WorldGenDecoratorChanceConfiguration(64)));
+        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeSwamp.o, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.CHICKEN, 10, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.COW, 8, 4, 4));
+        this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SQUID, 10, 1, 2));
+        this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE, 95, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_VILLAGER, 5, 1, 1));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.CREEPER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SLIME, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ENDERMAN, 10, 1, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.WITCH, 5, 1, 1));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SLIME, 1, 1, 1));
     }
 }

@@ -1,109 +1,89 @@
 package net.minecraft.server;
 
-public class GenLayerDesert extends GenLayer {
+public enum GenLayerDesert implements AreaTransformer7 {
 
-    public GenLayerDesert(long i, GenLayer genlayer) {
-        super(i);
-        this.a = genlayer;
-    }
+    INSTANCE;
 
-    public int[] a(int i, int j, int k, int l) {
-        int[] aint = this.a.a(i - 1, j - 1, k + 2, l + 2);
-        int[] aint1 = IntCache.a(k * l);
+    private static final int b = BiomeBase.a(Biomes.d);
+    private static final int c = BiomeBase.a(Biomes.e);
+    private static final int d = BiomeBase.a(Biomes.J);
+    private static final int e = BiomeBase.a(Biomes.n);
+    private static final int f = BiomeBase.a(Biomes.w);
+    private static final int g = BiomeBase.a(Biomes.y);
+    private static final int h = BiomeBase.a(Biomes.M);
+    private static final int i = BiomeBase.a(Biomes.O);
+    private static final int j = BiomeBase.a(Biomes.N);
+    private static final int k = BiomeBase.a(Biomes.c);
+    private static final int l = BiomeBase.a(Biomes.H);
+    private static final int m = BiomeBase.a(Biomes.v);
+    private static final int n = BiomeBase.a(Biomes.h);
+    private static final int o = BiomeBase.a(Biomes.g);
+    private static final int p = BiomeBase.a(Biomes.F);
 
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                this.a((long) (j1 + i), (long) (i1 + j));
-                int k1 = aint[j1 + 1 + (i1 + 1) * (k + 2)];
+    private GenLayerDesert() {}
 
-                if (!this.a(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.e), BiomeBase.a(Biomes.v)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.N), BiomeBase.a(Biomes.M)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.O), BiomeBase.a(Biomes.M)) && !this.b(aint, aint1, j1, i1, k, k1, BiomeBase.a(Biomes.H), BiomeBase.a(Biomes.g))) {
-                    int l1;
-                    int i2;
-                    int j2;
-                    int k2;
+    public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
+        int[] aint = new int[1];
 
-                    if (k1 == BiomeBase.a(Biomes.d)) {
-                        l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                        i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                        j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                        k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                        if (l1 != BiomeBase.a(Biomes.n) && i2 != BiomeBase.a(Biomes.n) && j2 != BiomeBase.a(Biomes.n) && k2 != BiomeBase.a(Biomes.n)) {
-                            aint1[j1 + i1 * k] = k1;
-                        } else {
-                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.J);
-                        }
-                    } else if (k1 == BiomeBase.a(Biomes.h)) {
-                        l1 = aint[j1 + 1 + (i1 + 1 - 1) * (k + 2)];
-                        i2 = aint[j1 + 1 + 1 + (i1 + 1) * (k + 2)];
-                        j2 = aint[j1 + 1 - 1 + (i1 + 1) * (k + 2)];
-                        k2 = aint[j1 + 1 + (i1 + 1 + 1) * (k + 2)];
-                        if (l1 != BiomeBase.a(Biomes.d) && i2 != BiomeBase.a(Biomes.d) && j2 != BiomeBase.a(Biomes.d) && k2 != BiomeBase.a(Biomes.d) && l1 != BiomeBase.a(Biomes.F) && i2 != BiomeBase.a(Biomes.F) && j2 != BiomeBase.a(Biomes.F) && k2 != BiomeBase.a(Biomes.F) && l1 != BiomeBase.a(Biomes.n) && i2 != BiomeBase.a(Biomes.n) && j2 != BiomeBase.a(Biomes.n) && k2 != BiomeBase.a(Biomes.n)) {
-                            if (l1 != BiomeBase.a(Biomes.w) && k2 != BiomeBase.a(Biomes.w) && i2 != BiomeBase.a(Biomes.w) && j2 != BiomeBase.a(Biomes.w)) {
-                                aint1[j1 + i1 * k] = k1;
-                            } else {
-                                aint1[j1 + i1 * k] = BiomeBase.a(Biomes.y);
-                            }
-                        } else {
-                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.c);
-                        }
-                    } else {
-                        aint1[j1 + i1 * k] = k1;
+        if (!this.a(aint, i, j, k, l, i1, GenLayerDesert.c, GenLayerDesert.m) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.j, GenLayerDesert.h) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.i, GenLayerDesert.h) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.l, GenLayerDesert.o)) {
+            if (i1 == GenLayerDesert.b && (i == GenLayerDesert.e || j == GenLayerDesert.e || l == GenLayerDesert.e || k == GenLayerDesert.e)) {
+                return GenLayerDesert.d;
+            } else {
+                if (i1 == GenLayerDesert.n) {
+                    if (i == GenLayerDesert.b || j == GenLayerDesert.b || l == GenLayerDesert.b || k == GenLayerDesert.b || i == GenLayerDesert.p || j == GenLayerDesert.p || l == GenLayerDesert.p || k == GenLayerDesert.p || i == GenLayerDesert.e || j == GenLayerDesert.e || l == GenLayerDesert.e || k == GenLayerDesert.e) {
+                        return GenLayerDesert.k;
+                    }
+
+                    if (i == GenLayerDesert.f || k == GenLayerDesert.f || j == GenLayerDesert.f || l == GenLayerDesert.f) {
+                        return GenLayerDesert.g;
                     }
                 }
-            }
-        }
 
-        return aint1;
+                return i1;
+            }
+        } else {
+            return aint[0];
+        }
     }
 
-    private boolean a(int[] aint, int[] aint1, int i, int j, int k, int l, int i1, int j1) {
-        if (!a(l, i1)) {
+    private boolean a(int[] aint, int i, int j, int k, int l, int i1, int j1, int k1) {
+        if (!GenLayers.a(i1, j1)) {
             return false;
         } else {
-            int k1 = aint[i + 1 + (j + 1 - 1) * (k + 2)];
-            int l1 = aint[i + 1 + 1 + (j + 1) * (k + 2)];
-            int i2 = aint[i + 1 - 1 + (j + 1) * (k + 2)];
-            int j2 = aint[i + 1 + (j + 1 + 1) * (k + 2)];
-
-            if (this.b(k1, i1) && this.b(l1, i1) && this.b(i2, i1) && this.b(j2, i1)) {
-                aint1[i + j * k] = l;
+            if (this.a(i, j1) && this.a(j, j1) && this.a(l, j1) && this.a(k, j1)) {
+                aint[0] = i1;
             } else {
-                aint1[i + j * k] = j1;
+                aint[0] = k1;
             }
 
             return true;
         }
     }
 
-    private boolean b(int[] aint, int[] aint1, int i, int j, int k, int l, int i1, int j1) {
-        if (l != i1) {
+    private boolean b(int[] aint, int i, int j, int k, int l, int i1, int j1, int k1) {
+        if (i1 != j1) {
             return false;
         } else {
-            int k1 = aint[i + 1 + (j + 1 - 1) * (k + 2)];
-            int l1 = aint[i + 1 + 1 + (j + 1) * (k + 2)];
-            int i2 = aint[i + 1 - 1 + (j + 1) * (k + 2)];
-            int j2 = aint[i + 1 + (j + 1 + 1) * (k + 2)];
-
-            if (a(k1, i1) && a(l1, i1) && a(i2, i1) && a(j2, i1)) {
-                aint1[i + j * k] = l;
+            if (GenLayers.a(i, j1) && GenLayers.a(j, j1) && GenLayers.a(l, j1) && GenLayers.a(k, j1)) {
+                aint[0] = i1;
             } else {
-                aint1[i + j * k] = j1;
+                aint[0] = k1;
             }
 
             return true;
         }
     }
 
-    private boolean b(int i, int j) {
-        if (a(i, j)) {
+    private boolean a(int i, int j) {
+        if (GenLayers.a(i, j)) {
             return true;
         } else {
             BiomeBase biomebase = BiomeBase.getBiome(i);
             BiomeBase biomebase1 = BiomeBase.getBiome(j);
 
             if (biomebase != null && biomebase1 != null) {
-                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.h();
-                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.h();
+                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.g();
+                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.g();
 
                 return biomebase_enumtemperature == biomebase_enumtemperature1 || biomebase_enumtemperature == BiomeBase.EnumTemperature.MEDIUM || biomebase_enumtemperature1 == BiomeBase.EnumTemperature.MEDIUM;
             } else {

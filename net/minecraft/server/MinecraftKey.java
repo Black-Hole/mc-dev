@@ -7,37 +7,62 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.lang.reflect.Type;
-import java.util.Locale;
+import java.util.function.IntPredicate;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
 
 public class MinecraftKey implements Comparable<MinecraftKey> {
 
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.id.invalid", new Object[0]));
     protected final String a;
     protected final String b;
 
-    protected MinecraftKey(int i, String... astring) {
-        this.a = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0].toLowerCase(Locale.ROOT);
-        this.b = astring[1].toLowerCase(Locale.ROOT);
-        Validate.notNull(this.b);
+    protected MinecraftKey(String[] astring) {
+        this.a = StringUtils.isEmpty(astring[0]) ? "minecraft" : astring[0];
+        this.b = astring[1];
+        if (!this.a.chars().allMatch((i) -> {
+            return i == 95 || i == 45 || i >= 97 && i <= 122 || i >= 48 && i <= 57 || i == 46;
+        })) {
+            throw new ResourceKeyInvalidException("Non [a-z0-9_.-] character in namespace of location: " + this.a + ':' + this.b);
+        } else if (!this.b.chars().allMatch((i) -> {
+            return i == 95 || i == 45 || i >= 97 && i <= 122 || i >= 48 && i <= 57 || i == 47 || i == 46;
+        })) {
+            throw new ResourceKeyInvalidException("Non [a-z0-9/._-] character in path of location: " + this.a + ':' + this.b);
+        }
     }
 
     public MinecraftKey(String s) {
-        this(0, a(s));
+        this(b(s, ':'));
     }
 
     public MinecraftKey(String s, String s1) {
-        this(0, new String[] { s, s1});
+        this(new String[] { s, s1});
     }
 
-    protected static String[] a(String s) {
+    public static MinecraftKey a(String s, char c0) {
+        return new MinecraftKey(b(s, c0));
+    }
+
+    @Nullable
+    public static MinecraftKey a(String s) {
+        try {
+            return new MinecraftKey(s);
+        } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+            return null;
+        }
+    }
+
+    protected static String[] b(String s, char c0) {
         String[] astring = new String[] { "minecraft", s};
-        int i = s.indexOf(58);
+        int i = s.indexOf(c0);
 
         if (i >= 0) {
             astring[1] = s.substring(i + 1, s.length());
-            if (i > 1) {
+            if (i >= 1) {
                 astring[0] = s.substring(0, i);
             }
         }
@@ -74,13 +99,34 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public int a(MinecraftKey minecraftkey) {
-        int i = this.a.compareTo(minecraftkey.a);
+        int i = this.b.compareTo(minecraftkey.b);
 
         if (i == 0) {
-            i = this.b.compareTo(minecraftkey.b);
+            i = this.a.compareTo(minecraftkey.a);
         }
 
         return i;
+    }
+
+    public static MinecraftKey a(StringReader stringreader) throws CommandSyntaxException {
+        int i = stringreader.getCursor();
+
+        while (stringreader.canRead() && a(stringreader.peek())) {
+            stringreader.skip();
+        }
+
+        String s = stringreader.getString().substring(i, stringreader.getCursor());
+
+        try {
+            return new MinecraftKey(s);
+        } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
+            stringreader.setCursor(i);
+            throw MinecraftKey.c.createWithContext(stringreader);
+        }
+    }
+
+    public static boolean a(char c0) {
+        return c0 >= 48 && c0 <= 57 || c0 >= 97 && c0 <= 122 || c0 == 95 || c0 == 58 || c0 == 47 || c0 == 46 || c0 == 45;
     }
 
     public int compareTo(Object object) {

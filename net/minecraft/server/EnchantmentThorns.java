@@ -6,7 +6,6 @@ public class EnchantmentThorns extends Enchantment {
 
     public EnchantmentThorns(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_CHEST, aenumitemslot);
-        this.c("thorns");
     }
 
     public int a(int i) {

@@ -1,17 +1,17 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class EntityEnderCrystal extends Entity {
 
-    private static final DataWatcherObject<Optional<BlockPosition>> b = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.k);
-    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.h);
+    private static final DataWatcherObject<Optional<BlockPosition>> b = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.m);
+    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityEnderCrystal.class, DataWatcherRegistry.i);
     public int a;
 
     public EntityEnderCrystal(World world) {
-        super(world);
-        this.i = true;
+        super(EntityTypes.END_CRYSTAL, world);
+        this.j = true;
         this.setSize(2.0F, 2.0F);
         this.a = this.random.nextInt(100000);
     }
@@ -25,12 +25,12 @@ public class EntityEnderCrystal extends Entity {
         return false;
     }
 
-    protected void i() {
-        this.getDataWatcher().register(EntityEnderCrystal.b, Optional.absent());
+    protected void x_() {
+        this.getDataWatcher().register(EntityEnderCrystal.b, Optional.empty());
         this.getDataWatcher().register(EntityEnderCrystal.c, Boolean.valueOf(true));
     }
 
-    public void B_() {
+    public void tick() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -38,7 +38,7 @@ public class EntityEnderCrystal extends Entity {
         if (!this.world.isClientSide) {
             BlockPosition blockposition = new BlockPosition(this);
 
-            if (this.world.worldProvider instanceof WorldProviderTheEnd && this.world.getType(blockposition).getBlock() != Blocks.FIRE) {
+            if (this.world.worldProvider instanceof WorldProviderTheEnd && this.world.getType(blockposition).isAir()) {
                 this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
             }
         }
@@ -97,7 +97,7 @@ public class EntityEnderCrystal extends Entity {
     private void a(DamageSource damagesource) {
         if (this.world.worldProvider instanceof WorldProviderTheEnd) {
             WorldProviderTheEnd worldprovidertheend = (WorldProviderTheEnd) this.world.worldProvider;
-            EnderDragonBattle enderdragonbattle = worldprovidertheend.t();
+            EnderDragonBattle enderdragonbattle = worldprovidertheend.r();
 
             if (enderdragonbattle != null) {
                 enderdragonbattle.a(this, damagesource);
@@ -107,12 +107,12 @@ public class EntityEnderCrystal extends Entity {
     }
 
     public void setBeamTarget(@Nullable BlockPosition blockposition) {
-        this.getDataWatcher().set(EntityEnderCrystal.b, Optional.fromNullable(blockposition));
+        this.getDataWatcher().set(EntityEnderCrystal.b, Optional.ofNullable(blockposition));
     }
 
     @Nullable
     public BlockPosition getBeamTarget() {
-        return (BlockPosition) ((Optional) this.getDataWatcher().get(EntityEnderCrystal.b)).orNull();
+        return (BlockPosition) ((Optional) this.getDataWatcher().get(EntityEnderCrystal.b)).orElse((Object) null);
     }
 
     public void setShowingBottom(boolean flag) {

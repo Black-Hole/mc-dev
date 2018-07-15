@@ -1,18 +1,38 @@
 package net.minecraft.server;
 
-public class DataConverterBedItem implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.OpticFinder;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
-    public DataConverterBedItem() {}
+public class DataConverterBedItem extends DataFix {
 
-    public int a() {
-        return 1125;
+    public DataConverterBedItem(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("minecraft:bed".equals(nbttagcompound.getString("id")) && nbttagcompound.getShort("Damage") == 0) {
-            nbttagcompound.setShort("Damage", (short) EnumColor.RED.getColorIndex());
-        }
+    public TypeRewriteRule makeRule() {
+        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
 
-        return nbttagcompound;
+        return this.fixTypeEverywhereTyped("BedItemColorFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
+            Optional optional = typed.getOptional(opticfinder);
+
+            if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:bed")) {
+                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+
+                if (dynamic.getShort("Damage") == 0) {
+                    return typed.set(DSL.remainderFinder(), dynamic.set("Damage", dynamic.createShort((short) 14)));
+                }
+            }
+
+            return typed;
+        });
     }
 }

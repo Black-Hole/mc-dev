@@ -1,35 +1,32 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import java.util.List;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import java.util.concurrent.TimeUnit;
 
 public class BiomeCache {
 
     private final WorldChunkManager a;
-    private long b;
-    private final Long2ObjectMap<BiomeCache.a> c = new Long2ObjectOpenHashMap(4096);
-    private final List<BiomeCache.a> d = Lists.newArrayList();
+    private final LoadingCache<ChunkCoordIntPair, BiomeCache.a> b;
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
+        this.b = CacheBuilder.newBuilder().expireAfterAccess(30000L, TimeUnit.MILLISECONDS).build(new CacheLoader() {
+            public BiomeCache.a a(ChunkCoordIntPair chunkcoordintpair) throws Exception {
+                return BiomeCache.this.new a(chunkcoordintpair.x, chunkcoordintpair.z);
+            }
+
+            public Object load(Object object) throws Exception {
+                return this.a((ChunkCoordIntPair) object);
+            }
+        });
         this.a = worldchunkmanager;
     }
 
     public BiomeCache.a a(int i, int j) {
         i >>= 4;
         j >>= 4;
-        long k = (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
-        BiomeCache.a biomecache_a = (BiomeCache.a) this.c.get(k);
-
-        if (biomecache_a == null) {
-            biomecache_a = new BiomeCache.a(i, j);
-            this.c.put(k, biomecache_a);
-            this.d.add(biomecache_a);
-        }
-
-        biomecache_a.d = MinecraftServer.aw();
-        return biomecache_a;
+        return (BiomeCache.a) this.b.getUnchecked(new ChunkCoordIntPair(i, j));
     }
 
     public BiomeBase a(int i, int j, BiomeBase biomebase) {
@@ -38,47 +35,22 @@ public class BiomeCache {
         return biomebase1 == null ? biomebase : biomebase1;
     }
 
-    public void a() {
-        long i = MinecraftServer.aw();
-        long j = i - this.b;
-
-        if (j > 7500L || j < 0L) {
-            this.b = i;
-
-            for (int k = 0; k < this.d.size(); ++k) {
-                BiomeCache.a biomecache_a = (BiomeCache.a) this.d.get(k);
-                long l = i - biomecache_a.d;
-
-                if (l > 30000L || l < 0L) {
-                    this.d.remove(k--);
-                    long i1 = (long) biomecache_a.b & 4294967295L | ((long) biomecache_a.c & 4294967295L) << 32;
-
-                    this.c.remove(i1);
-                }
-            }
-        }
-
-    }
+    public void a() {}
 
     public BiomeBase[] b(int i, int j) {
-        return this.a(i, j).a;
+        return this.a(i, j).b;
     }
 
     public class a {
 
-        public BiomeBase[] a = new BiomeBase[256];
-        public int b;
-        public int c;
-        public long d;
+        private final BiomeBase[] b;
 
         public a(int i, int j) {
-            this.b = i;
-            this.c = j;
-            BiomeCache.this.a.a(this.a, i << 4, j << 4, 16, 16, false);
+            this.b = BiomeCache.this.a.a(i << 4, j << 4, 16, 16, false);
         }
 
         public BiomeBase a(int i, int j) {
-            return this.a[i & 15 | (j & 15) << 4];
+            return this.b[i & 15 | (j & 15) << 4];
         }
     }
 }

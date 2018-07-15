@@ -1,73 +1,63 @@
 package net.minecraft.server;
 
-import io.netty.buffer.Unpooled;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.Iterator;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class CommandStopSound extends CommandAbstract {
+public class CommandStopSound {
 
-    public CommandStopSound() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        RequiredArgumentBuilder requiredargumentbuilder = (RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, (MinecraftKey) null);
+        })).then(CommandDispatcher.a("*").then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), (SoundCategory) null, ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"));
+        })));
+        SoundCategory[] asoundcategory = SoundCategory.values();
+        int i = asoundcategory.length;
 
-    public String getCommand() {
-        return "stopsound";
-    }
+        for (int j = 0; j < i; ++j) {
+            SoundCategory soundcategory = asoundcategory[j];
 
-    public int a() {
-        return 2;
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.stopsound.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length >= 1 && astring.length <= 3) {
-            byte b0 = 0;
-            int i = b0 + 1;
-            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[b0]);
-            String s = "";
-            String s1 = "";
-
-            if (astring.length >= 2) {
-                String s2 = astring[i++];
-                SoundCategory soundcategory = SoundCategory.a(s2);
-
-                if (soundcategory == null) {
-                    throw new CommandException("commands.stopsound.unknownSoundSource", new Object[] { s2});
-                }
-
-                s = soundcategory.a();
-            }
-
-            if (astring.length == 3) {
-                s1 = astring[i++];
-            }
-
-            PacketDataSerializer packetdataserializer = new PacketDataSerializer(Unpooled.buffer());
-
-            packetdataserializer.a(s);
-            packetdataserializer.a(s1);
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutCustomPayload("MC|StopSound", packetdataserializer));
-            if (s.isEmpty() && s1.isEmpty()) {
-                a(icommandlistener, (ICommand) this, "commands.stopsound.success.all", new Object[] { entityplayer.getName()});
-            } else if (s1.isEmpty()) {
-                a(icommandlistener, (ICommand) this, "commands.stopsound.success.soundSource", new Object[] { s, entityplayer.getName()});
-            } else {
-                a(icommandlistener, (ICommand) this, "commands.stopsound.success.individualSound", new Object[] { s1, s, entityplayer.getName()});
-            }
-
-        } else {
-            throw new ExceptionUsage(this.getUsage(icommandlistener), new Object[0]);
+            requiredargumentbuilder.then(((LiteralArgumentBuilder) CommandDispatcher.a(soundcategory.a()).executes((commandcontext) -> {
+                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, (MinecraftKey) null);
+            })).then(CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c).executes((commandcontext) -> {
+                return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), soundcategory, ArgumentMinecraftKeyRegistered.c(commandcontext, "sound"));
+            })));
         }
+
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("stopsound").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(requiredargumentbuilder));
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, (Collection) SoundCategory.b()) : (astring.length == 3 ? a(astring, (Collection) SoundEffect.a.keySet()) : Collections.emptyList()));
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, @Nullable SoundCategory soundcategory, @Nullable MinecraftKey minecraftkey) {
+        PacketPlayOutStopSound packetplayoutstopsound = new PacketPlayOutStopSound(minecraftkey, soundcategory);
+        Iterator iterator = collection.iterator();
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+            entityplayer.playerConnection.sendPacket(packetplayoutstopsound);
+        }
+
+        if (soundcategory != null) {
+            if (minecraftkey != null) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.sound", new Object[] { minecraftkey, soundcategory.a()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.source.any", new Object[] { soundcategory.a()}), true);
+            }
+        } else if (minecraftkey != null) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.sound", new Object[] { minecraftkey}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.stopsound.success.sourceless.any", new Object[0]), true);
+        }
+
+        return collection.size();
     }
 }

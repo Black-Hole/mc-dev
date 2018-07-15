@@ -122,11 +122,11 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public IChatBaseComponent f() {
-        return IChatBaseComponent.ChatSerializer.a(this.e(32767));
+        return IChatBaseComponent.ChatSerializer.a(this.e(262144));
     }
 
     public PacketDataSerializer a(IChatBaseComponent ichatbasecomponent) {
-        return this.a(IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
+        return this.a(IChatBaseComponent.ChatSerializer.a(ichatbasecomponent), 262144);
     }
 
     public <T extends Enum<T>> T a(Class<T> oclass) {
@@ -237,12 +237,13 @@ public class PacketDataSerializer extends ByteBuf {
         if (itemstack.isEmpty()) {
             this.writeShort(-1);
         } else {
-            this.writeShort(Item.getId(itemstack.getItem()));
+            Item item = itemstack.getItem();
+
+            this.writeShort(Item.getId(item));
             this.writeByte(itemstack.getCount());
-            this.writeShort(itemstack.getData());
             NBTTagCompound nbttagcompound = null;
 
-            if (itemstack.getItem().usesDurability() || itemstack.getItem().p()) {
+            if (item.usesDurability() || item.n()) {
                 nbttagcompound = itemstack.getTag();
             }
 
@@ -259,8 +260,7 @@ public class PacketDataSerializer extends ByteBuf {
             return ItemStack.a;
         } else {
             byte b0 = this.readByte();
-            short short1 = this.readShort();
-            ItemStack itemstack = new ItemStack(Item.getById(short0), b0, short1);
+            ItemStack itemstack = new ItemStack(Item.getById(short0), b0);
 
             itemstack.setTag(this.j());
             return itemstack;
@@ -287,10 +287,14 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public PacketDataSerializer a(String s) {
+        return this.a(s, 32767);
+    }
+
+    public PacketDataSerializer a(String s, int i) {
         byte[] abyte = s.getBytes(StandardCharsets.UTF_8);
 
-        if (abyte.length > 32767) {
-            throw new EncoderException("String too big (was " + abyte.length + " bytes encoded, max " + 32767 + ")");
+        if (abyte.length > i) {
+            throw new EncoderException("String too big (was " + abyte.length + " bytes encoded, max " + i + ")");
         } else {
             this.d(abyte.length);
             this.writeBytes(abyte);

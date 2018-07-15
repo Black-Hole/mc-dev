@@ -6,7 +6,6 @@ public class EnchantmentDurability extends Enchantment {
 
     protected EnchantmentDurability(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.BREAKABLE, aenumitemslot);
-        this.c("durability");
     }
 
     public int a(int i) {
@@ -22,7 +21,7 @@ public class EnchantmentDurability extends Enchantment {
     }
 
     public boolean canEnchant(ItemStack itemstack) {
-        return itemstack.f() ? true : super.canEnchant(itemstack);
+        return itemstack.e() ? true : super.canEnchant(itemstack);
     }
 
     public static boolean a(ItemStack itemstack, int i, Random random) {

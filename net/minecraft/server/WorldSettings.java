@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 public final class WorldSettings {
 
     private final long a;
@@ -9,10 +12,10 @@ public final class WorldSettings {
     private final WorldType e;
     private boolean f;
     private boolean g;
-    private String h;
+    private JsonElement h;
 
     public WorldSettings(long i, EnumGamemode enumgamemode, boolean flag, boolean flag1, WorldType worldtype) {
-        this.h = "";
+        this.h = new JsonObject();
         this.a = i;
         this.b = enumgamemode;
         this.c = flag;
@@ -29,8 +32,8 @@ public final class WorldSettings {
         return this;
     }
 
-    public WorldSettings setGeneratorSettings(String s) {
-        this.h = s;
+    public WorldSettings setGeneratorSettings(JsonElement jsonelement) {
+        this.h = jsonelement;
         return this;
     }
 
@@ -66,7 +69,7 @@ public final class WorldSettings {
         return EnumGamemode.getById(i);
     }
 
-    public String j() {
+    public JsonElement j() {
         return this.h;
     }
 }

@@ -1,53 +1,56 @@
 package net.minecraft.server;
 
-public class GenLayerDeepOcean extends GenLayer {
+public enum GenLayerDeepOcean implements AreaTransformer7 {
 
-    public GenLayerDeepOcean(long i, GenLayer genlayer) {
-        super(i);
-        this.a = genlayer;
-    }
+    INSTANCE;
 
-    public int[] a(int i, int j, int k, int l) {
-        int i1 = i - 1;
-        int j1 = j - 1;
-        int k1 = k + 2;
-        int l1 = l + 2;
-        int[] aint = this.a.a(i1, j1, k1, l1);
-        int[] aint1 = IntCache.a(k * l);
+    private GenLayerDeepOcean() {}
 
-        for (int i2 = 0; i2 < l; ++i2) {
-            for (int j2 = 0; j2 < k; ++j2) {
-                int k2 = aint[j2 + 1 + (i2 + 1 - 1) * (k + 2)];
-                int l2 = aint[j2 + 1 + 1 + (i2 + 1) * (k + 2)];
-                int i3 = aint[j2 + 1 - 1 + (i2 + 1) * (k + 2)];
-                int j3 = aint[j2 + 1 + (i2 + 1 + 1) * (k + 2)];
-                int k3 = aint[j2 + 1 + (i2 + 1) * k1];
-                int l3 = 0;
+    public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
+        if (GenLayers.b(i1)) {
+            int j1 = 0;
 
-                if (k2 == 0) {
-                    ++l3;
+            if (GenLayers.b(i)) {
+                ++j1;
+            }
+
+            if (GenLayers.b(j)) {
+                ++j1;
+            }
+
+            if (GenLayers.b(l)) {
+                ++j1;
+            }
+
+            if (GenLayers.b(k)) {
+                ++j1;
+            }
+
+            if (j1 > 3) {
+                if (i1 == GenLayers.a) {
+                    return GenLayers.f;
                 }
 
-                if (l2 == 0) {
-                    ++l3;
+                if (i1 == GenLayers.b) {
+                    return GenLayers.g;
                 }
 
-                if (i3 == 0) {
-                    ++l3;
+                if (i1 == GenLayers.c) {
+                    return GenLayers.h;
                 }
 
-                if (j3 == 0) {
-                    ++l3;
+                if (i1 == GenLayers.d) {
+                    return GenLayers.i;
                 }
 
-                if (k3 == 0 && l3 > 3) {
-                    aint1[j2 + i2 * k] = BiomeBase.a(Biomes.z);
-                } else {
-                    aint1[j2 + i2 * k] = k3;
+                if (i1 == GenLayers.e) {
+                    return GenLayers.j;
                 }
+
+                return GenLayers.h;
             }
         }
 
-        return aint1;
+        return i1;
     }
 }

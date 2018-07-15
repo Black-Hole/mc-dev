@@ -39,48 +39,54 @@ public abstract class DefinedStructurePiece extends StructurePiece {
         this.c = new BlockPosition(nbttagcompound.getInt("TPX"), nbttagcompound.getInt("TPY"), nbttagcompound.getInt("TPZ"));
     }
 
-    public boolean a(World world, Random random, StructureBoundingBox structureboundingbox) {
+    public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         this.b.a(structureboundingbox);
-        this.a.a(world, this.c, this.b, 18);
-        Map map = this.a.a(this.c, this.b);
-        Iterator iterator = map.entrySet().iterator();
+        if (this.a.a(generatoraccess, this.c, this.b, 2)) {
+            Map map = this.a.a(this.c, this.b);
+            Iterator iterator = map.entrySet().iterator();
 
-        while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
-            String s = (String) entry.getValue();
+            while (iterator.hasNext()) {
+                Entry entry = (Entry) iterator.next();
+                String s = (String) entry.getValue();
 
-            this.a(s, (BlockPosition) entry.getKey(), world, random, structureboundingbox);
+                this.a(s, (BlockPosition) entry.getKey(), generatoraccess, random, structureboundingbox);
+            }
         }
 
         return true;
     }
 
-    protected abstract void a(String s, BlockPosition blockposition, World world, Random random, StructureBoundingBox structureboundingbox);
+    protected abstract void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox);
 
     private void b() {
         EnumBlockRotation enumblockrotation = this.b.c();
-        BlockPosition blockposition = this.a.a(enumblockrotation);
+        BlockPosition blockposition = this.b.d();
+        BlockPosition blockposition1 = this.a.a(enumblockrotation);
         EnumBlockMirror enumblockmirror = this.b.b();
+        int i = blockposition.getX();
+        int j = blockposition.getZ();
+        int k = blockposition1.getX() - 1;
+        int l = blockposition1.getY() - 1;
+        int i1 = blockposition1.getZ() - 1;
 
-        this.l = new StructureBoundingBox(0, 0, 0, blockposition.getX(), blockposition.getY() - 1, blockposition.getZ());
         switch (enumblockrotation) {
         case NONE:
-        default:
-            break;
-
-        case CLOCKWISE_90:
-            this.l.a(-blockposition.getX(), 0, 0);
-            break;
-
-        case COUNTERCLOCKWISE_90:
-            this.l.a(0, 0, -blockposition.getZ());
+            this.m = new StructureBoundingBox(0, 0, 0, k, l, i1);
             break;
 
         case CLOCKWISE_180:
-            this.l.a(-blockposition.getX(), 0, -blockposition.getZ());
+            this.m = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
+            break;
+
+        case COUNTERCLOCKWISE_90:
+            this.m = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
+            break;
+
+        case CLOCKWISE_90:
+            this.m = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
         }
 
-        BlockPosition blockposition1;
+        BlockPosition blockposition2;
 
         switch (enumblockmirror) {
         case NONE:
@@ -88,36 +94,36 @@ public abstract class DefinedStructurePiece extends StructurePiece {
             break;
 
         case FRONT_BACK:
-            blockposition1 = BlockPosition.ZERO;
+            blockposition2 = BlockPosition.ZERO;
             if (enumblockrotation != EnumBlockRotation.CLOCKWISE_90 && enumblockrotation != EnumBlockRotation.COUNTERCLOCKWISE_90) {
                 if (enumblockrotation == EnumBlockRotation.CLOCKWISE_180) {
-                    blockposition1 = blockposition1.shift(EnumDirection.EAST, blockposition.getX());
+                    blockposition2 = blockposition2.shift(EnumDirection.EAST, k);
                 } else {
-                    blockposition1 = blockposition1.shift(EnumDirection.WEST, blockposition.getX());
+                    blockposition2 = blockposition2.shift(EnumDirection.WEST, k);
                 }
             } else {
-                blockposition1 = blockposition1.shift(enumblockrotation.a(EnumDirection.WEST), blockposition.getZ());
+                blockposition2 = blockposition2.shift(enumblockrotation.a(EnumDirection.WEST), i1);
             }
 
-            this.l.a(blockposition1.getX(), 0, blockposition1.getZ());
+            this.m.a(blockposition2.getX(), 0, blockposition2.getZ());
             break;
 
         case LEFT_RIGHT:
-            blockposition1 = BlockPosition.ZERO;
+            blockposition2 = BlockPosition.ZERO;
             if (enumblockrotation != EnumBlockRotation.CLOCKWISE_90 && enumblockrotation != EnumBlockRotation.COUNTERCLOCKWISE_90) {
                 if (enumblockrotation == EnumBlockRotation.CLOCKWISE_180) {
-                    blockposition1 = blockposition1.shift(EnumDirection.SOUTH, blockposition.getZ());
+                    blockposition2 = blockposition2.shift(EnumDirection.SOUTH, i1);
                 } else {
-                    blockposition1 = blockposition1.shift(EnumDirection.NORTH, blockposition.getZ());
+                    blockposition2 = blockposition2.shift(EnumDirection.NORTH, i1);
                 }
             } else {
-                blockposition1 = blockposition1.shift(enumblockrotation.a(EnumDirection.NORTH), blockposition.getX());
+                blockposition2 = blockposition2.shift(enumblockrotation.a(EnumDirection.NORTH), k);
             }
 
-            this.l.a(blockposition1.getX(), 0, blockposition1.getZ());
+            this.m.a(blockposition2.getX(), 0, blockposition2.getZ());
         }
 
-        this.l.a(this.c.getX(), this.c.getY(), this.c.getZ());
+        this.m.a(this.c.getX(), this.c.getY(), this.c.getZ());
     }
 
     public void a(int i, int j, int k) {

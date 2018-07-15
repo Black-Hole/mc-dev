@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,8 +10,8 @@ public class ItemKnowledgeBook extends Item {
 
     private static final Logger a = LogManager.getLogger();
 
-    public ItemKnowledgeBook() {
-        this.d(1);
+    public ItemKnowledgeBook(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -29,23 +29,23 @@ public class ItemKnowledgeBook extends Item {
 
                 for (int i = 0; i < nbttaglist.size(); ++i) {
                     String s = nbttaglist.getString(i);
-                    IRecipe irecipe = CraftingManager.a(new MinecraftKey(s));
+                    IRecipe irecipe = world.getMinecraftServer().getCraftingManager().a(new MinecraftKey(s));
 
                     if (irecipe == null) {
-                        ItemKnowledgeBook.a.error("Invalid recipe: " + s);
+                        ItemKnowledgeBook.a.error("Invalid recipe: {}", s);
                         return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
                     }
 
                     arraylist.add(irecipe);
                 }
 
-                entityhuman.a((List) arraylist);
-                entityhuman.b(StatisticList.b((Item) this));
+                entityhuman.a((Collection) arraylist);
+                entityhuman.b(StatisticList.ITEM_USED.b(this));
             }
 
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
         } else {
-            ItemKnowledgeBook.a.error("Tag not valid: " + nbttagcompound);
+            ItemKnowledgeBook.a.error("Tag not valid: {}", nbttagcompound);
             return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
         }
     }

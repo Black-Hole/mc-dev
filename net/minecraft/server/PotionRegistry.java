@@ -9,13 +9,11 @@ public class PotionRegistry {
 
     private static final MinecraftKey b = new MinecraftKey("empty");
     public static final RegistryBlocks<MinecraftKey, PotionRegistry> a = new RegistryBlocks(PotionRegistry.b);
-    private static int c;
-    private final String d;
-    private final ImmutableList<MobEffect> e;
+    private final String c;
+    private final ImmutableList<MobEffect> d;
 
-    @Nullable
     public static PotionRegistry a(String s) {
-        return (PotionRegistry) PotionRegistry.a.get(new MinecraftKey(s));
+        return (PotionRegistry) PotionRegistry.a.get(MinecraftKey.a(s));
     }
 
     public PotionRegistry(MobEffect... amobeffect) {
@@ -23,16 +21,16 @@ public class PotionRegistry {
     }
 
     public PotionRegistry(@Nullable String s, MobEffect... amobeffect) {
-        this.d = s;
-        this.e = ImmutableList.copyOf(amobeffect);
+        this.c = s;
+        this.d = ImmutableList.copyOf(amobeffect);
     }
 
     public String b(String s) {
-        return this.d == null ? s + ((MinecraftKey) PotionRegistry.a.b(this)).getKey() : s + this.d;
+        return s + (this.c == null ? ((MinecraftKey) PotionRegistry.a.b(this)).getKey() : this.c);
     }
 
     public List<MobEffect> a() {
-        return this.e;
+        return this.d;
     }
 
     public static void b() {
@@ -55,6 +53,10 @@ public class PotionRegistry {
         a("strong_swiftness", new PotionRegistry("swiftness", new MobEffect[] { new MobEffect(MobEffects.FASTER_MOVEMENT, 1800, 1)}));
         a("slowness", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 1800)}));
         a("long_slowness", new PotionRegistry("slowness", new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 4800)}));
+        a("strong_slowness", new PotionRegistry("slowness", new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 400, 3)}));
+        a("turtle_master", new PotionRegistry("turtle_master", new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 400, 3), new MobEffect(MobEffects.RESISTANCE, 400, 2)}));
+        a("long_turtle_master", new PotionRegistry("turtle_master", new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 800, 3), new MobEffect(MobEffects.RESISTANCE, 800, 2)}));
+        a("strong_turtle_master", new PotionRegistry("turtle_master", new MobEffect[] { new MobEffect(MobEffects.SLOWER_MOVEMENT, 400, 5), new MobEffect(MobEffects.RESISTANCE, 400, 3)}));
         a("water_breathing", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.WATER_BREATHING, 3600)}));
         a("long_water_breathing", new PotionRegistry("water_breathing", new MobEffect[] { new MobEffect(MobEffects.WATER_BREATHING, 9600)}));
         a("healing", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.HEAL, 1)}));
@@ -72,17 +74,19 @@ public class PotionRegistry {
         a("strong_strength", new PotionRegistry("strength", new MobEffect[] { new MobEffect(MobEffects.INCREASE_DAMAGE, 1800, 1)}));
         a("weakness", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.WEAKNESS, 1800)}));
         a("long_weakness", new PotionRegistry("weakness", new MobEffect[] { new MobEffect(MobEffects.WEAKNESS, 4800)}));
-        a("luck", new PotionRegistry("luck", new MobEffect[] { new MobEffect(MobEffects.z, 6000)}));
+        a("luck", new PotionRegistry("luck", new MobEffect[] { new MobEffect(MobEffects.LUCK, 6000)}));
+        a("slow_falling", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.SLOW_FALLING, 1800)}));
+        a("long_slow_falling", new PotionRegistry("slow_falling", new MobEffect[] { new MobEffect(MobEffects.SLOW_FALLING, 4800)}));
         PotionRegistry.a.a();
     }
 
     protected static void a(String s, PotionRegistry potionregistry) {
-        PotionRegistry.a.a(PotionRegistry.c++, new MinecraftKey(s), potionregistry);
+        PotionRegistry.a.a(new MinecraftKey(s), potionregistry);
     }
 
     public boolean c() {
-        if (!this.e.isEmpty()) {
-            UnmodifiableIterator unmodifiableiterator = this.e.iterator();
+        if (!this.d.isEmpty()) {
+            UnmodifiableIterator unmodifiableiterator = this.d.iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) unmodifiableiterator.next();

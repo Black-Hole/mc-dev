@@ -84,7 +84,7 @@ public class PathfinderGoalSelector {
             }
         }
 
-        this.d.b();
+        this.d.e();
         if (!this.c.isEmpty()) {
             this.d.a("goalTick");
             iterator = this.c.iterator();
@@ -94,7 +94,7 @@ public class PathfinderGoalSelector {
                 pathfindergoalselector_pathfindergoalselectoritem.a.e();
             }
 
-            this.d.b();
+            this.d.e();
         }
 
     }
@@ -119,7 +119,7 @@ public class PathfinderGoalSelector {
                         if (!this.a(pathfindergoalselector_pathfindergoalselectoritem, pathfindergoalselector_pathfindergoalselectoritem1)) {
                             return false;
                         }
-                    } else if (!pathfindergoalselector_pathfindergoalselectoritem1.a.g()) {
+                    } else if (!pathfindergoalselector_pathfindergoalselectoritem1.a.f()) {
                         return false;
                     }
                 }

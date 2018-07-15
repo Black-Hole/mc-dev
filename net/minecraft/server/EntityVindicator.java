@@ -1,32 +1,22 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityVindicator extends EntityIllagerAbstract {
 
     private boolean b;
-    private static final Predicate<Entity> c = new Predicate() {
-        public boolean a(@Nullable Entity entity) {
-            return entity instanceof EntityLiving && ((EntityLiving) entity).cS();
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((Entity) object);
-        }
+    private static final Predicate<Entity> c = (entity) -> {
+        return entity instanceof EntityLiving && ((EntityLiving) entity).de();
     };
 
     public EntityVindicator(World world) {
-        super(world);
+        super(EntityTypes.VINDICATOR, world);
         this.setSize(0.6F, 1.95F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityVindicator.class);
-    }
-
-    protected void r() {
-        super.r();
+    protected void n() {
+        super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(8, new PathfinderGoalRandomStroll(this, 0.6D));
@@ -47,12 +37,12 @@ public class EntityVindicator extends EntityIllagerAbstract {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
     }
 
-    protected MinecraftKey J() {
-        return LootTables.av;
+    protected MinecraftKey G() {
+        return LootTables.aC;
     }
 
     public void a(boolean flag) {
@@ -76,8 +66,8 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
-        GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity);
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
@@ -88,33 +78,33 @@ public class EntityVindicator extends EntityIllagerAbstract {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
     }
 
-    protected void M() {
-        super.M();
+    protected void mobTick() {
+        super.mobTick();
         this.a(this.getGoalTarget() != null);
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aY() == null && entity.aY() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.be() == null && entity.be() == null : false);
     }
 
-    public void setCustomName(String s) {
-        super.setCustomName(s);
-        if (!this.b && "Johnny".equals(s)) {
+    public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
+        super.setCustomName(ichatbasecomponent);
+        if (!this.b && ichatbasecomponent != null && ichatbasecomponent.getString().equals("Johnny")) {
             this.b = true;
         }
 
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.iq;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_VINDICATOR_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.ir;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_VINDICATOR_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.is;
+        return SoundEffects.ENTITY_VINDICATOR_HURT;
     }
 
     static class a extends PathfinderGoalNearestAttackableTarget<EntityLiving> {

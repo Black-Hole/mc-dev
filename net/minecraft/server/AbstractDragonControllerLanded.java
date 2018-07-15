@@ -11,8 +11,8 @@ public abstract class AbstractDragonControllerLanded extends AbstractDragonContr
     }
 
     public float a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
-        if (damagesource.i() instanceof EntityArrow) {
-            damagesource.i().setOnFire(1);
+        if (damagesource.j() instanceof EntityArrow) {
+            damagesource.j().setOnFire(1);
             return 0.0F;
         } else {
             return super.a(entitycomplexpart, damagesource, f);

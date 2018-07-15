@@ -2,24 +2,30 @@ package net.minecraft.server;
 
 public class ItemSeedFood extends ItemFood {
 
-    private final Block b;
-    private final Block c;
+    private final IBlockData a;
 
-    public ItemSeedFood(int i, float f, Block block, Block block1) {
-        super(i, f, false);
-        this.b = block;
-        this.c = block1;
+    public ItemSeedFood(int i, float f, Block block, Item.Info item_info) {
+        super(i, f, false, item_info);
+        this.a = block.getBlockData();
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        ItemStack itemstack = entityhuman.b(enumhand);
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+        BlockPosition blockposition = itemactioncontext.getClickPosition().up();
 
-        if (enumdirection == EnumDirection.UP && entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack) && world.getType(blockposition).getBlock() == this.c && world.isEmpty(blockposition.up())) {
-            world.setTypeAndData(blockposition.up(), this.b.getBlockData(), 11);
+        if (itemactioncontext.getClickedFace() == EnumDirection.UP && world.isEmpty(blockposition) && this.a.canPlace(world, blockposition)) {
+            world.setTypeAndData(blockposition, this.a, 11);
+            EntityHuman entityhuman = itemactioncontext.getEntity();
+            ItemStack itemstack = itemactioncontext.getItemStack();
+
+            if (entityhuman instanceof EntityPlayer) {
+                CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
+            }
+
             itemstack.subtract(1);
             return EnumInteractionResult.SUCCESS;
         } else {
-            return EnumInteractionResult.FAIL;
+            return EnumInteractionResult.PASS;
         }
     }
 }

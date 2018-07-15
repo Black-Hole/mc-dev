@@ -32,11 +32,11 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public BlockPosition a() {
+    public BlockPosition b() {
         return this.a;
     }
 
-    public String[] b() {
+    public String[] c() {
         return this.b;
     }
 }

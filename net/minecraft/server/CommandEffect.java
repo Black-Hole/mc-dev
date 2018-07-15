@@ -1,97 +1,133 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.Iterator;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class CommandEffect extends CommandAbstract {
+public class CommandEffect {
 
-    public CommandEffect() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.effect.give.failed", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.everything.failed", new Object[0]));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.effect.clear.specific.failed", new Object[0]));
 
-    public String getCommand() {
-        return "effect";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("effect").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("clear").then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"));
+        })).then(CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"));
+        }))))).then(CommandDispatcher.a("give").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), (Integer) null, 0, true);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("seconds", (ArgumentType) IntegerArgumentType.integer(1, 1000000)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), 0, true);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("amplifier", (ArgumentType) IntegerArgumentType.integer(0, 255)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), IntegerArgumentType.getInteger(commandcontext, "amplifier"), true);
+        })).then(CommandDispatcher.a("hideParticles", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), IntegerArgumentType.getInteger(commandcontext, "amplifier"), !BoolArgumentType.getBool(commandcontext, "hideParticles"));
+        }))))))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, MobEffectList mobeffectlist, @Nullable Integer integer, int i, boolean flag) throws CommandSyntaxException {
+        int j = 0;
+        int k;
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.effect.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.effect.usage", new Object[0]);
-        } else {
-            EntityLiving entityliving = (EntityLiving) a(minecraftserver, icommandlistener, astring[0], EntityLiving.class);
-
-            if ("clear".equals(astring[1])) {
-                if (entityliving.getEffects().isEmpty()) {
-                    throw new CommandException("commands.effect.failure.notActive.all", new Object[] { entityliving.getName()});
-                } else {
-                    entityliving.removeAllEffects();
-                    a(icommandlistener, (ICommand) this, "commands.effect.success.removed.all", new Object[] { entityliving.getName()});
-                }
+        if (integer != null) {
+            if (mobeffectlist.isInstant()) {
+                k = integer.intValue();
             } else {
-                MobEffectList mobeffectlist;
+                k = integer.intValue() * 20;
+            }
+        } else if (mobeffectlist.isInstant()) {
+            k = 1;
+        } else {
+            k = 600;
+        }
 
-                try {
-                    mobeffectlist = MobEffectList.fromId(a(astring[1], 1));
-                } catch (ExceptionInvalidNumber exceptioninvalidnumber) {
-                    mobeffectlist = MobEffectList.getByName(astring[1]);
-                }
+        Iterator iterator = collection.iterator();
 
-                if (mobeffectlist == null) {
-                    throw new ExceptionInvalidNumber("commands.effect.notFound", new Object[] { astring[1]});
-                } else {
-                    int i = 600;
-                    int j = 30;
-                    int k = 0;
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
 
-                    if (astring.length >= 3) {
-                        j = a(astring[2], 0, 1000000);
-                        if (mobeffectlist.isInstant()) {
-                            i = j;
-                        } else {
-                            i = j * 20;
-                        }
-                    } else if (mobeffectlist.isInstant()) {
-                        i = 1;
-                    }
+            if (entity instanceof EntityLiving) {
+                MobEffect mobeffect = new MobEffect(mobeffectlist, k, i, false, flag);
 
-                    if (astring.length >= 4) {
-                        k = a(astring[3], 0, 255);
-                    }
-
-                    boolean flag = true;
-
-                    if (astring.length >= 5 && "true".equalsIgnoreCase(astring[4])) {
-                        flag = false;
-                    }
-
-                    if (j > 0) {
-                        MobEffect mobeffect = new MobEffect(mobeffectlist, i, k, false, flag);
-
-                        entityliving.addEffect(mobeffect);
-                        a(icommandlistener, (ICommand) this, "commands.effect.success", new Object[] { new ChatMessage(mobeffect.f(), new Object[0]), Integer.valueOf(MobEffectList.getId(mobeffectlist)), Integer.valueOf(k), entityliving.getName(), Integer.valueOf(j)});
-                    } else if (entityliving.hasEffect(mobeffectlist)) {
-                        entityliving.removeEffect(mobeffectlist);
-                        a(icommandlistener, (ICommand) this, "commands.effect.success.removed", new Object[] { new ChatMessage(mobeffectlist.a(), new Object[0]), entityliving.getName()});
-                    } else {
-                        throw new CommandException("commands.effect.failure.notActive", new Object[] { new ChatMessage(mobeffectlist.a(), new Object[0]), entityliving.getName()});
-                    }
+                if (((EntityLiving) entity).addEffect(mobeffect)) {
+                    ++j;
                 }
             }
         }
+
+        if (j == 0) {
+            throw CommandEffect.a.create();
+        } else {
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), Integer.valueOf(k / 20)}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.multiple", new Object[] { mobeffectlist.d(), Integer.valueOf(collection.size()), Integer.valueOf(k / 20)}), true);
+            }
+
+            return j;
+        }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, (Collection) MobEffectList.REGISTRY.keySet()) : (astring.length == 5 ? a(astring, new String[] { "true", "false"}) : Collections.emptyList()));
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection) throws CommandSyntaxException {
+        int i = 0;
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+
+            if (entity instanceof EntityLiving && ((EntityLiving) entity).removeAllEffects()) {
+                ++i;
+            }
+        }
+
+        if (i == 0) {
+            throw CommandEffect.b.create();
+        } else {
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+            }
+
+            return i;
+        }
     }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, MobEffectList mobeffectlist) throws CommandSyntaxException {
+        int i = 0;
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+
+            if (entity instanceof EntityLiving && ((EntityLiving) entity).removeEffect(mobeffectlist)) {
+                ++i;
+            }
+        }
+
+        if (i == 0) {
+            throw CommandEffect.c.create();
+        } else {
+            if (collection.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            } else {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.multiple", new Object[] { mobeffectlist.d(), Integer.valueOf(collection.size())}), true);
+            }
+
+            return i;
+        }
     }
 }

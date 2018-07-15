@@ -33,6 +33,7 @@ public class ServerGUI extends JComponent {
     private static final Font a = new Font("Monospaced", 0, 12);
     private static final Logger b = LogManager.getLogger();
     private final DedicatedServer c;
+    private Thread d;
 
     public static void a(final DedicatedServer dedicatedserver) {
         try {
@@ -63,6 +64,7 @@ public class ServerGUI extends JComponent {
                 System.exit(0);
             }
         });
+        servergui.a();
     }
 
     public ServerGUI(DedicatedServer dedicatedserver) {
@@ -71,24 +73,24 @@ public class ServerGUI extends JComponent {
         this.setLayout(new BorderLayout());
 
         try {
-            this.add(this.c(), "Center");
-            this.add(this.a(), "West");
+            this.add(this.d(), "Center");
+            this.add(this.b(), "West");
         } catch (Exception exception) {
             ServerGUI.b.error("Couldn\'t build server GUI", exception);
         }
 
     }
 
-    private JComponent a() throws Exception {
+    private JComponent b() throws Exception {
         JPanel jpanel = new JPanel(new BorderLayout());
 
         jpanel.add(new GuiStatsComponent(this.c), "North");
-        jpanel.add(this.b(), "Center");
+        jpanel.add(this.c(), "Center");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Stats"));
         return jpanel;
     }
 
-    private JComponent b() throws Exception {
+    private JComponent c() throws Exception {
         PlayerListBox playerlistbox = new PlayerListBox(this.c);
         JScrollPane jscrollpane = new JScrollPane(playerlistbox, 22, 30);
 
@@ -96,25 +98,23 @@ public class ServerGUI extends JComponent {
         return jscrollpane;
     }
 
-    private JComponent c() throws Exception {
+    private JComponent d() throws Exception {
         JPanel jpanel = new JPanel(new BorderLayout());
-        final JTextArea jtextarea = new JTextArea();
-        final JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
+        JTextArea jtextarea = new JTextArea();
+        JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
 
         jtextarea.setEditable(false);
         jtextarea.setFont(ServerGUI.a);
-        final JTextField jtextfield = new JTextField();
+        JTextField jtextfield = new JTextField();
 
-        jtextfield.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionevent) {
-                String s = jtextfield.getText().trim();
+        jtextfield.addActionListener((actionevent) -> {
+            String s = jtextfield.getText().trim();
 
-                if (!s.isEmpty()) {
-                    ServerGUI.this.c.issueCommand(s, ServerGUI.this.c);
-                }
-
-                jtextfield.setText("");
+            if (!s.isEmpty()) {
+                this.c.issueCommand(s, this.c.getServerCommandListener());
             }
+
+            jtextfield.setText("");
         });
         jtextarea.addFocusListener(new FocusAdapter() {
             public void focusGained(FocusEvent focusevent) {}
@@ -122,28 +122,27 @@ public class ServerGUI extends JComponent {
         jpanel.add(jscrollpane, "Center");
         jpanel.add(jtextfield, "South");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Log and chat"));
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                String s;
+        this.d = new Thread(() -> {
+            String s;
 
-                while ((s = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
-                    ServerGUI.this.a(jtextarea, jscrollpane, s);
-                }
-
+            while ((s = QueueLogAppender.getNextLogEvent("ServerGuiConsole")) != null) {
+                this.a(jtextarea, jscrollpane, s);
             }
-        });
 
-        thread.setDaemon(true);
-        thread.start();
+        });
+        this.d.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(ServerGUI.b));
+        this.d.setDaemon(true);
         return jpanel;
     }
 
-    public void a(final JTextArea jtextarea, final JScrollPane jscrollpane, final String s) {
+    public void a() {
+        this.d.start();
+    }
+
+    public void a(JTextArea jtextarea, JScrollPane jscrollpane, String s) {
         if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    ServerGUI.this.a(jtextarea, jscrollpane, s);
-                }
+            SwingUtilities.invokeLater(() -> {
+                this.a(jtextarea, jscrollpane, s);
             });
         } else {
             Document document = jtextarea.getDocument();

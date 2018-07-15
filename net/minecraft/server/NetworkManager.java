@@ -6,10 +6,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.local.LocalChannel;
-import io.netty.channel.local.LocalEventLoopGroup;
 import io.netty.channel.local.LocalServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.handler.timeout.TimeoutException;
@@ -19,9 +19,9 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.net.SocketAddress;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,33 +34,15 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public static final Marker a = MarkerManager.getMarker("NETWORK");
     public static final Marker b = MarkerManager.getMarker("NETWORK_PACKETS", NetworkManager.a);
     public static final AttributeKey<EnumProtocol> c = AttributeKey.valueOf("protocol");
-    public static final LazyInitVar<NioEventLoopGroup> d = new LazyInitVar() {
-        protected NioEventLoopGroup a() {
-            return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Client IO #%d").setDaemon(true).build());
-        }
-
-        protected Object init() {
-            return this.a();
-        }
-    };
-    public static final LazyInitVar<EpollEventLoopGroup> e = new LazyInitVar() {
-        protected EpollEventLoopGroup a() {
-            return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Client IO #%d").setDaemon(true).build());
-        }
-
-        protected Object init() {
-            return this.a();
-        }
-    };
-    public static final LazyInitVar<LocalEventLoopGroup> f = new LazyInitVar() {
-        protected LocalEventLoopGroup a() {
-            return new LocalEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
-        }
-
-        protected Object init() {
-            return this.a();
-        }
-    };
+    public static final LazyInitVar<NioEventLoopGroup> d = new LazyInitVar(() -> {
+        return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Client IO #%d").setDaemon(true).build());
+    });
+    public static final LazyInitVar<EpollEventLoopGroup> e = new LazyInitVar(() -> {
+        return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Client IO #%d").setDaemon(true).build());
+    });
+    public static final LazyInitVar<DefaultEventLoopGroup> f = new LazyInitVar(() -> {
+        return new DefaultEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
+    });
     private final EnumProtocolDirection h;
     private final Queue<NetworkManager.QueuedPacket> i = Queues.newConcurrentLinkedQueue();
     private final ReentrantReadWriteLock j = new ReentrantReadWriteLock();
@@ -70,6 +52,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     private IChatBaseComponent n;
     private boolean o;
     private boolean p;
+    private int q;
+    private int r;
+    private float s;
+    private float t;
+    private int u;
+    private boolean v;
 
     public NetworkManager(EnumProtocolDirection enumprotocoldirection) {
         this.h = enumprotocoldirection;
@@ -98,28 +86,51 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         this.close(new ChatMessage("disconnect.endOfStream", new Object[0]));
     }
 
-    public void exceptionCaught(ChannelHandlerContext channelhandlercontext, Throwable throwable) throws Exception {
-        ChatMessage chatmessage;
-
-        if (throwable instanceof TimeoutException) {
-            chatmessage = new ChatMessage("disconnect.timeout", new Object[0]);
+    public void exceptionCaught(ChannelHandlerContext channelhandlercontext, Throwable throwable) {
+        if (throwable instanceof SkipEncodeException) {
+            NetworkManager.g.debug("Skipping packet due to errors", throwable.getCause());
         } else {
-            chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
-        }
+            boolean flag = !this.v;
 
-        NetworkManager.g.debug(chatmessage.toPlainText(), throwable);
-        this.close(chatmessage);
+            this.v = true;
+            if (this.channel.isOpen()) {
+                if (throwable instanceof TimeoutException) {
+                    NetworkManager.g.debug("Timeout", throwable);
+                    this.close(new ChatMessage("disconnect.timeout", new Object[0]));
+                } else {
+                    ChatMessage chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
+
+                    if (flag) {
+                        NetworkManager.g.debug("Failed to sent packet", throwable);
+                        this.sendPacket(new PacketPlayOutKickDisconnect(chatmessage), (future) -> {
+                            this.close(ichatbasecomponent);
+                        });
+                        this.stopReading();
+                    } else {
+                        NetworkManager.g.debug("Double fault", throwable);
+                        this.close(chatmessage);
+                    }
+                }
+
+            }
+        }
     }
 
     protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
         if (this.channel.isOpen()) {
             try {
-                packet.a(this.m);
+                a(packet, this.m);
             } catch (CancelledPacketHandleException cancelledpackethandleexception) {
                 ;
             }
+
+            ++this.q;
         }
 
+    }
+
+    private static <T extends PacketListener> void a(Packet<T> packet, PacketListener packetlistener) {
+        packet.a(packetlistener);
     }
 
     public void setPacketListener(PacketListener packetlistener) {
@@ -129,14 +140,18 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void sendPacket(Packet<?> packet) {
+        this.sendPacket(packet, (GenericFutureListener) null);
+    }
+
+    public void sendPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> genericfuturelistener) {
         if (this.isConnected()) {
-            this.m();
-            this.a(packet, (GenericFutureListener[]) null);
+            this.o();
+            this.b(packet, genericfuturelistener);
         } else {
             this.j.writeLock().lock();
 
             try {
-                this.i.add(new NetworkManager.QueuedPacket(packet, new GenericFutureListener[0]));
+                this.i.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
             } finally {
                 this.j.writeLock().unlock();
             }
@@ -144,26 +159,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     }
 
-    public void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> genericfuturelistener, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
-        if (this.isConnected()) {
-            this.m();
-            this.a(packet, (GenericFutureListener[]) ArrayUtils.add(agenericfuturelistener, 0, genericfuturelistener));
-        } else {
-            this.j.writeLock().lock();
+    private void b(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> genericfuturelistener) {
+        EnumProtocol enumprotocol = EnumProtocol.a(packet);
+        EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
 
-            try {
-                this.i.add(new NetworkManager.QueuedPacket(packet, (GenericFutureListener[]) ArrayUtils.add(agenericfuturelistener, 0, genericfuturelistener)));
-            } finally {
-                this.j.writeLock().unlock();
-            }
-        }
-
-    }
-
-    private void a(final Packet<?> packet, @Nullable final GenericFutureListener<? extends Future<? super Void>>[] agenericfuturelistener) {
-        final EnumProtocol enumprotocol = EnumProtocol.a(packet);
-        final EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
-
+        ++this.r;
         if (enumprotocol1 != enumprotocol) {
             NetworkManager.g.debug("Disabled auto read");
             this.channel.config().setAutoRead(false);
@@ -176,32 +176,30 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
             ChannelFuture channelfuture = this.channel.writeAndFlush(packet);
 
-            if (agenericfuturelistener != null) {
-                channelfuture.addListeners(agenericfuturelistener);
+            if (genericfuturelistener != null) {
+                channelfuture.addListener(genericfuturelistener);
             }
 
             channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
         } else {
-            this.channel.eventLoop().execute(new Runnable() {
-                public void run() {
-                    if (enumprotocol != enumprotocol1) {
-                        NetworkManager.this.setProtocol(enumprotocol);
-                    }
-
-                    ChannelFuture channelfuture = NetworkManager.this.channel.writeAndFlush(packet);
-
-                    if (agenericfuturelistener != null) {
-                        channelfuture.addListeners(agenericfuturelistener);
-                    }
-
-                    channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+            this.channel.eventLoop().execute(() -> {
+                if (enumprotocol != enumprotocol1) {
+                    this.setProtocol(enumprotocol);
                 }
+
+                ChannelFuture channelfuture = this.channel.writeAndFlush(packet);
+
+                if (genericfuturelistener != null) {
+                    channelfuture.addListener(genericfuturelistener);
+                }
+
+                channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
             });
         }
 
     }
 
-    private void m() {
+    private void o() {
         if (this.channel != null && this.channel.isOpen()) {
             this.j.readLock().lock();
 
@@ -209,7 +207,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                 while (!this.i.isEmpty()) {
                     NetworkManager.QueuedPacket networkmanager_queuedpacket = (NetworkManager.QueuedPacket) this.i.poll();
 
-                    this.a(networkmanager_queuedpacket.a, networkmanager_queuedpacket.b);
+                    this.b(networkmanager_queuedpacket.a, networkmanager_queuedpacket.b);
                 }
             } finally {
                 this.j.readLock().unlock();
@@ -219,13 +217,20 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void a() {
-        this.m();
+        this.o();
         if (this.m instanceof ITickable) {
-            ((ITickable) this.m).e();
+            ((ITickable) this.m).X_();
         }
 
         if (this.channel != null) {
             this.channel.flush();
+        }
+
+        if (this.u++ % 20 == 0) {
+            this.t = this.t * 0.75F + (float) this.r * 0.25F;
+            this.s = this.s * 0.75F + (float) this.q * 0.25F;
+            this.r = 0;
+            this.q = 0;
         }
 
     }
@@ -264,6 +269,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         return this.m;
     }
 
+    @Nullable
     public IChatBaseComponent j() {
         return this.n;
     }
@@ -320,11 +326,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     static class QueuedPacket {
 
         private final Packet<?> a;
-        private final GenericFutureListener<? extends Future<? super Void>>[] b;
+        @Nullable
+        private final GenericFutureListener<? extends Future<? super Void>> b;
 
-        public QueuedPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>>... agenericfuturelistener) {
+        public QueuedPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> genericfuturelistener) {
             this.a = packet;
-            this.b = agenericfuturelistener;
+            this.b = genericfuturelistener;
         }
     }
 }

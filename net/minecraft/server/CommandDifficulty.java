@@ -1,41 +1,51 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class CommandDifficulty extends CommandAbstract {
+public class CommandDifficulty {
 
-    public CommandDifficulty() {}
+    private static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("commands.difficulty.failure", new Object[] { object});
+    });
 
-    public String getCommand() {
-        return "difficulty";
-    }
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        LiteralArgumentBuilder literalargumentbuilder = CommandDispatcher.a("difficulty");
+        EnumDifficulty[] aenumdifficulty = EnumDifficulty.values();
+        int i = aenumdifficulty.length;
 
-    public int a() {
-        return 2;
-    }
+        for (int j = 0; j < i; ++j) {
+            EnumDifficulty enumdifficulty = aenumdifficulty[j];
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.difficulty.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length <= 0) {
-            throw new ExceptionUsage("commands.difficulty.usage", new Object[0]);
-        } else {
-            EnumDifficulty enumdifficulty = this.e(astring[0]);
-
-            minecraftserver.a(enumdifficulty);
-            a(icommandlistener, (ICommand) this, "commands.difficulty.success", new Object[] { new ChatMessage(enumdifficulty.b(), new Object[0])});
+            literalargumentbuilder.then(CommandDispatcher.a(enumdifficulty.c()).executes((commandcontext) -> {
+                return a((CommandListenerWrapper) commandcontext.getSource(), enumdifficulty);
+            }));
         }
+
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).executes((commandcontext) -> {
+            EnumDifficulty enumdifficulty = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getDifficulty();
+
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.difficulty.query", new Object[] { enumdifficulty.b()}), false);
+            return enumdifficulty.a();
+        }));
     }
 
-    protected EnumDifficulty e(String s) throws ExceptionInvalidNumber {
-        return !"peaceful".equalsIgnoreCase(s) && !"p".equalsIgnoreCase(s) ? (!"easy".equalsIgnoreCase(s) && !"e".equalsIgnoreCase(s) ? (!"normal".equalsIgnoreCase(s) && !"n".equalsIgnoreCase(s) ? (!"hard".equalsIgnoreCase(s) && !"h".equalsIgnoreCase(s) ? EnumDifficulty.getById(a(s, 0, 3)) : EnumDifficulty.HARD) : EnumDifficulty.NORMAL) : EnumDifficulty.EASY) : EnumDifficulty.PEACEFUL;
-    }
+    public static int a(CommandListenerWrapper commandlistenerwrapper, EnumDifficulty enumdifficulty) throws CommandSyntaxException {
+        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "peaceful", "easy", "normal", "hard"}) : Collections.emptyList();
+        if (minecraftserver.worldServer[0].getDifficulty() == enumdifficulty) {
+            throw CommandDifficulty.a.create(enumdifficulty.c());
+        } else {
+            minecraftserver.a(enumdifficulty);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.difficulty.success", new Object[] { enumdifficulty.b()}), true);
+            return 0;
+        }
     }
 }

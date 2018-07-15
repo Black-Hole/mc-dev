@@ -1,60 +1,55 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import javax.annotation.Nullable;
 
 public class BlockRedstoneLamp extends Block {
 
-    private final boolean a;
+    public static final BlockStateBoolean a = BlockRedstoneTorch.LIT;
 
-    public BlockRedstoneLamp(boolean flag) {
-        super(Material.BUILDABLE_GLASS);
-        this.a = flag;
-        if (flag) {
-            this.a(1.0F);
-        }
-
+    public BlockRedstoneLamp(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) this.getBlockData().set(BlockRedstoneLamp.a, Boolean.valueOf(false)));
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public int l(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneLamp.a)).booleanValue() ? super.l(iblockdata) : 0;
+    }
+
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        super.onPlace(iblockdata, world, blockposition, iblockdata1);
+    }
+
+    @Nullable
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return (IBlockData) this.getBlockData().set(BlockRedstoneLamp.a, Boolean.valueOf(blockactioncontext.getWorld().isBlockIndirectlyPowered(blockactioncontext.getClickPosition())));
+    }
+
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
-            if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
-                world.setTypeAndData(blockposition, Blocks.REDSTONE_LAMP.getBlockData(), 2);
-            } else if (!this.a && world.isBlockIndirectlyPowered(blockposition)) {
-                world.setTypeAndData(blockposition, Blocks.LIT_REDSTONE_LAMP.getBlockData(), 2);
+            boolean flag = ((Boolean) iblockdata.get(BlockRedstoneLamp.a)).booleanValue();
+
+            if (flag != world.isBlockIndirectlyPowered(blockposition)) {
+                if (flag) {
+                    world.I().a(blockposition, this, 4);
+                } else {
+                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockRedstoneLamp.a), 2);
+                }
             }
 
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
-            if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
-                world.a(blockposition, (Block) this, 4);
-            } else if (!this.a && world.isBlockIndirectlyPowered(blockposition)) {
-                world.setTypeAndData(blockposition, Blocks.LIT_REDSTONE_LAMP.getBlockData(), 2);
+            if (((Boolean) iblockdata.get(BlockRedstoneLamp.a)).booleanValue() && !world.isBlockIndirectlyPowered(blockposition)) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockRedstoneLamp.a), 2);
             }
 
         }
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!world.isClientSide) {
-            if (this.a && !world.isBlockIndirectlyPowered(blockposition)) {
-                world.setTypeAndData(blockposition, Blocks.REDSTONE_LAMP.getBlockData(), 2);
-            }
-
-        }
-    }
-
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Item.getItemOf(Blocks.REDSTONE_LAMP);
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(Blocks.REDSTONE_LAMP);
-    }
-
-    protected ItemStack u(IBlockData iblockdata) {
-        return new ItemStack(Blocks.REDSTONE_LAMP);
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockRedstoneLamp.a});
     }
 }

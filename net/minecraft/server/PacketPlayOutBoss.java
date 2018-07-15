@@ -19,14 +19,14 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutBoss(PacketPlayOutBoss.Action packetplayoutboss_action, BossBattle bossbattle) {
         this.b = packetplayoutboss_action;
-        this.a = bossbattle.d();
-        this.c = bossbattle.e();
+        this.a = bossbattle.i();
+        this.c = bossbattle.j();
         this.d = bossbattle.getProgress();
-        this.e = bossbattle.g();
-        this.f = bossbattle.h();
-        this.g = bossbattle.i();
-        this.h = bossbattle.j();
-        this.i = bossbattle.k();
+        this.e = bossbattle.l();
+        this.f = bossbattle.m();
+        this.g = bossbattle.n();
+        this.h = bossbattle.o();
+        this.i = bossbattle.p();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -78,7 +78,7 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
             packetdataserializer.writeFloat(this.d);
             packetdataserializer.a((Enum) this.e);
             packetdataserializer.a((Enum) this.f);
-            packetdataserializer.writeByte(this.j());
+            packetdataserializer.writeByte(this.k());
 
         case REMOVE:
         default:
@@ -98,12 +98,12 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
             break;
 
         case UPDATE_PROPERTIES:
-            packetdataserializer.writeByte(this.j());
+            packetdataserializer.writeByte(this.k());
         }
 
     }
 
-    private int j() {
+    private int k() {
         int i = 0;
 
         if (this.g) {

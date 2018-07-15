@@ -4,56 +4,56 @@ import java.util.Random;
 
 public class BlockObserver extends BlockDirectional {
 
-    public static final BlockStateBoolean a = BlockStateBoolean.of("powered");
+    public static final BlockStateBoolean b = BlockProperties.t;
 
-    public BlockObserver() {
-        super(Material.STONE);
-        this.w(this.blockStateList.getBlockData().set(BlockObserver.FACING, EnumDirection.SOUTH).set(BlockObserver.a, Boolean.valueOf(false)));
-        this.a(CreativeModeTab.d);
+    public BlockObserver(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockObserver.FACING, EnumDirection.SOUTH)).set(BlockObserver.b, Boolean.valueOf(false)));
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockObserver.FACING, BlockObserver.a});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockObserver.FACING, BlockObserver.b});
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockObserver.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockObserver.FACING)));
+        return (IBlockData) iblockdata.set(BlockObserver.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockObserver.FACING)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockObserver.FACING)));
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (((Boolean) iblockdata.get(BlockObserver.a)).booleanValue()) {
-            world.setTypeAndData(blockposition, iblockdata.set(BlockObserver.a, Boolean.valueOf(false)), 2);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)), 2);
         } else {
-            world.setTypeAndData(blockposition, iblockdata.set(BlockObserver.a, Boolean.valueOf(true)), 2);
-            world.a(blockposition, (Block) this, 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(true)), 2);
+            world.I().a(blockposition, this, 2);
         }
 
-        this.e(world, blockposition, iblockdata);
+        this.a(world, blockposition, iblockdata);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {}
-
-    public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!world.isClientSide && blockposition.shift((EnumDirection) iblockdata.get(BlockObserver.FACING)).equals(blockposition1)) {
-            this.d(iblockdata, world, blockposition);
-        }
-
-    }
-
-    private void d(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        if (!((Boolean) iblockdata.get(BlockObserver.a)).booleanValue()) {
-            if (!world.b(blockposition, (Block) this)) {
-                world.a(blockposition, (Block) this, 2);
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (iblockdata.get(BlockObserver.FACING) == enumdirection) {
+            if (!((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
+                this.a(generatoraccess, blockposition);
+            } else if (!generatoraccess.e() && !generatoraccess.I().a(blockposition, this)) {
+                return (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false));
             }
-
         }
+
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+        if (!generatoraccess.e() && !generatoraccess.I().a(blockposition, this)) {
+            generatoraccess.I().a(blockposition, this, 2);
+        }
+
+    }
+
+    protected void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockObserver.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
 
@@ -65,48 +65,24 @@ public class BlockObserver extends BlockDirectional {
         return true;
     }
 
-    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return iblockdata.a(iblockaccess, blockposition, enumdirection);
     }
 
-    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockObserver.a)).booleanValue() && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
+    public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.isClientSide) {
-            if (((Boolean) iblockdata.get(BlockObserver.a)).booleanValue()) {
-                this.b(world, blockposition, iblockdata, world.random);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+            if (!world.isClientSide && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && world.I().a(blockposition, this)) {
+                this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)));
             }
 
-            this.d(iblockdata, world, blockposition);
         }
-
     }
 
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockObserver.a)).booleanValue() && world.b(blockposition, (Block) this)) {
-            this.e(world, blockposition, iblockdata.set(BlockObserver.a, Boolean.valueOf(false)));
-        }
-
-    }
-
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockObserver.FACING, EnumDirection.a(blockposition, entityliving).opposite());
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockObserver.FACING)).a();
-
-        if (((Boolean) iblockdata.get(BlockObserver.a)).booleanValue()) {
-            i |= 8;
-        }
-
-        return i;
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockObserver.FACING, EnumDirection.fromType1(i & 7));
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return (IBlockData) this.getBlockData().set(BlockObserver.FACING, blockactioncontext.d().opposite().opposite());
     }
 }

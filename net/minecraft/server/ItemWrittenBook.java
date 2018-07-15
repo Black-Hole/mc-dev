@@ -1,12 +1,14 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemWrittenBook extends Item {
 
-    public ItemWrittenBook() {
-        this.d(1);
+    public ItemWrittenBook(Item.Info item_info) {
+        super(item_info);
     }
 
-    public static boolean b(NBTTagCompound nbttagcompound) {
+    public static boolean b(@Nullable NBTTagCompound nbttagcompound) {
         if (!ItemBookAndQuill.b(nbttagcompound)) {
             return false;
         } else if (!nbttagcompound.hasKeyOfType("title", 8)) {
@@ -14,25 +16,25 @@ public class ItemWrittenBook extends Item {
         } else {
             String s = nbttagcompound.getString("title");
 
-            return s != null && s.length() <= 32 ? nbttagcompound.hasKeyOfType("author", 8) : false;
+            return s.length() > 32 ? false : nbttagcompound.hasKeyOfType("author", 8);
         }
     }
 
-    public static int h(ItemStack itemstack) {
+    public static int e(ItemStack itemstack) {
         return itemstack.getTag().getInt("generation");
     }
 
-    public String b(ItemStack itemstack) {
+    public IChatBaseComponent i(ItemStack itemstack) {
         if (itemstack.hasTag()) {
             NBTTagCompound nbttagcompound = itemstack.getTag();
             String s = nbttagcompound.getString("title");
 
             if (!UtilColor.b(s)) {
-                return s;
+                return new ChatComponentText(s);
             }
         }
 
-        return super.b(itemstack);
+        return super.i(itemstack);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -43,43 +45,41 @@ public class ItemWrittenBook extends Item {
         }
 
         entityhuman.a(itemstack, enumhand);
-        entityhuman.b(StatisticList.b((Item) this));
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     private void a(ItemStack itemstack, EntityHuman entityhuman) {
-        if (itemstack.getTag() != null) {
-            NBTTagCompound nbttagcompound = itemstack.getTag();
+        NBTTagCompound nbttagcompound = itemstack.getTag();
 
-            if (!nbttagcompound.getBoolean("resolved")) {
-                nbttagcompound.setBoolean("resolved", true);
-                if (b(nbttagcompound)) {
-                    NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
+        if (nbttagcompound != null && !nbttagcompound.getBoolean("resolved")) {
+            nbttagcompound.setBoolean("resolved", true);
+            if (b(nbttagcompound)) {
+                NBTTagList nbttaglist = nbttagcompound.getList("pages", 8);
 
-                    for (int i = 0; i < nbttaglist.size(); ++i) {
-                        String s = nbttaglist.getString(i);
+                for (int i = 0; i < nbttaglist.size(); ++i) {
+                    String s = nbttaglist.getString(i);
 
-                        Object object;
+                    Object object;
 
-                        try {
-                            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.b(s);
+                    try {
+                        IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.b(s);
 
-                            object = ChatComponentUtils.filterForDisplay(entityhuman, ichatbasecomponent, entityhuman);
-                        } catch (Exception exception) {
-                            object = new ChatComponentText(s);
-                        }
-
-                        nbttaglist.a(i, new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
+                        object = ChatComponentUtils.filterForDisplay(entityhuman.getCommandListener(), ichatbasecomponent, entityhuman);
+                    } catch (Exception exception) {
+                        object = new ChatComponentText(s);
                     }
 
-                    nbttagcompound.set("pages", nbttaglist);
-                    if (entityhuman instanceof EntityPlayer && entityhuman.getItemInMainHand() == itemstack) {
-                        Slot slot = entityhuman.activeContainer.getSlot(entityhuman.inventory, entityhuman.inventory.itemInHandIndex);
-
-                        ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot.rawSlotIndex, itemstack));
-                    }
-
+                    nbttaglist.set(i, (NBTBase) (new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object))));
                 }
+
+                nbttagcompound.set("pages", nbttaglist);
+                if (entityhuman instanceof EntityPlayer && entityhuman.getItemInMainHand() == itemstack) {
+                    Slot slot = entityhuman.activeContainer.getSlot(entityhuman.inventory, entityhuman.inventory.itemInHandIndex);
+
+                    ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot.rawSlotIndex, itemstack));
+                }
+
             }
         }
     }

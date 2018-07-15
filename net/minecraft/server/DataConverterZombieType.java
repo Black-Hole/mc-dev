@@ -1,16 +1,20 @@
 package net.minecraft.server;
 
-public class DataConverterZombieType implements IDataConverter {
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
 
-    public DataConverterZombieType() {}
+public class DataConverterZombieType extends DataConverterEntityNameAbstract {
 
-    public int a() {
-        return 702;
+    public DataConverterZombieType(Schema schema, boolean flag) {
+        super("EntityZombieSplitFix", schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("Zombie".equals(nbttagcompound.getString("id"))) {
-            int i = nbttagcompound.getInt("ZombieType");
+    protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
+        if (Objects.equals("Zombie", s)) {
+            String s1 = "Zombie";
+            int i = dynamic.getInt("ZombieType");
 
             switch (i) {
             case 0:
@@ -22,17 +26,18 @@ public class DataConverterZombieType implements IDataConverter {
             case 3:
             case 4:
             case 5:
-                nbttagcompound.setString("id", "ZombieVillager");
-                nbttagcompound.setInt("Profession", i - 1);
+                s1 = "ZombieVillager";
+                dynamic = dynamic.set("Profession", dynamic.createInt(i - 1));
                 break;
 
             case 6:
-                nbttagcompound.setString("id", "Husk");
+                s1 = "Husk";
             }
 
-            nbttagcompound.remove("ZombieType");
+            dynamic = dynamic.remove("ZombieType");
+            return Pair.of(s1, dynamic);
+        } else {
+            return Pair.of(s, dynamic);
         }
-
-        return nbttagcompound;
     }
 }

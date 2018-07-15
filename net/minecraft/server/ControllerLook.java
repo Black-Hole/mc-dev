@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 public class ControllerLook {
 
-    private final EntityInsentient a;
-    private float b;
-    private float c;
-    private boolean d;
-    private double e;
-    private double f;
-    private double g;
+    protected final EntityInsentient a;
+    protected float b;
+    protected float c;
+    protected boolean d;
+    protected double e;
+    protected double f;
+    protected double g;
 
     public ControllerLook(EntityInsentient entityinsentient) {
         this.a = entityinsentient;
@@ -49,26 +49,26 @@ public class ControllerLook {
             float f1 = (float) (-(MathHelper.c(d1, d3) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f1, this.c);
-            this.a.aP = this.a(this.a.aP, f, this.b);
+            this.a.aS = this.a(this.a.aS, f, this.b);
         } else {
-            this.a.aP = this.a(this.a.aP, this.a.aN, 10.0F);
+            this.a.aS = this.a(this.a.aS, this.a.aQ, 10.0F);
         }
 
-        float f2 = MathHelper.g(this.a.aP - this.a.aN);
+        float f2 = MathHelper.g(this.a.aS - this.a.aQ);
 
-        if (!this.a.getNavigation().o()) {
+        if (!this.a.getNavigation().q()) {
             if (f2 < -75.0F) {
-                this.a.aP = this.a.aN - 75.0F;
+                this.a.aS = this.a.aQ - 75.0F;
             }
 
             if (f2 > 75.0F) {
-                this.a.aP = this.a.aN + 75.0F;
+                this.a.aS = this.a.aQ + 75.0F;
             }
         }
 
     }
 
-    private float a(float f, float f1, float f2) {
+    protected float a(float f, float f1, float f2) {
         float f3 = MathHelper.g(f1 - f);
 
         if (f3 > f2) {

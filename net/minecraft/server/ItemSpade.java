@@ -1,44 +1,48 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.util.Map;
 import java.util.Set;
 
 public class ItemSpade extends ItemTool {
 
-    private static final Set<Block> e = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SNOW_LAYER, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.dS});
+    private static final Set<Block> e = Sets.newHashSet(new Block[] { Blocks.CLAY, Blocks.DIRT, Blocks.COARSE_DIRT, Blocks.PODZOL, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.RED_SAND, Blocks.SNOW_BLOCK, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER});
+    protected static final Map<Block, IBlockData> a = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.GRASS_PATH.getBlockData()));
 
-    public ItemSpade(Item.EnumToolMaterial item_enumtoolmaterial) {
-        super(1.5F, -3.0F, item_enumtoolmaterial, ItemSpade.e);
+    public ItemSpade(ToolMaterial toolmaterial, float f, float f1, Item.Info item_info) {
+        super(f, f1, toolmaterial, ItemSpade.e, item_info);
     }
 
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
-        return block == Blocks.SNOW_LAYER ? true : block == Blocks.SNOW;
+        return block == Blocks.SNOW || block == Blocks.SNOW_BLOCK;
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        ItemStack itemstack = entityhuman.b(enumhand);
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+        BlockPosition blockposition = itemactioncontext.getClickPosition();
 
-        if (!entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
-            return EnumInteractionResult.FAIL;
-        } else {
-            IBlockData iblockdata = world.getType(blockposition);
-            Block block = iblockdata.getBlock();
+        if (itemactioncontext.getClickedFace() != EnumDirection.DOWN && world.getType(blockposition.up()).isAir()) {
+            IBlockData iblockdata = (IBlockData) ItemSpade.a.get(world.getType(blockposition).getBlock());
 
-            if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
-                IBlockData iblockdata1 = Blocks.GRASS_PATH.getBlockData();
+            if (iblockdata != null) {
+                EntityHuman entityhuman = itemactioncontext.getEntity();
 
-                world.a(entityhuman, blockposition, SoundEffects.gz, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.a(entityhuman, blockposition, SoundEffects.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 if (!world.isClientSide) {
-                    world.setTypeAndData(blockposition, iblockdata1, 11);
-                    itemstack.damage(1, entityhuman);
+                    world.setTypeAndData(blockposition, iblockdata, 11);
+                    if (entityhuman != null) {
+                        itemactioncontext.getItemStack().damage(1, entityhuman);
+                    }
                 }
 
                 return EnumInteractionResult.SUCCESS;
-            } else {
-                return EnumInteractionResult.PASS;
             }
         }
+
+        return EnumInteractionResult.PASS;
     }
 }

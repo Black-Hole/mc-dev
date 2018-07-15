@@ -43,9 +43,9 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
         this.d = new MapIcon[packetdataserializer.g()];
 
         for (int i = 0; i < this.d.length; ++i) {
-            short short0 = (short) packetdataserializer.readByte();
+            MapIcon.Type mapicon_type = (MapIcon.Type) packetdataserializer.a(MapIcon.Type.class);
 
-            this.d[i] = new MapIcon(MapIcon.Type.a((byte) (short0 >> 4 & 15)), packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (short0 & 15));
+            this.d[i] = new MapIcon(mapicon_type, packetdataserializer.readByte(), packetdataserializer.readByte(), (byte) (packetdataserializer.readByte() & 15), packetdataserializer.readBoolean() ? packetdataserializer.f() : null);
         }
 
         this.g = packetdataserializer.readUnsignedByte();
@@ -69,9 +69,16 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
         for (int j = 0; j < i; ++j) {
             MapIcon mapicon = amapicon[j];
 
-            packetdataserializer.writeByte((mapicon.getType() & 15) << 4 | mapicon.getRotation() & 15);
+            packetdataserializer.a((Enum) mapicon.b());
             packetdataserializer.writeByte(mapicon.getX());
             packetdataserializer.writeByte(mapicon.getY());
+            packetdataserializer.writeByte(mapicon.getRotation() & 15);
+            if (mapicon.g() != null) {
+                packetdataserializer.writeBoolean(true);
+                packetdataserializer.a(mapicon.g());
+            } else {
+                packetdataserializer.writeBoolean(false);
+            }
         }
 
         packetdataserializer.writeByte(this.g);

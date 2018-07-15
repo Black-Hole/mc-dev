@@ -4,7 +4,7 @@ import java.util.Random;
 
 public interface IBlockFragilePlantElement {
 
-    boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag);
+    boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag);
 
     boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata);
 

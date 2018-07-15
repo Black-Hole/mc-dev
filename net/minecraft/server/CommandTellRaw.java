@@ -1,48 +1,27 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonParseException;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandTellRaw extends CommandAbstract {
+public class CommandTellRaw {
 
-    public CommandTellRaw() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("tellraw").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("message", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            int i = 0;
 
-    public String getCommand() {
-        return "tellraw";
-    }
+            for (Iterator iterator = ArgumentEntity.f(commandcontext, "targets").iterator(); iterator.hasNext(); ++i) {
+                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-    public int a() {
-        return 2;
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.tellraw.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.tellraw.usage", new Object[0]);
-        } else {
-            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
-            String s = a(astring, 1);
-
-            try {
-                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-
-                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, entityplayer));
-            } catch (JsonParseException jsonparseexception) {
-                throw a(jsonparseexception);
+                entityplayer.sendMessage(ChatComponentUtils.filterForDisplay((CommandListenerWrapper) commandcontext.getSource(), ArgumentChatComponent.a(commandcontext, "message"), entityplayer));
             }
-        }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
-    }
-
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+            return i;
+        }))));
     }
 }

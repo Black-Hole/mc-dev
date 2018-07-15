@@ -4,7 +4,6 @@ public class EnchantmentArrowDamage extends Enchantment {
 
     public EnchantmentArrowDamage(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
-        this.c("arrowDamage");
     }
 
     public int a(int i) {

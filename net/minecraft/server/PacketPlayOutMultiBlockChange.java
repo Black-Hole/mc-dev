@@ -40,7 +40,7 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
             PacketPlayOutMultiBlockChange.MultiBlockChangeInfo packetplayoutmultiblockchange_multiblockchangeinfo = apacketplayoutmultiblockchange_multiblockchangeinfo[j];
 
             packetdataserializer.writeShort(packetplayoutmultiblockchange_multiblockchangeinfo.b());
-            packetdataserializer.d(Block.REGISTRY_ID.getId(packetplayoutmultiblockchange_multiblockchangeinfo.c()));
+            packetdataserializer.d(Block.getCombinedId(packetplayoutmultiblockchange_multiblockchangeinfo.c()));
         }
 
     }
@@ -61,7 +61,7 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
 
         public MultiBlockChangeInfo(short short0, Chunk chunk) {
             this.b = short0;
-            this.c = chunk.getBlockData(this.a());
+            this.c = chunk.getType(this.a());
         }
 
         public BlockPosition a() {

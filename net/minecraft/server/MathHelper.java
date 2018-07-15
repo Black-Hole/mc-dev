@@ -2,16 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.IntPredicate;
 
 public class MathHelper {
 
     public static final float a = c(2.0F);
-    private static final float[] b = new float[65536];
+    private static final float[] b = (float[]) SystemUtils.a((Object) (new float[65536]), (afloat) -> {
+        for (int i = 0; i < afloat.length; ++i) {
+            afloat[i] = (float) Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
+        }
+
+    });
     private static final Random c = new Random();
-    private static final int[] d;
-    private static final double e;
-    private static final double[] f;
-    private static final double[] g;
+    private static final int[] d = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
+    private static final double e = Double.longBitsToDouble(4805340802404319232L);
+    private static final double[] f = new double[257];
+    private static final double[] g = new double[257];
 
     public static float sin(float f) {
         return MathHelper.b[(int) (f * 10430.378F) & '\uffff'];
@@ -147,41 +154,27 @@ public class MathHelper {
         return d0;
     }
 
-    public static int b(int i) {
-        i %= 360;
-        if (i >= 180) {
-            i -= 360;
-        }
+    public static float c(float f, float f1) {
+        float f2 = g(f - f1);
 
-        if (i < -180) {
-            i += 360;
-        }
-
-        return i;
+        return f2 < 180.0F ? f2 : f2 - 360.0F;
     }
 
-    public static int a(String s, int i) {
-        try {
-            return Integer.parseInt(s);
-        } catch (Throwable throwable) {
-            return i;
-        }
+    public static float d(float f, float f1) {
+        float f2 = g(f - f1);
+
+        return f2 < 180.0F ? e(f2) : e(f2 - 360.0F);
     }
 
-    public static int a(String s, int i, int j) {
-        return Math.max(j, a(s, i));
+    public static float b(float f, float f1, float f2) {
+        f2 = e(f2);
+        return f < f1 ? a(f + f2, f, f1) : a(f - f2, f1, f);
     }
 
-    public static double a(String s, double d0) {
-        try {
-            return Double.parseDouble(s);
-        } catch (Throwable throwable) {
-            return d0;
-        }
-    }
+    public static float c(float f, float f1, float f2) {
+        float f3 = c(f1, f);
 
-    public static double a(String s, double d0, double d1) {
-        return Math.max(d1, a(s, d0));
+        return b(f, f + f3, f2);
     }
 
     public static int c(int i) {
@@ -228,7 +221,7 @@ public class MathHelper {
         long l = (long) (i * 3129871) ^ (long) k * 116129781L ^ (long) j;
 
         l = l * l * 42317861L + l * 11L;
-        return l;
+        return l >> 16;
     }
 
     public static UUID a(Random random) {
@@ -320,19 +313,26 @@ public class MathHelper {
         return i;
     }
 
-    static {
-        int i;
+    public static int a(int i, int j, IntPredicate intpredicate) {
+        int k = j - i;
 
-        for (i = 0; i < 65536; ++i) {
-            MathHelper.b[i] = (float) Math.sin((double) i * 3.141592653589793D * 2.0D / 65536.0D);
+        while (k > 0) {
+            int l = k / 2;
+            int i1 = i + l;
+
+            if (intpredicate.test(i1)) {
+                k = l;
+            } else {
+                i = i1 + 1;
+                k -= l + 1;
+            }
         }
 
-        d = new int[] { 0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
-        e = Double.longBitsToDouble(4805340802404319232L);
-        f = new double[257];
-        g = new double[257];
+        return i;
+    }
 
-        for (i = 0; i < 257; ++i) {
+    static {
+        for (int i = 0; i < 257; ++i) {
             double d0 = (double) i / 256.0D;
             double d1 = Math.asin(d0);
 

@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-abstract class NBTNumber extends NBTBase {
+public abstract class NBTNumber implements NBTBase {
 
     protected NBTNumber() {}
 
@@ -15,4 +15,6 @@ abstract class NBTNumber extends NBTBase {
     public abstract double asDouble();
 
     public abstract float i();
+
+    public abstract Number j();
 }

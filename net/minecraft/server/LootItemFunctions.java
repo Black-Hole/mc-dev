@@ -53,7 +53,6 @@ public class LootItemFunctions {
 
     static {
         a((LootItemFunction.a) (new LootItemFunctionSetCount.a()));
-        a((LootItemFunction.a) (new LootItemFunctionSetData.a()));
         a((LootItemFunction.a) (new LootEnchantLevel.a()));
         a((LootItemFunction.a) (new LootItemFunctionEnchant.a()));
         a((LootItemFunction.a) (new LootItemFunctionSetTag.a()));
@@ -61,6 +60,8 @@ public class LootItemFunctions {
         a((LootItemFunction.a) (new LootEnchantFunction.a()));
         a((LootItemFunction.a) (new LootItemFunctionSetDamage.a()));
         a((LootItemFunction.a) (new LootItemFunctionSetAttribute.b()));
+        a((LootItemFunction.a) (new LootItemFunctionSetName.a()));
+        a((LootItemFunction.a) (new LootItemFunctionExplorationMap.a()));
     }
 
     public static class a implements JsonDeserializer<LootItemFunction>, JsonSerializer<LootItemFunction> {
@@ -88,8 +89,8 @@ public class LootItemFunctions {
 
             lootitemfunction_a.a(jsonobject, lootitemfunction, jsonserializationcontext);
             jsonobject.addProperty("function", lootitemfunction_a.a().toString());
-            if (lootitemfunction.a() != null && lootitemfunction.a().length > 0) {
-                jsonobject.add("conditions", jsonserializationcontext.serialize(lootitemfunction.a()));
+            if (lootitemfunction.b() != null && lootitemfunction.b().length > 0) {
+                jsonobject.add("conditions", jsonserializationcontext.serialize(lootitemfunction.b()));
             }
 
             return jsonobject;

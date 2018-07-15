@@ -4,15 +4,12 @@ public class ItemAir extends Item {
 
     private final Block a;
 
-    public ItemAir(Block block) {
+    public ItemAir(Block block, Item.Info item_info) {
+        super(item_info);
         this.a = block;
     }
 
-    public String a(ItemStack itemstack) {
-        return this.a.a();
-    }
-
     public String getName() {
-        return this.a.a();
+        return this.a.m();
     }
 }

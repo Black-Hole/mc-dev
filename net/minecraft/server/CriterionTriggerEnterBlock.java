@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
@@ -74,7 +74,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
                 throw new JsonSyntaxException("Can\'t define block state without a specific block type");
             }
 
-            BlockStateList blockstatelist = block.s();
+            BlockStateList blockstatelist = block.getStates();
 
             IBlockState iblockstate;
             Optional optional;
@@ -175,6 +175,32 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
             super(CriterionTriggerEnterBlock.a);
             this.a = block;
             this.b = map;
+        }
+
+        public static CriterionTriggerEnterBlock.b a(Block block) {
+            return new CriterionTriggerEnterBlock.b(block, (Map) null);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.a != null) {
+                jsonobject.addProperty("block", ((MinecraftKey) Block.REGISTRY.b(this.a)).toString());
+                if (this.b != null && !this.b.isEmpty()) {
+                    JsonObject jsonobject1 = new JsonObject();
+                    Iterator iterator = this.b.entrySet().iterator();
+
+                    while (iterator.hasNext()) {
+                        Entry entry = (Entry) iterator.next();
+
+                        jsonobject1.addProperty(((IBlockState) entry.getKey()).a(), SystemUtils.a((IBlockState) entry.getKey(), entry.getValue()));
+                    }
+
+                    jsonobject.add("state", jsonobject1);
+                }
+            }
+
+            return jsonobject;
         }
 
         public boolean a(IBlockData iblockdata) {

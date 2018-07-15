@@ -10,14 +10,14 @@ public class EntityTNTPrimed extends Entity {
     private int c;
 
     public EntityTNTPrimed(World world) {
-        super(world);
+        super(EntityTypes.TNT, world);
         this.c = 80;
-        this.i = true;
+        this.j = true;
         this.fireProof = true;
         this.setSize(0.98F, 0.98F);
     }
 
-    public EntityTNTPrimed(World world, double d0, double d1, double d2, EntityLiving entityliving) {
+    public EntityTNTPrimed(World world, double d0, double d1, double d2, @Nullable EntityLiving entityliving) {
         this(world);
         this.setPosition(d0, d1, d2);
         float f = (float) (Math.random() * 6.2831854820251465D);
@@ -32,7 +32,7 @@ public class EntityTNTPrimed extends Entity {
         this.source = entityliving;
     }
 
-    protected void i() {
+    protected void x_() {
         this.datawatcher.register(EntityTNTPrimed.FUSE_TICKS, Integer.valueOf(80));
     }
 
@@ -44,7 +44,7 @@ public class EntityTNTPrimed extends Entity {
         return !this.dead;
     }
 
-    public void B_() {
+    public void tick() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
@@ -69,8 +69,8 @@ public class EntityTNTPrimed extends Entity {
                 this.explode();
             }
         } else {
-            this.aq();
-            this.world.addParticle(EnumParticle.SMOKE_NORMAL, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
+            this.at();
+            this.world.addParticle(Particles.M, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -105,12 +105,12 @@ public class EntityTNTPrimed extends Entity {
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityTNTPrimed.FUSE_TICKS.equals(datawatcherobject)) {
-            this.c = this.k();
+            this.c = this.i();
         }
 
     }
 
-    public int k() {
+    public int i() {
         return ((Integer) this.datawatcher.get(EntityTNTPrimed.FUSE_TICKS)).intValue();
     }
 

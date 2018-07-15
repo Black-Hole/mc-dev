@@ -93,7 +93,7 @@ public class DataWatcher {
         this.e.writeLock().unlock();
     }
 
-    private <T> DataWatcher.Item<T> c(DataWatcherObject<T> datawatcherobject) {
+    private <T> DataWatcher.Item<T> b(DataWatcherObject<T> datawatcherobject) {
         this.e.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
@@ -113,11 +113,11 @@ public class DataWatcher {
     }
 
     public <T> T get(DataWatcherObject<T> datawatcherobject) {
-        return this.c(datawatcherobject).b();
+        return this.b(datawatcherobject).b();
     }
 
     public <T> void set(DataWatcherObject<T> datawatcherobject, T t0) {
-        DataWatcher.Item datawatcher_item = this.c(datawatcherobject);
+        DataWatcher.Item datawatcher_item = this.b(datawatcherobject);
 
         if (ObjectUtils.notEqual(t0, datawatcher_item.b())) {
             datawatcher_item.a(t0);
@@ -126,11 +126,6 @@ public class DataWatcher {
             this.g = true;
         }
 
-    }
-
-    public <T> void markDirty(DataWatcherObject<T> datawatcherobject) {
-        this.c(datawatcherobject).c = true;
-        this.g = true;
     }
 
     public boolean a() {
@@ -142,9 +137,7 @@ public class DataWatcher {
             int i = 0;
 
             for (int j = list.size(); i < j; ++i) {
-                DataWatcher.Item datawatcher_item = (DataWatcher.Item) list.get(i);
-
-                a(packetdataserializer, datawatcher_item);
+                a(packetdataserializer, (DataWatcher.Item) list.get(i));
             }
         }
 
@@ -243,10 +236,14 @@ public class DataWatcher {
                 throw new DecoderException("Unknown serializer type " + i);
             }
 
-            arraylist.add(new DataWatcher.Item(datawatcherserializer.a(short0), datawatcherserializer.a(packetdataserializer)));
+            arraylist.add(a(packetdataserializer, short0, datawatcherserializer));
         }
 
         return arraylist;
+    }
+
+    private static <T> DataWatcher.Item<T> a(PacketDataSerializer packetdataserializer, int i, DataWatcherSerializer<T> datawatcherserializer) {
+        return new DataWatcher.Item(datawatcherserializer.a(i), datawatcherserializer.a(packetdataserializer));
     }
 
     public boolean d() {

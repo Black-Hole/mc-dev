@@ -5,11 +5,11 @@ public class EntityLargeFireball extends EntityFireball {
     public int yield = 1;
 
     public EntityLargeFireball(World world) {
-        super(world);
+        super(EntityTypes.FIREBALL, world, 1.0F, 1.0F);
     }
 
     public EntityLargeFireball(World world, EntityLiving entityliving, double d0, double d1, double d2) {
-        super(world, entityliving, d0, d1, d2);
+        super(EntityTypes.FIREBALL, entityliving, d0, d1, d2, world, 1.0F, 1.0F);
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {
@@ -25,10 +25,6 @@ public class EntityLargeFireball extends EntityFireball {
             this.die();
         }
 
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityFireball.a(dataconvertermanager, "Fireball");
     }
 
     public void b(NBTTagCompound nbttagcompound) {

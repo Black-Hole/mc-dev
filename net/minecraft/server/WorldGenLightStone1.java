@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenLightStone1 extends WorldGenerator {
+public class WorldGenLightStone1 extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     public WorldGenLightStone1() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        if (!world.isEmpty(blockposition)) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        if (!generatoraccess.isEmpty(blockposition)) {
             return false;
-        } else if (world.getType(blockposition.up()).getBlock() != Blocks.NETHERRACK) {
+        } else if (generatoraccess.getType(blockposition.up()).getBlock() != Blocks.NETHERRACK) {
             return false;
         } else {
-            world.setTypeAndData(blockposition, Blocks.GLOWSTONE.getBlockData(), 2);
+            generatoraccess.setTypeAndData(blockposition, Blocks.GLOWSTONE.getBlockData(), 2);
 
             for (int i = 0; i < 1500; ++i) {
                 BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), -random.nextInt(12), random.nextInt(8) - random.nextInt(8));
 
-                if (world.getType(blockposition1).getMaterial() == Material.AIR) {
+                if (generatoraccess.getType(blockposition1).isAir()) {
                     int j = 0;
                     EnumDirection[] aenumdirection = EnumDirection.values();
                     int k = aenumdirection.length;
@@ -25,7 +25,7 @@ public class WorldGenLightStone1 extends WorldGenerator {
                     for (int l = 0; l < k; ++l) {
                         EnumDirection enumdirection = aenumdirection[l];
 
-                        if (world.getType(blockposition1.shift(enumdirection)).getBlock() == Blocks.GLOWSTONE) {
+                        if (generatoraccess.getType(blockposition1.shift(enumdirection)).getBlock() == Blocks.GLOWSTONE) {
                             ++j;
                         }
 
@@ -35,7 +35,7 @@ public class WorldGenLightStone1 extends WorldGenerator {
                     }
 
                     if (j == 1) {
-                        world.setTypeAndData(blockposition1, Blocks.GLOWSTONE.getBlockData(), 2);
+                        generatoraccess.setTypeAndData(blockposition1, Blocks.GLOWSTONE.getBlockData(), 2);
                     }
                 }
             }

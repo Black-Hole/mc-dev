@@ -39,11 +39,11 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     public RemoteStatusListener(IMinecraftServer iminecraftserver) {
         super(iminecraftserver, "Query Listener");
         this.i = iminecraftserver.a("query.port", 0);
-        this.s = iminecraftserver.d_();
-        this.j = iminecraftserver.e_();
-        this.l = iminecraftserver.f_();
-        this.k = iminecraftserver.I();
-        this.m = iminecraftserver.S();
+        this.s = iminecraftserver.e();
+        this.j = iminecraftserver.f();
+        this.l = iminecraftserver.e_();
+        this.k = iminecraftserver.B();
+        this.m = iminecraftserver.K();
         this.w = 0L;
         this.r = "0.0.0.0";
         if (!this.s.isEmpty() && !this.r.equals(this.s)) {
@@ -56,7 +56,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
                 this.r = inetaddress.getHostAddress();
             } catch (UnknownHostException unknownhostexception) {
-                this.c("Unable to determine local host IP, please set server-ip in \'" + iminecraftserver.b() + "\' : " + unknownhostexception.getMessage());
+                this.c("Unable to determine local host IP, please set server-ip in \'" + iminecraftserver.d_() + "\' : " + unknownhostexception.getMessage());
             }
         }
 
@@ -65,7 +65,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             this.b("Setting default query port to " + this.i);
             iminecraftserver.a("query.port", (Object) Integer.valueOf(this.i));
             iminecraftserver.a("debug", (Object) Boolean.valueOf(false));
-            iminecraftserver.a();
+            iminecraftserver.c_();
         }
 
         this.q = Maps.newHashMap();
@@ -125,7 +125,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i = MinecraftServer.aw();
+        long i = SystemUtils.b();
 
         if (i < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -208,7 +208,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private void f() {
         if (this.a) {
-            long i = MinecraftServer.aw();
+            long i = SystemUtils.b();
 
             if (i >= this.h + 30000L) {
                 this.h = i;
@@ -228,7 +228,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = MinecraftServer.aw();
+        this.h = SystemUtils.b();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {
@@ -259,7 +259,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 }
 
             } else {
-                this.c("Invalid query port " + this.i + " found in \'" + this.b.b() + "\' (queries disabled)");
+                this.c("Invalid query port " + this.i + " found in \'" + this.b.d_() + "\' (queries disabled)");
             }
         }
     }

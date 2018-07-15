@@ -1,84 +1,368 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.RedirectModifier;
+import com.mojang.brigadier.ResultConsumer;
+import com.mojang.brigadier.SingleRedirectModifier;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.function.BiPredicate;
+import java.util.function.BinaryOperator;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 
-public class CommandExecute extends CommandAbstract {
+public class CommandExecute {
 
-    public CommandExecute() {}
+    private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
+        return new ChatMessage("commands.execute.blocks.toobig", new Object[] { object, object1});
+    });
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.execute.conditional.fail", new Object[0]));
+    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
+        return new ChatMessage("commands.execute.conditional.fail_count", new Object[] { object});
+    });
+    private static final BinaryOperator<ResultConsumer<CommandListenerWrapper>> d = (resultconsumer, resultconsumer1) -> {
+        return (commandcontext, flag, i) -> {
+            resultconsumer.onCommandComplete(commandcontext, flag, i);
+            resultconsumer1.onCommandComplete(commandcontext, flag, i);
+        };
+    };
 
-    public String getCommand() {
-        return "execute";
-    }
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        }));
 
-    public int a() {
-        return 2;
-    }
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("run").redirect(com_mojang_brigadier_commanddispatcher.getRoot()))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("if"), true))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("unless"), false))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+            ArrayList arraylist = Lists.newArrayList();
+            Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.execute.usage";
-    }
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 5) {
-            throw new ExceptionUsage("commands.execute.usage", new Object[0]);
-        } else {
-            Entity entity = a(minecraftserver, icommandlistener, astring[0], Entity.class);
-            double d0 = b(entity.locX, astring[1], false);
-            double d1 = b(entity.locY, astring[2], false);
-            double d2 = b(entity.locZ, astring[3], false);
-
-            new BlockPosition(d0, d1, d2);
-            byte b0 = 4;
-
-            if ("detect".equals(astring[4]) && astring.length > 10) {
-                World world = entity.getWorld();
-                double d3 = b(d0, astring[5], false);
-                double d4 = b(d1, astring[6], false);
-                double d5 = b(d2, astring[7], false);
-                Block block = b(icommandlistener, astring[8]);
-                BlockPosition blockposition = new BlockPosition(d3, d4, d5);
-
-                if (!world.isLoaded(blockposition)) {
-                    throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
-                }
-
-                IBlockData iblockdata = world.getType(blockposition);
-
-                if (iblockdata.getBlock() != block) {
-                    throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
-                }
-
-                if (!CommandAbstract.b(block, astring[9]).apply(iblockdata)) {
-                    throw new CommandException("commands.execute.failed", new Object[] { "detect", entity.getName()});
-                }
-
-                b0 = 10;
+                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity));
             }
 
-            String s = a(astring, b0);
-            CommandListenerWrapper commandlistenerwrapper = CommandListenerWrapper.a(icommandlistener).a(entity, new Vec3D(d0, d1, d2)).a(minecraftserver.worldServer[0].getGameRules().getBoolean("commandBlockOutput"));
-            ICommandHandler icommandhandler = minecraftserver.getCommandHandler();
+            return arraylist;
+        })))).then(CommandDispatcher.a("at").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+            ArrayList arraylist = Lists.newArrayList();
+            Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
+
+                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bI()).a(entity.aO()));
+            }
+
+            return arraylist;
+        })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("store").then(a(literalcommandnode, CommandDispatcher.a("result"), true))).then(a(literalcommandnode, CommandDispatcher.a("success"), false)))).then(((LiteralArgumentBuilder) CommandDispatcher.a("positioned").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentVec3.a(commandcontext, "pos"));
+        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+            ArrayList arraylist = Lists.newArrayList();
+            Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
+
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
+
+                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bI()));
+            }
+
+            return arraylist;
+        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("rotated").then(CommandDispatcher.a("rot", (ArgumentType) ArgumentRotation.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentRotation.a(commandcontext, "rot").b((CommandListenerWrapper) commandcontext.getSource()));
+        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+            ArrayList arraylist = Lists.newArrayList();
+            Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
+
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
+
+                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aO()));
+            }
+
+            return arraylist;
+        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("facing").then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).fork(literalcommandnode, (commandcontext) -> {
+            ArrayList arraylist = Lists.newArrayList();
+            ArgumentAnchor.Anchor argumentanchor_anchor = ArgumentAnchor.a(commandcontext, "anchor");
+            Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
+
+            while (iterator.hasNext()) {
+                Entity entity = (Entity) iterator.next();
+
+                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity, argumentanchor_anchor));
+            }
+
+            return arraylist;
+        }))))).then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).b(ArgumentVec3.a(commandcontext, "pos"));
+        })))).then(CommandDispatcher.a("align").then(CommandDispatcher.a("axes", (ArgumentType) ArgumentRotationAxis.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getPosition().a(ArgumentRotationAxis.a(commandcontext, "axes")));
+        })))).then(CommandDispatcher.a("anchored").then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentAnchor.a(commandcontext, "anchor"));
+        })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("in").then(CommandDispatcher.a("overworld").redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.OVERWORLD));
+        }))).then(CommandDispatcher.a("the_nether").redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.NETHER));
+        }))).then(CommandDispatcher.a("the_end").redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.THE_END));
+        }))));
+    }
+
+    private static ArgumentBuilder<CommandListenerWrapper, ?> a(LiteralCommandNode<CommandListenerWrapper> literalcommandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
+        literalargumentbuilder.then(CommandDispatcher.a("score").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.a(commandcontext, "objective"), flag);
+        }))));
+        literalargumentbuilder.then(CommandDispatcher.a("bossbar").then(((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommmandBossBar.a).then(CommandDispatcher.a("value").redirect(literalcommandnode, (commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), CommmandBossBar.a(commandcontext), true, flag);
+        }))).then(CommandDispatcher.a("max").redirect(literalcommandnode, (commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), CommmandBossBar.a(commandcontext), false, flag);
+        }))));
+        Iterator iterator = CommandData.a.iterator();
+
+        while (iterator.hasNext()) {
+            CommandData.a commanddata_a = (CommandData.a) iterator.next();
+
+            commanddata_a.a(literalargumentbuilder, (argumentbuilder) -> {
+                return argumentbuilder.then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("path", (ArgumentType) ArgumentNBTKey.a()).then(CommandDispatcher.a("int").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagInt((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                    }, flag);
+                })))).then(CommandDispatcher.a("float").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagFloat((float) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                    }, flag);
+                })))).then(CommandDispatcher.a("short").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagShort((short) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
+                    }, flag);
+                })))).then(CommandDispatcher.a("long").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagLong((long) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
+                    }, flag);
+                })))).then(CommandDispatcher.a("double").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagDouble((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"));
+                    }, flag);
+                })))).then(CommandDispatcher.a("byte").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                        return new NBTTagByte((byte) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
+                    }, flag);
+                }))));
+            });
+        }
+
+        return literalargumentbuilder;
+    }
+
+    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, Collection<String> collection, ScoreboardObjective scoreboardobjective, boolean flag) {
+        ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
+
+        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
+            Iterator iterator = collection.iterator();
+
+            while (iterator.hasNext()) {
+                String s = (String) iterator.next();
+                ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
+                int j = flag1 ? i : (flag ? 1 : 0);
+
+                scoreboardscore.setScore(j);
+            }
+
+        }, CommandExecute.d);
+    }
+
+    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, boolean flag, boolean flag1) {
+        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
+            int j = flag1 ? i : (flag ? 1 : 0);
+
+            if (flag2) {
+                bossbattlecustom.a(j);
+            } else {
+                bossbattlecustom.b(j);
+            }
+
+        }, CommandExecute.d);
+    }
+
+    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.c argumentnbtkey_c, IntFunction<NBTBase> intfunction, boolean flag) {
+        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
             try {
-                int i = icommandhandler.a(commandlistenerwrapper, s);
+                NBTTagCompound nbttagcompound = commanddataaccessor.a();
+                int j = flag1 ? i : (flag ? 1 : 0);
 
-                if (i < 1) {
-                    throw new CommandException("commands.execute.allInvocationsFailed", new Object[] { s});
-                }
-            } catch (Throwable throwable) {
-                throw new CommandException("commands.execute.failed", new Object[] { s, entity.getName()});
+                argumentnbtkey_c.a(nbttagcompound, (NBTBase) intfunction.apply(j));
+                commanddataaccessor.a(nbttagcompound);
+            } catch (CommandSyntaxException commandsyntaxexception) {
+                ;
             }
+
+        }, CommandExecute.d);
+    }
+
+    private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
+        return ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
+            return ArgumentBlockPredicate.a(commandcontext, "block").test(new ShapeDetectorBlock(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "pos"), true));
+        }))))).then(CommandDispatcher.a("score").then(CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(CommandDispatcher.a("=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+            return a(commandcontext, Integer::equals);
+        }))))).then(CommandDispatcher.a("<").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+            return a(commandcontext, (integer, integer1) -> {
+                return integer.intValue() < integer1.intValue();
+            });
+        }))))).then(CommandDispatcher.a("<=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+            return a(commandcontext, (integer, integer1) -> {
+                return integer.intValue() <= integer1.intValue();
+            });
+        }))))).then(CommandDispatcher.a(">").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+            return a(commandcontext, (integer, integer1) -> {
+                return integer.intValue() > integer1.intValue();
+            });
+        }))))).then(CommandDispatcher.a(">=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
+            return a(commandcontext, (integer, integer1) -> {
+                return integer.intValue() >= integer1.intValue();
+            });
+        }))))).then(CommandDispatcher.a("matches").then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("range", (ArgumentType) ArgumentCriterionValue.a()), flag, (commandcontext) -> {
+            return a(commandcontext, ArgumentCriterionValue.b.a(commandcontext, "range"));
+        }))))))).then(CommandDispatcher.a("blocks").then(CommandDispatcher.a("start", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("end", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("destination", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("all"), flag, (commandcontext) -> {
+            return a(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "start"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), false);
+        }))).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("masked"), flag, (commandcontext) -> {
+            return a(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "start"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), true);
+        }))))))).then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("entities", (ArgumentType) ArgumentEntity.b()).fork(commandnode, (commandcontext) -> {
+            return a(commandcontext, flag, !ArgumentEntity.c(commandcontext, "entities").isEmpty());
+        })).executes(flag ? (commandcontext) -> {
+            int i = ArgumentEntity.c(commandcontext, "entities").size();
+
+            if (i > 0) {
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { Integer.valueOf(i)}), false);
+                return i;
+            } else {
+                throw CommandExecute.b.create();
+            }
+        } : (commandcontext) -> {
+            int i = ArgumentEntity.c(commandcontext, "entities").size();
+
+            if (i == 0) {
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+                return 1;
+            } else {
+                throw CommandExecute.c.create(Integer.valueOf(i));
+            }
+        })));
+    }
+
+    private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, BiPredicate<Integer, Integer> bipredicate) throws CommandSyntaxException {
+        String s = ArgumentScoreholder.a(commandcontext, "target");
+        ScoreboardObjective scoreboardobjective = ArgumentScoreboardObjective.a(commandcontext, "targetObjective");
+        String s1 = ArgumentScoreholder.a(commandcontext, "source");
+        ScoreboardObjective scoreboardobjective1 = ArgumentScoreboardObjective.a(commandcontext, "sourceObjective");
+        ScoreboardServer scoreboardserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard();
+
+        if (scoreboardserver.b(s, scoreboardobjective) && scoreboardserver.b(s1, scoreboardobjective1)) {
+            ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
+            ScoreboardScore scoreboardscore1 = scoreboardserver.getPlayerScoreForObjective(s1, scoreboardobjective1);
+
+            return bipredicate.test(Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(scoreboardscore1.getScore()));
+        } else {
+            return false;
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : (astring.length > 5 && astring.length <= 8 && "detect".equals(astring[4]) ? a(astring, 5, blockposition) : (astring.length == 9 && "detect".equals(astring[4]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList())));
+    private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, CriterionConditionValue.d criterionconditionvalue_d) throws CommandSyntaxException {
+        String s = ArgumentScoreholder.a(commandcontext, "target");
+        ScoreboardObjective scoreboardobjective = ArgumentScoreboardObjective.a(commandcontext, "targetObjective");
+        ScoreboardServer scoreboardserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard();
+
+        return !scoreboardserver.b(s, scoreboardobjective) ? false : criterionconditionvalue_d.d(scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective).getScore());
     }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+    private static Collection<CommandListenerWrapper> a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag, boolean flag1) {
+        return (Collection) (flag1 == flag ? Collections.singleton(commandcontext.getSource()) : Collections.emptyList());
+    }
+
+    private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, boolean flag, CommandExecute.a commandexecute_a) {
+        return argumentbuilder.fork(commandnode, (commandcontext) -> {
+            return a(commandcontext, flag, commandexecute_a.test(commandcontext));
+        }).executes((commandcontext) -> {
+            if (flag == commandexecute_a.test(commandcontext)) {
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+                return 1;
+            } else {
+                throw CommandExecute.b.create();
+            }
+        });
+    }
+
+    private static boolean a(WorldServer worldserver, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, boolean flag) throws CommandSyntaxException {
+        StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
+        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.b()));
+        BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
+        int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
+
+        if (i > '\u8000') {
+            throw CommandExecute.a.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
+        } else {
+            for (int j = structureboundingbox.c; j <= structureboundingbox.f; ++j) {
+                for (int k = structureboundingbox.b; k <= structureboundingbox.e; ++k) {
+                    for (int l = structureboundingbox.a; l <= structureboundingbox.d; ++l) {
+                        BlockPosition blockposition4 = new BlockPosition(l, k, j);
+                        BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
+                        IBlockData iblockdata = worldserver.getType(blockposition4);
+
+                        if (!flag || iblockdata.getBlock() != Blocks.AIR) {
+                            if (iblockdata != worldserver.getType(blockposition5)) {
+                                return false;
+                            }
+
+                            TileEntity tileentity = worldserver.getTileEntity(blockposition4);
+                            TileEntity tileentity1 = worldserver.getTileEntity(blockposition5);
+
+                            if (tileentity != null) {
+                                if (tileentity1 == null) {
+                                    return false;
+                                }
+
+                                NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
+
+                                nbttagcompound.remove("x");
+                                nbttagcompound.remove("y");
+                                nbttagcompound.remove("z");
+                                NBTTagCompound nbttagcompound1 = tileentity1.save(new NBTTagCompound());
+
+                                nbttagcompound1.remove("x");
+                                nbttagcompound1.remove("y");
+                                nbttagcompound1.remove("z");
+                                if (!nbttagcompound.equals(nbttagcompound1)) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    @FunctionalInterface
+    interface a {
+
+        boolean test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
     }
 }

@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -51,13 +51,8 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
 
     public CriterionTriggerRecipeUnlocked.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "recipe"));
-        IRecipe irecipe = CraftingManager.a(minecraftkey);
 
-        if (irecipe == null) {
-            throw new JsonSyntaxException("Unknown recipe \'" + minecraftkey + "\'");
-        } else {
-            return new CriterionTriggerRecipeUnlocked.b(irecipe);
-        }
+        return new CriterionTriggerRecipeUnlocked.b(minecraftkey);
     }
 
     public void a(EntityPlayer entityplayer, IRecipe irecipe) {
@@ -125,15 +120,22 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final IRecipe a;
+        private final MinecraftKey a;
 
-        public b(IRecipe irecipe) {
+        public b(MinecraftKey minecraftkey) {
             super(CriterionTriggerRecipeUnlocked.a);
-            this.a = irecipe;
+            this.a = minecraftkey;
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.addProperty("recipe", this.a.toString());
+            return jsonobject;
         }
 
         public boolean a(IRecipe irecipe) {
-            return this.a == irecipe;
+            return this.a.equals(irecipe.getKey());
         }
     }
 }

@@ -40,19 +40,19 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public float a() {
+    public float b() {
         return this.a;
     }
 
-    public float b() {
+    public float c() {
         return this.b;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.c;
     }
 
-    public boolean d() {
+    public boolean e() {
         return this.d;
     }
 }

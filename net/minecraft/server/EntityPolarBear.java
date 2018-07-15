@@ -1,19 +1,19 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityPolarBear extends EntityAnimal {
 
-    private static final DataWatcherObject<Boolean> bx = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.h);
-    private float by;
-    private float bz;
-    private int bB;
+    private static final DataWatcherObject<Boolean> bC = DataWatcher.a(EntityPolarBear.class, DataWatcherRegistry.i);
+    private float bD;
+    private float bE;
+    private int bG;
 
     public EntityPolarBear(World world) {
-        super(world);
+        super(EntityTypes.POLAR_BEAR, world);
         this.setSize(1.3F, 1.4F);
     }
 
@@ -21,12 +21,12 @@ public class EntityPolarBear extends EntityAnimal {
         return new EntityPolarBear(this.world);
     }
 
-    public boolean e(ItemStack itemstack) {
+    public boolean f(ItemStack itemstack) {
         return false;
     }
 
-    protected void r() {
-        super.r();
+    protected void n() {
+        super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new EntityPolarBear.d());
         this.goalSelector.a(1, new EntityPolarBear.e());
@@ -47,53 +47,63 @@ public class EntityPolarBear extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
     }
 
-    protected SoundEffect F() {
-        return this.isBaby() ? SoundEffects.fN : SoundEffects.fM;
+    public boolean a(GeneratorAccess generatoraccess) {
+        int i = MathHelper.floor(this.locX);
+        int j = MathHelper.floor(this.getBoundingBox().b);
+        int k = MathHelper.floor(this.locZ);
+        BlockPosition blockposition = new BlockPosition(i, j, k);
+        BiomeBase biomebase = generatoraccess.getBiome(blockposition);
+
+        return biomebase != Biomes.l && biomebase != Biomes.Z ? super.a(generatoraccess) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
+    }
+
+    protected SoundEffect D() {
+        return this.isBaby() ? SoundEffects.ENTITY_POLAR_BEAR_AMBIENT_BABY : SoundEffects.ENTITY_POLAR_BEAR_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.fP;
+        return SoundEffects.ENTITY_POLAR_BEAR_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.fO;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_POLAR_BEAR_DEATH;
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.fQ, 0.15F, 1.0F);
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dl() {
-        if (this.bB <= 0) {
-            this.a(SoundEffects.fR, 1.0F, 1.0F);
-            this.bB = 40;
+    protected void dy() {
+        if (this.bG <= 0) {
+            this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, 1.0F);
+            this.bG = 40;
         }
 
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.F;
+    protected MinecraftKey G() {
+        return LootTables.M;
     }
 
-    protected void i() {
-        super.i();
-        this.datawatcher.register(EntityPolarBear.bx, Boolean.valueOf(false));
+    protected void x_() {
+        super.x_();
+        this.datawatcher.register(EntityPolarBear.bC, Boolean.valueOf(false));
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (this.world.isClientSide) {
-            this.by = this.bz;
-            if (this.dm()) {
-                this.bz = MathHelper.a(this.bz + 1.0F, 0.0F, 6.0F);
+            this.bD = this.bE;
+            if (this.dz()) {
+                this.bE = MathHelper.a(this.bE + 1.0F, 0.0F, 6.0F);
             } else {
-                this.bz = MathHelper.a(this.bz - 1.0F, 0.0F, 6.0F);
+                this.bE = MathHelper.a(this.bE - 1.0F, 0.0F, 6.0F);
             }
         }
 
-        if (this.bB > 0) {
-            --this.bB;
+        if (this.bG > 0) {
+            --this.bG;
         }
 
     }
@@ -108,19 +118,19 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dm() {
-        return ((Boolean) this.datawatcher.get(EntityPolarBear.bx)).booleanValue();
+    public boolean dz() {
+        return ((Boolean) this.datawatcher.get(EntityPolarBear.bC)).booleanValue();
     }
 
-    public void p(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bx, Boolean.valueOf(flag));
+    public void s(boolean flag) {
+        this.datawatcher.set(EntityPolarBear.bC, Boolean.valueOf(flag));
     }
 
-    protected float cx() {
+    protected float cI() {
         return 0.98F;
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         if (groupdataentity instanceof EntityPolarBear.b) {
             if (((EntityPolarBear.b) groupdataentity).a) {
                 this.setAgeRaw(-24000);
@@ -155,29 +165,29 @@ public class EntityPolarBear extends EntityAnimal {
         protected void a(EntityLiving entityliving, double d0) {
             double d1 = this.a(entityliving);
 
-            if (d0 <= d1 && this.c <= 0) {
-                this.c = 20;
-                this.b.B(entityliving);
-                EntityPolarBear.this.p(false);
+            if (d0 <= d1 && this.b <= 0) {
+                this.b = 20;
+                this.a.B(entityliving);
+                EntityPolarBear.this.s(false);
             } else if (d0 <= d1 * 2.0D) {
-                if (this.c <= 0) {
-                    EntityPolarBear.this.p(false);
-                    this.c = 20;
+                if (this.b <= 0) {
+                    EntityPolarBear.this.s(false);
+                    this.b = 20;
                 }
 
-                if (this.c <= 10) {
-                    EntityPolarBear.this.p(true);
-                    EntityPolarBear.this.dl();
+                if (this.b <= 10) {
+                    EntityPolarBear.this.s(true);
+                    EntityPolarBear.this.dy();
                 }
             } else {
-                this.c = 20;
-                EntityPolarBear.this.p(false);
+                this.b = 20;
+                EntityPolarBear.this.s(false);
             }
 
         }
 
         public void d() {
-            EntityPolarBear.this.p(false);
+            EntityPolarBear.this.s(false);
             super.d();
         }
 
@@ -228,7 +238,7 @@ public class EntityPolarBear extends EntityAnimal {
         public void c() {
             super.c();
             if (EntityPolarBear.this.isBaby()) {
-                this.f();
+                this.g();
                 this.d();
             }
 

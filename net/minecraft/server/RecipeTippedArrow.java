@@ -2,15 +2,17 @@ package net.minecraft.server;
 
 import java.util.Collection;
 
-public class RecipeTippedArrow implements IRecipe {
+public class RecipeTippedArrow extends IRecipeComplex {
 
-    public RecipeTippedArrow() {}
+    public RecipeTippedArrow(MinecraftKey minecraftkey) {
+        super(minecraftkey);
+    }
 
-    public boolean a(InventoryCrafting inventorycrafting, World world) {
-        if (inventorycrafting.j() == 3 && inventorycrafting.i() == 3) {
-            for (int i = 0; i < inventorycrafting.j(); ++i) {
-                for (int j = 0; j < inventorycrafting.i(); ++j) {
-                    ItemStack itemstack = inventorycrafting.c(i, j);
+    public boolean a(IInventory iinventory, World world) {
+        if (iinventory.U_() == 3 && iinventory.n() == 3) {
+            for (int i = 0; i < iinventory.U_(); ++i) {
+                for (int j = 0; j < iinventory.n(); ++j) {
+                    ItemStack itemstack = iinventory.getItem(i + j * iinventory.U_());
 
                     if (itemstack.isEmpty()) {
                         return false;
@@ -34,8 +36,8 @@ public class RecipeTippedArrow implements IRecipe {
         }
     }
 
-    public ItemStack craftItem(InventoryCrafting inventorycrafting) {
-        ItemStack itemstack = inventorycrafting.c(1, 1);
+    public ItemStack craftItem(IInventory iinventory) {
+        ItemStack itemstack = iinventory.getItem(1 + iinventory.U_());
 
         if (itemstack.getItem() != Items.LINGERING_POTION) {
             return ItemStack.a;
@@ -48,15 +50,7 @@ public class RecipeTippedArrow implements IRecipe {
         }
     }
 
-    public ItemStack b() {
-        return ItemStack.a;
-    }
-
-    public NonNullList<ItemStack> b(InventoryCrafting inventorycrafting) {
-        return NonNullList.a(inventorycrafting.getSize(), ItemStack.a);
-    }
-
-    public boolean c() {
-        return true;
+    public RecipeSerializer<?> a() {
+        return RecipeSerializers.k;
     }
 }

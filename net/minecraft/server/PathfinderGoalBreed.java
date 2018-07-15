@@ -6,12 +6,12 @@ import java.util.Random;
 
 public class PathfinderGoalBreed extends PathfinderGoal {
 
-    private final EntityAnimal animal;
-    private final Class<? extends EntityAnimal> e;
-    World a;
-    private EntityAnimal partner;
-    int b;
-    double c;
+    protected final EntityAnimal animal;
+    private final Class<? extends EntityAnimal> d;
+    protected World b;
+    protected EntityAnimal partner;
+    private int e;
+    private final double f;
 
     public PathfinderGoalBreed(EntityAnimal entityanimal, double d0) {
         this(entityanimal, d0, entityanimal.getClass());
@@ -19,9 +19,9 @@ public class PathfinderGoalBreed extends PathfinderGoal {
 
     public PathfinderGoalBreed(EntityAnimal entityanimal, double d0, Class<? extends EntityAnimal> oclass) {
         this.animal = entityanimal;
-        this.a = entityanimal.world;
-        this.e = oclass;
-        this.c = d0;
+        this.b = entityanimal.world;
+        this.d = oclass;
+        this.f = d0;
         this.a(3);
     }
 
@@ -29,32 +29,32 @@ public class PathfinderGoalBreed extends PathfinderGoal {
         if (!this.animal.isInLove()) {
             return false;
         } else {
-            this.partner = this.f();
+            this.partner = this.i();
             return this.partner != null;
         }
     }
 
     public boolean b() {
-        return this.partner.isAlive() && this.partner.isInLove() && this.b < 60;
+        return this.partner.isAlive() && this.partner.isInLove() && this.e < 60;
     }
 
     public void d() {
         this.partner = null;
-        this.b = 0;
+        this.e = 0;
     }
 
     public void e() {
-        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.N());
-        this.animal.getNavigation().a((Entity) this.partner, this.c);
-        ++this.b;
-        if (this.b >= 60 && this.animal.h(this.partner) < 9.0D) {
-            this.i();
+        this.animal.getControllerLook().a(this.partner, 10.0F, (float) this.animal.K());
+        this.animal.getNavigation().a((Entity) this.partner, this.f);
+        ++this.e;
+        if (this.e >= 60 && this.animal.h(this.partner) < 9.0D) {
+            this.g();
         }
 
     }
 
-    private EntityAnimal f() {
-        List list = this.a.a(this.e, this.animal.getBoundingBox().g(8.0D));
+    private EntityAnimal i() {
+        List list = this.b.a(this.d, this.animal.getBoundingBox().g(8.0D));
         double d0 = Double.MAX_VALUE;
         EntityAnimal entityanimal = null;
         Iterator iterator = list.iterator();
@@ -71,7 +71,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
         return entityanimal;
     }
 
-    private void i() {
+    protected void g() {
         EntityAgeable entityageable = this.animal.createChild(this.partner);
 
         if (entityageable != null) {
@@ -82,8 +82,8 @@ public class PathfinderGoalBreed extends PathfinderGoal {
             }
 
             if (entityplayer != null) {
-                entityplayer.b(StatisticList.C);
-                CriterionTriggers.n.a(entityplayer, this.animal, this.partner, entityageable);
+                entityplayer.a(StatisticList.ANIMALS_BRED);
+                CriterionTriggers.o.a(entityplayer, this.animal, this.partner, entityageable);
             }
 
             this.animal.setAgeRaw(6000);
@@ -92,7 +92,7 @@ public class PathfinderGoalBreed extends PathfinderGoal {
             this.partner.resetLove();
             entityageable.setAgeRaw(-24000);
             entityageable.setPositionRotation(this.animal.locX, this.animal.locY, this.animal.locZ, 0.0F, 0.0F);
-            this.a.addEntity(entityageable);
+            this.b.addEntity(entityageable);
             Random random = this.animal.getRandom();
 
             for (int i = 0; i < 7; ++i) {
@@ -103,11 +103,11 @@ public class PathfinderGoalBreed extends PathfinderGoal {
                 double d4 = 0.5D + random.nextDouble() * (double) this.animal.length;
                 double d5 = random.nextDouble() * (double) this.animal.width * 2.0D - (double) this.animal.width;
 
-                this.a.addParticle(EnumParticle.HEART, this.animal.locX + d3, this.animal.locY + d4, this.animal.locZ + d5, d0, d1, d2, new int[0]);
+                this.b.addParticle(Particles.A, this.animal.locX + d3, this.animal.locY + d4, this.animal.locZ + d5, d0, d1, d2);
             }
 
-            if (this.a.getGameRules().getBoolean("doMobLoot")) {
-                this.a.addEntity(new EntityExperienceOrb(this.a, this.animal.locX, this.animal.locY, this.animal.locZ, random.nextInt(7) + 1));
+            if (this.b.getGameRules().getBoolean("doMobLoot")) {
+                this.b.addEntity(new EntityExperienceOrb(this.b, this.animal.locX, this.animal.locY, this.animal.locZ, random.nextInt(7) + 1));
             }
 
         }

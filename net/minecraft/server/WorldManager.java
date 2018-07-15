@@ -13,9 +13,9 @@ public class WorldManager implements IWorldAccess {
         this.world = worldserver;
     }
 
-    public void a(int i, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
+    public void a(ParticleParam particleparam, boolean flag, double d0, double d1, double d2, double d3, double d4, double d5) {}
 
-    public void a(int i, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5, int... aint) {}
+    public void a(ParticleParam particleparam, boolean flag, boolean flag1, double d0, double d1, double d2, double d3, double d4, double d5) {}
 
     public void a(Entity entity) {
         this.world.getTracker().track(entity);
@@ -27,7 +27,7 @@ public class WorldManager implements IWorldAccess {
 
     public void b(Entity entity) {
         this.world.getTracker().untrackEntity(entity);
-        this.world.getScoreboard().a(entity);
+        this.world.l_().a(entity);
         if (entity instanceof EntityPlayer) {
             this.world.worldProvider.b((EntityPlayer) entity);
         }
@@ -40,7 +40,7 @@ public class WorldManager implements IWorldAccess {
 
     public void a(int i, int j, int k, int l, int i1, int j1) {}
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
+    public void a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1, int i) {
         this.world.getPlayerChunkMap().flagDirty(blockposition);
     }
 

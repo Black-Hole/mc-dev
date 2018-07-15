@@ -1,52 +1,57 @@
 package net.minecraft.server;
 
-import java.util.BitSet;
+import com.google.common.collect.Sets;
+import java.util.Set;
 import javax.annotation.Nullable;
 
 public class RecipeBook {
 
-    protected final BitSet a = new BitSet();
-    protected final BitSet b = new BitSet();
+    protected final Set<MinecraftKey> a = Sets.newHashSet();
+    protected final Set<MinecraftKey> b = Sets.newHashSet();
     protected boolean c;
     protected boolean d;
+    protected boolean e;
+    protected boolean f;
 
     public RecipeBook() {}
 
     public void a(RecipeBook recipebook) {
         this.a.clear();
         this.b.clear();
-        this.a.or(recipebook.a);
-        this.b.or(recipebook.b);
+        this.a.addAll(recipebook.a);
+        this.b.addAll(recipebook.b);
     }
 
     public void a(IRecipe irecipe) {
         if (!irecipe.c()) {
-            this.a.set(d(irecipe));
+            this.a(irecipe.getKey());
         }
 
     }
 
+    protected void a(MinecraftKey minecraftkey) {
+        this.a.add(minecraftkey);
+    }
+
     public boolean b(@Nullable IRecipe irecipe) {
-        return this.a.get(d(irecipe));
+        return irecipe == null ? false : this.a.contains(irecipe.getKey());
     }
 
-    public void c(IRecipe irecipe) {
-        int i = d(irecipe);
-
-        this.a.clear(i);
-        this.b.clear(i);
+    protected void b(MinecraftKey minecraftkey) {
+        this.a.remove(minecraftkey);
+        this.b.remove(minecraftkey);
     }
 
-    protected static int d(@Nullable IRecipe irecipe) {
-        return CraftingManager.recipes.a((Object) irecipe);
+    public void e(IRecipe irecipe) {
+        this.b.remove(irecipe.getKey());
     }
 
     public void f(IRecipe irecipe) {
-        this.b.clear(d(irecipe));
+        this.c(irecipe.getKey());
     }
 
-    public void g(IRecipe irecipe) {
-        this.b.set(d(irecipe));
+    protected void c(MinecraftKey minecraftkey) {
+        this.b.add(minecraftkey);
     }
 
     public void a(boolean flag) {
@@ -55,5 +60,13 @@ public class RecipeBook {
 
     public void b(boolean flag) {
         this.d = flag;
+    }
+
+    public void c(boolean flag) {
+        this.e = flag;
+    }
+
+    public void d(boolean flag) {
+        this.f = flag;
     }
 }

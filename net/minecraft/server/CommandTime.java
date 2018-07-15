@@ -1,94 +1,74 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Predicate;
 
-public class CommandTime extends CommandAbstract {
+public class CommandTime {
 
-    public CommandTime() {}
-
-    public String getCommand() {
-        return "time";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("time").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("set").then(CommandDispatcher.a("day").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 1000);
+        }))).then(CommandDispatcher.a("noon").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 6000);
+        }))).then(CommandDispatcher.a("night").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 13000);
+        }))).then(CommandDispatcher.a("midnight").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 18000);
+        }))).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "time"));
+        })))).then(CommandDispatcher.a("add").then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "time"));
+        })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("query").then(CommandDispatcher.a("daytime").executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), a(((CommandListenerWrapper) commandcontext.getSource()).getWorld()));
+        }))).then(CommandDispatcher.a("gametime").executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), (int) (((CommandListenerWrapper) commandcontext.getSource()).getWorld().getTime() % 2147483647L));
+        }))).then(CommandDispatcher.a("day").executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), (int) (((CommandListenerWrapper) commandcontext.getSource()).getWorld().getDayTime() / 24000L % 2147483647L));
+        }))));
     }
 
-    public int a() {
-        return 2;
+    private static int a(WorldServer worldserver) {
+        return (int) (worldserver.getDayTime() % 24000L);
     }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.time.usage";
+    private static int c(CommandListenerWrapper commandlistenerwrapper, int i) {
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.query", new Object[] { Integer.valueOf(i)}), false);
+        return i;
     }
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length > 1) {
-            int i;
+    public static int a(CommandListenerWrapper commandlistenerwrapper, int i) {
+        WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
+        int j = aworldserver.length;
 
-            if ("set".equals(astring[0])) {
-                if ("day".equals(astring[1])) {
-                    i = 1000;
-                } else if ("night".equals(astring[1])) {
-                    i = 13000;
-                } else {
-                    i = a(astring[1], 0);
-                }
+        for (int k = 0; k < j; ++k) {
+            WorldServer worldserver = aworldserver[k];
 
-                this.a(minecraftserver, i);
-                a(icommandlistener, (ICommand) this, "commands.time.set", new Object[] { Integer.valueOf(i)});
-                return;
-            }
-
-            if ("add".equals(astring[0])) {
-                i = a(astring[1], 0);
-                this.b(minecraftserver, i);
-                a(icommandlistener, (ICommand) this, "commands.time.added", new Object[] { Integer.valueOf(i)});
-                return;
-            }
-
-            if ("query".equals(astring[0])) {
-                if ("daytime".equals(astring[1])) {
-                    i = (int) (icommandlistener.getWorld().getDayTime() % 24000L);
-                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
-                    a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
-                    return;
-                }
-
-                if ("day".equals(astring[1])) {
-                    i = (int) (icommandlistener.getWorld().getDayTime() / 24000L % 2147483647L);
-                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
-                    a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
-                    return;
-                }
-
-                if ("gametime".equals(astring[1])) {
-                    i = (int) (icommandlistener.getWorld().getTime() % 2147483647L);
-                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, i);
-                    a(icommandlistener, (ICommand) this, "commands.time.query", new Object[] { Integer.valueOf(i)});
-                    return;
-                }
-            }
+            worldserver.setDayTime((long) i);
         }
 
-        throw new ExceptionUsage("commands.time.usage", new Object[0]);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { Integer.valueOf(i)}), true);
+        return a(commandlistenerwrapper.getWorld());
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "set", "add", "query"}) : (astring.length == 2 && "set".equals(astring[0]) ? a(astring, new String[] { "day", "night"}) : (astring.length == 2 && "query".equals(astring[0]) ? a(astring, new String[] { "daytime", "gametime", "day"}) : Collections.emptyList()));
-    }
+    public static int b(CommandListenerWrapper commandlistenerwrapper, int i) {
+        WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
+        int j = aworldserver.length;
 
-    protected void a(MinecraftServer minecraftserver, int i) {
-        for (int j = 0; j < minecraftserver.worldServer.length; ++j) {
-            minecraftserver.worldServer[j].setDayTime((long) i);
-        }
-
-    }
-
-    protected void b(MinecraftServer minecraftserver, int i) {
-        for (int j = 0; j < minecraftserver.worldServer.length; ++j) {
-            WorldServer worldserver = minecraftserver.worldServer[j];
+        for (int k = 0; k < j; ++k) {
+            WorldServer worldserver = aworldserver[k];
 
             worldserver.setDayTime(worldserver.getDayTime() + (long) i);
         }
 
+        int l = a(commandlistenerwrapper.getWorld());
+
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { Integer.valueOf(l)}), true);
+        return l;
     }
 }

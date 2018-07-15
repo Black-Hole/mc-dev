@@ -1,19 +1,20 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
-public class TileEntityBeacon extends TileEntityContainer implements ITickable, IWorldInventory {
+public class TileEntityBeacon extends TileEntityContainer implements IWorldInventory, ITickable {
 
     public static final MobEffectList[][] a = new MobEffectList[][] { { MobEffects.FASTER_MOVEMENT, MobEffects.FASTER_DIG}, { MobEffects.RESISTANCE, MobEffects.JUMP}, { MobEffects.INCREASE_DAMAGE}, { MobEffects.REGENERATION}};
-    private static final Set<MobEffectList> f = Sets.newHashSet();
-    private final List<TileEntityBeacon.BeaconColorTracker> g = Lists.newArrayList();
+    private static final Set<MobEffectList> e = (Set) Arrays.stream(TileEntityBeacon.a).flatMap(Arrays::stream).collect(Collectors.toSet());
+    private final List<TileEntityBeacon.BeaconColorTracker> f = Lists.newArrayList();
+    private boolean i;
     private boolean j;
     public int levels = -1;
     @Nullable
@@ -21,29 +22,42 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
     @Nullable
     public MobEffectList secondaryEffect;
     private ItemStack inventorySlot;
-    private String o;
+    private IChatBaseComponent o;
 
     public TileEntityBeacon() {
+        super(TileEntityTypes.o);
         this.inventorySlot = ItemStack.a;
     }
 
-    public void e() {
+    public void X_() {
         if (this.world.getTime() % 80L == 0L) {
-            this.n();
+            this.p();
+            if (this.i) {
+                this.a(SoundEffects.BLOCK_BEACON_AMBIENT);
+            }
+        }
+
+        if (!this.world.isClientSide && this.i != this.j) {
+            this.j = this.i;
+            this.a(this.i ? SoundEffects.BLOCK_BEACON_ACTIVATE : SoundEffects.BLOCK_BEACON_DEACTIVATE);
         }
 
     }
 
-    public void n() {
+    public void p() {
         if (this.world != null) {
-            this.F();
             this.E();
+            this.D();
         }
 
     }
 
-    private void E() {
-        if (this.j && this.levels > 0 && !this.world.isClientSide && this.primaryEffect != null) {
+    public void a(SoundEffect soundeffect) {
+        this.world.a((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    }
+
+    private void D() {
+        if (this.i && this.levels > 0 && !this.world.isClientSide && this.primaryEffect != null) {
             double d0 = (double) (this.levels * 10 + 10);
             byte b0 = 0;
 
@@ -78,18 +92,18 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     }
 
-    private void F() {
+    private void E() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
         int l = this.levels;
 
         this.levels = 0;
-        this.g.clear();
-        this.j = true;
-        TileEntityBeacon.BeaconColorTracker tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(EnumColor.WHITE.f());
+        this.f.clear();
+        this.i = true;
+        TileEntityBeacon.BeaconColorTracker tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(EnumColor.WHITE.d());
 
-        this.g.add(tileentitybeacon_beaconcolortracker);
+        this.f.add(tileentitybeacon_beaconcolortracker);
         boolean flag = true;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
@@ -97,15 +111,16 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
         for (i1 = j + 1; i1 < 256; ++i1) {
             IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition.c(i, i1, k));
+            Block block = iblockdata.getBlock();
             float[] afloat;
 
-            if (iblockdata.getBlock() == Blocks.STAINED_GLASS) {
-                afloat = ((EnumColor) iblockdata.get(BlockStainedGlass.COLOR)).f();
+            if (block instanceof BlockStainedGlass) {
+                afloat = ((BlockStainedGlass) block).b().d();
             } else {
-                if (iblockdata.getBlock() != Blocks.STAINED_GLASS_PANE) {
-                    if (iblockdata.c() >= 15 && iblockdata.getBlock() != Blocks.BEDROCK) {
-                        this.j = false;
-                        this.g.clear();
+                if (!(block instanceof BlockStainedGlassPane)) {
+                    if (iblockdata.b(this.world, blockposition_mutableblockposition) >= 15 && block != Blocks.BEDROCK) {
+                        this.i = false;
+                        this.f.clear();
                         break;
                     }
 
@@ -113,7 +128,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
                     continue;
                 }
 
-                afloat = ((EnumColor) iblockdata.get(BlockStainedGlassPane.COLOR)).f();
+                afloat = ((BlockStainedGlassPane) block).b().d();
             }
 
             if (!flag) {
@@ -124,13 +139,13 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
                 tileentitybeacon_beaconcolortracker.a();
             } else {
                 tileentitybeacon_beaconcolortracker = new TileEntityBeacon.BeaconColorTracker(afloat);
-                this.g.add(tileentitybeacon_beaconcolortracker);
+                this.f.add(tileentitybeacon_beaconcolortracker);
             }
 
             flag = false;
         }
 
-        if (this.j) {
+        if (this.i) {
             for (i1 = 1; i1 <= 4; this.levels = i1++) {
                 int j1 = j - i1;
 
@@ -142,9 +157,9 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
                 for (int k1 = i - i1; k1 <= i + i1 && flag1; ++k1) {
                     for (int l1 = k - i1; l1 <= k + i1; ++l1) {
-                        Block block = this.world.getType(new BlockPosition(k1, j1, l1)).getBlock();
+                        Block block1 = this.world.getType(new BlockPosition(k1, j1, l1)).getBlock();
 
-                        if (block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.DIAMOND_BLOCK && block != Blocks.IRON_BLOCK) {
+                        if (block1 != Blocks.EMERALD_BLOCK && block1 != Blocks.GOLD_BLOCK && block1 != Blocks.DIAMOND_BLOCK && block1 != Blocks.IRON_BLOCK) {
                             flag1 = false;
                             break;
                         }
@@ -157,7 +172,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
             }
 
             if (this.levels == 0) {
-                this.j = false;
+                this.i = false;
             }
         }
 
@@ -167,7 +182,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                CriterionTriggers.k.a(entityplayer, this);
+                CriterionTriggers.l.a(entityplayer, this);
             }
         }
 
@@ -179,24 +194,24 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 3, this.d());
+        return new PacketPlayOutTileEntityData(this.position, 3, this.Z_());
     }
 
-    public NBTTagCompound d() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
     @Nullable
-    private static MobEffectList f(int i) {
+    private static MobEffectList e(int i) {
         MobEffectList mobeffectlist = MobEffectList.fromId(i);
 
-        return TileEntityBeacon.f.contains(mobeffectlist) ? mobeffectlist : null;
+        return TileEntityBeacon.e.contains(mobeffectlist) ? mobeffectlist : null;
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.primaryEffect = f(nbttagcompound.getInt("Primary"));
-        this.secondaryEffect = f(nbttagcompound.getInt("Secondary"));
+        this.primaryEffect = e(nbttagcompound.getInt("Primary"));
+        this.secondaryEffect = e(nbttagcompound.getInt("Secondary"));
         this.levels = nbttagcompound.getInt("Levels");
     }
 
@@ -212,7 +227,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         return 1;
     }
 
-    public boolean x_() {
+    public boolean P_() {
         return this.inventorySlot.isEmpty();
     }
 
@@ -253,16 +268,21 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.o : "container.beacon";
+    public IChatBaseComponent getDisplayName() {
+        return (IChatBaseComponent) (this.o != null ? this.o : new ChatMessage("container.beacon", new Object[0]));
     }
 
     public boolean hasCustomName() {
-        return this.o != null && !this.o.isEmpty();
+        return this.o != null;
     }
 
-    public void setCustomName(String s) {
-        this.o = s;
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return this.o;
+    }
+
+    public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.o = ichatbasecomponent;
     }
 
     public int getMaxStackSize() {
@@ -312,11 +332,15 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
             break;
 
         case 1:
-            this.primaryEffect = f(j);
+            this.primaryEffect = e(j);
             break;
 
         case 2:
-            this.secondaryEffect = f(j);
+            this.secondaryEffect = e(j);
+        }
+
+        if (!this.world.isClientSide && i == 1 && this.i) {
+            this.a(SoundEffects.BLOCK_BEACON_POWER_SELECT);
         }
 
     }
@@ -331,7 +355,7 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
 
     public boolean c(int i, int j) {
         if (i == 1) {
-            this.n();
+            this.p();
             return true;
         } else {
             return super.c(i, j);
@@ -342,24 +366,12 @@ public class TileEntityBeacon extends TileEntityContainer implements ITickable, 
         return new int[0];
     }
 
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, @Nullable EnumDirection enumdirection) {
         return false;
     }
 
     public boolean canTakeItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
         return false;
-    }
-
-    static {
-        MobEffectList[][] amobeffectlist = TileEntityBeacon.a;
-        int i = amobeffectlist.length;
-
-        for (int j = 0; j < i; ++j) {
-            MobEffectList[] amobeffectlist1 = amobeffectlist[j];
-
-            Collections.addAll(TileEntityBeacon.f, amobeffectlist1);
-        }
-
     }
 
     public static class BeaconColorTracker {

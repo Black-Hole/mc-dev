@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicates;
-
 public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
 
     protected EntityInsentient a;
@@ -12,11 +10,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     protected Class<? extends Entity> d;
 
     public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f) {
-        this.a = entityinsentient;
-        this.d = oclass;
-        this.c = f;
-        this.f = 0.02F;
-        this.a(2);
+        this(entityinsentient, oclass, f, 0.02F);
     }
 
     public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f, float f1) {
@@ -36,7 +30,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
             }
 
             if (this.d == EntityHuman.class) {
-                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, Predicates.and(IEntitySelector.e, IEntitySelector.b(this.a)));
+                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, IEntitySelector.e.and(IEntitySelector.b(this.a)));
             } else {
                 this.b = this.a.world.a(this.d, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c), (Entity) this.a);
             }
@@ -58,7 +52,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.O(), (float) this.a.N());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.L(), (float) this.a.K());
         --this.e;
     }
 }

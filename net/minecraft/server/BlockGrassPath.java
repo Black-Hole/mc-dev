@@ -1,54 +1,48 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public class BlockGrassPath extends Block {
 
-    protected static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.9375D, 1.0D);
+    protected static final VoxelShape a = BlockSoil.b;
 
-    protected BlockGrassPath() {
-        super(Material.EARTH);
-        this.e(255);
+    protected BlockGrassPath(Block.Info block_info) {
+        super(block_info);
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        super.onPlace(world, blockposition, iblockdata);
-        this.b(world, blockposition);
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.J();
     }
 
-    private void b(World world, BlockPosition blockposition) {
-        if (world.getType(blockposition.up()).getMaterial().isBuildable()) {
-            BlockSoil.b(world, blockposition);
-        }
-
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return !this.getBlockData().canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) ? Block.a(this.getBlockData(), Blocks.DIRT.getBlockData(), (GeneratorAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) : super.getPlacedState(blockactioncontext);
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition) ? Block.a(iblockdata, Blocks.DIRT.getBlockData(), generatoraccess, blockposition) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.up());
+
+        return !iblockdata1.getMaterial().isBuildable() || iblockdata1.getBlock() instanceof BlockFenceGate;
+    }
+
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockGrassPath.a;
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
-
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(this);
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        super.a(iblockdata, world, blockposition, block, blockposition1);
-        this.b(world, blockposition);
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return Blocks.DIRT;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+    }
+
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

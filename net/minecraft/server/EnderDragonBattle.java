@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Lists;
@@ -14,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 public class EnderDragonBattle {
 
     private static final Logger a = LogManager.getLogger();
-    private static final Predicate<EntityPlayer> b = Predicates.and(IEntitySelector.a, IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
+    private static final Predicate<Entity> b = IEntitySelector.a.and(IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
     private final BossBattleServer c;
     private final WorldServer d;
     private final List<Integer> e;
@@ -40,7 +39,7 @@ public class EnderDragonBattle {
     private List<EntityEnderCrystal> r;
 
     public EnderDragonBattle(WorldServer worldserver, NBTTagCompound nbttagcompound) {
-        this.c = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.EnderDragon.name", new Object[0]), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).c(true);
+        this.c = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.minecraft.ender_dragon", new Object[0]), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).c(true);
         this.e = Lists.newArrayList();
         this.n = true;
         this.d = worldserver;
@@ -67,7 +66,7 @@ public class EnderDragonBattle {
             NBTTagList nbttaglist = nbttagcompound.getList("Gateways", 3);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                this.e.add(Integer.valueOf(nbttaglist.c(i)));
+                this.e.add(Integer.valueOf(nbttaglist.h(i)));
             }
         } else {
             this.e.addAll(ContiguousSet.create(Range.closedOpen(Integer.valueOf(0), Integer.valueOf(20)), DiscreteDomain.integers()));
@@ -96,7 +95,7 @@ public class EnderDragonBattle {
         while (iterator.hasNext()) {
             int i = ((Integer) iterator.next()).intValue();
 
-            nbttaglist.add(new NBTTagInt(i));
+            nbttaglist.add((NBTBase) (new NBTTagInt(i)));
         }
 
         nbttagcompound.set("Gateways", nbttaglist);
@@ -106,50 +105,20 @@ public class EnderDragonBattle {
     public void b() {
         this.c.setVisible(!this.k);
         if (++this.j >= 20) {
-            this.j();
+            this.k();
             this.j = 0;
         }
 
+        EnderDragonBattle.b enderdragonbattle_b = new EnderDragonBattle.b(null);
+
         if (!this.c.getPlayers().isEmpty()) {
-            if (this.n) {
-                EnderDragonBattle.a.info("Scanning for legacy world dragon fight...");
-                this.i();
+            if (this.n && enderdragonbattle_b.a()) {
+                this.g();
                 this.n = false;
-                boolean flag = this.g();
-
-                if (flag) {
-                    EnderDragonBattle.a.info("Found that the dragon has been killed in this world already.");
-                    this.l = true;
-                } else {
-                    EnderDragonBattle.a.info("Found that the dragon has not yet been killed in this world.");
-                    this.l = false;
-                    this.a(false);
-                }
-
-                List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
-
-                if (list.isEmpty()) {
-                    this.k = true;
-                } else {
-                    EntityEnderDragon entityenderdragon = (EntityEnderDragon) list.get(0);
-
-                    this.m = entityenderdragon.getUniqueID();
-                    EnderDragonBattle.a.info("Found that there\'s a dragon still alive ({})", entityenderdragon);
-                    this.k = false;
-                    if (!flag) {
-                        EnderDragonBattle.a.info("But we didn\'t have a portal, let\'s remove it.");
-                        entityenderdragon.die();
-                        this.m = null;
-                    }
-                }
-
-                if (!this.l && this.k) {
-                    this.k = false;
-                }
             }
 
             if (this.p != null) {
-                if (this.r == null) {
+                if (this.r == null && enderdragonbattle_b.a()) {
                     this.p = null;
                     this.e();
                 }
@@ -158,26 +127,65 @@ public class EnderDragonBattle {
             }
 
             if (!this.k) {
-                if (this.m == null || ++this.g >= 1200) {
-                    this.i();
-                    List list1 = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
-
-                    if (list1.isEmpty()) {
-                        EnderDragonBattle.a.debug("Haven\'t seen the dragon, respawning it");
-                        this.m();
-                    } else {
-                        EnderDragonBattle.a.debug("Haven\'t seen our dragon, but found another one to use.");
-                        this.m = ((EntityEnderDragon) list1.get(0)).getUniqueID();
-                    }
-
+                if ((this.m == null || ++this.g >= 1200) && enderdragonbattle_b.a()) {
+                    this.h();
                     this.g = 0;
                 }
 
-                if (++this.i >= 100) {
-                    this.k();
+                if (++this.i >= 100 && enderdragonbattle_b.a()) {
+                    this.l();
                     this.i = 0;
                 }
             }
+        }
+
+    }
+
+    private void g() {
+        EnderDragonBattle.a.info("Scanning for legacy world dragon fight...");
+        boolean flag = this.i();
+
+        if (flag) {
+            EnderDragonBattle.a.info("Found that the dragon has been killed in this world already.");
+            this.l = true;
+        } else {
+            EnderDragonBattle.a.info("Found that the dragon has not yet been killed in this world.");
+            this.l = false;
+            this.a(false);
+        }
+
+        List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
+
+        if (list.isEmpty()) {
+            this.k = true;
+        } else {
+            EntityEnderDragon entityenderdragon = (EntityEnderDragon) list.get(0);
+
+            this.m = entityenderdragon.getUniqueID();
+            EnderDragonBattle.a.info("Found that there\'s a dragon still alive ({})", entityenderdragon);
+            this.k = false;
+            if (!flag) {
+                EnderDragonBattle.a.info("But we didn\'t have a portal, let\'s remove it.");
+                entityenderdragon.die();
+                this.m = null;
+            }
+        }
+
+        if (!this.l && this.k) {
+            this.k = false;
+        }
+
+    }
+
+    private void h() {
+        List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
+
+        if (list.isEmpty()) {
+            EnderDragonBattle.a.debug("Haven\'t seen the dragon, respawning it");
+            this.n();
+        } else {
+            EnderDragonBattle.a.debug("Haven\'t seen our dragon, but found another one to use.");
+            this.m = ((EntityEnderDragon) list.get(0)).getUniqueID();
         }
 
     }
@@ -190,13 +198,13 @@ public class EnderDragonBattle {
             if (enumdragonrespawn == EnumDragonRespawn.END) {
                 this.p = null;
                 this.k = false;
-                EntityEnderDragon entityenderdragon = this.m();
+                EntityEnderDragon entityenderdragon = this.n();
                 Iterator iterator = this.c.getPlayers().iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    CriterionTriggers.m.a(entityplayer, (Entity) entityenderdragon);
+                    CriterionTriggers.n.a(entityplayer, (Entity) entityenderdragon);
                 }
             } else {
                 this.p = enumdragonrespawn;
@@ -205,7 +213,7 @@ public class EnderDragonBattle {
         }
     }
 
-    private boolean g() {
+    private boolean i() {
         for (int i = -8; i <= 8; ++i) {
             int j = -8;
 
@@ -233,7 +241,7 @@ public class EnderDragonBattle {
     }
 
     @Nullable
-    private ShapeDetector.ShapeDetectorCollection h() {
+    private ShapeDetector.ShapeDetectorCollection j() {
         int i;
         int j;
 
@@ -262,7 +270,7 @@ public class EnderDragonBattle {
             }
         }
 
-        i = this.d.getHighestBlockYAt(WorldGenEndTrophy.a).getY();
+        i = this.d.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a).getY();
 
         for (j = i; j >= 0; --j) {
             ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection1 = this.f.a(this.d, new BlockPosition(WorldGenEndTrophy.a.getX(), j, WorldGenEndTrophy.a.getZ()));
@@ -279,16 +287,45 @@ public class EnderDragonBattle {
         return null;
     }
 
-    private void i() {
-        for (int i = -8; i <= 8; ++i) {
-            for (int j = -8; j <= 8; ++j) {
-                this.d.getChunkAt(i, j);
+    private boolean a(int i, int j, int k, int l) {
+        if (this.b(i, j, k, l)) {
+            return true;
+        } else {
+            this.c(i, j, k, l);
+            return false;
+        }
+    }
+
+    private boolean b(int i, int j, int k, int l) {
+        boolean flag = true;
+
+        for (int i1 = i; i1 <= j; ++i1) {
+            for (int j1 = k; j1 <= l; ++j1) {
+                Chunk chunk = this.d.getChunkAt(i1, j1);
+
+                flag &= chunk.i() == ChunkStatus.POSTPROCESSED;
             }
+        }
+
+        return flag;
+    }
+
+    private void c(int i, int j, int k, int l) {
+        int i1;
+
+        for (i1 = i - 1; i1 <= j + 1; ++i1) {
+            this.d.getChunkAt(i1, k - 1);
+            this.d.getChunkAt(i1, l + 1);
+        }
+
+        for (i1 = k - 1; i1 <= l + 1; ++i1) {
+            this.d.getChunkAt(i - 1, i1);
+            this.d.getChunkAt(j + 1, i1);
         }
 
     }
 
-    private void j() {
+    private void k() {
         HashSet hashset = Sets.newHashSet();
         Iterator iterator = this.d.b(EntityPlayer.class, EnderDragonBattle.b).iterator();
 
@@ -312,10 +349,10 @@ public class EnderDragonBattle {
 
     }
 
-    private void k() {
+    private void l() {
         this.i = 0;
         this.h = 0;
-        WorldGenEnder.Spike[] aworldgenender_spike = BiomeTheEndDecorator.a(this.d);
+        WorldGenEnder.Spike[] aworldgenender_spike = WorldGenDecoratorSpike.a(this.d);
         int i = aworldgenender_spike.length;
 
         for (int j = 0; j < i; ++j) {
@@ -332,9 +369,9 @@ public class EnderDragonBattle {
             this.c.setProgress(0.0F);
             this.c.setVisible(false);
             this.a(true);
-            this.l();
+            this.m();
             if (!this.l) {
-                this.d.setTypeUpdate(this.d.getHighestBlockYAt(WorldGenEndTrophy.a), Blocks.DRAGON_EGG.getBlockData());
+                this.d.setTypeUpdate(this.d.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, WorldGenEndTrophy.a), Blocks.DRAGON_EGG.getBlockData());
             }
 
             this.l = true;
@@ -343,7 +380,7 @@ public class EnderDragonBattle {
 
     }
 
-    private void l() {
+    private void m() {
         if (!this.e.isEmpty()) {
             int i = ((Integer) this.e.remove(this.e.size() - 1)).intValue();
             int j = (int) (96.0D * Math.cos(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
@@ -355,22 +392,22 @@ public class EnderDragonBattle {
 
     private void a(BlockPosition blockposition) {
         this.d.triggerEffect(3000, blockposition, 0);
-        (new WorldGenEndGateway()).generate(this.d, new Random(), blockposition);
+        WorldGenerator.ax.generate(this.d, this.d.getChunkProviderServer().getChunkGenerator(), new Random(), blockposition, new WorldGenEndGatewayConfiguration(false));
     }
 
     private void a(boolean flag) {
         WorldGenEndTrophy worldgenendtrophy = new WorldGenEndTrophy(flag);
 
         if (this.o == null) {
-            for (this.o = this.d.q(WorldGenEndTrophy.a).down(); this.d.getType(this.o).getBlock() == Blocks.BEDROCK && this.o.getY() > this.d.getSeaLevel(); this.o = this.o.down()) {
+            for (this.o = this.d.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a).down(); this.d.getType(this.o).getBlock() == Blocks.BEDROCK && this.o.getY() > this.d.getSeaLevel(); this.o = this.o.down()) {
                 ;
             }
         }
 
-        worldgenendtrophy.generate(this.d, new Random(), this.o);
+        worldgenendtrophy.a(this.d, this.d.getChunkProviderServer().getChunkGenerator(), new Random(), this.o, WorldGenFeatureConfiguration.e);
     }
 
-    private EntityEnderDragon m() {
+    private EntityEnderDragon n() {
         this.d.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
         EntityEnderDragon entityenderdragon = new EntityEnderDragon(this.d);
 
@@ -404,7 +441,7 @@ public class EnderDragonBattle {
             this.f();
             this.a(true);
         } else {
-            this.k();
+            this.l();
             Entity entity = this.d.getEntity(this.m);
 
             if (entity instanceof EntityEnderDragon) {
@@ -424,7 +461,7 @@ public class EnderDragonBattle {
 
             if (blockposition == null) {
                 EnderDragonBattle.a.debug("Tried to respawn, but need to find the portal first.");
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.h();
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j();
 
                 if (shapedetector_shapedetectorcollection == null) {
                     EnderDragonBattle.a.debug("Couldn\'t find a portal, so we made one.");
@@ -459,7 +496,7 @@ public class EnderDragonBattle {
 
     private void a(List<EntityEnderCrystal> list) {
         if (this.k && this.p == null) {
-            for (ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.h(); shapedetector_shapedetectorcollection != null; shapedetector_shapedetectorcollection = this.h()) {
+            for (ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j(); shapedetector_shapedetectorcollection != null; shapedetector_shapedetectorcollection = this.j()) {
                 for (int i = 0; i < this.f.c(); ++i) {
                     for (int j = 0; j < this.f.b(); ++j) {
                         for (int k = 0; k < this.f.a(); ++k) {
@@ -482,7 +519,7 @@ public class EnderDragonBattle {
     }
 
     public void f() {
-        WorldGenEnder.Spike[] aworldgenender_spike = BiomeTheEndDecorator.a(this.d);
+        WorldGenEnder.Spike[] aworldgenender_spike = WorldGenDecoratorSpike.a(this.d);
         int i = aworldgenender_spike.length;
 
         for (int j = 0; j < i; ++j) {
@@ -498,5 +535,33 @@ public class EnderDragonBattle {
             }
         }
 
+    }
+
+    class b {
+
+        private EnderDragonBattle.LoadState b;
+
+        private b() {
+            this.b = EnderDragonBattle.LoadState.UNKNOWN;
+        }
+
+        private boolean a() {
+            if (this.b == EnderDragonBattle.LoadState.UNKNOWN) {
+                this.b = EnderDragonBattle.this.a(-8, 8, -8, 8) ? EnderDragonBattle.LoadState.LOADED : EnderDragonBattle.LoadState.NOT_LOADED;
+            }
+
+            return this.b == EnderDragonBattle.LoadState.LOADED;
+        }
+
+        b(Object object) {
+            this();
+        }
+    }
+
+    static enum LoadState {
+
+        UNKNOWN, NOT_LOADED, LOADED;
+
+        private LoadState() {}
     }
 }

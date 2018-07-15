@@ -1,26 +1,32 @@
 package net.minecraft.server;
 
-public class DataPaletteGlobal implements DataPalette {
+public class DataPaletteGlobal<T> implements DataPalette<T> {
 
-    public DataPaletteGlobal() {}
+    private final RegistryBlockID<T> a;
+    private final T b;
 
-    public int a(IBlockData iblockdata) {
-        int i = Block.REGISTRY_ID.getId(iblockdata);
+    public DataPaletteGlobal(RegistryBlockID<T> registryblockid, T t0) {
+        this.a = registryblockid;
+        this.b = t0;
+    }
+
+    public int a(T t0) {
+        int i = this.a.getId(t0);
 
         return i == -1 ? 0 : i;
     }
 
-    public IBlockData a(int i) {
-        IBlockData iblockdata = (IBlockData) Block.REGISTRY_ID.fromId(i);
+    public T a(int i) {
+        Object object = this.a.fromId(i);
 
-        return iblockdata == null ? Blocks.AIR.getBlockData() : iblockdata;
+        return object == null ? this.b : object;
     }
 
-    public void b(PacketDataSerializer packetdataserializer) {
-        packetdataserializer.d(0);
-    }
+    public void b(PacketDataSerializer packetdataserializer) {}
 
     public int a() {
         return PacketDataSerializer.a(0);
     }
+
+    public void a(NBTTagList nbttaglist) {}
 }

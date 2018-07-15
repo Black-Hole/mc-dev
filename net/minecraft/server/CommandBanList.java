@@ -1,41 +1,44 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandBanList extends CommandAbstract {
+public class CommandBanList {
 
-    public CommandBanList() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("banlist").requires((commandlistenerwrapper) -> {
+            return (commandlistenerwrapper.getServer().getPlayerList().getProfileBans().isEnabled() || commandlistenerwrapper.getServer().getPlayerList().getIPBans().isEnabled()) && commandlistenerwrapper.hasPermission(3);
+        })).executes((commandcontext) -> {
+            PlayerList playerlist = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList();
 
-    public String getCommand() {
-        return "banlist";
+            return a((CommandListenerWrapper) commandcontext.getSource(), Lists.newArrayList(Iterables.concat(playerlist.getProfileBans().e(), playerlist.getIPBans().e())));
+        })).then(CommandDispatcher.a("ips").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getIPBans().e());
+        }))).then(CommandDispatcher.a("players").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList().getProfileBans().e());
+        })));
     }
 
-    public int a() {
-        return 3;
-    }
-
-    public boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener) {
-        return (minecraftserver.getPlayerList().getIPBans().isEnabled() || minecraftserver.getPlayerList().getProfileBans().isEnabled()) && super.canUse(minecraftserver, icommandlistener);
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.banlist.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length >= 1 && "ips".equalsIgnoreCase(astring[0])) {
-            icommandlistener.sendMessage(new ChatMessage("commands.banlist.ips", new Object[] { Integer.valueOf(minecraftserver.getPlayerList().getIPBans().getEntries().length)}));
-            icommandlistener.sendMessage(new ChatComponentText(a((Object[]) minecraftserver.getPlayerList().getIPBans().getEntries())));
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends ExpirableListEntry<?>> collection) {
+        if (collection.isEmpty()) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.none", new Object[0]), false);
         } else {
-            icommandlistener.sendMessage(new ChatMessage("commands.banlist.players", new Object[] { Integer.valueOf(minecraftserver.getPlayerList().getProfileBans().getEntries().length)}));
-            icommandlistener.sendMessage(new ChatComponentText(a((Object[]) minecraftserver.getPlayerList().getProfileBans().getEntries())));
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.list", new Object[] { Integer.valueOf(collection.size())}), false);
+            Iterator iterator = collection.iterator();
+
+            while (iterator.hasNext()) {
+                ExpirableListEntry expirablelistentry = (ExpirableListEntry) iterator.next();
+
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[] { expirablelistentry.e(), expirablelistentry.b(), expirablelistentry.getReason()}), false);
+            }
         }
 
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "players", "ips"}) : Collections.emptyList();
+        return collection.size();
     }
 }

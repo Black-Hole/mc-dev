@@ -2,9 +2,8 @@ package net.minecraft.server;
 
 public class ItemSnowball extends Item {
 
-    public ItemSnowball() {
-        this.maxStackSize = 16;
-        this.b(CreativeModeTab.f);
+    public ItemSnowball(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -14,7 +13,7 @@ public class ItemSnowball extends Item {
             itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.hp, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSnowball.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemSnowball.k.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntitySnowball entitysnowball = new EntitySnowball(world, entityhuman);
 
@@ -22,7 +21,7 @@ public class ItemSnowball extends Item {
             world.addEntity(entitysnowball);
         }
 
-        entityhuman.b(StatisticList.b((Item) this));
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

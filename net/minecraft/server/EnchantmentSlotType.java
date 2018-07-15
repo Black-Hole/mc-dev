@@ -2,7 +2,8 @@ package net.minecraft.server;
 
 public enum EnchantmentSlotType {
 
-    ALL {;
+    ALL {
+        ;
         public boolean canEnchant(Item item) {
             EnchantmentSlotType[] aenchantmentslottype = EnchantmentSlotType.values();
             int i = aenchantmentslottype.length;
@@ -17,53 +18,81 @@ public enum EnchantmentSlotType {
 
             return false;
         }
-    }, ARMOR {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemArmor;
-    }
-}, ARMOR_FEET {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemArmor && ((ItemArmor) item).c == EnumItemSlot.FEET;
-    }
-}, ARMOR_LEGS {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemArmor && ((ItemArmor) item).c == EnumItemSlot.LEGS;
-    }
-}, ARMOR_CHEST {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemArmor && ((ItemArmor) item).c == EnumItemSlot.CHEST;
-    }
-}, ARMOR_HEAD {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemArmor && ((ItemArmor) item).c == EnumItemSlot.HEAD;
-    }
-}, WEAPON {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemSword;
-    }
-}, DIGGER {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemTool;
-    }
-}, FISHING_ROD {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemFishingRod;
-    }
-}, BREAKABLE {;
-    public boolean canEnchant(Item item) {
-        return item.usesDurability();
-    }
-}, BOW {;
-    public boolean canEnchant(Item item) {
-        return item instanceof ItemBow;
-    }
-}, WEARABLE {;
-    public boolean canEnchant(Item item) {
-        boolean flag = item instanceof ItemBlock && ((ItemBlock) item).getBlock() instanceof BlockPumpkin;
+    },
+    ARMOR {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemArmor;
+        }
+    },
+    ARMOR_FEET {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemArmor && ((ItemArmor) item).b() == EnumItemSlot.FEET;
+        }
+    },
+    ARMOR_LEGS {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemArmor && ((ItemArmor) item).b() == EnumItemSlot.LEGS;
+        }
+    },
+    ARMOR_CHEST {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemArmor && ((ItemArmor) item).b() == EnumItemSlot.CHEST;
+        }
+    },
+    ARMOR_HEAD {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemArmor && ((ItemArmor) item).b() == EnumItemSlot.HEAD;
+        }
+    },
+    WEAPON {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemSword;
+        }
+    },
+    DIGGER {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemTool;
+        }
+    },
+    FISHING_ROD {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemFishingRod;
+        }
+    },
+    TRIDENT {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemTrident;
+        }
+    },
+    BREAKABLE {
+        ;
+        public boolean canEnchant(Item item) {
+            return item.usesDurability();
+        }
+    },
+    BOW {
+        ;
+        public boolean canEnchant(Item item) {
+            return item instanceof ItemBow;
+        }
+    },
+    WEARABLE {
+        ;
+        public boolean canEnchant(Item item) {
+            Block block = Block.asBlock(item);
 
-        return item instanceof ItemArmor || item instanceof ItemElytra || item instanceof ItemSkull || flag;
-    }
-};
+            return item instanceof ItemArmor || item instanceof ItemElytra || block instanceof BlockSkullAbstract || block instanceof BlockPumpkin;
+        }
+    };
 
     private EnchantmentSlotType() {}
 

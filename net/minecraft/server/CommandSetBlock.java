@@ -1,101 +1,76 @@
 package net.minecraft.server;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class CommandSetBlock extends CommandAbstract {
+public class CommandSetBlock {
 
-    public CommandSetBlock() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.setblock.failed", new Object[0]));
 
-    public String getCommand() {
-        return "setblock";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("setblock").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentTile.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentTile.a(commandcontext, "block"), CommandSetBlock.Mode.REPLACE, (Predicate) null);
+        })).then(CommandDispatcher.a("destroy").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentTile.a(commandcontext, "block"), CommandSetBlock.Mode.DESTROY, (Predicate) null);
+        }))).then(CommandDispatcher.a("keep").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentTile.a(commandcontext, "block"), CommandSetBlock.Mode.REPLACE, (shapedetectorblock) -> {
+                return shapedetectorblock.c().isEmpty(shapedetectorblock.getPosition());
+            });
+        }))).then(CommandDispatcher.a("replace").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentTile.a(commandcontext, "block"), CommandSetBlock.Mode.REPLACE, (Predicate) null);
+        })))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition, ArgumentTileLocation argumenttilelocation, CommandSetBlock.Mode commandsetblock_mode, @Nullable Predicate<ShapeDetectorBlock> predicate) throws CommandSyntaxException {
+        WorldServer worldserver = commandlistenerwrapper.getWorld();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.setblock.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 4) {
-            throw new ExceptionUsage("commands.setblock.usage", new Object[0]);
+        if (predicate != null && !predicate.test(new ShapeDetectorBlock(worldserver, blockposition, true))) {
+            throw CommandSetBlock.a.create();
         } else {
-            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
-            BlockPosition blockposition = a(icommandlistener, astring, 0, false);
-            Block block = CommandAbstract.b(icommandlistener, astring[3]);
-            IBlockData iblockdata;
+            boolean flag;
 
-            if (astring.length >= 5) {
-                iblockdata = a(block, astring[4]);
+            if (commandsetblock_mode == CommandSetBlock.Mode.DESTROY) {
+                worldserver.setAir(blockposition, true);
+                flag = !argumenttilelocation.a().isAir();
             } else {
-                iblockdata = block.getBlockData();
-            }
+                TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-            World world = icommandlistener.getWorld();
-
-            if (!world.isLoaded(blockposition)) {
-                throw new CommandException("commands.setblock.outOfWorld", new Object[0]);
-            } else {
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                boolean flag = false;
-
-                if (astring.length >= 7 && block.isTileEntity()) {
-                    String s = a(astring, 6);
-
-                    try {
-                        nbttagcompound = MojangsonParser.parse(s);
-                        flag = true;
-                    } catch (MojangsonParseException mojangsonparseexception) {
-                        throw new CommandException("commands.setblock.tagError", new Object[] { mojangsonparseexception.getMessage()});
-                    }
-                }
-
-                if (astring.length >= 6) {
-                    if ("destroy".equals(astring[5])) {
-                        world.setAir(blockposition, true);
-                        if (block == Blocks.AIR) {
-                            a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
-                            return;
-                        }
-                    } else if ("keep".equals(astring[5]) && !world.isEmpty(blockposition)) {
-                        throw new CommandException("commands.setblock.noChange", new Object[0]);
-                    }
-                }
-
-                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                if (tileentity != null && tileentity instanceof IInventory) {
+                if (tileentity instanceof IInventory) {
                     ((IInventory) tileentity).clear();
                 }
 
-                if (!world.setTypeAndData(blockposition, iblockdata, 2)) {
-                    throw new CommandException("commands.setblock.noChange", new Object[0]);
-                } else {
-                    if (flag) {
-                        TileEntity tileentity1 = world.getTileEntity(blockposition);
+                flag = true;
+            }
 
-                        if (tileentity1 != null) {
-                            nbttagcompound.setInt("x", blockposition.getX());
-                            nbttagcompound.setInt("y", blockposition.getY());
-                            nbttagcompound.setInt("z", blockposition.getZ());
-                            tileentity1.load(nbttagcompound);
-                        }
-                    }
-
-                    world.update(blockposition, iblockdata.getBlock(), false);
-                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 1);
-                    a(icommandlistener, (ICommand) this, "commands.setblock.success", new Object[0]);
-                }
+            if (flag && !argumenttilelocation.a(worldserver, blockposition, 2)) {
+                throw CommandSetBlock.a.create();
+            } else {
+                worldserver.update(blockposition, argumenttilelocation.a().getBlock());
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.setblock.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())}), true);
+                return 1;
             }
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length == 4 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 6 ? a(astring, new String[] { "replace", "destroy", "keep"}) : Collections.emptyList()));
+    public interface Filter {
+
+        @Nullable
+        ArgumentTileLocation filter(StructureBoundingBox structureboundingbox, BlockPosition blockposition, ArgumentTileLocation argumenttilelocation, WorldServer worldserver);
+    }
+
+    public static enum Mode {
+
+        REPLACE, OUTLINE, HOLLOW, DESTROY;
+
+        private Mode() {}
     }
 }

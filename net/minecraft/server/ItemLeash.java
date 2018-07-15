@@ -5,21 +5,25 @@ import java.util.List;
 
 public class ItemLeash extends Item {
 
-    public ItemLeash() {
-        this.b(CreativeModeTab.i);
+    public ItemLeash(Item.Info item_info) {
+        super(item_info);
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, BlockPosition blockposition, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+        BlockPosition blockposition = itemactioncontext.getClickPosition();
         Block block = world.getType(blockposition).getBlock();
 
-        if (!(block instanceof BlockFence)) {
-            return EnumInteractionResult.PASS;
-        } else {
-            if (!world.isClientSide) {
+        if (block instanceof BlockFence) {
+            EntityHuman entityhuman = itemactioncontext.getEntity();
+
+            if (!world.isClientSide && entityhuman != null) {
                 a(entityhuman, world, blockposition);
             }
 
             return EnumInteractionResult.SUCCESS;
+        } else {
+            return EnumInteractionResult.PASS;
         }
     }
 

@@ -4,7 +4,6 @@ public class EnchantmentFlameArrows extends Enchantment {
 
     public EnchantmentFlameArrows(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
-        this.c("arrowFire");
     }
 
     public int a(int i) {

@@ -1,55 +1,34 @@
 package net.minecraft.server;
 
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import java.util.Collection;
+import java.util.Iterator;
 
-public class CommandTell extends CommandAbstract {
+public class CommandTell {
 
-    public CommandTell() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("msg").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("message", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChat.a(commandcontext, "message"));
+        }))));
 
-    public List<String> getAliases() {
-        return Arrays.asList(new String[] { "w", "msg"});
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("tell").redirect(literalcommandnode));
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("w").redirect(literalcommandnode));
     }
 
-    public String getCommand() {
-        return "tell";
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent) {
+        Iterator iterator = collection.iterator();
 
-    public int a() {
-        return 0;
-    }
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.message.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.message.usage", new Object[0]);
-        } else {
-            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
-
-            if (entityplayer == icommandlistener) {
-                throw new ExceptionPlayerNotFound("commands.message.sameTarget");
-            } else {
-                IChatBaseComponent ichatbasecomponent = b(icommandlistener, astring, 1, !(icommandlistener instanceof EntityHuman));
-                ChatMessage chatmessage = new ChatMessage("commands.message.display.incoming", new Object[] { icommandlistener.getScoreboardDisplayName(), ichatbasecomponent.f()});
-                ChatMessage chatmessage1 = new ChatMessage("commands.message.display.outgoing", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent.f()});
-
-                chatmessage.getChatModifier().setColor(EnumChatFormat.GRAY).setItalic(Boolean.valueOf(true));
-                chatmessage1.getChatModifier().setColor(EnumChatFormat.GRAY).setItalic(Boolean.valueOf(true));
-                entityplayer.sendMessage(chatmessage);
-                icommandlistener.sendMessage(chatmessage1);
-            }
+            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[] { commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.e()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}));
+            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent.e()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
         }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return a(astring, minecraftserver.getPlayers());
-    }
-
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+        return collection.size();
     }
 }

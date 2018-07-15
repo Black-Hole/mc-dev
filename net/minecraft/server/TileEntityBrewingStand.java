@@ -2,40 +2,47 @@ package net.minecraft.server;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import javax.annotation.Nullable;
 
-public class TileEntityBrewingStand extends TileEntityContainer implements ITickable, IWorldInventory {
+public class TileEntityBrewingStand extends TileEntityContainer implements IWorldInventory, ITickable {
 
     private static final int[] a = new int[] { 3};
-    private static final int[] f = new int[] { 0, 1, 2, 3};
-    private static final int[] g = new int[] { 0, 1, 2, 4};
+    private static final int[] e = new int[] { 0, 1, 2, 3};
+    private static final int[] f = new int[] { 0, 1, 2, 4};
     private NonNullList<ItemStack> items;
     private int brewTime;
-    private boolean[] j;
-    private Item k;
-    private String l;
+    private boolean[] i;
+    private Item j;
+    private IChatBaseComponent k;
     private int fuelLevel;
 
     public TileEntityBrewingStand() {
+        super(TileEntityTypes.l);
         this.items = NonNullList.a(5, ItemStack.a);
     }
 
-    public String getName() {
-        return this.hasCustomName() ? this.l : "container.brewing";
+    public IChatBaseComponent getDisplayName() {
+        return (IChatBaseComponent) (this.k != null ? this.k : new ChatMessage("container.brewing", new Object[0]));
     }
 
     public boolean hasCustomName() {
-        return this.l != null && !this.l.isEmpty();
+        return this.k != null;
     }
 
-    public void setCustomName(String s) {
-        this.l = s;
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return this.k;
+    }
+
+    public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.k = ichatbasecomponent;
     }
 
     public int getSize() {
         return this.items.size();
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -51,7 +58,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return false;
     }
 
-    public void e() {
+    public void X_() {
         ItemStack itemstack = (ItemStack) this.items.get(4);
 
         if (this.fuelLevel <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {
@@ -60,7 +67,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             this.update();
         }
 
-        boolean flag = this.o();
+        boolean flag = this.q();
         boolean flag1 = this.brewTime > 0;
         ItemStack itemstack1 = (ItemStack) this.items.get(3);
 
@@ -69,27 +76,27 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
             boolean flag2 = this.brewTime == 0;
 
             if (flag2 && flag) {
-                this.p();
+                this.r();
                 this.update();
             } else if (!flag) {
                 this.brewTime = 0;
                 this.update();
-            } else if (this.k != itemstack1.getItem()) {
+            } else if (this.j != itemstack1.getItem()) {
                 this.brewTime = 0;
                 this.update();
             }
         } else if (flag && this.fuelLevel > 0) {
             --this.fuelLevel;
             this.brewTime = 400;
-            this.k = itemstack1.getItem();
+            this.j = itemstack1.getItem();
             this.update();
         }
 
         if (!this.world.isClientSide) {
-            boolean[] aboolean = this.n();
+            boolean[] aboolean = this.p();
 
-            if (!Arrays.equals(aboolean, this.j)) {
-                this.j = aboolean;
+            if (!Arrays.equals(aboolean, this.i)) {
+                this.i = aboolean;
                 IBlockData iblockdata = this.world.getType(this.getPosition());
 
                 if (!(iblockdata.getBlock() instanceof BlockBrewingStand)) {
@@ -97,7 +104,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
                 }
 
                 for (int i = 0; i < BlockBrewingStand.HAS_BOTTLE.length; ++i) {
-                    iblockdata = iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], Boolean.valueOf(aboolean[i]));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], Boolean.valueOf(aboolean[i]));
                 }
 
                 this.world.setTypeAndData(this.position, iblockdata, 2);
@@ -106,7 +113,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
 
     }
 
-    public boolean[] n() {
+    public boolean[] p() {
         boolean[] aboolean = new boolean[3];
 
         for (int i = 0; i < 3; ++i) {
@@ -118,7 +125,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         return aboolean;
     }
 
-    private boolean o() {
+    private boolean q() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         if (itemstack.isEmpty()) {
@@ -138,7 +145,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         }
     }
 
-    private void p() {
+    private void r() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         for (int i = 0; i < 3; ++i) {
@@ -148,8 +155,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().r()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().q());
+        if (itemstack.getItem().p()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().o());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
@@ -162,17 +169,13 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         this.world.triggerEffect(1035, blockposition, 0);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        dataconvertermanager.a(DataConverterTypes.BLOCK_ENTITY, (DataInspector) (new DataInspectorItemList(TileEntityBrewingStand.class, new String[] { "Items"})));
-    }
-
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
         ContainerUtil.b(nbttagcompound, this.items);
         this.brewTime = nbttagcompound.getShort("BrewTime");
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.l = nbttagcompound.getString("CustomName");
+            this.k = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
         this.fuelLevel = nbttagcompound.getByte("Fuel");
@@ -182,8 +185,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
         super.save(nbttagcompound);
         nbttagcompound.setShort("BrewTime", (short) this.brewTime);
         ContainerUtil.a(nbttagcompound, this.items);
-        if (this.hasCustomName()) {
-            nbttagcompound.setString("CustomName", this.l);
+        if (this.k != null) {
+            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.k));
         }
 
         nbttagcompound.setByte("Fuel", (byte) this.fuelLevel);
@@ -232,10 +235,10 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
     }
 
     public int[] getSlotsForFace(EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.a : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.f : TileEntityBrewingStand.g);
+        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.a : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.e : TileEntityBrewingStand.f);
     }
 
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, @Nullable EnumDirection enumdirection) {
         return this.b(i, itemstack);
     }
 

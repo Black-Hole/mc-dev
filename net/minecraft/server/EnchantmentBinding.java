@@ -4,7 +4,6 @@ public class EnchantmentBinding extends Enchantment {
 
     public EnchantmentBinding(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.WEARABLE, aenumitemslot);
-        this.c("binding_curse");
     }
 
     public int a(int i) {
@@ -23,7 +22,7 @@ public class EnchantmentBinding extends Enchantment {
         return true;
     }
 
-    public boolean isCursed() {
+    public boolean c() {
         return true;
     }
 }

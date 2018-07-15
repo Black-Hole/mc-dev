@@ -27,7 +27,7 @@ public class InsensitiveStringMap<V> implements Map<String, V> {
     }
 
     public boolean containsValue(Object object) {
-        return this.a.containsKey(object);
+        return this.a.containsValue(object);
     }
 
     public V get(Object object) {

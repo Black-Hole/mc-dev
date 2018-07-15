@@ -4,7 +4,7 @@ public interface IInventory extends INamableTileEntity {
 
     int getSize();
 
-    boolean x_();
+    boolean P_();
 
     ItemStack getItem(int i);
 
@@ -33,4 +33,12 @@ public interface IInventory extends INamableTileEntity {
     int h();
 
     void clear();
+
+    default int n() {
+        return 0;
+    }
+
+    default int U_() {
+        return 0;
+    }
 }

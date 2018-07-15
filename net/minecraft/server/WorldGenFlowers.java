@@ -2,29 +2,25 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenFlowers extends WorldGenerator {
+public abstract class WorldGenFlowers extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private BlockFlowers a;
-    private IBlockData b;
+    public WorldGenFlowers() {}
 
-    public WorldGenFlowers(BlockFlowers blockflowers, BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
-        this.a(blockflowers, blockflowers_enumflowervarient);
-    }
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+        IBlockData iblockdata = this.a(random, blockposition);
+        int i = 0;
 
-    public void a(BlockFlowers blockflowers, BlockFlowers.EnumFlowerVarient blockflowers_enumflowervarient) {
-        this.a = blockflowers;
-        this.b = blockflowers.getBlockData().set(blockflowers.g(), blockflowers_enumflowervarient);
-    }
-
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (int i = 0; i < 64; ++i) {
+        for (int j = 0; j < 64; ++j) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(blockposition1) && (!world.worldProvider.n() || blockposition1.getY() < 255) && this.a.f(world, blockposition1, this.b)) {
-                world.setTypeAndData(blockposition1, this.b, 2);
+            if (generatoraccess.isEmpty(blockposition1) && blockposition1.getY() < 255 && iblockdata.canPlace(generatoraccess, blockposition1)) {
+                generatoraccess.setTypeAndData(blockposition1, iblockdata, 2);
+                ++i;
             }
         }
 
-        return true;
+        return i > 0;
     }
+
+    public abstract IBlockData a(Random random, BlockPosition blockposition);
 }

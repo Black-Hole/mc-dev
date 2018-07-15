@@ -17,27 +17,25 @@ public class RemoteControlCommandListener implements ICommandListener {
         return this.a.toString();
     }
 
-    public String getName() {
-        return "Rcon";
+    public CommandListenerWrapper f() {
+        WorldServer worldserver = this.b.a(DimensionManager.OVERWORLD);
+
+        return new CommandListenerWrapper(this, new Vec3D(worldserver.getSpawn()), Vec2F.a, worldserver, 4, "Recon", new ChatComponentText("Rcon"), this.b, (Entity) null);
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent) {
-        this.a.append(ichatbasecomponent.toPlainText());
+        this.a.append(ichatbasecomponent.getString());
     }
 
-    public boolean a(int i, String s) {
+    public boolean a() {
         return true;
     }
 
-    public World getWorld() {
-        return this.b.getWorld();
-    }
-
-    public boolean getSendCommandFeedback() {
+    public boolean b() {
         return true;
     }
 
-    public MinecraftServer C_() {
-        return this.b;
+    public boolean B_() {
+        return this.b.l();
     }
 }

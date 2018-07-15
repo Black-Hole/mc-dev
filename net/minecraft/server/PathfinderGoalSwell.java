@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class PathfinderGoalSwell extends PathfinderGoal {
 
-    EntityCreeper a;
-    EntityLiving b;
+    private final EntityCreeper a;
+    private EntityLiving b;
 
     public PathfinderGoalSwell(EntityCreeper entitycreeper) {
         this.a = entitycreeper;
@@ -13,11 +13,11 @@ public class PathfinderGoalSwell extends PathfinderGoal {
     public boolean a() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
-        return this.a.dm() > 0 || entityliving != null && this.a.h(entityliving) < 9.0D;
+        return this.a.dz() > 0 || entityliving != null && this.a.h(entityliving) < 9.0D;
     }
 
     public void c() {
-        this.a.getNavigation().p();
+        this.a.getNavigation().r();
         this.b = this.a.getGoalTarget();
     }
 

@@ -1,18 +1,20 @@
 package net.minecraft.server;
 
-public class DataConverterShulkerBoxBlock implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import java.util.function.Function;
 
-    public DataConverterShulkerBoxBlock() {}
+public class DataConverterShulkerBoxBlock extends DataConverterNamedEntity {
 
-    public int a() {
-        return 813;
+    public DataConverterShulkerBoxBlock(Schema schema, boolean flag) {
+        super(schema, flag, "BlockEntityShulkerBoxColorFix", DataConverterTypes.j, "minecraft:shulker_box");
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("minecraft:shulker".equals(nbttagcompound.getString("id"))) {
-            nbttagcompound.remove("Color");
-        }
-
-        return nbttagcompound;
+    protected Typed<?> a(Typed<?> typed) {
+        return typed.update(DSL.remainderFinder(), (dynamic) -> {
+            return dynamic.remove("Color");
+        });
     }
 }

@@ -1,152 +1,145 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.Locale;
+import java.util.function.Predicate;
 
-public class CommandWorldBorder extends CommandAbstract {
+public class CommandWorldBorder {
 
-    public CommandWorldBorder() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.center.failed", new Object[0]));
+    private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.nochange", new Object[0]));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.small.", new Object[0]));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.set.failed.big.", new Object[0]));
+    private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.time.failed", new Object[0]));
+    private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.warning.distance.failed", new Object[0]));
+    private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.buffer.failed", new Object[0]));
+    private static final SimpleCommandExceptionType h = new SimpleCommandExceptionType(new ChatMessage("commands.worldborder.damage.amount.failed", new Object[0]));
 
-    public String getCommand() {
-        return "worldborder";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("worldborder").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) IntegerArgumentType.integer(-60000000, 60000000)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) IntegerArgumentType.getInteger(commandcontext, "distance"), 0L);
+        })).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) IntegerArgumentType.getInteger(commandcontext, "distance"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().i() + (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+        }))))).then(CommandDispatcher.a("set").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) IntegerArgumentType.integer(-60000000, 60000000)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), (double) IntegerArgumentType.getInteger(commandcontext, "distance"), 0L);
+        })).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), (double) IntegerArgumentType.getInteger(commandcontext, "distance"), (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+        }))))).then(CommandDispatcher.a("center").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec2.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "pos"));
+        })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("damage").then(CommandDispatcher.a("amount").then(CommandDispatcher.a("damagePerBlock", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), FloatArgumentType.getFloat(commandcontext, "damagePerBlock"));
+        })))).then(CommandDispatcher.a("buffer").then(CommandDispatcher.a("distance", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), FloatArgumentType.getFloat(commandcontext, "distance"));
+        }))))).then(CommandDispatcher.a("get").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource());
+        }))).then(((LiteralArgumentBuilder) CommandDispatcher.a("warning").then(CommandDispatcher.a("distance").then(CommandDispatcher.a("distance", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "distance"));
+        })))).then(CommandDispatcher.a("time").then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "time"));
+        })))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, float f) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.worldborder.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 1) {
-            throw new ExceptionUsage("commands.worldborder.usage", new Object[0]);
+        if (worldborder.getDamageBuffer() == (double) f) {
+            throw CommandWorldBorder.g.create();
         } else {
-            WorldBorder worldborder = this.a(minecraftserver);
-            double d0;
-            double d1;
-            long i;
-
-            if ("set".equals(astring[0])) {
-                if (astring.length != 2 && astring.length != 3) {
-                    throw new ExceptionUsage("commands.worldborder.set.usage", new Object[0]);
-                }
-
-                d0 = worldborder.j();
-                d1 = a(astring[1], 1.0D, 6.0E7D);
-                i = astring.length > 2 ? a(astring[2], 0L, 9223372036854775L) * 1000L : 0L;
-                if (i > 0L) {
-                    worldborder.transitionSizeBetween(d0, d1, i);
-                    if (d0 > d1) {
-                        a(icommandlistener, (ICommand) this, "commands.worldborder.setSlowly.shrink.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)});
-                    } else {
-                        a(icommandlistener, (ICommand) this, "commands.worldborder.setSlowly.grow.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)});
-                    }
-                } else {
-                    worldborder.setSize(d1);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.set.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)})});
-                }
-            } else if ("add".equals(astring[0])) {
-                if (astring.length != 2 && astring.length != 3) {
-                    throw new ExceptionUsage("commands.worldborder.add.usage", new Object[0]);
-                }
-
-                d0 = worldborder.getSize();
-                d1 = d0 + a(astring[1], -d0, 6.0E7D - d0);
-                i = worldborder.i() + (astring.length > 2 ? a(astring[2], 0L, 9223372036854775L) * 1000L : 0L);
-                if (i > 0L) {
-                    worldborder.transitionSizeBetween(d0, d1, i);
-                    if (d0 > d1) {
-                        a(icommandlistener, (ICommand) this, "commands.worldborder.setSlowly.shrink.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)});
-                    } else {
-                        a(icommandlistener, (ICommand) this, "commands.worldborder.setSlowly.grow.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)});
-                    }
-                } else {
-                    worldborder.setSize(d1);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.set.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d1)}), String.format("%.1f", new Object[] { Double.valueOf(d0)})});
-                }
-            } else if ("center".equals(astring[0])) {
-                if (astring.length != 3) {
-                    throw new ExceptionUsage("commands.worldborder.center.usage", new Object[0]);
-                }
-
-                BlockPosition blockposition = icommandlistener.getChunkCoordinates();
-                double d2 = b((double) blockposition.getX() + 0.5D, astring[1], true);
-                double d3 = b((double) blockposition.getZ() + 0.5D, astring[2], true);
-
-                worldborder.setCenter(d2, d3);
-                a(icommandlistener, (ICommand) this, "commands.worldborder.center.success", new Object[] { Double.valueOf(d2), Double.valueOf(d3)});
-            } else if ("damage".equals(astring[0])) {
-                if (astring.length < 2) {
-                    throw new ExceptionUsage("commands.worldborder.damage.usage", new Object[0]);
-                }
-
-                if ("buffer".equals(astring[1])) {
-                    if (astring.length != 3) {
-                        throw new ExceptionUsage("commands.worldborder.damage.buffer.usage", new Object[0]);
-                    }
-
-                    d0 = a(astring[2], 0.0D);
-                    d1 = worldborder.getDamageBuffer();
-                    worldborder.setDamageBuffer(d0);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.damage.buffer.success", new Object[] { String.format("%.1f", new Object[] { Double.valueOf(d0)}), String.format("%.1f", new Object[] { Double.valueOf(d1)})});
-                } else if ("amount".equals(astring[1])) {
-                    if (astring.length != 3) {
-                        throw new ExceptionUsage("commands.worldborder.damage.amount.usage", new Object[0]);
-                    }
-
-                    d0 = a(astring[2], 0.0D);
-                    d1 = worldborder.getDamageAmount();
-                    worldborder.setDamageAmount(d0);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.damage.amount.success", new Object[] { String.format("%.2f", new Object[] { Double.valueOf(d0)}), String.format("%.2f", new Object[] { Double.valueOf(d1)})});
-                }
-            } else if ("warning".equals(astring[0])) {
-                if (astring.length < 2) {
-                    throw new ExceptionUsage("commands.worldborder.warning.usage", new Object[0]);
-                }
-
-                int j;
-                int k;
-
-                if ("time".equals(astring[1])) {
-                    if (astring.length != 3) {
-                        throw new ExceptionUsage("commands.worldborder.warning.time.usage", new Object[0]);
-                    }
-
-                    j = a(astring[2], 0);
-                    k = worldborder.getWarningTime();
-                    worldborder.setWarningTime(j);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.warning.time.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k)});
-                } else if ("distance".equals(astring[1])) {
-                    if (astring.length != 3) {
-                        throw new ExceptionUsage("commands.worldborder.warning.distance.usage", new Object[0]);
-                    }
-
-                    j = a(astring[2], 0);
-                    k = worldborder.getWarningDistance();
-                    worldborder.setWarningDistance(j);
-                    a(icommandlistener, (ICommand) this, "commands.worldborder.warning.distance.success", new Object[] { Integer.valueOf(j), Integer.valueOf(k)});
-                }
-            } else {
-                if (!"get".equals(astring[0])) {
-                    throw new ExceptionUsage("commands.worldborder.usage", new Object[0]);
-                }
-
-                d0 = worldborder.getSize();
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.QUERY_RESULT, MathHelper.floor(d0 + 0.5D));
-                icommandlistener.sendMessage(new ChatMessage("commands.worldborder.get.success", new Object[] { String.format("%.0f", new Object[] { Double.valueOf(d0)})}));
-            }
-
+            worldborder.setDamageBuffer((double) f);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.buffer.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(f)})}), true);
+            return (int) f;
         }
     }
 
-    protected WorldBorder a(MinecraftServer minecraftserver) {
-        return minecraftserver.worldServer[0].getWorldBorder();
+    private static int b(CommandListenerWrapper commandlistenerwrapper, float f) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
+
+        if (worldborder.getDamageAmount() == (double) f) {
+            throw CommandWorldBorder.h.create();
+        } else {
+            worldborder.setDamageAmount((double) f);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.amount.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(f)})}), true);
+            return (int) f;
+        }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "set", "center", "damage", "warning", "add", "get"}) : (astring.length == 2 && "damage".equals(astring[0]) ? a(astring, new String[] { "buffer", "amount"}) : (astring.length >= 2 && astring.length <= 3 && "center".equals(astring[0]) ? b(astring, 1, blockposition) : (astring.length == 2 && "warning".equals(astring[0]) ? a(astring, new String[] { "time", "distance"}) : Collections.emptyList())));
+    private static int a(CommandListenerWrapper commandlistenerwrapper, int i) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
+
+        if (worldborder.getWarningTime() == i) {
+            throw CommandWorldBorder.e.create();
+        } else {
+            worldborder.setWarningTime(i);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.warning.time.success", new Object[] { Integer.valueOf(i)}), true);
+            return i;
+        }
+    }
+
+    private static int b(CommandListenerWrapper commandlistenerwrapper, int i) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
+
+        if (worldborder.getWarningDistance() == i) {
+            throw CommandWorldBorder.f.create();
+        } else {
+            worldborder.setWarningDistance(i);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.warning.distance.success", new Object[] { Integer.valueOf(i)}), true);
+            return i;
+        }
+    }
+
+    private static int a(CommandListenerWrapper commandlistenerwrapper) {
+        double d0 = commandlistenerwrapper.getWorld().getWorldBorder().getSize();
+
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.get", new Object[] { String.format(Locale.ROOT, "%.0f", new Object[] { Double.valueOf(d0)})}), false);
+        return MathHelper.floor(d0 + 0.5D);
+    }
+
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Vec2F vec2f) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
+
+        if (worldborder.getCenterX() == (double) vec2f.i && worldborder.getCenterZ() == (double) vec2f.j) {
+            throw CommandWorldBorder.a.create();
+        } else {
+            worldborder.setCenter((double) vec2f.i, (double) vec2f.j);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.center.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(vec2f.i)}), String.format("%.2f", new Object[] { Float.valueOf(vec2f.j)})}), true);
+            return 0;
+        }
+    }
+
+    private static int a(CommandListenerWrapper commandlistenerwrapper, double d0, long i) throws CommandSyntaxException {
+        WorldBorder worldborder = commandlistenerwrapper.getWorld().getWorldBorder();
+        double d1 = worldborder.getSize();
+
+        if (d1 == d0) {
+            throw CommandWorldBorder.b.create();
+        } else if (d0 < 1.0D) {
+            throw CommandWorldBorder.c.create();
+        } else if (d0 > 6.0E7D) {
+            throw CommandWorldBorder.d.create();
+        } else {
+            if (i > 0L) {
+                worldborder.transitionSizeBetween(d1, d0, i);
+                if (d0 > d1) {
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.grow", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)}), true);
+                } else {
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.shrink", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { Double.valueOf(d0)}), Long.toString(i / 1000L)}), true);
+                }
+            } else {
+                worldborder.setSize(d0);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.immediate", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { Double.valueOf(d0)})}), true);
+            }
+
+            return (int) (d0 - d1);
+        }
     }
 }

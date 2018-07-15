@@ -5,23 +5,23 @@ import javax.annotation.Nullable;
 public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRangedEntity {
 
     private int c;
-    private final Vec3D[][] bx;
+    private final Vec3D[][] bC;
 
     public EntityIllagerIllusioner(World world) {
-        super(world);
+        super(EntityTypes.ILLUSIONER, world);
         this.setSize(0.6F, 1.95F);
         this.b_ = 5;
-        this.bx = new Vec3D[2][4];
+        this.bC = new Vec3D[2][4];
 
         for (int i = 0; i < 4; ++i) {
-            this.bx[0][i] = new Vec3D(0.0D, 0.0D, 0.0D);
-            this.bx[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+            this.bC[0][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+            this.bC[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
         }
 
     }
 
-    protected void r() {
-        super.r();
+    protected void n() {
+        super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new EntityIllagerWizard.b());
         this.goalSelector.a(4, new EntityIllagerIllusioner.b(null));
@@ -43,21 +43,21 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(32.0D);
     }
 
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.BOW));
-        return super.prepare(difficultydamagescaler, groupdataentity);
+        return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
     }
 
-    protected MinecraftKey J() {
+    protected MinecraftKey G() {
         return LootTables.a;
     }
 
-    public void n() {
-        super.n();
+    public void k() {
+        super.k();
         if (this.world.isClientSide && this.isInvisible()) {
             --this.c;
             if (this.c < 0) {
@@ -65,12 +65,12 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
             }
 
             if (this.hurtTicks != 1 && this.ticksLived % 1200 != 0) {
-                if (this.hurtTicks == this.az - 1) {
+                if (this.hurtTicks == this.aC - 1) {
                     this.c = 3;
 
                     for (int i = 0; i < 4; ++i) {
-                        this.bx[0][i] = this.bx[1][i];
-                        this.bx[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
+                        this.bC[0][i] = this.bC[1][i];
+                        this.bC[1][i] = new Vec3D(0.0D, 0.0D, 0.0D);
                     }
                 }
             } else {
@@ -81,81 +81,81 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
                 int j;
 
                 for (j = 0; j < 4; ++j) {
-                    this.bx[0][j] = this.bx[1][j];
-                    this.bx[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
+                    this.bC[0][j] = this.bC[1][j];
+                    this.bC[1][j] = new Vec3D((double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D, (double) Math.max(0, this.random.nextInt(6) - 4), (double) (-6.0F + (float) this.random.nextInt(13)) * 0.5D);
                 }
 
                 for (j = 0; j < 16; ++j) {
-                    this.world.addParticle(EnumParticle.CLOUD, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+                    this.world.addParticle(Particles.g, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
                 }
 
-                this.world.a(this.locX, this.locY, this.locZ, SoundEffects.dg, this.bK(), 1.0F, 1.0F, false);
+                this.world.a(this.locX, this.locY, this.locZ, SoundEffects.ENTITY_ILLUSIONER_MIRROR_MOVE, this.bV(), 1.0F, 1.0F, false);
             }
         }
 
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.aY() == null && entity.aY() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.be() == null && entity.be() == null : false);
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.dc;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_ILLUSIONER_AMBIENT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.de;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_ILLUSIONER_DEATH;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.df;
+        return SoundEffects.ENTITY_ILLUSIONER_HURT;
     }
 
-    protected SoundEffect dm() {
-        return SoundEffects.dd;
+    protected SoundEffect dz() {
+        return SoundEffects.ENTITY_ILLUSIONER_CAST_SPELL;
     }
 
     public void a(EntityLiving entityliving, float f) {
-        EntityArrow entityarrow = this.r(f);
+        EntityArrow entityarrow = this.v(f);
         double d0 = entityliving.locX - this.locX;
         double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entityarrow.locY;
         double d2 = entityliving.locZ - this.locZ;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) (14 - this.world.getDifficulty().a() * 4));
-        this.a(SoundEffects.gW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.a(SoundEffects.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(entityarrow);
     }
 
-    protected EntityArrow r(float f) {
+    protected EntityArrow v(float f) {
         EntityTippedArrow entitytippedarrow = new EntityTippedArrow(this.world, this);
 
         entitytippedarrow.a((EntityLiving) this, f);
         return entitytippedarrow;
     }
 
-    public void p(boolean flag) {
+    public void s(boolean flag) {
         this.a(1, flag);
     }
 
     class a extends EntityIllagerWizard.c {
 
-        private int b;
+        private int e;
 
         private a() {
             super();
         }
 
         public boolean a() {
-            return !super.a() ? false : (EntityIllagerIllusioner.this.getGoalTarget() == null ? false : (EntityIllagerIllusioner.this.getGoalTarget().getId() == this.b ? false : EntityIllagerIllusioner.this.world.D(new BlockPosition(EntityIllagerIllusioner.this)).a((float) EnumDifficulty.NORMAL.ordinal())));
+            return !super.a() ? false : (EntityIllagerIllusioner.this.getGoalTarget() == null ? false : (EntityIllagerIllusioner.this.getGoalTarget().getId() == this.e ? false : EntityIllagerIllusioner.this.world.getDamageScaler(new BlockPosition(EntityIllagerIllusioner.this)).a((float) EnumDifficulty.NORMAL.ordinal())));
         }
 
         public void c() {
             super.c();
-            this.b = EntityIllagerIllusioner.this.getGoalTarget().getId();
+            this.e = EntityIllagerIllusioner.this.getGoalTarget().getId();
         }
 
-        protected int f() {
+        protected int g() {
             return 20;
         }
 
@@ -168,7 +168,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         }
 
         protected SoundEffect k() {
-            return SoundEffects.dh;
+            return SoundEffects.ENTITY_ILLUSIONER_PREPARE_BLINDNESS;
         }
 
         protected EntityIllagerWizard.Spell l() {
@@ -190,7 +190,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
             return !super.a() ? false : !EntityIllagerIllusioner.this.hasEffect(MobEffects.INVISIBILITY);
         }
 
-        protected int f() {
+        protected int g() {
             return 20;
         }
 
@@ -204,7 +204,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
 
         @Nullable
         protected SoundEffect k() {
-            return SoundEffects.di;
+            return SoundEffects.ENTITY_ILLUSIONER_PREPARE_MIRROR;
         }
 
         protected EntityIllagerWizard.Spell l() {

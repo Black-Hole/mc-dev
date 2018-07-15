@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
@@ -138,8 +139,22 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
             this.a = potionregistry;
         }
 
+        public static CriterionTriggerBrewedPotion.b c() {
+            return new CriterionTriggerBrewedPotion.b((PotionRegistry) null);
+        }
+
         public boolean a(PotionRegistry potionregistry) {
             return this.a == null || this.a == potionregistry;
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            if (this.a != null) {
+                jsonobject.addProperty("potion", ((MinecraftKey) PotionRegistry.a.b(this.a)).toString());
+            }
+
+            return jsonobject;
         }
     }
 }

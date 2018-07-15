@@ -2,16 +2,14 @@ package net.minecraft.server;
 
 public enum EnumGamemode {
 
-    NOT_SET(-1, "", ""), SURVIVAL(0, "survival", "s"), CREATIVE(1, "creative", "c"), ADVENTURE(2, "adventure", "a"), SPECTATOR(3, "spectator", "sp");
+    NOT_SET(-1, ""), SURVIVAL(0, "survival"), CREATIVE(1, "creative"), ADVENTURE(2, "adventure"), SPECTATOR(3, "spectator");
 
-    int f;
-    String g;
-    String h;
+    private final int f;
+    private final String g;
 
-    private EnumGamemode(int i, String s, String s1) {
+    private EnumGamemode(int i, String s) {
         this.f = i;
         this.g = s;
-        this.h = s1;
     }
 
     public int getId() {
@@ -20,6 +18,10 @@ public enum EnumGamemode {
 
     public String b() {
         return this.g;
+    }
+
+    public IChatBaseComponent c() {
+        return new ChatMessage("gameMode." + this.g, new Object[0]);
     }
 
     public void a(PlayerAbilities playerabilities) {
@@ -39,10 +41,10 @@ public enum EnumGamemode {
             playerabilities.isFlying = false;
         }
 
-        playerabilities.mayBuild = !this.c();
+        playerabilities.mayBuild = !this.d();
     }
 
-    public boolean c() {
+    public boolean d() {
         return this == EnumGamemode.ADVENTURE || this == EnumGamemode.SPECTATOR;
     }
 
@@ -50,7 +52,7 @@ public enum EnumGamemode {
         return this == EnumGamemode.CREATIVE;
     }
 
-    public boolean e() {
+    public boolean f() {
         return this == EnumGamemode.SURVIVAL || this == EnumGamemode.ADVENTURE;
     }
 
@@ -80,7 +82,7 @@ public enum EnumGamemode {
         for (int j = 0; j < i; ++j) {
             EnumGamemode enumgamemode1 = aenumgamemode[j];
 
-            if (enumgamemode1.g.equals(s) || enumgamemode1.h.equals(s)) {
+            if (enumgamemode1.g.equals(s)) {
                 return enumgamemode1;
             }
         }

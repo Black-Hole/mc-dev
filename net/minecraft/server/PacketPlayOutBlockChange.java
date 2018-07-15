@@ -9,9 +9,9 @@ public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutBlockChange() {}
 
-    public PacketPlayOutBlockChange(World world, BlockPosition blockposition) {
+    public PacketPlayOutBlockChange(IBlockAccess iblockaccess, BlockPosition blockposition) {
         this.a = blockposition;
-        this.block = world.getType(blockposition);
+        this.block = iblockaccess.getType(blockposition);
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -21,7 +21,7 @@ public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
-        packetdataserializer.d(Block.REGISTRY_ID.getId(this.block));
+        packetdataserializer.d(Block.getCombinedId(this.block));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

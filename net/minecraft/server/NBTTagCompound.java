@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.io.DataInput;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -18,15 +20,15 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class NBTTagCompound extends NBTBase {
+public class NBTTagCompound implements NBTBase {
 
-    private static final Logger b = LogManager.getLogger();
-    private static final Pattern c = Pattern.compile("[A-Za-z0-9._+-]+");
+    private static final Logger f = LogManager.getLogger();
+    private static final Pattern g = Pattern.compile("[A-Za-z0-9._+-]+");
     private final Map<String, NBTBase> map = Maps.newHashMap();
 
     public NBTTagCompound() {}
 
-    void write(DataOutput dataoutput) throws IOException {
+    public void write(DataOutput dataoutput) throws IOException {
         Iterator iterator = this.map.keySet().iterator();
 
         while (iterator.hasNext()) {
@@ -39,7 +41,7 @@ public class NBTTagCompound extends NBTBase {
         dataoutput.writeByte(0);
     }
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         nbtreadlimiter.a(384L);
         if (i > 512) {
             throw new RuntimeException("Tried to read NBT tag with too high complexity, depth > 512");
@@ -62,7 +64,7 @@ public class NBTTagCompound extends NBTBase {
         }
     }
 
-    public Set<String> c() {
+    public Set<String> getKeys() {
         return this.map.keySet();
     }
 
@@ -126,6 +128,18 @@ public class NBTTagCompound extends NBTBase {
 
     public void setIntArray(String s, int[] aint) {
         this.map.put(s, new NBTTagIntArray(aint));
+    }
+
+    public void b(String s, List<Integer> list) {
+        this.map.put(s, new NBTTagIntArray(list));
+    }
+
+    public void a(String s, long[] along) {
+        this.map.put(s, new NBTTagLongArray(along));
+    }
+
+    public void c(String s, List<Long> list) {
+        this.map.put(s, new NBTTagLongArray(list));
     }
 
     public void setBoolean(String s, boolean flag) {
@@ -227,7 +241,7 @@ public class NBTTagCompound extends NBTBase {
     public String getString(String s) {
         try {
             if (this.hasKeyOfType(s, 8)) {
-                return ((NBTBase) this.map.get(s)).c_();
+                return ((NBTBase) this.map.get(s)).b_();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -260,6 +274,18 @@ public class NBTTagCompound extends NBTBase {
         return new int[0];
     }
 
+    public long[] o(String s) {
+        try {
+            if (this.hasKeyOfType(s, 12)) {
+                return ((NBTTagLongArray) this.map.get(s)).d();
+            }
+        } catch (ClassCastException classcastexception) {
+            throw new ReportedException(this.a(s, 12, classcastexception));
+        }
+
+        return new long[0];
+    }
+
     public NBTTagCompound getCompound(String s) {
         try {
             if (this.hasKeyOfType(s, 10)) {
@@ -277,7 +303,7 @@ public class NBTTagCompound extends NBTBase {
             if (this.d(s) == 9) {
                 NBTTagList nbttaglist = (NBTTagList) this.map.get(s);
 
-                if (!nbttaglist.isEmpty() && nbttaglist.g() != i) {
+                if (!nbttaglist.isEmpty() && nbttaglist.d() != i) {
                     return new NBTTagList();
                 }
 
@@ -302,7 +328,7 @@ public class NBTTagCompound extends NBTBase {
         StringBuilder stringbuilder = new StringBuilder("{");
         Object object = this.map.keySet();
 
-        if (NBTTagCompound.b.isDebugEnabled()) {
+        if (NBTTagCompound.f.isDebugEnabled()) {
             ArrayList arraylist = Lists.newArrayList(this.map.keySet());
 
             Collections.sort(arraylist);
@@ -325,33 +351,21 @@ public class NBTTagCompound extends NBTBase {
         return this.map.isEmpty();
     }
 
-    private CrashReport a(final String s, final int i, ClassCastException classcastexception) {
+    private CrashReport a(String s, int i, ClassCastException classcastexception) {
         CrashReport crashreport = CrashReport.a(classcastexception, "Reading NBT data");
         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Corrupt NBT tag", 1);
 
-        crashreportsystemdetails.a("Tag type found", new CrashReportCallable() {
-            public String a() throws Exception {
-                return NBTBase.a[((NBTBase) NBTTagCompound.this.map.get(s)).getTypeId()];
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
+        crashreportsystemdetails.a("Tag type found", () -> {
+            return NBTTagCompound.a[((NBTBase) this.map.get(s)).getTypeId()];
         });
-        crashreportsystemdetails.a("Tag type expected", new CrashReportCallable() {
-            public String a() throws Exception {
-                return NBTBase.a[i];
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
+        crashreportsystemdetails.a("Tag type expected", () -> {
+            return NBTTagCompound.a[i];
         });
         crashreportsystemdetails.a("Tag name", (Object) s);
         return crashreport;
     }
 
-    public NBTTagCompound g() {
+    public NBTTagCompound clone() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         Iterator iterator = this.map.keySet().iterator();
 
@@ -365,11 +379,11 @@ public class NBTTagCompound extends NBTBase {
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) && Objects.equals(this.map.entrySet(), ((NBTTagCompound) object).map.entrySet());
+        return this == object ? true : object instanceof NBTTagCompound && Objects.equals(this.map, ((NBTTagCompound) object).map);
     }
 
     public int hashCode() {
-        return super.hashCode() ^ this.map.hashCode();
+        return this.map.hashCode();
     }
 
     private static void a(String s, NBTBase nbtbase, DataOutput dataoutput) throws IOException {
@@ -404,7 +418,7 @@ public class NBTTagCompound extends NBTBase {
         }
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         Iterator iterator = nbttagcompound.map.keySet().iterator();
 
         while (iterator.hasNext()) {
@@ -424,13 +438,62 @@ public class NBTTagCompound extends NBTBase {
             }
         }
 
+        return this;
     }
 
     protected static String s(String s) {
-        return NBTTagCompound.c.matcher(s).matches() ? s : NBTTagString.a(s);
+        return NBTTagCompound.g.matcher(s).matches() ? s : NBTTagString.a(s, true);
+    }
+
+    protected static IChatBaseComponent t(String s) {
+        if (NBTTagCompound.g.matcher(s).matches()) {
+            return (new ChatComponentText(s)).a(NBTTagCompound.b);
+        } else {
+            IChatBaseComponent ichatbasecomponent = (new ChatComponentText(NBTTagString.a(s, false))).a(NBTTagCompound.b);
+
+            return (new ChatComponentText("\"")).addSibling(ichatbasecomponent).a("\"");
+        }
+    }
+
+    public IChatBaseComponent a(String s, int i) {
+        if (this.map.isEmpty()) {
+            return new ChatComponentText("{}");
+        } else {
+            ChatComponentText chatcomponenttext = new ChatComponentText("{");
+            Object object = this.map.keySet();
+
+            if (NBTTagCompound.f.isDebugEnabled()) {
+                ArrayList arraylist = Lists.newArrayList(this.map.keySet());
+
+                Collections.sort(arraylist);
+                object = arraylist;
+            }
+
+            if (!s.isEmpty()) {
+                chatcomponenttext.a("\n");
+            }
+
+            IChatBaseComponent ichatbasecomponent;
+
+            for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); chatcomponenttext.addSibling(ichatbasecomponent)) {
+                String s1 = (String) iterator.next();
+
+                ichatbasecomponent = (new ChatComponentText(Strings.repeat(s, i + 1))).addSibling(t(s1)).a(String.valueOf(':')).a(" ").addSibling(((NBTBase) this.map.get(s1)).a(s, i + 1));
+                if (iterator.hasNext()) {
+                    ichatbasecomponent.a(String.valueOf(',')).a(s.isEmpty() ? " " : "\n");
+                }
+            }
+
+            if (!s.isEmpty()) {
+                chatcomponenttext.a("\n").a(Strings.repeat(s, i));
+            }
+
+            chatcomponenttext.a("}");
+            return chatcomponenttext;
+        }
     }
 
     public NBTBase clone() {
-        return this.g();
+        return this.clone();
     }
 }

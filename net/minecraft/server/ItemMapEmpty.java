@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class ItemMapEmpty extends ItemWorldMapBase {
 
-    protected ItemMapEmpty() {
-        this.b(CreativeModeTab.f);
+    public ItemMapEmpty(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = ItemWorldMap.a(world, entityhuman.locX, entityhuman.locZ, (byte) 0, true, false);
+        ItemStack itemstack = ItemWorldMap.a(world, MathHelper.floor(entityhuman.locX), MathHelper.floor(entityhuman.locZ), (byte) 0, true, false);
         ItemStack itemstack1 = entityhuman.b(enumhand);
 
         itemstack1.subtract(1);
@@ -18,7 +18,7 @@ public class ItemMapEmpty extends ItemWorldMapBase {
                 entityhuman.drop(itemstack, false);
             }
 
-            entityhuman.b(StatisticList.b((Item) this));
+            entityhuman.b(StatisticList.ITEM_USED.b(this));
             return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack1);
         }
     }

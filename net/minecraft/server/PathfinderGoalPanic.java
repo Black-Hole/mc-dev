@@ -31,11 +31,11 @@ public class PathfinderGoalPanic extends PathfinderGoal {
                 }
             }
 
-            return this.f();
+            return this.g();
         }
     }
 
-    protected boolean f() {
+    protected boolean g() {
         Vec3D vec3d = RandomPositionGenerator.a(this.a, 5, 4);
 
         if (vec3d == null) {
@@ -53,11 +53,11 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().o();
+        return !this.a.getNavigation().q();
     }
 
     @Nullable
-    private BlockPosition a(World world, Entity entity, int i, int j) {
+    protected BlockPosition a(IBlockAccess iblockaccess, Entity entity, int i, int j) {
         BlockPosition blockposition = new BlockPosition(entity);
         int k = blockposition.getX();
         int l = blockposition.getY();
@@ -70,9 +70,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
             for (int k1 = l - j; k1 <= l + j; ++k1) {
                 for (int l1 = i1 - i; l1 <= i1 + i; ++l1) {
                     blockposition_mutableblockposition.c(j1, k1, l1);
-                    IBlockData iblockdata = world.getType(blockposition_mutableblockposition);
-
-                    if (iblockdata.getMaterial() == Material.WATER) {
+                    if (iblockaccess.b(blockposition_mutableblockposition).a(TagsFluid.a)) {
                         float f1 = (float) ((j1 - k) * (j1 - k) + (k1 - l) * (k1 - l) + (l1 - i1) * (l1 - i1));
 
                         if (f1 < f) {

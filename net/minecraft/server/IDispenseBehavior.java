@@ -2,11 +2,9 @@ package net.minecraft.server;
 
 public interface IDispenseBehavior {
 
-    IDispenseBehavior NONE = new IDispenseBehavior() {
-        public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
-            return itemstack;
-        }
+    IDispenseBehavior NONE = (isourceblock, itemstack) -> {
+        return itemstack;
     };
 
-    ItemStack a(ISourceBlock isourceblock, ItemStack itemstack);
+    ItemStack dispense(ISourceBlock isourceblock, ItemStack itemstack);
 }

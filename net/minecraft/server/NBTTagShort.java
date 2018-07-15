@@ -14,11 +14,11 @@ public class NBTTagShort extends NBTNumber {
         this.data = short0;
     }
 
-    void write(DataOutput dataoutput) throws IOException {
+    public void write(DataOutput dataoutput) throws IOException {
         dataoutput.writeShort(this.data);
     }
 
-    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
+    public void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException {
         nbtreadlimiter.a(80L);
         this.data = datainput.readShort();
     }
@@ -36,11 +36,17 @@ public class NBTTagShort extends NBTNumber {
     }
 
     public boolean equals(Object object) {
-        return super.equals(object) && this.data == ((NBTTagShort) object).data;
+        return this == object ? true : object instanceof NBTTagShort && this.data == ((NBTTagShort) object).data;
     }
 
     public int hashCode() {
-        return super.hashCode() ^ this.data;
+        return this.data;
+    }
+
+    public IChatBaseComponent a(String s, int i) {
+        IChatBaseComponent ichatbasecomponent = (new ChatComponentText("s")).a(NBTTagShort.e);
+
+        return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagShort.d);
     }
 
     public long d() {
@@ -65,6 +71,10 @@ public class NBTTagShort extends NBTNumber {
 
     public float i() {
         return (float) this.data;
+    }
+
+    public Number j() {
+        return Short.valueOf(this.data);
     }
 
     public NBTBase clone() {

@@ -65,6 +65,10 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
     }
 
+    public double m(BaseBlockPosition baseblockposition) {
+        return this.h(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
+    }
+
     public double distanceSquared(double d0, double d1, double d2) {
         double d3 = (double) this.getX() - d0;
         double d4 = (double) this.getY() - d1;

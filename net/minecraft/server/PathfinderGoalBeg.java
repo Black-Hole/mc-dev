@@ -4,7 +4,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
 
     private final EntityWolf a;
     private EntityHuman b;
-    private final World c;
+    private final IWorldReader c;
     private final float d;
     private int e;
 
@@ -25,17 +25,17 @@ public class PathfinderGoalBeg extends PathfinderGoal {
     }
 
     public void c() {
-        this.a.t(true);
+        this.a.w(true);
         this.e = 40 + this.a.getRandom().nextInt(40);
     }
 
     public void d() {
-        this.a.t(false);
+        this.a.w(false);
         this.b = null;
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.N());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.K());
         --this.e;
     }
 
@@ -51,7 +51,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
                 return true;
             }
 
-            if (this.a.e(itemstack)) {
+            if (this.a.f(itemstack)) {
                 return true;
             }
         }

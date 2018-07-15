@@ -2,30 +2,23 @@ package net.minecraft.server;
 
 public class ItemShield extends Item {
 
-    public ItemShield() {
-        this.maxStackSize = 1;
-        this.b(CreativeModeTab.j);
-        this.setMaxDurability(336);
-        this.a(new MinecraftKey("blocking"), new IDynamicTexture() {
+    public ItemShield(Item.Info item_info) {
+        super(item_info);
+        this.a(new MinecraftKey("blocking"), (itemstack, world, entityliving) -> {
+            return entityliving != null && entityliving.isHandRaised() && entityliving.cV() == itemstack ? 1.0F : 0.0F;
         });
-        BlockDispenser.REGISTRY.a(this, ItemArmor.b);
+        BlockDispenser.a((IMaterial) this, ItemArmor.a);
     }
 
-    public String b(ItemStack itemstack) {
-        if (itemstack.d("BlockEntityTag") != null) {
-            EnumColor enumcolor = TileEntityBanner.d(itemstack);
-
-            return LocaleI18n.get("item.shield." + enumcolor.d() + ".name");
-        } else {
-            return LocaleI18n.get("item.shield.name");
-        }
+    public String h(ItemStack itemstack) {
+        return itemstack.b("BlockEntityTag") != null ? this.getName() + '.' + e(itemstack).b() : super.h(itemstack);
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.BLOCK;
     }
 
-    public int e(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         return 72000;
     }
 
@@ -37,6 +30,10 @@ public class ItemShield extends Item {
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return itemstack1.getItem() == Item.getItemOf(Blocks.PLANKS) ? true : super.a(itemstack, itemstack1);
+        return TagsItem.b.isTagged(itemstack1.getItem()) || super.a(itemstack, itemstack1);
+    }
+
+    public static EnumColor e(ItemStack itemstack) {
+        return EnumColor.fromColorIndex(itemstack.a("BlockEntityTag").getInt("Base"));
     }
 }

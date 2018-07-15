@@ -5,52 +5,64 @@ import javax.annotation.Nullable;
 
 public abstract class TileEntityLootable extends TileEntityContainer implements ILootable {
 
-    protected MinecraftKey m;
-    protected long n;
-    protected String o;
+    protected MinecraftKey g;
+    protected long h;
+    protected IChatBaseComponent i;
 
-    public TileEntityLootable() {}
+    protected TileEntityLootable(TileEntityTypes<?> tileentitytypes) {
+        super(tileentitytypes);
+    }
 
-    protected boolean c(NBTTagCompound nbttagcompound) {
+    public static void a(IBlockAccess iblockaccess, Random random, BlockPosition blockposition, MinecraftKey minecraftkey) {
+        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+
+        if (tileentity instanceof TileEntityLootable) {
+            ((TileEntityLootable) tileentity).a(minecraftkey, random.nextLong());
+        }
+
+    }
+
+    protected boolean d(NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
-            this.m = new MinecraftKey(nbttagcompound.getString("LootTable"));
-            this.n = nbttagcompound.getLong("LootTableSeed");
+            this.g = new MinecraftKey(nbttagcompound.getString("LootTable"));
+            this.h = nbttagcompound.getLong("LootTableSeed");
             return true;
         } else {
             return false;
         }
     }
 
-    protected boolean d(NBTTagCompound nbttagcompound) {
-        if (this.m != null) {
-            nbttagcompound.setString("LootTable", this.m.toString());
-            if (this.n != 0L) {
-                nbttagcompound.setLong("LootTableSeed", this.n);
+    protected boolean e(NBTTagCompound nbttagcompound) {
+        if (this.g == null) {
+            return false;
+        } else {
+            nbttagcompound.setString("LootTable", this.g.toString());
+            if (this.h != 0L) {
+                nbttagcompound.setLong("LootTableSeed", this.h);
             }
 
             return true;
-        } else {
-            return false;
         }
     }
 
     public void d(@Nullable EntityHuman entityhuman) {
-        if (this.m != null) {
-            LootTable loottable = this.world.getLootTableRegistry().a(this.m);
+        if (this.g != null && this.world.getMinecraftServer() != null) {
+            LootTable loottable = this.world.getMinecraftServer().aP().a(this.g);
 
-            this.m = null;
+            this.g = null;
             Random random;
 
-            if (this.n == 0L) {
+            if (this.h == 0L) {
                 random = new Random();
             } else {
-                random = new Random(this.n);
+                random = new Random(this.h);
             }
 
             LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
 
+            loottableinfo_a.a(this.position);
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.du());
+                loottableinfo_a.a(entityhuman.dI());
             }
 
             loottable.a(this, random, loottableinfo_a.a());
@@ -58,21 +70,26 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
 
     }
 
-    public MinecraftKey b() {
-        return this.m;
+    public MinecraftKey Q_() {
+        return this.g;
     }
 
     public void a(MinecraftKey minecraftkey, long i) {
-        this.m = minecraftkey;
-        this.n = i;
+        this.g = minecraftkey;
+        this.h = i;
     }
 
     public boolean hasCustomName() {
-        return this.o != null && !this.o.isEmpty();
+        return this.i != null;
     }
 
-    public void setCustomName(String s) {
-        this.o = s;
+    public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
+        this.i = ichatbasecomponent;
+    }
+
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return this.i;
     }
 
     public ItemStack getItem(int i) {
@@ -129,9 +146,10 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
     }
 
     public void clear() {
-        this.d((EntityHuman) null);
         this.q().clear();
     }
 
     protected abstract NonNullList<ItemStack> q();
+
+    protected abstract void a(NonNullList<ItemStack> nonnulllist);
 }

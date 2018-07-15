@@ -1,16 +1,18 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import javax.annotation.Nullable;
 
-public class TileEntitySign extends TileEntity {
+public class TileEntitySign extends TileEntity implements ICommandListener {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
-    public int f = -1;
+    public int e = -1;
     public boolean isEditable = true;
-    private EntityHuman h;
-    private final CommandObjectiveExecutor i = new CommandObjectiveExecutor();
+    private EntityHuman g;
 
-    public TileEntitySign() {}
+    public TileEntitySign() {
+        super(TileEntityTypes.i);
+    }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
@@ -21,63 +23,36 @@ public class TileEntitySign extends TileEntity {
             nbttagcompound.setString("Text" + (i + 1), s);
         }
 
-        this.i.b(nbttagcompound);
         return nbttagcompound;
-    }
-
-    protected void b(World world) {
-        this.a(world);
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         this.isEditable = false;
         super.load(nbttagcompound);
-        ICommandListener icommandlistener = new ICommandListener() {
-            public String getName() {
-                return "Sign";
-            }
-
-            public boolean a(int i, String s) {
-                return true;
-            }
-
-            public BlockPosition getChunkCoordinates() {
-                return TileEntitySign.this.position;
-            }
-
-            public Vec3D d() {
-                return new Vec3D((double) TileEntitySign.this.position.getX() + 0.5D, (double) TileEntitySign.this.position.getY() + 0.5D, (double) TileEntitySign.this.position.getZ() + 0.5D);
-            }
-
-            public World getWorld() {
-                return TileEntitySign.this.world;
-            }
-
-            public MinecraftServer C_() {
-                return TileEntitySign.this.world.getMinecraftServer();
-            }
-        };
 
         for (int i = 0; i < 4; ++i) {
             String s = nbttagcompound.getString("Text" + (i + 1));
             IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
 
-            try {
-                this.lines[i] = ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, (Entity) null);
-            } catch (CommandException commandexception) {
+            if (this.world instanceof WorldServer) {
+                try {
+                    this.lines[i] = ChatComponentUtils.filterForDisplay(this.a((EntityPlayer) null), ichatbasecomponent, (Entity) null);
+                } catch (CommandSyntaxException commandsyntaxexception) {
+                    this.lines[i] = ichatbasecomponent;
+                }
+            } else {
                 this.lines[i] = ichatbasecomponent;
             }
         }
 
-        this.i.a(nbttagcompound);
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 9, this.d());
+        return new PacketPlayOutTileEntityData(this.position, 9, this.Z_());
     }
 
-    public NBTTagCompound d() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
@@ -85,65 +60,19 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public boolean a() {
+    public boolean d() {
         return this.isEditable;
     }
 
     public void a(EntityHuman entityhuman) {
-        this.h = entityhuman;
+        this.g = entityhuman;
     }
 
     public EntityHuman e() {
-        return this.h;
+        return this.g;
     }
 
-    public boolean b(final EntityHuman entityhuman) {
-        ICommandListener icommandlistener = new ICommandListener() {
-            public String getName() {
-                return entityhuman.getName();
-            }
-
-            public IChatBaseComponent getScoreboardDisplayName() {
-                return entityhuman.getScoreboardDisplayName();
-            }
-
-            public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
-
-            public boolean a(int i, String s) {
-                return i <= 2;
-            }
-
-            public BlockPosition getChunkCoordinates() {
-                return TileEntitySign.this.position;
-            }
-
-            public Vec3D d() {
-                return new Vec3D((double) TileEntitySign.this.position.getX() + 0.5D, (double) TileEntitySign.this.position.getY() + 0.5D, (double) TileEntitySign.this.position.getZ() + 0.5D);
-            }
-
-            public World getWorld() {
-                return entityhuman.getWorld();
-            }
-
-            public Entity f() {
-                return entityhuman;
-            }
-
-            public boolean getSendCommandFeedback() {
-                return false;
-            }
-
-            public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-                if (TileEntitySign.this.world != null && !TileEntitySign.this.world.isClientSide) {
-                    TileEntitySign.this.i.a(TileEntitySign.this.world.getMinecraftServer(), this, commandobjectiveexecutor_enumcommandresult, i);
-                }
-
-            }
-
-            public MinecraftServer C_() {
-                return entityhuman.C_();
-            }
-        };
+    public boolean b(EntityHuman entityhuman) {
         IChatBaseComponent[] aichatbasecomponent = this.lines;
         int i = aichatbasecomponent.length;
 
@@ -155,7 +84,7 @@ public class TileEntitySign extends TileEntity {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    entityhuman.C_().getCommandHandler().a(icommandlistener, chatclickable.b());
+                    entityhuman.bK().getCommandDispatcher().a(this.a((EntityPlayer) entityhuman), chatclickable.b());
                 }
             }
         }
@@ -163,7 +92,24 @@ public class TileEntitySign extends TileEntity {
         return true;
     }
 
-    public CommandObjectiveExecutor f() {
-        return this.i;
+    public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
+
+    public CommandListenerWrapper a(@Nullable EntityPlayer entityplayer) {
+        String s = entityplayer == null ? "Sign" : entityplayer.getDisplayName().getString();
+        Object object = entityplayer == null ? new ChatComponentText("Sign") : entityplayer.getScoreboardDisplayName();
+
+        return new CommandListenerWrapper(this, new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D), Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityplayer);
+    }
+
+    public boolean a() {
+        return false;
+    }
+
+    public boolean b() {
+        return false;
+    }
+
+    public boolean B_() {
+        return false;
     }
 }

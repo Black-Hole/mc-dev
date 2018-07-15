@@ -7,10 +7,13 @@ import java.net.ServerSocket;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class RemoteConnectionThread implements Runnable {
 
-    private static final AtomicInteger h = new AtomicInteger(0);
+    private static final Logger h = LogManager.getLogger();
+    private static final AtomicInteger i = new AtomicInteger(0);
     protected boolean a;
     protected IMinecraftServer b;
     protected final String c;
@@ -29,7 +32,8 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     public synchronized void a() {
-        this.d = new Thread(this, this.c + " #" + RemoteConnectionThread.h.incrementAndGet());
+        this.d = new Thread(this, this.c + " #" + RemoteConnectionThread.i.incrementAndGet());
+        this.d.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.h));
         this.d.start();
         this.a = true;
     }
@@ -39,7 +43,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected void a(String s) {
-        this.b.h(s);
+        this.b.g(s);
     }
 
     protected void b(String s) {
@@ -51,11 +55,11 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected void d(String s) {
-        this.b.g(s);
+        this.b.f(s);
     }
 
     protected int d() {
-        return this.b.H();
+        return this.b.A();
     }
 
     protected void a(DatagramSocket datagramsocket) {

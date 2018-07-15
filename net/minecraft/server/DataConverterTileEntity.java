@@ -1,51 +1,64 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.FunctionType;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.DynamicOps;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
+import com.mojang.datafixers.util.Pair;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class DataConverterTileEntity implements IDataConverter {
+public class DataConverterTileEntity extends DataFix {
 
-    private static final Map<String, String> a = Maps.newHashMap();
+    private static final Map<String, String> a = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
+        hashmap.put("Airportal", "minecraft:end_portal");
+        hashmap.put("Banner", "minecraft:banner");
+        hashmap.put("Beacon", "minecraft:beacon");
+        hashmap.put("Cauldron", "minecraft:brewing_stand");
+        hashmap.put("Chest", "minecraft:chest");
+        hashmap.put("Comparator", "minecraft:comparator");
+        hashmap.put("Control", "minecraft:command_block");
+        hashmap.put("DLDetector", "minecraft:daylight_detector");
+        hashmap.put("Dropper", "minecraft:dropper");
+        hashmap.put("EnchantTable", "minecraft:enchanting_table");
+        hashmap.put("EndGateway", "minecraft:end_gateway");
+        hashmap.put("EnderChest", "minecraft:ender_chest");
+        hashmap.put("FlowerPot", "minecraft:flower_pot");
+        hashmap.put("Furnace", "minecraft:furnace");
+        hashmap.put("Hopper", "minecraft:hopper");
+        hashmap.put("MobSpawner", "minecraft:mob_spawner");
+        hashmap.put("Music", "minecraft:noteblock");
+        hashmap.put("Piston", "minecraft:piston");
+        hashmap.put("RecordPlayer", "minecraft:jukebox");
+        hashmap.put("Sign", "minecraft:sign");
+        hashmap.put("Skull", "minecraft:skull");
+        hashmap.put("Structure", "minecraft:structure_block");
+        hashmap.put("Trap", "minecraft:dispenser");
+    });
 
-    public DataConverterTileEntity() {}
-
-    public int a() {
-        return 704;
+    public DataConverterTileEntity(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        String s = (String) DataConverterTileEntity.a.get(nbttagcompound.getString("id"));
+    public TypeRewriteRule makeRule() {
+        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        Type type1 = this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK);
+        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.j);
+        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.j);
 
-        if (s != null) {
-            nbttagcompound.setString("id", s);
-        }
-
-        return nbttagcompound;
-    }
-
-    static {
-        DataConverterTileEntity.a.put("Airportal", "minecraft:end_portal");
-        DataConverterTileEntity.a.put("Banner", "minecraft:banner");
-        DataConverterTileEntity.a.put("Beacon", "minecraft:beacon");
-        DataConverterTileEntity.a.put("Cauldron", "minecraft:brewing_stand");
-        DataConverterTileEntity.a.put("Chest", "minecraft:chest");
-        DataConverterTileEntity.a.put("Comparator", "minecraft:comparator");
-        DataConverterTileEntity.a.put("Control", "minecraft:command_block");
-        DataConverterTileEntity.a.put("DLDetector", "minecraft:daylight_detector");
-        DataConverterTileEntity.a.put("Dropper", "minecraft:dropper");
-        DataConverterTileEntity.a.put("EnchantTable", "minecraft:enchanting_table");
-        DataConverterTileEntity.a.put("EndGateway", "minecraft:end_gateway");
-        DataConverterTileEntity.a.put("EnderChest", "minecraft:ender_chest");
-        DataConverterTileEntity.a.put("FlowerPot", "minecraft:flower_pot");
-        DataConverterTileEntity.a.put("Furnace", "minecraft:furnace");
-        DataConverterTileEntity.a.put("Hopper", "minecraft:hopper");
-        DataConverterTileEntity.a.put("MobSpawner", "minecraft:mob_spawner");
-        DataConverterTileEntity.a.put("Music", "minecraft:noteblock");
-        DataConverterTileEntity.a.put("Piston", "minecraft:piston");
-        DataConverterTileEntity.a.put("RecordPlayer", "minecraft:jukebox");
-        DataConverterTileEntity.a.put("Sign", "minecraft:sign");
-        DataConverterTileEntity.a.put("Skull", "minecraft:skull");
-        DataConverterTileEntity.a.put("Structure", "minecraft:structure_block");
-        DataConverterTileEntity.a.put("Trap", "minecraft:dispenser");
+        return TypeRewriteRule.seq(this.convertUnchecked("item stack block entity name hook converter", type, type1), this.fixTypeEverywhere("BlockEntityIdFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
+            return (pair) -> {
+                return pair.mapFirst((s) -> {
+                    return (String) DataConverterTileEntity.a.getOrDefault(s, s);
+                });
+            };
+        }));
     }
 }

@@ -1,44 +1,35 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EntityPotion extends EntityProjectile {
 
-    private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.f);
+    private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.g);
     private static final Logger g = LogManager.getLogger();
-    public static final Predicate<EntityLiving> e = new Predicate() {
-        public boolean a(@Nullable EntityLiving entityliving) {
-            return EntityPotion.c(entityliving);
-        }
-
-        public boolean apply(@Nullable Object object) {
-            return this.a((EntityLiving) object);
-        }
-    };
+    public static final Predicate<EntityLiving> e = EntityPotion::a;
 
     public EntityPotion(World world) {
-        super(world);
+        super(EntityTypes.POTION, world);
     }
 
     public EntityPotion(World world, EntityLiving entityliving, ItemStack itemstack) {
-        super(world, entityliving);
+        super(EntityTypes.POTION, entityliving, world);
         this.setItem(itemstack);
     }
 
     public EntityPotion(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        super(world, d0, d1, d2);
+        super(EntityTypes.POTION, d0, d1, d2, world);
         if (!itemstack.isEmpty()) {
             this.setItem(itemstack);
         }
 
     }
 
-    protected void i() {
+    protected void x_() {
         this.getDataWatcher().register(EntityPotion.f, ItemStack.a);
     }
 
@@ -58,10 +49,9 @@ public class EntityPotion extends EntityProjectile {
 
     public void setItem(ItemStack itemstack) {
         this.getDataWatcher().set(EntityPotion.f, itemstack);
-        this.getDataWatcher().markDirty(EntityPotion.f);
     }
 
-    protected float j() {
+    protected float f() {
         return 0.05F;
     }
 
@@ -86,7 +76,7 @@ public class EntityPotion extends EntityProjectile {
             }
 
             if (flag) {
-                this.n();
+                this.l();
             } else if (!list.isEmpty()) {
                 if (this.isLingering()) {
                     this.a(itemstack, potionregistry);
@@ -102,7 +92,7 @@ public class EntityPotion extends EntityProjectile {
         }
     }
 
-    private void n() {
+    private void l() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
         List list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.e);
 
@@ -113,7 +103,7 @@ public class EntityPotion extends EntityProjectile {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
                 double d0 = this.h(entityliving);
 
-                if (d0 < 16.0D && c(entityliving)) {
+                if (d0 < 16.0D && a(entityliving)) {
                     entityliving.damageEntity(DamageSource.DROWN, 1.0F);
                 }
             }
@@ -131,7 +121,7 @@ public class EntityPotion extends EntityProjectile {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving.cR()) {
+                if (entityliving.dd()) {
                     double d0 = this.h(entityliving);
 
                     if (d0 < 16.0D) {
@@ -201,14 +191,9 @@ public class EntityPotion extends EntityProjectile {
 
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityProjectile.a(dataconvertermanager, "ThrownPotion");
-        dataconvertermanager.a(DataConverterTypes.ENTITY, (DataInspector) (new DataInspectorItem(EntityPotion.class, new String[] { "Potion"})));
-    }
-
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        ItemStack itemstack = new ItemStack(nbttagcompound.getCompound("Potion"));
+        ItemStack itemstack = ItemStack.a(nbttagcompound.getCompound("Potion"));
 
         if (itemstack.isEmpty()) {
             this.die();
@@ -228,7 +213,7 @@ public class EntityPotion extends EntityProjectile {
 
     }
 
-    private static boolean c(EntityLiving entityliving) {
+    private static boolean a(EntityLiving entityliving) {
         return entityliving instanceof EntityEnderman || entityliving instanceof EntityBlaze;
     }
 }

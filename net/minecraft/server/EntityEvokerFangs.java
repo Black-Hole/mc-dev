@@ -15,7 +15,7 @@ public class EntityEvokerFangs extends Entity {
     private UUID f;
 
     public EntityEvokerFangs(World world) {
-        super(world);
+        super(EntityTypes.EVOKER_FANGS, world);
         this.c = 22;
         this.setSize(0.5F, 0.8F);
     }
@@ -28,7 +28,7 @@ public class EntityEvokerFangs extends Entity {
         this.setPosition(d0, d1, d2);
     }
 
-    protected void i() {}
+    protected void x_() {}
 
     public void a(@Nullable EntityLiving entityliving) {
         this.e = entityliving;
@@ -61,21 +61,21 @@ public class EntityEvokerFangs extends Entity {
 
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (this.world.isClientSide) {
             if (this.d) {
                 --this.c;
                 if (this.c == 14) {
                     for (int i = 0; i < 12; ++i) {
                         double d0 = this.locX + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.width * 0.5D;
-                        double d1 = this.locY + 0.05D + this.random.nextDouble() * 1.0D;
+                        double d1 = this.locY + 0.05D + this.random.nextDouble();
                         double d2 = this.locZ + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.width * 0.5D;
                         double d3 = (this.random.nextDouble() * 2.0D - 1.0D) * 0.3D;
                         double d4 = 0.3D + this.random.nextDouble() * 0.3D;
                         double d5 = (this.random.nextDouble() * 2.0D - 1.0D) * 0.3D;
 
-                        this.world.addParticle(EnumParticle.CRIT, d0, d1 + 1.0D, d2, d3, d4, d5, new int[0]);
+                        this.world.addParticle(Particles.h, d0, d1 + 1.0D, d2, d3, d4, d5);
                     }
                 }
             }
@@ -106,7 +106,7 @@ public class EntityEvokerFangs extends Entity {
     private void c(EntityLiving entityliving) {
         EntityLiving entityliving1 = this.getOwner();
 
-        if (entityliving.isAlive() && !entityliving.be() && entityliving != entityliving1) {
+        if (entityliving.isAlive() && !entityliving.bl() && entityliving != entityliving1) {
             if (entityliving1 == null) {
                 entityliving.damageEntity(DamageSource.MAGIC, 6.0F);
             } else {
@@ -114,7 +114,7 @@ public class EntityEvokerFangs extends Entity {
                     return;
                 }
 
-                entityliving.damageEntity(DamageSource.b(this, entityliving1), 6.0F);
+                entityliving.damageEntity(DamageSource.c(this, entityliving1), 6.0F);
             }
 
         }

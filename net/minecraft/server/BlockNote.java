@@ -1,86 +1,73 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.List;
+public class BlockNote extends Block {
 
-public class BlockNote extends BlockTileEntity {
+    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.ar;
+    public static final BlockStateBoolean POWERED = BlockProperties.t;
+    public static final BlockStateInteger NOTE = BlockProperties.ai;
 
-    private static final List<SoundEffect> a = Lists.newArrayList(new SoundEffect[] { SoundEffects.eA, SoundEffects.eu, SoundEffects.eD, SoundEffects.eB, SoundEffects.ev, SoundEffects.ey, SoundEffects.ew, SoundEffects.ez, SoundEffects.ex, SoundEffects.eE});
-
-    public BlockNote() {
-        super(Material.WOOD);
-        this.a(CreativeModeTab.d);
+    public BlockNote(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, Integer.valueOf(0))).set(BlockNote.POWERED, Boolean.valueOf(false)));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return (IBlockData) this.getBlockData().set(BlockNote.INSTRUMENT, BlockPropertyInstrument.a(blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().down())));
+    }
+
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == EnumDirection.DOWN ? (IBlockData) iblockdata.set(BlockNote.INSTRUMENT, BlockPropertyInstrument.a(iblockdata1)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
-        TileEntity tileentity = world.getTileEntity(blockposition);
 
-        if (tileentity instanceof TileEntityNote) {
-            TileEntityNote tileentitynote = (TileEntityNote) tileentity;
-
-            if (tileentitynote.f != flag) {
-                if (flag) {
-                    tileentitynote.play(world, blockposition);
-                }
-
-                tileentitynote.f = flag;
+        if (flag != ((Boolean) iblockdata.get(BlockNote.POWERED)).booleanValue()) {
+            if (flag) {
+                this.play(world, blockposition);
             }
+
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockNote.POWERED, Boolean.valueOf(flag)), 3);
         }
 
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    private void play(World world, BlockPosition blockposition) {
+        if (world.getType(blockposition.up()).isAir()) {
+            world.playBlockAction(blockposition, this, 0, 0);
+        }
+
+    }
+
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-
-            if (tileentity instanceof TileEntityNote) {
-                TileEntityNote tileentitynote = (TileEntityNote) tileentity;
-
-                tileentitynote.a();
-                tileentitynote.play(world, blockposition);
-                entityhuman.b(StatisticList.S);
-            }
-
+            iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockNote.NOTE);
+            world.setTypeAndData(blockposition, iblockdata, 3);
+            this.play(world, blockposition);
+            entityhuman.a(StatisticList.TUNE_NOTEBLOCK);
             return true;
         }
     }
 
-    public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
+    public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
         if (!world.isClientSide) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-
-            if (tileentity instanceof TileEntityNote) {
-                ((TileEntityNote) tileentity).play(world, blockposition);
-                entityhuman.b(StatisticList.R);
-            }
-
+            this.play(world, blockposition);
+            entityhuman.a(StatisticList.PLAY_NOTEBLOCK);
         }
-    }
-
-    public TileEntity a(World world, int i) {
-        return new TileEntityNote();
-    }
-
-    private SoundEffect b(int i) {
-        if (i < 0 || i >= BlockNote.a.size()) {
-            i = 0;
-        }
-
-        return (SoundEffect) BlockNote.a.get(i);
     }
 
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
-        float f = (float) Math.pow(2.0D, (double) (j - 12) / 12.0D);
+        int k = ((Integer) iblockdata.get(BlockNote.NOTE)).intValue();
+        float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 
-        world.a((EntityHuman) null, blockposition, this.b(i), SoundCategory.RECORDS, 3.0F, f);
-        world.addParticle(EnumParticle.NOTE, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.2D, (double) blockposition.getZ() + 0.5D, (double) j / 24.0D, 0.0D, 0.0D, new int[0]);
+        world.a((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).a(), SoundCategory.RECORDS, 3.0F, f);
+        world.addParticle(Particles.I, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 1.2D, (double) blockposition.getZ() + 0.5D, (double) k / 24.0D, 0.0D, 0.0D);
         return true;
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
-        return EnumRenderType.MODEL;
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockNote.INSTRUMENT, BlockNote.POWERED, BlockNote.NOTE});
     }
 }

@@ -26,13 +26,15 @@ public class InventoryUtils {
     }
 
     public static void dropItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        float f = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
-        float f1 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
-        float f2 = InventoryUtils.a.nextFloat() * 0.8F + 0.1F;
+        float f = 0.75F;
+        float f1 = 0.125F;
+        float f2 = InventoryUtils.a.nextFloat() * 0.75F + 0.125F;
+        float f3 = InventoryUtils.a.nextFloat() * 0.75F;
+        float f4 = InventoryUtils.a.nextFloat() * 0.75F + 0.125F;
 
         while (!itemstack.isEmpty()) {
-            EntityItem entityitem = new EntityItem(world, d0 + (double) f, d1 + (double) f1, d2 + (double) f2, itemstack.cloneAndSubtract(InventoryUtils.a.nextInt(21) + 10));
-            float f3 = 0.05F;
+            EntityItem entityitem = new EntityItem(world, d0 + (double) f2, d1 + (double) f3, d2 + (double) f4, itemstack.cloneAndSubtract(InventoryUtils.a.nextInt(21) + 10));
+            float f5 = 0.05F;
 
             entityitem.motX = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;
             entityitem.motY = InventoryUtils.a.nextGaussian() * 0.05000000074505806D + 0.20000000298023224D;

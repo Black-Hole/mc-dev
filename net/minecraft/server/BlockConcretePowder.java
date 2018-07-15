@@ -2,23 +2,30 @@ package net.minecraft.server;
 
 public class BlockConcretePowder extends BlockFalling {
 
-    public static final BlockStateEnum<EnumColor> a = BlockStateEnum.of("color", EnumColor.class);
+    private final IBlockData a;
 
-    public BlockConcretePowder() {
-        super(Material.SAND);
-        this.w(this.blockStateList.getBlockData().set(BlockConcretePowder.a, EnumColor.WHITE));
-        this.a(CreativeModeTab.b);
+    public BlockConcretePowder(Block block, Block.Info block_info) {
+        super(block_info);
+        this.a = block.getBlockData();
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
         if (iblockdata1.getMaterial().isLiquid()) {
-            world.setTypeAndData(blockposition, Blocks.dR.getBlockData().set(BlockCloth.COLOR, iblockdata.get(BlockConcretePowder.a)), 3);
+            world.setTypeAndData(blockposition, this.a, 3);
         }
 
     }
 
-    protected boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        World world = blockactioncontext.getWorld();
+        BlockPosition blockposition = blockactioncontext.getClickPosition();
+
+        return !blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition()).getMaterial().isLiquid() && !a((IBlockAccess) world, blockposition) ? super.getPlacedState(blockactioncontext) : this.a;
+    }
+
+    private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         boolean flag = false;
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
@@ -26,65 +33,18 @@ public class BlockConcretePowder extends BlockFalling {
             EnumDirection enumdirection = aenumdirection[j];
 
             if (enumdirection != EnumDirection.DOWN) {
-                BlockPosition blockposition1 = blockposition.shift(enumdirection);
-
-                if (world.getType(blockposition1).getMaterial() == Material.WATER) {
+                blockposition_mutableblockposition.g(blockposition).c(enumdirection);
+                if (iblockaccess.getType(blockposition_mutableblockposition).getMaterial().isLiquid()) {
                     flag = true;
                     break;
                 }
             }
         }
 
-        if (flag) {
-            world.setTypeAndData(blockposition, Blocks.dR.getBlockData().set(BlockCloth.COLOR, iblockdata.get(BlockConcretePowder.a)), 3);
-        }
-
         return flag;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!this.e(world, blockposition, iblockdata)) {
-            super.a(iblockdata, world, blockposition, block, blockposition1);
-        }
-
-    }
-
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.e(world, blockposition, iblockdata)) {
-            super.onPlace(world, blockposition, iblockdata);
-        }
-
-    }
-
-    public int getDropData(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockConcretePowder.a)).getColorIndex();
-    }
-
-    public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
-        EnumColor[] aenumcolor = EnumColor.values();
-        int i = aenumcolor.length;
-
-        for (int j = 0; j < i; ++j) {
-            EnumColor enumcolor = aenumcolor[j];
-
-            nonnulllist.add(new ItemStack(this, 1, enumcolor.getColorIndex()));
-        }
-
-    }
-
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.a((EnumColor) iblockdata.get(BlockConcretePowder.a));
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockConcretePowder.a, EnumColor.fromColorIndex(i));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumColor) iblockdata.get(BlockConcretePowder.a)).getColorIndex();
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockConcretePowder.a});
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return a((IBlockAccess) generatoraccess, blockposition) ? this.a : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 }

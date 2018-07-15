@@ -4,31 +4,31 @@ import java.util.Iterator;
 
 public class Navigation extends NavigationAbstract {
 
-    private boolean i;
+    private boolean p;
 
     public Navigation(EntityInsentient entityinsentient, World world) {
         super(entityinsentient, world);
     }
 
     protected Pathfinder a() {
-        this.h = new PathfinderNormal();
-        this.h.a(true);
-        return new Pathfinder(this.h);
+        this.o = new PathfinderNormal();
+        this.o.a(true);
+        return new Pathfinder(this.o);
     }
 
     protected boolean b() {
-        return this.a.onGround || this.h() && this.q() || this.a.isPassenger();
+        return this.a.onGround || this.s() || this.a.isPassenger();
     }
 
     protected Vec3D c() {
-        return new Vec3D(this.a.locX, (double) this.s(), this.a.locZ);
+        return new Vec3D(this.a.locX, (double) this.u(), this.a.locZ);
     }
 
     public PathEntity b(BlockPosition blockposition) {
         BlockPosition blockposition1;
 
-        if (this.b.getType(blockposition).getMaterial() == Material.AIR) {
-            for (blockposition1 = blockposition.down(); blockposition1.getY() > 0 && this.b.getType(blockposition1).getMaterial() == Material.AIR; blockposition1 = blockposition1.down()) {
+        if (this.b.getType(blockposition).isAir()) {
+            for (blockposition1 = blockposition.down(); blockposition1.getY() > 0 && this.b.getType(blockposition1).isAir(); blockposition1 = blockposition1.down()) {
                 ;
             }
 
@@ -36,7 +36,7 @@ public class Navigation extends NavigationAbstract {
                 return super.b(blockposition1.up());
             }
 
-            while (blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).getMaterial() == Material.AIR) {
+            while (blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).isAir()) {
                 blockposition1 = blockposition1.up();
             }
 
@@ -58,14 +58,14 @@ public class Navigation extends NavigationAbstract {
         return this.b(new BlockPosition(entity));
     }
 
-    private int s() {
+    private int u() {
         if (this.a.isInWater() && this.h()) {
             int i = (int) this.a.getBoundingBox().b;
             Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
             int j = 0;
 
             do {
-                if (block != Blocks.FLOWING_WATER && block != Blocks.WATER) {
+                if (block != Blocks.WATER) {
                     return i;
                 }
 
@@ -80,17 +80,17 @@ public class Navigation extends NavigationAbstract {
         }
     }
 
-    protected void q_() {
-        super.q_();
-        if (this.i) {
-            if (this.b.h(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().b + 0.5D), MathHelper.floor(this.a.locZ)))) {
+    protected void E_() {
+        super.E_();
+        if (this.p) {
+            if (this.b.e(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().b + 0.5D), MathHelper.floor(this.a.locZ)))) {
                 return;
             }
 
             for (int i = 0; i < this.c.d(); ++i) {
                 PathPoint pathpoint = this.c.a(i);
 
-                if (this.b.h(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
+                if (this.b.e(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
                     this.c.b(i - 1);
                     return;
                 }
@@ -176,7 +176,7 @@ public class Navigation extends NavigationAbstract {
                     double d3 = (double) j2 + 0.5D - vec3d.z;
 
                     if (d2 * d0 + d3 * d1 >= 0.0D) {
-                        PathType pathtype = this.h.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
+                        PathType pathtype = this.o.a(this.b, i2, j - 1, j2, this.a, l, i1, j1, true, true);
 
                         if (pathtype == PathType.WATER) {
                             return false;
@@ -190,7 +190,7 @@ public class Navigation extends NavigationAbstract {
                             return false;
                         }
 
-                        pathtype = this.h.a(this.b, i2, j, j2, this.a, l, i1, j1, true, true);
+                        pathtype = this.o.a(this.b, i2, j, j2, this.a, l, i1, j1, true, true);
                         float f = this.a.a(pathtype);
 
                         if (f < 0.0F || f >= 8.0F) {
@@ -211,44 +211,44 @@ public class Navigation extends NavigationAbstract {
     private boolean b(int i, int j, int k, int l, int i1, int j1, Vec3D vec3d, double d0, double d1) {
         Iterator iterator = BlockPosition.a(new BlockPosition(i, j, k), new BlockPosition(i + l - 1, j + i1 - 1, k + j1 - 1)).iterator();
 
-        while (iterator.hasNext()) {
-            BlockPosition blockposition = (BlockPosition) iterator.next();
-            double d2 = (double) blockposition.getX() + 0.5D - vec3d.x;
-            double d3 = (double) blockposition.getZ() + 0.5D - vec3d.z;
+        BlockPosition blockposition;
+        double d2;
+        double d3;
 
-            if (d2 * d0 + d3 * d1 >= 0.0D) {
-                Block block = this.b.getType(blockposition).getBlock();
-
-                if (!block.b(this.b, blockposition)) {
-                    return false;
-                }
+        do {
+            if (!iterator.hasNext()) {
+                return true;
             }
-        }
 
-        return true;
+            blockposition = (BlockPosition) iterator.next();
+            d2 = (double) blockposition.getX() + 0.5D - vec3d.x;
+            d3 = (double) blockposition.getZ() + 0.5D - vec3d.z;
+        } while (d2 * d0 + d3 * d1 < 0.0D || this.b.getType(blockposition).a((IBlockAccess) this.b, blockposition, PathMode.LAND));
+
+        return false;
     }
 
     public void a(boolean flag) {
-        this.h.b(flag);
+        this.o.b(flag);
     }
 
     public void b(boolean flag) {
-        this.h.a(flag);
+        this.o.a(flag);
     }
 
     public boolean g() {
-        return this.h.c();
+        return this.o.c();
     }
 
     public void c(boolean flag) {
-        this.h.c(flag);
+        this.o.c(flag);
     }
 
     public boolean h() {
-        return this.h.e();
+        return this.o.e();
     }
 
     public void d(boolean flag) {
-        this.i = flag;
+        this.p = flag;
     }
 }

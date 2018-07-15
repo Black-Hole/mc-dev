@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class CrashReportSystemDetails {
 
@@ -168,66 +169,13 @@ public class CrashReportSystemDetails {
         return this.d;
     }
 
-    public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final Block block, final int i) {
-        final int j = Block.getId(block);
+    public static void a(CrashReportSystemDetails crashreportsystemdetails, BlockPosition blockposition, @Nullable IBlockData iblockdata) {
+        if (iblockdata != null) {
+            crashreportsystemdetails.a("Block", iblockdata::toString);
+        }
 
-        crashreportsystemdetails.a("Block type", new CrashReportCallable() {
-            public String a() throws Exception {
-                try {
-                    return String.format("ID #%d (%s // %s)", new Object[] { Integer.valueOf(i), block.a(), block.getClass().getCanonicalName()});
-                } catch (Throwable throwable) {
-                    return "ID #" + i;
-                }
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
-        });
-        crashreportsystemdetails.a("Block data value", new CrashReportCallable() {
-            public String a() throws Exception {
-                if (i < 0) {
-                    return "Unknown? (Got " + i + ")";
-                } else {
-                    String s = String.format("%4s", new Object[] { Integer.toBinaryString(i)}).replace(" ", "0");
-
-                    return String.format("%1$d / 0x%1$X / 0b%2$s", new Object[] { Integer.valueOf(i), s});
-                }
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
-        });
-        crashreportsystemdetails.a("Block location", new CrashReportCallable() {
-            public String a() throws Exception {
-                return CrashReportSystemDetails.a(blockposition);
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
-        });
-    }
-
-    public static void a(CrashReportSystemDetails crashreportsystemdetails, final BlockPosition blockposition, final IBlockData iblockdata) {
-        crashreportsystemdetails.a("Block", new CrashReportCallable() {
-            public String a() throws Exception {
-                return iblockdata.toString();
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
-        });
-        crashreportsystemdetails.a("Block location", new CrashReportCallable() {
-            public String a() throws Exception {
-                return CrashReportSystemDetails.a(blockposition);
-            }
-
-            public Object call() throws Exception {
-                return this.a();
-            }
+        crashreportsystemdetails.a("Block location", () -> {
+            return a(blockposition);
         });
     }
 

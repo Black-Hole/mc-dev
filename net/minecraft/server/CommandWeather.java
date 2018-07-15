@@ -1,70 +1,59 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Predicate;
 
-public class CommandWeather extends CommandAbstract {
+public class CommandWeather {
 
-    public CommandWeather() {}
-
-    public String getCommand() {
-        return "weather";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("weather").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(((LiteralArgumentBuilder) CommandDispatcher.a("clear").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), 6000);
+        })).then(CommandDispatcher.a("duration", (ArgumentType) IntegerArgumentType.integer(0, 1000000)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "duration") * 20);
+        })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("rain").executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), 6000);
+        })).then(CommandDispatcher.a("duration", (ArgumentType) IntegerArgumentType.integer(0, 1000000)).executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "duration") * 20);
+        })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("thunder").executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), 6000);
+        })).then(CommandDispatcher.a("duration", (ArgumentType) IntegerArgumentType.integer(0, 1000000)).executes((commandcontext) -> {
+            return c((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "duration") * 20);
+        }))));
     }
 
-    public int a() {
-        return 2;
+    private static int a(CommandListenerWrapper commandlistenerwrapper, int i) {
+        commandlistenerwrapper.getWorld().getWorldData().g(i);
+        commandlistenerwrapper.getWorld().getWorldData().setWeatherDuration(0);
+        commandlistenerwrapper.getWorld().getWorldData().setThunderDuration(0);
+        commandlistenerwrapper.getWorld().getWorldData().setStorm(false);
+        commandlistenerwrapper.getWorld().getWorldData().setThundering(false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.weather.set.clear", new Object[0]), true);
+        return i;
     }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.weather.usage";
+    private static int b(CommandListenerWrapper commandlistenerwrapper, int i) {
+        commandlistenerwrapper.getWorld().getWorldData().g(0);
+        commandlistenerwrapper.getWorld().getWorldData().setWeatherDuration(i);
+        commandlistenerwrapper.getWorld().getWorldData().setThunderDuration(i);
+        commandlistenerwrapper.getWorld().getWorldData().setStorm(true);
+        commandlistenerwrapper.getWorld().getWorldData().setThundering(false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.weather.set.rain", new Object[0]), true);
+        return i;
     }
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length >= 1 && astring.length <= 2) {
-            int i = (300 + (new Random()).nextInt(600)) * 20;
-
-            if (astring.length >= 2) {
-                i = a(astring[1], 1, 1000000) * 20;
-            }
-
-            WorldServer worldserver = minecraftserver.worldServer[0];
-            WorldData worlddata = worldserver.getWorldData();
-
-            if ("clear".equalsIgnoreCase(astring[0])) {
-                worlddata.i(i);
-                worlddata.setWeatherDuration(0);
-                worlddata.setThunderDuration(0);
-                worlddata.setStorm(false);
-                worlddata.setThundering(false);
-                a(icommandlistener, (ICommand) this, "commands.weather.clear", new Object[0]);
-            } else if ("rain".equalsIgnoreCase(astring[0])) {
-                worlddata.i(0);
-                worlddata.setWeatherDuration(i);
-                worlddata.setThunderDuration(i);
-                worlddata.setStorm(true);
-                worlddata.setThundering(false);
-                a(icommandlistener, (ICommand) this, "commands.weather.rain", new Object[0]);
-            } else {
-                if (!"thunder".equalsIgnoreCase(astring[0])) {
-                    throw new ExceptionUsage("commands.weather.usage", new Object[0]);
-                }
-
-                worlddata.i(0);
-                worlddata.setWeatherDuration(i);
-                worlddata.setThunderDuration(i);
-                worlddata.setStorm(true);
-                worlddata.setThundering(true);
-                a(icommandlistener, (ICommand) this, "commands.weather.thunder", new Object[0]);
-            }
-
-        } else {
-            throw new ExceptionUsage("commands.weather.usage", new Object[0]);
-        }
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "clear", "rain", "thunder"}) : Collections.emptyList();
+    private static int c(CommandListenerWrapper commandlistenerwrapper, int i) {
+        commandlistenerwrapper.getWorld().getWorldData().g(0);
+        commandlistenerwrapper.getWorld().getWorldData().setWeatherDuration(i);
+        commandlistenerwrapper.getWorld().getWorldData().setThunderDuration(i);
+        commandlistenerwrapper.getWorld().getWorldData().setStorm(true);
+        commandlistenerwrapper.getWorld().getWorldData().setThundering(true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.weather.set.thunder", new Object[0]), true);
+        return i;
     }
 }

@@ -9,12 +9,12 @@ public class DefinedStructureProcessorRotation implements DefinedStructureProces
     private final Random b;
 
     public DefinedStructureProcessorRotation(BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
-        this.a = definedstructureinfo.f();
-        this.b = definedstructureinfo.a(blockposition);
+        this.a = definedstructureinfo.g();
+        this.b = definedstructureinfo.b(blockposition);
     }
 
     @Nullable
-    public DefinedStructure.BlockInfo a(World world, BlockPosition blockposition, DefinedStructure.BlockInfo definedstructure_blockinfo) {
+    public DefinedStructure.BlockInfo a(IBlockAccess iblockaccess, BlockPosition blockposition, DefinedStructure.BlockInfo definedstructure_blockinfo) {
         return this.a < 1.0F && this.b.nextFloat() > this.a ? null : definedstructure_blockinfo;
     }
 }

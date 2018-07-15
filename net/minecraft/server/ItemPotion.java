@@ -5,9 +5,8 @@ import java.util.List;
 
 public class ItemPotion extends Item {
 
-    public ItemPotion() {
-        this.d(1);
-        this.b(CreativeModeTab.k);
+    public ItemPotion(Item.Info item_info) {
+        super(item_info);
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
@@ -18,7 +17,7 @@ public class ItemPotion extends Item {
         }
 
         if (entityhuman instanceof EntityPlayer) {
-            CriterionTriggers.y.a((EntityPlayer) entityhuman, itemstack);
+            CriterionTriggers.z.a((EntityPlayer) entityhuman, itemstack);
         }
 
         if (!world.isClientSide) {
@@ -37,7 +36,7 @@ public class ItemPotion extends Item {
         }
 
         if (entityhuman != null) {
-            entityhuman.b(StatisticList.b((Item) this));
+            entityhuman.b(StatisticList.ITEM_USED.b(this));
         }
 
         if (entityhuman == null || !entityhuman.abilities.canInstantlyBuild) {
@@ -53,11 +52,11 @@ public class ItemPotion extends Item {
         return itemstack;
     }
 
-    public int e(ItemStack itemstack) {
+    public int c(ItemStack itemstack) {
         return 32;
     }
 
-    public EnumAnimation f(ItemStack itemstack) {
+    public EnumAnimation d(ItemStack itemstack) {
         return EnumAnimation.DRINK;
     }
 
@@ -66,8 +65,8 @@ public class ItemPotion extends Item {
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
     }
 
-    public String b(ItemStack itemstack) {
-        return LocaleI18n.get(PotionUtil.d(itemstack).b("potion.effect."));
+    public String h(ItemStack itemstack) {
+        return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
     }
 
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {

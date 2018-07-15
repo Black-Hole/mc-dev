@@ -54,15 +54,15 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
         return world.getEntity(this.a);
     }
 
-    public PacketPlayInUseEntity.EnumEntityUseAction a() {
+    public PacketPlayInUseEntity.EnumEntityUseAction b() {
         return this.action;
     }
 
-    public EnumHand b() {
+    public EnumHand c() {
         return this.d;
     }
 
-    public Vec3D c() {
+    public Vec3D d() {
         return this.c;
     }
 

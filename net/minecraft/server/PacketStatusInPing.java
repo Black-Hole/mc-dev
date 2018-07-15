@@ -20,7 +20,7 @@ public class PacketStatusInPing implements Packet<PacketStatusInListener> {
         packetstatusinlistener.a(this);
     }
 
-    public long a() {
+    public long b() {
         return this.a;
     }
 }

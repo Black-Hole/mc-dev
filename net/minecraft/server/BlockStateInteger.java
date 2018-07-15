@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 
 public class BlockStateInteger extends BlockState<Integer> {
 
@@ -27,7 +27,7 @@ public class BlockStateInteger extends BlockState<Integer> {
         }
     }
 
-    public Collection<Integer> c() {
+    public Collection<Integer> d() {
         return this.a;
     }
 
@@ -43,8 +43,8 @@ public class BlockStateInteger extends BlockState<Integer> {
         }
     }
 
-    public int hashCode() {
-        return 31 * super.hashCode() + this.a.hashCode();
+    public int c() {
+        return 31 * super.c() + this.a.hashCode();
     }
 
     public static BlockStateInteger of(String s, int i, int j) {
@@ -55,9 +55,9 @@ public class BlockStateInteger extends BlockState<Integer> {
         try {
             Integer integer = Integer.valueOf(s);
 
-            return this.a.contains(integer) ? Optional.of(integer) : Optional.absent();
+            return this.a.contains(integer) ? Optional.of(integer) : Optional.empty();
         } catch (NumberFormatException numberformatexception) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

@@ -1,41 +1,54 @@
 package net.minecraft.server;
 
-public class DataConverterShulkerBoxItem implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.OpticFinder;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.Type;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+
+public class DataConverterShulkerBoxItem extends DataFix {
 
     public static final String[] a = new String[] { "minecraft:white_shulker_box", "minecraft:orange_shulker_box", "minecraft:magenta_shulker_box", "minecraft:light_blue_shulker_box", "minecraft:yellow_shulker_box", "minecraft:lime_shulker_box", "minecraft:pink_shulker_box", "minecraft:gray_shulker_box", "minecraft:silver_shulker_box", "minecraft:cyan_shulker_box", "minecraft:purple_shulker_box", "minecraft:blue_shulker_box", "minecraft:brown_shulker_box", "minecraft:green_shulker_box", "minecraft:red_shulker_box", "minecraft:black_shulker_box"};
 
-    public DataConverterShulkerBoxItem() {}
-
-    public int a() {
-        return 813;
+    public DataConverterShulkerBoxItem(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("minecraft:shulker_box".equals(nbttagcompound.getString("id")) && nbttagcompound.hasKeyOfType("tag", 10)) {
-            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("tag");
+    public TypeRewriteRule makeRule() {
+        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder opticfinder1 = type.findField("tag");
+        OpticFinder opticfinder2 = opticfinder1.type().findField("BlockEntityTag");
 
-            if (nbttagcompound1.hasKeyOfType("BlockEntityTag", 10)) {
-                NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("BlockEntityTag");
+        return this.fixTypeEverywhereTyped("ItemShulkerBoxColorFix", type, (typed) -> {
+            Optional optional = typed.getOptional(opticfinder);
 
-                if (nbttagcompound2.getList("Items", 10).isEmpty()) {
-                    nbttagcompound2.remove("Items");
+            if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:shulker_box")) {
+                Optional optional1 = typed.getOptionalTyped(opticfinder1);
+
+                if (optional1.isPresent()) {
+                    Typed typed1 = (Typed) optional1.get();
+                    Optional optional2 = typed1.getOptionalTyped(opticfinder2);
+
+                    if (optional2.isPresent()) {
+                        Typed typed2 = (Typed) optional2.get();
+                        Dynamic dynamic = (Dynamic) typed2.get(DSL.remainderFinder());
+                        int i = dynamic.getInt("Color");
+
+                        dynamic.remove("Color");
+                        return typed.set(opticfinder1, typed1.set(opticfinder2, typed2.set(DSL.remainderFinder(), dynamic))).set(opticfinder, Pair.of(DataConverterTypes.q.typeName(), DataConverterShulkerBoxItem.a[i % 16]));
+                    }
                 }
-
-                int i = nbttagcompound2.getInt("Color");
-
-                nbttagcompound2.remove("Color");
-                if (nbttagcompound2.isEmpty()) {
-                    nbttagcompound1.remove("BlockEntityTag");
-                }
-
-                if (nbttagcompound1.isEmpty()) {
-                    nbttagcompound.remove("tag");
-                }
-
-                nbttagcompound.setString("id", DataConverterShulkerBoxItem.a[i % 16]);
             }
-        }
 
-        return nbttagcompound;
+            return typed;
+        });
     }
 }

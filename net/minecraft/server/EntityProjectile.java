@@ -9,35 +9,33 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
     private int blockX;
     private int blockY;
     private int blockZ;
-    private Block inBlockId;
     protected boolean inGround;
     public int shake;
     public EntityLiving shooter;
-    public String shooterName;
-    private int au;
-    private int av;
+    public UUID shooterId;
     public Entity d;
     private int aw;
 
-    public EntityProjectile(World world) {
-        super(world);
+    protected EntityProjectile(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.blockX = -1;
         this.blockY = -1;
         this.blockZ = -1;
         this.setSize(0.25F, 0.25F);
     }
 
-    public EntityProjectile(World world, double d0, double d1, double d2) {
-        this(world);
+    protected EntityProjectile(EntityTypes<?> entitytypes, double d0, double d1, double d2, World world) {
+        this(entitytypes, world);
         this.setPosition(d0, d1, d2);
     }
 
-    public EntityProjectile(World world, EntityLiving entityliving) {
-        this(world, entityliving.locX, entityliving.locY + (double) entityliving.getHeadHeight() - 0.10000000149011612D, entityliving.locZ);
+    protected EntityProjectile(EntityTypes<?> entitytypes, EntityLiving entityliving, World world) {
+        this(entitytypes, entityliving.locX, entityliving.locY + (double) entityliving.getHeadHeight() - 0.10000000149011612D, entityliving.locZ, world);
         this.shooter = entityliving;
+        this.shooterId = entityliving.getUniqueID();
     }
 
-    protected void i() {}
+    protected void x_() {}
 
     public void a(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float f5 = -MathHelper.sin(f1 * 0.017453292F) * MathHelper.cos(f * 0.017453292F);
@@ -74,36 +72,22 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.pitch = (float) (MathHelper.c(d1, (double) f3) * 57.2957763671875D);
         this.lastYaw = this.yaw;
         this.lastPitch = this.pitch;
-        this.au = 0;
     }
 
-    public void B_() {
-        this.M = this.locX;
-        this.N = this.locY;
-        this.O = this.locZ;
-        super.B_();
+    public void tick() {
+        this.N = this.locX;
+        this.O = this.locY;
+        this.P = this.locZ;
+        super.tick();
         if (this.shake > 0) {
             --this.shake;
         }
 
         if (this.inGround) {
-            if (this.world.getType(new BlockPosition(this.blockX, this.blockY, this.blockZ)).getBlock() == this.inBlockId) {
-                ++this.au;
-                if (this.au == 1200) {
-                    this.die();
-                }
-
-                return;
-            }
-
             this.inGround = false;
             this.motX *= (double) (this.random.nextFloat() * 0.2F);
             this.motY *= (double) (this.random.nextFloat() * 0.2F);
             this.motZ *= (double) (this.random.nextFloat() * 0.2F);
-            this.au = 0;
-            this.av = 0;
-        } else {
-            ++this.av;
         }
 
         Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
@@ -160,7 +144,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
 
         if (movingobjectposition != null) {
-            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && this.world.getType(movingobjectposition.a()).getBlock() == Blocks.PORTAL) {
+            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && this.world.getType(movingobjectposition.a()).getBlock() == Blocks.NETHER_PORTAL) {
                 this.e(movingobjectposition.a());
             } else {
                 this.a(movingobjectposition);
@@ -193,13 +177,13 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
         this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
         float f1 = 0.99F;
-        float f2 = this.j();
+        float f2 = this.f();
 
         if (this.isInWater()) {
             for (int j = 0; j < 4; ++j) {
                 float f3 = 0.25F;
 
-                this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ, new int[0]);
+                this.world.addParticle(Particles.e, this.locX - this.motX * 0.25D, this.locY - this.motY * 0.25D, this.locZ - this.motZ * 0.25D, this.motX, this.motY, this.motZ);
             }
 
             f1 = 0.8F;
@@ -215,65 +199,46 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         this.setPosition(this.locX, this.locY, this.locZ);
     }
 
-    protected float j() {
+    protected float f() {
         return 0.03F;
     }
 
     protected abstract void a(MovingObjectPosition movingobjectposition);
 
-    public static void a(DataConverterManager dataconvertermanager, String s) {}
-
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("xTile", this.blockX);
         nbttagcompound.setInt("yTile", this.blockY);
         nbttagcompound.setInt("zTile", this.blockZ);
-        MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(this.inBlockId);
-
-        nbttagcompound.setString("inTile", minecraftkey == null ? "" : minecraftkey.toString());
         nbttagcompound.setByte("shake", (byte) this.shake);
         nbttagcompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
-        if ((this.shooterName == null || this.shooterName.isEmpty()) && this.shooter instanceof EntityHuman) {
-            this.shooterName = this.shooter.getName();
+        if (this.shooterId != null) {
+            nbttagcompound.set("owner", GameProfileSerializer.a(this.shooterId));
         }
 
-        nbttagcompound.setString("ownerName", this.shooterName == null ? "" : this.shooterName);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         this.blockX = nbttagcompound.getInt("xTile");
         this.blockY = nbttagcompound.getInt("yTile");
         this.blockZ = nbttagcompound.getInt("zTile");
-        if (nbttagcompound.hasKeyOfType("inTile", 8)) {
-            this.inBlockId = Block.getByName(nbttagcompound.getString("inTile"));
-        } else {
-            this.inBlockId = Block.getById(nbttagcompound.getByte("inTile") & 255);
-        }
-
         this.shake = nbttagcompound.getByte("shake") & 255;
         this.inGround = nbttagcompound.getByte("inGround") == 1;
         this.shooter = null;
-        this.shooterName = nbttagcompound.getString("ownerName");
-        if (this.shooterName != null && this.shooterName.isEmpty()) {
-            this.shooterName = null;
+        if (nbttagcompound.hasKeyOfType("owner", 10)) {
+            this.shooterId = GameProfileSerializer.b(nbttagcompound.getCompound("owner"));
         }
 
-        this.shooter = this.getShooter();
     }
 
     @Nullable
     public EntityLiving getShooter() {
-        if (this.shooter == null && this.shooterName != null && !this.shooterName.isEmpty()) {
-            this.shooter = this.world.a(this.shooterName);
-            if (this.shooter == null && this.world instanceof WorldServer) {
-                try {
-                    Entity entity = ((WorldServer) this.world).getEntity(UUID.fromString(this.shooterName));
+        if (this.shooter == null && this.shooterId != null && this.world instanceof WorldServer) {
+            Entity entity = ((WorldServer) this.world).getEntity(this.shooterId);
 
-                    if (entity instanceof EntityLiving) {
-                        this.shooter = (EntityLiving) entity;
-                    }
-                } catch (Throwable throwable) {
-                    this.shooter = null;
-                }
+            if (entity instanceof EntityLiving) {
+                this.shooter = (EntityLiving) entity;
+            } else {
+                this.shooterId = null;
             }
         }
 

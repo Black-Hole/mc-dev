@@ -6,13 +6,13 @@ public class EntityComplexPart extends Entity {
     public final String b;
 
     public EntityComplexPart(IComplex icomplex, String s, float f, float f1) {
-        super(icomplex.a());
+        super(icomplex.P(), icomplex.J_());
         this.setSize(f, f1);
         this.owner = icomplex;
         this.b = s;
     }
 
-    protected void i() {}
+    protected void x_() {}
 
     protected void a(NBTTagCompound nbttagcompound) {}
 

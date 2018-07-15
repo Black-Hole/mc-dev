@@ -23,11 +23,11 @@ public class PacketPlayInEnchantItem implements Packet<PacketListenerPlayIn> {
         packetdataserializer.writeByte(this.b);
     }
 
-    public int a() {
+    public int b() {
         return this.a;
     }
 
-    public int b() {
+    public int c() {
         return this.b;
     }
 }

@@ -7,16 +7,16 @@ public class EntitySpider extends EntityMonster {
 
     private static final DataWatcherObject<Byte> a = DataWatcher.a(EntitySpider.class, DataWatcherRegistry.a);
 
-    public EntitySpider(World world) {
-        super(world);
+    protected EntitySpider(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.setSize(1.4F, 0.9F);
     }
 
-    public static void c(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntitySpider.class);
+    public EntitySpider(World world) {
+        this(EntityTypes.SPIDER, world);
     }
 
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(3, new PathfinderGoalLeapAtTarget(this, 0.4F));
         this.goalSelector.a(4, new EntitySpider.PathfinderGoalSpiderMeleeAttack(this));
@@ -28,7 +28,7 @@ public class EntitySpider extends EntityMonster {
         this.targetSelector.a(3, new EntitySpider.PathfinderGoalSpiderNearestAttackableTarget(this, EntityIronGolem.class));
     }
 
-    public double aG() {
+    public double aJ() {
         return (double) (this.length * 0.5F);
     }
 
@@ -36,13 +36,13 @@ public class EntitySpider extends EntityMonster {
         return new NavigationSpider(this, world);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntitySpider.a, Byte.valueOf((byte) 0));
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (!this.world.isClientSide) {
             this.a(this.positionChanged);
         }
@@ -55,32 +55,32 @@ public class EntitySpider extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.30000001192092896D);
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.hz;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_SPIDER_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.hB;
+        return SoundEffects.ENTITY_SPIDER_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.hA;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_SPIDER_DEATH;
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.hC, 0.15F, 1.0F);
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(SoundEffects.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.s;
+    protected MinecraftKey G() {
+        return LootTables.y;
     }
 
-    public boolean m_() {
-        return this.p();
+    public boolean z_() {
+        return this.l();
     }
 
-    public void ba() {}
+    public void bh() {}
 
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
@@ -90,7 +90,7 @@ public class EntitySpider extends EntityMonster {
         return mobeffect.getMobEffect() == MobEffects.POISON ? false : super.d(mobeffect);
     }
 
-    public boolean p() {
+    public boolean l() {
         return (((Byte) this.datawatcher.get(EntitySpider.a)).byteValue() & 1) != 0;
     }
 
@@ -107,14 +107,14 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity) {
-        Object object = super.prepare(difficultydamagescaler, groupdataentity);
+    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        Object object = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
         if (this.world.random.nextInt(100) == 0) {
             EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
 
             entityskeleton.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
-            entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null);
+            entityskeleton.prepare(difficultydamagescaler, (GroupDataEntity) null, (NBTTagCompound) null);
             this.world.addEntity(entityskeleton);
             entityskeleton.startRiding(this);
         }
@@ -148,7 +148,7 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean a() {
-            float f = this.e.aw();
+            float f = this.e.az();
 
             return f >= 0.5F ? false : super.a();
         }
@@ -161,10 +161,10 @@ public class EntitySpider extends EntityMonster {
         }
 
         public boolean b() {
-            float f = this.b.aw();
+            float f = this.a.az();
 
-            if (f >= 0.5F && this.b.getRandom().nextInt(100) == 0) {
-                this.b.setGoalTarget((EntityLiving) null);
+            if (f >= 0.5F && this.a.getRandom().nextInt(100) == 0) {
+                this.a.setGoalTarget((EntityLiving) null);
                 return false;
             } else {
                 return super.b();

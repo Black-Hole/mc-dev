@@ -2,47 +2,47 @@ package net.minecraft.server;
 
 public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
 
-    private final EntityVillager c;
-    private boolean d;
-    private boolean e;
-    private int f;
+    private final EntityVillager f;
+    private boolean g;
+    private boolean h;
+    private int i;
 
     public PathfinderGoalVillagerFarm(EntityVillager entityvillager, double d0) {
         super(entityvillager, d0, 16);
-        this.c = entityvillager;
+        this.f = entityvillager;
     }
 
     public boolean a() {
-        if (this.a <= 0) {
-            if (!this.c.world.getGameRules().getBoolean("mobGriefing")) {
+        if (this.b <= 0) {
+            if (!this.f.world.getGameRules().getBoolean("mobGriefing")) {
                 return false;
             }
 
-            this.f = -1;
-            this.d = this.c.du();
-            this.e = this.c.dt();
+            this.i = -1;
+            this.g = this.f.dH();
+            this.h = this.f.dG();
         }
 
         return super.a();
     }
 
     public boolean b() {
-        return this.f >= 0 && super.b();
+        return this.i >= 0 && super.b();
     }
 
     public void e() {
         super.e();
-        this.c.getControllerLook().a((double) this.b.getX() + 0.5D, (double) (this.b.getY() + 1), (double) this.b.getZ() + 0.5D, 10.0F, (float) this.c.N());
-        if (this.f()) {
-            World world = this.c.world;
-            BlockPosition blockposition = this.b.up();
+        this.f.getControllerLook().a((double) this.d.getX() + 0.5D, (double) (this.d.getY() + 1), (double) this.d.getZ() + 0.5D, 10.0F, (float) this.f.K());
+        if (this.k()) {
+            World world = this.f.world;
+            BlockPosition blockposition = this.d.up();
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            if (this.f == 0 && block instanceof BlockCrops && ((BlockCrops) block).z(iblockdata)) {
+            if (this.i == 0 && block instanceof BlockCrops && ((BlockCrops) block).w(iblockdata)) {
                 world.setAir(blockposition, true);
-            } else if (this.f == 1 && iblockdata.getMaterial() == Material.AIR) {
-                InventorySubcontainer inventorysubcontainer = this.c.dq();
+            } else if (this.i == 1 && iblockdata.isAir()) {
+                InventorySubcontainer inventorysubcontainer = this.f.dD();
 
                 for (int i = 0; i < inventorysubcontainer.getSize(); ++i) {
                     ItemStack itemstack = inventorysubcontainer.getItem(i);
@@ -59,7 +59,7 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
                             world.setTypeAndData(blockposition, Blocks.CARROTS.getBlockData(), 3);
                             flag = true;
                         } else if (itemstack.getItem() == Items.BEETROOT_SEEDS) {
-                            world.setTypeAndData(blockposition, Blocks.BEETROOT.getBlockData(), 3);
+                            world.setTypeAndData(blockposition, Blocks.BEETROOTS.getBlockData(), 3);
                             flag = true;
                         }
                     }
@@ -74,27 +74,27 @@ public class PathfinderGoalVillagerFarm extends PathfinderGoalGotoTarget {
                 }
             }
 
-            this.f = -1;
-            this.a = 10;
+            this.i = -1;
+            this.b = 10;
         }
 
     }
 
-    protected boolean a(World world, BlockPosition blockposition) {
-        Block block = world.getType(blockposition).getBlock();
+    protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
+        Block block = iworldreader.getType(blockposition).getBlock();
 
         if (block == Blocks.FARMLAND) {
             blockposition = blockposition.up();
-            IBlockData iblockdata = world.getType(blockposition);
+            IBlockData iblockdata = iworldreader.getType(blockposition);
 
             block = iblockdata.getBlock();
-            if (block instanceof BlockCrops && ((BlockCrops) block).z(iblockdata) && this.e && (this.f == 0 || this.f < 0)) {
-                this.f = 0;
+            if (block instanceof BlockCrops && ((BlockCrops) block).w(iblockdata) && this.h && (this.i == 0 || this.i < 0)) {
+                this.i = 0;
                 return true;
             }
 
-            if (iblockdata.getMaterial() == Material.AIR && this.d && (this.f == 1 || this.f < 0)) {
-                this.f = 1;
+            if (iblockdata.isAir() && this.g && (this.i == 1 || this.i < 0)) {
+                this.i = 1;
                 return true;
             }
         }

@@ -4,90 +4,123 @@ import java.util.Random;
 
 public class BlockIceFrost extends BlockIce {
 
-    public static final BlockStateInteger a = BlockStateInteger.of("age", 0, 3);
+    public static final BlockStateInteger a = BlockProperties.T;
 
-    public BlockIceFrost() {
-        this.w(this.blockStateList.getBlockData().set(BlockIceFrost.a, Integer.valueOf(0)));
+    public BlockIceFrost(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, Integer.valueOf(0)));
     }
 
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockIceFrost.a)).intValue();
-    }
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - ((Integer) iblockdata.get(BlockIceFrost.a)).intValue() - iblockdata.b(world, blockposition) && this.c(iblockdata, world, blockposition)) {
+            BlockPosition.b blockposition_b = BlockPosition.b.r();
+            Throwable throwable = null;
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockIceFrost.a, Integer.valueOf(MathHelper.clamp(i, 0, 3)));
-    }
+            try {
+                EnumDirection[] aenumdirection = EnumDirection.values();
+                int i = aenumdirection.length;
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if ((random.nextInt(3) == 0 || this.c(world, blockposition) < 4) && world.getLightLevel(blockposition) > 11 - ((Integer) iblockdata.get(BlockIceFrost.a)).intValue() - iblockdata.c()) {
-            this.a(world, blockposition, iblockdata, random, true);
-        } else {
-            world.a(blockposition, (Block) this, MathHelper.nextInt(random, 20, 40));
-        }
+                for (int j = 0; j < i; ++j) {
+                    EnumDirection enumdirection = aenumdirection[j];
 
-    }
+                    blockposition_b.j(blockposition).d(enumdirection);
+                    IBlockData iblockdata1 = world.getType(blockposition_b);
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (block == this) {
-            int i = this.c(world, blockposition);
-
-            if (i < 2) {
-                this.b(world, blockposition);
-            }
-        }
-
-    }
-
-    private int c(World world, BlockPosition blockposition) {
-        int i = 0;
-        EnumDirection[] aenumdirection = EnumDirection.values();
-        int j = aenumdirection.length;
-
-        for (int k = 0; k < j; ++k) {
-            EnumDirection enumdirection = aenumdirection[k];
-
-            if (world.getType(blockposition.shift(enumdirection)).getBlock() == this) {
-                ++i;
-                if (i >= 4) {
-                    return i;
+                    if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_b)) {
+                        world.I().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
+                    }
                 }
-            }
-        }
+            } catch (Throwable throwable1) {
+                throwable = throwable1;
+                throw throwable1;
+            } finally {
+                if (blockposition_b != null) {
+                    if (throwable != null) {
+                        try {
+                            blockposition_b.close();
+                        } catch (Throwable throwable2) {
+                            throwable.addSuppressed(throwable2);
+                        }
+                    } else {
+                        blockposition_b.close();
+                    }
+                }
 
-        return i;
+            }
+
+        } else {
+            world.I().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
+        }
     }
 
-    protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random, boolean flag) {
+    private boolean c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         int i = ((Integer) iblockdata.get(BlockIceFrost.a)).intValue();
 
         if (i < 3) {
-            world.setTypeAndData(blockposition, iblockdata.set(BlockIceFrost.a, Integer.valueOf(i + 1)), 2);
-            world.a(blockposition, (Block) this, MathHelper.nextInt(random, 20, 40));
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.a, Integer.valueOf(i + 1)), 2);
+            return false;
         } else {
-            this.b(world, blockposition);
-            if (flag) {
-                EnumDirection[] aenumdirection = EnumDirection.values();
-                int j = aenumdirection.length;
+            this.b(iblockdata, world, blockposition);
+            return true;
+        }
+    }
 
-                for (int k = 0; k < j; ++k) {
-                    EnumDirection enumdirection = aenumdirection[k];
-                    BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                    IBlockData iblockdata1 = world.getType(blockposition1);
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        if (block == this && this.a(world, blockposition, 2)) {
+            this.b(iblockdata, world, blockposition);
+        }
 
-                    if (iblockdata1.getBlock() == this) {
-                        this.a(world, blockposition1, iblockdata1, random, false);
+        super.doPhysics(iblockdata, world, blockposition, block, blockposition1);
+    }
+
+    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
+        int j = 0;
+        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        Throwable throwable = null;
+
+        try {
+            EnumDirection[] aenumdirection = EnumDirection.values();
+            int k = aenumdirection.length;
+
+            for (int l = 0; l < k; ++l) {
+                EnumDirection enumdirection = aenumdirection[l];
+
+                blockposition_b.j(blockposition).d(enumdirection);
+                if (iblockaccess.getType(blockposition_b).getBlock() == this) {
+                    ++j;
+                    if (j >= i) {
+                        boolean flag = false;
+
+                        return flag;
                     }
                 }
             }
+
+            return true;
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (blockposition_b != null) {
+                if (throwable != null) {
+                    try {
+                        blockposition_b.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    blockposition_b.close();
+                }
+            }
+
         }
-
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockIceFrost.a});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockIceFrost.a});
     }
 
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return ItemStack.a;
     }
 }

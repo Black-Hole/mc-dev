@@ -1,76 +1,260 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.Type;
+import java.util.UUID;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityTypes {
+public class EntityTypes<T extends Entity> {
 
-    public static final MinecraftKey a = new MinecraftKey("lightning_bolt");
-    private static final MinecraftKey e = new MinecraftKey("player");
-    private static final Logger f = LogManager.getLogger();
-    public static final RegistryMaterials<MinecraftKey, Class<? extends Entity>> b = new RegistryMaterials();
-    public static final Map<MinecraftKey, EntityTypes.MonsterEggInfo> eggInfo = Maps.newLinkedHashMap();
-    public static final Set<MinecraftKey> d = Sets.newHashSet();
-    private static final List<String> g = Lists.newArrayList();
-
+    private static final Logger aS = LogManager.getLogger();
+    public static final RegistryMaterials<MinecraftKey, EntityTypes<?>> REGISTRY = new RegistryMaterials();
+    public static final EntityTypes<EntityAreaEffectCloud> AREA_EFFECT_CLOUD = a("area_effect_cloud", EntityTypes.a.a(EntityAreaEffectCloud.class, EntityAreaEffectCloud::new));
+    public static final EntityTypes<EntityArmorStand> ARMOR_STAND = a("armor_stand", EntityTypes.a.a(EntityArmorStand.class, EntityArmorStand::new));
+    public static final EntityTypes<EntityTippedArrow> ARROW = a("arrow", EntityTypes.a.a(EntityTippedArrow.class, EntityTippedArrow::new));
+    public static final EntityTypes<EntityBat> BAT = a("bat", EntityTypes.a.a(EntityBat.class, EntityBat::new));
+    public static final EntityTypes<EntityBlaze> BLAZE = a("blaze", EntityTypes.a.a(EntityBlaze.class, EntityBlaze::new));
+    public static final EntityTypes<EntityBoat> BOAT = a("boat", EntityTypes.a.a(EntityBoat.class, EntityBoat::new));
+    public static final EntityTypes<EntityCaveSpider> CAVE_SPIDER = a("cave_spider", EntityTypes.a.a(EntityCaveSpider.class, EntityCaveSpider::new));
+    public static final EntityTypes<EntityChicken> CHICKEN = a("chicken", EntityTypes.a.a(EntityChicken.class, EntityChicken::new));
+    public static final EntityTypes<EntityCod> COD = a("cod", EntityTypes.a.a(EntityCod.class, EntityCod::new));
+    public static final EntityTypes<EntityCow> COW = a("cow", EntityTypes.a.a(EntityCow.class, EntityCow::new));
+    public static final EntityTypes<EntityCreeper> CREEPER = a("creeper", EntityTypes.a.a(EntityCreeper.class, EntityCreeper::new));
+    public static final EntityTypes<EntityHorseDonkey> DONKEY = a("donkey", EntityTypes.a.a(EntityHorseDonkey.class, EntityHorseDonkey::new));
+    public static final EntityTypes<EntityDolphin> DOLPHIN = a("dolphin", EntityTypes.a.a(EntityDolphin.class, EntityDolphin::new));
+    public static final EntityTypes<EntityDragonFireball> DRAGON_FIREBALL = a("dragon_fireball", EntityTypes.a.a(EntityDragonFireball.class, EntityDragonFireball::new));
+    public static final EntityTypes<EntityDrowned> DROWNED = a("drowned", EntityTypes.a.a(EntityDrowned.class, EntityDrowned::new));
+    public static final EntityTypes<EntityGuardianElder> ELDER_GUARDIAN = a("elder_guardian", EntityTypes.a.a(EntityGuardianElder.class, EntityGuardianElder::new));
+    public static final EntityTypes<EntityEnderCrystal> END_CRYSTAL = a("end_crystal", EntityTypes.a.a(EntityEnderCrystal.class, EntityEnderCrystal::new));
+    public static final EntityTypes<EntityEnderDragon> ENDER_DRAGON = a("ender_dragon", EntityTypes.a.a(EntityEnderDragon.class, EntityEnderDragon::new));
+    public static final EntityTypes<EntityEnderman> ENDERMAN = a("enderman", EntityTypes.a.a(EntityEnderman.class, EntityEnderman::new));
+    public static final EntityTypes<EntityEndermite> ENDERMITE = a("endermite", EntityTypes.a.a(EntityEndermite.class, EntityEndermite::new));
+    public static final EntityTypes<EntityEvokerFangs> EVOKER_FANGS = a("evoker_fangs", EntityTypes.a.a(EntityEvokerFangs.class, EntityEvokerFangs::new));
+    public static final EntityTypes<EntityEvoker> EVOKER = a("evoker", EntityTypes.a.a(EntityEvoker.class, EntityEvoker::new));
+    public static final EntityTypes<EntityExperienceOrb> EXPERIENCE_ORB = a("experience_orb", EntityTypes.a.a(EntityExperienceOrb.class, EntityExperienceOrb::new));
+    public static final EntityTypes<EntityEnderSignal> EYE_OF_ENDER = a("eye_of_ender", EntityTypes.a.a(EntityEnderSignal.class, EntityEnderSignal::new));
+    public static final EntityTypes<EntityFallingBlock> FALLING_BLOCK = a("falling_block", EntityTypes.a.a(EntityFallingBlock.class, EntityFallingBlock::new));
+    public static final EntityTypes<EntityFireworks> FIREWORK_ROCKET = a("firework_rocket", EntityTypes.a.a(EntityFireworks.class, EntityFireworks::new));
+    public static final EntityTypes<EntityGhast> GHAST = a("ghast", EntityTypes.a.a(EntityGhast.class, EntityGhast::new));
+    public static final EntityTypes<EntityGiantZombie> GIANT = a("giant", EntityTypes.a.a(EntityGiantZombie.class, EntityGiantZombie::new));
+    public static final EntityTypes<EntityGuardian> GUARDIAN = a("guardian", EntityTypes.a.a(EntityGuardian.class, EntityGuardian::new));
+    public static final EntityTypes<EntityHorse> HORSE = a("horse", EntityTypes.a.a(EntityHorse.class, EntityHorse::new));
+    public static final EntityTypes<EntityZombieHusk> HUSK = a("husk", EntityTypes.a.a(EntityZombieHusk.class, EntityZombieHusk::new));
+    public static final EntityTypes<EntityIllagerIllusioner> ILLUSIONER = a("illusioner", EntityTypes.a.a(EntityIllagerIllusioner.class, EntityIllagerIllusioner::new));
+    public static final EntityTypes<EntityItem> ITEM = a("item", EntityTypes.a.a(EntityItem.class, EntityItem::new));
+    public static final EntityTypes<EntityItemFrame> ITEM_FRAME = a("item_frame", EntityTypes.a.a(EntityItemFrame.class, EntityItemFrame::new));
+    public static final EntityTypes<EntityLargeFireball> FIREBALL = a("fireball", EntityTypes.a.a(EntityLargeFireball.class, EntityLargeFireball::new));
+    public static final EntityTypes<EntityLeash> LEASH_KNOT = a("leash_knot", EntityTypes.a.a(EntityLeash.class, EntityLeash::new).b());
+    public static final EntityTypes<EntityLlama> LLAMA = a("llama", EntityTypes.a.a(EntityLlama.class, EntityLlama::new));
+    public static final EntityTypes<EntityLlamaSpit> LLAMA_SPIT = a("llama_spit", EntityTypes.a.a(EntityLlamaSpit.class, EntityLlamaSpit::new));
+    public static final EntityTypes<EntityMagmaCube> MAGMA_CUBE = a("magma_cube", EntityTypes.a.a(EntityMagmaCube.class, EntityMagmaCube::new));
+    public static final EntityTypes<EntityMinecartRideable> MINECART = a("minecart", EntityTypes.a.a(EntityMinecartRideable.class, EntityMinecartRideable::new));
+    public static final EntityTypes<EntityMinecartChest> CHEST_MINECART = a("chest_minecart", EntityTypes.a.a(EntityMinecartChest.class, EntityMinecartChest::new));
+    public static final EntityTypes<EntityMinecartCommandBlock> COMMAND_BLOCK_MINECART = a("command_block_minecart", EntityTypes.a.a(EntityMinecartCommandBlock.class, EntityMinecartCommandBlock::new));
+    public static final EntityTypes<EntityMinecartFurnace> FURNACE_MINECART = a("furnace_minecart", EntityTypes.a.a(EntityMinecartFurnace.class, EntityMinecartFurnace::new));
+    public static final EntityTypes<EntityMinecartHopper> HOPPER_MINECART = a("hopper_minecart", EntityTypes.a.a(EntityMinecartHopper.class, EntityMinecartHopper::new));
+    public static final EntityTypes<EntityMinecartMobSpawner> SPAWNER_MINECART = a("spawner_minecart", EntityTypes.a.a(EntityMinecartMobSpawner.class, EntityMinecartMobSpawner::new));
+    public static final EntityTypes<EntityMinecartTNT> TNT_MINECART = a("tnt_minecart", EntityTypes.a.a(EntityMinecartTNT.class, EntityMinecartTNT::new));
+    public static final EntityTypes<EntityHorseMule> MULE = a("mule", EntityTypes.a.a(EntityHorseMule.class, EntityHorseMule::new));
+    public static final EntityTypes<EntityMushroomCow> MOOSHROOM = a("mooshroom", EntityTypes.a.a(EntityMushroomCow.class, EntityMushroomCow::new));
+    public static final EntityTypes<EntityOcelot> OCELOT = a("ocelot", EntityTypes.a.a(EntityOcelot.class, EntityOcelot::new));
+    public static final EntityTypes<EntityPainting> PAINTING = a("painting", EntityTypes.a.a(EntityPainting.class, EntityPainting::new));
+    public static final EntityTypes<EntityParrot> PARROT = a("parrot", EntityTypes.a.a(EntityParrot.class, EntityParrot::new));
+    public static final EntityTypes<EntityPig> PIG = a("pig", EntityTypes.a.a(EntityPig.class, EntityPig::new));
+    public static final EntityTypes<EntityPufferFish> PUFFERFISH = a("pufferfish", EntityTypes.a.a(EntityPufferFish.class, EntityPufferFish::new));
+    public static final EntityTypes<EntityPigZombie> ZOMBIE_PIGMAN = a("zombie_pigman", EntityTypes.a.a(EntityPigZombie.class, EntityPigZombie::new));
+    public static final EntityTypes<EntityPolarBear> POLAR_BEAR = a("polar_bear", EntityTypes.a.a(EntityPolarBear.class, EntityPolarBear::new));
+    public static final EntityTypes<EntityTNTPrimed> TNT = a("tnt", EntityTypes.a.a(EntityTNTPrimed.class, EntityTNTPrimed::new));
+    public static final EntityTypes<EntityRabbit> RABBIT = a("rabbit", EntityTypes.a.a(EntityRabbit.class, EntityRabbit::new));
+    public static final EntityTypes<EntitySalmon> SALMON = a("salmon", EntityTypes.a.a(EntitySalmon.class, EntitySalmon::new));
+    public static final EntityTypes<EntitySheep> SHEEP = a("sheep", EntityTypes.a.a(EntitySheep.class, EntitySheep::new));
+    public static final EntityTypes<EntityShulker> SHULKER = a("shulker", EntityTypes.a.a(EntityShulker.class, EntityShulker::new));
+    public static final EntityTypes<EntityShulkerBullet> SHULKER_BULLET = a("shulker_bullet", EntityTypes.a.a(EntityShulkerBullet.class, EntityShulkerBullet::new));
+    public static final EntityTypes<EntitySilverfish> SILVERFISH = a("silverfish", EntityTypes.a.a(EntitySilverfish.class, EntitySilverfish::new));
+    public static final EntityTypes<EntitySkeleton> SKELETON = a("skeleton", EntityTypes.a.a(EntitySkeleton.class, EntitySkeleton::new));
+    public static final EntityTypes<EntityHorseSkeleton> SKELETON_HORSE = a("skeleton_horse", EntityTypes.a.a(EntityHorseSkeleton.class, EntityHorseSkeleton::new));
+    public static final EntityTypes<EntitySlime> SLIME = a("slime", EntityTypes.a.a(EntitySlime.class, EntitySlime::new));
+    public static final EntityTypes<EntitySmallFireball> SMALL_FIREBALL = a("small_fireball", EntityTypes.a.a(EntitySmallFireball.class, EntitySmallFireball::new));
+    public static final EntityTypes<EntitySnowman> SNOW_GOLEM = a("snow_golem", EntityTypes.a.a(EntitySnowman.class, EntitySnowman::new));
+    public static final EntityTypes<EntitySnowball> SNOWBALL = a("snowball", EntityTypes.a.a(EntitySnowball.class, EntitySnowball::new));
+    public static final EntityTypes<EntitySpectralArrow> SPECTRAL_ARROW = a("spectral_arrow", EntityTypes.a.a(EntitySpectralArrow.class, EntitySpectralArrow::new));
+    public static final EntityTypes<EntitySpider> SPIDER = a("spider", EntityTypes.a.a(EntitySpider.class, EntitySpider::new));
+    public static final EntityTypes<EntitySquid> SQUID = a("squid", EntityTypes.a.a(EntitySquid.class, EntitySquid::new));
+    public static final EntityTypes<EntitySkeletonStray> STRAY = a("stray", EntityTypes.a.a(EntitySkeletonStray.class, EntitySkeletonStray::new));
+    public static final EntityTypes<EntityTropicalFish> TROPICAL_FISH = a("tropical_fish", EntityTypes.a.a(EntityTropicalFish.class, EntityTropicalFish::new));
+    public static final EntityTypes<EntityTurtle> TURTLE = a("turtle", EntityTypes.a.a(EntityTurtle.class, EntityTurtle::new));
+    public static final EntityTypes<EntityEgg> EGG = a("egg", EntityTypes.a.a(EntityEgg.class, EntityEgg::new));
+    public static final EntityTypes<EntityEnderPearl> ENDER_PEARL = a("ender_pearl", EntityTypes.a.a(EntityEnderPearl.class, EntityEnderPearl::new));
+    public static final EntityTypes<EntityThrownExpBottle> EXPERIENCE_BOTTLE = a("experience_bottle", EntityTypes.a.a(EntityThrownExpBottle.class, EntityThrownExpBottle::new));
+    public static final EntityTypes<EntityPotion> POTION = a("potion", EntityTypes.a.a(EntityPotion.class, EntityPotion::new));
+    public static final EntityTypes<EntityVex> VEX = a("vex", EntityTypes.a.a(EntityVex.class, EntityVex::new));
+    public static final EntityTypes<EntityVillager> VILLAGER = a("villager", EntityTypes.a.a(EntityVillager.class, EntityVillager::new));
+    public static final EntityTypes<EntityIronGolem> IRON_GOLEM = a("iron_golem", EntityTypes.a.a(EntityIronGolem.class, EntityIronGolem::new));
+    public static final EntityTypes<EntityVindicator> VINDICATOR = a("vindicator", EntityTypes.a.a(EntityVindicator.class, EntityVindicator::new));
+    public static final EntityTypes<EntityWitch> WITCH = a("witch", EntityTypes.a.a(EntityWitch.class, EntityWitch::new));
+    public static final EntityTypes<EntityWither> WITHER = a("wither", EntityTypes.a.a(EntityWither.class, EntityWither::new));
+    public static final EntityTypes<EntitySkeletonWither> WITHER_SKELETON = a("wither_skeleton", EntityTypes.a.a(EntitySkeletonWither.class, EntitySkeletonWither::new));
+    public static final EntityTypes<EntityWitherSkull> WITHER_SKULL = a("wither_skull", EntityTypes.a.a(EntityWitherSkull.class, EntityWitherSkull::new));
+    public static final EntityTypes<EntityWolf> WOLF = a("wolf", EntityTypes.a.a(EntityWolf.class, EntityWolf::new));
+    public static final EntityTypes<EntityZombie> ZOMBIE = a("zombie", EntityTypes.a.a(EntityZombie.class, EntityZombie::new));
+    public static final EntityTypes<EntityHorseZombie> ZOMBIE_HORSE = a("zombie_horse", EntityTypes.a.a(EntityHorseZombie.class, EntityHorseZombie::new));
+    public static final EntityTypes<EntityZombieVillager> ZOMBIE_VILLAGER = a("zombie_villager", EntityTypes.a.a(EntityZombieVillager.class, EntityZombieVillager::new));
+    public static final EntityTypes<EntityPhantom> PHANTOM = a("phantom", EntityTypes.a.a(EntityPhantom.class, EntityPhantom::new));
+    public static final EntityTypes<EntityLightning> LIGHTNING_BOLT = a("lightning_bolt", EntityTypes.a.a(EntityLightning.class).b());
+    public static final EntityTypes<EntityHuman> PLAYER = a("player", EntityTypes.a.a(EntityHuman.class).b().a());
+    public static final EntityTypes<EntityFishingHook> FISHING_BOBBER = a("fishing_bobber", EntityTypes.a.a(EntityFishingHook.class).b().a());
+    public static final EntityTypes<EntityThrownTrident> TRIDENT = a("trident", EntityTypes.a.a(EntityThrownTrident.class, EntityThrownTrident::new));
+    private final Class<? extends T> aT;
+    private final Function<? super World, ? extends T> aU;
+    private final boolean aV;
+    private final boolean aW;
     @Nullable
-    public static MinecraftKey a(Entity entity) {
-        return getName(entity.getClass());
+    private String aX;
+    @Nullable
+    private final Type<?> aY;
+
+    public static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.a<T> entitytypes_a) {
+        EntityTypes entitytypes = entitytypes_a.a(s);
+
+        EntityTypes.REGISTRY.a(new MinecraftKey(s), entitytypes);
+        return entitytypes;
     }
 
     @Nullable
-    public static MinecraftKey getName(Class<? extends Entity> oclass) {
-        return (MinecraftKey) EntityTypes.b.b(oclass);
+    public static MinecraftKey getName(EntityTypes<?> entitytypes) {
+        return (MinecraftKey) EntityTypes.REGISTRY.b(entitytypes);
     }
 
     @Nullable
-    public static String b(Entity entity) {
-        int i = EntityTypes.b.a((Object) entity.getClass());
+    public static EntityTypes<?> a(String s) {
+        return (EntityTypes) EntityTypes.REGISTRY.get(MinecraftKey.a(s));
+    }
 
-        return i == -1 ? null : (String) EntityTypes.g.get(i);
+    public EntityTypes(Class<? extends T> oclass, Function<? super World, ? extends T> function, boolean flag, boolean flag1, @Nullable Type<?> type) {
+        this.aT = oclass;
+        this.aU = function;
+        this.aV = flag;
+        this.aW = flag1;
+        this.aY = type;
     }
 
     @Nullable
-    public static String a(@Nullable MinecraftKey minecraftkey) {
-        int i = EntityTypes.b.a(EntityTypes.b.get(minecraftkey));
-
-        return i == -1 ? null : (String) EntityTypes.g.get(i);
+    public Entity a(World world, @Nullable ItemStack itemstack, @Nullable EntityHuman entityhuman, BlockPosition blockposition, boolean flag, boolean flag1) {
+        return this.a(world, itemstack == null ? null : itemstack.getTag(), itemstack != null && itemstack.hasName() ? itemstack.getName() : null, entityhuman, blockposition, flag, flag1);
     }
 
     @Nullable
-    public static Entity a(@Nullable Class<? extends Entity> oclass, World world) {
-        if (oclass == null) {
+    public T a(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, boolean flag, boolean flag1) {
+        Entity entity = this.b(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, flag, flag1);
+
+        world.addEntity(entity);
+        return entity;
+    }
+
+    @Nullable
+    public T b(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, boolean flag, boolean flag1) {
+        Entity entity = this.a(world);
+
+        if (entity == null) {
             return null;
         } else {
-            try {
-                return (Entity) oclass.getConstructor(new Class[] { World.class}).newInstance(new Object[] { world});
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return null;
+            double d0;
+
+            if (flag) {
+                entity.setPosition((double) blockposition.getX() + 0.5D, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D);
+                d0 = a(world, blockposition, flag1, entity.getBoundingBox());
+            } else {
+                d0 = 0.0D;
+            }
+
+            entity.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
+            if (entity instanceof EntityInsentient) {
+                EntityInsentient entityinsentient = (EntityInsentient) entity;
+
+                entityinsentient.aS = entityinsentient.yaw;
+                entityinsentient.aQ = entityinsentient.yaw;
+                entityinsentient.prepare(world.getDamageScaler(new BlockPosition(entityinsentient)), (GroupDataEntity) null, nbttagcompound);
+                entityinsentient.A();
+            }
+
+            if (ichatbasecomponent != null && entity instanceof EntityLiving) {
+                entity.setCustomName(ichatbasecomponent);
+            }
+
+            a(world, entityhuman, entity, nbttagcompound);
+            return entity;
+        }
+    }
+
+    protected static double a(IWorldReader iworldreader, BlockPosition blockposition, boolean flag, AxisAlignedBB axisalignedbb) {
+        AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(blockposition);
+
+        if (flag) {
+            axisalignedbb1 = axisalignedbb1.b(0.0D, -1.0D, 0.0D);
+        }
+
+        VoxelShape voxelshape = iworldreader.c((Entity) null, axisalignedbb1);
+
+        return !flag && voxelshape.b() ? 0.0D : 1.0D + VoxelShapes.a(EnumDirection.EnumAxis.Y, axisalignedbb, voxelshape, flag ? -2.0D : -1.0D);
+    }
+
+    public static void a(World world, @Nullable EntityHuman entityhuman, @Nullable Entity entity, @Nullable NBTTagCompound nbttagcompound) {
+        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
+            MinecraftServer minecraftserver = world.getMinecraftServer();
+
+            if (minecraftserver != null && entity != null) {
+                if (world.isClientSide || !entity.bM() || entityhuman != null && minecraftserver.getPlayerList().isOp(entityhuman.getProfile())) {
+                    NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
+                    UUID uuid = entity.getUniqueID();
+
+                    nbttagcompound1.a(nbttagcompound.getCompound("EntityTag"));
+                    entity.a(uuid);
+                    entity.f(nbttagcompound1);
+                }
             }
         }
     }
 
+    public boolean a() {
+        return this.aV;
+    }
+
+    public boolean b() {
+        return this.aW;
+    }
+
+    public Class<? extends T> c() {
+        return this.aT;
+    }
+
+    public String d() {
+        if (this.aX == null) {
+            this.aX = SystemUtils.a("entity", (MinecraftKey) EntityTypes.REGISTRY.b(this));
+        }
+
+        return this.aX;
+    }
+
     @Nullable
-    public static Entity a(MinecraftKey minecraftkey, World world) {
-        return a((Class) EntityTypes.b.get(minecraftkey), world);
+    public T a(World world) {
+        return (Entity) this.aU.apply(world);
+    }
+
+    @Nullable
+    public static Entity a(World world, MinecraftKey minecraftkey) {
+        return a(world, (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey));
     }
 
     @Nullable
     public static Entity a(NBTTagCompound nbttagcompound, World world) {
         MinecraftKey minecraftkey = new MinecraftKey(nbttagcompound.getString("id"));
-        Entity entity = a(minecraftkey, world);
+        Entity entity = a(world, minecraftkey);
 
         if (entity == null) {
-            EntityTypes.f.warn("Skipping Entity with id {}", minecraftkey);
+            EntityTypes.aS.warn("Skipping Entity with id {}", minecraftkey);
         } else {
             entity.f(nbttagcompound);
         }
@@ -78,207 +262,59 @@ public class EntityTypes {
         return entity;
     }
 
-    public static Set<MinecraftKey> a() {
-        return EntityTypes.d;
+    @Nullable
+    private static Entity a(World world, @Nullable EntityTypes<?> entitytypes) {
+        return entitytypes == null ? null : entitytypes.a(world);
     }
 
-    public static boolean a(Entity entity, MinecraftKey minecraftkey) {
-        MinecraftKey minecraftkey1 = getName(entity.getClass());
+    public static class a<T extends Entity> {
 
-        return minecraftkey1 != null ? minecraftkey1.equals(minecraftkey) : (entity instanceof EntityHuman ? EntityTypes.e.equals(minecraftkey) : (entity instanceof EntityLightning ? EntityTypes.a.equals(minecraftkey) : false));
-    }
+        private final Class<? extends T> a;
+        private final Function<? super World, ? extends T> b;
+        private boolean c = true;
+        private boolean d = true;
 
-    public static boolean b(MinecraftKey minecraftkey) {
-        return EntityTypes.e.equals(minecraftkey) || a().contains(minecraftkey);
-    }
-
-    public static String b() {
-        StringBuilder stringbuilder = new StringBuilder();
-        Iterator iterator = a().iterator();
-
-        while (iterator.hasNext()) {
-            MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
-
-            stringbuilder.append(minecraftkey).append(", ");
+        private a(Class<? extends T> oclass, Function<? super World, ? extends T> function) {
+            this.a = oclass;
+            this.b = function;
         }
 
-        stringbuilder.append(EntityTypes.e);
-        return stringbuilder.toString();
-    }
-
-    public static void c() {
-        a(1, "item", EntityItem.class, "Item");
-        a(2, "xp_orb", EntityExperienceOrb.class, "XPOrb");
-        a(3, "area_effect_cloud", EntityAreaEffectCloud.class, "AreaEffectCloud");
-        a(4, "elder_guardian", EntityGuardianElder.class, "ElderGuardian");
-        a(5, "wither_skeleton", EntitySkeletonWither.class, "WitherSkeleton");
-        a(6, "stray", EntitySkeletonStray.class, "Stray");
-        a(7, "egg", EntityEgg.class, "ThrownEgg");
-        a(8, "leash_knot", EntityLeash.class, "LeashKnot");
-        a(9, "painting", EntityPainting.class, "Painting");
-        a(10, "arrow", EntityTippedArrow.class, "Arrow");
-        a(11, "snowball", EntitySnowball.class, "Snowball");
-        a(12, "fireball", EntityLargeFireball.class, "Fireball");
-        a(13, "small_fireball", EntitySmallFireball.class, "SmallFireball");
-        a(14, "ender_pearl", EntityEnderPearl.class, "ThrownEnderpearl");
-        a(15, "eye_of_ender_signal", EntityEnderSignal.class, "EyeOfEnderSignal");
-        a(16, "potion", EntityPotion.class, "ThrownPotion");
-        a(17, "xp_bottle", EntityThrownExpBottle.class, "ThrownExpBottle");
-        a(18, "item_frame", EntityItemFrame.class, "ItemFrame");
-        a(19, "wither_skull", EntityWitherSkull.class, "WitherSkull");
-        a(20, "tnt", EntityTNTPrimed.class, "PrimedTnt");
-        a(21, "falling_block", EntityFallingBlock.class, "FallingSand");
-        a(22, "fireworks_rocket", EntityFireworks.class, "FireworksRocketEntity");
-        a(23, "husk", EntityZombieHusk.class, "Husk");
-        a(24, "spectral_arrow", EntitySpectralArrow.class, "SpectralArrow");
-        a(25, "shulker_bullet", EntityShulkerBullet.class, "ShulkerBullet");
-        a(26, "dragon_fireball", EntityDragonFireball.class, "DragonFireball");
-        a(27, "zombie_villager", EntityZombieVillager.class, "ZombieVillager");
-        a(28, "skeleton_horse", EntityHorseSkeleton.class, "SkeletonHorse");
-        a(29, "zombie_horse", EntityHorseZombie.class, "ZombieHorse");
-        a(30, "armor_stand", EntityArmorStand.class, "ArmorStand");
-        a(31, "donkey", EntityHorseDonkey.class, "Donkey");
-        a(32, "mule", EntityHorseMule.class, "Mule");
-        a(33, "evocation_fangs", EntityEvokerFangs.class, "EvocationFangs");
-        a(34, "evocation_illager", EntityEvoker.class, "EvocationIllager");
-        a(35, "vex", EntityVex.class, "Vex");
-        a(36, "vindication_illager", EntityVindicator.class, "VindicationIllager");
-        a(37, "illusion_illager", EntityIllagerIllusioner.class, "IllusionIllager");
-        a(40, "commandblock_minecart", EntityMinecartCommandBlock.class, EntityMinecartAbstract.EnumMinecartType.COMMAND_BLOCK.b());
-        a(41, "boat", EntityBoat.class, "Boat");
-        a(42, "minecart", EntityMinecartRideable.class, EntityMinecartAbstract.EnumMinecartType.RIDEABLE.b());
-        a(43, "chest_minecart", EntityMinecartChest.class, EntityMinecartAbstract.EnumMinecartType.CHEST.b());
-        a(44, "furnace_minecart", EntityMinecartFurnace.class, EntityMinecartAbstract.EnumMinecartType.FURNACE.b());
-        a(45, "tnt_minecart", EntityMinecartTNT.class, EntityMinecartAbstract.EnumMinecartType.TNT.b());
-        a(46, "hopper_minecart", EntityMinecartHopper.class, EntityMinecartAbstract.EnumMinecartType.HOPPER.b());
-        a(47, "spawner_minecart", EntityMinecartMobSpawner.class, EntityMinecartAbstract.EnumMinecartType.SPAWNER.b());
-        a(50, "creeper", EntityCreeper.class, "Creeper");
-        a(51, "skeleton", EntitySkeleton.class, "Skeleton");
-        a(52, "spider", EntitySpider.class, "Spider");
-        a(53, "giant", EntityGiantZombie.class, "Giant");
-        a(54, "zombie", EntityZombie.class, "Zombie");
-        a(55, "slime", EntitySlime.class, "Slime");
-        a(56, "ghast", EntityGhast.class, "Ghast");
-        a(57, "zombie_pigman", EntityPigZombie.class, "PigZombie");
-        a(58, "enderman", EntityEnderman.class, "Enderman");
-        a(59, "cave_spider", EntityCaveSpider.class, "CaveSpider");
-        a(60, "silverfish", EntitySilverfish.class, "Silverfish");
-        a(61, "blaze", EntityBlaze.class, "Blaze");
-        a(62, "magma_cube", EntityMagmaCube.class, "LavaSlime");
-        a(63, "ender_dragon", EntityEnderDragon.class, "EnderDragon");
-        a(64, "wither", EntityWither.class, "WitherBoss");
-        a(65, "bat", EntityBat.class, "Bat");
-        a(66, "witch", EntityWitch.class, "Witch");
-        a(67, "endermite", EntityEndermite.class, "Endermite");
-        a(68, "guardian", EntityGuardian.class, "Guardian");
-        a(69, "shulker", EntityShulker.class, "Shulker");
-        a(90, "pig", EntityPig.class, "Pig");
-        a(91, "sheep", EntitySheep.class, "Sheep");
-        a(92, "cow", EntityCow.class, "Cow");
-        a(93, "chicken", EntityChicken.class, "Chicken");
-        a(94, "squid", EntitySquid.class, "Squid");
-        a(95, "wolf", EntityWolf.class, "Wolf");
-        a(96, "mooshroom", EntityMushroomCow.class, "MushroomCow");
-        a(97, "snowman", EntitySnowman.class, "SnowMan");
-        a(98, "ocelot", EntityOcelot.class, "Ozelot");
-        a(99, "villager_golem", EntityIronGolem.class, "VillagerGolem");
-        a(100, "horse", EntityHorse.class, "Horse");
-        a(101, "rabbit", EntityRabbit.class, "Rabbit");
-        a(102, "polar_bear", EntityPolarBear.class, "PolarBear");
-        a(103, "llama", EntityLlama.class, "Llama");
-        a(104, "llama_spit", EntityLlamaSpit.class, "LlamaSpit");
-        a(105, "parrot", EntityParrot.class, "Parrot");
-        a(120, "villager", EntityVillager.class, "Villager");
-        a(200, "ender_crystal", EntityEnderCrystal.class, "EnderCrystal");
-        a("bat", 4996656, 986895);
-        a("blaze", 16167425, 16775294);
-        a("cave_spider", 803406, 11013646);
-        a("chicken", 10592673, 16711680);
-        a("cow", 4470310, 10592673);
-        a("creeper", 894731, 0);
-        a("donkey", 5457209, 8811878);
-        a("elder_guardian", 13552826, 7632531);
-        a("enderman", 1447446, 0);
-        a("endermite", 1447446, 7237230);
-        a("evocation_illager", 9804699, 1973274);
-        a("ghast", 16382457, 12369084);
-        a("guardian", 5931634, 15826224);
-        a("horse", 12623485, 15656192);
-        a("husk", 7958625, 15125652);
-        a("llama", 12623485, 10051392);
-        a("magma_cube", 3407872, 16579584);
-        a("mooshroom", 10489616, 12040119);
-        a("mule", 1769984, 5321501);
-        a("ocelot", 15720061, 5653556);
-        a("parrot", 894731, 16711680);
-        a("pig", 15771042, 14377823);
-        a("polar_bear", 15921906, 9803152);
-        a("rabbit", 10051392, 7555121);
-        a("sheep", 15198183, 16758197);
-        a("shulker", 9725844, 5060690);
-        a("silverfish", 7237230, 3158064);
-        a("skeleton", 12698049, 4802889);
-        a("skeleton_horse", 6842447, 15066584);
-        a("slime", 5349438, 8306542);
-        a("spider", 3419431, 11013646);
-        a("squid", 2243405, 7375001);
-        a("stray", 6387319, 14543594);
-        a("vex", 8032420, 15265265);
-        a("villager", 5651507, 12422002);
-        a("vindication_illager", 9804699, 2580065);
-        a("witch", 3407872, 5349438);
-        a("wither_skeleton", 1315860, 4672845);
-        a("wolf", 14144467, 13545366);
-        a("zombie", '\uafaf', 7969893);
-        a("zombie_horse", 3232308, 9945732);
-        a("zombie_pigman", 15373203, 5009705);
-        a("zombie_villager", 5651507, 7969893);
-        EntityTypes.d.add(EntityTypes.a);
-    }
-
-    private static void a(int i, String s, Class<? extends Entity> oclass, String s1) {
-        try {
-            oclass.getConstructor(new Class[] { World.class});
-        } catch (NoSuchMethodException nosuchmethodexception) {
-            throw new RuntimeException("Invalid class " + oclass + " no constructor taking " + World.class.getName());
+        public static <T extends Entity> EntityTypes.a<T> a(Class<? extends T> oclass, Function<? super World, ? extends T> function) {
+            return new EntityTypes.a(oclass, function);
         }
 
-        if ((oclass.getModifiers() & 1024) == 1024) {
-            throw new RuntimeException("Invalid abstract class " + oclass);
-        } else {
-            MinecraftKey minecraftkey = new MinecraftKey(s);
+        public static <T extends Entity> EntityTypes.a<T> a(Class<? extends T> oclass) {
+            return new EntityTypes.a(oclass, (world) -> {
+                return null;
+            });
+        }
 
-            EntityTypes.b.a(i, minecraftkey, oclass);
-            EntityTypes.d.add(minecraftkey);
+        public EntityTypes.a<T> a() {
+            this.d = false;
+            return this;
+        }
 
-            while (EntityTypes.g.size() <= i) {
-                EntityTypes.g.add((Object) null);
+        public EntityTypes.a<T> b() {
+            this.c = false;
+            return this;
+        }
+
+        public EntityTypes<T> a(String s) {
+            Type type = null;
+
+            if (this.c) {
+                try {
+                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1513)).getChoiceType(DataConverterTypes.n, s);
+                } catch (IllegalStateException illegalstateexception) {
+                    if (SharedConstants.b) {
+                        throw illegalstateexception;
+                    }
+
+                    EntityTypes.aS.warn("No data fixer registered for entity {}", s);
+                }
             }
 
-            EntityTypes.g.set(i, s1);
-        }
-    }
-
-    protected static EntityTypes.MonsterEggInfo a(String s, int i, int j) {
-        MinecraftKey minecraftkey = new MinecraftKey(s);
-
-        return (EntityTypes.MonsterEggInfo) EntityTypes.eggInfo.put(minecraftkey, new EntityTypes.MonsterEggInfo(minecraftkey, i, j));
-    }
-
-    public static class MonsterEggInfo {
-
-        public final MinecraftKey a;
-        public final int b;
-        public final int c;
-        public final Statistic killEntityStatistic;
-        public final Statistic killedByEntityStatistic;
-
-        public MonsterEggInfo(MinecraftKey minecraftkey, int i, int j) {
-            this.a = minecraftkey;
-            this.b = i;
-            this.c = j;
-            this.killEntityStatistic = StatisticList.a(this);
-            this.killedByEntityStatistic = StatisticList.b(this);
+            return new EntityTypes(this.a, this.b, this.c, this.d, type);
         }
     }
 }

@@ -4,21 +4,23 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public abstract class NBTBase {
+public interface NBTBase {
 
-    public static final String[] a = new String[] { "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]", "LONG[]"};
+    String[] a = new String[] { "END", "BYTE", "SHORT", "INT", "LONG", "FLOAT", "DOUBLE", "BYTE[]", "STRING", "LIST", "COMPOUND", "INT[]", "LONG[]"};
+    EnumChatFormat b = EnumChatFormat.AQUA;
+    EnumChatFormat c = EnumChatFormat.GREEN;
+    EnumChatFormat d = EnumChatFormat.GOLD;
+    EnumChatFormat e = EnumChatFormat.RED;
 
-    abstract void write(DataOutput dataoutput) throws IOException;
+    void write(DataOutput dataoutput) throws IOException;
 
-    abstract void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException;
+    void load(DataInput datainput, int i, NBTReadLimiter nbtreadlimiter) throws IOException;
 
-    public abstract String toString();
+    String toString();
 
-    public abstract byte getTypeId();
+    byte getTypeId();
 
-    protected NBTBase() {}
-
-    protected static NBTBase createTag(byte b0) {
+    static default NBTBase createTag(byte b0) {
         switch (b0) {
         case 0:
             return new NBTTagEnd();
@@ -64,7 +66,7 @@ public abstract class NBTBase {
         }
     }
 
-    public static String j(int i) {
+    static default String n(int i) {
         switch (i) {
         case 0:
             return "TAG_End";
@@ -113,21 +115,15 @@ public abstract class NBTBase {
         }
     }
 
-    public abstract NBTBase clone();
+    NBTBase clone();
 
-    public boolean isEmpty() {
-        return false;
-    }
-
-    public boolean equals(Object object) {
-        return object instanceof NBTBase && this.getTypeId() == ((NBTBase) object).getTypeId();
-    }
-
-    public int hashCode() {
-        return this.getTypeId();
-    }
-
-    protected String c_() {
+    default String b_() {
         return this.toString();
     }
+
+    default IChatBaseComponent k() {
+        return this.a("", 0);
+    }
+
+    IChatBaseComponent a(String s, int i);
 }

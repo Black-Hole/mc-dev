@@ -1,8 +1,9 @@
 package net.minecraft.server;
 
-public class ContainerPlayer extends Container {
+public class ContainerPlayer extends ContainerRecipeBook {
 
-    private static final EnumItemSlot[] h = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
+    private static final String[] h = new String[] { "item/empty_armor_slot_boots", "item/empty_armor_slot_leggings", "item/empty_armor_slot_chestplate", "item/empty_armor_slot_helmet"};
+    private static final EnumItemSlot[] i = new EnumItemSlot[] { EnumItemSlot.HEAD, EnumItemSlot.CHEST, EnumItemSlot.LEGS, EnumItemSlot.FEET};
     public InventoryCrafting craftInventory = new InventoryCrafting(this, 2, 2);
     public InventoryCraftResult resultInventory = new InventoryCraftResult();
     public boolean g;
@@ -23,21 +24,21 @@ public class ContainerPlayer extends Container {
         }
 
         for (i = 0; i < 4; ++i) {
-            final EnumItemSlot enumitemslot = ContainerPlayer.h[i];
+            final EnumItemSlot enumitemslot = ContainerPlayer.i[i];
 
-            this.a(new Slot(playerinventory, 36 + (3 - i), 8, 8 + i * 18) {
+            this.a(new Slot(playerinventory, 39 - i, 8, 8 + i * 18) {
                 public int getMaxStackSize() {
                     return 1;
                 }
 
                 public boolean isAllowed(ItemStack itemstack) {
-                    return enumitemslot == EntityInsentient.d(itemstack);
+                    return enumitemslot == EntityInsentient.e(itemstack);
                 }
 
                 public boolean isAllowed(EntityHuman entityhuman) {
                     ItemStack itemstack = this.getItem();
 
-                    return !itemstack.isEmpty() && !entityhuman.z() && EnchantmentManager.d(itemstack) ? false : super.isAllowed(entityhuman);
+                    return !itemstack.isEmpty() && !entityhuman.u() && EnchantmentManager.d(itemstack) ? false : super.isAllowed(entityhuman);
                 }
             });
         }
@@ -54,6 +55,19 @@ public class ContainerPlayer extends Container {
 
         this.a(new Slot(playerinventory, 40, 77, 62) {
         });
+    }
+
+    public void a(AutoRecipeStackManager autorecipestackmanager) {
+        this.craftInventory.a(autorecipestackmanager);
+    }
+
+    public void d() {
+        this.resultInventory.clear();
+        this.craftInventory.clear();
+    }
+
+    public boolean a(IRecipe irecipe) {
+        return irecipe.a(this.craftInventory, this.owner.world);
     }
 
     public void a(IInventory iinventory) {
@@ -80,7 +94,7 @@ public class ContainerPlayer extends Container {
             ItemStack itemstack1 = slot.getItem();
 
             itemstack = itemstack1.cloneItemStack();
-            EnumItemSlot enumitemslot = EntityInsentient.d(itemstack);
+            EnumItemSlot enumitemslot = EntityInsentient.e(itemstack);
 
             if (i == 0) {
                 if (!this.a(itemstack1, 9, 45, true)) {
@@ -140,5 +154,17 @@ public class ContainerPlayer extends Container {
 
     public boolean a(ItemStack itemstack, Slot slot) {
         return slot.inventory != this.resultInventory && super.a(itemstack, slot);
+    }
+
+    public int e() {
+        return 0;
+    }
+
+    public int f() {
+        return this.craftInventory.U_();
+    }
+
+    public int g() {
+        return this.craftInventory.n();
     }
 }

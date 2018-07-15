@@ -2,50 +2,48 @@ package net.minecraft.server;
 
 public class BlockDropper extends BlockDispenser {
 
-    private final IDispenseBehavior e = new DispenseBehaviorItem();
+    private static final IDispenseBehavior c = new DispenseBehaviorItem();
 
-    public BlockDropper() {}
-
-    protected IDispenseBehavior a(ItemStack itemstack) {
-        return this.e;
+    public BlockDropper(Block.Info block_info) {
+        super(block_info);
     }
 
-    public TileEntity a(World world, int i) {
+    protected IDispenseBehavior a(ItemStack itemstack) {
+        return BlockDropper.c;
+    }
+
+    public TileEntity a(IBlockAccess iblockaccess) {
         return new TileEntityDropper();
     }
 
     public void dispense(World world, BlockPosition blockposition) {
         SourceBlock sourceblock = new SourceBlock(world, blockposition);
         TileEntityDispenser tileentitydispenser = (TileEntityDispenser) sourceblock.getTileEntity();
+        int i = tileentitydispenser.p();
 
-        if (tileentitydispenser != null) {
-            int i = tileentitydispenser.o();
+        if (i < 0) {
+            world.triggerEffect(1001, blockposition, 0);
+        } else {
+            ItemStack itemstack = tileentitydispenser.getItem(i);
 
-            if (i < 0) {
-                world.triggerEffect(1001, blockposition, 0);
-            } else {
-                ItemStack itemstack = tileentitydispenser.getItem(i);
+            if (!itemstack.isEmpty()) {
+                EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockDropper.FACING);
+                IInventory iinventory = TileEntityHopper.a(world, blockposition.shift(enumdirection));
+                ItemStack itemstack1;
 
-                if (!itemstack.isEmpty()) {
-                    EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockDropper.FACING);
-                    BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                    IInventory iinventory = TileEntityHopper.b(world, (double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
-                    ItemStack itemstack1;
-
-                    if (iinventory == null) {
-                        itemstack1 = this.e.a(sourceblock, itemstack);
+                if (iinventory == null) {
+                    itemstack1 = BlockDropper.c.dispense(sourceblock, itemstack);
+                } else {
+                    itemstack1 = TileEntityHopper.addItem(tileentitydispenser, iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
+                    if (itemstack1.isEmpty()) {
+                        itemstack1 = itemstack.cloneItemStack();
+                        itemstack1.subtract(1);
                     } else {
-                        itemstack1 = TileEntityHopper.addItem(tileentitydispenser, iinventory, itemstack.cloneItemStack().cloneAndSubtract(1), enumdirection.opposite());
-                        if (itemstack1.isEmpty()) {
-                            itemstack1 = itemstack.cloneItemStack();
-                            itemstack1.subtract(1);
-                        } else {
-                            itemstack1 = itemstack.cloneItemStack();
-                        }
+                        itemstack1 = itemstack.cloneItemStack();
                     }
-
-                    tileentitydispenser.setItem(i, itemstack1);
                 }
+
+                tileentitydispenser.setItem(i, itemstack1);
             }
         }
     }

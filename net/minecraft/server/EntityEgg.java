@@ -3,19 +3,15 @@ package net.minecraft.server;
 public class EntityEgg extends EntityProjectile {
 
     public EntityEgg(World world) {
-        super(world);
+        super(EntityTypes.EGG, world);
     }
 
     public EntityEgg(World world, EntityLiving entityliving) {
-        super(world, entityliving);
+        super(EntityTypes.EGG, entityliving, world);
     }
 
     public EntityEgg(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityProjectile.a(dataconvertermanager, "ThrownEgg");
+        super(EntityTypes.EGG, d0, d1, d2, world);
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {

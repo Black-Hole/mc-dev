@@ -1,37 +1,30 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class BlockAir extends Block {
 
-    protected BlockAir() {
-        super(Material.AIR);
+    protected BlockAir(Block.Info block_info) {
+        super(block_info);
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockAir.k;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return VoxelShapes.a();
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean d(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean a(IBlockData iblockdata, boolean flag) {
-        return false;
-    }
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {}
-
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean e(IBlockData iblockdata) {
         return true;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 

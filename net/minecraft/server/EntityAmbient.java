@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public abstract class EntityAmbient extends EntityInsentient implements IAnimal {
 
-    public EntityAmbient(World world) {
-        super(world);
+    protected EntityAmbient(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public boolean a(EntityHuman entityhuman) {

@@ -1,145 +1,144 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntListIterator;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AutoRecipe {
+public class AutoRecipe implements AutoRecipeAbstract<Integer> {
 
-    private final Logger a = LogManager.getLogger();
-    private final AutoRecipeStackManager b = new AutoRecipeStackManager();
-    private EntityPlayer c;
-    private IRecipe d;
-    private boolean e;
-    private InventoryCraftResult f;
-    private InventoryCrafting g;
-    private List<Slot> h;
+    protected static final Logger a = LogManager.getLogger();
+    protected final AutoRecipeStackManager b = new AutoRecipeStackManager();
+    protected PlayerInventory c;
+    protected ContainerRecipeBook d;
 
     public AutoRecipe() {}
 
     public void a(EntityPlayer entityplayer, @Nullable IRecipe irecipe, boolean flag) {
-        if (irecipe != null && entityplayer.F().b(irecipe)) {
-            this.c = entityplayer;
-            this.d = irecipe;
-            this.e = flag;
-            this.h = entityplayer.activeContainer.slots;
-            Container container = entityplayer.activeContainer;
-
-            this.f = null;
-            this.g = null;
-            if (container instanceof ContainerWorkbench) {
-                this.f = ((ContainerWorkbench) container).resultInventory;
-                this.g = ((ContainerWorkbench) container).craftInventory;
-            } else if (container instanceof ContainerPlayer) {
-                this.f = ((ContainerPlayer) container).resultInventory;
-                this.g = ((ContainerPlayer) container).craftInventory;
-            }
-
-            if (this.f != null && this.g != null) {
-                if (this.c() || entityplayer.z()) {
-                    this.b.a();
-                    entityplayer.inventory.a(this.b, false);
-                    this.g.a(this.b);
-                    if (this.b.a(irecipe, (IntList) null)) {
-                        this.b();
-                    } else {
-                        this.a();
-                        entityplayer.playerConnection.sendPacket(new PacketPlayOutAutoRecipe(entityplayer.activeContainer.windowId, irecipe));
-                    }
-
-                    entityplayer.inventory.update();
+        if (irecipe != null && entityplayer.B().b(irecipe)) {
+            this.c = entityplayer.inventory;
+            this.d = (ContainerRecipeBook) entityplayer.activeContainer;
+            if (this.b() || entityplayer.u()) {
+                this.b.a();
+                entityplayer.inventory.a(this.b);
+                this.d.a(this.b);
+                if (this.b.a(irecipe, (IntList) null)) {
+                    this.a(irecipe, flag);
+                } else {
+                    this.a();
+                    entityplayer.playerConnection.sendPacket(new PacketPlayOutAutoRecipe(entityplayer.activeContainer.windowId, irecipe));
                 }
+
+                entityplayer.inventory.update();
             }
         }
     }
 
-    private void a() {
-        PlayerInventory playerinventory = this.c.inventory;
-
-        for (int i = 0; i < this.g.getSize(); ++i) {
-            ItemStack itemstack = this.g.getItem(i);
-
-            if (!itemstack.isEmpty()) {
-                while (itemstack.getCount() > 0) {
-                    int j = playerinventory.firstPartial(itemstack);
-
-                    if (j == -1) {
-                        j = playerinventory.getFirstEmptySlotIndex();
-                    }
-
-                    ItemStack itemstack1 = itemstack.cloneItemStack();
-
-                    itemstack1.setCount(1);
-                    playerinventory.c(j, itemstack1);
-                    this.g.splitStack(i, 1);
-                }
+    protected void a() {
+        for (int i = 0; i < this.d.f() * this.d.g() + 1; ++i) {
+            if (i != this.d.e() || !(this.d instanceof ContainerWorkbench) && !(this.d instanceof ContainerPlayer)) {
+                this.a(i);
             }
         }
 
-        this.g.clear();
-        this.f.clear();
+        this.d.d();
     }
 
-    private void b() {
-        boolean flag = this.d.a(this.g, this.c.world);
-        int i = this.b.b(this.d, (IntList) null);
+    protected void a(int i) {
+        ItemStack itemstack = this.d.getSlot(i).getItem();
 
-        if (flag) {
-            boolean flag1 = true;
+        if (!itemstack.isEmpty()) {
+            for (; itemstack.getCount() > 0; this.d.getSlot(i).a(1)) {
+                int j = this.c.firstPartial(itemstack);
 
-            for (int j = 0; j < this.g.getSize(); ++j) {
-                ItemStack itemstack = this.g.getItem(j);
+                if (j == -1) {
+                    j = this.c.getFirstEmptySlotIndex();
+                }
 
-                if (!itemstack.isEmpty() && Math.min(i, itemstack.getMaxStackSize()) > itemstack.getCount()) {
-                    flag1 = false;
+                ItemStack itemstack1 = itemstack.cloneItemStack();
+
+                itemstack1.setCount(1);
+                if (!this.c.c(j, itemstack1)) {
+                    AutoRecipe.a.error("Can\'t find any space for item in the inventory");
                 }
             }
 
-            if (flag1) {
-                return;
+        }
+    }
+
+    protected void a(IRecipe irecipe, boolean flag) {
+        boolean flag1 = this.d.a(irecipe);
+        int i = this.b.b(irecipe, (IntList) null);
+        int j;
+
+        if (flag1) {
+            for (j = 0; j < this.d.g() * this.d.f() + 1; ++j) {
+                if (j != this.d.e()) {
+                    ItemStack itemstack = this.d.getSlot(j).getItem();
+
+                    if (!itemstack.isEmpty() && Math.min(i, itemstack.getMaxStackSize()) < itemstack.getCount() + 1) {
+                        return;
+                    }
+                }
             }
         }
 
-        int k = this.a(i, flag);
+        j = this.a(flag, i, flag1);
         IntArrayList intarraylist = new IntArrayList();
 
-        if (this.b.a(this.d, intarraylist, k)) {
-            int l = k;
+        if (this.b.a(irecipe, intarraylist, j)) {
+            int k = j;
             IntListIterator intlistiterator = intarraylist.iterator();
 
             while (intlistiterator.hasNext()) {
-                int i1 = ((Integer) intlistiterator.next()).intValue();
-                int j1 = AutoRecipeStackManager.b(i1).getMaxStackSize();
+                int l = ((Integer) intlistiterator.next()).intValue();
+                int i1 = AutoRecipeStackManager.b(l).getMaxStackSize();
 
-                if (j1 < l) {
-                    l = j1;
+                if (i1 < k) {
+                    k = i1;
                 }
             }
 
-            if (this.b.a(this.d, intarraylist, l)) {
+            if (this.b.a(irecipe, intarraylist, k)) {
                 this.a();
-                this.a(l, intarraylist);
+                this.a(this.d.f(), this.d.g(), this.d.e(), irecipe, intarraylist.iterator(), k);
             }
         }
+
     }
 
-    private int a(int i, boolean flag) {
+    public void a(Iterator<Integer> iterator, int i, int j, int k, int l) {
+        Slot slot = this.d.getSlot(i);
+        ItemStack itemstack = AutoRecipeStackManager.b(((Integer) iterator.next()).intValue());
+
+        if (!itemstack.isEmpty()) {
+            for (int i1 = 0; i1 < j; ++i1) {
+                this.a(slot, itemstack);
+            }
+        }
+
+    }
+
+    protected int a(boolean flag, int i, boolean flag1) {
         int j = 1;
 
-        if (this.e) {
+        if (flag) {
             j = i;
-        } else if (flag) {
+        } else if (flag1) {
             j = 64;
 
-            for (int k = 0; k < this.g.getSize(); ++k) {
-                ItemStack itemstack = this.g.getItem(k);
+            for (int k = 0; k < this.d.f() * this.d.g() + 1; ++k) {
+                if (k != this.d.e()) {
+                    ItemStack itemstack = this.d.getSlot(k).getItem();
 
-                if (!itemstack.isEmpty() && j > itemstack.getCount()) {
-                    j = itemstack.getCount();
+                    if (!itemstack.isEmpty() && j > itemstack.getCount()) {
+                        j = itemstack.getCount();
+                    }
                 }
             }
 
@@ -151,60 +150,17 @@ public class AutoRecipe {
         return j;
     }
 
-    private void a(int i, IntList intlist) {
-        int j = this.g.j();
-        int k = this.g.i();
-
-        if (this.d instanceof ShapedRecipes) {
-            ShapedRecipes shapedrecipes = (ShapedRecipes) this.d;
-
-            j = shapedrecipes.f();
-            k = shapedrecipes.g();
-        }
-
-        int l = 1;
-        IntListIterator intlistiterator = intlist.iterator();
-
-        for (int i1 = 0; i1 < this.g.j() && k != i1; ++i1) {
-            for (int j1 = 0; j1 < this.g.i(); ++j1) {
-                if (j == j1 || !intlistiterator.hasNext()) {
-                    l += this.g.j() - j1;
-                    break;
-                }
-
-                Slot slot = (Slot) this.h.get(l);
-                ItemStack itemstack = AutoRecipeStackManager.b(((Integer) intlistiterator.next()).intValue());
-
-                if (itemstack.isEmpty()) {
-                    ++l;
-                } else {
-                    for (int k1 = 0; k1 < i; ++k1) {
-                        this.a(slot, itemstack);
-                    }
-
-                    ++l;
-                }
-            }
-
-            if (!intlistiterator.hasNext()) {
-                break;
-            }
-        }
-
-    }
-
-    private void a(Slot slot, ItemStack itemstack) {
-        PlayerInventory playerinventory = this.c.inventory;
-        int i = playerinventory.c(itemstack);
+    protected void a(Slot slot, ItemStack itemstack) {
+        int i = this.c.c(itemstack);
 
         if (i != -1) {
-            ItemStack itemstack1 = playerinventory.getItem(i).cloneItemStack();
+            ItemStack itemstack1 = this.c.getItem(i).cloneItemStack();
 
             if (!itemstack1.isEmpty()) {
                 if (itemstack1.getCount() > 1) {
-                    playerinventory.splitStack(i, 1);
+                    this.c.splitStack(i, 1);
                 } else {
-                    playerinventory.splitWithoutUpdate(i);
+                    this.c.splitWithoutUpdate(i);
                 }
 
                 itemstack1.setCount(1);
@@ -218,25 +174,59 @@ public class AutoRecipe {
         }
     }
 
-    private boolean c() {
-        PlayerInventory playerinventory = this.c.inventory;
+    private boolean b() {
+        ArrayList arraylist = Lists.newArrayList();
+        int i = this.c();
 
-        for (int i = 0; i < this.g.getSize(); ++i) {
-            ItemStack itemstack = this.g.getItem(i);
+        for (int j = 0; j < this.d.f() * this.d.g() + 1; ++j) {
+            if (j != this.d.e()) {
+                ItemStack itemstack = this.d.getSlot(j).getItem().cloneItemStack();
 
-            if (!itemstack.isEmpty()) {
-                int j = playerinventory.firstPartial(itemstack);
+                if (!itemstack.isEmpty()) {
+                    int k = this.c.firstPartial(itemstack);
 
-                if (j == -1) {
-                    j = playerinventory.getFirstEmptySlotIndex();
-                }
+                    if (k == -1 && arraylist.size() <= i) {
+                        Iterator iterator = arraylist.iterator();
 
-                if (j == -1) {
-                    return false;
+                        while (iterator.hasNext()) {
+                            ItemStack itemstack1 = (ItemStack) iterator.next();
+
+                            if (itemstack1.doMaterialsMatch(itemstack) && itemstack1.getCount() != itemstack1.getMaxStackSize() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) {
+                                itemstack1.add(itemstack.getCount());
+                                itemstack.setCount(0);
+                                break;
+                            }
+                        }
+
+                        if (!itemstack.isEmpty()) {
+                            if (arraylist.size() >= i) {
+                                return false;
+                            }
+
+                            arraylist.add(itemstack);
+                        }
+                    } else if (k == -1) {
+                        return false;
+                    }
                 }
             }
         }
 
         return true;
+    }
+
+    private int c() {
+        int i = 0;
+        Iterator iterator = this.c.items.iterator();
+
+        while (iterator.hasNext()) {
+            ItemStack itemstack = (ItemStack) iterator.next();
+
+            if (itemstack.isEmpty()) {
+                ++i;
+            }
+        }
+
+        return i;
     }
 }

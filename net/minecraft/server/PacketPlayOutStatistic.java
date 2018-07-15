@@ -1,19 +1,19 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Maps;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
 
-    private Map<Statistic, Integer> a;
+    private Object2IntMap<Statistic<?>> a;
 
     public PacketPlayOutStatistic() {}
 
-    public PacketPlayOutStatistic(Map<Statistic, Integer> map) {
-        this.a = map;
+    public PacketPlayOutStatistic(Object2IntMap<Statistic<?>> object2intmap) {
+        this.a = object2intmap;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
@@ -23,29 +23,37 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         int i = packetdataserializer.g();
 
-        this.a = Maps.newHashMap();
+        this.a = new Object2IntOpenHashMap(i);
 
         for (int j = 0; j < i; ++j) {
-            Statistic statistic = StatisticList.getStatistic(packetdataserializer.e(32767));
-            int k = packetdataserializer.g();
-
-            if (statistic != null) {
-                this.a.put(statistic, Integer.valueOf(k));
-            }
+            this.a((StatisticWrapper) StatisticList.REGISTRY.getId(packetdataserializer.g()), packetdataserializer);
         }
 
     }
 
+    private <T> void a(StatisticWrapper<T> statisticwrapper, PacketDataSerializer packetdataserializer) {
+        int i = packetdataserializer.g();
+        int j = packetdataserializer.g();
+
+        this.a.put(statisticwrapper.b(statisticwrapper.a().getId(i)), j);
+    }
+
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a.size());
-        Iterator iterator = this.a.entrySet().iterator();
+        ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
 
-        while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+        while (objectiterator.hasNext()) {
+            Entry entry = (Entry) objectiterator.next();
+            Statistic statistic = (Statistic) entry.getKey();
 
-            packetdataserializer.a(((Statistic) entry.getKey()).name);
-            packetdataserializer.d(((Integer) entry.getValue()).intValue());
+            packetdataserializer.d(StatisticList.REGISTRY.a((Object) statistic.a()));
+            packetdataserializer.d(this.a(statistic));
+            packetdataserializer.d(entry.getIntValue());
         }
 
+    }
+
+    private <T> int a(Statistic<T> statistic) {
+        return statistic.a().a().a(statistic.b());
     }
 }

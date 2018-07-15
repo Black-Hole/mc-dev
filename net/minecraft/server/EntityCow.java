@@ -4,20 +4,20 @@ import javax.annotation.Nullable;
 
 public class EntityCow extends EntityAnimal {
 
-    public EntityCow(World world) {
-        super(world);
+    protected EntityCow(EntityTypes<?> entitytypes, World world) {
+        super(entitytypes, world);
         this.setSize(0.9F, 1.4F);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityCow.class);
+    public EntityCow(World world) {
+        this(EntityTypes.COW, world);
     }
 
-    protected void r() {
+    protected void n() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, Items.WHEAT, false));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.25D, RecipeItemStack.a(new IMaterial[] { Items.WHEAT}), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.25D));
         this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
@@ -30,36 +30,36 @@ public class EntityCow extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    protected SoundEffect F() {
-        return SoundEffects.ar;
+    protected SoundEffect D() {
+        return SoundEffects.ENTITY_COW_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.at;
+        return SoundEffects.ENTITY_COW_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.as;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_COW_DEATH;
     }
 
-    protected void a(BlockPosition blockposition, Block block) {
-        this.a(SoundEffects.av, 0.15F, 1.0F);
+    protected void a(BlockPosition blockposition, IBlockData iblockdata) {
+        this.a(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
     }
 
-    protected float cq() {
+    protected float cC() {
         return 0.4F;
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.L;
+    protected MinecraftKey G() {
+        return LootTables.S;
     }
 
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.BUCKET && !entityhuman.abilities.canInstantlyBuild && !this.isBaby()) {
-            entityhuman.a(SoundEffects.au, 1.0F, 1.0F);
+            entityhuman.a(SoundEffects.ENTITY_COW_MILK, 1.0F, 1.0F);
             itemstack.subtract(1);
             if (itemstack.isEmpty()) {
                 entityhuman.a(enumhand, new ItemStack(Items.MILK_BUCKET));

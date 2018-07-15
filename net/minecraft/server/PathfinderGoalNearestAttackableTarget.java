@@ -1,10 +1,10 @@
 package net.minecraft.server;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> extends PathfinderGoalTarget {
@@ -23,20 +23,14 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         this(entitycreature, oclass, 10, flag, flag1, (Predicate) null);
     }
 
-    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, @Nullable final Predicate<? super T> predicate) {
+    public PathfinderGoalNearestAttackableTarget(EntityCreature entitycreature, Class<T> oclass, int i, boolean flag, boolean flag1, @Nullable Predicate<? super T> predicate) {
         super(entitycreature, flag, flag1);
         this.a = oclass;
         this.i = i;
         this.b = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entitycreature);
         this.a(1);
-        this.c = new Predicate() {
-            public boolean a(@Nullable T t0) {
-                return t0 == null ? false : (predicate != null && !predicate.apply(t0) ? false : (!IEntitySelector.e.apply(t0) ? false : PathfinderGoalNearestAttackableTarget.this.a(t0, false)));
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((EntityLiving) object);
-            }
+        this.c = (entityliving) -> {
+            return entityliving == null ? false : (predicate != null && !predicate.test(entityliving) ? false : (!IEntitySelector.e.test(entityliving) ? false : this.a(entityliving, false)));
         };
     }
 
@@ -59,18 +53,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
-                    if (itemstack.getItem() == Items.SKULL) {
-                        int i = itemstack.i();
-                        boolean flag = PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton && i == 0;
-                        boolean flag1 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie && i == 2;
-                        boolean flag2 = PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper && i == 4;
-
-                        if (flag || flag1 || flag2) {
-                            return Double.valueOf(0.5D);
-                        }
-                    }
-
-                    return Double.valueOf(1.0D);
+                    return (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton) || itemstack.getItem() != Items.SKELETON_SKULL) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie) || itemstack.getItem() != Items.ZOMBIE_HEAD) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper) || itemstack.getItem() != Items.CREEPER_HEAD) ? Double.valueOf(1.0D) : Double.valueOf(0.5D);
                 }
 
                 @Nullable

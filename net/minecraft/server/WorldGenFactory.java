@@ -19,7 +19,7 @@ public class WorldGenFactory {
         WorldGenFactory.c.put(oclass, s);
     }
 
-    static void a(Class<? extends StructurePiece> oclass, String s) {
+    public static void a(Class<? extends StructurePiece> oclass, String s) {
         WorldGenFactory.d.put(s, oclass);
         WorldGenFactory.e.put(oclass, s);
     }
@@ -33,30 +33,35 @@ public class WorldGenFactory {
     }
 
     @Nullable
-    public static StructureStart a(NBTTagCompound nbttagcompound, World world) {
+    public static StructureStart a(NBTTagCompound nbttagcompound, GeneratorAccess generatoraccess) {
         StructureStart structurestart = null;
+        String s = nbttagcompound.getString("id");
 
-        try {
-            Class oclass = (Class) WorldGenFactory.b.get(nbttagcompound.getString("id"));
-
-            if (oclass != null) {
-                structurestart = (StructureStart) oclass.newInstance();
-            }
-        } catch (Exception exception) {
-            WorldGenFactory.a.warn("Failed Start with id {}", nbttagcompound.getString("id"));
-            exception.printStackTrace();
-        }
-
-        if (structurestart != null) {
-            structurestart.a(world, nbttagcompound);
+        if ("INVALID".equals(s)) {
+            return StructureGenerator.a;
         } else {
-            WorldGenFactory.a.warn("Skipping Structure with id {}", nbttagcompound.getString("id"));
-        }
+            try {
+                Class oclass = (Class) WorldGenFactory.b.get(s);
 
-        return structurestart;
+                if (oclass != null) {
+                    structurestart = (StructureStart) oclass.newInstance();
+                }
+            } catch (Exception exception) {
+                WorldGenFactory.a.warn("Failed Start with id {}", s);
+                exception.printStackTrace();
+            }
+
+            if (structurestart != null) {
+                structurestart.a(generatoraccess, nbttagcompound);
+            } else {
+                WorldGenFactory.a.warn("Skipping Structure with id {}", s);
+            }
+
+            return structurestart;
+        }
     }
 
-    public static StructurePiece b(NBTTagCompound nbttagcompound, World world) {
+    public static StructurePiece b(NBTTagCompound nbttagcompound, GeneratorAccess generatoraccess) {
         StructurePiece structurepiece = null;
 
         try {
@@ -71,7 +76,7 @@ public class WorldGenFactory {
         }
 
         if (structurepiece != null) {
-            structurepiece.a(world, nbttagcompound);
+            structurepiece.a(generatoraccess, nbttagcompound);
         } else {
             WorldGenFactory.a.warn("Skipping Piece with id {}", nbttagcompound.getString("id"));
         }
@@ -80,21 +85,33 @@ public class WorldGenFactory {
     }
 
     static {
-        b(WorldGenMineshaftStart.class, "Mineshaft");
-        b(WorldGenVillage.WorldGenVillageStart.class, "Village");
-        b(WorldGenNether.WorldGenNetherStart.class, "Fortress");
-        b(WorldGenStronghold.WorldGenStronghold2Start.class, "Stronghold");
-        b(WorldGenLargeFeature.WorldGenLargeFeatureStart.class, "Temple");
-        b(WorldGenMonument.WorldGenMonumentStart.class, "Monument");
-        b(WorldGenEndCity.Start.class, "EndCity");
+        b(WorldGenMineshaft.a.class, "Mineshaft");
+        b(WorldGenVillage.a.class, "Village");
+        b(WorldGenNether.a.class, "Fortress");
+        b(WorldGenStronghold.a.class, "Stronghold");
+        b(WorldGenFeatureJunglePyramid.a.class, "Jungle_Pyramid");
+        b(WorldGenFeatureOceanRuin.a.class, "Ocean_Ruin");
+        b(WorldGenFeatureDesertPyramid.a.class, "Desert_Pyramid");
+        b(WorldGenFeatureIgloo.a.class, "Igloo");
+        b(WorldGenFeatureSwampHut.a.class, "Swamp_Hut");
+        b(WorldGenMonument.a.class, "Monument");
+        b(WorldGenEndCity.a.class, "EndCity");
         b(WorldGenWoodlandMansion.a.class, "Mansion");
+        b(WorldGenBuriedTreasure.a.class, "Buried_Treasure");
+        b(WorldGenFeatureShipwreck.a.class, "Shipwreck");
         WorldGenMineshaftPieces.a();
         WorldGenVillagePieces.a();
         WorldGenNetherPieces.a();
         WorldGenStrongholdPieces.a();
-        WorldGenRegistration.a();
+        WorldGenJunglePyramidPiece.ac_();
+        WorldGenFeatureOceanRuinPieces.a();
+        WorldGenIglooPiece.a();
+        WorldGenWitchHut.b();
+        WorldGenDesertPyramidPiece.ab_();
         WorldGenMonumentPieces.a();
         WorldGenEndCityPieces.a();
         WorldGenWoodlandMansionPieces.a();
+        WorldGenBuriedTreasurePieces.a();
+        WorldGenShipwreck.a();
     }
 }

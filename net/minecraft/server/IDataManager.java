@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DataFixer;
 import java.io.File;
 import javax.annotation.Nullable;
 
@@ -22,7 +23,10 @@ public interface IDataManager {
 
     File getDirectory();
 
+    @Nullable
     File getDataFile(String s);
 
     DefinedStructureManager h();
+
+    DataFixer i();
 }

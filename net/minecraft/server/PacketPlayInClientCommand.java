@@ -24,7 +24,7 @@ public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public PacketPlayInClientCommand.EnumClientCommand a() {
+    public PacketPlayInClientCommand.EnumClientCommand b() {
         return this.a;
     }
 

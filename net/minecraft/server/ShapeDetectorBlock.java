@@ -1,19 +1,19 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ShapeDetectorBlock {
 
-    private final World a;
+    private final IWorldReader a;
     private final BlockPosition b;
     private final boolean c;
     private IBlockData d;
     private TileEntity e;
     private boolean f;
 
-    public ShapeDetectorBlock(World world, BlockPosition blockposition, boolean flag) {
-        this.a = world;
+    public ShapeDetectorBlock(IWorldReader iworldreader, BlockPosition blockposition, boolean flag) {
+        this.a = iworldreader;
         this.b = blockposition;
         this.c = flag;
     }
@@ -36,19 +36,17 @@ public class ShapeDetectorBlock {
         return this.e;
     }
 
+    public IWorldReader c() {
+        return this.a;
+    }
+
     public BlockPosition getPosition() {
         return this.b;
     }
 
-    public static Predicate<ShapeDetectorBlock> a(final Predicate<IBlockData> predicate) {
-        return new Predicate() {
-            public boolean a(@Nullable ShapeDetectorBlock shapedetectorblock) {
-                return shapedetectorblock != null && predicate.apply(shapedetectorblock.a());
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((ShapeDetectorBlock) object);
-            }
+    public static Predicate<ShapeDetectorBlock> a(Predicate<IBlockData> predicate) {
+        return (shapedetectorblock) -> {
+            return shapedetectorblock != null && predicate.test(shapedetectorblock.a());
         };
     }
 }

@@ -23,10 +23,10 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
         String[] astring = new String[this.e().size()];
         int i = 0;
 
-        WhiteListEntry whitelistentry;
+        JsonListEntry jsonlistentry;
 
-        for (Iterator iterator = this.e().values().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) whitelistentry.getKey()).getName()) {
-            whitelistentry = (WhiteListEntry) iterator.next();
+        for (Iterator iterator = this.e().iterator(); iterator.hasNext(); astring[i++] = ((GameProfile) jsonlistentry.getKey()).getName()) {
+            jsonlistentry = (JsonListEntry) iterator.next();
         }
 
         return astring;
@@ -34,22 +34,6 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
 
     protected String b(GameProfile gameprofile) {
         return gameprofile.getId().toString();
-    }
-
-    public GameProfile a(String s) {
-        Iterator iterator = this.e().values().iterator();
-
-        WhiteListEntry whitelistentry;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            whitelistentry = (WhiteListEntry) iterator.next();
-        } while (!s.equalsIgnoreCase(((GameProfile) whitelistentry.getKey()).getName()));
-
-        return (GameProfile) whitelistentry.getKey();
     }
 
     protected String a(Object object) {

@@ -1,20 +1,28 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Function;
 
-public class DataConverterLang implements IDataConverter {
+public class DataConverterLang extends DataFix {
 
-    public DataConverterLang() {}
-
-    public int a() {
-        return 816;
+    public DataConverterLang(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if (nbttagcompound.hasKeyOfType("lang", 8)) {
-            nbttagcompound.setString("lang", nbttagcompound.getString("lang").toLowerCase(Locale.ROOT));
-        }
+    public TypeRewriteRule makeRule() {
+        return this.fixTypeEverywhereTyped("OptionsLowerCaseLanguageFix", this.getInputSchema().getType(DataConverterTypes.e), (typed) -> {
+            return typed.update(DSL.remainderFinder(), (dynamic) -> {
+                Optional optional = dynamic.get("lang").flatMap(Dynamic::getStringValue);
 
-        return nbttagcompound;
+                return optional.isPresent() ? dynamic.set("lang", dynamic.createString(((String) optional.get()).toLowerCase(Locale.ROOT))) : dynamic;
+            });
+        });
     }
 }

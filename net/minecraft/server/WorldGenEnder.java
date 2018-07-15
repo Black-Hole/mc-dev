@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-public class WorldGenEnder extends WorldGenerator {
+public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private boolean a;
     private WorldGenEnder.Spike b;
@@ -20,7 +20,7 @@ public class WorldGenEnder extends WorldGenerator {
         this.a = flag;
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         if (this.b == null) {
             throw new IllegalStateException("Decoration requires priming with a spike");
         } else {
@@ -31,33 +31,44 @@ public class WorldGenEnder extends WorldGenerator {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
 
                 if (blockposition_mutableblockposition.distanceSquared((double) blockposition.getX(), (double) blockposition_mutableblockposition.getY(), (double) blockposition.getZ()) <= (double) (i * i + 1) && blockposition_mutableblockposition.getY() < this.b.d()) {
-                    this.a(world, blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData());
+                    this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData());
                 } else if (blockposition_mutableblockposition.getY() > 65) {
-                    this.a(world, blockposition_mutableblockposition, Blocks.AIR.getBlockData());
+                    this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, Blocks.AIR.getBlockData());
                 }
             }
 
             if (this.b.e()) {
+                boolean flag = true;
+                boolean flag1 = true;
+                boolean flag2 = true;
+                BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
+
                 for (int j = -2; j <= 2; ++j) {
                     for (int k = -2; k <= 2; ++k) {
-                        if (MathHelper.a(j) == 2 || MathHelper.a(k) == 2) {
-                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d(), blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
-                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 1, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
-                            this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 2, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
-                        }
+                        for (int l = 0; l <= 3; ++l) {
+                            boolean flag3 = MathHelper.a(j) == 2;
+                            boolean flag4 = MathHelper.a(k) == 2;
+                            boolean flag5 = l == 3;
 
-                        this.a(world, new BlockPosition(blockposition.getX() + j, this.b.d() + 3, blockposition.getZ() + k), Blocks.IRON_BARS.getBlockData());
+                            if (flag3 || flag4 || flag5) {
+                                boolean flag6 = j == -2 || j == 2 || flag5;
+                                boolean flag7 = k == -2 || k == 2 || flag5;
+                                IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) Blocks.IRON_BARS.getBlockData().set(BlockIronBars.NORTH, Boolean.valueOf(flag6 && k != -2))).set(BlockIronBars.SOUTH, Boolean.valueOf(flag6 && k != 2))).set(BlockIronBars.WEST, Boolean.valueOf(flag7 && j != -2))).set(BlockIronBars.EAST, Boolean.valueOf(flag7 && j != 2));
+
+                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition1.c(blockposition.getX() + j, this.b.d() + l, blockposition.getZ() + k), iblockdata);
+                            }
+                        }
                     }
                 }
             }
 
-            EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world);
+            EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(generatoraccess.getMinecraftWorld());
 
             entityendercrystal.setBeamTarget(this.c);
             entityendercrystal.setInvulnerable(this.a);
             entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (this.b.d() + 1), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
-            world.addEntity(entityendercrystal);
-            this.a(world, new BlockPosition(blockposition.getX(), this.b.d(), blockposition.getZ()), Blocks.BEDROCK.getBlockData());
+            generatoraccess.addEntity(entityendercrystal);
+            this.a(generatoraccess, new BlockPosition(blockposition.getX(), this.b.d(), blockposition.getZ()), Blocks.BEDROCK.getBlockData());
             return true;
         }
     }

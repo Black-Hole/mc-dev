@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
@@ -23,7 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import javax.annotation.Nullable;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,15 +53,11 @@ public class NameReferencingFileConverter {
     }
 
     private static void a(MinecraftServer minecraftserver, Collection<String> collection, ProfileLookupCallback profilelookupcallback) {
-        String[] astring = (String[]) Iterators.toArray(Iterators.filter(collection.iterator(), new Predicate() {
-            public boolean a(@Nullable String s) {
-                return !UtilColor.b(s);
-            }
-
-            public boolean apply(@Nullable Object object) {
-                return this.a((String) object);
-            }
-        }), String.class);
+        String[] astring = (String[]) collection.stream().filter((s) -> {
+            return !UtilColor.b(s);
+        }).toArray((i) -> {
+            return new String[i];
+        });
 
         if (minecraftserver.getOnlineMode()) {
             minecraftserver.getGameProfileRepository().findProfilesByNames(astring, Agent.MINECRAFT, profilelookupcallback);
@@ -197,7 +192,7 @@ public class NameReferencingFileConverter {
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
-                        oplist.add(new OpListEntry(gameprofile, minecraftserver.q(), false));
+                        oplist.add(new OpListEntry(gameprofile, minecraftserver.k(), false));
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
@@ -274,7 +269,7 @@ public class NameReferencingFileConverter {
 
             if (gameprofile != null && gameprofile.getId() != null) {
                 return gameprofile.getId().toString();
-            } else if (!minecraftserver.R() && minecraftserver.getOnlineMode()) {
+            } else if (!minecraftserver.J() && minecraftserver.getOnlineMode()) {
                 final ArrayList arraylist = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {

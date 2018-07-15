@@ -6,24 +6,20 @@ public class BlockFalling extends Block {
 
     public static boolean instaFall;
 
-    public BlockFalling() {
-        super(Material.SAND);
-        this.a(CreativeModeTab.b);
+    public BlockFalling(Block.Info block_info) {
+        super(block_info);
     }
 
-    public BlockFalling(Material material) {
-        super(material);
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        world.I().a(blockposition, this, this.a((IWorldReader) world));
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        world.a(blockposition, (Block) this, this.a(world));
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        generatoraccess.I().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        world.a(blockposition, (Block) this, this.a(world));
-    }
-
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
             this.b(world, blockposition);
         }
@@ -31,7 +27,7 @@ public class BlockFalling extends Block {
     }
 
     private void b(World world, BlockPosition blockposition) {
-        if (x(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
+        if (j(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             boolean flag = true;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
@@ -42,11 +38,13 @@ public class BlockFalling extends Block {
                     world.addEntity(entityfallingblock);
                 }
             } else {
-                world.setAir(blockposition);
+                if (world.getType(blockposition).getBlock() == this) {
+                    world.setAir(blockposition);
+                }
 
                 BlockPosition blockposition1;
 
-                for (blockposition1 = blockposition.down(); x(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                for (blockposition1 = blockposition.down(); j(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                     ;
                 }
 
@@ -60,18 +58,18 @@ public class BlockFalling extends Block {
 
     protected void a(EntityFallingBlock entityfallingblock) {}
 
-    public int a(World world) {
+    public int a(IWorldReader iworldreader) {
         return 2;
     }
 
-    public static boolean x(IBlockData iblockdata) {
+    public static boolean j(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
 
-        return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
+        return iblockdata.isAir() || block == Blocks.FIRE || material.isLiquid();
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {}
 
-    public void a_(World world, BlockPosition blockposition) {}
+    public void a(World world, BlockPosition blockposition) {}
 }

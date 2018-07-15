@@ -9,32 +9,31 @@ import javax.annotation.Nullable;
 
 public class TileEntitySkull extends TileEntity implements ITickable {
 
-    private int a;
-    public int rotation;
-    private GameProfile g;
-    private int h;
-    private boolean i;
-    private static UserCache j;
-    private static MinecraftSessionService k;
+    private GameProfile a;
+    private int e;
+    private boolean f;
+    public boolean drop = true;
+    private static UserCache h;
+    private static MinecraftSessionService i;
 
-    public TileEntitySkull() {}
+    public TileEntitySkull() {
+        super(TileEntityTypes.p);
+    }
 
     public static void a(UserCache usercache) {
-        TileEntitySkull.j = usercache;
+        TileEntitySkull.h = usercache;
     }
 
     public static void a(MinecraftSessionService minecraftsessionservice) {
-        TileEntitySkull.k = minecraftsessionservice;
+        TileEntitySkull.i = minecraftsessionservice;
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        nbttagcompound.setByte("SkullType", (byte) (this.a & 255));
-        nbttagcompound.setByte("Rot", (byte) (this.rotation & 255));
-        if (this.g != null) {
+        if (this.a != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            GameProfileSerializer.serialize(nbttagcompound1, this.g);
+            GameProfileSerializer.serialize(nbttagcompound1, this.a);
             nbttagcompound.set("Owner", nbttagcompound1);
         }
 
@@ -43,30 +42,28 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.a = nbttagcompound.getByte("SkullType");
-        this.rotation = nbttagcompound.getByte("Rot");
-        if (this.a == 3) {
-            if (nbttagcompound.hasKeyOfType("Owner", 10)) {
-                this.g = GameProfileSerializer.deserialize(nbttagcompound.getCompound("Owner"));
-            } else if (nbttagcompound.hasKeyOfType("ExtraType", 8)) {
-                String s = nbttagcompound.getString("ExtraType");
+        if (nbttagcompound.hasKeyOfType("Owner", 10)) {
+            this.a = GameProfileSerializer.deserialize(nbttagcompound.getCompound("Owner"));
+        } else if (nbttagcompound.hasKeyOfType("ExtraType", 8)) {
+            String s = nbttagcompound.getString("ExtraType");
 
-                if (!UtilColor.b(s)) {
-                    this.g = new GameProfile((UUID) null, s);
-                    this.i();
-                }
+            if (!UtilColor.b(s)) {
+                this.a = new GameProfile((UUID) null, s);
+                this.f();
             }
         }
 
     }
 
-    public void e() {
-        if (this.a == 5) {
+    public void X_() {
+        Block block = this.getBlock().getBlock();
+
+        if (block == Blocks.DRAGON_HEAD || block == Blocks.DRAGON_WALL_HEAD) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
-                this.i = true;
-                ++this.h;
+                this.f = true;
+                ++this.e;
             } else {
-                this.i = false;
+                this.f = false;
             }
         }
 
@@ -74,31 +71,25 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     @Nullable
     public GameProfile getGameProfile() {
-        return this.g;
+        return this.a;
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.d());
+        return new PacketPlayOutTileEntityData(this.position, 4, this.Z_());
     }
 
-    public NBTTagCompound d() {
+    public NBTTagCompound Z_() {
         return this.save(new NBTTagCompound());
     }
 
-    public void setSkullType(int i) {
-        this.a = i;
-        this.g = null;
-    }
-
     public void setGameProfile(@Nullable GameProfile gameprofile) {
-        this.a = 3;
-        this.g = gameprofile;
-        this.i();
+        this.a = gameprofile;
+        this.f();
     }
 
-    private void i() {
-        this.g = b(this.g);
+    private void f() {
+        this.a = b(this.a);
         this.update();
     }
 
@@ -106,8 +97,8 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         if (gameprofile != null && !UtilColor.b(gameprofile.getName())) {
             if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
                 return gameprofile;
-            } else if (TileEntitySkull.j != null && TileEntitySkull.k != null) {
-                GameProfile gameprofile1 = TileEntitySkull.j.getProfile(gameprofile.getName());
+            } else if (TileEntitySkull.h != null && TileEntitySkull.i != null) {
+                GameProfile gameprofile1 = TileEntitySkull.h.getProfile(gameprofile.getName());
 
                 if (gameprofile1 == null) {
                     return gameprofile;
@@ -115,7 +106,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
                     Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
 
                     if (property == null) {
-                        gameprofile1 = TileEntitySkull.k.fillProfileProperties(gameprofile1, true);
+                        gameprofile1 = TileEntitySkull.i.fillProfileProperties(gameprofile1, true);
                     }
 
                     return gameprofile1;
@@ -128,25 +119,18 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         }
     }
 
-    public int getSkullType() {
-        return this.a;
-    }
+    public static void a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
-    public void setRotation(int i) {
-        this.rotation = i;
-    }
+        if (tileentity instanceof TileEntitySkull) {
+            TileEntitySkull tileentityskull = (TileEntitySkull) tileentity;
 
-    public void a(EnumBlockMirror enumblockmirror) {
-        if (this.world != null && this.world.getType(this.getPosition()).get(BlockSkull.FACING) == EnumDirection.UP) {
-            this.rotation = enumblockmirror.a(this.rotation, 16);
+            tileentityskull.drop = false;
         }
 
     }
 
-    public void a(EnumBlockRotation enumblockrotation) {
-        if (this.world != null && this.world.getType(this.getPosition()).get(BlockSkull.FACING) == EnumDirection.UP) {
-            this.rotation = enumblockrotation.a(this.rotation, 16);
-        }
-
+    public boolean shouldDrop() {
+        return this.drop;
     }
 }

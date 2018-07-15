@@ -1,40 +1,30 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
-import java.util.Random;
 import javax.annotation.Nullable;
 
 public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
-    public static final BlockStateEnum<BlockBed.EnumBedPart> PART = BlockStateEnum.of("part", BlockBed.EnumBedPart.class);
-    public static final BlockStateBoolean OCCUPIED = BlockStateBoolean.of("occupied");
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5625D, 1.0D);
+    public static final BlockStateEnum<BlockPropertyBedPart> PART = BlockProperties.an;
+    public static final BlockStateBoolean OCCUPIED = BlockProperties.q;
+    protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
+    private final EnumColor color;
 
-    public BlockBed() {
-        super(Material.CLOTH);
-        this.w(this.blockStateList.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
-        this.isTileEntity = true;
+    public BlockBed(EnumColor enumcolor, Block.Info block_info) {
+        super(block_info);
+        this.color = enumcolor;
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBed.PART, BlockPropertyBedPart.FOOT)).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
     }
 
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
-            TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
-
-            if (tileentity instanceof TileEntityBed) {
-                EnumColor enumcolor = ((TileEntityBed) tileentity).a();
-
-                return MaterialMapColor.a(enumcolor);
-            }
-        }
-
-        return MaterialMapColor.f;
+        return iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.FOOT ? this.color.e() : MaterialMapColor.e;
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
-            if (iblockdata.get(BlockBed.PART) != BlockBed.EnumBedPart.HEAD) {
+            if (iblockdata.get(BlockBed.PART) != BlockPropertyBedPart.HEAD) {
                 blockposition = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
                 iblockdata = world.getType(blockposition);
                 if (iblockdata.getBlock() != this) {
@@ -42,32 +32,32 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                 }
             }
 
-            if (world.worldProvider.e() && world.getBiome(blockposition) != Biomes.j) {
+            if (world.worldProvider.p() && world.getBiome(blockposition) != Biomes.j) {
                 if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
-                    EntityHuman entityhuman1 = this.c(world, blockposition);
+                    EntityHuman entityhuman1 = this.a(world, blockposition);
 
                     if (entityhuman1 != null) {
-                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.occupied", new Object[0])), true);
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.occupied", new Object[0])), true);
                         return true;
                     }
 
-                    iblockdata = iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(false));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(false));
                     world.setTypeAndData(blockposition, iblockdata, 4);
                 }
 
                 EntityHuman.EnumBedResult entityhuman_enumbedresult = entityhuman.a(blockposition);
 
                 if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.OK) {
-                    iblockdata = iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(true));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(true));
                     world.setTypeAndData(blockposition, iblockdata, 4);
                     return true;
                 } else {
                     if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.NOT_POSSIBLE_NOW) {
-                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.noSleep", new Object[0])), true);
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.no_sleep", new Object[0])), true);
                     } else if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.NOT_SAFE) {
-                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.notSafe", new Object[0])), true);
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.not_safe", new Object[0])), true);
                     } else if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.TOO_FAR_AWAY) {
-                        entityhuman.a((IChatBaseComponent) (new ChatMessage("tile.bed.tooFarAway", new Object[0])), true);
+                        entityhuman.a((IChatBaseComponent) (new ChatMessage("block.minecraft.bed.too_far_away", new Object[0])), true);
                     }
 
                     return true;
@@ -80,14 +70,14 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                     world.setAir(blockposition1);
                 }
 
-                world.createExplosion((Entity) null, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0F, true, true);
+                world.createExplosion((Entity) null, DamageSource.a(), (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, 5.0F, true, true);
                 return true;
             }
         }
     }
 
     @Nullable
-    private EntityHuman c(World world, BlockPosition blockposition) {
+    private EntityHuman a(World world, BlockPosition blockposition) {
         Iterator iterator = world.players.iterator();
 
         EntityHuman entityhuman;
@@ -103,11 +93,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         return entityhuman;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
-
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
@@ -115,9 +101,9 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         super.fallOn(world, blockposition, entity, f * 0.5F);
     }
 
-    public void a(World world, Entity entity) {
+    public void a(IBlockAccess iblockaccess, Entity entity) {
         if (entity.isSneaking()) {
-            super.a(world, entity);
+            super.a(iblockaccess, entity);
         } else if (entity.motY < 0.0D) {
             entity.motY = -entity.motY * 0.6600000262260437D;
             if (!(entity instanceof EntityLiving)) {
@@ -127,34 +113,66 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockBed.FACING);
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        return enumdirection == a((BlockPropertyBedPart) iblockdata.get(BlockBed.PART), (EnumDirection) iblockdata.get(BlockBed.FACING)) ? (iblockdata1.getBlock() == this && iblockdata1.get(BlockBed.PART) != iblockdata.get(BlockBed.PART) ? (IBlockData) iblockdata.set(BlockBed.OCCUPIED, iblockdata1.get(BlockBed.OCCUPIED)) : Blocks.AIR.getBlockData()) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
 
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
-            if (world.getType(blockposition.shift(enumdirection)).getBlock() != this) {
-                world.setAir(blockposition);
-            }
-        } else if (world.getType(blockposition.shift(enumdirection.opposite())).getBlock() != this) {
-            if (!world.isClientSide) {
-                this.b(world, blockposition, iblockdata, 0);
-            }
+    private static EnumDirection a(BlockPropertyBedPart blockpropertybedpart, EnumDirection enumdirection) {
+        return blockpropertybedpart == BlockPropertyBedPart.FOOT ? enumdirection : enumdirection.opposite();
+    }
 
-            world.setAir(blockposition);
+    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
+        super.a(world, entityhuman, blockposition, Blocks.AIR.getBlockData(), tileentity, itemstack);
+    }
+
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            super.remove(iblockdata, world, blockposition, iblockdata1, flag);
+            world.n(blockposition);
+        }
+    }
+
+    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
+        BlockPropertyBedPart blockpropertybedpart = (BlockPropertyBedPart) iblockdata.get(BlockBed.PART);
+        boolean flag = blockpropertybedpart == BlockPropertyBedPart.HEAD;
+        BlockPosition blockposition1 = blockposition.shift(a(blockpropertybedpart, (EnumDirection) iblockdata.get(BlockBed.FACING)));
+        IBlockData iblockdata1 = world.getType(blockposition1);
+
+        if (iblockdata1.getBlock() == this && iblockdata1.get(BlockBed.PART) != blockpropertybedpart) {
+            world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 35);
+            world.a(entityhuman, 2001, blockposition1, Block.getCombinedId(iblockdata1));
+            if (!world.isClientSide && !entityhuman.u()) {
+                if (flag) {
+                    iblockdata.a(world, blockposition, 0);
+                } else {
+                    iblockdata1.a(world, blockposition1, 0);
+                }
+            }
         }
 
+        super.a(world, blockposition, iblockdata, entityhuman);
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT ? Items.a : Items.BED;
+    @Nullable
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        EnumDirection enumdirection = blockactioncontext.f();
+        BlockPosition blockposition = blockactioncontext.getClickPosition();
+        BlockPosition blockposition1 = blockposition.shift(enumdirection);
+
+        return blockactioncontext.getWorld().getType(blockposition1).a(blockactioncontext) ? (IBlockData) this.getBlockData().set(BlockBed.FACING, enumdirection) : null;
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return (IMaterial) (iblockdata.get(BlockBed.PART) == BlockPropertyBedPart.FOOT ? Items.AIR : super.getDropType(iblockdata, world, blockposition, i));
+    }
+
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return BlockBed.c;
     }
 
     @Nullable
-    public static BlockPosition a(World world, BlockPosition blockposition, int i) {
-        EnumDirection enumdirection = (EnumDirection) world.getType(blockposition).get(BlockBed.FACING);
+    public static BlockPosition a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
+        EnumDirection enumdirection = (EnumDirection) iblockaccess.getType(blockposition).get(BlockBed.FACING);
         int j = blockposition.getX();
         int k = blockposition.getY();
         int l = blockposition.getZ();
@@ -169,7 +187,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                 for (int k2 = k1; k2 <= i2; ++k2) {
                     BlockPosition blockposition1 = new BlockPosition(j2, k, k2);
 
-                    if (b(world, blockposition1)) {
+                    if (a(iblockaccess, blockposition1)) {
                         if (i <= 0) {
                             return blockposition1;
                         }
@@ -183,137 +201,47 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         return null;
     }
 
-    protected static boolean b(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).q() && !world.getType(blockposition).getMaterial().isBuildable() && !world.getType(blockposition.up()).getMaterial().isBuildable();
+    protected static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.getType(blockposition.down()).q() && !iblockaccess.getType(blockposition).getMaterial().isBuildable() && !iblockaccess.getType(blockposition.up()).getMaterial().isBuildable();
     }
 
-    public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-            EnumColor enumcolor = tileentity instanceof TileEntityBed ? ((TileEntityBed) tileentity).a() : EnumColor.RED;
-
-            a(world, blockposition, new ItemStack(Items.BED, 1, enumcolor.getColorIndex()));
-        }
-
-    }
-
-    public EnumPistonReaction h(IBlockData iblockdata) {
+    public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
+    public TextureType c() {
+        return TextureType.CUTOUT;
+    }
+
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        BlockPosition blockposition1 = blockposition;
-
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
-            blockposition1 = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
-        }
-
-        TileEntity tileentity = world.getTileEntity(blockposition1);
-        EnumColor enumcolor = tileentity instanceof TileEntityBed ? ((TileEntityBed) tileentity).a() : EnumColor.RED;
-
-        return new ItemStack(Items.BED, 1, enumcolor.getColorIndex());
-    }
-
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (entityhuman.abilities.canInstantlyBuild && iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
-            BlockPosition blockposition1 = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
-
-            if (world.getType(blockposition1).getBlock() == this) {
-                world.setAir(blockposition1);
-            }
-        }
-
-    }
-
-    public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, TileEntity tileentity, ItemStack itemstack) {
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD && tileentity instanceof TileEntityBed) {
-            TileEntityBed tileentitybed = (TileEntityBed) tileentity;
-            ItemStack itemstack1 = tileentitybed.f();
-
-            a(world, blockposition, itemstack1);
-        } else {
-            super.a(world, entityhuman, blockposition, iblockdata, (TileEntity) null, itemstack);
-        }
-
-    }
-
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        super.remove(world, blockposition, iblockdata);
-        world.s(blockposition);
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        EnumDirection enumdirection = EnumDirection.fromType2(i);
-
-        return (i & 8) > 0 ? this.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.HEAD).set(BlockBed.FACING, enumdirection).set(BlockBed.OCCUPIED, Boolean.valueOf((i & 4) > 0)) : this.getBlockData().set(BlockBed.PART, BlockBed.EnumBedPart.FOOT).set(BlockBed.FACING, enumdirection);
-    }
-
-    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.FOOT) {
-            IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING)));
-
-            if (iblockdata1.getBlock() == this) {
-                iblockdata = iblockdata.set(BlockBed.OCCUPIED, iblockdata1.get(BlockBed.OCCUPIED));
-            }
-        }
-
-        return iblockdata;
-    }
-
-    public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockBed.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBed.FACING)));
-    }
-
-    public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBed.FACING)));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        byte b0 = 0;
-        int i = b0 | ((EnumDirection) iblockdata.get(BlockBed.FACING)).get2DRotationValue();
-
-        if (iblockdata.get(BlockBed.PART) == BlockBed.EnumBedPart.HEAD) {
-            i |= 8;
-            if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
-                i |= 4;
-            }
-        }
-
-        return i;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockBed.FACING, BlockBed.PART, BlockBed.OCCUPIED});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockBed.FACING, BlockBed.PART, BlockBed.OCCUPIED});
     }
 
-    public TileEntity a(World world, int i) {
-        return new TileEntityBed();
+    public TileEntity a(IBlockAccess iblockaccess) {
+        return new TileEntityBed(this.color);
     }
 
-    public static enum EnumBedPart implements INamable {
+    public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {
+        super.postPlace(world, blockposition, iblockdata, entityliving, itemstack);
+        if (!world.isClientSide) {
+            BlockPosition blockposition1 = blockposition.shift((EnumDirection) iblockdata.get(BlockBed.FACING));
 
-        HEAD("head"), FOOT("foot");
-
-        private final String c;
-
-        private EnumBedPart(String s) {
-            this.c = s;
+            world.setTypeAndData(blockposition1, (IBlockData) iblockdata.set(BlockBed.PART, BlockPropertyBedPart.HEAD), 3);
+            world.update(blockposition, Blocks.AIR);
+            iblockdata.a((GeneratorAccess) world, blockposition, 3);
         }
 
-        public String toString() {
-            return this.c;
-        }
+    }
 
-        public String getName() {
-            return this.c;
-        }
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

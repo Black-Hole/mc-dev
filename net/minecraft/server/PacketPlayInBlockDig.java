@@ -26,15 +26,15 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public BlockPosition a() {
+    public BlockPosition b() {
         return this.a;
     }
 
-    public EnumDirection b() {
+    public EnumDirection c() {
         return this.b;
     }
 
-    public PacketPlayInBlockDig.EnumPlayerDigType c() {
+    public PacketPlayInBlockDig.EnumPlayerDigType d() {
         return this.c;
     }
 

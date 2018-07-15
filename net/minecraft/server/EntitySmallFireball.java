@@ -3,22 +3,15 @@ package net.minecraft.server;
 public class EntitySmallFireball extends EntityFireball {
 
     public EntitySmallFireball(World world) {
-        super(world);
-        this.setSize(0.3125F, 0.3125F);
+        super(EntityTypes.SMALL_FIREBALL, world, 0.3125F, 0.3125F);
     }
 
     public EntitySmallFireball(World world, EntityLiving entityliving, double d0, double d1, double d2) {
-        super(world, entityliving, d0, d1, d2);
-        this.setSize(0.3125F, 0.3125F);
+        super(EntityTypes.SMALL_FIREBALL, entityliving, d0, d1, d2, world, 0.3125F, 0.3125F);
     }
 
     public EntitySmallFireball(World world, double d0, double d1, double d2, double d3, double d4, double d5) {
-        super(world, d0, d1, d2, d3, d4, d5);
-        this.setSize(0.3125F, 0.3125F);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityFireball.a(dataconvertermanager, "SmallFireball");
+        super(EntityTypes.SMALL_FIREBALL, d0, d1, d2, d3, d4, d5, world, 0.3125F, 0.3125F);
     }
 
     protected void a(MovingObjectPosition movingobjectposition) {

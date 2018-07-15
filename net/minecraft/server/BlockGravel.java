@@ -1,20 +1,16 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public class BlockGravel extends BlockFalling {
 
-    public BlockGravel() {}
+    public BlockGravel(Block.Info block_info) {
+        super(block_info);
+    }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
         if (i > 3) {
             i = 3;
         }
 
-        return random.nextInt(10 - i * 3) == 0 ? Items.FLINT : super.getDropType(iblockdata, random, i);
-    }
-
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.n;
+        return (IMaterial) (world.random.nextInt(10 - i * 3) == 0 ? Items.FLINT : super.getDropType(iblockdata, world, blockposition, i));
     }
 }

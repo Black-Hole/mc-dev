@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import javax.annotation.Nullable;
 
 public class EntityBat extends EntityAmbient {
@@ -9,35 +10,35 @@ public class EntityBat extends EntityAmbient {
     private BlockPosition b;
 
     public EntityBat(World world) {
-        super(world);
+        super(EntityTypes.BAT, world);
         this.setSize(0.5F, 0.9F);
         this.setAsleep(true);
     }
 
-    protected void i() {
-        super.i();
+    protected void x_() {
+        super.x_();
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float cq() {
+    protected float cC() {
         return 0.1F;
     }
 
-    protected float cr() {
-        return super.cr() * 0.95F;
+    protected float cD() {
+        return super.cD() * 0.95F;
     }
 
     @Nullable
-    public SoundEffect F() {
-        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.x;
+    public SoundEffect D() {
+        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : SoundEffects.ENTITY_BAT_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return SoundEffects.z;
+        return SoundEffects.ENTITY_BAT_HURT;
     }
 
-    protected SoundEffect cf() {
-        return SoundEffects.y;
+    protected SoundEffect cr() {
+        return SoundEffects.ENTITY_BAT_DEATH;
     }
 
     public boolean isCollidable() {
@@ -46,7 +47,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void cB() {}
+    protected void cM() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -68,8 +69,8 @@ public class EntityBat extends EntityAmbient {
 
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         if (this.isAsleep()) {
             this.motX = 0.0D;
             this.motY = 0.0D;
@@ -81,15 +82,15 @@ public class EntityBat extends EntityAmbient {
 
     }
 
-    protected void M() {
-        super.M();
+    protected void mobTick() {
+        super.mobTick();
         BlockPosition blockposition = new BlockPosition(this);
         BlockPosition blockposition1 = blockposition.up();
 
         if (this.isAsleep()) {
-            if (this.world.getType(blockposition1).l()) {
+            if (this.world.getType(blockposition1).isOccluding()) {
                 if (this.random.nextInt(200) == 0) {
-                    this.aP = (float) this.random.nextInt(360);
+                    this.aS = (float) this.random.nextInt(360);
                 }
 
                 if (this.world.b(this, 4.0D) != null) {
@@ -119,9 +120,9 @@ public class EntityBat extends EntityAmbient {
             float f = (float) (MathHelper.c(this.motZ, this.motX) * 57.2957763671875D) - 90.0F;
             float f1 = MathHelper.g(f - this.yaw);
 
-            this.bg = 0.5F;
+            this.bj = 0.5F;
             this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).l()) {
+            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).isOccluding()) {
                 this.setAsleep(true);
             }
         }
@@ -132,7 +133,7 @@ public class EntityBat extends EntityAmbient {
         return false;
     }
 
-    public void e(float f, float f1) {}
+    public void c(float f, float f1) {}
 
     protected void a(double d0, boolean flag, IBlockData iblockdata, BlockPosition blockposition) {}
 
@@ -152,10 +153,6 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityBat.class);
-    }
-
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.datawatcher.set(EntityBat.a, Byte.valueOf(nbttagcompound.getByte("BatFlags")));
@@ -166,27 +163,31 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean P() {
+    public boolean a(GeneratorAccess generatoraccess) {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-        if (blockposition.getY() >= this.world.getSeaLevel()) {
+        if (blockposition.getY() >= generatoraccess.getSeaLevel()) {
             return false;
         } else {
-            int i = this.world.getLightLevel(blockposition);
+            int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (this.a(this.world.ae())) {
+            if (this.dr()) {
                 b0 = 7;
             } else if (this.random.nextBoolean()) {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.P();
+            return i > this.random.nextInt(b0) ? false : super.a(generatoraccess);
         }
     }
 
-    private boolean a(Calendar calendar) {
-        return calendar.get(2) + 1 == 10 && calendar.get(5) >= 20 || calendar.get(2) + 1 == 11 && calendar.get(5) <= 3;
+    private boolean dr() {
+        LocalDate localdate = LocalDate.now();
+        int i = localdate.get(ChronoField.DAY_OF_MONTH);
+        int j = localdate.get(ChronoField.MONTH_OF_YEAR);
+
+        return j == 10 && i >= 20 || j == 11 && i <= 3;
     }
 
     public float getHeadHeight() {
@@ -194,7 +195,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.ag;
+    protected MinecraftKey G() {
+        return LootTables.an;
     }
 }

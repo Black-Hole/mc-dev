@@ -18,7 +18,7 @@ public class StatusChallengeUtils {
         return new String(abyte, i, l - i, StandardCharsets.UTF_8);
     }
 
-    public static int b(byte[] abyte, int i) {
+    public static int a(byte[] abyte, int i) {
         return b(abyte, i, abyte.length);
     }
 

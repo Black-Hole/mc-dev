@@ -1,11 +1,15 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.mojang.datafixers.DataFixer;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.DSL.TypeReference;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
@@ -42,14 +46,14 @@ public final class GameProfileSerializer {
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Properties");
-                Iterator iterator = nbttagcompound1.c().iterator();
+                Iterator iterator = nbttagcompound1.getKeys().iterator();
 
                 while (iterator.hasNext()) {
                     String s2 = (String) iterator.next();
                     NBTTagList nbttaglist = nbttagcompound1.getList(s2, 10);
 
                     for (int i = 0; i < nbttaglist.size(); ++i) {
-                        NBTTagCompound nbttagcompound2 = nbttaglist.get(i);
+                        NBTTagCompound nbttagcompound2 = nbttaglist.getCompound(i);
                         String s3 = nbttagcompound2.getString("Value");
 
                         if (nbttagcompound2.hasKeyOfType("Signature", 8)) {
@@ -86,7 +90,7 @@ public final class GameProfileSerializer {
 
                 NBTTagCompound nbttagcompound2;
 
-                for (Iterator iterator1 = gameprofile.getProperties().get(s).iterator(); iterator1.hasNext(); nbttaglist.add(nbttagcompound2)) {
+                for (Iterator iterator1 = gameprofile.getProperties().get(s).iterator(); iterator1.hasNext(); nbttaglist.add((NBTBase) nbttagcompound2)) {
                     Property property = (Property) iterator1.next();
 
                     nbttagcompound2 = new NBTTagCompound();
@@ -106,7 +110,7 @@ public final class GameProfileSerializer {
     }
 
     @VisibleForTesting
-    public static boolean a(NBTBase nbtbase, NBTBase nbtbase1, boolean flag) {
+    public static boolean a(@Nullable NBTBase nbtbase, @Nullable NBTBase nbtbase1, boolean flag) {
         if (nbtbase == nbtbase1) {
             return true;
         } else if (nbtbase == null) {
@@ -118,7 +122,7 @@ public final class GameProfileSerializer {
         } else if (nbtbase instanceof NBTTagCompound) {
             NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
             NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase1;
-            Iterator iterator = nbttagcompound.c().iterator();
+            Iterator iterator = nbttagcompound.getKeys().iterator();
 
             String s;
             NBTBase nbtbase2;
@@ -143,13 +147,13 @@ public final class GameProfileSerializer {
                 int i = 0;
 
                 while (i < nbttaglist.size()) {
-                    NBTBase nbtbase3 = nbttaglist.i(i);
+                    NBTBase nbtbase3 = nbttaglist.get(i);
                     boolean flag1 = false;
                     int j = 0;
 
                     while (true) {
                         if (j < nbttaglist1.size()) {
-                            if (!a(nbtbase3, nbttaglist1.i(j), flag)) {
+                            if (!a(nbtbase3, nbttaglist1.get(j), flag)) {
                                 ++j;
                                 continue;
                             }
@@ -207,15 +211,15 @@ public final class GameProfileSerializer {
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Properties");
-                BlockStateList blockstatelist = block.s();
-                Iterator iterator = nbttagcompound1.c().iterator();
+                BlockStateList blockstatelist = block.getStates();
+                Iterator iterator = nbttagcompound1.getKeys().iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
                     IBlockState iblockstate = blockstatelist.a(s);
 
                     if (iblockstate != null) {
-                        iblockdata = a(iblockdata, iblockstate, s, nbttagcompound1, nbttagcompound);
+                        iblockdata = (IBlockData) a(iblockdata, iblockstate, s, nbttagcompound1, nbttagcompound);
                     }
                 }
             }
@@ -224,22 +228,26 @@ public final class GameProfileSerializer {
         }
     }
 
-    private static <T extends Comparable<T>> IBlockData a(IBlockData iblockdata, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
+    private static <S extends IBlockDataHolder<S>, T extends Comparable<T>> S a(S s0, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         Optional optional = iblockstate.b(nbttagcompound.getString(s));
 
         if (optional.isPresent()) {
-            return iblockdata.set(iblockstate, (Comparable) optional.get());
+            return (IBlockDataHolder) s0.set(iblockstate, (Comparable) optional.get());
         } else {
             GameProfileSerializer.a.warn("Unable to read property: {} with value: {} for blockstate: {}", s, nbttagcompound.getString(s), nbttagcompound1.toString());
-            return iblockdata;
+            return s0;
         }
     }
 
-    public static NBTTagCompound a(NBTTagCompound nbttagcompound, IBlockData iblockdata) {
+    public static NBTTagCompound a(IBlockData iblockdata) {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+
         nbttagcompound.setString("Name", ((MinecraftKey) Block.REGISTRY.b(iblockdata.getBlock())).toString());
-        if (!iblockdata.t().isEmpty()) {
+        ImmutableMap immutablemap = iblockdata.b();
+
+        if (!immutablemap.isEmpty()) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-            UnmodifiableIterator unmodifiableiterator = iblockdata.t().entrySet().iterator();
+            UnmodifiableIterator unmodifiableiterator = immutablemap.entrySet().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 Entry entry = (Entry) unmodifiableiterator.next();
@@ -256,5 +264,13 @@ public final class GameProfileSerializer {
 
     private static <T extends Comparable<T>> String a(IBlockState<T> iblockstate, Comparable<?> comparable) {
         return iblockstate.a(comparable);
+    }
+
+    public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i) {
+        return a(datafixer, typereference, nbttagcompound, i, 1513);
+    }
+
+    public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i, int j) {
+        return (NBTTagCompound) datafixer.update(typereference, new Dynamic(DynamicOpsNBT.a, nbttagcompound), i, j).getValue();
     }
 }

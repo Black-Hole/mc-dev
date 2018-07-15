@@ -1,75 +1,59 @@
 package net.minecraft.server;
 
-import java.util.Random;
+import com.google.common.collect.Lists;
 
-public class BiomeBigHills extends BiomeBase {
+public final class BiomeBigHills extends BiomeBase {
 
-    private final WorldGenerator x;
-    private final WorldGenTaiga2 y;
-    private final BiomeBigHills.Type z;
-
-    protected BiomeBigHills(BiomeBigHills.Type biomebighills_type, BiomeBase.a biomebase_a) {
-        super(biomebase_a);
-        this.x = new WorldGenMinable(Blocks.MONSTER_EGG.getBlockData().set(BlockMonsterEggs.VARIANT, BlockMonsterEggs.EnumMonsterEggVarient.STONE), 9);
-        this.y = new WorldGenTaiga2(false);
-        if (biomebighills_type == BiomeBigHills.Type.EXTRA_TREES) {
-            this.s.z = 3;
-        }
-
-        this.u.add(new BiomeBase.BiomeMeta(EntityLlama.class, 5, 4, 6));
-        this.z = biomebighills_type;
-    }
-
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(3) > 0 ? this.y : super.a(random));
-    }
-
-    public void a(World world, Random random, BlockPosition blockposition) {
-        super.a(world, random, blockposition);
-        int i = 3 + random.nextInt(6);
-
-        int j;
-        int k;
-        int l;
-
-        for (j = 0; j < i; ++j) {
-            k = random.nextInt(16);
-            l = random.nextInt(28) + 4;
-            int i1 = random.nextInt(16);
-            BlockPosition blockposition1 = blockposition.a(k, l, i1);
-
-            if (world.getType(blockposition1).getBlock() == Blocks.STONE) {
-                world.setTypeAndData(blockposition1, Blocks.EMERALD_ORE.getBlockData(), 2);
-            }
-        }
-
-        for (i = 0; i < 7; ++i) {
-            j = random.nextInt(16);
-            k = random.nextInt(64);
-            l = random.nextInt(16);
-            this.x.generate(world, random, blockposition.a(j, k, l));
-        }
-
-    }
-
-    public void a(World world, Random random, ChunkSnapshot chunksnapshot, int i, int j, double d0) {
-        this.q = Blocks.GRASS.getBlockData();
-        this.r = Blocks.DIRT.getBlockData();
-        if ((d0 < -1.0D || d0 > 2.0D) && this.z == BiomeBigHills.Type.MUTATED) {
-            this.q = Blocks.GRAVEL.getBlockData();
-            this.r = Blocks.GRAVEL.getBlockData();
-        } else if (d0 > 1.0D && this.z != BiomeBigHills.Type.EXTRA_TREES) {
-            this.q = Blocks.STONE.getBlockData();
-            this.r = Blocks.STONE.getBlockData();
-        }
-
-        this.b(world, random, chunksnapshot, i, j, d0);
-    }
-
-    public static enum Type {
-
-        NORMAL, EXTRA_TREES, MUTATED;
-
-        private Type() {}
+    protected BiomeBigHills() {
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeBigHills.aw, BiomeBigHills.aj)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.EXTREME_HILLS).a(1.0F).b(0.5F).c(0.2F).d(0.3F).a(4159204).b(329011).a((String) null));
+        this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeBigHills.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
+        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeBigHills.d, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.02F))));
+        this.a();
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeBigHills.L, new WorldGenDecoratorLakeChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeBigHills.K, new WorldGenDecoratorLakeChanceConfiguration(80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES, a(WorldGenerator.ad, WorldGenFeatureConfiguration.e, BiomeBigHills.M, new WorldGenDecoratorDungeonConfiguration(8)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIRT.getBlockData(), 33), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRAVEL.getBlockData(), 33), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRANITE.getBlockData(), 33), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIORITE.getBlockData(), 33), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.ANDESITE.getBlockData(), 33), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.COAL_ORE.getBlockData(), 17), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 128)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.IRON_ORE.getBlockData(), 9), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 64)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(2, 0, 0, 32)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.REDSTONE_ORE.getBlockData(), 8), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIAMOND_ORE.getBlockData(), 8), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(1, 0, 0, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.LAPIS_ORE.getBlockData(), 7), BiomeBigHills.B, new WorldGenDecoratorHeightAverageConfiguration(1, 16, 16)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.SAND, 7, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeBigHills.h, new WorldGenDecoratorFrequencyConfiguration(3)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.CLAY, 4, 1, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.CLAY})), BiomeBigHills.h, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL, 6, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeBigHills.h, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ap, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.A, WorldGenerator.s}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.666F, 0.1F}, WorldGenerator.C, WorldGenFeatureConfiguration.e), BiomeBigHills.t, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, (WorldGenFeatureComposite) a(WorldGenerator.G, BiomeBigHills.i, new WorldGenDecoratorFrequencyConfiguration(2)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.M, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), BiomeBigHills.j, new WorldGenDecoratorFrequencyConfiguration(1)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeBigHills.q, new WorldGenDecoratorChanceConfiguration(4)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeBigHills.q, new WorldGenDecoratorChanceConfiguration(8)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeBigHills.j, new WorldGenDecoratorFrequencyConfiguration(10)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeBigHills.q, new WorldGenDecoratorChanceConfiguration(32)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeBigHills.v, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeBigHills.w, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.as, new WorldGenFeatureReplaceBlockConfiguration(BlockPredicate.a(Blocks.STONE), Blocks.EMERALD_ORE.getBlockData()), BiomeBigHills.J, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.INFESTED_STONE.getBlockData(), 9), BiomeBigHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(7, 0, 0, 64)));
+        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeBigHills.o, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.CHICKEN, 10, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.COW, 8, 4, 4));
+        this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.LLAMA, 5, 4, 6));
+        this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SQUID, 10, 1, 2));
+        this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE, 95, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_VILLAGER, 5, 1, 1));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.CREEPER, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SLIME, 100, 4, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.ENDERMAN, 10, 1, 4));
+        this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.WITCH, 5, 1, 1));
     }
 }

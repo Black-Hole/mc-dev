@@ -1,19 +1,21 @@
 package net.minecraft.server;
 
+import java.util.function.Consumer;
+
 public class ScoreboardObjective {
 
     private final Scoreboard a;
     private final String b;
     private final IScoreboardCriteria c;
-    private IScoreboardCriteria.EnumScoreboardHealthDisplay d;
-    private String e;
+    public String displayName;
+    private IScoreboardCriteria.EnumScoreboardHealthDisplay e;
 
-    public ScoreboardObjective(Scoreboard scoreboard, String s, IScoreboardCriteria iscoreboardcriteria) {
+    public ScoreboardObjective(Scoreboard scoreboard, String s, IScoreboardCriteria iscoreboardcriteria, String s1) {
         this.a = scoreboard;
         this.b = s;
         this.c = iscoreboardcriteria;
-        this.e = s;
-        this.d = iscoreboardcriteria.c();
+        this.displayName = s1;
+        this.e = iscoreboardcriteria.e();
     }
 
     public String getName() {
@@ -25,20 +27,21 @@ public class ScoreboardObjective {
     }
 
     public String getDisplayName() {
-        return this.e;
+        return this.displayName;
+    }
+
+    public IChatBaseComponent e() {
+        return ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(this.displayName))).a((chatmodifier) -> {
+            chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getName())));
+        });
     }
 
     public void setDisplayName(String s) {
-        this.e = s;
+        this.displayName = s;
         this.a.handleObjectiveChanged(this);
     }
 
-    public IScoreboardCriteria.EnumScoreboardHealthDisplay e() {
-        return this.d;
-    }
-
-    public void a(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        this.d = iscoreboardcriteria_enumscoreboardhealthdisplay;
-        this.a.handleObjectiveChanged(this);
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay f() {
+        return this.e;
     }
 }

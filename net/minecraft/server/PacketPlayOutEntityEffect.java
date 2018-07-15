@@ -31,6 +31,10 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
             this.e = (byte) (this.e | 2);
         }
 
+        if (mobeffect.f()) {
+            this.e = (byte) (this.e | 4);
+        }
+
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {

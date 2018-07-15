@@ -17,36 +17,19 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
     };
 
     public EntityMinecartMobSpawner(World world) {
-        super(world);
+        super(EntityTypes.SPAWNER_MINECART, world);
     }
 
     public EntityMinecartMobSpawner(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        a(dataconvertermanager, EntityMinecartMobSpawner.class);
-        dataconvertermanager.a(DataConverterTypes.ENTITY, new DataInspector() {
-            public NBTTagCompound a(DataConverter dataconverter, NBTTagCompound nbttagcompound, int i) {
-                String s = nbttagcompound.getString("id");
-
-                if (EntityTypes.getName(EntityMinecartMobSpawner.class).equals(new MinecraftKey(s))) {
-                    nbttagcompound.setString("id", TileEntity.a(TileEntityMobSpawner.class).toString());
-                    dataconverter.a(DataConverterTypes.BLOCK_ENTITY, nbttagcompound, i);
-                    nbttagcompound.setString("id", s);
-                }
-
-                return nbttagcompound;
-            }
-        });
+        super(EntityTypes.SPAWNER_MINECART, world, d0, d1, d2);
     }
 
     public EntityMinecartAbstract.EnumMinecartType v() {
         return EntityMinecartAbstract.EnumMinecartType.SPAWNER;
     }
 
-    public IBlockData x() {
-        return Blocks.MOB_SPAWNER.getBlockData();
+    public IBlockData z() {
+        return Blocks.SPAWNER.getBlockData();
     }
 
     protected void a(NBTTagCompound nbttagcompound) {
@@ -59,8 +42,8 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         this.a.b(nbttagcompound);
     }
 
-    public void B_() {
-        super.B_();
+    public void tick() {
+        super.tick();
         this.a.c();
     }
 }

@@ -4,20 +4,27 @@ import java.util.Random;
 
 public class BlockGlass extends BlockHalfTransparent {
 
-    public BlockGlass(Material material, boolean flag) {
-        super(material, flag);
-        this.a(CreativeModeTab.b);
+    public BlockGlass(Block.Info block_info) {
+        super(block_info);
     }
 
-    public int a(Random random) {
+    public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
+    }
+
+    public int a(IBlockData iblockdata, Random random) {
         return 0;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public TextureType c() {
+        return TextureType.CUTOUT;
+    }
+
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    protected boolean n() {
+    protected boolean k() {
         return true;
     }
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class PacketPlayOutGameStateChange implements Packet<PacketListenerPlayOut> {
 
-    public static final String[] a = new String[] { "tile.bed.notValid"};
+    public static final String[] a = new String[] { "block.minecraft.bed.not_valid"};
     private int b;
     private float c;
 

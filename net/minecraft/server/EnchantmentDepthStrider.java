@@ -4,7 +4,6 @@ public class EnchantmentDepthStrider extends Enchantment {
 
     public EnchantmentDepthStrider(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_FEET, aenumitemslot);
-        this.c("waterWalker");
     }
 
     public int a(int i) {

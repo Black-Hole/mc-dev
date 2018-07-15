@@ -2,17 +2,15 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenLakes extends WorldGenerator {
+public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfiguration> {
 
-    private final Block a;
+    private static final IBlockData a = Blocks.CAVE_AIR.getBlockData();
 
-    public WorldGenLakes(Block block) {
-        this.a = block;
-    }
+    public WorldGenLakes() {}
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (blockposition = blockposition.a(-8, 0, -8); blockposition.getY() > 5 && world.isEmpty(blockposition); blockposition = blockposition.down()) {
-            ;
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureLakeConfiguration worldgenfeaturelakeconfiguration) {
+        while (blockposition.getY() > 5 && generatoraccess.isEmpty(blockposition)) {
+            blockposition = blockposition.down();
         }
 
         if (blockposition.getY() <= 4) {
@@ -57,13 +55,13 @@ public class WorldGenLakes extends WorldGenerator {
                     for (j1 = 0; j1 < 8; ++j1) {
                         flag = !aboolean[(j * 16 + k1) * 8 + j1] && (j < 15 && aboolean[((j + 1) * 16 + k1) * 8 + j1] || j > 0 && aboolean[((j - 1) * 16 + k1) * 8 + j1] || k1 < 15 && aboolean[(j * 16 + k1 + 1) * 8 + j1] || k1 > 0 && aboolean[(j * 16 + (k1 - 1)) * 8 + j1] || j1 < 7 && aboolean[(j * 16 + k1) * 8 + j1 + 1] || j1 > 0 && aboolean[(j * 16 + k1) * 8 + (j1 - 1)]);
                         if (flag) {
-                            Material material = world.getType(blockposition.a(j, j1, k1)).getMaterial();
+                            Material material = generatoraccess.getType(blockposition.a(j, j1, k1)).getMaterial();
 
                             if (j1 >= 4 && material.isLiquid()) {
                                 return false;
                             }
 
-                            if (j1 < 4 && !material.isBuildable() && world.getType(blockposition.a(j, j1, k1)).getBlock() != this.a) {
+                            if (j1 < 4 && !material.isBuildable() && generatoraccess.getType(blockposition.a(j, j1, k1)).getBlock() != worldgenfeaturelakeconfiguration.a) {
                                 return false;
                             }
                         }
@@ -75,25 +73,26 @@ public class WorldGenLakes extends WorldGenerator {
                 for (k1 = 0; k1 < 16; ++k1) {
                     for (j1 = 0; j1 < 8; ++j1) {
                         if (aboolean[(j * 16 + k1) * 8 + j1]) {
-                            world.setTypeAndData(blockposition.a(j, j1, k1), j1 >= 4 ? Blocks.AIR.getBlockData() : this.a.getBlockData(), 2);
+                            generatoraccess.setTypeAndData(blockposition.a(j, j1, k1), j1 >= 4 ? WorldGenLakes.a : worldgenfeaturelakeconfiguration.a.getBlockData(), 2);
                         }
                     }
                 }
             }
 
+            BlockPosition blockposition1;
+
             for (j = 0; j < 16; ++j) {
                 for (k1 = 0; k1 < 16; ++k1) {
                     for (j1 = 4; j1 < 8; ++j1) {
                         if (aboolean[(j * 16 + k1) * 8 + j1]) {
-                            BlockPosition blockposition1 = blockposition.a(j, j1 - 1, k1);
+                            blockposition1 = blockposition.a(j, j1 - 1, k1);
+                            if (Block.d(generatoraccess.getType(blockposition1).getBlock()) && generatoraccess.getBrightness(EnumSkyBlock.SKY, blockposition.a(j, j1, k1)) > 0) {
+                                BiomeBase biomebase = generatoraccess.getBiome(blockposition1);
 
-                            if (world.getType(blockposition1).getBlock() == Blocks.DIRT && world.getBrightness(EnumSkyBlock.SKY, blockposition.a(j, j1, k1)) > 0) {
-                                BiomeBase biomebase = world.getBiome(blockposition1);
-
-                                if (biomebase.q.getBlock() == Blocks.MYCELIUM) {
-                                    world.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
+                                if (biomebase.r().a().getBlock() == Blocks.MYCELIUM) {
+                                    generatoraccess.setTypeAndData(blockposition1, Blocks.MYCELIUM.getBlockData(), 2);
                                 } else {
-                                    world.setTypeAndData(blockposition1, Blocks.GRASS.getBlockData(), 2);
+                                    generatoraccess.setTypeAndData(blockposition1, Blocks.GRASS_BLOCK.getBlockData(), 2);
                                 }
                             }
                         }
@@ -101,26 +100,27 @@ public class WorldGenLakes extends WorldGenerator {
                 }
             }
 
-            if (this.a.getBlockData().getMaterial() == Material.LAVA) {
+            if (worldgenfeaturelakeconfiguration.a.getBlockData().getMaterial() == Material.LAVA) {
                 for (j = 0; j < 16; ++j) {
                     for (k1 = 0; k1 < 16; ++k1) {
                         for (j1 = 0; j1 < 8; ++j1) {
                             flag = !aboolean[(j * 16 + k1) * 8 + j1] && (j < 15 && aboolean[((j + 1) * 16 + k1) * 8 + j1] || j > 0 && aboolean[((j - 1) * 16 + k1) * 8 + j1] || k1 < 15 && aboolean[(j * 16 + k1 + 1) * 8 + j1] || k1 > 0 && aboolean[(j * 16 + (k1 - 1)) * 8 + j1] || j1 < 7 && aboolean[(j * 16 + k1) * 8 + j1 + 1] || j1 > 0 && aboolean[(j * 16 + k1) * 8 + (j1 - 1)]);
-                            if (flag && (j1 < 4 || random.nextInt(2) != 0) && world.getType(blockposition.a(j, j1, k1)).getMaterial().isBuildable()) {
-                                world.setTypeAndData(blockposition.a(j, j1, k1), Blocks.STONE.getBlockData(), 2);
+                            if (flag && (j1 < 4 || random.nextInt(2) != 0) && generatoraccess.getType(blockposition.a(j, j1, k1)).getMaterial().isBuildable()) {
+                                generatoraccess.setTypeAndData(blockposition.a(j, j1, k1), Blocks.STONE.getBlockData(), 2);
                             }
                         }
                     }
                 }
             }
 
-            if (this.a.getBlockData().getMaterial() == Material.WATER) {
+            if (worldgenfeaturelakeconfiguration.a.getBlockData().getMaterial() == Material.WATER) {
                 for (j = 0; j < 16; ++j) {
                     for (k1 = 0; k1 < 16; ++k1) {
                         boolean flag1 = true;
 
-                        if (world.u(blockposition.a(j, 4, k1))) {
-                            world.setTypeAndData(blockposition.a(j, 4, k1), Blocks.ICE.getBlockData(), 2);
+                        blockposition1 = blockposition.a(j, 4, k1);
+                        if (generatoraccess.getBiome(blockposition1).a(generatoraccess, blockposition1, false)) {
+                            generatoraccess.setTypeAndData(blockposition1, Blocks.ICE.getBlockData(), 2);
                         }
                     }
                 }

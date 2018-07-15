@@ -36,19 +36,19 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         byte b0 = 0;
 
-        if (this.a()) {
+        if (this.b()) {
             b0 = (byte) (b0 | 1);
         }
 
-        if (this.b()) {
+        if (this.c()) {
             b0 = (byte) (b0 | 2);
         }
 
-        if (this.c()) {
+        if (this.d()) {
             b0 = (byte) (b0 | 4);
         }
 
-        if (this.d()) {
+        if (this.e()) {
             b0 = (byte) (b0 | 8);
         }
 
@@ -61,7 +61,7 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
-    public boolean a() {
+    public boolean b() {
         return this.a;
     }
 
@@ -69,7 +69,7 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
         this.a = flag;
     }
 
-    public boolean b() {
+    public boolean c() {
         return this.b;
     }
 
@@ -77,7 +77,7 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
         this.b = flag;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.c;
     }
 
@@ -85,7 +85,7 @@ public class PacketPlayOutAbilities implements Packet<PacketListenerPlayOut> {
         this.c = flag;
     }
 
-    public boolean d() {
+    public boolean e() {
         return this.d;
     }
 

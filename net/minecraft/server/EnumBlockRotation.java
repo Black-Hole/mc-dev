@@ -2,14 +2,9 @@ package net.minecraft.server;
 
 public enum EnumBlockRotation {
 
-    NONE("rotate_0"), CLOCKWISE_90("rotate_90"), CLOCKWISE_180("rotate_180"), COUNTERCLOCKWISE_90("rotate_270");
+    NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90;
 
-    private final String e;
-    private static final String[] f = new String[values().length];
-
-    private EnumBlockRotation(String s) {
-        this.e = s;
-    }
+    private EnumBlockRotation() {}
 
     public EnumBlockRotation a(EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
@@ -97,18 +92,5 @@ public enum EnumBlockRotation {
         default:
             return i;
         }
-    }
-
-    static {
-        int i = 0;
-        EnumBlockRotation[] aenumblockrotation = values();
-        int j = aenumblockrotation.length;
-
-        for (int k = 0; k < j; ++k) {
-            EnumBlockRotation enumblockrotation = aenumblockrotation[k];
-
-            EnumBlockRotation.f[i++] = enumblockrotation.e;
-        }
-
     }
 }

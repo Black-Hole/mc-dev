@@ -31,7 +31,7 @@ public class ContainerBeacon extends Container {
         icrafting.setContainerData(this, this.beacon);
     }
 
-    public IInventory e() {
+    public IInventory d() {
         return this.beacon;
     }
 

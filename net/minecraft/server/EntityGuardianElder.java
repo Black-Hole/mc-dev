@@ -1,16 +1,16 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityGuardianElder extends EntityGuardian {
 
     public EntityGuardianElder(World world) {
-        super(world);
+        super(EntityTypes.ELDER_GUARDIAN, world);
         this.setSize(this.width * 2.35F, this.length * 2.35F);
-        this.cW();
+        this.di();
         if (this.goalRandomStroll != null) {
             this.goalRandomStroll.setTimeBetweenMovement(400);
         }
@@ -24,49 +24,39 @@ public class EntityGuardianElder extends EntityGuardian {
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(80.0D);
     }
 
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityInsentient.a(dataconvertermanager, EntityGuardianElder.class);
-    }
-
     @Nullable
-    protected MinecraftKey J() {
-        return LootTables.y;
+    protected MinecraftKey G() {
+        return LootTables.E;
     }
 
-    public int p() {
+    public int l() {
         return 60;
     }
 
-    protected SoundEffect F() {
-        return this.isInWater() ? SoundEffects.aI : SoundEffects.aJ;
+    protected SoundEffect D() {
+        return this.aq() ? SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT : SoundEffects.ENTITY_ELDER_GUARDIAN_AMBIENT_LAND;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.isInWater() ? SoundEffects.aO : SoundEffects.aP;
+        return this.aq() ? SoundEffects.ENTITY_ELDER_GUARDIAN_HURT : SoundEffects.ENTITY_ELDER_GUARDIAN_HURT_LAND;
     }
 
-    protected SoundEffect cf() {
-        return this.isInWater() ? SoundEffects.aL : SoundEffects.aM;
+    protected SoundEffect cr() {
+        return this.aq() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
     }
 
-    protected SoundEffect dn() {
-        return SoundEffects.aN;
+    protected SoundEffect dA() {
+        return SoundEffects.ENTITY_ELDER_GUARDIAN_FLOP;
     }
 
-    protected void M() {
-        super.M();
+    protected void mobTick() {
+        super.mobTick();
         boolean flag = true;
 
         if ((this.ticksLived + this.getId()) % 1200 == 0) {
             MobEffectList mobeffectlist = MobEffects.SLOWER_DIG;
-            List list = this.world.b(EntityPlayer.class, new Predicate() {
-                public boolean a(@Nullable EntityPlayer entityplayer) {
-                    return EntityGuardianElder.this.h(entityplayer) < 2500.0D && entityplayer.playerInteractManager.c();
-                }
-
-                public boolean apply(@Nullable Object object) {
-                    return this.a((EntityPlayer) object);
-                }
+            List list = this.world.b(EntityPlayer.class, (entityplayer) -> {
+                return this.h(entityplayer) < 2500.0D && entityplayer.playerInteractManager.c();
             });
             boolean flag1 = true;
             boolean flag2 = true;
@@ -83,7 +73,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.dj()) {
+        if (!this.dw()) {
             this.a(new BlockPosition(this), 16);
         }
 

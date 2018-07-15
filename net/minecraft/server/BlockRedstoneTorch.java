@@ -8,24 +8,125 @@ import java.util.Random;
 
 public class BlockRedstoneTorch extends BlockTorch {
 
-    private static final Map<World, List<BlockRedstoneTorch.RedstoneUpdateInfo>> g = Maps.newHashMap();
-    private final boolean isOn;
+    public static final BlockStateBoolean LIT = BlockProperties.o;
+    private static final Map<IBlockAccess, List<BlockRedstoneTorch.RedstoneUpdateInfo>> b = Maps.newHashMap();
 
-    private boolean a(World world, BlockPosition blockposition, boolean flag) {
-        if (!BlockRedstoneTorch.g.containsKey(world)) {
-            BlockRedstoneTorch.g.put(world, Lists.newArrayList());
+    protected BlockRedstoneTorch(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, Boolean.valueOf(true)));
+    }
+
+    public int a(IWorldReader iworldreader) {
+        return 2;
+    }
+
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        EnumDirection[] aenumdirection = EnumDirection.values();
+        int i = aenumdirection.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumDirection enumdirection = aenumdirection[j];
+
+            world.applyPhysics(blockposition.shift(enumdirection), this);
         }
 
-        List list = (List) BlockRedstoneTorch.g.get(world);
+    }
+
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (!flag) {
+            EnumDirection[] aenumdirection = EnumDirection.values();
+            int i = aenumdirection.length;
+
+            for (int j = 0; j < i; ++j) {
+                EnumDirection enumdirection = aenumdirection[j];
+
+                world.applyPhysics(blockposition.shift(enumdirection), this);
+            }
+
+        }
+    }
+
+    public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() && EnumDirection.UP != enumdirection ? 15 : 0;
+    }
+
+    protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return world.isBlockFacePowered(blockposition.down(), EnumDirection.DOWN);
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        a(iblockdata, world, blockposition, random, this.a(world, blockposition, iblockdata));
+    }
+
+    public static void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random, boolean flag) {
+        List list = (List) BlockRedstoneTorch.b.get(world);
+
+        while (list != null && !list.isEmpty() && world.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
+            list.remove(0);
+        }
+
+        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue()) {
+            if (flag) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, Boolean.valueOf(false)), 3);
+                if (a(world, blockposition, true)) {
+                    world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_REDSTONE_TORCH_BURNOUT, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+
+                    for (int i = 0; i < 5; ++i) {
+                        double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;
+                        double d1 = (double) blockposition.getY() + random.nextDouble() * 0.6D + 0.2D;
+                        double d2 = (double) blockposition.getZ() + random.nextDouble() * 0.6D + 0.2D;
+
+                        world.addParticle(Particles.M, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+                    }
+
+                    world.I().a(blockposition, world.getType(blockposition).getBlock(), 160);
+                }
+            }
+        } else if (!flag && !a(world, blockposition, false)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, Boolean.valueOf(true)), 3);
+        }
+
+    }
+
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() == this.a(world, blockposition, iblockdata) && !world.I().b(blockposition, this)) {
+            world.I().a(blockposition, this, this.a((IWorldReader) world));
+        }
+
+    }
+
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return enumdirection == EnumDirection.DOWN ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
+    }
+
+    public boolean isPowerSource(IBlockData iblockdata) {
+        return true;
+    }
+
+    public int l(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() ? super.l(iblockdata) : 0;
+    }
+
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockRedstoneTorch.LIT});
+    }
+
+    private static boolean a(World world, BlockPosition blockposition, boolean flag) {
+        Object object = (List) BlockRedstoneTorch.b.get(world);
+
+        if (object == null) {
+            object = Lists.newArrayList();
+            BlockRedstoneTorch.b.put(world, object);
+        }
 
         if (flag) {
-            list.add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition, world.getTime()));
+            ((List) object).add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition.h(), world.getTime()));
         }
 
         int i = 0;
 
-        for (int j = 0; j < list.size(); ++j) {
-            BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) list.get(j);
+        for (int j = 0; j < ((List) object).size(); ++j) {
+            BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) ((List) object).get(j);
 
             if (blockredstonetorch_redstoneupdateinfo.a.equals(blockposition)) {
                 ++i;
@@ -38,120 +139,10 @@ public class BlockRedstoneTorch extends BlockTorch {
         return false;
     }
 
-    protected BlockRedstoneTorch(boolean flag) {
-        this.isOn = flag;
-        this.a(true);
-        this.a((CreativeModeTab) null);
-    }
+    public static class RedstoneUpdateInfo {
 
-    public int a(World world) {
-        return 2;
-    }
-
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.isOn) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
-            int i = aenumdirection.length;
-
-            for (int j = 0; j < i; ++j) {
-                EnumDirection enumdirection = aenumdirection[j];
-
-                world.applyPhysics(blockposition.shift(enumdirection), this, false);
-            }
-        }
-
-    }
-
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.isOn) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
-            int i = aenumdirection.length;
-
-            for (int j = 0; j < i; ++j) {
-                EnumDirection enumdirection = aenumdirection[j];
-
-                world.applyPhysics(blockposition.shift(enumdirection), this, false);
-            }
-        }
-
-    }
-
-    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return this.isOn && iblockdata.get(BlockRedstoneTorch.FACING) != enumdirection ? 15 : 0;
-    }
-
-    private boolean g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockRedstoneTorch.FACING)).opposite();
-
-        return world.isBlockFacePowered(blockposition.shift(enumdirection), enumdirection);
-    }
-
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
-
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        boolean flag = this.g(world, blockposition, iblockdata);
-        List list = (List) BlockRedstoneTorch.g.get(world);
-
-        while (list != null && !list.isEmpty() && world.getTime() - ((BlockRedstoneTorch.RedstoneUpdateInfo) list.get(0)).b > 60L) {
-            list.remove(0);
-        }
-
-        if (this.isOn) {
-            if (flag) {
-                world.setTypeAndData(blockposition, Blocks.UNLIT_REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
-                if (this.a(world, blockposition, true)) {
-                    world.a((EntityHuman) null, blockposition, SoundEffects.gm, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
-
-                    for (int i = 0; i < 5; ++i) {
-                        double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;
-                        double d1 = (double) blockposition.getY() + random.nextDouble() * 0.6D + 0.2D;
-                        double d2 = (double) blockposition.getZ() + random.nextDouble() * 0.6D + 0.2D;
-
-                        world.addParticle(EnumParticle.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-
-                    world.a(blockposition, world.getType(blockposition).getBlock(), 160);
-                }
-            }
-        } else if (!flag && !this.a(world, blockposition, false)) {
-            world.setTypeAndData(blockposition, Blocks.REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
-        }
-
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (!this.e(world, blockposition, iblockdata)) {
-            if (this.isOn == this.g(world, blockposition, iblockdata)) {
-                world.a(blockposition, (Block) this, this.a(world));
-            }
-
-        }
-    }
-
-    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.DOWN ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
-    }
-
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Item.getItemOf(Blocks.REDSTONE_TORCH);
-    }
-
-    public boolean isPowerSource(IBlockData iblockdata) {
-        return true;
-    }
-
-    public ItemStack a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(Blocks.REDSTONE_TORCH);
-    }
-
-    public boolean d(Block block) {
-        return block == Blocks.UNLIT_REDSTONE_TORCH || block == Blocks.REDSTONE_TORCH;
-    }
-
-    static class RedstoneUpdateInfo {
-
-        BlockPosition a;
-        long b;
+        private final BlockPosition a;
+        private final long b;
 
         public RedstoneUpdateInfo(BlockPosition blockposition, long i) {
             this.a = blockposition;

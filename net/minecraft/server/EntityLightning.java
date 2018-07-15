@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 
 public class EntityLightning extends EntityWeather {
 
@@ -8,41 +10,37 @@ public class EntityLightning extends EntityWeather {
     public long a;
     private int c;
     private final boolean d;
+    @Nullable
+    private EntityPlayer e;
 
     public EntityLightning(World world, double d0, double d1, double d2, boolean flag) {
-        super(world);
+        super(EntityTypes.LIGHTNING_BOLT, world);
         this.setPositionRotation(d0, d1, d2, 0.0F, 0.0F);
         this.lifeTicks = 2;
         this.a = this.random.nextLong();
         this.c = this.random.nextInt(3) + 1;
         this.d = flag;
-        BlockPosition blockposition = new BlockPosition(this);
+        EnumDifficulty enumdifficulty = world.getDifficulty();
 
-        if (!flag && !world.isClientSide && world.getGameRules().getBoolean("doFireTick") && (world.getDifficulty() == EnumDifficulty.NORMAL || world.getDifficulty() == EnumDifficulty.HARD) && world.areChunksLoaded(blockposition, 10)) {
-            if (world.getType(blockposition).getMaterial() == Material.AIR && Blocks.FIRE.canPlace(world, blockposition)) {
-                world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-            }
-
-            for (int i = 0; i < 4; ++i) {
-                BlockPosition blockposition1 = blockposition.a(this.random.nextInt(3) - 1, this.random.nextInt(3) - 1, this.random.nextInt(3) - 1);
-
-                if (world.getType(blockposition1).getMaterial() == Material.AIR && Blocks.FIRE.canPlace(world, blockposition1)) {
-                    world.setTypeUpdate(blockposition1, Blocks.FIRE.getBlockData());
-                }
-            }
+        if (enumdifficulty == EnumDifficulty.NORMAL || enumdifficulty == EnumDifficulty.HARD) {
+            this.a(4);
         }
 
     }
 
-    public SoundCategory bK() {
+    public SoundCategory bV() {
         return SoundCategory.WEATHER;
     }
 
-    public void B_() {
-        super.B_();
+    public void d(@Nullable EntityPlayer entityplayer) {
+        this.e = entityplayer;
+    }
+
+    public void tick() {
+        super.tick();
         if (this.lifeTicks == 2) {
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dK, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
-            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.dJ, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
+            this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
         }
 
         --this.lifeTicks;
@@ -52,14 +50,8 @@ public class EntityLightning extends EntityWeather {
             } else if (this.lifeTicks < -this.random.nextInt(10)) {
                 --this.c;
                 this.lifeTicks = 1;
-                if (!this.d && !this.world.isClientSide) {
-                    this.a = this.random.nextLong();
-                    BlockPosition blockposition = new BlockPosition(this);
-
-                    if (this.world.getGameRules().getBoolean("doFireTick") && this.world.areChunksLoaded(blockposition, 10) && this.world.getType(blockposition).getMaterial() == Material.AIR && Blocks.FIRE.canPlace(this.world, blockposition)) {
-                        this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-                    }
-                }
+                this.a = this.random.nextLong();
+                this.a(0);
             }
         }
 
@@ -75,12 +67,36 @@ public class EntityLightning extends EntityWeather {
 
                     entity.onLightningStrike(this);
                 }
+
+                if (this.e != null) {
+                    CriterionTriggers.E.a(this.e, (Collection) list);
+                }
             }
         }
 
     }
 
-    protected void i() {}
+    private void a(int i) {
+        if (!this.d && !this.world.isClientSide && this.world.getGameRules().getBoolean("doFireTick")) {
+            IBlockData iblockdata = Blocks.FIRE.getBlockData();
+            BlockPosition blockposition = new BlockPosition(this);
+
+            if (this.world.areChunksLoaded(blockposition, 10) && this.world.getType(blockposition).isAir() && iblockdata.canPlace(this.world, blockposition)) {
+                this.world.setTypeUpdate(blockposition, iblockdata);
+            }
+
+            for (int j = 0; j < i; ++j) {
+                BlockPosition blockposition1 = blockposition.a(this.random.nextInt(3) - 1, this.random.nextInt(3) - 1, this.random.nextInt(3) - 1);
+
+                if (this.world.getType(blockposition1).isAir() && iblockdata.canPlace(this.world, blockposition1)) {
+                    this.world.setTypeUpdate(blockposition1, iblockdata);
+                }
+            }
+
+        }
+    }
+
+    protected void x_() {}
 
     protected void a(NBTTagCompound nbttagcompound) {}
 

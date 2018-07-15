@@ -16,13 +16,13 @@ public class PathfinderGoalRandomStrollLand extends PathfinderGoalRandomStroll {
     }
 
     @Nullable
-    protected Vec3D f() {
-        if (this.a.isInWater()) {
+    protected Vec3D g() {
+        if (this.a.aq()) {
             Vec3D vec3d = RandomPositionGenerator.b(this.a, 15, 7);
 
-            return vec3d == null ? super.f() : vec3d;
+            return vec3d == null ? super.g() : vec3d;
         } else {
-            return this.a.getRandom().nextFloat() >= this.h ? RandomPositionGenerator.b(this.a, 10, 7) : super.f();
+            return this.a.getRandom().nextFloat() >= this.h ? RandomPositionGenerator.b(this.a, 10, 7) : super.g();
         }
     }
 }

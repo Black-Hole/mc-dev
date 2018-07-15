@@ -5,60 +5,54 @@ import javax.annotation.Nullable;
 public class TileEntityCommand extends TileEntity {
 
     private boolean a;
+    private boolean e;
     private boolean f;
     private boolean g;
-    private boolean h;
-    private final CommandBlockListenerAbstract i = new CommandBlockListenerAbstract() {
-        public BlockPosition getChunkCoordinates() {
-            return TileEntityCommand.this.position;
-        }
-
-        public Vec3D d() {
-            return new Vec3D((double) TileEntityCommand.this.position.getX() + 0.5D, (double) TileEntityCommand.this.position.getY() + 0.5D, (double) TileEntityCommand.this.position.getZ() + 0.5D);
-        }
-
-        public World getWorld() {
-            return TileEntityCommand.this.getWorld();
-        }
-
+    private final CommandBlockListenerAbstract h = new CommandBlockListenerAbstract() {
         public void setCommand(String s) {
             super.setCommand(s);
             TileEntityCommand.this.update();
         }
 
-        public void i() {
-            IBlockData iblockdata = TileEntityCommand.this.world.getType(TileEntityCommand.this.position);
-
-            TileEntityCommand.this.getWorld().notify(TileEntityCommand.this.position, iblockdata, iblockdata, 3);
+        public WorldServer d() {
+            return (WorldServer) TileEntityCommand.this.world;
         }
 
-        public MinecraftServer C_() {
-            return TileEntityCommand.this.world.getMinecraftServer();
+        public void e() {
+            IBlockData iblockdata = TileEntityCommand.this.world.getType(TileEntityCommand.this.position);
+
+            this.d().notify(TileEntityCommand.this.position, iblockdata, iblockdata, 3);
+        }
+
+        public CommandListenerWrapper getWrapper() {
+            return new CommandListenerWrapper(this, new Vec3D((double) TileEntityCommand.this.position.getX() + 0.5D, (double) TileEntityCommand.this.position.getY() + 0.5D, (double) TileEntityCommand.this.position.getZ() + 0.5D), Vec2F.a, this.d(), 2, this.getName().getString(), this.getName(), this.d().getMinecraftServer(), (Entity) null);
         }
     };
 
-    public TileEntityCommand() {}
+    public TileEntityCommand() {
+        super(TileEntityTypes.w);
+    }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        this.i.a(nbttagcompound);
-        nbttagcompound.setBoolean("powered", this.f());
-        nbttagcompound.setBoolean("conditionMet", this.i());
-        nbttagcompound.setBoolean("auto", this.h());
+        this.h.a(nbttagcompound);
+        nbttagcompound.setBoolean("powered", this.d());
+        nbttagcompound.setBoolean("conditionMet", this.f());
+        nbttagcompound.setBoolean("auto", this.e());
         return nbttagcompound;
     }
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.i.b(nbttagcompound);
+        this.h.b(nbttagcompound);
         this.a = nbttagcompound.getBoolean("powered");
-        this.g = nbttagcompound.getBoolean("conditionMet");
+        this.f = nbttagcompound.getBoolean("conditionMet");
         this.b(nbttagcompound.getBoolean("auto"));
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        if (this.k()) {
+        if (this.i()) {
             this.c(false);
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
@@ -73,84 +67,80 @@ public class TileEntityCommand extends TileEntity {
     }
 
     public CommandBlockListenerAbstract getCommandBlock() {
-        return this.i;
-    }
-
-    public CommandObjectiveExecutor e() {
-        return this.i.o();
+        return this.h;
     }
 
     public void a(boolean flag) {
         this.a = flag;
     }
 
-    public boolean f() {
+    public boolean d() {
         return this.a;
     }
 
-    public boolean h() {
-        return this.f;
+    public boolean e() {
+        return this.e;
     }
 
     public void b(boolean flag) {
-        boolean flag1 = this.f;
+        boolean flag1 = this.e;
 
-        this.f = flag;
-        if (!flag1 && flag && !this.a && this.world != null && this.l() != TileEntityCommand.Type.SEQUENCE) {
-            Block block = this.getBlock();
+        this.e = flag;
+        if (!flag1 && flag && !this.a && this.world != null && this.j() != TileEntityCommand.Type.SEQUENCE) {
+            Block block = this.getBlock().getBlock();
 
             if (block instanceof BlockCommand) {
-                this.j();
-                this.world.a(this.position, block, block.a(this.world));
+                this.h();
+                this.world.I().a(this.position, block, block.a((IWorldReader) this.world));
             }
         }
 
+    }
+
+    public boolean f() {
+        return this.f;
+    }
+
+    public boolean h() {
+        this.f = true;
+        if (this.k()) {
+            BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
+
+            if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
+                TileEntity tileentity = this.world.getTileEntity(blockposition);
+
+                this.f = tileentity instanceof TileEntityCommand && ((TileEntityCommand) tileentity).getCommandBlock().i() > 0;
+            } else {
+                this.f = false;
+            }
+        }
+
+        return this.f;
     }
 
     public boolean i() {
         return this.g;
     }
 
-    public boolean j() {
-        this.g = true;
-        if (this.m()) {
-            BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
+    public void c(boolean flag) {
+        this.g = flag;
+    }
 
-            if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
-                TileEntity tileentity = this.world.getTileEntity(blockposition);
+    public TileEntityCommand.Type j() {
+        Block block = this.getBlock().getBlock();
 
-                this.g = tileentity instanceof TileEntityCommand && ((TileEntityCommand) tileentity).getCommandBlock().k() > 0;
-            } else {
-                this.g = false;
-            }
-        }
-
-        return this.g;
+        return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.REPEATING_COMMAND_BLOCK ? TileEntityCommand.Type.AUTO : (block == Blocks.CHAIN_COMMAND_BLOCK ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
     public boolean k() {
-        return this.h;
-    }
-
-    public void c(boolean flag) {
-        this.h = flag;
-    }
-
-    public TileEntityCommand.Type l() {
-        Block block = this.getBlock();
-
-        return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.dc ? TileEntityCommand.Type.AUTO : (block == Blocks.dd ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
-    }
-
-    public boolean m() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         return iblockdata.getBlock() instanceof BlockCommand ? ((Boolean) iblockdata.get(BlockCommand.b)).booleanValue() : false;
     }
 
-    public void A() {
-        this.e = null;
-        super.A();
+    public void z() {
+        this.invalidateBlockCache();
+        super.z();
     }
 
     public static enum Type {

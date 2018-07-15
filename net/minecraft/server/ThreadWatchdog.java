@@ -6,6 +6,7 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.apache.logging.log4j.LogManager;
@@ -19,17 +20,17 @@ public class ThreadWatchdog implements Runnable {
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
         this.b = dedicatedserver;
-        this.c = dedicatedserver.aT();
+        this.c = dedicatedserver.ba();
     }
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.aH();
-            long j = MinecraftServer.aw();
+            long i = this.b.az();
+            long j = SystemUtils.b();
             long k = j - i;
 
             if (k > this.c) {
-                ThreadWatchdog.a.fatal("A single server tick took {} seconds (should be max {})", String.format("%.2f", new Object[] { Float.valueOf((float) k / 1000.0F)}), String.format("%.2f", new Object[] { Float.valueOf(0.05F)}));
+                ThreadWatchdog.a.fatal("A single server tick took {} seconds (should be max {})", String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf((float) k / 1000.0F)}), String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(0.05F)}));
                 ThreadWatchdog.a.fatal("Considering it to be crashed, server will forcibly shutdown.");
                 ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
                 ThreadInfo[] athreadinfo = threadmxbean.dumpAllThreads(true, true);
@@ -41,7 +42,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.aI().getId()) {
+                    if (threadinfo.getThreadId() == this.b.aA().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 
@@ -55,7 +56,7 @@ public class ThreadWatchdog implements Runnable {
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Thread Dump");
 
                 crashreportsystemdetails.a("Threads", (Object) stringbuilder);
-                File file = new File(new File(this.b.A(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
+                File file = new File(new File(this.b.t(), "crash-reports"), "crash-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + "-server.txt");
 
                 if (crashreport.a(file)) {
                     ThreadWatchdog.a.error("This crash report has been saved to: {}", file.getAbsolutePath());

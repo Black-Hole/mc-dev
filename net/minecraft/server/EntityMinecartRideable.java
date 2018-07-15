@@ -3,15 +3,11 @@ package net.minecraft.server;
 public class EntityMinecartRideable extends EntityMinecartAbstract {
 
     public EntityMinecartRideable(World world) {
-        super(world);
+        super(EntityTypes.MINECART, world);
     }
 
     public EntityMinecartRideable(World world, double d0, double d1, double d2) {
-        super(world, d0, d1, d2);
-    }
-
-    public static void a(DataConverterManager dataconvertermanager) {
-        EntityMinecartAbstract.a(dataconvertermanager, EntityMinecartRideable.class);
+        super(EntityTypes.MINECART, world, d0, d1, d2);
     }
 
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
@@ -35,10 +31,10 @@ public class EntityMinecartRideable extends EntityMinecartAbstract {
             }
 
             if (this.getType() == 0) {
-                this.e(-this.u());
-                this.d(10);
+                this.l(-this.u());
+                this.e(10);
                 this.setDamage(50.0F);
-                this.ax();
+                this.aA();
             }
         }
 

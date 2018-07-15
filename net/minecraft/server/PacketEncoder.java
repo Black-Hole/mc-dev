@@ -23,7 +23,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
         EnumProtocol enumprotocol = (EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get();
 
         if (enumprotocol == null) {
-            throw new RuntimeException("ConnectionProtocol unknown: " + packet.toString());
+            throw new RuntimeException("ConnectionProtocol unknown: " + packet);
         } else {
             Integer integer = enumprotocol.a(this.c, packet);
 
@@ -42,8 +42,12 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
                     packet.b(packetdataserializer);
                 } catch (Throwable throwable) {
                     PacketEncoder.a.error(throwable);
+                    if (packet.a()) {
+                        throw new SkipEncodeException(throwable);
+                    } else {
+                        throw throwable;
+                    }
                 }
-
             }
         }
     }

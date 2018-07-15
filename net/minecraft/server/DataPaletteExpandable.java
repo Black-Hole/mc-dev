@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-interface DataPaletteExpandable {
+interface DataPaletteExpandable<T> {
 
-    int a(int i, IBlockData iblockdata);
+    int onResize(int i, T t0);
 }

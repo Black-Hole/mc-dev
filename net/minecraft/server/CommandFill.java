@@ -1,155 +1,119 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class CommandFill extends CommandAbstract {
+public class CommandFill {
 
-    public CommandFill() {}
+    private static final Dynamic2CommandExceptionType a = new Dynamic2CommandExceptionType((object, object1) -> {
+        return new ChatMessage("commands.fill.toobig", new Object[] { object, object1});
+    });
+    private static final ArgumentTileLocation b = new ArgumentTileLocation(Blocks.AIR.getBlockData(), Collections.emptySet(), (NBTTagCompound) null);
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.fill.failed", new Object[0]));
 
-    public String getCommand() {
-        return "fill";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("fill").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("from", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("to", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentTile.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.REPLACE, (Predicate) null);
+        })).then(((LiteralArgumentBuilder) CommandDispatcher.a("replace").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.REPLACE, (Predicate) null);
+        })).then(CommandDispatcher.a("filter", (ArgumentType) ArgumentBlockPredicate.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.REPLACE, ArgumentBlockPredicate.a(commandcontext, "filter"));
+        })))).then(CommandDispatcher.a("keep").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.REPLACE, (shapedetectorblock) -> {
+                return shapedetectorblock.c().isEmpty(shapedetectorblock.getPosition());
+            });
+        }))).then(CommandDispatcher.a("outline").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.OUTLINE, (Predicate) null);
+        }))).then(CommandDispatcher.a("hollow").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.HOLLOW, (Predicate) null);
+        }))).then(CommandDispatcher.a("destroy").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), new StructureBoundingBox(ArgumentPosition.a(commandcontext, "from"), ArgumentPosition.a(commandcontext, "to")), ArgumentTile.a(commandcontext, "block"), CommandFill.Mode.DESTROY, (Predicate) null);
+        }))))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, StructureBoundingBox structureboundingbox, ArgumentTileLocation argumenttilelocation, CommandFill.Mode commandfill_mode, @Nullable Predicate<ShapeDetectorBlock> predicate) throws CommandSyntaxException {
+        int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.fill.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 7) {
-            throw new ExceptionUsage("commands.fill.usage", new Object[0]);
+        if (i > '\u8000') {
+            throw CommandFill.a.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
         } else {
-            icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, 0);
-            BlockPosition blockposition = a(icommandlistener, astring, 0, false);
-            BlockPosition blockposition1 = a(icommandlistener, astring, 3, false);
-            Block block = CommandAbstract.b(icommandlistener, astring[6]);
-            IBlockData iblockdata;
+            ArrayList arraylist = Lists.newArrayList();
+            WorldServer worldserver = commandlistenerwrapper.getWorld();
+            int j = 0;
+            Iterator iterator = BlockPosition.MutableBlockPosition.a(structureboundingbox.a, structureboundingbox.b, structureboundingbox.c, structureboundingbox.d, structureboundingbox.e, structureboundingbox.f).iterator();
 
-            if (astring.length >= 8) {
-                iblockdata = a(block, astring[7]);
-            } else {
-                iblockdata = block.getBlockData();
+            BlockPosition blockposition;
+
+            while (iterator.hasNext()) {
+                blockposition = (BlockPosition) iterator.next();
+                if (predicate == null || predicate.test(new ShapeDetectorBlock(worldserver, blockposition, true))) {
+                    ArgumentTileLocation argumenttilelocation1 = commandfill_mode.e.filter(structureboundingbox, blockposition, argumenttilelocation, worldserver);
+
+                    if (argumenttilelocation1 != null) {
+                        TileEntity tileentity = worldserver.getTileEntity(blockposition);
+
+                        if (tileentity != null && tileentity instanceof IInventory) {
+                            ((IInventory) tileentity).clear();
+                        }
+
+                        if (argumenttilelocation1.a(worldserver, blockposition, 2)) {
+                            arraylist.add(blockposition.h());
+                            ++j;
+                        }
+                    }
+                }
             }
 
-            BlockPosition blockposition2 = new BlockPosition(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()));
-            BlockPosition blockposition3 = new BlockPosition(Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
-            int i = (blockposition3.getX() - blockposition2.getX() + 1) * (blockposition3.getY() - blockposition2.getY() + 1) * (blockposition3.getZ() - blockposition2.getZ() + 1);
+            iterator = arraylist.iterator();
 
-            if (i > '\u8000') {
-                throw new CommandException("commands.fill.tooManyBlocks", new Object[] { Integer.valueOf(i), Integer.valueOf('\u8000')});
-            } else if (blockposition2.getY() >= 0 && blockposition3.getY() < 256) {
-                World world = icommandlistener.getWorld();
+            while (iterator.hasNext()) {
+                blockposition = (BlockPosition) iterator.next();
+                Block block = worldserver.getType(blockposition).getBlock();
 
-                for (int j = blockposition2.getZ(); j <= blockposition3.getZ(); j += 16) {
-                    for (int k = blockposition2.getX(); k <= blockposition3.getX(); k += 16) {
-                        if (!world.isLoaded(new BlockPosition(k, blockposition3.getY() - blockposition2.getY(), j))) {
-                            throw new CommandException("commands.fill.outOfWorld", new Object[0]);
-                        }
-                    }
-                }
+                worldserver.update(blockposition, block);
+            }
 
-                NBTTagCompound nbttagcompound = new NBTTagCompound();
-                boolean flag = false;
-
-                if (astring.length >= 10 && block.isTileEntity()) {
-                    String s = a(astring, 9);
-
-                    try {
-                        nbttagcompound = MojangsonParser.parse(s);
-                        flag = true;
-                    } catch (MojangsonParseException mojangsonparseexception) {
-                        throw new CommandException("commands.fill.tagError", new Object[] { mojangsonparseexception.getMessage()});
-                    }
-                }
-
-                ArrayList arraylist = Lists.newArrayList();
-
-                i = 0;
-
-                for (int l = blockposition2.getZ(); l <= blockposition3.getZ(); ++l) {
-                    for (int i1 = blockposition2.getY(); i1 <= blockposition3.getY(); ++i1) {
-                        for (int j1 = blockposition2.getX(); j1 <= blockposition3.getX(); ++j1) {
-                            BlockPosition blockposition4 = new BlockPosition(j1, i1, l);
-
-                            if (astring.length >= 9) {
-                                if (!"outline".equals(astring[8]) && !"hollow".equals(astring[8])) {
-                                    if ("destroy".equals(astring[8])) {
-                                        world.setAir(blockposition4, true);
-                                    } else if ("keep".equals(astring[8])) {
-                                        if (!world.isEmpty(blockposition4)) {
-                                            continue;
-                                        }
-                                    } else if ("replace".equals(astring[8]) && !block.isTileEntity() && astring.length > 9) {
-                                        Block block1 = CommandAbstract.b(icommandlistener, astring[9]);
-
-                                        if (world.getType(blockposition4).getBlock() != block1 || astring.length > 10 && !"-1".equals(astring[10]) && !"*".equals(astring[10]) && !CommandAbstract.b(block1, astring[10]).apply(world.getType(blockposition4))) {
-                                            continue;
-                                        }
-                                    }
-                                } else if (j1 != blockposition2.getX() && j1 != blockposition3.getX() && i1 != blockposition2.getY() && i1 != blockposition3.getY() && l != blockposition2.getZ() && l != blockposition3.getZ()) {
-                                    if ("hollow".equals(astring[8])) {
-                                        world.setTypeAndData(blockposition4, Blocks.AIR.getBlockData(), 2);
-                                        arraylist.add(blockposition4);
-                                    }
-                                    continue;
-                                }
-                            }
-
-                            TileEntity tileentity = world.getTileEntity(blockposition4);
-
-                            if (tileentity != null && tileentity instanceof IInventory) {
-                                ((IInventory) tileentity).clear();
-                            }
-
-                            if (world.setTypeAndData(blockposition4, iblockdata, 2)) {
-                                arraylist.add(blockposition4);
-                                ++i;
-                                if (flag) {
-                                    TileEntity tileentity1 = world.getTileEntity(blockposition4);
-
-                                    if (tileentity1 != null) {
-                                        nbttagcompound.setInt("x", blockposition4.getX());
-                                        nbttagcompound.setInt("y", blockposition4.getY());
-                                        nbttagcompound.setInt("z", blockposition4.getZ());
-                                        tileentity1.load(nbttagcompound);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Iterator iterator = arraylist.iterator();
-
-                while (iterator.hasNext()) {
-                    BlockPosition blockposition5 = (BlockPosition) iterator.next();
-                    Block block2 = world.getType(blockposition5).getBlock();
-
-                    world.update(blockposition5, block2, false);
-                }
-
-                if (i <= 0) {
-                    throw new CommandException("commands.fill.failed", new Object[0]);
-                } else {
-                    icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_BLOCKS, i);
-                    a(icommandlistener, (ICommand) this, "commands.fill.success", new Object[] { Integer.valueOf(i)});
-                }
+            if (j == 0) {
+                throw CommandFill.c.create();
             } else {
-                throw new CommandException("commands.fill.outOfWorld", new Object[0]);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.fill.success", new Object[] { Integer.valueOf(j)}), true);
+                return j;
             }
         }
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length > 0 && astring.length <= 3 ? a(astring, 0, blockposition) : (astring.length > 3 && astring.length <= 6 ? a(astring, 3, blockposition) : (astring.length == 7 ? a(astring, (Collection) Block.REGISTRY.keySet()) : (astring.length == 9 ? a(astring, new String[] { "replace", "destroy", "keep", "hollow", "outline"}) : (astring.length == 10 && "replace".equals(astring[8]) ? a(astring, (Collection) Block.REGISTRY.keySet()) : Collections.emptyList()))));
+    static enum Mode {
+
+        REPLACE((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
+            return argumenttilelocation;
+        }), OUTLINE((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
+            return blockposition.getX() != structureboundingbox.a && blockposition.getX() != structureboundingbox.d && blockposition.getY() != structureboundingbox.b && blockposition.getY() != structureboundingbox.e && blockposition.getZ() != structureboundingbox.c && blockposition.getZ() != structureboundingbox.f ? null : argumenttilelocation;
+        }), HOLLOW((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
+            return blockposition.getX() != structureboundingbox.a && blockposition.getX() != structureboundingbox.d && blockposition.getY() != structureboundingbox.b && blockposition.getY() != structureboundingbox.e && blockposition.getZ() != structureboundingbox.c && blockposition.getZ() != structureboundingbox.f ? CommandFill.b : argumenttilelocation;
+        }), DESTROY((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
+            worldserver.setAir(blockposition, true);
+            return argumenttilelocation;
+        });
+
+        public final CommandSetBlock.Filter e;
+
+        private Mode(CommandSetBlock.Filter commandsetblock_filter) {
+            this.e = commandsetblock_filter;
+        }
     }
 }

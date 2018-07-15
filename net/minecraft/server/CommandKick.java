@@ -1,49 +1,36 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandKick extends CommandAbstract {
+public class CommandKick {
 
-    public CommandKick() {}
-
-    public String getCommand() {
-        return "kick";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("kick").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(3);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), new ChatMessage("multiplayer.disconnect.kicked", new Object[0]));
+        })).then(CommandDispatcher.a("reason", (ArgumentType) ArgumentChat.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChat.a(commandcontext, "reason"));
+        }))));
     }
 
-    public int a() {
-        return 3;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent) {
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.kick.usage";
-    }
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length > 0 && astring[0].length() > 1) {
-            EntityPlayer entityplayer = minecraftserver.getPlayerList().getPlayer(astring[0]);
-
-            if (entityplayer == null) {
-                throw new ExceptionPlayerNotFound("commands.generic.player.notFound", new Object[] { astring[0]});
-            } else {
-                if (astring.length >= 2) {
-                    IChatBaseComponent ichatbasecomponent = a(icommandlistener, astring, 1);
-
-                    entityplayer.playerConnection.disconnect(ichatbasecomponent);
-                    a(icommandlistener, (ICommand) this, "commands.kick.success.reason", new Object[] { entityplayer.getName(), ichatbasecomponent.toPlainText()});
-                } else {
-                    entityplayer.playerConnection.disconnect(new ChatMessage("multiplayer.disconnect.kicked", new Object[0]));
-                    a(icommandlistener, (ICommand) this, "commands.kick.success", new Object[] { entityplayer.getName()});
-                }
-
-            }
-        } else {
-            throw new ExceptionUsage("commands.kick.usage", new Object[0]);
+            entityplayer.playerConnection.disconnect(ichatbasecomponent);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.kick.success", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent}), true);
         }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length >= 1 ? a(astring, minecraftserver.getPlayers()) : Collections.emptyList();
+        return collection.size();
     }
 }

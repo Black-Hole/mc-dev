@@ -2,23 +2,23 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenMushrooms extends WorldGenerator {
+public class WorldGenMushrooms extends WorldGenerator<WorldGenFeatureMushroomConfiguration> {
 
-    private final BlockPlant a;
+    public WorldGenMushrooms() {}
 
-    public WorldGenMushrooms(BlockPlant blockplant) {
-        this.a = blockplant;
-    }
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureMushroomConfiguration worldgenfeaturemushroomconfiguration) {
+        int i = 0;
+        IBlockData iblockdata = worldgenfeaturemushroomconfiguration.a.getBlockData();
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
-        for (int i = 0; i < 64; ++i) {
+        for (int j = 0; j < 64; ++j) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
-            if (world.isEmpty(blockposition1) && (!world.worldProvider.n() || blockposition1.getY() < 255) && this.a.f(world, blockposition1, this.a.getBlockData())) {
-                world.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
+            if (generatoraccess.isEmpty(blockposition1) && (!generatoraccess.o().h() || blockposition1.getY() < 255) && iblockdata.canPlace(generatoraccess, blockposition1)) {
+                generatoraccess.setTypeAndData(blockposition1, iblockdata, 2);
+                ++i;
             }
         }
 
-        return true;
+        return i > 0;
     }
 }

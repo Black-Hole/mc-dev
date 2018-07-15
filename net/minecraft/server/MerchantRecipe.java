@@ -83,12 +83,12 @@ public class MerchantRecipe {
     public void a(NBTTagCompound nbttagcompound) {
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("buy");
 
-        this.buyingItem1 = new ItemStack(nbttagcompound1);
+        this.buyingItem1 = ItemStack.a(nbttagcompound1);
         NBTTagCompound nbttagcompound2 = nbttagcompound.getCompound("sell");
 
-        this.sellingItem = new ItemStack(nbttagcompound2);
+        this.sellingItem = ItemStack.a(nbttagcompound2);
         if (nbttagcompound.hasKeyOfType("buyB", 10)) {
-            this.buyingItem2 = new ItemStack(nbttagcompound.getCompound("buyB"));
+            this.buyingItem2 = ItemStack.a(nbttagcompound.getCompound("buyB"));
         }
 
         if (nbttagcompound.hasKeyOfType("uses", 99)) {

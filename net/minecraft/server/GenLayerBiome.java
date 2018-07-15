@@ -1,76 +1,81 @@
 package net.minecraft.server;
 
-public class GenLayerBiome extends GenLayer {
+public class GenLayerBiome implements AreaTransformer5 {
 
-    private BiomeBase[] c;
-    private final BiomeBase[] d;
-    private final BiomeBase[] e;
-    private final BiomeBase[] f;
-    private final CustomWorldSettingsFinal g;
+    private static final int a = BiomeBase.a(Biomes.C);
+    private static final int b = BiomeBase.a(Biomes.d);
+    private static final int c = BiomeBase.a(Biomes.e);
+    private static final int d = BiomeBase.a(Biomes.f);
+    private static final int e = BiomeBase.a(Biomes.n);
+    private static final int f = BiomeBase.a(Biomes.w);
+    private static final int g = BiomeBase.a(Biomes.O);
+    private static final int h = BiomeBase.a(Biomes.N);
+    private static final int i = BiomeBase.a(Biomes.p);
+    private static final int j = BiomeBase.a(Biomes.c);
+    private static final int k = BiomeBase.a(Biomes.H);
+    private static final int l = BiomeBase.a(Biomes.E);
+    private static final int m = BiomeBase.a(Biomes.K);
+    private static final int n = BiomeBase.a(Biomes.h);
+    private static final int o = BiomeBase.a(Biomes.g);
+    private static final int p = BiomeBase.a(Biomes.F);
+    private static final int[] q = new int[] { GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
+    private static final int[] r = new int[] { GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
+    private static final int[] s = new int[] { GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
+    private static final int[] t = new int[] { GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.o, GenLayerBiome.j};
+    private static final int[] u = new int[] { GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.e, GenLayerBiome.p};
+    private final GeneratorSettingsOverworld v;
+    private int[] w;
 
-    public GenLayerBiome(long i, GenLayer genlayer, WorldType worldtype, CustomWorldSettingsFinal customworldsettingsfinal) {
-        super(i);
-        this.c = new BiomeBase[] { Biomes.d, Biomes.d, Biomes.d, Biomes.K, Biomes.K, Biomes.c};
-        this.d = new BiomeBase[] { Biomes.f, Biomes.E, Biomes.e, Biomes.c, Biomes.C, Biomes.h};
-        this.e = new BiomeBase[] { Biomes.f, Biomes.e, Biomes.g, Biomes.c};
-        this.f = new BiomeBase[] { Biomes.n, Biomes.n, Biomes.n, Biomes.F};
-        this.a = genlayer;
+    public GenLayerBiome(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
+        this.w = GenLayerBiome.r;
         if (worldtype == WorldType.NORMAL_1_1) {
-            this.c = new BiomeBase[] { Biomes.d, Biomes.f, Biomes.e, Biomes.h, Biomes.c, Biomes.g};
-            this.g = null;
+            this.w = GenLayerBiome.q;
+            this.v = null;
         } else {
-            this.g = customworldsettingsfinal;
+            this.v = generatorsettingsoverworld;
         }
 
     }
 
-    public int[] a(int i, int j, int k, int l) {
-        int[] aint = this.a.a(i, j, k, l);
-        int[] aint1 = IntCache.a(k * l);
+    public int a(WorldGenContext worldgencontext, int i) {
+        if (this.v != null && this.v.v() >= 0) {
+            return this.v.v();
+        } else {
+            int j = (i & 3840) >> 8;
 
-        for (int i1 = 0; i1 < l; ++i1) {
-            for (int j1 = 0; j1 < k; ++j1) {
-                this.a((long) (j1 + i), (long) (i1 + j));
-                int k1 = aint[j1 + i1 * k];
-                int l1 = (k1 & 3840) >> 8;
+            i &= -3841;
+            if (!GenLayers.a(i) && i != GenLayerBiome.i) {
+                switch (i) {
+                case 1:
+                    if (j > 0) {
+                        return worldgencontext.a(3) == 0 ? GenLayerBiome.g : GenLayerBiome.h;
+                    }
 
-                k1 &= -3841;
-                if (this.g != null && this.g.G >= 0) {
-                    aint1[j1 + i1 * k] = this.g.G;
-                } else if (b(k1)) {
-                    aint1[j1 + i1 * k] = k1;
-                } else if (k1 == BiomeBase.a(Biomes.p)) {
-                    aint1[j1 + i1 * k] = k1;
-                } else if (k1 == 1) {
-                    if (l1 > 0) {
-                        if (this.a(3) == 0) {
-                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.O);
-                        } else {
-                            aint1[j1 + i1 * k] = BiomeBase.a(Biomes.N);
-                        }
-                    } else {
-                        aint1[j1 + i1 * k] = BiomeBase.a(this.c[this.a(this.c.length)]);
+                    return this.w[worldgencontext.a(this.w.length)];
+
+                case 2:
+                    if (j > 0) {
+                        return GenLayerBiome.f;
                     }
-                } else if (k1 == 2) {
-                    if (l1 > 0) {
-                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.w);
-                    } else {
-                        aint1[j1 + i1 * k] = BiomeBase.a(this.d[this.a(this.d.length)]);
+
+                    return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
+
+                case 3:
+                    if (j > 0) {
+                        return GenLayerBiome.k;
                     }
-                } else if (k1 == 3) {
-                    if (l1 > 0) {
-                        aint1[j1 + i1 * k] = BiomeBase.a(Biomes.H);
-                    } else {
-                        aint1[j1 + i1 * k] = BiomeBase.a(this.e[this.a(this.e.length)]);
-                    }
-                } else if (k1 == 4) {
-                    aint1[j1 + i1 * k] = BiomeBase.a(this.f[this.a(this.f.length)]);
-                } else {
-                    aint1[j1 + i1 * k] = BiomeBase.a(Biomes.p);
+
+                    return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
+
+                case 4:
+                    return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
+
+                default:
+                    return GenLayerBiome.i;
                 }
+            } else {
+                return i;
             }
         }
-
-        return aint1;
     }
 }

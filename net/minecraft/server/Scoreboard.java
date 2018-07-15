@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class Scoreboard {
@@ -22,40 +25,36 @@ public class Scoreboard {
 
     public Scoreboard() {}
 
-    @Nullable
-    public ScoreboardObjective getObjective(String s) {
+    public ScoreboardObjective c(String s) {
         return (ScoreboardObjective) this.objectivesByName.get(s);
     }
 
-    public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria) {
+    @Nullable
+    public ScoreboardObjective getObjective(@Nullable String s) {
+        return (ScoreboardObjective) this.objectivesByName.get(s);
+    }
+
+    public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria, String s1) {
         if (s.length() > 16) {
             throw new IllegalArgumentException("The objective name \'" + s + "\' is too long!");
+        } else if (this.objectivesByName.containsKey(s)) {
+            throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
         } else {
-            ScoreboardObjective scoreboardobjective = this.getObjective(s);
+            ScoreboardObjective scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria, s1);
 
-            if (scoreboardobjective != null) {
-                throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
-            } else {
-                scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria);
-                Object object = (List) this.objectivesByCriteria.get(iscoreboardcriteria);
-
-                if (object == null) {
-                    object = Lists.newArrayList();
-                    this.objectivesByCriteria.put(iscoreboardcriteria, object);
-                }
-
-                ((List) object).add(scoreboardobjective);
-                this.objectivesByName.put(s, scoreboardobjective);
-                this.handleObjectiveAdded(scoreboardobjective);
-                return scoreboardobjective;
-            }
+            ((List) this.objectivesByCriteria.computeIfAbsent(iscoreboardcriteria, (iscoreboardcriteria) -> {
+                return Lists.newArrayList();
+            })).add(scoreboardobjective);
+            this.objectivesByName.put(s, scoreboardobjective);
+            this.handleObjectiveAdded(scoreboardobjective);
+            return scoreboardobjective;
         }
     }
 
-    public Collection<ScoreboardObjective> getObjectivesForCriteria(IScoreboardCriteria iscoreboardcriteria) {
-        Collection collection = (Collection) this.objectivesByCriteria.get(iscoreboardcriteria);
-
-        return collection == null ? Lists.newArrayList() : Lists.newArrayList(collection);
+    public final void getObjectivesForCriteria(IScoreboardCriteria iscoreboardcriteria, String s, Consumer<ScoreboardScore> consumer) {
+        ((List) this.objectivesByCriteria.getOrDefault(iscoreboardcriteria, Collections.emptyList())).forEach((scoreboardobjective) -> {
+            consumer.accept(this.getPlayerScoreForObjective(s, scoreboardobjective));
+        });
     }
 
     public boolean b(String s, ScoreboardObjective scoreboardobjective) {
@@ -74,21 +73,16 @@ public class Scoreboard {
         if (s.length() > 40) {
             throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
         } else {
-            Object object = (Map) this.playerScores.get(s);
+            Map map = (Map) this.playerScores.computeIfAbsent(s, (s) -> {
+                return Maps.newHashMap();
+            });
 
-            if (object == null) {
-                object = Maps.newHashMap();
-                this.playerScores.put(s, object);
-            }
+            return (ScoreboardScore) map.computeIfAbsent(scoreboardobjective, (scoreboardobjective) -> {
+                ScoreboardScore scoreboardscore = new ScoreboardScore(this, scoreboardobjective, s);
 
-            ScoreboardScore scoreboardscore = (ScoreboardScore) ((Map) object).get(scoreboardobjective);
-
-            if (scoreboardscore == null) {
-                scoreboardscore = new ScoreboardScore(this, scoreboardobjective, s);
-                ((Map) object).put(scoreboardobjective, scoreboardscore);
-            }
-
-            return scoreboardscore;
+                scoreboardscore.setScore(0);
+                return scoreboardscore;
+            });
         }
     }
 
@@ -113,11 +107,15 @@ public class Scoreboard {
         return this.objectivesByName.values();
     }
 
-    public Collection<String> getPlayers() {
-        return this.playerScores.keySet();
+    public Collection<String> d() {
+        return this.objectivesByName.keySet();
     }
 
-    public void resetPlayerScores(String s, ScoreboardObjective scoreboardobjective) {
+    public Collection<String> getPlayers() {
+        return Lists.newArrayList(this.playerScores.keySet());
+    }
+
+    public void resetPlayerScores(String s, @Nullable ScoreboardObjective scoreboardobjective) {
         Map map;
 
         if (scoreboardobjective == null) {
@@ -142,20 +140,6 @@ public class Scoreboard {
             }
         }
 
-    }
-
-    public Collection<ScoreboardScore> getScores() {
-        Collection collection = this.playerScores.values();
-        ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = collection.iterator();
-
-        while (iterator.hasNext()) {
-            Map map = (Map) iterator.next();
-
-            arraylist.addAll(map.values());
-        }
-
-        return arraylist;
     }
 
     public Map<ScoreboardObjective, ScoreboardScore> getPlayerObjectives(String s) {
@@ -194,7 +178,7 @@ public class Scoreboard {
         this.handleObjectiveRemoved(scoreboardobjective);
     }
 
-    public void setDisplaySlot(int i, ScoreboardObjective scoreboardobjective) {
+    public void setDisplaySlot(int i, @Nullable ScoreboardObjective scoreboardobjective) {
         this.displaySlots[i] = scoreboardobjective;
     }
 
@@ -237,21 +221,16 @@ public class Scoreboard {
         this.handleTeamRemoved(scoreboardteam);
     }
 
-    public boolean addPlayerToTeam(String s, String s1) {
+    public boolean addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
         if (s.length() > 40) {
             throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
-        } else if (!this.teamsByName.containsKey(s1)) {
-            return false;
         } else {
-            ScoreboardTeam scoreboardteam = this.getTeam(s1);
-
             if (this.getPlayerTeam(s) != null) {
                 this.removePlayerFromTeam(s);
             }
 
             this.teamsByPlayer.put(s, scoreboardteam);
-            scoreboardteam.getPlayerNameSet().add(s);
-            return true;
+            return scoreboardteam.getPlayerNameSet().add(s);
         }
     }
 
@@ -275,7 +254,7 @@ public class Scoreboard {
         }
     }
 
-    public Collection<String> getTeamNames() {
+    public Collection<String> f() {
         return this.teamsByName.keySet();
     }
 
@@ -322,7 +301,7 @@ public class Scoreboard {
                 EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);
 
                 if (enumchatformat != null && enumchatformat != EnumChatFormat.RESET) {
-                    return "sidebar.team." + enumchatformat.e();
+                    return "sidebar.team." + enumchatformat.g();
                 }
             }
 
@@ -340,7 +319,7 @@ public class Scoreboard {
         } else {
             if (s.startsWith("sidebar.team.")) {
                 String s1 = s.substring("sidebar.team.".length());
-                EnumChatFormat enumchatformat = EnumChatFormat.b(s1);
+                EnumChatFormat enumchatformat = EnumChatFormat.c(s1);
 
                 if (enumchatformat != null && enumchatformat.b() >= 0) {
                     return enumchatformat.b() + 3;
@@ -365,10 +344,49 @@ public class Scoreboard {
 
     public void a(Entity entity) {
         if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
-            String s = entity.bn();
+            String s = entity.bu();
 
             this.resetPlayerScores(s, (ScoreboardObjective) null);
             this.removePlayerFromTeam(s);
         }
+    }
+
+    protected NBTTagList i() {
+        NBTTagList nbttaglist = new NBTTagList();
+
+        this.playerScores.values().stream().map(Map::values).forEach((collection) -> {
+            collection.stream().filter((scoreboardscore) -> {
+                return scoreboardscore.getObjective() != null;
+            }).forEach((scoreboardscore) -> {
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
+
+                nbttagcompound.setString("Name", scoreboardscore.getPlayerName());
+                nbttagcompound.setString("Objective", scoreboardscore.getObjective().getName());
+                nbttagcompound.setInt("Score", scoreboardscore.getScore());
+                nbttagcompound.setBoolean("Locked", scoreboardscore.g());
+                nbttaglist.add((NBTBase) nbttagcompound);
+            });
+        });
+        return nbttaglist;
+    }
+
+    protected void a(NBTTagList nbttaglist) {
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
+            ScoreboardObjective scoreboardobjective = this.c(nbttagcompound.getString("Objective"));
+            String s = nbttagcompound.getString("Name");
+
+            if (s.length() > 40) {
+                s = s.substring(0, 40);
+            }
+
+            ScoreboardScore scoreboardscore = this.getPlayerScoreForObjective(s, scoreboardobjective);
+
+            scoreboardscore.setScore(nbttagcompound.getInt("Score"));
+            if (nbttagcompound.hasKey("Locked")) {
+                scoreboardscore.a(nbttagcompound.getBoolean("Locked"));
+            }
+        }
+
     }
 }

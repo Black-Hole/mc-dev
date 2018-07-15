@@ -53,7 +53,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
                     int l = StatusChallengeUtils.b(this.k, k, i);
 
                     k += 4;
-                    int i1 = StatusChallengeUtils.b(this.k, k);
+                    int i1 = StatusChallengeUtils.a(this.k, k);
 
                     k += 4;
                     switch (i1) {

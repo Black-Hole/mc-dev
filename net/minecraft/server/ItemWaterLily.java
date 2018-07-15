@@ -1,9 +1,13 @@
 package net.minecraft.server;
 
-public class ItemWaterLily extends ItemWithAuxData {
+public class ItemWaterLily extends ItemBlock {
 
-    public ItemWaterLily(Block block) {
-        super(block, false);
+    public ItemWaterLily(Block block, Item.Info item_info) {
+        super(block, item_info);
+    }
+
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        return EnumInteractionResult.PASS;
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -22,19 +26,21 @@ public class ItemWaterLily extends ItemWithAuxData {
 
                 BlockPosition blockposition1 = blockposition.up();
                 IBlockData iblockdata = world.getType(blockposition);
+                Material material = iblockdata.getMaterial();
+                Fluid fluid = world.b(blockposition);
 
-                if (iblockdata.getMaterial() == Material.WATER && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0 && world.isEmpty(blockposition1)) {
-                    world.setTypeAndData(blockposition1, Blocks.WATERLILY.getBlockData(), 11);
+                if ((fluid.c() == FluidTypes.c || material == Material.ICE) && world.isEmpty(blockposition1)) {
+                    world.setTypeAndData(blockposition1, Blocks.LILY_PAD.getBlockData(), 11);
                     if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.x.a((EntityPlayer) entityhuman, blockposition1, itemstack);
+                        CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
                     }
 
                     if (!entityhuman.abilities.canInstantlyBuild) {
                         itemstack.subtract(1);
                     }
 
-                    entityhuman.b(StatisticList.b((Item) this));
-                    world.a(entityhuman, blockposition, SoundEffects.it, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    entityhuman.b(StatisticList.ITEM_USED.b(this));
+                    world.a(entityhuman, blockposition, SoundEffects.BLOCK_LILY_PAD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
                 }
             }

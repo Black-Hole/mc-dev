@@ -1,71 +1,73 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import javax.annotation.Nullable;
 
 public class ChatComponentUtils {
 
-    public static IChatBaseComponent filterForDisplay(ICommandListener icommandlistener, IChatBaseComponent ichatbasecomponent, Entity entity) throws CommandException {
+    public static IChatBaseComponent a(IChatBaseComponent ichatbasecomponent, ChatModifier chatmodifier) {
+        return chatmodifier.g() ? ichatbasecomponent : (ichatbasecomponent.getChatModifier().g() ? ichatbasecomponent.setChatModifier(chatmodifier.clone()) : (new ChatComponentText("")).addSibling(ichatbasecomponent).setChatModifier(chatmodifier.clone()));
+    }
+
+    public static IChatBaseComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity) throws CommandSyntaxException {
         Object object;
 
-        if (ichatbasecomponent instanceof ChatComponentScore) {
+        if (ichatbasecomponent instanceof ChatComponentScore && commandlistenerwrapper != null) {
             ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
-            String s = chatcomponentscore.g();
+            String s;
 
-            if (PlayerSelector.isPattern(s)) {
-                List list = PlayerSelector.getPlayers(icommandlistener, s, Entity.class);
+            if (chatcomponentscore.g() != null) {
+                List list = chatcomponentscore.g().b(commandlistenerwrapper);
 
-                if (list.size() != 1) {
-                    throw new ExceptionEntityNotFound("commands.generic.selector.notFound", new Object[] { s});
-                }
-
-                Entity entity1 = (Entity) list.get(0);
-
-                if (entity1 instanceof EntityHuman) {
-                    s = entity1.getName();
+                if (list.isEmpty()) {
+                    s = chatcomponentscore.f();
                 } else {
-                    s = entity1.bn();
+                    if (list.size() != 1) {
+                        throw ArgumentEntity.a.create();
+                    }
+
+                    s = ((Entity) list.get(0)).getName();
                 }
+            } else {
+                s = chatcomponentscore.f();
             }
 
             String s1 = entity != null && s.equals("*") ? entity.getName() : s;
 
             object = new ChatComponentScore(s1, chatcomponentscore.h());
             ((ChatComponentScore) object).b(chatcomponentscore.getText());
-            ((ChatComponentScore) object).a(icommandlistener);
-        } else if (ichatbasecomponent instanceof ChatComponentSelector) {
-            String s2 = ((ChatComponentSelector) ichatbasecomponent).g();
-
-            object = PlayerSelector.getPlayerNames(icommandlistener, s2);
-            if (object == null) {
-                object = new ChatComponentText("");
-            }
+            ((ChatComponentScore) object).b(commandlistenerwrapper);
+        } else if (ichatbasecomponent instanceof ChatComponentSelector && commandlistenerwrapper != null) {
+            object = ((ChatComponentSelector) ichatbasecomponent).a(commandlistenerwrapper);
         } else if (ichatbasecomponent instanceof ChatComponentText) {
-            object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).g());
+            object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).f());
         } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
-            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).h());
+            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).g());
         } else {
             if (!(ichatbasecomponent instanceof ChatMessage)) {
                 return ichatbasecomponent;
             }
 
-            Object[] aobject = ((ChatMessage) ichatbasecomponent).j();
+            Object[] aobject = ((ChatMessage) ichatbasecomponent).i();
 
             for (int i = 0; i < aobject.length; ++i) {
                 Object object1 = aobject[i];
 
                 if (object1 instanceof IChatBaseComponent) {
-                    aobject[i] = filterForDisplay(icommandlistener, (IChatBaseComponent) object1, entity);
+                    aobject[i] = filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object1, entity);
                 }
             }
 
-            object = new ChatMessage(((ChatMessage) ichatbasecomponent).i(), aobject);
-        }
-
-        ChatModifier chatmodifier = ichatbasecomponent.getChatModifier();
-
-        if (chatmodifier != null) {
-            ((IChatBaseComponent) object).setChatModifier(chatmodifier.clone());
+            object = new ChatMessage(((ChatMessage) ichatbasecomponent).h(), aobject);
         }
 
         Iterator iterator = ichatbasecomponent.a().iterator();
@@ -73,9 +75,63 @@ public class ChatComponentUtils {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
 
-            ((IChatBaseComponent) object).addSibling(filterForDisplay(icommandlistener, ichatbasecomponent1, entity));
+            ((IChatBaseComponent) object).addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent1, entity));
         }
 
-        return (IChatBaseComponent) object;
+        return a((IChatBaseComponent) object, ichatbasecomponent.getChatModifier());
+    }
+
+    public static IChatBaseComponent a(GameProfile gameprofile) {
+        return gameprofile.getName() != null ? new ChatComponentText(gameprofile.getName()) : (gameprofile.getId() != null ? new ChatComponentText(gameprofile.getId().toString()) : new ChatComponentText("(unknown)"));
+    }
+
+    public static IChatBaseComponent a(Collection<String> collection) {
+        return a(collection, (s) -> {
+            return (new ChatComponentText(s)).a(EnumChatFormat.GREEN);
+        });
+    }
+
+    public static <T extends Comparable<T>> IChatBaseComponent a(Collection<T> collection, Function<T, IChatBaseComponent> function) {
+        if (collection.isEmpty()) {
+            return new ChatComponentText("");
+        } else if (collection.size() == 1) {
+            return (IChatBaseComponent) function.apply(collection.iterator().next());
+        } else {
+            ArrayList arraylist = Lists.newArrayList(collection);
+
+            arraylist.sort(Comparable::compareTo);
+            return b(collection, function);
+        }
+    }
+
+    public static <T> IChatBaseComponent b(Collection<T> collection, Function<T, IChatBaseComponent> function) {
+        if (collection.isEmpty()) {
+            return new ChatComponentText("");
+        } else if (collection.size() == 1) {
+            return (IChatBaseComponent) function.apply(collection.iterator().next());
+        } else {
+            ChatComponentText chatcomponenttext = new ChatComponentText("");
+            boolean flag = true;
+
+            for (Iterator iterator = collection.iterator(); iterator.hasNext(); flag = false) {
+                Object object = iterator.next();
+
+                if (!flag) {
+                    chatcomponenttext.addSibling((new ChatComponentText(", ")).a(EnumChatFormat.GRAY));
+                }
+
+                chatcomponenttext.addSibling((IChatBaseComponent) function.apply(object));
+            }
+
+            return chatcomponenttext;
+        }
+    }
+
+    public static IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
+        return (new ChatComponentText("[")).addSibling(ichatbasecomponent).a("]");
+    }
+
+    public static IChatBaseComponent a(Message message) {
+        return (IChatBaseComponent) (message instanceof IChatBaseComponent ? (IChatBaseComponent) message : new ChatComponentText(message.getString()));
     }
 }

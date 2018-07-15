@@ -1,27 +1,36 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonParseException;
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.OpticFinder;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.types.Type;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 
-public class DataConverterBook implements IDataConverter {
+public class DataConverterBook extends DataFix {
 
-    public DataConverterBook() {}
-
-    public int a() {
-        return 165;
+    public DataConverterBook(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        if ("minecraft:written_book".equals(nbttagcompound.getString("id"))) {
-            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("tag");
-
-            if (nbttagcompound1.hasKeyOfType("pages", 9)) {
-                NBTTagList nbttaglist = nbttagcompound1.getList("pages", 8);
-
-                for (int i = 0; i < nbttaglist.size(); ++i) {
-                    String s = nbttaglist.getString(i);
+    public Dynamic<?> a(Dynamic<?> dynamic) {
+        Optional optional = dynamic.get("pages").flatMap(Dynamic::getStream).map((stream) -> {
+            return stream.map((dynamic) -> {
+                if (!dynamic.getStringValue().isPresent()) {
+                    return dynamic;
+                } else {
+                    String s = (String) dynamic.getStringValue().get();
                     Object object = null;
 
-                    if (!"null".equals(s) && !UtilColor.b(s)) {
+                    if (!"null".equals(s) && !StringUtils.isEmpty(s)) {
                         if ((s.charAt(0) != 34 || s.charAt(s.length() - 1) != 34) && (s.charAt(0) != 123 || s.charAt(s.length() - 1) != 125)) {
                             object = new ChatComponentText(s);
                         } else {
@@ -58,13 +67,23 @@ public class DataConverterBook implements IDataConverter {
                         object = new ChatComponentText("");
                     }
 
-                    nbttaglist.a(i, new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
+                    return dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
                 }
+            });
+        });
 
-                nbttagcompound1.set("pages", nbttaglist);
-            }
-        }
+        dynamic.getClass();
+        return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic);
+    }
 
-        return nbttagcompound;
+    public TypeRewriteRule makeRule() {
+        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder opticfinder = type.findField("tag");
+
+        return this.fixTypeEverywhereTyped("ItemWrittenBookPagesStrictJsonFix", type, (typed) -> {
+            return typed.updateTyped(opticfinder, (typedx) -> {
+                return typedx.update(DSL.remainderFinder(), this::a);
+            });
+        });
     }
 }

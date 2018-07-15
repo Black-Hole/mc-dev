@@ -1,8 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Sets;
-import java.util.Set;
-
 public class PathfinderGoalTempt extends PathfinderGoal {
 
     private final EntityCreature a;
@@ -15,17 +12,17 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     private EntityHuman target;
     private int i;
     private boolean j;
-    private final Set<Item> k;
+    private final RecipeItemStack k;
     private final boolean l;
 
-    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, Item item, boolean flag) {
-        this(entitycreature, d0, flag, Sets.newHashSet(new Item[] { item}));
+    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, RecipeItemStack recipeitemstack, boolean flag) {
+        this(entitycreature, d0, flag, recipeitemstack);
     }
 
-    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, boolean flag, Set<Item> set) {
+    public PathfinderGoalTempt(EntityCreature entitycreature, double d0, boolean flag, RecipeItemStack recipeitemstack) {
         this.a = entitycreature;
         this.b = d0;
-        this.k = set;
+        this.k = recipeitemstack;
         this.l = flag;
         this.a(3);
         if (!(entitycreature.getNavigation() instanceof Navigation)) {
@@ -44,7 +41,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     }
 
     protected boolean a(ItemStack itemstack) {
-        return this.k.contains(itemstack.getItem());
+        return this.k.a(itemstack);
     }
 
     public boolean b() {
@@ -79,22 +76,22 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     public void d() {
         this.target = null;
-        this.a.getNavigation().p();
+        this.a.getNavigation().r();
         this.i = 100;
         this.j = false;
     }
 
     public void e() {
-        this.a.getControllerLook().a(this.target, (float) (this.a.O() + 20), (float) this.a.N());
+        this.a.getControllerLook().a(this.target, (float) (this.a.L() + 20), (float) this.a.K());
         if (this.a.h(this.target) < 6.25D) {
-            this.a.getNavigation().p();
+            this.a.getNavigation().r();
         } else {
             this.a.getNavigation().a((Entity) this.target, this.b);
         }
 
     }
 
-    public boolean f() {
+    public boolean g() {
         return this.j;
     }
 }

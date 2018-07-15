@@ -1,80 +1,68 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandGive extends CommandAbstract {
+public class CommandGive {
 
-    public CommandGive() {}
-
-    public String getCommand() {
-        return "give";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("give").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(((RequiredArgumentBuilder) CommandDispatcher.a("item", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentItemStack.a(commandcontext, "item"), ArgumentEntity.f(commandcontext, "targets"), 1);
+        })).then(CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(1)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentItemStack.a(commandcontext, "item"), ArgumentEntity.f(commandcontext, "targets"), IntegerArgumentType.getInteger(commandcontext, "count"));
+        })))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, ArgumentPredicateItemStack argumentpredicateitemstack, Collection<EntityPlayer> collection, int i) throws CommandSyntaxException {
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.give.usage";
-    }
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+            int j = i;
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.give.usage", new Object[0]);
-        } else {
-            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
-            Item item = a(icommandlistener, astring[1]);
-            int i = astring.length >= 3 ? a(astring[2], 1, item.getMaxStackSize()) : 1;
-            int j = astring.length >= 4 ? a(astring[3]) : 0;
-            ItemStack itemstack = new ItemStack(item, i, j);
+            while (j > 0) {
+                int k = Math.min(argumentpredicateitemstack.a().getMaxStackSize(), j);
 
-            if (astring.length >= 5) {
-                String s = a(astring, 4);
+                j -= k;
+                ItemStack itemstack = argumentpredicateitemstack.a(k, false);
+                boolean flag = entityplayer.inventory.pickup(itemstack);
+                EntityItem entityitem;
 
-                try {
-                    itemstack.setTag(MojangsonParser.parse(s));
-                } catch (MojangsonParseException mojangsonparseexception) {
-                    throw new CommandException("commands.give.tagError", new Object[] { mojangsonparseexception.getMessage()});
+                if (flag && itemstack.isEmpty()) {
+                    itemstack.setCount(1);
+                    entityitem = entityplayer.drop(itemstack, false);
+                    if (entityitem != null) {
+                        entityitem.t();
+                    }
+
+                    entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    entityplayer.defaultContainer.b();
+                } else {
+                    entityitem = entityplayer.drop(itemstack, false);
+                    if (entityitem != null) {
+                        entityitem.o();
+                        entityitem.b(entityplayer.getUniqueID());
+                    }
                 }
             }
-
-            boolean flag = entityplayer.inventory.pickup(itemstack);
-
-            if (flag) {
-                entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.dx, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                entityplayer.defaultContainer.b();
-            }
-
-            EntityItem entityitem;
-
-            if (flag && itemstack.isEmpty()) {
-                itemstack.setCount(1);
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i);
-                entityitem = entityplayer.drop(itemstack, false);
-                if (entityitem != null) {
-                    entityitem.w();
-                }
-            } else {
-                icommandlistener.a(CommandObjectiveExecutor.EnumCommandResult.AFFECTED_ITEMS, i - itemstack.getCount());
-                entityitem = entityplayer.drop(itemstack, false);
-                if (entityitem != null) {
-                    entityitem.r();
-                    entityitem.d(entityplayer.getName());
-                }
-            }
-
-            a(icommandlistener, (ICommand) this, "commands.give.success", new Object[] { itemstack.C(), Integer.valueOf(i), entityplayer.getName()});
         }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, (Collection) Item.REGISTRY.keySet()) : Collections.emptyList());
-    }
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { Integer.valueOf(i), argumentpredicateitemstack.a(i, false).A(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { Integer.valueOf(i), argumentpredicateitemstack.a(i, false).A(), Integer.valueOf(collection.size())}), true);
+        }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+        return collection.size();
     }
 }

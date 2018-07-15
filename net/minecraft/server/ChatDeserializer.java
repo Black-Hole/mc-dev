@@ -62,7 +62,7 @@ public class ChatDeserializer {
     public static Item b(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             String s1 = jsonelement.getAsString();
-            Item item = Item.b(s1);
+            Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s1));
 
             if (item == null) {
                 throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string \'" + s1 + "\'");
@@ -140,6 +140,22 @@ public class ChatDeserializer {
 
     public static int a(JsonObject jsonobject, String s, int i) {
         return jsonobject.has(s) ? g(jsonobject.get(s), s) : i;
+    }
+
+    public static byte h(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsByte();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Byte, was " + d(jsonelement));
+        }
+    }
+
+    public static byte o(JsonObject jsonobject, String s) {
+        if (jsonobject.has(s)) {
+            return h(jsonobject.get(s), s);
+        } else {
+            throw new JsonSyntaxException("Missing " + s + ", expected to find a Byte");
+        }
     }
 
     public static JsonObject m(JsonElement jsonelement, String s) {
@@ -255,11 +271,6 @@ public class ChatDeserializer {
     }
 
     @Nullable
-    public static <T> T a(Gson gson, String s, Type type, boolean flag) {
-        return a(gson, (Reader) (new StringReader(s)), type, flag);
-    }
-
-    @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass, boolean flag) {
         return a(gson, (Reader) (new StringReader(s)), oclass, flag);
     }
@@ -267,16 +278,6 @@ public class ChatDeserializer {
     @Nullable
     public static <T> T a(Gson gson, Reader reader, Type type) {
         return a(gson, reader, type, false);
-    }
-
-    @Nullable
-    public static <T> T a(Gson gson, String s, Type type) {
-        return a(gson, s, type, false);
-    }
-
-    @Nullable
-    public static <T> T a(Gson gson, Reader reader, Class<T> oclass) {
-        return a(gson, reader, oclass, false);
     }
 
     @Nullable

@@ -4,65 +4,55 @@ import java.util.Random;
 
 public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
-    protected final boolean d;
+    protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
+    public static final BlockStateBoolean c = BlockProperties.t;
 
-    protected BlockDiodeAbstract(boolean flag) {
-        super(Material.ORIENTABLE);
-        this.d = flag;
+    protected BlockDiodeAbstract(Block.Info block_info) {
+        super(block_info);
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockDiodeAbstract.c;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return BlockDiodeAbstract.b;
     }
 
-    public boolean c(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).q() ? super.canPlace(world, blockposition) : false;
+    public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
+        return iworldreader.getType(blockposition.down()).q();
     }
 
-    public boolean b(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.down()).q();
-    }
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if (!this.a((IWorldReader) world, blockposition, iblockdata)) {
+            boolean flag = ((Boolean) iblockdata.get(BlockDiodeAbstract.c)).booleanValue();
+            boolean flag1 = this.a(world, blockposition, iblockdata);
 
-    public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {}
-
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (!this.b((IBlockAccess) world, blockposition, iblockdata)) {
-            boolean flag = this.e(world, blockposition, iblockdata);
-
-            if (this.d && !flag) {
-                world.setTypeAndData(blockposition, this.z(iblockdata), 2);
-            } else if (!this.d) {
-                world.setTypeAndData(blockposition, this.y(iblockdata), 2);
-                if (!flag) {
-                    world.a(blockposition, this.y(iblockdata).getBlock(), this.E(iblockdata), -1);
+            if (flag && !flag1) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, Boolean.valueOf(false)), 2);
+            } else if (!flag) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, Boolean.valueOf(true)), 2);
+                if (!flag1) {
+                    world.I().a(blockposition, this, this.j(iblockdata), TickListPriority.HIGH);
                 }
             }
 
         }
     }
 
-    protected boolean A(IBlockData iblockdata) {
-        return this.d;
-    }
-
-    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return iblockdata.a(iblockaccess, blockposition, enumdirection);
     }
 
-    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return !this.A(iblockdata) ? 0 : (iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? this.a(iblockaccess, blockposition, iblockdata) : 0);
+    public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
+        return !((Boolean) iblockdata.get(BlockDiodeAbstract.c)).booleanValue() ? 0 : (iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? this.b(iblockaccess, blockposition, iblockdata) : 0);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (this.b(world, blockposition)) {
-            this.g(world, blockposition, iblockdata);
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        if (iblockdata.canPlace(world, blockposition)) {
+            this.c(world, blockposition, iblockdata);
         } else {
-            this.b(world, blockposition, iblockdata, 0);
+            iblockdata.a(world, blockposition, 0);
             world.setAir(blockposition);
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -70,40 +60,41 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                world.applyPhysics(blockposition.shift(enumdirection), this, false);
+                world.applyPhysics(blockposition.shift(enumdirection), this);
             }
 
         }
     }
 
-    protected void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.b((IBlockAccess) world, blockposition, iblockdata)) {
-            boolean flag = this.e(world, blockposition, iblockdata);
+    protected void c(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (!this.a((IWorldReader) world, blockposition, iblockdata)) {
+            boolean flag = ((Boolean) iblockdata.get(BlockDiodeAbstract.c)).booleanValue();
+            boolean flag1 = this.a(world, blockposition, iblockdata);
 
-            if (this.d != flag && !world.a(blockposition, (Block) this)) {
-                byte b0 = -1;
+            if (flag != flag1 && !world.I().b(blockposition, this)) {
+                TickListPriority ticklistpriority = TickListPriority.HIGH;
 
-                if (this.i(world, blockposition, iblockdata)) {
-                    b0 = -3;
-                } else if (this.d) {
-                    b0 = -2;
+                if (this.c((IBlockAccess) world, blockposition, iblockdata)) {
+                    ticklistpriority = TickListPriority.EXTREMELY_HIGH;
+                } else if (flag) {
+                    ticklistpriority = TickListPriority.VERY_HIGH;
                 }
 
-                world.a(blockposition, this, this.x(iblockdata), b0);
+                world.I().a(blockposition, this, this.j(iblockdata), ticklistpriority);
             }
 
         }
     }
 
-    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public boolean a(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata) {
         return false;
     }
 
-    protected boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.f(world, blockposition, iblockdata) > 0;
+    protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        return this.b(world, blockposition, iblockdata) > 0;
     }
 
-    protected int f(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    protected int b(World world, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         int i = world.getBlockFacePower(blockposition1, enumdirection);
@@ -117,41 +108,51 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         }
     }
 
-    protected int c(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+    protected int b(IWorldReader iworldreader, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING);
         EnumDirection enumdirection1 = enumdirection.e();
         EnumDirection enumdirection2 = enumdirection.f();
 
-        return Math.max(this.a(iblockaccess, blockposition.shift(enumdirection1), enumdirection1), this.a(iblockaccess, blockposition.shift(enumdirection2), enumdirection2));
+        return Math.max(this.a(iworldreader, blockposition.shift(enumdirection1), enumdirection1), this.a(iworldreader, blockposition.shift(enumdirection2), enumdirection2));
     }
 
-    protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition);
+    protected int a(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
+        IBlockData iblockdata = iworldreader.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        return this.B(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue() : iblockaccess.getBlockPower(blockposition, enumdirection))) : 0;
+        return this.w(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue() : iworldreader.a(blockposition, enumdirection))) : 0;
     }
 
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockDiodeAbstract.FACING, entityliving.getDirection().opposite());
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        return (IBlockData) this.getBlockData().set(BlockDiodeAbstract.FACING, blockactioncontext.f().opposite());
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        if (this.e(world, blockposition, iblockdata)) {
-            world.a(blockposition, (Block) this, 1);
+        if (this.a(world, blockposition, iblockdata)) {
+            world.I().a(blockposition, this, 1);
         }
 
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.h(world, blockposition, iblockdata);
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        this.d(world, blockposition, iblockdata);
     }
 
-    protected void h(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
+            super.remove(iblockdata, world, blockposition, iblockdata1, flag);
+            this.a(world, blockposition);
+            this.d(world, blockposition, iblockdata);
+        }
+    }
+
+    protected void a(World world, BlockPosition blockposition) {}
+
+    protected void d(World world, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
 
@@ -159,62 +160,33 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         world.a(blockposition1, (Block) this, enumdirection);
     }
 
-    public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.d) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
-            int i = aenumdirection.length;
-
-            for (int j = 0; j < i; ++j) {
-                EnumDirection enumdirection = aenumdirection[j];
-
-                world.applyPhysics(blockposition.shift(enumdirection), this, false);
-            }
-        }
-
-        super.postBreak(world, blockposition, iblockdata);
+    protected boolean w(IBlockData iblockdata) {
+        return iblockdata.isPowerSource();
     }
 
-    public boolean b(IBlockData iblockdata) {
-        return false;
-    }
-
-    protected boolean B(IBlockData iblockdata) {
-        return iblockdata.m();
-    }
-
-    protected int a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
+    protected int b(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         return 15;
     }
 
     public static boolean isDiode(IBlockData iblockdata) {
-        return Blocks.UNPOWERED_REPEATER.D(iblockdata) || Blocks.UNPOWERED_COMPARATOR.D(iblockdata);
+        return iblockdata.getBlock() instanceof BlockDiodeAbstract;
     }
 
-    public boolean D(IBlockData iblockdata) {
-        Block block = iblockdata.getBlock();
-
-        return block == this.y(this.getBlockData()).getBlock() || block == this.z(this.getBlockData()).getBlock();
-    }
-
-    public boolean i(World world, BlockPosition blockposition, IBlockData iblockdata) {
+    public boolean c(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
         EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockDiodeAbstract.FACING)).opposite();
-        BlockPosition blockposition1 = blockposition.shift(enumdirection);
+        IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        return isDiode(world.getType(blockposition1)) ? world.getType(blockposition1).get(BlockDiodeAbstract.FACING) != enumdirection : false;
+        return isDiode(iblockdata1) && iblockdata1.get(BlockDiodeAbstract.FACING) != enumdirection;
     }
 
-    protected int E(IBlockData iblockdata) {
-        return this.x(iblockdata);
+    protected abstract int j(IBlockData iblockdata);
+
+    public TextureType c() {
+        return TextureType.CUTOUT;
     }
 
-    protected abstract int x(IBlockData iblockdata);
-
-    protected abstract IBlockData y(IBlockData iblockdata);
-
-    protected abstract IBlockData z(IBlockData iblockdata);
-
-    public boolean d(Block block) {
-        return this.D(block.getBlockData());
+    public boolean f(IBlockData iblockdata) {
+        return true;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

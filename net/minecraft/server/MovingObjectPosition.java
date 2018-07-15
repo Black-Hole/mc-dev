@@ -12,10 +12,6 @@ public class MovingObjectPosition {
         this(MovingObjectPosition.EnumMovingObjectType.BLOCK, vec3d, enumdirection, blockposition);
     }
 
-    public MovingObjectPosition(Vec3D vec3d, EnumDirection enumdirection) {
-        this(MovingObjectPosition.EnumMovingObjectType.BLOCK, vec3d, enumdirection, BlockPosition.ZERO);
-    }
-
     public MovingObjectPosition(Entity entity) {
         this(entity, new Vec3D(entity.locX, entity.locY, entity.locZ));
     }

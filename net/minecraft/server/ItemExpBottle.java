@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 public class ItemExpBottle extends Item {
 
-    public ItemExpBottle() {
-        this.b(CreativeModeTab.f);
+    public ItemExpBottle(Item.Info item_info) {
+        super(item_info);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
@@ -13,7 +13,7 @@ public class ItemExpBottle extends Item {
             itemstack.subtract(1);
         }
 
-        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.bz, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.j.nextFloat() * 0.4F + 0.8F));
+        world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_EXPERIENCE_BOTTLE_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemExpBottle.k.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             EntityThrownExpBottle entitythrownexpbottle = new EntityThrownExpBottle(world, entityhuman);
 
@@ -21,7 +21,7 @@ public class ItemExpBottle extends Item {
             world.addEntity(entitythrownexpbottle);
         }
 
-        entityhuman.b(StatisticList.b((Item) this));
+        entityhuman.b(StatisticList.ITEM_USED.b(this));
         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

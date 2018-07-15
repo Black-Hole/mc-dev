@@ -39,7 +39,7 @@ public class LootSelector {
             LotoSelectorEntry lotoselectorentry = alotoselectorentry[k];
 
             if (LootItemConditions.a(lotoselectorentry.e, random, loottableinfo)) {
-                int l = lotoselectorentry.a(loottableinfo.f());
+                int l = lotoselectorentry.a(loottableinfo.g());
 
                 if (l > 0) {
                     arraylist.add(lotoselectorentry);
@@ -60,7 +60,7 @@ public class LootSelector {
                 }
 
                 lotoselectorentry1 = (LotoSelectorEntry) iterator.next();
-                i1 -= lotoselectorentry1.a(loottableinfo.f());
+                i1 -= lotoselectorentry1.a(loottableinfo.g());
             } while (i1 >= 0);
 
             lotoselectorentry1.a(collection, random, loottableinfo);
@@ -69,7 +69,7 @@ public class LootSelector {
 
     public void b(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
         if (LootItemConditions.a(this.b, random, loottableinfo)) {
-            int i = this.c.a(random) + MathHelper.d(this.d.b(random) * loottableinfo.f());
+            int i = this.c.a(random) + MathHelper.d(this.d.b(random) * loottableinfo.g());
 
             for (int j = 0; j < i; ++j) {
                 this.a(collection, random, loottableinfo);

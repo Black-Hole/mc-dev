@@ -29,8 +29,11 @@ public class MobEffects {
     public static final MobEffectList SATURATION;
     public static final MobEffectList GLOWING;
     public static final MobEffectList LEVITATION;
-    public static final MobEffectList z;
-    public static final MobEffectList A;
+    public static final MobEffectList LUCK;
+    public static final MobEffectList UNLUCK;
+    public static final MobEffectList SLOW_FALLING;
+    public static final MobEffectList CONDUIT_POWER;
+    public static final MobEffectList DOLPHINS_GRACE;
 
     @Nullable
     private static MobEffectList a(String s) {
@@ -72,8 +75,11 @@ public class MobEffects {
             SATURATION = a("saturation");
             GLOWING = a("glowing");
             LEVITATION = a("levitation");
-            z = a("luck");
-            A = a("unluck");
+            LUCK = a("luck");
+            UNLUCK = a("unluck");
+            SLOW_FALLING = a("slow_falling");
+            CONDUIT_POWER = a("conduit_power");
+            DOLPHINS_GRACE = a("dolphins_grace");
         }
     }
 }

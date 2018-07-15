@@ -104,7 +104,7 @@ public class EntityTracker {
         this.addEntity(entity, i, j, false);
     }
 
-    public void addEntity(Entity entity, int i, final int j, boolean flag) {
+    public void addEntity(Entity entity, int i, int j, boolean flag) {
         try {
             if (this.trackedEntities.b(entity.getId())) {
                 throw new IllegalStateException("Entity is already tracked!");
@@ -120,20 +120,14 @@ public class EntityTracker {
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Entity To Track");
 
             crashreportsystemdetails.a("Tracking range", (Object) (i + " blocks"));
-            crashreportsystemdetails.a("Update interval", new CrashReportCallable() {
-                public String a() throws Exception {
-                    String s = "Once per " + i + " ticks";
+            crashreportsystemdetails.a("Update interval", () -> {
+                String s = "Once per " + i + " ticks";
 
-                    if (i == Integer.MAX_VALUE) {
-                        s = "Maximum (" + s + ")";
-                    }
-
-                    return s;
+                if (i == Integer.MAX_VALUE) {
+                    s = "Maximum (" + s + ")";
                 }
 
-                public Object call() throws Exception {
-                    return this.a();
-                }
+                return s;
             });
             entity.appendEntityCrashDetails(crashreportsystemdetails);
             ((EntityTrackerEntry) this.trackedEntities.get(entity.getId())).b().appendEntityCrashDetails(crashreport.a("Entity That Is Already Tracked"));
@@ -253,13 +247,13 @@ public class EntityTracker {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
             Entity entity = entitytrackerentry.b();
 
-            if (entity != entityplayer && entity.ab == chunk.locX && entity.ad == chunk.locZ) {
+            if (entity != entityplayer && entity.ae == chunk.locX && entity.ag == chunk.locZ) {
                 entitytrackerentry.updatePlayer(entityplayer);
                 if (entity instanceof EntityInsentient && ((EntityInsentient) entity).getLeashHolder() != null) {
                     arraylist.add(entity);
                 }
 
-                if (!entity.bF().isEmpty()) {
+                if (!entity.bP().isEmpty()) {
                     arraylist1.add(entity);
                 }
             }

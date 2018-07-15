@@ -1,28 +1,27 @@
 package net.minecraft.server;
 
-public class DataConverterSkeleton implements IDataConverter {
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.schemas.Schema;
+import com.mojang.datafixers.util.Pair;
+import java.util.Objects;
 
-    public DataConverterSkeleton() {}
+public class DataConverterSkeleton extends DataConverterEntityNameAbstract {
 
-    public int a() {
-        return 701;
+    public DataConverterSkeleton(Schema schema, boolean flag) {
+        super("EntitySkeletonSplitFix", schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        String s = nbttagcompound.getString("id");
-
-        if ("Skeleton".equals(s)) {
-            int i = nbttagcompound.getInt("SkeletonType");
+    protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
+        if (Objects.equals(s, "Skeleton")) {
+            int i = dynamic.getInt("SkeletonType");
 
             if (i == 1) {
-                nbttagcompound.setString("id", "WitherSkeleton");
+                s = "WitherSkeleton";
             } else if (i == 2) {
-                nbttagcompound.setString("id", "Stray");
+                s = "Stray";
             }
-
-            nbttagcompound.remove("SkeletonType");
         }
 
-        return nbttagcompound;
+        return Pair.of(s, dynamic);
     }
 }

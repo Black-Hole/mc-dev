@@ -1,97 +1,201 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
-public class CommandTeleport extends CommandAbstract {
+public class CommandTeleport {
 
-    public CommandTeleport() {}
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("teleport").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("location", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, (CommandTeleport.a) null);
+        })).then(CommandDispatcher.a("rotation", (ArgumentType) ArgumentRotation.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), ArgumentRotation.a(commandcontext, "rotation"), (CommandTeleport.a) null);
+        }))).then(((LiteralArgumentBuilder) CommandDispatcher.a("facing").then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("facingEntity", (ArgumentType) ArgumentEntity.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, new CommandTeleport.a(ArgumentEntity.a(commandcontext, "facingEntity"), ArgumentAnchor.Anchor.FEET));
+        })).then(CommandDispatcher.a("facingAnchor", (ArgumentType) ArgumentAnchor.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, new CommandTeleport.a(ArgumentEntity.a(commandcontext, "facingEntity"), ArgumentAnchor.a(commandcontext, "facingAnchor")));
+        }))))).then(CommandDispatcher.a("facingLocation", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, new CommandTeleport.a(ArgumentVec3.a(commandcontext, "facingLocation")));
+        }))))).then(CommandDispatcher.a("destination", (ArgumentType) ArgumentEntity.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentEntity.a(commandcontext, "destination"));
+        })))).then(CommandDispatcher.a("location", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).g()), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), VectorPosition.d(), (CommandTeleport.a) null);
+        }))).then(CommandDispatcher.a("destination", (ArgumentType) ArgumentEntity.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).g()), ArgumentEntity.a(commandcontext, "destination"));
+        })));
 
-    public String getCommand() {
-        return "teleport";
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("tp").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).redirect(literalcommandnode));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, Entity entity) {
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.teleport.usage";
-    }
+        while (iterator.hasNext()) {
+            Entity entity1 = (Entity) iterator.next();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 4) {
-            throw new ExceptionUsage("commands.teleport.usage", new Object[0]);
+            a(commandlistenerwrapper, entity1, commandlistenerwrapper.getWorld(), entity.locX, entity.locY, entity.locZ, EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class), entity.yaw, entity.pitch, (CommandTeleport.a) null);
+        }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), entity.getScoreboardDisplayName()}), true);
         } else {
-            Entity entity = c(minecraftserver, icommandlistener, astring[0]);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.multiple", new Object[] { Integer.valueOf(collection.size()), entity.getScoreboardDisplayName()}), true);
+        }
 
-            if (entity.world != null) {
-                boolean flag = true;
-                Vec3D vec3d = icommandlistener.d();
-                byte b0 = 1;
-                int i = b0 + 1;
-                CommandAbstract.CommandNumber commandabstract_commandnumber = a(vec3d.x, astring[b0], true);
-                CommandAbstract.CommandNumber commandabstract_commandnumber1 = a(vec3d.y, astring[i++], -4096, 4096, false);
-                CommandAbstract.CommandNumber commandabstract_commandnumber2 = a(vec3d.z, astring[i++], true);
-                Entity entity1 = icommandlistener.f() == null ? entity : icommandlistener.f();
-                CommandAbstract.CommandNumber commandabstract_commandnumber3 = a(astring.length > i ? (double) entity1.yaw : (double) entity.yaw, astring.length > i ? astring[i] : "~", false);
+        return collection.size();
+    }
 
-                ++i;
-                CommandAbstract.CommandNumber commandabstract_commandnumber4 = a(astring.length > i ? (double) entity1.pitch : (double) entity.pitch, astring.length > i ? astring[i] : "~", false);
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, WorldServer worldserver, IVectorPosition ivectorposition, @Nullable IVectorPosition ivectorposition1, @Nullable CommandTeleport.a commandteleport_a) throws CommandSyntaxException {
+        Vec3D vec3d = ivectorposition.a(commandlistenerwrapper);
+        Vec2F vec2f = ivectorposition1 == null ? null : ivectorposition1.b(commandlistenerwrapper);
+        EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
 
-                a(entity, commandabstract_commandnumber, commandabstract_commandnumber1, commandabstract_commandnumber2, commandabstract_commandnumber3, commandabstract_commandnumber4);
-                a(icommandlistener, (ICommand) this, "commands.teleport.success.coordinates", new Object[] { entity.getName(), Double.valueOf(commandabstract_commandnumber.a()), Double.valueOf(commandabstract_commandnumber1.a()), Double.valueOf(commandabstract_commandnumber2.a())});
+        if (ivectorposition.a()) {
+            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X);
+        }
+
+        if (ivectorposition.b()) {
+            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y);
+        }
+
+        if (ivectorposition.c()) {
+            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z);
+        }
+
+        if (ivectorposition1 == null) {
+            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
+            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
+        } else {
+            if (ivectorposition1.a()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
+            }
+
+            if (ivectorposition1.b()) {
+                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
             }
         }
+
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity = (Entity) iterator.next();
+
+            if (ivectorposition1 == null) {
+                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, enumset, entity.yaw, entity.pitch, commandteleport_a);
+            } else {
+                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, enumset, vec2f.j, vec2f.i, commandteleport_a);
+            }
+        }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), Double.valueOf(vec3d.x), Double.valueOf(vec3d.y), Double.valueOf(vec3d.z)}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.multiple", new Object[] { Integer.valueOf(collection.size()), Double.valueOf(vec3d.x), Double.valueOf(vec3d.y), Double.valueOf(vec3d.z)}), true);
+        }
+
+        return collection.size();
     }
 
-    private static void a(Entity entity, CommandAbstract.CommandNumber commandabstract_commandnumber, CommandAbstract.CommandNumber commandabstract_commandnumber1, CommandAbstract.CommandNumber commandabstract_commandnumber2, CommandAbstract.CommandNumber commandabstract_commandnumber3, CommandAbstract.CommandNumber commandabstract_commandnumber4) {
-        float f;
-
+    private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) {
         if (entity instanceof EntityPlayer) {
-            EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
-
-            f = (float) commandabstract_commandnumber3.b();
-            if (commandabstract_commandnumber3.c()) {
-                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
-            } else {
-                f = MathHelper.g(f);
-            }
-
-            float f1 = (float) commandabstract_commandnumber4.b();
-
-            if (commandabstract_commandnumber4.c()) {
-                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
-            } else {
-                f1 = MathHelper.g(f1);
-            }
-
             entity.stopRiding();
-            ((EntityPlayer) entity).playerConnection.a(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f, f1, enumset);
+            if (worldserver == entity.world) {
+                ((EntityPlayer) entity).playerConnection.a(d0, d1, d2, f, f1, set);
+            } else {
+                ((EntityPlayer) entity).a(worldserver, d0, d1, d2, f, f1);
+            }
+
             entity.setHeadRotation(f);
         } else {
-            float f2 = (float) MathHelper.g(commandabstract_commandnumber3.a());
+            float f2 = MathHelper.g(f);
+            float f3 = MathHelper.g(f1);
 
-            f = (float) MathHelper.g(commandabstract_commandnumber4.a());
-            f = MathHelper.a(f, -90.0F, 90.0F);
-            entity.setPositionRotation(commandabstract_commandnumber.a(), commandabstract_commandnumber1.a(), commandabstract_commandnumber2.a(), f2, f);
-            entity.setHeadRotation(f2);
+            f3 = MathHelper.a(f3, -90.0F, 90.0F);
+            if (worldserver == entity.world) {
+                entity.setPositionRotation(d0, d1, d2, f2, f3);
+                entity.setHeadRotation(f2);
+            } else {
+                WorldServer worldserver1 = (WorldServer) entity.world;
+
+                worldserver1.kill(entity);
+                entity.dimension = worldserver.worldProvider.getDimensionManager().getDimensionID();
+                entity.dead = false;
+                Entity entity1 = entity;
+
+                entity = entity.P().a((World) worldserver);
+                if (entity == null) {
+                    return;
+                }
+
+                entity.v(entity1);
+                entity.setPositionRotation(d0, d1, d2, f2, f3);
+                entity.setHeadRotation(f2);
+                boolean flag = entity.attachedToPlayer;
+
+                entity.attachedToPlayer = true;
+                worldserver.addEntity(entity);
+                entity.attachedToPlayer = flag;
+                worldserver.entityJoinedWorld(entity, false);
+                entity1.dead = true;
+            }
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).cP()) {
+        if (commandteleport_a != null) {
+            commandteleport_a.a(commandlistenerwrapper, entity);
+        }
+
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).db()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }
 
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : Collections.emptyList());
-    }
+    static class a {
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+        private final Vec3D a;
+        private final Entity b;
+        private final ArgumentAnchor.Anchor c;
+
+        public a(Entity entity, ArgumentAnchor.Anchor argumentanchor_anchor) {
+            this.b = entity;
+            this.c = argumentanchor_anchor;
+            this.a = argumentanchor_anchor.a(entity);
+        }
+
+        public a(Vec3D vec3d) {
+            this.b = null;
+            this.a = vec3d;
+            this.c = null;
+        }
+
+        public void a(CommandListenerWrapper commandlistenerwrapper, Entity entity) {
+            if (this.b != null) {
+                if (entity instanceof EntityPlayer) {
+                    ((EntityPlayer) entity).a(commandlistenerwrapper.k(), this.b, this.c);
+                } else {
+                    entity.a(commandlistenerwrapper.k(), this.a);
+                }
+            } else {
+                entity.a(commandlistenerwrapper.k(), this.a);
+            }
+
+        }
     }
 }

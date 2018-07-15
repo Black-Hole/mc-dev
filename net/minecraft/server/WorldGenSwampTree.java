@@ -1,20 +1,21 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
 
-public class WorldGenSwampTree extends WorldGenTreeAbstract {
+public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
-    private static final IBlockData a = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.OAK);
-    private static final IBlockData b = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves1.CHECK_DECAY, Boolean.valueOf(false));
+    private static final IBlockData a = Blocks.OAK_LOG.getBlockData();
+    private static final IBlockData b = Blocks.OAK_LEAVES.getBlockData();
 
     public WorldGenSwampTree() {
         super(false);
     }
 
-    public boolean generate(World world, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i;
 
-        for (i = random.nextInt(4) + 5; world.getType(blockposition.down()).getMaterial() == Material.WATER; blockposition = blockposition.down()) {
+        for (i = random.nextInt(4) + 5; generatoraccess.b(blockposition.down()).a(TagsFluid.a); blockposition = blockposition.down()) {
             ;
         }
 
@@ -40,13 +41,15 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
                 for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
                     for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
                         if (l >= 0 && l < 256) {
-                            IBlockData iblockdata = world.getType(blockposition_mutableblockposition.c(j, l, k));
+                            IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k));
                             Block block = iblockdata.getBlock();
 
-                            if (iblockdata.getMaterial() != Material.AIR && iblockdata.getMaterial() != Material.LEAVES) {
-                                if (block != Blocks.WATER && block != Blocks.FLOWING_WATER) {
-                                    flag = false;
-                                } else if (l > blockposition.getY()) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.E)) {
+                                if (block == Blocks.WATER) {
+                                    if (l > blockposition.getY()) {
+                                        flag = false;
+                                    }
+                                } else {
                                     flag = false;
                                 }
                             }
@@ -60,10 +63,10 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
             if (!flag) {
                 return false;
             } else {
-                Block block1 = world.getType(blockposition.down()).getBlock();
+                Block block1 = generatoraccess.getType(blockposition.down()).getBlock();
 
-                if ((block1 == Blocks.GRASS || block1 == Blocks.DIRT) && blockposition.getY() < 256 - i - 1) {
-                    this.a(world, blockposition.down());
+                if ((block1 == Blocks.GRASS_BLOCK || Block.d(block1)) && blockposition.getY() < 256 - i - 1) {
+                    this.a(generatoraccess, blockposition.down());
 
                     BlockPosition blockposition1;
                     int i1;
@@ -83,8 +86,8 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
 
                                 if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
                                     blockposition1 = new BlockPosition(k, i1, l1);
-                                    if (!world.getType(blockposition1).b()) {
-                                        this.a(world, blockposition1, WorldGenSwampTree.b);
+                                    if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
+                                        this.a(generatoraccess, blockposition1, WorldGenSwampTree.b);
                                     }
                                 }
                             }
@@ -92,11 +95,11 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
                     }
 
                     for (i1 = 0; i1 < i; ++i1) {
-                        IBlockData iblockdata1 = world.getType(blockposition.up(i1));
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
                         Block block2 = iblockdata1.getBlock();
 
-                        if (iblockdata1.getMaterial() == Material.AIR || iblockdata1.getMaterial() == Material.LEAVES || block2 == Blocks.FLOWING_WATER || block2 == Blocks.WATER) {
-                            this.a(world, blockposition.up(i1), WorldGenSwampTree.a);
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E) || block2 == Blocks.WATER) {
+                            this.a(set, generatoraccess, blockposition.up(i1), WorldGenSwampTree.a);
                         }
                     }
 
@@ -108,27 +111,27 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
                         for (k1 = blockposition.getX() - j; k1 <= blockposition.getX() + j; ++k1) {
                             for (l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
                                 blockposition_mutableblockposition1.c(k1, i1, l1);
-                                if (world.getType(blockposition_mutableblockposition1).getMaterial() == Material.LEAVES) {
+                                if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.E)) {
                                     BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                     blockposition1 = blockposition_mutableblockposition1.east();
                                     BlockPosition blockposition3 = blockposition_mutableblockposition1.north();
                                     BlockPosition blockposition4 = blockposition_mutableblockposition1.south();
 
-                                    if (random.nextInt(4) == 0 && world.getType(blockposition2).getMaterial() == Material.AIR) {
-                                        this.a(world, blockposition2, BlockVine.EAST);
+                                    if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition2).isAir()) {
+                                        this.a(generatoraccess, blockposition2, BlockVine.EAST);
                                     }
 
-                                    if (random.nextInt(4) == 0 && world.getType(blockposition1).getMaterial() == Material.AIR) {
-                                        this.a(world, blockposition1, BlockVine.WEST);
+                                    if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition1).isAir()) {
+                                        this.a(generatoraccess, blockposition1, BlockVine.WEST);
                                     }
 
-                                    if (random.nextInt(4) == 0 && world.getType(blockposition3).getMaterial() == Material.AIR) {
-                                        this.a(world, blockposition3, BlockVine.SOUTH);
+                                    if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition3).isAir()) {
+                                        this.a(generatoraccess, blockposition3, BlockVine.SOUTH);
                                     }
 
-                                    if (random.nextInt(4) == 0 && world.getType(blockposition4).getMaterial() == Material.AIR) {
-                                        this.a(world, blockposition4, BlockVine.NORTH);
+                                    if (random.nextInt(4) == 0 && generatoraccess.getType(blockposition4).isAir()) {
+                                        this.a(generatoraccess, blockposition4, BlockVine.NORTH);
                                     }
                                 }
                             }
@@ -145,14 +148,14 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract {
         }
     }
 
-    private void a(World world, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
-        IBlockData iblockdata = Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true));
+    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
+        IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true));
 
-        this.a(world, blockposition, iblockdata);
+        this.a(generatoraccess, blockposition, iblockdata);
         int i = 4;
 
-        for (blockposition = blockposition.down(); world.getType(blockposition).getMaterial() == Material.AIR && i > 0; --i) {
-            this.a(world, blockposition, iblockdata);
+        for (blockposition = blockposition.down(); generatoraccess.getType(blockposition).isAir() && i > 0; --i) {
+            this.a(generatoraccess, blockposition, iblockdata);
             blockposition = blockposition.down();
         }
 

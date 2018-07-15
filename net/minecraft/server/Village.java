@@ -58,50 +58,35 @@ public class Village {
         int j = this.h / 10;
 
         if (this.l < j && this.b.size() > 20 && this.a.random.nextInt(7000) == 0) {
-            Vec3D vec3d = this.a(this.d, 2, 4, 2);
+            Entity entity = this.f(this.d);
 
-            if (vec3d != null) {
-                EntityIronGolem entityirongolem = new EntityIronGolem(this.a);
-
-                entityirongolem.setPosition(vec3d.x, vec3d.y, vec3d.z);
-                this.a.addEntity(entityirongolem);
+            if (entity != null) {
                 ++this.l;
             }
         }
 
     }
 
-    private Vec3D a(BlockPosition blockposition, int i, int j, int k) {
-        for (int l = 0; l < 10; ++l) {
+    @Nullable
+    private Entity f(BlockPosition blockposition) {
+        for (int i = 0; i < 10; ++i) {
             BlockPosition blockposition1 = blockposition.a(this.a.random.nextInt(16) - 8, this.a.random.nextInt(6) - 3, this.a.random.nextInt(16) - 8);
 
-            if (this.a(blockposition1) && this.a(new BlockPosition(i, j, k), blockposition1)) {
-                return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
+            if (this.a(blockposition1)) {
+                EntityIronGolem entityirongolem = (EntityIronGolem) EntityTypes.IRON_GOLEM.b(this.a, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition1, false, false);
+
+                if (entityirongolem != null) {
+                    if (entityirongolem.M() && entityirongolem.a((IWorldReader) this.a)) {
+                        this.a.addEntity(entityirongolem);
+                        return entityirongolem;
+                    }
+
+                    entityirongolem.die();
+                }
             }
         }
 
         return null;
-    }
-
-    private boolean a(BlockPosition blockposition, BlockPosition blockposition1) {
-        if (!this.a.getType(blockposition1.down()).q()) {
-            return false;
-        } else {
-            int i = blockposition1.getX() - blockposition.getX() / 2;
-            int j = blockposition1.getZ() - blockposition.getZ() / 2;
-
-            for (int k = i; k < i + blockposition.getX(); ++k) {
-                for (int l = blockposition1.getY(); l < blockposition1.getY() + blockposition.getY(); ++l) {
-                    for (int i1 = j; i1 < j + blockposition.getZ(); ++i1) {
-                        if (this.a.getType(new BlockPosition(k, l, i1)).l()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
     }
 
     private void j() {
@@ -185,7 +170,7 @@ public class Village {
                 BlockPosition blockposition1 = villagedoor1.d();
                 EnumDirection enumdirection = villagedoor1.j();
 
-                if (this.a.getType(blockposition1.shift(enumdirection, 1)).getBlock().b(this.a, blockposition1.shift(enumdirection, 1)) && this.a.getType(blockposition1.shift(enumdirection, -1)).getBlock().b(this.a, blockposition1.shift(enumdirection, -1)) && this.a.getType(blockposition1.up().shift(enumdirection, 1)).getBlock().b(this.a, blockposition1.up().shift(enumdirection, 1)) && this.a.getType(blockposition1.up().shift(enumdirection, -1)).getBlock().b(this.a, blockposition1.up().shift(enumdirection, -1))) {
+                if (this.a.getType(blockposition1.shift(enumdirection, 1)).a((IBlockAccess) this.a, blockposition1.shift(enumdirection, 1), PathMode.LAND) && this.a.getType(blockposition1.shift(enumdirection, -1)).a((IBlockAccess) this.a, blockposition1.shift(enumdirection, -1), PathMode.LAND) && this.a.getType(blockposition1.up().shift(enumdirection, 1)).a((IBlockAccess) this.a, blockposition1.up().shift(enumdirection, 1), PathMode.LAND) && this.a.getType(blockposition1.up().shift(enumdirection, -1)).a((IBlockAccess) this.a, blockposition1.up().shift(enumdirection, -1), PathMode.LAND)) {
                     villagedoor = villagedoor1;
                     i = j;
                 }
@@ -312,7 +297,7 @@ public class Village {
                 villagedoor.a();
             }
 
-            if (!this.f(villagedoor.d()) || Math.abs(this.g - villagedoor.h()) > 1200) {
+            if (!this.g(villagedoor.d()) || Math.abs(this.g - villagedoor.h()) > 1200) {
                 this.c = this.c.b(villagedoor.d());
                 flag = true;
                 villagedoor.a(true);
@@ -326,7 +311,7 @@ public class Village {
 
     }
 
-    private boolean f(BlockPosition blockposition) {
+    private boolean g(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
         Block block = iblockdata.getBlock();
 
@@ -383,7 +368,7 @@ public class Village {
         NBTTagList nbttaglist = nbttagcompound.getList("Doors", 10);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.get(i);
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             VillageDoor villagedoor = new VillageDoor(new BlockPosition(nbttagcompound1.getInt("X"), nbttagcompound1.getInt("Y"), nbttagcompound1.getInt("Z")), nbttagcompound1.getInt("IDX"), nbttagcompound1.getInt("IDZ"), nbttagcompound1.getInt("TS"));
 
             this.b.add(villagedoor);
@@ -392,7 +377,7 @@ public class Village {
         NBTTagList nbttaglist1 = nbttagcompound.getList("Players", 10);
 
         for (int j = 0; j < nbttaglist1.size(); ++j) {
-            NBTTagCompound nbttagcompound2 = nbttaglist1.get(j);
+            NBTTagCompound nbttagcompound2 = nbttaglist1.getCompound(j);
 
             if (nbttagcompound2.hasKey("UUID") && this.a != null && this.a.getMinecraftServer() != null) {
                 UserCache usercache = this.a.getMinecraftServer().getUserCache();
@@ -434,7 +419,7 @@ public class Village {
             nbttagcompound1.setInt("IDX", villagedoor.f());
             nbttagcompound1.setInt("IDZ", villagedoor.g());
             nbttagcompound1.setInt("TS", villagedoor.h());
-            nbttaglist.add(nbttagcompound1);
+            nbttaglist.add((NBTBase) nbttagcompound1);
         }
 
         nbttagcompound.set("Doors", nbttaglist);
@@ -452,7 +437,7 @@ public class Village {
                 if (gameprofile != null) {
                     nbttagcompound2.setString("UUID", gameprofile.getId().toString());
                     nbttagcompound2.setInt("S", ((Integer) this.j.get(s)).intValue());
-                    nbttaglist1.add(nbttagcompound2);
+                    nbttaglist1.add((NBTBase) nbttagcompound2);
                 }
             } catch (RuntimeException runtimeexception) {
                 ;

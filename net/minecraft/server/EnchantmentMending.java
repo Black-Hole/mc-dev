@@ -4,7 +4,6 @@ public class EnchantmentMending extends Enchantment {
 
     public EnchantmentMending(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.BREAKABLE, aenumitemslot);
-        this.c("mending");
     }
 
     public int a(int i) {

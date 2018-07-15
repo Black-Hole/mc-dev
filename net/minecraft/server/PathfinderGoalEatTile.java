@@ -1,70 +1,69 @@
 package net.minecraft.server;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import java.util.function.Predicate;
 
 public class PathfinderGoalEatTile extends PathfinderGoal {
 
-    private static final Predicate<IBlockData> b = BlockStatePredicate.a((Block) Blocks.TALLGRASS).a(BlockLongGrass.TYPE, Predicates.equalTo(BlockLongGrass.EnumTallGrassType.GRASS));
-    private final EntityInsentient c;
-    private final World d;
-    int a;
+    private static final Predicate<IBlockData> a = BlockStatePredicate.a(Blocks.GRASS);
+    private final EntityInsentient b;
+    private final World c;
+    private int d;
 
     public PathfinderGoalEatTile(EntityInsentient entityinsentient) {
-        this.c = entityinsentient;
-        this.d = entityinsentient.world;
+        this.b = entityinsentient;
+        this.c = entityinsentient.world;
         this.a(7);
     }
 
     public boolean a() {
-        if (this.c.getRandom().nextInt(this.c.isBaby() ? 50 : 1000) != 0) {
+        if (this.b.getRandom().nextInt(this.b.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
-            BlockPosition blockposition = new BlockPosition(this.c.locX, this.c.locY, this.c.locZ);
+            BlockPosition blockposition = new BlockPosition(this.b.locX, this.b.locY, this.b.locZ);
 
-            return PathfinderGoalEatTile.b.apply(this.d.getType(blockposition)) ? true : this.d.getType(blockposition.down()).getBlock() == Blocks.GRASS;
+            return PathfinderGoalEatTile.a.test(this.c.getType(blockposition)) ? true : this.c.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK;
         }
     }
 
     public void c() {
-        this.a = 40;
-        this.d.broadcastEntityEffect(this.c, (byte) 10);
-        this.c.getNavigation().p();
+        this.d = 40;
+        this.c.broadcastEntityEffect(this.b, (byte) 10);
+        this.b.getNavigation().r();
     }
 
     public void d() {
-        this.a = 0;
+        this.d = 0;
     }
 
     public boolean b() {
-        return this.a > 0;
+        return this.d > 0;
     }
 
-    public int f() {
-        return this.a;
+    public int g() {
+        return this.d;
     }
 
     public void e() {
-        this.a = Math.max(0, this.a - 1);
-        if (this.a == 4) {
-            BlockPosition blockposition = new BlockPosition(this.c.locX, this.c.locY, this.c.locZ);
+        this.d = Math.max(0, this.d - 1);
+        if (this.d == 4) {
+            BlockPosition blockposition = new BlockPosition(this.b.locX, this.b.locY, this.b.locZ);
 
-            if (PathfinderGoalEatTile.b.apply(this.d.getType(blockposition))) {
-                if (this.d.getGameRules().getBoolean("mobGriefing")) {
-                    this.d.setAir(blockposition, false);
+            if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
+                if (this.c.getGameRules().getBoolean("mobGriefing")) {
+                    this.c.setAir(blockposition, false);
                 }
 
-                this.c.A();
+                this.b.x();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
-                if (this.d.getType(blockposition1).getBlock() == Blocks.GRASS) {
-                    if (this.d.getGameRules().getBoolean("mobGriefing")) {
-                        this.d.triggerEffect(2001, blockposition1, Block.getId(Blocks.GRASS));
-                        this.d.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
+                if (this.c.getType(blockposition1).getBlock() == Blocks.GRASS_BLOCK) {
+                    if (this.c.getGameRules().getBoolean("mobGriefing")) {
+                        this.c.triggerEffect(2001, blockposition1, Block.getCombinedId(Blocks.GRASS_BLOCK.getBlockData()));
+                        this.c.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
                     }
 
-                    this.c.A();
+                    this.b.x();
                 }
             }
 

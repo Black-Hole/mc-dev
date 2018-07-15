@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -126,8 +127,19 @@ public class CriterionTriggerUsedTotem implements CriterionTrigger<CriterionTrig
             this.a = criterionconditionitem;
         }
 
+        public static CriterionTriggerUsedTotem.b a(IMaterial imaterial) {
+            return new CriterionTriggerUsedTotem.b(CriterionConditionItem.a.a().a(imaterial).b());
+        }
+
         public boolean a(ItemStack itemstack) {
             return this.a.a(itemstack);
+        }
+
+        public JsonElement b() {
+            JsonObject jsonobject = new JsonObject();
+
+            jsonobject.add("item", this.a.a());
+            return jsonobject;
         }
     }
 }

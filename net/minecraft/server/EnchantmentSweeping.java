@@ -21,8 +21,4 @@ public class EnchantmentSweeping extends Enchantment {
     public static float e(int i) {
         return 1.0F - 1.0F / (float) (i + 1);
     }
-
-    public String a() {
-        return "enchantment.sweeping";
-    }
 }

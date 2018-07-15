@@ -4,7 +4,7 @@ public abstract class DispenseBehaviorProjectile extends DispenseBehaviorItem {
 
     public DispenseBehaviorProjectile() {}
 
-    public ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
+    public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
         World world = isourceblock.getWorld();
         IPosition iposition = BlockDispenser.a(isourceblock);
         EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);

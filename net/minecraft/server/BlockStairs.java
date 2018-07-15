@@ -1,161 +1,98 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
+import java.util.function.IntFunction;
+import java.util.stream.IntStream;
 
-public class BlockStairs extends Block {
+public class BlockStairs extends Block implements IFluidSource, IFluidContainer {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateEnum<BlockStairs.EnumHalf> HALF = BlockStateEnum.of("half", BlockStairs.EnumHalf.class);
-    public static final BlockStateEnum<BlockStairs.EnumStairShape> SHAPE = BlockStateEnum.of("shape", BlockStairs.EnumStairShape.class);
-    protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB e = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB f = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB g = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
-    protected static final AxisAlignedBB B = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB C = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 0.5D, 1.0D, 0.5D);
-    protected static final AxisAlignedBB D = new AxisAlignedBB(0.5D, 0.5D, 0.0D, 1.0D, 1.0D, 0.5D);
-    protected static final AxisAlignedBB E = new AxisAlignedBB(0.0D, 0.5D, 0.5D, 0.5D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB F = new AxisAlignedBB(0.5D, 0.5D, 0.5D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB G = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB H = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB I = new AxisAlignedBB(0.5D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB J = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 0.5D);
-    protected static final AxisAlignedBB K = new AxisAlignedBB(0.0D, 0.0D, 0.5D, 1.0D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB L = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5D, 0.5D, 0.5D);
-    protected static final AxisAlignedBB M = new AxisAlignedBB(0.5D, 0.0D, 0.0D, 1.0D, 0.5D, 0.5D);
-    protected static final AxisAlignedBB N = new AxisAlignedBB(0.0D, 0.0D, 0.5D, 0.5D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB O = new AxisAlignedBB(0.5D, 0.0D, 0.5D, 1.0D, 0.5D, 1.0D);
-    private final Block P;
-    private final IBlockData Q;
+    public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.P;
+    public static final BlockStateEnum<BlockPropertyStairsShape> SHAPE = BlockProperties.au;
+    public static final BlockStateBoolean p = BlockProperties.x;
+    protected static final VoxelShape q = BlockStepAbstract.p;
+    protected static final VoxelShape r = BlockStepAbstract.c;
+    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 0.0D, 8.0D, 8.0D, 8.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 8.0D, 8.0D, 8.0D, 16.0D);
+    protected static final VoxelShape u = Block.a(0.0D, 8.0D, 0.0D, 8.0D, 16.0D, 8.0D);
+    protected static final VoxelShape v = Block.a(0.0D, 8.0D, 8.0D, 8.0D, 16.0D, 16.0D);
+    protected static final VoxelShape w = Block.a(8.0D, 0.0D, 0.0D, 16.0D, 8.0D, 8.0D);
+    protected static final VoxelShape x = Block.a(8.0D, 0.0D, 8.0D, 16.0D, 8.0D, 16.0D);
+    protected static final VoxelShape y = Block.a(8.0D, 8.0D, 0.0D, 16.0D, 16.0D, 8.0D);
+    protected static final VoxelShape z = Block.a(8.0D, 8.0D, 8.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape[] A = a(BlockStairs.q, BlockStairs.s, BlockStairs.w, BlockStairs.t, BlockStairs.x);
+    protected static final VoxelShape[] B = a(BlockStairs.r, BlockStairs.u, BlockStairs.y, BlockStairs.v, BlockStairs.z);
+    private static final int[] C = new int[] { 12, 5, 3, 10, 14, 13, 7, 11, 13, 7, 11, 14, 8, 4, 1, 2, 4, 1, 2, 8};
+    private final Block D;
+    private final IBlockData E;
 
-    protected BlockStairs(IBlockData iblockdata) {
-        super(iblockdata.getBlock().material);
-        this.w(this.blockStateList.getBlockData().set(BlockStairs.FACING, EnumDirection.NORTH).set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT));
-        this.P = iblockdata.getBlock();
-        this.Q = iblockdata;
-        this.c(this.P.strength);
-        this.b(this.P.durability / 3.0F);
-        this.a(this.P.stepSound);
-        this.e(255);
-        this.a(CreativeModeTab.b);
+    private static VoxelShape[] a(VoxelShape voxelshape, VoxelShape voxelshape1, VoxelShape voxelshape2, VoxelShape voxelshape3, VoxelShape voxelshape4) {
+        return (VoxelShape[]) IntStream.range(0, 16).mapToObj((i) -> {
+            return a(i, voxelshape, voxelshape1, voxelshape2, voxelshape3, voxelshape4);
+        }).toArray((i) -> {
+            return new VoxelShape[i];
+        });
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, AxisAlignedBB axisalignedbb, List<AxisAlignedBB> list, @Nullable Entity entity, boolean flag) {
-        if (!flag) {
-            iblockdata = this.updateState(iblockdata, world, blockposition);
+    private static VoxelShape a(int i, VoxelShape voxelshape, VoxelShape voxelshape1, VoxelShape voxelshape2, VoxelShape voxelshape3, VoxelShape voxelshape4) {
+        VoxelShape voxelshape5 = voxelshape;
+
+        if ((i & 1) != 0) {
+            voxelshape5 = VoxelShapes.a(voxelshape, voxelshape1);
         }
 
-        Iterator iterator = y(iblockdata).iterator();
-
-        while (iterator.hasNext()) {
-            AxisAlignedBB axisalignedbb1 = (AxisAlignedBB) iterator.next();
-
-            a(blockposition, axisalignedbb, list, axisalignedbb1);
+        if ((i & 2) != 0) {
+            voxelshape5 = VoxelShapes.a(voxelshape5, voxelshape2);
         }
 
+        if ((i & 4) != 0) {
+            voxelshape5 = VoxelShapes.a(voxelshape5, voxelshape3);
+        }
+
+        if ((i & 8) != 0) {
+            voxelshape5 = VoxelShapes.a(voxelshape5, voxelshape4);
+        }
+
+        return voxelshape5;
     }
 
-    private static List<AxisAlignedBB> y(IBlockData iblockdata) {
-        ArrayList arraylist = Lists.newArrayList();
-        boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
-
-        arraylist.add(flag ? BlockStairs.d : BlockStairs.G);
-        BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
-
-        if (blockstairs_enumstairshape == BlockStairs.EnumStairShape.STRAIGHT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_LEFT || blockstairs_enumstairshape == BlockStairs.EnumStairShape.INNER_RIGHT) {
-            arraylist.add(z(iblockdata));
-        }
-
-        if (blockstairs_enumstairshape != BlockStairs.EnumStairShape.STRAIGHT) {
-            arraylist.add(A(iblockdata));
-        }
-
-        return arraylist;
+    protected BlockStairs(IBlockData iblockdata, Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStairs.FACING, EnumDirection.NORTH)).set(BlockStairs.HALF, BlockPropertyHalf.BOTTOM)).set(BlockStairs.SHAPE, BlockPropertyStairsShape.STRAIGHT)).set(BlockStairs.p, Boolean.valueOf(false)));
+        this.D = iblockdata.getBlock();
+        this.E = iblockdata;
     }
 
-    private static AxisAlignedBB z(IBlockData iblockdata) {
-        boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
-
-        switch ((EnumDirection) iblockdata.get(BlockStairs.FACING)) {
-        case NORTH:
-        default:
-            return flag ? BlockStairs.J : BlockStairs.g;
-
-        case SOUTH:
-            return flag ? BlockStairs.K : BlockStairs.B;
-
-        case WEST:
-            return flag ? BlockStairs.H : BlockStairs.e;
-
-        case EAST:
-            return flag ? BlockStairs.I : BlockStairs.f;
-        }
+    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.J();
     }
 
-    private static AxisAlignedBB A(IBlockData iblockdata) {
-        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
-        EnumDirection enumdirection1;
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return (iblockdata.get(BlockStairs.HALF) == BlockPropertyHalf.TOP ? BlockStairs.A : BlockStairs.B)[BlockStairs.C[this.w(iblockdata)]];
+    }
 
-        switch ((BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE)) {
-        case OUTER_LEFT:
-        default:
-            enumdirection1 = enumdirection;
-            break;
-
-        case OUTER_RIGHT:
-            enumdirection1 = enumdirection.e();
-            break;
-
-        case INNER_RIGHT:
-            enumdirection1 = enumdirection.opposite();
-            break;
-
-        case INNER_LEFT:
-            enumdirection1 = enumdirection.f();
-        }
-
-        boolean flag = iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
-
-        switch (enumdirection1) {
-        case NORTH:
-        default:
-            return flag ? BlockStairs.L : BlockStairs.C;
-
-        case SOUTH:
-            return flag ? BlockStairs.O : BlockStairs.F;
-
-        case WEST:
-            return flag ? BlockStairs.N : BlockStairs.E;
-
-        case EAST:
-            return flag ? BlockStairs.M : BlockStairs.D;
-        }
+    private int w(IBlockData iblockdata) {
+        return ((BlockPropertyStairsShape) iblockdata.get(BlockStairs.SHAPE)).ordinal() * 4 + ((EnumDirection) iblockdata.get(BlockStairs.FACING)).get2DRotationValue();
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        iblockdata = this.updateState(iblockdata, iblockaccess, blockposition);
         if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
-            return enumdirection == EnumDirection.UP == (iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP) ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+            return enumdirection == EnumDirection.UP == (iblockdata.get(BlockStairs.HALF) == BlockPropertyHalf.TOP) ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
         } else {
-            BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
+            BlockPropertyStairsShape blockpropertystairsshape = (BlockPropertyStairsShape) iblockdata.get(BlockStairs.SHAPE);
 
-            if (blockstairs_enumstairshape != BlockStairs.EnumStairShape.OUTER_LEFT && blockstairs_enumstairshape != BlockStairs.EnumStairShape.OUTER_RIGHT) {
+            if (blockpropertystairsshape != BlockPropertyStairsShape.OUTER_LEFT && blockpropertystairsshape != BlockPropertyStairsShape.OUTER_RIGHT) {
                 EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockStairs.FACING);
 
-                switch (blockstairs_enumstairshape) {
-                case INNER_RIGHT:
-                    return enumdirection1 != enumdirection && enumdirection1 != enumdirection.f() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
+                switch (blockpropertystairsshape) {
+                case STRAIGHT:
+                    return enumdirection1 == enumdirection ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
 
                 case INNER_LEFT:
                     return enumdirection1 != enumdirection && enumdirection1 != enumdirection.e() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
 
-                case STRAIGHT:
-                    return enumdirection1 == enumdirection ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
+                case INNER_RIGHT:
+                    return enumdirection1 != enumdirection && enumdirection1 != enumdirection.f() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
 
                 default:
                     return EnumBlockFaceShape.UNDEFINED;
@@ -166,205 +103,153 @@ public class BlockStairs extends Block {
         }
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
+    public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
+        this.E.attack(world, blockposition, entityhuman);
     }
 
-    public void attack(World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        this.P.attack(world, blockposition, entityhuman);
+    public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        this.D.postBreak(generatoraccess, blockposition, iblockdata);
     }
 
-    public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.P.postBreak(world, blockposition, iblockdata);
+    public float j() {
+        return this.D.j();
     }
 
-    public float a(Entity entity) {
-        return this.P.a(entity);
+    public TextureType c() {
+        return this.D.c();
     }
 
-    public int a(World world) {
-        return this.P.a(world);
+    public int a(IWorldReader iworldreader) {
+        return this.D.a(iworldreader);
     }
 
-    public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
-        return this.P.a(world, blockposition, entity, vec3d);
+    public boolean i() {
+        return this.D.i();
     }
 
-    public boolean m() {
-        return this.P.m();
+    public boolean d(IBlockData iblockdata) {
+        return this.D.d(iblockdata);
     }
 
-    public boolean a(IBlockData iblockdata, boolean flag) {
-        return this.P.a(iblockdata, flag);
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        if (iblockdata.getBlock() != iblockdata.getBlock()) {
+            this.E.doPhysics(world, blockposition, Blocks.AIR, blockposition);
+            this.D.onPlace(this.E, world, blockposition, iblockdata1);
+        }
     }
 
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        return this.P.canPlace(world, blockposition);
-    }
-
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.Q.doPhysics(world, blockposition, Blocks.AIR, blockposition);
-        this.P.onPlace(world, blockposition, this.Q);
-    }
-
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.P.remove(world, blockposition, this.Q);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            this.E.remove(world, blockposition, iblockdata1, flag);
+        }
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        this.P.stepOn(world, blockposition, entity);
+        this.D.stepOn(world, blockposition, entity);
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        this.P.b(world, blockposition, iblockdata, random);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        this.D.a(iblockdata, world, blockposition, random);
     }
 
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        return this.P.interact(world, blockposition, this.Q, entityhuman, enumhand, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+        return this.E.interact(world, blockposition, entityhuman, enumhand, EnumDirection.DOWN, 0.0F, 0.0F, 0.0F);
     }
 
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
-        this.P.wasExploded(world, blockposition, explosion);
+        this.D.wasExploded(world, blockposition, explosion);
     }
 
-    public boolean k(IBlockData iblockdata) {
-        return iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP;
+    public boolean q(IBlockData iblockdata) {
+        return iblockdata.get(BlockStairs.HALF) == BlockPropertyHalf.TOP;
     }
 
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.P.c(this.Q, iblockaccess, blockposition);
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        EnumDirection enumdirection = blockactioncontext.getClickedFace();
+        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.p, Boolean.valueOf(fluid.c() == FluidTypes.c));
+
+        return (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, blockactioncontext.getWorld(), blockactioncontext.getClickPosition()));
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        IBlockData iblockdata = super.getPlacedState(world, blockposition, enumdirection, f, f1, f2, i, entityliving);
-
-        iblockdata = iblockdata.set(BlockStairs.FACING, entityliving.getDirection()).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.STRAIGHT);
-        return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) f1 <= 0.5D) ? iblockdata.set(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM) : iblockdata.set(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
-    }
-
-    @Nullable
-    public MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = y(this.updateState(iblockdata, world, blockposition)).iterator();
-
-        while (iterator.hasNext()) {
-            AxisAlignedBB axisalignedbb = (AxisAlignedBB) iterator.next();
-
-            arraylist.add(this.a(blockposition, vec3d, vec3d1, axisalignedbb));
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (((Boolean) iblockdata.get(BlockStairs.p)).booleanValue()) {
+            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
-        MovingObjectPosition movingobjectposition = null;
-        double d0 = 0.0D;
-        Iterator iterator1 = arraylist.iterator();
-
-        while (iterator1.hasNext()) {
-            MovingObjectPosition movingobjectposition1 = (MovingObjectPosition) iterator1.next();
-
-            if (movingobjectposition1 != null) {
-                double d1 = movingobjectposition1.pos.distanceSquared(vec3d1);
-
-                if (d1 > d0) {
-                    movingobjectposition = movingobjectposition1;
-                    d0 = d1;
-                }
-            }
-        }
-
-        return movingobjectposition;
+        return enumdirection.k().c() ? (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, generatoraccess, blockposition)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public IBlockData fromLegacyData(int i) {
-        IBlockData iblockdata = this.getBlockData().set(BlockStairs.HALF, (i & 4) > 0 ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM);
-
-        iblockdata = iblockdata.set(BlockStairs.FACING, EnumDirection.fromType1(5 - (i & 3)));
-        return iblockdata;
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        int i = 0;
-
-        if (iblockdata.get(BlockStairs.HALF) == BlockStairs.EnumHalf.TOP) {
-            i |= 4;
-        }
-
-        i |= 5 - ((EnumDirection) iblockdata.get(BlockStairs.FACING)).a();
-        return i;
-    }
-
-    public IBlockData updateState(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.set(BlockStairs.SHAPE, g(iblockdata, iblockaccess, blockposition));
-    }
-
-    private static BlockStairs.EnumStairShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private static BlockPropertyStairsShape m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        if (x(iblockdata1) && iblockdata.get(BlockStairs.HALF) == iblockdata1.get(BlockStairs.HALF)) {
+        if (j(iblockdata1) && iblockdata.get(BlockStairs.HALF) == iblockdata1.get(BlockStairs.HALF)) {
             EnumDirection enumdirection1 = (EnumDirection) iblockdata1.get(BlockStairs.FACING);
 
             if (enumdirection1.k() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).k() && d(iblockdata, iblockaccess, blockposition, enumdirection1.opposite())) {
                 if (enumdirection1 == enumdirection.f()) {
-                    return BlockStairs.EnumStairShape.OUTER_LEFT;
+                    return BlockPropertyStairsShape.OUTER_LEFT;
                 }
 
-                return BlockStairs.EnumStairShape.OUTER_RIGHT;
+                return BlockPropertyStairsShape.OUTER_RIGHT;
             }
         }
 
         IBlockData iblockdata2 = iblockaccess.getType(blockposition.shift(enumdirection.opposite()));
 
-        if (x(iblockdata2) && iblockdata.get(BlockStairs.HALF) == iblockdata2.get(BlockStairs.HALF)) {
+        if (j(iblockdata2) && iblockdata.get(BlockStairs.HALF) == iblockdata2.get(BlockStairs.HALF)) {
             EnumDirection enumdirection2 = (EnumDirection) iblockdata2.get(BlockStairs.FACING);
 
             if (enumdirection2.k() != ((EnumDirection) iblockdata.get(BlockStairs.FACING)).k() && d(iblockdata, iblockaccess, blockposition, enumdirection2)) {
                 if (enumdirection2 == enumdirection.f()) {
-                    return BlockStairs.EnumStairShape.INNER_LEFT;
+                    return BlockPropertyStairsShape.INNER_LEFT;
                 }
 
-                return BlockStairs.EnumStairShape.INNER_RIGHT;
+                return BlockPropertyStairsShape.INNER_RIGHT;
             }
         }
 
-        return BlockStairs.EnumStairShape.STRAIGHT;
+        return BlockPropertyStairsShape.STRAIGHT;
     }
 
     private static boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata1 = iblockaccess.getType(blockposition.shift(enumdirection));
 
-        return !x(iblockdata1) || iblockdata1.get(BlockStairs.FACING) != iblockdata.get(BlockStairs.FACING) || iblockdata1.get(BlockStairs.HALF) != iblockdata.get(BlockStairs.HALF);
+        return !j(iblockdata1) || iblockdata1.get(BlockStairs.FACING) != iblockdata.get(BlockStairs.FACING) || iblockdata1.get(BlockStairs.HALF) != iblockdata.get(BlockStairs.HALF);
     }
 
-    public static boolean x(IBlockData iblockdata) {
+    public static boolean j(IBlockData iblockdata) {
         return iblockdata.getBlock() instanceof BlockStairs;
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockStairs.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockStairs.FACING)));
+        return (IBlockData) iblockdata.set(BlockStairs.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockStairs.FACING)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockStairs.FACING);
-        BlockStairs.EnumStairShape blockstairs_enumstairshape = (BlockStairs.EnumStairShape) iblockdata.get(BlockStairs.SHAPE);
+        BlockPropertyStairsShape blockpropertystairsshape = (BlockPropertyStairsShape) iblockdata.get(BlockStairs.SHAPE);
 
         switch (enumblockmirror) {
         case LEFT_RIGHT:
             if (enumdirection.k() == EnumDirection.EnumAxis.Z) {
-                switch (blockstairs_enumstairshape) {
-                case OUTER_LEFT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
-
-                case OUTER_RIGHT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
+                switch (blockpropertystairsshape) {
+                case INNER_LEFT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
 
                 case INNER_RIGHT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
 
-                case INNER_LEFT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
+                case OUTER_LEFT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
+
+                case OUTER_RIGHT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
 
                 default:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
@@ -374,21 +259,21 @@ public class BlockStairs extends Block {
 
         case FRONT_BACK:
             if (enumdirection.k() == EnumDirection.EnumAxis.X) {
-                switch (blockstairs_enumstairshape) {
-                case OUTER_LEFT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_RIGHT);
-
-                case OUTER_RIGHT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.OUTER_LEFT);
-
-                case INNER_RIGHT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_RIGHT);
-
-                case INNER_LEFT:
-                    return iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockStairs.EnumStairShape.INNER_LEFT);
-
+                switch (blockpropertystairsshape) {
                 case STRAIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
+
+                case INNER_LEFT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
+
+                case INNER_RIGHT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
+
+                case OUTER_LEFT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
+
+                case OUTER_RIGHT:
+                    return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
                 }
             }
         }
@@ -396,45 +281,41 @@ public class BlockStairs extends Block {
         return super.a(iblockdata, enumblockmirror);
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE, BlockStairs.p});
     }
 
-    public static enum EnumStairShape implements INamable {
-
-        STRAIGHT("straight"), INNER_LEFT("inner_left"), INNER_RIGHT("inner_right"), OUTER_LEFT("outer_left"), OUTER_RIGHT("outer_right");
-
-        private final String f;
-
-        private EnumStairShape(String s) {
-            this.f = s;
-        }
-
-        public String toString() {
-            return this.f;
-        }
-
-        public String getName() {
-            return this.f;
+    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        if (((Boolean) iblockdata.get(BlockStairs.p)).booleanValue()) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.p, Boolean.valueOf(false)), 3);
+            return FluidTypes.c;
+        } else {
+            return FluidTypes.a;
         }
     }
 
-    public static enum EnumHalf implements INamable {
+    public Fluid t(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockStairs.p)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    }
 
-        TOP("top"), BOTTOM("bottom");
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+        return !((Boolean) iblockdata.get(BlockStairs.p)).booleanValue() && fluidtype == FluidTypes.c;
+    }
 
-        private final String c;
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+        if (!((Boolean) iblockdata.get(BlockStairs.p)).booleanValue() && fluid.c() == FluidTypes.c) {
+            if (!generatoraccess.e()) {
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.p, Boolean.valueOf(true)), 3);
+                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+            }
 
-        private EnumHalf(String s) {
-            this.c = s;
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        public String toString() {
-            return this.c;
-        }
-
-        public String getName() {
-            return this.c;
-        }
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

@@ -1,43 +1,52 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 public enum EnumChatFormat {
 
-    BLACK("BLACK", '0', 0), DARK_BLUE("DARK_BLUE", '1', 1), DARK_GREEN("DARK_GREEN", '2', 2), DARK_AQUA("DARK_AQUA", '3', 3), DARK_RED("DARK_RED", '4', 4), DARK_PURPLE("DARK_PURPLE", '5', 5), GOLD("GOLD", '6', 6), GRAY("GRAY", '7', 7), DARK_GRAY("DARK_GRAY", '8', 8), BLUE("BLUE", '9', 9), GREEN("GREEN", 'a', 10), AQUA("AQUA", 'b', 11), RED("RED", 'c', 12), LIGHT_PURPLE("LIGHT_PURPLE", 'd', 13), YELLOW("YELLOW", 'e', 14), WHITE("WHITE", 'f', 15), OBFUSCATED("OBFUSCATED", 'k', true), BOLD("BOLD", 'l', true), STRIKETHROUGH("STRIKETHROUGH", 'm', true), UNDERLINE("UNDERLINE", 'n', true), ITALIC("ITALIC", 'o', true), RESET("RESET", 'r', -1);
+    BLACK("BLACK", '0', 0, Integer.valueOf(0)), DARK_BLUE("DARK_BLUE", '1', 1, Integer.valueOf(170)), DARK_GREEN("DARK_GREEN", '2', 2, Integer.valueOf('\uaa00')), DARK_AQUA("DARK_AQUA", '3', 3, Integer.valueOf('\uaaaa')), DARK_RED("DARK_RED", '4', 4, Integer.valueOf(11141120)), DARK_PURPLE("DARK_PURPLE", '5', 5, Integer.valueOf(11141290)), GOLD("GOLD", '6', 6, Integer.valueOf(16755200)), GRAY("GRAY", '7', 7, Integer.valueOf(11184810)), DARK_GRAY("DARK_GRAY", '8', 8, Integer.valueOf(5592405)), BLUE("BLUE", '9', 9, Integer.valueOf(5592575)), GREEN("GREEN", 'a', 10, Integer.valueOf(5635925)), AQUA("AQUA", 'b', 11, Integer.valueOf(5636095)), RED("RED", 'c', 12, Integer.valueOf(16733525)), LIGHT_PURPLE("LIGHT_PURPLE", 'd', 13, Integer.valueOf(16733695)), YELLOW("YELLOW", 'e', 14, Integer.valueOf(16777045)), WHITE("WHITE", 'f', 15, Integer.valueOf(16777215)), OBFUSCATED("OBFUSCATED", 'k', true), BOLD("BOLD", 'l', true), STRIKETHROUGH("STRIKETHROUGH", 'm', true), UNDERLINE("UNDERLINE", 'n', true), ITALIC("ITALIC", 'o', true), RESET("RESET", 'r', -1, (Integer) null);
 
-    private static final Map<String, EnumChatFormat> w = Maps.newHashMap();
+    private static final Map<String, EnumChatFormat> w = (Map) Arrays.stream(values()).collect(Collectors.toMap((enumchatformat) -> {
+        return d(enumchatformat.y);
+    }, (enumchatformat) -> {
+        return enumchatformat;
+    }));
     private static final Pattern x = Pattern.compile("(?i)\u00a7[0-9A-FK-OR]");
     private final String y;
     public final char character;
     private final boolean A;
     private final String B;
     private final int C;
+    @Nullable
+    private final Integer D;
 
-    private static String c(String s) {
+    private static String d(String s) {
         return s.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
     }
 
-    private EnumChatFormat(String s, char c0, int i) {
-        this(s, c0, false, i);
+    private EnumChatFormat(String s, char c0, int i, Integer integer) {
+        this(s, c0, false, i, integer);
     }
 
     private EnumChatFormat(String s, char c0, boolean flag) {
-        this(s, c0, flag, -1);
+        this(s, c0, flag, -1, (Integer) null);
     }
 
-    private EnumChatFormat(String s, char c0, boolean flag, int i) {
+    private EnumChatFormat(String s, char c0, boolean flag, int i, Integer integer) {
         this.y = s;
         this.character = c0;
         this.A = flag;
         this.C = i;
+        this.D = integer;
         this.B = "\u00a7" + c0;
     }
 
@@ -53,7 +62,7 @@ public enum EnumChatFormat {
         return !this.A && this != EnumChatFormat.RESET;
     }
 
-    public String e() {
+    public String g() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 
@@ -62,13 +71,13 @@ public enum EnumChatFormat {
     }
 
     @Nullable
-    public static String a(@Nullable String s) {
+    public static String b(@Nullable String s) {
         return s == null ? null : EnumChatFormat.x.matcher(s).replaceAll("");
     }
 
     @Nullable
-    public static EnumChatFormat b(@Nullable String s) {
-        return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(c(s));
+    public static EnumChatFormat c(@Nullable String s) {
+        return s == null ? null : (EnumChatFormat) EnumChatFormat.w.get(d(s));
     }
 
     @Nullable
@@ -100,22 +109,10 @@ public enum EnumChatFormat {
             EnumChatFormat enumchatformat = aenumchatformat[j];
 
             if ((!enumchatformat.d() || flag) && (!enumchatformat.isFormat() || flag1)) {
-                arraylist.add(enumchatformat.e());
+                arraylist.add(enumchatformat.g());
             }
         }
 
         return arraylist;
-    }
-
-    static {
-        EnumChatFormat[] aenumchatformat = values();
-        int i = aenumchatformat.length;
-
-        for (int j = 0; j < i; ++j) {
-            EnumChatFormat enumchatformat = aenumchatformat[j];
-
-            EnumChatFormat.w.put(c(enumchatformat.y), enumchatformat);
-        }
-
     }
 }

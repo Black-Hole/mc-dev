@@ -5,20 +5,20 @@ import java.io.IOException;
 public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
 
     private int a;
-    private IRecipe b;
+    private MinecraftKey b;
     private boolean c;
 
     public PacketPlayInAutoRecipe() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
-        this.b = CraftingManager.a(packetdataserializer.g());
+        this.b = packetdataserializer.l();
         this.c = packetdataserializer.readBoolean();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
-        packetdataserializer.d(CraftingManager.a(this.b));
+        packetdataserializer.a(this.b);
         packetdataserializer.writeBoolean(this.c);
     }
 
@@ -26,15 +26,15 @@ public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
-    public int a() {
+    public int b() {
         return this.a;
     }
 
-    public IRecipe b() {
+    public MinecraftKey c() {
         return this.b;
     }
 
-    public boolean c() {
+    public boolean d() {
         return this.c;
     }
 }

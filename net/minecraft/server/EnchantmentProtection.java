@@ -26,11 +26,7 @@ public class EnchantmentProtection extends Enchantment {
     }
 
     public int a(int i, DamageSource damagesource) {
-        return damagesource.ignoresInvulnerability() ? 0 : (this.a == EnchantmentProtection.DamageType.ALL ? i : (this.a == EnchantmentProtection.DamageType.FIRE && damagesource.o() ? i * 2 : (this.a == EnchantmentProtection.DamageType.FALL && damagesource == DamageSource.FALL ? i * 3 : (this.a == EnchantmentProtection.DamageType.EXPLOSION && damagesource.isExplosion() ? i * 2 : (this.a == EnchantmentProtection.DamageType.PROJECTILE && damagesource.a() ? i * 2 : 0)))));
-    }
-
-    public String a() {
-        return "enchantment.protect." + this.a.a();
+        return damagesource.ignoresInvulnerability() ? 0 : (this.a == EnchantmentProtection.DamageType.ALL ? i : (this.a == EnchantmentProtection.DamageType.FIRE && damagesource.p() ? i * 2 : (this.a == EnchantmentProtection.DamageType.FALL && damagesource == DamageSource.FALL ? i * 3 : (this.a == EnchantmentProtection.DamageType.EXPLOSION && damagesource.isExplosion() ? i * 2 : (this.a == EnchantmentProtection.DamageType.PROJECTILE && damagesource.b() ? i * 2 : 0)))));
     }
 
     public boolean a(Enchantment enchantment) {
@@ -65,22 +61,16 @@ public class EnchantmentProtection extends Enchantment {
 
     public static enum DamageType {
 
-        ALL("all", 1, 11, 20), FIRE("fire", 10, 8, 12), FALL("fall", 5, 6, 10), EXPLOSION("explosion", 5, 8, 12), PROJECTILE("projectile", 3, 6, 15);
+        ALL("all", 1, 11), FIRE("fire", 10, 8), FALL("fall", 5, 6), EXPLOSION("explosion", 5, 8), PROJECTILE("projectile", 3, 6);
 
         private final String f;
         private final int g;
         private final int h;
-        private final int i;
 
-        private DamageType(String s, int i, int j, int k) {
+        private DamageType(String s, int i, int j) {
             this.f = s;
             this.g = i;
             this.h = j;
-            this.i = k;
-        }
-
-        public String a() {
-            return this.f;
         }
 
         public int b() {

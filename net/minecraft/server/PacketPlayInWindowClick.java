@@ -37,27 +37,27 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         packetdataserializer.a(this.item);
     }
 
-    public int a() {
+    public int b() {
         return this.a;
     }
 
-    public int b() {
+    public int c() {
         return this.slot;
     }
 
-    public int c() {
+    public int d() {
         return this.button;
     }
 
-    public short d() {
+    public short e() {
         return this.d;
     }
 
-    public ItemStack e() {
+    public ItemStack f() {
         return this.item;
     }
 
-    public InventoryClickType f() {
+    public InventoryClickType g() {
         return this.shift;
     }
 }

@@ -3,7 +3,9 @@ package net.minecraft.server;
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 public class GameProfileBanEntry extends ExpirableListEntry<GameProfile> {
 
@@ -11,7 +13,7 @@ public class GameProfileBanEntry extends ExpirableListEntry<GameProfile> {
         this(gameprofile, (Date) null, (String) null, (Date) null, (String) null);
     }
 
-    public GameProfileBanEntry(GameProfile gameprofile, Date date, String s, Date date1, String s1) {
+    public GameProfileBanEntry(GameProfile gameprofile, @Nullable Date date, @Nullable String s, @Nullable Date date1, @Nullable String s1) {
         super(gameprofile, date1, s, date1, s1);
     }
 
@@ -25,6 +27,12 @@ public class GameProfileBanEntry extends ExpirableListEntry<GameProfile> {
             jsonobject.addProperty("name", ((GameProfile) this.getKey()).getName());
             super.a(jsonobject);
         }
+    }
+
+    public IChatBaseComponent e() {
+        GameProfile gameprofile = (GameProfile) this.getKey();
+
+        return new ChatComponentText(gameprofile.getName() != null ? gameprofile.getName() : Objects.toString(gameprofile.getId(), "(Unknown)"));
     }
 
     private static GameProfile b(JsonObject jsonobject) {

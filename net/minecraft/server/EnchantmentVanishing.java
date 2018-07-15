@@ -4,7 +4,6 @@ public class EnchantmentVanishing extends Enchantment {
 
     public EnchantmentVanishing(Enchantment.Rarity enchantment_rarity, EnumItemSlot... aenumitemslot) {
         super(enchantment_rarity, EnchantmentSlotType.ALL, aenumitemslot);
-        this.c("vanishing_curse");
     }
 
     public int a(int i) {
@@ -23,7 +22,7 @@ public class EnchantmentVanishing extends Enchantment {
         return true;
     }
 
-    public boolean isCursed() {
+    public boolean c() {
         return true;
     }
 }

@@ -2,9 +2,11 @@ package net.minecraft.server;
 
 public class ItemBook extends Item {
 
-    public ItemBook() {}
+    public ItemBook(Item.Info item_info) {
+        super(item_info);
+    }
 
-    public boolean g_(ItemStack itemstack) {
+    public boolean a(ItemStack itemstack) {
         return itemstack.getCount() == 1;
     }
 

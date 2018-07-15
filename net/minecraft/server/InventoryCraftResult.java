@@ -3,7 +3,7 @@ package net.minecraft.server;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
-public class InventoryCraftResult implements IInventory {
+public class InventoryCraftResult implements IInventory, RecipeHolder {
 
     private final NonNullList<ItemStack> items;
     private IRecipe b;
@@ -16,7 +16,7 @@ public class InventoryCraftResult implements IInventory {
         return 1;
     }
 
-    public boolean x_() {
+    public boolean P_() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -36,16 +36,17 @@ public class InventoryCraftResult implements IInventory {
         return (ItemStack) this.items.get(0);
     }
 
-    public String getName() {
-        return "Result";
+    public IChatBaseComponent getDisplayName() {
+        return new ChatComponentText("Result");
     }
 
     public boolean hasCustomName() {
         return false;
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return null;
     }
 
     public ItemStack splitStack(int i, int j) {

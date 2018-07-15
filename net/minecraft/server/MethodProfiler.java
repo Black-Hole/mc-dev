@@ -13,45 +13,68 @@ import org.apache.logging.log4j.Logger;
 
 public class MethodProfiler {
 
-    private static final Logger b = LogManager.getLogger();
-    private final List<String> c = Lists.newArrayList();
-    private final List<Long> d = Lists.newArrayList();
-    public boolean a;
+    private static final Logger a = LogManager.getLogger();
+    private final List<String> b = Lists.newArrayList();
+    private final List<Long> c = Lists.newArrayList();
+    private boolean d;
     private String e = "";
     private final Map<String, Long> f = Maps.newHashMap();
+    private long g;
+    private int h;
 
     public MethodProfiler() {}
 
-    public void a() {
-        this.f.clear();
-        this.e = "";
-        this.c.clear();
+    public boolean a() {
+        return this.d;
+    }
+
+    public void b() {
+        this.d = false;
+    }
+
+    public long c() {
+        return this.g;
+    }
+
+    public int d() {
+        return this.h;
+    }
+
+    public void a(int i) {
+        if (!this.d) {
+            this.d = true;
+            this.f.clear();
+            this.e = "";
+            this.b.clear();
+            this.h = i;
+            this.g = SystemUtils.c();
+        }
     }
 
     public void a(String s) {
-        if (this.a) {
+        if (this.d) {
             if (!this.e.isEmpty()) {
                 this.e = this.e + ".";
             }
 
             this.e = this.e + s;
-            this.c.add(this.e);
-            this.d.add(Long.valueOf(System.nanoTime()));
+            this.b.add(this.e);
+            this.c.add(Long.valueOf(SystemUtils.c()));
         }
     }
 
     public void a(Supplier<String> supplier) {
-        if (this.a) {
+        if (this.d) {
             this.a((String) supplier.get());
         }
     }
 
-    public void b() {
-        if (this.a) {
-            long i = System.nanoTime();
-            long j = ((Long) this.d.remove(this.d.size() - 1)).longValue();
+    public void e() {
+        if (this.d && !this.c.isEmpty()) {
+            long i = SystemUtils.c();
+            long j = ((Long) this.c.remove(this.c.size() - 1)).longValue();
 
-            this.c.remove(this.c.size() - 1);
+            this.b.remove(this.b.size() - 1);
             long k = i - j;
 
             if (this.f.containsKey(this.e)) {
@@ -61,86 +84,82 @@ public class MethodProfiler {
             }
 
             if (k > 100000000L) {
-                MethodProfiler.b.warn("Something\'s taking too long! \'{}\' took aprox {} ms", this.e, Double.valueOf((double) k / 1000000.0D));
+                MethodProfiler.a.warn("Something\'s taking too long! \'{}\' took aprox {} ms", this.e, Double.valueOf((double) k / 1000000.0D));
             }
 
-            this.e = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
+            this.e = this.b.isEmpty() ? "" : (String) this.b.get(this.b.size() - 1);
         }
     }
 
     public List<MethodProfiler.ProfilerInfo> b(String s) {
-        if (!this.a) {
-            return Collections.emptyList();
-        } else {
-            long i = this.f.containsKey("root") ? ((Long) this.f.get("root")).longValue() : 0L;
-            long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;
-            ArrayList arraylist = Lists.newArrayList();
+        long i = this.f.containsKey("root") ? ((Long) this.f.get("root")).longValue() : 0L;
+        long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;
+        ArrayList arraylist = Lists.newArrayList();
 
-            if (!s.isEmpty()) {
-                s = s + ".";
-            }
-
-            long k = 0L;
-            Iterator iterator = this.f.keySet().iterator();
-
-            while (iterator.hasNext()) {
-                String s1 = (String) iterator.next();
-
-                if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
-                    k += ((Long) this.f.get(s1)).longValue();
-                }
-            }
-
-            float f = (float) k;
-
-            if (k < j) {
-                k = j;
-            }
-
-            if (i < k) {
-                i = k;
-            }
-
-            Iterator iterator1 = this.f.keySet().iterator();
-
-            String s2;
-
-            while (iterator1.hasNext()) {
-                s2 = (String) iterator1.next();
-                if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
-                    long l = ((Long) this.f.get(s2)).longValue();
-                    double d0 = (double) l * 100.0D / (double) k;
-                    double d1 = (double) l * 100.0D / (double) i;
-                    String s3 = s2.substring(s.length());
-
-                    arraylist.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
-                }
-            }
-
-            iterator1 = this.f.keySet().iterator();
-
-            while (iterator1.hasNext()) {
-                s2 = (String) iterator1.next();
-                this.f.put(s2, Long.valueOf(((Long) this.f.get(s2)).longValue() * 999L / 1000L));
-            }
-
-            if ((float) k > f) {
-                arraylist.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
-            }
-
-            Collections.sort(arraylist);
-            arraylist.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
-            return arraylist;
+        if (!s.isEmpty()) {
+            s = s + ".";
         }
+
+        long k = 0L;
+        Iterator iterator = this.f.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            String s1 = (String) iterator.next();
+
+            if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
+                k += ((Long) this.f.get(s1)).longValue();
+            }
+        }
+
+        float f = (float) k;
+
+        if (k < j) {
+            k = j;
+        }
+
+        if (i < k) {
+            i = k;
+        }
+
+        Iterator iterator1 = this.f.keySet().iterator();
+
+        String s2;
+
+        while (iterator1.hasNext()) {
+            s2 = (String) iterator1.next();
+            if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
+                long l = ((Long) this.f.get(s2)).longValue();
+                double d0 = (double) l * 100.0D / (double) k;
+                double d1 = (double) l * 100.0D / (double) i;
+                String s3 = s2.substring(s.length());
+
+                arraylist.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
+            }
+        }
+
+        iterator1 = this.f.keySet().iterator();
+
+        while (iterator1.hasNext()) {
+            s2 = (String) iterator1.next();
+            this.f.put(s2, Long.valueOf(((Long) this.f.get(s2)).longValue() * 999L / 1000L));
+        }
+
+        if ((float) k > f) {
+            arraylist.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
+        }
+
+        Collections.sort(arraylist);
+        arraylist.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
+        return arraylist;
     }
 
     public void c(String s) {
-        this.b();
+        this.e();
         this.a(s);
     }
 
-    public String c() {
-        return this.c.isEmpty() ? "[UNKNOWN]" : (String) this.c.get(this.c.size() - 1);
+    public String f() {
+        return this.b.isEmpty() ? "[UNKNOWN]" : (String) this.b.get(this.b.size() - 1);
     }
 
     public static final class ProfilerInfo implements Comparable<MethodProfiler.ProfilerInfo> {

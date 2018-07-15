@@ -29,24 +29,17 @@ public class NoiseGenerator3 extends NoiseGenerator {
         return d2;
     }
 
-    public double[] a(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4) {
-        return this.a(adouble, d0, d1, i, j, d2, d3, d4, 0.5D);
+    public double[] a(double d0, double d1, int i, int j, double d2, double d3, double d4) {
+        return this.a(d0, d1, i, j, d2, d3, d4, 0.5D);
     }
 
-    public double[] a(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4, double d5) {
-        if (adouble != null && adouble.length >= i * j) {
-            for (int k = 0; k < adouble.length; ++k) {
-                adouble[k] = 0.0D;
-            }
-        } else {
-            adouble = new double[i * j];
-        }
-
+    public double[] a(double d0, double d1, int i, int j, double d2, double d3, double d4, double d5) {
+        double[] adouble = new double[i * j];
         double d6 = 1.0D;
         double d7 = 1.0D;
 
-        for (int l = 0; l < this.b; ++l) {
-            this.a[l].a(adouble, d0, d1, i, j, d2 * d7 * d6, d3 * d7 * d6, 0.55D / d6);
+        for (int k = 0; k < this.b; ++k) {
+            this.a[k].a(adouble, d0, d1, i, j, d2 * d7 * d6, d3 * d7 * d6, 0.55D / d6);
             d7 *= d4;
             d6 *= d5;
         }

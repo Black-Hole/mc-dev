@@ -1,30 +1,42 @@
 package net.minecraft.server;
 
-public class DataConverterDropChances implements IDataConverter {
+import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DataFix;
+import com.mojang.datafixers.Dynamic;
+import com.mojang.datafixers.TypeRewriteRule;
+import com.mojang.datafixers.Typed;
+import com.mojang.datafixers.schemas.Schema;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-    public DataConverterDropChances() {}
+public class DataConverterDropChances extends DataFix {
 
-    public int a() {
-        return 113;
+    public DataConverterDropChances(Schema schema, boolean flag) {
+        super(schema, flag);
     }
 
-    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
-        NBTTagList nbttaglist;
+    public TypeRewriteRule makeRule() {
+        return this.fixTypeEverywhereTyped("EntityRedundantChanceTagsFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
+            return typed.update(DSL.remainderFinder(), (dynamic) -> {
+                Dynamic dynamic1 = dynamic;
 
-        if (nbttagcompound.hasKeyOfType("HandDropChances", 9)) {
-            nbttaglist = nbttagcompound.getList("HandDropChances", 5);
-            if (nbttaglist.size() == 2 && nbttaglist.g(0) == 0.0F && nbttaglist.g(1) == 0.0F) {
-                nbttagcompound.remove("HandDropChances");
-            }
-        }
+                if (Objects.equals(dynamic.get("HandDropChances"), Optional.of(dynamic.createList(Stream.generate(() -> {
+                    return dynamic.createFloat(0.0F);
+                }).limit(2L))))) {
+                    dynamic = dynamic.remove("HandDropChances");
+                }
 
-        if (nbttagcompound.hasKeyOfType("ArmorDropChances", 9)) {
-            nbttaglist = nbttagcompound.getList("ArmorDropChances", 5);
-            if (nbttaglist.size() == 4 && nbttaglist.g(0) == 0.0F && nbttaglist.g(1) == 0.0F && nbttaglist.g(2) == 0.0F && nbttaglist.g(3) == 0.0F) {
-                nbttagcompound.remove("ArmorDropChances");
-            }
-        }
+                if (Objects.equals(dynamic.get("ArmorDropChances"), Optional.of(dynamic.createList(Stream.generate(() -> {
+                    return dynamic.createFloat(0.0F);
+                }).limit(4L))))) {
+                    dynamic = dynamic.remove("ArmorDropChances");
+                }
 
-        return nbttagcompound;
+                return dynamic;
+            });
+        });
     }
 }

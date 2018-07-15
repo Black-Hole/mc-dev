@@ -1,66 +1,71 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.function.Predicate;
 
-public class CommandSaveAll extends CommandAbstract {
+public class CommandSaveAll {
 
-    public CommandSaveAll() {}
+    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.save.failed", new Object[0]));
 
-    public String getCommand() {
-        return "save-all";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("save-all").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(4);
+        })).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), false);
+        })).then(CommandDispatcher.a("flush").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), true);
+        })));
     }
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.save.usage";
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, boolean flag) throws CommandSyntaxException {
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.saving", new Object[0]), false);
+        MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
+        boolean flag1 = false;
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        icommandlistener.sendMessage(new ChatMessage("commands.save.start", new Object[0]));
-        if (minecraftserver.getPlayerList() != null) {
-            minecraftserver.getPlayerList().savePlayers();
+        minecraftserver.getPlayerList().savePlayers();
+        WorldServer[] aworldserver = minecraftserver.worldServer;
+        int i = aworldserver.length;
+
+        for (int j = 0; j < i; ++j) {
+            WorldServer worldserver = aworldserver[j];
+
+            if (worldserver != null && a(worldserver, flag)) {
+                flag1 = true;
+            }
         }
+
+        if (!flag1) {
+            throw CommandSaveAll.a.create();
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.save.success", new Object[0]), true);
+            return 1;
+        }
+    }
+
+    private static boolean a(WorldServer worldserver, boolean flag) {
+        boolean flag1 = worldserver.savingDisabled;
+
+        worldserver.savingDisabled = false;
+
+        boolean flag2;
 
         try {
-            int i;
-            WorldServer worldserver;
-            boolean flag;
-
-            for (i = 0; i < minecraftserver.worldServer.length; ++i) {
-                if (minecraftserver.worldServer[i] != null) {
-                    worldserver = minecraftserver.worldServer[i];
-                    flag = worldserver.savingDisabled;
-                    worldserver.savingDisabled = false;
-                    worldserver.save(true, (IProgressUpdate) null);
-                    worldserver.savingDisabled = flag;
-                }
+            worldserver.save(true, (IProgressUpdate) null);
+            if (flag) {
+                worldserver.flushSave();
             }
 
-            if (astring.length > 0 && "flush".equals(astring[0])) {
-                icommandlistener.sendMessage(new ChatMessage("commands.save.flushStart", new Object[0]));
-
-                for (i = 0; i < minecraftserver.worldServer.length; ++i) {
-                    if (minecraftserver.worldServer[i] != null) {
-                        worldserver = minecraftserver.worldServer[i];
-                        flag = worldserver.savingDisabled;
-                        worldserver.savingDisabled = false;
-                        worldserver.flushSave();
-                        worldserver.savingDisabled = flag;
-                    }
-                }
-
-                icommandlistener.sendMessage(new ChatMessage("commands.save.flushEnd", new Object[0]));
-            }
+            return true;
         } catch (ExceptionWorldConflict exceptionworldconflict) {
-            a(icommandlistener, (ICommand) this, "commands.save.failed", new Object[] { exceptionworldconflict.getMessage()});
-            return;
+            flag2 = false;
+        } finally {
+            worldserver.savingDisabled = flag1;
         }
 
-        a(icommandlistener, (ICommand) this, "commands.save.success", new Object[0]);
-    }
-
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, new String[] { "flush"}) : Collections.emptyList();
+        return flag2;
     }
 }

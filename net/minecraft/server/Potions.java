@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Potions {
 
-    private static final Set<PotionRegistry> K;
+    private static final Set<PotionRegistry> Q;
     public static final PotionRegistry EMPTY;
     public static final PotionRegistry b;
     public static final PotionRegistry c;
@@ -42,11 +42,17 @@ public class Potions {
     public static final PotionRegistry H;
     public static final PotionRegistry I;
     public static final PotionRegistry J;
+    public static final PotionRegistry K;
+    public static final PotionRegistry L;
+    public static final PotionRegistry M;
+    public static final PotionRegistry N;
+    public static final PotionRegistry O;
+    public static final PotionRegistry P;
 
     private static PotionRegistry a(String s) {
         PotionRegistry potionregistry = (PotionRegistry) PotionRegistry.a.get(new MinecraftKey(s));
 
-        if (!Potions.K.add(potionregistry)) {
+        if (!Potions.Q.add(potionregistry)) {
             throw new IllegalStateException("Invalid Potion requested: " + s);
         } else {
             return potionregistry;
@@ -57,7 +63,7 @@ public class Potions {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Potions before Bootstrap!");
         } else {
-            K = Sets.newHashSet();
+            Q = Sets.newHashSet(new PotionRegistry[] { (PotionRegistry) null});
             EMPTY = a("empty");
             b = a("water");
             c = a("mundane");
@@ -77,24 +83,30 @@ public class Potions {
             q = a("strong_swiftness");
             r = a("slowness");
             s = a("long_slowness");
-            t = a("water_breathing");
-            u = a("long_water_breathing");
-            v = a("healing");
-            w = a("strong_healing");
-            x = a("harming");
-            y = a("strong_harming");
-            z = a("poison");
-            A = a("long_poison");
-            B = a("strong_poison");
-            C = a("regeneration");
-            D = a("long_regeneration");
-            E = a("strong_regeneration");
-            F = a("strength");
-            G = a("long_strength");
-            H = a("strong_strength");
-            I = a("weakness");
-            J = a("long_weakness");
-            Potions.K.clear();
+            t = a("strong_slowness");
+            u = a("turtle_master");
+            v = a("long_turtle_master");
+            w = a("strong_turtle_master");
+            x = a("water_breathing");
+            y = a("long_water_breathing");
+            z = a("healing");
+            A = a("strong_healing");
+            B = a("harming");
+            C = a("strong_harming");
+            D = a("poison");
+            E = a("long_poison");
+            F = a("strong_poison");
+            G = a("regeneration");
+            H = a("long_regeneration");
+            I = a("strong_regeneration");
+            J = a("strength");
+            K = a("long_strength");
+            L = a("strong_strength");
+            M = a("weakness");
+            N = a("long_weakness");
+            O = a("slow_falling");
+            P = a("long_slow_falling");
+            Potions.Q.clear();
         }
     }
 }

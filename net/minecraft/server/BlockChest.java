@@ -1,94 +1,143 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 
-public class BlockChest extends BlockTileEntity {
+public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidContainer {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    protected static final AxisAlignedBB b = new AxisAlignedBB(0.0625D, 0.0D, 0.0D, 0.9375D, 0.875D, 0.9375D);
-    protected static final AxisAlignedBB c = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 1.0D);
-    protected static final AxisAlignedBB d = new AxisAlignedBB(0.0D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
-    protected static final AxisAlignedBB e = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 1.0D, 0.875D, 0.9375D);
-    protected static final AxisAlignedBB f = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
-    public final BlockChest.Type g;
+    public static final BlockStateEnum<BlockPropertyChestType> b = BlockProperties.ao;
+    public static final BlockStateBoolean c = BlockProperties.x;
+    protected static final VoxelShape p = Block.a(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 15.0D);
+    protected static final VoxelShape q = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    protected static final VoxelShape s = Block.a(1.0D, 0.0D, 1.0D, 16.0D, 14.0D, 15.0D);
+    protected static final VoxelShape t = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-    protected BlockChest(BlockChest.Type blockchest_type) {
-        super(Material.WOOD);
-        this.w(this.blockStateList.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH));
-        this.g = blockchest_type;
-        this.a(blockchest_type == BlockChest.Type.TRAP ? CreativeModeTab.d : CreativeModeTab.c);
+    protected BlockChest(Block.Info block_info) {
+        super(block_info);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChest.FACING, EnumDirection.NORTH)).set(BlockChest.b, BlockPropertyChestType.SINGLE)).set(BlockChest.c, Boolean.valueOf(false)));
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean c(IBlockData iblockdata) {
-        return false;
-    }
-
-    public EnumRenderType a(IBlockData iblockdata) {
+    public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.getType(blockposition.north()).getBlock() == this ? BlockChest.b : (iblockaccess.getType(blockposition.south()).getBlock() == this ? BlockChest.c : (iblockaccess.getType(blockposition.west()).getBlock() == this ? BlockChest.d : (iblockaccess.getType(blockposition.east()).getBlock() == this ? BlockChest.e : BlockChest.f)));
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (((Boolean) iblockdata.get(BlockChest.c)).booleanValue()) {
+            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+        }
+
+        if (iblockdata1.getBlock() == this && enumdirection.k().c()) {
+            BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata1.get(BlockChest.b);
+
+            if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE && blockpropertychesttype != BlockPropertyChestType.SINGLE && iblockdata.get(BlockChest.FACING) == iblockdata1.get(BlockChest.FACING) && j(iblockdata1) == enumdirection.opposite()) {
+                return (IBlockData) iblockdata.set(BlockChest.b, blockpropertychesttype.a());
+            }
+        } else if (j(iblockdata) == enumdirection) {
+            return (IBlockData) iblockdata.set(BlockChest.b, BlockPropertyChestType.SINGLE);
+        }
+
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.e(world, blockposition, iblockdata);
-        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE) {
+            return BlockChest.t;
+        } else {
+            switch (j(iblockdata)) {
+            case NORTH:
+            default:
+                return BlockChest.p;
 
-        while (iterator.hasNext()) {
-            EnumDirection enumdirection = (EnumDirection) iterator.next();
-            BlockPosition blockposition1 = blockposition.shift(enumdirection);
-            IBlockData iblockdata1 = world.getType(blockposition1);
+            case SOUTH:
+                return BlockChest.q;
 
-            if (iblockdata1.getBlock() == this) {
-                this.e(world, blockposition1, iblockdata1);
+            case WEST:
+                return BlockChest.r;
+
+            case EAST:
+                return BlockChest.s;
+            }
+        }
+    }
+
+    public static EnumDirection j(IBlockData iblockdata) {
+        EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockChest.FACING);
+
+        return iblockdata.get(BlockChest.b) == BlockPropertyChestType.LEFT ? enumdirection.e() : enumdirection.f();
+    }
+
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        BlockPropertyChestType blockpropertychesttype = BlockPropertyChestType.SINGLE;
+        EnumDirection enumdirection = blockactioncontext.f().opposite();
+        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        boolean flag = blockactioncontext.isSneaking();
+        EnumDirection enumdirection1 = blockactioncontext.getClickedFace();
+
+        if (enumdirection1.k().c() && flag) {
+            EnumDirection enumdirection2 = this.a(blockactioncontext, enumdirection1.opposite());
+
+            if (enumdirection2 != null && enumdirection2.k() != enumdirection1.k()) {
+                enumdirection = enumdirection2;
+                blockpropertychesttype = enumdirection2.f() == enumdirection1.opposite() ? BlockPropertyChestType.RIGHT : BlockPropertyChestType.LEFT;
             }
         }
 
+        if (blockpropertychesttype == BlockPropertyChestType.SINGLE && !flag) {
+            if (enumdirection == this.a(blockactioncontext, enumdirection.e())) {
+                blockpropertychesttype = BlockPropertyChestType.LEFT;
+            } else if (enumdirection == this.a(blockactioncontext, enumdirection.f())) {
+                blockpropertychesttype = BlockPropertyChestType.RIGHT;
+            }
+        }
+
+        return (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChest.FACING, enumdirection)).set(BlockChest.b, blockpropertychesttype)).set(BlockChest.c, Boolean.valueOf(fluid.c() == FluidTypes.c));
     }
 
-    public IBlockData getPlacedState(World world, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2, int i, EntityLiving entityliving) {
-        return this.getBlockData().set(BlockChest.FACING, entityliving.getDirection());
+    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        if (((Boolean) iblockdata.get(BlockChest.c)).booleanValue()) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockChest.c, Boolean.valueOf(false)), 3);
+            return FluidTypes.c;
+        } else {
+            return FluidTypes.a;
+        }
+    }
+
+    public Fluid t(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockChest.c)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    }
+
+    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+        return !((Boolean) iblockdata.get(BlockChest.c)).booleanValue() && fluidtype == FluidTypes.c;
+    }
+
+    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+        if (!((Boolean) iblockdata.get(BlockChest.c)).booleanValue() && fluid.c() == FluidTypes.c) {
+            if (!generatoraccess.e()) {
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockChest.c, Boolean.valueOf(true)), 3);
+                generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Nullable
+    private EnumDirection a(BlockActionContext blockactioncontext, EnumDirection enumdirection) {
+        IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().shift(enumdirection));
+
+        return iblockdata.getBlock() == this && iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE ? (EnumDirection) iblockdata.get(BlockChest.FACING) : null;
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        EnumDirection enumdirection = EnumDirection.fromType2(MathHelper.floor((double) (entityliving.yaw * 4.0F / 360.0F) + 0.5D) & 3).opposite();
-
-        iblockdata = iblockdata.set(BlockChest.FACING, enumdirection);
-        BlockPosition blockposition1 = blockposition.north();
-        BlockPosition blockposition2 = blockposition.south();
-        BlockPosition blockposition3 = blockposition.west();
-        BlockPosition blockposition4 = blockposition.east();
-        boolean flag = this == world.getType(blockposition1).getBlock();
-        boolean flag1 = this == world.getType(blockposition2).getBlock();
-        boolean flag2 = this == world.getType(blockposition3).getBlock();
-        boolean flag3 = this == world.getType(blockposition4).getBlock();
-
-        if (!flag && !flag1 && !flag2 && !flag3) {
-            world.setTypeAndData(blockposition, iblockdata, 3);
-        } else if (enumdirection.k() == EnumDirection.EnumAxis.X && (flag || flag1)) {
-            if (flag) {
-                world.setTypeAndData(blockposition1, iblockdata, 3);
-            } else {
-                world.setTypeAndData(blockposition2, iblockdata, 3);
-            }
-
-            world.setTypeAndData(blockposition, iblockdata, 3);
-        } else if (enumdirection.k() == EnumDirection.EnumAxis.Z && (flag2 || flag3)) {
-            if (flag2) {
-                world.setTypeAndData(blockposition3, iblockdata, 3);
-            } else {
-                world.setTypeAndData(blockposition4, iblockdata, 3);
-            }
-
-            world.setTypeAndData(blockposition, iblockdata, 3);
-        }
-
         if (itemstack.hasName()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
@@ -99,261 +148,71 @@ public class BlockChest extends BlockTileEntity {
 
     }
 
-    public IBlockData e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (world.isClientSide) {
-            return iblockdata;
-        } else {
-            IBlockData iblockdata1 = world.getType(blockposition.north());
-            IBlockData iblockdata2 = world.getType(blockposition.south());
-            IBlockData iblockdata3 = world.getType(blockposition.west());
-            IBlockData iblockdata4 = world.getType(blockposition.east());
-            EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockChest.FACING);
+    public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            TileEntity tileentity = world.getTileEntity(blockposition);
 
-            if (iblockdata1.getBlock() != this && iblockdata2.getBlock() != this) {
-                boolean flag = iblockdata1.b();
-                boolean flag1 = iblockdata2.b();
-
-                if (iblockdata3.getBlock() == this || iblockdata4.getBlock() == this) {
-                    BlockPosition blockposition1 = iblockdata3.getBlock() == this ? blockposition.west() : blockposition.east();
-                    IBlockData iblockdata5 = world.getType(blockposition1.north());
-                    IBlockData iblockdata6 = world.getType(blockposition1.south());
-
-                    enumdirection = EnumDirection.SOUTH;
-                    EnumDirection enumdirection1;
-
-                    if (iblockdata3.getBlock() == this) {
-                        enumdirection1 = (EnumDirection) iblockdata3.get(BlockChest.FACING);
-                    } else {
-                        enumdirection1 = (EnumDirection) iblockdata4.get(BlockChest.FACING);
-                    }
-
-                    if (enumdirection1 == EnumDirection.NORTH) {
-                        enumdirection = EnumDirection.NORTH;
-                    }
-
-                    if ((flag || iblockdata5.b()) && !flag1 && !iblockdata6.b()) {
-                        enumdirection = EnumDirection.SOUTH;
-                    }
-
-                    if ((flag1 || iblockdata6.b()) && !flag && !iblockdata5.b()) {
-                        enumdirection = EnumDirection.NORTH;
-                    }
-                }
-            } else {
-                BlockPosition blockposition2 = iblockdata1.getBlock() == this ? blockposition.north() : blockposition.south();
-                IBlockData iblockdata7 = world.getType(blockposition2.west());
-                IBlockData iblockdata8 = world.getType(blockposition2.east());
-
-                enumdirection = EnumDirection.EAST;
-                EnumDirection enumdirection2;
-
-                if (iblockdata1.getBlock() == this) {
-                    enumdirection2 = (EnumDirection) iblockdata1.get(BlockChest.FACING);
-                } else {
-                    enumdirection2 = (EnumDirection) iblockdata2.get(BlockChest.FACING);
-                }
-
-                if (enumdirection2 == EnumDirection.WEST) {
-                    enumdirection = EnumDirection.WEST;
-                }
-
-                if ((iblockdata3.b() || iblockdata7.b()) && !iblockdata4.b() && !iblockdata8.b()) {
-                    enumdirection = EnumDirection.EAST;
-                }
-
-                if ((iblockdata4.b() || iblockdata8.b()) && !iblockdata3.b() && !iblockdata7.b()) {
-                    enumdirection = EnumDirection.WEST;
-                }
+            if (tileentity instanceof IInventory) {
+                InventoryUtils.dropInventory(world, blockposition, (IInventory) tileentity);
+                world.updateAdjacentComparators(blockposition, this);
             }
 
-            iblockdata = iblockdata.set(BlockChest.FACING, enumdirection);
-            world.setTypeAndData(blockposition, iblockdata, 3);
-            return iblockdata;
+            super.remove(iblockdata, world, blockposition, iblockdata1, flag);
         }
     }
 
-    public IBlockData f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        EnumDirection enumdirection = null;
-        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-        while (iterator.hasNext()) {
-            EnumDirection enumdirection1 = (EnumDirection) iterator.next();
-            IBlockData iblockdata1 = world.getType(blockposition.shift(enumdirection1));
-
-            if (iblockdata1.getBlock() == this) {
-                return iblockdata;
-            }
-
-            if (iblockdata1.b()) {
-                if (enumdirection != null) {
-                    enumdirection = null;
-                    break;
-                }
-
-                enumdirection = enumdirection1;
-            }
-        }
-
-        if (enumdirection != null) {
-            return iblockdata.set(BlockChest.FACING, enumdirection.opposite());
-        } else {
-            EnumDirection enumdirection2 = (EnumDirection) iblockdata.get(BlockChest.FACING);
-
-            if (world.getType(blockposition.shift(enumdirection2)).b()) {
-                enumdirection2 = enumdirection2.opposite();
-            }
-
-            if (world.getType(blockposition.shift(enumdirection2)).b()) {
-                enumdirection2 = enumdirection2.e();
-            }
-
-            if (world.getType(blockposition.shift(enumdirection2)).b()) {
-                enumdirection2 = enumdirection2.opposite();
-            }
-
-            return iblockdata.set(BlockChest.FACING, enumdirection2);
-        }
-    }
-
-    public boolean canPlace(World world, BlockPosition blockposition) {
-        int i = 0;
-        BlockPosition blockposition1 = blockposition.west();
-        BlockPosition blockposition2 = blockposition.east();
-        BlockPosition blockposition3 = blockposition.north();
-        BlockPosition blockposition4 = blockposition.south();
-
-        if (world.getType(blockposition1).getBlock() == this) {
-            if (this.d(world, blockposition1)) {
-                return false;
-            }
-
-            ++i;
-        }
-
-        if (world.getType(blockposition2).getBlock() == this) {
-            if (this.d(world, blockposition2)) {
-                return false;
-            }
-
-            ++i;
-        }
-
-        if (world.getType(blockposition3).getBlock() == this) {
-            if (this.d(world, blockposition3)) {
-                return false;
-            }
-
-            ++i;
-        }
-
-        if (world.getType(blockposition4).getBlock() == this) {
-            if (this.d(world, blockposition4)) {
-                return false;
-            }
-
-            ++i;
-        }
-
-        return i <= 1;
-    }
-
-    private boolean d(World world, BlockPosition blockposition) {
-        if (world.getType(blockposition).getBlock() != this) {
-            return false;
-        } else {
-            Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-            EnumDirection enumdirection;
-
-            do {
-                if (!iterator.hasNext()) {
-                    return false;
-                }
-
-                enumdirection = (EnumDirection) iterator.next();
-            } while (world.getType(blockposition.shift(enumdirection)).getBlock() != this);
-
-            return true;
-        }
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        super.a(iblockdata, world, blockposition, block, blockposition1);
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        if (tileentity instanceof TileEntityChest) {
-            tileentity.invalidateBlockCache();
-        }
-
-    }
-
-    public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        if (tileentity instanceof IInventory) {
-            InventoryUtils.dropInventory(world, blockposition, (IInventory) tileentity);
-            world.updateAdjacentComparators(blockposition, this);
-        }
-
-        super.remove(world, blockposition, iblockdata);
-    }
-
-    public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         if (world.isClientSide) {
             return true;
         } else {
-            ITileInventory itileinventory = this.getInventory(world, blockposition);
+            ITileInventory itileinventory = this.getInventory(iblockdata, world, blockposition, false);
 
             if (itileinventory != null) {
                 entityhuman.openContainer(itileinventory);
-                if (this.g == BlockChest.Type.BASIC) {
-                    entityhuman.b(StatisticList.aa);
-                } else if (this.g == BlockChest.Type.TRAP) {
-                    entityhuman.b(StatisticList.U);
-                }
+                entityhuman.b(this.b());
             }
 
             return true;
         }
     }
 
-    @Nullable
-    public ITileInventory getInventory(World world, BlockPosition blockposition) {
-        return this.a(world, blockposition, false);
+    protected Statistic<MinecraftKey> b() {
+        return StatisticList.CUSTOM.b(StatisticList.OPEN_CHEST);
     }
 
     @Nullable
-    public ITileInventory a(World world, BlockPosition blockposition, boolean flag) {
+    public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition, boolean flag) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         if (!(tileentity instanceof TileEntityChest)) {
             return null;
+        } else if (!flag && this.a(world, blockposition)) {
+            return null;
         } else {
             Object object = (TileEntityChest) tileentity;
+            BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata.get(BlockChest.b);
 
-            if (!flag && this.e(world, blockposition)) {
-                return null;
+            if (blockpropertychesttype == BlockPropertyChestType.SINGLE) {
+                return (ITileInventory) object;
             } else {
-                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+                BlockPosition blockposition1 = blockposition.shift(j(iblockdata));
+                IBlockData iblockdata1 = world.getType(blockposition1);
 
-                while (iterator.hasNext()) {
-                    EnumDirection enumdirection = (EnumDirection) iterator.next();
-                    BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                    Block block = world.getType(blockposition1).getBlock();
+                if (iblockdata1.getBlock() == this) {
+                    BlockPropertyChestType blockpropertychesttype1 = (BlockPropertyChestType) iblockdata1.get(BlockChest.b);
 
-                    if (block == this) {
-                        if (this.e(world, blockposition1)) {
+                    if (blockpropertychesttype1 != BlockPropertyChestType.SINGLE && blockpropertychesttype != blockpropertychesttype1 && iblockdata1.get(BlockChest.FACING) == iblockdata.get(BlockChest.FACING)) {
+                        if (!flag && this.a(world, blockposition1)) {
                             return null;
                         }
 
                         TileEntity tileentity1 = world.getTileEntity(blockposition1);
 
                         if (tileentity1 instanceof TileEntityChest) {
-                            if (enumdirection != EnumDirection.WEST && enumdirection != EnumDirection.NORTH) {
-                                object = new InventoryLargeChest("container.chestDouble", (ITileInventory) object, (TileEntityChest) tileentity1);
-                            } else {
-                                object = new InventoryLargeChest("container.chestDouble", (TileEntityChest) tileentity1, (ITileInventory) object);
-                            }
+                            Object object1 = blockpropertychesttype == BlockPropertyChestType.RIGHT ? object : (ITileInventory) tileentity1;
+                            Object object2 = blockpropertychesttype == BlockPropertyChestType.RIGHT ? (ITileInventory) tileentity1 : object;
+
+                            object = new InventoryLargeChest(new ChatMessage("container.chestDouble", new Object[0]), (ITileInventory) object1, (ITileInventory) object2);
                         }
                     }
                 }
@@ -363,101 +222,61 @@ public class BlockChest extends BlockTileEntity {
         }
     }
 
-    public TileEntity a(World world, int i) {
+    public TileEntity a(IBlockAccess iblockaccess) {
         return new TileEntityChest();
     }
 
-    public boolean isPowerSource(IBlockData iblockdata) {
-        return this.g == BlockChest.Type.TRAP;
+    private boolean a(World world, BlockPosition blockposition) {
+        return this.a((IBlockAccess) world, blockposition) || this.b(world, blockposition);
     }
 
-    public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        if (!iblockdata.m()) {
-            return 0;
-        } else {
-            int i = 0;
-            TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
+    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockaccess.getType(blockposition.up()).isOccluding();
+    }
 
-            if (tileentity instanceof TileEntityChest) {
-                i = ((TileEntityChest) tileentity).l;
+    private boolean b(World world, BlockPosition blockposition) {
+        List list = world.a(EntityOcelot.class, new AxisAlignedBB((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 2), (double) (blockposition.getZ() + 1)));
+
+        if (!list.isEmpty()) {
+            Iterator iterator = list.iterator();
+
+            while (iterator.hasNext()) {
+                EntityOcelot entityocelot = (EntityOcelot) iterator.next();
+
+                if (entityocelot.isSitting()) {
+                    return true;
+                }
             }
-
-            return MathHelper.clamp(i, 0, 15);
         }
-    }
 
-    public int c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.UP ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
-    }
-
-    private boolean e(World world, BlockPosition blockposition) {
-        return this.i(world, blockposition) || this.j(world, blockposition);
-    }
-
-    private boolean i(World world, BlockPosition blockposition) {
-        return world.getType(blockposition.up()).l();
-    }
-
-    private boolean j(World world, BlockPosition blockposition) {
-        Iterator iterator = world.a(EntityOcelot.class, new AxisAlignedBB((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 2), (double) (blockposition.getZ() + 1))).iterator();
-
-        EntityOcelot entityocelot;
-
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            Entity entity = (Entity) iterator.next();
-
-            entityocelot = (EntityOcelot) entity;
-        } while (!entityocelot.isSitting());
-
-        return true;
+        return false;
     }
 
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
-    public int c(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return Container.b((IInventory) this.getInventory(world, blockposition));
-    }
-
-    public IBlockData fromLegacyData(int i) {
-        EnumDirection enumdirection = EnumDirection.fromType1(i);
-
-        if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
-            enumdirection = EnumDirection.NORTH;
-        }
-
-        return this.getBlockData().set(BlockChest.FACING, enumdirection);
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((EnumDirection) iblockdata.get(BlockChest.FACING)).a();
+    public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        return Container.b((IInventory) this.getInventory(iblockdata, world, blockposition, false));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return iblockdata.set(BlockChest.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockChest.FACING)));
+        return (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockChest.FACING)));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockChest.FACING)));
     }
 
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockChest.FACING});
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockChest.FACING, BlockChest.b, BlockChest.c});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public static enum Type {
-
-        BASIC, TRAP;
-
-        private Type() {}
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return false;
     }
 }

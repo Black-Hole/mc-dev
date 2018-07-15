@@ -12,52 +12,57 @@ import java.util.regex.Pattern;
 
 public class ChatMessage extends ChatBaseComponent {
 
-    private final String d;
-    private final Object[] e;
-    private final Object f = new Object();
-    private long g = -1L;
+    private static final LocaleLanguage d = new LocaleLanguage();
+    private static final LocaleLanguage e = LocaleLanguage.a();
+    private final String f;
+    private final Object[] g;
+    private final Object h = new Object();
+    private long i = -1L;
     @VisibleForTesting
     List<IChatBaseComponent> b = Lists.newArrayList();
     public static final Pattern c = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     public ChatMessage(String s, Object... aobject) {
-        this.d = s;
-        this.e = aobject;
-        Object[] aobject1 = aobject;
-        int i = aobject.length;
+        this.f = s;
+        this.g = aobject;
 
-        for (int j = 0; j < i; ++j) {
-            Object object = aobject1[j];
+        for (int i = 0; i < aobject.length; ++i) {
+            Object object = aobject[i];
 
             if (object instanceof IChatBaseComponent) {
-                ((IChatBaseComponent) object).getChatModifier().setChatModifier(this.getChatModifier());
+                IChatBaseComponent ichatbasecomponent = ((IChatBaseComponent) object).e();
+
+                this.g[i] = ichatbasecomponent;
+                ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
+            } else if (object == null) {
+                this.g[i] = "null";
             }
         }
 
     }
 
     @VisibleForTesting
-    synchronized void g() {
-        Object object = this.f;
+    synchronized void f() {
+        Object object = this.h;
 
-        synchronized (this.f) {
-            long i = LocaleI18n.a();
+        synchronized (this.h) {
+            long i = ChatMessage.e.b();
 
-            if (i == this.g) {
+            if (i == this.i) {
                 return;
             }
 
-            this.g = i;
+            this.i = i;
             this.b.clear();
         }
 
         try {
-            this.b(LocaleI18n.get(this.d));
+            this.b(ChatMessage.e.a(this.f));
         } catch (ChatMessageException chatmessageexception) {
             this.b.clear();
 
             try {
-                this.b(LocaleI18n.b(this.d));
+                this.b(ChatMessage.d.a(this.f));
             } catch (ChatMessageException chatmessageexception1) {
                 throw chatmessageexception;
             }
@@ -66,15 +71,15 @@ public class ChatMessage extends ChatBaseComponent {
     }
 
     protected void b(String s) {
-        boolean flag = false;
         Matcher matcher = ChatMessage.c.matcher(s);
-        int i = 0;
-        int j = 0;
 
         try {
+            int i = 0;
+
+            int j;
             int k;
 
-            for (; matcher.find(j); j = k) {
+            for (j = 0; matcher.find(j); j = k) {
                 int l = matcher.start();
 
                 k = matcher.end();
@@ -101,7 +106,7 @@ public class ChatMessage extends ChatBaseComponent {
                     String s3 = matcher.group(1);
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
-                    if (i1 < this.e.length) {
+                    if (i1 < this.g.length) {
                         this.b.add(this.a(i1));
                     }
                 }
@@ -120,10 +125,10 @@ public class ChatMessage extends ChatBaseComponent {
     }
 
     private IChatBaseComponent a(int i) {
-        if (i >= this.e.length) {
+        if (i >= this.g.length) {
             throw new ChatMessageException(this, i);
         } else {
-            Object object = this.e[i];
+            Object object = this.g[i];
             Object object1;
 
             if (object instanceof IChatBaseComponent) {
@@ -139,7 +144,7 @@ public class ChatMessage extends ChatBaseComponent {
 
     public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
         super.setChatModifier(chatmodifier);
-        Object[] aobject = this.e;
+        Object[] aobject = this.g;
         int i = aobject.length;
 
         for (int j = 0; j < i; ++j) {
@@ -150,7 +155,7 @@ public class ChatMessage extends ChatBaseComponent {
             }
         }
 
-        if (this.g > -1L) {
+        if (this.i > -1L) {
             Iterator iterator = this.b.iterator();
 
             while (iterator.hasNext()) {
@@ -164,12 +169,12 @@ public class ChatMessage extends ChatBaseComponent {
     }
 
     public Iterator<IChatBaseComponent> iterator() {
-        this.g();
+        this.f();
         return Iterators.concat(a((Iterable) this.b), a((Iterable) this.a));
     }
 
     public String getText() {
-        this.g();
+        this.f();
         StringBuilder stringbuilder = new StringBuilder();
         Iterator iterator = this.b.iterator();
 
@@ -182,18 +187,18 @@ public class ChatMessage extends ChatBaseComponent {
         return stringbuilder.toString();
     }
 
-    public ChatMessage h() {
-        Object[] aobject = new Object[this.e.length];
+    public ChatMessage g() {
+        Object[] aobject = new Object[this.g.length];
 
-        for (int i = 0; i < this.e.length; ++i) {
-            if (this.e[i] instanceof IChatBaseComponent) {
-                aobject[i] = ((IChatBaseComponent) this.e[i]).f();
+        for (int i = 0; i < this.g.length; ++i) {
+            if (this.g[i] instanceof IChatBaseComponent) {
+                aobject[i] = ((IChatBaseComponent) this.g[i]).e();
             } else {
-                aobject[i] = this.e[i];
+                aobject[i] = this.g[i];
             }
         }
 
-        ChatMessage chatmessage = new ChatMessage(this.d, aobject);
+        ChatMessage chatmessage = new ChatMessage(this.f, aobject);
 
         chatmessage.setChatModifier(this.getChatModifier().clone());
         Iterator iterator = this.a().iterator();
@@ -201,7 +206,7 @@ public class ChatMessage extends ChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            chatmessage.addSibling(ichatbasecomponent.f());
+            chatmessage.addSibling(ichatbasecomponent.e());
         }
 
         return chatmessage;
@@ -215,31 +220,31 @@ public class ChatMessage extends ChatBaseComponent {
         } else {
             ChatMessage chatmessage = (ChatMessage) object;
 
-            return Arrays.equals(this.e, chatmessage.e) && this.d.equals(chatmessage.d) && super.equals(object);
+            return Arrays.equals(this.g, chatmessage.g) && this.f.equals(chatmessage.f) && super.equals(object);
         }
     }
 
     public int hashCode() {
         int i = super.hashCode();
 
-        i = 31 * i + this.d.hashCode();
-        i = 31 * i + Arrays.hashCode(this.e);
+        i = 31 * i + this.f.hashCode();
+        i = 31 * i + Arrays.hashCode(this.g);
         return i;
     }
 
     public String toString() {
-        return "TranslatableComponent{key=\'" + this.d + '\'' + ", args=" + Arrays.toString(this.e) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "TranslatableComponent{key=\'" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String i() {
-        return this.d;
+    public String h() {
+        return this.f;
     }
 
-    public Object[] j() {
-        return this.e;
+    public Object[] i() {
+        return this.g;
     }
 
-    public IChatBaseComponent f() {
-        return this.h();
+    public IChatBaseComponent e() {
+        return this.g();
     }
 }

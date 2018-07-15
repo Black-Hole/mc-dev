@@ -1,17 +1,9 @@
 package net.minecraft.server;
 
-public class BiomeVoid extends BiomeBase {
+public final class BiomeVoid extends BiomeBase {
 
-    public BiomeVoid(BiomeBase.a biomebase_a) {
-        super(biomebase_a);
-        this.t.clear();
-        this.u.clear();
-        this.v.clear();
-        this.w.clear();
-        this.s = new BiomeVoidDecorator();
-    }
-
-    public boolean i() {
-        return true;
+    public BiomeVoid() {
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeVoid.aG, BiomeVoid.ak)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.NONE).a(0.1F).b(0.2F).c(0.5F).d(0.5F).a(4159204).b(329011).a((String) null));
+        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.N, WorldGenFeatureConfiguration.e, BiomeVoid.n, WorldGenFeatureDecoratorConfiguration.e));
     }
 }

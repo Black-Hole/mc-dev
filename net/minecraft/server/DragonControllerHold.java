@@ -19,7 +19,7 @@ public class DragonControllerHold extends AbstractDragonController {
     public void c() {
         double d0 = this.c == null ? 0.0D : this.c.c(this.a.locX, this.a.locY, this.a.locZ);
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.B) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.C) {
             this.j();
         }
 
@@ -39,9 +39,9 @@ public class DragonControllerHold extends AbstractDragonController {
         int i;
 
         if (this.b != null && this.b.b()) {
-            BlockPosition blockposition = this.a.world.q(new BlockPosition(WorldGenEndTrophy.a));
+            BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPosition(WorldGenEndTrophy.a));
 
-            i = this.a.df() == null ? 0 : this.a.df().c();
+            i = this.a.ds() == null ? 0 : this.a.ds().c();
             if (this.a.getRandom().nextInt(i + 3) == 0) {
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.c);
                 return;
@@ -61,7 +61,7 @@ public class DragonControllerHold extends AbstractDragonController {
         }
 
         if (this.b == null || this.b.b()) {
-            int j = this.a.p();
+            int j = this.a.l();
 
             i = j;
             if (this.a.getRandom().nextInt(8) == 0) {
@@ -75,7 +75,7 @@ public class DragonControllerHold extends AbstractDragonController {
                 --i;
             }
 
-            if (this.a.df() != null && this.a.df().c() >= 0) {
+            if (this.a.ds() != null && this.a.ds().c() >= 0) {
                 i %= 12;
                 if (i < 0) {
                     i += 12;

@@ -1,13 +1,15 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class InventoryLargeChest implements ITileInventory {
 
-    private final String a;
+    private final IChatBaseComponent a;
     public final ITileInventory left;
     public final ITileInventory right;
 
-    public InventoryLargeChest(String s, ITileInventory itileinventory, ITileInventory itileinventory1) {
-        this.a = s;
+    public InventoryLargeChest(IChatBaseComponent ichatbasecomponent, ITileInventory itileinventory, ITileInventory itileinventory1) {
+        this.a = ichatbasecomponent;
         if (itileinventory == null) {
             itileinventory = itileinventory1;
         }
@@ -30,24 +32,25 @@ public class InventoryLargeChest implements ITileInventory {
         return this.left.getSize() + this.right.getSize();
     }
 
-    public boolean x_() {
-        return this.left.x_() && this.right.x_();
+    public boolean P_() {
+        return this.left.P_() && this.right.P_();
     }
 
     public boolean a(IInventory iinventory) {
         return this.left == iinventory || this.right == iinventory;
     }
 
-    public String getName() {
-        return this.left.hasCustomName() ? this.left.getName() : (this.right.hasCustomName() ? this.right.getName() : this.a);
+    public IChatBaseComponent getDisplayName() {
+        return this.left.hasCustomName() ? this.left.getDisplayName() : (this.right.hasCustomName() ? this.right.getDisplayName() : this.a);
     }
 
     public boolean hasCustomName() {
         return this.left.hasCustomName() || this.right.hasCustomName();
     }
 
-    public IChatBaseComponent getScoreboardDisplayName() {
-        return (IChatBaseComponent) (this.hasCustomName() ? new ChatComponentText(this.getName()) : new ChatMessage(this.getName(), new Object[0]));
+    @Nullable
+    public IChatBaseComponent getCustomName() {
+        return this.left.hasCustomName() ? this.left.getCustomName() : this.right.getCustomName();
     }
 
     public ItemStack getItem(int i) {

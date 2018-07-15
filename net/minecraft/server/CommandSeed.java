@@ -1,28 +1,24 @@
 package net.minecraft.server;
 
-public class CommandSeed extends CommandAbstract {
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-    public CommandSeed() {}
+public class CommandSeed {
 
-    public boolean canUse(MinecraftServer minecraftserver, ICommandListener icommandlistener) {
-        return minecraftserver.R() || super.canUse(minecraftserver, icommandlistener);
-    }
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.getServer().J() || commandlistenerwrapper.hasPermission(2);
+        })).executes((commandcontext) -> {
+            long i = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getSeed();
+            IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((new ChatComponentText(String.valueOf(i))).a((chatmodifier) -> {
+                chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, String.valueOf(i))).setInsertion(String.valueOf(i));
+            }));
 
-    public String getCommand() {
-        return "seed";
-    }
-
-    public int a() {
-        return 2;
-    }
-
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.seed.usage";
-    }
-
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        Object object = icommandlistener instanceof EntityHuman ? ((EntityHuman) icommandlistener).world : minecraftserver.getWorldServer(0);
-
-        icommandlistener.sendMessage(new ChatMessage("commands.seed.success", new Object[] { Long.valueOf(((World) object).getSeed())}));
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.seed.success", new Object[] { ichatbasecomponent}), false);
+            return (int) i;
+        }));
     }
 }

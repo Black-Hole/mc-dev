@@ -10,7 +10,7 @@ public class ChatComponentText extends ChatBaseComponent {
         this.b = s;
     }
 
-    public String g() {
+    public String f() {
         return this.b;
     }
 
@@ -18,7 +18,7 @@ public class ChatComponentText extends ChatBaseComponent {
         return this.b;
     }
 
-    public ChatComponentText h() {
+    public ChatComponentText g() {
         ChatComponentText chatcomponenttext = new ChatComponentText(this.b);
 
         chatcomponenttext.setChatModifier(this.getChatModifier().clone());
@@ -27,7 +27,7 @@ public class ChatComponentText extends ChatBaseComponent {
         while (iterator.hasNext()) {
             IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
 
-            chatcomponenttext.addSibling(ichatbasecomponent.f());
+            chatcomponenttext.addSibling(ichatbasecomponent.e());
         }
 
         return chatcomponenttext;
@@ -41,7 +41,7 @@ public class ChatComponentText extends ChatBaseComponent {
         } else {
             ChatComponentText chatcomponenttext = (ChatComponentText) object;
 
-            return this.b.equals(chatcomponenttext.g()) && super.equals(object);
+            return this.b.equals(chatcomponenttext.f()) && super.equals(object);
         }
     }
 
@@ -49,7 +49,7 @@ public class ChatComponentText extends ChatBaseComponent {
         return "TextComponent{text=\'" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public IChatBaseComponent f() {
-        return this.h();
+    public IChatBaseComponent e() {
+        return this.g();
     }
 }

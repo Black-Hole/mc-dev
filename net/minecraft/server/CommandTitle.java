@@ -1,94 +1,109 @@
 package net.minecraft.server;
 
-import com.google.gson.JsonParseException;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.function.Predicate;
 
-public class CommandTitle extends CommandAbstract {
+public class CommandTitle {
 
-    private static final Logger a = LogManager.getLogger();
-
-    public CommandTitle() {}
-
-    public String getCommand() {
-        return "title";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("title").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("clear").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"));
+        }))).then(CommandDispatcher.a("reset").executes((commandcontext) -> {
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"));
+        }))).then(CommandDispatcher.a("title").then(CommandDispatcher.a("title", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChatComponent.a(commandcontext, "title"), PacketPlayOutTitle.EnumTitleAction.TITLE);
+        })))).then(CommandDispatcher.a("subtitle").then(CommandDispatcher.a("title", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChatComponent.a(commandcontext, "title"), PacketPlayOutTitle.EnumTitleAction.SUBTITLE);
+        })))).then(CommandDispatcher.a("actionbar").then(CommandDispatcher.a("title", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentChatComponent.a(commandcontext, "title"), PacketPlayOutTitle.EnumTitleAction.ACTIONBAR);
+        })))).then(CommandDispatcher.a("times").then(CommandDispatcher.a("fadeIn", (ArgumentType) IntegerArgumentType.integer(0)).then(CommandDispatcher.a("stay", (ArgumentType) IntegerArgumentType.integer(0)).then(CommandDispatcher.a("fadeOut", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), IntegerArgumentType.getInteger(commandcontext, "fadeIn"), IntegerArgumentType.getInteger(commandcontext, "stay"), IntegerArgumentType.getInteger(commandcontext, "fadeOut"));
+        })))))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection) {
+        PacketPlayOutTitle packetplayouttitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, (IChatBaseComponent) null);
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.title.usage";
-    }
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length < 2) {
-            throw new ExceptionUsage("commands.title.usage", new Object[0]);
-        } else {
-            if (astring.length < 3) {
-                if ("title".equals(astring[1]) || "subtitle".equals(astring[1]) || "actionbar".equals(astring[1])) {
-                    throw new ExceptionUsage("commands.title.usage.title", new Object[0]);
-                }
-
-                if ("times".equals(astring[1])) {
-                    throw new ExceptionUsage("commands.title.usage.times", new Object[0]);
-                }
-            }
-
-            EntityPlayer entityplayer = b(minecraftserver, icommandlistener, astring[0]);
-            PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction = PacketPlayOutTitle.EnumTitleAction.a(astring[1]);
-
-            if (packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.CLEAR && packetplayouttitle_enumtitleaction != PacketPlayOutTitle.EnumTitleAction.RESET) {
-                if (packetplayouttitle_enumtitleaction == PacketPlayOutTitle.EnumTitleAction.TIMES) {
-                    if (astring.length != 5) {
-                        throw new ExceptionUsage("commands.title.usage", new Object[0]);
-                    } else {
-                        int i = a(astring[2]);
-                        int j = a(astring[3]);
-                        int k = a(astring[4]);
-                        PacketPlayOutTitle packetplayouttitle = new PacketPlayOutTitle(i, j, k);
-
-                        entityplayer.playerConnection.sendPacket(packetplayouttitle);
-                        a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
-                    }
-                } else if (astring.length < 3) {
-                    throw new ExceptionUsage("commands.title.usage", new Object[0]);
-                } else {
-                    String s = a(astring, 2);
-
-                    IChatBaseComponent ichatbasecomponent;
-
-                    try {
-                        ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-                    } catch (JsonParseException jsonparseexception) {
-                        throw a(jsonparseexception);
-                    }
-
-                    PacketPlayOutTitle packetplayouttitle1 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(icommandlistener, ichatbasecomponent, entityplayer));
-
-                    entityplayer.playerConnection.sendPacket(packetplayouttitle1);
-                    a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
-                }
-            } else if (astring.length != 2) {
-                throw new ExceptionUsage("commands.title.usage", new Object[0]);
-            } else {
-                PacketPlayOutTitle packetplayouttitle2 = new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, (IChatBaseComponent) null);
-
-                entityplayer.playerConnection.sendPacket(packetplayouttitle2);
-                a(icommandlistener, (ICommand) this, "commands.title.success", new Object[0]);
-            }
+            entityplayer.playerConnection.sendPacket(packetplayouttitle);
         }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.cleared.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+        }
+
+        return collection.size();
     }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length == 2 ? a(astring, PacketPlayOutTitle.EnumTitleAction.a()) : Collections.emptyList());
+    private static int b(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection) {
+        PacketPlayOutTitle packetplayouttitle = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, (IChatBaseComponent) null);
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+            entityplayer.playerConnection.sendPacket(packetplayouttitle);
+        }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.reset.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+        }
+
+        return collection.size();
     }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, IChatBaseComponent ichatbasecomponent, PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction) throws CommandSyntaxException {
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutTitle(packetplayouttitle_enumtitleaction, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entityplayer)));
+        }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.show." + packetplayouttitle_enumtitleaction.name().toLowerCase(Locale.ROOT) + ".multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+        }
+
+        return collection.size();
+    }
+
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, int i, int j, int k) {
+        PacketPlayOutTitle packetplayouttitle = new PacketPlayOutTitle(i, j, k);
+        Iterator iterator = collection.iterator();
+
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+
+            entityplayer.playerConnection.sendPacket(packetplayouttitle);
+        }
+
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.single", new Object[] { ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.title.times.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+        }
+
+        return collection.size();
     }
 }

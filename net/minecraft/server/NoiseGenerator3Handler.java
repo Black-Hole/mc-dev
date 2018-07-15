@@ -6,19 +6,14 @@ public class NoiseGenerator3Handler {
 
     private static final int[][] e = new int[][] { { 1, 1, 0}, { -1, 1, 0}, { 1, -1, 0}, { -1, -1, 0}, { 1, 0, 1}, { -1, 0, 1}, { 1, 0, -1}, { -1, 0, -1}, { 0, 1, 1}, { 0, -1, 1}, { 0, 1, -1}, { 0, -1, -1}};
     public static final double a = Math.sqrt(3.0D);
-    private final int[] f;
+    private final int[] f = new int[512];
     public double b;
     public double c;
     public double d;
     private static final double g = 0.5D * (NoiseGenerator3Handler.a - 1.0D);
     private static final double h = (3.0D - NoiseGenerator3Handler.a) / 6.0D;
 
-    public NoiseGenerator3Handler() {
-        this(new Random());
-    }
-
     public NoiseGenerator3Handler(Random random) {
-        this.f = new int[512];
         this.b = random.nextDouble() * 256.0D;
         this.c = random.nextDouble() * 256.0D;
         this.d = random.nextDouble() * 256.0D;

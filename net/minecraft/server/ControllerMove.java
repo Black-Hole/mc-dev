@@ -74,7 +74,7 @@ public class ControllerMove {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
             if (navigationabstract != null) {
-                PathfinderAbstract pathfinderabstract = navigationabstract.r();
+                PathfinderAbstract pathfinderabstract = navigationabstract.t();
 
                 if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
                     this.f = 1.0F;
@@ -83,9 +83,9 @@ public class ControllerMove {
                 }
             }
 
-            this.a.k(f2);
-            this.a.n(this.f);
-            this.a.p(this.g);
+            this.a.o(f2);
+            this.a.r(this.f);
+            this.a.t(this.g);
             this.h = ControllerMove.Operation.WAIT;
         } else if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
@@ -95,24 +95,24 @@ public class ControllerMove {
             double d3 = d0 * d0 + d2 * d2 + d1 * d1;
 
             if (d3 < 2.500000277905201E-7D) {
-                this.a.n(0.0F);
+                this.a.r(0.0F);
                 return;
             }
 
             f = (float) (MathHelper.c(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
-            this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
-            if (d2 > (double) this.a.P && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.width)) {
+            this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+            if (d2 > (double) this.a.Q && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.width)) {
                 this.a.getControllerJump().a();
                 this.h = ControllerMove.Operation.JUMPING;
             }
         } else if (this.h == ControllerMove.Operation.JUMPING) {
-            this.a.k((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
+            this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
             if (this.a.onGround) {
                 this.h = ControllerMove.Operation.WAIT;
             }
         } else {
-            this.a.n(0.0F);
+            this.a.r(0.0F);
         }
 
     }

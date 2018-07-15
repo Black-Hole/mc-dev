@@ -25,7 +25,7 @@ public class LootItem extends LotoSelectorEntry {
         for (int j = 0; j < i; ++j) {
             LootItemFunction lootitemfunction = alootitemfunction[j];
 
-            if (LootItemConditions.a(lootitemfunction.a(), random, loottableinfo)) {
+            if (LootItemConditions.a(lootitemfunction.b(), random, loottableinfo)) {
                 itemstack = lootitemfunction.a(itemstack, random, loottableinfo);
             }
         }

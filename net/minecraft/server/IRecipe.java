@@ -2,19 +2,35 @@ package net.minecraft.server;
 
 public interface IRecipe {
 
-    boolean a(InventoryCrafting inventorycrafting, World world);
+    boolean a(IInventory iinventory, World world);
 
-    ItemStack craftItem(InventoryCrafting inventorycrafting);
+    ItemStack craftItem(IInventory iinventory);
 
-    ItemStack b();
+    ItemStack d();
 
-    NonNullList<ItemStack> b(InventoryCrafting inventorycrafting);
+    default NonNullList<ItemStack> b(IInventory iinventory) {
+        NonNullList nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
 
-    default NonNullList<RecipeItemStack> d() {
+        for (int i = 0; i < nonnulllist.size(); ++i) {
+            Item item = iinventory.getItem(i).getItem();
+
+            if (item.p()) {
+                nonnulllist.set(i, new ItemStack(item.o()));
+            }
+        }
+
+        return nonnulllist;
+    }
+
+    default NonNullList<RecipeItemStack> e() {
         return NonNullList.a();
     }
 
     default boolean c() {
         return false;
     }
+
+    MinecraftKey getKey();
+
+    RecipeSerializer<?> a();
 }

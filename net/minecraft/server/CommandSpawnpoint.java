@@ -1,45 +1,44 @@
 package net.minecraft.server;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.function.Predicate;
 
-public class CommandSpawnpoint extends CommandAbstract {
+public class CommandSpawnpoint {
 
-    public CommandSpawnpoint() {}
-
-    public String getCommand() {
-        return "spawnpoint";
+    public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("spawnpoint").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), Collections.singleton(((CommandListenerWrapper) commandcontext.getSource()).h()), new BlockPosition(((CommandListenerWrapper) commandcontext.getSource()).getPosition()));
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), new BlockPosition(((CommandListenerWrapper) commandcontext.getSource()).getPosition()));
+        })).then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), ArgumentPosition.b(commandcontext, "pos"));
+        }))));
     }
 
-    public int a() {
-        return 2;
-    }
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, BlockPosition blockposition) {
+        Iterator iterator = collection.iterator();
 
-    public String getUsage(ICommandListener icommandlistener) {
-        return "commands.spawnpoint.usage";
-    }
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-    public void execute(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring) throws CommandException {
-        if (astring.length > 1 && astring.length < 4) {
-            throw new ExceptionUsage("commands.spawnpoint.usage", new Object[0]);
-        } else {
-            EntityPlayer entityplayer = astring.length > 0 ? b(minecraftserver, icommandlistener, astring[0]) : a(icommandlistener);
-            BlockPosition blockposition = astring.length > 3 ? a(icommandlistener, astring, 1, true) : entityplayer.getChunkCoordinates();
-
-            if (entityplayer.world != null) {
-                entityplayer.setRespawnPosition(blockposition, true);
-                a(icommandlistener, (ICommand) this, "commands.spawnpoint.success", new Object[] { entityplayer.getName(), Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())});
-            }
-
+            entityplayer.setRespawnPosition(blockposition, true);
         }
-    }
 
-    public List<String> tabComplete(MinecraftServer minecraftserver, ICommandListener icommandlistener, String[] astring, @Nullable BlockPosition blockposition) {
-        return astring.length == 1 ? a(astring, minecraftserver.getPlayers()) : (astring.length > 1 && astring.length <= 4 ? a(astring, 1, blockposition) : Collections.emptyList());
-    }
+        if (collection.size() == 1) {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.single", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+        } else {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.spawnpoint.success.multiple", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), Integer.valueOf(collection.size())}), true);
+        }
 
-    public boolean isListStart(String[] astring, int i) {
-        return i == 0;
+        return collection.size();
     }
 }

@@ -4,15 +4,8 @@ import java.util.Random;
 
 public class BlockMagma extends Block {
 
-    public BlockMagma() {
-        super(Material.STONE);
-        this.a(CreativeModeTab.b);
-        this.a(0.2F);
-        this.a(true);
-    }
-
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return MaterialMapColor.L;
+    public BlockMagma(Block.Info block_info) {
+        super(block_info);
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
@@ -23,21 +16,43 @@ public class BlockMagma extends Block {
         super.stepOn(world, blockposition, entity);
     }
 
-    public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        BlockPosition blockposition1 = blockposition.up();
-        IBlockData iblockdata1 = world.getType(blockposition1);
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        BlockBubbleColumn.a(world, blockposition.up(), true);
+    }
 
-        if (iblockdata1.getBlock() == Blocks.WATER || iblockdata1.getBlock() == Blocks.FLOWING_WATER) {
-            world.setAir(blockposition1);
-            world.a((EntityHuman) null, blockposition, SoundEffects.bN, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() == Blocks.WATER) {
+            generatoraccess.I().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+        }
+
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        BlockPosition blockposition1 = blockposition.up();
+
+        if (world.b(blockposition).a(TagsFluid.a)) {
+            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
             if (world instanceof WorldServer) {
-                ((WorldServer) world).a(EnumParticle.SMOKE_LARGE, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.25D, (double) blockposition1.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D, new int[0]);
+                ((WorldServer) world).a(Particles.F, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.25D, (double) blockposition1.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D);
             }
         }
 
     }
 
+    public int a(IWorldReader iworldreader) {
+        return 20;
+    }
+
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        world.I().a(blockposition, this, this.a((IWorldReader) world));
+    }
+
     public boolean a(IBlockData iblockdata, Entity entity) {
         return entity.isFireProof();
+    }
+
+    public boolean e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
     }
 }

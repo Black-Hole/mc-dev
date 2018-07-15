@@ -1,163 +1,94 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
+import com.google.common.collect.Maps;
+import java.util.Map;
 import java.util.Random;
-import javax.annotation.Nullable;
+import java.util.function.Function;
 
-public abstract class BlockFluids extends Block {
+public class BlockFluids extends Block implements IFluidSource {
 
-    public static final BlockStateInteger LEVEL = BlockStateInteger.of("level", 0, 15);
+    public static final BlockStateInteger LEVEL = BlockProperties.ag;
+    protected final FluidTypeFlowing b;
+    private final Map<IBlockData, VoxelShape> c = Maps.newIdentityHashMap();
 
-    protected BlockFluids(Material material) {
-        super(material);
-        this.w(this.blockStateList.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(0)));
-        this.a(true);
+    protected BlockFluids(FluidTypeFlowing fluidtypeflowing, Block.Info block_info) {
+        super(block_info);
+        this.b = fluidtypeflowing;
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, Integer.valueOf(0)));
     }
 
-    public AxisAlignedBB b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockFluids.j;
+    public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        world.b(blockposition).b(world, blockposition, random);
     }
 
-    @Nullable
-    public AxisAlignedBB a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockFluids.k;
-    }
-
-    public boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.material != Material.LAVA;
-    }
-
-    public static float b(int i) {
-        if (i >= 8) {
-            i = 0;
-        }
-
-        return (float) (i + 1) / 9.0F;
-    }
-
-    protected int x(IBlockData iblockdata) {
-        return iblockdata.getMaterial() == this.material ? ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() : -1;
-    }
-
-    protected int y(IBlockData iblockdata) {
-        int i = this.x(iblockdata);
-
-        return i >= 8 ? 0 : i;
-    }
-
-    public boolean c(IBlockData iblockdata) {
+    public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
 
-    public boolean b(IBlockData iblockdata) {
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
+        return !this.b.a(TagsFluid.b);
+    }
+
+    public Fluid t(IBlockData iblockdata) {
+        int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
+
+        return i >= 8 ? this.b.a(8, true) : (i == 0 ? this.b.a(false) : this.b.a(8 - i, false));
+    }
+
+    public boolean a(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean a(IBlockData iblockdata, boolean flag) {
-        return flag && ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0;
+    public boolean d(IBlockData iblockdata) {
+        return false;
     }
 
-    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition);
-        Block block = iblockdata.getBlock();
-        Material material = iblockdata.getMaterial();
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        Fluid fluid = iblockaccess.b(blockposition.up());
 
-        if (material == this.material) {
-            return false;
-        } else if (enumdirection == EnumDirection.UP) {
-            return true;
-        } else if (material == Material.ICE) {
-            return false;
-        } else {
-            boolean flag = c(block) || block instanceof BlockStairs;
+        return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.c.computeIfAbsent(iblockdata, (iblockdata) -> {
+            Fluid fluid = iblockdata.s();
 
-            return !flag && iblockdata.d(iblockaccess, blockposition, enumdirection) == EnumBlockFaceShape.SOLID;
-        }
+            return VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D);
+        });
     }
 
-    public EnumRenderType a(IBlockData iblockdata) {
-        return EnumRenderType.LIQUID;
+    public EnumRenderType c(IBlockData iblockdata) {
+        return EnumRenderType.INVISIBLE;
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Items.a;
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return Items.AIR;
     }
 
-    public int a(Random random) {
-        return 0;
+    public int a(IWorldReader iworldreader) {
+        return this.b.a(iworldreader);
     }
 
-    protected Vec3D a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        double d0 = 0.0D;
-        double d1 = 0.0D;
-        double d2 = 0.0D;
-        int i = this.y(iblockdata);
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.s();
-        Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-        while (iterator.hasNext()) {
-            EnumDirection enumdirection = (EnumDirection) iterator.next();
-
-            blockposition_pooledblockposition.j(blockposition).d(enumdirection);
-            int j = this.y(iblockaccess.getType(blockposition_pooledblockposition));
-            int k;
-
-            if (j < 0) {
-                if (!iblockaccess.getType(blockposition_pooledblockposition).getMaterial().isSolid()) {
-                    j = this.y(iblockaccess.getType(blockposition_pooledblockposition.down()));
-                    if (j >= 0) {
-                        k = j - (i - 8);
-                        d0 += (double) (enumdirection.getAdjacentX() * k);
-                        d1 += (double) (enumdirection.getAdjacentY() * k);
-                        d2 += (double) (enumdirection.getAdjacentZ() * k);
-                    }
-                }
-            } else if (j >= 0) {
-                k = j - i;
-                d0 += (double) (enumdirection.getAdjacentX() * k);
-                d1 += (double) (enumdirection.getAdjacentY() * k);
-                d2 += (double) (enumdirection.getAdjacentZ() * k);
-            }
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        if (this.a(world, blockposition, iblockdata)) {
+            world.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
         }
 
-        Vec3D vec3d = new Vec3D(d0, d1, d2);
+    }
 
-        if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() >= 8) {
-            Iterator iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-            while (iterator1.hasNext()) {
-                EnumDirection enumdirection1 = (EnumDirection) iterator1.next();
-
-                blockposition_pooledblockposition.j(blockposition).d(enumdirection1);
-                if (this.a(iblockaccess, (BlockPosition) blockposition_pooledblockposition, enumdirection1) || this.a(iblockaccess, blockposition_pooledblockposition.up(), enumdirection1)) {
-                    vec3d = vec3d.a().add(0.0D, -6.0D, 0.0D);
-                    break;
-                }
-            }
+    public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
+        if (iblockdata.s().d() || iblockdata1.s().d()) {
+            generatoraccess.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) generatoraccess));
         }
 
-        blockposition_pooledblockposition.t();
-        return vec3d.a();
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public Vec3D a(World world, BlockPosition blockposition, Entity entity, Vec3D vec3d) {
-        return vec3d.e(this.a((IBlockAccess) world, blockposition, world.getType(blockposition)));
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+        if (this.a(world, blockposition, iblockdata)) {
+            world.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
+        }
+
     }
 
-    public int a(World world) {
-        return this.material == Material.WATER ? 5 : (this.material == Material.LAVA ? (world.worldProvider.n() ? 10 : 30) : 0);
-    }
-
-    public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        this.e(world, blockposition, iblockdata);
-    }
-
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        this.e(world, blockposition, iblockdata);
-    }
-
-    public boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.material == Material.LAVA) {
+    public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
+        if (this.b.a(TagsFluid.b)) {
             boolean flag = false;
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -165,88 +96,59 @@ public abstract class BlockFluids extends Block {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (enumdirection != EnumDirection.DOWN && world.getType(blockposition.shift(enumdirection)).getMaterial() == Material.WATER) {
+                if (enumdirection != EnumDirection.DOWN && world.b(blockposition.shift(enumdirection)).a(TagsFluid.a)) {
                     flag = true;
                     break;
                 }
             }
 
             if (flag) {
-                Integer integer = (Integer) iblockdata.get(BlockFluids.LEVEL);
+                Fluid fluid = world.b(blockposition);
 
-                if (integer.intValue() == 0) {
+                if (fluid.d()) {
                     world.setTypeUpdate(blockposition, Blocks.OBSIDIAN.getBlockData());
                     this.fizz(world, blockposition);
-                    return true;
+                    return false;
                 }
 
-                if (integer.intValue() <= 4) {
+                if (fluid.f() >= 0.44444445F) {
                     world.setTypeUpdate(blockposition, Blocks.COBBLESTONE.getBlockData());
                     this.fizz(world, blockposition);
-                    return true;
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
-    protected void fizz(World world, BlockPosition blockposition) {
+    protected void fizz(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         double d0 = (double) blockposition.getX();
         double d1 = (double) blockposition.getY();
         double d2 = (double) blockposition.getZ();
 
-        world.a((EntityHuman) null, blockposition, SoundEffects.dE, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+        generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (generatoraccess.m().nextFloat() - generatoraccess.m().nextFloat()) * 0.8F);
 
         for (int i = 0; i < 8; ++i) {
-            world.addParticle(EnumParticle.SMOKE_LARGE, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);
+            generatoraccess.addParticle(Particles.F, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D);
         }
 
     }
 
-    public IBlockData fromLegacyData(int i) {
-        return this.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(i));
-    }
-
-    public int toLegacyData(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
-    }
-
-    protected BlockStateList getStateList() {
-        return new BlockStateList(this, new IBlockState[] { BlockFluids.LEVEL});
-    }
-
-    public static BlockFlowing a(Material material) {
-        if (material == Material.WATER) {
-            return Blocks.FLOWING_WATER;
-        } else if (material == Material.LAVA) {
-            return Blocks.FLOWING_LAVA;
-        } else {
-            throw new IllegalArgumentException("Invalid material");
-        }
-    }
-
-    public static BlockStationary b(Material material) {
-        if (material == Material.WATER) {
-            return Blocks.WATER;
-        } else if (material == Material.LAVA) {
-            return Blocks.LAVA;
-        } else {
-            throw new IllegalArgumentException("Invalid material");
-        }
-    }
-
-    public static float g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
-
-        return (i & 7) == 0 && iblockaccess.getType(blockposition.up()).getMaterial() == Material.WATER ? 1.0F : 1.0F - b(i);
-    }
-
-    public static float h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (float) blockposition.getY() + g(iblockdata, iblockaccess, blockposition);
+    protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
+        blockstatelist_a.a(new IBlockState[] { BlockFluids.LEVEL});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
         return EnumBlockFaceShape.UNDEFINED;
+    }
+
+    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+        if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
+            generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
+            return this.b;
+        } else {
+            return FluidTypes.a;
+        }
     }
 }

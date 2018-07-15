@@ -13,6 +13,10 @@ public class DifficultyDamageScaler {
         this.b = this.a(enumdifficulty, i, j, f);
     }
 
+    public EnumDifficulty a() {
+        return this.a;
+    }
+
     public float b() {
         return this.b;
     }
