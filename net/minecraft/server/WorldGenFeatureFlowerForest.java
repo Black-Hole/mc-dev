@@ -9,7 +9,7 @@ public class WorldGenFeatureFlowerForest extends WorldGenFlowers {
     public WorldGenFeatureFlowerForest() {}
 
     public IBlockData a(Random random, BlockPosition blockposition) {
-        double d0 = MathHelper.a((1.0D + BiomeBase.aK.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
+        double d0 = MathHelper.a((1.0D + BiomeBase.aJ.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
         Block block = WorldGenFeatureFlowerForest.a[(int) (d0 * (double) WorldGenFeatureFlowerForest.a.length)];
 
         return block == Blocks.BLUE_ORCHID ? Blocks.POPPY.getBlockData() : block.getBlockData();

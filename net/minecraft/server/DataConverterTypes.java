@@ -45,9 +45,15 @@ public class DataConverterTypes {
         return "structure_feature";
     };
     public static final TypeReference t = () -> {
-        return "recipe";
+        return "objective";
     };
     public static final TypeReference u = () -> {
+        return "team";
+    };
+    public static final TypeReference v = () -> {
+        return "recipe";
+    };
+    public static final TypeReference w = () -> {
         return "biome";
     };
 }

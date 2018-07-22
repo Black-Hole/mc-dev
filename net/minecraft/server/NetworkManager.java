@@ -219,7 +219,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void a() {
         this.o();
         if (this.m instanceof ITickable) {
-            ((ITickable) this.m).X_();
+            ((ITickable) this.m).Y_();
         }
 
         if (this.channel != null) {

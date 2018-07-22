@@ -14,7 +14,7 @@ public class TileEntityBed extends TileEntity {
     }
 
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 11, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 11, this.aa_());
     }
 
     public void a(EnumColor enumcolor) {

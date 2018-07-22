@@ -311,7 +311,7 @@ public final class VoxelShapes {
             }
         }
 
-        return (VoxelShapeMerger) (doublelist.getDouble(doublelist.size() - 1) < doublelist1.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist, doublelist1, false) : (doublelist1.getDouble(doublelist1.size() - 1) < doublelist.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist1, doublelist, true) : (Objects.equals(doublelist, doublelist1) ? new VoxelShapeMergerIdentical(doublelist) : new VoxelShapeMergerList(doublelist, doublelist1, flag, flag1))));
+        return (VoxelShapeMerger) (doublelist.getDouble(doublelist.size() - 1) < doublelist1.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist, doublelist1, false) : (doublelist1.getDouble(doublelist1.size() - 1) < doublelist.getDouble(0) - 1.0E-7D ? new VoxelShapeMergerDisjoint(doublelist1, doublelist, true) : (Objects.equals(doublelist, doublelist1) ? (doublelist instanceof VoxelShapeMergerIdentical ? (VoxelShapeMerger) doublelist : (doublelist1 instanceof VoxelShapeMergerIdentical ? (VoxelShapeMerger) doublelist1 : new VoxelShapeMergerIdentical(doublelist))) : new VoxelShapeMergerList(doublelist, doublelist1, flag, flag1))));
     }
 
     public interface a {

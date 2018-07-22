@@ -28,7 +28,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
     }
 
-    public boolean bZ() {
+    public boolean ca() {
         return false;
     }
 
@@ -42,7 +42,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return (BlockPosition) this.datawatcher.get(EntityDolphin.b);
     }
 
-    public boolean dy() {
+    public boolean dz() {
         return ((Boolean) this.datawatcher.get(EntityDolphin.c)).booleanValue();
     }
 
@@ -50,7 +50,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.datawatcher.set(EntityDolphin.c, Boolean.valueOf(flag));
     }
 
-    public int dz() {
+    public int dA() {
         return ((Integer) this.datawatcher.get(EntityDolphin.bC)).intValue();
     }
 
@@ -70,8 +70,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         nbttagcompound.setInt("TreasurePosX", this.l().getX());
         nbttagcompound.setInt("TreasurePosY", this.l().getY());
         nbttagcompound.setInt("TreasurePosZ", this.l().getZ());
-        nbttagcompound.setBoolean("GotFish", this.dy());
-        nbttagcompound.setInt("Moistness", this.dz());
+        nbttagcompound.setBoolean("GotFish", this.dz());
+        nbttagcompound.setInt("Moistness", this.dA());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -168,8 +168,8 @@ public class EntityDolphin extends EntityWaterAnimal {
             if (this.ap()) {
                 this.b(2400);
             } else {
-                this.b(this.dz() - 1);
-                if (this.dz() <= 0) {
+                this.b(this.dA() - 1);
+                if (this.dA() <= 0) {
                     this.damageEntity(DamageSource.DRYOUT, 1.0F);
                 }
 
@@ -201,7 +201,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!itemstack.isEmpty() && itemstack.getItem().a(TagsItem.G)) {
+        if (!itemstack.isEmpty() && itemstack.getItem().a(TagsItem.D)) {
             if (!this.world.isClientSide) {
                 this.a(SoundEffects.ENTITY_DOLPHIN_EAT, 1.0F, 1.0F);
             }
@@ -251,7 +251,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Nullable
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_DOLPHIN_DEATH;
     }
 
@@ -273,15 +273,15 @@ public class EntityDolphin extends EntityWaterAnimal {
         return LootTables.aN;
     }
 
-    protected boolean dA() {
-        BlockPosition blockposition = this.getNavigation().j();
+    protected boolean dB() {
+        BlockPosition blockposition = this.getNavigation().i();
 
         return blockposition != null ? this.c(blockposition) < 144.0D : false;
     }
 
     public void a(float f, float f1, float f2) {
-        if (this.cO() && this.isInWater()) {
-            this.a(f, f1, f2, this.cJ());
+        if (this.cP() && this.isInWater()) {
+            this.a(f, f1, f2, this.cK());
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.8999999761581421D;
             this.motY *= 0.8999999761581421D;
@@ -314,7 +314,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
 
         public boolean a() {
-            return this.a.dy() && this.a.getAirTicks() >= 100;
+            return this.a.dz() && this.a.getAirTicks() >= 100;
         }
 
         public boolean b() {
@@ -325,7 +325,7 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         public void c() {
             this.b = false;
-            this.a.getNavigation().r();
+            this.a.getNavigation().q();
             World world = this.a.world;
             BlockPosition blockposition = new BlockPosition(this.a);
             String s = (double) world.random.nextFloat() >= 0.5D ? "Ocean_Ruin" : "Shipwreck";
@@ -360,7 +360,7 @@ public class EntityDolphin extends EntityWaterAnimal {
             BlockPosition blockposition = this.a.l();
             World world = this.a.world;
 
-            if (this.a.dA() || this.a.getNavigation().q()) {
+            if (this.a.dB() || this.a.getNavigation().p()) {
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 1, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.39269909262657166D);
 
                 if (vec3d == null) {
@@ -404,11 +404,11 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         public boolean a() {
             this.c = this.a.world.findNearbyPlayer(this.a, 10.0D);
-            return this.c == null ? false : this.c.bb();
+            return this.c == null ? false : this.c.isSwimming();
         }
 
         public boolean b() {
-            return this.c != null && this.c.bb() && this.a.h(this.c) < 256.0D;
+            return this.c != null && this.c.isSwimming() && this.a.h(this.c) < 256.0D;
         }
 
         public void c() {
@@ -417,18 +417,18 @@ public class EntityDolphin extends EntityWaterAnimal {
 
         public void d() {
             this.c = null;
-            this.a.getNavigation().r();
+            this.a.getNavigation().q();
         }
 
         public void e() {
             this.a.getControllerLook().a(this.c, (float) (this.a.L() + 20), (float) this.a.K());
             if (this.a.h(this.c) < 6.25D) {
-                this.a.getNavigation().r();
+                this.a.getNavigation().q();
             } else {
                 this.a.getNavigation().a((Entity) this.c, this.b);
             }
 
-            if (this.c.bb() && this.c.world.random.nextInt(6) == 0) {
+            if (this.c.isSwimming() && this.c.world.random.nextInt(6) == 0) {
                 this.c.addEffect(new MobEffect(MobEffects.DOLPHINS_GRACE, 100));
             }
 
@@ -505,7 +505,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                 this.i.motY += 0.005D;
             }
 
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().q()) {
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().p()) {
                 double d0 = this.b - this.i.locX;
                 double d1 = this.c - this.i.locY;
                 double d2 = this.d - this.i.locZ;

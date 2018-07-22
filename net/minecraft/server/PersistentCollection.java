@@ -48,7 +48,7 @@ public class PersistentCollection {
 
                 if (file != null && file.exists()) {
                     persistentbase = (PersistentBase) function.apply(s);
-                    persistentbase.a(this.a(s, 1513).getCompound("data"));
+                    persistentbase.a(this.a(s, 1519).getCompound("data"));
                     this.a.put(s, persistentbase);
                     this.d.add(persistentbase);
                 }
@@ -123,7 +123,7 @@ public class PersistentCollection {
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
 
                     nbttagcompound.set("data", persistentbase.b(new NBTTagCompound()));
-                    nbttagcompound.setInt("DataVersion", 1513);
+                    nbttagcompound.setInt("DataVersion", 1519);
                     FileOutputStream fileoutputstream = new FileOutputStream(file);
 
                     NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);

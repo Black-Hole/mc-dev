@@ -55,11 +55,11 @@ public class EntityZombieVillager extends EntityZombie {
 
     public void tick() {
         if (!this.world.isClientSide && this.isConverting()) {
-            int i = this.dK();
+            int i = this.dL();
 
             this.conversionTime -= i;
             if (this.conversionTime <= 0) {
-                this.dJ();
+                this.dK();
             }
         }
 
@@ -84,7 +84,7 @@ public class EntityZombieVillager extends EntityZombie {
         }
     }
 
-    protected boolean dC() {
+    protected boolean dD() {
         return false;
     }
 
@@ -105,13 +105,13 @@ public class EntityZombieVillager extends EntityZombie {
         this.world.broadcastEntityEffect(this, (byte) 16);
     }
 
-    protected void dJ() {
+    protected void dK() {
         EntityVillager entityvillager = new EntityVillager(this.world);
 
         entityvillager.u(this);
         entityvillager.setProfession(this.getProfession());
         entityvillager.a(this.world.getDamageScaler(new BlockPosition(entityvillager)), (GroupDataEntity) null, (NBTTagCompound) null, false);
-        entityvillager.dC();
+        entityvillager.dD();
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
         }
@@ -136,7 +136,7 @@ public class EntityZombieVillager extends EntityZombie {
         this.world.a((EntityHuman) null, 1027, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected int dK() {
+    protected int dL() {
         int i = 1;
 
         if (this.random.nextFloat() < 0.01F) {
@@ -163,7 +163,7 @@ public class EntityZombieVillager extends EntityZombie {
         return i;
     }
 
-    protected float cD() {
+    protected float cE() {
         return this.isBaby() ? (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 2.0F : (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F;
     }
 
@@ -175,11 +175,11 @@ public class EntityZombieVillager extends EntityZombie {
         return SoundEffects.ENTITY_ZOMBIE_VILLAGER_HURT;
     }
 
-    public SoundEffect cr() {
+    public SoundEffect cs() {
         return SoundEffects.ENTITY_ZOMBIE_VILLAGER_DEATH;
     }
 
-    public SoundEffect dA() {
+    public SoundEffect dB() {
         return SoundEffects.ENTITY_ZOMBIE_VILLAGER_STEP;
     }
 
@@ -188,7 +188,7 @@ public class EntityZombieVillager extends EntityZombie {
         return LootTables.az;
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dC() {
         return ItemStack.a;
     }
 }

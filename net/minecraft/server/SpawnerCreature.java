@@ -143,7 +143,7 @@ public final class SpawnerCreature {
                                                                     entityinsentient.die();
                                                                 }
 
-                                                                if (l2 >= entityinsentient.dg()) {
+                                                                if (l2 >= entityinsentient.dh()) {
                                                                     continue label128;
                                                                 }
 
@@ -180,14 +180,14 @@ public final class SpawnerCreature {
         Chunk chunk = world.getChunkAt(i, j);
         int k = i * 16 + world.random.nextInt(16);
         int l = j * 16 + world.random.nextInt(16);
-        int i1 = MathHelper.c(chunk.a(HeightMap.Type.LIGHT_BLOCKING, k, l) + 1, 16);
-        int j1 = world.random.nextInt(i1 > 0 ? i1 : chunk.b() + 16 - 1);
+        int i1 = chunk.a(HeightMap.Type.LIGHT_BLOCKING, k, l) + 1;
+        int j1 = world.random.nextInt(i1 + 1);
 
         return new BlockPosition(k, j1, l);
     }
 
     public static boolean a(IBlockData iblockdata, Fluid fluid) {
-        return iblockdata.k() ? false : (iblockdata.isPowerSource() ? false : (!fluid.e() ? false : !iblockdata.a(TagsBlock.y)));
+        return iblockdata.k() ? false : (iblockdata.isPowerSource() ? false : (!fluid.e() ? false : !iblockdata.a(TagsBlock.z)));
     }
 
     public static boolean a(EntityPositionTypes.Surface entitypositiontypes_surface, IWorldReader iworldreader, BlockPosition blockposition, @Nullable EntityTypes<? extends EntityInsentient> entitytypes) {

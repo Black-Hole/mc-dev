@@ -36,7 +36,7 @@ public class PathfinderGoalMoveIndoors extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().q();
+        return !this.a.getNavigation().p();
     }
 
     public void c() {

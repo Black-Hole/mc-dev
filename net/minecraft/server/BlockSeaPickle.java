@@ -17,8 +17,8 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
         this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSeaPickle.a, Integer.valueOf(1))).set(BlockSeaPickle.b, Boolean.valueOf(true)));
     }
 
-    public int l(IBlockData iblockdata) {
-        return this.j(iblockdata) ? 0 : super.l(iblockdata) + 3 * ((Integer) iblockdata.get(BlockSeaPickle.a)).intValue();
+    public int m(IBlockData iblockdata) {
+        return this.k(iblockdata) ? 0 : super.m(iblockdata) + 3 * ((Integer) iblockdata.get(BlockSeaPickle.a)).intValue();
     }
 
     @Nullable
@@ -29,12 +29,13 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
             return (IBlockData) iblockdata.set(BlockSeaPickle.a, Integer.valueOf(Math.min(4, ((Integer) iblockdata.get(BlockSeaPickle.a)).intValue() + 1)));
         } else {
             Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+            boolean flag = fluid.a(TagsFluid.a) && fluid.g() == 8;
 
-            return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockSeaPickle.b, Boolean.valueOf(fluid.c() == FluidTypes.c));
+            return (IBlockData) super.getPlacedState(blockactioncontext).set(BlockSeaPickle.b, Boolean.valueOf(flag));
         }
     }
 
-    private boolean j(IBlockData iblockdata) {
+    private boolean k(IBlockData iblockdata) {
         return !((Boolean) iblockdata.get(BlockSeaPickle.b)).booleanValue();
     }
 
@@ -81,7 +82,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockSeaPickle.b)).booleanValue()) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSeaPickle.b, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
@@ -90,8 +91,8 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockSeaPickle.b)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    public Fluid h(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockSeaPickle.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
@@ -128,7 +129,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.j(iblockdata) && world.getType(blockposition.down()).a(TagsBlock.z)) {
+        if (!this.k(iblockdata) && world.getType(blockposition.down()).a(TagsBlock.A)) {
             boolean flag = true;
             int i = 1;
             boolean flag1 = true;
@@ -146,7 +147,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
                         if (blockposition1 != blockposition && random.nextInt(6) == 0 && world.getType(blockposition1).getBlock() == Blocks.WATER) {
                             IBlockData iblockdata1 = world.getType(blockposition1.down());
 
-                            if (iblockdata1.a(TagsBlock.z)) {
+                            if (iblockdata1.a(TagsBlock.A)) {
                                 world.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, Integer.valueOf(random.nextInt(4) + 1)), 3);
                             }
                         }

@@ -227,14 +227,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             i = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.world.getType(new BlockPosition(j, i - 1, k)).a(TagsBlock.y)) {
+            if (this.world.getType(new BlockPosition(j, i - 1, k)).a(TagsBlock.z)) {
                 --i;
             }
 
             BlockPosition blockposition = new BlockPosition(j, i, k);
             IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (iblockdata.a(TagsBlock.y)) {
+            if (iblockdata.a(TagsBlock.z)) {
                 this.b(blockposition, iblockdata);
                 if (iblockdata.getBlock() == Blocks.ACTIVATOR_RAIL) {
                     this.a(j, i, k, ((Boolean) iblockdata.get(BlockPoweredRail.POWERED)).booleanValue());
@@ -334,7 +334,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         }
 
         double d0 = 0.0078125D;
-        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(blockminecarttrackabstract.d());
+        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(blockminecarttrackabstract.e());
 
         switch (blockpropertytrackposition) {
         case ASCENDING_EAST:
@@ -530,14 +530,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
 
-        if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.y)) {
+        if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.z)) {
             --j;
         }
 
         IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
-        if (iblockdata.a(TagsBlock.y)) {
-            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).d());
+        if (iblockdata.a(TagsBlock.z)) {
+            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).e());
             int[][] aint = EntityMinecartAbstract.h[blockpropertytrackposition.a()];
             double d3 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
             double d4 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;

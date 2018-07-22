@@ -122,7 +122,8 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     private final AdvancementDataWorld al;
     private final CustomFunctionData am;
     private boolean an;
-    private float ao;
+    private boolean forceUpgrade;
+    private float ap;
 
     public MinecraftServer(@Nullable File file, Proxy proxy, DataFixer datafixer, CommandDispatcher commanddispatcher, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
         this.ac = new ResourceManager(EnumResourcePackType.SERVER_DATA);
@@ -153,7 +154,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
 
     public abstract boolean init() throws IOException;
 
-    protected void a(String s) {
+    public void convertWorld(String s) {
         if (this.getConvertable().isConvertable(s)) {
             MinecraftServer.LOGGER.info("Converting map!");
             this.b((IChatBaseComponent) (new ChatMessage("menu.convertingLevel", new Object[0])));
@@ -174,6 +175,43 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             });
         }
 
+        if (this.forceUpgrade) {
+            MinecraftServer.LOGGER.info("Forcing world upgrade!");
+            WorldData worlddata = this.getConvertable().c(this.getWorld());
+
+            if (worlddata != null) {
+                WorldUpgrader worldupgrader = new WorldUpgrader(this.getWorld(), this.getConvertable(), worlddata);
+                IChatBaseComponent ichatbasecomponent = null;
+
+                while (!worldupgrader.b()) {
+                    IChatBaseComponent ichatbasecomponent1 = worldupgrader.m();
+
+                    if (ichatbasecomponent != ichatbasecomponent1) {
+                        ichatbasecomponent = ichatbasecomponent1;
+                        MinecraftServer.LOGGER.info(worldupgrader.m().getString());
+                    }
+
+                    int i = worldupgrader.j();
+
+                    if (i > 0) {
+                        int j = worldupgrader.k() + worldupgrader.l();
+
+                        MinecraftServer.LOGGER.info("{}% completed ({} / {} chunks)...", Integer.valueOf(MathHelper.d((float) j / (float) i * 100.0F)), Integer.valueOf(j), Integer.valueOf(i));
+                    }
+
+                    if (this.isStopped()) {
+                        worldupgrader.a();
+                    } else {
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException interruptedexception) {
+                            ;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     protected synchronized void b(IChatBaseComponent ichatbasecomponent) {
@@ -181,13 +219,13 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public void a(String s, String s1, long i, WorldType worldtype, JsonElement jsonelement) {
-        this.a(s);
+        this.convertWorld(s);
         this.b((IChatBaseComponent) (new ChatMessage("menu.loadingLevel", new Object[0])));
         this.worldServer = new WorldServer[3];
         this.f = new long[this.worldServer.length][100];
         IDataManager idatamanager = this.convertable.a(s, this);
 
-        this.a(this.K(), idatamanager);
+        this.a(this.getWorld(), idatamanager);
         WorldData worlddata = idatamanager.getWorldData();
         WorldSettings worldsettings;
 
@@ -444,7 +482,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             if (this.init()) {
                 this.aa = SystemUtils.b();
                 this.n.setMOTD(new ChatComponentText(this.motd));
-                this.n.setServerInfo(new ServerPing.ServerData("1.13-pre7", 389));
+                this.n.setServerInfo(new ServerPing.ServerData("1.13", 393));
                 this.a(this.n);
 
                 while (this.isRunning) {
@@ -507,7 +545,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         File file = this.c("server-icon.png");
 
         if (!file.exists()) {
-            file = this.getConvertable().b(this.K(), "icon.png");
+            file = this.getConvertable().b(this.getWorld(), "icon.png");
         }
 
         if (file.isFile()) {
@@ -584,7 +622,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         this.methodProfiler.a("tallying");
         long l = this.e[this.ticks % 100] = SystemUtils.c() - i;
 
-        this.ao = this.ao * 0.8F + (float) l / 1000000.0F * 0.19999999F;
+        this.ap = this.ap * 0.8F + (float) l / 1000000.0F * 0.19999999F;
         this.methodProfiler.e();
         this.methodProfiler.e();
     }
@@ -599,7 +637,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         }
 
         this.methodProfiler.c("commandFunctions");
-        this.aD().X_();
+        this.getFunctionData().Y_();
         this.methodProfiler.c("levels");
 
         int i;
@@ -656,7 +694,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         this.methodProfiler.c("tickables");
 
         for (i = 0; i < this.l.size(); ++i) {
-            ((ITickable) this.l.get(i)).X_();
+            ((ITickable) this.l.get(i)).Y_();
         }
 
         this.methodProfiler.e();
@@ -680,16 +718,17 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             String s2 = null;
             boolean flag1 = false;
             boolean flag2 = false;
+            boolean flag3 = false;
             int i = -1;
 
             for (int j = 0; j < astring.length; ++j) {
                 String s3 = astring[j];
                 String s4 = j == astring.length - 1 ? null : astring[j + 1];
-                boolean flag3 = false;
+                boolean flag4 = false;
 
                 if (!"nogui".equals(s3) && !"--nogui".equals(s3)) {
                     if ("--port".equals(s3) && s4 != null) {
-                        flag3 = true;
+                        flag4 = true;
 
                         try {
                             i = Integer.parseInt(s4);
@@ -697,24 +736,26 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
                             ;
                         }
                     } else if ("--singleplayer".equals(s3) && s4 != null) {
-                        flag3 = true;
+                        flag4 = true;
                         s = s4;
                     } else if ("--universe".equals(s3) && s4 != null) {
-                        flag3 = true;
+                        flag4 = true;
                         s1 = s4;
                     } else if ("--world".equals(s3) && s4 != null) {
-                        flag3 = true;
+                        flag4 = true;
                         s2 = s4;
                     } else if ("--demo".equals(s3)) {
                         flag1 = true;
                     } else if ("--bonusChest".equals(s3)) {
                         flag2 = true;
+                    } else if ("--forceUpgrade".equals(s3)) {
+                        flag3 = true;
                     }
                 } else {
                     flag = false;
                 }
 
-                if (flag3) {
+                if (flag4) {
                     ++j;
                 }
             }
@@ -738,15 +779,19 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             }
 
             if (flag1) {
-                dedicatedserver.b(true);
+                dedicatedserver.c(true);
             }
 
             if (flag2) {
-                dedicatedserver.c(true);
+                dedicatedserver.d(true);
             }
 
             if (flag && !GraphicsEnvironment.isHeadless()) {
                 dedicatedserver.aY();
+            }
+
+            if (flag3) {
+                dedicatedserver.setForceUpgrade(true);
             }
 
             dedicatedserver.y();
@@ -762,6 +807,10 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             MinecraftServer.LOGGER.fatal("Failed to start the minecraft server", exception);
         }
 
+    }
+
+    protected void setForceUpgrade(boolean flag) {
+        this.forceUpgrade = flag;
     }
 
     public void y() {
@@ -793,7 +842,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public String getVersion() {
-        return "1.13-pre7";
+        return "1.13";
     }
 
     public int A() {
@@ -891,7 +940,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.I != null;
     }
 
-    public String K() {
+    public String getWorld() {
         return this.J;
     }
 
@@ -934,11 +983,11 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.demoMode;
     }
 
-    public void b(boolean flag) {
+    public void c(boolean flag) {
         this.demoMode = flag;
     }
 
-    public void c(boolean flag) {
+    public void d(boolean flag) {
         this.M = flag;
     }
 
@@ -1018,7 +1067,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.z;
     }
 
-    public void e(boolean flag) {
+    public void f(boolean flag) {
         this.z = flag;
     }
 
@@ -1215,7 +1264,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.al;
     }
 
-    public CustomFunctionData aD() {
+    public CustomFunctionData getFunctionData() {
         return this.am;
     }
 
@@ -1338,7 +1387,17 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.an;
     }
 
-    public void k(boolean flag) {
+    public void l(boolean flag) {
         this.an = flag;
+    }
+
+    public int a(GameProfile gameprofile) {
+        if (this.getPlayerList().isOp(gameprofile)) {
+            OpListEntry oplistentry = (OpListEntry) this.getPlayerList().getOPs().get(gameprofile);
+
+            return oplistentry != null ? oplistentry.a() : (this.J() ? (this.I().equals(gameprofile.getName()) ? 4 : (this.getPlayerList().x() ? 4 : 0)) : this.k());
+        } else {
+            return 0;
+        }
     }
 }

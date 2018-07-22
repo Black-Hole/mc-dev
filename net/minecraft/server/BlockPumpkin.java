@@ -30,11 +30,11 @@ public class BlockPumpkin extends BlockStemmed {
         }
     }
 
-    public BlockStem b() {
+    public BlockStem d() {
         return (BlockStem) Blocks.PUMPKIN_STEM;
     }
 
-    public BlockStemAttached d() {
+    public BlockStemAttached e() {
         return (BlockStemAttached) Blocks.ATTACHED_PUMPKIN_STEM;
     }
 }

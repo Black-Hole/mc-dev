@@ -12,7 +12,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     public void k() {
-        this.cx();
+        this.cy();
         float f = this.az();
 
         if (f > 0.5F) {
@@ -46,7 +46,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return SoundEffects.ENTITY_HOSTILE_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_HOSTILE_DEATH;
     }
 

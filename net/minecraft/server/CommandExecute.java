@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.OptionalInt;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.IntFunction;
@@ -239,11 +240,7 @@ public class CommandExecute {
             });
         }))))).then(CommandDispatcher.a("matches").then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("range", (ArgumentType) ArgumentCriterionValue.a()), flag, (commandcontext) -> {
             return a(commandcontext, ArgumentCriterionValue.b.a(commandcontext, "range"));
-        }))))))).then(CommandDispatcher.a("blocks").then(CommandDispatcher.a("start", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("end", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("destination", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("all"), flag, (commandcontext) -> {
-            return a(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "start"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), false);
-        }))).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("masked"), flag, (commandcontext) -> {
-            return a(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "start"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), true);
-        }))))))).then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("entities", (ArgumentType) ArgumentEntity.b()).fork(commandnode, (commandcontext) -> {
+        }))))))).then(CommandDispatcher.a("blocks").then(CommandDispatcher.a("start", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("end", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("destination", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("all"), flag, false))).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("masked"), flag, true))))))).then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("entities", (ArgumentType) ArgumentEntity.b()).fork(commandnode, (commandcontext) -> {
             return a(commandcontext, flag, !ArgumentEntity.c(commandcontext, "entities").isEmpty());
         })).executes(flag ? (commandcontext) -> {
             int i = ArgumentEntity.c(commandcontext, "entities").size();
@@ -308,7 +305,43 @@ public class CommandExecute {
         });
     }
 
-    private static boolean a(WorldServer worldserver, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, boolean flag) throws CommandSyntaxException {
+    private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, boolean flag, boolean flag1) {
+        return argumentbuilder.fork(commandnode, (commandcontext) -> {
+            return a(commandcontext, flag, c(commandcontext, flag1).isPresent());
+        }).executes(flag ? (commandcontext) -> {
+            return a(commandcontext, flag);
+        } : (commandcontext) -> {
+            return b(commandcontext, flag);
+        });
+    }
+
+    private static int a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag) throws CommandSyntaxException {
+        OptionalInt optionalint = c(commandcontext, flag);
+
+        if (optionalint.isPresent()) {
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { Integer.valueOf(optionalint.getAsInt())}), false);
+            return optionalint.getAsInt();
+        } else {
+            throw CommandExecute.b.create();
+        }
+    }
+
+    private static int b(CommandContext<CommandListenerWrapper> commandcontext, boolean flag) throws CommandSyntaxException {
+        OptionalInt optionalint = c(commandcontext, flag);
+
+        if (!optionalint.isPresent()) {
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
+            return 1;
+        } else {
+            throw CommandExecute.c.create(Integer.valueOf(optionalint.getAsInt()));
+        }
+    }
+
+    private static OptionalInt c(CommandContext<CommandListenerWrapper> commandcontext, boolean flag) throws CommandSyntaxException {
+        return a(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "start"), ArgumentPosition.a(commandcontext, "end"), ArgumentPosition.a(commandcontext, "destination"), flag);
+    }
+
+    private static OptionalInt a(WorldServer worldserver, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, boolean flag) throws CommandSyntaxException {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
         StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.b()));
         BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
@@ -317,16 +350,18 @@ public class CommandExecute {
         if (i > '\u8000') {
             throw CommandExecute.a.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
         } else {
-            for (int j = structureboundingbox.c; j <= structureboundingbox.f; ++j) {
-                for (int k = structureboundingbox.b; k <= structureboundingbox.e; ++k) {
-                    for (int l = structureboundingbox.a; l <= structureboundingbox.d; ++l) {
-                        BlockPosition blockposition4 = new BlockPosition(l, k, j);
+            int j = 0;
+
+            for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
+                for (int l = structureboundingbox.b; l <= structureboundingbox.e; ++l) {
+                    for (int i1 = structureboundingbox.a; i1 <= structureboundingbox.d; ++i1) {
+                        BlockPosition blockposition4 = new BlockPosition(i1, l, k);
                         BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
                         IBlockData iblockdata = worldserver.getType(blockposition4);
 
                         if (!flag || iblockdata.getBlock() != Blocks.AIR) {
                             if (iblockdata != worldserver.getType(blockposition5)) {
-                                return false;
+                                return OptionalInt.empty();
                             }
 
                             TileEntity tileentity = worldserver.getTileEntity(blockposition4);
@@ -334,7 +369,7 @@ public class CommandExecute {
 
                             if (tileentity != null) {
                                 if (tileentity1 == null) {
-                                    return false;
+                                    return OptionalInt.empty();
                                 }
 
                                 NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
@@ -348,15 +383,17 @@ public class CommandExecute {
                                 nbttagcompound1.remove("y");
                                 nbttagcompound1.remove("z");
                                 if (!nbttagcompound.equals(nbttagcompound1)) {
-                                    return false;
+                                    return OptionalInt.empty();
                                 }
                             }
+
+                            ++j;
                         }
                     }
                 }
             }
 
-            return true;
+            return OptionalInt.of(j);
         }
     }
 

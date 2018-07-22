@@ -122,10 +122,10 @@ public class TileEntityStructure extends TileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 7, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 7, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 

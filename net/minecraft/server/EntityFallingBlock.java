@@ -110,7 +110,7 @@ public class EntityFallingBlock extends Entity {
                 } else {
                     IBlockData iblockdata = this.world.getType(blockposition);
 
-                    if (!flag1 && BlockFalling.j(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
+                    if (!flag1 && BlockFalling.k(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
                         this.onGround = false;
                         return;
                     }
@@ -121,7 +121,7 @@ public class EntityFallingBlock extends Entity {
                     if (iblockdata.getBlock() != Blocks.MOVING_PISTON) {
                         this.die();
                         if (!this.f) {
-                            if (iblockdata.getMaterial().isReplaceable() && (flag1 || !BlockFalling.j(this.world.getType(blockposition.down()))) && this.world.setTypeAndData(blockposition, this.block, 3)) {
+                            if (iblockdata.getMaterial().isReplaceable() && (flag1 || !BlockFalling.k(this.world.getType(blockposition.down()))) && this.world.setTypeAndData(blockposition, this.block, 3)) {
                                 if (block instanceof BlockFalling) {
                                     ((BlockFalling) block).a(this.world, blockposition, this.block, iblockdata);
                                 }
@@ -168,7 +168,7 @@ public class EntityFallingBlock extends Entity {
 
             if (i > 0) {
                 ArrayList arraylist = Lists.newArrayList(this.world.getEntities(this, this.getBoundingBox()));
-                boolean flag = this.block.a(TagsBlock.x);
+                boolean flag = this.block.a(TagsBlock.y);
                 DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
                 Iterator iterator = arraylist.iterator();
 
@@ -212,7 +212,7 @@ public class EntityFallingBlock extends Entity {
             this.hurtEntities = nbttagcompound.getBoolean("HurtEntities");
             this.fallHurtAmount = nbttagcompound.getFloat("FallHurtAmount");
             this.fallHurtMax = nbttagcompound.getInt("FallHurtMax");
-        } else if (this.block.a(TagsBlock.x)) {
+        } else if (this.block.a(TagsBlock.y)) {
             this.hurtEntities = true;
         }
 

@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.DataFixUtils;
-import com.mojang.datafixers.FunctionType;
 import com.mojang.datafixers.OpticFinder;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
@@ -42,7 +41,7 @@ public class DataConverterRiding extends DataFix {
 
         if (!Objects.equals(type5, type3)) {
             throw new IllegalStateException("Old entity type is not what was expected.");
-        } else if (!type6.equals(type4, true)) {
+        } else if (!type6.equals(type4, true, true)) {
             throw new IllegalStateException("New entity type is not what was expected.");
         } else {
             OpticFinder opticfinder = DSL.typeFinder(type3);

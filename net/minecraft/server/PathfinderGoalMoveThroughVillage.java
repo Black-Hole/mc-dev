@@ -63,7 +63,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public boolean b() {
-        if (this.a.getNavigation().q()) {
+        if (this.a.getNavigation().p()) {
             return false;
         } else {
             float f = this.a.width + 4.0F;
@@ -77,7 +77,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     }
 
     public void d() {
-        if (this.a.getNavigation().q() || this.a.c(this.d.d()) < 16.0D) {
+        if (this.a.getNavigation().p() || this.a.c(this.d.d()) < 16.0D) {
             this.f.add(this.d);
         }
 

@@ -41,7 +41,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
                     if (world.getType(blockposition1).isAir() && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.COARSE_DIRT || block == Blocks.PODZOL || block == Blocks.GRASS_BLOCK)) {
                         world.setTypeUpdate(blockposition1, this.blockFruit.getBlockData());
-                        world.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.d().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
+                        world.setTypeUpdate(blockposition, (IBlockData) this.blockFruit.e().getBlockData().set(BlockFacingHorizontal.FACING, enumdirection));
                     }
                 }
             }
@@ -52,7 +52,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
         super.dropNaturally(iblockdata, world, blockposition, f, i);
         if (!world.isClientSide) {
-            Item item = this.b();
+            Item item = this.d();
 
             if (item != null) {
                 int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
@@ -68,7 +68,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     @Nullable
-    protected Item b() {
+    protected Item d() {
         return this.blockFruit == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.blockFruit == Blocks.MELON ? Items.MELON_SEEDS : null);
     }
 
@@ -77,7 +77,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        Item item = this.b();
+        Item item = this.d();
 
         return item == null ? ItemStack.a : new ItemStack(item);
     }
@@ -105,7 +105,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         blockstatelist_a.a(new IBlockState[] { BlockStem.AGE});
     }
 
-    public BlockStemmed d() {
+    public BlockStemmed e() {
         return this.blockFruit;
     }
 }

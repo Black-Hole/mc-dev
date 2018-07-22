@@ -34,7 +34,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         this.g = flag1;
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 
@@ -244,7 +244,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                 if (this.g) {
                     iblockdata = Blocks.AIR.getBlockData();
                 } else {
-                    iblockdata = Block.a(this.a, (GeneratorAccess) this.world, this.position);
+                    iblockdata = Block.b(this.a, this.world, this.position);
                 }
 
                 this.world.setTypeAndData(this.position, iblockdata, 3);
@@ -254,14 +254,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     }
 
-    public void X_() {
+    public void Y_() {
         this.k = this.world.getTime();
         this.j = this.i;
         if (this.j >= 1.0F) {
             this.world.n(this.position);
             this.y();
             if (this.a != null && this.world.getType(this.position).getBlock() == Blocks.MOVING_PISTON) {
-                IBlockData iblockdata = Block.a(this.a, (GeneratorAccess) this.world, this.position);
+                IBlockData iblockdata = Block.b(this.a, this.world, this.position);
 
                 if (iblockdata.isAir()) {
                     this.world.setTypeAndData(this.position, this.a, 20);

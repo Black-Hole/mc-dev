@@ -59,10 +59,10 @@ public class BlockSprawling extends Block {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.t[this.j(iblockdata)];
+        return this.t[this.k(iblockdata)];
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int k(IBlockData iblockdata) {
         int i = 0;
 
         for (int j = 0; j < BlockSprawling.u.length; ++j) {

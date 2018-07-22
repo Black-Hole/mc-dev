@@ -12,15 +12,6 @@ public class BlockCoral extends Block {
         this.a = block;
     }
 
-    @Nullable
-    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        if (!this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
-            blockactioncontext.getWorld().I().a(blockactioncontext.getClickPosition(), this, 60 + blockactioncontext.getWorld().m().nextInt(40));
-        }
-
-        return this.getBlockData();
-    }
-
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!this.a((IBlockAccess) world, blockposition)) {
             world.setTypeAndData(blockposition, this.a.getBlockData(), 2);
@@ -36,7 +27,7 @@ public class BlockCoral extends Block {
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    protected boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
@@ -52,11 +43,20 @@ public class BlockCoral extends Block {
         return false;
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return this.a;
+    @Nullable
+    public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
+        if (!this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
+            blockactioncontext.getWorld().I().a(blockactioncontext.getClickPosition(), this, 60 + blockactioncontext.getWorld().m().nextInt(40));
+        }
+
+        return this.getBlockData();
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
+    }
+
+    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
+        return this.a;
     }
 }

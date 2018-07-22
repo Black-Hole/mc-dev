@@ -137,7 +137,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Nullable
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SNOW_GOLEM_DEATH;
     }
 

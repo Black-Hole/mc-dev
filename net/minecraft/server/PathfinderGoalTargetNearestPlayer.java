@@ -33,7 +33,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
                 }
 
                 if (entity.isInvisible()) {
-                    float f = ((EntityHuman) entity).dj();
+                    float f = ((EntityHuman) entity).dk();
 
                     if (f < 0.1F) {
                         f = 0.1F;

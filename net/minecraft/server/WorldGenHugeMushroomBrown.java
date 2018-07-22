@@ -33,7 +33,7 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                         for (l = -j1; l <= j1; ++l) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.g(blockposition).d(k, i1, l));
 
-                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.E)) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.D)) {
                                 return false;
                             }
                         }

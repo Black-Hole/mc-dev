@@ -13,10 +13,10 @@ public class PathfinderGoalRestrictSun extends PathfinderGoal {
     }
 
     public void c() {
-        ((Navigation) this.a.getNavigation()).d(true);
+        ((Navigation) this.a.getNavigation()).c(true);
     }
 
     public void d() {
-        ((Navigation) this.a.getNavigation()).d(false);
+        ((Navigation) this.a.getNavigation()).c(false);
     }
 }

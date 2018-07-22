@@ -50,14 +50,14 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 5, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 5, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 
-    public void X_() {
+    public void Y_() {
         ++this.a;
         long i = this.world.getTime();
 

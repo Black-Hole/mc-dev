@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
     public static java.nio.file.Path a;
     private static final Logger d = LogManager.getLogger();
-    public static Object b;
+    public static Class<?> b;
     public final Set<String> c;
 
     public ResourcePackVanilla(String... astring) {
@@ -69,6 +70,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
         HashSet hashset = Sets.newHashSet();
+        URI uri;
 
         if (ResourcePackVanilla.a != null) {
             try {
@@ -78,14 +80,23 @@ public class ResourcePackVanilla implements IResourcePack {
             }
 
             if (enumresourcepacktype == EnumResourcePackType.CLIENT_RESOURCES) {
-                try {
-                    URI uri = ResourcePackVanilla.b.getClass().getResource("/" + enumresourcepacktype.a() + "/minecraft").toURI();
+                Enumeration enumeration = null;
 
-                    if ("file".equals(uri.getScheme())) {
-                        hashset.addAll(this.a(i, "minecraft", Paths.get(uri), s, predicate));
-                    }
-                } catch (IOException | URISyntaxException urisyntaxexception) {
+                try {
+                    enumeration = ResourcePackVanilla.b.getClassLoader().getResources(enumresourcepacktype.a() + "/minecraft");
+                } catch (IOException ioexception1) {
                     ;
+                }
+
+                while (enumeration != null && enumeration.hasMoreElements()) {
+                    try {
+                        uri = ((URL) enumeration.nextElement()).toURI();
+                        if ("file".equals(uri.getScheme())) {
+                            hashset.addAll(this.a(i, "minecraft", Paths.get(uri), s, predicate));
+                        }
+                    } catch (IOException | URISyntaxException urisyntaxexception) {
+                        ;
+                    }
                 }
             }
         }
@@ -98,9 +109,8 @@ public class ResourcePackVanilla implements IResourcePack {
                 return hashset;
             }
 
-            URI uri1 = url.toURI();
-
-            if ("file".equals(uri1.getScheme())) {
+            uri = url.toURI();
+            if ("file".equals(uri.getScheme())) {
                 URL url1 = new URL(url.toString().substring(0, url.toString().length() - ".mcassetsroot".length()) + "minecraft");
 
                 if (url1 == null) {
@@ -110,8 +120,8 @@ public class ResourcePackVanilla implements IResourcePack {
                 java.nio.file.Path java_nio_file_path = Paths.get(url1.toURI());
 
                 hashset.addAll(this.a(i, "minecraft", java_nio_file_path, s, predicate));
-            } else if ("jar".equals(uri1.getScheme())) {
-                FileSystem filesystem = FileSystems.newFileSystem(uri1, Collections.emptyMap());
+            } else if ("jar".equals(uri.getScheme())) {
+                FileSystem filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
                 Throwable throwable = null;
 
                 try {
@@ -136,7 +146,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
                 }
             } else {
-                ResourcePackVanilla.d.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri1);
+                ResourcePackVanilla.d.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
             }
         } catch (NoSuchFileException | FileNotFoundException filenotfoundexception) {
             ;

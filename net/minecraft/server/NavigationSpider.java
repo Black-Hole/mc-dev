@@ -31,7 +31,7 @@ public class NavigationSpider extends Navigation {
     }
 
     public void d() {
-        if (!this.q()) {
+        if (!this.p()) {
             super.d();
         } else {
             if (this.p != null) {

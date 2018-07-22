@@ -105,11 +105,11 @@ public class EntityWolf extends EntityTameableAnimal {
         return SoundEffects.ENTITY_WOLF_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_WOLF_DEATH;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 0.4F;
     }
 
@@ -120,7 +120,7 @@ public class EntityWolf extends EntityTameableAnimal {
 
     public void k() {
         super.k();
-        if (!this.world.isClientSide && this.bL && !this.bM && !this.dr() && this.onGround) {
+        if (!this.world.isClientSide && this.bL && !this.bM && !this.ds() && this.onGround) {
             this.bM = true;
             this.bN = 0.0F;
             this.bO = 0.0F;
@@ -136,7 +136,7 @@ public class EntityWolf extends EntityTameableAnimal {
     public void tick() {
         super.tick();
         this.bK = this.bJ;
-        if (this.dL()) {
+        if (this.dM()) {
             this.bJ += (1.0F - this.bJ) * 0.4F;
         } else {
             this.bJ += (0.0F - this.bJ) * 0.4F;
@@ -149,7 +149,7 @@ public class EntityWolf extends EntityTameableAnimal {
             this.bO = 0.0F;
         } else if ((this.bL || this.bM) && this.bM) {
             if (this.bN == 0.0F) {
-                this.a(SoundEffects.ENTITY_WOLF_SHAKE, this.cC(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.a(SoundEffects.ENTITY_WOLF_SHAKE, this.cD(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
             }
 
             this.bO = this.bN;
@@ -257,7 +257,7 @@ public class EntityWolf extends EntityTameableAnimal {
             if (this.f((EntityLiving) entityhuman) && !this.world.isClientSide && !this.f(itemstack)) {
                 this.goalSit.setSitting(!this.isSitting());
                 this.bg = false;
-                this.navigation.r();
+                this.navigation.q();
                 this.setGoalTarget((EntityLiving) null);
             }
         } else if (item == Items.BONE && !this.isAngry()) {
@@ -268,7 +268,7 @@ public class EntityWolf extends EntityTameableAnimal {
             if (!this.world.isClientSide) {
                 if (this.random.nextInt(3) == 0) {
                     this.c(entityhuman);
-                    this.navigation.r();
+                    this.navigation.q();
                     this.setGoalTarget((EntityLiving) null);
                     this.goalSit.setSitting(true);
                     this.setHealth(20.0F);
@@ -292,7 +292,7 @@ public class EntityWolf extends EntityTameableAnimal {
         return item instanceof ItemFood && ((ItemFood) item).d();
     }
 
-    public int dg() {
+    public int dh() {
         return 8;
     }
 
@@ -349,7 +349,7 @@ public class EntityWolf extends EntityTameableAnimal {
         }
     }
 
-    public boolean dL() {
+    public boolean dM() {
         return ((Boolean) this.datawatcher.get(EntityWolf.bH)).booleanValue();
     }
 

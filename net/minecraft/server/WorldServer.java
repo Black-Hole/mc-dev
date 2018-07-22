@@ -116,7 +116,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
         }
 
-        this.chunkProvider.getChunkGenerator().getWorldChunkManager().X_();
+        this.chunkProvider.getChunkGenerator().getWorldChunkManager().Y_();
         if (this.everyoneDeeplySleeping()) {
             if (this.getGameRules().getBoolean("doDaylightCycle")) {
                 long i = this.worldData.getDayTime() + 24000L;

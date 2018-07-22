@@ -11,8 +11,8 @@ public class BlockRedstoneOre extends Block {
         this.v((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, Boolean.valueOf(false)));
     }
 
-    public int l(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue() ? super.l(iblockdata) : 0;
+    public int m(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue() ? super.m(iblockdata) : 0;
     }
 
     public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {

@@ -21,7 +21,7 @@ public class CommandList {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        return a(commandlistenerwrapper, EntityHuman::dB);
+        return a(commandlistenerwrapper, EntityHuman::dC);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {

@@ -263,9 +263,11 @@ public class DataConverterSchemaV99 extends Schema {
         });
         schema.registerType(false, DataConverterTypes.g, DSL::remainder);
         schema.registerType(false, DataConverterTypes.h, () -> {
-            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.s.in(schema))));
+            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.s.in(schema)), "Objectives", DSL.list(DataConverterTypes.t.in(schema)), "Teams", DSL.list(DataConverterTypes.u.in(schema))));
         });
         schema.registerType(false, DataConverterTypes.s, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.t, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.u, DSL::remainder);
         schema.registerType(true, DataConverterTypes.r, DSL::remainder);
     }
 

@@ -12,7 +12,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ed());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ee());
     }
 
     public EnumMonsterType getMonsterType() {
@@ -24,8 +24,8 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         return SoundEffects.ENTITY_ZOMBIE_HORSE_AMBIENT;
     }
 
-    protected SoundEffect cr() {
-        super.cr();
+    protected SoundEffect cs() {
+        super.cs();
         return SoundEffects.ENTITY_ZOMBIE_HORSE_DEATH;
     }
 
@@ -60,7 +60,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (!this.dV() && itemstack.getItem() == Items.SADDLE) {
+                if (!this.dW() && itemstack.getItem() == Items.SADDLE) {
                     this.c(entityhuman);
                     return true;
                 }
@@ -75,5 +75,5 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         }
     }
 
-    protected void dI() {}
+    protected void dJ() {}
 }

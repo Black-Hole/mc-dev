@@ -5,10 +5,10 @@ public class ItemBow extends Item {
     public ItemBow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving == null ? 0.0F : (entityliving.cV().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.cW()) / 20.0F);
+            return entityliving == null ? 0.0F : (entityliving.cW().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.cX()) / 20.0F);
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.cV() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.cW() == itemstack ? 1.0F : 0.0F;
         });
     }
 

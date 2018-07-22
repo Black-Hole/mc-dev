@@ -509,7 +509,7 @@ public class Chunk implements IChunkAccess {
 
             return chunksection == Chunk.a ? (this.c(blockposition) ? enumskyblock.c : 0) : (enumskyblock == EnumSkyBlock.SKY ? (!flag ? 0 : chunksection.c(i, j & 15, k)) : (enumskyblock == EnumSkyBlock.BLOCK ? chunksection.d(i, j & 15, k) : enumskyblock.c));
         } else {
-            return 0;
+            return (enumskyblock != EnumSkyBlock.SKY || !flag) && enumskyblock != EnumSkyBlock.BLOCK ? 0 : enumskyblock.c;
         }
     }
 
@@ -1051,7 +1051,7 @@ public class Chunk implements IChunkAccess {
                         Short oshort = (Short) shortlistiterator.next();
                         BlockPosition blockposition = ProtoChunk.a(oshort.shortValue(), i, chunkcoordintpair);
                         IBlockData iblockdata = this.world.getType(blockposition);
-                        IBlockData iblockdata1 = Block.a(iblockdata, (GeneratorAccess) this.world, blockposition);
+                        IBlockData iblockdata1 = Block.b(iblockdata, this.world, blockposition);
 
                         this.world.setTypeAndData(blockposition, iblockdata1, 20);
                     }

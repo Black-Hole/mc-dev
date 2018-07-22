@@ -17,7 +17,7 @@ public class Navigation extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.a.onGround || this.s() || this.a.isPassenger();
+        return this.a.onGround || this.r() || this.a.isPassenger();
     }
 
     protected Vec3D c() {
@@ -59,7 +59,7 @@ public class Navigation extends NavigationAbstract {
     }
 
     private int u() {
-        if (this.a.isInWater() && this.h()) {
+        if (this.a.isInWater() && this.t()) {
             int i = (int) this.a.getBoundingBox().b;
             Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
             int j = 0;
@@ -241,14 +241,6 @@ public class Navigation extends NavigationAbstract {
     }
 
     public void c(boolean flag) {
-        this.o.c(flag);
-    }
-
-    public boolean h() {
-        return this.o.e();
-    }
-
-    public void d(boolean flag) {
         this.p = flag;
     }
 }

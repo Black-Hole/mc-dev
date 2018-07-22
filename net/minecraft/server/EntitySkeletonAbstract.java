@@ -23,7 +23,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     protected EntitySkeletonAbstract(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
         this.setSize(0.6F, 1.99F);
-        this.dz();
+        this.dA();
     }
 
     protected void n() {
@@ -60,7 +60,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     public void k() {
-        boolean flag = this.dq();
+        boolean flag = this.dr();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -105,7 +105,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
-        this.dz();
+        this.dA();
         this.p(this.random.nextFloat() < 0.55F * difficultydamagescaler.d());
         if (this.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             LocalDate localdate = LocalDate.now();
@@ -121,7 +121,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return groupdataentity;
     }
 
-    public void dz() {
+    public void dA() {
         if (this.world != null && !this.world.isClientSide) {
             this.goalSelector.a((PathfinderGoal) this.c);
             this.goalSelector.a((PathfinderGoal) this.b);
@@ -164,13 +164,13 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.dz();
+        this.dA();
     }
 
     public void setSlot(EnumItemSlot enumitemslot, ItemStack itemstack) {
         super.setSlot(enumitemslot, itemstack);
         if (!this.world.isClientSide && enumitemslot == EnumItemSlot.MAINHAND) {
-            this.dz();
+            this.dA();
         }
 
     }

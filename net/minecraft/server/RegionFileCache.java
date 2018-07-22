@@ -76,22 +76,22 @@ public class RegionFileCache {
     }
 
     @Nullable
-    public static DataInputStream d(File file, int i, int j) {
+    public static DataInputStream read(File file, int i, int j) {
         RegionFile regionfile = a(file, i, j);
 
         return regionfile.a(i & 31, j & 31);
     }
 
     @Nullable
-    public static DataOutputStream e(File file, int i, int j) {
+    public static DataOutputStream write(File file, int i, int j) {
         RegionFile regionfile = a(file, i, j);
 
-        return regionfile.b(i & 31, j & 31);
+        return regionfile.c(i & 31, j & 31);
     }
 
     public static synchronized boolean chunkExists(File file, int i, int j) {
         RegionFile regionfile = b(file, i, j);
 
-        return regionfile != null ? regionfile.c(i & 31, j & 31) : false;
+        return regionfile != null ? regionfile.d(i & 31, j & 31) : false;
     }
 }

@@ -29,7 +29,7 @@ public class ItemSword extends ItemToolMaterial {
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a(TagsBlock.E) && material != Material.PUMPKIN ? 1.0F : 1.5F;
+            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a(TagsBlock.D) && material != Material.PUMPKIN ? 1.0F : 1.5F;
         }
     }
 

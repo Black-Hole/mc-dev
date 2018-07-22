@@ -10,7 +10,7 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
     private boolean h;
     private static final WorldGenJunglePyramidPiece.a i = new WorldGenJunglePyramidPiece.a(null);
 
-    public static void ac_() {
+    public static void ad_() {
         WorldGenFactory.a(WorldGenJunglePyramidPiece.class, "TeJP");
     }
 

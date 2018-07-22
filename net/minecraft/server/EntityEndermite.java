@@ -46,7 +46,7 @@ public class EntityEndermite extends EntityMonster {
         return SoundEffects.ENTITY_ENDERMITE_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_ENDERMITE_DEATH;
     }
 

@@ -78,6 +78,15 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     }
 
+    public boolean c(int i, ItemStack itemstack) {
+        if (i >= 0 && i < this.getSize()) {
+            this.setItem(i, itemstack);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void update() {}
 
     public boolean a(EntityHuman entityhuman) {
@@ -197,7 +206,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
             LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a(new BlockPosition(this));
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dI());
+                loottableinfo_a.a(entityhuman.dJ());
             }
 
             loottable.a(this, random, loottableinfo_a.a());

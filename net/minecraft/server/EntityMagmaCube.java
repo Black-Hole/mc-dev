@@ -37,22 +37,22 @@ public class EntityMagmaCube extends EntitySlime {
 
     @Nullable
     protected MinecraftKey G() {
-        return this.dy() ? LootTables.a : LootTables.ap;
+        return this.dz() ? LootTables.a : LootTables.ap;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int dr() {
-        return super.dr() * 4;
+    protected int ds() {
+        return super.ds() * 4;
     }
 
-    protected void ds() {
+    protected void dt() {
         this.a *= 0.9F;
     }
 
-    protected void cG() {
+    protected void cH() {
         this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
         this.impulse = true;
     }
@@ -69,27 +69,27 @@ public class EntityMagmaCube extends EntitySlime {
 
     public void c(float f, float f1) {}
 
-    protected boolean dt() {
+    protected boolean du() {
         return true;
     }
 
-    protected int du() {
-        return super.du() + 2;
+    protected int dv() {
+        return super.dv() + 2;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
-    protected SoundEffect cr() {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
-    }
-
-    protected SoundEffect dv() {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+    protected SoundEffect cs() {
+        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
     }
 
     protected SoundEffect dw() {
+        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+    }
+
+    protected SoundEffect dx() {
         return SoundEffects.ENTITY_MAGMA_CUBE_JUMP;
     }
 }

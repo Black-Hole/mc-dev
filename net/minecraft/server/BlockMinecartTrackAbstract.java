@@ -7,11 +7,11 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     private final boolean c;
 
     public static boolean a(World world, BlockPosition blockposition) {
-        return j(world.getType(blockposition));
+        return k(world.getType(blockposition));
     }
 
-    public static boolean j(IBlockData iblockdata) {
-        return iblockdata.a(TagsBlock.y);
+    public static boolean k(IBlockData iblockdata) {
+        return iblockdata.a(TagsBlock.z);
     }
 
     protected BlockMinecartTrackAbstract(boolean flag, Block.Info block_info) {
@@ -19,12 +19,12 @@ public abstract class BlockMinecartTrackAbstract extends Block {
         this.c = flag;
     }
 
-    public boolean b() {
+    public boolean d() {
         return this.c;
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        BlockPropertyTrackPosition blockpropertytrackposition = iblockdata.getBlock() == this ? (BlockPropertyTrackPosition) iblockdata.get(this.d()) : null;
+        BlockPropertyTrackPosition blockpropertytrackposition = iblockdata.getBlock() == this ? (BlockPropertyTrackPosition) iblockdata.get(this.e()) : null;
 
         return blockpropertytrackposition != null && blockpropertytrackposition.c() ? BlockMinecartTrackAbstract.b : BlockMinecartTrackAbstract.a;
     }
@@ -55,7 +55,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (!world.isClientSide) {
-            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.d());
+            BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.e());
             boolean flag = false;
 
             if (!world.getType(blockposition.down()).q()) {
@@ -99,7 +99,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!flag) {
             super.remove(iblockdata, world, blockposition, iblockdata1, flag);
-            if (((BlockPropertyTrackPosition) iblockdata.get(this.d())).c()) {
+            if (((BlockPropertyTrackPosition) iblockdata.get(this.e())).c()) {
                 world.applyPhysics(blockposition.up(), this);
             }
 
@@ -111,5 +111,5 @@ public abstract class BlockMinecartTrackAbstract extends Block {
         }
     }
 
-    public abstract IBlockState<BlockPropertyTrackPosition> d();
+    public abstract IBlockState<BlockPropertyTrackPosition> e();
 }

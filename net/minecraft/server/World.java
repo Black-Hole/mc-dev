@@ -856,7 +856,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                         this.methodProfiler.a(() -> {
                             return String.valueOf(TileEntityTypes.a(tileentity.C()));
                         });
-                        ((ITickable) tileentity).X_();
+                        ((ITickable) tileentity).Y_();
                         this.methodProfiler.e();
                     } catch (Throwable throwable2) {
                         crashreport1 = CrashReport.a(throwable2, "Ticking block entity");
@@ -966,7 +966,11 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
             if (entity.isPassenger()) {
                 entity.aH();
             } else {
+                this.methodProfiler.a(() -> {
+                    return ((MinecraftKey) EntityTypes.REGISTRY.b(entity.P())).toString();
+                });
                 entity.tick();
+                this.methodProfiler.e();
             }
         }
 
@@ -2011,7 +2015,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                 }
 
                 if (entityhuman1.isInvisible()) {
-                    float f = entityhuman1.dj();
+                    float f = entityhuman1.dk();
 
                     if (f < 0.1F) {
                         f = 0.1F;

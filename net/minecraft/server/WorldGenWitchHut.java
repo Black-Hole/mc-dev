@@ -83,7 +83,7 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
                     this.e = true;
                     EntityWitch entitywitch = new EntityWitch(generatoraccess.getMinecraftWorld());
 
-                    entitywitch.di();
+                    entitywitch.dj();
                     entitywitch.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
                     entitywitch.prepare(generatoraccess.getDamageScaler(new BlockPosition(i, j, k)), (GroupDataEntity) null, (NBTTagCompound) null);
                     generatoraccess.addEntity(entitywitch);

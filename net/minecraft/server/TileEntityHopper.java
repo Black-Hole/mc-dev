@@ -75,7 +75,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         return 64;
     }
 
-    public void X_() {
+    public void Y_() {
         if (this.world != null && !this.world.isClientSide) {
             --this.f;
             this.j = this.world.getTime();

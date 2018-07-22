@@ -51,7 +51,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     }
 
     public boolean b() {
-        return this.c != null && !this.e.q() && this.a.h(this.c) > (double) (this.g * this.g);
+        return this.c != null && !this.e.p() && this.a.h(this.c) > (double) (this.g * this.g);
     }
 
     public void c() {
@@ -62,7 +62,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
 
     public void d() {
         this.c = null;
-        this.e.r();
+        this.e.q();
         this.a.a(PathType.WATER, this.h);
     }
 
@@ -79,7 +79,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
                 if (d3 > (double) (this.g * this.g)) {
                     this.e.a((Entity) this.c, this.d);
                 } else {
-                    this.e.r();
+                    this.e.q();
                     ControllerLook controllerlook = this.c.getControllerLook();
 
                     if (d3 <= (double) this.g || controllerlook.e() == this.a.locX && controllerlook.f() == this.a.locY && controllerlook.g() == this.a.locZ) {

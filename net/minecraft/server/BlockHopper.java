@@ -89,7 +89,7 @@ public class BlockHopper extends BlockTileEntity {
 
     }
 
-    public boolean q(IBlockData iblockdata) {
+    public boolean r(IBlockData iblockdata) {
         return true;
     }
 

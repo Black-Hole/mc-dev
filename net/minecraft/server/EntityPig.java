@@ -39,7 +39,7 @@ public class EntityPig extends EntityAnimal {
         return this.bP().isEmpty() ? null : (Entity) this.bP().get(0);
     }
 
-    public boolean dh() {
+    public boolean di() {
         Entity entity = this.bO();
 
         if (!(entity instanceof EntityHuman)) {
@@ -85,7 +85,7 @@ public class EntityPig extends EntityAnimal {
         return SoundEffects.ENTITY_PIG_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_PIG_DEATH;
     }
 
@@ -165,7 +165,7 @@ public class EntityPig extends EntityAnimal {
     public void a(float f, float f1, float f2) {
         Entity entity = this.bP().isEmpty() ? null : (Entity) this.bP().get(0);
 
-        if (this.isVehicle() && this.dh()) {
+        if (this.isVehicle() && this.di()) {
             this.yaw = entity.yaw;
             this.lastYaw = this.yaw;
             this.pitch = entity.pitch * 0.5F;
@@ -173,7 +173,7 @@ public class EntityPig extends EntityAnimal {
             this.aQ = this.yaw;
             this.aS = this.yaw;
             this.Q = 1.0F;
-            this.aU = this.cJ() * 0.1F;
+            this.aU = this.cK() * 0.1F;
             if (this.bG && this.bH++ > this.bI) {
                 this.bG = false;
             }
@@ -211,7 +211,7 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public boolean dz() {
+    public boolean dA() {
         if (this.bG) {
             return false;
         } else {

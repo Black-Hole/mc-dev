@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.FunctionType;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.DynamicOps;
@@ -22,9 +21,9 @@ public class DataConverterRecipes extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = DSL.named(DataConverterTypes.t.typeName(), DSL.namespacedString());
+        Type type = DSL.named(DataConverterTypes.v.typeName(), DSL.namespacedString());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.t))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.v))) {
             throw new IllegalStateException("Recipe type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("Recipes fix", type, (dynamicops) -> {

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Blocks {
 
-    private static final Set<Block> kg;
+    private static final Set<Block> kv;
     public static final Block AIR;
     public static final Block STONE;
     public static final Block GRANITE;
@@ -576,6 +576,11 @@ public class Blocks {
     public static final Block BUBBLE_CORAL;
     public static final Block FIRE_CORAL;
     public static final Block HORN_CORAL;
+    public static final Block TUBE_CORAL_WALL_FAN;
+    public static final Block BRAIN_CORAL_WALL_FAN;
+    public static final Block BUBBLE_CORAL_WALL_FAN;
+    public static final Block FIRE_CORAL_WALL_FAN;
+    public static final Block HORN_CORAL_WALL_FAN;
     public static final Block TUBE_CORAL_FAN;
     public static final Block BRAIN_CORAL_FAN;
     public static final Block BUBBLE_CORAL_FAN;
@@ -583,12 +588,22 @@ public class Blocks {
     public static final Block HORN_CORAL_FAN;
     public static final Block SEA_PICKLE;
     public static final Block CONDUIT;
+    public static final Block DEAD_TUBE_CORAL_WALL_FAN;
+    public static final Block DEAD_BRAIN_CORAL_WALL_FAN;
+    public static final Block DEAD_BUBBLE_CORAL_WALL_FAN;
+    public static final Block DEAD_FIRE_CORAL_WALL_FAN;
+    public static final Block DEAD_HORN_CORAL_WALL_FAN;
+    public static final Block DEAD_TUBE_CORAL_FAN;
+    public static final Block DEAD_BRAIN_CORAL_FAN;
+    public static final Block DEAD_BUBBLE_CORAL_FAN;
+    public static final Block DEAD_FIRE_CORAL_FAN;
+    public static final Block DEAD_HORN_CORAL_FAN;
     public static final Block STRUCTURE_BLOCK;
 
     private static Block get(String s) {
         Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
 
-        if (!Blocks.kg.add(block)) {
+        if (!Blocks.kv.add(block)) {
             throw new IllegalStateException("Invalid Block requested: " + s);
         } else {
             return block;
@@ -599,7 +614,7 @@ public class Blocks {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
-            kg = Sets.newHashSet(new Block[] { (Block) null});
+            kv = Sets.newHashSet(new Block[] { (Block) null});
             AIR = get("air");
             STONE = get("stone");
             GRANITE = get("granite");
@@ -1170,6 +1185,11 @@ public class Blocks {
             BUBBLE_CORAL = get("bubble_coral");
             FIRE_CORAL = get("fire_coral");
             HORN_CORAL = get("horn_coral");
+            TUBE_CORAL_WALL_FAN = get("tube_coral_wall_fan");
+            BRAIN_CORAL_WALL_FAN = get("brain_coral_wall_fan");
+            BUBBLE_CORAL_WALL_FAN = get("bubble_coral_wall_fan");
+            FIRE_CORAL_WALL_FAN = get("fire_coral_wall_fan");
+            HORN_CORAL_WALL_FAN = get("horn_coral_wall_fan");
             TUBE_CORAL_FAN = get("tube_coral_fan");
             BRAIN_CORAL_FAN = get("brain_coral_fan");
             BUBBLE_CORAL_FAN = get("bubble_coral_fan");
@@ -1177,8 +1197,18 @@ public class Blocks {
             HORN_CORAL_FAN = get("horn_coral_fan");
             SEA_PICKLE = get("sea_pickle");
             CONDUIT = get("conduit");
+            DEAD_TUBE_CORAL_WALL_FAN = get("dead_tube_coral_wall_fan");
+            DEAD_BRAIN_CORAL_WALL_FAN = get("dead_brain_coral_wall_fan");
+            DEAD_BUBBLE_CORAL_WALL_FAN = get("dead_bubble_coral_wall_fan");
+            DEAD_FIRE_CORAL_WALL_FAN = get("dead_fire_coral_wall_fan");
+            DEAD_HORN_CORAL_WALL_FAN = get("dead_horn_coral_wall_fan");
+            DEAD_TUBE_CORAL_FAN = get("dead_tube_coral_fan");
+            DEAD_BRAIN_CORAL_FAN = get("dead_brain_coral_fan");
+            DEAD_BUBBLE_CORAL_FAN = get("dead_bubble_coral_fan");
+            DEAD_FIRE_CORAL_FAN = get("dead_fire_coral_fan");
+            DEAD_HORN_CORAL_FAN = get("dead_horn_coral_fan");
             STRUCTURE_BLOCK = get("structure_block");
-            Blocks.kg.clear();
+            Blocks.kv.clear();
         }
     }
 }

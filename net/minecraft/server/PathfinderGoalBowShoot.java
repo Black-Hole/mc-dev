@@ -33,7 +33,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
     }
 
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().q()) && this.g();
+        return (this.a() || !this.a.getNavigation().p()) && this.g();
     }
 
     public void c() {
@@ -46,7 +46,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         ((IRangedEntity) this.a).s(false);
         this.f = 0;
         this.e = -1;
-        this.a.cZ();
+        this.a.da();
     }
 
     public void e() {
@@ -68,7 +68,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
             }
 
             if (d0 <= (double) this.d && this.f >= 20) {
-                this.a.getNavigation().r();
+                this.a.getNavigation().q();
                 ++this.i;
             } else {
                 this.a.getNavigation().a((Entity) entityliving, this.b);
@@ -102,12 +102,12 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.cZ();
+                    this.a.da();
                 } else if (flag) {
-                    int i = this.a.cX();
+                    int i = this.a.cY();
 
                     if (i >= 20) {
-                        this.a.cZ();
+                        this.a.da();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }

@@ -89,7 +89,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
                                     IBlockData iblockdata = generatoraccess.getType(blockposition1);
                                     Material material = iblockdata.getMaterial();
 
-                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E) || material == Material.REPLACEABLE_PLANT) {
+                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D) || material == Material.REPLACEABLE_PLANT) {
                                         this.a(generatoraccess, blockposition1, this.aI);
                                     }
                                 }
@@ -101,7 +101,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(j));
                         Material material1 = iblockdata1.getMaterial();
 
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E) || material1 == Material.REPLACEABLE_PLANT) {
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D) || material1 == Material.REPLACEABLE_PLANT) {
                             this.a(set, generatoraccess, blockposition.up(j), this.aH);
                             if (this.d && j > 0) {
                                 if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition.a(-1, j, 0))) {
@@ -132,7 +132,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
                             for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
                                 for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1; ++k1) {
                                     blockposition_mutableblockposition1.c(j1, j, k1);
-                                    if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.E)) {
+                                    if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.D)) {
                                         BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                         blockposition1 = blockposition_mutableblockposition1.east();

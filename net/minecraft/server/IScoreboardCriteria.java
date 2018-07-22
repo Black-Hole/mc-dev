@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.ImmutableMap.Builder;
 import java.util.Map;
 import javax.annotation.Nullable;
 
@@ -73,8 +75,35 @@ public class IScoreboardCriteria {
 
     public static enum EnumScoreboardHealthDisplay {
 
-        INTEGER, HEARTS;
+        INTEGER("integer"), HEARTS("hearts");
 
-        private EnumScoreboardHealthDisplay() {}
+        private final String c;
+        private static final Map<String, IScoreboardCriteria.EnumScoreboardHealthDisplay> d;
+
+        private EnumScoreboardHealthDisplay(String s) {
+            this.c = s;
+        }
+
+        public String a() {
+            return this.c;
+        }
+
+        public static IScoreboardCriteria.EnumScoreboardHealthDisplay a(String s) {
+            return (IScoreboardCriteria.EnumScoreboardHealthDisplay) IScoreboardCriteria.EnumScoreboardHealthDisplay.d.getOrDefault(s, IScoreboardCriteria.EnumScoreboardHealthDisplay.INTEGER);
+        }
+
+        static {
+            Builder builder = ImmutableMap.builder();
+            IScoreboardCriteria.EnumScoreboardHealthDisplay[] aiscoreboardcriteria_enumscoreboardhealthdisplay = values();
+            int i = aiscoreboardcriteria_enumscoreboardhealthdisplay.length;
+
+            for (int j = 0; j < i; ++j) {
+                IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = aiscoreboardcriteria_enumscoreboardhealthdisplay[j];
+
+                builder.put(iscoreboardcriteria_enumscoreboardhealthdisplay.c, iscoreboardcriteria_enumscoreboardhealthdisplay);
+            }
+
+            d = builder.build();
+        }
     }
 }

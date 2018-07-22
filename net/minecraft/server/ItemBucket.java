@@ -28,7 +28,7 @@ public class ItemBucket extends Item {
                 if (this.a == FluidTypes.a) {
                     iblockdata = world.getType(blockposition);
                     if (iblockdata.getBlock() instanceof IFluidSource) {
-                        FluidType fluidtype = ((IFluidSource) iblockdata.getBlock()).b(world, blockposition, iblockdata);
+                        FluidType fluidtype = ((IFluidSource) iblockdata.getBlock()).a(world, blockposition, iblockdata);
 
                         if (fluidtype != FluidTypes.a) {
                             entityhuman.b(StatisticList.ITEM_USED.b(this));

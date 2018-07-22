@@ -80,7 +80,7 @@ public class EntityCreeper extends EntityMonster {
         }
 
         if (nbttagcompound.getBoolean("ignited")) {
-            this.dB();
+            this.dC();
         }
 
     }
@@ -92,7 +92,7 @@ public class EntityCreeper extends EntityMonster {
                 this.a(1);
             }
 
-            int i = this.dz();
+            int i = this.dA();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.a(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
@@ -105,7 +105,7 @@ public class EntityCreeper extends EntityMonster {
 
             if (this.fuseTicks >= this.maxFuseTicks) {
                 this.fuseTicks = this.maxFuseTicks;
-                this.dE();
+                this.dF();
             }
         }
 
@@ -116,7 +116,7 @@ public class EntityCreeper extends EntityMonster {
         return SoundEffects.ENTITY_CREEPER_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_CREEPER_DEATH;
     }
 
@@ -146,7 +146,7 @@ public class EntityCreeper extends EntityMonster {
         return LootTables.x;
     }
 
-    public int dz() {
+    public int dA() {
         return ((Integer) this.datawatcher.get(EntityCreeper.a)).intValue();
     }
 
@@ -166,7 +166,7 @@ public class EntityCreeper extends EntityMonster {
             this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.bV(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             entityhuman.a(enumhand);
             if (!this.world.isClientSide) {
-                this.dB();
+                this.dC();
                 itemstack.damage(1, entityhuman);
                 return true;
             }
@@ -175,7 +175,7 @@ public class EntityCreeper extends EntityMonster {
         return super.a(entityhuman, enumhand);
     }
 
-    private void dE() {
+    private void dF() {
         if (!this.world.isClientSide) {
             boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
             float f = this.isPowered() ? 2.0F : 1.0F;
@@ -183,12 +183,12 @@ public class EntityCreeper extends EntityMonster {
             this.aX = true;
             this.world.explode(this, this.locX, this.locY, this.locZ, (float) this.explosionRadius * f, flag);
             this.die();
-            this.dF();
+            this.dG();
         }
 
     }
 
-    private void dF() {
+    private void dG() {
         Collection collection = this.getEffects();
 
         if (!collection.isEmpty()) {
@@ -216,7 +216,7 @@ public class EntityCreeper extends EntityMonster {
         return ((Boolean) this.datawatcher.get(EntityCreeper.c)).booleanValue();
     }
 
-    public void dB() {
+    public void dC() {
         this.datawatcher.set(EntityCreeper.c, Boolean.valueOf(true));
     }
 

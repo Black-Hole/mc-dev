@@ -23,11 +23,11 @@ public abstract class EntityCreature extends EntityInsentient {
         return super.a(generatoraccess) && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean dr() {
-        return !this.navigation.q();
+    public boolean ds() {
+        return !this.navigation.p();
     }
 
-    public boolean ds() {
+    public boolean dt() {
         return this.f(new BlockPosition(this));
     }
 
@@ -40,24 +40,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition dt() {
+    public BlockPosition du() {
         return this.a;
     }
 
-    public float du() {
+    public float dv() {
         return this.b;
     }
 
-    public void dv() {
+    public void dw() {
         this.b = -1.0F;
     }
 
-    public boolean dw() {
+    public boolean dx() {
         return this.b != -1.0F;
     }
 
-    protected void dl() {
-        super.dl();
+    protected void dm() {
+        super.dm();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -89,13 +89,13 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dx());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dy());
             }
         }
 
     }
 
-    protected double dx() {
+    protected double dy() {
         return 1.0D;
     }
 

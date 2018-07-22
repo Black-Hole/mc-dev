@@ -73,7 +73,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return SoundEffects.ENTITY_GHAST_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_GHAST_DEATH;
     }
 
@@ -82,7 +82,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return LootTables.aq;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 10.0F;
     }
 
@@ -90,7 +90,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return this.random.nextInt(20) == 0 && super.a(generatoraccess) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int dg() {
+    public int dh() {
         return 1;
     }
 

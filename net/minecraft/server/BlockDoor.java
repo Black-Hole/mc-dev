@@ -91,11 +91,11 @@ public class BlockDoor extends Block {
         return false;
     }
 
-    private int b() {
+    private int d() {
         return this.material == Material.ORE ? 1011 : 1012;
     }
 
-    private int d() {
+    private int e() {
         return this.material == Material.ORE ? 1005 : 1006;
     }
 
@@ -154,7 +154,7 @@ public class BlockDoor extends Block {
         } else {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockDoor.OPEN);
             world.setTypeAndData(blockposition, iblockdata, 10);
-            world.a(entityhuman, ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue() ? this.d() : this.b(), blockposition, 0);
+            world.a(entityhuman, ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue() ? this.e() : this.d(), blockposition, 0);
             return true;
         }
     }
@@ -188,7 +188,7 @@ public class BlockDoor extends Block {
     }
 
     private void b(World world, BlockPosition blockposition, boolean flag) {
-        world.a((EntityHuman) null, flag ? this.d() : this.b(), blockposition, 0);
+        world.a((EntityHuman) null, flag ? this.e() : this.d(), blockposition, 0);
     }
 
     public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {

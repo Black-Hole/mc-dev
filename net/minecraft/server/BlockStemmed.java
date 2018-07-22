@@ -6,7 +6,7 @@ public abstract class BlockStemmed extends Block {
         super(block_info);
     }
 
-    public abstract BlockStem b();
+    public abstract BlockStem d();
 
-    public abstract BlockStemAttached d();
+    public abstract BlockStemAttached e();
 }

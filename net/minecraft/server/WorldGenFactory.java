@@ -103,11 +103,11 @@ public class WorldGenFactory {
         WorldGenVillagePieces.a();
         WorldGenNetherPieces.a();
         WorldGenStrongholdPieces.a();
-        WorldGenJunglePyramidPiece.ac_();
+        WorldGenJunglePyramidPiece.ad_();
         WorldGenFeatureOceanRuinPieces.a();
         WorldGenIglooPiece.a();
         WorldGenWitchHut.b();
-        WorldGenDesertPyramidPiece.ab_();
+        WorldGenDesertPyramidPiece.ac_();
         WorldGenMonumentPieces.a();
         WorldGenEndCityPieces.a();
         WorldGenWoodlandMansionPieces.a();

@@ -9,7 +9,7 @@ public class ControllerMove {
     protected double e;
     protected float f;
     protected float g;
-    public ControllerMove.Operation h;
+    protected ControllerMove.Operation h;
 
     public ControllerMove(EntityInsentient entityinsentient) {
         this.h = ControllerMove.Operation.WAIT;
@@ -29,7 +29,10 @@ public class ControllerMove {
         this.c = d1;
         this.d = d2;
         this.e = d3;
-        this.h = ControllerMove.Operation.MOVE_TO;
+        if (this.h != ControllerMove.Operation.JUMPING) {
+            this.h = ControllerMove.Operation.MOVE_TO;
+        }
+
     }
 
     public void a(float f, float f1) {
@@ -74,7 +77,7 @@ public class ControllerMove {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
             if (navigationabstract != null) {
-                PathfinderAbstract pathfinderabstract = navigationabstract.t();
+                PathfinderAbstract pathfinderabstract = navigationabstract.s();
 
                 if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
                     this.f = 1.0F;

@@ -59,7 +59,7 @@ public class EntityTropicalFish extends EntityFish {
         nbttagcompound.setInt("BucketVariantTag", this.getVariant());
     }
 
-    protected ItemStack dA() {
+    protected ItemStack dB() {
         return new ItemStack(Items.TROPICAL_FISH_BUCKET);
     }
 
@@ -72,7 +72,7 @@ public class EntityTropicalFish extends EntityFish {
         return SoundEffects.ENTITY_TROPICAL_FISH_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_TROPICAL_FISH_DEATH;
     }
 
@@ -80,7 +80,7 @@ public class EntityTropicalFish extends EntityFish {
         return SoundEffects.ENTITY_TROPICAL_FISH_HURT;
     }
 
-    protected SoundEffect dC() {
+    protected SoundEffect dD() {
         return SoundEffects.ENTITY_TROPICAL_FISH_FLOP;
     }
 

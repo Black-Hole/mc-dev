@@ -33,26 +33,26 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
     }
 
     protected boolean isTypeNotPersistent() {
-        return !this.dD() && !this.hasCustomName();
+        return !this.dE() && !this.hasCustomName();
     }
 
     public boolean l() {
-        return this.c && this.a < this.dy();
+        return this.c && this.a < this.dz();
     }
 
-    protected int dy() {
+    protected int dz() {
         return 8;
     }
 
-    public int dg() {
-        return this.dy();
+    public int dh() {
+        return this.dz();
     }
 
     public void a(boolean flag) {
         this.bC = flag;
     }
 
-    public boolean dz() {
+    public boolean dA() {
         return this.bC;
     }
 
@@ -61,7 +61,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         this.datawatcher.register(EntityFish.b, Boolean.valueOf(false));
     }
 
-    private boolean dD() {
+    private boolean dE() {
         return ((Boolean) this.datawatcher.get(EntityFish.b)).booleanValue();
     }
 
@@ -71,7 +71,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("FromBucket", this.dD());
+        nbttagcompound.setBoolean("FromBucket", this.dE());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -108,7 +108,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
     }
 
     public void a(float f, float f1, float f2) {
-        if (this.cO() && this.isInWater()) {
+        if (this.cP() && this.isInWater()) {
             this.a(f, f1, f2, 0.01F);
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.8999999761581421D;
@@ -130,7 +130,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
             this.motZ += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F);
             this.onGround = false;
             this.impulse = true;
-            this.a(this.dC(), this.cC(), this.cD());
+            this.a(this.dD(), this.cD(), this.cE());
         }
 
         super.k();
@@ -142,7 +142,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         if (itemstack.getItem() == Items.WATER_BUCKET && this.isAlive()) {
             this.a(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
             itemstack.subtract(1);
-            ItemStack itemstack1 = this.dA();
+            ItemStack itemstack1 = this.dB();
 
             this.f(itemstack1);
             if (!this.world.isClientSide) {
@@ -169,17 +169,17 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
 
     }
 
-    protected abstract ItemStack dA();
+    protected abstract ItemStack dB();
 
     public void t(boolean flag) {
         this.c = flag;
     }
 
-    public boolean dB() {
+    public boolean dC() {
         return this.c;
     }
 
-    protected abstract SoundEffect dC();
+    protected abstract SoundEffect dD();
 
     protected SoundEffect ad() {
         return SoundEffects.ENTITY_FISH_SWIM;
@@ -199,7 +199,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
                 this.i.motY += 0.005D;
             }
 
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().q()) {
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().p()) {
                 double d0 = this.b - this.i.locX;
                 double d1 = this.c - this.i.locY;
                 double d2 = this.d - this.i.locZ;
@@ -212,8 +212,8 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
                 this.i.aQ = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.o(this.i.cJ() + (f1 - this.i.cJ()) * 0.125F);
-                this.i.motY += (double) this.i.cJ() * d1 * 0.1D;
+                this.i.o(this.i.cK() + (f1 - this.i.cK()) * 0.125F);
+                this.i.motY += (double) this.i.cK() * d1 * 0.1D;
             } else {
                 this.i.o(0.0F);
             }
@@ -230,7 +230,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         }
 
         public boolean a() {
-            return super.a() && !this.h.dz();
+            return super.a() && !this.h.dA();
         }
     }
 }

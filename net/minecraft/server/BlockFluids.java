@@ -29,7 +29,7 @@ public class BlockFluids extends Block implements IFluidSource {
         return !this.b.a(TagsFluid.b);
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
 
         return i >= 8 ? this.b.a(8, true) : (i == 0 ? this.b.a(false) : this.b.a(8 - i, false));
@@ -143,7 +143,7 @@ public class BlockFluids extends Block implements IFluidSource {
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
             generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
             return this.b;

@@ -8,11 +8,11 @@ public class BlockPotatoes extends BlockCrops {
         super(block_info);
     }
 
-    protected IMaterial e() {
+    protected IMaterial f() {
         return Items.POTATO;
     }
 
-    protected IMaterial f() {
+    protected IMaterial g() {
         return Items.POTATO;
     }
 
@@ -27,6 +27,6 @@ public class BlockPotatoes extends BlockCrops {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockPotatoes.a[((Integer) iblockdata.get(this.b())).intValue()];
+        return BlockPotatoes.a[((Integer) iblockdata.get(this.d())).intValue()];
     }
 }

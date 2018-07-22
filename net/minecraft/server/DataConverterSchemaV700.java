@@ -20,7 +20,7 @@ public class DataConverterSchemaV700 extends Schema {
     public Map<String, Supplier<TypeTemplate>> registerEntities(Schema schema) {
         Map map = super.registerEntities(schema);
 
-        a(schema, map, "Guardian");
+        a(schema, map, "ElderGuardian");
         return map;
     }
 }

@@ -157,7 +157,7 @@ public class WorldGenFeatureOceanRuinPieces {
             } else if ("drowned".equals(s)) {
                 EntityDrowned entitydrowned = new EntityDrowned(generatoraccess.getMinecraftWorld());
 
-                entitydrowned.di();
+                entitydrowned.dj();
                 entitydrowned.setPositionRotation(blockposition, 0.0F, 0.0F);
                 generatoraccess.addEntity(entitydrowned);
                 if (blockposition.getY() > generatoraccess.getSeaLevel()) {

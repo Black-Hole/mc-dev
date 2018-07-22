@@ -13,7 +13,7 @@ public class WorldGenFeatureJungleGrass extends WorldGenerator<WorldGenFeatureEm
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         IBlockData iblockdata = this.a(random);
 
-        for (IBlockData iblockdata1 = generatoraccess.getType(blockposition); (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) && blockposition.getY() > 0; iblockdata1 = generatoraccess.getType(blockposition)) {
+        for (IBlockData iblockdata1 = generatoraccess.getType(blockposition); (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D)) && blockposition.getY() > 0; iblockdata1 = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

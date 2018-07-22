@@ -74,7 +74,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                         BlockPosition blockposition1 = new BlockPosition(k, l1, j1);
                         IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                             this.a(set, generatoraccess, blockposition1);
                             k1 = l1;
                         }
@@ -123,7 +123,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                                 BlockPosition blockposition3 = new BlockPosition(k, k2, j1);
                                 IBlockData iblockdata1 = generatoraccess.getType(blockposition3);
 
-                                if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                                if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D)) {
                                     this.a(set, generatoraccess, blockposition3);
                                     k1 = k2;
                                 }
@@ -172,7 +172,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
     private void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-        if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+        if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
             this.a(generatoraccess, blockposition, WorldGenAcaciaTree.b);
         }
 

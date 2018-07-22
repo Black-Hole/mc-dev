@@ -199,11 +199,11 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         schema.registerType(false, DataConverterTypes.a, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.t, () -> {
+        schema.registerType(false, DataConverterTypes.v, () -> {
             return DSL.constType(DSL.namespacedString());
         });
         schema.registerType(false, DataConverterTypes.b, () -> {
-            return DSL.optionalFields("RootVehicle", DSL.optionalFields("Entity", DataConverterTypes.n.in(schema)), "Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), DSL.optionalFields("ShoulderEntityLeft", DataConverterTypes.n.in(schema), "ShoulderEntityRight", DataConverterTypes.n.in(schema), "recipeBook", DSL.optionalFields("recipes", DSL.list(DataConverterTypes.t.in(schema)), "toBeDisplayed", DSL.list(DataConverterTypes.t.in(schema)))));
+            return DSL.optionalFields("RootVehicle", DSL.optionalFields("Entity", DataConverterTypes.n.in(schema)), "Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), DSL.optionalFields("ShoulderEntityLeft", DataConverterTypes.n.in(schema), "ShoulderEntityRight", DataConverterTypes.n.in(schema), "recipeBook", DSL.optionalFields("recipes", DSL.list(DataConverterTypes.v.in(schema)), "toBeDisplayed", DSL.list(DataConverterTypes.v.in(schema)))));
         });
         schema.registerType(false, DataConverterTypes.c, () -> {
             return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.n.in(schema)), "TileEntities", DSL.list(DataConverterTypes.j.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.p.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.l.in(schema))))));
@@ -242,18 +242,20 @@ public class DataConverterSchemaV1460 extends DataConverterSchemaNamed {
             return DSL.optionalFields("stats", DSL.optionalFields("minecraft:mined", DSL.compoundList(DataConverterTypes.p.in(schema), DSL.constType(DSL.intType())), "minecraft:crafted", (TypeTemplate) supplier.get(), "minecraft:used", (TypeTemplate) supplier.get(), "minecraft:broken", (TypeTemplate) supplier.get(), "minecraft:picked_up", (TypeTemplate) supplier.get(), DSL.optionalFields("minecraft:dropped", (TypeTemplate) supplier.get(), "minecraft:killed", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.intType())), "minecraft:killed_by", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.intType())), "minecraft:custom", DSL.compoundList(DSL.constType(DSL.namespacedString()), DSL.constType(DSL.intType())))));
         });
         schema.registerType(false, DataConverterTypes.h, () -> {
-            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.s.in(schema))));
+            return DSL.optionalFields("data", DSL.optionalFields("Features", DSL.compoundList(DataConverterTypes.s.in(schema)), "Objectives", DSL.list(DataConverterTypes.t.in(schema)), "Teams", DSL.list(DataConverterTypes.u.in(schema))));
         });
         schema.registerType(false, DataConverterTypes.s, () -> {
             return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.l.in(schema), "CB", DataConverterTypes.l.in(schema), "CC", DataConverterTypes.l.in(schema), "CD", DataConverterTypes.l.in(schema))));
         });
+        schema.registerType(false, DataConverterTypes.t, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.u, DSL::remainder);
         schema.registerType(true, DataConverterTypes.r, () -> {
             return DSL.optionalFields("SpawnPotentials", DSL.list(DSL.fields("Entity", DataConverterTypes.n.in(schema))), "SpawnData", DataConverterTypes.n.in(schema));
         });
         schema.registerType(false, DataConverterTypes.i, () -> {
-            return DSL.optionalFields("minecraft:adventure/adventuring_time", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.u.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_a_mob", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_all_mobs", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))), "minecraft:husbandry/bred_all_animals", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))));
+            return DSL.optionalFields("minecraft:adventure/adventuring_time", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.w.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_a_mob", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))), "minecraft:adventure/kill_all_mobs", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))), "minecraft:husbandry/bred_all_animals", DSL.optionalFields("criteria", DSL.compoundList(DataConverterTypes.m.in(schema), DSL.constType(DSL.string()))));
         });
-        schema.registerType(false, DataConverterTypes.u, () -> {
+        schema.registerType(false, DataConverterTypes.w, () -> {
             return DSL.constType(DSL.namespacedString());
         });
         schema.registerType(false, DataConverterTypes.m, () -> {

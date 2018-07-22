@@ -6,7 +6,7 @@ public class TileEntityLightDetector extends TileEntity implements ITickable {
         super(TileEntityTypes.q);
     }
 
-    public void X_() {
+    public void Y_() {
         if (this.world != null && !this.world.isClientSide && this.world.getTime() % 20L == 0L) {
             IBlockData iblockdata = this.getBlock();
             Block block = iblockdata.getBlock();

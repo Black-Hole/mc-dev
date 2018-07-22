@@ -26,23 +26,23 @@ public class WorldGenMegaTree extends WorldGenMegaTreeAbstract<WorldGenFeatureEm
             for (int j = 0; j < i; ++j) {
                 IBlockData iblockdata = generatoraccess.getType(blockposition.up(j));
 
-                if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                     this.a(set, generatoraccess, blockposition.up(j), this.b);
                 }
 
                 if (j < i - 1) {
                     iblockdata = generatoraccess.getType(blockposition.a(1, j, 0));
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                         this.a(set, generatoraccess, blockposition.a(1, j, 0), this.b);
                     }
 
                     iblockdata = generatoraccess.getType(blockposition.a(1, j, 1));
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                         this.a(set, generatoraccess, blockposition.a(1, j, 1), this.b);
                     }
 
                     iblockdata = generatoraccess.getType(blockposition.a(0, j, 1));
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                         this.a(set, generatoraccess, blockposition.a(0, j, 1), this.b);
                     }
                 }

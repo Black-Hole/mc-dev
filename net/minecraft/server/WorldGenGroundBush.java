@@ -15,7 +15,7 @@ public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmpt
     }
 
     public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
-        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
+        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 
@@ -39,7 +39,7 @@ public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                             BlockPosition blockposition1 = new BlockPosition(l, i, j1);
                             IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
-                            if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                            if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D)) {
                                 this.a(generatoraccess, blockposition1, this.a);
                             }
                         }

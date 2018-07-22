@@ -21,7 +21,7 @@ public class BlockStemAttached extends BlockPlant {
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.b().getBlockData().set(BlockStem.AGE, Integer.valueOf(7)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.d().getBlockData().set(BlockStem.AGE, Integer.valueOf(7)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {

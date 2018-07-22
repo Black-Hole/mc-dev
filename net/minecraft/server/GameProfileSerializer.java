@@ -267,7 +267,7 @@ public final class GameProfileSerializer {
     }
 
     public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i) {
-        return a(datafixer, typereference, nbttagcompound, i, 1513);
+        return a(datafixer, typereference, nbttagcompound, i, 1519);
     }
 
     public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i, int j) {

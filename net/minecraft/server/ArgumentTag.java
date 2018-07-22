@@ -36,7 +36,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
             stringreader.skip();
             minecraftkey = MinecraftKey.a(stringreader);
             return (commandcontext) -> {
-                Tag tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aD().g().a(minecraftkey);
+                Tag tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().g().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentTag.b.create(minecraftkey.toString());
@@ -47,7 +47,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
         } else {
             minecraftkey = MinecraftKey.a(stringreader);
             return (commandcontext) -> {
-                CustomFunction customfunction = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aD().a(minecraftkey);
+                CustomFunction customfunction = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().a(minecraftkey);
 
                 if (customfunction == null) {
                     throw ArgumentTag.c.create(minecraftkey.toString());

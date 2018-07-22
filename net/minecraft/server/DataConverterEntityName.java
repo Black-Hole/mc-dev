@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.mojang.datafixers.DataFix;
-import com.mojang.datafixers.FunctionType;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
@@ -31,7 +30,7 @@ public abstract class DataConverterEntityName extends DataFix {
                 Pair pair1 = this.a(s, this.a(pair.getSecond(), dynamicops, type));
                 Type type1 = (Type) taggedchoicetype1.types().get(pair1.getFirst());
 
-                if (!type1.equals(((Typed) pair1.getSecond()).getType(), true)) {
+                if (!type1.equals(((Typed) pair1.getSecond()).getType(), true, true)) {
                     throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", new Object[] { type1, ((Typed) pair1.getSecond()).getType()}));
                 } else {
                     return Pair.of(pair1.getFirst(), ((Typed) pair1.getSecond()).getValue());

@@ -79,7 +79,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         thread.setDaemon(true);
         thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(DedicatedServer.LOGGER));
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.13-pre7");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.13");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }
@@ -96,7 +96,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 this.b("127.0.0.1");
             } else {
                 this.setOnlineMode(this.propertyManager.getBoolean("online-mode", true));
-                this.e(this.propertyManager.getBoolean("prevent-proxy-connections", false));
+                this.f(this.propertyManager.getBoolean("prevent-proxy-connections", false));
                 this.b(this.propertyManager.getString("server-ip", ""));
             }
 
@@ -108,7 +108,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             this.setMotd(this.propertyManager.getString("motd", "A Minecraft Server"));
             this.setForceGamemode(this.propertyManager.getBoolean("force-gamemode", false));
             this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
-            this.k(this.propertyManager.getBoolean("enforce-whitelist", false));
+            this.l(this.propertyManager.getBoolean("enforce-whitelist", false));
             if (this.propertyManager.getInt("difficulty", 1) < 0) {
                 this.propertyManager.setProperty("difficulty", Integer.valueOf(0));
             } else if (this.propertyManager.getInt("difficulty", 1) > 3) {
@@ -160,7 +160,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 this.a((PlayerList) (new DedicatedPlayerList(this)));
                 long j = SystemUtils.c();
 
-                if (this.K() == null) {
+                if (this.getWorld() == null) {
                     this.setWorld(this.propertyManager.getString("level-name", "world"));
                 }
 
@@ -198,7 +198,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 TileEntitySkull.a(this.getUserCache());
                 TileEntitySkull.a(this.ar());
                 UserCache.a(this.getOnlineMode());
-                DedicatedServer.LOGGER.info("Preparing level \"{}\"", this.K());
+                DedicatedServer.LOGGER.info("Preparing level \"{}\"", this.getWorld());
                 JsonObject jsonobject = new JsonObject();
 
                 if (worldtype == WorldType.FLAT) {
@@ -207,7 +207,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                     jsonobject = (new JsonParser()).parse(s2).getAsJsonObject();
                 }
 
-                this.a(this.K(), this.K(), k, worldtype, jsonobject);
+                this.a(this.getWorld(), this.getWorld(), k, worldtype, jsonobject);
                 long i1 = SystemUtils.c() - j;
                 String s3 = String.format(Locale.ROOT, "%.3fs", new Object[] { Double.valueOf((double) i1 / 1.0E9D)});
 

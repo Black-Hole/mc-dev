@@ -86,7 +86,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                     BlockPosition blockposition1 = blockposition.a(k, 0, l);
                     IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                         this.a(generatoraccess, blockposition1, this.c);
                     }
                 }
@@ -104,7 +104,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                     BlockPosition blockposition1 = blockposition.a(k, 0, l);
                     IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                         this.a(generatoraccess, blockposition1, this.c);
                     }
                 }

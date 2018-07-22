@@ -11,7 +11,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     private final Scoreboard a;
     private final String b;
     private final Set<String> c = Sets.newHashSet();
-    private String d;
+    private IChatBaseComponent d;
     private IChatBaseComponent e = new ChatComponentText("");
     private IChatBaseComponent f = new ChatComponentText("");
     private boolean g = true;
@@ -28,19 +28,19 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.l = ScoreboardTeamBase.EnumTeamPush.ALWAYS;
         this.a = scoreboard;
         this.b = s;
-        this.d = s;
+        this.d = new ChatComponentText(s);
     }
 
     public String getName() {
         return this.b;
     }
 
-    public String getDisplayName() {
+    public IChatBaseComponent getDisplayName() {
         return this.d;
     }
 
     public IChatBaseComponent d() {
-        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((new ChatComponentText(this.d)).a((chatmodifier) -> {
+        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a(this.d.e().a((chatmodifier) -> {
             chatmodifier.setInsertion(this.b).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
         }));
         EnumChatFormat enumchatformat = this.getColor();
@@ -52,30 +52,30 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return ichatbasecomponent;
     }
 
-    public void setDisplayName(String s) {
-        if (s == null) {
+    public void setDisplayName(IChatBaseComponent ichatbasecomponent) {
+        if (ichatbasecomponent == null) {
             throw new IllegalArgumentException("Name cannot be null");
         } else {
-            this.d = s;
+            this.d = ichatbasecomponent;
             this.a.handleTeamChanged(this);
         }
     }
 
-    public void a(@Nullable IChatBaseComponent ichatbasecomponent) {
+    public void setPrefix(@Nullable IChatBaseComponent ichatbasecomponent) {
         this.e = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
         this.a.handleTeamChanged(this);
     }
 
-    public IChatBaseComponent e() {
+    public IChatBaseComponent getPrefix() {
         return this.e;
     }
 
-    public void b(@Nullable IChatBaseComponent ichatbasecomponent) {
+    public void setSuffix(@Nullable IChatBaseComponent ichatbasecomponent) {
         this.f = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
         this.a.handleTeamChanged(this);
     }
 
-    public IChatBaseComponent f() {
+    public IChatBaseComponent getSuffix() {
         return this.f;
     }
 

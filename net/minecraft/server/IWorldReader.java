@@ -222,12 +222,13 @@ public interface IWorldReader extends IBlockAccess {
 
         VoxelShape voxelshape2 = this.a(voxelshape, voxelshape1, flag, flag2);
 
-        return (!flag || voxelshape2.b()) && entity != null ? (voxelshape.b() ? VoxelShapes.a() : this.a(entity, voxelshape, flag, set, voxelshape2)) : voxelshape2;
+        return (!flag || voxelshape2.b()) && entity != null ? (voxelshape.b() ? VoxelShapes.a() : VoxelShapes.b(voxelshape2, this.a(entity, voxelshape, flag, set), OperatorBoolean.OR)) : voxelshape2;
     }
 
-    default VoxelShape a(@Nullable Entity entity, VoxelShape voxelshape, boolean flag, Set<Entity> set, VoxelShape voxelshape1) {
+    default VoxelShape a(@Nullable Entity entity, VoxelShape voxelshape, boolean flag, Set<Entity> set) {
         AxisAlignedBB axisalignedbb = voxelshape.a();
         List list = this.getEntities(entity, axisalignedbb.g(0.25D));
+        VoxelShape voxelshape1 = VoxelShapes.a();
 
         for (int i = 0; i < list.size(); ++i) {
             Entity entity1 = (Entity) list.get(i);

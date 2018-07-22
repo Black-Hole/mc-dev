@@ -34,13 +34,13 @@ public class Scoreboard {
         return (ScoreboardObjective) this.objectivesByName.get(s);
     }
 
-    public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria, String s1) {
+    public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria, IChatBaseComponent ichatbasecomponent, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
         if (s.length() > 16) {
             throw new IllegalArgumentException("The objective name \'" + s + "\' is too long!");
         } else if (this.objectivesByName.containsKey(s)) {
             throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
         } else {
-            ScoreboardObjective scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria, s1);
+            ScoreboardObjective scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
 
             ((List) this.objectivesByCriteria.computeIfAbsent(iscoreboardcriteria, (iscoreboardcriteria) -> {
                 return Lists.newArrayList();

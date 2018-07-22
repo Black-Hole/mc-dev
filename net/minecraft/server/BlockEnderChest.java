@@ -33,7 +33,7 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
         return 8;
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 
@@ -83,7 +83,7 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue()) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockEnderChest.b, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
@@ -92,8 +92,8 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    public Fluid h(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {

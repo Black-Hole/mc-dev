@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multisets;
 import java.util.function.Function;
 import javax.annotation.Nullable;
@@ -81,7 +81,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             boolean flag1 = i2 * i2 + j2 * j2 > (j1 - 2) * (j1 - 2);
                             int k2 = (j / i + k1 - 64) * i;
                             int l2 = (k / i + l1 - 64) * i;
-                            HashMultiset hashmultiset = HashMultiset.create();
+                            LinkedHashMultiset linkedhashmultiset = LinkedHashMultiset.create();
                             Chunk chunk = world.getChunkAtWorldCoords(new BlockPosition(k2, 0, l2));
 
                             if (!chunk.isEmpty()) {
@@ -95,9 +95,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
                                     if ((l3 >> 20 & 1) == 0) {
-                                        hashmultiset.add(Blocks.DIRT.getBlockData().d(world, BlockPosition.ZERO), 10);
+                                        linkedhashmultiset.add(Blocks.DIRT.getBlockData().d(world, BlockPosition.ZERO), 10);
                                     } else {
-                                        hashmultiset.add(Blocks.STONE.getBlockData().d(world, BlockPosition.ZERO), 100);
+                                        linkedhashmultiset.add(Blocks.STONE.getBlockData().d(world, BlockPosition.ZERO), 100);
                                     }
 
                                     d1 = 100.0D;
@@ -134,7 +134,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
                                             worldmap.a(world, (chunk.locX << 4) + i4 + i3, (chunk.locZ << 4) + j4 + j3);
                                             d1 += (double) k4 / (double) (i * i);
-                                            hashmultiset.add(iblockdata.d(world, blockposition_mutableblockposition));
+                                            linkedhashmultiset.add(iblockdata.d(world, blockposition_mutableblockposition));
                                         }
                                     }
                                 }
@@ -151,7 +151,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                     b0 = 0;
                                 }
 
-                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(hashmultiset), MaterialMapColor.b);
+                                MaterialMapColor materialmapcolor = (MaterialMapColor) Iterables.getFirst(Multisets.copyHighestCountFirst(linkedhashmultiset), MaterialMapColor.b);
 
                                 if (materialmapcolor == MaterialMapColor.n) {
                                     d2 = (double) k3 * 0.1D + (double) (k1 + l1 & 1) * 0.2D;
@@ -329,7 +329,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         IBlockData iblockdata = itemactioncontext.getWorld().getType(itemactioncontext.getClickPosition());
 
-        if (iblockdata.a(TagsBlock.t)) {
+        if (iblockdata.a(TagsBlock.u)) {
             if (!itemactioncontext.g.isClientSide) {
                 WorldMap worldmap = getSavedMap(itemactioncontext.getItemStack(), itemactioncontext.getWorld());
 

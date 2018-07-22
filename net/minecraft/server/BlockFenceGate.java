@@ -31,7 +31,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         if (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).e().k() != enumdirection_enumaxis) {
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
-            boolean flag = this.j(iblockdata1) || this.j(generatoraccess.getType(blockposition.shift(enumdirection.opposite())));
+            boolean flag = this.k(iblockdata1) || this.k(generatoraccess.getType(blockposition.shift(enumdirection.opposite())));
 
             return (IBlockData) iblockdata.set(BlockFenceGate.IN_WALL, Boolean.valueOf(flag));
         }
@@ -71,12 +71,12 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
         EnumDirection enumdirection = blockactioncontext.f();
         EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-        boolean flag1 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z && (this.j(world.getType(blockposition.west())) || this.j(world.getType(blockposition.east()))) || enumdirection_enumaxis == EnumDirection.EnumAxis.X && (this.j(world.getType(blockposition.north())) || this.j(world.getType(blockposition.south())));
+        boolean flag1 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z && (this.k(world.getType(blockposition.west())) || this.k(world.getType(blockposition.east()))) || enumdirection_enumaxis == EnumDirection.EnumAxis.X && (this.k(world.getType(blockposition.north())) || this.k(world.getType(blockposition.south())));
 
         return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockFenceGate.FACING, enumdirection)).set(BlockFenceGate.OPEN, Boolean.valueOf(flag))).set(BlockFenceGate.POWERED, Boolean.valueOf(flag))).set(BlockFenceGate.IN_WALL, Boolean.valueOf(flag1));
     }
 
-    private boolean j(IBlockData iblockdata) {
+    private boolean k(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.COBBLESTONE_WALL || iblockdata.getBlock() == Blocks.MOSSY_COBBLESTONE_WALL;
     }
 

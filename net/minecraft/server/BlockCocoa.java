@@ -30,7 +30,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         Block block = iworldreader.getType(blockposition.shift((EnumDirection) iblockdata.get(BlockCocoa.FACING))).getBlock();
 
-        return block == Blocks.JUNGLE_LOG || block == Blocks.JUNGLE_WOOD || block == Blocks.STRIPPED_JUNGLE_LOG;
+        return block.a(TagsBlock.s);
     }
 
     public boolean a(IBlockData iblockdata) {

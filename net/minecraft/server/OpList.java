@@ -28,12 +28,6 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
         return astring;
     }
 
-    public int a(GameProfile gameprofile) {
-        OpListEntry oplistentry = (OpListEntry) this.get(gameprofile);
-
-        return oplistentry != null ? oplistentry.a() : 0;
-    }
-
     public boolean b(GameProfile gameprofile) {
         OpListEntry oplistentry = (OpListEntry) this.get(gameprofile);
 

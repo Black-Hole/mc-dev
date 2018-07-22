@@ -14,7 +14,7 @@ public class WorldGenBuriedTreasurePieces {
 
         public a(BlockPosition blockposition) {
             super(0);
-            this.m = new StructureBoundingBox(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            this.n = new StructureBoundingBox(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
         }
 
         protected void a(NBTTagCompound nbttagcompound) {}
@@ -22,8 +22,8 @@ public class WorldGenBuriedTreasurePieces {
         protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {}
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            int i = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, this.m.a, this.m.c);
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.m.a, i, this.m.c);
+            int i = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, this.n.a, this.n.c);
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.n.a, i, this.n.c);
 
             while (blockposition_mutableblockposition.getY() > 0) {
                 IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition);
@@ -51,7 +51,7 @@ public class WorldGenBuriedTreasurePieces {
                         }
                     }
 
-                    return this.a(generatoraccess, structureboundingbox, random, new BlockPosition(this.m.a, blockposition_mutableblockposition.getY(), this.m.c), LootTables.r, (IBlockData) null);
+                    return this.a(generatoraccess, structureboundingbox, random, new BlockPosition(this.n.a, blockposition_mutableblockposition.getY(), this.n.c), LootTables.r, (IBlockData) null);
                 }
 
                 blockposition_mutableblockposition.d(0, -1, 0);

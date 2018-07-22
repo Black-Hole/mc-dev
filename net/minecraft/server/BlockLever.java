@@ -84,7 +84,7 @@ public class BlockLever extends BlockAttachable {
 
     private static void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, float f) {
         EnumDirection enumdirection = ((EnumDirection) iblockdata.get(BlockLever.FACING)).opposite();
-        EnumDirection enumdirection1 = j(iblockdata).opposite();
+        EnumDirection enumdirection1 = k(iblockdata).opposite();
         double d0 = (double) blockposition.getX() + 0.5D + 0.1D * (double) enumdirection.getAdjacentX() + 0.2D * (double) enumdirection1.getAdjacentX();
         double d1 = (double) blockposition.getY() + 0.5D + 0.1D * (double) enumdirection.getAdjacentY() + 0.2D * (double) enumdirection1.getAdjacentY();
         double d2 = (double) blockposition.getZ() + 0.5D + 0.1D * (double) enumdirection.getAdjacentZ() + 0.2D * (double) enumdirection1.getAdjacentZ();
@@ -107,7 +107,7 @@ public class BlockLever extends BlockAttachable {
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() && j(iblockdata) == enumdirection ? 15 : 0;
+        return ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() && k(iblockdata) == enumdirection ? 15 : 0;
     }
 
     public boolean isPowerSource(IBlockData iblockdata) {
@@ -116,7 +116,7 @@ public class BlockLever extends BlockAttachable {
 
     private void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
         world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.shift(j(iblockdata).opposite()), this);
+        world.applyPhysics(blockposition.shift(k(iblockdata).opposite()), this);
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {

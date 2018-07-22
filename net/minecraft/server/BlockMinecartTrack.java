@@ -16,7 +16,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     }
 
-    public IBlockState<BlockPropertyTrackPosition> d() {
+    public IBlockState<BlockPropertyTrackPosition> e() {
         return BlockMinecartTrack.SHAPE;
     }
 

@@ -33,7 +33,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
             } else if (!flag) {
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, Boolean.valueOf(true)), 2);
                 if (!flag1) {
-                    world.I().a(blockposition, this, this.j(iblockdata), TickListPriority.HIGH);
+                    world.I().a(blockposition, this, this.k(iblockdata), TickListPriority.HIGH);
                 }
             }
 
@@ -80,7 +80,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
                     ticklistpriority = TickListPriority.VERY_HIGH;
                 }
 
-                world.I().a(blockposition, this, this.j(iblockdata), ticklistpriority);
+                world.I().a(blockposition, this, this.k(iblockdata), ticklistpriority);
             }
 
         }
@@ -179,7 +179,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         return isDiode(iblockdata1) && iblockdata1.get(BlockDiodeAbstract.FACING) != enumdirection;
     }
 
-    protected abstract int j(IBlockData iblockdata);
+    protected abstract int k(IBlockData iblockdata);
 
     public TextureType c() {
         return TextureType.CUTOUT;

@@ -60,7 +60,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
         this.b.motX += (double) enumdirection.getAdjacentX() * 0.6D;
         this.b.motY += 0.7D;
         this.b.motZ += (double) enumdirection.getAdjacentZ() * 0.6D;
-        this.b.getNavigation().r();
+        this.b.getNavigation().q();
     }
 
     public void d() {

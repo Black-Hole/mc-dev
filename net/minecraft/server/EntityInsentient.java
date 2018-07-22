@@ -132,7 +132,7 @@ public abstract class EntityInsentient extends EntityLiving {
         SoundEffect soundeffect = this.D();
 
         if (soundeffect != null) {
-            this.a(soundeffect, this.cC(), this.cD());
+            this.a(soundeffect, this.cD(), this.cE());
         }
 
     }
@@ -200,7 +200,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void tick() {
         super.tick();
         if (!this.world.isClientSide) {
-            this.dl();
+            this.dm();
             if (this.ticksLived % 5 == 0) {
                 boolean flag = !(this.bO() instanceof EntityInsentient);
                 boolean flag1 = !(this.getVehicle() instanceof EntityBoat);
@@ -247,7 +247,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("CanPickUpLoot", this.dj());
+        nbttagcompound.setBoolean("CanPickUpLoot", this.dk());
         nbttagcompound.setBoolean("PersistenceRequired", this.persistent);
         NBTTagList nbttaglist = new NBTTagList();
 
@@ -409,7 +409,7 @@ public abstract class EntityInsentient extends EntityLiving {
             LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a((Entity) this).a(damagesource).a(new BlockPosition(this));
 
             if (flag && this.killer != null) {
-                loottableinfo_a = loottableinfo_a.a(this.killer).a(this.killer.dI());
+                loottableinfo_a = loottableinfo_a.a(this.killer).a(this.killer.dJ());
             }
 
             List list = loottable.a(this.bJ == 0L ? this.random : new Random(this.bJ), loottableinfo_a.a());
@@ -448,7 +448,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void k() {
         super.k();
         this.world.methodProfiler.a("looting");
-        if (!this.world.isClientSide && this.dj() && !this.aX && this.world.getGameRules().getBoolean("mobGriefing")) {
+        if (!this.world.isClientSide && this.dk() && !this.aX && this.world.getGameRules().getBoolean("mobGriefing")) {
             List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
             Iterator iterator = list.iterator();
 
@@ -591,7 +591,7 @@ public abstract class EntityInsentient extends EntityLiving {
         if (this.isPassenger() && this.getVehicle() instanceof EntityInsentient) {
             EntityInsentient entityinsentient = (EntityInsentient) this.getVehicle();
 
-            entityinsentient.getNavigation().a(this.getNavigation().n(), 1.5D);
+            entityinsentient.getNavigation().a(this.getNavigation().m(), 1.5D);
             entityinsentient.getControllerMove().a(this.getControllerMove());
         }
 
@@ -669,7 +669,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return !iworldreader.containsLiquid(this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.b(this, this.getBoundingBox());
     }
 
-    public int dg() {
+    public int dh() {
         return 4;
     }
 
@@ -912,11 +912,11 @@ public abstract class EntityInsentient extends EntityLiving {
         return groupdataentity;
     }
 
-    public boolean dh() {
+    public boolean di() {
         return false;
     }
 
-    public void di() {
+    public void dj() {
         this.persistent = true;
     }
 
@@ -932,7 +932,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     }
 
-    public boolean dj() {
+    public boolean dk() {
         return this.canPickUpLoot;
     }
 
@@ -965,9 +965,9 @@ public abstract class EntityInsentient extends EntityLiving {
         return false;
     }
 
-    protected void dl() {
+    protected void dm() {
         if (this.bM != null) {
-            this.dr();
+            this.ds();
         }
 
         if (this.bK) {
@@ -1031,7 +1031,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag1;
     }
 
-    private void dr() {
+    private void ds() {
         if (this.bK && this.bM != null) {
             if (this.bM.b("UUID")) {
                 UUID uuid = this.bM.a("UUID");
@@ -1093,7 +1093,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean bT() {
-        return this.dh() && super.bT();
+        return this.di() && super.bT();
     }
 
     public static boolean b(EnumItemSlot enumitemslot, ItemStack itemstack) {
@@ -1102,8 +1102,8 @@ public abstract class EntityInsentient extends EntityLiving {
         return enumitemslot1 == enumitemslot || enumitemslot1 == EnumItemSlot.MAINHAND && enumitemslot == EnumItemSlot.OFFHAND || enumitemslot1 == EnumItemSlot.OFFHAND && enumitemslot == EnumItemSlot.MAINHAND;
     }
 
-    public boolean cO() {
-        return super.cO() && !this.isNoAI();
+    public boolean cP() {
+        return super.cP() && !this.isNoAI();
     }
 
     public void setNoAI(boolean flag) {
@@ -1157,7 +1157,7 @@ public abstract class EntityInsentient extends EntityLiving {
             if (entity instanceof EntityHuman) {
                 EntityHuman entityhuman = (EntityHuman) entity;
                 ItemStack itemstack = this.getItemInMainHand();
-                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cV() : ItemStack.a;
+                ItemStack itemstack1 = entityhuman.isHandRaised() ? entityhuman.cW() : ItemStack.a;
 
                 if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD) {
                     float f1 = 0.25F + (float) EnchantmentManager.getDigSpeedEnchantmentLevel(this) * 0.05F;
@@ -1175,7 +1175,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag;
     }
 
-    protected boolean dq() {
+    protected boolean dr() {
         if (this.world.K() && !this.world.isClientSide) {
             float f = this.az();
             BlockPosition blockposition = this.getVehicle() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
@@ -1186,5 +1186,14 @@ public abstract class EntityInsentient extends EntityLiving {
         }
 
         return false;
+    }
+
+    protected void c(Tag<FluidType> tag) {
+        if (this.getNavigation().t()) {
+            super.c(tag);
+        } else {
+            this.motY += 0.30000001192092896D;
+        }
+
     }
 }

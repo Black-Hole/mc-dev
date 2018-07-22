@@ -30,7 +30,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         this.o = true;
     }
 
-    public void X_() {
+    public void Y_() {
         this.p();
         if (this.k == TileEntityShulkerBox.AnimationPhase.OPENING || this.k == TileEntityShulkerBox.AnimationPhase.CLOSING) {
             this.H();
@@ -299,7 +299,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 10, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 10, this.aa_());
     }
 
     public boolean E() {

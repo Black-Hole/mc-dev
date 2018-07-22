@@ -10,7 +10,7 @@ public class BlockStainedGlassPane extends BlockGlassPane {
         this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false))).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false))).set(BlockStainedGlassPane.q, Boolean.valueOf(false)));
     }
 
-    public EnumColor b() {
+    public EnumColor d() {
         return this.color;
     }
 

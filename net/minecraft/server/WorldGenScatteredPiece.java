@@ -18,9 +18,9 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
         this.c = j1;
         this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
         if (this.f().k() == EnumDirection.EnumAxis.Z) {
-            this.m = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
+            this.n = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
         } else {
-            this.m = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
+            this.n = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
         }
 
     }
@@ -47,8 +47,8 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
             int k = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-            for (int l = this.m.c; l <= this.m.f; ++l) {
-                for (int i1 = this.m.a; i1 <= this.m.d; ++i1) {
+            for (int l = this.n.c; l <= this.n.f; ++l) {
+                for (int i1 = this.n.a; i1 <= this.n.d; ++i1) {
                     blockposition_mutableblockposition.c(i1, 64, l);
                     if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
                         j += generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition).getY();
@@ -61,7 +61,7 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
                 return false;
             } else {
                 this.d = j / k;
-                this.m.a(0, this.d - this.m.b + i, 0);
+                this.n.a(0, this.d - this.n.b + i, 0);
                 return true;
             }
         }

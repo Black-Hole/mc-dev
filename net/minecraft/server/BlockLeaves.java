@@ -27,7 +27,7 @@ public class BlockLeaves extends Block {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        world.setTypeAndData(blockposition, b(iblockdata, world, blockposition), 3);
+        world.setTypeAndData(blockposition, a(iblockdata, (GeneratorAccess) world, blockposition), 3);
     }
 
     public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -44,7 +44,7 @@ public class BlockLeaves extends Block {
         return iblockdata;
     }
 
-    private static IBlockData b(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
+    private static IBlockData a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
         int i = 7;
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
@@ -84,7 +84,7 @@ public class BlockLeaves extends Block {
     }
 
     private static int w(IBlockData iblockdata) {
-        return TagsBlock.m.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() : 7);
+        return TagsBlock.n.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() : 7);
     }
 
     public int a(IBlockData iblockdata, Random random) {
@@ -99,7 +99,7 @@ public class BlockLeaves extends Block {
 
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
         if (!world.isClientSide) {
-            int j = this.j(iblockdata);
+            int j = this.k(iblockdata);
 
             if (i > 0) {
                 j -= 2 << i;
@@ -132,7 +132,7 @@ public class BlockLeaves extends Block {
 
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int k(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.JUNGLE_LEAVES ? 40 : 20;
     }
 
@@ -140,7 +140,7 @@ public class BlockLeaves extends Block {
         return BlockLeaves.c ? TextureType.CUTOUT_MIPPED : TextureType.SOLID;
     }
 
-    public boolean p(IBlockData iblockdata) {
+    public boolean q(IBlockData iblockdata) {
         return false;
     }
 
@@ -159,6 +159,6 @@ public class BlockLeaves extends Block {
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return b((IBlockData) this.getBlockData().set(BlockLeaves.PERSISTENT, Boolean.valueOf(true)), blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
+        return a((IBlockData) this.getBlockData().set(BlockLeaves.PERSISTENT, Boolean.valueOf(true)), (GeneratorAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
     }
 }

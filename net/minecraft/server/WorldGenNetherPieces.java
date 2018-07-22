@@ -71,7 +71,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece5(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -135,7 +135,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece4(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -191,7 +191,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece8(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = random.nextInt(3) == 0;
         }
 
@@ -254,7 +254,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece10(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = random.nextInt(3) == 0;
         }
 
@@ -315,7 +315,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece7(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -356,7 +356,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece9(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -399,7 +399,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece11(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -544,7 +544,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece6(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -648,7 +648,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece12(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
@@ -729,7 +729,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece14(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -783,7 +783,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece13(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -838,16 +838,16 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece1(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         protected WorldGenNetherPiece1(Random random, int i, int j) {
             super(0);
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             if (this.f().k() == EnumDirection.EnumAxis.Z) {
-                this.m = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
+                this.n = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
             } else {
-                this.m = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
+                this.n = new StructureBoundingBox(i, 64, j, i + 19 - 1, 73, j + 19 - 1);
             }
 
         }
@@ -917,7 +917,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece2(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = random.nextInt();
         }
 
@@ -979,7 +979,7 @@ public class WorldGenNetherPieces {
         public WorldGenNetherPiece3(int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
@@ -1155,16 +1155,16 @@ public class WorldGenNetherPieces {
             if (enumdirection != null) {
                 switch (enumdirection) {
                 case NORTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + i, this.m.b + j, this.m.c - 1, enumdirection, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + i, this.n.b + j, this.n.c - 1, enumdirection, this.e(), flag);
 
                 case SOUTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + i, this.m.b + j, this.m.f + 1, enumdirection, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + i, this.n.b + j, this.n.f + 1, enumdirection, this.e(), flag);
 
                 case WEST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a - 1, this.m.b + j, this.m.c + i, enumdirection, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + j, this.n.c + i, enumdirection, this.e(), flag);
 
                 case EAST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.d + 1, this.m.b + j, this.m.c + i, enumdirection, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + j, this.n.c + i, enumdirection, this.e(), flag);
                 }
             }
 
@@ -1178,16 +1178,16 @@ public class WorldGenNetherPieces {
             if (enumdirection != null) {
                 switch (enumdirection) {
                 case NORTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a - 1, this.m.b + i, this.m.c + j, EnumDirection.WEST, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e(), flag);
 
                 case SOUTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a - 1, this.m.b + i, this.m.c + j, EnumDirection.WEST, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e(), flag);
 
                 case WEST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + j, this.m.b + i, this.m.c - 1, EnumDirection.NORTH, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e(), flag);
 
                 case EAST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + j, this.m.b + i, this.m.c - 1, EnumDirection.NORTH, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e(), flag);
                 }
             }
 
@@ -1201,16 +1201,16 @@ public class WorldGenNetherPieces {
             if (enumdirection != null) {
                 switch (enumdirection) {
                 case NORTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.d + 1, this.m.b + i, this.m.c + j, EnumDirection.EAST, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e(), flag);
 
                 case SOUTH:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.d + 1, this.m.b + i, this.m.c + j, EnumDirection.EAST, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e(), flag);
 
                 case WEST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + j, this.m.b + i, this.m.f + 1, EnumDirection.SOUTH, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e(), flag);
 
                 case EAST:
-                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.m.a + j, this.m.b + i, this.m.f + 1, EnumDirection.SOUTH, this.e(), flag);
+                    return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e(), flag);
                 }
             }
 

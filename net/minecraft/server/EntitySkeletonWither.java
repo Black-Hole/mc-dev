@@ -23,7 +23,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         return SoundEffects.ENTITY_WITHER_SKELETON_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_WITHER_SKELETON_DEATH;
     }
 
@@ -55,7 +55,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.dz();
+        this.dA();
         return groupdataentity1;
     }
 

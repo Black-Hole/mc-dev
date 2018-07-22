@@ -5,13 +5,13 @@ import javax.annotation.Nullable;
 public class AttributeRanged extends AttributeBase {
 
     private final double a;
-    private final double b;
+    public final double maximum;
     private String c;
 
     public AttributeRanged(@Nullable IAttribute iattribute, String s, double d0, double d1, double d2) {
         super(iattribute, s, d0);
         this.a = d1;
-        this.b = d2;
+        this.maximum = d2;
         if (d1 > d2) {
             throw new IllegalArgumentException("Minimum value cannot be bigger than maximum value!");
         } else if (d0 < d1) {
@@ -31,7 +31,7 @@ public class AttributeRanged extends AttributeBase {
     }
 
     public double a(double d0) {
-        d0 = MathHelper.a(d0, this.a, this.b);
+        d0 = MathHelper.a(d0, this.a, this.maximum);
         return d0;
     }
 }

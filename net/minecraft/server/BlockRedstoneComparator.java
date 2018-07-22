@@ -14,7 +14,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
         this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneComparator.FACING, EnumDirection.NORTH)).set(BlockRedstoneComparator.c, Boolean.valueOf(false))).set(BlockRedstoneComparator.MODE, BlockPropertyComparatorMode.COMPARE));
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int k(IBlockData iblockdata) {
         return 2;
     }
 

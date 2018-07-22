@@ -43,7 +43,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.e.q() && this.b.h(this.c) > (double) (this.g * this.g) && !this.b.isSitting();
+        return !this.e.p() && this.b.h(this.c) > (double) (this.g * this.g) && !this.b.isSitting();
     }
 
     public void c() {
@@ -54,7 +54,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
 
     public void d() {
         this.c = null;
-        this.e.r();
+        this.e.q();
         this.b.a(PathType.WATER, this.i);
     }
 
@@ -74,7 +74,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
                                 for (int i1 = 0; i1 <= 4; ++i1) {
                                     if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.a(i, j, k, l, i1)) {
                                         this.b.setPositionRotation((double) ((float) (i + l) + 0.5F), (double) k, (double) ((float) (j + i1) + 0.5F), this.b.yaw, this.b.pitch);
-                                        this.e.r();
+                                        this.e.q();
                                         return;
                                     }
                                 }

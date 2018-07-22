@@ -13,7 +13,7 @@ public class NavigationFlying extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.g() && this.s() || !this.a.isPassenger();
+        return this.t() && this.r() || !this.a.isPassenger();
     }
 
     protected Vec3D c() {
@@ -27,14 +27,14 @@ public class NavigationFlying extends NavigationAbstract {
     public void d() {
         ++this.e;
         if (this.m) {
-            this.m();
+            this.l();
         }
 
-        if (!this.q()) {
+        if (!this.p()) {
             Vec3D vec3d;
 
             if (this.b()) {
-                this.p();
+                this.o();
             } else if (this.c != null && this.c.e() < this.c.d()) {
                 vec3d = this.c.a(this.a, this.c.e());
                 if (MathHelper.floor(this.a.locX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ) == MathHelper.floor(vec3d.z)) {
@@ -42,8 +42,8 @@ public class NavigationFlying extends NavigationAbstract {
                 }
             }
 
-            this.o();
-            if (!this.q()) {
+            this.n();
+            if (!this.p()) {
                 vec3d = this.c.a((Entity) this.a);
                 this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
             }
@@ -125,14 +125,6 @@ public class NavigationFlying extends NavigationAbstract {
 
     public void b(boolean flag) {
         this.o.a(flag);
-    }
-
-    public void c(boolean flag) {
-        this.o.c(flag);
-    }
-
-    public boolean g() {
-        return this.o.e();
     }
 
     public boolean a(BlockPosition blockposition) {

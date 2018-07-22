@@ -21,7 +21,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     private int bK;
     private final BossBattleServer bL;
     private static final Predicate<Entity> bM = (entity) -> {
-        return entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() != EnumMonsterType.UNDEAD && ((EntityLiving) entity).de();
+        return entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() != EnumMonsterType.UNDEAD && ((EntityLiving) entity).df();
     };
 
     public EntityWither(World world) {
@@ -30,7 +30,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.setHealth(this.getMaxHealth());
         this.setSize(0.9F, 3.5F);
         this.fireProof = true;
-        ((Navigation) this.getNavigation()).c(true);
+        ((Navigation) this.getNavigation()).d(true);
         this.b_ = 50;
     }
 
@@ -54,7 +54,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Invul", this.dz());
+        nbttagcompound.setInt("Invul", this.dA());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -79,7 +79,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         return SoundEffects.ENTITY_WITHER_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_WITHER_DEATH;
     }
 
@@ -93,7 +93,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             Entity entity = this.world.getEntity(this.q(0));
 
             if (entity != null) {
-                if (this.locY < entity.locY || !this.dA() && this.locY < entity.locY + 5.0D) {
+                if (this.locY < entity.locY || !this.dB() && this.locY < entity.locY + 5.0D) {
                     if (this.motY < 0.0D) {
                         this.motY = 0.0D;
                     }
@@ -154,7 +154,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             }
         }
 
-        boolean flag = this.dA();
+        boolean flag = this.dB();
 
         for (j = 0; j < 3; ++j) {
             double d8 = this.r(j);
@@ -167,7 +167,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             }
         }
 
-        if (this.dz() > 0) {
+        if (this.dA() > 0) {
             for (j = 0; j < 3; ++j) {
                 this.world.addParticle(Particles.s, this.locX + this.random.nextGaussian(), this.locY + (double) (this.random.nextFloat() * 3.3F), this.locZ + this.random.nextGaussian(), 0.699999988079071D, 0.699999988079071D, 0.8999999761581421D);
             }
@@ -178,8 +178,8 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     protected void mobTick() {
         int i;
 
-        if (this.dz() > 0) {
-            i = this.dz() - 1;
+        if (this.dA() > 0) {
+            i = this.dA() - 1;
             if (i <= 0) {
                 this.world.createExplosion(this, this.locX, this.locY + (double) this.getHeadHeight(), this.locZ, 7.0F, false, this.world.getGameRules().getBoolean("mobGriefing"));
                 this.world.a(1023, new BlockPosition(this), 0);
@@ -391,12 +391,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else if (damagesource != DamageSource.DROWN && !(damagesource.getEntity() instanceof EntityWither)) {
-            if (this.dz() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
+            if (this.dA() > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
             } else {
                 Entity entity;
 
-                if (this.dA()) {
+                if (this.dB()) {
                     entity = damagesource.j();
                     if (entity instanceof EntityArrow) {
                         return false;
@@ -450,7 +450,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.getAttributeInstance(GenericAttributes.h).setValue(4.0D);
     }
 
-    public int dz() {
+    public int dA() {
         return ((Integer) this.datawatcher.get(EntityWither.bD)).intValue();
     }
 
@@ -466,7 +466,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.datawatcher.set((DataWatcherObject) EntityWither.bC.get(i), Integer.valueOf(j));
     }
 
-    public boolean dA() {
+    public boolean dB() {
         return this.getHealth() <= this.getMaxHealth() / 2.0F;
     }
 
@@ -491,7 +491,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         }
 
         public boolean a() {
-            return EntityWither.this.dz() > 0;
+            return EntityWither.this.dA() > 0;
         }
     }
 }

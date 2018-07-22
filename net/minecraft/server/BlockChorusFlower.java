@@ -171,7 +171,7 @@ public class BlockChorusFlower extends Block {
         a(world, blockposition, new ItemStack(this));
     }
 
-    protected ItemStack s(IBlockData iblockdata) {
+    protected ItemStack t(IBlockData iblockdata) {
         return ItemStack.a;
     }
 

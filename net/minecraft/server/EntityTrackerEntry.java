@@ -157,7 +157,7 @@ public class EntityTrackerEntry {
 
                 boolean flag3 = this.u || this.tracker.impulse;
 
-                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).db()) {
+                if (this.tracker instanceof EntityLiving && ((EntityLiving) this.tracker).dc()) {
                     flag3 = true;
                 }
 
@@ -294,7 +294,7 @@ public class EntityTrackerEntry {
                             entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateAttributes(this.tracker.getId(), collection));
                         }
 
-                        if (((EntityLiving) this.tracker).db()) {
+                        if (((EntityLiving) this.tracker).dc()) {
                             flag = true;
                         }
                     }

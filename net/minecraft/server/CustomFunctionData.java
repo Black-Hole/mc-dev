@@ -63,7 +63,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
         return this.f.getCommandDispatcher().a();
     }
 
-    public void X_() {
+    public void Y_() {
         MethodProfiler methodprofiler = this.f.methodProfiler;
         MinecraftKey minecraftkey = CustomFunctionData.d;
 

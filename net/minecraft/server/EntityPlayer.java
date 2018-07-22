@@ -356,12 +356,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.releaseShoulderEntities();
         if (!this.world.getGameRules().getBoolean("keepInventory") && !this.isSpectator()) {
-            this.di();
+            this.dj();
             this.inventory.q();
         }
 
         this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.d, this.getName(), ScoreboardScore::incrementScore);
-        EntityLiving entityliving = this.cu();
+        EntityLiving entityliving = this.cv();
 
         if (entityliving != null) {
             this.b(StatisticList.ENTITY_KILLED_BY.b(entityliving.P()));
@@ -935,7 +935,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         this.updateAbilities();
-        this.cQ();
+        this.cR();
     }
 
     public boolean isSpectator() {
@@ -984,13 +984,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     protected int y() {
-        if (this.server.getPlayerList().isOp(this.getProfile())) {
-            OpListEntry oplistentry = (OpListEntry) this.server.getPlayerList().getOPs().get(this.getProfile());
-
-            return oplistentry != null ? oplistentry.a() : (this.server.J() ? (this.server.I().equals(this.getProfile().getName()) ? 4 : (this.server.getPlayerList().x() ? 4 : 0)) : this.server.k());
-        } else {
-            return 0;
-        }
+        return this.server.a(this.getProfile());
     }
 
     public void resetIdleTimer() {
@@ -1020,7 +1014,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     protected void C() {
         if (this.isSpectator()) {
-            this.ck();
+            this.cl();
             this.setInvisible(true);
         } else {
             super.C();
@@ -1071,7 +1065,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(EnumHand enumhand) {
         super.a(enumhand);
-        this.dG();
+        this.dH();
     }
 
     public boolean H() {

@@ -66,10 +66,10 @@ public class AdvancementRewards {
         }
 
         MinecraftServer minecraftserver = entityplayer.server;
-        CustomFunction customfunction = this.e.a(minecraftserver.aD());
+        CustomFunction customfunction = this.e.a(minecraftserver.getFunctionData());
 
         if (customfunction != null) {
-            minecraftserver.aD().a(customfunction, entityplayer.getCommandListener().a().a(2));
+            minecraftserver.getFunctionData().a(customfunction, entityplayer.getCommandListener().a().a(2));
         }
 
     }

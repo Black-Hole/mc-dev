@@ -7,7 +7,7 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
     public WorldGenBonusChest() {}
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) && blockposition.getY() > 1; iblockdata = generatoraccess.getType(blockposition)) {
+        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) && blockposition.getY() > 1; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

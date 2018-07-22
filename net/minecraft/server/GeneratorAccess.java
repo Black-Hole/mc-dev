@@ -38,8 +38,6 @@ public interface GeneratorAccess extends IWorldReader, IWorldWriter {
     @Nullable
     PersistentCollection s_();
 
-    void a(String s, PersistentBase persistentbase);
-
     default EnumDifficulty getDifficulty() {
         return this.getWorldData().getDifficulty();
     }

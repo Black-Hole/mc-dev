@@ -25,7 +25,7 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         return SoundEffects.ENTITY_STRAY_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_STRAY_DEATH;
     }
 

@@ -14,7 +14,7 @@ public class EntitySalmon extends EntityFish {
         this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
     }
 
-    protected int dy() {
+    protected int dz() {
         return 5;
     }
 
@@ -23,7 +23,7 @@ public class EntitySalmon extends EntityFish {
         return LootTables.aJ;
     }
 
-    protected ItemStack dA() {
+    protected ItemStack dB() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 
@@ -31,7 +31,7 @@ public class EntitySalmon extends EntityFish {
         return SoundEffects.ENTITY_SALMON_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SALMON_DEATH;
     }
 
@@ -39,7 +39,7 @@ public class EntitySalmon extends EntityFish {
         return SoundEffects.ENTITY_SALMON_HURT;
     }
 
-    protected SoundEffect dC() {
+    protected SoundEffect dD() {
         return SoundEffects.ENTITY_SALMON_FLOP;
     }
 }

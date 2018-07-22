@@ -61,7 +61,7 @@ public class ContainerAnvil extends Container {
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (!world.isClientSide) {
-                    if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.x) && entityhuman.getRandom().nextFloat() < 0.12F) {
+                    if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.y) && entityhuman.getRandom().nextFloat() < 0.12F) {
                         IBlockData iblockdata1 = BlockAnvil.a_(iblockdata);
 
                         if (iblockdata1 == null) {
@@ -302,7 +302,7 @@ public class ContainerAnvil extends Container {
     }
 
     public boolean canUse(EntityHuman entityhuman) {
-        return !this.i.getType(this.j).a(TagsBlock.x) ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
+        return !this.i.getType(this.j).a(TagsBlock.y) ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
     }
 
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {

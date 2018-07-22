@@ -107,7 +107,7 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.dx()) {
+                if (!this.player.dy()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack.isEmpty()) {
@@ -206,7 +206,7 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.dx()) {
+                    if (!this.player.dy()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
                         if (itemstack.isEmpty()) {
@@ -302,15 +302,12 @@ public class PlayerInteractManager {
 
             return EnumInteractionResult.PASS;
         } else {
-            boolean flag = entityhuman.getItemInMainHand().isEmpty();
+            boolean flag = !entityhuman.getItemInMainHand().isEmpty() || !entityhuman.getItemInOffHand().isEmpty();
+            boolean flag1 = entityhuman.isSneaking() && flag;
 
-            if ((!entityhuman.isSneaking() || flag && entityhuman.getItemInOffHand().isEmpty()) && iblockdata.interact(world, blockposition, entityhuman, enumhand, enumdirection, f, f1, f2)) {
+            if (!flag1 && iblockdata.interact(world, blockposition, entityhuman, enumhand, enumdirection, f, f1, f2)) {
                 return EnumInteractionResult.SUCCESS;
-            } else if (flag) {
-                return EnumInteractionResult.PASS;
-            } else if (entityhuman.getCooldownTracker().a(itemstack.getItem())) {
-                return EnumInteractionResult.PASS;
-            } else {
+            } else if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().a(itemstack.getItem())) {
                 ItemActionContext itemactioncontext = new ItemActionContext(entityhuman, entityhuman.b(enumhand), blockposition, enumdirection, f, f1, f2);
 
                 if (this.isCreative()) {
@@ -322,6 +319,8 @@ public class PlayerInteractManager {
                 } else {
                     return itemstack.placeItem(itemactioncontext);
                 }
+            } else {
+                return EnumInteractionResult.PASS;
             }
         }
     }

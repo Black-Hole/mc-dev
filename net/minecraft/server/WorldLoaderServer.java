@@ -132,7 +132,7 @@ public class WorldLoaderServer extends WorldLoader {
                 int l;
 
                 for (l = 0; l < 32; ++l) {
-                    if (regionfile.c(k, l) && !regionfile1.c(k, l)) {
+                    if (regionfile.d(k, l) && !regionfile1.d(k, l)) {
                         DataInputStream datainputstream = regionfile.a(k, l);
 
                         if (datainputstream == null) {
@@ -148,7 +148,7 @@ public class WorldLoaderServer extends WorldLoader {
 
                             nbttagcompound2.set("Level", nbttagcompound3);
                             OldChunkLoader.a(oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
-                            DataOutputStream dataoutputstream = regionfile1.b(k, l);
+                            DataOutputStream dataoutputstream = regionfile1.c(k, l);
 
                             NBTCompressedStreamTools.a(nbttagcompound2, (DataOutput) dataoutputstream);
                             dataoutputstream.close();

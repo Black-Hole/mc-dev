@@ -14,11 +14,11 @@ public class BlockCobbleWall extends BlockTall {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.v[this.j(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition);
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.v[this.k(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition);
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.w[this.j(iblockdata)] : super.f(iblockdata, iblockaccess, blockposition);
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.w[this.k(iblockdata)] : super.f(iblockdata, iblockaccess, blockposition);
     }
 
     public boolean a(IBlockData iblockdata) {

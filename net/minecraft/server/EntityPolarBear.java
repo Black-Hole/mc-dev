@@ -65,7 +65,7 @@ public class EntityPolarBear extends EntityAnimal {
         return SoundEffects.ENTITY_POLAR_BEAR_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_POLAR_BEAR_DEATH;
     }
 
@@ -73,7 +73,7 @@ public class EntityPolarBear extends EntityAnimal {
         this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dy() {
+    protected void dz() {
         if (this.bG <= 0) {
             this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, 1.0F);
             this.bG = 40;
@@ -95,7 +95,7 @@ public class EntityPolarBear extends EntityAnimal {
         super.tick();
         if (this.world.isClientSide) {
             this.bD = this.bE;
-            if (this.dz()) {
+            if (this.dA()) {
                 this.bE = MathHelper.a(this.bE + 1.0F, 0.0F, 6.0F);
             } else {
                 this.bE = MathHelper.a(this.bE - 1.0F, 0.0F, 6.0F);
@@ -118,7 +118,7 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dz() {
+    public boolean dA() {
         return ((Boolean) this.datawatcher.get(EntityPolarBear.bC)).booleanValue();
     }
 
@@ -126,7 +126,7 @@ public class EntityPolarBear extends EntityAnimal {
         this.datawatcher.set(EntityPolarBear.bC, Boolean.valueOf(flag));
     }
 
-    protected float cI() {
+    protected float cJ() {
         return 0.98F;
     }
 
@@ -177,7 +177,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.b <= 10) {
                     EntityPolarBear.this.s(true);
-                    EntityPolarBear.this.dy();
+                    EntityPolarBear.this.dz();
                 }
             } else {
                 this.b = 20;

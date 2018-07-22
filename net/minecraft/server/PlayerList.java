@@ -465,13 +465,8 @@ public abstract class PlayerList {
 
     public void f(EntityPlayer entityplayer) {
         GameProfile gameprofile = entityplayer.getProfile();
-        int i = this.isOp(gameprofile) ? this.operators.a(gameprofile) : 0;
-        boolean flag = this.server.J();
-        boolean flag1 = flag && this.server.I().equalsIgnoreCase(entityplayer.getProfile().getName());
-        int j = flag1 ? 4 : 2;
+        int i = this.server.a(gameprofile);
 
-        i = flag && this.server.worldServer[0].getWorldData().u() ? j : i;
-        i = this.u ? j : i;
         this.b(entityplayer, i);
     }
 
@@ -641,13 +636,11 @@ public abstract class PlayerList {
     }
 
     public void addOp(GameProfile gameprofile) {
-        int i = this.server.k();
-
         this.operators.add(new OpListEntry(gameprofile, this.server.k(), this.operators.b(gameprofile)));
         EntityPlayer entityplayer = this.a(gameprofile.getId());
 
         if (entityplayer != null) {
-            this.b(entityplayer, i);
+            this.f(entityplayer);
         }
 
     }
@@ -657,7 +650,7 @@ public abstract class PlayerList {
         EntityPlayer entityplayer = this.a(gameprofile.getId());
 
         if (entityplayer != null) {
-            this.b(entityplayer, 0);
+            this.f(entityplayer);
         }
 
     }

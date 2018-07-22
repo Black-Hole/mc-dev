@@ -959,10 +959,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void as() {
-        if (this.bb()) {
-            this.g(this.isSprinting() && this.isInWater() && !this.isPassenger());
+        if (this.isSwimming()) {
+            this.setSwimming(this.isSprinting() && this.isInWater() && !this.isPassenger());
         } else {
-            this.g(this.isSprinting() && this.ar() && !this.isPassenger());
+            this.setSwimming(this.isSprinting() && this.ar() && !this.isPassenger());
         }
 
     }
@@ -1794,11 +1794,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.setFlag(3, flag);
     }
 
-    public boolean bb() {
+    public boolean isSwimming() {
         return this.getFlag(4);
     }
 
-    public void g(boolean flag) {
+    public void setSwimming(boolean flag) {
         this.setFlag(4, flag);
     }
 
@@ -2454,7 +2454,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public boolean bT() {
         Entity entity = this.bO();
 
-        return entity instanceof EntityHuman ? ((EntityHuman) entity).dm() : !this.world.isClientSide;
+        return entity instanceof EntityHuman ? ((EntityHuman) entity).dn() : !this.world.isClientSide;
     }
 
     @Nullable
@@ -2528,26 +2528,33 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             boolean flag = this.bw();
             boolean flag1 = false;
             Vec3D vec3d = Vec3D.a;
+            int k1 = 0;
             BlockPosition.b blockposition_b = BlockPosition.b.r();
             Throwable throwable = null;
 
             try {
-                for (int k1 = i; k1 < j; ++k1) {
-                    for (int l1 = k; l1 < l; ++l1) {
-                        for (int i2 = i1; i2 < j1; ++i2) {
-                            blockposition_b.f(k1, l1, i2);
+                for (int l1 = i; l1 < j; ++l1) {
+                    for (int i2 = k; i2 < l; ++i2) {
+                        for (int j2 = i1; j2 < j1; ++j2) {
+                            blockposition_b.f(l1, i2, j2);
                             Fluid fluid = this.world.b((BlockPosition) blockposition_b);
 
                             if (fluid.a(tag)) {
-                                double d1 = (double) ((float) l1 + fluid.f());
+                                double d1 = (double) ((float) i2 + fluid.f());
 
                                 if (d1 >= axisalignedbb.b) {
                                     flag1 = true;
-                                    if (flag) {
-                                        vec3d = vec3d.e(fluid.a((IWorldReader) this.world, (BlockPosition) blockposition_b));
-                                    }
-
                                     d0 = Math.max(d1 - axisalignedbb.b, d0);
+                                    if (flag) {
+                                        Vec3D vec3d1 = fluid.a((IWorldReader) this.world, (BlockPosition) blockposition_b);
+
+                                        if (d0 < 0.4D) {
+                                            vec3d1 = vec3d1.a(d0);
+                                        }
+
+                                        vec3d = vec3d.e(vec3d1);
+                                        ++k1;
+                                    }
                                 }
                             }
                         }
@@ -2572,7 +2579,14 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             if (vec3d.b() > 0.0D) {
-                vec3d = vec3d.a();
+                if (k1 > 0) {
+                    vec3d = vec3d.a(1.0D / (double) k1);
+                }
+
+                if (!(this instanceof EntityHuman)) {
+                    vec3d = vec3d.a();
+                }
+
                 double d2 = 0.014D;
 
                 this.motX += vec3d.x * 0.014D;
@@ -2583,5 +2597,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.W = d0;
             return flag1;
         }
+    }
+
+    public double bY() {
+        return this.W;
     }
 }

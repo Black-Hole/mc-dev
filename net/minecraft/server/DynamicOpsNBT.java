@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -125,10 +127,12 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
             if (nbtbase instanceof NBTTagEnd) {
                 throw new IllegalArgumentException("mergeInto called with a null input.");
             } else if (nbtbase instanceof NBTList) {
-                NBTList nbtlist = (NBTList) nbtbase.clone();
+                NBTTagList nbttaglist = new NBTTagList();
+                NBTList nbtlist = (NBTList) nbtbase;
 
-                nbtlist.add(nbtbase1);
-                return nbtlist;
+                nbttaglist.addAll(nbtlist);
+                nbttaglist.add(nbtbase1);
+                return nbttaglist;
             } else {
                 return nbtbase;
             }
@@ -168,7 +172,12 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
                 return nbtbase;
             }
 
-            nbttagcompound = (NBTTagCompound) nbtbase.clone();
+            NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase;
+
+            nbttagcompound = new NBTTagCompound();
+            nbttagcompound1.getKeys().forEach((s) -> {
+                nbttagcompound.set(s, nbttagcompound1.get(s));
+            });
         }
 
         nbttagcompound.set(nbtbase1.b_(), nbtbase2);
@@ -182,9 +191,13 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
             return nbtbase;
         } else {
             if (nbtbase instanceof NBTTagCompound && nbtbase1 instanceof NBTTagCompound) {
-                NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase.clone();
+                NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
                 NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase1;
+                NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
+                nbttagcompound.getKeys().forEach((s) -> {
+                    nbttagcompound.set(s, nbttagcompound1.get(s));
+                });
                 nbttagcompound1.getKeys().forEach((s) -> {
                     nbttagcompound.set(s, nbttagcompound1.get(s));
                 });
@@ -299,10 +312,15 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
     public NBTBase a(NBTBase nbtbase, String s) {
         if (nbtbase instanceof NBTTagCompound) {
-            NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase.clone();
+            NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
+            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound.remove(s);
-            return nbttagcompound;
+            nbttagcompound.getKeys().stream().filter((s) -> {
+                return !Objects.equals(s, s1);
+            }).forEach((s) -> {
+                nbttagcompound.set(s, nbttagcompound1.get(s));
+            });
+            return nbttagcompound1;
         } else {
             return nbtbase;
         }

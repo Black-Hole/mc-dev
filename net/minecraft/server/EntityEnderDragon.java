@@ -110,7 +110,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
             this.world.addParticle(Particles.u, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         } else {
-            this.dt();
+            this.du();
             f = 0.2F / (MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 10.0F + 1.0F);
             f *= (float) Math.pow(2.0D, this.motY);
             if (this.bS.a().a()) {
@@ -321,7 +321,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return (float) d0;
     }
 
-    private void dt() {
+    private void du() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -365,7 +365,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 double d4 = d2 * d2 + d3 * d3;
 
                 entity.f(d2 / d4 * 4.0D, 0.20000000298023224D, d3 / d4 * 4.0D);
-                if (!this.bS.a().a() && ((EntityLiving) entity).cf() < entity.ticksLived - 2) {
+                if (!this.bS.a().a() && ((EntityLiving) entity).cg() < entity.ticksLived - 2) {
                     entity.damageEntity(DamageSource.mobAttack(this), 5.0F);
                     this.a((EntityLiving) this, entity);
                 }
@@ -487,7 +487,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     }
 
-    protected void ca() {
+    protected void cb() {
         if (this.bR != null) {
             this.bR.b(this);
         }
@@ -794,7 +794,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return SoundEffects.ENTITY_ENDER_DRAGON_HURT;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 5.0F;
     }
 
@@ -865,7 +865,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     @Nullable
-    public EnderDragonBattle ds() {
+    public EnderDragonBattle dt() {
         return this.bR;
     }
 

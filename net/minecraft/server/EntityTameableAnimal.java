@@ -12,7 +12,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
 
     protected EntityTameableAnimal(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
-        this.dz();
+        this.dA();
     }
 
     protected void x_() {
@@ -94,10 +94,10 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
             this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 & -5)));
         }
 
-        this.dz();
+        this.dA();
     }
 
-    protected void dz() {}
+    protected void dA() {}
 
     public boolean isSitting() {
         return (((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue() & 1) != 0;

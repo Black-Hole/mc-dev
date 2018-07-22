@@ -162,14 +162,14 @@ public enum EnumProtocol {
     LOGIN(2) {
         ;
         {
-            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutCustomPayload.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutDisconnect.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutEncryptionBegin.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutSuccess.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutSetCompression.class);
-            this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInCustomPayload.class);
+            this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutCustomPayload.class);
             this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInStart.class);
             this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInEncryptionBegin.class);
+            this.a(EnumProtocolDirection.SERVERBOUND, PacketLoginInCustomPayload.class);
         }
     };
 

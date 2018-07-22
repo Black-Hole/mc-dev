@@ -66,8 +66,8 @@ public class EntityArmorStand extends EntityLiving {
         this.setPosition(d0, d1, d2);
     }
 
-    public boolean cO() {
-        return super.cO() && !this.isNoGravity();
+    public boolean cP() {
+        return super.cP() && !this.isNoGravity();
     }
 
     protected void x_() {
@@ -278,7 +278,7 @@ public class EntityArmorStand extends EntityLiving {
 
     protected void C(Entity entity) {}
 
-    protected void cM() {
+    protected void cN() {
         List list = this.world.getEntities(this, this.getBoundingBox(), EntityArmorStand.bD);
 
         for (int i = 0; i < list.size(); ++i) {
@@ -697,13 +697,13 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     @Nullable
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_ARMOR_STAND_BREAK;
     }
 
     public void onLightningStrike(EntityLightning entitylightning) {}
 
-    public boolean dd() {
+    public boolean de() {
         return false;
     }
 
@@ -715,7 +715,7 @@ public class EntityArmorStand extends EntityLiving {
         super.a(datawatcherobject);
     }
 
-    public boolean de() {
+    public boolean df() {
         return false;
     }
 }

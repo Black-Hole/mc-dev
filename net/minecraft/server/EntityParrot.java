@@ -103,7 +103,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         NavigationFlying navigationflying = new NavigationFlying(this, world);
 
         navigationflying.a(false);
-        navigationflying.c(true);
+        navigationflying.d(true);
         navigationflying.b(true);
         return navigationflying;
     }
@@ -120,10 +120,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         }
 
         super.k();
-        this.dL();
+        this.dM();
     }
 
-    private void dL() {
+    private void dM() {
         this.bJ = this.bG;
         this.bI = this.bH;
         this.bH = (float) ((double) this.bH + (double) (this.onGround ? -1 : 4) * 0.3D);
@@ -266,7 +266,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return SoundEffects.ENTITY_PARROT_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_PARROT_DEATH;
     }
 
@@ -283,7 +283,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return true;
     }
 
-    protected float cD() {
+    protected float cE() {
         return b(this.random);
     }
 

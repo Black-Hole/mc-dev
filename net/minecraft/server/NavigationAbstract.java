@@ -34,7 +34,7 @@ public abstract class NavigationAbstract {
         this.r = this.a();
     }
 
-    public BlockPosition j() {
+    public BlockPosition i() {
         return this.q;
     }
 
@@ -44,15 +44,15 @@ public abstract class NavigationAbstract {
         this.d = d0;
     }
 
-    public float k() {
+    public float j() {
         return (float) this.p.getValue();
     }
 
-    public boolean l() {
+    public boolean k() {
         return this.m;
     }
 
-    public void m() {
+    public void l() {
         if (this.b.getTime() - this.n > 20L) {
             if (this.q != null) {
                 this.c = null;
@@ -79,7 +79,7 @@ public abstract class NavigationAbstract {
             return this.c;
         } else {
             this.q = blockposition;
-            float f = this.k();
+            float f = this.j();
 
             this.b.methodProfiler.a("pathfind");
             BlockPosition blockposition1 = new BlockPosition(this.a);
@@ -103,7 +103,7 @@ public abstract class NavigationAbstract {
                 return this.c;
             } else {
                 this.q = blockposition;
-                float f = this.k();
+                float f = this.j();
 
                 this.b.methodProfiler.a("pathfind");
                 BlockPosition blockposition1 = (new BlockPosition(this.a)).up();
@@ -151,21 +151,21 @@ public abstract class NavigationAbstract {
     }
 
     @Nullable
-    public PathEntity n() {
+    public PathEntity m() {
         return this.c;
     }
 
     public void d() {
         ++this.e;
         if (this.m) {
-            this.m();
+            this.l();
         }
 
-        if (!this.q()) {
+        if (!this.p()) {
             Vec3D vec3d;
 
             if (this.b()) {
-                this.p();
+                this.o();
             } else if (this.c != null && this.c.e() < this.c.d()) {
                 vec3d = this.c();
                 Vec3D vec3d1 = this.c.a(this.a, this.c.e());
@@ -175,8 +175,8 @@ public abstract class NavigationAbstract {
                 }
             }
 
-            this.o();
-            if (!this.q()) {
+            this.n();
+            if (!this.p()) {
                 vec3d = this.c.a((Entity) this.a);
                 BlockPosition blockposition = new BlockPosition(vec3d);
 
@@ -185,9 +185,9 @@ public abstract class NavigationAbstract {
         }
     }
 
-    protected void o() {}
+    protected void n() {}
 
-    protected void p() {
+    protected void o() {
         Vec3D vec3d = this.c();
         int i = this.c.d();
 
@@ -222,7 +222,7 @@ public abstract class NavigationAbstract {
     protected void a(Vec3D vec3d) {
         if (this.e - this.f > 100) {
             if (vec3d.distanceSquared(this.g) < 2.25D) {
-                this.r();
+                this.q();
             }
 
             this.f = this.e;
@@ -238,14 +238,14 @@ public abstract class NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.cJ() > 0.0F ? d0 / (double) this.a.cJ() * 1000.0D : 0.0D;
+                this.k = this.a.cK() > 0.0F ? d0 / (double) this.a.cK() * 1000.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 3.0D) {
                 this.h = Vec3D.a;
                 this.i = 0L;
                 this.k = 0.0D;
-                this.r();
+                this.q();
             }
 
             this.j = SystemUtils.b();
@@ -253,11 +253,11 @@ public abstract class NavigationAbstract {
 
     }
 
-    public boolean q() {
+    public boolean p() {
         return this.c == null || this.c.b();
     }
 
-    public void r() {
+    public void q() {
         this.c = null;
     }
 
@@ -265,7 +265,7 @@ public abstract class NavigationAbstract {
 
     protected abstract boolean b();
 
-    protected boolean s() {
+    protected boolean r() {
         return this.a.aq() || this.a.ax();
     }
 
@@ -296,7 +296,15 @@ public abstract class NavigationAbstract {
         return this.b.getType(blockposition1).f(this.b, blockposition1);
     }
 
-    public PathfinderAbstract t() {
+    public PathfinderAbstract s() {
         return this.o;
+    }
+
+    public void d(boolean flag) {
+        this.o.c(flag);
+    }
+
+    public boolean t() {
+        return this.o.e();
     }
 }

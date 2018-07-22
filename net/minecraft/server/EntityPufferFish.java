@@ -11,7 +11,7 @@ public class EntityPufferFish extends EntityFish {
     private int c;
     private int bC;
     private static final Predicate<EntityLiving> bD = (entityliving) -> {
-        return entityliving == null ? false : (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).isSpectator() ? false : entityliving.getMonsterType() != EnumMonsterType.e);
+        return entityliving == null ? false : (entityliving instanceof EntityHuman && (((EntityHuman) entityliving).isSpectator() || ((EntityHuman) entityliving).u()) ? false : entityliving.getMonsterType() != EnumMonsterType.e);
     };
     private float bE = -1.0F;
     private float bF;
@@ -47,7 +47,7 @@ public class EntityPufferFish extends EntityFish {
         this.a(f);
     }
 
-    protected final void setSize(float f, float f1) {
+    public final void setSize(float f, float f1) {
         boolean flag = this.bE > 0.0F;
 
         this.bE = f;
@@ -82,7 +82,7 @@ public class EntityPufferFish extends EntityFish {
         return LootTables.aF;
     }
 
-    protected ItemStack dA() {
+    protected ItemStack dB() {
         return new ItemStack(Items.PUFFERFISH_BUCKET);
     }
 
@@ -95,20 +95,20 @@ public class EntityPufferFish extends EntityFish {
         if (this.isAlive() && !this.world.isClientSide) {
             if (this.c > 0) {
                 if (this.getPuffState() == 0) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.cC(), this.cD());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.cD(), this.cE());
                     this.setPuffState(1);
                 } else if (this.c > 40 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.cC(), this.cD());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_UP, this.cD(), this.cE());
                     this.setPuffState(2);
                 }
 
                 ++this.c;
             } else if (this.getPuffState() != 0) {
                 if (this.bC > 60 && this.getPuffState() == 2) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.cC(), this.cD());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.cD(), this.cE());
                     this.setPuffState(1);
                 } else if (this.bC > 100 && this.getPuffState() == 1) {
-                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.cC(), this.cD());
+                    this.a(SoundEffects.ENTITY_PUFFER_FISH_BLOW_OUT, this.cD(), this.cE());
                     this.setPuffState(0);
                 }
 
@@ -160,7 +160,7 @@ public class EntityPufferFish extends EntityFish {
         return SoundEffects.ENTITY_PUFFER_FISH_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_PUFFER_FISH_DEATH;
     }
 
@@ -168,7 +168,7 @@ public class EntityPufferFish extends EntityFish {
         return SoundEffects.ENTITY_PUFFER_FISH_HURT;
     }
 
-    protected SoundEffect dC() {
+    protected SoundEffect dD() {
         return SoundEffects.ENTITY_PUFFER_FISH_FLOP;
     }
 

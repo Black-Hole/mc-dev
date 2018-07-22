@@ -7,7 +7,7 @@ public class WorldGenDecoratorNoiseHeightDouble extends WorldGenDecorator<WorldG
     public WorldGenDecoratorNoiseHeightDouble() {}
 
     public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureDecoratorNoiseConfiguration worldgenfeaturedecoratornoiseconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        double d0 = BiomeBase.aK.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
+        double d0 = BiomeBase.aJ.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
         int i = d0 < worldgenfeaturedecoratornoiseconfiguration.a ? worldgenfeaturedecoratornoiseconfiguration.b : worldgenfeaturedecoratornoiseconfiguration.c;
 
         for (int j = 0; j < i; ++j) {

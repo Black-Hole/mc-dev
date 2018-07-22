@@ -20,12 +20,12 @@ public class EntityBat extends EntityAmbient {
         this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
     }
 
-    protected float cC() {
+    protected float cD() {
         return 0.1F;
     }
 
-    protected float cD() {
-        return super.cD() * 0.95F;
+    protected float cE() {
+        return super.cE() * 0.95F;
     }
 
     @Nullable
@@ -37,7 +37,7 @@ public class EntityBat extends EntityAmbient {
         return SoundEffects.ENTITY_BAT_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_BAT_DEATH;
     }
 
@@ -47,7 +47,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void C(Entity entity) {}
 
-    protected void cM() {}
+    protected void cN() {}
 
     protected void initAttributes() {
         super.initAttributes();
@@ -172,7 +172,7 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (this.dr()) {
+            if (this.ds()) {
                 b0 = 7;
             } else if (this.random.nextBoolean()) {
                 return false;
@@ -182,7 +182,7 @@ public class EntityBat extends EntityAmbient {
         }
     }
 
-    private boolean dr() {
+    private boolean ds() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);

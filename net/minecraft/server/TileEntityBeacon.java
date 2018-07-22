@@ -29,7 +29,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
         this.inventorySlot = ItemStack.a;
     }
 
-    public void X_() {
+    public void Y_() {
         if (this.world.getTime() % 80L == 0L) {
             this.p();
             if (this.i) {
@@ -115,7 +115,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
             float[] afloat;
 
             if (block instanceof BlockStainedGlass) {
-                afloat = ((BlockStainedGlass) block).b().d();
+                afloat = ((BlockStainedGlass) block).d().d();
             } else {
                 if (!(block instanceof BlockStainedGlassPane)) {
                     if (iblockdata.b(this.world, blockposition_mutableblockposition) >= 15 && block != Blocks.BEDROCK) {
@@ -128,7 +128,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
                     continue;
                 }
 
-                afloat = ((BlockStainedGlassPane) block).b().d();
+                afloat = ((BlockStainedGlassPane) block).d().d();
             }
 
             if (!flag) {
@@ -194,10 +194,10 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 3, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 3, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 

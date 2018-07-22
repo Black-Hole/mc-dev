@@ -20,8 +20,8 @@ public class BlockIce extends BlockHalfTransparent {
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         entityhuman.b(StatisticList.BLOCK_MINED.b(this));
         entityhuman.applyExhaustion(0.005F);
-        if (this.k() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            a(world, blockposition, this.s(iblockdata));
+        if (this.X_() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
+            a(world, blockposition, this.t(iblockdata));
         } else {
             if (world.worldProvider.isNether()) {
                 world.setAir(blockposition);

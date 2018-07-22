@@ -99,7 +99,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
     }
 
-    public IBlockState<BlockPropertyTrackPosition> d() {
+    public IBlockState<BlockPropertyTrackPosition> e() {
         return BlockMinecartDetector.SHAPE;
     }
 

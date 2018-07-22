@@ -309,7 +309,7 @@ public class DefinedStructure {
                         pair = (Pair) iterator2.next();
                         blockposition3 = (BlockPosition) pair.getFirst();
                         IBlockData iblockdata3 = generatoraccess.getType(blockposition3);
-                        IBlockData iblockdata4 = Block.a(iblockdata3, generatoraccess, blockposition3);
+                        IBlockData iblockdata4 = Block.b(iblockdata3, generatoraccess, blockposition3);
 
                         if (iblockdata3 != iblockdata4) {
                             generatoraccess.setTypeAndData(blockposition3, iblockdata4, i & -2 | 16);
@@ -584,7 +584,7 @@ public class DefinedStructure {
 
         nbttagcompound.set("entities", nbttaglist3);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
-        nbttagcompound.setInt("DataVersion", 1513);
+        nbttagcompound.setInt("DataVersion", 1519);
         return nbttagcompound;
     }
 

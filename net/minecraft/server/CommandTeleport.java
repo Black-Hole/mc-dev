@@ -160,7 +160,7 @@ public class CommandTeleport {
             commandteleport_a.a(commandlistenerwrapper, entity);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).db()) {
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).dc()) {
             entity.motY = 0.0D;
             entity.onGround = true;
         }

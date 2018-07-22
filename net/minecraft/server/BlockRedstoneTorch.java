@@ -103,8 +103,8 @@ public class BlockRedstoneTorch extends BlockTorch {
         return true;
     }
 
-    public int l(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() ? super.l(iblockdata) : 0;
+    public int m(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() ? super.m(iblockdata) : 0;
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {

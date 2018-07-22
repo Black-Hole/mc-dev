@@ -26,11 +26,11 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
     }
 
     public boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
-        return this.b().a(iworldreader, blockposition) != null || this.e().a(iworldreader, blockposition) != null;
+        return this.d().a(iworldreader, blockposition) != null || this.f().a(iworldreader, blockposition) != null;
     }
 
     private void a(World world, BlockPosition blockposition) {
-        ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.d().a(world, blockposition);
+        ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.e().a(world, blockposition);
         int i;
         Iterator iterator;
         EntityPlayer entityplayer;
@@ -39,7 +39,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         int k;
 
         if (shapedetector_shapedetectorcollection != null) {
-            for (i = 0; i < this.d().b(); ++i) {
+            for (i = 0; i < this.e().b(); ++i) {
                 ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(0, i, 0);
 
                 world.setTypeAndData(shapedetectorblock1.getPosition(), Blocks.AIR.getBlockData(), 2);
@@ -61,15 +61,15 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
             world.triggerEffect(2001, blockposition1, j);
             world.triggerEffect(2001, blockposition1.up(), j);
 
-            for (k = 0; k < this.d().b(); ++k) {
+            for (k = 0; k < this.e().b(); ++k) {
                 shapedetectorblock = shapedetector_shapedetectorcollection.a(0, k, 0);
                 world.update(shapedetectorblock.getPosition(), Blocks.AIR);
             }
         } else {
-            shapedetector_shapedetectorcollection = this.f().a(world, blockposition);
+            shapedetector_shapedetectorcollection = this.g().a(world, blockposition);
             if (shapedetector_shapedetectorcollection != null) {
-                for (i = 0; i < this.f().c(); ++i) {
-                    for (int l = 0; l < this.f().b(); ++l) {
+                for (i = 0; i < this.g().c(); ++i) {
+                    for (int l = 0; l < this.g().b(); ++l) {
                         world.setTypeAndData(shapedetector_shapedetectorcollection.a(i, l, 0).getPosition(), Blocks.AIR.getBlockData(), 2);
                     }
                 }
@@ -91,8 +91,8 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
                     world.addParticle(Particles.E, (double) blockposition2.getX() + world.random.nextDouble(), (double) blockposition2.getY() + world.random.nextDouble() * 3.9D, (double) blockposition2.getZ() + world.random.nextDouble(), 0.0D, 0.0D, 0.0D);
                 }
 
-                for (j = 0; j < this.f().c(); ++j) {
-                    for (k = 0; k < this.f().b(); ++k) {
+                for (j = 0; j < this.g().c(); ++j) {
+                    for (k = 0; k < this.g().b(); ++k) {
                         shapedetectorblock = shapedetector_shapedetectorcollection.a(j, k, 0);
                         world.update(shapedetectorblock.getPosition(), Blocks.AIR);
                     }
@@ -110,7 +110,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         blockstatelist_a.a(new IBlockState[] { BlockPumpkinCarved.a});
     }
 
-    protected ShapeDetector b() {
+    protected ShapeDetector d() {
         if (this.b == null) {
             this.b = ShapeDetectorBuilder.a().a(new String[] { " ", "#", "#"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
@@ -118,7 +118,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         return this.b;
     }
 
-    protected ShapeDetector d() {
+    protected ShapeDetector e() {
         if (this.c == null) {
             this.c = ShapeDetectorBuilder.a().a(new String[] { "^", "#", "#"}).a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.r)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
@@ -126,7 +126,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         return this.c;
     }
 
-    protected ShapeDetector e() {
+    protected ShapeDetector f() {
         if (this.p == null) {
             this.p = ShapeDetectorBuilder.a().a(new String[] { "~ ~", "###", "~#~"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
@@ -134,7 +134,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         return this.p;
     }
 
-    protected ShapeDetector f() {
+    protected ShapeDetector g() {
         if (this.q == null) {
             this.q = ShapeDetectorBuilder.a().a(new String[] { "~^~", "###", "~#~"}).a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.r)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }

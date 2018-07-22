@@ -69,7 +69,7 @@ public class EntityZombie extends EntityMonster {
         this.getDataWatcher().register(EntityZombie.bF, Boolean.valueOf(false));
     }
 
-    public boolean dG() {
+    public boolean dH() {
         return ((Boolean) this.getDataWatcher().get(EntityZombie.bF)).booleanValue();
     }
 
@@ -77,12 +77,12 @@ public class EntityZombie extends EntityMonster {
         this.getDataWatcher().set(EntityZombie.bE, Boolean.valueOf(flag));
     }
 
-    public boolean dH() {
+    public boolean dI() {
         return this.bH;
     }
 
     public void t(boolean flag) {
-        if (this.dz()) {
+        if (this.dA()) {
             if (this.bH != flag) {
                 this.bH = flag;
                 ((Navigation) this.getNavigation()).a(flag);
@@ -99,7 +99,7 @@ public class EntityZombie extends EntityMonster {
 
     }
 
-    protected boolean dz() {
+    protected boolean dA() {
         return true;
     }
 
@@ -137,18 +137,18 @@ public class EntityZombie extends EntityMonster {
         super.a(datawatcherobject);
     }
 
-    protected boolean dC() {
+    protected boolean dD() {
         return true;
     }
 
     public void tick() {
         if (!this.world.isClientSide) {
-            if (this.dG()) {
+            if (this.dH()) {
                 --this.bJ;
                 if (this.bJ < 0) {
-                    this.dE();
+                    this.dF();
                 }
-            } else if (this.dC()) {
+            } else if (this.dD()) {
                 if (this.a(TagsFluid.a)) {
                     ++this.bI;
                     if (this.bI >= 600) {
@@ -164,7 +164,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     public void k() {
-        boolean flag = this.L_() && this.dq();
+        boolean flag = this.L_() && this.dr();
 
         if (flag) {
             ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
@@ -194,7 +194,7 @@ public class EntityZombie extends EntityMonster {
         this.getDataWatcher().set(EntityZombie.bF, Boolean.valueOf(true));
     }
 
-    protected void dE() {
+    protected void dF() {
         this.a((EntityZombie) (new EntityDrowned(this.world)));
         this.world.a((EntityHuman) null, 1040, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
@@ -202,7 +202,7 @@ public class EntityZombie extends EntityMonster {
     protected void a(EntityZombie entityzombie) {
         if (!this.world.isClientSide && !this.dead) {
             entityzombie.u(this);
-            entityzombie.a(this.dj(), this.dH(), this.isBaby(), this.isNoAI());
+            entityzombie.a(this.dk(), this.dI(), this.isBaby(), this.isNoAI());
             EnumItemSlot[] aenumitemslot = EnumItemSlot.values();
             int i = aenumitemslot.length;
 
@@ -290,16 +290,16 @@ public class EntityZombie extends EntityMonster {
         return SoundEffects.ENTITY_ZOMBIE_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_ZOMBIE_DEATH;
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect dB() {
         return SoundEffects.ENTITY_ZOMBIE_STEP;
     }
 
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
-        this.a(this.dA(), 0.15F, 1.0F);
+        this.a(this.dB(), 0.15F, 1.0F);
     }
 
     public EnumMonsterType getMonsterType() {
@@ -331,9 +331,9 @@ public class EntityZombie extends EntityMonster {
             nbttagcompound.setBoolean("IsBaby", true);
         }
 
-        nbttagcompound.setBoolean("CanBreakDoors", this.dH());
+        nbttagcompound.setBoolean("CanBreakDoors", this.dI());
         nbttagcompound.setInt("InWaterTime", this.isInWater() ? this.bI : -1);
-        nbttagcompound.setInt("DrownedConversionTime", this.dG() ? this.bJ : -1);
+        nbttagcompound.setInt("DrownedConversionTime", this.dH() ? this.bJ : -1);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -426,7 +426,7 @@ public class EntityZombie extends EntityMonster {
                 }
             }
 
-            this.t(this.dz() && this.random.nextFloat() < f * 0.1F);
+            this.t(this.dA() && this.random.nextFloat() < f * 0.1F);
             this.a(difficultydamagescaler);
             this.b(difficultydamagescaler);
         }
@@ -448,7 +448,7 @@ public class EntityZombie extends EntityMonster {
 
     protected void a(boolean flag, boolean flag1, boolean flag2, boolean flag3) {
         this.p(flag);
-        this.t(this.dz() && flag1);
+        this.t(this.dA() && flag1);
         this.a(this.world.getDamageScaler(new BlockPosition(this)).d());
         this.setBaby(flag2);
         this.setNoAI(flag3);
@@ -465,7 +465,7 @@ public class EntityZombie extends EntityMonster {
         if (this.random.nextFloat() < f * 0.05F) {
             this.getAttributeInstance(EntityZombie.c).b(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, 0));
             this.getAttributeInstance(GenericAttributes.maxHealth).b(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, 2));
-            this.t(this.dz());
+            this.t(this.dA());
         }
 
     }
@@ -500,7 +500,7 @@ public class EntityZombie extends EntityMonster {
 
             if (entitycreeper.isPowered() && entitycreeper.canCauseHeadDrop()) {
                 entitycreeper.setCausedHeadDrop();
-                ItemStack itemstack = this.dB();
+                ItemStack itemstack = this.dC();
 
                 if (!itemstack.isEmpty()) {
                     this.a_(itemstack);
@@ -510,7 +510,7 @@ public class EntityZombie extends EntityMonster {
 
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dC() {
         return new ItemStack(Items.ZOMBIE_HEAD);
     }
 

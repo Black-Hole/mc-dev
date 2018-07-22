@@ -45,18 +45,18 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.t[this.j(iblockdata)];
+        return this.t[this.k(iblockdata)];
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.s[this.j(iblockdata)];
+        return this.s[this.k(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
         return 1 << enumdirection.get2DRotationValue();
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int k(IBlockData iblockdata) {
         int i = 0;
 
         if (((Boolean) iblockdata.get(BlockTall.NORTH)).booleanValue()) {
@@ -78,7 +78,7 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         return i;
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockTall.q)).booleanValue()) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.q, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
@@ -87,8 +87,8 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockTall.q)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    public Fluid h(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockTall.q)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {

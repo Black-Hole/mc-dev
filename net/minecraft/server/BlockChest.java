@@ -36,10 +36,10 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         if (iblockdata1.getBlock() == this && enumdirection.k().c()) {
             BlockPropertyChestType blockpropertychesttype = (BlockPropertyChestType) iblockdata1.get(BlockChest.b);
 
-            if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE && blockpropertychesttype != BlockPropertyChestType.SINGLE && iblockdata.get(BlockChest.FACING) == iblockdata1.get(BlockChest.FACING) && j(iblockdata1) == enumdirection.opposite()) {
+            if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE && blockpropertychesttype != BlockPropertyChestType.SINGLE && iblockdata.get(BlockChest.FACING) == iblockdata1.get(BlockChest.FACING) && k(iblockdata1) == enumdirection.opposite()) {
                 return (IBlockData) iblockdata.set(BlockChest.b, blockpropertychesttype.a());
             }
-        } else if (j(iblockdata) == enumdirection) {
+        } else if (k(iblockdata) == enumdirection) {
             return (IBlockData) iblockdata.set(BlockChest.b, BlockPropertyChestType.SINGLE);
         }
 
@@ -50,7 +50,7 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE) {
             return BlockChest.t;
         } else {
-            switch (j(iblockdata)) {
+            switch (k(iblockdata)) {
             case NORTH:
             default:
                 return BlockChest.p;
@@ -67,7 +67,7 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         }
     }
 
-    public static EnumDirection j(IBlockData iblockdata) {
+    public static EnumDirection k(IBlockData iblockdata) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockChest.FACING);
 
         return iblockdata.get(BlockChest.b) == BlockPropertyChestType.LEFT ? enumdirection.e() : enumdirection.f();
@@ -100,7 +100,7 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         return (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChest.FACING, enumdirection)).set(BlockChest.b, blockpropertychesttype)).set(BlockChest.c, Boolean.valueOf(fluid.c() == FluidTypes.c));
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockChest.c)).booleanValue()) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockChest.c, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
@@ -109,8 +109,8 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockChest.c)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    public Fluid h(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockChest.c)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
@@ -169,14 +169,14 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
 
             if (itileinventory != null) {
                 entityhuman.openContainer(itileinventory);
-                entityhuman.b(this.b());
+                entityhuman.b(this.d());
             }
 
             return true;
         }
     }
 
-    protected Statistic<MinecraftKey> b() {
+    protected Statistic<MinecraftKey> d() {
         return StatisticList.CUSTOM.b(StatisticList.OPEN_CHEST);
     }
 
@@ -195,7 +195,7 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
             if (blockpropertychesttype == BlockPropertyChestType.SINGLE) {
                 return (ITileInventory) object;
             } else {
-                BlockPosition blockposition1 = blockposition.shift(j(iblockdata));
+                BlockPosition blockposition1 = blockposition.shift(k(iblockdata));
                 IBlockData iblockdata1 = world.getType(blockposition1);
 
                 if (iblockdata1.getBlock() == this) {

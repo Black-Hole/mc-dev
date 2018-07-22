@@ -42,7 +42,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         a(world, blockposition.up(), a((IBlockAccess) world, blockposition));
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 
@@ -91,7 +91,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         return block == Blocks.BUBBLE_COLUMN || block == Blocks.MAGMA_BLOCK || block == Blocks.SOUL_SAND;
     }
 
-    public boolean i() {
+    public boolean j() {
         return false;
     }
 
@@ -115,7 +115,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         blockstatelist_a.a(new IBlockState[] { BlockBubbleColumn.a});
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
         return FluidTypes.c;
     }

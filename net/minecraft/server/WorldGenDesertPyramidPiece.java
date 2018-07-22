@@ -7,7 +7,7 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
 
     private final boolean[] e = new boolean[4];
 
-    public static void ab_() {
+    public static void ac_() {
         WorldGenFactory.a(WorldGenDesertPyramidPiece.class, "TeDP");
     }
 

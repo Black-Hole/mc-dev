@@ -22,7 +22,7 @@ public class BlockConduit extends BlockTileEntity {
         return EnumRenderType.ENTITYBLOCK_ANIMATED;
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 

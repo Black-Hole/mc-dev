@@ -78,7 +78,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         return 64;
     }
 
-    public void X_() {
+    public void Y_() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
@@ -146,7 +146,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
             double d2 = (double) this.position.getZ() + 0.5D;
 
             if (blockpropertychesttype == BlockPropertyChestType.RIGHT) {
-                EnumDirection enumdirection = BlockChest.j(this.getBlock());
+                EnumDirection enumdirection = BlockChest.k(this.getBlock());
 
                 d0 += (double) enumdirection.getAdjacentX() * 0.5D;
                 d2 += (double) enumdirection.getAdjacentZ() * 0.5D;

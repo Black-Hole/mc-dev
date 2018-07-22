@@ -21,7 +21,7 @@ public class BlockKelpPlant extends Block implements IFluidContainer {
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 

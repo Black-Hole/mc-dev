@@ -23,7 +23,7 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
         protected boolean a(Scheduler.a scheduler_a) {
             ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
 
-            return !protochunk.aa_() && !protochunk.h();
+            return !protochunk.ab_() && !protochunk.h();
         }
     });
 

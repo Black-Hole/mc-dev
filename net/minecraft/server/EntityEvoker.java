@@ -70,7 +70,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         return SoundEffects.ENTITY_EVOKER_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_EVOKER_DEATH;
     }
 
@@ -83,11 +83,11 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     @Nullable
-    private EntitySheep dD() {
+    private EntitySheep dE() {
         return this.c;
     }
 
-    protected SoundEffect dz() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_EVOKER_CAST_SPELL;
     }
 
@@ -104,7 +104,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         public boolean a() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 return false;
-            } else if (EntityEvoker.this.dA()) {
+            } else if (EntityEvoker.this.dB()) {
                 return false;
             } else if (EntityEvoker.this.ticksLived < this.c) {
                 return false;
@@ -123,7 +123,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         public boolean b() {
-            return EntityEvoker.this.dD() != null && this.b > 0;
+            return EntityEvoker.this.dE() != null && this.b > 0;
         }
 
         public void d() {
@@ -132,7 +132,7 @@ public class EntityEvoker extends EntityIllagerWizard {
         }
 
         protected void j() {
-            EntitySheep entitysheep = EntityEvoker.this.dD();
+            EntitySheep entitysheep = EntityEvoker.this.dE();
 
             if (entitysheep != null && entitysheep.isAlive()) {
                 entitysheep.setColor(EnumColor.RED);
@@ -310,8 +310,8 @@ public class EntityEvoker extends EntityIllagerWizard {
         public void e() {
             if (EntityEvoker.this.getGoalTarget() != null) {
                 EntityEvoker.this.getControllerLook().a(EntityEvoker.this.getGoalTarget(), (float) EntityEvoker.this.L(), (float) EntityEvoker.this.K());
-            } else if (EntityEvoker.this.dD() != null) {
-                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.dD(), (float) EntityEvoker.this.L(), (float) EntityEvoker.this.K());
+            } else if (EntityEvoker.this.dE() != null) {
+                EntityEvoker.this.getControllerLook().a(EntityEvoker.this.dE(), (float) EntityEvoker.this.L(), (float) EntityEvoker.this.K());
             }
 
         }

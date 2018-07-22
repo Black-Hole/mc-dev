@@ -21,7 +21,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
         return SoundEffects.ENTITY_SKELETON_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SKELETON_DEATH;
     }
 

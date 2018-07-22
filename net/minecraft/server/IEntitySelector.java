@@ -35,7 +35,7 @@ public final class IEntitySelector {
         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.e.and((entity) -> {
             if (!entity.isCollidable()) {
                 return false;
-            } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).dm())) {
+            } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).dn())) {
                 return false;
             } else {
                 ScoreboardTeamBase scoreboardteambase = entity.be();
@@ -85,7 +85,7 @@ public final class IEntitySelector {
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
 
-                return !entityliving.getEquipment(EntityInsentient.e(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dj() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return !entityliving.getEquipment(EntityInsentient.e(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dk() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
             }
         }
 

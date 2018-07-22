@@ -304,7 +304,7 @@ public class EntityTypes<T extends Entity> {
 
             if (this.c) {
                 try {
-                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1513)).getChoiceType(DataConverterTypes.n, s);
+                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1519)).getChoiceType(DataConverterTypes.n, s);
                 } catch (IllegalStateException illegalstateexception) {
                     if (SharedConstants.b) {
                         throw illegalstateexception;

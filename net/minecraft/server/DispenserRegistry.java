@@ -200,7 +200,7 @@ public class DispenserRegistry {
                 Block block = iblockdata.getBlock();
 
                 if (block instanceof IFluidSource) {
-                    FluidType fluidtype = ((IFluidSource) block).b(world, blockposition, iblockdata);
+                    FluidType fluidtype = ((IFluidSource) block).a(world, blockposition, iblockdata);
 
                     if (!(fluidtype instanceof FluidTypeFlowing)) {
                         return super.a(isourceblock, itemstack);
@@ -232,9 +232,6 @@ public class DispenserRegistry {
 
                 if (ItemFlintAndSteel.a((GeneratorAccess) world, blockposition)) {
                     world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-                    if (itemstack.isDamaged(1, world.random, (EntityPlayer) null)) {
-                        itemstack.setCount(0);
-                    }
                 } else {
                     Block block = world.getType(blockposition).getBlock();
 
@@ -244,6 +241,10 @@ public class DispenserRegistry {
                     } else {
                         this.a = false;
                     }
+                }
+
+                if (this.a && itemstack.isDamaged(1, world.random, (EntityPlayer) null)) {
+                    itemstack.setCount(0);
                 }
 
                 return itemstack;
@@ -353,7 +354,7 @@ public class DispenserRegistry {
             SoundEffect.b();
             FluidType.l();
             Block.t();
-            BlockFire.b();
+            BlockFire.d();
             MobEffectList.m();
             Enchantment.h();
             if (EntityTypes.getName(EntityTypes.PLAYER) == null) {

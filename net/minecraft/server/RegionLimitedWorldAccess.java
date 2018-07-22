@@ -228,8 +228,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return true;
     }
 
-    public VoxelShape a(@Nullable Entity entity, VoxelShape voxelshape, boolean flag, Set<Entity> set, VoxelShape voxelshape1) {
-        return voxelshape1;
+    public VoxelShape a(@Nullable Entity entity, VoxelShape voxelshape, boolean flag, Set<Entity> set) {
+        return VoxelShapes.a();
     }
 
     public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
@@ -270,10 +270,6 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     @Nullable
     public PersistentCollection s_() {
         return this.g.s_();
-    }
-
-    public void a(String s, PersistentBase persistentbase) {
-        this.g.a(s, persistentbase);
     }
 
     public IChunkProvider getChunkProvider() {

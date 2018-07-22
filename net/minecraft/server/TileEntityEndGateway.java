@@ -43,7 +43,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         this.exactTeleport = nbttagcompound.getBoolean("ExactTeleport");
     }
 
-    public void X_() {
+    public void Y_() {
         boolean flag = this.c();
         boolean flag1 = this.d();
 
@@ -78,10 +78,10 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 8, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 8, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 

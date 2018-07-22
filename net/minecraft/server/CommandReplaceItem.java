@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -10,6 +11,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
@@ -58,7 +60,7 @@ public class CommandReplaceItem {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, int i, ItemStack itemstack) throws CommandSyntaxException {
-        int j = 0;
+        ArrayList arraylist = Lists.newArrayListWithCapacity(collection.size());
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -69,23 +71,23 @@ public class CommandReplaceItem {
             }
 
             if (entity.c(i, itemstack.cloneItemStack())) {
-                ++j;
+                arraylist.add(entity);
                 if (entity instanceof EntityPlayer) {
                     ((EntityPlayer) entity).defaultContainer.b();
                 }
             }
         }
 
-        if (j == 0) {
+        if (arraylist.isEmpty()) {
             throw CommandReplaceItem.c.create(itemstack.A(), Integer.valueOf(i));
         } else {
-            if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), itemstack.A()}), true);
+            if (arraylist.size() == 1) {
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) arraylist.iterator().next()).getScoreboardDisplayName(), itemstack.A()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { Integer.valueOf(collection.size()), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { Integer.valueOf(arraylist.size()), itemstack.A()}), true);
             }
 
-            return j;
+            return arraylist.size();
         }
     }
 }

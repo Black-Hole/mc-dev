@@ -7,7 +7,7 @@ public class WorldGenFeatureFlowerPlain extends WorldGenFlowers {
     public WorldGenFeatureFlowerPlain() {}
 
     public IBlockData a(Random random, BlockPosition blockposition) {
-        double d0 = BiomeBase.aK.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
+        double d0 = BiomeBase.aJ.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
         int i;
 
         if (d0 < -0.8D) {

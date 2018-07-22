@@ -79,7 +79,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.bC.equals(datawatcherobject) && this.dB() && this.world.isClientSide) {
+        if (EntityEnderman.bC.equals(datawatcherobject) && this.dC() && this.world.isClientSide) {
             this.l();
         }
 
@@ -152,14 +152,14 @@ public class EntityEnderman extends EntityMonster {
 
             if (f > 0.5F && this.world.e(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
-                this.dz();
+                this.dA();
             }
         }
 
         super.mobTick();
     }
 
-    protected boolean dz() {
+    protected boolean dA() {
         double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -191,14 +191,14 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected SoundEffect D() {
-        return this.dB() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
+        return this.dC() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.ENTITY_ENDERMAN_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_ENDERMAN_DEATH;
     }
 
@@ -231,7 +231,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else if (damagesource instanceof EntityDamageSourceIndirect) {
             for (int i = 0; i < 64; ++i) {
-                if (this.dz()) {
+                if (this.dA()) {
                     return true;
                 }
             }
@@ -241,14 +241,14 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = super.damageEntity(damagesource, f);
 
             if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
-                this.dz();
+                this.dA();
             }
 
             return flag;
         }
     }
 
-    public boolean dB() {
+    public boolean dC() {
         return ((Boolean) this.datawatcher.get(EntityEnderman.bC)).booleanValue();
     }
 
@@ -374,7 +374,7 @@ public class EntityEnderman extends EntityMonster {
                 if (this.d != null) {
                     if (this.i.f((EntityHuman) this.d)) {
                         if (((EntityHuman) this.d).h(this.i) < 16.0D) {
-                            this.i.dz();
+                            this.i.dA();
                         }
 
                         this.l = 0;

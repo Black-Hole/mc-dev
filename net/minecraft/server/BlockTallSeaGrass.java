@@ -54,7 +54,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 

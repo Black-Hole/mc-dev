@@ -40,7 +40,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         return SoundEffects.ENTITY_WITCH_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_WITCH_DEATH;
     }
 
@@ -87,7 +87,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
                 if (this.random.nextFloat() < 0.15F && this.a(TagsFluid.a) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
                     potionregistry = Potions.x;
-                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.cq() != null && this.cq().p()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
+                } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.cr() != null && this.cr().p()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     potionregistry = Potions.m;
                 } else if (this.random.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
                     potionregistry = Potions.z;

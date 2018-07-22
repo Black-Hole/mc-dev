@@ -59,7 +59,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         entityplayer.playerConnection = this;
     }
 
-    public void X_() {
+    public void Y_() {
         this.syncPosition();
         this.player.playerTick();
         this.player.setLocation(this.l, this.m, this.n, this.player.yaw, this.player.pitch);
@@ -596,8 +596,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                                 i = 1;
                             }
 
-                            if (!this.player.H() && (!this.player.getWorldServer().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.db())) {
-                                float f2 = this.player.db() ? 300.0F : 100.0F;
+                            if (!this.player.H() && (!this.player.getWorldServer().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.dc())) {
+                                float f2 = this.player.dc() ? 300.0F : 100.0F;
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.J() || !this.minecraftServer.I().equals(this.player.getProfile().getName()))) {
                                     PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getDisplayName().getString(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
@@ -612,7 +612,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             d8 = d5 - this.p;
                             d9 = d6 - this.q;
                             if (this.player.onGround && !packetplayinflying.b() && d8 > 0.0D) {
-                                this.player.cG();
+                                this.player.cH();
                             }
 
                             this.player.move(EnumMoveType.PLAYER, d7, d8, d9);
@@ -647,7 +647,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                             this.B = d12 >= -0.03125D;
                             this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
-                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.db() && !worldserver.a(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
+                            this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.dc() && !worldserver.a(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                             this.player.onGround = packetplayinflying.b();
                             this.minecraftServer.getPlayerList().d(this.player);
                             this.player.a(this.player.locY - d3, packetplayinflying.b());
@@ -977,7 +977,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             break;
 
         case START_FALL_FLYING:
-            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.db() && !this.player.isInWater()) {
+            if (!this.player.onGround && this.player.motY < 0.0D && !this.player.dc() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
 
                 if (itemstack.getItem() == Items.ELYTRA && ItemElytra.e(itemstack)) {

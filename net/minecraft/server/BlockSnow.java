@@ -52,7 +52,7 @@ public class BlockSnow extends Block {
         if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
             EnumBlockFaceShape enumblockfaceshape = iblockdata1.c(iworldreader, blockposition.down(), EnumDirection.UP);
 
-            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.E) || block == this && ((Integer) iblockdata1.get(BlockSnow.LAYERS)).intValue() == 8;
+            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.D) || block == this && ((Integer) iblockdata1.get(BlockSnow.LAYERS)).intValue() == 8;
         } else {
             return false;
         }
@@ -65,12 +65,12 @@ public class BlockSnow extends Block {
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         Integer integer = (Integer) iblockdata.get(BlockSnow.LAYERS);
 
-        if (this.k() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
+        if (this.X_() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
             if (integer.intValue() == 8) {
                 a(world, blockposition, new ItemStack(Blocks.SNOW_BLOCK));
             } else {
                 for (int i = 0; i < integer.intValue(); ++i) {
-                    a(world, blockposition, this.s(iblockdata));
+                    a(world, blockposition, this.t(iblockdata));
                 }
             }
         } else {
@@ -117,7 +117,7 @@ public class BlockSnow extends Block {
         blockstatelist_a.a(new IBlockState[] { BlockSnow.LAYERS});
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 }

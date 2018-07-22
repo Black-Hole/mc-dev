@@ -94,7 +94,7 @@ public class WorldGenEndCityPieces {
             int j = random.nextInt(4) + 1;
             WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece, new BlockPosition(0, 0, -4), "bridge_piece", enumblockrotation, true));
 
-            worldgenendcitypieces_piece1.n = -1;
+            worldgenendcitypieces_piece1.o = -1;
             byte b0 = 0;
 
             for (int k = 0; k < j; ++k) {
@@ -120,7 +120,7 @@ public class WorldGenEndCityPieces {
             }
 
             worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece1, new BlockPosition(4, b0, 0), "bridge_end", enumblockrotation.a(EnumBlockRotation.CLOCKWISE_180), true));
-            worldgenendcitypieces_piece1.n = -1;
+            worldgenendcitypieces_piece1.o = -1;
             return true;
         }
     };
@@ -198,10 +198,10 @@ public class WorldGenEndCityPieces {
                 while (iterator.hasNext()) {
                     StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-                    structurepiece.n = j;
+                    structurepiece.o = j;
                     StructurePiece structurepiece1 = StructurePiece.a(list, structurepiece.d());
 
-                    if (structurepiece1 != null && structurepiece1.n != worldgenendcitypieces_piece.n) {
+                    if (structurepiece1 != null && structurepiece1.o != worldgenendcitypieces_piece.o) {
                         flag = true;
                         break;
                     }

@@ -18,7 +18,7 @@ public class BlockShulkerBox extends BlockTileEntity {
         return new TileEntityShulkerBox(this.color);
     }
 
-    public boolean p(IBlockData iblockdata) {
+    public boolean q(IBlockData iblockdata) {
         return true;
     }
 

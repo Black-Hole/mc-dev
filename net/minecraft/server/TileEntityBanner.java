@@ -87,10 +87,10 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 6, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 6, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 

@@ -28,7 +28,7 @@ public class DataConverterRegistry {
             DataConverterRegistry.a.error("Unable to build datafixers", throwable);
             Runtime.getRuntime().exit(1);
         }).setDaemon(true).setNameFormat("Bootstrap %d").build());
-        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(1513);
+        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(1519);
 
         a(datafixerbuilder);
         return datafixerbuilder.build(executorservice);
@@ -279,6 +279,7 @@ public class DataConverterRegistry {
                 return typed.update(DSL.remainderFinder(), DataConverterCustomNameEntity::a);
             }
         });
+        datafixerbuilder.addFixer(new DataConverterIglooMetadataRemoval(schema59, false));
         Schema schema60 = datafixerbuilder.addSchema(1490, DataConverterRegistry.c);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema60, "Rename melon_block", (s) -> {
@@ -319,7 +320,18 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(DataConverterItemName.a(schema69, "Item renamening fix", (s) -> {
             return (String) DataConverterEntityRename.c.getOrDefault(s, s);
         }));
+        datafixerbuilder.addFixer(new DataConverterRecipeRename(schema69, false));
         datafixerbuilder.addFixer(new DataConverterEntityRename(schema69, true));
         datafixerbuilder.addFixer(new DataConverterSwimStats(schema69, false));
+        Schema schema70 = datafixerbuilder.addSchema(1514, DataConverterRegistry.c);
+
+        datafixerbuilder.addFixer(new DataConverterObjectiveDisplayName(schema70, false));
+        datafixerbuilder.addFixer(new DataConverterTeamDisplayName(schema70, false));
+        datafixerbuilder.addFixer(new DataConverterObjectiveRenderType(schema70, false));
+        Schema schema71 = datafixerbuilder.addSchema(1515, DataConverterRegistry.c);
+
+        datafixerbuilder.addFixer(DataConverterBlockRename.a(schema71, "Rename coral fan blocks", (s) -> {
+            return (String) DataConverterCoralFan.a.getOrDefault(s, s);
+        }));
     }
 }

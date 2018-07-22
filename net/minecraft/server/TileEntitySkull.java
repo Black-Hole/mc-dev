@@ -55,7 +55,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
-    public void X_() {
+    public void Y_() {
         Block block = this.getBlock().getBlock();
 
         if (block == Blocks.DRAGON_HEAD || block == Blocks.DRAGON_WALL_HEAD) {
@@ -76,10 +76,10 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 4, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.save(new NBTTagCompound());
     }
 

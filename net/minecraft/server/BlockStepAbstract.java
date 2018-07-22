@@ -23,7 +23,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         blockstatelist_a.a(new IBlockState[] { BlockStepAbstract.a, BlockStepAbstract.b});
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return false;
     }
 
@@ -42,7 +42,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         }
     }
 
-    public boolean q(IBlockData iblockdata) {
+    public boolean r(IBlockData iblockdata) {
         return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.DOUBLE || iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.TOP;
     }
 
@@ -93,7 +93,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         }
     }
 
-    public FluidType b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if (((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue()) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
@@ -102,8 +102,8 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         }
     }
 
-    public Fluid t(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() ? FluidTypes.c.a(false) : super.t(iblockdata);
+    public Fluid h(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {

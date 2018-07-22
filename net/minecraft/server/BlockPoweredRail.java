@@ -115,7 +115,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
     }
 
-    public IBlockState<BlockPropertyTrackPosition> d() {
+    public IBlockState<BlockPropertyTrackPosition> e() {
         return BlockPoweredRail.SHAPE;
     }
 

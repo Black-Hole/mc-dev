@@ -102,7 +102,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (this.f(itemstack)) {
-            if (this.getAge() == 0 && this.dD()) {
+            if (this.getAge() == 0 && this.dE()) {
                 this.a(entityhuman, itemstack);
                 this.f(entityhuman);
                 return true;
@@ -125,7 +125,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     }
 
-    public boolean dD() {
+    public boolean dE() {
         return this.bC <= 0;
     }
 

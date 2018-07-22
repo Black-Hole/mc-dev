@@ -104,7 +104,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     public void k() {
-        if (this.dq()) {
+        if (this.dr()) {
             this.setOnFire(8);
         }
 
@@ -150,7 +150,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         return SoundEffects.ENTITY_PHANTOM_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_PHANTOM_DEATH;
     }
 
@@ -163,7 +163,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         return EnumMonsterType.UNDEAD;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 1.0F;
     }
 

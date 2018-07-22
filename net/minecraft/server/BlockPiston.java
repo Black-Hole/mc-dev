@@ -24,7 +24,7 @@ public class BlockPiston extends BlockDirectional {
         this.sticky = flag;
     }
 
-    public boolean p(IBlockData iblockdata) {
+    public boolean q(IBlockData iblockdata) {
         return !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue();
     }
 
@@ -55,7 +55,7 @@ public class BlockPiston extends BlockDirectional {
         }
     }
 
-    public boolean q(IBlockData iblockdata) {
+    public boolean r(IBlockData iblockdata) {
         return !((Boolean) iblockdata.get(BlockPiston.EXTENDED)).booleanValue() || iblockdata.get(BlockPiston.FACING) == EnumDirection.DOWN;
     }
 
@@ -187,7 +187,7 @@ public class BlockPiston extends BlockDirectional {
             if (this.sticky && i == 1) {
                 blockposition1 = blockposition.shift(enumdirection);
                 if (world.getType(blockposition1).getBlock() == Blocks.PISTON_HEAD) {
-                    world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 20);
+                    world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 21);
                 }
 
                 this.a(world, blockposition, enumdirection, false);

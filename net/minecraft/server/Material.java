@@ -3,15 +3,15 @@ package net.minecraft.server;
 public final class Material {
 
     public static final Material AIR = (new Material.a(MaterialMapColor.b)).c().j().b().f().i();
-    public static final Material b = (new Material.a(MaterialMapColor.b)).c().j().b().f().i();
+    public static final Material STRUCTURE_VOID = (new Material.a(MaterialMapColor.b)).c().j().b().f().i();
     public static final Material PORTAL = (new Material.a(MaterialMapColor.b)).c().j().b().h().i();
     public static final Material WOOL = (new Material.a(MaterialMapColor.e)).c().j().b().e().i();
     public static final Material PLANT = (new Material.a(MaterialMapColor.i)).c().j().b().g().i();
-    public static final Material f = (new Material.a(MaterialMapColor.n)).c().j().b().g().i();
+    public static final Material WATER_PLANT = (new Material.a(MaterialMapColor.n)).c().j().b().g().i();
     public static final Material REPLACEABLE_PLANT = (new Material.a(MaterialMapColor.i)).c().j().b().g().f().e().i();
-    public static final Material h = (new Material.a(MaterialMapColor.n)).c().j().b().g().f().i();
+    public static final Material REPLACEABLE_WATER_PLANT = (new Material.a(MaterialMapColor.n)).c().j().b().g().f().i();
     public static final Material WATER = (new Material.a(MaterialMapColor.n)).c().j().b().g().f().a().i();
-    public static final Material j = (new Material.a(MaterialMapColor.n)).c().j().b().g().f().a().i();
+    public static final Material BUBBLE_COLUMN = (new Material.a(MaterialMapColor.n)).c().j().b().g().f().a().i();
     public static final Material LAVA = (new Material.a(MaterialMapColor.f)).c().j().b().g().f().a().i();
     public static final Material PACKED_ICE = (new Material.a(MaterialMapColor.j)).c().j().b().g().f().d().i();
     public static final Material FIRE = (new Material.a(MaterialMapColor.b)).c().j().b().g().f().i();

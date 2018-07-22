@@ -21,78 +21,80 @@ public class WorldData {
     private long e;
     private WorldType f;
     private NBTTagCompound g;
-    private int h;
+    @Nullable
+    private String h;
     private int i;
     private int j;
-    private long k;
+    private int k;
     private long l;
     private long m;
     private long n;
+    private long o;
     @Nullable
-    private final DataFixer o;
-    private final int p;
-    private boolean q;
-    private NBTTagCompound r;
-    private int s;
+    private final DataFixer p;
+    private final int q;
+    private boolean r;
+    private NBTTagCompound s;
+    private int t;
     private String levelName;
-    private int u;
     private int v;
-    private boolean w;
-    private int x;
-    private boolean y;
-    private int z;
-    private EnumGamemode A;
-    private boolean B;
+    private int w;
+    private boolean x;
+    private int y;
+    private boolean z;
+    private int A;
+    private EnumGamemode B;
     private boolean C;
     private boolean D;
     private boolean E;
-    private EnumDifficulty F;
-    private boolean G;
-    private double H;
+    private boolean F;
+    private EnumDifficulty G;
+    private boolean H;
     private double I;
     private double J;
-    private long K;
-    private double L;
+    private double K;
+    private long L;
     private double M;
     private double N;
-    private int O;
+    private double O;
     private int P;
-    private final Set<String> Q;
+    private int Q;
     private final Set<String> R;
-    private final Map<DimensionManager, NBTTagCompound> S;
-    private NBTTagCompound T;
-    private final GameRules U;
+    private final Set<String> S;
+    private final Map<DimensionManager, NBTTagCompound> T;
+    private NBTTagCompound U;
+    private final GameRules V;
 
     protected WorldData() {
         this.f = WorldType.NORMAL;
         this.g = new NBTTagCompound();
-        this.J = 6.0E7D;
-        this.M = 5.0D;
-        this.N = 0.2D;
-        this.O = 5;
-        this.P = 15;
-        this.Q = Sets.newHashSet();
-        this.R = Sets.newLinkedHashSet();
-        this.S = Maps.newEnumMap(DimensionManager.class);
-        this.U = new GameRules();
-        this.o = null;
-        this.p = 1513;
+        this.K = 6.0E7D;
+        this.N = 5.0D;
+        this.O = 0.2D;
+        this.P = 5;
+        this.Q = 15;
+        this.R = Sets.newHashSet();
+        this.S = Sets.newLinkedHashSet();
+        this.T = Maps.newEnumMap(DimensionManager.class);
+        this.V = new GameRules();
+        this.p = null;
+        this.q = 1519;
         this.b(new NBTTagCompound());
     }
 
     public WorldData(NBTTagCompound nbttagcompound, DataFixer datafixer, int i, @Nullable NBTTagCompound nbttagcompound1) {
         this.f = WorldType.NORMAL;
         this.g = new NBTTagCompound();
-        this.J = 6.0E7D;
-        this.M = 5.0D;
-        this.N = 0.2D;
-        this.O = 5;
-        this.P = 15;
-        this.Q = Sets.newHashSet();
-        this.R = Sets.newLinkedHashSet();
-        this.S = Maps.newEnumMap(DimensionManager.class);
-        this.U = new GameRules();
-        this.o = datafixer;
+        this.K = 6.0E7D;
+        this.N = 5.0D;
+        this.O = 0.2D;
+        this.P = 5;
+        this.Q = 15;
+        this.R = Sets.newHashSet();
+        this.S = Sets.newLinkedHashSet();
+        this.T = Maps.newEnumMap(DimensionManager.class);
+        this.V = new GameRules();
+        this.p = datafixer;
         NBTTagCompound nbttagcompound2;
 
         if (nbttagcompound.hasKeyOfType("Version", 10)) {
@@ -109,7 +111,9 @@ public class WorldData {
             this.f = WorldType.getType(s);
             if (this.f == null) {
                 this.f = WorldType.NORMAL;
-            } else if (this.f.g()) {
+            } else if (this.f == WorldType.CUSTOMIZED) {
+                this.h = nbttagcompound.getString("generatorOptions");
+            } else if (this.f.h()) {
                 int j = 0;
 
                 if (nbttagcompound.hasKeyOfType("generatorVersion", 99)) {
@@ -122,96 +126,100 @@ public class WorldData {
             this.b(nbttagcompound.getCompound("generatorOptions"));
         }
 
-        this.A = EnumGamemode.getById(nbttagcompound.getInt("GameType"));
+        this.B = EnumGamemode.getById(nbttagcompound.getInt("GameType"));
+        if (nbttagcompound.hasKeyOfType("legacy_custom_options", 8)) {
+            this.h = nbttagcompound.getString("legacy_custom_options");
+        }
+
         if (nbttagcompound.hasKeyOfType("MapFeatures", 99)) {
-            this.B = nbttagcompound.getBoolean("MapFeatures");
+            this.C = nbttagcompound.getBoolean("MapFeatures");
         } else {
-            this.B = true;
+            this.C = true;
         }
 
-        this.h = nbttagcompound.getInt("SpawnX");
-        this.i = nbttagcompound.getInt("SpawnY");
-        this.j = nbttagcompound.getInt("SpawnZ");
-        this.k = nbttagcompound.getLong("Time");
+        this.i = nbttagcompound.getInt("SpawnX");
+        this.j = nbttagcompound.getInt("SpawnY");
+        this.k = nbttagcompound.getInt("SpawnZ");
+        this.l = nbttagcompound.getLong("Time");
         if (nbttagcompound.hasKeyOfType("DayTime", 99)) {
-            this.l = nbttagcompound.getLong("DayTime");
+            this.m = nbttagcompound.getLong("DayTime");
         } else {
-            this.l = this.k;
+            this.m = this.l;
         }
 
-        this.m = nbttagcompound.getLong("LastPlayed");
-        this.n = nbttagcompound.getLong("SizeOnDisk");
+        this.n = nbttagcompound.getLong("LastPlayed");
+        this.o = nbttagcompound.getLong("SizeOnDisk");
         this.levelName = nbttagcompound.getString("LevelName");
-        this.u = nbttagcompound.getInt("version");
-        this.v = nbttagcompound.getInt("clearWeatherTime");
-        this.x = nbttagcompound.getInt("rainTime");
-        this.w = nbttagcompound.getBoolean("raining");
-        this.z = nbttagcompound.getInt("thunderTime");
-        this.y = nbttagcompound.getBoolean("thundering");
-        this.C = nbttagcompound.getBoolean("hardcore");
+        this.v = nbttagcompound.getInt("version");
+        this.w = nbttagcompound.getInt("clearWeatherTime");
+        this.y = nbttagcompound.getInt("rainTime");
+        this.x = nbttagcompound.getBoolean("raining");
+        this.A = nbttagcompound.getInt("thunderTime");
+        this.z = nbttagcompound.getBoolean("thundering");
+        this.D = nbttagcompound.getBoolean("hardcore");
         if (nbttagcompound.hasKeyOfType("initialized", 99)) {
-            this.E = nbttagcompound.getBoolean("initialized");
+            this.F = nbttagcompound.getBoolean("initialized");
         } else {
-            this.E = true;
+            this.F = true;
         }
 
         if (nbttagcompound.hasKeyOfType("allowCommands", 99)) {
-            this.D = nbttagcompound.getBoolean("allowCommands");
+            this.E = nbttagcompound.getBoolean("allowCommands");
         } else {
-            this.D = this.A == EnumGamemode.CREATIVE;
+            this.E = this.B == EnumGamemode.CREATIVE;
         }
 
-        this.p = i;
+        this.q = i;
         if (nbttagcompound1 != null) {
-            this.r = nbttagcompound1;
+            this.s = nbttagcompound1;
         }
 
         if (nbttagcompound.hasKeyOfType("GameRules", 10)) {
-            this.U.a(nbttagcompound.getCompound("GameRules"));
+            this.V.a(nbttagcompound.getCompound("GameRules"));
         }
 
         if (nbttagcompound.hasKeyOfType("Difficulty", 99)) {
-            this.F = EnumDifficulty.getById(nbttagcompound.getByte("Difficulty"));
+            this.G = EnumDifficulty.getById(nbttagcompound.getByte("Difficulty"));
         }
 
         if (nbttagcompound.hasKeyOfType("DifficultyLocked", 1)) {
-            this.G = nbttagcompound.getBoolean("DifficultyLocked");
+            this.H = nbttagcompound.getBoolean("DifficultyLocked");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderCenterX", 99)) {
-            this.H = nbttagcompound.getDouble("BorderCenterX");
+            this.I = nbttagcompound.getDouble("BorderCenterX");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderCenterZ", 99)) {
-            this.I = nbttagcompound.getDouble("BorderCenterZ");
+            this.J = nbttagcompound.getDouble("BorderCenterZ");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderSize", 99)) {
-            this.J = nbttagcompound.getDouble("BorderSize");
+            this.K = nbttagcompound.getDouble("BorderSize");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderSizeLerpTime", 99)) {
-            this.K = nbttagcompound.getLong("BorderSizeLerpTime");
+            this.L = nbttagcompound.getLong("BorderSizeLerpTime");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderSizeLerpTarget", 99)) {
-            this.L = nbttagcompound.getDouble("BorderSizeLerpTarget");
+            this.M = nbttagcompound.getDouble("BorderSizeLerpTarget");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderSafeZone", 99)) {
-            this.M = nbttagcompound.getDouble("BorderSafeZone");
+            this.N = nbttagcompound.getDouble("BorderSafeZone");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderDamagePerBlock", 99)) {
-            this.N = nbttagcompound.getDouble("BorderDamagePerBlock");
+            this.O = nbttagcompound.getDouble("BorderDamagePerBlock");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderWarningBlocks", 99)) {
-            this.O = nbttagcompound.getInt("BorderWarningBlocks");
+            this.P = nbttagcompound.getInt("BorderWarningBlocks");
         }
 
         if (nbttagcompound.hasKeyOfType("BorderWarningTime", 99)) {
-            this.P = nbttagcompound.getInt("BorderWarningTime");
+            this.Q = nbttagcompound.getInt("BorderWarningTime");
         }
 
         if (nbttagcompound.hasKeyOfType("DimensionData", 10)) {
@@ -221,7 +229,7 @@ public class WorldData {
             while (iterator.hasNext()) {
                 String s1 = (String) iterator.next();
 
-                this.S.put(DimensionManager.a(Integer.parseInt(s1)), nbttagcompound2.getCompound(s1));
+                this.T.put(DimensionManager.a(Integer.parseInt(s1)), nbttagcompound2.getCompound(s1));
             }
         }
 
@@ -230,18 +238,18 @@ public class WorldData {
             NBTTagList nbttaglist = nbttagcompound2.getList("Disabled", 8);
 
             for (int k = 0; k < nbttaglist.size(); ++k) {
-                this.Q.add(nbttaglist.getString(k));
+                this.R.add(nbttaglist.getString(k));
             }
 
             NBTTagList nbttaglist1 = nbttagcompound2.getList("Enabled", 8);
 
             for (int l = 0; l < nbttaglist1.size(); ++l) {
-                this.R.add(nbttaglist1.getString(l));
+                this.S.add(nbttaglist1.getString(l));
             }
         }
 
         if (nbttagcompound.hasKeyOfType("CustomBossEvents", 10)) {
-            this.T = nbttagcompound.getCompound("CustomBossEvents");
+            this.U = nbttagcompound.getCompound("CustomBossEvents");
         }
 
     }
@@ -249,37 +257,37 @@ public class WorldData {
     public WorldData(WorldSettings worldsettings, String s) {
         this.f = WorldType.NORMAL;
         this.g = new NBTTagCompound();
-        this.J = 6.0E7D;
-        this.M = 5.0D;
-        this.N = 0.2D;
-        this.O = 5;
-        this.P = 15;
-        this.Q = Sets.newHashSet();
-        this.R = Sets.newLinkedHashSet();
-        this.S = Maps.newEnumMap(DimensionManager.class);
-        this.U = new GameRules();
-        this.o = null;
-        this.p = 1513;
+        this.K = 6.0E7D;
+        this.N = 5.0D;
+        this.O = 0.2D;
+        this.P = 5;
+        this.Q = 15;
+        this.R = Sets.newHashSet();
+        this.S = Sets.newLinkedHashSet();
+        this.T = Maps.newEnumMap(DimensionManager.class);
+        this.V = new GameRules();
+        this.p = null;
+        this.q = 1519;
         this.a(worldsettings);
         this.levelName = s;
-        this.F = WorldData.a;
-        this.E = false;
+        this.G = WorldData.a;
+        this.F = false;
     }
 
     public void a(WorldSettings worldsettings) {
         this.e = worldsettings.d();
-        this.A = worldsettings.e();
-        this.B = worldsettings.g();
-        this.C = worldsettings.f();
+        this.B = worldsettings.e();
+        this.C = worldsettings.g();
+        this.D = worldsettings.f();
         this.f = worldsettings.h();
         this.b((NBTTagCompound) Dynamic.convert(JsonOps.INSTANCE, DynamicOpsNBT.a, worldsettings.j()));
-        this.D = worldsettings.i();
+        this.E = worldsettings.i();
     }
 
     public NBTTagCompound a(@Nullable NBTTagCompound nbttagcompound) {
         this.Q();
         if (nbttagcompound == null) {
-            nbttagcompound = this.r;
+            nbttagcompound = this.s;
         }
 
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -291,54 +299,58 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.13-pre7");
-        nbttagcompound2.setInt("Id", 1513);
-        nbttagcompound2.setBoolean("Snapshot", true);
+        nbttagcompound2.setString("Name", "1.13");
+        nbttagcompound2.setInt("Id", 1519);
+        nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 1513);
+        nbttagcompound.setInt("DataVersion", 1519);
         nbttagcompound.setLong("RandomSeed", this.e);
-        nbttagcompound.setString("generatorName", this.f.name());
+        nbttagcompound.setString("generatorName", this.f.b());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
         if (!this.g.isEmpty()) {
             nbttagcompound.set("generatorOptions", this.g);
         }
 
-        nbttagcompound.setInt("GameType", this.A.getId());
-        nbttagcompound.setBoolean("MapFeatures", this.B);
-        nbttagcompound.setInt("SpawnX", this.h);
-        nbttagcompound.setInt("SpawnY", this.i);
-        nbttagcompound.setInt("SpawnZ", this.j);
-        nbttagcompound.setLong("Time", this.k);
-        nbttagcompound.setLong("DayTime", this.l);
-        nbttagcompound.setLong("SizeOnDisk", this.n);
-        nbttagcompound.setLong("LastPlayed", SystemUtils.d());
-        nbttagcompound.setString("LevelName", this.levelName);
-        nbttagcompound.setInt("version", this.u);
-        nbttagcompound.setInt("clearWeatherTime", this.v);
-        nbttagcompound.setInt("rainTime", this.x);
-        nbttagcompound.setBoolean("raining", this.w);
-        nbttagcompound.setInt("thunderTime", this.z);
-        nbttagcompound.setBoolean("thundering", this.y);
-        nbttagcompound.setBoolean("hardcore", this.C);
-        nbttagcompound.setBoolean("allowCommands", this.D);
-        nbttagcompound.setBoolean("initialized", this.E);
-        nbttagcompound.setDouble("BorderCenterX", this.H);
-        nbttagcompound.setDouble("BorderCenterZ", this.I);
-        nbttagcompound.setDouble("BorderSize", this.J);
-        nbttagcompound.setLong("BorderSizeLerpTime", this.K);
-        nbttagcompound.setDouble("BorderSafeZone", this.M);
-        nbttagcompound.setDouble("BorderDamagePerBlock", this.N);
-        nbttagcompound.setDouble("BorderSizeLerpTarget", this.L);
-        nbttagcompound.setDouble("BorderWarningBlocks", (double) this.O);
-        nbttagcompound.setDouble("BorderWarningTime", (double) this.P);
-        if (this.F != null) {
-            nbttagcompound.setByte("Difficulty", (byte) this.F.a());
+        if (this.h != null) {
+            nbttagcompound.setString("legacy_custom_options", this.h);
         }
 
-        nbttagcompound.setBoolean("DifficultyLocked", this.G);
-        nbttagcompound.set("GameRules", this.U.a());
+        nbttagcompound.setInt("GameType", this.B.getId());
+        nbttagcompound.setBoolean("MapFeatures", this.C);
+        nbttagcompound.setInt("SpawnX", this.i);
+        nbttagcompound.setInt("SpawnY", this.j);
+        nbttagcompound.setInt("SpawnZ", this.k);
+        nbttagcompound.setLong("Time", this.l);
+        nbttagcompound.setLong("DayTime", this.m);
+        nbttagcompound.setLong("SizeOnDisk", this.o);
+        nbttagcompound.setLong("LastPlayed", SystemUtils.d());
+        nbttagcompound.setString("LevelName", this.levelName);
+        nbttagcompound.setInt("version", this.v);
+        nbttagcompound.setInt("clearWeatherTime", this.w);
+        nbttagcompound.setInt("rainTime", this.y);
+        nbttagcompound.setBoolean("raining", this.x);
+        nbttagcompound.setInt("thunderTime", this.A);
+        nbttagcompound.setBoolean("thundering", this.z);
+        nbttagcompound.setBoolean("hardcore", this.D);
+        nbttagcompound.setBoolean("allowCommands", this.E);
+        nbttagcompound.setBoolean("initialized", this.F);
+        nbttagcompound.setDouble("BorderCenterX", this.I);
+        nbttagcompound.setDouble("BorderCenterZ", this.J);
+        nbttagcompound.setDouble("BorderSize", this.K);
+        nbttagcompound.setLong("BorderSizeLerpTime", this.L);
+        nbttagcompound.setDouble("BorderSafeZone", this.N);
+        nbttagcompound.setDouble("BorderDamagePerBlock", this.O);
+        nbttagcompound.setDouble("BorderSizeLerpTarget", this.M);
+        nbttagcompound.setDouble("BorderWarningBlocks", (double) this.P);
+        nbttagcompound.setDouble("BorderWarningTime", (double) this.Q);
+        if (this.G != null) {
+            nbttagcompound.setByte("Difficulty", (byte) this.G.a());
+        }
+
+        nbttagcompound.setBoolean("DifficultyLocked", this.H);
+        nbttagcompound.set("GameRules", this.V.a());
         NBTTagCompound nbttagcompound3 = new NBTTagCompound();
-        Iterator iterator = this.S.entrySet().iterator();
+        Iterator iterator = this.T.entrySet().iterator();
 
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
@@ -353,7 +365,7 @@ public class WorldData {
 
         NBTTagCompound nbttagcompound4 = new NBTTagCompound();
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator1 = this.R.iterator();
+        Iterator iterator1 = this.S.iterator();
 
         while (iterator1.hasNext()) {
             String s = (String) iterator1.next();
@@ -363,7 +375,7 @@ public class WorldData {
 
         nbttagcompound4.set("Enabled", nbttaglist);
         NBTTagList nbttaglist1 = new NBTTagList();
-        Iterator iterator2 = this.Q.iterator();
+        Iterator iterator2 = this.R.iterator();
 
         while (iterator2.hasNext()) {
             String s1 = (String) iterator2.next();
@@ -373,8 +385,8 @@ public class WorldData {
 
         nbttagcompound4.set("Disabled", nbttaglist1);
         nbttagcompound.set("DataPacks", nbttagcompound4);
-        if (this.T != null) {
-            nbttagcompound.set("CustomBossEvents", this.T);
+        if (this.U != null) {
+            nbttagcompound.set("CustomBossEvents", this.U);
         }
 
     }
@@ -384,57 +396,57 @@ public class WorldData {
     }
 
     public int b() {
-        return this.h;
-    }
-
-    public int c() {
         return this.i;
     }
 
-    public int d() {
+    public int c() {
         return this.j;
     }
 
-    public long getTime() {
+    public int d() {
         return this.k;
     }
 
-    public long getDayTime() {
+    public long getTime() {
         return this.l;
     }
 
+    public long getDayTime() {
+        return this.m;
+    }
+
     private void Q() {
-        if (!this.q && this.r != null) {
-            if (this.p < 1513) {
-                if (this.o == null) {
+        if (!this.r && this.s != null) {
+            if (this.q < 1519) {
+                if (this.p == null) {
                     throw new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded.");
                 }
 
-                this.r = GameProfileSerializer.a(this.o, DataFixTypes.PLAYER, this.r, this.p);
+                this.s = GameProfileSerializer.a(this.p, DataFixTypes.PLAYER, this.s, this.q);
             }
 
-            this.s = this.r.getInt("Dimension");
-            this.q = true;
+            this.t = this.s.getInt("Dimension");
+            this.r = true;
         }
     }
 
     public NBTTagCompound h() {
         this.Q();
-        return this.r;
+        return this.s;
     }
 
     public void setTime(long i) {
-        this.k = i;
-    }
-
-    public void setDayTime(long i) {
         this.l = i;
     }
 
+    public void setDayTime(long i) {
+        this.m = i;
+    }
+
     public void setSpawn(BlockPosition blockposition) {
-        this.h = blockposition.getX();
-        this.i = blockposition.getY();
-        this.j = blockposition.getZ();
+        this.i = blockposition.getX();
+        this.j = blockposition.getY();
+        this.k = blockposition.getZ();
     }
 
     public String getName() {
@@ -446,75 +458,75 @@ public class WorldData {
     }
 
     public int k() {
-        return this.u;
-    }
-
-    public void d(int i) {
-        this.u = i;
-    }
-
-    public int z() {
         return this.v;
     }
 
-    public void g(int i) {
+    public void d(int i) {
         this.v = i;
     }
 
-    public boolean isThundering() {
-        return this.y;
-    }
-
-    public void setThundering(boolean flag) {
-        this.y = flag;
-    }
-
-    public int getThunderDuration() {
-        return this.z;
-    }
-
-    public void setThunderDuration(int i) {
-        this.z = i;
-    }
-
-    public boolean hasStorm() {
+    public int z() {
         return this.w;
     }
 
-    public void setStorm(boolean flag) {
-        this.w = flag;
+    public void g(int i) {
+        this.w = i;
     }
 
-    public int getWeatherDuration() {
-        return this.x;
+    public boolean isThundering() {
+        return this.z;
     }
 
-    public void setWeatherDuration(int i) {
-        this.x = i;
+    public void setThundering(boolean flag) {
+        this.z = flag;
     }
 
-    public EnumGamemode getGameType() {
+    public int getThunderDuration() {
         return this.A;
     }
 
-    public boolean shouldGenerateMapFeatures() {
+    public void setThunderDuration(int i) {
+        this.A = i;
+    }
+
+    public boolean hasStorm() {
+        return this.x;
+    }
+
+    public void setStorm(boolean flag) {
+        this.x = flag;
+    }
+
+    public int getWeatherDuration() {
+        return this.y;
+    }
+
+    public void setWeatherDuration(int i) {
+        this.y = i;
+    }
+
+    public EnumGamemode getGameType() {
         return this.B;
     }
 
-    public void f(boolean flag) {
-        this.B = flag;
-    }
-
-    public void setGameType(EnumGamemode enumgamemode) {
-        this.A = enumgamemode;
-    }
-
-    public boolean isHardcore() {
+    public boolean shouldGenerateMapFeatures() {
         return this.C;
     }
 
-    public void g(boolean flag) {
+    public void f(boolean flag) {
         this.C = flag;
+    }
+
+    public void setGameType(EnumGamemode enumgamemode) {
+        this.B = enumgamemode;
+    }
+
+    public boolean isHardcore() {
+        return this.D;
+    }
+
+    public void g(boolean flag) {
+        this.D = flag;
     }
 
     public WorldType getType() {
@@ -534,111 +546,111 @@ public class WorldData {
     }
 
     public boolean u() {
-        return this.D;
-    }
-
-    public void c(boolean flag) {
-        this.D = flag;
-    }
-
-    public boolean v() {
         return this.E;
     }
 
-    public void d(boolean flag) {
+    public void c(boolean flag) {
         this.E = flag;
     }
 
-    public GameRules w() {
-        return this.U;
-    }
-
-    public double B() {
-        return this.H;
-    }
-
-    public double C() {
-        return this.I;
-    }
-
-    public double D() {
-        return this.J;
-    }
-
-    public void a(double d0) {
-        this.J = d0;
-    }
-
-    public long E() {
-        return this.K;
-    }
-
-    public void c(long i) {
-        this.K = i;
-    }
-
-    public double F() {
-        return this.L;
-    }
-
-    public void b(double d0) {
-        this.L = d0;
-    }
-
-    public void c(double d0) {
-        this.I = d0;
-    }
-
-    public void d(double d0) {
-        this.H = d0;
-    }
-
-    public double G() {
-        return this.M;
-    }
-
-    public void e(double d0) {
-        this.M = d0;
-    }
-
-    public double H() {
-        return this.N;
-    }
-
-    public void f(double d0) {
-        this.N = d0;
-    }
-
-    public int I() {
-        return this.O;
-    }
-
-    public int J() {
-        return this.P;
-    }
-
-    public void h(int i) {
-        this.O = i;
-    }
-
-    public void i(int i) {
-        this.P = i;
-    }
-
-    public EnumDifficulty getDifficulty() {
+    public boolean v() {
         return this.F;
     }
 
-    public void setDifficulty(EnumDifficulty enumdifficulty) {
-        this.F = enumdifficulty;
+    public void d(boolean flag) {
+        this.F = flag;
     }
 
-    public boolean isDifficultyLocked() {
+    public GameRules w() {
+        return this.V;
+    }
+
+    public double B() {
+        return this.I;
+    }
+
+    public double C() {
+        return this.J;
+    }
+
+    public double D() {
+        return this.K;
+    }
+
+    public void a(double d0) {
+        this.K = d0;
+    }
+
+    public long E() {
+        return this.L;
+    }
+
+    public void c(long i) {
+        this.L = i;
+    }
+
+    public double F() {
+        return this.M;
+    }
+
+    public void b(double d0) {
+        this.M = d0;
+    }
+
+    public void c(double d0) {
+        this.J = d0;
+    }
+
+    public void d(double d0) {
+        this.I = d0;
+    }
+
+    public double G() {
+        return this.N;
+    }
+
+    public void e(double d0) {
+        this.N = d0;
+    }
+
+    public double H() {
+        return this.O;
+    }
+
+    public void f(double d0) {
+        this.O = d0;
+    }
+
+    public int I() {
+        return this.P;
+    }
+
+    public int J() {
+        return this.Q;
+    }
+
+    public void h(int i) {
+        this.P = i;
+    }
+
+    public void i(int i) {
+        this.Q = i;
+    }
+
+    public EnumDifficulty getDifficulty() {
         return this.G;
     }
 
+    public void setDifficulty(EnumDifficulty enumdifficulty) {
+        this.G = enumdifficulty;
+    }
+
+    public boolean isDifficultyLocked() {
+        return this.H;
+    }
+
     public void e(boolean flag) {
-        this.G = flag;
+        this.H = flag;
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
@@ -646,25 +658,25 @@ public class WorldData {
             return String.valueOf(this.getSeed());
         });
         crashreportsystemdetails.a("Level generator", () -> {
-            return String.format("ID %02d - %s, ver %d. Features enabled: %b", new Object[] { Integer.valueOf(this.f.h()), this.f.name(), Integer.valueOf(this.f.getVersion()), Boolean.valueOf(this.B)});
+            return String.format("ID %02d - %s, ver %d. Features enabled: %b", new Object[] { Integer.valueOf(this.f.i()), this.f.name(), Integer.valueOf(this.f.getVersion()), Boolean.valueOf(this.C)});
         });
         crashreportsystemdetails.a("Level generator options", () -> {
             return this.g.toString();
         });
         crashreportsystemdetails.a("Level spawn location", () -> {
-            return CrashReportSystemDetails.a(this.h, this.i, this.j);
+            return CrashReportSystemDetails.a(this.i, this.j, this.k);
         });
         crashreportsystemdetails.a("Level time", () -> {
-            return String.format("%d game time, %d day time", new Object[] { Long.valueOf(this.k), Long.valueOf(this.l)});
+            return String.format("%d game time, %d day time", new Object[] { Long.valueOf(this.l), Long.valueOf(this.m)});
         });
         crashreportsystemdetails.a("Level dimension", () -> {
-            return String.valueOf(this.s);
+            return String.valueOf(this.t);
         });
         crashreportsystemdetails.a("Level storage version", () -> {
             String s = "Unknown?";
 
             try {
-                switch (this.u) {
+                switch (this.v) {
                 case 19132:
                     s = "McRegion";
                     break;
@@ -676,40 +688,40 @@ public class WorldData {
                 ;
             }
 
-            return String.format("0x%05X - %s", new Object[] { Integer.valueOf(this.u), s});
+            return String.format("0x%05X - %s", new Object[] { Integer.valueOf(this.v), s});
         });
         crashreportsystemdetails.a("Level weather", () -> {
-            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", new Object[] { Integer.valueOf(this.x), Boolean.valueOf(this.w), Integer.valueOf(this.z), Boolean.valueOf(this.y)});
+            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", new Object[] { Integer.valueOf(this.y), Boolean.valueOf(this.x), Integer.valueOf(this.A), Boolean.valueOf(this.z)});
         });
         crashreportsystemdetails.a("Level game mode", () -> {
-            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", new Object[] { this.A.b(), Integer.valueOf(this.A.getId()), Boolean.valueOf(this.C), Boolean.valueOf(this.D)});
+            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", new Object[] { this.B.b(), Integer.valueOf(this.B.getId()), Boolean.valueOf(this.D), Boolean.valueOf(this.E)});
         });
     }
 
     public NBTTagCompound a(DimensionManager dimensionmanager) {
-        NBTTagCompound nbttagcompound = (NBTTagCompound) this.S.get(dimensionmanager);
+        NBTTagCompound nbttagcompound = (NBTTagCompound) this.T.get(dimensionmanager);
 
         return nbttagcompound == null ? new NBTTagCompound() : nbttagcompound;
     }
 
     public void a(DimensionManager dimensionmanager, NBTTagCompound nbttagcompound) {
-        this.S.put(dimensionmanager, nbttagcompound);
+        this.T.put(dimensionmanager, nbttagcompound);
     }
 
     public Set<String> N() {
-        return this.Q;
+        return this.R;
     }
 
     public Set<String> O() {
-        return this.R;
+        return this.S;
     }
 
     @Nullable
     public NBTTagCompound P() {
-        return this.T;
+        return this.U;
     }
 
     public void c(@Nullable NBTTagCompound nbttagcompound) {
-        this.T = nbttagcompound;
+        this.U = nbttagcompound;
     }
 }

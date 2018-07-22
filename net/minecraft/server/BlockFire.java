@@ -43,7 +43,7 @@ public class BlockFire extends Block {
     public IBlockData a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         IBlockData iblockdata = iblockaccess.getType(blockposition.down());
 
-        if (!iblockdata.q() && !this.j(iblockdata)) {
+        if (!iblockdata.q() && !this.k(iblockdata)) {
             IBlockData iblockdata1 = this.getBlockData();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -53,7 +53,7 @@ public class BlockFire extends Block {
                 BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.s.get(enumdirection);
 
                 if (blockstateboolean != null) {
-                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, Boolean.valueOf(this.j(iblockaccess.getType(blockposition.shift(enumdirection)))));
+                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, Boolean.valueOf(this.k(iblockaccess.getType(blockposition.shift(enumdirection)))));
                 }
             }
 
@@ -109,7 +109,7 @@ public class BlockFire extends Block {
                         return;
                     }
 
-                    if (i == 15 && random.nextInt(4) == 0 && !this.j(world.getType(blockposition.down()))) {
+                    if (i == 15 && random.nextInt(4) == 0 && !this.k(world.getType(blockposition.down()))) {
                         world.setAir(blockposition);
                         return;
                     }
@@ -203,7 +203,7 @@ public class BlockFire extends Block {
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (this.j(iblockaccess.getType(blockposition.shift(enumdirection)))) {
+            if (this.k(iblockaccess.getType(blockposition.shift(enumdirection)))) {
                 return true;
             }
         }
@@ -229,11 +229,11 @@ public class BlockFire extends Block {
         }
     }
 
-    public boolean i() {
+    public boolean j() {
         return false;
     }
 
-    public boolean j(IBlockData iblockdata) {
+    public boolean k(IBlockData iblockdata) {
         return this.g(iblockdata.getBlock()) > 0;
     }
 
@@ -266,7 +266,7 @@ public class BlockFire extends Block {
         this.u.put(block, j);
     }
 
-    public static void b() {
+    public static void d() {
         BlockFire blockfire = (BlockFire) Blocks.FIRE;
 
         blockfire.a(Blocks.OAK_PLANKS, 5, 20);

@@ -13,10 +13,12 @@ public class PistonExtendsChecker {
     private final EnumDirection e;
     private final List<BlockPosition> f = Lists.newArrayList();
     private final List<BlockPosition> g = Lists.newArrayList();
+    private final EnumDirection h;
 
     public PistonExtendsChecker(World world, BlockPosition blockposition, EnumDirection enumdirection, boolean flag) {
         this.a = world;
         this.b = blockposition;
+        this.h = enumdirection;
         this.c = flag;
         if (flag) {
             this.e = enumdirection;
@@ -33,7 +35,7 @@ public class PistonExtendsChecker {
         this.g.clear();
         IBlockData iblockdata = this.a.getType(this.d);
 
-        if (!BlockPiston.a(iblockdata, this.a, this.d, this.e, false, this.e)) {
+        if (!BlockPiston.a(iblockdata, this.a, this.d, this.e, false, this.h)) {
             if (this.c && iblockdata.getPushReaction() == EnumPistonReaction.DESTROY) {
                 this.g.add(this.d);
                 return true;

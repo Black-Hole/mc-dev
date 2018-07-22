@@ -90,11 +90,11 @@ public class EntityOcelot extends EntityTameableAnimal {
         return SoundEffects.ENTITY_CAT_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_CAT_DEATH;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 0.4F;
     }
 
@@ -203,7 +203,7 @@ public class EntityOcelot extends EntityTameableAnimal {
             IBlockData iblockdata = iworldreader.getType(blockposition.down());
             Block block = iblockdata.getBlock();
 
-            if (block == Blocks.GRASS_BLOCK || iblockdata.a(TagsBlock.E)) {
+            if (block == Blocks.GRASS_BLOCK || iblockdata.a(TagsBlock.D)) {
                 return true;
             }
         }
@@ -217,7 +217,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : (this.isTamed() ? new ChatMessage(SystemUtils.a("entity", EntityOcelot.bI), new Object[0]) : super.getDisplayName()));
     }
 
-    protected void dz() {
+    protected void dA() {
         if (this.bJ == null) {
             this.bJ = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }

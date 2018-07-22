@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 public class CommandFunction {
 
     public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
-        CustomFunctionData customfunctiondata = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aD();
+        CustomFunctionData customfunctiondata = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData();
 
         ICompletionProvider.a((Iterable) customfunctiondata.g().a(), suggestionsbuilder, "#");
         return ICompletionProvider.a((Iterable) customfunctiondata.c().keySet(), suggestionsbuilder);
@@ -32,7 +32,7 @@ public class CommandFunction {
 
         CustomFunction customfunction;
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += commandlistenerwrapper.getServer().aD().a(customfunction, commandlistenerwrapper.a().b(2))) {
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += commandlistenerwrapper.getServer().getFunctionData().a(customfunction, commandlistenerwrapper.a().b(2))) {
             customfunction = (CustomFunction) iterator.next();
         }
 

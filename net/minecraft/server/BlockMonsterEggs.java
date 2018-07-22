@@ -19,15 +19,15 @@ public class BlockMonsterEggs extends Block {
         return 0;
     }
 
-    public Block b() {
+    public Block d() {
         return this.a;
     }
 
-    public static boolean j(IBlockData iblockdata) {
+    public static boolean k(IBlockData iblockdata) {
         return BlockMonsterEggs.b.containsKey(iblockdata.getBlock());
     }
 
-    protected ItemStack s(IBlockData iblockdata) {
+    protected ItemStack t(IBlockData iblockdata) {
         return new ItemStack(this.a);
     }
 

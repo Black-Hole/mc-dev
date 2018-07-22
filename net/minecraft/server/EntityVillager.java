@@ -65,7 +65,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
     }
 
-    private void dJ() {
+    private void dK() {
         if (!this.bS) {
             this.bS = true;
             if (this.isBaby()) {
@@ -98,7 +98,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             this.profession = 70 + this.random.nextInt(50);
             this.village = this.world.ae().getClosestVillage(blockposition, 32);
             if (this.village == null) {
-                this.dv();
+                this.dw();
             } else {
                 BlockPosition blockposition1 = this.village.a();
 
@@ -110,7 +110,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             }
         }
 
-        if (!this.dB() && this.bK > 0) {
+        if (!this.dC() && this.bK > 0) {
             --this.bK;
             if (this.bK <= 0) {
                 if (this.bL) {
@@ -146,7 +146,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         if (flag) {
             itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dB() && !this.isBaby()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dC() && !this.isBaby()) {
             if (this.trades == null) {
                 this.populateTrades();
             }
@@ -221,7 +221,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         }
 
         this.p(true);
-        this.dJ();
+        this.dK();
     }
 
     protected boolean isTypeNotPersistent() {
@@ -229,14 +229,14 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     }
 
     protected SoundEffect D() {
-        return this.dB() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT;
+        return this.dC() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
         return SoundEffects.ENTITY_VILLAGER_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_VILLAGER_DEATH;
     }
 
@@ -265,7 +265,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.bG = flag;
     }
 
-    public boolean dA() {
+    public boolean dB() {
         return this.bG;
     }
 
@@ -320,12 +320,12 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return this.tradingPlayer;
     }
 
-    public boolean dB() {
+    public boolean dC() {
         return this.tradingPlayer != null;
     }
 
     public boolean u(boolean flag) {
-        if (!this.bM && flag && this.dE()) {
+        if (!this.bM && flag && this.dF()) {
             boolean flag1 = false;
 
             for (int i = 0; i < this.inventory.getSize(); ++i) {
@@ -359,7 +359,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.increaseUses();
         this.a_ = -this.z();
-        this.a(SoundEffects.ENTITY_VILLAGER_YES, this.cC(), this.cD());
+        this.a(SoundEffects.ENTITY_VILLAGER_YES, this.cD(), this.cE());
         int i = 3 + this.random.nextInt(4);
 
         if (merchantrecipe.e() == 1 || this.random.nextInt(5) == 0) {
@@ -392,7 +392,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     public void a(ItemStack itemstack) {
         if (!this.world.isClientSide && this.a_ > -this.z() + 20) {
             this.a_ = -this.z();
-            this.a(itemstack.isEmpty() ? SoundEffects.ENTITY_VILLAGER_NO : SoundEffects.ENTITY_VILLAGER_YES, this.cC(), this.cD());
+            this.a(itemstack.isEmpty() ? SoundEffects.ENTITY_VILLAGER_NO : SoundEffects.ENTITY_VILLAGER_YES, this.cD(), this.cE());
         }
 
     }
@@ -542,12 +542,12 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             this.setProfession(this.world.random.nextInt(6));
         }
 
-        this.dJ();
+        this.dK();
         this.populateTrades();
         return groupdataentity;
     }
 
-    public void dC() {
+    public void dD() {
         this.bR = true;
     }
 
@@ -579,7 +579,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         }
     }
 
-    public InventorySubcontainer dD() {
+    public InventorySubcontainer dE() {
         return this.inventory;
     }
 
@@ -603,15 +603,15 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return item == Items.BREAD || item == Items.POTATO || item == Items.CARROT || item == Items.WHEAT || item == Items.WHEAT_SEEDS || item == Items.BEETROOT || item == Items.BEETROOT_SEEDS;
     }
 
-    public boolean dE() {
+    public boolean dF() {
         return this.q(1);
     }
 
-    public boolean dF() {
+    public boolean dG() {
         return this.q(2);
     }
 
-    public boolean dG() {
+    public boolean dH() {
         boolean flag = this.getProfession() == 0;
 
         return flag ? !this.q(5) : !this.q(1);
@@ -637,7 +637,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return false;
     }
 
-    public boolean dH() {
+    public boolean dI() {
         for (int i = 0; i < this.inventory.getSize(); ++i) {
             Item item = this.inventory.getItem(i).getItem();
 

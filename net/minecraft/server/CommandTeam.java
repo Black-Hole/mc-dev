@@ -24,10 +24,8 @@ public class CommandTeam {
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.team.add.longName", new Object[] { object});
     });
-    private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
-        return new ChatMessage("commands.team.add.longDisplayName", new Object[] { object});
-    });
-    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.team.empty.unchanged", new Object[0]));
+    private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("commands.team.empty.unchanged", new Object[0]));
+    private static final SimpleCommandExceptionType d = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.name.unchanged", new Object[0]));
     private static final SimpleCommandExceptionType e = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.color.unchanged", new Object[0]));
     private static final SimpleCommandExceptionType f = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyEnabled", new Object[0]));
     private static final SimpleCommandExceptionType g = new SimpleCommandExceptionType(new ChatMessage("commands.team.option.friendlyfire.alreadyDisabled", new Object[0]));
@@ -45,9 +43,9 @@ public class CommandTeam {
         })).then(CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).executes((commandcontext) -> {
             return c((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"));
         })))).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("team", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "team"), StringArgumentType.getString(commandcontext, "team"));
-        })).then(CommandDispatcher.a("displayName", (ArgumentType) StringArgumentType.greedyString()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "team"), StringArgumentType.getString(commandcontext, "displayName"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "team"));
+        })).then(CommandDispatcher.a("displayName", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), StringArgumentType.getString(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "displayName"));
         }))))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"));
         })))).then(CommandDispatcher.a("empty").then(CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).executes((commandcontext) -> {
@@ -58,9 +56,11 @@ public class CommandTeam {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentScoreholder.c(commandcontext, "members"));
         }))))).then(CommandDispatcher.a("leave").then(CommandDispatcher.a("members", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "members"));
-        })))).then(CommandDispatcher.a("option").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).then(CommandDispatcher.a("color").then(CommandDispatcher.a("value", (ArgumentType) ArgumentChatFormat.a()).executes((commandcontext) -> {
+        })))).then(CommandDispatcher.a("modify").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("team", (ArgumentType) ArgumentScoreboardTeam.a()).then(CommandDispatcher.a("displayName").then(CommandDispatcher.a("displayName", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "displayName"));
+        })))).then(CommandDispatcher.a("color").then(CommandDispatcher.a("value", (ArgumentType) ArgumentChatFormat.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatFormat.a(commandcontext, "value"));
-        })))).then(CommandDispatcher.a("friendlyfire").then(CommandDispatcher.a("allowed", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
+        })))).then(CommandDispatcher.a("friendlyFire").then(CommandDispatcher.a("allowed", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), BoolArgumentType.getBool(commandcontext, "allowed"));
         })))).then(CommandDispatcher.a("seeFriendlyInvisibles").then(CommandDispatcher.a("allowed", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), BoolArgumentType.getBool(commandcontext, "allowed"));
@@ -89,9 +89,9 @@ public class CommandTeam {
         }))).then(CommandDispatcher.a("always").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ScoreboardTeamBase.EnumTeamPush.ALWAYS);
         })))).then(CommandDispatcher.a("prefix").then(CommandDispatcher.a("prefix", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "prefix"));
+            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "prefix"));
         })))).then(CommandDispatcher.a("suffix").then(CommandDispatcher.a("suffix", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
-            return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "suffix"));
+            return c((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreboardTeam.a(commandcontext, "team"), ArgumentChatComponent.a(commandcontext, "suffix"));
         }))))));
     }
 
@@ -191,6 +191,16 @@ public class CommandTeam {
         }
     }
 
+    private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
+        if (scoreboardteam.getDisplayName().equals(ichatbasecomponent)) {
+            throw CommandTeam.d.create();
+        } else {
+            scoreboardteam.setDisplayName(ichatbasecomponent);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.name.success", new Object[] { scoreboardteam.d()}), true);
+            return 0;
+        }
+    }
+
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, EnumChatFormat enumchatformat) throws CommandSyntaxException {
         if (scoreboardteam.getColor() == enumchatformat) {
             throw CommandTeam.e.create();
@@ -206,7 +216,7 @@ public class CommandTeam {
         ArrayList arraylist = Lists.newArrayList(scoreboardteam.getPlayerNameSet());
 
         if (arraylist.isEmpty()) {
-            throw CommandTeam.d.create();
+            throw CommandTeam.c.create();
         } else {
             Iterator iterator = arraylist.iterator();
 
@@ -229,19 +239,21 @@ public class CommandTeam {
         return scoreboardserver.getTeams().size();
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, String s, String s1) throws CommandSyntaxException {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
+        return a(commandlistenerwrapper, s, (IChatBaseComponent) (new ChatComponentText(s)));
+    }
+
+    private static int a(CommandListenerWrapper commandlistenerwrapper, String s, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
         if (scoreboardserver.getTeam(s) != null) {
             throw CommandTeam.a.create();
         } else if (s.length() > 16) {
             throw CommandTeam.b.create(Integer.valueOf(16));
-        } else if (s1.length() > 32) {
-            throw CommandTeam.c.create(Integer.valueOf(32));
         } else {
             ScoreboardTeam scoreboardteam = scoreboardserver.createTeam(s);
 
-            scoreboardteam.setDisplayName(s1);
+            scoreboardteam.setDisplayName(ichatbasecomponent);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.add.success", new Object[] { scoreboardteam.d()}), true);
             return scoreboardserver.getTeams().size();
         }
@@ -271,14 +283,14 @@ public class CommandTeam {
         return collection.size();
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
-        scoreboardteam.a(ichatbasecomponent);
+    private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
+        scoreboardteam.setPrefix(ichatbasecomponent);
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.prefix.success", new Object[] { ichatbasecomponent}), false);
         return 1;
     }
 
-    private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
-        scoreboardteam.b(ichatbasecomponent);
+    private static int c(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam, IChatBaseComponent ichatbasecomponent) {
+        scoreboardteam.setSuffix(ichatbasecomponent);
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.option.suffix.success", new Object[] { ichatbasecomponent}), false);
         return 1;
     }

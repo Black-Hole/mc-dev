@@ -47,18 +47,26 @@ public class CommandLocate {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
-        BlockPosition blockposition = commandlistenerwrapper.getWorld().a(s, new BlockPosition(commandlistenerwrapper.getPosition()), 100);
+        BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
+        BlockPosition blockposition1 = commandlistenerwrapper.getWorld().a(s, blockposition, 100);
 
-        if (blockposition == null) {
+        if (blockposition1 == null) {
             throw CommandLocate.a.create();
         } else {
-            int i = MathHelper.floor(blockposition.m(new BlockPosition(commandlistenerwrapper.getPosition())));
-            IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatMessage("chat.coordinates", new Object[] { Integer.valueOf(blockposition.getX()), "~", Integer.valueOf(blockposition.getZ())}))).a((chatmodifier) -> {
+            int i = MathHelper.d(a(blockposition.getX(), blockposition.getZ(), blockposition1.getX(), blockposition1.getZ()));
+            IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatMessage("chat.coordinates", new Object[] { Integer.valueOf(blockposition1.getX()), "~", Integer.valueOf(blockposition1.getZ())}))).a((chatmodifier) -> {
                 chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tp @s " + blockposition.getX() + " ~ " + blockposition.getZ())).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.coordinates.tooltip", new Object[0])));
             });
 
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.locate.success", new Object[] { s, ichatbasecomponent, Integer.valueOf(i)}), false);
             return i;
         }
+    }
+
+    private static float a(int i, int j, int k, int l) {
+        int i1 = k - i;
+        int j1 = l - j;
+
+        return MathHelper.c((float) (i1 * i1 + j1 * j1));
     }
 }

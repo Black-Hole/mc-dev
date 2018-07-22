@@ -20,7 +20,7 @@ public class BlockSeaLantern extends Block {
         return 2 + random.nextInt(2);
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 }

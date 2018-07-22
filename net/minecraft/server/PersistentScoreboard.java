@@ -54,13 +54,12 @@ public class PersistentScoreboard extends PersistentBase {
             }
 
             ScoreboardTeam scoreboardteam = this.b.createTeam(s);
-            String s1 = nbttagcompound.getString("DisplayName");
+            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
 
-            if (s1.length() > 32) {
-                s1 = s1.substring(0, 32);
+            if (ichatbasecomponent != null) {
+                scoreboardteam.setDisplayName(ichatbasecomponent);
             }
 
-            scoreboardteam.setDisplayName(s1);
             if (nbttagcompound.hasKeyOfType("TeamColor", 8)) {
                 scoreboardteam.setColor(EnumChatFormat.c(nbttagcompound.getString("TeamColor")));
             }
@@ -73,19 +72,19 @@ public class PersistentScoreboard extends PersistentBase {
                 scoreboardteam.setCanSeeFriendlyInvisibles(nbttagcompound.getBoolean("SeeFriendlyInvisibles"));
             }
 
-            IChatBaseComponent ichatbasecomponent;
+            IChatBaseComponent ichatbasecomponent1;
 
             if (nbttagcompound.hasKeyOfType("MemberNamePrefix", 8)) {
-                ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNamePrefix"));
-                if (ichatbasecomponent != null) {
-                    scoreboardteam.a(ichatbasecomponent);
+                ichatbasecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNamePrefix"));
+                if (ichatbasecomponent1 != null) {
+                    scoreboardteam.setPrefix(ichatbasecomponent1);
                 }
             }
 
             if (nbttagcompound.hasKeyOfType("MemberNameSuffix", 8)) {
-                ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNameSuffix"));
-                if (ichatbasecomponent != null) {
-                    scoreboardteam.b(ichatbasecomponent);
+                ichatbasecomponent1 = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("MemberNameSuffix"));
+                if (ichatbasecomponent1 != null) {
+                    scoreboardteam.setSuffix(ichatbasecomponent1);
                 }
             }
 
@@ -149,7 +148,10 @@ public class PersistentScoreboard extends PersistentBase {
                     s = s.substring(0, 16);
                 }
 
-                this.b.registerObjective(s, iscoreboardcriteria, nbttagcompound.getString("DisplayName"));
+                IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("DisplayName"));
+                IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = IScoreboardCriteria.EnumScoreboardHealthDisplay.a(nbttagcompound.getString("RenderType"));
+
+                this.b.registerObjective(s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
             }
         }
 
@@ -178,15 +180,15 @@ public class PersistentScoreboard extends PersistentBase {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
             nbttagcompound.setString("Name", scoreboardteam.getName());
-            nbttagcompound.setString("DisplayName", scoreboardteam.getDisplayName());
+            nbttagcompound.setString("DisplayName", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getDisplayName()));
             if (scoreboardteam.getColor().b() >= 0) {
                 nbttagcompound.setString("TeamColor", scoreboardteam.getColor().g());
             }
 
             nbttagcompound.setBoolean("AllowFriendlyFire", scoreboardteam.allowFriendlyFire());
             nbttagcompound.setBoolean("SeeFriendlyInvisibles", scoreboardteam.canSeeFriendlyInvisibles());
-            nbttagcompound.setString("MemberNamePrefix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.e()));
-            nbttagcompound.setString("MemberNameSuffix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.f()));
+            nbttagcompound.setString("MemberNamePrefix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getPrefix()));
+            nbttagcompound.setString("MemberNameSuffix", IChatBaseComponent.ChatSerializer.a(scoreboardteam.getSuffix()));
             nbttagcompound.setString("NameTagVisibility", scoreboardteam.getNameTagVisibility().e);
             nbttagcompound.setString("DeathMessageVisibility", scoreboardteam.getDeathMessageVisibility().e);
             nbttagcompound.setString("CollisionRule", scoreboardteam.getCollisionRule().e);
@@ -238,7 +240,8 @@ public class PersistentScoreboard extends PersistentBase {
 
                 nbttagcompound.setString("Name", scoreboardobjective.getName());
                 nbttagcompound.setString("CriteriaName", scoreboardobjective.getCriteria().getName());
-                nbttagcompound.setString("DisplayName", scoreboardobjective.getDisplayName());
+                nbttagcompound.setString("DisplayName", IChatBaseComponent.ChatSerializer.a(scoreboardobjective.getDisplayName()));
+                nbttagcompound.setString("RenderType", scoreboardobjective.f().a());
                 nbttaglist.add((NBTBase) nbttagcompound);
             }
         }

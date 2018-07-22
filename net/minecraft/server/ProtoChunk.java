@@ -506,7 +506,7 @@ public class ProtoChunk implements IChunkAccess {
         this.d.addAndGet(i);
     }
 
-    public boolean aa_() {
+    public boolean ab_() {
         return this.d.get() > 0;
     }
 

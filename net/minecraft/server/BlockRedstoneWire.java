@@ -79,23 +79,27 @@ public class BlockRedstoneWire extends Block {
             while (iterator.hasNext()) {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
                 BlockPropertyRedstoneSide blockpropertyredstoneside = (BlockPropertyRedstoneSide) iblockdata.get((IBlockState) BlockRedstoneWire.r.get(enumdirection));
-                IBlockData iblockdata1;
-                IBlockData iblockdata2;
 
                 if (blockpropertyredstoneside != BlockPropertyRedstoneSide.NONE && generatoraccess.getType(blockposition_b.j(blockposition).d(enumdirection)).getBlock() != this) {
                     blockposition_b.d(EnumDirection.DOWN);
-                    iblockdata1 = generatoraccess.getType(blockposition_b);
+                    IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
+
                     if (iblockdata1.getBlock() != Blocks.OBSERVER) {
-                        iblockdata2 = iblockdata1.updateState(enumdirection.opposite(), iblockdata, generatoraccess, blockposition_b, blockposition);
+                        BlockPosition blockposition1 = blockposition_b.shift(enumdirection.opposite());
+                        IBlockData iblockdata2 = iblockdata1.updateState(enumdirection.opposite(), generatoraccess.getType(blockposition1), generatoraccess, blockposition_b, blockposition1);
+
                         a(iblockdata1, iblockdata2, generatoraccess, blockposition_b, i);
                     }
-                }
 
-                if (blockpropertyredstoneside == BlockPropertyRedstoneSide.SIDE) {
                     blockposition_b.j(blockposition).d(enumdirection).d(EnumDirection.UP);
-                    iblockdata1 = generatoraccess.getType(blockposition_b);
-                    iblockdata2 = iblockdata1.updateState(enumdirection.opposite(), iblockdata, generatoraccess, blockposition_b, blockposition);
-                    a(iblockdata1, iblockdata2, generatoraccess, blockposition_b, i);
+                    IBlockData iblockdata3 = generatoraccess.getType(blockposition_b);
+
+                    if (iblockdata3.getBlock() != Blocks.OBSERVER) {
+                        BlockPosition blockposition2 = blockposition_b.shift(enumdirection.opposite());
+                        IBlockData iblockdata4 = iblockdata3.updateState(enumdirection.opposite(), generatoraccess.getType(blockposition2), generatoraccess, blockposition_b, blockposition2);
+
+                        a(iblockdata3, iblockdata4, generatoraccess, blockposition_b, i);
+                    }
                 }
             }
         } catch (Throwable throwable1) {
@@ -121,26 +125,21 @@ public class BlockRedstoneWire extends Block {
     private BlockPropertyRedstoneSide a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         IBlockData iblockdata = iblockaccess.getType(blockposition.shift(enumdirection));
+        IBlockData iblockdata1 = iblockaccess.getType(blockposition.up());
 
-        if (!a(iblockaccess.getType(blockposition1), enumdirection) && (iblockdata.isOccluding() || !j(iblockaccess.getType(blockposition1.down())))) {
-            IBlockData iblockdata1 = iblockaccess.getType(blockposition.up());
+        if (!iblockdata1.isOccluding()) {
+            boolean flag = iblockaccess.getType(blockposition1).q() || iblockaccess.getType(blockposition1).getBlock() == Blocks.GLOWSTONE;
 
-            if (!iblockdata1.isOccluding()) {
-                boolean flag = iblockaccess.getType(blockposition1).q() || iblockaccess.getType(blockposition1).getBlock() == Blocks.GLOWSTONE;
-
-                if (flag && j(iblockaccess.getType(blockposition1.up()))) {
-                    if (iblockdata.k()) {
-                        return BlockPropertyRedstoneSide.UP;
-                    }
-
-                    return BlockPropertyRedstoneSide.SIDE;
+            if (flag && k(iblockaccess.getType(blockposition1.up()))) {
+                if (iblockdata.k()) {
+                    return BlockPropertyRedstoneSide.UP;
                 }
-            }
 
-            return BlockPropertyRedstoneSide.NONE;
-        } else {
-            return BlockPropertyRedstoneSide.SIDE;
+                return BlockPropertyRedstoneSide.SIDE;
+            }
         }
+
+        return !a(iblockaccess.getType(blockposition1), enumdirection) && (iblockdata.isOccluding() || !k(iblockaccess.getType(blockposition1.down()))) ? BlockPropertyRedstoneSide.NONE : BlockPropertyRedstoneSide.SIDE;
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -395,10 +394,10 @@ public class BlockRedstoneWire extends Block {
     }
 
     protected static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return j(iblockaccess.getType(blockposition));
+        return k(iblockaccess.getType(blockposition));
     }
 
-    protected static boolean j(IBlockData iblockdata) {
+    protected static boolean k(IBlockData iblockdata) {
         return a(iblockdata, (EnumDirection) null);
     }
 

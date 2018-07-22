@@ -9,43 +9,43 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     protected BlockCrops(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.b(), Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.d(), Integer.valueOf(0)));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockCrops.a[((Integer) iblockdata.get(this.b())).intValue()];
+        return BlockCrops.a[((Integer) iblockdata.get(this.d())).intValue()];
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    public BlockStateInteger b() {
+    public BlockStateInteger d() {
         return BlockCrops.AGE;
     }
 
-    public int d() {
+    public int e() {
         return 7;
     }
 
-    protected int j(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(this.b())).intValue();
+    protected int k(IBlockData iblockdata) {
+        return ((Integer) iblockdata.get(this.d())).intValue();
     }
 
     public IBlockData setAge(int i) {
-        return (IBlockData) this.getBlockData().set(this.b(), Integer.valueOf(i));
+        return (IBlockData) this.getBlockData().set(this.d(), Integer.valueOf(i));
     }
 
     public boolean w(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(this.b())).intValue() >= this.d();
+        return ((Integer) iblockdata.get(this.d())).intValue() >= this.e();
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         super.a(iblockdata, world, blockposition, random);
         if (world.getLightLevel(blockposition.up(), 0) >= 9) {
-            int i = this.j(iblockdata);
+            int i = this.k(iblockdata);
 
-            if (i < this.d()) {
+            if (i < this.e()) {
                 float f = a((Block) this, (IBlockAccess) world, blockposition);
 
                 if (random.nextInt((int) (25.0F / f) + 1) == 0) {
@@ -57,8 +57,8 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = this.j(iblockdata) + this.a(world);
-        int j = this.d();
+        int i = this.k(iblockdata) + this.a(world);
+        int j = this.e();
 
         if (i > j) {
             i = j;
@@ -119,25 +119,25 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
         return (iworldreader.getLightLevel(blockposition, 0) >= 8 || iworldreader.e(blockposition)) && super.canPlace(iblockdata, iworldreader, blockposition);
     }
 
-    protected IMaterial e() {
+    protected IMaterial f() {
         return Items.WHEAT_SEEDS;
     }
 
-    protected IMaterial f() {
+    protected IMaterial g() {
         return Items.WHEAT;
     }
 
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
         super.dropNaturally(iblockdata, world, blockposition, f, 0);
         if (!world.isClientSide) {
-            int j = this.j(iblockdata);
+            int j = this.k(iblockdata);
 
-            if (j >= this.d()) {
+            if (j >= this.e()) {
                 int k = 3 + i;
 
                 for (int l = 0; l < k; ++l) {
-                    if (world.random.nextInt(2 * this.d()) <= j) {
-                        a(world, blockposition, new ItemStack(this.e()));
+                    if (world.random.nextInt(2 * this.e()) <= j) {
+                        a(world, blockposition, new ItemStack(this.f()));
                     }
                 }
             }
@@ -146,11 +146,11 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return this.w(iblockdata) ? this.f() : this.e();
+        return this.w(iblockdata) ? this.g() : this.f();
     }
 
     public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(this.e());
+        return new ItemStack(this.f());
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

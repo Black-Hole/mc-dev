@@ -20,11 +20,11 @@ public class BlockMelon extends BlockStemmed {
         return Math.min(9, this.a(iblockdata, random) + random.nextInt(1 + i));
     }
 
-    public BlockStem b() {
+    public BlockStem d() {
         return (BlockStem) Blocks.MELON_STEM;
     }
 
-    public BlockStemAttached d() {
+    public BlockStemAttached e() {
         return (BlockStemAttached) Blocks.ATTACHED_MELON_STEM;
     }
 }

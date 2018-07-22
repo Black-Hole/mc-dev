@@ -44,7 +44,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k));
                             Block block = iblockdata.getBlock();
 
-                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.E)) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.D)) {
                                 if (block == Blocks.WATER) {
                                     if (l > blockposition.getY()) {
                                         flag = false;
@@ -98,7 +98,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
                         Block block2 = iblockdata1.getBlock();
 
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E) || block2 == Blocks.WATER) {
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D) || block2 == Blocks.WATER) {
                             this.a(set, generatoraccess, blockposition.up(i1), WorldGenSwampTree.a);
                         }
                     }
@@ -111,7 +111,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                         for (k1 = blockposition.getX() - j; k1 <= blockposition.getX() + j; ++k1) {
                             for (l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
                                 blockposition_mutableblockposition1.c(k1, i1, l1);
-                                if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.E)) {
+                                if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.D)) {
                                     BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                     blockposition1 = blockposition_mutableblockposition1.east();

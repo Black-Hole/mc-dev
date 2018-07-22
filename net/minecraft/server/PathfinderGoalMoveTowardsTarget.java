@@ -38,7 +38,7 @@ public class PathfinderGoalMoveTowardsTarget extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().q() && this.b.isAlive() && this.b.h(this.a) < (double) (this.g * this.g);
+        return !this.a.getNavigation().p() && this.b.isAlive() && this.b.h(this.a) < (double) (this.g * this.g);
     }
 
     public void d() {

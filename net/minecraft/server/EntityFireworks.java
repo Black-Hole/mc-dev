@@ -60,7 +60,7 @@ public class EntityFireworks extends Entity {
             }
 
             if (this.e != null) {
-                if (this.e.db()) {
+                if (this.e.dc()) {
                     Vec3D vec3d = this.e.aN();
                     double d0 = 1.5D;
                     double d1 = 0.1D;

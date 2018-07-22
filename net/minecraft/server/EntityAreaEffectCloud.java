@@ -248,7 +248,7 @@ public class EntityAreaEffectCloud extends Entity {
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
 
-                            if (!this.h.containsKey(entityliving) && entityliving.dd()) {
+                            if (!this.h.containsKey(entityliving) && entityliving.de()) {
                                 double d0 = entityliving.locX - this.locX;
                                 double d1 = entityliving.locZ - this.locZ;
                                 double d2 = d0 * d0 + d1 * d1;

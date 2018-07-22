@@ -103,7 +103,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                 --j;
             }
 
-            if (this.a.ds() != null && this.a.ds().c() > 0) {
+            if (this.a.dt() != null && this.a.dt().c() > 0) {
                 j %= 12;
                 if (j < 0) {
                     j += 12;

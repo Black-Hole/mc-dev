@@ -19,9 +19,9 @@ public class MinecartTrackLogic {
         this.b = blockposition;
         this.d = iblockdata;
         this.c = (BlockMinecartTrackAbstract) iblockdata.getBlock();
-        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.c.d());
+        BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(this.c.e());
 
-        this.e = this.c.b();
+        this.e = this.c.d();
         this.a(blockpropertytrackposition);
     }
 
@@ -105,18 +105,18 @@ public class MinecartTrackLogic {
     private MinecartTrackLogic b(BlockPosition blockposition) {
         IBlockData iblockdata = this.a.getType(blockposition);
 
-        if (BlockMinecartTrackAbstract.j(iblockdata)) {
+        if (BlockMinecartTrackAbstract.k(iblockdata)) {
             return new MinecartTrackLogic(this.a, blockposition, iblockdata);
         } else {
             BlockPosition blockposition1 = blockposition.up();
 
             iblockdata = this.a.getType(blockposition1);
-            if (BlockMinecartTrackAbstract.j(iblockdata)) {
+            if (BlockMinecartTrackAbstract.k(iblockdata)) {
                 return new MinecartTrackLogic(this.a, blockposition1, iblockdata);
             } else {
                 blockposition1 = blockposition.down();
                 iblockdata = this.a.getType(blockposition1);
-                return BlockMinecartTrackAbstract.j(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
+                return BlockMinecartTrackAbstract.k(iblockdata) ? new MinecartTrackLogic(this.a, blockposition1, iblockdata) : null;
             }
         }
     }
@@ -218,7 +218,7 @@ public class MinecartTrackLogic {
             blockpropertytrackposition = BlockPropertyTrackPosition.NORTH_SOUTH;
         }
 
-        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition);
+        this.d = (IBlockData) this.d.set(this.c.e(), blockpropertytrackposition);
         this.a.setTypeAndData(this.b, this.d, 3);
     }
 
@@ -341,7 +341,7 @@ public class MinecartTrackLogic {
         }
 
         this.a(blockpropertytrackposition);
-        this.d = (IBlockData) this.d.set(this.c.d(), blockpropertytrackposition);
+        this.d = (IBlockData) this.d.set(this.c.e(), blockpropertytrackposition);
         if (flag1 || this.a.getType(this.b) != this.d) {
             this.a.setTypeAndData(this.b, this.d, 3);
 

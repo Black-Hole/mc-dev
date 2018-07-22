@@ -106,7 +106,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue() && j(iblockdata) == enumdirection ? 15 : 0;
+        return ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue() && k(iblockdata) == enumdirection ? 15 : 0;
     }
 
     public boolean isPowerSource(IBlockData iblockdata) {
@@ -151,7 +151,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     private void c(IBlockData iblockdata, World world, BlockPosition blockposition) {
         world.applyPhysics(blockposition, this);
-        world.applyPhysics(blockposition.shift(j(iblockdata).opposite()), this);
+        world.applyPhysics(blockposition.shift(k(iblockdata).opposite()), this);
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {

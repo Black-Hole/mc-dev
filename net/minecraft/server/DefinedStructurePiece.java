@@ -71,19 +71,19 @@ public abstract class DefinedStructurePiece extends StructurePiece {
 
         switch (enumblockrotation) {
         case NONE:
-            this.m = new StructureBoundingBox(0, 0, 0, k, l, i1);
+            this.n = new StructureBoundingBox(0, 0, 0, k, l, i1);
             break;
 
         case CLOCKWISE_180:
-            this.m = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
+            this.n = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
             break;
 
         case COUNTERCLOCKWISE_90:
-            this.m = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
+            this.n = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
             break;
 
         case CLOCKWISE_90:
-            this.m = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
+            this.n = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
         }
 
         BlockPosition blockposition2;
@@ -105,7 +105,7 @@ public abstract class DefinedStructurePiece extends StructurePiece {
                 blockposition2 = blockposition2.shift(enumblockrotation.a(EnumDirection.WEST), i1);
             }
 
-            this.m.a(blockposition2.getX(), 0, blockposition2.getZ());
+            this.n.a(blockposition2.getX(), 0, blockposition2.getZ());
             break;
 
         case LEFT_RIGHT:
@@ -120,10 +120,10 @@ public abstract class DefinedStructurePiece extends StructurePiece {
                 blockposition2 = blockposition2.shift(enumblockrotation.a(EnumDirection.NORTH), k);
             }
 
-            this.m.a(blockposition2.getX(), 0, blockposition2.getZ());
+            this.n.a(blockposition2.getX(), 0, blockposition2.getZ());
         }
 
-        this.m.a(this.c.getX(), this.c.getY(), this.c.getZ());
+        this.n.a(this.c.getX(), this.c.getY(), this.c.getZ());
     }
 
     public void a(int i, int j, int k) {

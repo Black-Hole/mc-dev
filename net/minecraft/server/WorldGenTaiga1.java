@@ -87,7 +87,7 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                     for (i2 = 0; i2 < i - 1; ++i2) {
                         IBlockData iblockdata = generatoraccess.getType(blockposition.up(i2));
 
-                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                             this.a(set, generatoraccess, blockposition.up(i2), WorldGenTaiga1.a);
                         }
                     }

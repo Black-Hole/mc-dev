@@ -22,7 +22,7 @@ public class ControllerLookDolphin extends ControllerLook {
             this.a.pitch = this.a(this.a.pitch, f1, this.c);
             this.a.aS = this.a(this.a.aS, f, this.b);
         } else {
-            if (this.a.getNavigation().q()) {
+            if (this.a.getNavigation().p()) {
                 this.a.pitch = this.a(this.a.pitch, 0.0F, 5.0F);
             }
 

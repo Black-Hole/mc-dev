@@ -53,7 +53,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().q();
+        return !this.a.getNavigation().p();
     }
 
     @Nullable

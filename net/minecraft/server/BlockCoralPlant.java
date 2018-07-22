@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import javax.annotation.Nullable;
 
 public class BlockCoralPlant extends Block {
@@ -8,6 +9,14 @@ public class BlockCoralPlant extends Block {
 
     protected BlockCoralPlant(Block.Info block_info) {
         super(block_info);
+    }
+
+    protected boolean X_() {
+        return true;
+    }
+
+    public int a(IBlockData iblockdata, Random random) {
+        return 0;
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -31,7 +40,7 @@ public class BlockCoralPlant extends Block {
         return false;
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 

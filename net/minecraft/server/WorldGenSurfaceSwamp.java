@@ -7,7 +7,7 @@ public class WorldGenSurfaceSwamp implements WorldGenSurface<WorldGenSurfaceConf
     public WorldGenSurfaceSwamp() {}
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
-        double d1 = BiomeBase.aK.a((double) i * 0.25D, (double) j * 0.25D);
+        double d1 = BiomeBase.aJ.a((double) i * 0.25D, (double) j * 0.25D);
 
         if (d1 > 0.0D) {
             int j1 = i & 15;
@@ -28,6 +28,6 @@ public class WorldGenSurfaceSwamp implements WorldGenSurface<WorldGenSurfaceConf
             }
         }
 
-        BiomeBase.av.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, worldgensurfaceconfigurationbase);
+        BiomeBase.au.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, worldgensurfaceconfigurationbase);
     }
 }

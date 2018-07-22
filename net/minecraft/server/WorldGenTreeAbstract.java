@@ -17,7 +17,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
     protected boolean a(Block block) {
         IBlockData iblockdata = block.getBlockData();
 
-        return iblockdata.isAir() || iblockdata.a(TagsBlock.E) || block == Blocks.GRASS_BLOCK || Block.d(block) || block.a(TagsBlock.m) || block.a(TagsBlock.l) || block == Blocks.VINE;
+        return iblockdata.isAir() || iblockdata.a(TagsBlock.D) || block == Blocks.GRASS_BLOCK || Block.d(block) || block.a(TagsBlock.n) || block.a(TagsBlock.m) || block == Blocks.VINE;
     }
 
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
@@ -33,7 +33,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
 
     protected final void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         this.b(generatoraccess, blockposition, iblockdata);
-        if (TagsBlock.m.isTagged(iblockdata.getBlock())) {
+        if (TagsBlock.n.isTagged(iblockdata.getBlock())) {
             set.add(blockposition.h());
         }
 

@@ -88,7 +88,7 @@ public class RegionFile {
 
     @Nullable
     public synchronized DataInputStream a(int i, int j) {
-        if (this.d(i, j)) {
+        if (this.e(i, j)) {
             return null;
         } else {
             try {
@@ -134,9 +134,37 @@ public class RegionFile {
         }
     }
 
+    public boolean b(int i, int j) {
+        if (this.e(i, j)) {
+            return false;
+        } else {
+            int k = this.getOffset(i, j);
+
+            if (k == 0) {
+                return false;
+            } else {
+                int l = k >> 8;
+                int i1 = k & 255;
+
+                if (l + i1 > this.f.size()) {
+                    return false;
+                } else {
+                    try {
+                        this.c.seek((long) (l * 4096));
+                        int j1 = this.c.readInt();
+
+                        return j1 > 4096 * i1 ? false : j1 > 0;
+                    } catch (IOException ioexception) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
     @Nullable
-    public DataOutputStream b(int i, int j) {
-        return this.d(i, j) ? null : new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j))));
+    public DataOutputStream c(int i, int j) {
+        return this.e(i, j) ? null : new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j))));
     }
 
     protected synchronized void a(int i, int j, byte[] abyte, int k) {
@@ -220,7 +248,7 @@ public class RegionFile {
         this.c.write(abyte, 0, j);
     }
 
-    private boolean d(int i, int j) {
+    private boolean e(int i, int j) {
         return i < 0 || i >= 32 || j < 0 || j >= 32;
     }
 
@@ -228,7 +256,7 @@ public class RegionFile {
         return this.d[i + j * 32];
     }
 
-    public boolean c(int i, int j) {
+    public boolean d(int i, int j) {
         return this.getOffset(i, j) != 0;
     }
 

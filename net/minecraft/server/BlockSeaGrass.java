@@ -59,7 +59,7 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
         return true;
     }
 
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.c.a(false);
     }
 

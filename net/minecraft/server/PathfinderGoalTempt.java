@@ -76,7 +76,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
 
     public void d() {
         this.target = null;
-        this.a.getNavigation().r();
+        this.a.getNavigation().q();
         this.i = 100;
         this.j = false;
     }
@@ -84,7 +84,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     public void e() {
         this.a.getControllerLook().a(this.target, (float) (this.a.L() + 20), (float) this.a.K());
         if (this.a.h(this.target) < 6.25D) {
-            this.a.getNavigation().r();
+            this.a.getNavigation().q();
         } else {
             this.a.getNavigation().a((Entity) this.target, this.b);
         }

@@ -43,16 +43,16 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         return nbttagcompound;
     }
 
-    public void X_() {
+    public void Y_() {
         this.a.c();
     }
 
     @Nullable
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 1, this.Z_());
+        return new PacketPlayOutTileEntityData(this.position, 1, this.aa_());
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
         nbttagcompound.remove("SpawnPotentials");

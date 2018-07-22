@@ -63,7 +63,7 @@ public class EntitySpider extends EntityMonster {
         return SoundEffects.ENTITY_SPIDER_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SPIDER_DEATH;
     }
 

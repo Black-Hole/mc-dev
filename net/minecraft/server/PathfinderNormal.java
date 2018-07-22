@@ -34,6 +34,8 @@ public class PathfinderNormal extends PathfinderAbstract {
                 ++i;
                 blockposition_mutableblockposition.c(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
             }
+
+            --i;
         } else if (this.b.onGround) {
             i = MathHelper.floor(this.b.getBoundingBox().b + 0.5D);
         } else {
@@ -391,7 +393,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
         if (iblockdata.isAir()) {
             return PathType.OPEN;
-        } else if (block != Blocks.OAK_TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.LILY_PAD) {
+        } else if (!block.a(TagsBlock.E) && block != Blocks.LILY_PAD) {
             if (block == Blocks.FIRE) {
                 return PathType.DAMAGE_FIRE;
             } else if (block == Blocks.CACTUS) {

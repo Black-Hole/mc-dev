@@ -25,29 +25,26 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
         this.a(TagsBlock.h, TagsItem.h);
         this.a(TagsBlock.i, TagsItem.i);
         this.a(TagsBlock.j, TagsItem.j);
-        this.a(TagsBlock.k, TagsItem.k);
         this.a(TagsBlock.l, TagsItem.l);
-        this.a(TagsBlock.o, TagsItem.o);
-        this.a(TagsBlock.n, TagsItem.n);
-        this.a(TagsBlock.p, TagsItem.p);
-        this.a(TagsBlock.q, TagsItem.q);
-        this.a(TagsBlock.s, TagsItem.s);
-        this.a(TagsBlock.r, TagsItem.r);
         this.a(TagsBlock.m, TagsItem.m);
-        this.a(TagsBlock.u, TagsItem.u);
-        this.a(TagsBlock.w, TagsItem.w);
+        this.a(TagsBlock.p, TagsItem.p);
+        this.a(TagsBlock.o, TagsItem.o);
+        this.a(TagsBlock.q, TagsItem.q);
+        this.a(TagsBlock.r, TagsItem.r);
+        this.a(TagsBlock.t, TagsItem.t);
+        this.a(TagsBlock.s, TagsItem.s);
+        this.a(TagsBlock.n, TagsItem.n);
         this.a(TagsBlock.v, TagsItem.v);
         this.a(TagsBlock.x, TagsItem.x);
+        this.a(TagsBlock.w, TagsItem.w);
         this.a(TagsBlock.y, TagsItem.y);
         this.a(TagsBlock.z, TagsItem.z);
-        this.a(TagsBlock.A, TagsItem.A);
-        this.a(TagsBlock.B, TagsItem.B);
-        this.a(TagsBlock.C, TagsItem.C);
-        this.a(TagsBlock.D, TagsItem.D);
-        this.a(TagsBlock.E, TagsItem.E);
-        this.a(TagsItem.t).a((Object[]) (new Item[] { Items.WHITE_BANNER, Items.ORANGE_BANNER, Items.MAGENTA_BANNER, Items.LIGHT_BLUE_BANNER, Items.YELLOW_BANNER, Items.LIME_BANNER, Items.PINK_BANNER, Items.GRAY_BANNER, Items.LIGHT_GRAY_BANNER, Items.CYAN_BANNER, Items.PURPLE_BANNER, Items.BLUE_BANNER, Items.BROWN_BANNER, Items.GREEN_BANNER, Items.RED_BANNER, Items.BLACK_BANNER}));
-        this.a(TagsItem.F).a((Object[]) (new Item[] { Items.OAK_BOAT, Items.SPRUCE_BOAT, Items.BIRCH_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}));
-        this.a(TagsItem.G).a((Object[]) (new Item[] { Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH}));
+        this.a(TagsBlock.D, TagsItem.A);
+        this.a(TagsBlock.k, TagsItem.k);
+        this.a(TagsBlock.E, TagsItem.B);
+        this.a(TagsItem.u).a((Object[]) (new Item[] { Items.WHITE_BANNER, Items.ORANGE_BANNER, Items.MAGENTA_BANNER, Items.LIGHT_BLUE_BANNER, Items.YELLOW_BANNER, Items.LIME_BANNER, Items.PINK_BANNER, Items.GRAY_BANNER, Items.LIGHT_GRAY_BANNER, Items.CYAN_BANNER, Items.PURPLE_BANNER, Items.BLUE_BANNER, Items.BROWN_BANNER, Items.GREEN_BANNER, Items.RED_BANNER, Items.BLACK_BANNER}));
+        this.a(TagsItem.C).a((Object[]) (new Item[] { Items.OAK_BOAT, Items.SPRUCE_BOAT, Items.BIRCH_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}));
+        this.a(TagsItem.D).a((Object[]) (new Item[] { Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH}));
     }
 
     protected void a(Tag<Block> tag, Tag<Item> tag1) {

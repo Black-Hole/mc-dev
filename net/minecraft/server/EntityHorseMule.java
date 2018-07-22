@@ -18,8 +18,8 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
         return SoundEffects.ENTITY_MULE_AMBIENT;
     }
 
-    protected SoundEffect cr() {
-        super.cr();
+    protected SoundEffect cs() {
+        super.cs();
         return SoundEffects.ENTITY_MULE_DEATH;
     }
 
@@ -28,7 +28,7 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
         return SoundEffects.ENTITY_MULE_HURT;
     }
 
-    protected void dC() {
+    protected void dD() {
         this.a(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 }

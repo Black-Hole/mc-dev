@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,8 +41,8 @@ public abstract class PersistentStructureLegacy {
     private final Map<String, Long2ObjectMap<NBTTagCompound>> e = Maps.newHashMap();
     private final Map<String, PersistentIndexed> f = Maps.newHashMap();
 
-    public PersistentStructureLegacy(GeneratorAccess generatoraccess) {
-        this.b(generatoraccess);
+    public PersistentStructureLegacy(@Nullable PersistentCollection persistentcollection) {
+        this.a(persistentcollection);
         boolean flag = false;
         String[] astring = this.b();
         int i = astring.length;
@@ -71,12 +72,12 @@ public abstract class PersistentStructureLegacy {
 
     }
 
-    public NBTTagCompound a(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound) {
+    public NBTTagCompound a(NBTTagCompound nbttagcompound) {
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(nbttagcompound1.getInt("xPos"), nbttagcompound1.getInt("zPos"));
 
         if (this.a(chunkcoordintpair.x, chunkcoordintpair.z)) {
-            nbttagcompound = this.a(generatoraccess, nbttagcompound, chunkcoordintpair);
+            nbttagcompound = this.a(nbttagcompound, chunkcoordintpair);
         }
 
         NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Structures");
@@ -137,7 +138,7 @@ public abstract class PersistentStructureLegacy {
         }
     }
 
-    private NBTTagCompound a(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound, ChunkCoordIntPair chunkcoordintpair) {
+    private NBTTagCompound a(NBTTagCompound nbttagcompound, ChunkCoordIntPair chunkcoordintpair) {
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
         NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound("Structures");
         NBTTagCompound nbttagcompound3 = nbttagcompound2.getCompound("Starts");
@@ -155,11 +156,7 @@ public abstract class PersistentStructureLegacy {
                     NBTTagCompound nbttagcompound4 = (NBTTagCompound) long2objectmap.get(k);
 
                     if (nbttagcompound4 != null) {
-                        StructureStart structurestart = WorldGenFactory.a(nbttagcompound4, generatoraccess);
-
-                        if (structurestart != null) {
-                            nbttagcompound3.set(s, nbttagcompound4);
-                        }
+                        nbttagcompound3.set(s, nbttagcompound4);
                     }
                 }
             }
@@ -171,9 +168,7 @@ public abstract class PersistentStructureLegacy {
         return nbttagcompound;
     }
 
-    private void b(GeneratorAccess generatoraccess) {
-        PersistentCollection persistentcollection = generatoraccess.s_();
-
+    private void a(@Nullable PersistentCollection persistentcollection) {
         if (persistentcollection != null) {
             String[] astring = this.a();
             int i = astring.length;
@@ -217,7 +212,7 @@ public abstract class PersistentStructureLegacy {
                 }
 
                 String s4 = s + "_index";
-                PersistentIndexed persistentindexed = (PersistentIndexed) generatoraccess.a(PersistentIndexed::new, s4);
+                PersistentIndexed persistentindexed = (PersistentIndexed) persistentcollection.get(PersistentIndexed::new, s4);
 
                 if (persistentindexed != null && !persistentindexed.a().isEmpty()) {
                     this.f.put(s, persistentindexed);
@@ -233,7 +228,7 @@ public abstract class PersistentStructureLegacy {
                         persistentindexed1.a(ChunkCoordIntPair.a(nbttagcompound2.getInt("ChunkX"), nbttagcompound2.getInt("ChunkZ")));
                     }
 
-                    generatoraccess.a(s4, (PersistentBase) persistentindexed1);
+                    persistentcollection.a(s4, persistentindexed1);
                     persistentindexed1.c();
                 }
             }
@@ -241,19 +236,19 @@ public abstract class PersistentStructureLegacy {
         }
     }
 
-    public static PersistentStructureLegacy a(GeneratorAccess generatoraccess) {
-        switch (generatoraccess.o().getDimensionManager()) {
+    public static PersistentStructureLegacy a(DimensionManager dimensionmanager, @Nullable PersistentCollection persistentcollection) {
+        switch (dimensionmanager) {
         case OVERWORLD:
-            return new PersistentStructureLegacy.b(generatoraccess);
+            return new PersistentStructureLegacy.b(persistentcollection);
 
         case NETHER:
-            return new PersistentStructureLegacy.a(generatoraccess);
+            return new PersistentStructureLegacy.a(persistentcollection);
 
         case THE_END:
-            return new PersistentStructureLegacy.c(generatoraccess);
+            return new PersistentStructureLegacy.c(persistentcollection);
 
         default:
-            throw new RuntimeException(String.format("Unknown dimension type : %s", new Object[] { generatoraccess.o().getDimensionManager()}));
+            throw new RuntimeException(String.format("Unknown dimension type : %s", new Object[] { dimensionmanager}));
         }
     }
 
@@ -261,8 +256,8 @@ public abstract class PersistentStructureLegacy {
 
         private static final String[] a = new String[] { "EndCity"};
 
-        public c(GeneratorAccess generatoraccess) {
-            super(generatoraccess);
+        public c(@Nullable PersistentCollection persistentcollection) {
+            super(persistentcollection);
         }
 
         protected String[] a() {
@@ -278,8 +273,8 @@ public abstract class PersistentStructureLegacy {
 
         private static final String[] a = new String[] { "Fortress"};
 
-        public a(GeneratorAccess generatoraccess) {
-            super(generatoraccess);
+        public a(@Nullable PersistentCollection persistentcollection) {
+            super(persistentcollection);
         }
 
         protected String[] a() {
@@ -296,8 +291,8 @@ public abstract class PersistentStructureLegacy {
         private static final String[] a = new String[] { "Monument", "Stronghold", "Village", "Mineshaft", "Temple", "Mansion"};
         private static final String[] b = new String[] { "Village", "Mineshaft", "Mansion", "Igloo", "Desert_Pyramid", "Jungle_Pyramid", "Swamp_Hut", "Stronghold", "Monument"};
 
-        public b(GeneratorAccess generatoraccess) {
-            super(generatoraccess);
+        public b(@Nullable PersistentCollection persistentcollection) {
+            super(persistentcollection);
         }
 
         protected String[] a() {

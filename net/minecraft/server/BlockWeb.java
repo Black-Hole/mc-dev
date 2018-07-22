@@ -20,7 +20,7 @@ public class BlockWeb extends Block {
         return Items.STRING;
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 

@@ -34,7 +34,7 @@ public class ItemEnderEye extends Item {
                 }
 
                 world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.b().a(world, blockposition);
+                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.d().a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
                     BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().a(-3, 0, -3);

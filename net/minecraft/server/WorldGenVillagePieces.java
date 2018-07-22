@@ -183,7 +183,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageLight(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static StructureBoundingBox a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection) {
@@ -199,7 +199,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 4 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 4 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.OAK_FENCE.getBlockData());
@@ -229,7 +229,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageFarm2(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = WorldGenVillagePieces.WorldGenVillageFarm.b(random);
             this.b = WorldGenVillagePieces.WorldGenVillageFarm.b(random);
             this.c = WorldGenVillagePieces.WorldGenVillageFarm.b(random);
@@ -281,7 +281,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 4 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 4 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.OAK_LOG.getBlockData());
@@ -303,29 +303,29 @@ public class WorldGenVillagePieces {
 
             for (i = 1; i <= 7; ++i) {
                 BlockCrops blockcrops = (BlockCrops) this.a.getBlock();
-                int j = blockcrops.d();
+                int j = blockcrops.e();
                 int k = j / 3;
 
-                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 1, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 2, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 1, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 2, 1, i, structureboundingbox);
                 blockcrops = (BlockCrops) this.b.getBlock();
-                int l = blockcrops.d();
+                int l = blockcrops.e();
                 int i1 = l / 3;
 
-                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 4, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 5, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 4, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 5, 1, i, structureboundingbox);
                 blockcrops = (BlockCrops) this.c.getBlock();
-                int j1 = blockcrops.d();
+                int j1 = blockcrops.e();
                 int k1 = j1 / 3;
 
-                this.a(generatoraccess, (IBlockData) this.c.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k1, j1))), 7, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.c.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k1, j1))), 8, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.c.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k1, j1))), 7, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.c.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k1, j1))), 8, 1, i, structureboundingbox);
                 blockcrops = (BlockCrops) this.d.getBlock();
-                int l1 = blockcrops.d();
+                int l1 = blockcrops.e();
                 int i2 = l1 / 3;
 
-                this.a(generatoraccess, (IBlockData) this.d.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i2, l1))), 10, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.d.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i2, l1))), 11, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.d.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i2, l1))), 10, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.d.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i2, l1))), 11, 1, i, structureboundingbox);
             }
 
             for (i = 0; i < 9; ++i) {
@@ -349,7 +349,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageFarm(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = b(random);
             this.b = b(random);
         }
@@ -397,7 +397,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 4 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 4 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.OAK_LOG.getBlockData());
@@ -415,17 +415,17 @@ public class WorldGenVillagePieces {
 
             for (i = 1; i <= 7; ++i) {
                 BlockCrops blockcrops = (BlockCrops) this.a.getBlock();
-                int j = blockcrops.d();
+                int j = blockcrops.e();
                 int k = j / 3;
 
-                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 1, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 2, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 1, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.a.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, k, j))), 2, 1, i, structureboundingbox);
                 blockcrops = (BlockCrops) this.b.getBlock();
-                int l = blockcrops.d();
+                int l = blockcrops.e();
                 int i1 = l / 3;
 
-                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 4, 1, i, structureboundingbox);
-                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.b(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 5, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 4, 1, i, structureboundingbox);
+                this.a(generatoraccess, (IBlockData) this.b.set(blockcrops.d(), Integer.valueOf(MathHelper.nextInt(random, i1, l))), 5, 1, i, structureboundingbox);
             }
 
             for (i = 0; i < 9; ++i) {
@@ -448,7 +448,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageBlacksmith(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static WorldGenVillagePieces.WorldGenVillageBlacksmith a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -474,7 +474,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 6 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 6 - 1, 0);
             }
 
             IBlockData iblockdata = Blocks.COBBLESTONE.getBlockData();
@@ -559,7 +559,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageHouse2(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static WorldGenVillagePieces.WorldGenVillageHouse2 a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -575,7 +575,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 7 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 7 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -709,7 +709,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageButcher(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static WorldGenVillagePieces.WorldGenVillageButcher a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -725,7 +725,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 7 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 7 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -837,7 +837,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageHut(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = random.nextBoolean();
             this.b = random.nextInt(3);
         }
@@ -867,7 +867,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 6 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 6 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -939,7 +939,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageLibrary(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static WorldGenVillagePieces.WorldGenVillageLibrary a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -955,7 +955,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 9 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 9 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -1058,7 +1058,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageTemple(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         public static WorldGenVillagePieces.WorldGenVillageTemple a(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
@@ -1074,7 +1074,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 12 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 12 - 1, 0);
             }
 
             IBlockData iblockdata = Blocks.COBBLESTONE.getBlockData();
@@ -1171,7 +1171,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageHouse(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = random.nextBoolean();
         }
 
@@ -1198,7 +1198,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 6 - 1, 0);
+                this.n.a(0, this.f - this.n.e + 6 - 1, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -1295,7 +1295,7 @@ public class WorldGenVillagePieces {
         public WorldGenVillageRoad(WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece, int i, Random random, StructureBoundingBox structureboundingbox, EnumDirection enumdirection) {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
             this.a = Math.max(structureboundingbox.c(), structureboundingbox.e());
         }
 
@@ -1318,7 +1318,7 @@ public class WorldGenVillagePieces {
             for (i = random.nextInt(5); i < this.a - 8; i += 2 + random.nextInt(5)) {
                 structurepiece1 = this.a((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, 0, i);
                 if (structurepiece1 != null) {
-                    i += Math.max(structurepiece1.m.c(), structurepiece1.m.e());
+                    i += Math.max(structurepiece1.n.c(), structurepiece1.n.e());
                     flag = true;
                 }
             }
@@ -1326,7 +1326,7 @@ public class WorldGenVillagePieces {
             for (i = random.nextInt(5); i < this.a - 8; i += 2 + random.nextInt(5)) {
                 structurepiece1 = this.b((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, 0, i);
                 if (structurepiece1 != null) {
-                    i += Math.max(structurepiece1.m.c(), structurepiece1.m.e());
+                    i += Math.max(structurepiece1.n.c(), structurepiece1.n.e());
                     flag = true;
                 }
             }
@@ -1337,19 +1337,19 @@ public class WorldGenVillagePieces {
                 switch (enumdirection) {
                 case NORTH:
                 default:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a - 1, this.m.b, this.m.c, EnumDirection.WEST, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a - 1, this.n.b, this.n.c, EnumDirection.WEST, this.e());
                     break;
 
                 case SOUTH:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a - 1, this.m.b, this.m.f - 2, EnumDirection.WEST, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a - 1, this.n.b, this.n.f - 2, EnumDirection.WEST, this.e());
                     break;
 
                 case WEST:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a, this.m.b, this.m.c - 1, EnumDirection.NORTH, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a, this.n.b, this.n.c - 1, EnumDirection.NORTH, this.e());
                     break;
 
                 case EAST:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.d - 2, this.m.b, this.m.c - 1, EnumDirection.NORTH, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.d - 2, this.n.b, this.n.c - 1, EnumDirection.NORTH, this.e());
                 }
             }
 
@@ -1357,19 +1357,19 @@ public class WorldGenVillagePieces {
                 switch (enumdirection) {
                 case NORTH:
                 default:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.d + 1, this.m.b, this.m.c, EnumDirection.EAST, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.d + 1, this.n.b, this.n.c, EnumDirection.EAST, this.e());
                     break;
 
                 case SOUTH:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.d + 1, this.m.b, this.m.f - 2, EnumDirection.EAST, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.d + 1, this.n.b, this.n.f - 2, EnumDirection.EAST, this.e());
                     break;
 
                 case WEST:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a, this.m.b, this.m.f + 1, EnumDirection.SOUTH, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a, this.n.b, this.n.f + 1, EnumDirection.SOUTH, this.e());
                     break;
 
                 case EAST:
-                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.d - 2, this.m.b, this.m.f + 1, EnumDirection.SOUTH, this.e());
+                    WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.d - 2, this.n.b, this.n.f + 1, EnumDirection.SOUTH, this.e());
                 }
             }
 
@@ -1394,11 +1394,11 @@ public class WorldGenVillagePieces {
             IBlockData iblockdata3 = this.a(Blocks.COBBLESTONE.getBlockData());
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-            this.m.b = 1000;
-            this.m.e = 0;
+            this.n.b = 1000;
+            this.n.e = 0;
 
-            for (int i = this.m.a; i <= this.m.d; ++i) {
-                for (int j = this.m.c; j <= this.m.f; ++j) {
+            for (int i = this.n.a; i <= this.n.d; ++i) {
+                for (int j = this.n.c; j <= this.n.f; ++j) {
                     blockposition_mutableblockposition.c(i, 64, j);
                     if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
                         int k = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition.getX(), blockposition_mutableblockposition.getZ());
@@ -1431,8 +1431,8 @@ public class WorldGenVillagePieces {
                             blockposition_mutableblockposition.c(EnumDirection.DOWN);
                         }
 
-                        this.m.b = Math.min(this.m.b, blockposition_mutableblockposition.getY());
-                        this.m.e = Math.max(this.m.e, blockposition_mutableblockposition.getY());
+                        this.n.b = Math.min(this.n.b, blockposition_mutableblockposition.getY());
+                        this.n.e = Math.max(this.n.e, blockposition_mutableblockposition.getY());
                     }
                 }
             }
@@ -1478,18 +1478,18 @@ public class WorldGenVillagePieces {
             super(worldgenvillagepieces_worldgenvillagestartpiece, i);
             this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
             if (this.f().k() == EnumDirection.EnumAxis.Z) {
-                this.m = new StructureBoundingBox(j, 64, k, j + 6 - 1, 78, k + 6 - 1);
+                this.n = new StructureBoundingBox(j, 64, k, j + 6 - 1, 78, k + 6 - 1);
             } else {
-                this.m = new StructureBoundingBox(j, 64, k, j + 6 - 1, 78, k + 6 - 1);
+                this.n = new StructureBoundingBox(j, 64, k, j + 6 - 1, 78, k + 6 - 1);
             }
 
         }
 
         public void a(StructurePiece structurepiece, List<StructurePiece> list, Random random) {
-            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a - 1, this.m.e - 4, this.m.c + 1, EnumDirection.WEST, this.e());
-            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.d + 1, this.m.e - 4, this.m.c + 1, EnumDirection.EAST, this.e());
-            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a + 1, this.m.e - 4, this.m.c - 1, EnumDirection.NORTH, this.e());
-            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.m.a + 1, this.m.e - 4, this.m.f + 1, EnumDirection.SOUTH, this.e());
+            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a - 1, this.n.e - 4, this.n.c + 1, EnumDirection.WEST, this.e());
+            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.d + 1, this.n.e - 4, this.n.c + 1, EnumDirection.EAST, this.e());
+            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a + 1, this.n.e - 4, this.n.c - 1, EnumDirection.NORTH, this.e());
+            WorldGenVillagePieces.e((WorldGenVillagePieces.WorldGenVillageStartPiece) structurepiece, list, random, this.n.a + 1, this.n.e - 4, this.n.f + 1, EnumDirection.SOUTH, this.e());
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
@@ -1499,7 +1499,7 @@ public class WorldGenVillagePieces {
                     return true;
                 }
 
-                this.m.a(0, this.f - this.m.e + 3, 0);
+                this.n.a(0, this.f - this.n.e + 3, 0);
             }
 
             IBlockData iblockdata = this.a(Blocks.COBBLESTONE.getBlockData());
@@ -1577,16 +1577,16 @@ public class WorldGenVillagePieces {
                 switch (enumdirection) {
                 case NORTH:
                 default:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a - 1, this.m.b + i, this.m.c + j, EnumDirection.WEST, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e());
 
                 case SOUTH:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a - 1, this.m.b + i, this.m.c + j, EnumDirection.WEST, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e());
 
                 case WEST:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a + j, this.m.b + i, this.m.c - 1, EnumDirection.NORTH, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e());
 
                 case EAST:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a + j, this.m.b + i, this.m.c - 1, EnumDirection.NORTH, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e());
                 }
             } else {
                 return null;
@@ -1601,16 +1601,16 @@ public class WorldGenVillagePieces {
                 switch (enumdirection) {
                 case NORTH:
                 default:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.d + 1, this.m.b + i, this.m.c + j, EnumDirection.EAST, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e());
 
                 case SOUTH:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.d + 1, this.m.b + i, this.m.c + j, EnumDirection.EAST, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e());
 
                 case WEST:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a + j, this.m.b + i, this.m.f + 1, EnumDirection.SOUTH, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e());
 
                 case EAST:
-                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.m.a + j, this.m.b + i, this.m.f + 1, EnumDirection.SOUTH, this.e());
+                    return WorldGenVillagePieces.d(worldgenvillagepieces_worldgenvillagestartpiece, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e());
                 }
             } else {
                 return null;
@@ -1622,8 +1622,8 @@ public class WorldGenVillagePieces {
             int j = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-            for (int k = this.m.c; k <= this.m.f; ++k) {
-                for (int l = this.m.a; l <= this.m.d; ++l) {
+            for (int k = this.n.c; k <= this.n.f; ++k) {
+                for (int l = this.n.a; l <= this.n.d; ++l) {
                     blockposition_mutableblockposition.c(l, 64, k);
                     if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
                         i += generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition).getY();
@@ -1661,7 +1661,7 @@ public class WorldGenVillagePieces {
                         entityzombievillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
                         entityzombievillager.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityzombievillager)), (GroupDataEntity) null, (NBTTagCompound) null);
                         entityzombievillager.setProfession(this.c(i1, 0));
-                        entityzombievillager.di();
+                        entityzombievillager.dj();
                         generatoraccess.addEntity(entityzombievillager);
                     } else {
                         EntityVillager entityvillager = new EntityVillager(generatoraccess.getMinecraftWorld());
@@ -1684,7 +1684,7 @@ public class WorldGenVillagePieces {
             Block block = iblockdata.getBlock();
 
             if (this.g == WorldGenVillagePieces.Material.SANDSTONE) {
-                if (block.a(TagsBlock.m) || block == Blocks.COBBLESTONE) {
+                if (block.a(TagsBlock.n) || block == Blocks.COBBLESTONE) {
                     return Blocks.SANDSTONE.getBlockData();
                 }
 
@@ -1708,7 +1708,7 @@ public class WorldGenVillagePieces {
                     return Blocks.BIRCH_PRESSURE_PLATE.getBlockData();
                 }
             } else if (this.g == WorldGenVillagePieces.Material.SPRUCE) {
-                if (block.a(TagsBlock.m)) {
+                if (block.a(TagsBlock.n)) {
                     return (IBlockData) Blocks.SPRUCE_LOG.getBlockData().set(BlockLogAbstract.AXIS, iblockdata.get(BlockLogAbstract.AXIS));
                 }
 
@@ -1728,7 +1728,7 @@ public class WorldGenVillagePieces {
                     return Blocks.SPRUCE_PRESSURE_PLATE.getBlockData();
                 }
             } else if (this.g == WorldGenVillagePieces.Material.ACACIA) {
-                if (block.a(TagsBlock.m)) {
+                if (block.a(TagsBlock.n)) {
                     return (IBlockData) Blocks.ACACIA_LOG.getBlockData().set(BlockLogAbstract.AXIS, iblockdata.get(BlockLogAbstract.AXIS));
                 }
 

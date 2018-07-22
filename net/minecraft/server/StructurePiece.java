@@ -9,30 +9,30 @@ import javax.annotation.Nullable;
 
 public abstract class StructurePiece {
 
-    protected static final IBlockData l = Blocks.CAVE_AIR.getBlockData();
-    protected StructureBoundingBox m;
+    protected static final IBlockData m = Blocks.CAVE_AIR.getBlockData();
+    protected StructureBoundingBox n;
     @Nullable
     private EnumDirection a;
     private EnumBlockMirror b;
     private EnumBlockRotation c;
-    protected int n;
+    protected int o;
     private static final Set<Block> d = ImmutableSet.builder().add(Blocks.NETHER_BRICK_FENCE).add(Blocks.TORCH).add(Blocks.WALL_TORCH).add(Blocks.OAK_FENCE).add(Blocks.SPRUCE_FENCE).add(Blocks.DARK_OAK_FENCE).add(Blocks.ACACIA_FENCE).add(Blocks.BIRCH_FENCE).add(Blocks.JUNGLE_FENCE).add(Blocks.LADDER).add(Blocks.IRON_BARS).build();
 
     public StructurePiece() {}
 
     protected StructurePiece(int i) {
-        this.n = i;
+        this.o = i;
     }
 
     public final NBTTagCompound c() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("id", WorldGenFactory.a(this));
-        nbttagcompound.set("BB", this.m.g());
+        nbttagcompound.set("BB", this.n.g());
         EnumDirection enumdirection = this.f();
 
         nbttagcompound.setInt("O", enumdirection == null ? -1 : enumdirection.get2DRotationValue());
-        nbttagcompound.setInt("GD", this.n);
+        nbttagcompound.setInt("GD", this.o);
         this.a(nbttagcompound);
         return nbttagcompound;
     }
@@ -41,13 +41,13 @@ public abstract class StructurePiece {
 
     public void a(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound) {
         if (nbttagcompound.hasKey("BB")) {
-            this.m = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
+            this.n = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
         }
 
         int i = nbttagcompound.getInt("O");
 
         this.a(i == -1 ? null : EnumDirection.fromType2(i));
-        this.n = nbttagcompound.getInt("GD");
+        this.o = nbttagcompound.getInt("GD");
         this.a(nbttagcompound, generatoraccess.getDataManager().h());
     }
 
@@ -58,11 +58,11 @@ public abstract class StructurePiece {
     public abstract boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair);
 
     public StructureBoundingBox d() {
-        return this.m;
+        return this.n;
     }
 
     public int e() {
-        return this.n;
+        return this.o;
     }
 
     public static StructurePiece a(List<StructurePiece> list, StructureBoundingBox structureboundingbox) {
@@ -82,12 +82,12 @@ public abstract class StructurePiece {
     }
 
     protected boolean a(IBlockAccess iblockaccess, StructureBoundingBox structureboundingbox) {
-        int i = Math.max(this.m.a - 1, structureboundingbox.a);
-        int j = Math.max(this.m.b - 1, structureboundingbox.b);
-        int k = Math.max(this.m.c - 1, structureboundingbox.c);
-        int l = Math.min(this.m.d + 1, structureboundingbox.d);
-        int i1 = Math.min(this.m.e + 1, structureboundingbox.e);
-        int j1 = Math.min(this.m.f + 1, structureboundingbox.f);
+        int i = Math.max(this.n.a - 1, structureboundingbox.a);
+        int j = Math.max(this.n.b - 1, structureboundingbox.b);
+        int k = Math.max(this.n.c - 1, structureboundingbox.c);
+        int l = Math.min(this.n.d + 1, structureboundingbox.d);
+        int i1 = Math.min(this.n.e + 1, structureboundingbox.e);
+        int j1 = Math.min(this.n.f + 1, structureboundingbox.f);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         int k1;
@@ -141,13 +141,13 @@ public abstract class StructurePiece {
             switch (enumdirection) {
             case NORTH:
             case SOUTH:
-                return this.m.a + i;
+                return this.n.a + i;
 
             case WEST:
-                return this.m.d - j;
+                return this.n.d - j;
 
             case EAST:
-                return this.m.a + j;
+                return this.n.a + j;
 
             default:
                 return i;
@@ -156,7 +156,7 @@ public abstract class StructurePiece {
     }
 
     protected int d(int i) {
-        return this.f() == null ? i : i + this.m.b;
+        return this.f() == null ? i : i + this.n.b;
     }
 
     protected int b(int i, int j) {
@@ -167,14 +167,14 @@ public abstract class StructurePiece {
         } else {
             switch (enumdirection) {
             case NORTH:
-                return this.m.f - j;
+                return this.n.f - j;
 
             case SOUTH:
-                return this.m.c + j;
+                return this.n.c + j;
 
             case WEST:
             case EAST:
-                return this.m.c + i;
+                return this.n.c + i;
 
             default:
                 return j;
@@ -443,7 +443,7 @@ public abstract class StructurePiece {
     }
 
     public void a(int i, int j, int k) {
-        this.m.a(i, j, k);
+        this.n.a(i, j, k);
     }
 
     @Nullable

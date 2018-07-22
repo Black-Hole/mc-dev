@@ -10,7 +10,7 @@ public class BlockCarpet extends Block {
         this.color = enumcolor;
     }
 
-    public EnumColor b() {
+    public EnumColor d() {
         return this.color;
     }
 

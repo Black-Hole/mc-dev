@@ -5,7 +5,7 @@ import java.io.IOException;
 public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPlayOut> {
 
     private String a;
-    private String b;
+    private IChatBaseComponent b;
     private IScoreboardCriteria.EnumScoreboardHealthDisplay c;
     private int d;
 
@@ -22,7 +22,7 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
         this.a = packetdataserializer.e(16);
         this.d = packetdataserializer.readByte();
         if (this.d == 0 || this.d == 2) {
-            this.b = packetdataserializer.e(32);
+            this.b = packetdataserializer.f();
             this.c = (IScoreboardCriteria.EnumScoreboardHealthDisplay) packetdataserializer.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.class);
         }
 

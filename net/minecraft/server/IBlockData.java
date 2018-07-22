@@ -29,7 +29,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     Block getBlock();
 
     default Material getMaterial() {
-        return this.getBlock().m(this);
+        return this.getBlock().n(this);
     }
 
     default boolean a(Entity entity) {
@@ -79,7 +79,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     }
 
     default int e() {
-        return this.getBlock().l(this);
+        return this.getBlock().m(this);
     }
 
     default boolean isAir() {
@@ -111,7 +111,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     }
 
     default boolean k() {
-        return this.getBlock().n(this);
+        return this.getBlock().o(this);
     }
 
     default boolean isOccluding() {
@@ -192,7 +192,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     }
 
     default boolean q() {
-        return this.getBlock().q(this);
+        return this.getBlock().r(this);
     }
 
     default Vec3D k(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -252,7 +252,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     }
 
     default boolean r() {
-        return this.getBlock().p(this);
+        return this.getBlock().q(this);
     }
 
     default EnumBlockFaceShape c(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -284,7 +284,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
     }
 
     default Fluid s() {
-        return this.getBlock().t(this);
+        return this.getBlock().h(this);
     }
 
     default boolean t() {

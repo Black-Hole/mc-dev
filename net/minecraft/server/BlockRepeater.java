@@ -19,7 +19,7 @@ public class BlockRepeater extends BlockDiodeAbstract {
         }
     }
 
-    protected int j(IBlockData iblockdata) {
+    protected int k(IBlockData iblockdata) {
         return ((Integer) iblockdata.get(BlockRepeater.DELAY)).intValue() * 2;
     }
 

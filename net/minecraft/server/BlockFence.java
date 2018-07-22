@@ -11,7 +11,7 @@ public class BlockFence extends BlockTall {
     }
 
     public VoxelShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.u[this.j(iblockdata)];
+        return this.u[this.k(iblockdata)];
     }
 
     public boolean a(IBlockData iblockdata) {

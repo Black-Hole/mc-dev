@@ -103,7 +103,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         return SoundEffects.ENTITY_ILLUSIONER_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_ILLUSIONER_DEATH;
     }
 
@@ -111,7 +111,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         return SoundEffects.ENTITY_ILLUSIONER_HURT;
     }
 
-    protected SoundEffect dz() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_ILLUSIONER_CAST_SPELL;
     }
 

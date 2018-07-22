@@ -7,7 +7,7 @@ public class WorldGenDecoratorSolidTopNoise extends WorldGenDecorator<WorldGenDe
     public WorldGenDecoratorSolidTopNoise() {}
 
     public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorNoiseConfiguration worldgendecoratornoiseconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        double d0 = BiomeBase.aK.a((double) blockposition.getX() / worldgendecoratornoiseconfiguration.b, (double) blockposition.getZ() / worldgendecoratornoiseconfiguration.b);
+        double d0 = BiomeBase.aJ.a((double) blockposition.getX() / worldgendecoratornoiseconfiguration.b, (double) blockposition.getZ() / worldgendecoratornoiseconfiguration.b);
         int i = (int) Math.ceil(d0 * (double) worldgendecoratornoiseconfiguration.a);
 
         for (int j = 0; j < i; ++j) {

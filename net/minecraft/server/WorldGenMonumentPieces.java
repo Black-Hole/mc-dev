@@ -1,11 +1,13 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class WorldGenMonumentPieces {
 
@@ -297,17 +299,17 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece8 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        private int o;
+        private int p;
 
         public WorldGenMonumentPiece8() {}
 
         public WorldGenMonumentPiece8(EnumDirection enumdirection, StructureBoundingBox structureboundingbox, int i) {
             super(enumdirection, structureboundingbox);
-            this.o = i & 1;
+            this.p = i & 1;
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            if (this.o == 0) {
+            if (this.p == 0) {
                 int i;
 
                 for (i = 0; i < 4; ++i) {
@@ -356,7 +358,7 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, structureboundingbox, 6, 0, 21, 7, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(generatoraccess, structureboundingbox, 15, 0, 21, 16, 4, 21, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(generatoraccess, structureboundingbox, 11, 2, 16);
-            } else if (this.o == 1) {
+            } else if (this.p == 1) {
                 this.a(generatoraccess, structureboundingbox, 9, 3, 18, 13, 3, 20, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(generatoraccess, structureboundingbox, 9, 0, 18, 9, 2, 18, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
                 this.a(generatoraccess, structureboundingbox, 13, 0, 18, 13, 2, 18, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, WorldGenMonumentPieces.WorldGenMonumentPiece8.b, false);
@@ -492,12 +494,12 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.k.b[EnumDirection.NORTH.a()];
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.k;
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.NORTH.a()];
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker2 = worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker3 = worldgenmonumentpieces_worldgenmonumentstatetracker1.b[EnumDirection.UP.a()];
 
-            if (this.k.a / 25 > 0) {
+            if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 8, worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.DOWN.a()]);
                 this.a(generatoraccess, structureboundingbox, 0, 0, worldgenmonumentpieces_worldgenmonumentstatetracker1.c[EnumDirection.DOWN.a()]);
             }
@@ -607,12 +609,12 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.k.b[EnumDirection.EAST.a()];
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.k;
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.EAST.a()];
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker2 = worldgenmonumentpieces_worldgenmonumentstatetracker1.b[EnumDirection.UP.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker3 = worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()];
 
-            if (this.k.a / 25 > 0) {
+            if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 8, 0, worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.DOWN.a()]);
                 this.a(generatoraccess, structureboundingbox, 0, 0, worldgenmonumentpieces_worldgenmonumentstatetracker1.c[EnumDirection.DOWN.a()]);
             }
@@ -722,10 +724,10 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.k.b[EnumDirection.NORTH.a()];
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.k;
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.NORTH.a()];
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
 
-            if (this.k.a / 25 > 0) {
+            if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 8, worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.DOWN.a()]);
                 this.a(generatoraccess, structureboundingbox, 0, 0, worldgenmonumentpieces_worldgenmonumentstatetracker1.c[EnumDirection.DOWN.a()]);
             }
@@ -811,10 +813,10 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.k.b[EnumDirection.EAST.a()];
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.k;
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.EAST.a()];
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
 
-            if (this.k.a / 25 > 0) {
+            if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 8, 0, worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.DOWN.a()]);
                 this.a(generatoraccess, structureboundingbox, 0, 0, worldgenmonumentpieces_worldgenmonumentstatetracker1.c[EnumDirection.DOWN.a()]);
             }
@@ -881,11 +883,11 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            if (this.k.a / 25 > 0) {
-                this.a(generatoraccess, structureboundingbox, 0, 0, this.k.c[EnumDirection.DOWN.a()]);
+            if (this.l.a / 25 > 0) {
+                this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
             }
 
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.k.b[EnumDirection.UP.a()];
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.UP.a()];
 
             if (worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()] == null) {
                 this.a(generatoraccess, structureboundingbox, 1, 8, 1, 6, 8, 6, WorldGenMonumentPieces.WorldGenMonumentPiece5.a);
@@ -903,7 +905,7 @@ public class WorldGenMonumentPieces {
             this.a(generatoraccess, structureboundingbox, 1, 4, 5, 1, 4, 5, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, false);
             this.a(generatoraccess, structureboundingbox, 5, 4, 5, 5, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, false);
             this.a(generatoraccess, structureboundingbox, 6, 4, 5, 6, 4, 5, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, WorldGenMonumentPieces.WorldGenMonumentPiece5.b, false);
-            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.k;
+            WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
 
             for (int i = 1; i <= 5; i += 4) {
                 byte b0 = 0;
@@ -964,11 +966,11 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            if (this.k.a / 25 > 0) {
-                this.a(generatoraccess, structureboundingbox, 0, 0, this.k.c[EnumDirection.DOWN.a()]);
+            if (this.l.a / 25 > 0) {
+                this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
             }
 
-            if (this.k.b[EnumDirection.UP.a()] == null) {
+            if (this.l.b[EnumDirection.UP.a()] == null) {
                 this.a(generatoraccess, structureboundingbox, 1, 4, 1, 6, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.a);
             }
 
@@ -999,7 +1001,7 @@ public class WorldGenMonumentPieces {
             this.a(generatoraccess, structureboundingbox, 7, 1, 3, 7, 2, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, false);
             this.a(generatoraccess, structureboundingbox, 3, 1, 0, 4, 2, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, false);
             this.a(generatoraccess, structureboundingbox, 3, 1, 7, 4, 2, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.c, false);
-            if (this.k.c[EnumDirection.SOUTH.a()]) {
+            if (this.l.c[EnumDirection.SOUTH.a()]) {
                 this.a(generatoraccess, structureboundingbox, 3, 1, 0, 4, 2, 0);
             }
 
@@ -1009,27 +1011,27 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPieceSimple extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        private int o;
+        private int p;
 
         public WorldGenMonumentPieceSimple() {}
 
         public WorldGenMonumentPieceSimple(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
-            this.o = random.nextInt(3);
+            this.p = random.nextInt(3);
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            if (this.k.a / 25 > 0) {
-                this.a(generatoraccess, structureboundingbox, 0, 0, this.k.c[EnumDirection.DOWN.a()]);
+            if (this.l.a / 25 > 0) {
+                this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
             }
 
-            if (this.k.b[EnumDirection.UP.a()] == null) {
+            if (this.l.b[EnumDirection.UP.a()] == null) {
                 this.a(generatoraccess, structureboundingbox, 1, 4, 1, 6, 4, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a);
             }
 
-            boolean flag = this.o != 0 && random.nextBoolean() && !this.k.c[EnumDirection.DOWN.a()] && !this.k.c[EnumDirection.UP.a()] && this.k.c() > 1;
+            boolean flag = this.p != 0 && random.nextBoolean() && !this.l.c[EnumDirection.DOWN.a()] && !this.l.c[EnumDirection.UP.a()] && this.l.c() > 1;
 
-            if (this.o == 0) {
+            if (this.p == 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 1, 0, 2, 1, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 0, 3, 0, 2, 3, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 0, 2, 0, 0, 2, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
@@ -1050,7 +1052,7 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, structureboundingbox, 7, 2, 5, 7, 2, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                 this.a(generatoraccess, structureboundingbox, 5, 2, 7, 6, 2, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                 this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.e, 6, 2, 6, structureboundingbox);
-                if (this.k.c[EnumDirection.SOUTH.a()]) {
+                if (this.l.c[EnumDirection.SOUTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 3, 3, 0, 4, 3, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 } else {
                     this.a(generatoraccess, structureboundingbox, 3, 3, 0, 4, 3, 1, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1058,7 +1060,7 @@ public class WorldGenMonumentPieces {
                     this.a(generatoraccess, structureboundingbox, 3, 1, 0, 4, 1, 1, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (this.k.c[EnumDirection.NORTH.a()]) {
+                if (this.l.c[EnumDirection.NORTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 3, 3, 7, 4, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 } else {
                     this.a(generatoraccess, structureboundingbox, 3, 3, 6, 4, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1066,7 +1068,7 @@ public class WorldGenMonumentPieces {
                     this.a(generatoraccess, structureboundingbox, 3, 1, 6, 4, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (this.k.c[EnumDirection.WEST.a()]) {
+                if (this.l.c[EnumDirection.WEST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 0, 3, 3, 0, 3, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 } else {
                     this.a(generatoraccess, structureboundingbox, 0, 3, 3, 1, 3, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1074,14 +1076,14 @@ public class WorldGenMonumentPieces {
                     this.a(generatoraccess, structureboundingbox, 0, 1, 3, 1, 1, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (this.k.c[EnumDirection.EAST.a()]) {
+                if (this.l.c[EnumDirection.EAST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 7, 3, 3, 7, 3, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 } else {
                     this.a(generatoraccess, structureboundingbox, 6, 3, 3, 7, 3, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                     this.a(generatoraccess, structureboundingbox, 7, 2, 3, 7, 2, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(generatoraccess, structureboundingbox, 6, 1, 3, 7, 1, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
-            } else if (this.o == 1) {
+            } else if (this.p == 1) {
                 this.a(generatoraccess, structureboundingbox, 2, 1, 2, 2, 3, 2, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 2, 1, 5, 2, 3, 5, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 5, 1, 5, 5, 3, 5, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1106,30 +1108,30 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, 7, 2, 6, structureboundingbox);
                 this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, 6, 2, 0, structureboundingbox);
                 this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, 7, 2, 1, structureboundingbox);
-                if (!this.k.c[EnumDirection.SOUTH.a()]) {
+                if (!this.l.c[EnumDirection.SOUTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 1, 3, 0, 6, 3, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                     this.a(generatoraccess, structureboundingbox, 1, 2, 0, 6, 2, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(generatoraccess, structureboundingbox, 1, 1, 0, 6, 1, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (!this.k.c[EnumDirection.NORTH.a()]) {
+                if (!this.l.c[EnumDirection.NORTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 1, 3, 7, 6, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                     this.a(generatoraccess, structureboundingbox, 1, 2, 7, 6, 2, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(generatoraccess, structureboundingbox, 1, 1, 7, 6, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (!this.k.c[EnumDirection.WEST.a()]) {
+                if (!this.l.c[EnumDirection.WEST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 0, 3, 1, 0, 3, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                     this.a(generatoraccess, structureboundingbox, 0, 2, 1, 0, 2, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(generatoraccess, structureboundingbox, 0, 1, 1, 0, 1, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
 
-                if (!this.k.c[EnumDirection.EAST.a()]) {
+                if (!this.l.c[EnumDirection.EAST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 7, 3, 1, 7, 3, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                     this.a(generatoraccess, structureboundingbox, 7, 2, 1, 7, 2, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.a, false);
                     this.a(generatoraccess, structureboundingbox, 7, 1, 1, 7, 1, 6, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 }
-            } else if (this.o == 2) {
+            } else if (this.p == 2) {
                 this.a(generatoraccess, structureboundingbox, 0, 1, 0, 0, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 7, 1, 0, 7, 1, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
                 this.a(generatoraccess, structureboundingbox, 1, 1, 0, 6, 1, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.b, false);
@@ -1146,19 +1148,19 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, structureboundingbox, 7, 1, 3, 7, 2, 4, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, false);
                 this.a(generatoraccess, structureboundingbox, 3, 1, 0, 4, 2, 0, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, false);
                 this.a(generatoraccess, structureboundingbox, 3, 1, 7, 4, 2, 7, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, WorldGenMonumentPieces.WorldGenMonumentPieceSimple.c, false);
-                if (this.k.c[EnumDirection.SOUTH.a()]) {
+                if (this.l.c[EnumDirection.SOUTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 3, 1, 0, 4, 2, 0);
                 }
 
-                if (this.k.c[EnumDirection.NORTH.a()]) {
+                if (this.l.c[EnumDirection.NORTH.a()]) {
                     this.a(generatoraccess, structureboundingbox, 3, 1, 7, 4, 2, 7);
                 }
 
-                if (this.k.c[EnumDirection.WEST.a()]) {
+                if (this.l.c[EnumDirection.WEST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 0, 1, 3, 0, 2, 4);
                 }
 
-                if (this.k.c[EnumDirection.EAST.a()]) {
+                if (this.l.c[EnumDirection.EAST.a()]) {
                     this.a(generatoraccess, structureboundingbox, 7, 1, 3, 7, 2, 4);
                 }
             }
@@ -1191,15 +1193,15 @@ public class WorldGenMonumentPieces {
             this.a(generatoraccess, structureboundingbox, 0, 1, 7, 7, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, false);
             this.a(generatoraccess, structureboundingbox, 1, 1, 0, 2, 3, 0, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, false);
             this.a(generatoraccess, structureboundingbox, 5, 1, 0, 6, 3, 0, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, false);
-            if (this.k.c[EnumDirection.NORTH.a()]) {
+            if (this.l.c[EnumDirection.NORTH.a()]) {
                 this.a(generatoraccess, structureboundingbox, 3, 1, 7, 4, 2, 7);
             }
 
-            if (this.k.c[EnumDirection.WEST.a()]) {
+            if (this.l.c[EnumDirection.WEST.a()]) {
                 this.a(generatoraccess, structureboundingbox, 0, 1, 3, 1, 2, 4);
             }
 
-            if (this.k.c[EnumDirection.EAST.a()]) {
+            if (this.l.c[EnumDirection.EAST.a()]) {
                 this.a(generatoraccess, structureboundingbox, 6, 1, 3, 7, 2, 4);
             }
 
@@ -1209,9 +1211,9 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece1 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        private WorldGenMonumentPieces.WorldGenMonumentStateTracker o;
         private WorldGenMonumentPieces.WorldGenMonumentStateTracker p;
-        private final List<WorldGenMonumentPieces.WorldGenMonumentPiece> q = Lists.newArrayList();
+        private WorldGenMonumentPieces.WorldGenMonumentStateTracker q;
+        private final List<WorldGenMonumentPieces.WorldGenMonumentPiece> r = Lists.newArrayList();
 
         public WorldGenMonumentPiece1() {}
 
@@ -1221,16 +1223,16 @@ public class WorldGenMonumentPieces {
             EnumDirection enumdirection1 = this.f();
 
             if (enumdirection1.k() == EnumDirection.EnumAxis.Z) {
-                this.m = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
+                this.n = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
             } else {
-                this.m = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
+                this.n = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
             }
 
             List list = this.a(random);
 
-            this.o.d = true;
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(enumdirection1, this.o));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.p, random));
+            this.p.d = true;
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(enumdirection1, this.p));
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.q, random));
             ArrayList arraylist = Lists.newArrayList();
 
             arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6(null));
@@ -1252,17 +1254,17 @@ public class WorldGenMonumentPieces {
                         WorldGenMonumentPieces.IWorldGenMonumentPieceSelector worldgenmonumentpieces_iworldgenmonumentpieceselector = (WorldGenMonumentPieces.IWorldGenMonumentPieceSelector) iterator1.next();
 
                         if (worldgenmonumentpieces_iworldgenmonumentpieceselector.a(worldgenmonumentpieces_worldgenmonumentstatetracker)) {
-                            this.q.add(worldgenmonumentpieces_iworldgenmonumentpieceselector.a(enumdirection1, worldgenmonumentpieces_worldgenmonumentstatetracker, random));
+                            this.r.add(worldgenmonumentpieces_iworldgenmonumentpieceselector.a(enumdirection1, worldgenmonumentpieces_worldgenmonumentstatetracker, random));
                             break;
                         }
                     }
                 }
             }
 
-            int k = this.m.b;
+            int k = this.n.b;
             int l = this.a(9, 22);
             int i1 = this.b(9, 22);
-            Iterator iterator2 = this.q.iterator();
+            Iterator iterator2 = this.r.iterator();
 
             while (iterator2.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator2.next();
@@ -1275,9 +1277,9 @@ public class WorldGenMonumentPieces {
             StructureBoundingBox structureboundingbox2 = StructureBoundingBox.a(this.a(22, 22), this.d(13), this.b(22, 22), this.a(35, 35), this.d(17), this.b(35, 35));
             int j1 = random.nextInt();
 
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox, j1++));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox1, j1++));
-            this.q.add(new WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse(enumdirection1, structureboundingbox2));
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox, j1++));
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox1, j1++));
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse(enumdirection1, structureboundingbox2));
         }
 
         private List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> a(Random random) {
@@ -1312,7 +1314,7 @@ public class WorldGenMonumentPieces {
                 }
             }
 
-            this.o = aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.g];
+            this.p = aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.h];
 
             int l;
             int i1;
@@ -1356,22 +1358,22 @@ public class WorldGenMonumentPieces {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(1001);
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker2 = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(1002);
 
-            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.h].a(EnumDirection.UP, worldgenmonumentpieces_worldgenmonumentstatetracker);
-            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.i].a(EnumDirection.SOUTH, worldgenmonumentpieces_worldgenmonumentstatetracker1);
-            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.j].a(EnumDirection.SOUTH, worldgenmonumentpieces_worldgenmonumentstatetracker2);
+            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.i].a(EnumDirection.UP, worldgenmonumentpieces_worldgenmonumentstatetracker);
+            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.j].a(EnumDirection.SOUTH, worldgenmonumentpieces_worldgenmonumentstatetracker1);
+            aworldgenmonumentpieces_worldgenmonumentstatetracker[WorldGenMonumentPieces.WorldGenMonumentPiece1.k].a(EnumDirection.SOUTH, worldgenmonumentpieces_worldgenmonumentstatetracker2);
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker1.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker2.d = true;
-            this.o.e = true;
-            this.p = aworldgenmonumentpieces_worldgenmonumentstatetracker[b(random.nextInt(4), 0, 2)];
-            this.p.d = true;
-            this.p.b[EnumDirection.EAST.a()].d = true;
-            this.p.b[EnumDirection.NORTH.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].d = true;
-            this.p.b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
-            this.p.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
+            this.p.e = true;
+            this.q = aworldgenmonumentpieces_worldgenmonumentstatetracker[b(random.nextInt(4), 0, 2)];
+            this.q.d = true;
+            this.q.b[EnumDirection.EAST.a()].d = true;
+            this.q.b[EnumDirection.NORTH.a()].d = true;
+            this.q.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].d = true;
+            this.q.b[EnumDirection.UP.a()].d = true;
+            this.q.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
+            this.q.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
+            this.q.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
             ArrayList arraylist = Lists.newArrayList();
             WorldGenMonumentPieces.WorldGenMonumentStateTracker[] aworldgenmonumentpieces_worldgenmonumentstatetracker1 = aworldgenmonumentpieces_worldgenmonumentstatetracker;
 
@@ -1421,7 +1423,7 @@ public class WorldGenMonumentPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            int i = Math.max(generatoraccess.getSeaLevel(), 64) - this.m.b;
+            int i = Math.max(generatoraccess.getSeaLevel(), 64) - this.n.b;
 
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 58, i, 58);
             this.a(false, 0, generatoraccess, random, structureboundingbox);
@@ -1468,7 +1470,7 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, structureboundingbox, 0 - j, 0 + j * 2, 58 + j, 57 + j, 23, 58 + j);
             }
 
-            Iterator iterator = this.q.iterator();
+            Iterator iterator = this.r.iterator();
 
             while (iterator.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator.next();
@@ -1827,11 +1829,12 @@ public class WorldGenMonumentPieces {
         protected static final IBlockData d = WorldGenMonumentPieces.WorldGenMonumentPiece.b;
         protected static final IBlockData e = Blocks.SEA_LANTERN.getBlockData();
         protected static final IBlockData f = Blocks.WATER.getBlockData();
-        protected static final int g = b(2, 0, 0);
-        protected static final int h = b(2, 2, 0);
-        protected static final int i = b(0, 1, 0);
-        protected static final int j = b(4, 1, 0);
-        protected WorldGenMonumentPieces.WorldGenMonumentStateTracker k;
+        protected static final Set<Block> g = ImmutableSet.builder().add(Blocks.ICE).add(Blocks.PACKED_ICE).add(Blocks.BLUE_ICE).add(WorldGenMonumentPieces.WorldGenMonumentPiece.f.getBlock()).build();
+        protected static final int h = b(2, 0, 0);
+        protected static final int i = b(2, 2, 0);
+        protected static final int j = b(0, 1, 0);
+        protected static final int k = b(4, 1, 0);
+        protected WorldGenMonumentPieces.WorldGenMonumentStateTracker l;
 
         protected static final int b(int i, int j, int k) {
             return j * 25 + k * 5 + i;
@@ -1848,39 +1851,39 @@ public class WorldGenMonumentPieces {
         public WorldGenMonumentPiece(EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
             super(1);
             this.a(enumdirection);
-            this.m = structureboundingbox;
+            this.n = structureboundingbox;
         }
 
         protected WorldGenMonumentPiece(int i, EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, int j, int k, int l) {
             super(i);
             this.a(enumdirection);
-            this.k = worldgenmonumentpieces_worldgenmonumentstatetracker;
+            this.l = worldgenmonumentpieces_worldgenmonumentstatetracker;
             int i1 = worldgenmonumentpieces_worldgenmonumentstatetracker.a;
             int j1 = i1 % 5;
             int k1 = i1 / 5 % 5;
             int l1 = i1 / 25;
 
             if (enumdirection != EnumDirection.NORTH && enumdirection != EnumDirection.SOUTH) {
-                this.m = new StructureBoundingBox(0, 0, 0, l * 8 - 1, k * 4 - 1, j * 8 - 1);
+                this.n = new StructureBoundingBox(0, 0, 0, l * 8 - 1, k * 4 - 1, j * 8 - 1);
             } else {
-                this.m = new StructureBoundingBox(0, 0, 0, j * 8 - 1, k * 4 - 1, l * 8 - 1);
+                this.n = new StructureBoundingBox(0, 0, 0, j * 8 - 1, k * 4 - 1, l * 8 - 1);
             }
 
             switch (enumdirection) {
             case NORTH:
-                this.m.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
+                this.n.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
                 break;
 
             case SOUTH:
-                this.m.a(j1 * 8, l1 * 4, k1 * 8);
+                this.n.a(j1 * 8, l1 * 4, k1 * 8);
                 break;
 
             case WEST:
-                this.m.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
+                this.n.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
                 break;
 
             default:
-                this.m.a(k1 * 8, l1 * 4, j1 * 8);
+                this.n.a(k1 * 8, l1 * 4, j1 * 8);
             }
 
         }
@@ -1893,10 +1896,14 @@ public class WorldGenMonumentPieces {
             for (int k1 = j; k1 <= i1; ++k1) {
                 for (int l1 = i; l1 <= l; ++l1) {
                     for (int i2 = k; i2 <= j1; ++i2) {
-                        if (this.d(k1) >= generatoraccess.getSeaLevel() && this.a((IBlockAccess) generatoraccess, l1, k1, i2, structureboundingbox) != WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
-                            this.a(generatoraccess, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
-                        } else {
-                            this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);
+                        IBlockData iblockdata = this.a((IBlockAccess) generatoraccess, l1, k1, i2, structureboundingbox);
+
+                        if (!WorldGenMonumentPieces.WorldGenMonumentPiece.g.contains(iblockdata.getBlock())) {
+                            if (this.d(k1) >= generatoraccess.getSeaLevel() && iblockdata != WorldGenMonumentPieces.WorldGenMonumentPiece.f) {
+                                this.a(generatoraccess, Blocks.AIR.getBlockData(), l1, k1, i2, structureboundingbox);
+                            } else {
+                                this.a(generatoraccess, WorldGenMonumentPieces.WorldGenMonumentPiece.f, l1, k1, i2, structureboundingbox);
+                            }
                         }
                     }
                 }

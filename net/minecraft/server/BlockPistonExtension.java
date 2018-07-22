@@ -30,7 +30,7 @@ public class BlockPistonExtension extends BlockDirectional {
         this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
     }
 
-    private VoxelShape j(IBlockData iblockdata) {
+    private VoxelShape k(IBlockData iblockdata) {
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
         case DOWN:
         default:
@@ -54,7 +54,7 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return VoxelShapes.a(this.j(iblockdata), this.w(iblockdata));
+        return VoxelShapes.a(this.k(iblockdata), this.w(iblockdata));
     }
 
     private VoxelShape w(IBlockData iblockdata) {
@@ -82,7 +82,7 @@ public class BlockPistonExtension extends BlockDirectional {
         }
     }
 
-    public boolean q(IBlockData iblockdata) {
+    public boolean r(IBlockData iblockdata) {
         return iblockdata.get(BlockPistonExtension.FACING) == EnumDirection.UP;
     }
 

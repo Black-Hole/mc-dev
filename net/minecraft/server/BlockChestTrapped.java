@@ -10,7 +10,7 @@ public class BlockChestTrapped extends BlockChest {
         return new TileEntityChestTrapped();
     }
 
-    protected Statistic<MinecraftKey> b() {
+    protected Statistic<MinecraftKey> d() {
         return StatisticList.CUSTOM.b(StatisticList.TRIGGER_TRAPPED_CHEST);
     }
 

@@ -49,7 +49,7 @@ public class BlockSponge extends Block {
                 Material material = iblockdata.getMaterial();
 
                 if (fluid.a(TagsFluid.a)) {
-                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).b(world, blockposition2, iblockdata) != FluidTypes.a) {
+                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).a(world, blockposition2, iblockdata) != FluidTypes.a) {
                         ++i;
                         if (j < 6) {
                             linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
@@ -60,7 +60,7 @@ public class BlockSponge extends Block {
                         if (j < 6) {
                             linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
                         }
-                    } else if (material == Material.f || material == Material.h) {
+                    } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
                         iblockdata.a(world, blockposition2, 0);
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;

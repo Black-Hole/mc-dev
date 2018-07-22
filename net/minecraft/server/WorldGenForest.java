@@ -78,7 +78,7 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                                     BlockPosition blockposition1 = new BlockPosition(k, i1, l1);
                                     IBlockData iblockdata = generatoraccess.getType(blockposition1);
 
-                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.E)) {
+                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
                                         this.a(generatoraccess, blockposition1, WorldGenForest.b);
                                     }
                                 }
@@ -89,7 +89,7 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                     for (i1 = 0; i1 < i; ++i1) {
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
 
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.E)) {
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D)) {
                             this.a(set, generatoraccess, blockposition.up(i1), WorldGenForest.a);
                         }
                     }

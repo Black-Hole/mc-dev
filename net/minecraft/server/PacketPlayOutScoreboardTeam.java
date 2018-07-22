@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut> {
 
     private String a = "";
-    private String b = "";
+    private IChatBaseComponent b = new ChatComponentText("");
     private IChatBaseComponent c = new ChatComponentText("");
     private IChatBaseComponent d = new ChatComponentText("");
     private String e;
@@ -38,8 +38,8 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
             this.e = scoreboardteam.getNameTagVisibility().e;
             this.f = scoreboardteam.getCollisionRule().e;
             this.g = scoreboardteam.getColor();
-            this.c = scoreboardteam.e();
-            this.d = scoreboardteam.f();
+            this.c = scoreboardteam.getPrefix();
+            this.d = scoreboardteam.getSuffix();
         }
 
         if (i == 0) {
@@ -68,10 +68,10 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
         this.a = packetdataserializer.e(16);
         this.i = packetdataserializer.readByte();
         if (this.i == 0 || this.i == 2) {
-            this.b = packetdataserializer.e(32);
+            this.b = packetdataserializer.f();
             this.j = packetdataserializer.readByte();
-            this.e = packetdataserializer.e(32);
-            this.f = packetdataserializer.e(32);
+            this.e = packetdataserializer.e(40);
+            this.f = packetdataserializer.e(40);
             this.g = (EnumChatFormat) packetdataserializer.a(EnumChatFormat.class);
             this.c = packetdataserializer.f();
             this.d = packetdataserializer.f();

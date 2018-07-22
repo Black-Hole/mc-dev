@@ -15,7 +15,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return true;
     }
 
-    public EnumColor b() {
+    public EnumColor d() {
         return this.color;
     }
 
@@ -27,7 +27,7 @@ public class BlockStainedGlass extends BlockHalfTransparent {
         return 0;
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 

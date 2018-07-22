@@ -396,7 +396,7 @@ public class EntityFishingHook extends Entity {
             } else if (this.g > 0) {
                 LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a(new BlockPosition(this));
 
-                loottableinfo_a.a((float) this.az + this.owner.dI());
+                loottableinfo_a.a((float) this.az + this.owner.dJ());
                 List list = this.world.getMinecraftServer().aP().a(LootTables.aO).a(this.random, loottableinfo_a.a());
 
                 CriterionTriggers.D.a((EntityPlayer) this.owner, itemstack, this, list);
@@ -416,7 +416,7 @@ public class EntityFishingHook extends Entity {
                     entityitem.motZ = d2 * 0.1D;
                     this.world.addEntity(entityitem);
                     this.owner.world.addEntity(new EntityExperienceOrb(this.owner.world, this.owner.locX, this.owner.locY + 0.5D, this.owner.locZ + 0.5D, this.random.nextInt(6) + 1));
-                    if (itemstack1.getItem().a(TagsItem.G)) {
+                    if (itemstack1.getItem().a(TagsItem.D)) {
                         this.owner.a(StatisticList.FISH_CAUGHT, 1);
                     }
                 }

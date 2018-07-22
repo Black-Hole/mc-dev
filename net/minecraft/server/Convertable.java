@@ -13,6 +13,9 @@ public interface Convertable {
 
     IDataManager a(String s, @Nullable MinecraftServer minecraftserver);
 
+    @Nullable
+    WorldData c(String s);
+
     boolean isConvertable(String s);
 
     boolean convert(String s, IProgressUpdate iprogressupdate);

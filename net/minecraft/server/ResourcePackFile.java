@@ -119,17 +119,21 @@ public class ResourcePackFile extends ResourcePackAbstract {
 
             if (!zipentry.isDirectory() && zipentry.getName().startsWith(s1)) {
                 String s2 = zipentry.getName().substring(s1.length());
-                int j = s2.indexOf(47);
 
-                if (j >= 0) {
-                    String s3 = s2.substring(0, j);
-                    String s4 = s2.substring(j + 1);
+                if (!s2.endsWith(".mcmeta")) {
+                    int j = s2.indexOf(47);
 
-                    if (s4.startsWith(s + "/")) {
-                        String[] astring = s4.substring(s.length() + 2).split("/");
+                    if (j >= 0) {
+                        String s3 = s2.substring(j + 1);
 
-                        if (astring.length >= i + 1 && !s2.endsWith(".mcmeta") && predicate.test(s4)) {
-                            arraylist.add(new MinecraftKey(s3, s4));
+                        if (s3.startsWith(s + "/")) {
+                            String[] astring = s3.substring(s.length() + 2).split("/");
+
+                            if (astring.length >= i + 1 && predicate.test(s3)) {
+                                String s4 = s2.substring(0, j);
+
+                                arraylist.add(new MinecraftKey(s4, s3));
+                            }
                         }
                     }
                 }

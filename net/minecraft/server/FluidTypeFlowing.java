@@ -32,23 +32,31 @@ public abstract class FluidTypeFlowing extends FluidType {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                 blockposition_b.j(blockposition).d(enumdirection);
-                float f = iworldreader.b(blockposition_b).f();
-                float f1 = 0.0F;
+                Fluid fluid1 = iworldreader.b(blockposition_b);
 
-                if (f == 0.0F) {
-                    if (!iworldreader.getType(blockposition_b).getMaterial().isSolid()) {
-                        f = iworldreader.b(blockposition_b.down()).f();
-                        if (f > 0.0F) {
-                            f1 = f - fluid.f();
+                if (this.g(fluid1)) {
+                    float f = fluid1.f();
+                    float f1 = 0.0F;
+
+                    if (f == 0.0F) {
+                        if (!iworldreader.getType(blockposition_b).getMaterial().isSolid()) {
+                            Fluid fluid2 = iworldreader.b(blockposition_b.down());
+
+                            if (this.g(fluid2)) {
+                                f = fluid2.f();
+                                if (f > 0.0F) {
+                                    f1 = fluid.f() - (f - 0.8888889F);
+                                }
+                            }
                         }
+                    } else if (f > 0.0F) {
+                        f1 = fluid.f() - f;
                     }
-                } else if (f > 0.0F) {
-                    f1 = fluid.f() - f;
-                }
 
-                if (f1 != 0.0F) {
-                    d0 += (double) ((float) enumdirection.getAdjacentX() * f1);
-                    d1 += (double) ((float) enumdirection.getAdjacentZ() * f1);
+                    if (f1 != 0.0F) {
+                        d0 += (double) ((float) enumdirection.getAdjacentX() * f1);
+                        d1 += (double) ((float) enumdirection.getAdjacentZ() * f1);
+                    }
                 }
             }
 
@@ -88,6 +96,10 @@ public abstract class FluidTypeFlowing extends FluidType {
         }
 
         return vec3d;
+    }
+
+    private boolean g(Fluid fluid) {
+        return fluid.e() || fluid.c().a((FluidType) this);
     }
 
     protected boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -177,7 +189,7 @@ public abstract class FluidTypeFlowing extends FluidType {
             IBlockData iblockdata2 = iworldreader.getType(blockposition.down());
             Fluid fluid1 = iworldreader.b(blockposition.down());
 
-            if (iblockdata2.getMaterial().isBuildable() || this.g(fluid1)) {
+            if (iblockdata2.getMaterial().isBuildable() || this.h(fluid1)) {
                 return this.a(false);
             }
         }
@@ -266,10 +278,10 @@ public abstract class FluidTypeFlowing extends FluidType {
     }
 
     private boolean a(IBlockAccess iblockaccess, FluidType fluidtype, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection, BlockPosition blockposition1, IBlockData iblockdata1, Fluid fluid) {
-        return !this.g(fluid) && this.a(enumdirection, iblockdata.h(iblockaccess, blockposition), iblockdata1.h(iblockaccess, blockposition1)) && this.a(iblockaccess, blockposition1, iblockdata1, fluidtype);
+        return !this.h(fluid) && this.a(enumdirection, iblockdata.h(iblockaccess, blockposition), iblockdata1.h(iblockaccess, blockposition1)) && this.a(iblockaccess, blockposition1, iblockdata1, fluidtype);
     }
 
-    private boolean g(Fluid fluid) {
+    private boolean h(Fluid fluid) {
         return fluid.c().a((FluidType) this) && fluid.d();
     }
 
@@ -284,7 +296,7 @@ public abstract class FluidTypeFlowing extends FluidType {
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
             Fluid fluid = iworldreader.b(blockposition1);
 
-            if (this.g(fluid)) {
+            if (this.h(fluid)) {
                 ++i;
             }
         }
@@ -336,7 +348,7 @@ public abstract class FluidTypeFlowing extends FluidType {
         } else if (!(block instanceof BlockDoor) && block != Blocks.SIGN && block != Blocks.LADDER && block != Blocks.SUGAR_CANE && block != Blocks.BUBBLE_COLUMN) {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PORTAL && material != Material.b && material != Material.f && material != Material.h ? !material.isSolid() : false;
+            return material != Material.PORTAL && material != Material.STRUCTURE_VOID && material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT ? !material.isSolid() : false;
         } else {
             return false;
         }

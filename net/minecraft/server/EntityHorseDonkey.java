@@ -18,8 +18,8 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
         return SoundEffects.ENTITY_DONKEY_AMBIENT;
     }
 
-    protected SoundEffect cr() {
-        super.cr();
+    protected SoundEffect cs() {
+        super.cs();
         return SoundEffects.ENTITY_DONKEY_DEATH;
     }
 
@@ -29,7 +29,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.eb() && ((EntityHorseAbstract) entityanimal).eb());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ec() && ((EntityHorseAbstract) entityanimal).ec());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

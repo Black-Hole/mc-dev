@@ -7,7 +7,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
 
     private boolean b;
     private static final Predicate<Entity> c = (entity) -> {
-        return entity instanceof EntityLiving && ((EntityLiving) entity).de();
+        return entity instanceof EntityLiving && ((EntityLiving) entity).df();
     };
 
     public EntityVindicator(World world) {
@@ -99,7 +99,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
         return SoundEffects.ENTITY_VINDICATOR_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_VINDICATOR_DEATH;
     }
 

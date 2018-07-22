@@ -97,7 +97,7 @@ public class BlockTurtleEgg extends Block {
         return (double) f < 0.69D && (double) f > 0.65D ? true : world.random.nextInt(500) == 0;
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return true;
     }
 

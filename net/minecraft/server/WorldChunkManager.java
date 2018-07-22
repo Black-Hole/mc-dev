@@ -21,7 +21,7 @@ public abstract class WorldChunkManager implements ITickable {
         return WorldChunkManager.c;
     }
 
-    public void X_() {}
+    public void Y_() {}
 
     @Nullable
     public abstract BiomeBase getBiome(BlockPosition blockposition, @Nullable BiomeBase biomebase);

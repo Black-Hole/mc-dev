@@ -48,11 +48,11 @@ public class EntitySquid extends EntityWaterAnimal {
         return SoundEffects.ENTITY_SQUID_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SQUID_DEATH;
     }
 
-    protected float cC() {
+    protected float cD() {
         return 0.4F;
     }
 
@@ -135,7 +135,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (super.damageEntity(damagesource, f) && this.getLastDamager() != null) {
-            this.dy();
+            this.dz();
             return true;
         } else {
             return false;
@@ -149,8 +149,8 @@ public class EntitySquid extends EntityWaterAnimal {
         return vec3d1;
     }
 
-    private void dy() {
-        this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.cC(), this.cD());
+    private void dz() {
+        this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.cD(), this.cE());
         Vec3D vec3d = this.b(new Vec3D(0.0D, -1.0D, 0.0D)).add(this.locX, this.locY, this.locZ);
 
         for (int i = 0; i < 30; ++i) {
@@ -253,7 +253,7 @@ public class EntitySquid extends EntityWaterAnimal {
         }
 
         public void e() {
-            int i = this.b.ci();
+            int i = this.b.cj();
 
             if (i > 100) {
                 this.b.c(0.0F, 0.0F, 0.0F);

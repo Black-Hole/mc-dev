@@ -15,7 +15,7 @@ public class NavigationGuardian extends NavigationAbstract {
     }
 
     protected boolean b() {
-        return this.p || this.s();
+        return this.p || this.r();
     }
 
     protected Vec3D c() {
@@ -25,14 +25,14 @@ public class NavigationGuardian extends NavigationAbstract {
     public void d() {
         ++this.e;
         if (this.m) {
-            this.m();
+            this.l();
         }
 
-        if (!this.q()) {
+        if (!this.p()) {
             Vec3D vec3d;
 
             if (this.b()) {
-                this.p();
+                this.o();
             } else if (this.c != null && this.c.e() < this.c.d()) {
                 vec3d = this.c.a(this.a, this.c.e());
                 if (MathHelper.floor(this.a.locX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ) == MathHelper.floor(vec3d.z)) {
@@ -40,15 +40,15 @@ public class NavigationGuardian extends NavigationAbstract {
                 }
             }
 
-            this.o();
-            if (!this.q()) {
+            this.n();
+            if (!this.p()) {
                 vec3d = this.c.a((Entity) this.a);
                 this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
             }
         }
     }
 
-    protected void p() {
+    protected void o() {
         if (this.c != null) {
             Vec3D vec3d = this.c();
             float f = this.a.width > 0.75F ? this.a.width / 2.0F : 0.75F - this.a.width / 2.0F;
@@ -79,7 +79,7 @@ public class NavigationGuardian extends NavigationAbstract {
     protected void a(Vec3D vec3d) {
         if (this.e - this.f > 100) {
             if (vec3d.distanceSquared(this.g) < 2.25D) {
-                this.r();
+                this.q();
             }
 
             this.f = this.e;
@@ -95,14 +95,14 @@ public class NavigationGuardian extends NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.cJ() > 0.0F ? d0 / (double) this.a.cJ() * 100.0D : 0.0D;
+                this.k = this.a.cK() > 0.0F ? d0 / (double) this.a.cK() * 100.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 2.0D) {
                 this.h = Vec3D.a;
                 this.i = 0L;
                 this.k = 0.0D;
-                this.r();
+                this.q();
             }
 
             this.j = SystemUtils.b();
@@ -119,4 +119,6 @@ public class NavigationGuardian extends NavigationAbstract {
     public boolean a(BlockPosition blockposition) {
         return !this.b.getType(blockposition).f(this.b, blockposition);
     }
+
+    public void d(boolean flag) {}
 }

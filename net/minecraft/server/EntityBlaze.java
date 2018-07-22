@@ -48,7 +48,7 @@ public class EntityBlaze extends EntityMonster {
         return SoundEffects.ENTITY_BLAZE_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_BLAZE_DEATH;
     }
 
@@ -197,7 +197,7 @@ public class EntityBlaze extends EntityMonster {
 
                 this.a.getControllerLook().a(entityliving, 10.0F, 10.0F);
             } else {
-                this.a.getNavigation().r();
+                this.a.getNavigation().q();
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
             }
 

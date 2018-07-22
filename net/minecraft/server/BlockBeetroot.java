@@ -11,19 +11,19 @@ public class BlockBeetroot extends BlockCrops {
         super(block_info);
     }
 
-    public BlockStateInteger b() {
+    public BlockStateInteger d() {
         return BlockBeetroot.a;
     }
 
-    public int d() {
+    public int e() {
         return 3;
     }
 
-    protected IMaterial e() {
+    protected IMaterial f() {
         return Items.BEETROOT_SEEDS;
     }
 
-    protected IMaterial f() {
+    protected IMaterial g() {
         return Items.BEETROOT;
     }
 
@@ -43,6 +43,6 @@ public class BlockBeetroot extends BlockCrops {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockBeetroot.c[((Integer) iblockdata.get(this.b())).intValue()];
+        return BlockBeetroot.c[((Integer) iblockdata.get(this.d())).intValue()];
     }
 }

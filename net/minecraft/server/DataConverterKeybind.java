@@ -85,10 +85,12 @@ public class DataConverterKeybind extends DataFix {
         int2objectopenhashmap.put(72, "key.keypad.8");
         int2objectopenhashmap.put(73, "key.keypad.9");
         int2objectopenhashmap.put(78, "key.keypad.add");
-        int2objectopenhashmap.put(179, "key.keypad.decimal");
+        int2objectopenhashmap.put(83, "key.keypad.decimal");
+        int2objectopenhashmap.put(181, "key.keypad.divide");
         int2objectopenhashmap.put(156, "key.keypad.enter");
         int2objectopenhashmap.put(141, "key.keypad.equal");
         int2objectopenhashmap.put(55, "key.keypad.multiply");
+        int2objectopenhashmap.put(74, "key.keypad.subtract");
         int2objectopenhashmap.put(38, "key.l");
         int2objectopenhashmap.put(203, "key.left");
         int2objectopenhashmap.put(56, "key.left.alt");
@@ -106,6 +108,7 @@ public class DataConverterKeybind extends DataFix {
         int2objectopenhashmap.put(201, "key.page.up");
         int2objectopenhashmap.put(197, "key.pause");
         int2objectopenhashmap.put(52, "key.period");
+        int2objectopenhashmap.put(183, "key.print.screen");
         int2objectopenhashmap.put(16, "key.q");
         int2objectopenhashmap.put(19, "key.r");
         int2objectopenhashmap.put(205, "key.right");
@@ -157,16 +160,14 @@ public class DataConverterKeybind extends DataFix {
                                 }
 
                                 return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s));
-                            }
-
-                            if (DataConverterKeybind.a.containsKey(i)) {
-                                String s1 = (String) DataConverterKeybind.a.get(i);
+                            } else {
+                                String s1 = (String) DataConverterKeybind.a.getOrDefault(Integer.valueOf(i), "key.unknown");
 
                                 return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s1));
                             }
+                        } else {
+                            return Pair.of(entry.getKey(), entry.getValue());
                         }
-
-                        return Pair.of(entry.getKey(), entry.getValue());
                     }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
                 }).orElse(dynamic);
             });

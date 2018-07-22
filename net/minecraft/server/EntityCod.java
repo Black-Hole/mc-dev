@@ -14,7 +14,7 @@ public class EntityCod extends EntityFish {
         this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
     }
 
-    protected ItemStack dA() {
+    protected ItemStack dB() {
         return new ItemStack(Items.COD_BUCKET);
     }
 
@@ -27,7 +27,7 @@ public class EntityCod extends EntityFish {
         return SoundEffects.ENTITY_COD_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_COD_DEATH;
     }
 
@@ -35,7 +35,7 @@ public class EntityCod extends EntityFish {
         return SoundEffects.ENTITY_COD_HURT;
     }
 
-    protected SoundEffect dC() {
+    protected SoundEffect dD() {
         return SoundEffects.ENTITY_COD_FLOP;
     }
 }

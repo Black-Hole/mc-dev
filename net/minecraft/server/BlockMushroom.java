@@ -58,7 +58,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
         Block block = iblockdata1.getBlock();
 
-        return block != Blocks.MYCELIUM && block != Blocks.PODZOL ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.b(iblockdata1, iworldreader, blockposition1) : true;
+        return block != Blocks.MYCELIUM && block != Blocks.PODZOL ? iworldreader.getLightLevel(blockposition, 0) < 13 && this.b(iblockdata1, (IBlockAccess) iworldreader, blockposition1) : true;
     }
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {

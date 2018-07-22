@@ -25,7 +25,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
 
     public boolean a() {
         if (!this.g) {
-            if (this.a.ci() >= 100) {
+            if (this.a.cj() >= 100) {
                 return false;
             }
 
@@ -53,7 +53,7 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
     }
 
     public boolean b() {
-        return !this.a.getNavigation().q();
+        return !this.a.getNavigation().p();
     }
 
     public void c() {

@@ -46,16 +46,11 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Items.BLAZE_ROD, 2400);
         a(linkedhashmap, (IMaterial) Items.COAL, 1600);
         a(linkedhashmap, (IMaterial) Items.CHARCOAL, 1600);
-        a(linkedhashmap, TagsItem.m, 300);
+        a(linkedhashmap, TagsItem.n, 300);
         a(linkedhashmap, TagsItem.b, 300);
         a(linkedhashmap, TagsItem.h, 300);
         a(linkedhashmap, TagsItem.i, 150);
-        a(linkedhashmap, (IMaterial) Blocks.OAK_TRAPDOOR, 300);
-        a(linkedhashmap, (IMaterial) Blocks.ACACIA_TRAPDOOR, 300);
-        a(linkedhashmap, (IMaterial) Blocks.BIRCH_TRAPDOOR, 300);
-        a(linkedhashmap, (IMaterial) Blocks.DARK_OAK_TRAPDOOR, 300);
-        a(linkedhashmap, (IMaterial) Blocks.JUNGLE_TRAPDOOR, 300);
-        a(linkedhashmap, (IMaterial) Blocks.SPRUCE_TRAPDOOR, 300);
+        a(linkedhashmap, TagsItem.k, 300);
         a(linkedhashmap, TagsItem.j, 300);
         a(linkedhashmap, (IMaterial) Blocks.OAK_FENCE, 300);
         a(linkedhashmap, (IMaterial) Blocks.BIRCH_FENCE, 300);
@@ -76,7 +71,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Blocks.TRAPPED_CHEST, 300);
         a(linkedhashmap, (IMaterial) Blocks.CRAFTING_TABLE, 300);
         a(linkedhashmap, (IMaterial) Blocks.DAYLIGHT_DETECTOR, 300);
-        a(linkedhashmap, TagsItem.t, 300);
+        a(linkedhashmap, TagsItem.u, 300);
         a(linkedhashmap, (IMaterial) Items.BOW, 300);
         a(linkedhashmap, (IMaterial) Items.FISHING_ROD, 300);
         a(linkedhashmap, (IMaterial) Blocks.LADDER, 300);
@@ -87,11 +82,11 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Items.WOODEN_AXE, 200);
         a(linkedhashmap, (IMaterial) Items.WOODEN_PICKAXE, 200);
         a(linkedhashmap, TagsItem.g, 200);
-        a(linkedhashmap, TagsItem.F, 200);
+        a(linkedhashmap, TagsItem.C, 200);
         a(linkedhashmap, TagsItem.a, 100);
         a(linkedhashmap, TagsItem.d, 100);
         a(linkedhashmap, (IMaterial) Items.STICK, 100);
-        a(linkedhashmap, TagsItem.l, 100);
+        a(linkedhashmap, TagsItem.m, 100);
         a(linkedhashmap, (IMaterial) Items.BOWL, 100);
         a(linkedhashmap, TagsItem.f, 67);
         a(linkedhashmap, (IMaterial) Blocks.DRIED_KELP_BLOCK, 4001);
@@ -224,7 +219,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         return this.burnTime > 0;
     }
 
-    public void X_() {
+    public void Y_() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 

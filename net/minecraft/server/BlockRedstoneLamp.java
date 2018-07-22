@@ -12,8 +12,8 @@ public class BlockRedstoneLamp extends Block {
         this.v((IBlockData) this.getBlockData().set(BlockRedstoneLamp.a, Boolean.valueOf(false)));
     }
 
-    public int l(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockRedstoneLamp.a)).booleanValue() ? super.l(iblockdata) : 0;
+    public int m(IBlockData iblockdata) {
+        return ((Boolean) iblockdata.get(BlockRedstoneLamp.a)).booleanValue() ? super.m(iblockdata) : 0;
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {

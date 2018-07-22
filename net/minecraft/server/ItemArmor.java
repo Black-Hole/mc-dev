@@ -33,6 +33,7 @@ public class ItemArmor extends Item {
             entityliving.setSlot(enumitemslot, itemstack1);
             if (entityliving instanceof EntityInsentient) {
                 ((EntityInsentient) entityliving).a(enumitemslot, 2.0F);
+                ((EntityInsentient) entityliving).dj();
             }
 
             return itemstack;

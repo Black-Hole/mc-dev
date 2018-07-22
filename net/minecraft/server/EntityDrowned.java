@@ -50,14 +50,14 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     public boolean a(GeneratorAccess generatoraccess) {
         BiomeBase biomebase = generatoraccess.getBiome(new BlockPosition(this.locX, this.locY, this.locZ));
 
-        return biomebase != Biomes.i && biomebase != Biomes.m ? this.random.nextInt(40) == 0 && this.dF() && super.a(generatoraccess) : this.random.nextInt(15) == 0 && super.a(generatoraccess);
+        return biomebase != Biomes.i && biomebase != Biomes.m ? this.random.nextInt(40) == 0 && this.dG() && super.a(generatoraccess) : this.random.nextInt(15) == 0 && super.a(generatoraccess);
     }
 
-    private boolean dF() {
+    private boolean dG() {
         return this.getBoundingBox().b < (double) (this.world.getSeaLevel() - 5);
     }
 
-    protected boolean dz() {
+    protected boolean dA() {
         return false;
     }
 
@@ -74,11 +74,11 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return this.isInWater() ? SoundEffects.ENTITY_DROWNED_HURT_WATER : SoundEffects.ENTITY_DROWNED_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return this.isInWater() ? SoundEffects.ENTITY_DROWNED_DEATH_WATER : SoundEffects.ENTITY_DROWNED_DEATH;
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect dB() {
         return SoundEffects.ENTITY_DROWNED_STEP;
     }
 
@@ -86,7 +86,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return SoundEffects.ENTITY_DROWNED_SWIM;
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dC() {
         return ItemStack.a;
     }
 
@@ -107,7 +107,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return itemstack1.getItem() == Items.NAUTILUS_SHELL ? false : (itemstack1.getItem() == Items.TRIDENT ? (itemstack.getItem() == Items.TRIDENT ? itemstack.getDamage() < itemstack1.getDamage() : false) : (itemstack.getItem() == Items.TRIDENT ? true : super.a(itemstack, itemstack1, enumitemslot)));
     }
 
-    protected boolean dC() {
+    protected boolean dD() {
         return false;
     }
 
@@ -120,10 +120,10 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     public boolean bw() {
-        return !this.bb();
+        return !this.isSwimming();
     }
 
-    private boolean dI() {
+    private boolean dJ() {
         if (this.bC) {
             return true;
         } else {
@@ -134,7 +134,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     public void a(float f, float f1, float f2) {
-        if (this.cO() && this.isInWater() && this.dI()) {
+        if (this.cP() && this.isInWater() && this.dJ()) {
             this.a(f, f1, f2, 0.01F);
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.8999999761581421D;
@@ -148,19 +148,19 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
     public void as() {
         if (!this.world.isClientSide) {
-            if (this.cO() && this.isInWater() && this.dI()) {
+            if (this.cP() && this.isInWater() && this.dJ()) {
                 this.navigation = this.a;
-                this.g(true);
+                this.setSwimming(true);
             } else {
                 this.navigation = this.b;
-                this.g(false);
+                this.setSwimming(false);
             }
         }
 
     }
 
-    protected boolean dD() {
-        PathEntity pathentity = this.getNavigation().n();
+    protected boolean dE() {
+        PathEntity pathentity = this.getNavigation().m();
 
         if (pathentity != null) {
             PathPoint pathpoint = pathentity.i();
@@ -222,12 +222,12 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         public void a() {
             EntityLiving entityliving = this.i.getGoalTarget();
 
-            if (this.i.dI() && this.i.isInWater()) {
+            if (this.i.dJ() && this.i.isInWater()) {
                 if (entityliving != null && entityliving.locY > this.i.locY || this.i.bC) {
                     this.i.motY += 0.002D;
                 }
 
-                if (this.h != ControllerMove.Operation.MOVE_TO || this.i.getNavigation().q()) {
+                if (this.h != ControllerMove.Operation.MOVE_TO || this.i.getNavigation().p()) {
                     this.i.o(0.0F);
                     return;
                 }
@@ -244,10 +244,10 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
                 this.i.aQ = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.o(this.i.cJ() + (f1 - this.i.cJ()) * 0.125F);
-                this.i.motY += (double) this.i.cJ() * d1 * 0.1D;
-                this.i.motX += (double) this.i.cJ() * d0 * 0.005D;
-                this.i.motZ += (double) this.i.cJ() * d2 * 0.005D;
+                this.i.o(this.i.cK() + (f1 - this.i.cK()) * 0.125F);
+                this.i.motY += (double) this.i.cK() * d1 * 0.1D;
+                this.i.motX += (double) this.i.cK() * d0 * 0.005D;
+                this.i.motZ += (double) this.i.cK() * d2 * 0.005D;
             } else {
                 if (!this.i.onGround) {
                     this.i.motY -= 0.008D;
@@ -313,7 +313,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public boolean b() {
-            return !this.a.getNavigation().q();
+            return !this.a.getNavigation().p();
         }
 
         public void c() {
@@ -393,7 +393,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public void e() {
-            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().q() || this.a.dD())) {
+            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().p() || this.a.dE())) {
                 Vec3D vec3d = RandomPositionGenerator.a(this.a, 4, 8, new Vec3D(this.a.locX, (double) (this.c - 1), this.a.locZ));
 
                 if (vec3d == null) {

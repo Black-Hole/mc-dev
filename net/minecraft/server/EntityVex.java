@@ -90,7 +90,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    public BlockPosition dz() {
+    public BlockPosition dA() {
         return this.c;
     }
 
@@ -117,7 +117,7 @@ public class EntityVex extends EntityMonster {
         this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
     }
 
-    public boolean dA() {
+    public boolean dB() {
         return this.b(1);
     }
 
@@ -138,7 +138,7 @@ public class EntityVex extends EntityMonster {
         return SoundEffects.ENTITY_VEX_AMBIENT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_VEX_DEATH;
     }
 
@@ -198,7 +198,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dz();
+            BlockPosition blockposition = EntityVex.this.dA();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -230,7 +230,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean b() {
-            return EntityVex.this.getControllerMove().b() && EntityVex.this.dA() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.dB() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         public void c() {

@@ -17,7 +17,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     }
 
     public boolean a() {
-        int i = this.e.cf();
+        int i = this.e.cg();
         EntityLiving entityliving = this.e.getLastDamager();
 
         return i != this.b && entityliving != null && this.a(entityliving, false);
@@ -26,7 +26,7 @@ public class PathfinderGoalHurtByTarget extends PathfinderGoalTarget {
     public void c() {
         this.e.setGoalTarget(this.e.getLastDamager());
         this.g = this.e.getGoalTarget();
-        this.b = this.e.cf();
+        this.b = this.e.cg();
         this.h = 300;
         if (this.a) {
             this.g();

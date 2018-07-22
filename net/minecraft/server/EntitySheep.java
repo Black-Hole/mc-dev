@@ -199,7 +199,7 @@ public class EntitySheep extends EntityAnimal {
         return SoundEffects.ENTITY_SHEEP_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_SHEEP_DEATH;
     }
 

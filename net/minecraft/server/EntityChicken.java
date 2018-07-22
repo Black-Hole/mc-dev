@@ -75,7 +75,7 @@ public class EntityChicken extends EntityAnimal {
         return SoundEffects.ENTITY_CHICKEN_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_CHICKEN_DEATH;
     }
 

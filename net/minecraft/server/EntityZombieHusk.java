@@ -24,11 +24,11 @@ public class EntityZombieHusk extends EntityZombie {
         return SoundEffects.ENTITY_HUSK_HURT;
     }
 
-    protected SoundEffect cr() {
+    protected SoundEffect cs() {
         return SoundEffects.ENTITY_HUSK_DEATH;
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect dB() {
         return SoundEffects.ENTITY_HUSK_STEP;
     }
 
@@ -49,16 +49,16 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected boolean dC() {
+    protected boolean dD() {
         return true;
     }
 
-    protected void dE() {
+    protected void dF() {
         this.a(new EntityZombie(this.world));
         this.world.a((EntityHuman) null, 1041, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dC() {
         return ItemStack.a;
     }
 }

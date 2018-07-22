@@ -107,7 +107,7 @@ public abstract class TileEntity {
         return null;
     }
 
-    public NBTTagCompound Z_() {
+    public NBTTagCompound aa_() {
         return this.d(new NBTTagCompound());
     }
 

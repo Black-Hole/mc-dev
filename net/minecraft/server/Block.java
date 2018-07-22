@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +30,7 @@ public class Block implements IMaterial {
     private final boolean p;
     @Nullable
     private String name;
-    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Triple<IBlockData, IBlockData, EnumDirection>>> r = ThreadLocal.withInitial(() -> {
+    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Object>> r = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap(200) {
             protected void rehash(int i) {}
         };
@@ -109,12 +108,12 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public int l(IBlockData iblockdata) {
+    public int m(IBlockData iblockdata) {
         return this.g;
     }
 
     @Deprecated
-    public Material m(IBlockData iblockdata) {
+    public Material n(IBlockData iblockdata) {
         return this.material;
     }
 
@@ -165,7 +164,7 @@ public class Block implements IMaterial {
         return tag.isTagged(this);
     }
 
-    public static IBlockData a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
+    public static IBlockData b(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
         IBlockData iblockdata1 = iblockdata;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         EnumDirection[] aenumdirection = EnumDirection.values();
@@ -231,7 +230,7 @@ public class Block implements IMaterial {
     }
 
     protected static boolean a(Block block) {
-        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block instanceof BlockTrapdoor || block instanceof BlockStainedGlass || block == Blocks.BEACON || block == Blocks.CAULDRON || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.CONDUIT;
+        return block instanceof BlockShulkerBox || block instanceof BlockLeaves || block.a(TagsBlock.E) || block instanceof BlockStainedGlass || block == Blocks.BEACON || block == Blocks.CAULDRON || block == Blocks.GLASS || block == Blocks.GLOWSTONE || block == Blocks.ICE || block == Blocks.SEA_LANTERN || block == Blocks.CONDUIT;
     }
 
     public static boolean b(Block block) {
@@ -239,7 +238,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public boolean n(IBlockData iblockdata) {
+    public boolean o(IBlockData iblockdata) {
         return iblockdata.getMaterial().isSolid() && iblockdata.g();
     }
 
@@ -249,7 +248,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public boolean p(IBlockData iblockdata) {
+    public boolean q(IBlockData iblockdata) {
         return this.material.isSolid() && iblockdata.g();
     }
 
@@ -259,7 +258,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public boolean q(IBlockData iblockdata) {
+    public boolean r(IBlockData iblockdata) {
         return iblockdata.getMaterial().f() && iblockdata.g();
     }
 
@@ -371,10 +370,10 @@ public class Block implements IMaterial {
     }
 
     public boolean d(IBlockData iblockdata) {
-        return this.i();
+        return this.j();
     }
 
-    public boolean i() {
+    public boolean j() {
         return true;
     }
 
@@ -465,7 +464,7 @@ public class Block implements IMaterial {
 
     }
 
-    public float j() {
+    public float k() {
         return this.durability;
     }
 
@@ -531,8 +530,8 @@ public class Block implements IMaterial {
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         entityhuman.b(StatisticList.BLOCK_MINED.b(this));
         entityhuman.applyExhaustion(0.005F);
-        if (this.k() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            ItemStack itemstack1 = this.s(iblockdata);
+        if (this.X_() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
+            ItemStack itemstack1 = this.t(iblockdata);
 
             a(world, blockposition, itemstack1);
         } else {
@@ -543,11 +542,11 @@ public class Block implements IMaterial {
 
     }
 
-    protected boolean k() {
+    protected boolean X_() {
         return this.getBlockData().g() && !this.isTileEntity();
     }
 
-    protected ItemStack s(IBlockData iblockdata) {
+    protected ItemStack t(IBlockData iblockdata) {
         return new ItemStack(this);
     }
 
@@ -596,7 +595,7 @@ public class Block implements IMaterial {
     }
 
     @Deprecated
-    public Fluid t(IBlockData iblockdata) {
+    public Fluid h(IBlockData iblockdata) {
         return FluidTypes.a.i();
     }
 
@@ -803,10 +802,10 @@ public class Block implements IMaterial {
         a("grass", (Block) blocklonggrass);
         a("fern", (Block) blocklonggrass1);
         a("dead_bush", (Block) blockdeadbush);
-        BlockSeaGrass blockseagrass = new BlockSeaGrass(Block.Info.a(Material.h).a().b().a(SoundEffectType.m));
+        BlockSeaGrass blockseagrass = new BlockSeaGrass(Block.Info.a(Material.REPLACEABLE_WATER_PLANT).a().b().a(SoundEffectType.m));
 
         a("seagrass", (Block) blockseagrass);
-        a("tall_seagrass", (Block) (new BlockTallSeaGrass(blockseagrass, Block.Info.a(Material.h).a().b().a(SoundEffectType.m))));
+        a("tall_seagrass", (Block) (new BlockTallSeaGrass(blockseagrass, Block.Info.a(Material.REPLACEABLE_WATER_PLANT).a().b().a(SoundEffectType.m))));
         a("piston", (Block) (new BlockPiston(false, Block.Info.a(Material.PISTON).b(0.5F))));
         a("piston_head", (Block) (new BlockPistonExtension(Block.Info.a(Material.PISTON).b(0.5F))));
         a("white_wool", new Block(Block.Info.a(Material.CLOTH, MaterialMapColor.j).b(0.8F).a(SoundEffectType.g)));
@@ -1241,7 +1240,7 @@ public class Block implements IMaterial {
         a("nether_wart_block", new Block(Block.Info.a(Material.GRASS, MaterialMapColor.D).b(1.0F).a(SoundEffectType.a)));
         a("red_nether_bricks", new Block(Block.Info.a(Material.STONE, MaterialMapColor.K).a(2.0F, 6.0F)));
         a("bone_block", (Block) (new BlockRotatable(Block.Info.a(Material.STONE, MaterialMapColor.d).b(2.0F))));
-        a("structure_void", (Block) (new BlockStructureVoid(Block.Info.a(Material.b).a())));
+        a("structure_void", (Block) (new BlockStructureVoid(Block.Info.a(Material.STRUCTURE_VOID).a())));
         a("observer", (Block) (new BlockObserver(Block.Info.a(Material.STONE).b(3.0F))));
         a("shulker_box", (Block) (new BlockShulkerBox((EnumColor) null, Block.Info.a(Material.STONE, MaterialMapColor.z).b(2.0F).d())));
         a("white_shulker_box", (Block) (new BlockShulkerBox(EnumColor.WHITE, Block.Info.a(Material.STONE, MaterialMapColor.j).b(2.0F).d())));
@@ -1325,10 +1324,10 @@ public class Block implements IMaterial {
         a("green_concrete_powder", (Block) (new BlockConcretePowder(block33, Block.Info.a(Material.SAND, EnumColor.GREEN).b(0.5F).a(SoundEffectType.h))));
         a("red_concrete_powder", (Block) (new BlockConcretePowder(block34, Block.Info.a(Material.SAND, EnumColor.RED).b(0.5F).a(SoundEffectType.h))));
         a("black_concrete_powder", (Block) (new BlockConcretePowder(block35, Block.Info.a(Material.SAND, EnumColor.BLACK).b(0.5F).a(SoundEffectType.h))));
-        BlockKelp blockkelp = new BlockKelp(Block.Info.a(Material.f).a().c().b().a(SoundEffectType.m));
+        BlockKelp blockkelp = new BlockKelp(Block.Info.a(Material.WATER_PLANT).a().c().b().a(SoundEffectType.m));
 
         a("kelp", (Block) blockkelp);
-        a("kelp_plant", (Block) (new BlockKelpPlant(blockkelp, Block.Info.a(Material.f).a().b().a(SoundEffectType.m))));
+        a("kelp_plant", (Block) (new BlockKelpPlant(blockkelp, Block.Info.a(Material.WATER_PLANT).a().b().a(SoundEffectType.m))));
         a("dried_kelp_block", new Block(Block.Info.a(Material.GRASS, MaterialMapColor.B).a(0.5F, 2.5F).a(SoundEffectType.c)));
         a("turtle_egg", (Block) (new BlockTurtleEgg(Block.Info.a(Material.DRAGON_EGG, MaterialMapColor.x).b(0.5F).a(SoundEffectType.e).c())));
         Block block36 = new Block(Block.Info.a(Material.STONE, MaterialMapColor.w).a(1.5F, 6.0F));
@@ -1347,22 +1346,49 @@ public class Block implements IMaterial {
         a("bubble_coral_block", (Block) (new BlockCoral(block38, Block.Info.a(Material.STONE, MaterialMapColor.z).a(1.5F, 6.0F).a(SoundEffectType.n))));
         a("fire_coral_block", (Block) (new BlockCoral(block39, Block.Info.a(Material.STONE, MaterialMapColor.D).a(1.5F, 6.0F).a(SoundEffectType.n))));
         a("horn_coral_block", (Block) (new BlockCoral(block40, Block.Info.a(Material.STONE, MaterialMapColor.t).a(1.5F, 6.0F).a(SoundEffectType.n))));
-        a("tube_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.f, MaterialMapColor.A).a().b().a(SoundEffectType.m))));
-        a("brain_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.f, MaterialMapColor.v).a().b().a(SoundEffectType.m))));
-        a("bubble_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.f, MaterialMapColor.z).a().b().a(SoundEffectType.m))));
-        a("fire_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.f, MaterialMapColor.D).a().b().a(SoundEffectType.m))));
-        a("horn_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.f, MaterialMapColor.t).a().b().a(SoundEffectType.m))));
-        a("tube_coral_fan", (Block) (new BlockCoralFan(Block.Info.a(Material.f, MaterialMapColor.A).a().b().a(SoundEffectType.m))));
-        a("brain_coral_fan", (Block) (new BlockCoralFan(Block.Info.a(Material.f, MaterialMapColor.v).a().b().a(SoundEffectType.m))));
-        a("bubble_coral_fan", (Block) (new BlockCoralFan(Block.Info.a(Material.f, MaterialMapColor.z).a().b().a(SoundEffectType.m))));
-        a("fire_coral_fan", (Block) (new BlockCoralFan(Block.Info.a(Material.f, MaterialMapColor.D).a().b().a(SoundEffectType.m))));
-        a("horn_coral_fan", (Block) (new BlockCoralFan(Block.Info.a(Material.f, MaterialMapColor.t).a().b().a(SoundEffectType.m))));
-        a("sea_pickle", (Block) (new BlockSeaPickle(Block.Info.a(Material.f, MaterialMapColor.C).a(3).a(SoundEffectType.l))));
+        a("tube_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.A).a().b().a(SoundEffectType.m))));
+        a("brain_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.v).a().b().a(SoundEffectType.m))));
+        a("bubble_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.z).a().b().a(SoundEffectType.m))));
+        a("fire_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.D).a().b().a(SoundEffectType.m))));
+        a("horn_coral", (Block) (new BlockCoralPlant(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.t).a().b().a(SoundEffectType.m))));
+        BlockCoralFanWallAbstract blockcoralfanwallabstract = new BlockCoralFanWallAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanWallAbstract blockcoralfanwallabstract1 = new BlockCoralFanWallAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanWallAbstract blockcoralfanwallabstract2 = new BlockCoralFanWallAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanWallAbstract blockcoralfanwallabstract3 = new BlockCoralFanWallAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanWallAbstract blockcoralfanwallabstract4 = new BlockCoralFanWallAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+
+        a("dead_tube_coral_wall_fan", (Block) blockcoralfanwallabstract);
+        a("dead_brain_coral_wall_fan", (Block) blockcoralfanwallabstract1);
+        a("dead_bubble_coral_wall_fan", (Block) blockcoralfanwallabstract2);
+        a("dead_fire_coral_wall_fan", (Block) blockcoralfanwallabstract3);
+        a("dead_horn_coral_wall_fan", (Block) blockcoralfanwallabstract4);
+        a("tube_coral_wall_fan", (Block) (new BlockCoralFanWall(blockcoralfanwallabstract, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.A).a().b().a(SoundEffectType.m))));
+        a("brain_coral_wall_fan", (Block) (new BlockCoralFanWall(blockcoralfanwallabstract1, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.v).a().b().a(SoundEffectType.m))));
+        a("bubble_coral_wall_fan", (Block) (new BlockCoralFanWall(blockcoralfanwallabstract2, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.z).a().b().a(SoundEffectType.m))));
+        a("fire_coral_wall_fan", (Block) (new BlockCoralFanWall(blockcoralfanwallabstract3, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.D).a().b().a(SoundEffectType.m))));
+        a("horn_coral_wall_fan", (Block) (new BlockCoralFanWall(blockcoralfanwallabstract4, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.t).a().b().a(SoundEffectType.m))));
+        BlockCoralFanAbstract blockcoralfanabstract = new BlockCoralFanAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanAbstract blockcoralfanabstract1 = new BlockCoralFanAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanAbstract blockcoralfanabstract2 = new BlockCoralFanAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanAbstract blockcoralfanabstract3 = new BlockCoralFanAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+        BlockCoralFanAbstract blockcoralfanabstract4 = new BlockCoralFanAbstract(Block.Info.a(Material.STONE, MaterialMapColor.w).a().b());
+
+        a("dead_tube_coral_fan", (Block) blockcoralfanabstract);
+        a("dead_brain_coral_fan", (Block) blockcoralfanabstract1);
+        a("dead_bubble_coral_fan", (Block) blockcoralfanabstract2);
+        a("dead_fire_coral_fan", (Block) blockcoralfanabstract3);
+        a("dead_horn_coral_fan", (Block) blockcoralfanabstract4);
+        a("tube_coral_fan", (Block) (new BlockCoralFan(blockcoralfanabstract, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.A).a().b().a(SoundEffectType.m))));
+        a("brain_coral_fan", (Block) (new BlockCoralFan(blockcoralfanabstract1, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.v).a().b().a(SoundEffectType.m))));
+        a("bubble_coral_fan", (Block) (new BlockCoralFan(blockcoralfanabstract2, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.z).a().b().a(SoundEffectType.m))));
+        a("fire_coral_fan", (Block) (new BlockCoralFan(blockcoralfanabstract3, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.D).a().b().a(SoundEffectType.m))));
+        a("horn_coral_fan", (Block) (new BlockCoralFan(blockcoralfanabstract4, Block.Info.a(Material.WATER_PLANT, MaterialMapColor.t).a().b().a(SoundEffectType.m))));
+        a("sea_pickle", (Block) (new BlockSeaPickle(Block.Info.a(Material.WATER_PLANT, MaterialMapColor.C).a(3).a(SoundEffectType.l))));
         a("blue_ice", (Block) (new BlockBlueIce(Block.Info.a(Material.SNOW_LAYER).b(2.8F).a(0.989F).a(SoundEffectType.f))));
         a("conduit", (Block) (new BlockConduit(Block.Info.a(Material.SHATTERABLE, MaterialMapColor.G).b(3.0F).a(15))));
         a("void_air", (Block) (new BlockAir(Block.Info.a(Material.AIR).a())));
         a("cave_air", (Block) (new BlockAir(Block.Info.a(Material.AIR).a())));
-        a("bubble_column", (Block) (new BlockBubbleColumn(Block.Info.a(Material.j).a())));
+        a("bubble_column", (Block) (new BlockBubbleColumn(Block.Info.a(Material.BUBBLE_COLUMN).a())));
         a("structure_block", (Block) (new BlockStructure(Block.Info.a(Material.ORE, MaterialMapColor.x).a(-1.0F, 3600000.0F))));
         Block.REGISTRY.a();
         Iterator iterator = Block.REGISTRY.iterator();
