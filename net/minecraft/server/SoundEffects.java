@@ -666,7 +666,7 @@ public class SoundEffects {
     public static final SoundEffect ENTITY_ZOMBIE_VILLAGER_STEP;
 
     private static SoundEffect a(String s) {
-        SoundEffect soundeffect = (SoundEffect) SoundEffect.a.get(new MinecraftKey(s));
+        SoundEffect soundeffect = (SoundEffect) IRegistry.SOUND_EVENT.get(new MinecraftKey(s));
 
         if (soundeffect == null) {
             throw new IllegalStateException("Invalid Sound requested: " + s);

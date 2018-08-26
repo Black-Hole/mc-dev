@@ -29,7 +29,7 @@ public class ItemSword extends ItemToolMaterial {
         } else {
             Material material = iblockdata.getMaterial();
 
-            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a(TagsBlock.D) && material != Material.PUMPKIN ? 1.0F : 1.5F;
+            return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !iblockdata.a(TagsBlock.LEAVES) && material != Material.PUMPKIN ? 1.0F : 1.5F;
         }
     }
 
@@ -54,8 +54,8 @@ public class ItemSword extends ItemToolMaterial {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.a, 0));
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemSword.i, "Weapon modifier", (double) this.b, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, 0));
+            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.b, 0));
         }
 
         return multimap;

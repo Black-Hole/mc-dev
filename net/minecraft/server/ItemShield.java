@@ -30,7 +30,7 @@ public class ItemShield extends Item {
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return TagsItem.b.isTagged(itemstack1.getItem()) || super.a(itemstack, itemstack1);
+        return TagsItem.PLANKS.isTagged(itemstack1.getItem()) || super.a(itemstack, itemstack1);
     }
 
     public static EnumColor e(ItemStack itemstack) {

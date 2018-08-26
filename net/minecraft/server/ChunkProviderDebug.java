@@ -7,7 +7,7 @@ import java.util.stream.StreamSupport;
 
 public class ChunkProviderDebug extends ChunkGeneratorAbstract<GeneratorSettingsDebug> {
 
-    private static final List<IBlockData> h = (List) StreamSupport.stream(Block.REGISTRY.spliterator(), false).flatMap((block) -> {
+    private static final List<IBlockData> h = (List) StreamSupport.stream(IRegistry.BLOCK.spliterator(), false).flatMap((block) -> {
         return block.getStates().a().stream();
     }).collect(Collectors.toList());
     private static final int i = MathHelper.f(MathHelper.c((float) ChunkProviderDebug.h.size()));

@@ -72,7 +72,7 @@ public class EntitySpider extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.y;
     }
 

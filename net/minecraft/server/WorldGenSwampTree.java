@@ -15,7 +15,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
     public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i;
 
-        for (i = random.nextInt(4) + 5; generatoraccess.b(blockposition.down()).a(TagsFluid.a); blockposition = blockposition.down()) {
+        for (i = random.nextInt(4) + 5; generatoraccess.b(blockposition.down()).a(TagsFluid.WATER); blockposition = blockposition.down()) {
             ;
         }
 
@@ -44,7 +44,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k));
                             Block block = iblockdata.getBlock();
 
-                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.D)) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.LEAVES)) {
                                 if (block == Blocks.WATER) {
                                     if (l > blockposition.getY()) {
                                         flag = false;
@@ -98,7 +98,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
                         Block block2 = iblockdata1.getBlock();
 
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D) || block2 == Blocks.WATER) {
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES) || block2 == Blocks.WATER) {
                             this.a(set, generatoraccess, blockposition.up(i1), WorldGenSwampTree.a);
                         }
                     }
@@ -111,7 +111,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                         for (k1 = blockposition.getX() - j; k1 <= blockposition.getX() + j; ++k1) {
                             for (l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
                                 blockposition_mutableblockposition1.c(k1, i1, l1);
-                                if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.D)) {
+                                if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.LEAVES)) {
                                     BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
                                     blockposition1 = blockposition_mutableblockposition1.east();

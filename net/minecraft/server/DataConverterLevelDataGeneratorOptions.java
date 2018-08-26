@@ -4,7 +4,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.JsonParser;
 import com.mojang.datafixers.DataFix;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
@@ -124,7 +123,7 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
 
                 dynamic1 = dynamic.set("generatorOptions", a(s, dynamic.getOps()));
             } else if ("buffet".equalsIgnoreCase(dynamic.getString("generatorName")) && optional.isPresent()) {
-                Dynamic dynamic2 = new Dynamic(JsonOps.INSTANCE, (new JsonParser()).parse((String) optional.get()));
+                Dynamic dynamic2 = new Dynamic(JsonOps.INSTANCE, ChatDeserializer.a((String) optional.get(), true));
 
                 dynamic1 = dynamic.set("generatorOptions", dynamic2.convert(dynamic.getOps()));
             } else {

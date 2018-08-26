@@ -8,7 +8,7 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
     private int g;
 
     public TileEntityEnderChest() {
-        super(TileEntityTypes.e);
+        super(TileEntityTypes.ENDER_CHEST);
     }
 
     public void Y_() {

@@ -61,7 +61,7 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.ar;
     }
 
@@ -135,7 +135,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (super.damageEntity(damagesource, f) && this.getLastDamager() != null) {
-            this.dz();
+            this.dy();
             return true;
         } else {
             return false;
@@ -149,7 +149,7 @@ public class EntitySquid extends EntityWaterAnimal {
         return vec3d1;
     }
 
-    private void dz() {
+    private void dy() {
         this.a(SoundEffects.ENTITY_SQUID_SQUIRT, this.cD(), this.cE());
         Vec3D vec3d = this.b(new Vec3D(0.0D, -1.0D, 0.0D)).add(this.locX, this.locY, this.locZ);
 
@@ -166,7 +166,7 @@ public class EntitySquid extends EntityWaterAnimal {
         this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel();
     }
 
@@ -205,7 +205,7 @@ public class EntitySquid extends EntityWaterAnimal {
                 IBlockData iblockdata = EntitySquid.this.world.getType(new BlockPosition(EntitySquid.this.locX + vec3d.x, EntitySquid.this.locY + vec3d.y, EntitySquid.this.locZ + vec3d.z));
                 Fluid fluid = EntitySquid.this.world.b(new BlockPosition(EntitySquid.this.locX + vec3d.x, EntitySquid.this.locY + vec3d.y, EntitySquid.this.locZ + vec3d.z));
 
-                if (fluid.a(TagsFluid.a) || iblockdata.isAir()) {
+                if (fluid.a(TagsFluid.WATER) || iblockdata.isAir()) {
                     double d0 = vec3d.b();
 
                     if (d0 > 0.0D) {

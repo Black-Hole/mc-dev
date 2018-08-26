@@ -71,7 +71,7 @@ public class FurnaceRecipe implements IRecipe {
             }
 
             String s1 = ChatDeserializer.h(jsonobject, "result");
-            Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s1));
+            Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s1));
 
             if (item != null) {
                 ItemStack itemstack = new ItemStack(item);

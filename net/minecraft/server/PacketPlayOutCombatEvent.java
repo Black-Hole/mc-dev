@@ -13,10 +13,10 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     public PacketPlayOutCombatEvent() {}
 
     public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype) {
-        this(combattracker, packetplayoutcombatevent_enumcombateventtype, true);
+        this(combattracker, packetplayoutcombatevent_enumcombateventtype, new ChatComponentText(""));
     }
 
-    public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype, boolean flag) {
+    public PacketPlayOutCombatEvent(CombatTracker combattracker, PacketPlayOutCombatEvent.EnumCombatEventType packetplayoutcombatevent_enumcombateventtype, IChatBaseComponent ichatbasecomponent) {
         this.a = packetplayoutcombatevent_enumcombateventtype;
         EntityLiving entityliving = combattracker.c();
 
@@ -29,11 +29,7 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
         case ENTITY_DIED:
             this.b = combattracker.h().getId();
             this.c = entityliving == null ? -1 : entityliving.getId();
-            if (flag) {
-                this.e = combattracker.getDeathMessage();
-            } else {
-                this.e = new ChatComponentText("");
-            }
+            this.e = ichatbasecomponent;
         }
 
     }
@@ -66,6 +62,10 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
+    }
+
+    public boolean a() {
+        return this.a == PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED;
     }
 
     public static enum EnumCombatEventType {

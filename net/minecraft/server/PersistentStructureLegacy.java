@@ -175,8 +175,7 @@ public abstract class PersistentStructureLegacy {
 
             for (int j = 0; j < i; ++j) {
                 String s = astring[j];
-
-                NBTTagCompound nbttagcompound;
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
 
                 try {
                     nbttagcompound = persistentcollection.a(s, 1493).getCompound("data").getCompound("Features");
@@ -184,7 +183,7 @@ public abstract class PersistentStructureLegacy {
                         continue;
                     }
                 } catch (IOException ioexception) {
-                    continue;
+                    ;
                 }
 
                 Iterator iterator = nbttagcompound.getKeys().iterator();
@@ -212,13 +211,14 @@ public abstract class PersistentStructureLegacy {
                 }
 
                 String s4 = s + "_index";
-                PersistentIndexed persistentindexed = (PersistentIndexed) persistentcollection.get(PersistentIndexed::new, s4);
+                PersistentIndexed persistentindexed = (PersistentIndexed) persistentcollection.get(DimensionManager.OVERWORLD, PersistentIndexed::new, s4);
 
                 if (persistentindexed != null && !persistentindexed.a().isEmpty()) {
                     this.f.put(s, persistentindexed);
                 } else {
-                    this.f.put(s, new PersistentIndexed(s4));
-                    PersistentIndexed persistentindexed1 = (PersistentIndexed) this.f.get(s);
+                    PersistentIndexed persistentindexed1 = new PersistentIndexed(s4);
+
+                    this.f.put(s, persistentindexed1);
                     Iterator iterator1 = nbttagcompound.getKeys().iterator();
 
                     while (iterator1.hasNext()) {
@@ -228,7 +228,7 @@ public abstract class PersistentStructureLegacy {
                         persistentindexed1.a(ChunkCoordIntPair.a(nbttagcompound2.getInt("ChunkX"), nbttagcompound2.getInt("ChunkZ")));
                     }
 
-                    persistentcollection.a(s4, persistentindexed1);
+                    persistentcollection.a(DimensionManager.OVERWORLD, s4, persistentindexed1);
                     persistentindexed1.c();
                 }
             }
@@ -237,17 +237,13 @@ public abstract class PersistentStructureLegacy {
     }
 
     public static PersistentStructureLegacy a(DimensionManager dimensionmanager, @Nullable PersistentCollection persistentcollection) {
-        switch (dimensionmanager) {
-        case OVERWORLD:
+        if (dimensionmanager == DimensionManager.OVERWORLD) {
             return new PersistentStructureLegacy.b(persistentcollection);
-
-        case NETHER:
+        } else if (dimensionmanager == DimensionManager.NETHER) {
             return new PersistentStructureLegacy.a(persistentcollection);
-
-        case THE_END:
+        } else if (dimensionmanager == DimensionManager.THE_END) {
             return new PersistentStructureLegacy.c(persistentcollection);
-
-        default:
+        } else {
             throw new RuntimeException(String.format("Unknown dimension type : %s", new Object[] { dimensionmanager}));
         }
     }

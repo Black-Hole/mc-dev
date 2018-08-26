@@ -91,19 +91,21 @@ public class EntitySelector {
 
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[] { entityplayer}));
         } else if (this.k != null) {
-            WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
-            int i = aworldserver.length;
+            Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
-            for (int j = 0; j < i; ++j) {
-                WorldServer worldserver = aworldserver[j];
-                Entity entity = worldserver.getEntity(this.k);
+            Entity entity;
 
-                if (entity != null) {
-                    return Lists.newArrayList(new Entity[] { entity});
+            do {
+                if (!iterator.hasNext()) {
+                    return Collections.emptyList();
                 }
-            }
 
-            return Collections.emptyList();
+                WorldServer worldserver = (WorldServer) iterator.next();
+
+                entity = worldserver.getEntity(this.k);
+            } while (entity == null);
+
+            return Lists.newArrayList(new Entity[] { entity});
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
             Predicate predicate = this.a(vec3d);
@@ -116,11 +118,10 @@ public class EntitySelector {
                 if (this.d()) {
                     this.a(arraylist, commandlistenerwrapper.getWorld(), vec3d, predicate);
                 } else {
-                    WorldServer[] aworldserver1 = commandlistenerwrapper.getServer().worldServer;
-                    int k = aworldserver1.length;
+                    Iterator iterator1 = commandlistenerwrapper.getServer().getWorlds().iterator();
 
-                    for (int l = 0; l < k; ++l) {
-                        WorldServer worldserver1 = aworldserver1[l];
+                    while (iterator1.hasNext()) {
+                        WorldServer worldserver1 = (WorldServer) iterator1.next();
 
                         this.a(arraylist, worldserver1, vec3d, predicate);
                     }

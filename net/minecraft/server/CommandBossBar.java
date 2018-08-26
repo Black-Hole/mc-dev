@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class CommmandBossBar {
+public class CommandBossBar {
 
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.bossbar.create.failed", new Object[] { object});
@@ -34,7 +34,7 @@ public class CommmandBossBar {
     private static final SimpleCommandExceptionType j = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.hidden", new Object[0]));
     private static final SimpleCommandExceptionType k = new SimpleCommandExceptionType(new ChatMessage("commands.bossbar.set.visibility.unchanged.visible", new Object[0]));
     public static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getServer().aR().a(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getServer().aP().a(), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -42,11 +42,11 @@ public class CommmandBossBar {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("add").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).then(CommandDispatcher.a("name", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentMinecraftKeyRegistered.c(commandcontext, "id"), ArgumentChatComponent.a(commandcontext, "name"));
-        }))))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommmandBossBar.a).executes((commandcontext) -> {
+        }))))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).executes((commandcontext) -> {
             return e((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext));
         })))).then(CommandDispatcher.a("list").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource());
-        }))).then(CommandDispatcher.a("set").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommmandBossBar.a).then(CommandDispatcher.a("name").then(CommandDispatcher.a("name", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
+        }))).then(CommandDispatcher.a("set").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).then(CommandDispatcher.a("name").then(CommandDispatcher.a("name", (ArgumentType) ArgumentChatComponent.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext), ArgumentChatComponent.a(commandcontext, "name"));
         })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("color").then(CommandDispatcher.a("pink").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext), BossBattle.BarColor.PINK);
@@ -82,7 +82,7 @@ public class CommmandBossBar {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext), (Collection) Collections.emptyList());
         })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext), ArgumentEntity.d(commandcontext, "targets"));
-        })))))).then(CommandDispatcher.a("get").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommmandBossBar.a).then(CommandDispatcher.a("value").executes((commandcontext) -> {
+        })))))).then(CommandDispatcher.a("get").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).then(CommandDispatcher.a("value").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext));
         }))).then(CommandDispatcher.a("max").executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext));
@@ -126,9 +126,9 @@ public class CommmandBossBar {
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, boolean flag) throws CommandSyntaxException {
         if (bossbattlecustom.g() == flag) {
             if (flag) {
-                throw CommmandBossBar.k.create();
+                throw CommandBossBar.k.create();
             } else {
-                throw CommmandBossBar.j.create();
+                throw CommandBossBar.j.create();
             }
         } else {
             bossbattlecustom.setVisible(flag);
@@ -144,7 +144,7 @@ public class CommmandBossBar {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, int i) throws CommandSyntaxException {
         if (bossbattlecustom.c() == i) {
-            throw CommmandBossBar.h.create();
+            throw CommandBossBar.h.create();
         } else {
             bossbattlecustom.a(i);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.value.success", new Object[] { bossbattlecustom.e(), Integer.valueOf(i)}), true);
@@ -154,7 +154,7 @@ public class CommmandBossBar {
 
     private static int b(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, int i) throws CommandSyntaxException {
         if (bossbattlecustom.d() == i) {
-            throw CommmandBossBar.i.create();
+            throw CommandBossBar.i.create();
         } else {
             bossbattlecustom.b(i);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.max.success", new Object[] { bossbattlecustom.e(), Integer.valueOf(i)}), true);
@@ -164,7 +164,7 @@ public class CommmandBossBar {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, BossBattle.BarColor bossbattle_barcolor) throws CommandSyntaxException {
         if (bossbattlecustom.l().equals(bossbattle_barcolor)) {
-            throw CommmandBossBar.f.create();
+            throw CommandBossBar.f.create();
         } else {
             bossbattlecustom.a(bossbattle_barcolor);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.color.success", new Object[] { bossbattlecustom.e()}), true);
@@ -174,7 +174,7 @@ public class CommmandBossBar {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, BossBattle.BarStyle bossbattle_barstyle) throws CommandSyntaxException {
         if (bossbattlecustom.m().equals(bossbattle_barstyle)) {
-            throw CommmandBossBar.g.create();
+            throw CommandBossBar.g.create();
         } else {
             bossbattlecustom.a(bossbattle_barstyle);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.style.success", new Object[] { bossbattlecustom.e()}), true);
@@ -186,7 +186,7 @@ public class CommmandBossBar {
         IChatBaseComponent ichatbasecomponent1 = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null);
 
         if (bossbattlecustom.j().equals(ichatbasecomponent1)) {
-            throw CommmandBossBar.e.create();
+            throw CommandBossBar.e.create();
         } else {
             bossbattlecustom.a(ichatbasecomponent1);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.name.success", new Object[] { bossbattlecustom.e()}), true);
@@ -198,11 +198,11 @@ public class CommmandBossBar {
         boolean flag = bossbattlecustom.a(collection);
 
         if (!flag) {
-            throw CommmandBossBar.d.create();
+            throw CommandBossBar.d.create();
         } else {
             if (bossbattlecustom.getPlayers().isEmpty()) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.none", new Object[] { bossbattlecustom.e()}), true);
-            } else if (bossbattlecustom.getPlayers().isEmpty()) {
+            } else {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.set.players.success.some", new Object[] { bossbattlecustom.e(), Integer.valueOf(collection.size()), ChatComponentUtils.b(collection, EntityHuman::getScoreboardDisplayName)}), true);
             }
 
@@ -211,7 +211,7 @@ public class CommmandBossBar {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        Collection collection = commandlistenerwrapper.getServer().aR().b();
+        Collection collection = commandlistenerwrapper.getServer().aP().b();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.none", new Object[0]), false);
@@ -223,10 +223,10 @@ public class CommmandBossBar {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) throws CommandSyntaxException {
-        BossBattleCustomData bossbattlecustomdata = commandlistenerwrapper.getServer().aR();
+        BossBattleCustomData bossbattlecustomdata = commandlistenerwrapper.getServer().aP();
 
         if (bossbattlecustomdata.a(minecraftkey) != null) {
-            throw CommmandBossBar.b.create(minecraftkey.toString());
+            throw CommandBossBar.b.create(minecraftkey.toString());
         } else {
             BossBattleCustom bossbattlecustom = bossbattlecustomdata.a(minecraftkey, ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, (Entity) null));
 
@@ -236,7 +236,7 @@ public class CommmandBossBar {
     }
 
     private static int e(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom) {
-        BossBattleCustomData bossbattlecustomdata = commandlistenerwrapper.getServer().aR();
+        BossBattleCustomData bossbattlecustomdata = commandlistenerwrapper.getServer().aP();
 
         bossbattlecustom.b();
         bossbattlecustomdata.a(bossbattlecustom);
@@ -246,10 +246,10 @@ public class CommmandBossBar {
 
     public static BossBattleCustom a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
         MinecraftKey minecraftkey = ArgumentMinecraftKeyRegistered.c(commandcontext, "id");
-        BossBattleCustom bossbattlecustom = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aR().a(minecraftkey);
+        BossBattleCustom bossbattlecustom = ((CommandListenerWrapper) commandcontext.getSource()).getServer().aP().a(minecraftkey);
 
         if (bossbattlecustom == null) {
-            throw CommmandBossBar.c.create(minecraftkey.toString());
+            throw CommandBossBar.c.create(minecraftkey.toString());
         } else {
             return bossbattlecustom;
         }

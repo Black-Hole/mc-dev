@@ -7,6 +7,6 @@ public class TileEntityEnderPortal extends TileEntity {
     }
 
     public TileEntityEnderPortal() {
-        this(TileEntityTypes.n);
+        this(TileEntityTypes.END_PORTAL);
     }
 }

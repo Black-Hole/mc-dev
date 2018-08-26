@@ -65,7 +65,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
         if (commandcontext.getSource() instanceof CommandListenerWrapper) {
-            return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard().d(), suggestionsbuilder);
+            return ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard().d(), suggestionsbuilder);
         } else if (commandcontext.getSource() instanceof ICompletionProvider) {
             ICompletionProvider icompletionprovider = (ICompletionProvider) commandcontext.getSource();
 

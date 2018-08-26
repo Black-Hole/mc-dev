@@ -2,38 +2,15 @@ package net.minecraft.server;
 
 public abstract class VoxelShapeDiscrete {
 
-    public static final VoxelShapeDiscrete a = new VoxelShapeDiscrete(0, 0, 0) {
-        public void b(VoxelShapeDiscrete.b voxelshapediscrete_b, boolean flag) {}
-
-        public boolean b(int i, int j, int k) {
-            return false;
-        }
-
-        public boolean a(int i, int j, int k, boolean flag, boolean flag1) {
-            throw new IllegalArgumentException();
-        }
-
-        public boolean a() {
-            return true;
-        }
-
-        public int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return 0;
-        }
-
-        public int b(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return -1;
-        }
-    };
-    private static final EnumDirection.EnumAxis[] e = EnumDirection.EnumAxis.values();
+    private static final EnumDirection.EnumAxis[] d = EnumDirection.EnumAxis.values();
+    protected final int a;
     protected final int b;
     protected final int c;
-    protected final int d;
 
     protected VoxelShapeDiscrete(int i, int j, int k) {
-        this.b = i;
-        this.c = j;
-        this.d = k;
+        this.a = i;
+        this.b = j;
+        this.c = k;
     }
 
     public boolean a(EnumAxisCycle enumaxiscycle, int i, int j, int k) {
@@ -41,7 +18,7 @@ public abstract class VoxelShapeDiscrete {
     }
 
     public boolean c(int i, int j, int k) {
-        return i >= 0 && j >= 0 && k >= 0 ? (i < this.b && j < this.c && k < this.d ? this.b(i, j, k) : false) : false;
+        return i >= 0 && j >= 0 && k >= 0 ? (i < this.a && j < this.b && k < this.c ? this.b(i, j, k) : false) : false;
     }
 
     public boolean b(EnumAxisCycle enumaxiscycle, int i, int j, int k) {
@@ -50,10 +27,10 @@ public abstract class VoxelShapeDiscrete {
 
     public abstract boolean b(int i, int j, int k);
 
-    public abstract boolean a(int i, int j, int k, boolean flag, boolean flag1);
+    public abstract void a(int i, int j, int k, boolean flag, boolean flag1);
 
     public boolean a() {
-        EnumDirection.EnumAxis[] aenumdirection_enumaxis = VoxelShapeDiscrete.e;
+        EnumDirection.EnumAxis[] aenumdirection_enumaxis = VoxelShapeDiscrete.d;
         int i = aenumdirection_enumaxis.length;
 
         for (int j = 0; j < i; ++j) {
@@ -72,7 +49,7 @@ public abstract class VoxelShapeDiscrete {
     public abstract int b(EnumDirection.EnumAxis enumdirection_enumaxis);
 
     public int c(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.b, this.c, this.d);
+        return enumdirection_enumaxis.a(this.a, this.b, this.c);
     }
 
     public int b() {
@@ -85,10 +62,6 @@ public abstract class VoxelShapeDiscrete {
 
     public int d() {
         return this.c(EnumDirection.EnumAxis.Z);
-    }
-
-    public static VoxelShapeDiscrete e() {
-        return VoxelShapeDiscrete.a;
     }
 
     protected boolean a(int i, int j, int k, int l) {
@@ -121,11 +94,11 @@ public abstract class VoxelShapeDiscrete {
     public void b(VoxelShapeDiscrete.b voxelshapediscrete_b, boolean flag) {
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(this);
 
-        for (int i = 0; i <= this.b; ++i) {
-            for (int j = 0; j <= this.c; ++j) {
+        for (int i = 0; i <= this.a; ++i) {
+            for (int j = 0; j <= this.b; ++j) {
                 int k = -1;
 
-                for (int l = 0; l <= this.d; ++l) {
+                for (int l = 0; l <= this.c; ++l) {
                     if (voxelshapebitset.c(i, j, l)) {
                         if (flag) {
                             if (k == -1) {

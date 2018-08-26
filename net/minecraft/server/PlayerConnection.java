@@ -4,10 +4,12 @@ import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import com.google.common.util.concurrent.Futures;
 import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.suggestion.Suggestions;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -190,7 +192,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 double d9 = entity.motX * entity.motX + entity.motY * entity.motY + entity.motZ * entity.motZ;
                 double d10 = d6 * d6 + d7 * d7 + d8 * d8;
 
-                if (d10 - d9 > 100.0D && (!this.minecraftServer.J() || !this.minecraftServer.I().equals(entity.getDisplayName().getString()))) {
+                if (d10 - d9 > 100.0D && (!this.minecraftServer.H() || !this.minecraftServer.G().equals(entity.getDisplayName().getString()))) {
                     PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", entity.getDisplayName().getString(), this.player.getDisplayName().getString(), Double.valueOf(d6), Double.valueOf(d7), Double.valueOf(d8));
                     this.networkManager.sendPacket(new PacketPlayOutVehicleMove(entity));
                     return;
@@ -243,10 +245,10 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         PlayerConnectionUtils.ensureMainThread(packetplayinteleportaccept, this, this.player.getWorldServer());
         if (packetplayinteleportaccept.b() == this.teleportAwait) {
             this.player.setLocation(this.teleportPos.x, this.teleportPos.y, this.teleportPos.z, this.player.yaw, this.player.pitch);
+            this.o = this.teleportPos.x;
+            this.p = this.teleportPos.y;
+            this.q = this.teleportPos.z;
             if (this.player.H()) {
-                this.o = this.teleportPos.x;
-                this.p = this.teleportPos.y;
-                this.q = this.teleportPos.z;
                 this.player.I();
             }
 
@@ -287,7 +289,13 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInTabComplete packetplayintabcomplete) {
         PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.getWorldServer());
-        ParseResults parseresults = this.minecraftServer.getCommandDispatcher().a().parse(packetplayintabcomplete.c(), this.player.getCommandListener());
+        StringReader stringreader = new StringReader(packetplayintabcomplete.c());
+
+        if (stringreader.canRead() && stringreader.peek() == 47) {
+            stringreader.skip();
+        }
+
+        ParseResults parseresults = this.minecraftServer.getCommandDispatcher().a().parse(stringreader, this.player.getCommandListener());
 
         this.minecraftServer.getCommandDispatcher().a().getCompletionSuggestions(parseresults).thenAccept((suggestions) -> {
             this.networkManager.sendPacket(new PacketPlayOutTabComplete(packetplayintabcomplete.b(), suggestions));
@@ -488,7 +496,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
         if (!itemstack.isEmpty()) {
             if (ItemBookAndQuill.b(itemstack.getTag())) {
-                ItemStack itemstack1 = this.player.getItemInMainHand();
+                ItemStack itemstack1 = this.player.b(packetplayinbedit.d());
 
                 if (!itemstack1.isEmpty()) {
                     if (itemstack.getItem() == Items.WRITABLE_BOOK && itemstack1.getItem() == Items.WRITABLE_BOOK) {
@@ -508,7 +516,9 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             }
 
                             itemstack2.a("pages", (NBTBase) nbttaglist);
-                            this.player.setSlot(EnumItemSlot.MAINHAND, itemstack2);
+                            EnumItemSlot enumitemslot = packetplayinbedit.d() == EnumHand.MAIN_HAND ? EnumItemSlot.MAINHAND : EnumItemSlot.OFFHAND;
+
+                            this.player.setSlot(enumitemslot, itemstack2);
                         } else {
                             itemstack1.a("pages", (NBTBase) itemstack.getTag().getList("pages", 8));
                         }
@@ -521,7 +531,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInEntityNBTQuery packetplayinentitynbtquery) {
         PlayerConnectionUtils.ensureMainThread(packetplayinentitynbtquery, this, this.player.getWorldServer());
-        if (this.player.k(2)) {
+        if (this.player.j(2)) {
             Entity entity = this.player.getWorldServer().getEntity(packetplayinentitynbtquery.c());
 
             if (entity != null) {
@@ -535,7 +545,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(PacketPlayInTileNBTQuery packetplayintilenbtquery) {
         PlayerConnectionUtils.ensureMainThread(packetplayintilenbtquery, this, this.player.getWorldServer());
-        if (this.player.k(2)) {
+        if (this.player.j(2)) {
             TileEntity tileentity = this.player.getWorldServer().getTileEntity(packetplayintilenbtquery.c());
             NBTTagCompound nbttagcompound = tileentity != null ? tileentity.save(new NBTTagCompound()) : null;
 
@@ -599,7 +609,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             if (!this.player.H() && (!this.player.getWorldServer().getGameRules().getBoolean("disableElytraMovementCheck") || !this.player.dc())) {
                                 float f2 = this.player.dc() ? 300.0F : 100.0F;
 
-                                if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.J() || !this.minecraftServer.I().equals(this.player.getProfile().getName()))) {
+                                if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.H() || !this.minecraftServer.G().equals(this.player.getProfile().getName()))) {
                                     PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getDisplayName().getString(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
                                     this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
                                     return;
@@ -793,17 +803,14 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         PlayerConnectionUtils.ensureMainThread(packetplayinspectate, this, this.player.getWorldServer());
         if (this.player.isSpectator()) {
             Entity entity = null;
-            WorldServer[] aworldserver = this.minecraftServer.worldServer;
-            int i = aworldserver.length;
+            Iterator iterator = this.minecraftServer.getWorlds().iterator();
 
-            for (int j = 0; j < i; ++j) {
-                WorldServer worldserver = aworldserver[j];
+            while (iterator.hasNext()) {
+                WorldServer worldserver = (WorldServer) iterator.next();
 
-                if (worldserver != null) {
-                    entity = packetplayinspectate.a(worldserver);
-                    if (entity != null) {
-                        break;
-                    }
+                entity = packetplayinspectate.a(worldserver);
+                if (entity != null) {
+                    break;
                 }
             }
 
@@ -828,11 +835,11 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
     public void a(IChatBaseComponent ichatbasecomponent) {
         PlayerConnection.LOGGER.info("{} lost connection: {}", this.player.getDisplayName().getString(), ichatbasecomponent.getString());
-        this.minecraftServer.av();
+        this.minecraftServer.at();
         this.minecraftServer.getPlayerList().sendMessage((new ChatMessage("multiplayer.player.left", new Object[] { this.player.getScoreboardDisplayName()})).a(EnumChatFormat.YELLOW));
         this.player.n();
         this.minecraftServer.getPlayerList().disconnect(this.player);
-        if (this.minecraftServer.J() && this.player.getDisplayName().getString().equals(this.minecraftServer.I())) {
+        if (this.minecraftServer.H() && this.player.getDisplayName().getString().equals(this.minecraftServer.G())) {
             PlayerConnection.LOGGER.info("Stopping singleplayer server as player logged out");
             this.minecraftServer.safeShutdown();
         }
@@ -1040,14 +1047,14 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         case PERFORM_RESPAWN:
             if (this.player.viewingCredits) {
                 this.player.viewingCredits = false;
-                this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, true);
+                this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, DimensionManager.OVERWORLD, true);
                 CriterionTriggers.v.a(this.player, DimensionManager.THE_END, DimensionManager.OVERWORLD);
             } else {
                 if (this.player.getHealth() > 0.0F) {
                     return;
                 }
 
-                this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, false);
+                this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, DimensionManager.OVERWORLD, false);
                 if (this.minecraftServer.isHardcore()) {
                     this.player.a(EnumGamemode.SPECTATOR);
                     this.player.getWorldServer().getGameRules().set("spectatorsGenerateChunks", "false", this.minecraftServer);
@@ -1209,7 +1216,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             String[] astring = packetplayinupdatesign.c();
 
             for (int i = 0; i < astring.length; ++i) {
-                tileentitysign.lines[i] = new ChatComponentText(EnumChatFormat.b(astring[i]));
+                tileentitysign.a(i, new ChatComponentText(EnumChatFormat.b(astring[i])));
             }
 
             tileentitysign.update();
@@ -1224,7 +1231,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
             this.player.ping = (this.player.ping * 3 + i) / 4;
             this.g = false;
-        } else if (!this.player.getDisplayName().getString().equals(this.minecraftServer.I())) {
+        } else if (!this.player.getDisplayName().getString().equals(this.minecraftServer.G())) {
             this.disconnect(new ChatMessage("disconnect.timeout", new Object[0]));
         }
 

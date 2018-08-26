@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import java.util.Collection;
 import java.util.Random;
 
-public class LootSelectorLootTable extends LotoSelectorEntry {
+public class LootSelectorLootTable extends LootSelectorEntry {
 
     protected final MinecraftKey a;
 
@@ -16,7 +16,7 @@ public class LootSelectorLootTable extends LotoSelectorEntry {
     }
 
     public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
-        LootTable loottable = loottableinfo.f().a(this.a);
+        LootTable loottable = loottableinfo.f().getLootTable(this.a);
 
         collection.addAll(loottable.a(random, loottableinfo));
     }

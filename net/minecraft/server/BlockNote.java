@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class BlockNote extends Block {
 
-    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.ar;
+    public static final BlockStateEnum<BlockPropertyInstrument> INSTRUMENT = BlockProperties.as;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
-    public static final BlockStateInteger NOTE = BlockProperties.ai;
+    public static final BlockStateInteger NOTE = BlockProperties.aj;
 
     public BlockNote(Block.Info block_info) {
         super(block_info);

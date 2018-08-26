@@ -7,13 +7,13 @@ import javax.annotation.Nullable;
 public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidContainer {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateEnum<BlockPropertyChestType> b = BlockProperties.ao;
-    public static final BlockStateBoolean c = BlockProperties.x;
-    protected static final VoxelShape p = Block.a(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 15.0D);
-    protected static final VoxelShape q = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 16.0D);
-    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
-    protected static final VoxelShape s = Block.a(1.0D, 0.0D, 1.0D, 16.0D, 14.0D, 15.0D);
-    protected static final VoxelShape t = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    public static final BlockStateEnum<BlockPropertyChestType> b = BlockProperties.ap;
+    public static final BlockStateBoolean c = BlockProperties.y;
+    protected static final VoxelShape o = Block.a(1.0D, 0.0D, 0.0D, 15.0D, 14.0D, 15.0D);
+    protected static final VoxelShape p = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 16.0D);
+    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
+    protected static final VoxelShape r = Block.a(1.0D, 0.0D, 1.0D, 16.0D, 14.0D, 15.0D);
+    protected static final VoxelShape s = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
     protected BlockChest(Block.Info block_info) {
         super(block_info);
@@ -30,7 +30,7 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (((Boolean) iblockdata.get(BlockChest.c)).booleanValue()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         if (iblockdata1.getBlock() == this && enumdirection.k().c()) {
@@ -48,21 +48,21 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         if (iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE) {
-            return BlockChest.t;
+            return BlockChest.s;
         } else {
             switch (k(iblockdata)) {
             case NORTH:
             default:
-                return BlockChest.p;
+                return BlockChest.o;
 
             case SOUTH:
-                return BlockChest.q;
+                return BlockChest.p;
 
             case WEST:
-                return BlockChest.r;
+                return BlockChest.q;
 
             case EAST:
-                return BlockChest.s;
+                return BlockChest.r;
             }
         }
     }
@@ -113,15 +113,15 @@ public class BlockChest extends BlockTileEntity implements IFluidSource, IFluidC
         return ((Boolean) iblockdata.get(BlockChest.c)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return !((Boolean) iblockdata.get(BlockChest.c)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         if (!((Boolean) iblockdata.get(BlockChest.c)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockChest.c, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             return true;

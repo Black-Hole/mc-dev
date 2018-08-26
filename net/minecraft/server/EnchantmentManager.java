@@ -10,19 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
+import org.apache.commons.lang3.mutable.MutableFloat;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 public class EnchantmentManager {
-
-    private static final EnchantmentManager.EnchantmentModifierProtection a = new EnchantmentManager.EnchantmentModifierProtection(null);
-    private static final EnchantmentManager.EnchantmentModifierDamage b = new EnchantmentManager.EnchantmentModifierDamage(null);
-    private static final EnchantmentManager.EnchantmentModifierThorns c = new EnchantmentManager.EnchantmentModifierThorns(null);
-    private static final EnchantmentManager.EnchantmentModifierArthropods d = new EnchantmentManager.EnchantmentModifierArthropods(null);
 
     public static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemstack) {
         if (itemstack.isEmpty()) {
             return 0;
         } else {
-            MinecraftKey minecraftkey = (MinecraftKey) Enchantment.enchantments.b(enchantment);
+            MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(enchantment);
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -44,7 +41,7 @@ public class EnchantmentManager {
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
-            Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(MinecraftKey.a(nbttagcompound.getString("id")));
+            Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(nbttagcompound.getString("id")));
 
             if (enchantment != null) {
                 linkedhashmap.put(enchantment, Integer.valueOf(nbttagcompound.getInt("lvl")));
@@ -66,7 +63,7 @@ public class EnchantmentManager {
                 int i = ((Integer) entry.getValue()).intValue();
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                nbttagcompound.setString("id", String.valueOf(Enchantment.enchantments.b(enchantment)));
+                nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
                 nbttagcompound.setShort("lvl", (short) i);
                 nbttaglist.add((NBTBase) nbttagcompound);
                 if (itemstack.getItem() == Items.ENCHANTED_BOOK) {
@@ -83,48 +80,50 @@ public class EnchantmentManager {
 
     }
 
-    private static void a(EnchantmentManager.EnchantmentModifier enchantmentmanager_enchantmentmodifier, ItemStack itemstack) {
+    private static void a(EnchantmentManager.a enchantmentmanager_a, ItemStack itemstack) {
         if (!itemstack.isEmpty()) {
             NBTTagList nbttaglist = itemstack.getEnchantments();
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 String s = nbttaglist.getCompound(i).getString("id");
                 int j = nbttaglist.getCompound(i).getInt("lvl");
-                Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(MinecraftKey.a(s));
+                Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(s));
 
                 if (enchantment != null) {
-                    enchantmentmanager_enchantmentmodifier.a(enchantment, j);
+                    enchantmentmanager_a.accept(enchantment, j);
                 }
             }
 
         }
     }
 
-    private static void a(EnchantmentManager.EnchantmentModifier enchantmentmanager_enchantmentmodifier, Iterable<ItemStack> iterable) {
+    private static void a(EnchantmentManager.a enchantmentmanager_a, Iterable<ItemStack> iterable) {
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             ItemStack itemstack = (ItemStack) iterator.next();
 
-            a(enchantmentmanager_enchantmentmodifier, itemstack);
+            a(enchantmentmanager_a, itemstack);
         }
 
     }
 
     public static int a(Iterable<ItemStack> iterable, DamageSource damagesource) {
-        EnchantmentManager.a.a = 0;
-        EnchantmentManager.a.b = damagesource;
-        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.a, iterable);
-        EnchantmentManager.a.b = null;
-        return EnchantmentManager.a.a;
+        MutableInt mutableint = new MutableInt();
+
+        a((enchantment, i) -> {
+            mutableint.add(enchantment.a(i, damagesource));
+        }, iterable);
+        return mutableint.intValue();
     }
 
     public static float a(ItemStack itemstack, EnumMonsterType enummonstertype) {
-        EnchantmentManager.b.a = 0.0F;
-        EnchantmentManager.b.b = enummonstertype;
-        a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.b, itemstack);
-        EnchantmentManager.b.b = null;
-        return EnchantmentManager.b.a;
+        MutableFloat mutablefloat = new MutableFloat();
+
+        a((enchantment, i) -> {
+            mutablefloat.add(enchantment.a(i, enummonstertype));
+        }, itemstack);
+        return mutablefloat.floatValue();
     }
 
     public static float a(EntityLiving entityliving) {
@@ -134,33 +133,33 @@ public class EnchantmentManager {
     }
 
     public static void a(EntityLiving entityliving, Entity entity) {
-        EnchantmentManager.c.b = entity;
-        EnchantmentManager.c.a = entityliving;
+        EnchantmentManager.a enchantmentmanager_a = (enchantment, i) -> {
+            enchantment.b(entityliving, entity, i);
+        };
+
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.aU());
+            a(enchantmentmanager_a, entityliving.aU());
         }
 
         if (entity instanceof EntityHuman) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.c, entityliving.getItemInMainHand());
+            a(enchantmentmanager_a, entityliving.getItemInMainHand());
         }
 
-        EnchantmentManager.c.b = null;
-        EnchantmentManager.c.a = null;
     }
 
     public static void b(EntityLiving entityliving, Entity entity) {
-        EnchantmentManager.d.a = entityliving;
-        EnchantmentManager.d.b = entity;
+        EnchantmentManager.a enchantmentmanager_a = (enchantment, i) -> {
+            enchantment.a(entityliving, entity, i);
+        };
+
         if (entityliving != null) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.aU());
+            a(enchantmentmanager_a, entityliving.aU());
         }
 
         if (entityliving instanceof EntityHuman) {
-            a((EnchantmentManager.EnchantmentModifier) EnchantmentManager.d, entityliving.getItemInMainHand());
+            a(enchantmentmanager_a, entityliving.getItemInMainHand());
         }
 
-        EnchantmentManager.d.a = null;
-        EnchantmentManager.c.b = null;
     }
 
     public static int a(Enchantment enchantment, EntityLiving entityliving) {
@@ -369,7 +368,7 @@ public class EnchantmentManager {
         ArrayList arraylist = Lists.newArrayList();
         Item item = itemstack.getItem();
         boolean flag1 = itemstack.getItem() == Items.BOOK;
-        Iterator iterator = Enchantment.enchantments.iterator();
+        Iterator iterator = IRegistry.ENCHANTMENT.iterator();
 
         while (iterator.hasNext()) {
             Enchantment enchantment = (Enchantment) iterator.next();
@@ -387,72 +386,9 @@ public class EnchantmentManager {
         return arraylist;
     }
 
-    static final class EnchantmentModifierArthropods implements EnchantmentManager.EnchantmentModifier {
+    @FunctionalInterface
+    interface a {
 
-        public EntityLiving a;
-        public Entity b;
-
-        private EnchantmentModifierArthropods() {}
-
-        public void a(Enchantment enchantment, int i) {
-            enchantment.a(this.a, this.b, i);
-        }
-
-        EnchantmentModifierArthropods(Object object) {
-            this();
-        }
-    }
-
-    static final class EnchantmentModifierThorns implements EnchantmentManager.EnchantmentModifier {
-
-        public EntityLiving a;
-        public Entity b;
-
-        private EnchantmentModifierThorns() {}
-
-        public void a(Enchantment enchantment, int i) {
-            enchantment.b(this.a, this.b, i);
-        }
-
-        EnchantmentModifierThorns(Object object) {
-            this();
-        }
-    }
-
-    static final class EnchantmentModifierDamage implements EnchantmentManager.EnchantmentModifier {
-
-        public float a;
-        public EnumMonsterType b;
-
-        private EnchantmentModifierDamage() {}
-
-        public void a(Enchantment enchantment, int i) {
-            this.a += enchantment.a(i, this.b);
-        }
-
-        EnchantmentModifierDamage(Object object) {
-            this();
-        }
-    }
-
-    static final class EnchantmentModifierProtection implements EnchantmentManager.EnchantmentModifier {
-
-        public int a;
-        public DamageSource b;
-
-        private EnchantmentModifierProtection() {}
-
-        public void a(Enchantment enchantment, int i) {
-            this.a += enchantment.a(i, this.b);
-        }
-
-        EnchantmentModifierProtection(Object object) {
-            this();
-        }
-    }
-
-    interface EnchantmentModifier {
-
-        void a(Enchantment enchantment, int i);
+        void accept(Enchantment enchantment, int i);
     }
 }

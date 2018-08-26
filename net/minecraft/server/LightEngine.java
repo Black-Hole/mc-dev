@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 public abstract class LightEngine implements ILightEngine {
 
     private static final Logger a = LogManager.getLogger();
-    private final IntPriorityQueue b = new IntArrayFIFOQueue(786);
-    private static final EnumDirection[] c = EnumDirection.values();
+    private static final EnumDirection[] b = EnumDirection.values();
+    private final IntPriorityQueue c = new IntArrayFIFOQueue(786);
 
     public LightEngine() {}
 
@@ -68,14 +68,14 @@ public abstract class LightEngine implements ILightEngine {
         Throwable throwable = null;
 
         try {
-            while (!this.b.isEmpty()) {
-                int i = this.b.dequeueInt();
+            while (!this.c.isEmpty()) {
+                int i = this.c.dequeueInt();
                 int j = this.d(i);
                 int k = this.a(i) - 16;
                 int l = this.b(i);
                 int i1 = this.c(i) - 16;
                 EnumDirection enumdirection = this.e(i);
-                EnumDirection[] aenumdirection = LightEngine.c;
+                EnumDirection[] aenumdirection = LightEngine.b;
                 int j1 = aenumdirection.length;
 
                 for (int k1 = 0; k1 < j1; ++k1) {
@@ -123,7 +123,7 @@ public abstract class LightEngine implements ILightEngine {
         int i1 = i - chunkcoordintpair.d() + 16;
         int j1 = k - chunkcoordintpair.e() + 16;
 
-        this.b.enqueue(this.a((EnumDirection) null, i1, j, j1, l));
+        this.c.enqueue(this.a((EnumDirection) null, i1, j, j1, l));
     }
 
     protected void a(ChunkCoordIntPair chunkcoordintpair, BlockPosition blockposition, int i) {

@@ -64,7 +64,7 @@ public class RecipeMapClone extends IRecipeComplex {
         if (!itemstack.isEmpty() && i >= 1) {
             ItemStack itemstack2 = itemstack.cloneItemStack();
 
-            itemstack2.add(1);
+            itemstack2.setCount(i + 1);
             return itemstack2;
         } else {
             return ItemStack.a;

@@ -4,26 +4,26 @@ import java.util.Random;
 
 public class BlockPistonExtension extends BlockDirectional {
 
-    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.as;
+    public static final BlockStateEnum<BlockPropertyPistonType> TYPE = BlockProperties.at;
     public static final BlockStateBoolean SHORT = BlockProperties.u;
-    protected static final VoxelShape p = Block.a(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
-    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
-    protected static final VoxelShape t = Block.a(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape u = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-    protected static final VoxelShape v = Block.a(6.0D, -4.0D, 6.0D, 10.0D, 12.0D, 10.0D);
-    protected static final VoxelShape w = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 20.0D, 10.0D);
-    protected static final VoxelShape x = Block.a(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
-    protected static final VoxelShape y = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
-    protected static final VoxelShape z = Block.a(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-    protected static final VoxelShape A = Block.a(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
-    protected static final VoxelShape B = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
-    protected static final VoxelShape C = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
-    protected static final VoxelShape D = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
-    protected static final VoxelShape E = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
-    protected static final VoxelShape F = Block.a(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-    protected static final VoxelShape G = Block.a(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+    protected static final VoxelShape o = Block.a(12.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape p = Block.a(0.0D, 0.0D, 0.0D, 4.0D, 16.0D, 16.0D);
+    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 12.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 4.0D);
+    protected static final VoxelShape s = Block.a(0.0D, 12.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
+    protected static final VoxelShape u = Block.a(6.0D, -4.0D, 6.0D, 10.0D, 12.0D, 10.0D);
+    protected static final VoxelShape v = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 20.0D, 10.0D);
+    protected static final VoxelShape w = Block.a(6.0D, 6.0D, -4.0D, 10.0D, 10.0D, 12.0D);
+    protected static final VoxelShape x = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 20.0D);
+    protected static final VoxelShape y = Block.a(-4.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+    protected static final VoxelShape z = Block.a(4.0D, 6.0D, 6.0D, 20.0D, 10.0D, 10.0D);
+    protected static final VoxelShape A = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 12.0D, 10.0D);
+    protected static final VoxelShape B = Block.a(6.0D, 4.0D, 6.0D, 10.0D, 16.0D, 10.0D);
+    protected static final VoxelShape C = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 12.0D);
+    protected static final VoxelShape D = Block.a(6.0D, 6.0D, 4.0D, 10.0D, 10.0D, 16.0D);
+    protected static final VoxelShape E = Block.a(0.0D, 6.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+    protected static final VoxelShape F = Block.a(4.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
 
     public BlockPistonExtension(Block.Info block_info) {
         super(block_info);
@@ -34,22 +34,22 @@ public class BlockPistonExtension extends BlockDirectional {
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
         case DOWN:
         default:
-            return BlockPistonExtension.u;
-
-        case UP:
             return BlockPistonExtension.t;
 
-        case NORTH:
+        case UP:
             return BlockPistonExtension.s;
 
-        case SOUTH:
+        case NORTH:
             return BlockPistonExtension.r;
 
-        case WEST:
+        case SOUTH:
             return BlockPistonExtension.q;
 
-        case EAST:
+        case WEST:
             return BlockPistonExtension.p;
+
+        case EAST:
+            return BlockPistonExtension.o;
         }
     }
 
@@ -63,22 +63,22 @@ public class BlockPistonExtension extends BlockDirectional {
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
         case DOWN:
         default:
-            return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
-
-        case UP:
             return flag ? BlockPistonExtension.B : BlockPistonExtension.v;
 
-        case NORTH:
-            return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
+        case UP:
+            return flag ? BlockPistonExtension.A : BlockPistonExtension.u;
 
-        case SOUTH:
+        case NORTH:
             return flag ? BlockPistonExtension.D : BlockPistonExtension.x;
 
+        case SOUTH:
+            return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
+
         case WEST:
-            return flag ? BlockPistonExtension.G : BlockPistonExtension.A;
+            return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
 
         case EAST:
-            return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
+            return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
         }
     }
 

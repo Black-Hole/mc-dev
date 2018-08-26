@@ -16,7 +16,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) this.ed());
+        this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) this.ec());
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.17499999701976776D);
         this.getAttributeInstance(EntityHorseChestedAbstract.attributeJumpStrength).setValue(0.5D);
     }
@@ -29,16 +29,16 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         this.datawatcher.set(EntityHorseChestedAbstract.bM, Boolean.valueOf(flag));
     }
 
-    protected int dB() {
-        return this.isCarryingChest() ? 17 : super.dB();
+    protected int dA() {
+        return this.isCarryingChest() ? 17 : super.dA();
     }
 
     public double aJ() {
         return super.aJ() - 0.25D;
     }
 
-    protected SoundEffect dC() {
-        super.dC();
+    protected SoundEffect dB() {
+        super.dB();
         return SoundEffects.ENTITY_DONKEY_ANGRY;
     }
 
@@ -95,7 +95,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
             }
         }
 
-        this.dT();
+        this.dS();
     }
 
     public boolean c(int i, ItemStack itemstack) {
@@ -142,18 +142,18 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
                             return true;
                         }
 
-                        this.ea();
+                        this.dZ();
                         return true;
                     }
 
                     if (!this.isCarryingChest() && itemstack.getItem() == Blocks.CHEST.getItem()) {
                         this.setCarryingChest(true);
-                        this.dD();
+                        this.dC();
                         flag = true;
                         this.loadChest();
                     }
 
-                    if (!this.isBaby() && !this.dW() && itemstack.getItem() == Items.SADDLE) {
+                    if (!this.isBaby() && !this.dV() && itemstack.getItem() == Items.SADDLE) {
                         this.c(entityhuman);
                         return true;
                     }
@@ -177,11 +177,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
         }
     }
 
-    protected void dD() {
+    protected void dC() {
         this.a(SoundEffects.ENTITY_DONKEY_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 
-    public int dI() {
+    public int dH() {
         return 5;
     }
 }

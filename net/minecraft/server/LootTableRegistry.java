@@ -14,14 +14,14 @@ import org.apache.logging.log4j.Logger;
 public class LootTableRegistry implements IResourcePackListener {
 
     private static final Logger c = LogManager.getLogger();
-    private static final Gson d = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootSelector.class, new LootSelector.a()).registerTypeAdapter(LootTable.class, new LootTable.a()).registerTypeHierarchyAdapter(LotoSelectorEntry.class, new LotoSelectorEntry.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
+    private static final Gson d = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootSelector.class, new LootSelector.a()).registerTypeAdapter(LootTable.class, new LootTable.a()).registerTypeHierarchyAdapter(LootSelectorEntry.class, new LootSelectorEntry.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
     private final Map<MinecraftKey, LootTable> e = Maps.newHashMap();
     public static final int a = "loot_tables/".length();
     public static final int b = ".json".length();
 
     public LootTableRegistry() {}
 
-    public LootTable a(MinecraftKey minecraftkey) {
+    public LootTable getLootTable(MinecraftKey minecraftkey) {
         return (LootTable) this.e.getOrDefault(minecraftkey, LootTable.a);
     }
 

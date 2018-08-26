@@ -35,7 +35,7 @@ public class WorldManager implements IWorldAccess {
     }
 
     public void a(@Nullable EntityHuman entityhuman, SoundEffect soundeffect, SoundCategory soundcategory, double d0, double d1, double d2, float f, float f1) {
-        this.a.getPlayerList().sendPacketNearby(entityhuman, d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.world.worldProvider.getDimensionManager().getDimensionID(), new PacketPlayOutNamedSoundEffect(soundeffect, soundcategory, d0, d1, d2, f, f1));
+        this.a.getPlayerList().sendPacketNearby(entityhuman, d0, d1, d2, f > 1.0F ? (double) (16.0F * f) : 16.0D, this.world.worldProvider.getDimensionManager(), new PacketPlayOutNamedSoundEffect(soundeffect, soundcategory, d0, d1, d2, f, f1));
     }
 
     public void a(int i, int j, int k, int l, int i1, int j1) {}
@@ -49,7 +49,7 @@ public class WorldManager implements IWorldAccess {
     public void a(SoundEffect soundeffect, BlockPosition blockposition) {}
 
     public void a(EntityHuman entityhuman, int i, BlockPosition blockposition, int j) {
-        this.a.getPlayerList().sendPacketNearby(entityhuman, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 64.0D, this.world.worldProvider.getDimensionManager().getDimensionID(), new PacketPlayOutWorldEvent(i, blockposition, j, false));
+        this.a.getPlayerList().sendPacketNearby(entityhuman, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 64.0D, this.world.worldProvider.getDimensionManager(), new PacketPlayOutWorldEvent(i, blockposition, j, false));
     }
 
     public void a(int i, BlockPosition blockposition, int j) {

@@ -10,7 +10,7 @@ public class BlockConcretePowder extends BlockFalling {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        if (iblockdata1.getMaterial().isLiquid()) {
+        if (x(iblockdata1)) {
             world.setTypeAndData(blockposition, this.a, 3);
         }
 
@@ -20,7 +20,7 @@ public class BlockConcretePowder extends BlockFalling {
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
 
-        return !blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition()).getMaterial().isLiquid() && !a((IBlockAccess) world, blockposition) ? super.getPlacedState(blockactioncontext) : this.a;
+        return !x(world.getType(blockposition)) && !a((IBlockAccess) world, blockposition) ? super.getPlacedState(blockactioncontext) : this.a;
     }
 
     private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -31,10 +31,12 @@ public class BlockConcretePowder extends BlockFalling {
 
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
+            IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
 
-            if (enumdirection != EnumDirection.DOWN) {
+            if (enumdirection != EnumDirection.DOWN || x(iblockdata)) {
                 blockposition_mutableblockposition.g(blockposition).c(enumdirection);
-                if (iblockaccess.getType(blockposition_mutableblockposition).getMaterial().isLiquid()) {
+                iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
+                if (x(iblockdata) && !Block.a(iblockdata.h(iblockaccess, blockposition), enumdirection.opposite())) {
                     flag = true;
                     break;
                 }
@@ -42,6 +44,10 @@ public class BlockConcretePowder extends BlockFalling {
         }
 
         return flag;
+    }
+
+    private static boolean x(IBlockData iblockdata) {
+        return iblockdata.s().a(TagsFluid.WATER);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {

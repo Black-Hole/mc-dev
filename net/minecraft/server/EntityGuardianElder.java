@@ -10,7 +10,7 @@ public class EntityGuardianElder extends EntityGuardian {
     public EntityGuardianElder(World world) {
         super(EntityTypes.ELDER_GUARDIAN, world);
         this.setSize(this.width * 2.35F, this.length * 2.35F);
-        this.dj();
+        this.di();
         if (this.goalRandomStroll != null) {
             this.goalRandomStroll.setTimeBetweenMovement(400);
         }
@@ -25,7 +25,7 @@ public class EntityGuardianElder extends EntityGuardian {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.E;
     }
 
@@ -45,7 +45,7 @@ public class EntityGuardianElder extends EntityGuardian {
         return this.aq() ? SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH : SoundEffects.ENTITY_ELDER_GUARDIAN_DEATH_LAND;
     }
 
-    protected SoundEffect dB() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_ELDER_GUARDIAN_FLOP;
     }
 
@@ -73,7 +73,7 @@ public class EntityGuardianElder extends EntityGuardian {
             }
         }
 
-        if (!this.dx()) {
+        if (!this.dw()) {
             this.a(new BlockPosition(this), 16);
         }
 

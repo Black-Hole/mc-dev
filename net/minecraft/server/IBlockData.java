@@ -72,7 +72,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
         int i = block.j(this, iblockaccess, blockposition);
 
         if (object2bytemap != null) {
-            object2bytemap.put(this, (byte) Math.min(i, iblockaccess.J()));
+            object2bytemap.put(this, (byte) Math.min(i, iblockaccess.K()));
         }
 
         return i;

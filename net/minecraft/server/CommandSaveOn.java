@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class CommandSaveOn {
@@ -16,11 +17,10 @@ public class CommandSaveOn {
         })).executes((commandcontext) -> {
             CommandListenerWrapper commandlistenerwrapper = (CommandListenerWrapper) commandcontext.getSource();
             boolean flag = false;
-            WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
-            int i = aworldserver.length;
+            Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
-            for (int j = 0; j < i; ++j) {
-                WorldServer worldserver = aworldserver[j];
+            while (iterator.hasNext()) {
+                WorldServer worldserver = (WorldServer) iterator.next();
 
                 if (worldserver != null && worldserver.savingDisabled) {
                     worldserver.savingDisabled = false;

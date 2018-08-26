@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -30,22 +31,24 @@ public class CustomFunction {
         ArrayList arraylist = Lists.newArrayListWithCapacity(list.size());
 
         for (int i = 0; i < list.size(); ++i) {
+            int j = i + 1;
             String s = ((String) list.get(i)).trim();
+            StringReader stringreader = new StringReader(s);
 
-            if (!s.startsWith("#") && !s.isEmpty()) {
-                String[] astring = s.split(" ", 2);
-                String s1 = astring[0];
+            if (stringreader.canRead() && stringreader.peek() != 35) {
+                if (stringreader.peek() == 47) {
+                    stringreader.skip();
+                    if (stringreader.peek() == 47) {
+                        throw new IllegalArgumentException("Unknown or invalid command \'" + s + "\' on line " + j + " (if you intended to make a comment, use \'#\' not \'//\')");
+                    }
 
-                if (s1.startsWith("//")) {
-                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' on line " + i + " (if you intended to make a comment, use \'#\' not \'//\')");
-                }
+                    String s1 = stringreader.readUnquotedString();
 
-                if (s1.startsWith("/") && s1.length() > 1) {
-                    throw new IllegalArgumentException("Unknown or invalid command \'" + s1 + "\' on line " + i + " (did you mean \'" + s1.substring(1) + "\'? Do not use a preceding forwards slash.)");
+                    throw new IllegalArgumentException("Unknown or invalid command \'" + s + "\' on line " + j + " (did you mean \'" + s1 + "\'? Do not use a preceding forwards slash.)");
                 }
 
                 try {
-                    ParseResults parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(s, customfunctiondata.f());
+                    ParseResults parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.f());
 
                     if (parseresults.getReader().canRead()) {
                         if (parseresults.getExceptions().size() == 1) {
@@ -61,12 +64,12 @@ public class CustomFunction {
 
                     arraylist.add(new CustomFunction.b(parseresults));
                 } catch (CommandSyntaxException commandsyntaxexception) {
-                    throw new IllegalArgumentException("Whilst parsing command on line " + i + ": " + commandsyntaxexception.getMessage());
+                    throw new IllegalArgumentException("Whilst parsing command on line " + j + ": " + commandsyntaxexception.getMessage());
                 }
             }
         }
 
-        return new CustomFunction(minecraftkey, (CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[arraylist.size()]));
+        return new CustomFunction(minecraftkey, (CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[0]));
     }
 
     public static class a {
@@ -142,7 +145,7 @@ public class CustomFunction {
         }
 
         public void a(CustomFunctionData customfunctiondata, CommandListenerWrapper commandlistenerwrapper, ArrayDeque<CustomFunctionData.a> arraydeque, int i) throws CommandSyntaxException {
-            customfunctiondata.d().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getReader(), this.a.getExceptions()));
+            customfunctiondata.d().execute(new ParseResults(this.a.getContext().withSource(commandlistenerwrapper), this.a.getStartIndex(), this.a.getReader(), this.a.getExceptions()));
         }
 
         public String toString() {

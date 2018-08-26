@@ -35,7 +35,7 @@ public class BlockCommand extends BlockTileEntity {
                 if (!flag1 && !tileentitycommand.e() && tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag) {
                         tileentitycommand.h();
-                        world.I().a(blockposition, this, this.a((IWorldReader) world));
+                        world.J().a(blockposition, this, this.a((IWorldReader) world));
                     }
 
                 }
@@ -63,7 +63,7 @@ public class BlockCommand extends BlockTileEntity {
                     }
 
                     if (tileentitycommand.d() || tileentitycommand.e()) {
-                        world.I().a(blockposition, this, this.a((IWorldReader) world));
+                        world.J().a(blockposition, this, this.a((IWorldReader) world));
                     }
                 } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
                     if (flag1) {
@@ -211,7 +211,7 @@ public class BlockCommand extends BlockTileEntity {
         if (i <= 0) {
             int j = Math.max(gamerules.c("maxCommandChainLength"), 0);
 
-            BlockCommand.c.warn("Commandblock chain tried to execure more than {} steps!", Integer.valueOf(j));
+            BlockCommand.c.warn("Command Block chain tried to execute more than {} steps!", Integer.valueOf(j));
         }
 
     }

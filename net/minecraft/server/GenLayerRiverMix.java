@@ -4,11 +4,11 @@ public enum GenLayerRiverMix implements AreaTransformer3, AreaTransformerIdentit
 
     INSTANCE;
 
-    private static final int b = BiomeBase.a(Biomes.m);
-    private static final int c = BiomeBase.a(Biomes.n);
-    private static final int d = BiomeBase.a(Biomes.p);
-    private static final int e = BiomeBase.a(Biomes.q);
-    private static final int f = BiomeBase.a(Biomes.i);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.m);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.n);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.p);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.q);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.i);
 
     private GenLayerRiverMix() {}
 

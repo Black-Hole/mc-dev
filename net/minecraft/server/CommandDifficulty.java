@@ -40,7 +40,7 @@ public class CommandDifficulty {
     public static int a(CommandListenerWrapper commandlistenerwrapper, EnumDifficulty enumdifficulty) throws CommandSyntaxException {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver.worldServer[0].getDifficulty() == enumdifficulty) {
+        if (minecraftserver.getWorldServer(DimensionManager.OVERWORLD).getDifficulty() == enumdifficulty) {
             throw CommandDifficulty.a.create(enumdifficulty.c());
         } else {
             minecraftserver.a(enumdifficulty);

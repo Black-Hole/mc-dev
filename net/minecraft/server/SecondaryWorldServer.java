@@ -4,11 +4,8 @@ import java.util.function.Function;
 
 public class SecondaryWorldServer extends WorldServer {
 
-    private final WorldServer a;
-
-    public SecondaryWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, int i, WorldServer worldserver, MethodProfiler methodprofiler) {
-        super(minecraftserver, idatamanager, new SecondaryWorldData(worldserver.getWorldData()), i, methodprofiler);
-        this.a = worldserver;
+    public SecondaryWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, DimensionManager dimensionmanager, WorldServer worldserver, MethodProfiler methodprofiler) {
+        super(minecraftserver, idatamanager, worldserver.h(), new SecondaryWorldData(worldserver.getWorldData()), dimensionmanager, methodprofiler);
         worldserver.getWorldBorder().a(new IWorldBorderListener() {
             public void a(WorldBorder worldborder, double d0) {
                 SecondaryWorldServer.this.getWorldBorder().setSize(d0);
@@ -42,14 +39,13 @@ public class SecondaryWorldServer extends WorldServer {
 
     protected void a() {}
 
-    public GeneratorAccess b() {
-        this.worldMaps = this.a.s_();
+    public SecondaryWorldServer b() {
         String s = PersistentVillage.a(this.worldProvider);
-        PersistentVillage persistentvillage = (PersistentVillage) this.worldMaps.get(PersistentVillage::new, s);
+        PersistentVillage persistentvillage = (PersistentVillage) this.a(DimensionManager.OVERWORLD, PersistentVillage::new, s);
 
         if (persistentvillage == null) {
             this.villages = new PersistentVillage(this);
-            this.worldMaps.a(s, this.villages);
+            this.a(DimensionManager.OVERWORLD, s, (PersistentBase) this.villages);
         } else {
             this.villages = persistentvillage;
             this.villages.a((World) this);
@@ -60,5 +56,9 @@ public class SecondaryWorldServer extends WorldServer {
 
     public void t_() {
         this.worldProvider.k();
+    }
+
+    public WorldServer i_() {
+        return this.b();
     }
 }

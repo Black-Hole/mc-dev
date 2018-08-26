@@ -60,7 +60,7 @@ public class WorldGenCanyonOcean extends WorldGenCanyon {
 
                                                 if ((double) f < 0.25D) {
                                                     generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK.getBlockData(), 2);
-                                                    generatoraccess.I().a(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK, 0);
+                                                    generatoraccess.J().a(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK, 0);
                                                     flag = true;
                                                 } else {
                                                     generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData(), 2);
@@ -78,7 +78,7 @@ public class WorldGenCanyonOcean extends WorldGenCanyon {
 
                                                     if (iblockdata1.isAir()) {
                                                         generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenCanyonOcean.c.i(), 2);
-                                                        generatoraccess.H().a(blockposition_mutableblockposition, WorldGenCanyonOcean.c.c(), 0);
+                                                        generatoraccess.I().a(blockposition_mutableblockposition, WorldGenCanyonOcean.c.c(), 0);
                                                         flag = true;
                                                         flag1 = true;
                                                         break;

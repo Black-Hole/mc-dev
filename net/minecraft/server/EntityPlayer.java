@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 public class EntityPlayer extends EntityHuman implements ICrafting {
 
     private static final Logger cc = LogManager.getLogger();
-    private static final IChatBaseComponent cd = (new ChatMessage("multiplayer.message_not_delivered", new Object[0])).a(EnumChatFormat.RED);
     public String locale = "en_US";
     public PlayerConnection playerConnection;
     public final MinecraftServer server;
@@ -26,30 +25,30 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double d;
     public double e;
     public final List<Integer> removeQueue = Lists.newLinkedList();
-    private final AdvancementDataPlayer cg;
-    private final ServerStatisticManager ch;
-    private float ci = Float.MIN_VALUE;
+    private final AdvancementDataPlayer cf;
+    private final ServerStatisticManager cg;
+    private float ch = Float.MIN_VALUE;
+    private int ci = Integer.MIN_VALUE;
     private int cj = Integer.MIN_VALUE;
     private int ck = Integer.MIN_VALUE;
     private int cl = Integer.MIN_VALUE;
     private int cm = Integer.MIN_VALUE;
-    private int cn = Integer.MIN_VALUE;
     private float lastHealthSent = -1.0E8F;
-    private int cp = -99999999;
-    private boolean cq = true;
+    private int co = -99999999;
+    private boolean cp = true;
     public int lastSentExp = -99999999;
     public int invulnerableTicks = 60;
-    private EntityHuman.EnumChatVisibility ct;
-    private boolean cu = true;
-    private long cv = SystemUtils.b();
-    private Entity cw;
+    private EntityHuman.EnumChatVisibility cs;
+    private boolean ct = true;
+    private long cu = SystemUtils.b();
+    private Entity cv;
     public boolean worldChangeInvuln;
-    private boolean cy;
-    private final RecipeBookServer cz;
-    private Vec3D cA;
-    private int cB;
-    private boolean cC;
-    private Vec3D cD;
+    private boolean cx;
+    private final RecipeBookServer cy;
+    private Vec3D cz;
+    private int cA;
+    private boolean cB;
+    private Vec3D cC;
     private int containerCounter;
     public boolean f;
     public int ping;
@@ -60,9 +59,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         playerinteractmanager.player = this;
         this.playerInteractManager = playerinteractmanager;
         this.server = minecraftserver;
-        this.cz = new RecipeBookServer(minecraftserver.getCraftingManager());
-        this.ch = minecraftserver.getPlayerList().getStatisticManager(this);
-        this.cg = minecraftserver.getPlayerList().h(this);
+        this.cy = new RecipeBookServer(minecraftserver.getCraftingManager());
+        this.cg = minecraftserver.getPlayerList().getStatisticManager(this);
+        this.cf = minecraftserver.getPlayerList().h(this);
         this.Q = 1.0F;
         this.a(worldserver);
     }
@@ -83,7 +82,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             }
 
             int k = (i * 2 + 1) * (i * 2 + 1);
-            int l = this.s(k);
+            int l = this.r(k);
             int i1 = (new Random()).nextInt(k);
 
             for (int j1 = 0; j1 < k; ++j1) {
@@ -109,7 +108,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
-    private int s(int i) {
+    private int r(int i) {
         return i <= 16 ? i - 1 : 17;
     }
 
@@ -126,12 +125,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (nbttagcompound.hasKeyOfType("enteredNetherPosition", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("enteredNetherPosition");
 
-            this.cD = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
+            this.cC = new Vec3D(nbttagcompound1.getDouble("x"), nbttagcompound1.getDouble("y"), nbttagcompound1.getDouble("z"));
         }
 
-        this.cy = nbttagcompound.getBoolean("seenCredits");
+        this.cx = nbttagcompound.getBoolean("seenCredits");
         if (nbttagcompound.hasKeyOfType("recipeBook", 10)) {
-            this.cz.a(nbttagcompound.getCompound("recipeBook"));
+            this.cy.a(nbttagcompound.getCompound("recipeBook"));
         }
 
     }
@@ -139,13 +138,13 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("playerGameType", this.playerInteractManager.getGameMode().getId());
-        nbttagcompound.setBoolean("seenCredits", this.cy);
-        if (this.cD != null) {
+        nbttagcompound.setBoolean("seenCredits", this.cx);
+        if (this.cC != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound1.setDouble("x", this.cD.x);
-            nbttagcompound1.setDouble("y", this.cD.y);
-            nbttagcompound1.setDouble("z", this.cD.z);
+            nbttagcompound1.setDouble("x", this.cC.x);
+            nbttagcompound1.setDouble("y", this.cC.y);
+            nbttagcompound1.setDouble("z", this.cC.z);
             nbttagcompound.set("enteredNetherPosition", nbttagcompound1);
         }
 
@@ -162,7 +161,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             nbttagcompound.set("RootVehicle", nbttagcompound2);
         }
 
-        nbttagcompound.set("recipeBook", this.cz.e());
+        nbttagcompound.set("recipeBook", this.cy.e());
     }
 
     public void a(int i) {
@@ -252,11 +251,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         }
 
         CriterionTriggers.w.a(this);
-        if (this.cA != null) {
-            CriterionTriggers.u.a(this, this.cA, this.ticksLived - this.cB);
+        if (this.cz != null) {
+            CriterionTriggers.u.a(this, this.cz, this.ticksLived - this.cA);
         }
 
-        this.cg.b(this);
+        this.cf.b(this);
     }
 
     public void playerTick() {
@@ -275,41 +274,41 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 }
             }
 
-            if (this.getHealth() != this.lastHealthSent || this.cp != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cq) {
+            if (this.getHealth() != this.lastHealthSent || this.co != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cp) {
                 this.playerConnection.sendPacket(new PacketPlayOutUpdateHealth(this.getHealth(), this.foodData.getFoodLevel(), this.foodData.getSaturationLevel()));
                 this.lastHealthSent = this.getHealth();
-                this.cp = this.foodData.getFoodLevel();
-                this.cq = this.foodData.getSaturationLevel() == 0.0F;
+                this.co = this.foodData.getFoodLevel();
+                this.cp = this.foodData.getSaturationLevel() == 0.0F;
             }
 
-            if (this.getHealth() + this.getAbsorptionHearts() != this.ci) {
-                this.ci = this.getHealth() + this.getAbsorptionHearts();
-                this.a(IScoreboardCriteria.g, MathHelper.f(this.ci));
+            if (this.getHealth() + this.getAbsorptionHearts() != this.ch) {
+                this.ch = this.getHealth() + this.getAbsorptionHearts();
+                this.a(IScoreboardCriteria.g, MathHelper.f(this.ch));
             }
 
-            if (this.foodData.getFoodLevel() != this.cj) {
-                this.cj = this.foodData.getFoodLevel();
-                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.cj));
+            if (this.foodData.getFoodLevel() != this.ci) {
+                this.ci = this.foodData.getFoodLevel();
+                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.ci));
             }
 
-            if (this.getAirTicks() != this.ck) {
-                this.ck = this.getAirTicks();
-                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.ck));
+            if (this.getAirTicks() != this.cj) {
+                this.cj = this.getAirTicks();
+                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.cj));
             }
 
-            if (this.getArmorStrength() != this.cl) {
-                this.cl = this.getArmorStrength();
-                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.cl));
+            if (this.getArmorStrength() != this.ck) {
+                this.ck = this.getArmorStrength();
+                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.ck));
             }
 
-            if (this.expTotal != this.cn) {
-                this.cn = this.expTotal;
-                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cn));
+            if (this.expTotal != this.cm) {
+                this.cm = this.expTotal;
+                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cm));
             }
 
-            if (this.expLevel != this.cm) {
-                this.cm = this.expLevel;
-                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.cm));
+            if (this.expLevel != this.cl) {
+                this.cl = this.expLevel;
+                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.cl));
             }
 
             if (this.expTotal != this.lastSentExp) {
@@ -339,19 +338,35 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void die(DamageSource damagesource) {
         boolean flag = this.world.getGameRules().getBoolean("showDeathMessages");
 
-        this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, flag));
         if (flag) {
+            IChatBaseComponent ichatbasecomponent = this.getCombatTracker().getDeathMessage();
+
+            this.playerConnection.a((Packet) (new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatbasecomponent)), (future) -> {
+                if (!future.isSuccess()) {
+                    boolean flag = true;
+                    String s = ichatbasecomponent.a(256);
+                    ChatMessage chatmessage = new ChatMessage("death.attack.message_too_long", new Object[] { (new ChatComponentText(s)).a(EnumChatFormat.YELLOW)});
+                    IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("death.attack.even_more_magic", new Object[] { this.getScoreboardDisplayName()})).a((chatmodifier) -> {
+                        chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
+                    });
+
+                    this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatbasecomponent1));
+                }
+
+            });
             ScoreboardTeamBase scoreboardteambase = this.be();
 
             if (scoreboardteambase != null && scoreboardteambase.getDeathMessageVisibility() != ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS) {
                 if (scoreboardteambase.getDeathMessageVisibility() == ScoreboardTeamBase.EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS) {
-                    this.server.getPlayerList().a((EntityHuman) this, this.getCombatTracker().getDeathMessage());
+                    this.server.getPlayerList().a((EntityHuman) this, ichatbasecomponent);
                 } else if (scoreboardteambase.getDeathMessageVisibility() == ScoreboardTeamBase.EnumNameTagVisibility.HIDE_FOR_OWN_TEAM) {
-                    this.server.getPlayerList().b((EntityHuman) this, this.getCombatTracker().getDeathMessage());
+                    this.server.getPlayerList().b((EntityHuman) this, ichatbasecomponent);
                 }
             } else {
-                this.server.getPlayerList().sendMessage(this.getCombatTracker().getDeathMessage());
+                this.server.getPlayerList().sendMessage(ichatbasecomponent);
             }
+        } else {
+            this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED));
         }
 
         this.releaseShoulderEntities();
@@ -370,7 +385,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.a(StatisticList.DEATHS);
         this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_DEATH));
-        this.a(StatisticList.CUSTOM.b(StatisticList.n));
+        this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_REST));
         this.extinguish();
         this.setFlag(0, false);
         this.getCombatTracker().g();
@@ -414,7 +429,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (this.isInvulnerable(damagesource)) {
             return false;
         } else {
-            boolean flag = this.server.S() && this.canPvP() && "fall".equals(damagesource.translationIndex);
+            boolean flag = this.server.Q() && this.canPvP() && "fall".equals(damagesource.translationIndex);
 
             if (!flag && this.invulnerableTicks > 0 && damagesource != DamageSource.OUT_OF_WORLD) {
                 return false;
@@ -428,8 +443,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
                     if (entity instanceof EntityArrow) {
                         EntityArrow entityarrow = (EntityArrow) entity;
+                        Entity entity1 = entityarrow.getShooter();
 
-                        if (entityarrow.shooter instanceof EntityHuman && !this.a((EntityHuman) entityarrow.shooter)) {
+                        if (entity1 instanceof EntityHuman && !this.a((EntityHuman) entity1)) {
                             return false;
                         }
                     }
@@ -449,33 +465,33 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     @Nullable
-    public Entity d(int i) {
+    public Entity a(DimensionManager dimensionmanager) {
         this.worldChangeInvuln = true;
-        if (this.dimension == 0 && i == -1) {
-            this.cD = new Vec3D(this.locX, this.locY, this.locZ);
-        } else if (this.dimension != -1 && i != 0) {
-            this.cD = null;
+        if (this.dimension == DimensionManager.OVERWORLD && dimensionmanager == DimensionManager.NETHER) {
+            this.cC = new Vec3D(this.locX, this.locY, this.locZ);
+        } else if (this.dimension != DimensionManager.NETHER && dimensionmanager != DimensionManager.OVERWORLD) {
+            this.cC = null;
         }
 
-        if (this.dimension == 1 && i == 1) {
+        if (this.dimension == DimensionManager.THE_END && dimensionmanager == DimensionManager.THE_END) {
             this.world.kill(this);
             if (!this.viewingCredits) {
                 this.viewingCredits = true;
-                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, this.cy ? 0.0F : 1.0F));
-                this.cy = true;
+                this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, this.cx ? 0.0F : 1.0F));
+                this.cx = true;
             }
 
             return this;
         } else {
-            if (this.dimension == 0 && i == 1) {
-                i = 1;
+            if (this.dimension == DimensionManager.OVERWORLD && dimensionmanager == DimensionManager.THE_END) {
+                dimensionmanager = DimensionManager.THE_END;
             }
 
-            this.server.getPlayerList().a(this, i);
+            this.server.getPlayerList().a(this, dimensionmanager);
             this.playerConnection.sendPacket(new PacketPlayOutWorldEvent(1032, BlockPosition.ZERO, 0, false));
             this.lastSentExp = -1;
             this.lastHealthSent = -1.0F;
-            this.cp = -1;
+            this.co = -1;
             return this;
         }
     }
@@ -600,7 +616,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void openTileEntity(ITileEntityContainer itileentitycontainer) {
-        if (itileentitycontainer instanceof ILootable && ((ILootable) itileentitycontainer).Q_() != null && this.isSpectator()) {
+        if (itileentitycontainer instanceof ILootable && ((ILootable) itileentitycontainer).getLootTable() != null && this.isSpectator()) {
             this.a((new ChatMessage("container.spectatorCantOpen", new Object[0])).a(EnumChatFormat.RED), true);
         } else {
             this.nextContainerCounter();
@@ -612,7 +628,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void openContainer(IInventory iinventory) {
-        if (iinventory instanceof ILootable && ((ILootable) iinventory).Q_() != null && this.isSpectator()) {
+        if (iinventory instanceof ILootable && ((ILootable) iinventory).getLootTable() != null && this.isSpectator()) {
             this.a((new ChatMessage("container.spectatorCantOpen", new Object[0])).a(EnumChatFormat.RED), true);
         } else {
             if (this.activeContainer != this.defaultContainer) {
@@ -758,19 +774,19 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(Statistic<?> statistic, int i) {
-        this.ch.b(this, statistic, i);
+        this.cg.b(this, statistic, i);
         this.getScoreboard().getObjectivesForCriteria(statistic, this.getName(), (scoreboardscore) -> {
             scoreboardscore.addScore(i);
         });
     }
 
     public void a(Statistic<?> statistic) {
-        this.ch.setStatistic(this, statistic, 0);
+        this.cg.setStatistic(this, statistic, 0);
         this.getScoreboard().getObjectivesForCriteria(statistic, this.getName(), ScoreboardScore::c);
     }
 
     public int a(Collection<IRecipe> collection) {
-        return this.cz.a(collection, this);
+        return this.cy.a(collection, this);
     }
 
     public void a(MinecraftKey[] aminecraftkey) {
@@ -791,7 +807,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public int b(Collection<IRecipe> collection) {
-        return this.cz.b(collection, this);
+        return this.cy.b(collection, this);
     }
 
     public void giveExp(int i) {
@@ -800,7 +816,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void n() {
-        this.cC = true;
+        this.cB = true;
         this.ejectPassengers();
         if (this.sleeping) {
             this.a(true, false, false);
@@ -809,7 +825,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public boolean o() {
-        return this.cC;
+        return this.cB;
     }
 
     public void triggerHealthUpdate() {
@@ -865,11 +881,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.getDataWatcher().set(EntityPlayer.bx, entityplayer.getDataWatcher().get(EntityPlayer.bx));
         this.lastSentExp = -1;
         this.lastHealthSent = -1.0F;
-        this.cp = -1;
-        this.cz.a((RecipeBook) entityplayer.cz);
+        this.co = -1;
+        this.cy.a((RecipeBook) entityplayer.cy);
         this.removeQueue.addAll(entityplayer.removeQueue);
-        this.cy = entityplayer.cy;
-        this.cD = entityplayer.cD;
+        this.cx = entityplayer.cx;
+        this.cC = entityplayer.cC;
         this.setShoulderEntityLeft(entityplayer.getShoulderEntityLeft());
         this.setShoulderEntityRight(entityplayer.getShoulderEntityRight());
     }
@@ -878,8 +894,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.a(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.getId(), mobeffect));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.cB = this.ticksLived;
-            this.cA = new Vec3D(this.locX, this.locY, this.locZ);
+            this.cA = this.ticksLived;
+            this.cz = new Vec3D(this.locX, this.locY, this.locZ);
         }
 
         CriterionTriggers.A.a(this);
@@ -895,7 +911,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         super.b(mobeffect);
         this.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect.getMobEffect()));
         if (mobeffect.getMobEffect() == MobEffects.LEVITATION) {
-            this.cA = null;
+            this.cz = null;
         }
 
         CriterionTriggers.A.a(this);
@@ -953,7 +969,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(IChatBaseComponent ichatbasecomponent, ChatMessageType chatmessagetype) {
         this.playerConnection.a((Packet) (new PacketPlayOutChat(ichatbasecomponent, chatmessagetype)), (future) -> {
             if (!future.isSuccess() && (chatmessagetype == ChatMessageType.GAME_INFO || chatmessagetype == ChatMessageType.SYSTEM)) {
-                this.playerConnection.sendPacket(new PacketPlayOutChat(EntityPlayer.cd, ChatMessageType.SYSTEM));
+                boolean flag = true;
+                String s = ichatbasecomponent.a(256);
+                IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(s)).a(EnumChatFormat.YELLOW);
+
+                this.playerConnection.sendPacket(new PacketPlayOutChat((new ChatMessage("multiplayer.message_not_delivered", new Object[] { ichatbasecomponent1})).a(EnumChatFormat.RED), ChatMessageType.SYSTEM));
             }
 
         });
@@ -969,14 +989,14 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     public void a(PacketPlayInSettings packetplayinsettings) {
         this.locale = packetplayinsettings.b();
-        this.ct = packetplayinsettings.d();
-        this.cu = packetplayinsettings.e();
+        this.cs = packetplayinsettings.d();
+        this.ct = packetplayinsettings.e();
         this.getDataWatcher().set(EntityPlayer.bx, Byte.valueOf((byte) packetplayinsettings.f()));
         this.getDataWatcher().set(EntityPlayer.by, Byte.valueOf((byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1)));
     }
 
     public EntityHuman.EnumChatVisibility getChatFlags() {
-        return this.ct;
+        return this.cs;
     }
 
     public void setResourcePack(String s, String s1) {
@@ -988,15 +1008,15 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void resetIdleTimer() {
-        this.cv = SystemUtils.b();
+        this.cu = SystemUtils.b();
     }
 
     public ServerStatisticManager getStatisticManager() {
-        return this.ch;
+        return this.cg;
     }
 
     public RecipeBookServer B() {
-        return this.cz;
+        return this.cy;
     }
 
     public void c(Entity entity) {
@@ -1024,16 +1044,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public Entity getSpecatorTarget() {
-        return (Entity) (this.cw == null ? this : this.cw);
+        return (Entity) (this.cv == null ? this : this.cv);
     }
 
     public void setSpectatorTarget(Entity entity) {
         Entity entity1 = this.getSpecatorTarget();
 
-        this.cw = (Entity) (entity == null ? this : entity);
-        if (entity1 != this.cw) {
-            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.cw));
-            this.enderTeleportTo(this.cw.locX, this.cw.locY, this.cw.locZ);
+        this.cv = (Entity) (entity == null ? this : entity);
+        if (entity1 != this.cv) {
+            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.cv));
+            this.enderTeleportTo(this.cv.locX, this.cv.locY, this.cv.locZ);
         }
 
     }
@@ -1055,7 +1075,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public long F() {
-        return this.cv;
+        return this.cu;
     }
 
     @Nullable
@@ -1086,12 +1106,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public AdvancementDataPlayer getAdvancementData() {
-        return this.cg;
+        return this.cf;
     }
 
     @Nullable
     public Vec3D M() {
-        return this.cD;
+        return this.cC;
     }
 
     public void a(WorldServer worldserver, double d0, double d1, double d2, float f, float f1) {
@@ -1102,7 +1122,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         } else {
             WorldServer worldserver1 = this.getWorldServer();
 
-            this.dimension = worldserver.worldProvider.getDimensionManager().getDimensionID();
+            this.dimension = worldserver.worldProvider.getDimensionManager();
             this.playerConnection.sendPacket(new PacketPlayOutRespawn(this.dimension, worldserver1.getDifficulty(), worldserver1.getWorldData().getType(), this.playerInteractManager.getGameMode()));
             this.server.getPlayerList().f(this);
             worldserver1.removeEntity(this);

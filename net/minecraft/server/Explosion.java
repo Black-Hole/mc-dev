@@ -65,9 +65,10 @@ public class Explosion {
                             BlockPosition blockposition = new BlockPosition(d4, d5, d6);
                             IBlockData iblockdata = this.world.getType(blockposition);
                             Fluid fluid = this.world.b(blockposition);
-                            float f2 = Math.max(iblockdata.getBlock().k(), fluid.l());
 
-                            if (f2 > 0.0F) {
+                            if (!iblockdata.isAir() || !fluid.e()) {
+                                float f2 = Math.max(iblockdata.getBlock().getDurability(), fluid.l());
+
                                 if (this.source != null) {
                                     f2 = this.source.a(this, this.world, blockposition, iblockdata, fluid, f2);
                                 }

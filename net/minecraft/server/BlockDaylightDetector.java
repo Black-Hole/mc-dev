@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockDaylightDetector extends BlockTileEntity {
 
-    public static final BlockStateInteger POWER = BlockProperties.ak;
+    public static final BlockStateInteger POWER = BlockProperties.al;
     public static final BlockStateBoolean b = BlockProperties.m;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D);
 

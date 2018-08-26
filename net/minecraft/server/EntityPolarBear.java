@@ -47,14 +47,14 @@ public class EntityPolarBear extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
         BiomeBase biomebase = generatoraccess.getBiome(blockposition);
 
-        return biomebase != Biomes.l && biomebase != Biomes.Z ? super.a(generatoraccess) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
+        return biomebase != Biomes.l && biomebase != Biomes.Z ? super.a(generatoraccess, flag) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
     }
 
     protected SoundEffect D() {
@@ -73,7 +73,7 @@ public class EntityPolarBear extends EntityAnimal {
         this.a(SoundEffects.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
     }
 
-    protected void dz() {
+    protected void dy() {
         if (this.bG <= 0) {
             this.a(SoundEffects.ENTITY_POLAR_BEAR_WARNING, 1.0F, 1.0F);
             this.bG = 40;
@@ -82,7 +82,7 @@ public class EntityPolarBear extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.M;
     }
 
@@ -95,7 +95,7 @@ public class EntityPolarBear extends EntityAnimal {
         super.tick();
         if (this.world.isClientSide) {
             this.bD = this.bE;
-            if (this.dA()) {
+            if (this.dz()) {
                 this.bE = MathHelper.a(this.bE + 1.0F, 0.0F, 6.0F);
             } else {
                 this.bE = MathHelper.a(this.bE - 1.0F, 0.0F, 6.0F);
@@ -118,7 +118,7 @@ public class EntityPolarBear extends EntityAnimal {
         return flag;
     }
 
-    public boolean dA() {
+    public boolean dz() {
         return ((Boolean) this.datawatcher.get(EntityPolarBear.bC)).booleanValue();
     }
 
@@ -177,7 +177,7 @@ public class EntityPolarBear extends EntityAnimal {
 
                 if (this.b <= 10) {
                     EntityPolarBear.this.s(true);
-                    EntityPolarBear.this.dz();
+                    EntityPolarBear.this.dy();
                 }
             } else {
                 this.b = 20;

@@ -79,7 +79,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (EntityEnderman.bC.equals(datawatcherobject) && this.dC() && this.world.isClientSide) {
+        if (EntityEnderman.bC.equals(datawatcherobject) && this.dB() && this.world.isClientSide) {
             this.l();
         }
 
@@ -147,19 +147,19 @@ public class EntityEnderman extends EntityMonster {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
-        if (this.world.K() && this.ticksLived >= this.bE + 600) {
+        if (this.world.L() && this.ticksLived >= this.bE + 600) {
             float f = this.az();
 
             if (f > 0.5F && this.world.e(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
-                this.dA();
+                this.dz();
             }
         }
 
         super.mobTick();
     }
 
-    protected boolean dA() {
+    protected boolean dz() {
         double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
         double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
         double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
@@ -191,7 +191,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected SoundEffect D() {
-        return this.dC() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
+        return this.dB() ? SoundEffects.ENTITY_ENDERMAN_SCREAM : SoundEffects.ENTITY_ENDERMAN_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
@@ -213,7 +213,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.C;
     }
 
@@ -231,7 +231,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else if (damagesource instanceof EntityDamageSourceIndirect) {
             for (int i = 0; i < 64; ++i) {
-                if (this.dA()) {
+                if (this.dz()) {
                     return true;
                 }
             }
@@ -241,14 +241,14 @@ public class EntityEnderman extends EntityMonster {
             boolean flag = super.damageEntity(damagesource, f);
 
             if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
-                this.dA();
+                this.dz();
             }
 
             return flag;
         }
     }
 
-    public boolean dC() {
+    public boolean dB() {
         return ((Boolean) this.datawatcher.get(EntityEnderman.bC)).booleanValue();
     }
 
@@ -276,7 +276,7 @@ public class EntityEnderman extends EntityMonster {
             MovingObjectPosition movingobjectposition = world.rayTrace(new Vec3D((double) ((float) MathHelper.floor(this.enderman.locX) + 0.5F), (double) ((float) j + 0.5F), (double) ((float) MathHelper.floor(this.enderman.locZ) + 0.5F)), new Vec3D((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F)), FluidCollisionOption.NEVER, true, false);
             boolean flag = movingobjectposition != null && movingobjectposition.a().equals(blockposition);
 
-            if (block.a(TagsBlock.G) && flag) {
+            if (block.a(TagsBlock.ENDERMAN_HOLDABLE) && flag) {
                 this.enderman.setCarried(iblockdata);
                 world.setAir(blockposition);
             }
@@ -374,7 +374,7 @@ public class EntityEnderman extends EntityMonster {
                 if (this.d != null) {
                     if (this.i.f((EntityHuman) this.d)) {
                         if (((EntityHuman) this.d).h(this.i) < 16.0D) {
-                            this.i.dA();
+                            this.i.dz();
                         }
 
                         this.l = 0;

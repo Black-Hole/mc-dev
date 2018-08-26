@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class CommandSaveAll {
@@ -27,11 +28,10 @@ public class CommandSaveAll {
         boolean flag1 = false;
 
         minecraftserver.getPlayerList().savePlayers();
-        WorldServer[] aworldserver = minecraftserver.worldServer;
-        int i = aworldserver.length;
+        Iterator iterator = minecraftserver.getWorlds().iterator();
 
-        for (int j = 0; j < i; ++j) {
-            WorldServer worldserver = aworldserver[j];
+        while (iterator.hasNext()) {
+            WorldServer worldserver = (WorldServer) iterator.next();
 
             if (worldserver != null && a(worldserver, flag)) {
                 flag1 = true;

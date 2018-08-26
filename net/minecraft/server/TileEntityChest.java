@@ -17,7 +17,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     }
 
     public TileEntityChest() {
-        this(TileEntityTypes.c);
+        this(TileEntityTypes.CHEST);
     }
 
     public int getSize() {

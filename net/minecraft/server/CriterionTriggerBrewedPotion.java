@@ -57,11 +57,11 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
         if (jsonobject.has("potion")) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
-            if (!PotionRegistry.a.d(minecraftkey)) {
+            if (!IRegistry.POTION.c(minecraftkey)) {
                 throw new JsonSyntaxException("Unknown potion \'" + minecraftkey + "\'");
             }
 
-            potionregistry = (PotionRegistry) PotionRegistry.a.get(minecraftkey);
+            potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey);
         }
 
         return new CriterionTriggerBrewedPotion.b(potionregistry);
@@ -151,7 +151,7 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
             JsonObject jsonobject = new JsonObject();
 
             if (this.a != null) {
-                jsonobject.addProperty("potion", ((MinecraftKey) PotionRegistry.a.b(this.a)).toString());
+                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.a).toString());
             }
 
             return jsonobject;

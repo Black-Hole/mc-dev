@@ -26,7 +26,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
         this.b = entityliving.getUniqueID();
-        this.c = EntityTypes.REGISTRY.a((Object) entityliving.P());
+        this.c = IRegistry.ENTITY_TYPE.a((Object) entityliving.P());
         this.d = entityliving.locX;
         this.e = entityliving.locY;
         this.f = entityliving.locZ;

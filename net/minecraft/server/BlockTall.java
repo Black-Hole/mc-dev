@@ -9,18 +9,18 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     public static final BlockStateBoolean NORTH = BlockSprawling.a;
     public static final BlockStateBoolean EAST = BlockSprawling.b;
     public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.p;
-    public static final BlockStateBoolean q = BlockProperties.x;
-    protected static final Map<EnumDirection, BlockStateBoolean> r = (Map) BlockSprawling.s.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean WEST = BlockSprawling.o;
+    public static final BlockStateBoolean p = BlockProperties.y;
+    protected static final Map<EnumDirection, BlockStateBoolean> q = (Map) BlockSprawling.r.entrySet().stream().filter((entry) -> {
         return ((EnumDirection) entry.getKey()).k().c();
     }).collect(SystemUtils.a());
+    protected final VoxelShape[] r;
     protected final VoxelShape[] s;
-    protected final VoxelShape[] t;
 
     protected BlockTall(float f, float f1, float f2, float f3, float f4, Block.Info block_info) {
         super(block_info);
-        this.s = this.a(f, f1, f4, 0.0F, f4);
-        this.t = this.a(f, f1, f2, 0.0F, f3);
+        this.r = this.a(f, f1, f4, 0.0F, f4);
+        this.s = this.a(f, f1, f2, 0.0F, f3);
     }
 
     protected VoxelShape[] a(float f, float f1, float f2, float f3, float f4) {
@@ -45,11 +45,11 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.t[this.k(iblockdata)];
+        return this.s[this.k(iblockdata)];
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.s[this.k(iblockdata)];
+        return this.r[this.k(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
@@ -79,8 +79,8 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockTall.q)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.q, Boolean.valueOf(false)), 3);
+        if (((Boolean) iblockdata.get(BlockTall.p)).booleanValue()) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -88,18 +88,18 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockTall.q)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return ((Boolean) iblockdata.get(BlockTall.p)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockTall.q)).booleanValue() && fluidtype == FluidTypes.c;
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+        return !((Boolean) iblockdata.get(BlockTall.p)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockTall.q)).booleanValue() && fluid.c() == FluidTypes.c) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+        if (!((Boolean) iblockdata.get(BlockTall.p)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.q, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, Boolean.valueOf(true)), 3);
+                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;

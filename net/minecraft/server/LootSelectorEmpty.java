@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import java.util.Collection;
 import java.util.Random;
 
-public class LootSelectorEmpty extends LotoSelectorEntry {
+public class LootSelectorEmpty extends LootSelectorEntry {
 
     public LootSelectorEmpty(int i, int j, LootItemCondition[] alootitemcondition) {
         super(i, j, alootitemcondition);

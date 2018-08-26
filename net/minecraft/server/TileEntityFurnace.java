@@ -46,12 +46,12 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Items.BLAZE_ROD, 2400);
         a(linkedhashmap, (IMaterial) Items.COAL, 1600);
         a(linkedhashmap, (IMaterial) Items.CHARCOAL, 1600);
-        a(linkedhashmap, TagsItem.n, 300);
-        a(linkedhashmap, TagsItem.b, 300);
-        a(linkedhashmap, TagsItem.h, 300);
-        a(linkedhashmap, TagsItem.i, 150);
-        a(linkedhashmap, TagsItem.k, 300);
-        a(linkedhashmap, TagsItem.j, 300);
+        a(linkedhashmap, TagsItem.LOGS, 300);
+        a(linkedhashmap, TagsItem.PLANKS, 300);
+        a(linkedhashmap, TagsItem.WOODEN_STAIRS, 300);
+        a(linkedhashmap, TagsItem.WOODEN_SLABS, 150);
+        a(linkedhashmap, TagsItem.WOODEN_TRAPDOORS, 300);
+        a(linkedhashmap, TagsItem.WOODEN_PRESSURE_PLATES, 300);
         a(linkedhashmap, (IMaterial) Blocks.OAK_FENCE, 300);
         a(linkedhashmap, (IMaterial) Blocks.BIRCH_FENCE, 300);
         a(linkedhashmap, (IMaterial) Blocks.SPRUCE_FENCE, 300);
@@ -71,7 +71,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Blocks.TRAPPED_CHEST, 300);
         a(linkedhashmap, (IMaterial) Blocks.CRAFTING_TABLE, 300);
         a(linkedhashmap, (IMaterial) Blocks.DAYLIGHT_DETECTOR, 300);
-        a(linkedhashmap, TagsItem.u, 300);
+        a(linkedhashmap, TagsItem.BANNERS, 300);
         a(linkedhashmap, (IMaterial) Items.BOW, 300);
         a(linkedhashmap, (IMaterial) Items.FISHING_ROD, 300);
         a(linkedhashmap, (IMaterial) Blocks.LADDER, 300);
@@ -81,20 +81,20 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         a(linkedhashmap, (IMaterial) Items.WOODEN_HOE, 200);
         a(linkedhashmap, (IMaterial) Items.WOODEN_AXE, 200);
         a(linkedhashmap, (IMaterial) Items.WOODEN_PICKAXE, 200);
-        a(linkedhashmap, TagsItem.g, 200);
-        a(linkedhashmap, TagsItem.C, 200);
-        a(linkedhashmap, TagsItem.a, 100);
-        a(linkedhashmap, TagsItem.d, 100);
+        a(linkedhashmap, TagsItem.WOODEN_DOORS, 200);
+        a(linkedhashmap, TagsItem.BOATS, 200);
+        a(linkedhashmap, TagsItem.WOOL, 100);
+        a(linkedhashmap, TagsItem.WOODEN_BUTTONS, 100);
         a(linkedhashmap, (IMaterial) Items.STICK, 100);
-        a(linkedhashmap, TagsItem.m, 100);
+        a(linkedhashmap, TagsItem.SAPLINGS, 100);
         a(linkedhashmap, (IMaterial) Items.BOWL, 100);
-        a(linkedhashmap, TagsItem.f, 67);
+        a(linkedhashmap, TagsItem.CARPETS, 67);
         a(linkedhashmap, (IMaterial) Blocks.DRIED_KELP_BLOCK, 4001);
         return linkedhashmap;
     }
 
     public TileEntityFurnace() {
-        super(TileEntityTypes.b);
+        super(TileEntityTypes.FURNACE);
         this.items = NonNullList.a(3, ItemStack.a);
         this.m = Maps.newHashMap();
     }
@@ -235,7 +235,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
                 }
             } else {
-                IRecipe irecipe = this.world.D().b(this, this.world);
+                IRecipe irecipe = this.world.E().b(this, this.world);
 
                 if (!this.isBurning() && this.canBurn(irecipe)) {
                     this.burnTime = fuelTime(itemstack);
@@ -281,7 +281,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
     }
 
     private int s() {
-        FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.world.D().b(this, this.world);
+        FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.world.E().b(this, this.world);
 
         return furnacerecipe != null ? furnacerecipe.h() : 200;
     }
@@ -480,7 +480,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
 
             while (iterator.hasNext()) {
                 MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
-                IRecipe irecipe = entityhuman.world.D().a(minecraftkey);
+                IRecipe irecipe = entityhuman.world.E().a(minecraftkey);
 
                 if (irecipe != null) {
                     arraylist.add(irecipe);

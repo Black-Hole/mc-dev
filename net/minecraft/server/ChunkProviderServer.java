@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.LongIterator;
@@ -8,12 +7,11 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.annotation.Nullable;
@@ -27,16 +25,19 @@ public class ChunkProviderServer implements IChunkProvider {
     public final ChunkGenerator<?> chunkGenerator;
     private final IChunkLoader chunkLoader;
     public final Long2ObjectMap<Chunk> chunks = Long2ObjectMaps.synchronize(new ChunkMap(8192));
-    private final ChunkTaskScheduler f;
-    private final SchedulerBatch<ChunkCoordIntPair, ChunkStatus, ProtoChunk> g;
+    private Chunk lastChunk;
+    private final ChunkTaskScheduler chunkScheduler;
+    private final SchedulerBatch<ChunkCoordIntPair, ChunkStatus, ProtoChunk> batchScheduler;
     public final WorldServer world;
+    private final IAsyncTaskHandler asyncTaskHandler;
 
     public ChunkProviderServer(WorldServer worldserver, IChunkLoader ichunkloader, ChunkGenerator<?> chunkgenerator, IAsyncTaskHandler iasynctaskhandler) {
         this.world = worldserver;
         this.chunkLoader = ichunkloader;
         this.chunkGenerator = chunkgenerator;
-        this.f = new ChunkTaskScheduler(2, worldserver, chunkgenerator, ichunkloader, iasynctaskhandler);
-        this.g = new SchedulerBatch(this.f);
+        this.asyncTaskHandler = iasynctaskhandler;
+        this.chunkScheduler = new ChunkTaskScheduler(2, worldserver, chunkgenerator, ichunkloader, iasynctaskhandler);
+        this.batchScheduler = new SchedulerBatch(this.chunkScheduler);
     }
 
     public Collection<Chunk> a() {
@@ -46,7 +47,6 @@ public class ChunkProviderServer implements IChunkProvider {
     public void unload(Chunk chunk) {
         if (this.world.worldProvider.a(chunk.locX, chunk.locZ)) {
             this.unloadQueue.add(ChunkCoordIntPair.a(chunk.locX, chunk.locZ));
-            chunk.d = true;
         }
 
     }
@@ -62,97 +62,80 @@ public class ChunkProviderServer implements IChunkProvider {
 
     }
 
-    @Nullable
-    public Chunk getLoadedChunkAt(int i, int j) {
-        long k = ChunkCoordIntPair.a(i, j);
-        Chunk chunk = (Chunk) this.chunks.get(k);
-
-        if (chunk != null) {
-            chunk.d = false;
-        }
-
-        return chunk;
+    public void a(int i, int j) {
+        this.unloadQueue.remove(ChunkCoordIntPair.a(i, j));
     }
 
     @Nullable
-    private Chunk loadChunkAt(int i, int j) {
-        try {
-            Chunk chunk = this.chunkLoader.a(this.world, i, j, (chunk) -> {
-                chunk.setLastSaved(this.world.getTime());
-                this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
-            });
+    public Chunk getChunkAt(int i, int j, boolean flag, boolean flag1) {
+        IChunkLoader ichunkloader = this.chunkLoader;
+        Chunk chunk;
 
-            if (chunk != null) {
-                chunk.addEntities();
+        synchronized (this.chunkLoader) {
+            if (this.lastChunk != null && this.lastChunk.getPos().x == i && this.lastChunk.getPos().z == j) {
+                return this.lastChunk;
             }
 
+            long k = ChunkCoordIntPair.a(i, j);
+
+            chunk = (Chunk) this.chunks.get(k);
+            if (chunk != null) {
+                this.lastChunk = chunk;
+                return chunk;
+            }
+
+            if (flag) {
+                try {
+                    chunk = this.chunkLoader.a(this.world, i, j, (chunk) -> {
+                        chunk.setLastSaved(this.world.getTime());
+                        this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
+                    });
+                } catch (Exception exception) {
+                    ChunkProviderServer.a.error("Couldn\'t load chunk", exception);
+                }
+            }
+        }
+
+        if (chunk != null) {
+            this.asyncTaskHandler.postToMainThread(chunk::addEntities);
             return chunk;
-        } catch (Exception exception) {
-            ChunkProviderServer.a.error("Couldn\'t load chunk", exception);
+        } else if (flag1) {
+            try {
+                this.batchScheduler.b();
+                this.batchScheduler.a(new ChunkCoordIntPair(i, j));
+                CompletableFuture completablefuture = this.batchScheduler.c();
+
+                return (Chunk) completablefuture.thenApply(this::a).join();
+            } catch (RuntimeException runtimeexception) {
+                throw this.a(i, j, (Throwable) runtimeexception);
+            }
+        } else {
             return null;
         }
     }
 
-    @Nullable
-    public Chunk getOrLoadChunkAt(int i, int j) {
-        Long2ObjectMap long2objectmap = this.chunks;
+    public IChunkAccess a(int i, int j, boolean flag) {
+        Chunk chunk = this.getChunkAt(i, j, true, false);
 
-        synchronized (this.chunks) {
-            Chunk chunk = this.getLoadedChunkAt(i, j);
-
-            return chunk != null ? chunk : this.loadChunkAt(i, j);
-        }
-    }
-
-    public Chunk getChunkAt(int i, int j) {
-        Chunk chunk = this.getOrLoadChunkAt(i, j);
-
-        if (chunk != null) {
-            return chunk;
-        } else {
-            try {
-                chunk = (Chunk) this.generateChunk(i, j).get();
-                return chunk;
-            } catch (ExecutionException | InterruptedException interruptedexception) {
-                throw this.a(i, j, (Throwable) interruptedexception);
-            }
-        }
-    }
-
-    public IChunkAccess d(int i, int j) {
-        Long2ObjectMap long2objectmap = this.chunks;
-
-        synchronized (this.chunks) {
-            IChunkAccess ichunkaccess = (IChunkAccess) this.chunks.get(ChunkCoordIntPair.a(i, j));
-
-            return ichunkaccess != null ? ichunkaccess : (IChunkAccess) this.f.c((Object) (new ChunkCoordIntPair(i, j)));
-        }
+        return (IChunkAccess) (chunk != null ? chunk : (IChunkAccess) this.chunkScheduler.b(new ChunkCoordIntPair(i, j), flag));
     }
 
     public CompletableFuture<ProtoChunk> a(Iterable<ChunkCoordIntPair> iterable, Consumer<Chunk> consumer) {
-        this.g.b();
+        this.batchScheduler.b();
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
-            Chunk chunk = this.getOrLoadChunkAt(chunkcoordintpair.x, chunkcoordintpair.z);
+            Chunk chunk = this.getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, true, false);
 
             if (chunk != null) {
                 consumer.accept(chunk);
             } else {
-                this.g.a(chunkcoordintpair).thenApply(this::a).thenAccept(consumer);
+                this.batchScheduler.a(chunkcoordintpair).thenApply(this::a).thenAccept(consumer);
             }
         }
 
-        return this.g.c();
-    }
-
-    public CompletableFuture<Chunk> generateChunk(int i, int j) {
-        this.g.b();
-        this.g.a(new ChunkCoordIntPair(i, j));
-        CompletableFuture completablefuture = this.g.c();
-
-        return completablefuture.thenApply(this::a);
+        return this.batchScheduler.c();
     }
 
     private ReportedException a(int i, int j, Throwable throwable) {
@@ -191,19 +174,11 @@ public class ChunkProviderServer implements IChunkProvider {
             }
 
             this.chunks.put(k, chunk);
+            this.lastChunk = chunk;
         }
 
-        chunk.addEntities();
+        this.asyncTaskHandler.postToMainThread(chunk::addEntities);
         return chunk;
-    }
-
-    public void saveChunkNOP(Chunk chunk) {
-        try {
-            this.chunkLoader.a(this.world, chunk);
-        } catch (Exception exception) {
-            ChunkProviderServer.a.error("Couldn\'t save entities", exception);
-        }
-
     }
 
     public void saveChunk(IChunkAccess ichunkaccess) {
@@ -221,33 +196,34 @@ public class ChunkProviderServer implements IChunkProvider {
     public boolean a(boolean flag) {
         int i = 0;
 
-        this.f.a();
-        ArrayList arraylist = Lists.newArrayList(this.chunks.values());
-        Iterator iterator = arraylist.iterator();
+        this.chunkScheduler.a(() -> {
+            return true;
+        });
+        IChunkLoader ichunkloader = this.chunkLoader;
 
-        while (iterator.hasNext()) {
-            Chunk chunk = (Chunk) iterator.next();
+        synchronized (this.chunkLoader) {
+            ObjectIterator objectiterator = this.chunks.values().iterator();
 
-            if (flag) {
-                this.saveChunkNOP(chunk);
-            }
+            while (objectiterator.hasNext()) {
+                Chunk chunk = (Chunk) objectiterator.next();
 
-            if (chunk.c(flag)) {
-                this.saveChunk(chunk);
-                chunk.a(false);
-                ++i;
-                if (i == 24 && !flag) {
-                    return false;
+                if (chunk.c(flag)) {
+                    this.saveChunk(chunk);
+                    chunk.a(false);
+                    ++i;
+                    if (i == 24 && !flag) {
+                        return false;
+                    }
                 }
             }
-        }
 
-        return true;
+            return true;
+        }
     }
 
     public void close() {
         try {
-            this.g.a();
+            this.batchScheduler.a();
         } catch (InterruptedException interruptedexception) {
             ChunkProviderServer.a.error("Couldn\'t stop taskManager", interruptedexception);
         }
@@ -255,36 +231,43 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void c() {
-        this.chunkLoader.c();
+        IChunkLoader ichunkloader = this.chunkLoader;
+
+        synchronized (this.chunkLoader) {
+            this.chunkLoader.b();
+        }
     }
 
-    public boolean unloadChunks() {
+    public boolean unloadChunks(BooleanSupplier booleansupplier) {
         if (!this.world.savingDisabled) {
             if (!this.unloadQueue.isEmpty()) {
                 LongIterator longiterator = this.unloadQueue.iterator();
 
-                for (int i = 0; i < 100 && longiterator.hasNext(); longiterator.remove()) {
+                for (int i = 0; longiterator.hasNext() && (booleansupplier.getAsBoolean() || i < 200 || this.unloadQueue.size() > 2000); longiterator.remove()) {
                     Long olong = (Long) longiterator.next();
-                    Chunk chunk = (Chunk) this.chunks.get(olong);
+                    IChunkLoader ichunkloader = this.chunkLoader;
 
-                    if (chunk != null && chunk.d) {
-                        chunk.removeEntities();
-                        this.saveChunk(chunk);
-                        this.saveChunkNOP(chunk);
-                        this.chunks.remove(olong);
-                        ++i;
+                    synchronized (this.chunkLoader) {
+                        Chunk chunk = (Chunk) this.chunks.get(olong);
+
+                        if (chunk != null) {
+                            chunk.removeEntities();
+                            this.saveChunk(chunk);
+                            this.chunks.remove(olong);
+                            this.lastChunk = null;
+                            ++i;
+                        }
                     }
                 }
             }
 
-            this.f.a();
-            this.chunkLoader.b();
+            this.chunkScheduler.a(booleansupplier);
         }
 
         return false;
     }
 
-    public boolean e() {
+    public boolean d() {
         return !this.world.savingDisabled;
     }
 
@@ -301,23 +284,19 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     @Nullable
-    public BlockPosition a(World world, String s, BlockPosition blockposition, int i) {
-        return this.chunkGenerator.findNearestMapFeature(world, s, blockposition, i);
+    public BlockPosition a(World world, String s, BlockPosition blockposition, int i, boolean flag) {
+        return this.chunkGenerator.findNearestMapFeature(world, s, blockposition, i, flag);
     }
 
     public ChunkGenerator<?> getChunkGenerator() {
         return this.chunkGenerator;
     }
 
-    public int h() {
+    public int g() {
         return this.chunks.size();
     }
 
     public boolean isLoaded(int i, int j) {
         return this.chunks.containsKey(ChunkCoordIntPair.a(i, j));
-    }
-
-    public boolean f(int i, int j) {
-        return this.chunks.containsKey(ChunkCoordIntPair.a(i, j)) || this.chunkLoader.chunkExists(i, j);
     }
 }

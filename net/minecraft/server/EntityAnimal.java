@@ -73,13 +73,13 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         this.bD = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
 
-        return generatoraccess.getType(blockposition.down()).getBlock() == this.bF && generatoraccess.getLightLevel(blockposition, 0) > 8 && super.a(generatoraccess);
+        return generatoraccess.getType(blockposition.down()).getBlock() == this.bF && generatoraccess.getLightLevel(blockposition, 0) > 8 && super.a(generatoraccess, flag);
     }
 
     public int z() {
@@ -102,7 +102,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (this.f(itemstack)) {
-            if (this.getAge() == 0 && this.dE()) {
+            if (this.getAge() == 0 && this.dD()) {
                 this.a(entityhuman, itemstack);
                 this.f(entityhuman);
                 return true;
@@ -125,7 +125,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     }
 
-    public boolean dE() {
+    public boolean dD() {
         return this.bC <= 0;
     }
 
@@ -138,7 +138,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         this.world.broadcastEntityEffect(this, (byte) 18);
     }
 
-    public void e(int i) {
+    public void d(int i) {
         this.bC = i;
     }
 

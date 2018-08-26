@@ -41,7 +41,7 @@ public class Enchantments {
 
     @Nullable
     private static Enchantment a(String s) {
-        Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(new MinecraftKey(s));
+        Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(new MinecraftKey(s));
 
         if (enchantment == null) {
             throw new IllegalStateException("Invalid Enchantment requested: " + s);

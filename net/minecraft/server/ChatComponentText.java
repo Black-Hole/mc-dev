@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
-
 public class ChatComponentText extends ChatBaseComponent {
 
     private final String b;
@@ -10,7 +8,7 @@ public class ChatComponentText extends ChatBaseComponent {
         this.b = s;
     }
 
-    public String f() {
+    public String i() {
         return this.b;
     }
 
@@ -18,19 +16,8 @@ public class ChatComponentText extends ChatBaseComponent {
         return this.b;
     }
 
-    public ChatComponentText g() {
-        ChatComponentText chatcomponenttext = new ChatComponentText(this.b);
-
-        chatcomponenttext.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
-
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
-
-            chatcomponenttext.addSibling(ichatbasecomponent.e());
-        }
-
-        return chatcomponenttext;
+    public ChatComponentText j() {
+        return new ChatComponentText(this.b);
     }
 
     public boolean equals(Object object) {
@@ -41,7 +28,7 @@ public class ChatComponentText extends ChatBaseComponent {
         } else {
             ChatComponentText chatcomponenttext = (ChatComponentText) object;
 
-            return this.b.equals(chatcomponenttext.f()) && super.equals(object);
+            return this.b.equals(chatcomponenttext.i()) && super.equals(object);
         }
     }
 
@@ -49,7 +36,7 @@ public class ChatComponentText extends ChatBaseComponent {
         return "TextComponent{text=\'" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public IChatBaseComponent e() {
-        return this.g();
+    public IChatBaseComponent g() {
+        return this.j();
     }
 }

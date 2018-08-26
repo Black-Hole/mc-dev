@@ -9,7 +9,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     private NonNullList<ItemStack> items;
     private boolean b;
     private MinecraftKey c;
-    private long d;
+    public long lootTableSeed;
 
     protected EntityMinecartContainer(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
@@ -106,9 +106,9 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
     }
 
     @Nullable
-    public Entity d(int i) {
+    public Entity a(DimensionManager dimensionmanager) {
         this.b = false;
-        return super.d(i);
+        return super.a(dimensionmanager);
     }
 
     public void die() {
@@ -127,8 +127,8 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         super.b(nbttagcompound);
         if (this.c != null) {
             nbttagcompound.setString("LootTable", this.c.toString());
-            if (this.d != 0L) {
-                nbttagcompound.setLong("LootTableSeed", this.d);
+            if (this.lootTableSeed != 0L) {
+                nbttagcompound.setLong("LootTableSeed", this.lootTableSeed);
             }
         } else {
             ContainerUtil.a(nbttagcompound, this.items);
@@ -141,7 +141,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
         if (nbttagcompound.hasKeyOfType("LootTable", 8)) {
             this.c = new MinecraftKey(nbttagcompound.getString("LootTable"));
-            this.d = nbttagcompound.getLong("LootTableSeed");
+            this.lootTableSeed = nbttagcompound.getLong("LootTableSeed");
         } else {
             ContainerUtil.b(nbttagcompound, this.items);
         }
@@ -192,24 +192,24 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     public void f(@Nullable EntityHuman entityhuman) {
         if (this.c != null && this.world.getMinecraftServer() != null) {
-            LootTable loottable = this.world.getMinecraftServer().aP().a(this.c);
+            LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(this.c);
 
             this.c = null;
             Random random;
 
-            if (this.d == 0L) {
+            if (this.lootTableSeed == 0L) {
                 random = new Random();
             } else {
-                random = new Random(this.d);
+                random = new Random(this.lootTableSeed);
             }
 
-            LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a(new BlockPosition(this));
+            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).position(new BlockPosition(this));
 
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dJ());
+                loottableinfo_builder.luck(entityhuman.dJ());
             }
 
-            loottable.a(this, random, loottableinfo_a.a());
+            loottable.a(this, random, loottableinfo_builder.build());
         }
 
     }
@@ -221,10 +221,10 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
 
     public void a(MinecraftKey minecraftkey, long i) {
         this.c = minecraftkey;
-        this.d = i;
+        this.lootTableSeed = i;
     }
 
-    public MinecraftKey Q_() {
+    public MinecraftKey getLootTable() {
         return this.c;
     }
 }

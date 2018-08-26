@@ -632,7 +632,7 @@ public class WorldGenNetherPieces {
             BlockPosition blockposition = new BlockPosition(this.a(6, 6), this.d(5), this.b(6, 6));
 
             if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                generatoraccess.H().a(blockposition, FluidTypes.e, 0);
+                generatoraccess.I().a(blockposition, FluidTypes.e, 0);
             }
 
             return true;

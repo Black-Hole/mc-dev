@@ -9,7 +9,7 @@ public class WorldGenDeadBush extends WorldGenerator<WorldGenFeatureEmptyConfigu
     public WorldGenDeadBush() {}
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
+        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

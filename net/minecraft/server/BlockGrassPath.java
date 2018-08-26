@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Random;
+
 public class BlockGrassPath extends Block {
 
     protected static final VoxelShape a = BlockSoil.b;
@@ -9,15 +11,23 @@ public class BlockGrassPath extends Block {
     }
 
     public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.J();
+        return iblockaccess.K();
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return !this.getBlockData().canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) ? Block.a(this.getBlockData(), Blocks.DIRT.getBlockData(), (GeneratorAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) : super.getPlacedState(blockactioncontext);
+        return !this.getBlockData().canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) ? Block.a(this.getBlockData(), Blocks.DIRT.getBlockData(), blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) : super.getPlacedState(blockactioncontext);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return enumdirection == EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition) ? Block.a(iblockdata, Blocks.DIRT.getBlockData(), generatoraccess, blockposition) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        if (enumdirection == EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition)) {
+            generatoraccess.J().a(blockposition, this, 1);
+        }
+
+        return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+    }
+
+    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        BlockSoil.b(iblockdata, world, blockposition);
     }
 
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {

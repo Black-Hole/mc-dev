@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Blocks {
 
-    private static final Set<Block> kv;
+    private static final Set<Block> kA;
     public static final Block AIR;
     public static final Block STONE;
     public static final Block GRANITE;
@@ -576,6 +576,11 @@ public class Blocks {
     public static final Block BUBBLE_CORAL;
     public static final Block FIRE_CORAL;
     public static final Block HORN_CORAL;
+    public static final Block DEAD_TUBE_CORAL;
+    public static final Block DEAD_BRAIN_CORAL;
+    public static final Block DEAD_BUBBLE_CORAL;
+    public static final Block DEAD_FIRE_CORAL;
+    public static final Block DEAD_HORN_CORAL;
     public static final Block TUBE_CORAL_WALL_FAN;
     public static final Block BRAIN_CORAL_WALL_FAN;
     public static final Block BUBBLE_CORAL_WALL_FAN;
@@ -601,9 +606,9 @@ public class Blocks {
     public static final Block STRUCTURE_BLOCK;
 
     private static Block get(String s) {
-        Block block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
+        Block block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(s));
 
-        if (!Blocks.kv.add(block)) {
+        if (!Blocks.kA.add(block)) {
             throw new IllegalStateException("Invalid Block requested: " + s);
         } else {
             return block;
@@ -614,7 +619,7 @@ public class Blocks {
         if (!DispenserRegistry.a()) {
             throw new RuntimeException("Accessed Blocks before Bootstrap!");
         } else {
-            kv = Sets.newHashSet(new Block[] { (Block) null});
+            kA = Sets.newHashSet(new Block[] { (Block) null});
             AIR = get("air");
             STONE = get("stone");
             GRANITE = get("granite");
@@ -1185,6 +1190,11 @@ public class Blocks {
             BUBBLE_CORAL = get("bubble_coral");
             FIRE_CORAL = get("fire_coral");
             HORN_CORAL = get("horn_coral");
+            DEAD_TUBE_CORAL = get("dead_tube_coral");
+            DEAD_BRAIN_CORAL = get("dead_brain_coral");
+            DEAD_BUBBLE_CORAL = get("dead_bubble_coral");
+            DEAD_FIRE_CORAL = get("dead_fire_coral");
+            DEAD_HORN_CORAL = get("dead_horn_coral");
             TUBE_CORAL_WALL_FAN = get("tube_coral_wall_fan");
             BRAIN_CORAL_WALL_FAN = get("brain_coral_wall_fan");
             BUBBLE_CORAL_WALL_FAN = get("bubble_coral_wall_fan");
@@ -1208,7 +1218,7 @@ public class Blocks {
             DEAD_FIRE_CORAL_FAN = get("dead_fire_coral_fan");
             DEAD_HORN_CORAL_FAN = get("dead_horn_coral_fan");
             STRUCTURE_BLOCK = get("structure_block");
-            Blocks.kv.clear();
+            Blocks.kA.clear();
         }
     }
 }

@@ -24,7 +24,7 @@ public class BlockSlowSand extends Block {
     }
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        world.I().a(blockposition, this, this.a((IWorldReader) world));
+        world.J().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     public int a(IWorldReader iworldreader) {
@@ -32,7 +32,7 @@ public class BlockSlowSand extends Block {
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
-        world.I().a(blockposition, this, this.a((IWorldReader) world));
+        world.J().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {

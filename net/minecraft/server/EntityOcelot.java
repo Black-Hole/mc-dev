@@ -115,7 +115,7 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.V;
     }
 
@@ -188,12 +188,12 @@ public class EntityOcelot extends EntityTameableAnimal {
         this.datawatcher.set(EntityOcelot.bH, Integer.valueOf(i));
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         return this.random.nextInt(3) != 0;
     }
 
     public boolean a(IWorldReader iworldreader) {
-        if (iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox())) {
+        if (iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox())) {
             BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
             if (blockposition.getY() < iworldreader.getSeaLevel()) {
@@ -203,7 +203,7 @@ public class EntityOcelot extends EntityTameableAnimal {
             IBlockData iblockdata = iworldreader.getType(blockposition.down());
             Block block = iblockdata.getBlock();
 
-            if (block == Blocks.GRASS_BLOCK || iblockdata.a(TagsBlock.D)) {
+            if (block == Blocks.GRASS_BLOCK || iblockdata.a(TagsBlock.LEAVES)) {
                 return true;
             }
         }
@@ -217,7 +217,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : (this.isTamed() ? new ChatMessage(SystemUtils.a("entity", EntityOcelot.bI), new Object[0]) : super.getDisplayName()));
     }
 
-    protected void dA() {
+    protected void dz() {
         if (this.bJ == null) {
             this.bJ = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }

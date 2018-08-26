@@ -1,66 +1,69 @@
 package net.minecraft.server;
 
+import java.io.File;
 import java.util.function.Supplier;
+import javax.annotation.Nullable;
 
-public enum DimensionManager {
+public class DimensionManager {
 
-    OVERWORLD(0, "overworld", "", WorldProviderNormal::new), NETHER(-1, "the_nether", "_nether", WorldProviderHell::new), THE_END(1, "the_end", "_end", WorldProviderTheEnd::new);
-
+    public static final DimensionManager OVERWORLD = a("overworld", new DimensionManager(1, "", "", WorldProviderNormal::new));
+    public static final DimensionManager NETHER = a("the_nether", new DimensionManager(0, "_nether", "DIM-1", WorldProviderHell::new));
+    public static final DimensionManager THE_END = a("the_end", new DimensionManager(2, "_end", "DIM1", WorldProviderTheEnd::new));
     private final int d;
     private final String e;
     private final String f;
     private final Supplier<? extends WorldProvider> g;
 
-    private DimensionManager(int i, String s, String s1, Supplier supplier) {
+    public static void a() {}
+
+    private static DimensionManager a(String s, DimensionManager dimensionmanager) {
+        IRegistry.DIMENSION_TYPE.a(dimensionmanager.d, new MinecraftKey(s), dimensionmanager);
+        return dimensionmanager;
+    }
+
+    public DimensionManager(int i, String s, String s1, Supplier<? extends WorldProvider> supplier) {
         this.d = i;
         this.e = s;
         this.f = s1;
         this.g = supplier;
     }
 
-    public int getDimensionID() {
-        return this.d;
+    public static Iterable<DimensionManager> b() {
+        return IRegistry.DIMENSION_TYPE;
     }
 
-    public String b() {
+    public int getDimensionID() {
+        return this.d + -1;
+    }
+
+    public String d() {
         return this.e;
     }
 
-    public String c() {
-        return this.f;
+    public File a(File file) {
+        return this.f.isEmpty() ? file : new File(file, this.f);
     }
 
-    public WorldProvider d() {
+    public WorldProvider e() {
         return (WorldProvider) this.g.get();
     }
 
-    public static DimensionManager a(int i) {
-        DimensionManager[] adimensionmanager = values();
-        int j = adimensionmanager.length;
-
-        for (int k = 0; k < j; ++k) {
-            DimensionManager dimensionmanager = adimensionmanager[k];
-
-            if (dimensionmanager.getDimensionID() == i) {
-                return dimensionmanager;
-            }
-        }
-
-        throw new IllegalArgumentException("Invalid dimension id " + i);
+    public String toString() {
+        return a(this).toString();
     }
 
-    public static DimensionManager a(String s) {
-        DimensionManager[] adimensionmanager = values();
-        int i = adimensionmanager.length;
+    @Nullable
+    public static DimensionManager a(int i) {
+        return (DimensionManager) IRegistry.DIMENSION_TYPE.fromId(i - -1);
+    }
 
-        for (int j = 0; j < i; ++j) {
-            DimensionManager dimensionmanager = adimensionmanager[j];
+    @Nullable
+    public static DimensionManager a(MinecraftKey minecraftkey) {
+        return (DimensionManager) IRegistry.DIMENSION_TYPE.get(minecraftkey);
+    }
 
-            if (dimensionmanager.b().equals(s)) {
-                return dimensionmanager;
-            }
-        }
-
-        throw new IllegalArgumentException("Invalid dimension " + s);
+    @Nullable
+    public static MinecraftKey a(DimensionManager dimensionmanager) {
+        return IRegistry.DIMENSION_TYPE.getKey(dimensionmanager);
     }
 }

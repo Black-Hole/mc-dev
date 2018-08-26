@@ -92,7 +92,7 @@ public class CriterionConditionItem {
                 if (jsonobject.has("item")) {
                     MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "item"));
 
-                    item = (Item) Item.REGISTRY.get(minecraftkey);
+                    item = (Item) IRegistry.ITEM.get(minecraftkey);
                     if (item == null) {
                         throw new JsonSyntaxException("Unknown item id \'" + minecraftkey + "\'");
                     }
@@ -115,11 +115,11 @@ public class CriterionConditionItem {
                 if (jsonobject.has("potion")) {
                     MinecraftKey minecraftkey2 = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
-                    if (!PotionRegistry.a.d(minecraftkey2)) {
+                    if (!IRegistry.POTION.c(minecraftkey2)) {
                         throw new JsonSyntaxException("Unknown potion \'" + minecraftkey2 + "\'");
                     }
 
-                    potionregistry = (PotionRegistry) PotionRegistry.a.get(minecraftkey2);
+                    potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey2);
                 }
 
                 return new CriterionConditionItem(tag, item, criterionconditionvalue_d, criterionconditionvalue_d1, acriterionconditionenchantments, potionregistry, criterionconditionnbt);
@@ -136,7 +136,7 @@ public class CriterionConditionItem {
             JsonObject jsonobject = new JsonObject();
 
             if (this.c != null) {
-                jsonobject.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.c)).toString());
+                jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.c).toString());
             }
 
             if (this.b != null) {
@@ -161,7 +161,7 @@ public class CriterionConditionItem {
             }
 
             if (this.g != null) {
-                jsonobject.addProperty("potion", ((MinecraftKey) PotionRegistry.a.b(this.g)).toString());
+                jsonobject.addProperty("potion", IRegistry.POTION.getKey(this.g).toString());
             }
 
             return jsonobject;

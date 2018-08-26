@@ -52,7 +52,7 @@ public class WorldGenForestTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                     BlockPosition blockposition2 = new BlockPosition(k1, k2, l1);
                     IBlockData iblockdata = generatoraccess.getType(blockposition2);
 
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) {
+                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
                         this.a(set, generatoraccess, blockposition2);
                         this.a(set, generatoraccess, blockposition2.east());
                         this.a(set, generatoraccess, blockposition2.south());

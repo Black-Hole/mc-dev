@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class BlockHopper extends BlockTileEntity {
 
-    public static final BlockStateDirection FACING = BlockProperties.H;
+    public static final BlockStateDirection FACING = BlockProperties.I;
     public static final BlockStateBoolean ENABLED = BlockProperties.e;
     private static final VoxelShape c = Block.a(0.0D, 10.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    private static final VoxelShape p = Block.a(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
-    private static final VoxelShape q = VoxelShapes.a(BlockHopper.p, BlockHopper.c);
-    private static final VoxelShape r = VoxelShapes.a(BlockHopper.q, IHopper.a, OperatorBoolean.ONLY_FIRST);
-    private static final VoxelShape s = VoxelShapes.a(BlockHopper.r, Block.a(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
-    private static final VoxelShape t = VoxelShapes.a(BlockHopper.r, Block.a(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
-    private static final VoxelShape u = VoxelShapes.a(BlockHopper.r, Block.a(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
-    private static final VoxelShape v = VoxelShapes.a(BlockHopper.r, Block.a(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
-    private static final VoxelShape w = VoxelShapes.a(BlockHopper.r, Block.a(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
-    private static final VoxelShape x = IHopper.a;
-    private static final VoxelShape y = VoxelShapes.a(IHopper.a, Block.a(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
-    private static final VoxelShape z = VoxelShapes.a(IHopper.a, Block.a(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
-    private static final VoxelShape A = VoxelShapes.a(IHopper.a, Block.a(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
-    private static final VoxelShape B = VoxelShapes.a(IHopper.a, Block.a(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
+    private static final VoxelShape o = Block.a(4.0D, 4.0D, 4.0D, 12.0D, 10.0D, 12.0D);
+    private static final VoxelShape p = VoxelShapes.a(BlockHopper.o, BlockHopper.c);
+    private static final VoxelShape q = VoxelShapes.a(BlockHopper.p, IHopper.a, OperatorBoolean.ONLY_FIRST);
+    private static final VoxelShape r = VoxelShapes.a(BlockHopper.q, Block.a(6.0D, 0.0D, 6.0D, 10.0D, 4.0D, 10.0D));
+    private static final VoxelShape s = VoxelShapes.a(BlockHopper.q, Block.a(12.0D, 4.0D, 6.0D, 16.0D, 8.0D, 10.0D));
+    private static final VoxelShape t = VoxelShapes.a(BlockHopper.q, Block.a(6.0D, 4.0D, 0.0D, 10.0D, 8.0D, 4.0D));
+    private static final VoxelShape u = VoxelShapes.a(BlockHopper.q, Block.a(6.0D, 4.0D, 12.0D, 10.0D, 8.0D, 16.0D));
+    private static final VoxelShape v = VoxelShapes.a(BlockHopper.q, Block.a(0.0D, 4.0D, 6.0D, 4.0D, 8.0D, 10.0D));
+    private static final VoxelShape w = IHopper.a;
+    private static final VoxelShape x = VoxelShapes.a(IHopper.a, Block.a(12.0D, 8.0D, 6.0D, 16.0D, 10.0D, 10.0D));
+    private static final VoxelShape y = VoxelShapes.a(IHopper.a, Block.a(6.0D, 8.0D, 0.0D, 10.0D, 10.0D, 4.0D));
+    private static final VoxelShape z = VoxelShapes.a(IHopper.a, Block.a(6.0D, 8.0D, 12.0D, 10.0D, 10.0D, 16.0D));
+    private static final VoxelShape A = VoxelShapes.a(IHopper.a, Block.a(0.0D, 8.0D, 6.0D, 4.0D, 10.0D, 10.0D));
 
     public BlockHopper(Block.Info block_info) {
         super(block_info);
@@ -27,41 +27,41 @@ public class BlockHopper extends BlockTileEntity {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
         case DOWN:
-            return BlockHopper.s;
+            return BlockHopper.r;
 
         case NORTH:
-            return BlockHopper.u;
-
-        case SOUTH:
-            return BlockHopper.v;
-
-        case WEST:
-            return BlockHopper.w;
-
-        case EAST:
             return BlockHopper.t;
 
+        case SOUTH:
+            return BlockHopper.u;
+
+        case WEST:
+            return BlockHopper.v;
+
+        case EAST:
+            return BlockHopper.s;
+
         default:
-            return BlockHopper.r;
+            return BlockHopper.q;
         }
     }
 
     public VoxelShape h(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
         case DOWN:
-            return BlockHopper.x;
+            return BlockHopper.w;
 
         case NORTH:
-            return BlockHopper.z;
+            return BlockHopper.y;
 
         case SOUTH:
-            return BlockHopper.A;
+            return BlockHopper.z;
 
         case WEST:
-            return BlockHopper.B;
+            return BlockHopper.A;
 
         case EAST:
-            return BlockHopper.y;
+            return BlockHopper.x;
 
         default:
             return IHopper.a;

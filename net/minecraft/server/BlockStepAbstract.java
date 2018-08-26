@@ -5,10 +5,10 @@ import javax.annotation.Nullable;
 
 public class BlockStepAbstract extends Block implements IFluidSource, IFluidContainer {
 
-    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.at;
-    public static final BlockStateBoolean b = BlockProperties.x;
+    public static final BlockStateEnum<BlockPropertySlabType> a = BlockProperties.au;
+    public static final BlockStateBoolean b = BlockProperties.y;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
-    protected static final VoxelShape p = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape o = Block.a(0.0D, 8.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
     public BlockStepAbstract(Block.Info block_info) {
         super(block_info);
@@ -16,7 +16,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
     }
 
     public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.J();
+        return iblockaccess.K();
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
@@ -35,7 +35,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
             return VoxelShapes.b();
 
         case TOP:
-            return BlockStepAbstract.p;
+            return BlockStepAbstract.o;
 
         default:
             return BlockStepAbstract.c;
@@ -106,15 +106,15 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         return ((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         if (iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;
@@ -125,7 +125,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (((Boolean) iblockdata.get(BlockStepAbstract.b)).booleanValue()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -137,7 +137,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
             return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.BOTTOM;
 
         case WATER:
-            return iblockaccess.b(blockposition).a(TagsFluid.a);
+            return iblockaccess.b(blockposition).a(TagsFluid.WATER);
 
         case AIR:
             return false;

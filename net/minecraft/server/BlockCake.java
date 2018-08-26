@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockCake extends Block {
 
-    public static final BlockStateInteger BITES = BlockProperties.Y;
+    public static final BlockStateInteger BITES = BlockProperties.Z;
     protected static final VoxelShape[] b = new VoxelShape[] { Block.a(1.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(3.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(5.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(7.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(9.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(11.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D), Block.a(13.0D, 0.0D, 1.0D, 15.0D, 8.0D, 15.0D)};
 
     protected BlockCake(Block.Info block_info) {

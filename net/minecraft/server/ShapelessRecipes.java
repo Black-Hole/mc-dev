@@ -8,20 +8,20 @@ import java.util.Iterator;
 
 public class ShapelessRecipes implements IRecipe {
 
-    private final MinecraftKey a;
-    private final String b;
+    private final MinecraftKey key;
+    private final String group;
     private final ItemStack result;
     private final NonNullList<RecipeItemStack> ingredients;
 
     public ShapelessRecipes(MinecraftKey minecraftkey, String s, ItemStack itemstack, NonNullList<RecipeItemStack> nonnulllist) {
-        this.a = minecraftkey;
-        this.b = s;
+        this.key = minecraftkey;
+        this.group = s;
         this.result = itemstack;
         this.ingredients = nonnulllist;
     }
 
     public MinecraftKey getKey() {
-        return this.a;
+        return this.key;
     }
 
     public RecipeSerializer<?> a() {
@@ -114,7 +114,7 @@ public class ShapelessRecipes implements IRecipe {
         }
 
         public void a(PacketDataSerializer packetdataserializer, ShapelessRecipes shapelessrecipes) {
-            packetdataserializer.a(shapelessrecipes.b);
+            packetdataserializer.a(shapelessrecipes.group);
             packetdataserializer.d(shapelessrecipes.ingredients.size());
             Iterator iterator = shapelessrecipes.ingredients.iterator();
 

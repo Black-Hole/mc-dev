@@ -12,6 +12,7 @@ public abstract class StructureStart {
     protected int c;
     protected int d;
     private BiomeBase e;
+    private int f;
 
     public StructureStart() {}
 
@@ -65,9 +66,10 @@ public abstract class StructureStart {
 
         if (this.b()) {
             nbttagcompound.setString("id", WorldGenFactory.a(this));
-            nbttagcompound.setString("biome", ((MinecraftKey) BiomeBase.REGISTRY_ID.b(this.e)).toString());
+            nbttagcompound.setString("biome", IRegistry.BIOME.getKey(this.e).toString());
             nbttagcompound.setInt("ChunkX", i);
             nbttagcompound.setInt("ChunkZ", j);
+            nbttagcompound.setInt("references", this.f);
             nbttagcompound.set("BB", this.b.g());
             NBTTagList nbttaglist = new NBTTagList();
             List list = this.a;
@@ -96,7 +98,8 @@ public abstract class StructureStart {
     public void a(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound) {
         this.c = nbttagcompound.getInt("ChunkX");
         this.d = nbttagcompound.getInt("ChunkZ");
-        this.e = nbttagcompound.hasKey("biome") ? (BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(nbttagcompound.getString("biome"))) : generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9), Biomes.c);
+        this.f = nbttagcompound.getInt("references");
+        this.e = nbttagcompound.hasKey("biome") ? (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(nbttagcompound.getString("biome"))) : generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9), Biomes.c);
         if (nbttagcompound.hasKey("BB")) {
             this.b = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
         }
@@ -172,5 +175,17 @@ public abstract class StructureStart {
 
     public BlockPosition a() {
         return new BlockPosition(this.c << 4, 0, this.d << 4);
+    }
+
+    public boolean g() {
+        return this.f < this.i();
+    }
+
+    public void h() {
+        ++this.f;
+    }
+
+    protected int i() {
+        return 1;
     }
 }

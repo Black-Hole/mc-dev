@@ -104,7 +104,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     public void k() {
-        if (this.dr()) {
+        if (this.dq()) {
             this.setOnFire(8);
         }
 
@@ -155,7 +155,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.K;
     }
 
@@ -273,7 +273,18 @@ public class EntityPhantom extends EntityFlying implements IMonster {
             return EntityPhantom.this.getGoalTarget() != null && EntityPhantom.this.bC == EntityPhantom.AttackPhase.SWOOP;
         }
 
+        public boolean b() {
+            EntityLiving entityliving = EntityPhantom.this.getGoalTarget();
+
+            return entityliving == null ? false : (!entityliving.isAlive() ? false : (entityliving instanceof EntityHuman && (((EntityHuman) entityliving).isSpectator() || ((EntityHuman) entityliving).u()) ? false : this.a()));
+        }
+
         public void c() {}
+
+        public void d() {
+            EntityPhantom.this.setGoalTarget((EntityLiving) null);
+            EntityPhantom.this.bC = EntityPhantom.AttackPhase.CIRCLE;
+        }
 
         public void e() {
             EntityLiving entityliving = EntityPhantom.this.getGoalTarget();

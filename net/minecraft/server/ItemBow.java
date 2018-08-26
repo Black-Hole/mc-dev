@@ -84,7 +84,7 @@ public class ItemBow extends Item {
                         world.addEntity(entityarrow);
                     }
 
-                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.k.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (ItemBow.i.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !entityhuman.abilities.canInstantlyBuild) {
                         itemstack1.subtract(1);
                         if (itemstack1.isEmpty()) {

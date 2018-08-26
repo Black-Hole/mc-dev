@@ -7,8 +7,8 @@ public class ItemFood extends Item {
     private final boolean c;
     private boolean d;
     private boolean e;
-    private MobEffect l;
-    private float m;
+    private MobEffect k;
+    private float l;
 
     public ItemFood(int i, float f, boolean flag, Item.Info item_info) {
         super(item_info);
@@ -35,8 +35,8 @@ public class ItemFood extends Item {
     }
 
     protected void a(ItemStack itemstack, World world, EntityHuman entityhuman) {
-        if (!world.isClientSide && this.l != null && world.random.nextFloat() < this.m) {
-            entityhuman.addEffect(new MobEffect(this.l));
+        if (!world.isClientSide && this.k != null && world.random.nextFloat() < this.l) {
+            entityhuman.addEffect(new MobEffect(this.k));
         }
 
     }
@@ -73,8 +73,8 @@ public class ItemFood extends Item {
     }
 
     public ItemFood a(MobEffect mobeffect, float f) {
-        this.l = mobeffect;
-        this.m = f;
+        this.k = mobeffect;
+        this.l = f;
         return this;
     }
 

@@ -25,7 +25,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
     private IChatBaseComponent o;
 
     public TileEntityBeacon() {
-        super(TileEntityTypes.o);
+        super(TileEntityTypes.BEACON);
         this.inventorySlot = ItemStack.a;
     }
 

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockRotatable extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.z;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.A;
 
     public BlockRotatable(Block.Info block_info) {
         super(block_info);

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockCauldron extends Block {
 
-    public static final BlockStateInteger LEVEL = BlockProperties.ae;
+    public static final BlockStateInteger LEVEL = BlockProperties.af;
     protected static final VoxelShape b = Block.a(2.0D, 4.0D, 2.0D, 14.0D, 16.0D, 14.0D);
     protected static final VoxelShape c = VoxelShapes.a(VoxelShapes.b(), BlockCauldron.b, OperatorBoolean.ONLY_FIRST);
 
@@ -151,7 +151,7 @@ public class BlockCauldron extends Block {
                     } else if (i > 0 && item instanceof ItemBlock) {
                         Block block = ((ItemBlock) item).getBlock();
 
-                        if (block instanceof BlockShulkerBox) {
+                        if (block instanceof BlockShulkerBox && !world.e()) {
                             ItemStack itemstack2 = new ItemStack(Blocks.SHULKER_BOX, 1);
 
                             if (itemstack.hasTag()) {
@@ -160,6 +160,7 @@ public class BlockCauldron extends Block {
 
                             entityhuman.a(enumhand, itemstack2);
                             this.a(world, blockposition, iblockdata, i - 1);
+                            entityhuman.a(StatisticList.CLEAN_SHULKER_BOX);
                         }
 
                         return true;

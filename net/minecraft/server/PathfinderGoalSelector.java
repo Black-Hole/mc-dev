@@ -49,7 +49,7 @@ public class PathfinderGoalSelector {
         iterator.remove();
     }
 
-    public void a() {
+    public void doTick() {
         this.d.a("goalSetup");
         Iterator iterator;
         PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem;

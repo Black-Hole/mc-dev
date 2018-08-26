@@ -26,7 +26,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         this.a = new Object2IntOpenHashMap(i);
 
         for (int j = 0; j < i; ++j) {
-            this.a((StatisticWrapper) StatisticList.REGISTRY.getId(packetdataserializer.g()), packetdataserializer);
+            this.a((StatisticWrapper) IRegistry.STATS.fromId(packetdataserializer.g()), packetdataserializer);
         }
 
     }
@@ -35,7 +35,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         int i = packetdataserializer.g();
         int j = packetdataserializer.g();
 
-        this.a.put(statisticwrapper.b(statisticwrapper.a().getId(i)), j);
+        this.a.put(statisticwrapper.b(statisticwrapper.a().fromId(i)), j);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -46,7 +46,7 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
             Entry entry = (Entry) objectiterator.next();
             Statistic statistic = (Statistic) entry.getKey();
 
-            packetdataserializer.d(StatisticList.REGISTRY.a((Object) statistic.a()));
+            packetdataserializer.d(IRegistry.STATS.a((Object) statistic.a()));
             packetdataserializer.d(this.a(statistic));
             packetdataserializer.d(entry.getIntValue());
         }

@@ -206,7 +206,7 @@ public final class GameProfileSerializer {
         if (!nbttagcompound.hasKeyOfType("Name", 8)) {
             return Blocks.AIR.getBlockData();
         } else {
-            Block block = (Block) Block.REGISTRY.get(new MinecraftKey(nbttagcompound.getString("Name")));
+            Block block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(nbttagcompound.getString("Name")));
             IBlockData iblockdata = block.getBlockData();
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
@@ -242,7 +242,7 @@ public final class GameProfileSerializer {
     public static NBTTagCompound a(IBlockData iblockdata) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("Name", ((MinecraftKey) Block.REGISTRY.b(iblockdata.getBlock())).toString());
+        nbttagcompound.setString("Name", IRegistry.BLOCK.getKey(iblockdata.getBlock()).toString());
         ImmutableMap immutablemap = iblockdata.b();
 
         if (!immutablemap.isEmpty()) {
@@ -267,7 +267,7 @@ public final class GameProfileSerializer {
     }
 
     public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i) {
-        return a(datafixer, typereference, nbttagcompound, i, 1519);
+        return a(datafixer, typereference, nbttagcompound, i, 1628);
     }
 
     public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i, int j) {

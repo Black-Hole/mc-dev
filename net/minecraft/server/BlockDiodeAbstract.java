@@ -33,7 +33,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
             } else if (!flag) {
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDiodeAbstract.c, Boolean.valueOf(true)), 2);
                 if (!flag1) {
-                    world.I().a(blockposition, this, this.k(iblockdata), TickListPriority.HIGH);
+                    world.J().a(blockposition, this, this.k(iblockdata), TickListPriority.HIGH);
                 }
             }
 
@@ -71,7 +71,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
             boolean flag = ((Boolean) iblockdata.get(BlockDiodeAbstract.c)).booleanValue();
             boolean flag1 = this.a(world, blockposition, iblockdata);
 
-            if (flag != flag1 && !world.I().b(blockposition, this)) {
+            if (flag != flag1 && !world.J().b(blockposition, this)) {
                 TickListPriority ticklistpriority = TickListPriority.HIGH;
 
                 if (this.c((IBlockAccess) world, blockposition, iblockdata)) {
@@ -80,7 +80,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
                     ticklistpriority = TickListPriority.VERY_HIGH;
                 }
 
-                world.I().a(blockposition, this, this.k(iblockdata), ticklistpriority);
+                world.J().a(blockposition, this, this.k(iblockdata), ticklistpriority);
             }
 
         }
@@ -133,7 +133,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.I().a(blockposition, this, 1);
+            world.J().a(blockposition, this, 1);
         }
 
     }

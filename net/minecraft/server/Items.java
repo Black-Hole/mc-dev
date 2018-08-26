@@ -317,7 +317,7 @@ public class Items {
     public static final Item HEART_OF_THE_SEA;
 
     private static Item get(String s) {
-        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
+        Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s));
 
         if (item == null) {
             throw new IllegalStateException("Invalid Item requested: " + s);

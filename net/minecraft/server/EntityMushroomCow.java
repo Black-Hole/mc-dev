@@ -23,9 +23,9 @@ public class EntityMushroomCow extends EntityCow {
 
             return true;
         } else if (itemstack.getItem() == Items.SHEARS && this.getAge() >= 0) {
-            this.die();
             this.world.addParticle(Particles.u, this.locX, this.locY + (double) (this.length / 2.0F), this.locZ, 0.0D, 0.0D, 0.0D);
             if (!this.world.isClientSide) {
+                this.die();
                 EntityCow entitycow = new EntityCow(this.world);
 
                 entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
@@ -56,7 +56,7 @@ public class EntityMushroomCow extends EntityCow {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.T;
     }
 

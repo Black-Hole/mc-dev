@@ -19,7 +19,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     private boolean p;
 
     public TileEntityShulkerBox(@Nullable EnumColor enumcolor) {
-        super(TileEntityTypes.x);
+        super(TileEntityTypes.SHULKER_BOX);
         this.e = NonNullList.a(27, ItemStack.a);
         this.k = TileEntityShulkerBox.AnimationPhase.CLOSED;
         this.n = enumcolor;

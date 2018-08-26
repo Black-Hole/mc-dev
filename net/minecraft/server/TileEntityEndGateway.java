@@ -16,7 +16,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     public boolean exactTeleport;
 
     public TileEntityEndGateway() {
-        super(TileEntityTypes.v);
+        super(TileEntityTypes.END_GATEWAY);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {

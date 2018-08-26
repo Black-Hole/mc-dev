@@ -20,10 +20,10 @@ public class EntitySmallFireball extends EntityFireball {
 
             if (movingobjectposition.entity != null) {
                 if (!movingobjectposition.entity.isFireProof()) {
+                    movingobjectposition.entity.setOnFire(5);
                     flag = movingobjectposition.entity.damageEntity(DamageSource.fireball(this, this.shooter), 5.0F);
                     if (flag) {
                         this.a(this.shooter, movingobjectposition.entity);
-                        movingobjectposition.entity.setOnFire(5);
                     }
                 }
             } else {

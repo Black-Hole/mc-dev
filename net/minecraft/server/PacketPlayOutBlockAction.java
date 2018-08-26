@@ -22,14 +22,14 @@ public class PacketPlayOutBlockAction implements Packet<PacketListenerPlayOut> {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
         this.c = packetdataserializer.readUnsignedByte();
-        this.d = Block.getById(packetdataserializer.g());
+        this.d = (Block) IRegistry.BLOCK.fromId(packetdataserializer.g());
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.b);
         packetdataserializer.writeByte(this.c);
-        packetdataserializer.d(Block.REGISTRY.a((Object) this.d));
+        packetdataserializer.d(IRegistry.BLOCK.a((Object) this.d));
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

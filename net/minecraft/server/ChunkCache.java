@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -139,10 +138,6 @@ public class ChunkCache implements IIBlockAccess {
     }
 
     public boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
-        throw new RuntimeException("This method should never be called here. No entity logic inside Region");
-    }
-
-    public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
         throw new RuntimeException("This method should never be called here. No entity logic inside Region");
     }
 

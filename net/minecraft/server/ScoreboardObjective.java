@@ -31,7 +31,7 @@ public class ScoreboardObjective {
     }
 
     public IChatBaseComponent e() {
-        return ChatComponentUtils.a(this.displayName.e().a((chatmodifier) -> {
+        return ChatComponentUtils.a(this.displayName.h().a((chatmodifier) -> {
             chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getName())));
         }));
     }

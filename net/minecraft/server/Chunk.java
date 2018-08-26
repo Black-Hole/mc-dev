@@ -25,57 +25,56 @@ import org.apache.logging.log4j.Logger;
 
 public class Chunk implements IChunkAccess {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger d = LogManager.getLogger();
     public static final ChunkSection a = null;
     private final ChunkSection[] sections;
-    private final BiomeBase[] g;
-    private final boolean[] h;
-    private final Map<BlockPosition, NBTTagCompound> i;
-    private boolean j;
+    private final BiomeBase[] f;
+    private final boolean[] g;
+    private final Map<BlockPosition, NBTTagCompound> h;
+    private boolean i;
     public final World world;
     public final Map<HeightMap.Type, HeightMap> heightMap;
     public final int locX;
     public final int locZ;
-    private boolean m;
-    private final ChunkConverter n;
+    private boolean l;
+    private final ChunkConverter m;
     public final Map<BlockPosition, TileEntity> tileEntities;
     public final EntitySlice<Entity>[] entitySlices;
-    private final Map<String, StructureStart> q;
-    private final Map<String, LongSet> r;
-    private final ShortList[] s;
-    private final TickList<Block> t;
-    private final TickList<FluidType> u;
+    private final Map<String, StructureStart> p;
+    private final Map<String, LongSet> q;
+    private final ShortList[] r;
+    private final TickList<Block> s;
+    private final TickList<FluidType> t;
+    private boolean u;
     private boolean v;
-    private boolean w;
     private long lastSaved;
-    private boolean y;
-    private int z;
-    private long A;
-    private int B;
-    private final ConcurrentLinkedQueue<BlockPosition> C;
-    public boolean d;
-    private ChunkStatus D;
-    private int E;
-    private final AtomicInteger F;
+    private boolean x;
+    private int y;
+    private long z;
+    private int A;
+    private final ConcurrentLinkedQueue<BlockPosition> B;
+    private ChunkStatus C;
+    private int D;
+    private final AtomicInteger E;
 
     public Chunk(World world, int i, int j, BiomeBase[] abiomebase, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long k) {
         this.sections = new ChunkSection[16];
-        this.h = new boolean[256];
-        this.i = Maps.newHashMap();
+        this.g = new boolean[256];
+        this.h = Maps.newHashMap();
         this.heightMap = Maps.newHashMap();
         this.tileEntities = Maps.newHashMap();
+        this.p = Maps.newHashMap();
         this.q = Maps.newHashMap();
-        this.r = Maps.newHashMap();
-        this.s = new ShortList[16];
-        this.B = 4096;
-        this.C = Queues.newConcurrentLinkedQueue();
-        this.D = ChunkStatus.EMPTY;
-        this.F = new AtomicInteger();
+        this.r = new ShortList[16];
+        this.A = 4096;
+        this.B = Queues.newConcurrentLinkedQueue();
+        this.C = ChunkStatus.EMPTY;
+        this.E = new AtomicInteger();
         this.entitySlices = (EntitySlice[]) (new EntitySlice[16]);
         this.world = world;
         this.locX = i;
         this.locZ = j;
-        this.n = chunkconverter;
+        this.m = chunkconverter;
         HeightMap.Type[] aheightmap_type = HeightMap.Type.values();
         int l = aheightmap_type.length;
 
@@ -91,10 +90,10 @@ public class Chunk implements IChunkAccess {
             this.entitySlices[j1] = new EntitySlice(Entity.class);
         }
 
-        this.g = abiomebase;
-        this.t = ticklist;
-        this.u = ticklist1;
-        this.A = k;
+        this.f = abiomebase;
+        this.s = ticklist;
+        this.t = ticklist1;
+        this.z = k;
     }
 
     public Chunk(World world, ProtoChunk protochunk, int i, int j) {
@@ -122,10 +121,10 @@ public class Chunk implements IChunkAccess {
             this.a(tileentity);
         }
 
-        this.i.putAll(protochunk.w());
+        this.h.putAll(protochunk.w());
 
         for (k = 0; k < protochunk.u().length; ++k) {
-            this.s[k] = protochunk.u()[k];
+            this.r[k] = protochunk.u()[k];
         }
 
         this.a(protochunk.e());
@@ -142,12 +141,12 @@ public class Chunk implements IChunkAccess {
             }
         }
 
-        this.y = true;
+        this.x = true;
         this.a(ChunkStatus.FULLCHUNK);
     }
 
     public Set<BlockPosition> t() {
-        HashSet hashset = Sets.newHashSet(this.i.keySet());
+        HashSet hashset = Sets.newHashSet(this.h.keySet());
 
         hashset.addAll(this.tileEntities.keySet());
         return hashset;
@@ -164,7 +163,7 @@ public class Chunk implements IChunkAccess {
     public void initLighting() {
         int i = this.b();
 
-        this.z = Integer.MAX_VALUE;
+        this.y = Integer.MAX_VALUE;
         Iterator iterator = this.heightMap.values().iterator();
 
         while (iterator.hasNext()) {
@@ -202,12 +201,12 @@ public class Chunk implements IChunkAccess {
             }
         }
 
-        this.y = true;
+        this.x = true;
     }
 
     private void c(int i, int j) {
-        this.h[i + j * 16] = true;
-        this.m = true;
+        this.g[i + j * 16] = true;
+        this.l = true;
     }
 
     private void g(boolean flag) {
@@ -215,8 +214,8 @@ public class Chunk implements IChunkAccess {
         if (this.world.areChunksLoaded(new BlockPosition(this.locX * 16 + 8, 0, this.locZ * 16 + 8), 16)) {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
-                    if (this.h[i + j * 16]) {
-                        this.h[i + j * 16] = false;
+                    if (this.g[i + j * 16]) {
+                        this.g[i + j * 16] = false;
                         int k = this.a(HeightMap.Type.LIGHT_BLOCKING, i, j);
                         int l = this.locX * 16 + i;
                         int i1 = this.locZ * 16 + j;
@@ -225,7 +224,7 @@ public class Chunk implements IChunkAccess {
                         Iterator iterator;
                         EnumDirection enumdirection;
 
-                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.f(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
+                        for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.d(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
                             enumdirection = (EnumDirection) iterator.next();
                         }
 
@@ -245,7 +244,7 @@ public class Chunk implements IChunkAccess {
                 }
             }
 
-            this.m = false;
+            this.l = false;
         }
 
         this.world.methodProfiler.e();
@@ -268,7 +267,7 @@ public class Chunk implements IChunkAccess {
                 this.world.c(EnumSkyBlock.SKY, new BlockPosition(i, i1, j));
             }
 
-            this.y = true;
+            this.x = true;
         }
 
     }
@@ -320,8 +319,8 @@ public class Chunk implements IChunkAccess {
                 }
             }
 
-            if (i1 < this.z) {
-                this.z = i1;
+            if (i1 < this.y) {
+                this.y = i1;
             }
 
             if (this.world.worldProvider.g()) {
@@ -339,7 +338,7 @@ public class Chunk implements IChunkAccess {
                 this.a(j1, k1, i2, j2);
             }
 
-            this.y = true;
+            this.x = true;
         }
     }
 
@@ -352,7 +351,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public IBlockData getBlockData(int i, int j, int k) {
-        if (this.world.R() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+        if (this.world.S() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             IBlockData iblockdata = null;
 
             if (j == 60) {
@@ -488,7 +487,7 @@ public class Chunk implements IChunkAccess {
                     }
                 }
 
-                this.y = true;
+                this.x = true;
                 return iblockdata1;
             }
         }
@@ -544,7 +543,7 @@ public class Chunk implements IChunkAccess {
                 chunksection.b(j, k & 15, l, i);
             }
 
-            this.y = true;
+            this.x = true;
         }
     }
 
@@ -581,12 +580,12 @@ public class Chunk implements IChunkAccess {
     }
 
     public void a(Entity entity) {
-        this.w = true;
+        this.v = true;
         int i = MathHelper.floor(entity.locX / 16.0D);
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.locX || j != this.locZ) {
-            Chunk.e.warn("Wrong location! ({}, {}) should be ({}, {}), {}", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity);
+            Chunk.d.warn("Wrong location! ({}, {}) should be ({}, {}), {}", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity);
             entity.die();
         }
 
@@ -661,7 +660,7 @@ public class Chunk implements IChunkAccess {
                 tileentity = this.j(blockposition);
                 this.world.setTileEntity(blockposition, tileentity);
             } else if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.QUEUED) {
-                this.C.add(blockposition);
+                this.B.add(blockposition);
             }
         } else if (tileentity.x()) {
             this.tileEntities.remove(blockposition);
@@ -673,7 +672,7 @@ public class Chunk implements IChunkAccess {
 
     public void a(TileEntity tileentity) {
         this.a(tileentity.getPosition(), tileentity);
-        if (this.j) {
+        if (this.i) {
             this.world.a(tileentity);
         }
 
@@ -693,11 +692,11 @@ public class Chunk implements IChunkAccess {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.i.put(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), nbttagcompound);
+        this.h.put(new BlockPosition(nbttagcompound.getInt("x"), nbttagcompound.getInt("y"), nbttagcompound.getInt("z")), nbttagcompound);
     }
 
     public void d(BlockPosition blockposition) {
-        if (this.j) {
+        if (this.i) {
             TileEntity tileentity = (TileEntity) this.tileEntities.remove(blockposition);
 
             if (tileentity != null) {
@@ -708,21 +707,23 @@ public class Chunk implements IChunkAccess {
     }
 
     public void addEntities() {
-        this.j = true;
-        this.world.b(this.tileEntities.values());
+        this.i = true;
+        this.world.a(this.tileEntities.values());
         EntitySlice[] aentityslice = this.entitySlices;
         int i = aentityslice.length;
 
         for (int j = 0; j < i; ++j) {
             EntitySlice entityslice = aentityslice[j];
 
-            this.world.a((Collection) entityslice);
+            this.world.a(entityslice.stream().filter((entity) -> {
+                return !(entity instanceof EntityHuman);
+            }));
         }
 
     }
 
     public void removeEntities() {
-        this.j = false;
+        this.i = false;
         Iterator iterator = this.tileEntities.values().iterator();
 
         while (iterator.hasNext()) {
@@ -737,13 +738,13 @@ public class Chunk implements IChunkAccess {
         for (int j = 0; j < i; ++j) {
             EntitySlice entityslice = aentityslice[j];
 
-            this.world.c((Collection) entityslice);
+            this.world.b((Collection) entityslice);
         }
 
     }
 
     public void markDirty() {
-        this.y = true;
+        this.x = true;
     }
 
     public void a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, List<Entity> list, Predicate<? super Entity> predicate) {
@@ -809,14 +810,14 @@ public class Chunk implements IChunkAccess {
 
     public boolean c(boolean flag) {
         if (flag) {
-            if (this.w && this.world.getTime() != this.lastSaved || this.y) {
+            if (this.v && this.world.getTime() != this.lastSaved || this.x) {
                 return true;
             }
-        } else if (this.w && this.world.getTime() >= this.lastSaved + 600L) {
+        } else if (this.v && this.world.getTime() >= this.lastSaved + 600L) {
             return true;
         }
 
-        return this.y;
+        return this.x;
     }
 
     public boolean isEmpty() {
@@ -824,14 +825,14 @@ public class Chunk implements IChunkAccess {
     }
 
     public void d(boolean flag) {
-        if (this.m && this.world.worldProvider.g() && !flag) {
+        if (this.l && this.world.worldProvider.g() && !flag) {
             this.g(this.world.isClientSide);
         }
 
-        this.v = true;
+        this.u = true;
 
-        while (!this.C.isEmpty()) {
-            BlockPosition blockposition = (BlockPosition) this.C.poll();
+        while (!this.B.isEmpty()) {
+            BlockPosition blockposition = (BlockPosition) this.B.poll();
 
             if (this.a(blockposition, Chunk.EnumTileEntityState.CHECK) == null && this.getType(blockposition).getBlock().isTileEntity()) {
                 TileEntity tileentity = this.j(blockposition);
@@ -844,11 +845,11 @@ public class Chunk implements IChunkAccess {
     }
 
     public boolean isReady() {
-        return this.D.a(ChunkStatus.POSTPROCESSED);
+        return this.C.a(ChunkStatus.POSTPROCESSED);
     }
 
     public boolean v() {
-        return this.v;
+        return this.u;
     }
 
     public ChunkCoordIntPair getPos() {
@@ -877,7 +878,7 @@ public class Chunk implements IChunkAccess {
 
     public void a(ChunkSection[] achunksection) {
         if (this.sections.length != achunksection.length) {
-            Chunk.e.warn("Could not set level chunk sections, array length is {} instead of {}", Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length));
+            Chunk.d.warn("Could not set level chunk sections, array length is {} instead of {}", Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length));
         } else {
             System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
         }
@@ -887,27 +888,27 @@ public class Chunk implements IChunkAccess {
         int i = blockposition.getX() & 15;
         int j = blockposition.getZ() & 15;
 
-        return this.g[j << 4 | i];
+        return this.f[j << 4 | i];
     }
 
     public BiomeBase[] getBiomeIndex() {
-        return this.g;
+        return this.f;
     }
 
     public void x() {
-        if (this.B < 4096) {
+        if (this.A < 4096) {
             BlockPosition blockposition = new BlockPosition(this.locX << 4, 0, this.locZ << 4);
 
             for (int i = 0; i < 8; ++i) {
-                if (this.B >= 4096) {
+                if (this.A >= 4096) {
                     return;
                 }
 
-                int j = this.B % 16;
-                int k = this.B / 16 % 16;
-                int l = this.B / 256;
+                int j = this.A % 16;
+                int k = this.A / 16 % 16;
+                int l = this.A / 256;
 
-                ++this.B;
+                ++this.A;
 
                 for (int i1 = 0; i1 < 16; ++i1) {
                     BlockPosition blockposition1 = blockposition.a(k, (j << 4) + i1, l);
@@ -935,7 +936,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public boolean y() {
-        return this.j;
+        return this.i;
     }
 
     public World getWorld() {
@@ -959,15 +960,15 @@ public class Chunk implements IChunkAccess {
     }
 
     public NBTTagCompound g(BlockPosition blockposition) {
-        return (NBTTagCompound) this.i.get(blockposition);
+        return (NBTTagCompound) this.h.get(blockposition);
     }
 
     public TickList<Block> k() {
-        return this.t;
+        return this.s;
     }
 
     public TickList<FluidType> l() {
-        return this.u;
+        return this.t;
     }
 
     public BitSet a(WorldGenStage.Features worldgenstage_features) {
@@ -975,11 +976,11 @@ public class Chunk implements IChunkAccess {
     }
 
     public void a(boolean flag) {
-        this.y = flag;
+        this.x = flag;
     }
 
     public void f(boolean flag) {
-        this.w = flag;
+        this.v = flag;
     }
 
     public void setLastSaved(long i) {
@@ -988,64 +989,63 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     public StructureStart a(String s) {
-        return (StructureStart) this.q.get(s);
+        return (StructureStart) this.p.get(s);
     }
 
     public void a(String s, StructureStart structurestart) {
-        this.q.put(s, structurestart);
+        this.p.put(s, structurestart);
     }
 
     public Map<String, StructureStart> e() {
-        return this.q;
+        return this.p;
     }
 
     public void a(Map<String, StructureStart> map) {
-        this.q.clear();
-        this.q.putAll(map);
+        this.p.clear();
+        this.p.putAll(map);
     }
 
     @Nullable
     public LongSet b(String s) {
-        return (LongSet) this.r.computeIfAbsent(s, (s) -> {
+        return (LongSet) this.q.computeIfAbsent(s, (s) -> {
             return new LongOpenHashSet();
         });
     }
 
     public void a(String s, long i) {
-        ((LongSet) this.r.computeIfAbsent(s, (s) -> {
+        ((LongSet) this.q.computeIfAbsent(s, (s) -> {
             return new LongOpenHashSet();
         })).add(i);
     }
 
     public Map<String, LongSet> f() {
-        return this.r;
+        return this.q;
     }
 
     public void b(Map<String, LongSet> map) {
-        this.r.clear();
-        this.r.putAll(map);
+        this.q.clear();
+        this.q.putAll(map);
     }
 
     public int D() {
-        return this.z;
+        return this.y;
     }
 
     public long m() {
-        return this.A;
+        return this.z;
     }
 
     public void b(long i) {
-        this.A = i;
+        this.z = i;
     }
 
     public void E() {
-        this.n.a(this);
-        if (!this.D.a(ChunkStatus.POSTPROCESSED) && this.E == 8) {
+        if (!this.C.a(ChunkStatus.POSTPROCESSED) && this.D == 8) {
             ChunkCoordIntPair chunkcoordintpair = this.getPos();
 
-            for (int i = 0; i < this.s.length; ++i) {
-                if (this.s[i] != null) {
-                    ShortListIterator shortlistiterator = this.s[i].iterator();
+            for (int i = 0; i < this.r.length; ++i) {
+                if (this.r[i] != null) {
+                    ShortListIterator shortlistiterator = this.r[i].iterator();
 
                     while (shortlistiterator.hasNext()) {
                         Short oshort = (Short) shortlistiterator.next();
@@ -1056,23 +1056,23 @@ public class Chunk implements IChunkAccess {
                         this.world.setTypeAndData(blockposition, iblockdata1, 20);
                     }
 
-                    this.s[i].clear();
+                    this.r[i].clear();
                 }
             }
 
-            if (this.t instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.t).a(this.world.I(), (blockposition) -> {
+            if (this.s instanceof ProtoChunkTickList) {
+                ((ProtoChunkTickList) this.s).a(this.world.J(), (blockposition) -> {
                     return this.world.getType(blockposition).getBlock();
                 });
             }
 
-            if (this.u instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.u).a(this.world.H(), (blockposition) -> {
+            if (this.t instanceof ProtoChunkTickList) {
+                ((ProtoChunkTickList) this.t).a(this.world.I(), (blockposition) -> {
                     return this.world.b(blockposition).c();
                 });
             }
 
-            Iterator iterator = this.i.entrySet().iterator();
+            Iterator iterator = this.h.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
@@ -1089,7 +1089,7 @@ public class Chunk implements IChunkAccess {
                             tileentity = ((ITileEntity) block).a(this.world);
                         } else {
                             tileentity = null;
-                            Chunk.e.warn("Tried to load a DUMMY block entity @ {} but found not tile entity block {} at location", blockposition1, this.getType(blockposition1));
+                            Chunk.d.warn("Tried to load a DUMMY block entity @ {} but found not tile entity block {} at location", blockposition1, this.getType(blockposition1));
                         }
                     } else {
                         tileentity = TileEntity.create(nbttagcompound);
@@ -1099,34 +1099,35 @@ public class Chunk implements IChunkAccess {
                         tileentity.setPosition(blockposition1);
                         this.a(tileentity);
                     } else {
-                        Chunk.e.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition1), blockposition1);
+                        Chunk.d.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition1), blockposition1);
                     }
                 }
             }
 
-            this.i.clear();
+            this.h.clear();
             this.a(ChunkStatus.POSTPROCESSED);
+            this.m.a(this);
         }
     }
 
     public ChunkConverter F() {
-        return this.n;
+        return this.m;
     }
 
     public ShortList[] G() {
-        return this.s;
+        return this.r;
     }
 
     public void a(short short0, int i) {
-        ProtoChunk.a(this.s, i).add(short0);
+        ProtoChunk.a(this.r, i).add(short0);
     }
 
     public ChunkStatus i() {
-        return this.D;
+        return this.C;
     }
 
     public void a(ChunkStatus chunkstatus) {
-        this.D = chunkstatus;
+        this.C = chunkstatus;
     }
 
     public void c(String s) {
@@ -1134,11 +1135,11 @@ public class Chunk implements IChunkAccess {
     }
 
     public void H() {
-        ++this.E;
-        if (this.E > 8) {
+        ++this.D;
+        if (this.D > 8) {
             throw new RuntimeException("Error while adding chunk to cache. Too many neighbors");
         } else {
-            if (this.K()) {
+            if (this.J()) {
                 ((IAsyncTaskHandler) this.world).postToMainThread(this::E);
             }
 
@@ -1146,14 +1147,14 @@ public class Chunk implements IChunkAccess {
     }
 
     public void I() {
-        --this.E;
-        if (this.E < 0) {
+        --this.D;
+        if (this.D < 0) {
             throw new RuntimeException("Error while removing chunk from cache. Not enough neighbors");
         }
     }
 
-    public boolean K() {
-        return this.E == 8;
+    public boolean J() {
+        return this.D == 8;
     }
 
     public static enum EnumTileEntityState {

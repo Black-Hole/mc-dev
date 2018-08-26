@@ -1,9 +1,8 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.doubles.AbstractDoubleList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 
-public class VoxelShapeMergerIdentical extends AbstractDoubleList implements VoxelShapeMerger {
+public class VoxelShapeMergerIdentical implements VoxelShapeMerger {
 
     private final DoubleList a;
 
@@ -11,12 +10,8 @@ public class VoxelShapeMergerIdentical extends AbstractDoubleList implements Vox
         this.a = doublelist;
     }
 
-    public int size() {
-        return this.a.size();
-    }
-
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
-        for (int i = 0; i <= this.size(); ++i) {
+        for (int i = 0; i <= this.a.size(); ++i) {
             if (!voxelshapemerger_a.merge(i, i, i)) {
                 return false;
             }
@@ -25,7 +20,7 @@ public class VoxelShapeMergerIdentical extends AbstractDoubleList implements Vox
         return true;
     }
 
-    public double getDouble(int i) {
-        return this.a.getDouble(i);
+    public DoubleList a() {
+        return this.a;
     }
 }

@@ -33,14 +33,14 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                         for (l = -j1; l <= j1; ++l) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.g(blockposition).d(k, i1, l));
 
-                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.D)) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.LEAVES)) {
                                 return false;
                             }
                         }
                     }
                 }
 
-                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.q, Boolean.valueOf(true))).set(BlockHugeMushroom.r, Boolean.valueOf(false));
+                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.p, Boolean.valueOf(true))).set(BlockHugeMushroom.q, Boolean.valueOf(false));
                 boolean flag = true;
 
                 for (k = -3; k <= 3; ++k) {
@@ -60,13 +60,13 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                                 boolean flag9 = flag3 || flag5 && l == -2;
                                 boolean flag10 = flag4 || flag5 && l == 2;
 
-                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.p, Boolean.valueOf(flag7))).set(BlockHugeMushroom.b, Boolean.valueOf(flag8))).set(BlockHugeMushroom.a, Boolean.valueOf(flag9))).set(BlockHugeMushroom.c, Boolean.valueOf(flag10)));
+                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.o, Boolean.valueOf(flag7))).set(BlockHugeMushroom.b, Boolean.valueOf(flag8))).set(BlockHugeMushroom.a, Boolean.valueOf(flag9))).set(BlockHugeMushroom.c, Boolean.valueOf(flag10)));
                             }
                         }
                     }
                 }
 
-                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.q, Boolean.valueOf(false))).set(BlockHugeMushroom.r, Boolean.valueOf(false));
+                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, Boolean.valueOf(false))).set(BlockHugeMushroom.q, Boolean.valueOf(false));
 
                 for (l = 0; l < i; ++l) {
                     blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, l);

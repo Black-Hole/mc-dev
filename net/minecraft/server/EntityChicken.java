@@ -84,7 +84,7 @@ public class EntityChicken extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.J;
     }
 

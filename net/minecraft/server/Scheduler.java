@@ -23,6 +23,7 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -65,10 +66,10 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
 
     }
 
-    public CompletableFuture<R> b(K k0) {
+    public CompletableFuture<R> a(K k0) {
         CompletableFuture completablefuture = this.f;
         Supplier supplier = () -> {
-            return this.a(object).a(completablefuture, this.j);
+            return this.b(object).a(completablefuture, this.j);
         };
         CompletableFuture completablefuture1 = CompletableFuture.supplyAsync(supplier, this.a);
         CompletableFuture completablefuture2 = completablefuture1.thenComposeAsync((completablefuture) -> {
@@ -79,7 +80,7 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
         return completablefuture2;
     }
 
-    public CompletableFuture<R> b() {
+    public CompletableFuture<R> a() {
         CompletableFuture completablefuture = (CompletableFuture) this.e.remove(this.e.size() - 1);
         CompletableFuture completablefuture1 = CompletableFuture.allOf((CompletableFuture[]) this.e.toArray(new CompletableFuture[0])).thenCompose((void) -> {
             return completablefuture;
@@ -91,9 +92,14 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
         return completablefuture1;
     }
 
-    protected abstract Scheduler.a a(K k0);
+    protected Scheduler.a b(K k0) {
+        return this.a(k0, true);
+    }
 
-    public void c() throws InterruptedException {
+    @Nullable
+    protected abstract Scheduler.a a(K k0, boolean flag);
+
+    public void b() throws InterruptedException {
         this.a.shutdown();
         this.a.awaitTermination(1L, TimeUnit.DAYS);
         this.c.shutdown();
@@ -102,11 +108,14 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
 
     protected abstract R a(K k0, T t0, Map<K, R> map);
 
-    public R c(K k0) {
-        return this.a(k0).a();
+    @Nullable
+    public R b(K k0, boolean flag) {
+        Scheduler.a scheduler_a = this.a(k0, flag);
+
+        return scheduler_a != null ? scheduler_a.a() : null;
     }
 
-    public CompletableFuture<R> d() {
+    public CompletableFuture<R> c() {
         CompletableFuture completablefuture = this.g;
 
         return completablefuture.thenApply((object) -> {
@@ -146,7 +155,7 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
                     return CompletableFuture.completedFuture(this.d);
                 } else {
                     schedulertask1.a(this.c, (object, schedulertaskx) -> {
-                        CompletableFuture completablefuture = (CompletableFuture) map.put(object, Scheduler.this.a(object, Scheduler.this.a(object)).a(completablefuture1, schedulertaskx));
+                        CompletableFuture completablefuture = (CompletableFuture) map.put(object, Scheduler.this.a(object, Scheduler.this.b(object)).a(completablefuture1, schedulertaskx));
                     });
                     CompletableFuture[] acompletablefuture = (CompletableFuture[]) Streams.concat(new Stream[] { Stream.of(completablefuture), map.values().stream()}).toArray((i) -> {
                         return new CompletableFuture[i];
@@ -165,7 +174,7 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
                         while (iterator.hasNext()) {
                             Object object1 = iterator.next();
 
-                            Scheduler.this.b(object1, Scheduler.this.a(object1));
+                            Scheduler.this.b(object1, Scheduler.this.b(object1));
                         }
 
                         return object;

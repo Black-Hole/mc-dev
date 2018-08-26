@@ -5,12 +5,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mojang.brigadier.suggestion.Suggestions;
-import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
@@ -60,21 +57,6 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
     public static Collection<CustomFunction> a(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
         return ((ArgumentTag.a) commandcontext.getArgument(s, ArgumentTag.a.class)).create(commandcontext);
-    }
-
-    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        StringReader stringreader = new StringReader(suggestionsbuilder.getInput());
-
-        stringreader.setCursor(suggestionsbuilder.getStart());
-        ArgumentParserItemStack argumentparseritemstack = new ArgumentParserItemStack(stringreader, true);
-
-        try {
-            argumentparseritemstack.h();
-        } catch (CommandSyntaxException commandsyntaxexception) {
-            ;
-        }
-
-        return argumentparseritemstack.a(suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

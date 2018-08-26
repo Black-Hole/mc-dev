@@ -20,12 +20,12 @@ public class ShapedRecipes implements IRecipe {
     private final int height;
     private final NonNullList<RecipeItemStack> items;
     private final ItemStack result;
-    private final MinecraftKey e;
-    private final String f;
+    private final MinecraftKey key;
+    private final String group;
 
     public ShapedRecipes(MinecraftKey minecraftkey, String s, int i, int j, NonNullList<RecipeItemStack> nonnulllist, ItemStack itemstack) {
-        this.e = minecraftkey;
-        this.f = s;
+        this.key = minecraftkey;
+        this.group = s;
         this.width = i;
         this.height = j;
         this.items = nonnulllist;
@@ -33,7 +33,7 @@ public class ShapedRecipes implements IRecipe {
     }
 
     public MinecraftKey getKey() {
-        return this.e;
+        return this.key;
     }
 
     public RecipeSerializer<?> a() {
@@ -239,7 +239,7 @@ public class ShapedRecipes implements IRecipe {
 
     public static ItemStack a(JsonObject jsonobject) {
         String s = ChatDeserializer.h(jsonobject, "item");
-        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s));
+        Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s));
 
         if (item == null) {
             throw new JsonSyntaxException("Unknown item \'" + s + "\'");
@@ -290,7 +290,7 @@ public class ShapedRecipes implements IRecipe {
         public void a(PacketDataSerializer packetdataserializer, ShapedRecipes shapedrecipes) {
             packetdataserializer.d(shapedrecipes.width);
             packetdataserializer.d(shapedrecipes.height);
-            packetdataserializer.a(shapedrecipes.f);
+            packetdataserializer.a(shapedrecipes.group);
             Iterator iterator = shapedrecipes.items.iterator();
 
             while (iterator.hasNext()) {

@@ -32,7 +32,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
         if (this.b.isEmpty()) {
             ArrayList arraylist = Lists.newArrayList();
-            Iterator iterator = Enchantment.enchantments.iterator();
+            Iterator iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {
                 Enchantment enchantment1 = (Enchantment) iterator.next();
@@ -77,7 +77,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
                 while (iterator.hasNext()) {
                     Enchantment enchantment = (Enchantment) iterator.next();
-                    MinecraftKey minecraftkey = (MinecraftKey) Enchantment.enchantments.b(enchantment);
+                    MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(enchantment);
 
                     if (minecraftkey == null) {
                         throw new IllegalArgumentException("Don\'t know how to serialize enchantment " + enchantment);
@@ -101,7 +101,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
                 while (iterator.hasNext()) {
                     JsonElement jsonelement = (JsonElement) iterator.next();
                     String s = ChatDeserializer.a(jsonelement, "enchantment");
-                    Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(new MinecraftKey(s));
+                    Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(new MinecraftKey(s));
 
                     if (enchantment == null) {
                         throw new JsonSyntaxException("Unknown enchantment \'" + s + "\'");

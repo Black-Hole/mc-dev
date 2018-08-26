@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.R;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.S;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
 
     protected BlockPoweredRail(Block.Info block_info) {

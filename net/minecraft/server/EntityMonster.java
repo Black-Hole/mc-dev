@@ -50,7 +50,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return SoundEffects.ENTITY_HOSTILE_DEATH;
     }
 
-    protected SoundEffect n(int i) {
+    protected SoundEffect m(int i) {
         return i > 4 ? SoundEffects.ENTITY_HOSTILE_BIG_FALL : SoundEffects.ENTITY_HOSTILE_SMALL_FALL;
     }
 
@@ -64,14 +64,14 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         if (this.world.getBrightness(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
             return false;
         } else {
-            int i = this.world.X() ? this.world.d(blockposition, 10) : this.world.getLightLevel(blockposition);
+            int i = this.world.Y() ? this.world.d(blockposition, 10) : this.world.getLightLevel(blockposition);
 
             return i <= this.random.nextInt(8);
         }
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && this.K_() && super.a(generatoraccess);
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL && this.K_() && super.a(generatoraccess, flag);
     }
 
     protected void initAttributes() {

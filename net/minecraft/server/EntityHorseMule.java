@@ -9,7 +9,7 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.P;
     }
 
@@ -28,7 +28,7 @@ public class EntityHorseMule extends EntityHorseChestedAbstract {
         return SoundEffects.ENTITY_MULE_HURT;
     }
 
-    protected void dD() {
+    protected void dC() {
         this.a(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 }

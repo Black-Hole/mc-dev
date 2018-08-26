@@ -4,7 +4,7 @@ public enum GenLayerRiver implements AreaTransformer7 {
 
     INSTANCE;
 
-    public static final int b = BiomeBase.a(Biomes.i);
+    public static final int b = IRegistry.BIOME.a((Object) Biomes.i);
 
     private GenLayerRiver() {}
 

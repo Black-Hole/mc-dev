@@ -24,7 +24,7 @@ public class CommandOp {
         })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentProfile.a()).suggests((commandcontext, suggestionsbuilder) -> {
             PlayerList playerlist = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList();
 
-            return ICompletionProvider.a(playerlist.v().stream().filter((entityplayer) -> {
+            return ICompletionProvider.b(playerlist.v().stream().filter((entityplayer) -> {
                 return !playerlist.isOp(entityplayer.getProfile());
             }).map((entityplayer) -> {
                 return entityplayer.getProfile().getName();

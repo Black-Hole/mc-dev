@@ -2,15 +2,14 @@ package net.minecraft.server;
 
 public class Particle<T extends ParticleParam> {
 
-    public static final RegistryMaterials<MinecraftKey, Particle<? extends ParticleParam>> REGISTRY = new RegistryMaterials();
-    private final MinecraftKey b;
-    private final boolean c;
-    private final ParticleParam.a<T> d;
+    private final MinecraftKey a;
+    private final boolean b;
+    private final ParticleParam.a<T> c;
 
     protected Particle(MinecraftKey minecraftkey, boolean flag, ParticleParam.a<T> particleparam_a) {
-        this.b = minecraftkey;
-        this.c = flag;
-        this.d = particleparam_a;
+        this.a = minecraftkey;
+        this.b = flag;
+        this.c = particleparam_a;
     }
 
     public static void c() {
@@ -67,22 +66,22 @@ public class Particle<T extends ParticleParam> {
     }
 
     public MinecraftKey d() {
-        return this.b;
+        return this.a;
     }
 
     public boolean e() {
-        return this.c;
+        return this.b;
     }
 
     public ParticleParam.a<T> f() {
-        return this.d;
+        return this.c;
     }
 
     private static void a(String s, boolean flag) {
-        Particle.REGISTRY.a(new MinecraftKey(s), new ParticleType(new MinecraftKey(s), flag));
+        IRegistry.PARTICLE_TYPE.a(new MinecraftKey(s), (Object) (new ParticleType(new MinecraftKey(s), flag)));
     }
 
     private static <T extends ParticleParam> void a(String s, boolean flag, ParticleParam.a<T> particleparam_a) {
-        Particle.REGISTRY.a(new MinecraftKey(s), new Particle(new MinecraftKey(s), flag, particleparam_a));
+        IRegistry.PARTICLE_TYPE.a(new MinecraftKey(s), (Object) (new Particle(new MinecraftKey(s), flag, particleparam_a)));
     }
 }

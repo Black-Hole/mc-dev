@@ -14,12 +14,12 @@ public class EntityMagmaCube extends EntitySlime {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     protected void setSize(int i, boolean flag) {
@@ -36,19 +36,19 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     @Nullable
-    protected MinecraftKey G() {
-        return this.dz() ? LootTables.a : LootTables.ap;
+    protected MinecraftKey getDefaultLootTable() {
+        return this.dy() ? LootTables.a : LootTables.ap;
     }
 
     public boolean isBurning() {
         return false;
     }
 
-    protected int ds() {
-        return super.ds() * 4;
+    protected int dr() {
+        return super.dr() * 4;
     }
 
-    protected void dt() {
+    protected void ds() {
         this.a *= 0.9F;
     }
 
@@ -58,7 +58,7 @@ public class EntityMagmaCube extends EntitySlime {
     }
 
     protected void c(Tag<FluidType> tag) {
-        if (tag == TagsFluid.b) {
+        if (tag == TagsFluid.LAVA) {
             this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
             this.impulse = true;
         } else {
@@ -69,27 +69,27 @@ public class EntityMagmaCube extends EntitySlime {
 
     public void c(float f, float f1) {}
 
-    protected boolean du() {
-        return true;
+    protected boolean dt() {
+        return this.cP();
     }
 
-    protected int dv() {
-        return super.dv() + 2;
+    protected int du() {
+        return super.du() + 2;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
-        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
     protected SoundEffect cs() {
-        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+    }
+
+    protected SoundEffect dv() {
+        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
     }
 
     protected SoundEffect dw() {
-        return this.dz() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
-    }
-
-    protected SoundEffect dx() {
         return SoundEffects.ENTITY_MAGMA_CUBE_JUMP;
     }
 }

@@ -30,10 +30,10 @@ public class CommandDatapack {
         return new ChatMessage("commands.datapack.disable.failed", new Object[] { object});
     });
     private static final SuggestionProvider<CommandListenerWrapper> d = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
+        return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().d().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
     private static final SuggestionProvider<CommandListenerWrapper> e = (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().c().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
+        return ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository().c().stream().map(ResourcePackLoader::e).map(StringArgumentType::escapeIfRequired), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -76,7 +76,7 @@ public class CommandDatapack {
 
         commanddatapack_a.apply(arraylist, resourcepackloader);
         resourcepackrepository.a((Collection) arraylist);
-        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(0).getWorldData();
+        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
         worlddata.O().clear();
         resourcepackrepository.d().forEach((resourcepackloader) -> {
@@ -94,7 +94,7 @@ public class CommandDatapack {
 
         arraylist.remove(resourcepackloader);
         resourcepackrepository.a((Collection) arraylist);
-        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(0).getWorldData();
+        WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
         worlddata.O().clear();
         resourcepackrepository.d().forEach((resourcepackloader) -> {

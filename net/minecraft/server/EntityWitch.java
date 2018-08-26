@@ -85,7 +85,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
             } else {
                 PotionRegistry potionregistry = null;
 
-                if (this.random.nextFloat() < 0.15F && this.a(TagsFluid.a) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
+                if (this.random.nextFloat() < 0.15F && this.a(TagsFluid.WATER) && !this.hasEffect(MobEffects.WATER_BREATHING)) {
                     potionregistry = Potions.x;
                 } else if (this.random.nextFloat() < 0.15F && (this.isBurning() || this.cr() != null && this.cr().p()) && !this.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     potionregistry = Potions.m;
@@ -129,7 +129,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.v;
     }
 

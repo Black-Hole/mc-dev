@@ -34,7 +34,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         }
 
         return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder) -> {
-            ICompletionProvider.b(((CommandListenerWrapper) commandcontext.getSource()).l(), suggestionsbuilder);
+            ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).l(), suggestionsbuilder);
         });
     };
     private static final Collection<String> b = Arrays.asList(new String[] { "Player", "0123", "*", "@e"});

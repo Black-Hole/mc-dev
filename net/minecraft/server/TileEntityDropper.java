@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class TileEntityDropper extends TileEntityDispenser {
 
     public TileEntityDropper() {
-        super(TileEntityTypes.h);
+        super(TileEntityTypes.DROPPER);
     }
 
     public IChatBaseComponent getDisplayName() {

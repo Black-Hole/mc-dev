@@ -14,7 +14,7 @@ public class TileEntityDispenser extends TileEntityLootable {
     }
 
     public TileEntityDispenser() {
-        this(TileEntityTypes.g);
+        this(TileEntityTypes.DISPENSER);
     }
 
     public int getSize() {

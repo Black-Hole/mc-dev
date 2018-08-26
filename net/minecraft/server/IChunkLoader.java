@@ -14,11 +14,5 @@ public interface IChunkLoader {
 
     void saveChunk(World world, IChunkAccess ichunkaccess) throws IOException, ExceptionWorldConflict;
 
-    void a(IBlockAccess iblockaccess, Chunk chunk) throws IOException;
-
     void b();
-
-    void c();
-
-    boolean chunkExists(int i, int j);
 }

@@ -17,17 +17,17 @@ public class BlockCoralFanWall extends BlockCoralFanWallAbstract {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!b_(iblockdata, world, blockposition)) {
-            world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) this.c.getBlockData().set(BlockCoralFanWall.a, Boolean.valueOf(false))).set(BlockCoralFanWall.b, iblockdata.get(BlockCoralFanWall.b)), 2);
+            world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) this.c.getBlockData().set(BlockCoralFanWall.b, Boolean.valueOf(false))).set(BlockCoralFanWall.a, iblockdata.get(BlockCoralFanWall.a)), 2);
         }
 
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (enumdirection.opposite() == iblockdata.get(BlockCoralFanWall.b) && !iblockdata.canPlace(generatoraccess, blockposition)) {
+        if (enumdirection.opposite() == iblockdata.get(BlockCoralFanWall.a) && !iblockdata.canPlace(generatoraccess, blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
-            if (((Boolean) iblockdata.get(BlockCoralFanWall.a)).booleanValue()) {
-                generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            if (((Boolean) iblockdata.get(BlockCoralFanWall.b)).booleanValue()) {
+                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             this.a(iblockdata, generatoraccess, blockposition);

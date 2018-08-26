@@ -10,8 +10,7 @@ import javax.annotation.Nullable;
 
 public class Item implements IMaterial {
 
-    public static final RegistryMaterials<MinecraftKey, Item> REGISTRY = new RegistryMaterials();
-    public static final Map<Block, Item> g = Maps.newHashMap();
+    public static final Map<Block, Item> f = Maps.newHashMap();
     private static final IDynamicTexture a = (itemstack, world, entityliving) -> {
         return itemstack.f() ? 1.0F : 0.0F;
     };
@@ -24,12 +23,12 @@ public class Item implements IMaterial {
     private static final IDynamicTexture d = (itemstack, world, entityliving) -> {
         return entityliving instanceof EntityHuman ? ((EntityHuman) entityliving).getCooldownTracker().a(itemstack.getItem(), 0.0F) : 0.0F;
     };
-    private final IRegistry<MinecraftKey, IDynamicTexture> e = new RegistrySimple();
-    protected static final UUID h = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-    protected static final UUID i = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+    protected static final UUID g = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
+    protected static final UUID h = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
+    protected static Random i = new Random();
+    private final Map<MinecraftKey, IDynamicTexture> e = Maps.newHashMap();
     protected final CreativeModeTab j;
-    private final EnumItemRarity l;
-    protected static Random k = new Random();
+    private final EnumItemRarity k;
     private final int maxStackSize;
     private final int durability;
     private final Item craftingResult;
@@ -37,22 +36,33 @@ public class Item implements IMaterial {
     private String name;
 
     public static int getId(Item item) {
-        return item == null ? 0 : Item.REGISTRY.a((Object) item);
+        return item == null ? 0 : IRegistry.ITEM.a((Object) item);
     }
 
     public static Item getById(int i) {
-        return (Item) Item.REGISTRY.getId(i);
+        return (Item) IRegistry.ITEM.fromId(i);
     }
 
     @Deprecated
     public static Item getItemOf(Block block) {
-        Item item = (Item) Item.g.get(block);
+        Item item = (Item) Item.f.get(block);
 
         return item == null ? Items.AIR : item;
     }
 
-    public final void a(MinecraftKey minecraftkey, IDynamicTexture idynamictexture) {
-        this.e.a(minecraftkey, idynamictexture);
+    public Item(Item.Info item_info) {
+        this.a(new MinecraftKey("lefthanded"), Item.c);
+        this.a(new MinecraftKey("cooldown"), Item.d);
+        this.j = item_info.d;
+        this.k = item_info.e;
+        this.craftingResult = item_info.c;
+        this.durability = item_info.b;
+        this.maxStackSize = item_info.a;
+        if (this.durability > 0) {
+            this.a(new MinecraftKey("damaged"), Item.a);
+            this.a(new MinecraftKey("damage"), Item.b);
+        }
+
     }
 
     public boolean a(NBTTagCompound nbttagcompound) {
@@ -67,19 +77,8 @@ public class Item implements IMaterial {
         return this;
     }
 
-    public Item(Item.Info item_info) {
-        this.a(new MinecraftKey("lefthanded"), Item.c);
-        this.a(new MinecraftKey("cooldown"), Item.d);
-        this.j = item_info.d;
-        this.l = item_info.e;
-        this.craftingResult = item_info.c;
-        this.durability = item_info.b;
-        this.maxStackSize = item_info.a;
-        if (this.durability > 0) {
-            this.a(new MinecraftKey("damaged"), Item.a);
-            this.a(new MinecraftKey("damage"), Item.b);
-        }
-
+    public final void a(MinecraftKey minecraftkey, IDynamicTexture idynamictexture) {
+        this.e.put(minecraftkey, idynamictexture);
     }
 
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
@@ -128,7 +127,7 @@ public class Item implements IMaterial {
 
     protected String m() {
         if (this.name == null) {
-            this.name = SystemUtils.a("item", (MinecraftKey) Item.REGISTRY.b(this));
+            this.name = SystemUtils.a("item", IRegistry.ITEM.getKey(this));
         }
 
         return this.name;
@@ -179,9 +178,9 @@ public class Item implements IMaterial {
 
     public EnumItemRarity j(ItemStack itemstack) {
         if (!itemstack.hasEnchantments()) {
-            return this.l;
+            return this.k;
         } else {
-            switch (this.l) {
+            switch (this.k) {
             case COMMON:
             case UNCOMMON:
                 return EnumItemRarity.RARE;
@@ -191,7 +190,7 @@ public class Item implements IMaterial {
 
             case EPIC:
             default:
-                return this.l;
+                return this.k;
             }
         }
     }
@@ -694,6 +693,11 @@ public class Item implements IMaterial {
         a(Blocks.BUBBLE_CORAL, CreativeModeTab.c);
         a(Blocks.FIRE_CORAL, CreativeModeTab.c);
         a(Blocks.HORN_CORAL, CreativeModeTab.c);
+        a(Blocks.DEAD_BRAIN_CORAL, CreativeModeTab.c);
+        a(Blocks.DEAD_BUBBLE_CORAL, CreativeModeTab.c);
+        a(Blocks.DEAD_FIRE_CORAL, CreativeModeTab.c);
+        a(Blocks.DEAD_HORN_CORAL, CreativeModeTab.c);
+        a(Blocks.DEAD_TUBE_CORAL, CreativeModeTab.c);
         a((ItemBlock) (new ItemBlockWallable(Blocks.TUBE_CORAL_FAN, Blocks.TUBE_CORAL_WALL_FAN, (new Item.Info()).a(CreativeModeTab.c))));
         a((ItemBlock) (new ItemBlockWallable(Blocks.BRAIN_CORAL_FAN, Blocks.BRAIN_CORAL_WALL_FAN, (new Item.Info()).a(CreativeModeTab.c))));
         a((ItemBlock) (new ItemBlockWallable(Blocks.BUBBLE_CORAL_FAN, Blocks.BUBBLE_CORAL_WALL_FAN, (new Item.Info()).a(CreativeModeTab.c))));
@@ -1055,7 +1059,7 @@ public class Item implements IMaterial {
     }
 
     protected static void a(Block block, Item item) {
-        a((MinecraftKey) Block.REGISTRY.b(block), item);
+        a(IRegistry.BLOCK.getKey(block), item);
     }
 
     private static void a(String s, Item item) {
@@ -1064,10 +1068,10 @@ public class Item implements IMaterial {
 
     private static void a(MinecraftKey minecraftkey, Item item) {
         if (item instanceof ItemBlock) {
-            ((ItemBlock) item).a(Item.g, item);
+            ((ItemBlock) item).a(Item.f, item);
         }
 
-        Item.REGISTRY.a(minecraftkey, item);
+        IRegistry.ITEM.a(minecraftkey, (Object) item);
     }
 
     public boolean a(Tag<Item> tag) {

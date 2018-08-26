@@ -26,33 +26,37 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(3.0D);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean isPersistent() {
+        return this.isFromBucket() || super.isPersistent();
+    }
+
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         BlockPosition blockposition = new BlockPosition(this);
 
-        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition.up()).getBlock() == Blocks.WATER ? super.a(generatoraccess) : false;
+        return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition.up()).getBlock() == Blocks.WATER ? super.a(generatoraccess, flag) : false;
     }
 
     protected boolean isTypeNotPersistent() {
-        return !this.dE() && !this.hasCustomName();
+        return !this.isFromBucket() && !this.hasCustomName();
     }
 
     public boolean l() {
-        return this.c && this.a < this.dz();
+        return this.c && this.a < this.dy();
     }
 
-    protected int dz() {
+    protected int dy() {
         return 8;
     }
 
-    public int dh() {
-        return this.dz();
+    public int dg() {
+        return this.dy();
     }
 
     public void a(boolean flag) {
         this.bC = flag;
     }
 
-    public boolean dA() {
+    public boolean dz() {
         return this.bC;
     }
 
@@ -61,37 +65,33 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         this.datawatcher.register(EntityFish.b, Boolean.valueOf(false));
     }
 
-    private boolean dE() {
+    public boolean isFromBucket() {
         return ((Boolean) this.datawatcher.get(EntityFish.b)).booleanValue();
     }
 
-    public void s(boolean flag) {
+    public void setFromBucket(boolean flag) {
         this.datawatcher.set(EntityFish.b, Boolean.valueOf(flag));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("FromBucket", this.dE());
+        nbttagcompound.setBoolean("FromBucket", this.isFromBucket());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.s(nbttagcompound.getBoolean("FromBucket"));
+        this.setFromBucket(nbttagcompound.getBoolean("FromBucket"));
     }
 
     protected void n() {
         super.n();
         this.goalSelector.a(0, new PathfinderGoalPanic(this, 1.25D));
-        this.goalSelector.a(2, new PathfinderGoalAvoidTarget(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, IEntitySelector.e));
+        this.goalSelector.a(2, new PathfinderGoalAvoidTarget(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, IEntitySelector.f));
         this.goalSelector.a(4, new EntityFish.b(this));
     }
 
     protected NavigationAbstract b(World world) {
         return new NavigationGuardian(this, world);
-    }
-
-    public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
     }
 
     public void tick() {
@@ -130,7 +130,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
             this.motZ += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F);
             this.onGround = false;
             this.impulse = true;
-            this.a(this.dD(), this.cD(), this.cE());
+            this.a(this.dC(), this.cD(), this.cE());
         }
 
         super.k();
@@ -142,7 +142,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         if (itemstack.getItem() == Items.WATER_BUCKET && this.isAlive()) {
             this.a(SoundEffects.ITEM_BUCKET_FILL_FISH, 1.0F, 1.0F);
             itemstack.subtract(1);
-            ItemStack itemstack1 = this.dB();
+            ItemStack itemstack1 = this.dA();
 
             this.f(itemstack1);
             if (!this.world.isClientSide) {
@@ -169,17 +169,17 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
 
     }
 
-    protected abstract ItemStack dB();
+    protected abstract ItemStack dA();
 
     public void t(boolean flag) {
         this.c = flag;
     }
 
-    public boolean dC() {
+    public boolean dB() {
         return this.c;
     }
 
-    protected abstract SoundEffect dD();
+    protected abstract SoundEffect dC();
 
     protected SoundEffect ad() {
         return SoundEffects.ENTITY_FISH_SWIM;
@@ -195,7 +195,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         }
 
         public void a() {
-            if (this.i.a(TagsFluid.a)) {
+            if (this.i.a(TagsFluid.WATER)) {
                 this.i.motY += 0.005D;
             }
 
@@ -230,7 +230,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
         }
 
         public boolean a() {
-            return super.a() && !this.h.dA();
+            return super.a() && !this.h.dz();
         }
     }
 }

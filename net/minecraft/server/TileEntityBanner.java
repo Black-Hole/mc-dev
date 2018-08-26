@@ -15,7 +15,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
     private String j;
 
     public TileEntityBanner() {
-        super(TileEntityTypes.t);
+        super(TileEntityTypes.BANNER);
         this.color = EnumColor.WHITE;
     }
 
@@ -72,7 +72,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
             this.a = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
         }
 
-        if (this.u()) {
+        if (this.hasWorld()) {
             this.color = ((BlockBannerAbstract) this.getBlock().getBlock()).b();
         } else {
             this.color = null;

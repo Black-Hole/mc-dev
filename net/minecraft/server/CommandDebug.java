@@ -41,7 +41,7 @@ public class CommandDebug {
         if (methodprofiler.a()) {
             throw CommandDebug.c.create();
         } else {
-            minecraftserver.ak();
+            minecraftserver.ai();
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[] { "Started the debug profiler. Type \'/debug stop\' to stop it."}), true);
             return 0;
         }
@@ -55,7 +55,7 @@ public class CommandDebug {
             throw CommandDebug.b.create();
         } else {
             long i = SystemUtils.c();
-            int j = minecraftserver.aj();
+            int j = minecraftserver.ah();
             long k = i - methodprofiler.c();
             int l = j - methodprofiler.d();
             File file = new File(minecraftserver.c("debug"), "profile-results-" + (new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss")).format(new Date()) + ".txt");

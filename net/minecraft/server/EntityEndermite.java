@@ -55,7 +55,7 @@ public class EntityEndermite extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.as;
     }
 
@@ -115,8 +115,8 @@ public class EntityEndermite extends EntityMonster {
         return true;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        if (super.a(generatoraccess)) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        if (super.a(generatoraccess, flag)) {
             EntityHuman entityhuman = generatoraccess.findNearbyPlayer(this, 5.0D);
 
             return entityhuman == null;

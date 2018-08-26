@@ -70,7 +70,7 @@ public class EntitySilverfish extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.B;
     }
 
@@ -92,8 +92,8 @@ public class EntitySilverfish extends EntityMonster {
         return true;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        if (super.a(generatoraccess)) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        if (super.a(generatoraccess, flag)) {
             EntityHuman entityhuman = generatoraccess.b(this, 5.0D);
 
             return entityhuman == null;

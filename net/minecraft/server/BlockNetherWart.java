@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BlockNetherWart extends BlockPlant {
 
-    public static final BlockStateInteger AGE = BlockProperties.T;
+    public static final BlockStateInteger AGE = BlockProperties.U;
     private static final VoxelShape[] b = new VoxelShape[] { Block.a(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 11.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D)};
 
     protected BlockNetherWart(Block.Info block_info) {

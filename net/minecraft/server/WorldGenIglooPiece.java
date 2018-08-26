@@ -74,7 +74,7 @@ public class WorldGenIglooPiece {
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition.down());
 
                 if (tileentity instanceof TileEntityChest) {
-                    ((TileEntityChest) tileentity).a(LootTables.n, random.nextLong());
+                    ((TileEntityChest) tileentity).setLootTable(LootTables.n, random.nextLong());
                 }
 
             }

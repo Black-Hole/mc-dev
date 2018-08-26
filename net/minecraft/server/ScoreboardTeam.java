@@ -40,7 +40,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public IChatBaseComponent d() {
-        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a(this.d.e().a((chatmodifier) -> {
+        IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a(this.d.h().a((chatmodifier) -> {
             chatmodifier.setInsertion(this.b).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.b)));
         }));
         EnumChatFormat enumchatformat = this.getColor();
@@ -62,7 +62,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public void setPrefix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.e = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
+        this.e = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.h());
         this.a.handleTeamChanged(this);
     }
 
@@ -71,7 +71,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public void setSuffix(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.f = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.e());
+        this.f = (IChatBaseComponent) (ichatbasecomponent == null ? new ChatComponentText("") : ichatbasecomponent.h());
         this.a.handleTeamChanged(this);
     }
 
@@ -95,7 +95,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
     }
 
     public static IChatBaseComponent a(@Nullable ScoreboardTeamBase scoreboardteambase, IChatBaseComponent ichatbasecomponent) {
-        return scoreboardteambase == null ? ichatbasecomponent.e() : scoreboardteambase.getFormattedName(ichatbasecomponent);
+        return scoreboardteambase == null ? ichatbasecomponent.h() : scoreboardteambase.getFormattedName(ichatbasecomponent);
     }
 
     public boolean allowFriendlyFire() {

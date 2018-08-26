@@ -114,13 +114,13 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.U;
     }
 
     public void k() {
         super.k();
-        if (!this.world.isClientSide && this.bL && !this.bM && !this.ds() && this.onGround) {
+        if (!this.world.isClientSide && this.bL && !this.bM && !this.dr() && this.onGround) {
             this.bM = true;
             this.bN = 0.0F;
             this.bO = 0.0F;
@@ -136,7 +136,7 @@ public class EntityWolf extends EntityTameableAnimal {
     public void tick() {
         super.tick();
         this.bK = this.bJ;
-        if (this.dM()) {
+        if (this.dL()) {
             this.bJ += (1.0F - this.bJ) * 0.4F;
         } else {
             this.bJ += (0.0F - this.bJ) * 0.4F;
@@ -292,7 +292,7 @@ public class EntityWolf extends EntityTameableAnimal {
         return item instanceof ItemFood && ((ItemFood) item).d();
     }
 
-    public int dh() {
+    public int dg() {
         return 8;
     }
 
@@ -349,7 +349,7 @@ public class EntityWolf extends EntityTameableAnimal {
         }
     }
 
-    public boolean dM() {
+    public boolean dL() {
         return ((Boolean) this.datawatcher.get(EntityWolf.bH)).booleanValue();
     }
 

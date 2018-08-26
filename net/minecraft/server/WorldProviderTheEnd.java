@@ -18,12 +18,12 @@ public class WorldProviderTheEnd extends WorldProvider {
     }
 
     public ChunkGenerator<?> getChunkGenerator() {
-        GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) ChunkGeneratorType.d.a();
+        GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) ChunkGeneratorType.c.b();
 
         generatorsettingsend.a(Blocks.END_STONE.getBlockData());
         generatorsettingsend.b(Blocks.AIR.getBlockData());
         generatorsettingsend.a(this.d());
-        return ChunkGeneratorType.d.create(this.b, BiomeLayout.e.a(((BiomeLayoutTheEndConfiguration) BiomeLayout.e.a()).a(this.b.getSeed())), generatorsettingsend);
+        return ChunkGeneratorType.c.create(this.b, BiomeLayout.d.a(((BiomeLayoutTheEndConfiguration) BiomeLayout.d.b()).a(this.b.getSeed())), generatorsettingsend);
     }
 
     public float a(long i, float f) {

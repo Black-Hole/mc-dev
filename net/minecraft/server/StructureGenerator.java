@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,10 +43,10 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                     StructureStart structurestart = this.a(generatoraccess, chunkgenerator, (SeededRandom) random, i2);
 
                     if (structurestart != StructureGenerator.a && structurestart.c().a(l, i1, l + 15, i1 + 15)) {
-                        ((LongSet) chunkgenerator.getStructureCache(this).computeIfAbsent(Long.valueOf(j1), (olong) -> {
+                        ((LongSet) chunkgenerator.getStructureCache(this).computeIfAbsent(j1, (i) -> {
                             return new LongOpenHashSet();
                         })).add(i2);
-                        generatoraccess.getChunkProvider().d(j, k).a(this.a(), i2);
+                        generatoraccess.getChunkProvider().a(j, k, true).a(this.a(), i2);
                         structurestart.a(generatoraccess, random, new StructureBoundingBox(l, i1, l + 15, i1 + 15), new ChunkCoordIntPair(j, k));
                         structurestart.b(new ChunkCoordIntPair(j, k));
                         flag = true;
@@ -103,7 +103,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
     }
 
     @Nullable
-    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, BlockPosition blockposition, int i) {
+    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, BlockPosition blockposition, int i, boolean flag) {
         if (!chunkgenerator.getWorldChunkManager().a(this)) {
             return null;
         } else {
@@ -117,17 +117,24 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
 
                 while (true) {
                     if (i1 <= l) {
-                        boolean flag = i1 == -l || i1 == l;
+                        boolean flag1 = i1 == -l || i1 == l;
 
                         for (int j1 = -l; j1 <= l; ++j1) {
-                            boolean flag1 = j1 == -l || j1 == l;
+                            boolean flag2 = j1 == -l || j1 == l;
 
-                            if (flag || flag1) {
+                            if (flag1 || flag2) {
                                 ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, seededrandom, j, k, i1, j1);
                                 StructureStart structurestart = this.a(world, chunkgenerator, seededrandom, chunkcoordintpair.a());
 
                                 if (structurestart != StructureGenerator.a) {
-                                    return structurestart.a();
+                                    if (flag && structurestart.g()) {
+                                        structurestart.h();
+                                        return structurestart.a();
+                                    }
+
+                                    if (!flag) {
+                                        return structurestart.a();
+                                    }
                                 }
 
                                 if (l == 0) {
@@ -159,7 +166,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
         LongSet longset = (LongSet) long2objectmap1.get(k);
 
         if (longset == null) {
-            longset = generatoraccess.getChunkProvider().d(i, j).b(this.a());
+            longset = generatoraccess.getChunkProvider().a(i, j, true).b(this.a());
             long2objectmap1.put(k, longset);
         }
 
@@ -173,7 +180,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                 arraylist.add(structurestart);
             } else {
                 ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong.longValue());
-                IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z);
+                IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().a(chunkcoordintpair.x, chunkcoordintpair.z, true);
 
                 structurestart = ichunkaccess.a(this.a());
                 if (structurestart != null) {
@@ -197,9 +204,10 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                 return structurestart;
             } else {
                 ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
+                IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().a(chunkcoordintpair.x, chunkcoordintpair.z, false);
 
-                if (generatoraccess.getChunkProvider().f(chunkcoordintpair.x, chunkcoordintpair.z)) {
-                    structurestart = generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z).a(this.a());
+                if (ichunkaccess != null) {
+                    structurestart = ichunkaccess.a(this.a());
                     if (structurestart != null) {
                         long2objectmap.put(i, structurestart);
                         return structurestart;
@@ -215,7 +223,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                 }
 
                 if (structurestart.b()) {
-                    generatoraccess.getChunkProvider().d(chunkcoordintpair.x, chunkcoordintpair.z).a(this.a(), structurestart);
+                    generatoraccess.getChunkProvider().a(chunkcoordintpair.x, chunkcoordintpair.z, true).a(this.a(), structurestart);
                 }
 
                 long2objectmap.put(i, structurestart);

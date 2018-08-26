@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BlockCactus extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.W;
+    public static final BlockStateInteger AGE = BlockProperties.X;
     protected static final VoxelShape b = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 15.0D, 15.0D);
     protected static final VoxelShape c = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
@@ -63,7 +63,7 @@ public class BlockCactus extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (!iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -86,7 +86,7 @@ public class BlockCactus extends Block {
             IBlockData iblockdata1 = iworldreader.getType(blockposition.shift(enumdirection));
 
             material = iblockdata1.getMaterial();
-        } while (!material.isBuildable() && !iworldreader.b(blockposition.shift(enumdirection)).a(TagsFluid.b));
+        } while (!material.isBuildable() && !iworldreader.b(blockposition.shift(enumdirection)).a(TagsFluid.LAVA));
 
         return false;
     }

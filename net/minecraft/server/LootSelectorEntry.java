@@ -12,13 +12,13 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Random;
 
-public abstract class LotoSelectorEntry {
+public abstract class LootSelectorEntry {
 
     protected final int c;
     protected final int d;
     protected final LootItemCondition[] e;
 
-    protected LotoSelectorEntry(int i, int j, LootItemCondition[] alootitemcondition) {
+    protected LootSelectorEntry(int i, int j, LootItemCondition[] alootitemcondition) {
         this.c = i;
         this.d = j;
         this.e = alootitemcondition;
@@ -32,11 +32,11 @@ public abstract class LotoSelectorEntry {
 
     protected abstract void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext);
 
-    public static class a implements JsonDeserializer<LotoSelectorEntry>, JsonSerializer<LotoSelectorEntry> {
+    public static class a implements JsonDeserializer<LootSelectorEntry>, JsonSerializer<LootSelectorEntry> {
 
         public a() {}
 
-        public LotoSelectorEntry a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootSelectorEntry a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot item");
             String s = ChatDeserializer.h(jsonobject, "type");
             int i = ChatDeserializer.a(jsonobject, "weight", 1);
@@ -60,33 +60,33 @@ public abstract class LotoSelectorEntry {
             }
         }
 
-        public JsonElement a(LotoSelectorEntry lotoselectorentry, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement a(LootSelectorEntry lootselectorentry, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("weight", Integer.valueOf(lotoselectorentry.c));
-            jsonobject.addProperty("quality", Integer.valueOf(lotoselectorentry.d));
-            if (lotoselectorentry.e.length > 0) {
-                jsonobject.add("conditions", jsonserializationcontext.serialize(lotoselectorentry.e));
+            jsonobject.addProperty("weight", Integer.valueOf(lootselectorentry.c));
+            jsonobject.addProperty("quality", Integer.valueOf(lootselectorentry.d));
+            if (lootselectorentry.e.length > 0) {
+                jsonobject.add("conditions", jsonserializationcontext.serialize(lootselectorentry.e));
             }
 
-            if (lotoselectorentry instanceof LootItem) {
+            if (lootselectorentry instanceof LootItem) {
                 jsonobject.addProperty("type", "item");
-            } else if (lotoselectorentry instanceof LootSelectorLootTable) {
+            } else if (lootselectorentry instanceof LootSelectorLootTable) {
                 jsonobject.addProperty("type", "loot_table");
             } else {
-                if (!(lotoselectorentry instanceof LootSelectorEmpty)) {
-                    throw new IllegalArgumentException("Don\'t know how to serialize " + lotoselectorentry);
+                if (!(lootselectorentry instanceof LootSelectorEmpty)) {
+                    throw new IllegalArgumentException("Don\'t know how to serialize " + lootselectorentry);
                 }
 
                 jsonobject.addProperty("type", "empty");
             }
 
-            lotoselectorentry.a(jsonobject, jsonserializationcontext);
+            lootselectorentry.a(jsonobject, jsonserializationcontext);
             return jsonobject;
         }
 
         public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LotoSelectorEntry) object, type, jsonserializationcontext);
+            return this.a((LootSelectorEntry) object, type, jsonserializationcontext);
         }
 
         public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {

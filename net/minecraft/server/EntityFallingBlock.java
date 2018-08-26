@@ -87,13 +87,13 @@ public class EntityFallingBlock extends Entity {
             if (!this.world.isClientSide) {
                 blockposition = new BlockPosition(this);
                 boolean flag = this.block.getBlock() instanceof BlockConcretePowder;
-                boolean flag1 = flag && this.world.b(blockposition).a(TagsFluid.a);
+                boolean flag1 = flag && this.world.b(blockposition).a(TagsFluid.WATER);
                 double d0 = this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ;
 
                 if (flag && d0 > 1.0D) {
                     MovingObjectPosition movingobjectposition = this.world.rayTrace(new Vec3D(this.lastX, this.lastY, this.lastZ), new Vec3D(this.locX, this.locY, this.locZ), FluidCollisionOption.SOURCE_ONLY);
 
-                    if (movingobjectposition != null && this.world.b(movingobjectposition.a()).a(TagsFluid.a)) {
+                    if (movingobjectposition != null && this.world.b(movingobjectposition.a()).a(TagsFluid.WATER)) {
                         blockposition = movingobjectposition.a();
                         flag1 = true;
                     }
@@ -168,7 +168,7 @@ public class EntityFallingBlock extends Entity {
 
             if (i > 0) {
                 ArrayList arraylist = Lists.newArrayList(this.world.getEntities(this, this.getBoundingBox()));
-                boolean flag = this.block.a(TagsBlock.y);
+                boolean flag = this.block.a(TagsBlock.ANVIL);
                 DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
                 Iterator iterator = arraylist.iterator();
 
@@ -212,7 +212,7 @@ public class EntityFallingBlock extends Entity {
             this.hurtEntities = nbttagcompound.getBoolean("HurtEntities");
             this.fallHurtAmount = nbttagcompound.getFloat("FallHurtAmount");
             this.fallHurtMax = nbttagcompound.getInt("FallHurtMax");
-        } else if (this.block.a(TagsBlock.y)) {
+        } else if (this.block.a(TagsBlock.ANVIL)) {
             this.hurtEntities = true;
         }
 

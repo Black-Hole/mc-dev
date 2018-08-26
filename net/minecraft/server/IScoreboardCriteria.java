@@ -47,7 +47,7 @@ public class IScoreboardCriteria {
             if (i < 0) {
                 return null;
             } else {
-                StatisticWrapper statisticwrapper = (StatisticWrapper) StatisticList.REGISTRY.get(MinecraftKey.a(s.substring(0, i), '.'));
+                StatisticWrapper statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(MinecraftKey.a(s.substring(0, i), '.'));
 
                 return statisticwrapper == null ? null : a(statisticwrapper, MinecraftKey.a(s.substring(i + 1), '.'));
             }
@@ -56,9 +56,9 @@ public class IScoreboardCriteria {
 
     @Nullable
     private static <T> IScoreboardCriteria a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
-        RegistryMaterials registrymaterials = statisticwrapper.a();
+        IRegistry iregistry = statisticwrapper.a();
 
-        return registrymaterials.d(minecraftkey) ? statisticwrapper.b(registrymaterials.get(minecraftkey)) : null;
+        return iregistry.c(minecraftkey) ? statisticwrapper.b(iregistry.get(minecraftkey)) : null;
     }
 
     public String getName() {

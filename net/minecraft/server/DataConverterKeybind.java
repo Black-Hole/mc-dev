@@ -161,7 +161,7 @@ public class DataConverterKeybind extends DataFix {
 
                                 return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s));
                             } else {
-                                String s1 = (String) DataConverterKeybind.a.getOrDefault(Integer.valueOf(i), "key.unknown");
+                                String s1 = (String) DataConverterKeybind.a.getOrDefault(i, "key.unknown");
 
                                 return Pair.of(entry.getKey(), ((Dynamic) entry.getValue()).createString(s1));
                             }

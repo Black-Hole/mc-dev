@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
+import java.nio.file.LinkOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Map;
 import java.util.function.Function;
@@ -166,7 +167,7 @@ public class DefinedStructureManager implements IResourcePackListener {
                 return false;
             } else {
                 try {
-                    Files.createDirectories(java_nio_file_path1, new FileAttribute[0]);
+                    Files.createDirectories(Files.exists(java_nio_file_path1, new LinkOption[0]) ? java_nio_file_path1.toRealPath(new LinkOption[0]) : java_nio_file_path1, new FileAttribute[0]);
                 } catch (IOException ioexception) {
                     DefinedStructureManager.a.error("Failed to create parent directory: {}", java_nio_file_path1);
                     return false;

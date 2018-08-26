@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 public enum EnumToolMaterial implements ToolMaterial {
 
     WOOD(0, 59, 2.0F, 0.0F, 15, () -> {
-        return RecipeItemStack.a(TagsItem.b);
+        return RecipeItemStack.a(TagsItem.PLANKS);
     }), STONE(1, 131, 4.0F, 1.0F, 5, () -> {
         return RecipeItemStack.a(new IMaterial[] { Blocks.COBBLESTONE});
     }), IRON(2, 250, 6.0F, 2.0F, 14, () -> {

@@ -192,7 +192,7 @@ public class CommandClone {
                         worldserver.update(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b.getBlock());
                     }
 
-                    worldserver.w().a(structureboundingbox, blockposition3);
+                    worldserver.x().a(structureboundingbox, blockposition3);
                     if (j == 0) {
                         throw CommandClone.d.create();
                     } else {

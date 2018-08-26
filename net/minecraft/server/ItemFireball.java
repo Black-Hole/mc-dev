@@ -15,7 +15,7 @@ public class ItemFireball extends Item {
             BlockPosition blockposition = itemactioncontext.getClickPosition().shift(itemactioncontext.getClickedFace());
 
             if (world.getType(blockposition).isAir()) {
-                world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (ItemFireball.k.nextFloat() - ItemFireball.k.nextFloat()) * 0.2F + 1.0F);
+                world.a((EntityHuman) null, blockposition, SoundEffects.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (ItemFireball.i.nextFloat() - ItemFireball.i.nextFloat()) * 0.2F + 1.0F);
                 world.setTypeUpdate(blockposition, ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition));
             }
 

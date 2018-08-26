@@ -117,12 +117,8 @@ public class CommandExecute {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getPosition().a(ArgumentRotationAxis.a(commandcontext, "axes")));
         })))).then(CommandDispatcher.a("anchored").then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentAnchor.a(commandcontext, "anchor"));
-        })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("in").then(CommandDispatcher.a("overworld").redirect(literalcommandnode, (commandcontext) -> {
-            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.OVERWORLD));
-        }))).then(CommandDispatcher.a("the_nether").redirect(literalcommandnode, (commandcontext) -> {
-            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.NETHER));
-        }))).then(CommandDispatcher.a("the_end").redirect(literalcommandnode, (commandcontext) -> {
-            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().a(DimensionManager.THE_END));
+        })))).then(CommandDispatcher.a("in").then(CommandDispatcher.a("dimension", (ArgumentType) ArgumentDimension.a()).redirect(literalcommandnode, (commandcontext) -> {
+            return ((CommandListenerWrapper) commandcontext.getSource()).a(((CommandListenerWrapper) commandcontext.getSource()).getServer().getWorldServer(ArgumentDimension.a(commandcontext, "dimension")));
         }))));
     }
 
@@ -130,10 +126,10 @@ public class CommandExecute {
         literalargumentbuilder.then(CommandDispatcher.a("score").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentScoreholder.b()).suggests(ArgumentScoreholder.a).then(CommandDispatcher.a("objective", (ArgumentType) ArgumentScoreboardObjective.a()).redirect(literalcommandnode, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentScoreholder.c(commandcontext, "targets"), ArgumentScoreboardObjective.a(commandcontext, "objective"), flag);
         }))));
-        literalargumentbuilder.then(CommandDispatcher.a("bossbar").then(((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommmandBossBar.a).then(CommandDispatcher.a("value").redirect(literalcommandnode, (commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), CommmandBossBar.a(commandcontext), true, flag);
+        literalargumentbuilder.then(CommandDispatcher.a("bossbar").then(((RequiredArgumentBuilder) CommandDispatcher.a("id", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandBossBar.a).then(CommandDispatcher.a("value").redirect(literalcommandnode, (commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), CommandBossBar.a(commandcontext), true, flag);
         }))).then(CommandDispatcher.a("max").redirect(literalcommandnode, (commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), CommmandBossBar.a(commandcontext), false, flag);
+            return a((CommandListenerWrapper) commandcontext.getSource(), CommandBossBar.a(commandcontext), false, flag);
         }))));
         Iterator iterator = CommandData.a.iterator();
 

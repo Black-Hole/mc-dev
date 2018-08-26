@@ -7,26 +7,16 @@ import java.util.List;
 public class WorldBorder {
 
     private final List<IWorldBorderListener> a = Lists.newArrayList();
-    private double b;
-    private double c;
-    private double d = 6.0E7D;
-    private double e;
-    private long f;
-    private long g;
-    private int h;
-    private double i;
-    private double j;
-    private int k;
-    private int l;
+    private double b = 0.2D;
+    private double c = 5.0D;
+    private int d = 15;
+    private int e = 5;
+    private double f;
+    private double g;
+    private int h = 29999984;
+    private WorldBorder.a i = new WorldBorder.c(6.0E7D);
 
-    public WorldBorder() {
-        this.e = this.d;
-        this.h = 29999984;
-        this.i = 0.2D;
-        this.j = 5.0D;
-        this.k = 15;
-        this.l = 5;
-    }
+    public WorldBorder() {}
 
     public boolean a(BlockPosition blockposition) {
         return (double) (blockposition.getX() + 1) > this.b() && (double) blockposition.getX() < this.d() && (double) (blockposition.getZ() + 1) > this.c() && (double) blockposition.getZ() < this.e();
@@ -55,61 +45,34 @@ public class WorldBorder {
         return Math.min(d6, d3);
     }
 
-    public EnumWorldBorderState getState() {
-        return this.e < this.d ? EnumWorldBorderState.SHRINKING : (this.e > this.d ? EnumWorldBorderState.GROWING : EnumWorldBorderState.STATIONARY);
-    }
-
     public double b() {
-        double d0 = this.getCenterX() - this.getSize() / 2.0D;
-
-        if (d0 < (double) (-this.h)) {
-            d0 = (double) (-this.h);
-        }
-
-        return d0;
+        return this.i.a();
     }
 
     public double c() {
-        double d0 = this.getCenterZ() - this.getSize() / 2.0D;
-
-        if (d0 < (double) (-this.h)) {
-            d0 = (double) (-this.h);
-        }
-
-        return d0;
+        return this.i.c();
     }
 
     public double d() {
-        double d0 = this.getCenterX() + this.getSize() / 2.0D;
-
-        if (d0 > (double) this.h) {
-            d0 = (double) this.h;
-        }
-
-        return d0;
+        return this.i.b();
     }
 
     public double e() {
-        double d0 = this.getCenterZ() + this.getSize() / 2.0D;
-
-        if (d0 > (double) this.h) {
-            d0 = (double) this.h;
-        }
-
-        return d0;
+        return this.i.d();
     }
 
     public double getCenterX() {
-        return this.b;
+        return this.f;
     }
 
     public double getCenterZ() {
-        return this.c;
+        return this.g;
     }
 
     public void setCenter(double d0, double d1) {
-        this.b = d0;
-        this.c = d1;
+        this.f = d0;
+        this.g = d1;
+        this.i.k();
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -121,32 +84,19 @@ public class WorldBorder {
     }
 
     public double getSize() {
-        if (this.getState() != EnumWorldBorderState.STATIONARY) {
-            double d0 = (double) ((float) (SystemUtils.b() - this.g) / (float) (this.f - this.g));
-
-            if (d0 < 1.0D) {
-                return this.d + (this.e - this.d) * d0;
-            }
-
-            this.setSize(this.e);
-        }
-
-        return this.d;
+        return this.i.e();
     }
 
     public long i() {
-        return this.getState() == EnumWorldBorderState.STATIONARY ? 0L : this.f - SystemUtils.b();
+        return this.i.g();
     }
 
     public double j() {
-        return this.e;
+        return this.i.h();
     }
 
     public void setSize(double d0) {
-        this.d = d0;
-        this.e = d0;
-        this.f = SystemUtils.b();
-        this.g = this.f;
+        this.i = new WorldBorder.c(d0);
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -158,10 +108,7 @@ public class WorldBorder {
     }
 
     public void transitionSizeBetween(double d0, double d1, long i) {
-        this.d = d0;
-        this.e = d1;
-        this.g = SystemUtils.b();
-        this.f = this.g + i;
+        this.i = (WorldBorder.a) (d0 != d1 ? new WorldBorder.b(d0, d1, i, null) : new WorldBorder.c(d1));
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -182,6 +129,7 @@ public class WorldBorder {
 
     public void a(int i) {
         this.h = i;
+        this.i.j();
     }
 
     public int l() {
@@ -189,11 +137,11 @@ public class WorldBorder {
     }
 
     public double getDamageBuffer() {
-        return this.j;
+        return this.c;
     }
 
     public void setDamageBuffer(double d0) {
-        this.j = d0;
+        this.c = d0;
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -205,11 +153,11 @@ public class WorldBorder {
     }
 
     public double getDamageAmount() {
-        return this.i;
+        return this.b;
     }
 
     public void setDamageAmount(double d0) {
-        this.i = d0;
+        this.b = d0;
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -221,11 +169,11 @@ public class WorldBorder {
     }
 
     public int getWarningTime() {
-        return this.k;
+        return this.d;
     }
 
     public void setWarningTime(int i) {
-        this.k = i;
+        this.d = i;
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -237,11 +185,11 @@ public class WorldBorder {
     }
 
     public int getWarningDistance() {
-        return this.l;
+        return this.e;
     }
 
     public void setWarningDistance(int i) {
-        this.l = i;
+        this.e = i;
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {
@@ -250,5 +198,152 @@ public class WorldBorder {
             iworldborderlistener.b(this, i);
         }
 
+    }
+
+    public void r() {
+        this.i = this.i.l();
+    }
+
+    class c implements WorldBorder.a {
+
+        private final double b;
+        private double c;
+        private double d;
+        private double e;
+        private double f;
+
+        public c(double d0) {
+            this.b = d0;
+            this.m();
+        }
+
+        public double a() {
+            return this.c;
+        }
+
+        public double b() {
+            return this.e;
+        }
+
+        public double c() {
+            return this.d;
+        }
+
+        public double d() {
+            return this.f;
+        }
+
+        public double e() {
+            return this.b;
+        }
+
+        public long g() {
+            return 0L;
+        }
+
+        public double h() {
+            return this.b;
+        }
+
+        private void m() {
+            this.c = Math.max(WorldBorder.this.getCenterX() - this.b / 2.0D, (double) (-WorldBorder.this.h));
+            this.d = Math.max(WorldBorder.this.getCenterZ() - this.b / 2.0D, (double) (-WorldBorder.this.h));
+            this.e = Math.min(WorldBorder.this.getCenterX() + this.b / 2.0D, (double) WorldBorder.this.h);
+            this.f = Math.min(WorldBorder.this.getCenterZ() + this.b / 2.0D, (double) WorldBorder.this.h);
+        }
+
+        public void j() {
+            this.m();
+        }
+
+        public void k() {
+            this.m();
+        }
+
+        public WorldBorder.a l() {
+            return this;
+        }
+    }
+
+    class b implements WorldBorder.a {
+
+        private final double b;
+        private final double c;
+        private final long d;
+        private final long e;
+        private final double f;
+
+        private b(double d0, double d1, long i) {
+            this.b = d0;
+            this.c = d1;
+            this.f = (double) i;
+            this.e = SystemUtils.b();
+            this.d = this.e + i;
+        }
+
+        public double a() {
+            return Math.max(WorldBorder.this.getCenterX() - this.e() / 2.0D, (double) (-WorldBorder.this.h));
+        }
+
+        public double c() {
+            return Math.max(WorldBorder.this.getCenterZ() - this.e() / 2.0D, (double) (-WorldBorder.this.h));
+        }
+
+        public double b() {
+            return Math.min(WorldBorder.this.getCenterX() + this.e() / 2.0D, (double) WorldBorder.this.h);
+        }
+
+        public double d() {
+            return Math.min(WorldBorder.this.getCenterZ() + this.e() / 2.0D, (double) WorldBorder.this.h);
+        }
+
+        public double e() {
+            double d0 = (double) (SystemUtils.b() - this.e) / this.f;
+
+            return d0 < 1.0D ? this.b + (this.c - this.b) * d0 : this.c;
+        }
+
+        public long g() {
+            return this.d - SystemUtils.b();
+        }
+
+        public double h() {
+            return this.c;
+        }
+
+        public void k() {}
+
+        public void j() {}
+
+        public WorldBorder.a l() {
+            return (WorldBorder.a) (this.g() <= 0L ? WorldBorder.this.new c(this.c) : this);
+        }
+
+        b(double d0, double d1, long i, Object object) {
+            this(d0, d1, i);
+        }
+    }
+
+    interface a {
+
+        double a();
+
+        double b();
+
+        double c();
+
+        double d();
+
+        double e();
+
+        long g();
+
+        double h();
+
+        void j();
+
+        void k();
+
+        WorldBorder.a l();
     }
 }

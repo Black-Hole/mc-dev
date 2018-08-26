@@ -69,7 +69,7 @@ public class CriterionConditionMobEffect {
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
                 MinecraftKey minecraftkey = new MinecraftKey((String) entry.getKey());
-                MobEffectList mobeffectlist = (MobEffectList) MobEffectList.REGISTRY.get(minecraftkey);
+                MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
 
                 if (mobeffectlist == null) {
                     throw new JsonSyntaxException("Unknown effect \'" + minecraftkey + "\'");
@@ -96,7 +96,7 @@ public class CriterionConditionMobEffect {
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
 
-                jsonobject.add(((MinecraftKey) MobEffectList.REGISTRY.b(entry.getKey())).toString(), ((CriterionConditionMobEffect.a) entry.getValue()).a());
+                jsonobject.add(IRegistry.MOB_EFFECT.getKey(entry.getKey()).toString(), ((CriterionConditionMobEffect.a) entry.getValue()).a());
             }
 
             return jsonobject;

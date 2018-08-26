@@ -4,15 +4,15 @@ import java.io.IOException;
 
 public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
-    private int a;
+    private DimensionManager a;
     private EnumDifficulty b;
     private EnumGamemode c;
     private WorldType d;
 
     public PacketPlayOutRespawn() {}
 
-    public PacketPlayOutRespawn(int i, EnumDifficulty enumdifficulty, WorldType worldtype, EnumGamemode enumgamemode) {
-        this.a = i;
+    public PacketPlayOutRespawn(DimensionManager dimensionmanager, EnumDifficulty enumdifficulty, WorldType worldtype, EnumGamemode enumgamemode) {
+        this.a = dimensionmanager;
         this.b = enumdifficulty;
         this.c = enumgamemode;
         this.d = worldtype;
@@ -23,7 +23,7 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readInt();
+        this.a = DimensionManager.a(packetdataserializer.readInt());
         this.b = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.c = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
         this.d = WorldType.getType(packetdataserializer.e(16));
@@ -34,7 +34,7 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeInt(this.a);
+        packetdataserializer.writeInt(this.a.getDimensionID());
         packetdataserializer.writeByte(this.b.a());
         packetdataserializer.writeByte(this.c.getId());
         packetdataserializer.a(this.d.name());

@@ -95,11 +95,11 @@ public class EntityEnderPearl extends EntityProjectile {
     }
 
     @Nullable
-    public Entity d(int i) {
-        if (this.shooter.dimension != i) {
+    public Entity a(DimensionManager dimensionmanager) {
+        if (this.shooter.dimension != dimensionmanager) {
             this.shooter = null;
         }
 
-        return super.d(i);
+        return super.a(dimensionmanager);
     }
 }

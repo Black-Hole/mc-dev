@@ -302,6 +302,7 @@ public class ArgumentParserSelector {
 
             if (this.l.canRead()) {
                 this.l.skip();
+                this.G = ArgumentParserSelector.k;
                 return;
             }
 

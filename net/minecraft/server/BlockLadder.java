@@ -5,11 +5,11 @@ import javax.annotation.Nullable;
 public class BlockLadder extends Block implements IFluidSource, IFluidContainer {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean b = BlockProperties.x;
+    public static final BlockStateBoolean b = BlockProperties.y;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
-    protected static final VoxelShape p = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
-    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape o = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape p = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
+    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
 
     protected BlockLadder(Block.Info block_info) {
         super(block_info);
@@ -19,13 +19,13 @@ public class BlockLadder extends Block implements IFluidSource, IFluidContainer 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockLadder.FACING)) {
         case NORTH:
-            return BlockLadder.r;
-
-        case SOUTH:
             return BlockLadder.q;
 
-        case WEST:
+        case SOUTH:
             return BlockLadder.p;
+
+        case WEST:
+            return BlockLadder.o;
 
         case EAST:
         default:
@@ -55,7 +55,7 @@ public class BlockLadder extends Block implements IFluidSource, IFluidContainer 
             return Blocks.AIR.getBlockData();
         } else {
             if (((Boolean) iblockdata.get(BlockLadder.b)).booleanValue()) {
-                generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -127,15 +127,15 @@ public class BlockLadder extends Block implements IFluidSource, IFluidContainer 
         return ((Boolean) iblockdata.get(BlockLadder.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return !((Boolean) iblockdata.get(BlockLadder.b)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         if (!((Boolean) iblockdata.get(BlockLadder.b)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockLadder.b, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;

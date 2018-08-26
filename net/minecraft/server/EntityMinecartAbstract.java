@@ -98,8 +98,8 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             if (this.isInvulnerable(damagesource)) {
                 return false;
             } else {
-                this.l(-this.u());
-                this.e(10);
+                this.k(-this.u());
+                this.d(10);
                 this.aA();
                 this.setDamage(this.getDamage() + f * 10.0F);
                 boolean flag = damagesource.getEntity() instanceof EntityHuman && ((EntityHuman) damagesource.getEntity()).abilities.canInstantlyBuild;
@@ -138,13 +138,13 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return !this.dead;
     }
 
-    public EnumDirection bB() {
+    public EnumDirection getAdjustedDirection() {
         return this.g ? this.getDirection().opposite().e() : this.getDirection().e();
     }
 
     public void tick() {
         if (this.getType() > 0) {
-            this.e(this.getType() - 1);
+            this.d(this.getType() - 1);
         }
 
         if (this.getDamage() > 0.0F) {
@@ -167,15 +167,15 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                     if (!this.isPassenger() && this.ao++ >= i) {
                         this.ao = i;
                         this.portalCooldown = this.aQ();
-                        byte b0;
+                        DimensionManager dimensionmanager;
 
-                        if (this.world.worldProvider.getDimensionManager().getDimensionID() == -1) {
-                            b0 = 0;
+                        if (this.world.worldProvider.getDimensionManager() == DimensionManager.NETHER) {
+                            dimensionmanager = DimensionManager.OVERWORLD;
                         } else {
-                            b0 = -1;
+                            dimensionmanager = DimensionManager.NETHER;
                         }
 
-                        this.d(b0);
+                        this.a(dimensionmanager);
                     }
 
                     this.an = false;
@@ -227,14 +227,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             i = MathHelper.floor(this.locY);
             int k = MathHelper.floor(this.locZ);
 
-            if (this.world.getType(new BlockPosition(j, i - 1, k)).a(TagsBlock.z)) {
+            if (this.world.getType(new BlockPosition(j, i - 1, k)).a(TagsBlock.RAILS)) {
                 --i;
             }
 
             BlockPosition blockposition = new BlockPosition(j, i, k);
             IBlockData iblockdata = this.world.getType(blockposition);
 
-            if (iblockdata.a(TagsBlock.z)) {
+            if (iblockdata.a(TagsBlock.RAILS)) {
                 this.b(blockposition, iblockdata);
                 if (iblockdata.getBlock() == Blocks.ACTIVATOR_RAIL) {
                     this.a(j, i, k, ((Boolean) iblockdata.get(BlockPoweredRail.POWERED)).booleanValue());
@@ -530,13 +530,13 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         int j = MathHelper.floor(d1);
         int k = MathHelper.floor(d2);
 
-        if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.z)) {
+        if (this.world.getType(new BlockPosition(i, j - 1, k)).a(TagsBlock.RAILS)) {
             --j;
         }
 
         IBlockData iblockdata = this.world.getType(new BlockPosition(i, j, k));
 
-        if (iblockdata.a(TagsBlock.z)) {
+        if (iblockdata.a(TagsBlock.RAILS)) {
             BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(((BlockMinecartTrackAbstract) iblockdata.getBlock()).e());
             int[][] aint = EntityMinecartAbstract.h[blockpropertytrackposition.a()];
             double d3 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
@@ -676,7 +676,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return ((Float) this.datawatcher.get(EntityMinecartAbstract.c)).floatValue();
     }
 
-    public void e(int i) {
+    public void d(int i) {
         this.datawatcher.set(EntityMinecartAbstract.a, Integer.valueOf(i));
     }
 
@@ -684,7 +684,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         return ((Integer) this.datawatcher.get(EntityMinecartAbstract.a)).intValue();
     }
 
-    public void l(int i) {
+    public void k(int i) {
         this.datawatcher.set(EntityMinecartAbstract.b, Integer.valueOf(i));
     }
 

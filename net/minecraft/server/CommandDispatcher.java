@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.AmbiguityConsumer;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.ResultConsumer;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -34,7 +35,7 @@ public class CommandDispatcher {
     public CommandDispatcher(boolean flag) {
         CommandAdvancement.a(this.b);
         CommandExecute.a(this.b);
-        CommmandBossBar.a(this.b);
+        CommandBossBar.a(this.b);
         CommandClear.a(this.b);
         CommandClone.a(this.b);
         CommandData.a(this.b);
@@ -76,6 +77,7 @@ public class CommandDispatcher {
         CommandTeam.a(this.b);
         CommandTeleport.a(this.b);
         CommandTellRaw.a(this.b);
+        CommandForceload.a(this.b);
         CommandTime.a(this.b);
         CommandTitle.a(this.b);
         CommandTrigger.a(this.b);
@@ -115,10 +117,10 @@ public class CommandDispatcher {
     }
 
     public int a(CommandListenerWrapper commandlistenerwrapper, String s) {
-        String s1 = s;
+        StringReader stringreader = new StringReader(s);
 
-        if (s.startsWith("/")) {
-            s = s.substring(1);
+        if (stringreader.canRead() && stringreader.peek() == 47) {
+            stringreader.skip();
         }
 
         commandlistenerwrapper.getServer().methodProfiler.a(s);
@@ -130,7 +132,7 @@ public class CommandDispatcher {
             ChatComponentText chatcomponenttext;
 
             try {
-                int i = this.b.execute(s, commandlistenerwrapper);
+                int i = this.b.execute(stringreader, commandlistenerwrapper);
 
                 return i;
             } catch (CommandException commandexception) {
@@ -247,7 +249,24 @@ public class CommandDispatcher {
         return RequiredArgumentBuilder.argument(s, argumenttype);
     }
 
+    public static Predicate<String> a(CommandDispatcher.a commanddispatcher_a) {
+        return (s) -> {
+            try {
+                commanddispatcher_a.parse(new StringReader(s));
+                return true;
+            } catch (CommandSyntaxException commandsyntaxexception) {
+                return false;
+            }
+        };
+    }
+
     public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> a() {
         return this.b;
+    }
+
+    @FunctionalInterface
+    public interface a {
+
+        void parse(StringReader stringreader) throws CommandSyntaxException;
     }
 }

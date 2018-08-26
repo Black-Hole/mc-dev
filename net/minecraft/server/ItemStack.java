@@ -56,7 +56,7 @@ public final class ItemStack {
     }
 
     private ItemStack(NBTTagCompound nbttagcompound) {
-        Item item = (Item) Item.REGISTRY.get(new MinecraftKey(nbttagcompound.getString("id")));
+        Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(nbttagcompound.getString("id")));
 
         this.item = item == null ? Items.AIR : item;
         this.count = nbttagcompound.getByte("Count");
@@ -103,7 +103,7 @@ public final class ItemStack {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(itemactioncontext.getWorld(), blockposition, false);
 
-        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().E(), shapedetectorblock)) {
+        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().F(), shapedetectorblock)) {
             return EnumInteractionResult.PASS;
         } else {
             Item item = this.getItem();
@@ -130,7 +130,7 @@ public final class ItemStack {
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
-        MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.getItem());
+        MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.getItem());
 
         nbttagcompound.setString("id", minecraftkey == null ? "minecraft:air" : minecraftkey.toString());
         nbttagcompound.setByte("Count", (byte) this.count);
@@ -203,7 +203,7 @@ public final class ItemStack {
 
             j = this.getDamage() + i;
             this.setDamage(j);
-            return j > this.h();
+            return j >= this.h();
         }
     }
 
@@ -449,7 +449,7 @@ public final class ItemStack {
         NBTTagList nbttaglist = this.tag.getList("Enchantments", 10);
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", String.valueOf(Enchantment.enchantments.b(enchantment)));
+        nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
         nbttagcompound.setShort("lvl", (short) ((byte) i));
         nbttaglist.add((NBTBase) nbttagcompound);
     }

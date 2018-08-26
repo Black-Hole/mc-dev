@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.Iterator;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +28,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
         this.d = entityselector;
     }
 
-    public String f() {
+    public String i() {
         return this.c;
     }
 
@@ -41,19 +40,8 @@ public class ChatComponentSelector extends ChatBaseComponent {
         return this.c;
     }
 
-    public ChatComponentSelector h() {
-        ChatComponentSelector chatcomponentselector = new ChatComponentSelector(this.c);
-
-        chatcomponentselector.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
-
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
-
-            chatcomponentselector.addSibling(ichatbasecomponent.e());
-        }
-
-        return chatcomponentselector;
+    public ChatComponentSelector k() {
+        return new ChatComponentSelector(this.c);
     }
 
     public boolean equals(Object object) {
@@ -72,7 +60,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
         return "SelectorComponent{pattern=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public IChatBaseComponent e() {
-        return this.h();
+    public IChatBaseComponent g() {
+        return this.k();
     }
 }

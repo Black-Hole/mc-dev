@@ -9,7 +9,7 @@ public class EntitySkeleton extends EntitySkeletonAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.av;
     }
 

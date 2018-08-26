@@ -12,7 +12,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ee());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ed());
     }
 
     public EnumMonsterType getMonsterType() {
@@ -35,7 +35,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.Q;
     }
 
@@ -60,7 +60,7 @@ public class EntityHorseZombie extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (!this.dW() && itemstack.getItem() == Items.SADDLE) {
+                if (!this.dV() && itemstack.getItem() == Items.SADDLE) {
                     this.c(entityhuman);
                     return true;
                 }
@@ -75,5 +75,5 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         }
     }
 
-    protected void dJ() {}
+    protected void dI() {}
 }

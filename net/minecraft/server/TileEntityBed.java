@@ -5,7 +5,7 @@ public class TileEntityBed extends TileEntity {
     public EnumColor color;
 
     public TileEntityBed() {
-        super(TileEntityTypes.y);
+        super(TileEntityTypes.BED);
     }
 
     public TileEntityBed(EnumColor enumcolor) {

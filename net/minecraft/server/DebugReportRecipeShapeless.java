@@ -71,11 +71,11 @@ public class DebugReportRecipeShapeless {
     }
 
     public void a(Consumer<DebugReportRecipeData> consumer) {
-        this.a(consumer, (MinecraftKey) Item.REGISTRY.b(this.b));
+        this.a(consumer, IRegistry.ITEM.getKey(this.b));
     }
 
     public void a(Consumer<DebugReportRecipeData> consumer, String s) {
-        MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.b);
+        MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.b);
 
         if ((new MinecraftKey(s)).equals(minecraftkey)) {
             throw new IllegalStateException("Shapeless Recipe " + s + " should remove its \'save\' argument");
@@ -136,7 +136,7 @@ public class DebugReportRecipeShapeless {
             jsonobject.add("ingredients", jsonarray);
             JsonObject jsonobject1 = new JsonObject();
 
-            jsonobject1.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.b)).toString());
+            jsonobject1.addProperty("item", IRegistry.ITEM.getKey(this.b).toString());
             if (this.c > 1) {
                 jsonobject1.addProperty("count", Integer.valueOf(this.c));
             }

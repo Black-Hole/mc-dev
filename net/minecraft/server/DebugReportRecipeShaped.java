@@ -77,11 +77,11 @@ public class DebugReportRecipeShaped {
     }
 
     public void a(Consumer<DebugReportRecipeData> consumer) {
-        this.a(consumer, (MinecraftKey) Item.REGISTRY.b(this.b));
+        this.a(consumer, IRegistry.ITEM.getKey(this.b));
     }
 
     public void a(Consumer<DebugReportRecipeData> consumer, String s) {
-        MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.b);
+        MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.b);
 
         if ((new MinecraftKey(s)).equals(minecraftkey)) {
             throw new IllegalStateException("Shaped Recipe " + s + " should remove its \'save\' argument");
@@ -181,7 +181,7 @@ public class DebugReportRecipeShaped {
             jsonobject.add("key", jsonobject1);
             JsonObject jsonobject2 = new JsonObject();
 
-            jsonobject2.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.c)).toString());
+            jsonobject2.addProperty("item", IRegistry.ITEM.getKey(this.c).toString());
             if (this.d > 1) {
                 jsonobject2.addProperty("count", Integer.valueOf(this.d));
             }

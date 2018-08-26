@@ -20,7 +20,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
         } else if (this.a.getRandom().nextInt(500) != 0) {
             return false;
         } else {
-            this.e = this.c.ae().getClosestVillage(new BlockPosition(this.a), 0);
+            this.e = this.c.af().getClosestVillage(new BlockPosition(this.a), 0);
             if (this.e == null) {
                 return false;
             } else if (this.g() && this.a.u(true)) {

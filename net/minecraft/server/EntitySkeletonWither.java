@@ -11,7 +11,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aw;
     }
 
@@ -55,7 +55,7 @@ public class EntitySkeletonWither extends EntitySkeletonAbstract {
         GroupDataEntity groupdataentity1 = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
 
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(4.0D);
-        this.dA();
+        this.dz();
         return groupdataentity1;
     }
 

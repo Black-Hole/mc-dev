@@ -38,7 +38,7 @@ public class AutoRecipeStackManager {
     }
 
     public static int c(ItemStack itemstack) {
-        return Item.REGISTRY.a((Object) itemstack.getItem());
+        return IRegistry.ITEM.a((Object) itemstack.getItem());
     }
 
     public boolean a(int i) {
@@ -128,7 +128,7 @@ public class AutoRecipeStackManager {
                     this.c(this.h.getInt(k));
 
                     for (int l = 0; l < k; ++l) {
-                        this.c((l & 1) == 0, ((Integer) this.h.get(l)).intValue(), ((Integer) this.h.get(l + 1)).intValue());
+                        this.c((l & 1) == 0, this.h.get(l).intValue(), this.h.get(l + 1).intValue());
                     }
 
                     this.h.clear();

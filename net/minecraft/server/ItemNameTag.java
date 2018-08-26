@@ -10,7 +10,7 @@ public class ItemNameTag extends Item {
         if (itemstack.hasName() && !(entityliving instanceof EntityHuman)) {
             entityliving.setCustomName(itemstack.getName());
             if (entityliving instanceof EntityInsentient) {
-                ((EntityInsentient) entityliving).dj();
+                ((EntityInsentient) entityliving).di();
             }
 
             itemstack.subtract(1);

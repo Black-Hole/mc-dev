@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import java.util.Collection;
 import java.util.Random;
 
-public class LootItem extends LotoSelectorEntry {
+public class LootItem extends LootSelectorEntry {
 
     protected final Item a;
     protected final LootItemFunction[] b;
@@ -53,7 +53,7 @@ public class LootItem extends LotoSelectorEntry {
             jsonobject.add("functions", jsonserializationcontext.serialize(this.b));
         }
 
-        MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(this.a);
+        MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.a);
 
         if (minecraftkey == null) {
             throw new IllegalArgumentException("Can\'t serialize unknown item " + this.a);

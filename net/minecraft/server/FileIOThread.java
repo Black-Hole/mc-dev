@@ -36,7 +36,11 @@ public class FileIOThread implements Runnable {
     private void c() {
         for (int i = 0; i < this.c.size(); ++i) {
             IAsyncChunkSaver iasyncchunksaver = (IAsyncChunkSaver) this.c.get(i);
-            boolean flag = iasyncchunksaver.a();
+            boolean flag;
+
+            synchronized (iasyncchunksaver) {
+                flag = iasyncchunksaver.a();
+            }
 
             if (!flag) {
                 this.c.remove(i--);

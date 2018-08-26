@@ -34,7 +34,7 @@ public class ItemGlassBottle extends Item {
                         return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
                     }
 
-                    if (world.b(blockposition).a(TagsFluid.a)) {
+                    if (world.b(blockposition).a(TagsFluid.WATER)) {
                         world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.b)));
                     }

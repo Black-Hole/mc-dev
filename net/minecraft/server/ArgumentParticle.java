@@ -39,7 +39,7 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
     public static ParticleParam b(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        Particle particle = (Particle) Particle.REGISTRY.get(minecraftkey);
+        Particle particle = (Particle) IRegistry.PARTICLE_TYPE.get(minecraftkey);
 
         if (particle == null) {
             throw ArgumentParticle.a.create(minecraftkey);
@@ -53,7 +53,7 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a((Iterable) Particle.REGISTRY.keySet(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) IRegistry.PARTICLE_TYPE.keySet(), suggestionsbuilder);
     }
 
     public Object parse(StringReader stringreader) throws CommandSyntaxException {

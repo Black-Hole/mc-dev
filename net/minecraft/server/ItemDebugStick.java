@@ -35,7 +35,7 @@ public class ItemDebugStick extends Item {
             Block block = iblockdata.getBlock();
             BlockStateList blockstatelist = block.getStates();
             Collection collection = blockstatelist.d();
-            String s = ((MinecraftKey) Block.REGISTRY.b(block)).toString();
+            String s = IRegistry.BLOCK.getKey(block).toString();
 
             if (collection.isEmpty()) {
                 a(entityhuman, (IChatBaseComponent) (new ChatMessage(this.getName() + ".empty", new Object[] { s})));

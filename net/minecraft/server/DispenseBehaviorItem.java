@@ -49,10 +49,6 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
     }
 
     protected void a(ISourceBlock isourceblock, EnumDirection enumdirection) {
-        isourceblock.getWorld().triggerEffect(2000, isourceblock.getBlockPosition(), this.a(enumdirection));
-    }
-
-    private int a(EnumDirection enumdirection) {
-        return enumdirection.getAdjacentX() + 1 + (enumdirection.getAdjacentZ() + 1) * 3;
+        isourceblock.getWorld().triggerEffect(2000, isourceblock.getBlockPosition(), enumdirection.a());
     }
 }

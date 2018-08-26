@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.Iterator;
 import javax.annotation.Nullable;
 
 public class ChatComponentScore extends ChatBaseComponent {
@@ -29,16 +28,16 @@ public class ChatComponentScore extends ChatBaseComponent {
         this.c = entityselector;
     }
 
-    public String f() {
+    public String i() {
         return this.b;
     }
 
     @Nullable
-    public EntitySelector g() {
+    public EntitySelector j() {
         return this.c;
     }
 
-    public String h() {
+    public String k() {
         return this.d;
     }
 
@@ -53,7 +52,7 @@ public class ChatComponentScore extends ChatBaseComponent {
     public void b(CommandListenerWrapper commandlistenerwrapper) {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver != null && minecraftserver.F() && UtilColor.b(this.e)) {
+        if (minecraftserver != null && minecraftserver.D() && UtilColor.b(this.e)) {
             ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
 
@@ -68,19 +67,10 @@ public class ChatComponentScore extends ChatBaseComponent {
 
     }
 
-    public ChatComponentScore i() {
+    public ChatComponentScore l() {
         ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.d);
 
         chatcomponentscore.b(this.e);
-        chatcomponentscore.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
-
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
-
-            chatcomponentscore.addSibling(ichatbasecomponent.e());
-        }
-
         return chatcomponentscore;
     }
 
@@ -100,7 +90,7 @@ public class ChatComponentScore extends ChatBaseComponent {
         return "ScoreComponent{name=\'" + this.b + '\'' + "objective=\'" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public IChatBaseComponent e() {
-        return this.i();
+    public IChatBaseComponent g() {
+        return this.l();
     }
 }

@@ -5,7 +5,7 @@ public class TileEntityComparator extends TileEntity {
     private int a;
 
     public TileEntityComparator() {
-        super(TileEntityTypes.s);
+        super(TileEntityTypes.COMPARATOR);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {

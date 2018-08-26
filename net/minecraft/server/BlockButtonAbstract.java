@@ -9,30 +9,30 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     public static final BlockStateBoolean POWERED = BlockProperties.t;
     protected static final VoxelShape b = Block.a(6.0D, 14.0D, 5.0D, 10.0D, 16.0D, 11.0D);
     protected static final VoxelShape c = Block.a(5.0D, 14.0D, 6.0D, 11.0D, 16.0D, 10.0D);
-    protected static final VoxelShape p = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 2.0D, 11.0D);
-    protected static final VoxelShape q = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 2.0D, 10.0D);
-    protected static final VoxelShape r = Block.a(5.0D, 6.0D, 14.0D, 11.0D, 10.0D, 16.0D);
-    protected static final VoxelShape s = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 2.0D);
-    protected static final VoxelShape t = Block.a(14.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
-    protected static final VoxelShape u = Block.a(0.0D, 6.0D, 5.0D, 2.0D, 10.0D, 11.0D);
-    protected static final VoxelShape v = Block.a(6.0D, 15.0D, 5.0D, 10.0D, 16.0D, 11.0D);
-    protected static final VoxelShape w = Block.a(5.0D, 15.0D, 6.0D, 11.0D, 16.0D, 10.0D);
-    protected static final VoxelShape x = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 1.0D, 11.0D);
-    protected static final VoxelShape y = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 1.0D, 10.0D);
-    protected static final VoxelShape z = Block.a(5.0D, 6.0D, 15.0D, 11.0D, 10.0D, 16.0D);
-    protected static final VoxelShape A = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 1.0D);
-    protected static final VoxelShape B = Block.a(15.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
-    protected static final VoxelShape C = Block.a(0.0D, 6.0D, 5.0D, 1.0D, 10.0D, 11.0D);
-    private final boolean F;
+    protected static final VoxelShape o = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 2.0D, 11.0D);
+    protected static final VoxelShape p = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 2.0D, 10.0D);
+    protected static final VoxelShape q = Block.a(5.0D, 6.0D, 14.0D, 11.0D, 10.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 2.0D);
+    protected static final VoxelShape s = Block.a(14.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 6.0D, 5.0D, 2.0D, 10.0D, 11.0D);
+    protected static final VoxelShape u = Block.a(6.0D, 15.0D, 5.0D, 10.0D, 16.0D, 11.0D);
+    protected static final VoxelShape v = Block.a(5.0D, 15.0D, 6.0D, 11.0D, 16.0D, 10.0D);
+    protected static final VoxelShape w = Block.a(6.0D, 0.0D, 5.0D, 10.0D, 1.0D, 11.0D);
+    protected static final VoxelShape x = Block.a(5.0D, 0.0D, 6.0D, 11.0D, 1.0D, 10.0D);
+    protected static final VoxelShape y = Block.a(5.0D, 6.0D, 15.0D, 11.0D, 10.0D, 16.0D);
+    protected static final VoxelShape z = Block.a(5.0D, 6.0D, 0.0D, 11.0D, 10.0D, 1.0D);
+    protected static final VoxelShape A = Block.a(15.0D, 6.0D, 5.0D, 16.0D, 10.0D, 11.0D);
+    protected static final VoxelShape B = Block.a(0.0D, 6.0D, 5.0D, 1.0D, 10.0D, 11.0D);
+    private final boolean E;
 
     protected BlockButtonAbstract(boolean flag, Block.Info block_info) {
         super(block_info);
         this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockButtonAbstract.FACING, EnumDirection.NORTH)).set(BlockButtonAbstract.POWERED, Boolean.valueOf(false))).set(BlockButtonAbstract.FACE, BlockPropertyAttachPosition.WALL));
-        this.F = flag;
+        this.E = flag;
     }
 
     public int a(IWorldReader iworldreader) {
-        return this.F ? 30 : 20;
+        return this.E ? 30 : 20;
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -46,30 +46,30 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockButtonAbstract.FACE)) {
         case FLOOR:
             if (enumdirection.k() == EnumDirection.EnumAxis.X) {
-                return flag ? BlockButtonAbstract.x : BlockButtonAbstract.p;
+                return flag ? BlockButtonAbstract.w : BlockButtonAbstract.o;
             }
 
-            return flag ? BlockButtonAbstract.y : BlockButtonAbstract.q;
+            return flag ? BlockButtonAbstract.x : BlockButtonAbstract.p;
 
         case WALL:
             switch (enumdirection) {
             case EAST:
-                return flag ? BlockButtonAbstract.C : BlockButtonAbstract.u;
-
-            case WEST:
                 return flag ? BlockButtonAbstract.B : BlockButtonAbstract.t;
 
-            case SOUTH:
+            case WEST:
                 return flag ? BlockButtonAbstract.A : BlockButtonAbstract.s;
+
+            case SOUTH:
+                return flag ? BlockButtonAbstract.z : BlockButtonAbstract.r;
 
             case NORTH:
             default:
-                return flag ? BlockButtonAbstract.z : BlockButtonAbstract.r;
+                return flag ? BlockButtonAbstract.y : BlockButtonAbstract.q;
             }
 
         case CEILING:
         default:
-            return enumdirection.k() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.v : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.w : BlockButtonAbstract.c);
+            return enumdirection.k() == EnumDirection.EnumAxis.X ? (flag ? BlockButtonAbstract.u : BlockButtonAbstract.b) : (flag ? BlockButtonAbstract.v : BlockButtonAbstract.c);
         }
     }
 
@@ -80,7 +80,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, Boolean.valueOf(true)), 3);
             this.a(entityhuman, world, blockposition, true);
             this.c(iblockdata, world, blockposition);
-            world.I().a(blockposition, this, this.a((IWorldReader) world));
+            world.J().a(blockposition, this, this.a((IWorldReader) world));
             return true;
         }
     }
@@ -115,7 +115,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide && ((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
-            if (this.F) {
+            if (this.E) {
                 this.b(iblockdata, world, blockposition);
             } else {
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, Boolean.valueOf(false)), 3);
@@ -127,7 +127,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (!world.isClientSide && this.F && !((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
+        if (!world.isClientSide && this.E && !((Boolean) iblockdata.get(BlockButtonAbstract.POWERED)).booleanValue()) {
             this.b(iblockdata, world, blockposition);
         }
     }
@@ -144,7 +144,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         }
 
         if (flag) {
-            world.I().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.J().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
         }
 
     }

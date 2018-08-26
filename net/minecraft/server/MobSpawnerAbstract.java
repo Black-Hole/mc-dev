@@ -40,13 +40,13 @@ public abstract class MobSpawnerAbstract {
     }
 
     public void setMobName(EntityTypes<?> entitytypes) {
-        this.spawnData.b().setString("id", ((MinecraftKey) EntityTypes.REGISTRY.b(entitytypes)).toString());
+        this.spawnData.b().setString("id", IRegistry.ENTITY_TYPE.getKey(entitytypes).toString());
     }
 
     private boolean h() {
         BlockPosition blockposition = this.b();
 
-        return this.a().isPlayerNearby((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, (double) this.requiredPlayerRange);
+        return this.a().b((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, (double) this.requiredPlayerRange);
     }
 
     public void c() {
@@ -105,7 +105,7 @@ public abstract class MobSpawnerAbstract {
                     EntityInsentient entityinsentient = entity instanceof EntityInsentient ? (EntityInsentient) entity : null;
 
                     entity.setPositionRotation(entity.locX, entity.locY, entity.locZ, world.random.nextFloat() * 360.0F, 0.0F);
-                    if (entityinsentient == null || entityinsentient.M() && entityinsentient.canSpawn()) {
+                    if (entityinsentient == null || entityinsentient.a((GeneratorAccess) world, true) && entityinsentient.canSpawn()) {
                         if (this.spawnData.b().d() == 1 && this.spawnData.b().hasKeyOfType("id", 8) && entity instanceof EntityInsentient) {
                             ((EntityInsentient) entity).prepare(world.getDamageScaler(new BlockPosition(entity)), (GroupDataEntity) null, (NBTTagCompound) null);
                         }

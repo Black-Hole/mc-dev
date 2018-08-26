@@ -25,7 +25,7 @@ public class EntityGiantZombie extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.A;
     }
 }

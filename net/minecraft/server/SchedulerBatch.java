@@ -16,7 +16,7 @@ public class SchedulerBatch<K, T extends SchedulerTask<K, T>, R> {
     }
 
     public void a() throws InterruptedException {
-        this.b.c();
+        this.b.b();
     }
 
     public void b() {
@@ -32,11 +32,11 @@ public class SchedulerBatch<K, T extends SchedulerTask<K, T>, R> {
         if (!this.c) {
             throw new RuntimeException("Batch not properly started. Please use startBatch to create a new batch.");
         } else {
-            CompletableFuture completablefuture = this.b.b(k0);
+            CompletableFuture completablefuture = this.b.a(k0);
 
             --this.d;
             if (this.d == 0) {
-                completablefuture = this.b.b();
+                completablefuture = this.b.a();
                 this.d = 1000;
             }
 
@@ -49,11 +49,11 @@ public class SchedulerBatch<K, T extends SchedulerTask<K, T>, R> {
             throw new RuntimeException("Batch not properly started. Please use startBatch to create a new batch.");
         } else {
             if (this.d != 1000) {
-                this.b.b();
+                this.b.a();
             }
 
             this.c = false;
-            return this.b.d();
+            return this.b.c();
         }
     }
 }

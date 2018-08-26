@@ -16,7 +16,7 @@ public class WorldProviderNormal extends WorldProvider {
     }
 
     public boolean a(int i, int j) {
-        return !this.b.g(i, j);
+        return !this.b.e(i, j) && super.a(i, j);
     }
 
     protected void m() {
@@ -25,27 +25,27 @@ public class WorldProviderNormal extends WorldProvider {
 
     public ChunkGenerator<? extends GeneratorSettings> getChunkGenerator() {
         WorldType worldtype = this.b.getWorldData().getType();
-        ChunkGeneratorType chunkgeneratortype = ChunkGeneratorType.f;
-        ChunkGeneratorType chunkgeneratortype1 = ChunkGeneratorType.e;
-        ChunkGeneratorType chunkgeneratortype2 = ChunkGeneratorType.c;
-        ChunkGeneratorType chunkgeneratortype3 = ChunkGeneratorType.d;
-        ChunkGeneratorType chunkgeneratortype4 = ChunkGeneratorType.b;
-        BiomeLayout biomelayout = BiomeLayout.c;
-        BiomeLayout biomelayout1 = BiomeLayout.d;
-        BiomeLayout biomelayout2 = BiomeLayout.b;
+        ChunkGeneratorType chunkgeneratortype = ChunkGeneratorType.e;
+        ChunkGeneratorType chunkgeneratortype1 = ChunkGeneratorType.d;
+        ChunkGeneratorType chunkgeneratortype2 = ChunkGeneratorType.b;
+        ChunkGeneratorType chunkgeneratortype3 = ChunkGeneratorType.c;
+        ChunkGeneratorType chunkgeneratortype4 = ChunkGeneratorType.a;
+        BiomeLayout biomelayout = BiomeLayout.b;
+        BiomeLayout biomelayout1 = BiomeLayout.c;
+        BiomeLayout biomelayout2 = BiomeLayout.a;
 
         if (worldtype == WorldType.FLAT) {
             GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.a(new Dynamic(DynamicOpsNBT.a, this.b.getWorldData().getGeneratorOptions()));
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(generatorsettingsflat.t());
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(generatorsettingsflat.t());
 
             return chunkgeneratortype.create(this.b, biomelayout.a(biomelayoutfixedconfiguration), generatorsettingsflat);
         } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.c);
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.c);
 
-            return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.a());
+            return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.b());
         } else if (worldtype != WorldType.g) {
-            GeneratorSettingsOverworld generatorsettingsoverworld = (GeneratorSettingsOverworld) chunkgeneratortype4.a();
-            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(this.b.getWorldData()).a(generatorsettingsoverworld);
+            GeneratorSettingsOverworld generatorsettingsoverworld = (GeneratorSettingsOverworld) chunkgeneratortype4.b();
+            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(this.b.getWorldData()).a(generatorsettingsoverworld);
 
             return chunkgeneratortype4.create(this.b, biomelayout1.a(biomelayoutoverworldconfiguration), generatorsettingsoverworld);
         } else {
@@ -64,34 +64,34 @@ public class WorldProviderNormal extends WorldProvider {
                     abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[] { Biomes.a};
 
                     for (int i = 0; i < jsonarray.size(); ++i) {
-                        BiomeBase biomebase = (BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(jsonarray.get(i).getAsString()));
+                        BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(jsonarray.get(i).getAsString()));
 
                         abiomebase[i] = biomebase != null ? biomebase : Biomes.a;
                     }
                 }
 
-                if (BiomeLayout.c.b().equals(minecraftkey)) {
-                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(abiomebase[0]);
+                if (BiomeLayout.b.c().equals(minecraftkey)) {
+                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(abiomebase[0]);
 
                     worldchunkmanager = biomelayout.a(biomelayoutfixedconfiguration2);
                 }
 
-                if (BiomeLayout.b.b().equals(minecraftkey)) {
+                if (BiomeLayout.a.c().equals(minecraftkey)) {
                     int j = jsonobject1.has("size") ? jsonobject1.getAsJsonPrimitive("size").getAsInt() : 2;
-                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.a()).a(abiomebase).a(j);
+                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.b()).a(abiomebase).a(j);
 
                     worldchunkmanager = biomelayout2.a(biomelayoutcheckerboardconfiguration);
                 }
 
-                if (BiomeLayout.d.b().equals(minecraftkey)) {
-                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(new GeneratorSettingsOverworld()).a(this.b.getWorldData());
+                if (BiomeLayout.c.c().equals(minecraftkey)) {
+                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = ((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(new GeneratorSettingsOverworld()).a(this.b.getWorldData());
 
                     worldchunkmanager = biomelayout1.a(biomelayoutoverworldconfiguration1);
                 }
             }
 
             if (worldchunkmanager == null) {
-                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.a));
+                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.a));
             }
 
             IBlockData iblockdata = Blocks.STONE.getBlockData();
@@ -103,7 +103,7 @@ public class WorldProviderNormal extends WorldProvider {
 
                 if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_block")) {
                     s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_block").getAsString();
-                    block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
+                    block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(s));
                     if (block != null) {
                         iblockdata = block.getBlockData();
                     }
@@ -111,7 +111,7 @@ public class WorldProviderNormal extends WorldProvider {
 
                 if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_fluid")) {
                     s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_fluid").getAsString();
-                    block = (Block) Block.REGISTRY.get(new MinecraftKey(s));
+                    block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(s));
                     if (block != null) {
                         iblockdata1 = block.getBlockData();
                     }
@@ -121,16 +121,16 @@ public class WorldProviderNormal extends WorldProvider {
             if (jsonobject.has("chunk_generator") && jsonobject.getAsJsonObject("chunk_generator").has("type")) {
                 MinecraftKey minecraftkey1 = new MinecraftKey(jsonobject.getAsJsonObject("chunk_generator").getAsJsonPrimitive("type").getAsString());
 
-                if (ChunkGeneratorType.c.c().equals(minecraftkey1)) {
-                    GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) chunkgeneratortype2.a();
+                if (ChunkGeneratorType.b.d().equals(minecraftkey1)) {
+                    GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) chunkgeneratortype2.b();
 
                     generatorsettingsnether.a(iblockdata);
                     generatorsettingsnether.b(iblockdata1);
                     return chunkgeneratortype2.create(this.b, worldchunkmanager, generatorsettingsnether);
                 }
 
-                if (ChunkGeneratorType.d.c().equals(minecraftkey1)) {
-                    GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) chunkgeneratortype3.a();
+                if (ChunkGeneratorType.c.d().equals(minecraftkey1)) {
+                    GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) chunkgeneratortype3.b();
 
                     generatorsettingsend.a(new BlockPosition(0, 64, 0));
                     generatorsettingsend.a(iblockdata);
@@ -139,7 +139,7 @@ public class WorldProviderNormal extends WorldProvider {
                 }
             }
 
-            GeneratorSettingsOverworld generatorsettingsoverworld1 = (GeneratorSettingsOverworld) chunkgeneratortype4.a();
+            GeneratorSettingsOverworld generatorsettingsoverworld1 = (GeneratorSettingsOverworld) chunkgeneratortype4.b();
 
             generatorsettingsoverworld1.a(iblockdata);
             generatorsettingsoverworld1.b(iblockdata1);
@@ -168,7 +168,7 @@ public class WorldProviderNormal extends WorldProvider {
         BiomeBase biomebase = this.b.getBiome(blockposition_mutableblockposition);
         IBlockData iblockdata = biomebase.r().a();
 
-        if (flag && !iblockdata.getBlock().a(TagsBlock.I)) {
+        if (flag && !iblockdata.getBlock().a(TagsBlock.VALID_SPAWN)) {
             return null;
         } else {
             Chunk chunk = this.b.getChunkAt(i >> 4, j >> 4);

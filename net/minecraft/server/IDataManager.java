@@ -24,7 +24,7 @@ public interface IDataManager {
     File getDirectory();
 
     @Nullable
-    File getDataFile(String s);
+    File getDataFile(DimensionManager dimensionmanager, String s);
 
     DefinedStructureManager h();
 

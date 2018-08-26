@@ -8,30 +8,30 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
     INSTANCE;
 
     private static final Logger b = LogManager.getLogger();
-    private static final int c = BiomeBase.a(Biomes.C);
-    private static final int d = BiomeBase.a(Biomes.D);
-    private static final int e = BiomeBase.a(Biomes.d);
-    private static final int f = BiomeBase.a(Biomes.s);
-    private static final int g = BiomeBase.a(Biomes.e);
-    private static final int h = BiomeBase.a(Biomes.J);
-    private static final int i = BiomeBase.a(Biomes.f);
-    private static final int j = BiomeBase.a(Biomes.t);
-    private static final int k = BiomeBase.a(Biomes.n);
-    private static final int l = BiomeBase.a(Biomes.o);
-    private static final int m = BiomeBase.a(Biomes.w);
-    private static final int n = BiomeBase.a(Biomes.x);
-    private static final int o = BiomeBase.a(Biomes.M);
-    private static final int p = BiomeBase.a(Biomes.N);
-    private static final int q = BiomeBase.a(Biomes.c);
-    private static final int r = BiomeBase.a(Biomes.H);
-    private static final int s = BiomeBase.a(Biomes.I);
-    private static final int t = BiomeBase.a(Biomes.E);
-    private static final int u = BiomeBase.a(Biomes.K);
-    private static final int v = BiomeBase.a(Biomes.L);
-    private static final int w = BiomeBase.a(Biomes.g);
-    private static final int x = BiomeBase.a(Biomes.F);
-    private static final int y = BiomeBase.a(Biomes.G);
-    private static final int z = BiomeBase.a(Biomes.u);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.C);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.D);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.d);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.s);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.e);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.J);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.f);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.t);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.n);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.o);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.w);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.x);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.M);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.N);
+    private static final int q = IRegistry.BIOME.a((Object) Biomes.c);
+    private static final int r = IRegistry.BIOME.a((Object) Biomes.H);
+    private static final int s = IRegistry.BIOME.a((Object) Biomes.I);
+    private static final int t = IRegistry.BIOME.a((Object) Biomes.E);
+    private static final int u = IRegistry.BIOME.a((Object) Biomes.K);
+    private static final int v = IRegistry.BIOME.a((Object) Biomes.L);
+    private static final int w = IRegistry.BIOME.a((Object) Biomes.g);
+    private static final int x = IRegistry.BIOME.a((Object) Biomes.F);
+    private static final int y = IRegistry.BIOME.a((Object) Biomes.G);
+    private static final int z = IRegistry.BIOME.a((Object) Biomes.u);
 
     private GenLayerRegionHills() {}
 
@@ -47,11 +47,11 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         BiomeBase biomebase;
 
         if (!GenLayers.b(k) && l >= 2 && i1 == 1) {
-            BiomeBase biomebase1 = BiomeBase.a(k);
+            BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(k);
 
             if (biomebase1 == null || !biomebase1.b()) {
-                biomebase = BiomeBase.b(biomebase1);
-                return biomebase == null ? k : BiomeBase.a(biomebase);
+                biomebase = BiomeBase.a(biomebase1);
+                return biomebase == null ? k : IRegistry.BIOME.a((Object) biomebase);
             }
         }
 
@@ -97,8 +97,8 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
             }
 
             if (i1 == 0 && j1 != k) {
-                biomebase = BiomeBase.b(BiomeBase.a(j1));
-                j1 = biomebase == null ? k : BiomeBase.a(biomebase);
+                biomebase = BiomeBase.a((BiomeBase) IRegistry.BIOME.fromId(j1));
+                j1 = biomebase == null ? k : IRegistry.BIOME.a((Object) biomebase);
             }
 
             if (j1 != k) {

@@ -55,11 +55,11 @@ public class EntityZombieVillager extends EntityZombie {
 
     public void tick() {
         if (!this.world.isClientSide && this.isConverting()) {
-            int i = this.dL();
+            int i = this.dK();
 
             this.conversionTime -= i;
             if (this.conversionTime <= 0) {
-                this.dK();
+                this.dJ();
             }
         }
 
@@ -84,7 +84,7 @@ public class EntityZombieVillager extends EntityZombie {
         }
     }
 
-    protected boolean dD() {
+    protected boolean dC() {
         return false;
     }
 
@@ -105,13 +105,13 @@ public class EntityZombieVillager extends EntityZombie {
         this.world.broadcastEntityEffect(this, (byte) 16);
     }
 
-    protected void dK() {
+    protected void dJ() {
         EntityVillager entityvillager = new EntityVillager(this.world);
 
         entityvillager.u(this);
         entityvillager.setProfession(this.getProfession());
         entityvillager.a(this.world.getDamageScaler(new BlockPosition(entityvillager)), (GroupDataEntity) null, (NBTTagCompound) null, false);
-        entityvillager.dD();
+        entityvillager.dC();
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
         }
@@ -136,7 +136,7 @@ public class EntityZombieVillager extends EntityZombie {
         this.world.a((EntityHuman) null, 1027, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected int dL() {
+    protected int dK() {
         int i = 1;
 
         if (this.random.nextFloat() < 0.01F) {
@@ -179,16 +179,16 @@ public class EntityZombieVillager extends EntityZombie {
         return SoundEffects.ENTITY_ZOMBIE_VILLAGER_DEATH;
     }
 
-    public SoundEffect dB() {
+    public SoundEffect dA() {
         return SoundEffects.ENTITY_ZOMBIE_VILLAGER_STEP;
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.az;
     }
 
-    protected ItemStack dC() {
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 }

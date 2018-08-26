@@ -17,7 +17,7 @@ public class ItemTippedArrow extends ItemArrow {
 
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         if (this.a(creativemodetab)) {
-            Iterator iterator = PotionRegistry.a.iterator();
+            Iterator iterator = IRegistry.POTION.iterator();
 
             while (iterator.hasNext()) {
                 PotionRegistry potionregistry = (PotionRegistry) iterator.next();

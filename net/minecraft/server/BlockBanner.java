@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class BlockBanner extends BlockBannerAbstract {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.am;
+    public static final BlockStateInteger ROTATION = BlockProperties.an;
     private static final Map<EnumColor, Block> b = Maps.newHashMap();
     private static final VoxelShape c = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 

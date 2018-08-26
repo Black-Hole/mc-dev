@@ -17,13 +17,13 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class LootSelector {
 
-    private final LotoSelectorEntry[] a;
+    private final LootSelectorEntry[] a;
     private final LootItemCondition[] b;
     private final LootValueBounds c;
     private final LootValueBounds d;
 
-    public LootSelector(LotoSelectorEntry[] alotoselectorentry, LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds, LootValueBounds lootvaluebounds1) {
-        this.a = alotoselectorentry;
+    public LootSelector(LootSelectorEntry[] alootselectorentry, LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds, LootValueBounds lootvaluebounds1) {
+        this.a = alootselectorentry;
         this.b = alootitemcondition;
         this.c = lootvaluebounds;
         this.d = lootvaluebounds1;
@@ -32,17 +32,17 @@ public class LootSelector {
     protected void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
         ArrayList arraylist = Lists.newArrayList();
         int i = 0;
-        LotoSelectorEntry[] alotoselectorentry = this.a;
-        int j = alotoselectorentry.length;
+        LootSelectorEntry[] alootselectorentry = this.a;
+        int j = alootselectorentry.length;
 
         for (int k = 0; k < j; ++k) {
-            LotoSelectorEntry lotoselectorentry = alotoselectorentry[k];
+            LootSelectorEntry lootselectorentry = alootselectorentry[k];
 
-            if (LootItemConditions.a(lotoselectorentry.e, random, loottableinfo)) {
-                int l = lotoselectorentry.a(loottableinfo.g());
+            if (LootItemConditions.a(lootselectorentry.e, random, loottableinfo)) {
+                int l = lootselectorentry.a(loottableinfo.g());
 
                 if (l > 0) {
-                    arraylist.add(lotoselectorentry);
+                    arraylist.add(lootselectorentry);
                     i += l;
                 }
             }
@@ -52,18 +52,18 @@ public class LootSelector {
             int i1 = random.nextInt(i);
             Iterator iterator = arraylist.iterator();
 
-            LotoSelectorEntry lotoselectorentry1;
+            LootSelectorEntry lootselectorentry1;
 
             do {
                 if (!iterator.hasNext()) {
                     return;
                 }
 
-                lotoselectorentry1 = (LotoSelectorEntry) iterator.next();
-                i1 -= lotoselectorentry1.a(loottableinfo.g());
+                lootselectorentry1 = (LootSelectorEntry) iterator.next();
+                i1 -= lootselectorentry1.a(loottableinfo.g());
             } while (i1 >= 0);
 
-            lotoselectorentry1.a(collection, random, loottableinfo);
+            lootselectorentry1.a(collection, random, loottableinfo);
         }
     }
 
@@ -84,12 +84,12 @@ public class LootSelector {
 
         public LootSelector a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot pool");
-            LotoSelectorEntry[] alotoselectorentry = (LotoSelectorEntry[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LotoSelectorEntry[].class);
+            LootSelectorEntry[] alootselectorentry = (LootSelectorEntry[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LootSelectorEntry[].class);
             LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class);
             LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "rolls", jsondeserializationcontext, LootValueBounds.class);
             LootValueBounds lootvaluebounds1 = (LootValueBounds) ChatDeserializer.a(jsonobject, "bonus_rolls", new LootValueBounds(0.0F, 0.0F), jsondeserializationcontext, LootValueBounds.class);
 
-            return new LootSelector(alotoselectorentry, alootitemcondition, lootvaluebounds, lootvaluebounds1);
+            return new LootSelector(alootselectorentry, alootitemcondition, lootvaluebounds, lootvaluebounds1);
         }
 
         public JsonElement a(LootSelector lootselector, Type type, JsonSerializationContext jsonserializationcontext) {

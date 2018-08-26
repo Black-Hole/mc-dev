@@ -3,27 +3,16 @@ package net.minecraft.server;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.math.DoubleMath;
 import com.google.common.math.IntMath;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
-import it.unimi.dsi.fastutil.doubles.DoubleLists;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Supplier;
-import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public final class VoxelShapes {
 
-    private static final VoxelShape a = new VoxelShape(VoxelShapeDiscrete.e()) {
-        protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return DoubleLists.EMPTY_LIST;
-        }
-
-        public double b(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return Double.MAX_VALUE;
-        }
-
-        public double c(EnumDirection.EnumAxis enumdirection_enumaxis) {
-            return -1.7976931348623157E308D;
-        }
-    };
+    private static final VoxelShape a = new VoxelShapeArray(new VoxelShapeBitSet(0, 0, 0), new DoubleArrayList(new double[] { 0.0D}), new DoubleArrayList(new double[] { 0.0D}), new DoubleArrayList(new double[] { 0.0D}));
     private static final VoxelShape b = (VoxelShape) SystemUtils.a(() -> {
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(1, 1, 1);
 
@@ -124,11 +113,11 @@ public final class VoxelShapes {
                 return flag ? voxelshape : a();
             } else {
                 VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag, flag1);
-                VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
-                VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.size() - 1) * (voxelshapemerger1.size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
+                VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.a().size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
+                VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.a().size() - 1) * (voxelshapemerger1.a().size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
                 VoxelShapeBitSet voxelshapebitset = VoxelShapeBitSet.a(voxelshape.a, voxelshape1.a, voxelshapemerger, voxelshapemerger1, voxelshapemerger2, operatorboolean);
 
-                return (VoxelShape) (voxelshapemerger instanceof VoxelShapeCubeMerger && voxelshapemerger1 instanceof VoxelShapeCubeMerger && voxelshapemerger2 instanceof VoxelShapeCubeMerger ? new VoxelShapeCube(voxelshapebitset) : new VoxelShapeArray(voxelshapebitset, voxelshapemerger, voxelshapemerger1, voxelshapemerger2));
+                return (VoxelShape) (voxelshapemerger instanceof VoxelShapeCubeMerger && voxelshapemerger1 instanceof VoxelShapeCubeMerger && voxelshapemerger2 instanceof VoxelShapeCubeMerger ? new VoxelShapeCube(voxelshapebitset) : new VoxelShapeArray(voxelshapebitset, voxelshapemerger.a(), voxelshapemerger1.a(), voxelshapemerger2.a()));
             }
         }
     }
@@ -161,8 +150,8 @@ public final class VoxelShapes {
             }
 
             VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag, flag1);
-            VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
-            VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.size() - 1) * (voxelshapemerger1.size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
+            VoxelShapeMerger voxelshapemerger1 = a(voxelshapemerger.a().size() - 1, voxelshape.a(EnumDirection.EnumAxis.Y), voxelshape1.a(EnumDirection.EnumAxis.Y), flag, flag1);
+            VoxelShapeMerger voxelshapemerger2 = a((voxelshapemerger.a().size() - 1) * (voxelshapemerger1.a().size() - 1), voxelshape.a(EnumDirection.EnumAxis.Z), voxelshape1.a(EnumDirection.EnumAxis.Z), flag, flag1);
 
             return a(voxelshapemerger, voxelshapemerger1, voxelshapemerger2, voxelshape.a, voxelshape1.a, operatorboolean);
         }
@@ -178,86 +167,14 @@ public final class VoxelShapes {
         });
     }
 
-    public static double a(EnumDirection.EnumAxis enumdirection_enumaxis, AxisAlignedBB axisalignedbb, VoxelShape voxelshape, double d0) {
-        return a(EnumAxisCycle.a(enumdirection_enumaxis, EnumDirection.EnumAxis.X), axisalignedbb, voxelshape, d0);
-    }
-
-    private static double a(EnumAxisCycle enumaxiscycle, AxisAlignedBB axisalignedbb, VoxelShape voxelshape, double d0) {
-        if (voxelshape.b()) {
-            return d0;
-        } else if (Math.abs(d0) < 1.0E-7D) {
-            return 0.0D;
-        } else {
-            EnumAxisCycle enumaxiscycle1 = enumaxiscycle.a();
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumaxiscycle1.a(EnumDirection.EnumAxis.X);
-            EnumDirection.EnumAxis enumdirection_enumaxis1 = enumaxiscycle1.a(EnumDirection.EnumAxis.Y);
-            EnumDirection.EnumAxis enumdirection_enumaxis2 = enumaxiscycle1.a(EnumDirection.EnumAxis.Z);
-            double d1 = axisalignedbb.b(enumdirection_enumaxis);
-            double d2 = axisalignedbb.a(enumdirection_enumaxis);
-            int i = voxelshape.a(enumdirection_enumaxis, d2 + 1.0E-7D);
-            int j = voxelshape.a(enumdirection_enumaxis, d1 - 1.0E-7D);
-            int k = Math.max(0, voxelshape.a(enumdirection_enumaxis1, axisalignedbb.a(enumdirection_enumaxis1) + 1.0E-7D));
-            int l = Math.min(voxelshape.a.c(enumdirection_enumaxis1), voxelshape.a(enumdirection_enumaxis1, axisalignedbb.b(enumdirection_enumaxis1) - 1.0E-7D) + 1);
-            int i1 = Math.max(0, voxelshape.a(enumdirection_enumaxis2, axisalignedbb.a(enumdirection_enumaxis2) + 1.0E-7D));
-            int j1 = Math.min(voxelshape.a.c(enumdirection_enumaxis2), voxelshape.a(enumdirection_enumaxis2, axisalignedbb.b(enumdirection_enumaxis2) - 1.0E-7D) + 1);
-            int k1 = voxelshape.a.c(enumdirection_enumaxis);
-            int l1;
-            int i2;
-            int j2;
-            double d3;
-
-            if (d0 > 0.0D) {
-                for (l1 = j + 1; l1 < k1; ++l1) {
-                    for (i2 = k; i2 < l; ++i2) {
-                        for (j2 = i1; j2 < j1; ++j2) {
-                            if (voxelshape.a.a(enumaxiscycle1, l1, i2, j2)) {
-                                d3 = voxelshape.b(enumdirection_enumaxis, l1) - d1;
-                                if (d3 >= -1.0E-7D) {
-                                    d0 = Math.min(d0, d3);
-                                }
-
-                                return d0;
-                            }
-                        }
-                    }
-                }
-            } else if (d0 < 0.0D) {
-                for (l1 = i - 1; l1 >= 0; --l1) {
-                    for (i2 = k; i2 < l; ++i2) {
-                        for (j2 = i1; j2 < j1; ++j2) {
-                            if (voxelshape.a.a(enumaxiscycle1, l1, i2, j2)) {
-                                d3 = voxelshape.b(enumdirection_enumaxis, l1 + 1) - d2;
-                                if (d3 <= 1.0E-7D) {
-                                    d0 = Math.max(d0, d3);
-                                }
-
-                                return d0;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return d0;
-        }
-    }
-
-    @Nullable
-    public static MovingObjectPosition a(VoxelShape voxelshape, Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
-        if (voxelshape.b()) {
-            return null;
-        } else {
-            Vec3D vec3d2 = vec3d1.d(vec3d);
-
-            if (vec3d2.c() < 1.0E-7D) {
-                return null;
-            } else {
-                Vec3D vec3d3 = vec3d.e(vec3d2.a(0.001D));
-                Vec3D vec3d4 = vec3d.e(vec3d2.a(0.001D)).a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
-
-                return voxelshape.b(vec3d4.x, vec3d4.y, vec3d4.z) ? new MovingObjectPosition(vec3d3, EnumDirection.a(vec3d2.x, vec3d2.y, vec3d2.z), blockposition) : AxisAlignedBB.a(voxelshape.d(), vec3d, vec3d1, blockposition);
+    public static double a(EnumDirection.EnumAxis enumdirection_enumaxis, AxisAlignedBB axisalignedbb, Stream<VoxelShape> stream, double d0) {
+        for (Iterator iterator = stream.iterator(); iterator.hasNext(); d0 = ((VoxelShape) iterator.next()).a(enumdirection_enumaxis, axisalignedbb, d0)) {
+            if (Math.abs(d0) < 1.0E-7D) {
+                return 0.0D;
             }
         }
+
+        return d0;
     }
 
     public static boolean b(VoxelShape voxelshape, VoxelShape voxelshape1, EnumDirection enumdirection) {
@@ -275,27 +192,9 @@ public final class VoxelShapes {
                 voxelshape3 = a();
             }
 
-            return !c(new VoxelShapeSlice(b(), enumdirection_enumaxis, 0), a(new VoxelShapeSlice(voxelshape2, enumdirection_enumaxis, voxelshape2.a.c(enumdirection_enumaxis) - 1), new VoxelShapeSlice(voxelshape3, enumdirection_enumaxis, 0), OperatorBoolean.OR), OperatorBoolean.ONLY_FIRST);
+            return !c(b(), b(new VoxelShapeSlice(voxelshape2, enumdirection_enumaxis, voxelshape2.a.c(enumdirection_enumaxis) - 1), new VoxelShapeSlice(voxelshape3, enumdirection_enumaxis, 0), OperatorBoolean.OR), OperatorBoolean.ONLY_FIRST);
         } else {
             return true;
-        }
-    }
-
-    public static VoxelShape a(VoxelShape voxelshape, EnumDirection enumdirection) {
-        if (!voxelshape.b() && voxelshape != b()) {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
-            DoubleList doublelist = voxelshape.a(enumdirection_enumaxis);
-
-            if (doublelist.size() == 2 && DoubleMath.fuzzyEquals(doublelist.getDouble(0), 0.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(doublelist.getDouble(1), 1.0D, 1.0E-7D)) {
-                return voxelshape;
-            } else {
-                int i = voxelshape.a(enumdirection_enumaxis, enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? 0.9999999D : 1.0E-7D);
-
-                return new VoxelShapeSlice(voxelshape, enumdirection_enumaxis, i);
-            }
-        } else {
-            return voxelshape;
         }
     }
 

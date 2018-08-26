@@ -26,14 +26,14 @@ public class CommandWorldBorder {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("worldborder").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) IntegerArgumentType.integer(-60000000, 60000000)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) IntegerArgumentType.getInteger(commandcontext, "distance"), 0L);
+        })).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) FloatArgumentType.floatArg(-6.0E7F, 6.0E7F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) FloatArgumentType.getFloat(commandcontext, "distance"), 0L);
         })).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) IntegerArgumentType.getInteger(commandcontext, "distance"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().i() + (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
-        }))))).then(CommandDispatcher.a("set").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) IntegerArgumentType.integer(-60000000, 60000000)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), (double) IntegerArgumentType.getInteger(commandcontext, "distance"), 0L);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().getSize() + (double) FloatArgumentType.getFloat(commandcontext, "distance"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getWorldBorder().i() + (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+        }))))).then(CommandDispatcher.a("set").then(((RequiredArgumentBuilder) CommandDispatcher.a("distance", (ArgumentType) FloatArgumentType.floatArg(-6.0E7F, 6.0E7F)).executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), (double) FloatArgumentType.getFloat(commandcontext, "distance"), 0L);
         })).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), (double) IntegerArgumentType.getInteger(commandcontext, "distance"), (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
+            return a((CommandListenerWrapper) commandcontext.getSource(), (double) FloatArgumentType.getFloat(commandcontext, "distance"), (long) IntegerArgumentType.getInteger(commandcontext, "time") * 1000L);
         }))))).then(CommandDispatcher.a("center").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec2.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "pos"));
         })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("damage").then(CommandDispatcher.a("amount").then(CommandDispatcher.a("damagePerBlock", (ArgumentType) FloatArgumentType.floatArg(0.0F)).executes((commandcontext) -> {

@@ -30,10 +30,10 @@ public class CriterionConditionEntityType {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             String s = ChatDeserializer.a(jsonelement, "type");
             MinecraftKey minecraftkey = new MinecraftKey(s);
-            EntityTypes entitytypes = (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey);
+            EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
             if (entitytypes == null) {
-                throw new JsonSyntaxException("Unknown entity type \'" + minecraftkey + "\', valid types are: " + CriterionConditionEntityType.b.join(EntityTypes.REGISTRY.keySet()));
+                throw new JsonSyntaxException("Unknown entity type \'" + minecraftkey + "\', valid types are: " + CriterionConditionEntityType.b.join(IRegistry.ENTITY_TYPE.keySet()));
             } else {
                 return new CriterionConditionEntityType(entitytypes);
             }
@@ -43,6 +43,6 @@ public class CriterionConditionEntityType {
     }
 
     public JsonElement a() {
-        return (JsonElement) (this.c == null ? JsonNull.INSTANCE : new JsonPrimitive(((MinecraftKey) EntityTypes.REGISTRY.b(this.c)).toString()));
+        return (JsonElement) (this.c == null ? JsonNull.INSTANCE : new JsonPrimitive(IRegistry.ENTITY_TYPE.getKey(this.c).toString()));
     }
 }

@@ -59,7 +59,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected int d() {
-        return this.b.A();
+        return this.b.y();
     }
 
     protected void a(DatagramSocket datagramsocket) {

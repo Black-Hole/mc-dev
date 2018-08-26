@@ -13,7 +13,7 @@ public class ItemShears extends Item {
 
         Block block = iblockdata.getBlock();
 
-        return !iblockdata.a(TagsBlock.D) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !block.a(TagsBlock.a) ? super.a(itemstack, world, iblockdata, blockposition, entityliving) : true;
+        return !iblockdata.a(TagsBlock.LEAVES) && block != Blocks.COBWEB && block != Blocks.GRASS && block != Blocks.FERN && block != Blocks.DEAD_BUSH && block != Blocks.VINE && block != Blocks.TRIPWIRE && !block.a(TagsBlock.WOOL) ? super.a(itemstack, world, iblockdata, blockposition, entityliving) : true;
     }
 
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
@@ -25,6 +25,6 @@ public class ItemShears extends Item {
     public float getDestroySpeed(ItemStack itemstack, IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
-        return block != Blocks.COBWEB && !iblockdata.a(TagsBlock.D) ? (block.a(TagsBlock.a) ? 5.0F : super.getDestroySpeed(itemstack, iblockdata)) : 15.0F;
+        return block != Blocks.COBWEB && !iblockdata.a(TagsBlock.LEAVES) ? (block.a(TagsBlock.WOOL) ? 5.0F : super.getDestroySpeed(itemstack, iblockdata)) : 15.0F;
     }
 }

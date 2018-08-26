@@ -113,7 +113,7 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
         this.a(generatoraccess, Blocks.SANDSTONE_SLAB.getBlockData(), this.a - 2, 2, 2, structureboundingbox);
         this.a(generatoraccess, iblockdata3, 2, 1, 2, structureboundingbox);
         this.a(generatoraccess, iblockdata2, this.a - 3, 1, 2, structureboundingbox);
-        this.a(generatoraccess, structureboundingbox, 4, 3, 5, 4, 3, 18, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
+        this.a(generatoraccess, structureboundingbox, 4, 3, 5, 4, 3, 17, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
         this.a(generatoraccess, structureboundingbox, this.a - 5, 3, 5, this.a - 5, 3, 17, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
         this.a(generatoraccess, structureboundingbox, 3, 1, 5, 4, 2, 16, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
         this.a(generatoraccess, structureboundingbox, this.a - 6, 1, 5, this.a - 5, 2, 16, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);

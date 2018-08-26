@@ -31,7 +31,7 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenFeatureConfigurat
     protected boolean a(IBlockData iblockdata, IBlockData iblockdata1) {
         Block block = iblockdata.getBlock();
 
-        return this.a(iblockdata) || (block == Blocks.SAND || block == Blocks.GRAVEL) && !iblockdata1.s().a(TagsFluid.a);
+        return this.a(iblockdata) || (block == Blocks.SAND || block == Blocks.GRAVEL) && !iblockdata1.s().a(TagsFluid.WATER);
     }
 
     protected boolean a(IWorldReader iworldreader, int i, int j, int k, int l, int i1, int j1, int k1, int l1) {

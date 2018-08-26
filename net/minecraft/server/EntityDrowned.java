@@ -47,22 +47,22 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return groupdataentity;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         BiomeBase biomebase = generatoraccess.getBiome(new BlockPosition(this.locX, this.locY, this.locZ));
 
-        return biomebase != Biomes.i && biomebase != Biomes.m ? this.random.nextInt(40) == 0 && this.dG() && super.a(generatoraccess) : this.random.nextInt(15) == 0 && super.a(generatoraccess);
+        return biomebase != Biomes.i && biomebase != Biomes.m ? this.random.nextInt(40) == 0 && this.dF() && super.a(generatoraccess, flag) : this.random.nextInt(15) == 0 && super.a(generatoraccess, flag);
     }
 
-    private boolean dG() {
+    private boolean dF() {
         return this.getBoundingBox().b < (double) (this.world.getSeaLevel() - 5);
     }
 
-    protected boolean dA() {
+    protected boolean dz() {
         return false;
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aM;
     }
 
@@ -78,7 +78,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return this.isInWater() ? SoundEffects.ENTITY_DROWNED_DEATH_WATER : SoundEffects.ENTITY_DROWNED_DEATH;
     }
 
-    protected SoundEffect dB() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_DROWNED_STEP;
     }
 
@@ -86,7 +86,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return SoundEffects.ENTITY_DROWNED_SWIM;
     }
 
-    protected ItemStack dC() {
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 
@@ -107,23 +107,23 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         return itemstack1.getItem() == Items.NAUTILUS_SHELL ? false : (itemstack1.getItem() == Items.TRIDENT ? (itemstack.getItem() == Items.TRIDENT ? itemstack.getDamage() < itemstack1.getDamage() : false) : (itemstack.getItem() == Items.TRIDENT ? true : super.a(itemstack, itemstack1, enumitemslot)));
     }
 
-    protected boolean dD() {
+    protected boolean dC() {
         return false;
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
+        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
     }
 
     public boolean f(@Nullable EntityLiving entityliving) {
-        return entityliving != null ? !this.world.K() || entityliving.isInWater() : false;
+        return entityliving != null ? !this.world.L() || entityliving.isInWater() : false;
     }
 
     public boolean bw() {
         return !this.isSwimming();
     }
 
-    private boolean dJ() {
+    private boolean dI() {
         if (this.bC) {
             return true;
         } else {
@@ -134,7 +134,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     }
 
     public void a(float f, float f1, float f2) {
-        if (this.cP() && this.isInWater() && this.dJ()) {
+        if (this.cP() && this.isInWater() && this.dI()) {
             this.a(f, f1, f2, 0.01F);
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
             this.motX *= 0.8999999761581421D;
@@ -148,7 +148,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
     public void as() {
         if (!this.world.isClientSide) {
-            if (this.cP() && this.isInWater() && this.dJ()) {
+            if (this.cP() && this.isInWater() && this.dI()) {
                 this.navigation = this.a;
                 this.setSwimming(true);
             } else {
@@ -159,7 +159,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
 
     }
 
-    protected boolean dE() {
+    protected boolean dD() {
         PathEntity pathentity = this.getNavigation().m();
 
         if (pathentity != null) {
@@ -222,7 +222,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         public void a() {
             EntityLiving entityliving = this.i.getGoalTarget();
 
-            if (this.i.dJ() && this.i.isInWater()) {
+            if (this.i.dI() && this.i.isInWater()) {
                 if (entityliving != null && entityliving.locY > this.i.locY || this.i.bC) {
                     this.i.motY += 0.002D;
                 }
@@ -294,7 +294,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public boolean a() {
-            if (!this.f.K()) {
+            if (!this.f.L()) {
                 return false;
             } else if (this.a.isInWater()) {
                 return false;
@@ -347,7 +347,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public boolean a() {
-            return super.a() && !this.f.world.K() && this.f.isInWater() && this.f.locY >= (double) (this.f.world.getSeaLevel() - 3);
+            return super.a() && !this.f.world.L() && this.f.isInWater() && this.f.locY >= (double) (this.f.world.getSeaLevel() - 3);
         }
 
         public boolean b() {
@@ -385,7 +385,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public boolean a() {
-            return !this.a.world.K() && this.a.isInWater() && this.a.locY < (double) (this.c - 2);
+            return !this.a.world.L() && this.a.isInWater() && this.a.locY < (double) (this.c - 2);
         }
 
         public boolean b() {
@@ -393,7 +393,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         }
 
         public void e() {
-            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().p() || this.a.dE())) {
+            if (this.a.locY < (double) (this.c - 1) && (this.a.getNavigation().p() || this.a.dD())) {
                 Vec3D vec3d = RandomPositionGenerator.a(this.a, 4, 8, new Vec3D(this.a.locX, (double) (this.c - 1), this.a.locZ));
 
                 if (vec3d == null) {

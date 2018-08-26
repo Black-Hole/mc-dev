@@ -36,14 +36,14 @@ public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
         }
 
         if (flag && i > itemstack.getMaxStackSize()) {
-            throw ArgumentPredicateItemStack.a.create(Item.REGISTRY.b(this.b), Integer.valueOf(itemstack.getMaxStackSize()));
+            throw ArgumentPredicateItemStack.a.create(IRegistry.ITEM.getKey(this.b), Integer.valueOf(itemstack.getMaxStackSize()));
         } else {
             return itemstack;
         }
     }
 
     public String c() {
-        StringBuilder stringbuilder = new StringBuilder(Item.REGISTRY.a((Object) this.b));
+        StringBuilder stringbuilder = new StringBuilder(IRegistry.ITEM.a((Object) this.b));
 
         if (this.c != null) {
             stringbuilder.append(this.c);

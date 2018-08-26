@@ -78,7 +78,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aq;
     }
 
@@ -86,11 +86,11 @@ public class EntityGhast extends EntityFlying implements IMonster {
         return 10.0F;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return this.random.nextInt(20) == 0 && super.a(generatoraccess) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return this.random.nextInt(20) == 0 && super.a(generatoraccess, flag) && generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
-    public int dh() {
+    public int dg() {
         return 1;
     }
 

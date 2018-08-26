@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockAttachable extends BlockFacingHorizontal {
 
-    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.J;
+    public static final BlockStateEnum<BlockPropertyAttachPosition> FACE = BlockProperties.K;
 
     protected BlockAttachable(Block.Info block_info) {
         super(block_info);

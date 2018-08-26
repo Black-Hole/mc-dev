@@ -44,8 +44,8 @@ public class Advancement {
         } else {
             IChatBaseComponent ichatbasecomponent = advancementdisplay.a();
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
-            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.e().a(enumchatformat).a("\n").addSibling(advancementdisplay.b());
-            IChatBaseComponent ichatbasecomponent2 = ichatbasecomponent.e().a((chatmodifier) -> {
+            IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.h().a(enumchatformat).a("\n").addSibling(advancementdisplay.b());
+            IChatBaseComponent ichatbasecomponent2 = ichatbasecomponent.h().a((chatmodifier) -> {
                 chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
             });
 

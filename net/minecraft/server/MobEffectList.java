@@ -10,38 +10,37 @@ import javax.annotation.Nullable;
 
 public class MobEffectList {
 
-    public static final RegistryMaterials<MinecraftKey, MobEffectList> REGISTRY = new RegistryMaterials();
     private final Map<IAttribute, AttributeModifier> a = Maps.newHashMap();
-    private final boolean c;
-    private final int d;
+    private final boolean b;
+    private final int c;
     @Nullable
-    private String e;
-    private int f = -1;
+    private String d;
+    private int e = -1;
     public double durationModifier;
-    private boolean h;
+    private boolean g;
 
     @Nullable
     public static MobEffectList fromId(int i) {
-        return (MobEffectList) MobEffectList.REGISTRY.getId(i);
+        return (MobEffectList) IRegistry.MOB_EFFECT.fromId(i);
     }
 
     public static int getId(MobEffectList mobeffectlist) {
-        return MobEffectList.REGISTRY.a((Object) mobeffectlist);
+        return IRegistry.MOB_EFFECT.a((Object) mobeffectlist);
     }
 
     protected MobEffectList(boolean flag, int i) {
-        this.c = flag;
+        this.b = flag;
         if (flag) {
             this.durationModifier = 0.5D;
         } else {
             this.durationModifier = 1.0D;
         }
 
-        this.d = i;
+        this.c = i;
     }
 
     protected MobEffectList b(int i, int j) {
-        this.f = i + j * 12;
+        this.e = i + j * 12;
         return this;
     }
 
@@ -115,11 +114,11 @@ public class MobEffectList {
     }
 
     protected String b() {
-        if (this.e == null) {
-            this.e = SystemUtils.a("effect", (MinecraftKey) MobEffectList.REGISTRY.b(this));
+        if (this.d == null) {
+            this.d = SystemUtils.a("effect", IRegistry.MOB_EFFECT.getKey(this));
         }
 
-        return this.e;
+        return this.d;
     }
 
     public String c() {
@@ -136,7 +135,7 @@ public class MobEffectList {
     }
 
     public int getColor() {
-        return this.d;
+        return this.c;
     }
 
     public MobEffectList a(IAttribute iattribute, String s, double d0, int i) {
@@ -182,7 +181,7 @@ public class MobEffectList {
     }
 
     public MobEffectList l() {
-        this.h = true;
+        this.g = true;
         return this;
     }
 
@@ -220,6 +219,6 @@ public class MobEffectList {
     }
 
     private static void a(int i, String s, MobEffectList mobeffectlist) {
-        MobEffectList.REGISTRY.a(i, new MinecraftKey(s), mobeffectlist);
+        IRegistry.MOB_EFFECT.a(i, new MinecraftKey(s), mobeffectlist);
     }
 }

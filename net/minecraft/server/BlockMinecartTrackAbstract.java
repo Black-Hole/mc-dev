@@ -11,7 +11,7 @@ public abstract class BlockMinecartTrackAbstract extends Block {
     }
 
     public static boolean k(IBlockData iblockdata) {
-        return iblockdata.a(TagsBlock.z);
+        return iblockdata.a(TagsBlock.RAILS);
     }
 
     protected BlockMinecartTrackAbstract(boolean flag, Block.Info block_info) {

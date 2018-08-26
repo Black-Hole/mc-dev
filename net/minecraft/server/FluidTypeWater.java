@@ -45,7 +45,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     }
 
     public boolean a(Fluid fluid, FluidType fluidtype, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.DOWN && !fluidtype.a(TagsFluid.a);
+        return enumdirection == EnumDirection.DOWN && !fluidtype.a(TagsFluid.WATER);
     }
 
     protected float d() {

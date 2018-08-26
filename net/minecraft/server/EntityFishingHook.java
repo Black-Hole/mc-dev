@@ -105,7 +105,7 @@ public class EntityFishingHook extends Entity {
             BlockPosition blockposition = new BlockPosition(this);
             Fluid fluid = this.world.b(blockposition);
 
-            if (fluid.a(TagsFluid.a)) {
+            if (fluid.a(TagsFluid.WATER)) {
                 f = fluid.f();
             }
 
@@ -174,7 +174,7 @@ public class EntityFishingHook extends Entity {
                 }
             }
 
-            if (!fluid.a(TagsFluid.a)) {
+            if (!fluid.a(TagsFluid.WATER)) {
                 this.motY -= 0.03D;
             }
 
@@ -394,10 +394,10 @@ public class EntityFishingHook extends Entity {
                 this.world.broadcastEntityEffect(this, (byte) 31);
                 i = this.hooked instanceof EntityItem ? 3 : 5;
             } else if (this.g > 0) {
-                LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a(new BlockPosition(this));
+                LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).position(new BlockPosition(this));
 
-                loottableinfo_a.a((float) this.az + this.owner.dJ());
-                List list = this.world.getMinecraftServer().aP().a(LootTables.aO).a(this.random, loottableinfo_a.a());
+                loottableinfo_builder.luck((float) this.az + this.owner.dJ());
+                List list = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.aO).a(this.random, loottableinfo_builder.build());
 
                 CriterionTriggers.D.a((EntityPlayer) this.owner, itemstack, this, list);
                 Iterator iterator = list.iterator();
@@ -416,7 +416,7 @@ public class EntityFishingHook extends Entity {
                     entityitem.motZ = d2 * 0.1D;
                     this.world.addEntity(entityitem);
                     this.owner.world.addEntity(new EntityExperienceOrb(this.owner.world, this.owner.locX, this.owner.locY + 0.5D, this.owner.locZ + 0.5D, this.random.nextInt(6) + 1));
-                    if (itemstack1.getItem().a(TagsItem.D)) {
+                    if (itemstack1.getItem().a(TagsItem.FISHES)) {
                         this.owner.a(StatisticList.FISH_CAUGHT, 1);
                     }
                 }

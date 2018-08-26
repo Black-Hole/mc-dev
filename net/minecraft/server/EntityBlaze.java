@@ -102,7 +102,7 @@ public class EntityBlaze extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.w;
     }
 

@@ -17,7 +17,7 @@ public class Statistic<T> extends IScoreboardCriteria {
     }
 
     public static <T> String a(StatisticWrapper<T> statisticwrapper, T t0) {
-        return a((MinecraftKey) StatisticList.REGISTRY.b(statisticwrapper)) + ":" + a((MinecraftKey) statisticwrapper.a().b(t0));
+        return a(IRegistry.STATS.getKey(statisticwrapper)) + ":" + a(statisticwrapper.a().getKey(t0));
     }
 
     private static <T> String a(@Nullable MinecraftKey minecraftkey) {

@@ -49,8 +49,8 @@ public class ItemHoe extends ItemToolMaterial {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", 0.0D, 0));
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemHoe.i, "Weapon modifier", (double) this.b, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, 0));
+            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) this.b, 0));
         }
 
         return multimap;

@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class GenLayerBiome implements AreaTransformer5 {
 
-    private static final int a = BiomeBase.a(Biomes.C);
-    private static final int b = BiomeBase.a(Biomes.d);
-    private static final int c = BiomeBase.a(Biomes.e);
-    private static final int d = BiomeBase.a(Biomes.f);
-    private static final int e = BiomeBase.a(Biomes.n);
-    private static final int f = BiomeBase.a(Biomes.w);
-    private static final int g = BiomeBase.a(Biomes.O);
-    private static final int h = BiomeBase.a(Biomes.N);
-    private static final int i = BiomeBase.a(Biomes.p);
-    private static final int j = BiomeBase.a(Biomes.c);
-    private static final int k = BiomeBase.a(Biomes.H);
-    private static final int l = BiomeBase.a(Biomes.E);
-    private static final int m = BiomeBase.a(Biomes.K);
-    private static final int n = BiomeBase.a(Biomes.h);
-    private static final int o = BiomeBase.a(Biomes.g);
-    private static final int p = BiomeBase.a(Biomes.F);
+    private static final int a = IRegistry.BIOME.a((Object) Biomes.C);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.d);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.e);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.f);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.n);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.w);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.O);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.N);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.p);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.c);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.H);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.E);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.K);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.h);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.g);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.F);
     private static final int[] q = new int[] { GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
     private static final int[] r = new int[] { GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
     private static final int[] s = new int[] { GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};

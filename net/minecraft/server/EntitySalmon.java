@@ -14,16 +14,16 @@ public class EntitySalmon extends EntityFish {
         this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
     }
 
-    protected int dz() {
+    protected int dy() {
         return 5;
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aJ;
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dA() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 
@@ -39,7 +39,7 @@ public class EntitySalmon extends EntityFish {
         return SoundEffects.ENTITY_SALMON_HURT;
     }
 
-    protected SoundEffect dD() {
+    protected SoundEffect dC() {
         return SoundEffects.ENTITY_SALMON_FLOP;
     }
 }

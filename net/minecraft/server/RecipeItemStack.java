@@ -176,7 +176,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
 
             if (jsonobject.has("item")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "item"));
-                Item item = (Item) Item.REGISTRY.get(minecraftkey);
+                Item item = (Item) IRegistry.ITEM.get(minecraftkey);
 
                 if (item == null) {
                     throw new JsonSyntaxException("Unknown item \'" + minecraftkey + "\'");
@@ -250,7 +250,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         public JsonObject b() {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.a.getItem())).toString());
+            jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.a.getItem()).toString());
             return jsonobject;
         }
 

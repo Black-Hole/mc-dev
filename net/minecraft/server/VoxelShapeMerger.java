@@ -2,7 +2,9 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 
-interface VoxelShapeMerger extends DoubleList {
+interface VoxelShapeMerger {
+
+    DoubleList a();
 
     boolean a(VoxelShapeMerger.a voxelshapemerger_a);
 

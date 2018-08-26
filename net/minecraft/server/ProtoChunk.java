@@ -67,23 +67,23 @@ public class ProtoChunk implements IChunkAccess {
         Predicate predicate = (block) -> {
             return block == null || block.getBlockData().isAir();
         };
-        RegistryBlocks registryblocks = Block.REGISTRY;
+        IRegistry iregistry = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        Function function = registryblocks::b;
-        RegistryBlocks registryblocks1 = Block.REGISTRY;
+        IRegistry.BLOCK.getClass();
+        Function function = iregistry::getKey;
+        IRegistry iregistry1 = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        this.q = new ProtoChunkTickList(predicate, function, registryblocks1::get, chunkcoordintpair);
+        IRegistry.BLOCK.getClass();
+        this.q = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, chunkcoordintpair);
         predicate = (fluidtype) -> {
             return fluidtype == null || fluidtype == FluidTypes.a;
         };
-        registryblocks = FluidType.c;
-        FluidType.c.getClass();
-        function = registryblocks::b;
-        registryblocks1 = FluidType.c;
-        FluidType.c.getClass();
-        this.r = new ProtoChunkTickList(predicate, function, registryblocks1::get, chunkcoordintpair);
+        iregistry = IRegistry.FLUID;
+        IRegistry.FLUID.getClass();
+        function = iregistry::getKey;
+        iregistry1 = IRegistry.FLUID;
+        IRegistry.FLUID.getClass();
+        this.r = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, chunkcoordintpair);
     }
 
     public static ShortList a(ShortList[] ashortlist, int i) {

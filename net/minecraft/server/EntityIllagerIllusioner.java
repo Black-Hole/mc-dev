@@ -52,7 +52,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         super.x_();
     }
 
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.a;
     }
 
@@ -111,7 +111,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         return SoundEffects.ENTITY_ILLUSIONER_HURT;
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect dz() {
         return SoundEffects.ENTITY_ILLUSIONER_CAST_SPELL;
     }
 

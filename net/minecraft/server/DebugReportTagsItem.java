@@ -11,40 +11,40 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
     private static final Logger e = LogManager.getLogger();
 
     public DebugReportTagsItem(DebugReportGenerator debugreportgenerator) {
-        super(debugreportgenerator, Item.REGISTRY);
+        super(debugreportgenerator, IRegistry.ITEM);
     }
 
     protected void b() {
-        this.a(TagsBlock.a, TagsItem.a);
-        this.a(TagsBlock.b, TagsItem.b);
-        this.a(TagsBlock.c, TagsItem.c);
-        this.a(TagsBlock.d, TagsItem.d);
-        this.a(TagsBlock.e, TagsItem.e);
-        this.a(TagsBlock.f, TagsItem.f);
-        this.a(TagsBlock.g, TagsItem.g);
-        this.a(TagsBlock.h, TagsItem.h);
-        this.a(TagsBlock.i, TagsItem.i);
-        this.a(TagsBlock.j, TagsItem.j);
-        this.a(TagsBlock.l, TagsItem.l);
-        this.a(TagsBlock.m, TagsItem.m);
-        this.a(TagsBlock.p, TagsItem.p);
-        this.a(TagsBlock.o, TagsItem.o);
-        this.a(TagsBlock.q, TagsItem.q);
-        this.a(TagsBlock.r, TagsItem.r);
-        this.a(TagsBlock.t, TagsItem.t);
-        this.a(TagsBlock.s, TagsItem.s);
-        this.a(TagsBlock.n, TagsItem.n);
-        this.a(TagsBlock.v, TagsItem.v);
-        this.a(TagsBlock.x, TagsItem.x);
-        this.a(TagsBlock.w, TagsItem.w);
-        this.a(TagsBlock.y, TagsItem.y);
-        this.a(TagsBlock.z, TagsItem.z);
-        this.a(TagsBlock.D, TagsItem.A);
-        this.a(TagsBlock.k, TagsItem.k);
-        this.a(TagsBlock.E, TagsItem.B);
-        this.a(TagsItem.u).a((Object[]) (new Item[] { Items.WHITE_BANNER, Items.ORANGE_BANNER, Items.MAGENTA_BANNER, Items.LIGHT_BLUE_BANNER, Items.YELLOW_BANNER, Items.LIME_BANNER, Items.PINK_BANNER, Items.GRAY_BANNER, Items.LIGHT_GRAY_BANNER, Items.CYAN_BANNER, Items.PURPLE_BANNER, Items.BLUE_BANNER, Items.BROWN_BANNER, Items.GREEN_BANNER, Items.RED_BANNER, Items.BLACK_BANNER}));
-        this.a(TagsItem.C).a((Object[]) (new Item[] { Items.OAK_BOAT, Items.SPRUCE_BOAT, Items.BIRCH_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}));
-        this.a(TagsItem.D).a((Object[]) (new Item[] { Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH}));
+        this.a(TagsBlock.WOOL, TagsItem.WOOL);
+        this.a(TagsBlock.PLANKS, TagsItem.PLANKS);
+        this.a(TagsBlock.STONE_BRICKS, TagsItem.STONE_BRICKS);
+        this.a(TagsBlock.WOODEN_BUTTONS, TagsItem.WOODEN_BUTTONS);
+        this.a(TagsBlock.BUTTONS, TagsItem.BUTTONS);
+        this.a(TagsBlock.CARPETS, TagsItem.CARPETS);
+        this.a(TagsBlock.WOODEN_DOORS, TagsItem.WOODEN_DOORS);
+        this.a(TagsBlock.WOODEN_STAIRS, TagsItem.WOODEN_STAIRS);
+        this.a(TagsBlock.WOODEN_SLABS, TagsItem.WOODEN_SLABS);
+        this.a(TagsBlock.WOODEN_PRESSURE_PLATES, TagsItem.WOODEN_PRESSURE_PLATES);
+        this.a(TagsBlock.DOORS, TagsItem.DOORS);
+        this.a(TagsBlock.SAPLINGS, TagsItem.SAPLINGS);
+        this.a(TagsBlock.OAK_LOGS, TagsItem.OAK_LOGS);
+        this.a(TagsBlock.DARK_OAK_LOGS, TagsItem.DARK_OAK_LOGS);
+        this.a(TagsBlock.BIRCH_LOGS, TagsItem.BIRCH_LOGS);
+        this.a(TagsBlock.ACACIA_LOGS, TagsItem.ACACIA_LOGS);
+        this.a(TagsBlock.SPRUCE_LOGS, TagsItem.SPRUCE_LOGS);
+        this.a(TagsBlock.JUNGLE_LOGS, TagsItem.JUNGLE_LOGS);
+        this.a(TagsBlock.LOGS, TagsItem.LOGS);
+        this.a(TagsBlock.SAND, TagsItem.SAND);
+        this.a(TagsBlock.SLABS, TagsItem.SLABS);
+        this.a(TagsBlock.STAIRS, TagsItem.STAIRS);
+        this.a(TagsBlock.ANVIL, TagsItem.ANVIL);
+        this.a(TagsBlock.RAILS, TagsItem.RAILS);
+        this.a(TagsBlock.LEAVES, TagsItem.LEAVES);
+        this.a(TagsBlock.WOODEN_TRAPDOORS, TagsItem.WOODEN_TRAPDOORS);
+        this.a(TagsBlock.TRAPDOORS, TagsItem.TRAPDOORS);
+        this.a(TagsItem.BANNERS).a((Object[]) (new Item[] { Items.WHITE_BANNER, Items.ORANGE_BANNER, Items.MAGENTA_BANNER, Items.LIGHT_BLUE_BANNER, Items.YELLOW_BANNER, Items.LIME_BANNER, Items.PINK_BANNER, Items.GRAY_BANNER, Items.LIGHT_GRAY_BANNER, Items.CYAN_BANNER, Items.PURPLE_BANNER, Items.BLUE_BANNER, Items.BROWN_BANNER, Items.GREEN_BANNER, Items.RED_BANNER, Items.BLACK_BANNER}));
+        this.a(TagsItem.BOATS).a((Object[]) (new Item[] { Items.OAK_BOAT, Items.SPRUCE_BOAT, Items.BIRCH_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}));
+        this.a(TagsItem.FISHES).a((Object[]) (new Item[] { Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH}));
     }
 
     protected void a(Tag<Block> tag, Tag<Item> tag1) {
@@ -72,7 +72,7 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
                 Item item = block.getItem();
 
                 if (item == Items.AIR) {
-                    DebugReportTagsItem.e.warn("Itemless block copied to item tag: {}", Block.REGISTRY.b(block));
+                    DebugReportTagsItem.e.warn("Itemless block copied to item tag: {}", IRegistry.BLOCK.getKey(block));
                 } else {
                     arraylist.add(item);
                 }

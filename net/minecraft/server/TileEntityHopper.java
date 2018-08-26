@@ -14,7 +14,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     private long j;
 
     public TileEntityHopper() {
-        super(TileEntityTypes.r);
+        super(TileEntityTypes.HOPPER);
         this.items = NonNullList.a(5, ItemStack.a);
         this.f = -1;
     }
@@ -433,7 +433,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
 
         if (object == null) {
-            List list = world.getEntities((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.c);
+            List list = world.getEntities((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.d);
 
             if (!list.isEmpty()) {
                 object = (IInventory) list.get(world.random.nextInt(list.size()));

@@ -27,7 +27,7 @@ public enum BlockPropertyInstrument implements INamable {
             return BlockPropertyInstrument.FLUTE;
         } else if (block == Blocks.GOLD_BLOCK) {
             return BlockPropertyInstrument.BELL;
-        } else if (block.a(TagsBlock.a)) {
+        } else if (block.a(TagsBlock.WOOL)) {
             return BlockPropertyInstrument.GUITAR;
         } else if (block == Blocks.PACKED_ICE) {
             return BlockPropertyInstrument.CHIME;

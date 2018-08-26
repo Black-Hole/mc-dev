@@ -156,6 +156,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         if (i == -1) {
             return false;
         } else {
+            this.a(generatoraccess, blockposition.down());
             int j = (int) ((double) i * 0.618D);
 
             if (j >= i) {

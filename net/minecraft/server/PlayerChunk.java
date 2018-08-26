@@ -25,7 +25,10 @@ public class PlayerChunk {
     public PlayerChunk(PlayerChunkMap playerchunkmap, int i, int j) {
         this.playerChunkMap = playerchunkmap;
         this.location = new ChunkCoordIntPair(i, j);
-        this.chunk = playerchunkmap.getWorld().getChunkProviderServer().getOrLoadChunkAt(i, j);
+        ChunkProviderServer chunkproviderserver = playerchunkmap.getWorld().getChunkProviderServer();
+
+        chunkproviderserver.a(i, j);
+        this.chunk = chunkproviderserver.getChunkAt(i, j, true, false);
     }
 
     public ChunkCoordIntPair a() {
@@ -66,12 +69,7 @@ public class PlayerChunk {
         if (this.chunk != null) {
             return true;
         } else {
-            if (flag) {
-                this.chunk = this.playerChunkMap.getWorld().getChunkProviderServer().getChunkAt(this.location.x, this.location.z);
-            } else {
-                this.chunk = this.playerChunkMap.getWorld().getChunkProviderServer().getOrLoadChunkAt(this.location.x, this.location.z);
-            }
-
+            this.chunk = this.playerChunkMap.getWorld().getChunkProviderServer().getChunkAt(this.location.x, this.location.z, true, flag);
             return this.chunk != null;
         }
     }
@@ -87,14 +85,16 @@ public class PlayerChunk {
             this.dirtyCount = 0;
             this.h = 0;
             this.done = true;
-            PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, '\uffff');
-            Iterator iterator = this.c.iterator();
+            if (!this.c.isEmpty()) {
+                PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, '\uffff');
+                Iterator iterator = this.c.iterator();
 
-            while (iterator.hasNext()) {
-                EntityPlayer entityplayer = (EntityPlayer) iterator.next();
+                while (iterator.hasNext()) {
+                    EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                entityplayer.playerConnection.sendPacket(packetplayoutmapchunk);
-                this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
+                    entityplayer.playerConnection.sendPacket(packetplayoutmapchunk);
+                    this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
+                }
             }
 
             return true;

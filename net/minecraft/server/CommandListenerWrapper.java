@@ -177,7 +177,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     private void sendAdminMessage(IChatBaseComponent ichatbasecomponent) {
         IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("chat.type.admin", new Object[] { this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
 
-        if (this.i.aQ().getBoolean("sendCommandFeedback")) {
+        if (this.i.getGameRules().getBoolean("sendCommandFeedback")) {
             Iterator iterator = this.i.getPlayerList().v().iterator();
 
             while (iterator.hasNext()) {
@@ -189,7 +189,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
             }
         }
 
-        if (this.base != this.i && this.i.aQ().getBoolean("logAdminCommands")) {
+        if (this.base != this.i && this.i.getGameRules().getBoolean("logAdminCommands")) {
             this.i.sendMessage(ichatbasecomponent1);
         }
 
@@ -218,7 +218,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public Collection<MinecraftKey> n() {
-        return SoundEffect.a.keySet();
+        return IRegistry.SOUND_EVENT.keySet();
     }
 
     public Collection<MinecraftKey> o() {

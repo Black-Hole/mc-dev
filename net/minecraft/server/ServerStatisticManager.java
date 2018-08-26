@@ -39,7 +39,7 @@ public class ServerStatisticManager extends StatisticManager {
         this.d = file;
         if (file.isFile()) {
             try {
-                this.a(minecraftserver.aB(), FileUtils.readFileToString(file));
+                this.a(minecraftserver.az(), FileUtils.readFileToString(file));
             } catch (IOException ioexception) {
                 ServerStatisticManager.b.error("Couldn\'t read statistics file {}", file, ioexception);
             } catch (JsonParseException jsonparseexception) {
@@ -78,47 +78,52 @@ public class ServerStatisticManager extends StatisticManager {
             try {
                 jsonreader.setLenient(false);
                 JsonElement jsonelement = Streams.parse(jsonreader);
-                NBTTagCompound nbttagcompound = a(jsonelement.getAsJsonObject());
 
-                if (!nbttagcompound.hasKeyOfType("DataVersion", 99)) {
-                    nbttagcompound.setInt("DataVersion", 1343);
-                }
+                if (!jsonelement.isJsonNull()) {
+                    NBTTagCompound nbttagcompound = a(jsonelement.getAsJsonObject());
 
-                nbttagcompound = GameProfileSerializer.a(datafixer, DataFixTypes.STATS, nbttagcompound, nbttagcompound.getInt("DataVersion"));
-                if (nbttagcompound.hasKeyOfType("stats", 10)) {
-                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("stats");
-                    Iterator iterator = nbttagcompound1.getKeys().iterator();
+                    if (!nbttagcompound.hasKeyOfType("DataVersion", 99)) {
+                        nbttagcompound.setInt("DataVersion", 1343);
+                    }
 
-                    while (iterator.hasNext()) {
-                        String s1 = (String) iterator.next();
+                    nbttagcompound = GameProfileSerializer.a(datafixer, DataFixTypes.STATS, nbttagcompound, nbttagcompound.getInt("DataVersion"));
+                    if (nbttagcompound.hasKeyOfType("stats", 10)) {
+                        NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("stats");
+                        Iterator iterator = nbttagcompound1.getKeys().iterator();
 
-                        if (nbttagcompound1.hasKeyOfType(s1, 10)) {
-                            StatisticWrapper statisticwrapper = (StatisticWrapper) StatisticList.REGISTRY.get(new MinecraftKey(s1));
+                        while (iterator.hasNext()) {
+                            String s1 = (String) iterator.next();
 
-                            if (statisticwrapper == null) {
-                                ServerStatisticManager.b.warn("Invalid statistic type in {}: Don\'t know what {} is", this.d, s1);
-                            } else {
-                                NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound(s1);
-                                Iterator iterator1 = nbttagcompound2.getKeys().iterator();
+                            if (nbttagcompound1.hasKeyOfType(s1, 10)) {
+                                StatisticWrapper statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(new MinecraftKey(s1));
 
-                                while (iterator1.hasNext()) {
-                                    String s2 = (String) iterator1.next();
+                                if (statisticwrapper == null) {
+                                    ServerStatisticManager.b.warn("Invalid statistic type in {}: Don\'t know what {} is", this.d, s1);
+                                } else {
+                                    NBTTagCompound nbttagcompound2 = nbttagcompound1.getCompound(s1);
+                                    Iterator iterator1 = nbttagcompound2.getKeys().iterator();
 
-                                    if (nbttagcompound2.hasKeyOfType(s2, 99)) {
-                                        Statistic statistic = this.a(statisticwrapper, s2);
+                                    while (iterator1.hasNext()) {
+                                        String s2 = (String) iterator1.next();
 
-                                        if (statistic == null) {
-                                            ServerStatisticManager.b.warn("Invalid statistic in {}: Don\'t know what {} is", this.d, s2);
+                                        if (nbttagcompound2.hasKeyOfType(s2, 99)) {
+                                            Statistic statistic = this.a(statisticwrapper, s2);
+
+                                            if (statistic == null) {
+                                                ServerStatisticManager.b.warn("Invalid statistic in {}: Don\'t know what {} is", this.d, s2);
+                                            } else {
+                                                this.a.put(statistic, nbttagcompound2.getInt(s2));
+                                            }
                                         } else {
-                                            this.a.put(statistic, nbttagcompound2.getInt(s2));
+                                            ServerStatisticManager.b.warn("Invalid statistic value in {}: Don\'t know what {} is for key {}", this.d, nbttagcompound2.get(s2), s2);
                                         }
-                                    } else {
-                                        ServerStatisticManager.b.warn("Invalid statistic value in {}: Don\'t know what {} is for key {}", this.d, nbttagcompound2.get(s2), s2);
                                     }
                                 }
                             }
                         }
                     }
+                } else {
+                    ServerStatisticManager.b.error("Unable to parse Stat data from {}", this.d);
                 }
             } catch (Throwable throwable1) {
                 throwable = throwable1;
@@ -145,9 +150,15 @@ public class ServerStatisticManager extends StatisticManager {
 
     @Nullable
     private <T> Statistic<T> a(StatisticWrapper<T> statisticwrapper, String s) {
-        Object object = statisticwrapper.a().get(new MinecraftKey(s));
+        MinecraftKey minecraftkey = MinecraftKey.a(s);
 
-        return object == null ? null : statisticwrapper.b(object);
+        if (minecraftkey == null) {
+            return null;
+        } else {
+            Object object = statisticwrapper.a().get(minecraftkey);
+
+            return object == null ? null : statisticwrapper.b(object);
+        }
     }
 
     private static NBTTagCompound a(JsonObject jsonobject) {
@@ -191,18 +202,18 @@ public class ServerStatisticManager extends StatisticManager {
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
 
-            jsonobject.add(((MinecraftKey) StatisticList.REGISTRY.b(entry.getKey())).toString(), (JsonElement) entry.getValue());
+            jsonobject.add(IRegistry.STATS.getKey(entry.getKey()).toString(), (JsonElement) entry.getValue());
         }
 
         JsonObject jsonobject1 = new JsonObject();
 
         jsonobject1.add("stats", jsonobject);
-        jsonobject1.addProperty("DataVersion", Integer.valueOf(1519));
+        jsonobject1.addProperty("DataVersion", Integer.valueOf(1628));
         return jsonobject1.toString();
     }
 
     private static <T> MinecraftKey b(Statistic<T> statistic) {
-        return (MinecraftKey) statistic.a().a().b(statistic.b());
+        return statistic.a().a().getKey(statistic.b());
     }
 
     public void c() {
@@ -210,7 +221,7 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     public void a(EntityPlayer entityplayer) {
-        int i = this.c.aj();
+        int i = this.c.ah();
         Object2IntOpenHashMap object2intopenhashmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {

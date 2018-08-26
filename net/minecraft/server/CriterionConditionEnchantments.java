@@ -62,7 +62,7 @@ public class CriterionConditionEnchantments {
             JsonObject jsonobject = new JsonObject();
 
             if (this.b != null) {
-                jsonobject.addProperty("enchantment", ((MinecraftKey) Enchantment.enchantments.b(this.b)).toString());
+                jsonobject.addProperty("enchantment", IRegistry.ENCHANTMENT.getKey(this.b).toString());
             }
 
             jsonobject.add("levels", this.c.d());
@@ -78,7 +78,7 @@ public class CriterionConditionEnchantments {
             if (jsonobject.has("enchantment")) {
                 MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "enchantment"));
 
-                enchantment = (Enchantment) Enchantment.enchantments.get(minecraftkey);
+                enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
                 if (enchantment == null) {
                     throw new JsonSyntaxException("Unknown enchantment \'" + minecraftkey + "\'");
                 }

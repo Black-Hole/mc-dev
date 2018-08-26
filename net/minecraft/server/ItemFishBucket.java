@@ -26,7 +26,7 @@ public class ItemFishBucket extends ItemBucket {
         Entity entity = this.a.a(world, itemstack, (EntityHuman) null, blockposition, true, false);
 
         if (entity != null) {
-            ((EntityFish) entity).s(true);
+            ((EntityFish) entity).setFromBucket(true);
         }
 
     }

@@ -98,12 +98,10 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         for (i = -1; i <= 1; ++i) {
             for (j = -1; j <= 1; ++j) {
                 for (k = -1; k <= 1; ++k) {
-                    if (i != 0 || j != 0 || k != 0) {
-                        BlockPosition blockposition = this.position.a(i, j, k);
+                    BlockPosition blockposition = this.position.a(i, j, k);
 
-                        if (!this.world.B(blockposition)) {
-                            return false;
-                        }
+                    if (!this.world.B(blockposition)) {
+                        return false;
                     }
                 }
             }

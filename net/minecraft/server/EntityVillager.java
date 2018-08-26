@@ -65,7 +65,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
     }
 
-    private void dK() {
+    private void dJ() {
         if (!this.bS) {
             this.bS = true;
             if (this.isBaby()) {
@@ -94,11 +94,11 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         if (--this.profession <= 0) {
             BlockPosition blockposition = new BlockPosition(this);
 
-            this.world.ae().a(blockposition);
+            this.world.af().a(blockposition);
             this.profession = 70 + this.random.nextInt(50);
-            this.village = this.world.ae().getClosestVillage(blockposition, 32);
+            this.village = this.world.af().getClosestVillage(blockposition, 32);
             if (this.village == null) {
-                this.dw();
+                this.dv();
             } else {
                 BlockPosition blockposition1 = this.village.a();
 
@@ -110,7 +110,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             }
         }
 
-        if (!this.dC() && this.bK > 0) {
+        if (!this.dB() && this.bK > 0) {
             --this.bK;
             if (this.bK <= 0) {
                 if (this.bL) {
@@ -146,7 +146,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         if (flag) {
             itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dC() && !this.isBaby()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dB() && !this.isBaby()) {
             if (this.trades == null) {
                 this.populateTrades();
             }
@@ -221,7 +221,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         }
 
         this.p(true);
-        this.dK();
+        this.dJ();
     }
 
     protected boolean isTypeNotPersistent() {
@@ -229,7 +229,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     }
 
     protected SoundEffect D() {
-        return this.dC() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT;
+        return this.dB() ? SoundEffects.ENTITY_VILLAGER_TRADE : SoundEffects.ENTITY_VILLAGER_AMBIENT;
     }
 
     protected SoundEffect d(DamageSource damagesource) {
@@ -241,7 +241,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aA;
     }
 
@@ -265,7 +265,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.bG = flag;
     }
 
-    public boolean dB() {
+    public boolean dA() {
         return this.bG;
     }
 
@@ -320,12 +320,12 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return this.tradingPlayer;
     }
 
-    public boolean dC() {
+    public boolean dB() {
         return this.tradingPlayer != null;
     }
 
     public boolean u(boolean flag) {
-        if (!this.bM && flag && this.dF()) {
+        if (!this.bM && flag && this.dE()) {
             boolean flag1 = false;
 
             for (int i = 0; i < this.inventory.getSize(); ++i) {
@@ -542,12 +542,12 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             this.setProfession(this.world.random.nextInt(6));
         }
 
-        this.dK();
+        this.dJ();
         this.populateTrades();
         return groupdataentity;
     }
 
-    public void dD() {
+    public void dC() {
         this.bR = true;
     }
 
@@ -579,7 +579,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         }
     }
 
-    public InventorySubcontainer dE() {
+    public InventorySubcontainer dD() {
         return this.inventory;
     }
 
@@ -603,21 +603,21 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return item == Items.BREAD || item == Items.POTATO || item == Items.CARROT || item == Items.WHEAT || item == Items.WHEAT_SEEDS || item == Items.BEETROOT || item == Items.BEETROOT_SEEDS;
     }
 
+    public boolean dE() {
+        return this.p(1);
+    }
+
     public boolean dF() {
-        return this.q(1);
+        return this.p(2);
     }
 
     public boolean dG() {
-        return this.q(2);
-    }
-
-    public boolean dH() {
         boolean flag = this.getProfession() == 0;
 
-        return flag ? !this.q(5) : !this.q(1);
+        return flag ? !this.p(5) : !this.p(1);
     }
 
-    private boolean q(int i) {
+    private boolean p(int i) {
         boolean flag = this.getProfession() == 0;
 
         for (int j = 0; j < this.inventory.getSize(); ++j) {
@@ -637,7 +637,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return false;
     }
 
-    public boolean dI() {
+    public boolean dH() {
         for (int i = 0; i < this.inventory.getSize(); ++i) {
             Item item = this.inventory.getItem(i).getItem();
 
@@ -705,7 +705,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         public void a(IMerchant imerchant, MerchantRecipeList merchantrecipelist, Random random) {
             int i = this.a.a(random);
             World world = imerchant.getWorld();
-            BlockPosition blockposition = world.a(this.b, imerchant.getPosition(), 100);
+            BlockPosition blockposition = world.a(this.b, imerchant.getPosition(), 100, true);
 
             if (blockposition != null) {
                 ItemStack itemstack = ItemWorldMap.a(world, blockposition.getX(), blockposition.getZ(), (byte) 2, true, true);
@@ -724,7 +724,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         public MerchantRecipeOptionBook() {}
 
         public void a(IMerchant imerchant, MerchantRecipeList merchantrecipelist, Random random) {
-            Enchantment enchantment = (Enchantment) Enchantment.enchantments.a(random);
+            Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.a(random);
             int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
             ItemStack itemstack = ItemEnchantedBook.a(new WeightedRandomEnchant(enchantment, i));
             int j = 2 + random.nextInt(5 + i * 10) + 3 * i;

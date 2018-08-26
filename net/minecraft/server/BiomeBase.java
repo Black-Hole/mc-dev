@@ -104,38 +104,28 @@ public abstract class BiomeBase {
     public static final RegistryBlockID<BiomeBase> aH = new RegistryBlockID();
     protected static final NoiseGenerator3 aI = new NoiseGenerator3(new Random(1234L), 1);
     public static final NoiseGenerator3 aJ = new NoiseGenerator3(new Random(2345L), 1);
-    public static final RegistryMaterials<MinecraftKey, BiomeBase> REGISTRY_ID = new RegistryMaterials();
     @Nullable
-    protected String aL;
+    protected String aK;
+    protected final float aL;
     protected final float aM;
     protected final float aN;
     protected final float aO;
-    protected final float aP;
+    protected final int aP;
     protected final int aQ;
-    protected final int aR;
     @Nullable
-    protected final String aS;
-    protected final WorldGenSurfaceComposite<?> aT;
-    protected final BiomeBase.Geography aU;
-    protected final BiomeBase.Precipitation aV;
-    protected final Map<WorldGenStage.Features, List<WorldGenCarverWrapper<?>>> aW = Maps.newHashMap();
-    protected final Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite<?, ?>>> aX = Maps.newHashMap();
-    protected final List<WorldGenFeatureCompositeFlower<?>> aY = Lists.newArrayList();
-    protected final Map<StructureGenerator<?>, WorldGenFeatureConfiguration> aZ = Maps.newHashMap();
-    private final Map<EnumCreatureType, List<BiomeBase.BiomeMeta>> ba = Maps.newHashMap();
-
-    public static int a(BiomeBase biomebase) {
-        return BiomeBase.REGISTRY_ID.a((Object) biomebase);
-    }
+    protected final String aR;
+    protected final WorldGenSurfaceComposite<?> aS;
+    protected final BiomeBase.Geography aT;
+    protected final BiomeBase.Precipitation aU;
+    protected final Map<WorldGenStage.Features, List<WorldGenCarverWrapper<?>>> aV = Maps.newHashMap();
+    protected final Map<WorldGenStage.Decoration, List<WorldGenFeatureComposite<?, ?>>> aW = Maps.newHashMap();
+    protected final List<WorldGenFeatureCompositeFlower<?>> aX = Lists.newArrayList();
+    protected final Map<StructureGenerator<?>, WorldGenFeatureConfiguration> aY = Maps.newHashMap();
+    private final Map<EnumCreatureType, List<BiomeBase.BiomeMeta>> aZ = Maps.newHashMap();
 
     @Nullable
-    public static BiomeBase a(int i) {
-        return (BiomeBase) BiomeBase.REGISTRY_ID.getId(i);
-    }
-
-    @Nullable
-    public static BiomeBase b(BiomeBase biomebase) {
-        return (BiomeBase) BiomeBase.aH.fromId(a(biomebase));
+    public static BiomeBase a(BiomeBase biomebase) {
+        return (BiomeBase) BiomeBase.aH.fromId(IRegistry.BIOME.a((Object) biomebase));
     }
 
     public static <C extends WorldGenFeatureConfiguration> WorldGenCarverWrapper<C> a(WorldGenCarver<C> worldgencarver, C c0) {
@@ -152,16 +142,16 @@ public abstract class BiomeBase {
 
     protected BiomeBase(BiomeBase.a biomebase_a) {
         if (biomebase_a.a != null && biomebase_a.b != null && biomebase_a.c != null && biomebase_a.d != null && biomebase_a.e != null && biomebase_a.f != null && biomebase_a.g != null && biomebase_a.h != null && biomebase_a.i != null) {
-            this.aT = biomebase_a.a;
-            this.aV = biomebase_a.b;
-            this.aU = biomebase_a.c;
-            this.aM = biomebase_a.d.floatValue();
-            this.aN = biomebase_a.e.floatValue();
-            this.aO = biomebase_a.f.floatValue();
-            this.aP = biomebase_a.g.floatValue();
-            this.aQ = biomebase_a.h.intValue();
-            this.aR = biomebase_a.i.intValue();
-            this.aS = biomebase_a.j;
+            this.aS = biomebase_a.a;
+            this.aU = biomebase_a.b;
+            this.aT = biomebase_a.c;
+            this.aL = biomebase_a.d.floatValue();
+            this.aM = biomebase_a.e.floatValue();
+            this.aN = biomebase_a.f.floatValue();
+            this.aO = biomebase_a.g.floatValue();
+            this.aP = biomebase_a.h.intValue();
+            this.aQ = biomebase_a.i.intValue();
+            this.aR = biomebase_a.j;
             WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
             int i = aworldgenstage_decoration.length;
 
@@ -170,7 +160,7 @@ public abstract class BiomeBase {
             for (j = 0; j < i; ++j) {
                 WorldGenStage.Decoration worldgenstage_decoration = aworldgenstage_decoration[j];
 
-                this.aX.put(worldgenstage_decoration, Lists.newArrayList());
+                this.aW.put(worldgenstage_decoration, Lists.newArrayList());
             }
 
             EnumCreatureType[] aenumcreaturetype = EnumCreatureType.values();
@@ -180,7 +170,7 @@ public abstract class BiomeBase {
             for (j = 0; j < i; ++j) {
                 EnumCreatureType enumcreaturetype = aenumcreaturetype[j];
 
-                this.ba.put(enumcreaturetype, Lists.newArrayList());
+                this.aZ.put(enumcreaturetype, Lists.newArrayList());
             }
 
         } else {
@@ -204,19 +194,19 @@ public abstract class BiomeBase {
     }
 
     public boolean b() {
-        return this.aS != null;
+        return this.aR != null;
     }
 
     protected void a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta) {
-        ((List) this.ba.get(enumcreaturetype)).add(biomebase_biomemeta);
+        ((List) this.aZ.get(enumcreaturetype)).add(biomebase_biomemeta);
     }
 
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
-        return (List) this.ba.get(enumcreaturetype);
+        return (List) this.aZ.get(enumcreaturetype);
     }
 
     public BiomeBase.Precipitation c() {
-        return this.aV;
+        return this.aU;
     }
 
     public boolean d() {
@@ -284,49 +274,49 @@ public abstract class BiomeBase {
 
     public void a(WorldGenStage.Decoration worldgenstage_decoration, WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite) {
         if (worldgenfeaturecomposite instanceof WorldGenFeatureCompositeFlower) {
-            this.aY.add((WorldGenFeatureCompositeFlower) worldgenfeaturecomposite);
+            this.aX.add((WorldGenFeatureCompositeFlower) worldgenfeaturecomposite);
         }
 
-        ((List) this.aX.get(worldgenstage_decoration)).add(worldgenfeaturecomposite);
+        ((List) this.aW.get(worldgenstage_decoration)).add(worldgenfeaturecomposite);
     }
 
     public <C extends WorldGenFeatureConfiguration> void a(WorldGenStage.Features worldgenstage_features, WorldGenCarverWrapper<C> worldgencarverwrapper) {
-        ((List) this.aW.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
+        ((List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
             return Lists.newArrayList();
         })).add(worldgencarverwrapper);
     }
 
     public List<WorldGenCarverWrapper<?>> a(WorldGenStage.Features worldgenstage_features) {
-        return (List) this.aW.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
+        return (List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
             return Lists.newArrayList();
         });
     }
 
     public <C extends WorldGenFeatureConfiguration> void a(StructureGenerator<C> structuregenerator, C c0) {
-        this.aZ.put(structuregenerator, c0);
+        this.aY.put(structuregenerator, c0);
     }
 
     public <C extends WorldGenFeatureConfiguration> boolean a(StructureGenerator<C> structuregenerator) {
-        return this.aZ.containsKey(structuregenerator);
+        return this.aY.containsKey(structuregenerator);
     }
 
     @Nullable
     public <C extends WorldGenFeatureConfiguration> WorldGenFeatureConfiguration b(StructureGenerator<C> structuregenerator) {
-        return (WorldGenFeatureConfiguration) this.aZ.get(structuregenerator);
+        return (WorldGenFeatureConfiguration) this.aY.get(structuregenerator);
     }
 
     public List<WorldGenFeatureCompositeFlower<?>> f() {
-        return this.aY;
+        return this.aX;
     }
 
     public List<WorldGenFeatureComposite<?, ?>> a(WorldGenStage.Decoration worldgenstage_decoration) {
-        return (List) this.aX.get(worldgenstage_decoration);
+        return (List) this.aW.get(worldgenstage_decoration);
     }
 
     public void a(WorldGenStage.Decoration worldgenstage_decoration, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, GeneratorAccess generatoraccess, long i, SeededRandom seededrandom, BlockPosition blockposition) {
         int j = 0;
 
-        for (Iterator iterator = ((List) this.aX.get(worldgenstage_decoration)).iterator(); iterator.hasNext(); ++j) {
+        for (Iterator iterator = ((List) this.aW.get(worldgenstage_decoration)).iterator(); iterator.hasNext(); ++j) {
             WorldGenFeatureComposite worldgenfeaturecomposite = (WorldGenFeatureComposite) iterator.next();
 
             seededrandom.b(i, j, worldgenstage_decoration.ordinal());
@@ -336,72 +326,67 @@ public abstract class BiomeBase {
     }
 
     public void a(Random random, IChunkAccess ichunkaccess, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1) {
-        this.aT.a(i1);
-        this.aT.a(random, ichunkaccess, this, i, j, k, d0, iblockdata, iblockdata1, l, i1, BiomeBase.ag);
+        this.aS.a(i1);
+        this.aS.a(random, ichunkaccess, this, i, j, k, d0, iblockdata, iblockdata1, l, i1, BiomeBase.ag);
     }
 
     public BiomeBase.EnumTemperature g() {
-        return this.aU == BiomeBase.Geography.OCEAN ? BiomeBase.EnumTemperature.OCEAN : ((double) this.getTemperature() < 0.2D ? BiomeBase.EnumTemperature.COLD : ((double) this.getTemperature() < 1.0D ? BiomeBase.EnumTemperature.MEDIUM : BiomeBase.EnumTemperature.WARM));
-    }
-
-    @Nullable
-    public static BiomeBase getBiome(int i) {
-        return a(i);
+        return this.aT == BiomeBase.Geography.OCEAN ? BiomeBase.EnumTemperature.OCEAN : ((double) this.getTemperature() < 0.2D ? BiomeBase.EnumTemperature.COLD : ((double) this.getTemperature() < 1.0D ? BiomeBase.EnumTemperature.MEDIUM : BiomeBase.EnumTemperature.WARM));
     }
 
     public static BiomeBase getBiome(int i, BiomeBase biomebase) {
-        BiomeBase biomebase1 = getBiome(i);
+        BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(i);
 
         return biomebase1 == null ? biomebase : biomebase1;
     }
 
     public final float h() {
-        return this.aM;
-    }
-
-    public final float getHumidity() {
-        return this.aP;
-    }
-
-    public String k() {
-        if (this.aL == null) {
-            this.aL = SystemUtils.a("biome", (MinecraftKey) BiomeBase.REGISTRY_ID.b(this));
-        }
-
         return this.aL;
     }
 
-    public final float l() {
-        return this.aN;
-    }
-
-    public final float getTemperature() {
+    public final float getHumidity() {
         return this.aO;
     }
 
+    public String k() {
+        if (this.aK == null) {
+            this.aK = SystemUtils.a("biome", IRegistry.BIOME.getKey(this));
+        }
+
+        return this.aK;
+    }
+
+    public final float l() {
+        return this.aM;
+    }
+
+    public final float getTemperature() {
+        return this.aN;
+    }
+
     public final int n() {
-        return this.aQ;
+        return this.aP;
     }
 
     public final int o() {
-        return this.aR;
+        return this.aQ;
     }
 
     public final BiomeBase.Geography p() {
-        return this.aU;
-    }
-
-    public WorldGenSurfaceComposite<?> q() {
         return this.aT;
     }
 
+    public WorldGenSurfaceComposite<?> q() {
+        return this.aS;
+    }
+
     public WorldGenSurfaceConfiguration r() {
-        return this.aT.a();
+        return this.aS.a();
     }
 
     @Nullable
     public String s() {
-        return this.aS;
+        return this.aR;
     }
 
     public static void t() {
@@ -482,9 +467,9 @@ public abstract class BiomeBase {
     }
 
     private static void a(int i, String s, BiomeBase biomebase) {
-        BiomeBase.REGISTRY_ID.a(i, new MinecraftKey(s), biomebase);
+        IRegistry.BIOME.a(i, new MinecraftKey(s), biomebase);
         if (biomebase.b()) {
-            BiomeBase.aH.a(biomebase, a((BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(biomebase.aS))));
+            BiomeBase.aH.a(biomebase, IRegistry.BIOME.a(IRegistry.BIOME.get(new MinecraftKey(biomebase.aR))));
         }
 
     }

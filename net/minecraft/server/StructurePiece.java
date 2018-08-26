@@ -198,7 +198,7 @@ public abstract class StructurePiece {
             Fluid fluid = generatoraccess.b(blockposition);
 
             if (!fluid.e()) {
-                generatoraccess.H().a(blockposition, fluid.c(), 0);
+                generatoraccess.I().a(blockposition, fluid.c(), 0);
             }
 
             if (StructurePiece.d.contains(iblockdata.getBlock())) {
@@ -411,7 +411,7 @@ public abstract class StructurePiece {
             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityChest) {
-                ((TileEntityChest) tileentity).a(minecraftkey, random.nextLong());
+                ((TileEntityChest) tileentity).setLootTable(minecraftkey, random.nextLong());
             }
 
             return true;
@@ -428,7 +428,7 @@ public abstract class StructurePiece {
             TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityDispenser) {
-                ((TileEntityDispenser) tileentity).a(minecraftkey, random.nextLong());
+                ((TileEntityDispenser) tileentity).setLootTable(minecraftkey, random.nextLong());
             }
 
             return true;

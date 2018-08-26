@@ -6,32 +6,30 @@ import java.util.Random;
 
 public abstract class FluidType {
 
-    private static final MinecraftKey a = new MinecraftKey("empty");
-    public static final RegistryBlocks<MinecraftKey, FluidType> c = new RegistryBlocks(FluidType.a);
-    public static final RegistryBlockID<Fluid> d = new RegistryBlockID();
-    protected final BlockStateList<FluidType, Fluid> e;
-    private Fluid b;
+    public static final RegistryBlockID<Fluid> c = new RegistryBlockID();
+    protected final BlockStateList<FluidType, Fluid> d;
+    private Fluid a;
 
     protected FluidType() {
         BlockStateList.a blockstatelist_a = new BlockStateList.a(this);
 
         this.a(blockstatelist_a);
-        this.e = blockstatelist_a.a(FluidImpl::new);
-        this.f((Fluid) this.e.getBlockData());
+        this.d = blockstatelist_a.a(FluidImpl::new);
+        this.f((Fluid) this.d.getBlockData());
     }
 
     protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {}
 
     public BlockStateList<FluidType, Fluid> h() {
-        return this.e;
+        return this.d;
     }
 
     protected final void f(Fluid fluid) {
-        this.b = fluid;
+        this.a = fluid;
     }
 
     public final Fluid i() {
-        return this.b;
+        return this.a;
     }
 
     public abstract Item b();
@@ -73,13 +71,12 @@ public abstract class FluidType {
     }
 
     public static void l() {
-        a(FluidType.a, new FluidTypeEmpty());
+        a(IRegistry.FLUID.b(), new FluidTypeEmpty());
         a("flowing_water", new FluidTypeWater.a());
         a("water", new FluidTypeWater.b());
         a("flowing_lava", new FluidTypeLava.a());
         a("lava", new FluidTypeLava.b());
-        FluidType.c.a();
-        Iterator iterator = FluidType.c.iterator();
+        Iterator iterator = IRegistry.FLUID.iterator();
 
         while (iterator.hasNext()) {
             FluidType fluidtype = (FluidType) iterator.next();
@@ -88,7 +85,7 @@ public abstract class FluidType {
             while (unmodifiableiterator.hasNext()) {
                 Fluid fluid = (Fluid) unmodifiableiterator.next();
 
-                FluidType.d.b(fluid);
+                FluidType.c.b(fluid);
             }
         }
 
@@ -99,6 +96,6 @@ public abstract class FluidType {
     }
 
     private static void a(MinecraftKey minecraftkey, FluidType fluidtype) {
-        FluidType.c.a(minecraftkey, fluidtype);
+        IRegistry.FLUID.a(minecraftkey, (Object) fluidtype);
     }
 }

@@ -23,14 +23,14 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
 
-        return fluid.a(TagsFluid.a) && fluid.g() == 8 ? super.getPlacedState(blockactioncontext) : null;
+        return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? super.getPlacedState(blockactioncontext) : null;
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         IBlockData iblockdata2 = super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
 
         if (!iblockdata2.isAir()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return iblockdata2;
@@ -75,11 +75,11 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
 
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return false;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         return false;
     }
 

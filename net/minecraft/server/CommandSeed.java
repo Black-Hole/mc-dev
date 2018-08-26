@@ -10,7 +10,7 @@ public class CommandSeed {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("seed").requires((commandlistenerwrapper) -> {
-            return commandlistenerwrapper.getServer().J() || commandlistenerwrapper.hasPermission(2);
+            return commandlistenerwrapper.getServer().H() || commandlistenerwrapper.hasPermission(2);
         })).executes((commandcontext) -> {
             long i = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getSeed();
             IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((new ChatComponentText(String.valueOf(i))).a((chatmodifier) -> {

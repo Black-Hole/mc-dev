@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BlockSoil extends Block {
 
-    public static final BlockStateInteger MOISTURE = BlockProperties.ah;
+    public static final BlockStateInteger MOISTURE = BlockProperties.ai;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
 
     protected BlockSoil(Block.Info block_info) {
@@ -15,7 +15,7 @@ public class BlockSoil extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection == EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -32,7 +32,7 @@ public class BlockSoil extends Block {
     }
 
     public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockaccess.J();
+        return iblockaccess.K();
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -70,8 +70,8 @@ public class BlockSoil extends Block {
         super.fallOn(world, blockposition, entity, f);
     }
 
-    protected static void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        world.setTypeUpdate(blockposition, a(iblockdata, Blocks.DIRT.getBlockData(), (GeneratorAccess) world, blockposition));
+    public static void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        world.setTypeUpdate(blockposition, a(iblockdata, Blocks.DIRT.getBlockData(), world, blockposition));
     }
 
     private static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -91,7 +91,7 @@ public class BlockSoil extends Block {
             }
 
             blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
-        } while (!iworldreader.b(blockposition_mutableblockposition).a(TagsFluid.a));
+        } while (!iworldreader.b(blockposition_mutableblockposition).a(TagsFluid.WATER));
 
         return true;
     }

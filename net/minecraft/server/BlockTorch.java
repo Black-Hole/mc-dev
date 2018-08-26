@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 public class BlockTorch extends Block {
 
-    protected static final VoxelShape p = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+    protected static final VoxelShape o = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
 
     protected BlockTorch(Block.Info block_info) {
         super(block_info);
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockTorch.p;
+        return BlockTorch.o;
     }
 
     public boolean a(IBlockData iblockdata) {

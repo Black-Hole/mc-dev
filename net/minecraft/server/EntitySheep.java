@@ -96,7 +96,7 @@ public class EntitySheep extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         if (this.isSheared()) {
             return LootTables.W;
         } else {
@@ -267,7 +267,7 @@ public class EntitySheep extends EntityAnimal {
 
         this.container.setItem(0, new ItemStack(ItemDye.a(enumcolor)));
         this.container.setItem(1, new ItemStack(ItemDye.a(enumcolor1)));
-        ItemStack itemstack = entityanimal.world.D().craft(this.container, ((EntitySheep) entityanimal).world);
+        ItemStack itemstack = entityanimal.world.E().craft(this.container, ((EntitySheep) entityanimal).world);
         Item item = itemstack.getItem();
         EnumColor enumcolor2;
 

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BlockIceFrost extends BlockIce {
 
-    public static final BlockStateInteger a = BlockProperties.T;
+    public static final BlockStateInteger a = BlockProperties.U;
 
     public BlockIceFrost(Block.Info block_info) {
         super(block_info);
@@ -27,7 +27,7 @@ public class BlockIceFrost extends BlockIce {
                     IBlockData iblockdata1 = world.getType(blockposition_b);
 
                     if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_b)) {
-                        world.I().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
+                        world.J().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
                     }
                 }
             } catch (Throwable throwable1) {
@@ -49,7 +49,7 @@ public class BlockIceFrost extends BlockIce {
             }
 
         } else {
-            world.I().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
+            world.J().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
         }
     }
 

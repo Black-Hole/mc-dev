@@ -25,7 +25,7 @@ public class CompletionProviders {
         return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).n(), suggestionsbuilder);
     });
     public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("minecraft:summonable_entities"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(EntityTypes.REGISTRY.e().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
+        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.f().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
             return new ChatMessage(SystemUtils.a("entity", EntityTypes.getName(entitytypes)), new Object[0]);
         });
     });

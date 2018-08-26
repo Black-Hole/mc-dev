@@ -11,11 +11,11 @@ public class BlockFalling extends Block {
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
-        world.I().a(blockposition, this, this.a((IWorldReader) world));
+        world.J().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        generatoraccess.I().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+        generatoraccess.J().a(blockposition, this, this.a((IWorldReader) generatoraccess));
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
@@ -66,7 +66,7 @@ public class BlockFalling extends Block {
         Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
 
-        return iblockdata.isAir() || block == Blocks.FIRE || material.isLiquid();
+        return iblockdata.isAir() || block == Blocks.FIRE || material.isLiquid() || material.isReplaceable();
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {}

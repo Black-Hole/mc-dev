@@ -11,12 +11,12 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.g();
-        this.b = packetdataserializer.e(256);
+        this.b = packetdataserializer.e(32500);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
-        packetdataserializer.a(this.b);
+        packetdataserializer.a(this.b, 32500);
     }
 
     public void a(PacketListenerPlayIn packetlistenerplayin) {

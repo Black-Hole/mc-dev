@@ -48,7 +48,7 @@ public class BlockSponge extends Block {
                 Fluid fluid = world.b(blockposition2);
                 Material material = iblockdata.getMaterial();
 
-                if (fluid.a(TagsFluid.a)) {
+                if (fluid.a(TagsFluid.WATER)) {
                     if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).a(world, blockposition2, iblockdata) != FluidTypes.a) {
                         ++i;
                         if (j < 6) {

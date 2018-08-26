@@ -256,7 +256,7 @@ public class DispenserRegistry {
                 World world = isourceblock.getWorld();
                 BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
 
-                if (!ItemBoneMeal.a(itemstack, world, blockposition) && !ItemBoneMeal.b(itemstack, world, blockposition)) {
+                if (!ItemBoneMeal.a(itemstack, world, blockposition) && !ItemBoneMeal.a(itemstack, world, blockposition, (EnumDirection) null)) {
                     this.a = false;
                 } else if (!world.isClientSide) {
                     world.triggerEffect(2005, blockposition, 0);
@@ -297,7 +297,7 @@ public class DispenserRegistry {
 
                 this.a = true;
                 if (world.isEmpty(blockposition) && BlockWitherSkull.b(world, blockposition, itemstack)) {
-                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, Integer.valueOf(enumdirection.opposite().get2DRotationValue() * 4)), 3);
+                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, Integer.valueOf(enumdirection.k() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4)), 3);
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntitySkull) {
@@ -368,14 +368,20 @@ public class DispenserRegistry {
                 Particle.c();
                 b();
                 ArgumentRegistry.a();
+                BiomeLayout.a();
+                TileEntityTypes.a();
+                ChunkGeneratorType.a();
+                DimensionManager.a();
                 Paintings.a();
+                StatisticList.a();
+                IRegistry.e();
                 if (SharedConstants.b) {
-                    a("block", Block.REGISTRY, Block::m);
-                    a("biome", BiomeBase.REGISTRY_ID, BiomeBase::k);
-                    a("enchantment", Enchantment.enchantments, Enchantment::g);
-                    a("item", Item.REGISTRY, Item::getName);
-                    a("effect", MobEffectList.REGISTRY, MobEffectList::c);
-                    a("entity", EntityTypes.REGISTRY, EntityTypes::d);
+                    a("block", IRegistry.BLOCK, Block::m);
+                    a("biome", IRegistry.BIOME, BiomeBase::k);
+                    a("enchantment", IRegistry.ENCHANTMENT, Enchantment::g);
+                    a("item", IRegistry.ITEM, Item::getName);
+                    a("effect", IRegistry.MOB_EFFECT, MobEffectList::c);
+                    a("entity", IRegistry.ENTITY_TYPE, EntityTypes::d);
                 }
 
                 d();
@@ -383,14 +389,14 @@ public class DispenserRegistry {
         }
     }
 
-    private static <T> void a(String s, RegistryMaterials<MinecraftKey, T> registrymaterials, Function<T, String> function) {
+    private static <T> void a(String s, IRegistry<T> iregistry, Function<T, String> function) {
         LocaleLanguage localelanguage = LocaleLanguage.a();
 
-        registrymaterials.iterator().forEachRemaining((object) -> {
+        iregistry.iterator().forEachRemaining((object) -> {
             String s = (String) function.apply(object);
 
             if (!localelanguage.b(s)) {
-                DispenserRegistry.c.warn("Missing translation for {}: {} (key: \'{}\')", s1, registrymaterials.b(object), s);
+                DispenserRegistry.c.warn("Missing translation for {}: {} (key: \'{}\')", s1, iregistry.getKey(object), s);
             }
 
         });
@@ -524,10 +530,10 @@ public class DispenserRegistry {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
             double d3;
 
-            if (world.b(blockposition).a(TagsFluid.a)) {
+            if (world.b(blockposition).a(TagsFluid.WATER)) {
                 d3 = 1.0D;
             } else {
-                if (!world.getType(blockposition).isAir() || !world.b(blockposition.down()).a(TagsFluid.a)) {
+                if (!world.getType(blockposition).isAir() || !world.b(blockposition.down()).a(TagsFluid.WATER)) {
                     return this.a.dispense(isourceblock, itemstack);
                 }
 

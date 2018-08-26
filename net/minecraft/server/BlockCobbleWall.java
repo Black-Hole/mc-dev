@@ -2,23 +2,23 @@ package net.minecraft.server;
 
 public class BlockCobbleWall extends BlockTall {
 
-    public static final BlockStateBoolean UP = BlockProperties.A;
+    public static final BlockStateBoolean UP = BlockProperties.B;
+    private final VoxelShape[] u;
     private final VoxelShape[] v;
-    private final VoxelShape[] w;
 
     public BlockCobbleWall(Block.Info block_info) {
         super(0.0F, 3.0F, 0.0F, 14.0F, 24.0F, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCobbleWall.UP, Boolean.valueOf(true))).set(BlockCobbleWall.NORTH, Boolean.valueOf(false))).set(BlockCobbleWall.EAST, Boolean.valueOf(false))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false))).set(BlockCobbleWall.WEST, Boolean.valueOf(false))).set(BlockCobbleWall.q, Boolean.valueOf(false)));
-        this.v = this.a(4.0F, 3.0F, 16.0F, 0.0F, 14.0F);
-        this.w = this.a(4.0F, 3.0F, 24.0F, 0.0F, 24.0F);
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCobbleWall.UP, Boolean.valueOf(true))).set(BlockCobbleWall.NORTH, Boolean.valueOf(false))).set(BlockCobbleWall.EAST, Boolean.valueOf(false))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(false))).set(BlockCobbleWall.WEST, Boolean.valueOf(false))).set(BlockCobbleWall.p, Boolean.valueOf(false)));
+        this.u = this.a(4.0F, 3.0F, 16.0F, 0.0F, 14.0F);
+        this.v = this.a(4.0F, 3.0F, 24.0F, 0.0F, 24.0F);
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.v[this.k(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition);
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.u[this.k(iblockdata)] : super.a(iblockdata, iblockaccess, blockposition);
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.w[this.k(iblockdata)] : super.f(iblockdata, iblockaccess, blockposition);
+        return ((Boolean) iblockdata.get(BlockCobbleWall.UP)).booleanValue() ? this.v[this.k(iblockdata)] : super.f(iblockdata, iblockaccess, blockposition);
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -58,12 +58,12 @@ public class BlockCobbleWall extends BlockTall {
         boolean flag3 = this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.EAST));
         boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(flag4 || !world.isEmpty(blockposition.up())))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag))).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2))).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3))).set(BlockCobbleWall.q, Boolean.valueOf(fluid.c() == FluidTypes.c));
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, Boolean.valueOf(flag4 || !world.isEmpty(blockposition.up())))).set(BlockCobbleWall.NORTH, Boolean.valueOf(flag))).set(BlockCobbleWall.EAST, Boolean.valueOf(flag1))).set(BlockCobbleWall.SOUTH, Boolean.valueOf(flag2))).set(BlockCobbleWall.WEST, Boolean.valueOf(flag3))).set(BlockCobbleWall.p, Boolean.valueOf(fluid.c() == FluidTypes.c));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockCobbleWall.q)).booleanValue()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+        if (((Boolean) iblockdata.get(BlockCobbleWall.p)).booleanValue()) {
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         if (enumdirection == EnumDirection.DOWN) {
@@ -80,7 +80,7 @@ public class BlockCobbleWall extends BlockTall {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.q});
+        blockstatelist_a.a(new IBlockState[] { BlockCobbleWall.UP, BlockCobbleWall.NORTH, BlockCobbleWall.EAST, BlockCobbleWall.WEST, BlockCobbleWall.SOUTH, BlockCobbleWall.p});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

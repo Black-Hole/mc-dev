@@ -7,7 +7,7 @@ public class WorldGenGrass extends WorldGenerator<WorldGenFeatureTallGrassConfig
     public WorldGenGrass() {}
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureTallGrassConfiguration worldgenfeaturetallgrassconfiguration) {
-        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.D)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
+        for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) && blockposition.getY() > 0; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
 

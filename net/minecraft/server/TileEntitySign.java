@@ -9,9 +9,10 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
     public int e = -1;
     public boolean isEditable = true;
     private EntityHuman g;
+    private final String[] h = new String[4];
 
     public TileEntitySign() {
-        super(TileEntityTypes.i);
+        super(TileEntityTypes.SIGN);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -43,8 +44,15 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
             } else {
                 this.lines[i] = ichatbasecomponent;
             }
+
+            this.h[i] = null;
         }
 
+    }
+
+    public void a(int i, IChatBaseComponent ichatbasecomponent) {
+        this.lines[i] = ichatbasecomponent;
+        this.h[i] = null;
     }
 
     @Nullable

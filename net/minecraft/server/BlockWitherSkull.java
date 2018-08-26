@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 public class BlockWitherSkull extends BlockSkull {
 
     private static ShapeDetector c;
-    private static ShapeDetector p;
+    private static ShapeDetector o;
 
     protected BlockWitherSkull(Block.Info block_info) {
         super(BlockSkull.Type.WITHER_SKELETON, block_info);
@@ -89,10 +89,10 @@ public class BlockWitherSkull extends BlockSkull {
     }
 
     protected static ShapeDetector e() {
-        if (BlockWitherSkull.p == null) {
-            BlockWitherSkull.p = ShapeDetectorBuilder.a().a(new String[] { "   ", "###", "~#~"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+        if (BlockWitherSkull.o == null) {
+            BlockWitherSkull.o = ShapeDetectorBuilder.a().a(new String[] { "   ", "###", "~#~"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SOUL_SAND))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
-        return BlockWitherSkull.p;
+        return BlockWitherSkull.o;
     }
 }

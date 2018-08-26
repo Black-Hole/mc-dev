@@ -21,7 +21,7 @@ public class ItemEnchantedBook extends Item {
     public static void a(ItemStack itemstack, WeightedRandomEnchant weightedrandomenchant) {
         NBTTagList nbttaglist = e(itemstack);
         boolean flag = true;
-        MinecraftKey minecraftkey = (MinecraftKey) Enchantment.enchantments.b(weightedrandomenchant.enchantment);
+        MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(weightedrandomenchant.enchantment);
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
@@ -60,7 +60,7 @@ public class ItemEnchantedBook extends Item {
         Enchantment enchantment;
 
         if (creativemodetab == CreativeModeTab.g) {
-            iterator = Enchantment.enchantments.iterator();
+            iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {
                 enchantment = (Enchantment) iterator.next();
@@ -71,7 +71,7 @@ public class ItemEnchantedBook extends Item {
                 }
             }
         } else if (creativemodetab.o().length != 0) {
-            iterator = Enchantment.enchantments.iterator();
+            iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {
                 enchantment = (Enchantment) iterator.next();

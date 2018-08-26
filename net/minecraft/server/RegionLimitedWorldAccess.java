@@ -1,9 +1,6 @@
 package net.minecraft.server;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -62,7 +59,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return i >= protochunk.getPos().x && i <= protochunk1.getPos().x && j >= protochunk.getPos().z && j <= protochunk1.getPos().z;
     }
 
-    public IChunkAccess c(int i, int j) {
+    public IChunkAccess b(int i, int j) {
         if (this.a(i, j)) {
             int k = i - this.b[0].getPos().x;
             int l = j - this.b[0].getPos().z;
@@ -208,7 +205,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         int i = MathHelper.floor(entity.locX / 16.0D);
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
-        this.c(i, j).a(entity);
+        this.b(i, j).a(entity);
         return true;
     }
 
@@ -226,15 +223,6 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     public boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
         return true;
-    }
-
-    public VoxelShape a(@Nullable Entity entity, VoxelShape voxelshape, boolean flag, Set<Entity> set) {
-        return VoxelShapes.a();
-    }
-
-    public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
-        RegionLimitedWorldAccess.a.warn("Trying to get a list of entities during worldgen. Entities are not instanciated during worldgen, ignoring.");
-        return Collections.emptyList();
     }
 
     public int a(BlockPosition blockposition, EnumDirection enumdirection) {
@@ -258,18 +246,13 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         if (!this.a(blockposition.getX() >> 4, blockposition.getZ() >> 4)) {
             throw new RuntimeException("We are asking a region for a chunk out of bound");
         } else {
-            return new DifficultyDamageScaler(this.g.getDifficulty(), this.g.getDayTime(), 0L, this.g.af());
+            return new DifficultyDamageScaler(this.g.getDifficulty(), this.g.getDayTime(), 0L, this.g.ah());
         }
     }
 
     @Nullable
-    public <T extends PersistentBase> T a(Function<String, T> function, String s) {
-        return this.g.a(function, s);
-    }
-
-    @Nullable
-    public PersistentCollection s_() {
-        return this.g.s_();
+    public PersistentCollection h() {
+        return this.g.h();
     }
 
     public IChunkProvider getChunkProvider() {
@@ -284,11 +267,11 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return this.h;
     }
 
-    public TickList<Block> I() {
+    public TickList<Block> J() {
         return this.n;
     }
 
-    public TickList<FluidType> H() {
+    public TickList<FluidType> I() {
         return this.o;
     }
 
@@ -303,7 +286,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     public void update(BlockPosition blockposition, Block block) {}
 
     public int a(HeightMap.Type heightmap_type, int i, int j) {
-        return this.c(i >> 4, j >> 4).a(heightmap_type, i & 15, j & 15) + 1;
+        return this.b(i >> 4, j >> 4).a(heightmap_type, i & 15, j & 15) + 1;
     }
 
     public void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {}

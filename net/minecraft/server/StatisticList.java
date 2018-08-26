@@ -2,21 +2,19 @@ package net.minecraft.server;
 
 public class StatisticList {
 
-    public static final RegistryMaterials<MinecraftKey, StatisticWrapper<?>> REGISTRY = new RegistryMaterials();
-    public static final RegistryMaterials<MinecraftKey, MinecraftKey> REGISTRY_CUSTOM = new RegistryMaterials();
-    public static final StatisticWrapper<Block> BLOCK_MINED = a("mined", (RegistryMaterials) Block.REGISTRY);
-    public static final StatisticWrapper<Item> ITEM_CRAFTED = a("crafted", Item.REGISTRY);
-    public static final StatisticWrapper<Item> ITEM_USED = a("used", Item.REGISTRY);
-    public static final StatisticWrapper<Item> ITEM_BROKEN = a("broken", Item.REGISTRY);
-    public static final StatisticWrapper<Item> ITEM_PICKED_UP = a("picked_up", Item.REGISTRY);
-    public static final StatisticWrapper<Item> ITEM_DROPPED = a("dropped", Item.REGISTRY);
-    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED = a("killed", EntityTypes.REGISTRY);
-    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED_BY = a("killed_by", EntityTypes.REGISTRY);
-    public static final StatisticWrapper<MinecraftKey> CUSTOM = a("custom", StatisticList.REGISTRY_CUSTOM);
+    public static final StatisticWrapper<Block> BLOCK_MINED = a("mined", IRegistry.BLOCK);
+    public static final StatisticWrapper<Item> ITEM_CRAFTED = a("crafted", IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_USED = a("used", IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_BROKEN = a("broken", IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_PICKED_UP = a("picked_up", IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_DROPPED = a("dropped", IRegistry.ITEM);
+    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED = a("killed", IRegistry.ENTITY_TYPE);
+    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED_BY = a("killed_by", IRegistry.ENTITY_TYPE);
+    public static final StatisticWrapper<MinecraftKey> CUSTOM = a("custom", IRegistry.CUSTOM_STAT);
     public static final MinecraftKey LEAVE_GAME = a("leave_game", Counter.DEFAULT);
     public static final MinecraftKey PLAY_ONE_MINUTE = a("play_one_minute", Counter.TIME);
     public static final MinecraftKey TIME_SINCE_DEATH = a("time_since_death", Counter.TIME);
-    public static final MinecraftKey n = a("time_since_rest", Counter.TIME);
+    public static final MinecraftKey TIME_SINCE_REST = a("time_since_rest", Counter.TIME);
     public static final MinecraftKey SNEAK_TIME = a("sneak_time", Counter.TIME);
     public static final MinecraftKey WALK_ONE_CM = a("walk_one_cm", Counter.DISTANCE);
     public static final MinecraftKey CROUCH_ONE_CM = a("crouch_one_cm", Counter.DISTANCE);
@@ -35,7 +33,12 @@ public class StatisticList {
     public static final MinecraftKey JUMP = a("jump", Counter.DEFAULT);
     public static final MinecraftKey DROP = a("drop", Counter.DEFAULT);
     public static final MinecraftKey DAMAGE_DEALT = a("damage_dealt", Counter.DIVIDE_BY_TEN);
+    public static final MinecraftKey DAMAGE_DEALT_ABSORBED = a("damage_dealt_absorbed", Counter.DIVIDE_BY_TEN);
+    public static final MinecraftKey DAMAGE_DEALT_RESISTED = a("damage_dealt_resisted", Counter.DIVIDE_BY_TEN);
     public static final MinecraftKey DAMAGE_TAKEN = a("damage_taken", Counter.DIVIDE_BY_TEN);
+    public static final MinecraftKey DAMAGE_BLOCKED_BY_SHIELD = a("damage_blocked_by_shield", Counter.DIVIDE_BY_TEN);
+    public static final MinecraftKey DAMAGE_ABSORBED = a("damage_absorbed", Counter.DIVIDE_BY_TEN);
+    public static final MinecraftKey DAMAGE_RESISTED = a("damage_resisted", Counter.DIVIDE_BY_TEN);
     public static final MinecraftKey DEATHS = a("deaths", Counter.DEFAULT);
     public static final MinecraftKey MOB_KILLS = a("mob_kills", Counter.DEFAULT);
     public static final MinecraftKey ANIMALS_BRED = a("animals_bred", Counter.DEFAULT);
@@ -48,6 +51,7 @@ public class StatisticList {
     public static final MinecraftKey USE_CAULDRON = a("use_cauldron", Counter.DEFAULT);
     public static final MinecraftKey CLEAN_ARMOR = a("clean_armor", Counter.DEFAULT);
     public static final MinecraftKey CLEAN_BANNER = a("clean_banner", Counter.DEFAULT);
+    public static final MinecraftKey CLEAN_SHULKER_BOX = a("clean_shulker_box", Counter.DEFAULT);
     public static final MinecraftKey INTERACT_WITH_BREWINGSTAND = a("interact_with_brewingstand", Counter.DEFAULT);
     public static final MinecraftKey INTERACT_WITH_BEACON = a("interact_with_beacon", Counter.DEFAULT);
     public static final MinecraftKey INSPECT_DROPPER = a("inspect_dropper", Counter.DEFAULT);
@@ -66,18 +70,20 @@ public class StatisticList {
     public static final MinecraftKey SLEEP_IN_BED = a("sleep_in_bed", Counter.DEFAULT);
     public static final MinecraftKey OPEN_SHULKER_BOX = a("open_shulker_box", Counter.DEFAULT);
 
+    public static void a() {}
+
     private static MinecraftKey a(String s, Counter counter) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
-        StatisticList.REGISTRY_CUSTOM.a(minecraftkey, minecraftkey);
+        IRegistry.CUSTOM_STAT.a(minecraftkey, (Object) minecraftkey);
         StatisticList.CUSTOM.a((Object) minecraftkey, counter);
         return minecraftkey;
     }
 
-    private static <T> StatisticWrapper<T> a(String s, RegistryMaterials<MinecraftKey, T> registrymaterials) {
-        StatisticWrapper statisticwrapper = new StatisticWrapper(registrymaterials);
+    private static <T> StatisticWrapper<T> a(String s, IRegistry<T> iregistry) {
+        StatisticWrapper statisticwrapper = new StatisticWrapper(iregistry);
 
-        StatisticList.REGISTRY.a(new MinecraftKey(s), statisticwrapper);
+        IRegistry.STATS.a(new MinecraftKey(s), (Object) statisticwrapper);
         return statisticwrapper;
     }
 }

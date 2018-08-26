@@ -149,7 +149,7 @@ public class ContainerFurnace extends ContainerRecipeBook {
     }
 
     private boolean a(ItemStack itemstack) {
-        Iterator iterator = this.f.D().b().iterator();
+        Iterator iterator = this.f.E().b().iterator();
 
         IRecipe irecipe;
 

@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class TileEntityChestTrapped extends TileEntityChest {
 
     public TileEntityChestTrapped() {
-        super(TileEntityTypes.d);
+        super(TileEntityTypes.TRAPPED_CHEST);
     }
 
     protected void p() {

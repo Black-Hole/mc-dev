@@ -111,7 +111,7 @@ public abstract class EntityHuman extends EntityLiving {
             if (!this.world.isClientSide) {
                 if (!this.p()) {
                     this.a(true, true, false);
-                } else if (this.world.K()) {
+                } else if (this.world.L()) {
                     this.a(false, true, true);
                 }
             }
@@ -147,7 +147,7 @@ public abstract class EntityHuman extends EntityLiving {
             }
 
             if (!this.isSleeping()) {
-                this.a(StatisticList.n);
+                this.a(StatisticList.TIME_SINCE_REST);
             }
         }
 
@@ -176,14 +176,14 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     protected boolean dg() {
-        this.bU = this.a(TagsFluid.a);
+        this.bU = this.a(TagsFluid.WATER);
         return this.bU;
     }
 
     private void l() {
         ItemStack itemstack = this.getEquipment(EnumItemSlot.HEAD);
 
-        if (itemstack.getItem() == Items.TURTLE_HELMET && !this.a(TagsFluid.a)) {
+        if (itemstack.getItem() == Items.TURTLE_HELMET && !this.a(TagsFluid.WATER)) {
             this.addEffect(new MobEffect(MobEffects.WATER_BREATHING, 200, 0, false, false, true));
         }
 
@@ -268,7 +268,7 @@ public abstract class EntityHuman extends EntityLiving {
         } else if (this.isSleeping()) {
             f = 0.2F;
             f1 = 0.2F;
-        } else if (!this.isSwimming() && !this.cO()) {
+        } else if (!this.isSwimming() && !this.isRiptiding()) {
             if (this.isSneaking()) {
                 f = 0.6F;
                 f1 = 1.65F;
@@ -490,7 +490,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.a(StatisticList.DEATHS);
         this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_DEATH));
-        this.a(StatisticList.CUSTOM.b(StatisticList.n));
+        this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_REST));
         this.extinguish();
         this.setFlag(0, false);
     }
@@ -617,7 +617,7 @@ public abstract class EntityHuman extends EntityLiving {
             f *= f1;
         }
 
-        if (this.a(TagsFluid.a) && !EnchantmentManager.h((EntityLiving) this)) {
+        if (this.a(TagsFluid.WATER) && !EnchantmentManager.h((EntityLiving) this)) {
             f /= 5.0F;
         }
 
@@ -678,7 +678,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 1519);
+        nbttagcompound.setInt("DataVersion", 1628);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -805,12 +805,18 @@ public abstract class EntityHuman extends EntityLiving {
 
             f = Math.max(f - this.getAbsorptionHearts(), 0.0F);
             this.setAbsorptionHearts(this.getAbsorptionHearts() - (f1 - f));
+            float f2 = f1 - f;
+
+            if (f2 > 0.0F && f2 < 3.4028235E37F) {
+                this.a(StatisticList.DAMAGE_ABSORBED, Math.round(f2 * 10.0F));
+            }
+
             if (f != 0.0F) {
                 this.applyExhaustion(damagesource.getExhaustionCost());
-                float f2 = this.getHealth();
+                float f3 = this.getHealth();
 
                 this.setHealth(this.getHealth() - f);
-                this.getCombatTracker().trackDamage(damagesource, f2, f);
+                this.getCombatTracker().trackDamage(damagesource, f3, f);
                 if (f < 3.4028235E37F) {
                     this.a(StatisticList.DAMAGE_TAKEN, Math.round(f * 10.0F));
                 }
@@ -969,7 +975,7 @@ public abstract class EntityHuman extends EntityLiving {
                             while (iterator.hasNext()) {
                                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                                if (entityliving != this && entityliving != entity && !this.r(entityliving) && this.h(entityliving) < 9.0D) {
+                                if (entityliving != this && entityliving != entity && !this.r(entityliving) && (!(entityliving instanceof EntityArmorStand) || !((EntityArmorStand) entityliving).isMarker()) && this.h(entityliving) < 9.0D) {
                                     entityliving.a(this, 0.4F, (double) MathHelper.sin(this.yaw * 0.017453292F), (double) (-MathHelper.cos(this.yaw * 0.017453292F)));
                                     entityliving.damageEntity(DamageSource.playerAttack(this), f4);
                                 }
@@ -1122,7 +1128,7 @@ public abstract class EntityHuman extends EntityLiving {
                 return EntityHuman.EnumBedResult.NOT_POSSIBLE_HERE;
             }
 
-            if (this.world.K()) {
+            if (this.world.L()) {
                 return EntityHuman.EnumBedResult.NOT_POSSIBLE_NOW;
             }
 
@@ -1146,7 +1152,7 @@ public abstract class EntityHuman extends EntityLiving {
         }
 
         this.releaseShoulderEntities();
-        this.a(StatisticList.CUSTOM.b(StatisticList.n));
+        this.a(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_REST));
         this.setSize(0.2F, 0.2F);
         if (this.world.isLoaded(blockposition)) {
             float f = 0.5F + (float) enumdirection.getAdjacentX() * 0.4F;
@@ -1334,23 +1340,12 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public void as() {
-        BlockPosition blockposition = new BlockPosition(this);
-        BlockPosition blockposition1 = blockposition.up();
-
         if (this.abilities.isFlying) {
             this.setSwimming(false);
-        } else if (!this.isSwimming() || this.f(blockposition) && !this.world.getType(blockposition1).getMaterial().isSolid()) {
+        } else {
             super.as();
         }
 
-    }
-
-    protected boolean f(BlockPosition blockposition) {
-        return this.g(blockposition) && !this.world.getType(blockposition.up()).isOccluding();
-    }
-
-    protected boolean g(BlockPosition blockposition) {
-        return !this.world.getType(blockposition).isOccluding();
     }
 
     public float cK() {
@@ -1367,7 +1362,7 @@ public abstract class EntityHuman extends EntityLiving {
                     this.a(StatisticList.SWIM_ONE_CM, i);
                     this.applyExhaustion(0.01F * (float) i * 0.01F);
                 }
-            } else if (this.a(TagsFluid.a)) {
+            } else if (this.a(TagsFluid.WATER)) {
                 i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
                 if (i > 0) {
                     this.a(StatisticList.WALK_UNDER_WATER_ONE_CM, i);
@@ -1446,7 +1441,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     }
 
-    protected SoundEffect n(int i) {
+    protected SoundEffect m(int i) {
         return i > 4 ? SoundEffects.ENTITY_PLAYER_BIG_FALL : SoundEffects.ENTITY_PLAYER_SMALL_FALL;
     }
 
@@ -1554,7 +1549,7 @@ public abstract class EntityHuman extends EntityLiving {
             BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
             ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition1, false);
 
-            return itemstack.b(this.world.E(), shapedetectorblock);
+            return itemstack.b(this.world.F(), shapedetectorblock);
         }
     }
 
@@ -1679,7 +1674,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public IChatBaseComponent dC() {
-        return (new ChatComponentText("")).addSibling(this.getScoreboardDisplayName()).a(" (").a(this.h.getId().toString()).a(")");
+        return (new ChatComponentText("")).addSibling(this.getDisplayName()).a(" (").a(this.h.getId().toString()).a(")");
     }
 
     private IChatBaseComponent c(IChatBaseComponent ichatbasecomponent) {

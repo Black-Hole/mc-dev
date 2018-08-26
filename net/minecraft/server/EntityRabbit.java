@@ -77,12 +77,12 @@ public class EntityRabbit extends EntityAnimal {
     public void o(boolean flag) {
         super.o(flag);
         if (flag) {
-            this.a(this.dA(), this.cD(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+            this.a(this.dz(), this.cD(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
         }
 
     }
 
-    public void dz() {
+    public void dy() {
         this.o(true);
         this.bG = 10;
         this.bE = 0;
@@ -108,7 +108,7 @@ public class EntityRabbit extends EntityAnimal {
         if (this.onGround) {
             if (!this.bH) {
                 this.o(false);
-                this.dJ();
+                this.dI();
             }
 
             if (this.getRabbitType() == 99 && this.bI == 0) {
@@ -117,7 +117,7 @@ public class EntityRabbit extends EntityAnimal {
                 if (entityliving != null && this.h(entityliving) < 16.0D) {
                     this.b(entityliving.locX, entityliving.locZ);
                     this.moveController.a(entityliving.locX, entityliving.locY, entityliving.locZ, this.moveController.c());
-                    this.dz();
+                    this.dy();
                     this.bH = true;
                 }
             }
@@ -134,10 +134,10 @@ public class EntityRabbit extends EntityAnimal {
                     }
 
                     this.b(vec3d.x, vec3d.z);
-                    this.dz();
+                    this.dy();
                 }
             } else if (!entityrabbit_controllerjumprabbit.d()) {
-                this.dC();
+                this.dB();
             }
         }
 
@@ -150,15 +150,15 @@ public class EntityRabbit extends EntityAnimal {
         this.yaw = (float) (MathHelper.c(d1 - this.locZ, d0 - this.locX) * 57.2957763671875D) - 90.0F;
     }
 
-    private void dC() {
+    private void dB() {
         ((EntityRabbit.ControllerJumpRabbit) this.h).a(true);
     }
 
-    private void dD() {
+    private void dC() {
         ((EntityRabbit.ControllerJumpRabbit) this.h).a(false);
     }
 
-    private void dI() {
+    private void dH() {
         if (this.moveController.c() < 2.2D) {
             this.bI = 10;
         } else {
@@ -167,9 +167,9 @@ public class EntityRabbit extends EntityAnimal {
 
     }
 
-    private void dJ() {
-        this.dI();
-        this.dD();
+    private void dI() {
+        this.dH();
+        this.dC();
     }
 
     public void k() {
@@ -202,7 +202,7 @@ public class EntityRabbit extends EntityAnimal {
         this.bJ = nbttagcompound.getInt("MoreCarrotTicks");
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect dz() {
         return SoundEffects.ENTITY_RABBIT_JUMP;
     }
 
@@ -236,7 +236,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.I;
     }
 
@@ -246,7 +246,7 @@ public class EntityRabbit extends EntityAnimal {
 
     public EntityRabbit b(EntityAgeable entityageable) {
         EntityRabbit entityrabbit = new EntityRabbit(this.world);
-        int i = this.dK();
+        int i = this.dJ();
 
         if (this.random.nextInt(20) != 0) {
             if (entityageable instanceof EntityRabbit && this.random.nextBoolean()) {
@@ -286,7 +286,7 @@ public class EntityRabbit extends EntityAnimal {
     @Nullable
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
         Object object = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
-        int i = this.dK();
+        int i = this.dJ();
         boolean flag = false;
 
         if (object instanceof EntityRabbit.GroupDataRabbit) {
@@ -304,24 +304,24 @@ public class EntityRabbit extends EntityAnimal {
         return (GroupDataEntity) object;
     }
 
-    private int dK() {
+    private int dJ() {
         BiomeBase biomebase = this.world.getBiome(new BlockPosition(this));
         int i = this.random.nextInt(100);
 
         return biomebase.c() == BiomeBase.Precipitation.SNOW ? (i < 80 ? 1 : 3) : (biomebase.p() == BiomeBase.Geography.DESERT ? 4 : (i < 50 ? 0 : (i < 90 ? 5 : 2)));
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-        return block != Blocks.GRASS && block != Blocks.SNOW && block != Blocks.SAND ? super.a(generatoraccess) : true;
+        return block != Blocks.GRASS && block != Blocks.SNOW && block != Blocks.SAND ? super.a(generatoraccess, flag) : true;
     }
 
-    private boolean dL() {
+    private boolean dK() {
         return this.bJ == 0;
     }
 
@@ -373,7 +373,7 @@ public class EntityRabbit extends EntityAnimal {
                 }
 
                 this.h = false;
-                this.g = this.f.dL();
+                this.g = this.f.dK();
                 this.g = true;
             }
 
@@ -502,7 +502,7 @@ public class EntityRabbit extends EntityAnimal {
 
         public void b() {
             if (this.a) {
-                this.c.dz();
+                this.c.dy();
                 this.a = false;
             }
 

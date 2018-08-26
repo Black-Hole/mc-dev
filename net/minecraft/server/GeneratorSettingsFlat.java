@@ -15,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -89,6 +90,21 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
     public GeneratorSettingsFlat() {}
 
+    @Nullable
+    public static Block a(String s) {
+        try {
+            MinecraftKey minecraftkey = new MinecraftKey(s);
+
+            if (IRegistry.BLOCK.c(minecraftkey)) {
+                return (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
+            }
+        } catch (IllegalArgumentException illegalargumentexception) {
+            GeneratorSettingsFlat.w.warn("Invalid blockstate: {}", s, illegalargumentexception);
+        }
+
+        return null;
+    }
+
     public BiomeBase t() {
         return this.O;
     }
@@ -157,7 +173,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         }
 
         stringbuilder.append(";");
-        stringbuilder.append(BiomeBase.REGISTRY_ID.b(this.O));
+        stringbuilder.append(IRegistry.BIOME.getKey(this.O));
         stringbuilder.append(";");
         if (!this.N.isEmpty()) {
             i = 0;
@@ -199,9 +215,9 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     }
 
     public static GeneratorSettingsFlat a(Dynamic<?> dynamic) {
-        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.f.a();
+        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
         List list = (List) ((Stream) dynamic.get("layers").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic) -> {
-            return Pair.of(Integer.valueOf(dynamic.getInt("height", 1)), Block.getByName(dynamic.getString("block")));
+            return Pair.of(Integer.valueOf(dynamic.getInt("height", 1)), a(dynamic.getString("block")));
         }).collect(Collectors.toList());
 
         if (list.stream().anyMatch((pair) -> {
@@ -218,7 +234,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
             } else {
                 generatorsettingsflat.v().addAll(list1);
                 generatorsettingsflat.w();
-                generatorsettingsflat.a((BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(dynamic.getString("biome"))));
+                generatorsettingsflat.a((BiomeBase) IRegistry.BIOME.get(new MinecraftKey(dynamic.getString("biome"))));
                 dynamic.get("structures").flatMap(Dynamic::getMapValues).ifPresent((map) -> {
                     map.keySet().forEach((dynamic) -> {
                         dynamic.getStringValue().map((s) -> {
@@ -232,7 +248,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     }
 
     public static GeneratorSettingsFlat x() {
-        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.f.a();
+        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
 
         generatorsettingsflat.a(Biomes.c);
         generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));

@@ -71,7 +71,7 @@ public class EntityGuardian extends EntityMonster {
         return EnumMonsterType.e;
     }
 
-    public boolean dC() {
+    public boolean dB() {
         return ((Boolean) this.datawatcher.get(EntityGuardian.bF)).booleanValue();
     }
 
@@ -87,13 +87,13 @@ public class EntityGuardian extends EntityMonster {
         this.datawatcher.set(EntityGuardian.bG, Integer.valueOf(i));
     }
 
-    public boolean dD() {
+    public boolean dC() {
         return ((Integer) this.datawatcher.get(EntityGuardian.bG)).intValue() != 0;
     }
 
     @Nullable
-    public EntityLiving dE() {
-        if (!this.dD()) {
+    public EntityLiving dD() {
+        if (!this.dC()) {
             return null;
         } else if (this.world.isClientSide) {
             if (this.bH != null) {
@@ -147,7 +147,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.b(blockposition).a(TagsFluid.a) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
+        return iworldreader.b(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
     }
 
     public void k() {
@@ -156,11 +156,11 @@ public class EntityGuardian extends EntityMonster {
             if (!this.isInWater()) {
                 this.c = 2.0F;
                 if (this.motY > 0.0D && this.bJ && !this.isSilent()) {
-                    this.world.a(this.locX, this.locY, this.locZ, this.dB(), this.bV(), 1.0F, 1.0F, false);
+                    this.world.a(this.locX, this.locY, this.locZ, this.dA(), this.bV(), 1.0F, 1.0F, false);
                 }
 
                 this.bJ = this.motY < 0.0D && this.world.q((new BlockPosition(this)).down());
-            } else if (this.dC()) {
+            } else if (this.dB()) {
                 if (this.c < 0.5F) {
                     this.c = 4.0F;
                 } else {
@@ -174,13 +174,13 @@ public class EntityGuardian extends EntityMonster {
             this.bD = this.bC;
             if (!this.aq()) {
                 this.bC = this.random.nextFloat();
-            } else if (this.dC()) {
+            } else if (this.dB()) {
                 this.bC += (0.0F - this.bC) * 0.25F;
             } else {
                 this.bC += (1.0F - this.bC) * 0.06F;
             }
 
-            if (this.dC() && this.isInWater()) {
+            if (this.dB() && this.isInWater()) {
                 Vec3D vec3d = this.f(0.0F);
 
                 for (int i = 0; i < 2; ++i) {
@@ -188,12 +188,12 @@ public class EntityGuardian extends EntityMonster {
                 }
             }
 
-            if (this.dD()) {
+            if (this.dC()) {
                 if (this.bI < this.l()) {
                     ++this.bI;
                 }
 
-                EntityLiving entityliving = this.dE();
+                EntityLiving entityliving = this.dD();
 
                 if (entityliving != null) {
                     this.getControllerLook().a(entityliving, 90.0F, 90.0F);
@@ -228,14 +228,14 @@ public class EntityGuardian extends EntityMonster {
             this.impulse = true;
         }
 
-        if (this.dD()) {
+        if (this.dC()) {
             this.yaw = this.aS;
         }
 
         super.k();
     }
 
-    protected SoundEffect dB() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_GUARDIAN_FLOP;
     }
 
@@ -244,7 +244,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.D;
     }
 
@@ -253,15 +253,15 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
+        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return (this.random.nextInt(20) == 0 || !generatoraccess.z(new BlockPosition(this))) && super.a(generatoraccess);
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return (this.random.nextInt(20) == 0 || !generatoraccess.z(new BlockPosition(this))) && super.a(generatoraccess, flag);
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.dC() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
+        if (!this.dB() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) damagesource.j();
 
             if (!damagesource.isExplosion()) {
@@ -287,7 +287,7 @@ public class EntityGuardian extends EntityMonster {
             this.motX *= 0.8999999761581421D;
             this.motY *= 0.8999999761581421D;
             this.motZ *= 0.8999999761581421D;
-            if (!this.dC() && this.getGoalTarget() == null) {
+            if (!this.dB() && this.getGoalTarget() == null) {
                 this.motY -= 0.005D;
             }
         } else {

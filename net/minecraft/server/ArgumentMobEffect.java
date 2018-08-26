@@ -31,7 +31,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
 
     public MobEffectList a(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        MobEffectList mobeffectlist = (MobEffectList) MobEffectList.REGISTRY.get(minecraftkey);
+        MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
 
         if (mobeffectlist == null) {
             throw ArgumentMobEffect.a.create(minecraftkey);
@@ -41,7 +41,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a((Iterable) MobEffectList.REGISTRY.keySet(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) IRegistry.MOB_EFFECT.keySet(), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

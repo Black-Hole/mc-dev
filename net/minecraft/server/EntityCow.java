@@ -51,7 +51,7 @@ public class EntityCow extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.S;
     }
 

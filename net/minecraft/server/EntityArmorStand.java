@@ -340,13 +340,15 @@ public class EntityArmorStand extends EntityLiving {
             enumitemslot = EnumItemSlot.LEGS;
         } else if (d0 >= 1.6D && this.a(EnumItemSlot.HEAD)) {
             enumitemslot = EnumItemSlot.HEAD;
+        } else if (!this.a(EnumItemSlot.MAINHAND) && this.a(EnumItemSlot.OFFHAND)) {
+            enumitemslot = EnumItemSlot.OFFHAND;
         }
 
         return enumitemslot;
     }
 
-    private boolean c(EnumItemSlot enumitemslot) {
-        return (this.bH & 1 << enumitemslot.c()) != 0;
+    public boolean c(EnumItemSlot enumitemslot) {
+        return (this.bH & 1 << enumitemslot.c()) != 0 || enumitemslot.a() == EnumItemSlot.Function.HAND && !this.hasArms();
     }
 
     private void a(EntityHuman entityhuman, EnumItemSlot enumitemslot, ItemStack itemstack, EnumHand enumhand) {
@@ -687,7 +689,7 @@ public class EntityArmorStand extends EntityLiving {
         return EnumMainHand.RIGHT;
     }
 
-    protected SoundEffect n(int i) {
+    protected SoundEffect m(int i) {
         return SoundEffects.ENTITY_ARMOR_STAND_FALL;
     }
 

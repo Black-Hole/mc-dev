@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class ItemArmor extends Item {
 
-    private static final UUID[] l = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+    private static final UUID[] k = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     public static final IDispenseBehavior a = new DispenseBehaviorItem() {
         protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
             ItemStack itemstack1 = ItemArmor.a(isourceblock, itemstack);
@@ -21,7 +21,7 @@ public class ItemArmor extends Item {
 
     public static ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
         BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
-        List list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.e.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
+        List list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.f.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {
             return ItemStack.a;
@@ -33,7 +33,7 @@ public class ItemArmor extends Item {
             entityliving.setSlot(enumitemslot, itemstack1);
             if (entityliving instanceof EntityInsentient) {
                 ((EntityInsentient) entityliving).a(enumitemslot, 2.0F);
-                ((EntityInsentient) entityliving).dj();
+                ((EntityInsentient) entityliving).di();
             }
 
             return itemstack;
@@ -83,8 +83,8 @@ public class ItemArmor extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == this.b) {
-            multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.l[enumitemslot.b()], "Armor modifier", (double) this.c, 0));
-            multimap.put(GenericAttributes.i.getName(), new AttributeModifier(ItemArmor.l[enumitemslot.b()], "Armor toughness", (double) this.d, 0));
+            multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor modifier", (double) this.c, 0));
+            multimap.put(GenericAttributes.i.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor toughness", (double) this.d, 0));
         }
 
         return multimap;

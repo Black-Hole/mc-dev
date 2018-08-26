@@ -7,7 +7,7 @@ public class BlockChorusFruit extends BlockSprawling {
 
     protected BlockChorusFruit(Block.Info block_info) {
         super(0.3125F, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, Boolean.valueOf(false))).set(BlockChorusFruit.b, Boolean.valueOf(false))).set(BlockChorusFruit.c, Boolean.valueOf(false))).set(BlockChorusFruit.p, Boolean.valueOf(false))).set(BlockChorusFruit.q, Boolean.valueOf(false))).set(BlockChorusFruit.r, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, Boolean.valueOf(false))).set(BlockChorusFruit.b, Boolean.valueOf(false))).set(BlockChorusFruit.c, Boolean.valueOf(false))).set(BlockChorusFruit.o, Boolean.valueOf(false))).set(BlockChorusFruit.p, Boolean.valueOf(false))).set(BlockChorusFruit.q, Boolean.valueOf(false)));
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
@@ -22,18 +22,18 @@ public class BlockChorusFruit extends BlockSprawling {
         Block block4 = iblockaccess.getType(blockposition.south()).getBlock();
         Block block5 = iblockaccess.getType(blockposition.west()).getBlock();
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.r, Boolean.valueOf(block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE))).set(BlockChorusFruit.q, Boolean.valueOf(block1 == this || block1 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.a, Boolean.valueOf(block2 == this || block2 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.b, Boolean.valueOf(block3 == this || block3 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.c, Boolean.valueOf(block4 == this || block4 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.p, Boolean.valueOf(block5 == this || block5 == Blocks.CHORUS_FLOWER));
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.q, Boolean.valueOf(block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE))).set(BlockChorusFruit.p, Boolean.valueOf(block1 == this || block1 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.a, Boolean.valueOf(block2 == this || block2 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.b, Boolean.valueOf(block3 == this || block3 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.c, Boolean.valueOf(block4 == this || block4 == Blocks.CHORUS_FLOWER))).set(BlockChorusFruit.o, Boolean.valueOf(block5 == this || block5 == Blocks.CHORUS_FLOWER));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (!iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
             Block block = iblockdata1.getBlock();
             boolean flag = block == this || block == Blocks.CHORUS_FLOWER || enumdirection == EnumDirection.DOWN && block == Blocks.END_STONE;
 
-            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.s.get(enumdirection), Boolean.valueOf(flag));
+            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.r.get(enumdirection), Boolean.valueOf(flag));
         }
     }
 
@@ -95,7 +95,7 @@ public class BlockChorusFruit extends BlockSprawling {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockChorusFruit.a, BlockChorusFruit.b, BlockChorusFruit.c, BlockChorusFruit.p, BlockChorusFruit.q, BlockChorusFruit.r});
+        blockstatelist_a.a(new IBlockState[] { BlockChorusFruit.a, BlockChorusFruit.b, BlockChorusFruit.c, BlockChorusFruit.o, BlockChorusFruit.p, BlockChorusFruit.q});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

@@ -31,7 +31,7 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
     public Enchantment a(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        Enchantment enchantment = (Enchantment) Enchantment.enchantments.get(minecraftkey);
+        Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
 
         if (enchantment == null) {
             throw ArgumentEnchantment.a.create(minecraftkey);
@@ -41,7 +41,7 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a((Iterable) Enchantment.enchantments.keySet(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) IRegistry.ENCHANTMENT.keySet(), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

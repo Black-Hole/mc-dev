@@ -8,12 +8,12 @@ public class EntitySkeletonStray extends EntitySkeletonAbstract {
         super(EntityTypes.STRAY, world);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return super.a(generatoraccess) && generatoraccess.e(new BlockPosition(this));
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return super.a(generatoraccess, flag) && (flag || generatoraccess.e(new BlockPosition(this)));
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.ax;
     }
 

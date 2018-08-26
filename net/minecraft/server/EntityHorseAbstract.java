@@ -49,10 +49,10 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 0.7D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.dJ();
+        this.dI();
     }
 
-    protected void dJ() {
+    protected void dI() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
     }
 
@@ -62,7 +62,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.datawatcher.register(EntityHorseAbstract.bO, Optional.empty());
     }
 
-    protected boolean q(int i) {
+    protected boolean p(int i) {
         return (((Byte) this.datawatcher.get(EntityHorseAbstract.bN)).byteValue() & i) != 0;
     }
 
@@ -78,7 +78,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     }
 
     public boolean isTamed() {
-        return this.q(2);
+        return this.p(2);
     }
 
     @Nullable
@@ -90,15 +90,15 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.datawatcher.set(EntityHorseAbstract.bO, Optional.ofNullable(uuid));
     }
 
-    public float dM() {
+    public float dL() {
         return 0.5F;
     }
 
     public void a(boolean flag) {
-        this.a(flag ? this.dM() : 1.0F);
+        this.a(flag ? this.dL() : 1.0F);
     }
 
-    public boolean dN() {
+    public boolean dM() {
         return this.bG;
     }
 
@@ -115,22 +115,22 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     }
 
     protected void u(float f) {
-        if (f > 6.0F && this.dO()) {
+        if (f > 6.0F && this.dN()) {
             this.y(false);
         }
 
     }
 
-    public boolean dO() {
-        return this.q(16);
+    public boolean dN() {
+        return this.p(16);
     }
 
-    public boolean dP() {
-        return this.q(32);
+    public boolean dO() {
+        return this.p(32);
     }
 
     public boolean hasReproduced() {
-        return this.q(8);
+        return this.p(8);
     }
 
     public void w(boolean flag) {
@@ -149,7 +149,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.bI = i;
     }
 
-    public int s(int i) {
+    public int r(int i) {
         int j = MathHelper.clamp(this.getTemper() + i, 0, this.getMaxDomestication());
 
         this.setTemper(j);
@@ -166,8 +166,8 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         return !this.isVehicle();
     }
 
-    private void dz() {
-        this.dD();
+    private void dy() {
+        this.dC();
         if (!this.isSilent()) {
             this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_HORSE_EAT, this.bV(), 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
         }
@@ -205,14 +205,14 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
     }
 
-    protected int dB() {
+    protected int dA() {
         return 2;
     }
 
     public void loadChest() {
         InventoryHorseChest inventoryhorsechest = this.inventoryChest;
 
-        this.inventoryChest = new InventoryHorseChest(this.getDisplayName(), this.dB());
+        this.inventoryChest = new InventoryHorseChest(this.getDisplayName(), this.dA());
         this.inventoryChest.a(this.getCustomName());
         if (inventoryhorsechest != null) {
             inventoryhorsechest.b(this);
@@ -228,20 +228,20 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
 
         this.inventoryChest.a((IInventoryListener) this);
-        this.dT();
+        this.dS();
     }
 
-    protected void dT() {
+    protected void dS() {
         if (!this.world.isClientSide) {
-            this.x(!this.inventoryChest.getItem(0).isEmpty() && this.dV());
+            this.x(!this.inventoryChest.getItem(0).isEmpty() && this.dU());
         }
     }
 
     public void a(IInventory iinventory) {
-        boolean flag = this.dW();
+        boolean flag = this.dV();
 
-        this.dT();
-        if (this.ticksLived > 20 && !flag && this.dW()) {
+        this.dS();
+        if (this.ticksLived > 20 && !flag && this.dV()) {
             this.a(SoundEffects.ENTITY_HORSE_SADDLE, 0.5F, 1.0F);
         }
 
@@ -279,7 +279,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     @Nullable
     protected SoundEffect d(DamageSource damagesource) {
         if (this.random.nextInt(3) == 0) {
-            this.dI();
+            this.dH();
         }
 
         return null;
@@ -288,23 +288,23 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     @Nullable
     protected SoundEffect D() {
         if (this.random.nextInt(10) == 0 && !this.isFrozen()) {
-            this.dI();
+            this.dH();
         }
 
         return null;
     }
 
-    public boolean dV() {
+    public boolean dU() {
         return true;
     }
 
-    public boolean dW() {
-        return this.q(4);
+    public boolean dV() {
+        return this.p(4);
     }
 
     @Nullable
-    protected SoundEffect dC() {
-        this.dI();
+    protected SoundEffect dB() {
+        this.dH();
         return null;
     }
 
@@ -343,7 +343,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.22499999403953552D);
     }
 
-    public int dh() {
+    public int dg() {
         return 6;
     }
 
@@ -424,37 +424,37 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         if (b0 > 0 && (flag || !this.isTamed()) && this.getTemper() < this.getMaxDomestication()) {
             flag = true;
             if (!this.world.isClientSide) {
-                this.s(b0);
+                this.r(b0);
             }
         }
 
         if (flag) {
-            this.dz();
+            this.dy();
         }
 
         return flag;
     }
 
     protected void g(EntityHuman entityhuman) {
-        entityhuman.yaw = this.yaw;
-        entityhuman.pitch = this.pitch;
         this.y(false);
         this.setStanding(false);
         if (!this.world.isClientSide) {
+            entityhuman.yaw = this.yaw;
+            entityhuman.pitch = this.pitch;
             entityhuman.startRiding(this);
         }
 
     }
 
     protected boolean isFrozen() {
-        return super.isFrozen() && this.isVehicle() && this.dW() || this.dO() || this.dP();
+        return super.isFrozen() && this.isVehicle() && this.dV() || this.dN() || this.dO();
     }
 
     public boolean f(ItemStack itemstack) {
         return false;
     }
 
-    private void dA() {
+    private void dz() {
         this.bD = 1;
     }
 
@@ -474,7 +474,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     public void k() {
         if (this.random.nextInt(200) == 0) {
-            this.dA();
+            this.dz();
         }
 
         super.k();
@@ -483,23 +483,23 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
                 this.heal(1.0F);
             }
 
-            if (this.dZ()) {
-                if (!this.dO() && !this.isVehicle() && this.random.nextInt(300) == 0 && this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.locY) - 1, MathHelper.floor(this.locZ))).getBlock() == Blocks.GRASS_BLOCK) {
+            if (this.dY()) {
+                if (!this.dN() && !this.isVehicle() && this.random.nextInt(300) == 0 && this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.locY) - 1, MathHelper.floor(this.locZ))).getBlock() == Blocks.GRASS_BLOCK) {
                     this.y(true);
                 }
 
-                if (this.dO() && ++this.bP > 50) {
+                if (this.dN() && ++this.bP > 50) {
                     this.bP = 0;
                     this.y(false);
                 }
             }
 
-            this.dY();
+            this.dX();
         }
     }
 
-    protected void dY() {
-        if (this.hasReproduced() && this.isBaby() && !this.dO()) {
+    protected void dX() {
+        if (this.hasReproduced() && this.isBaby() && !this.dN()) {
             EntityHorseAbstract entityhorseabstract = this.a(this, 16.0D);
 
             if (entityhorseabstract != null && this.h((Entity) entityhorseabstract) > 4.0D) {
@@ -509,7 +509,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     }
 
-    public boolean dZ() {
+    public boolean dY() {
         return true;
     }
 
@@ -537,7 +537,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
 
         this.bU = this.bT;
-        if (this.dO()) {
+        if (this.dN()) {
             this.bT += (1.0F - this.bT) * 0.4F + 0.05F;
             if (this.bT > 1.0F) {
                 this.bT = 1.0F;
@@ -550,7 +550,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
 
         this.bW = this.bV;
-        if (this.dP()) {
+        if (this.dO()) {
             this.bT = 0.0F;
             this.bU = this.bT;
             this.bV += (1.0F - this.bV) * 0.4F + 0.05F;
@@ -566,7 +566,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
 
         this.bY = this.bX;
-        if (this.q(64)) {
+        if (this.p(64)) {
             this.bX += (1.0F - this.bX) * 0.7F + 0.05F;
             if (this.bX > 1.0F) {
                 this.bX = 1.0F;
@@ -580,7 +580,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     }
 
-    private void dD() {
+    private void dC() {
         if (!this.world.isClientSide) {
             this.bQ = 1;
             this.d(64, true);
@@ -600,7 +600,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         this.d(32, flag);
     }
 
-    private void dI() {
+    private void dH() {
         if (this.bT() || this.cP()) {
             this.bR = 1;
             this.setStanding(true);
@@ -608,9 +608,9 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     }
 
-    public void ea() {
-        this.dI();
-        SoundEffect soundeffect = this.dC();
+    public void dZ() {
+        this.dH();
+        SoundEffect soundeffect = this.dB();
 
         if (soundeffect != null) {
             this.a(soundeffect, this.cD(), this.cE());
@@ -630,7 +630,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     }
 
     public void a(float f, float f1, float f2) {
-        if (this.isVehicle() && this.di() && this.dW()) {
+        if (this.isVehicle() && this.dh() && this.dV()) {
             EntityLiving entityliving = (EntityLiving) this.bO();
 
             this.yaw = entityliving.yaw;
@@ -646,12 +646,12 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
                 this.bL = 0;
             }
 
-            if (this.onGround && this.jumpPower == 0.0F && this.dP() && !this.canSlide) {
+            if (this.onGround && this.jumpPower == 0.0F && this.dO() && !this.canSlide) {
                 f = 0.0F;
                 f2 = 0.0F;
             }
 
-            if (this.jumpPower > 0.0F && !this.dN() && this.onGround) {
+            if (this.jumpPower > 0.0F && !this.dM() && this.onGround) {
                 this.motY = this.getJumpStrength() * (double) this.jumpPower;
                 if (this.hasEffect(MobEffects.JUMP)) {
                     this.motY += (double) ((float) (this.getEffect(MobEffects.JUMP).getAmplifier() + 1) * 0.1F);
@@ -665,7 +665,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
                     this.motX += (double) (-0.4F * f3 * this.jumpPower);
                     this.motZ += (double) (0.4F * f4 * this.jumpPower);
-                    this.eb();
+                    this.ea();
                 }
 
                 this.jumpPower = 0.0F;
@@ -703,13 +703,13 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
     }
 
-    protected void eb() {
+    protected void ea() {
         this.a(SoundEffects.ENTITY_HORSE_JUMP, 0.4F, 1.0F);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("EatingHaystack", this.dO());
+        nbttagcompound.setBoolean("EatingHaystack", this.dN());
         nbttagcompound.setBoolean("Bred", this.hasReproduced());
         nbttagcompound.setInt("Temper", this.getTemper());
         nbttagcompound.setBoolean("Tame", this.isTamed());
@@ -757,14 +757,14 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
             }
         }
 
-        this.dT();
+        this.dS();
     }
 
     public boolean mate(EntityAnimal entityanimal) {
         return false;
     }
 
-    protected boolean ec() {
+    protected boolean eb() {
         return !this.isVehicle() && !this.isPassenger() && this.isTamed() && !this.isBaby() && this.getHealth() >= this.getMaxHealth() && this.isInLove();
     }
 
@@ -774,28 +774,28 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     }
 
     protected void a(EntityAgeable entityageable, EntityHorseAbstract entityhorseabstract) {
-        double d0 = this.getAttributeInstance(GenericAttributes.maxHealth).b() + entityageable.getAttributeInstance(GenericAttributes.maxHealth).b() + (double) this.ed();
+        double d0 = this.getAttributeInstance(GenericAttributes.maxHealth).b() + entityageable.getAttributeInstance(GenericAttributes.maxHealth).b() + (double) this.ec();
 
         entityhorseabstract.getAttributeInstance(GenericAttributes.maxHealth).setValue(d0 / 3.0D);
-        double d1 = this.getAttributeInstance(EntityHorseAbstract.attributeJumpStrength).b() + entityageable.getAttributeInstance(EntityHorseAbstract.attributeJumpStrength).b() + this.ee();
+        double d1 = this.getAttributeInstance(EntityHorseAbstract.attributeJumpStrength).b() + entityageable.getAttributeInstance(EntityHorseAbstract.attributeJumpStrength).b() + this.ed();
 
         entityhorseabstract.getAttributeInstance(EntityHorseAbstract.attributeJumpStrength).setValue(d1 / 3.0D);
-        double d2 = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).b() + entityageable.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).b() + this.ef();
+        double d2 = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).b() + entityageable.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).b() + this.ee();
 
         entityhorseabstract.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(d2 / 3.0D);
     }
 
-    public boolean di() {
+    public boolean dh() {
         return this.bO() instanceof EntityLiving;
     }
 
     public boolean G_() {
-        return this.dW();
+        return this.dV();
     }
 
     public void b(int i) {
         this.canSlide = true;
-        this.dI();
+        this.dH();
     }
 
     public void I_() {}
@@ -822,15 +822,15 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     }
 
-    protected float ed() {
+    protected float ec() {
         return 15.0F + (float) this.random.nextInt(8) + (float) this.random.nextInt(9);
     }
 
-    protected double ee() {
+    protected double ed() {
         return 0.4000000059604645D + this.random.nextDouble() * 0.2D + this.random.nextDouble() * 0.2D + this.random.nextDouble() * 0.2D;
     }
 
-    protected double ef() {
+    protected double ee() {
         return (0.44999998807907104D + this.random.nextDouble() * 0.3D + this.random.nextDouble() * 0.3D + this.random.nextDouble() * 0.3D) * 0.25D;
     }
 
@@ -842,7 +842,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         return this.length;
     }
 
-    public boolean eg() {
+    public boolean ef() {
         return false;
     }
 
@@ -856,11 +856,11 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         if (j >= 0 && j < 2 && j < this.inventoryChest.getSize()) {
             if (j == 0 && itemstack.getItem() != Items.SADDLE) {
                 return false;
-            } else if (j == 1 && (!this.eg() || !this.g(itemstack))) {
+            } else if (j == 1 && (!this.ef() || !this.g(itemstack))) {
                 return false;
             } else {
                 this.inventoryChest.setItem(j, itemstack);
-                this.dT();
+                this.dS();
                 return true;
             }
         } else {

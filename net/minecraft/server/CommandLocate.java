@@ -48,7 +48,7 @@ public class CommandLocate {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) throws CommandSyntaxException {
         BlockPosition blockposition = new BlockPosition(commandlistenerwrapper.getPosition());
-        BlockPosition blockposition1 = commandlistenerwrapper.getWorld().a(s, blockposition, 100);
+        BlockPosition blockposition1 = commandlistenerwrapper.getWorld().a(s, blockposition, 100, false);
 
         if (blockposition1 == null) {
             throw CommandLocate.a.create();

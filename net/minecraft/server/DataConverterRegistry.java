@@ -28,7 +28,7 @@ public class DataConverterRegistry {
             DataConverterRegistry.a.error("Unable to build datafixers", throwable);
             Runtime.getRuntime().exit(1);
         }).setDaemon(true).setNameFormat("Bootstrap %d").build());
-        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(1519);
+        DataFixerBuilder datafixerbuilder = new DataFixerBuilder(1628);
 
         a(datafixerbuilder);
         return datafixerbuilder.build(executorservice);
@@ -333,5 +333,8 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema71, "Rename coral fan blocks", (s) -> {
             return (String) DataConverterCoralFan.a.getOrDefault(s, s);
         }));
+        Schema schema72 = datafixerbuilder.addSchema(1624, DataConverterRegistry.c);
+
+        datafixerbuilder.addFixer(new DataConverterTrappedChest(schema72, false));
     }
 }

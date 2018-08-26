@@ -1,23 +1,29 @@
 package net.minecraft.server;
 
+import java.util.function.BooleanSupplier;
 import javax.annotation.Nullable;
 
 public interface IChunkProvider extends AutoCloseable {
 
     @Nullable
-    Chunk getLoadedChunkAt(int i, int j);
+    Chunk getChunkAt(int i, int j, boolean flag, boolean flag1);
 
-    Chunk getChunkAt(int i, int j);
+    @Nullable
+    default IChunkAccess a(int i, int j, boolean flag) {
+        Chunk chunk = this.getChunkAt(i, j, true, false);
 
-    IChunkAccess d(int i, int j);
+        if (chunk == null && flag) {
+            throw new UnsupportedOperationException("Could not create an empty chunk");
+        } else {
+            return chunk;
+        }
+    }
 
-    boolean unloadChunks();
+    boolean unloadChunks(BooleanSupplier booleansupplier);
 
     String getName();
 
     ChunkGenerator<?> getChunkGenerator();
-
-    boolean f(int i, int j);
 
     default void close() {}
 }

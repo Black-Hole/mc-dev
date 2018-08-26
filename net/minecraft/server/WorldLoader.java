@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.attribute.FileAttribute;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,7 @@ public class WorldLoader implements Convertable {
         this.c = datafixer;
 
         try {
-            Files.createDirectories(java_nio_file_path, new FileAttribute[0]);
+            Files.createDirectories(Files.exists(java_nio_file_path, new LinkOption[0]) ? java_nio_file_path.toRealPath(new LinkOption[0]) : java_nio_file_path, new FileAttribute[0]);
         } catch (IOException ioexception) {
             throw new RuntimeException(ioexception);
         }

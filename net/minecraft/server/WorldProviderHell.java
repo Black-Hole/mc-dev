@@ -24,11 +24,11 @@ public class WorldProviderHell extends WorldProvider {
     }
 
     public ChunkGenerator<?> getChunkGenerator() {
-        GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) ChunkGeneratorType.c.a();
+        GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) ChunkGeneratorType.b.b();
 
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
-        return ChunkGeneratorType.c.create(this.b, BiomeLayout.c.a(((BiomeLayoutFixedConfiguration) BiomeLayout.c.a()).a(Biomes.j)), generatorsettingsnether);
+        return ChunkGeneratorType.b.create(this.b, BiomeLayout.b.a(((BiomeLayoutFixedConfiguration) BiomeLayout.b.b()).a(Biomes.j)), generatorsettingsnether);
     }
 
     public boolean o() {

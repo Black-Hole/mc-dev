@@ -6,9 +6,9 @@ import javax.annotation.Nullable;
 public class BlockTurtleEgg extends Block {
 
     private static final VoxelShape c = Block.a(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
-    private static final VoxelShape p = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
-    public static final BlockStateInteger a = BlockProperties.ac;
-    public static final BlockStateInteger b = BlockProperties.ab;
+    private static final VoxelShape o = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
+    public static final BlockStateInteger a = BlockProperties.ad;
+    public static final BlockStateInteger b = BlockProperties.ac;
 
     public BlockTurtleEgg(Block.Info block_info) {
         super(block_info);
@@ -29,13 +29,11 @@ public class BlockTurtleEgg extends Block {
     }
 
     private void a(World world, BlockPosition blockposition, Entity entity, int i) {
-        IBlockData iblockdata = world.getType(blockposition);
-
-        if (entity instanceof EntityTurtle) {
+        if (!this.a(world, entity)) {
             super.stepOn(world, blockposition, entity);
         } else {
             if (!world.isClientSide && world.random.nextInt(i) == 0) {
-                this.a(world, blockposition, iblockdata);
+                this.a(world, blockposition, world.getType(blockposition));
             }
 
         }
@@ -130,7 +128,7 @@ public class BlockTurtleEgg extends Block {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue() > 1 ? BlockTurtleEgg.p : BlockTurtleEgg.c;
+        return ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue() > 1 ? BlockTurtleEgg.o : BlockTurtleEgg.c;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -139,5 +137,9 @@ public class BlockTurtleEgg extends Block {
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(new IBlockState[] { BlockTurtleEgg.a, BlockTurtleEgg.b});
+    }
+
+    private boolean a(World world, Entity entity) {
+        return entity instanceof EntityTurtle ? false : (entity instanceof EntityLiving && !(entity instanceof EntityHuman) ? world.getGameRules().getBoolean("mobGriefing") : true);
     }
 }

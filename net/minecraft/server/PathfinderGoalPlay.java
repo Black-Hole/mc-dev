@@ -29,7 +29,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
             while (iterator.hasNext()) {
                 EntityVillager entityvillager = (EntityVillager) iterator.next();
 
-                if (entityvillager != this.a && !entityvillager.dB() && entityvillager.getAge() < 0) {
+                if (entityvillager != this.a && !entityvillager.dA() && entityvillager.getAge() < 0) {
                     double d1 = entityvillager.h(this.a);
 
                     if (d1 <= d0) {

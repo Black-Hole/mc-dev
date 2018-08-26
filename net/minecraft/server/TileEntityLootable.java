@@ -17,7 +17,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
         TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
 
         if (tileentity instanceof TileEntityLootable) {
-            ((TileEntityLootable) tileentity).a(minecraftkey, random.nextLong());
+            ((TileEntityLootable) tileentity).setLootTable(minecraftkey, random.nextLong());
         }
 
     }
@@ -47,7 +47,7 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
 
     public void d(@Nullable EntityHuman entityhuman) {
         if (this.g != null && this.world.getMinecraftServer() != null) {
-            LootTable loottable = this.world.getMinecraftServer().aP().a(this.g);
+            LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(this.g);
 
             this.g = null;
             Random random;
@@ -58,23 +58,23 @@ public abstract class TileEntityLootable extends TileEntityContainer implements 
                 random = new Random(this.h);
             }
 
-            LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
+            LootTableInfo.Builder loottableinfo_builder = new LootTableInfo.Builder((WorldServer) this.world);
 
-            loottableinfo_a.a(this.position);
+            loottableinfo_builder.position(this.position);
             if (entityhuman != null) {
-                loottableinfo_a.a(entityhuman.dJ());
+                loottableinfo_builder.luck(entityhuman.dJ());
             }
 
-            loottable.a(this, random, loottableinfo_a.a());
+            loottable.a(this, random, loottableinfo_builder.build());
         }
 
     }
 
-    public MinecraftKey Q_() {
+    public MinecraftKey getLootTable() {
         return this.g;
     }
 
-    public void a(MinecraftKey minecraftkey, long i) {
+    public void setLootTable(MinecraftKey minecraftkey, long i) {
         this.g = minecraftkey;
         this.h = i;
     }

@@ -18,7 +18,7 @@ public interface ChunkGenerator<C extends GeneratorSettings> {
     List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition);
 
     @Nullable
-    BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i);
+    BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag);
 
     C getSettings();
 

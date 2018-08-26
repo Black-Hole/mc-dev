@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class CommandTime {
@@ -43,11 +44,10 @@ public class CommandTime {
     }
 
     public static int a(CommandListenerWrapper commandlistenerwrapper, int i) {
-        WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
-        int j = aworldserver.length;
+        Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
-        for (int k = 0; k < j; ++k) {
-            WorldServer worldserver = aworldserver[k];
+        while (iterator.hasNext()) {
+            WorldServer worldserver = (WorldServer) iterator.next();
 
             worldserver.setDayTime((long) i);
         }
@@ -57,18 +57,17 @@ public class CommandTime {
     }
 
     public static int b(CommandListenerWrapper commandlistenerwrapper, int i) {
-        WorldServer[] aworldserver = commandlistenerwrapper.getServer().worldServer;
-        int j = aworldserver.length;
+        Iterator iterator = commandlistenerwrapper.getServer().getWorlds().iterator();
 
-        for (int k = 0; k < j; ++k) {
-            WorldServer worldserver = aworldserver[k];
+        while (iterator.hasNext()) {
+            WorldServer worldserver = (WorldServer) iterator.next();
 
             worldserver.setDayTime(worldserver.getDayTime() + (long) i);
         }
 
-        int l = a(commandlistenerwrapper.getWorld());
+        int j = a(commandlistenerwrapper.getWorld());
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { Integer.valueOf(l)}), true);
-        return l;
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.time.set", new Object[] { Integer.valueOf(j)}), true);
+        return j;
     }
 }

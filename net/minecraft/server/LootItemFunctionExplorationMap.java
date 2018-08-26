@@ -15,13 +15,15 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
     private final MapIcon.Type c;
     private final byte d;
     private final int e;
+    private final boolean f;
 
-    public LootItemFunctionExplorationMap(LootItemCondition[] alootitemcondition, String s, MapIcon.Type mapicon_type, byte b0, int i) {
+    public LootItemFunctionExplorationMap(LootItemCondition[] alootitemcondition, String s, MapIcon.Type mapicon_type, byte b0, int i, boolean flag) {
         super(alootitemcondition);
         this.b = s;
         this.c = mapicon_type;
         this.d = b0;
         this.e = i;
+        this.f = flag;
     }
 
     public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
@@ -34,7 +36,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
                 return itemstack;
             } else {
                 WorldServer worldserver = loottableinfo.h();
-                BlockPosition blockposition1 = worldserver.a(this.b, blockposition, this.e);
+                BlockPosition blockposition1 = worldserver.a(this.b, blockposition, this.e, this.f);
 
                 if (blockposition1 != null) {
                     ItemStack itemstack1 = ItemWorldMap.a(worldserver, blockposition1.getX(), blockposition1.getZ(), this.d, true, true);
@@ -76,8 +78,9 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
 
             byte b0 = jsonobject.has("zoom") ? ChatDeserializer.o(jsonobject, "zoom") : 2;
             int i = jsonobject.has("search_radius") ? ChatDeserializer.n(jsonobject, "search_radius") : 50;
+            boolean flag = jsonobject.has("skip_existing_chunks") ? ChatDeserializer.j(jsonobject, "skip_existing_chunks") : true;
 
-            return new LootItemFunctionExplorationMap(alootitemcondition, s, mapicon_type, b0, i);
+            return new LootItemFunctionExplorationMap(alootitemcondition, s, mapicon_type, b0, i, flag);
         }
 
         public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {

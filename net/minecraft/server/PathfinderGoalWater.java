@@ -11,7 +11,7 @@ public class PathfinderGoalWater extends PathfinderGoal {
     }
 
     public boolean a() {
-        return this.a.onGround && !this.a.world.b(new BlockPosition(this.a)).a(TagsFluid.a);
+        return this.a.onGround && !this.a.world.b(new BlockPosition(this.a)).a(TagsFluid.WATER);
     }
 
     public void c() {
@@ -22,7 +22,7 @@ public class PathfinderGoalWater extends PathfinderGoal {
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-            if (this.a.world.b(blockposition1).a(TagsFluid.a)) {
+            if (this.a.world.b(blockposition1).a(TagsFluid.WATER)) {
                 blockposition = blockposition1;
                 break;
             }

@@ -5,16 +5,16 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     public static final BlockStateBoolean OPEN = BlockProperties.r;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
     public static final BlockStateBoolean IN_WALL = BlockProperties.n;
-    protected static final VoxelShape p = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
-    protected static final VoxelShape q = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
-    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 13.0D, 10.0D);
-    protected static final VoxelShape s = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 13.0D, 16.0D);
-    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 24.0D, 10.0D);
-    protected static final VoxelShape u = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 24.0D, 16.0D);
-    protected static final VoxelShape v = VoxelShapes.a(Block.a(0.0D, 5.0D, 7.0D, 2.0D, 16.0D, 9.0D), Block.a(14.0D, 5.0D, 7.0D, 16.0D, 16.0D, 9.0D));
-    protected static final VoxelShape w = VoxelShapes.a(Block.a(7.0D, 5.0D, 0.0D, 9.0D, 16.0D, 2.0D), Block.a(7.0D, 5.0D, 14.0D, 9.0D, 16.0D, 16.0D));
-    protected static final VoxelShape x = VoxelShapes.a(Block.a(0.0D, 2.0D, 7.0D, 2.0D, 13.0D, 9.0D), Block.a(14.0D, 2.0D, 7.0D, 16.0D, 13.0D, 9.0D));
-    protected static final VoxelShape y = VoxelShapes.a(Block.a(7.0D, 2.0D, 0.0D, 9.0D, 13.0D, 2.0D), Block.a(7.0D, 2.0D, 14.0D, 9.0D, 13.0D, 16.0D));
+    protected static final VoxelShape o = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
+    protected static final VoxelShape p = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
+    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 13.0D, 10.0D);
+    protected static final VoxelShape r = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 13.0D, 16.0D);
+    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 24.0D, 10.0D);
+    protected static final VoxelShape t = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 24.0D, 16.0D);
+    protected static final VoxelShape u = VoxelShapes.a(Block.a(0.0D, 5.0D, 7.0D, 2.0D, 16.0D, 9.0D), Block.a(14.0D, 5.0D, 7.0D, 16.0D, 16.0D, 9.0D));
+    protected static final VoxelShape v = VoxelShapes.a(Block.a(7.0D, 5.0D, 0.0D, 9.0D, 16.0D, 2.0D), Block.a(7.0D, 5.0D, 14.0D, 9.0D, 16.0D, 16.0D));
+    protected static final VoxelShape w = VoxelShapes.a(Block.a(0.0D, 2.0D, 7.0D, 2.0D, 13.0D, 9.0D), Block.a(14.0D, 2.0D, 7.0D, 16.0D, 13.0D, 9.0D));
+    protected static final VoxelShape x = VoxelShapes.a(Block.a(7.0D, 2.0D, 0.0D, 9.0D, 13.0D, 2.0D), Block.a(7.0D, 2.0D, 14.0D, 9.0D, 13.0D, 16.0D));
 
     public BlockFenceGate(Block.Info block_info) {
         super(block_info);
@@ -22,7 +22,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.s : BlockFenceGate.r) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.q : BlockFenceGate.p);
+        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.r : BlockFenceGate.q) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.p : BlockFenceGate.o);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -38,11 +38,11 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.t : BlockFenceGate.u);
+        return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.s : BlockFenceGate.t);
     }
 
     public VoxelShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.y : BlockFenceGate.x) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.w : BlockFenceGate.v);
+        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.x : BlockFenceGate.w) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.v : BlockFenceGate.u);
     }
 
     public boolean a(IBlockData iblockdata) {

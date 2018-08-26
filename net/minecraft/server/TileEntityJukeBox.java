@@ -5,7 +5,7 @@ public class TileEntityJukeBox extends TileEntity {
     private ItemStack a;
 
     public TileEntityJukeBox() {
-        super(TileEntityTypes.f);
+        super(TileEntityTypes.JUKEBOX);
         this.a = ItemStack.a;
     }
 

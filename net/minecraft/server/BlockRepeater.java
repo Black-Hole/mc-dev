@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class BlockRepeater extends BlockDiodeAbstract {
 
     public static final BlockStateBoolean LOCKED = BlockProperties.p;
-    public static final BlockStateInteger DELAY = BlockProperties.Z;
+    public static final BlockStateInteger DELAY = BlockProperties.aa;
 
     protected BlockRepeater(Block.Info block_info) {
         super(block_info);

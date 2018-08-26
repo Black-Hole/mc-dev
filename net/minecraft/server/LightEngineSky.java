@@ -45,7 +45,7 @@ public class LightEngineSky extends LightEngine {
                                     blockposition_b1.f(j1 + enumdirection.getAdjacentX(), l2, k1 + enumdirection.getAdjacentZ());
                                     int i3 = regionlimitedworldaccess.getType(blockposition_b1).b(regionlimitedworldaccess, blockposition_b1);
 
-                                    if (i3 != regionlimitedworldaccess.J()) {
+                                    if (i3 != regionlimitedworldaccess.K()) {
                                         this.a((IWorldWriter) regionlimitedworldaccess, blockposition_b1, 15 - i3 - 1);
                                         this.a(ichunkaccess.getPos(), blockposition_b1, 15 - i3 - 1);
                                     }

@@ -1,15 +1,20 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class BlockDispenser extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockDirectional.FACING;
     public static final BlockStateBoolean TRIGGERED = BlockProperties.w;
-    public static final RegistryDefault<Item, IDispenseBehavior> REGISTRY = new RegistryDefault(new DispenseBehaviorItem());
+    public static final Map<Item, IDispenseBehavior> REGISTRY = (Map) SystemUtils.a((Object) (new Object2ObjectOpenHashMap()), (object2objectopenhashmap) -> {
+        object2objectopenhashmap.defaultReturnValue(new DispenseBehaviorItem());
+    });
 
     public static void a(IMaterial imaterial, IDispenseBehavior idispensebehavior) {
-        BlockDispenser.REGISTRY.a(imaterial.getItem(), idispensebehavior);
+        BlockDispenser.REGISTRY.put(imaterial.getItem(), idispensebehavior);
     }
 
     protected BlockDispenser(Block.Info block_info) {
@@ -67,7 +72,7 @@ public class BlockDispenser extends BlockTileEntity {
         boolean flag1 = ((Boolean) iblockdata.get(BlockDispenser.TRIGGERED)).booleanValue();
 
         if (flag && !flag1) {
-            world.I().a(blockposition, this, this.a((IWorldReader) world));
+            world.J().a(blockposition, this, this.a((IWorldReader) world));
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, Boolean.valueOf(true)), 4);
         } else if (!flag && flag1) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)), 4);

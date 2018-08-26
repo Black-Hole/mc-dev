@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.R;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.S;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
 
     public BlockMinecartDetector(Block.Info block_info) {
@@ -72,7 +72,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
 
         if (flag1) {
-            world.I().a(blockposition, this, this.a((IWorldReader) world));
+            world.J().a(blockposition, this, this.a((IWorldReader) world));
         }
 
         world.updateAdjacentComparators(blockposition, this);
@@ -115,7 +115,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
                 return ((EntityMinecartCommandBlock) list.get(0)).getCommandBlock().i();
             }
 
-            List list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.c);
+            List list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.d);
 
             if (!list1.isEmpty()) {
                 return Container.b((IInventory) list1.get(0));

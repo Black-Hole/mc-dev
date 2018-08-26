@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class BlockChorusFlower extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.U;
+    public static final BlockStateInteger AGE = BlockProperties.V;
     private final BlockChorusFruit b;
 
     protected BlockChorusFlower(BlockChorusFruit blockchorusfruit, Block.Info block_info) {
@@ -127,7 +127,7 @@ public class BlockChorusFlower extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection != EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

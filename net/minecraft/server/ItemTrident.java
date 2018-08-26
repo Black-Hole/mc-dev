@@ -73,7 +73,7 @@ public class ItemTrident extends Item {
                             soundeffect = SoundEffects.ITEM_TRIDENT_RIPTIDE_1;
                         }
 
-                        entityhuman.p(20);
+                        entityhuman.o(20);
                         if (entityhuman.onGround) {
                             float f7 = 1.1999999F;
 
@@ -117,8 +117,8 @@ public class ItemTrident extends Item {
         Multimap multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTrident.h, "Tool modifier", 8.0D, 0));
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemTrident.i, "Tool modifier", -2.9000000953674316D, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTrident.g, "Tool modifier", 8.0D, 0));
+            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemTrident.h, "Tool modifier", -2.9000000953674316D, 0));
         }
 
         return multimap;

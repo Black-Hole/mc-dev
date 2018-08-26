@@ -164,7 +164,7 @@ public class AdvancementDisplay {
     private JsonObject l() {
         JsonObject jsonobject = new JsonObject();
 
-        jsonobject.addProperty("item", ((MinecraftKey) Item.REGISTRY.b(this.c.getItem())).toString());
+        jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.c.getItem()).toString());
         return jsonobject;
     }
 }

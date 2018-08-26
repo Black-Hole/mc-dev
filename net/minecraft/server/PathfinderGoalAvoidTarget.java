@@ -21,7 +21,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, float f, double d0, double d1) {
         this(entitycreature, oclass, (entity) -> {
             return true;
-        }, f, d0, d1, IEntitySelector.d);
+        }, f, d0, d1, IEntitySelector.e);
     }
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super Entity> predicate, float f, double d0, double d1, Predicate<Entity> predicate1) {

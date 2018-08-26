@@ -40,9 +40,9 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         super(iminecraftserver, "Query Listener");
         this.i = iminecraftserver.a("query.port", 0);
         this.s = iminecraftserver.e();
-        this.j = iminecraftserver.f();
-        this.l = iminecraftserver.e_();
-        this.k = iminecraftserver.B();
+        this.j = iminecraftserver.e_();
+        this.l = iminecraftserver.m();
+        this.k = iminecraftserver.z();
         this.m = iminecraftserver.getWorld();
         this.w = 0L;
         this.r = "0.0.0.0";

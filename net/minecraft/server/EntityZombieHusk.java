@@ -8,8 +8,8 @@ public class EntityZombieHusk extends EntityZombie {
         super(EntityTypes.HUSK, world);
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return super.a(generatoraccess) && generatoraccess.e(new BlockPosition(this));
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return super.a(generatoraccess, flag) && (flag || generatoraccess.e(new BlockPosition(this)));
     }
 
     protected boolean L_() {
@@ -28,12 +28,12 @@ public class EntityZombieHusk extends EntityZombie {
         return SoundEffects.ENTITY_HUSK_DEATH;
     }
 
-    protected SoundEffect dB() {
+    protected SoundEffect dA() {
         return SoundEffects.ENTITY_HUSK_STEP;
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.ay;
     }
 
@@ -49,16 +49,16 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected boolean dD() {
+    protected boolean dC() {
         return true;
     }
 
-    protected void dF() {
+    protected void dE() {
         this.a(new EntityZombie(this.world));
         this.world.a((EntityHuman) null, 1041, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected ItemStack dC() {
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 }

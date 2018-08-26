@@ -16,7 +16,7 @@ public class ItemChorusFruit extends ItemFood {
 
             for (int i = 0; i < 16; ++i) {
                 double d3 = entityliving.locX + (entityliving.getRandom().nextDouble() - 0.5D) * 16.0D;
-                double d4 = MathHelper.a(entityliving.locY + (double) (entityliving.getRandom().nextInt(16) - 8), 0.0D, (double) (world.aa() - 1));
+                double d4 = MathHelper.a(entityliving.locY + (double) (entityliving.getRandom().nextInt(16) - 8), 0.0D, (double) (world.ab() - 1));
                 double d5 = entityliving.locZ + (entityliving.getRandom().nextDouble() - 0.5D) * 16.0D;
 
                 if (entityliving.isPassenger()) {

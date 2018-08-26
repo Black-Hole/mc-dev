@@ -25,11 +25,11 @@ public class ChatComponentUtils {
             ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
             String s;
 
-            if (chatcomponentscore.g() != null) {
-                List list = chatcomponentscore.g().b(commandlistenerwrapper);
+            if (chatcomponentscore.j() != null) {
+                List list = chatcomponentscore.j().b(commandlistenerwrapper);
 
                 if (list.isEmpty()) {
-                    s = chatcomponentscore.f();
+                    s = chatcomponentscore.i();
                 } else {
                     if (list.size() != 1) {
                         throw ArgumentEntity.a.create();
@@ -38,26 +38,26 @@ public class ChatComponentUtils {
                     s = ((Entity) list.get(0)).getName();
                 }
             } else {
-                s = chatcomponentscore.f();
+                s = chatcomponentscore.i();
             }
 
             String s1 = entity != null && s.equals("*") ? entity.getName() : s;
 
-            object = new ChatComponentScore(s1, chatcomponentscore.h());
+            object = new ChatComponentScore(s1, chatcomponentscore.k());
             ((ChatComponentScore) object).b(chatcomponentscore.getText());
             ((ChatComponentScore) object).b(commandlistenerwrapper);
         } else if (ichatbasecomponent instanceof ChatComponentSelector && commandlistenerwrapper != null) {
             object = ((ChatComponentSelector) ichatbasecomponent).a(commandlistenerwrapper);
         } else if (ichatbasecomponent instanceof ChatComponentText) {
-            object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).f());
+            object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).i());
         } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
-            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).g());
+            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).j());
         } else {
             if (!(ichatbasecomponent instanceof ChatMessage)) {
                 return ichatbasecomponent;
             }
 
-            Object[] aobject = ((ChatMessage) ichatbasecomponent).i();
+            Object[] aobject = ((ChatMessage) ichatbasecomponent).l();
 
             for (int i = 0; i < aobject.length; ++i) {
                 Object object1 = aobject[i];
@@ -67,7 +67,7 @@ public class ChatComponentUtils {
                 }
             }
 
-            object = new ChatMessage(((ChatMessage) ichatbasecomponent).h(), aobject);
+            object = new ChatMessage(((ChatMessage) ichatbasecomponent).k(), aobject);
         }
 
         Iterator iterator = ichatbasecomponent.a().iterator();

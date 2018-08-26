@@ -56,7 +56,7 @@ public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureFlowingConfig
 
                 if (j == 3 && k == 1) {
                     generatoraccess.setTypeAndData(blockposition, worldgenfeatureflowingconfiguration.a.i().i(), 2);
-                    generatoraccess.H().a(blockposition, worldgenfeatureflowingconfiguration.a, 0);
+                    generatoraccess.I().a(blockposition, worldgenfeatureflowingconfiguration.a, 0);
                     ++i;
                 }
 

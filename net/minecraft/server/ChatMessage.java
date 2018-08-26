@@ -1,14 +1,16 @@
 package net.minecraft.server;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class ChatMessage extends ChatBaseComponent {
 
@@ -30,7 +32,7 @@ public class ChatMessage extends ChatBaseComponent {
             Object object = aobject[i];
 
             if (object instanceof IChatBaseComponent) {
-                IChatBaseComponent ichatbasecomponent = ((IChatBaseComponent) object).e();
+                IChatBaseComponent ichatbasecomponent = ((IChatBaseComponent) object).h();
 
                 this.g[i] = ichatbasecomponent;
                 ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
@@ -42,7 +44,7 @@ public class ChatMessage extends ChatBaseComponent {
     }
 
     @VisibleForTesting
-    synchronized void f() {
+    synchronized void i() {
         Object object = this.h;
 
         synchronized (this.h) {
@@ -107,7 +109,7 @@ public class ChatMessage extends ChatBaseComponent {
                     int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
 
                     if (i1 < this.g.length) {
-                        this.b.add(this.a(i1));
+                        this.b.add(this.b(i1));
                     }
                 }
             }
@@ -124,7 +126,7 @@ public class ChatMessage extends ChatBaseComponent {
         }
     }
 
-    private IChatBaseComponent a(int i) {
+    private IChatBaseComponent b(int i) {
         if (i >= this.g.length) {
             throw new ChatMessageException(this, i);
         } else {
@@ -168,13 +170,13 @@ public class ChatMessage extends ChatBaseComponent {
         return this;
     }
 
-    public Iterator<IChatBaseComponent> iterator() {
-        this.f();
-        return Iterators.concat(a((Iterable) this.b), a((Iterable) this.a));
+    public Stream<IChatBaseComponent> c() {
+        this.i();
+        return Streams.concat(new Stream[] { this.b.stream(), this.a.stream()}).flatMap(IChatBaseComponent::c);
     }
 
     public String getText() {
-        this.f();
+        this.i();
         StringBuilder stringbuilder = new StringBuilder();
         Iterator iterator = this.b.iterator();
 
@@ -187,29 +189,18 @@ public class ChatMessage extends ChatBaseComponent {
         return stringbuilder.toString();
     }
 
-    public ChatMessage g() {
+    public ChatMessage j() {
         Object[] aobject = new Object[this.g.length];
 
         for (int i = 0; i < this.g.length; ++i) {
             if (this.g[i] instanceof IChatBaseComponent) {
-                aobject[i] = ((IChatBaseComponent) this.g[i]).e();
+                aobject[i] = ((IChatBaseComponent) this.g[i]).h();
             } else {
                 aobject[i] = this.g[i];
             }
         }
 
-        ChatMessage chatmessage = new ChatMessage(this.f, aobject);
-
-        chatmessage.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
-
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
-
-            chatmessage.addSibling(ichatbasecomponent.e());
-        }
-
-        return chatmessage;
+        return new ChatMessage(this.f, aobject);
     }
 
     public boolean equals(Object object) {
@@ -236,15 +227,15 @@ public class ChatMessage extends ChatBaseComponent {
         return "TranslatableComponent{key=\'" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String h() {
+    public String k() {
         return this.f;
     }
 
-    public Object[] i() {
+    public Object[] l() {
         return this.g;
     }
 
-    public IChatBaseComponent e() {
-        return this.g();
+    public IChatBaseComponent g() {
+        return this.j();
     }
 }

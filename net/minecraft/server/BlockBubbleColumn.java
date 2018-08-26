@@ -77,10 +77,10 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
             if (enumdirection == EnumDirection.DOWN) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, Boolean.valueOf(a((IBlockAccess) generatoraccess, blockposition1))), 2);
             } else if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() != Blocks.BUBBLE_COLUMN && a(generatoraccess, blockposition1)) {
-                generatoraccess.I().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+                generatoraccess.J().a(blockposition, this, this.a((IWorldReader) generatoraccess));
             }
 
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         }
     }

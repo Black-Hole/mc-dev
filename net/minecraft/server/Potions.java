@@ -50,7 +50,7 @@ public class Potions {
     public static final PotionRegistry P;
 
     private static PotionRegistry a(String s) {
-        PotionRegistry potionregistry = (PotionRegistry) PotionRegistry.a.get(new MinecraftKey(s));
+        PotionRegistry potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(new MinecraftKey(s));
 
         if (!Potions.Q.add(potionregistry)) {
             throw new IllegalStateException("Invalid Potion requested: " + s);

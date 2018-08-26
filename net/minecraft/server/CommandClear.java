@@ -52,7 +52,7 @@ public class CommandClear {
 
         if (j == 0) {
             if (collection.size() == 1) {
-                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().c());
+                throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().e());
             } else {
                 throw CommandClear.b.create(Integer.valueOf(collection.size()));
             }

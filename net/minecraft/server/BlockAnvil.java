@@ -8,15 +8,15 @@ public class BlockAnvil extends BlockFalling {
 
     private static final Logger c = LogManager.getLogger();
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    private static final VoxelShape p = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D);
-    private static final VoxelShape q = Block.a(3.0D, 4.0D, 4.0D, 13.0D, 5.0D, 12.0D);
-    private static final VoxelShape r = Block.a(4.0D, 5.0D, 6.0D, 12.0D, 10.0D, 10.0D);
-    private static final VoxelShape s = Block.a(0.0D, 10.0D, 3.0D, 16.0D, 16.0D, 13.0D);
-    private static final VoxelShape t = Block.a(4.0D, 4.0D, 3.0D, 12.0D, 5.0D, 13.0D);
-    private static final VoxelShape u = Block.a(6.0D, 5.0D, 4.0D, 10.0D, 10.0D, 12.0D);
-    private static final VoxelShape v = Block.a(3.0D, 10.0D, 0.0D, 13.0D, 16.0D, 16.0D);
-    private static final VoxelShape w = VoxelShapes.a(BlockAnvil.p, VoxelShapes.a(BlockAnvil.q, VoxelShapes.a(BlockAnvil.r, BlockAnvil.s)));
-    private static final VoxelShape x = VoxelShapes.a(BlockAnvil.p, VoxelShapes.a(BlockAnvil.t, VoxelShapes.a(BlockAnvil.u, BlockAnvil.v)));
+    private static final VoxelShape o = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 4.0D, 14.0D);
+    private static final VoxelShape p = Block.a(3.0D, 4.0D, 4.0D, 13.0D, 5.0D, 12.0D);
+    private static final VoxelShape q = Block.a(4.0D, 5.0D, 6.0D, 12.0D, 10.0D, 10.0D);
+    private static final VoxelShape r = Block.a(0.0D, 10.0D, 3.0D, 16.0D, 16.0D, 13.0D);
+    private static final VoxelShape s = Block.a(4.0D, 4.0D, 3.0D, 12.0D, 5.0D, 13.0D);
+    private static final VoxelShape t = Block.a(6.0D, 5.0D, 4.0D, 10.0D, 10.0D, 12.0D);
+    private static final VoxelShape u = Block.a(3.0D, 10.0D, 0.0D, 13.0D, 16.0D, 16.0D);
+    private static final VoxelShape v = VoxelShapes.a(BlockAnvil.o, VoxelShapes.a(BlockAnvil.p, VoxelShapes.a(BlockAnvil.q, BlockAnvil.r)));
+    private static final VoxelShape w = VoxelShapes.a(BlockAnvil.o, VoxelShapes.a(BlockAnvil.s, VoxelShapes.a(BlockAnvil.t, BlockAnvil.u)));
 
     public BlockAnvil(Block.Info block_info) {
         super(block_info);
@@ -46,7 +46,7 @@ public class BlockAnvil extends BlockFalling {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockAnvil.FACING);
 
-        return enumdirection.k() == EnumDirection.EnumAxis.X ? BlockAnvil.w : BlockAnvil.x;
+        return enumdirection.k() == EnumDirection.EnumAxis.X ? BlockAnvil.v : BlockAnvil.w;
     }
 
     protected void a(EntityFallingBlock entityfallingblock) {

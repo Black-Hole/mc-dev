@@ -13,14 +13,15 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackLoader {
 
     private static final Logger a = LogManager.getLogger();
-    private final String b;
-    private final Supplier<IResourcePack> c;
-    private final IChatBaseComponent d;
+    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}), 4);
+    private final String c;
+    private final Supplier<IResourcePack> d;
     private final IChatBaseComponent e;
-    private final EnumResourcePackVersion f;
-    private final ResourcePackLoader.Position g;
-    private final boolean h;
+    private final IChatBaseComponent f;
+    private final EnumResourcePackVersion g;
+    private final ResourcePackLoader.Position h;
     private final boolean i;
+    private final boolean j;
 
     @Nullable
     public static <T extends ResourcePackLoader> T a(String s, boolean flag, Supplier<IResourcePack> supplier, ResourcePackLoader.b<T> resourcepackloader_b, ResourcePackLoader.Position resourcepackloader_position) {
@@ -32,6 +33,11 @@ public class ResourcePackLoader {
 
             try {
                 ResourcePackInfo resourcepackinfo = (ResourcePackInfo) iresourcepack.a((ResourcePackMetaParser) ResourcePackInfo.a);
+
+                if (flag && resourcepackinfo == null) {
+                    ResourcePackLoader.a.error("Broken/missing pack.mcmeta detected, fudging it into existance. Please check that your launcher has downloaded all assets for the game correctly!");
+                    resourcepackinfo = ResourcePackLoader.b;
+                }
 
                 if (resourcepackinfo == null) {
                     ResourcePackLoader.a.warn("Couldn\'t find pack meta for pack {}", s);
@@ -65,14 +71,14 @@ public class ResourcePackLoader {
     }
 
     public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, EnumResourcePackVersion enumresourcepackversion, ResourcePackLoader.Position resourcepackloader_position, boolean flag1) {
-        this.b = s;
-        this.c = supplier;
-        this.d = ichatbasecomponent;
-        this.e = ichatbasecomponent1;
-        this.f = enumresourcepackversion;
-        this.h = flag;
-        this.g = resourcepackloader_position;
-        this.i = flag1;
+        this.c = s;
+        this.d = supplier;
+        this.e = ichatbasecomponent;
+        this.f = ichatbasecomponent1;
+        this.g = enumresourcepackversion;
+        this.i = flag;
+        this.h = resourcepackloader_position;
+        this.j = flag1;
     }
 
     public ResourcePackLoader(String s, boolean flag, Supplier<IResourcePack> supplier, IResourcePack iresourcepack, ResourcePackInfo resourcepackinfo, ResourcePackLoader.Position resourcepackloader_position) {
@@ -80,33 +86,33 @@ public class ResourcePackLoader {
     }
 
     public IChatBaseComponent a(boolean flag) {
-        return ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(this.b))).a((chatmodifier) -> {
-            chatmodifier.setColor(flag ? EnumChatFormat.GREEN : EnumChatFormat.RED).setInsertion(StringArgumentType.escapeIfRequired(this.b)).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, (new ChatComponentText("")).addSibling(this.d).a("\n").addSibling(this.e)));
+        return ChatComponentUtils.a((IChatBaseComponent) (new ChatComponentText(this.c))).a((chatmodifier) -> {
+            chatmodifier.setColor(flag ? EnumChatFormat.GREEN : EnumChatFormat.RED).setInsertion(StringArgumentType.escapeIfRequired(this.c)).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, (new ChatComponentText("")).addSibling(this.e).a("\n").addSibling(this.f)));
         });
     }
 
     public EnumResourcePackVersion c() {
-        return this.f;
+        return this.g;
     }
 
     public IResourcePack d() {
-        return (IResourcePack) this.c.get();
+        return (IResourcePack) this.d.get();
     }
 
     public String e() {
-        return this.b;
+        return this.c;
     }
 
     public boolean f() {
-        return this.h;
-    }
-
-    public boolean g() {
         return this.i;
     }
 
+    public boolean g() {
+        return this.j;
+    }
+
     public ResourcePackLoader.Position h() {
-        return this.g;
+        return this.h;
     }
 
     public boolean equals(Object object) {
@@ -117,12 +123,12 @@ public class ResourcePackLoader {
         } else {
             ResourcePackLoader resourcepackloader = (ResourcePackLoader) object;
 
-            return this.b.equals(resourcepackloader.b);
+            return this.c.equals(resourcepackloader.c);
         }
     }
 
     public int hashCode() {
-        return this.b.hashCode();
+        return this.c.hashCode();
     }
 
     public static enum Position {

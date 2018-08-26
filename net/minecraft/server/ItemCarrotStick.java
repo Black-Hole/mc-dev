@@ -15,7 +15,7 @@ public class ItemCarrotStick extends Item {
             if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
                 EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
-                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dA()) {
+                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dz()) {
                     itemstack.damage(7, entityhuman);
                     if (itemstack.isEmpty()) {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);

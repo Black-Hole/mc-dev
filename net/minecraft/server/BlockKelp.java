@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockKelp extends Block implements IFluidContainer {
 
-    public static final BlockStateInteger a = BlockProperties.X;
+    public static final BlockStateInteger a = BlockProperties.Y;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
 
     protected BlockKelp(Block.Info block_info) {
@@ -25,7 +25,7 @@ public class BlockKelp extends Block implements IFluidContainer {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
 
-        return fluid.a(TagsFluid.a) && fluid.g() == 8 ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : null;
+        return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : null;
     }
 
     public IBlockData a(GeneratorAccess generatoraccess) {
@@ -72,13 +72,13 @@ public class BlockKelp extends Block implements IFluidContainer {
                 return Blocks.AIR.getBlockData();
             }
 
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
         }
 
         if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() == this) {
             return Blocks.KELP_PLANT.getBlockData();
         } else {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         }
     }
@@ -87,11 +87,11 @@ public class BlockKelp extends Block implements IFluidContainer {
         blockstatelist_a.a(new IBlockState[] { BlockKelp.a});
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return false;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         return false;
     }
 }

@@ -109,7 +109,7 @@ public class OldChunkLoader {
         for (j = 0; j < 16; ++j) {
             for (k = 0; k < 16; ++k) {
                 blockposition_mutableblockposition.c(oldchunkloader_oldchunk.k << 4 | j, 0, oldchunkloader_oldchunk.l << 4 | k);
-                abyte1[k << 4 | j] = (byte) (BiomeBase.a(worldchunkmanager.getBiome(blockposition_mutableblockposition, Biomes.b)) & 255);
+                abyte1[k << 4 | j] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition, Biomes.b)) & 255);
             }
         }
 
@@ -120,6 +120,7 @@ public class OldChunkLoader {
             nbttagcompound.set("TileTicks", oldchunkloader_oldchunk.j);
         }
 
+        nbttagcompound.setBoolean("convertedFromAlphaFormat", true);
     }
 
     public static class OldChunk {

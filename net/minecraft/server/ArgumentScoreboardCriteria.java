@@ -52,7 +52,7 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
         ArrayList arraylist = Lists.newArrayList(IScoreboardCriteria.criteria.keySet());
-        Iterator iterator = StatisticList.REGISTRY.iterator();
+        Iterator iterator = IRegistry.STATS.iterator();
 
         while (iterator.hasNext()) {
             StatisticWrapper statisticwrapper = (StatisticWrapper) iterator.next();
@@ -66,7 +66,7 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
             }
         }
 
-        return ICompletionProvider.b(arraylist, suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) arraylist, suggestionsbuilder);
     }
 
     public <T> String a(StatisticWrapper<T> statisticwrapper, Object object) {

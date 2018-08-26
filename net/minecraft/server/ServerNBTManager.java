@@ -11,20 +11,10 @@ public class ServerNBTManager extends WorldNBTStorage {
     }
 
     public IChunkLoader createChunkLoader(WorldProvider worldprovider) {
-        File file = this.getDirectory();
-        File file1;
+        File file = worldprovider.getDimensionManager().a(this.getDirectory());
 
-        if (worldprovider instanceof WorldProviderHell) {
-            file1 = new File(file, "DIM-1");
-            file1.mkdirs();
-            return new ChunkRegionLoader(file1, this.a);
-        } else if (worldprovider instanceof WorldProviderTheEnd) {
-            file1 = new File(file, "DIM1");
-            file1.mkdirs();
-            return new ChunkRegionLoader(file1, this.a);
-        } else {
-            return new ChunkRegionLoader(file, this.a);
-        }
+        file.mkdirs();
+        return new ChunkRegionLoader(file, this.a);
     }
 
     public void saveWorldData(WorldData worlddata, @Nullable NBTTagCompound nbttagcompound) {

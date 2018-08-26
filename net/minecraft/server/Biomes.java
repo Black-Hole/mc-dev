@@ -78,7 +78,7 @@ public abstract class Biomes {
     public static final BiomeBase av;
 
     private static BiomeBase a(String s) {
-        BiomeBase biomebase = (BiomeBase) BiomeBase.REGISTRY_ID.get(new MinecraftKey(s));
+        BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(s));
 
         if (biomebase == null) {
             throw new IllegalStateException("Invalid Biome requested: " + s);

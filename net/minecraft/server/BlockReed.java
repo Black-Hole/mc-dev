@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BlockReed extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.W;
+    public static final BlockStateInteger AGE = BlockProperties.X;
     protected static final VoxelShape b = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     protected BlockReed(Block.Info block_info) {
@@ -58,7 +58,7 @@ public class BlockReed extends Block {
                     IBlockData iblockdata1 = iworldreader.getType(blockposition1.shift(enumdirection));
                     Fluid fluid = iworldreader.b(blockposition1.shift(enumdirection));
 
-                    if (fluid.a(TagsFluid.a) || iblockdata1.getBlock() == Blocks.FROSTED_ICE) {
+                    if (fluid.a(TagsFluid.WATER) || iblockdata1.getBlock() == Blocks.FROSTED_ICE) {
                         return true;
                     }
                 }

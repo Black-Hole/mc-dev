@@ -30,7 +30,7 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
             }
 
             if (this.d == EntityHuman.class) {
-                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, IEntitySelector.e.and(IEntitySelector.b(this.a)));
+                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, IEntitySelector.f.and(IEntitySelector.b(this.a)));
             } else {
                 this.b = this.a.world.a(this.d, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c), (Entity) this.a);
             }

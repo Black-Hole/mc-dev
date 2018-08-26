@@ -70,7 +70,7 @@ public class PathfinderGoalPanic extends PathfinderGoal {
             for (int k1 = l - j; k1 <= l + j; ++k1) {
                 for (int l1 = i1 - i; l1 <= i1 + i; ++l1) {
                     blockposition_mutableblockposition.c(j1, k1, l1);
-                    if (iblockaccess.b(blockposition_mutableblockposition).a(TagsFluid.a)) {
+                    if (iblockaccess.b(blockposition_mutableblockposition).a(TagsFluid.WATER)) {
                         float f1 = (float) ((j1 - k) * (j1 - k) + (k1 - l) * (k1 - l) + (l1 - i1) * (l1 - i1));
 
                         if (f1 < f) {

@@ -123,7 +123,7 @@ public class CommandScoreboard {
             }
         }
 
-        return ICompletionProvider.b(arraylist, suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) arraylist, suggestionsbuilder);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {

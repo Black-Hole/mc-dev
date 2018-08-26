@@ -37,7 +37,7 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                         if (k1 >= 0 && k1 < 256) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.c(l1, k1, j1));
 
-                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.D)) {
+                            if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.LEAVES)) {
                                 flag = false;
                             }
                         } else {
@@ -96,7 +96,7 @@ public class WorldGenTaiga2 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                     for (j2 = 0; j2 < i - j1; ++j2) {
                         IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(j2));
 
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.D)) {
+                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES)) {
                             this.a(set, generatoraccess, blockposition.up(j2), WorldGenTaiga2.a);
                         }
                     }

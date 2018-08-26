@@ -510,19 +510,21 @@ public class PlayerInventory implements IInventory {
     }
 
     public void a(float f) {
-        f /= 4.0F;
-        if (f < 1.0F) {
-            f = 1.0F;
-        }
-
-        for (int i = 0; i < this.armor.size(); ++i) {
-            ItemStack itemstack = (ItemStack) this.armor.get(i);
-
-            if (itemstack.getItem() instanceof ItemArmor) {
-                itemstack.damage((int) f, this.player);
+        if (f > 0.0F) {
+            f /= 4.0F;
+            if (f < 1.0F) {
+                f = 1.0F;
             }
-        }
 
+            for (int i = 0; i < this.armor.size(); ++i) {
+                ItemStack itemstack = (ItemStack) this.armor.get(i);
+
+                if (itemstack.getItem() instanceof ItemArmor) {
+                    itemstack.damage((int) f, this.player);
+                }
+            }
+
+        }
     }
 
     public void q() {

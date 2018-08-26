@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class BlockTallPlant extends BlockPlant {
 
-    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.O;
+    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.P;
 
     public BlockTallPlant(Block.Info block_info) {
         super(block_info);

@@ -53,7 +53,7 @@ public class ServerConnection {
             Class oclass;
             LazyInitVar lazyinitvar;
 
-            if (Epoll.isAvailable() && this.e.X()) {
+            if (Epoll.isAvailable() && this.e.V()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
                 ServerConnection.d.info("Using epoll channel type");

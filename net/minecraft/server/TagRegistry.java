@@ -7,9 +7,9 @@ public class TagRegistry implements IResourcePackListener {
     private final TagsServer<FluidType> c;
 
     public TagRegistry() {
-        this.a = new TagsServer(Block.REGISTRY, "tags/blocks", "block");
-        this.b = new TagsServer(Item.REGISTRY, "tags/items", "item");
-        this.c = new TagsServer(FluidType.c, "tags/fluids", "fluid");
+        this.a = new TagsServer(IRegistry.BLOCK, "tags/blocks", "block");
+        this.b = new TagsServer(IRegistry.ITEM, "tags/items", "item");
+        this.c = new TagsServer(IRegistry.FLUID, "tags/fluids", "fluid");
     }
 
     public TagsServer<Block> a() {

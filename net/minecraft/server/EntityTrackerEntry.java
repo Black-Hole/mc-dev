@@ -408,15 +408,15 @@ public class EntityTrackerEntry {
             Entity entity;
 
             if (this.tracker instanceof EntitySpectralArrow) {
-                entity = ((EntitySpectralArrow) this.tracker).shooter;
+                entity = ((EntitySpectralArrow) this.tracker).getShooter();
                 return new PacketPlayOutSpawnEntity(this.tracker, 91, 1 + (entity == null ? this.tracker.getId() : entity.getId()));
             } else if (this.tracker instanceof EntityTippedArrow) {
-                entity = ((EntityArrow) this.tracker).shooter;
+                entity = ((EntityArrow) this.tracker).getShooter();
                 return new PacketPlayOutSpawnEntity(this.tracker, 60, 1 + (entity == null ? this.tracker.getId() : entity.getId()));
             } else if (this.tracker instanceof EntitySnowball) {
                 return new PacketPlayOutSpawnEntity(this.tracker, 61);
             } else if (this.tracker instanceof EntityThrownTrident) {
-                entity = ((EntityArrow) this.tracker).shooter;
+                entity = ((EntityArrow) this.tracker).getShooter();
                 return new PacketPlayOutSpawnEntity(this.tracker, 94, 1 + (entity == null ? this.tracker.getId() : entity.getId()));
             } else if (this.tracker instanceof EntityLlamaSpit) {
                 return new PacketPlayOutSpawnEntity(this.tracker, 68);

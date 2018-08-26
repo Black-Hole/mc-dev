@@ -38,14 +38,14 @@ public class EntityPigZombie extends EntityZombie {
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(5.0D);
     }
 
-    protected boolean dD() {
+    protected boolean dC() {
         return false;
     }
 
     protected void mobTick() {
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
-        if (this.dG()) {
+        if (this.dF()) {
             if (!this.isBaby() && !attributeinstance.a(EntityPigZombie.b)) {
                 attributeinstance.b(EntityPigZombie.b);
             }
@@ -70,12 +70,12 @@ public class EntityPigZombie extends EntityZombie {
         super.mobTick();
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -130,7 +130,7 @@ public class EntityPigZombie extends EntityZombie {
 
     }
 
-    public boolean dG() {
+    public boolean dF() {
         return this.angerLevel > 0;
     }
 
@@ -147,7 +147,7 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.au;
     }
 
@@ -159,12 +159,12 @@ public class EntityPigZombie extends EntityZombie {
         this.setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
     }
 
-    protected ItemStack dC() {
+    protected ItemStack dB() {
         return ItemStack.a;
     }
 
     public boolean c(EntityHuman entityhuman) {
-        return this.dG();
+        return this.dF();
     }
 
     static class PathfinderGoalAnger extends PathfinderGoalNearestAttackableTarget<EntityHuman> {
@@ -174,7 +174,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         public boolean a() {
-            return ((EntityPigZombie) this.e).dG() && super.a();
+            return ((EntityPigZombie) this.e).dF() && super.a();
         }
     }
 

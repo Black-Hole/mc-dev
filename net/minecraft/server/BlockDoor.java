@@ -6,13 +6,13 @@ public class BlockDoor extends Block {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean OPEN = BlockProperties.r;
-    public static final BlockStateEnum<BlockPropertyDoorHinge> HINGE = BlockProperties.aq;
+    public static final BlockStateEnum<BlockPropertyDoorHinge> HINGE = BlockProperties.ar;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
-    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.O;
-    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
-    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape t = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape u = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
+    public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> HALF = BlockProperties.P;
+    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape s = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
 
     protected BlockDoor(Block.Info block_info) {
         super(block_info);
@@ -27,16 +27,16 @@ public class BlockDoor extends Block {
         switch (enumdirection) {
         case EAST:
         default:
-            return flag ? BlockDoor.u : (flag1 ? BlockDoor.s : BlockDoor.r);
+            return flag ? BlockDoor.t : (flag1 ? BlockDoor.r : BlockDoor.q);
 
         case SOUTH:
-            return flag ? BlockDoor.r : (flag1 ? BlockDoor.u : BlockDoor.t);
+            return flag ? BlockDoor.q : (flag1 ? BlockDoor.t : BlockDoor.s);
 
         case WEST:
-            return flag ? BlockDoor.t : (flag1 ? BlockDoor.r : BlockDoor.s);
+            return flag ? BlockDoor.s : (flag1 ? BlockDoor.q : BlockDoor.r);
 
         case NORTH:
-            return flag ? BlockDoor.s : (flag1 ? BlockDoor.t : BlockDoor.u);
+            return flag ? BlockDoor.r : (flag1 ? BlockDoor.s : BlockDoor.t);
         }
     }
 

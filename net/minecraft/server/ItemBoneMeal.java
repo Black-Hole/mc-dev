@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class ItemBoneMeal extends ItemDye {
 
     public ItemBoneMeal(EnumColor enumcolor, Item.Info item_info) {
@@ -9,6 +11,7 @@ public class ItemBoneMeal extends ItemDye {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
+        BlockPosition blockposition1 = blockposition.shift(itemactioncontext.getClickedFace());
 
         if (a(itemactioncontext.getItemStack(), world, blockposition)) {
             if (!world.isClientSide) {
@@ -17,9 +20,10 @@ public class ItemBoneMeal extends ItemDye {
 
             return EnumInteractionResult.SUCCESS;
         } else {
-            BlockPosition blockposition1 = blockposition.shift(itemactioncontext.getClickedFace());
+            IBlockData iblockdata = world.getType(blockposition);
+            boolean flag = iblockdata.c(world, blockposition1, itemactioncontext.getClickedFace()) == EnumBlockFaceShape.SOLID;
 
-            if (b(itemactioncontext.getItemStack(), world, blockposition1)) {
+            if (flag && a(itemactioncontext.getItemStack(), world, blockposition1, itemactioncontext.getClickedFace())) {
                 if (!world.isClientSide) {
                     world.triggerEffect(2005, blockposition1, 0);
                 }
@@ -53,24 +57,47 @@ public class ItemBoneMeal extends ItemDye {
         return false;
     }
 
-    public static boolean b(ItemStack itemstack, World world, BlockPosition blockposition) {
-        IBlockData iblockdata = Blocks.SEAGRASS.getBlockData();
-
+    public static boolean a(ItemStack itemstack, World world, BlockPosition blockposition, @Nullable EnumDirection enumdirection) {
         if (world.getType(blockposition).getBlock() == Blocks.WATER && world.b(blockposition).g() == 8) {
             if (!world.isClientSide) {
-                label36:
+                label77:
                 for (int i = 0; i < 128; ++i) {
                     BlockPosition blockposition1 = blockposition;
+                    BiomeBase biomebase = world.getBiome(blockposition);
+                    IBlockData iblockdata = Blocks.SEAGRASS.getBlockData();
 
-                    for (int j = 0; j < i / 16; ++j) {
-                        blockposition1 = blockposition1.a(ItemBoneMeal.k.nextInt(3) - 1, (ItemBoneMeal.k.nextInt(3) - 1) * ItemBoneMeal.k.nextInt(3) / 2, ItemBoneMeal.k.nextInt(3) - 1);
-                        if (!iblockdata.canPlace(world, blockposition1)) {
-                            continue label36;
+                    int j;
+
+                    for (j = 0; j < i / 16; ++j) {
+                        blockposition1 = blockposition1.a(ItemBoneMeal.i.nextInt(3) - 1, (ItemBoneMeal.i.nextInt(3) - 1) * ItemBoneMeal.i.nextInt(3) / 2, ItemBoneMeal.i.nextInt(3) - 1);
+                        biomebase = world.getBiome(blockposition1);
+                        if (world.getType(blockposition1).k()) {
+                            continue label77;
                         }
                     }
 
-                    if (world.getType(blockposition1).getBlock() == Blocks.WATER && world.b(blockposition1).g() == 8 && iblockdata.canPlace(world, blockposition1)) {
-                        world.setTypeAndData(blockposition1, iblockdata, 3);
+                    if (biomebase == Biomes.T || biomebase == Biomes.W) {
+                        if (i == 0 && enumdirection != null && enumdirection.k().c()) {
+                            iblockdata = (IBlockData) ((Block) TagsBlock.WALL_CORALS.a(world.random)).getBlockData().set(BlockCoralFanWallAbstract.a, enumdirection);
+                        } else if (ItemBoneMeal.i.nextInt(4) == 0) {
+                            iblockdata = ((Block) TagsBlock.UNDERWATER_BONEMEALS.a(ItemBoneMeal.i)).getBlockData();
+                        }
+                    }
+
+                    if (iblockdata.getBlock().a(TagsBlock.WALL_CORALS)) {
+                        for (j = 0; !iblockdata.canPlace(world, blockposition1) && j < 4; ++j) {
+                            iblockdata = (IBlockData) iblockdata.set(BlockCoralFanWallAbstract.a, EnumDirection.EnumDirectionLimit.HORIZONTAL.a(ItemBoneMeal.i));
+                        }
+                    }
+
+                    if (iblockdata.canPlace(world, blockposition1)) {
+                        IBlockData iblockdata1 = world.getType(blockposition1);
+
+                        if (iblockdata1.getBlock() == Blocks.WATER && world.b(blockposition1).g() == 8) {
+                            world.setTypeAndData(blockposition1, iblockdata, 3);
+                        } else if (iblockdata1.getBlock() == Blocks.SEAGRASS && ItemBoneMeal.i.nextInt(10) == 0) {
+                            ((IBlockFragilePlantElement) Blocks.SEAGRASS).b(world, ItemBoneMeal.i, blockposition1, iblockdata1);
+                        }
                     }
                 }
 

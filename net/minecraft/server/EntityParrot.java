@@ -120,10 +120,10 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         }
 
         super.k();
-        this.dM();
+        this.dL();
     }
 
-    private void dM() {
+    private void dL() {
         this.bJ = this.bG;
         this.bI = this.bH;
         this.bH = (float) ((double) this.bH + (double) (this.onGround ? -1 : 4) * 0.3D);
@@ -209,14 +209,14 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return false;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
         int j = MathHelper.floor(this.getBoundingBox().b);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-        return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLogAbstract || block == Blocks.AIR && super.a(generatoraccess);
+        return block instanceof BlockLeaves || block == Blocks.GRASS || block instanceof BlockLogAbstract || block == Blocks.AIR && super.a(generatoraccess, flag);
     }
 
     public void c(float f, float f1) {}
@@ -341,7 +341,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aE;
     }
 

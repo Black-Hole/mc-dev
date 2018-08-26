@@ -47,9 +47,9 @@ public class RandomPositionGenerator {
         Random random = entitycreature.getRandom();
         boolean flag1;
 
-        if (entitycreature.dx()) {
-            double d1 = entitycreature.du().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
-            double d2 = (double) (entitycreature.dv() + (float) i);
+        if (entitycreature.dw()) {
+            double d1 = entitycreature.dt().distanceSquared((double) MathHelper.floor(entitycreature.locX), (double) MathHelper.floor(entitycreature.locY), (double) MathHelper.floor(entitycreature.locZ)) + 4.0D;
+            double d2 = (double) (entitycreature.du() + (float) i);
 
             flag1 = d1 < d2 * d2;
         } else {
@@ -71,8 +71,8 @@ public class RandomPositionGenerator {
                 int i2 = blockposition.getZ();
                 BlockPosition blockposition1;
 
-                if (entitycreature.dx() && i > 1) {
-                    blockposition1 = entitycreature.du();
+                if (entitycreature.dw() && i > 1) {
+                    blockposition1 = entitycreature.dt();
                     if (entitycreature.locX > (double) blockposition1.getX()) {
                         k1 -= random.nextInt(i / 2);
                     } else {
@@ -155,6 +155,6 @@ public class RandomPositionGenerator {
     }
 
     private static boolean b(BlockPosition blockposition, EntityCreature entitycreature) {
-        return entitycreature.world.b(blockposition).a(TagsFluid.a);
+        return entitycreature.world.b(blockposition).a(TagsFluid.WATER);
     }
 }

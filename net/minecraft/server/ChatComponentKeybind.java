@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -26,19 +25,8 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return (String) this.d.get();
     }
 
-    public ChatComponentKeybind f() {
-        ChatComponentKeybind chatcomponentkeybind = new ChatComponentKeybind(this.c);
-
-        chatcomponentkeybind.setChatModifier(this.getChatModifier().clone());
-        Iterator iterator = this.a().iterator();
-
-        while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
-
-            chatcomponentkeybind.addSibling(ichatbasecomponent.e());
-        }
-
-        return chatcomponentkeybind;
+    public ChatComponentKeybind i() {
+        return new ChatComponentKeybind(this.c);
     }
 
     public boolean equals(Object object) {
@@ -57,11 +45,11 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return "KeybindComponent{keybind=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
-    public String g() {
+    public String j() {
         return this.c;
     }
 
-    public IChatBaseComponent e() {
-        return this.f();
+    public IChatBaseComponent g() {
+        return this.i();
     }
 }

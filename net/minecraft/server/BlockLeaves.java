@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockLeaves extends Block {
 
-    public static final BlockStateInteger DISTANCE = BlockProperties.aa;
+    public static final BlockStateInteger DISTANCE = BlockProperties.ab;
     public static final BlockStateBoolean PERSISTENT = BlockProperties.s;
     protected static boolean c;
 
@@ -38,7 +38,7 @@ public class BlockLeaves extends Block {
         int i = w(iblockdata1) + 1;
 
         if (i != 1 || ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() != i) {
-            generatoraccess.I().a(blockposition, this, 1);
+            generatoraccess.J().a(blockposition, this, 1);
         }
 
         return iblockdata;
@@ -84,7 +84,7 @@ public class BlockLeaves extends Block {
     }
 
     private static int w(IBlockData iblockdata) {
-        return TagsBlock.n.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() : 7);
+        return TagsBlock.LOGS.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() : 7);
     }
 
     public int a(IBlockData iblockdata, Random random) {

@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
 
     private static final Collection<String> b = Arrays.asList(new String[] { "0 0", "~ ~", "0.1 -0.5", "~1 ~-2"});
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.vec2.incomplete", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos2d.incomplete", new Object[0]));
     private final boolean c;
 
     public ArgumentVec2(boolean flag) {
@@ -65,7 +65,7 @@ public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(true);
             }
 
-            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder);
+            return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
         }
     }
 

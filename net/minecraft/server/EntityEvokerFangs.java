@@ -50,7 +50,10 @@ public class EntityEvokerFangs extends Entity {
 
     protected void a(NBTTagCompound nbttagcompound) {
         this.a = nbttagcompound.getInt("Warmup");
-        this.f = nbttagcompound.a("OwnerUUID");
+        if (nbttagcompound.b("OwnerUUID")) {
+            this.f = nbttagcompound.a("OwnerUUID");
+        }
+
     }
 
     protected void b(NBTTagCompound nbttagcompound) {

@@ -28,7 +28,7 @@ public class BlockEnderPortal extends BlockTileEntity {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.bm() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.g(world, blockposition), OperatorBoolean.AND)) {
-            entity.d(1);
+            entity.a(DimensionManager.THE_END);
         }
 
     }

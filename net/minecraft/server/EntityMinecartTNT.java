@@ -118,11 +118,11 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
     }
 
     public float a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid, float f) {
-        return this.k() && (iblockdata.a(TagsBlock.z) || iblockaccess.getType(blockposition.up()).a(TagsBlock.z)) ? 0.0F : super.a(explosion, iblockaccess, blockposition, iblockdata, fluid, f);
+        return this.k() && (iblockdata.a(TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a(TagsBlock.RAILS)) ? 0.0F : super.a(explosion, iblockaccess, blockposition, iblockdata, fluid, f);
     }
 
     public boolean a(Explosion explosion, IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, float f) {
-        return this.k() && (iblockdata.a(TagsBlock.z) || iblockaccess.getType(blockposition.up()).a(TagsBlock.z)) ? false : super.a(explosion, iblockaccess, blockposition, iblockdata, f);
+        return this.k() && (iblockdata.a(TagsBlock.RAILS) || iblockaccess.getType(blockposition.up()).a(TagsBlock.RAILS)) ? false : super.a(explosion, iblockaccess, blockposition, iblockdata, f);
     }
 
     protected void a(NBTTagCompound nbttagcompound) {

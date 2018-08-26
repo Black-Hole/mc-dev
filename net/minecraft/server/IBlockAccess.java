@@ -11,7 +11,7 @@ public interface IBlockAccess {
 
     Fluid b(BlockPosition blockposition);
 
-    default int J() {
+    default int K() {
         return 15;
     }
 }

@@ -5,14 +5,14 @@ import javax.annotation.Nullable;
 public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluidContainer {
 
     public static final BlockStateEnum<BlockPropertyDoubleBlockHalf> c = BlockTallPlantShearable.b;
-    protected static final VoxelShape p = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
+    protected static final VoxelShape o = Block.a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     public BlockTallSeaGrass(Block block, Block.Info block_info) {
         super(block, block_info);
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockTallSeaGrass.p;
+        return BlockTallSeaGrass.o;
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -34,7 +34,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         if (iblockdata != null) {
             Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition().up());
 
-            if (fluid.a(TagsFluid.a) && fluid.g() == 8) {
+            if (fluid.a(TagsFluid.WATER) && fluid.g() == 8) {
                 return iblockdata;
             }
         }
@@ -50,7 +50,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         } else {
             Fluid fluid = iworldreader.b(blockposition);
 
-            return super.canPlace(iblockdata, iworldreader, blockposition) && fluid.a(TagsFluid.a) && fluid.g() == 8;
+            return super.canPlace(iblockdata, iworldreader, blockposition) && fluid.a(TagsFluid.WATER) && fluid.g() == 8;
         }
     }
 
@@ -58,11 +58,11 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         return FluidTypes.c.a(false);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return false;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         return false;
     }
 

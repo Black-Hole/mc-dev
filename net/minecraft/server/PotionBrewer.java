@@ -182,9 +182,9 @@ public class PotionBrewer {
 
     private static void a(Item item, Item item1, Item item2) {
         if (!(item instanceof ItemPotion)) {
-            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item));
+            throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item));
         } else if (!(item2 instanceof ItemPotion)) {
-            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item2));
+            throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item2));
         } else {
             PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(item, RecipeItemStack.a(new IMaterial[] { item1}), item2));
         }
@@ -192,7 +192,7 @@ public class PotionBrewer {
 
     private static void a(Item item) {
         if (!(item instanceof ItemPotion)) {
-            throw new IllegalArgumentException("Expected a potion, got: " + Item.REGISTRY.b(item));
+            throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item));
         } else {
             PotionBrewer.c.add(RecipeItemStack.a(new IMaterial[] { item}));
         }

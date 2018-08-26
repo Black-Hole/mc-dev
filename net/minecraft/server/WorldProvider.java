@@ -69,7 +69,7 @@ public abstract class WorldProvider {
     public void l() {}
 
     public boolean a(int i, int j) {
-        return true;
+        return !this.b.f(i, j);
     }
 
     protected abstract void m();

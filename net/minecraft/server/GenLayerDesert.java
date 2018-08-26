@@ -4,21 +4,21 @@ public enum GenLayerDesert implements AreaTransformer7 {
 
     INSTANCE;
 
-    private static final int b = BiomeBase.a(Biomes.d);
-    private static final int c = BiomeBase.a(Biomes.e);
-    private static final int d = BiomeBase.a(Biomes.J);
-    private static final int e = BiomeBase.a(Biomes.n);
-    private static final int f = BiomeBase.a(Biomes.w);
-    private static final int g = BiomeBase.a(Biomes.y);
-    private static final int h = BiomeBase.a(Biomes.M);
-    private static final int i = BiomeBase.a(Biomes.O);
-    private static final int j = BiomeBase.a(Biomes.N);
-    private static final int k = BiomeBase.a(Biomes.c);
-    private static final int l = BiomeBase.a(Biomes.H);
-    private static final int m = BiomeBase.a(Biomes.v);
-    private static final int n = BiomeBase.a(Biomes.h);
-    private static final int o = BiomeBase.a(Biomes.g);
-    private static final int p = BiomeBase.a(Biomes.F);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.d);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.e);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.J);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.n);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.w);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.y);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.M);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.O);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.N);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.c);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.H);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.v);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.h);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.g);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.F);
 
     private GenLayerDesert() {}
 
@@ -78,8 +78,8 @@ public enum GenLayerDesert implements AreaTransformer7 {
         if (GenLayers.a(i, j)) {
             return true;
         } else {
-            BiomeBase biomebase = BiomeBase.getBiome(i);
-            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+            BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
+            BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
             if (biomebase != null && biomebase1 != null) {
                 BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.g();

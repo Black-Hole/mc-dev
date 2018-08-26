@@ -16,14 +16,14 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.ee());
+        this.getAttributeInstance(EntityHorseSkeleton.attributeJumpStrength).setValue(this.ed());
     }
 
-    protected void dJ() {}
+    protected void dI() {}
 
     protected SoundEffect D() {
         super.D();
-        return this.a(TagsFluid.a) ? SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT_WATER : SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT;
+        return this.a(TagsFluid.WATER) ? SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT_WATER : SoundEffects.ENTITY_SKELETON_HORSE_AMBIENT;
     }
 
     protected SoundEffect cs() {
@@ -64,11 +64,11 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     }
 
-    protected void eb() {
+    protected void ea() {
         if (this.isInWater()) {
             this.a(SoundEffects.ENTITY_SKELETON_HORSE_JUMP_WATER, 0.4F, 1.0F);
         } else {
-            super.eb();
+            super.ea();
         }
 
     }
@@ -82,13 +82,13 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.R;
     }
 
     public void k() {
         super.k();
-        if (this.dz() && this.bO++ >= 18000) {
+        if (this.dy() && this.bO++ >= 18000) {
             this.die();
         }
 
@@ -96,7 +96,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("SkeletonTrap", this.dz());
+        nbttagcompound.setBoolean("SkeletonTrap", this.dy());
         nbttagcompound.setInt("SkeletonTrapTime", this.bO);
     }
 
@@ -114,7 +114,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return 0.96F;
     }
 
-    public boolean dz() {
+    public boolean dy() {
         return this.bN;
     }
 
@@ -151,7 +151,7 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (itemstack.getItem() == Items.SADDLE && !this.dW()) {
+                if (itemstack.getItem() == Items.SADDLE && !this.dV()) {
                     this.c(entityhuman);
                     return true;
                 }

@@ -79,7 +79,7 @@ public class BlockRedstoneTorch extends BlockTorch {
                         world.addParticle(Particles.M, d0, d1, d2, 0.0D, 0.0D, 0.0D);
                     }
 
-                    world.I().a(blockposition, world.getType(blockposition).getBlock(), 160);
+                    world.J().a(blockposition, world.getType(blockposition).getBlock(), 160);
                 }
             }
         } else if (!flag && !a(world, blockposition, false)) {
@@ -89,8 +89,8 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() == this.a(world, blockposition, iblockdata) && !world.I().b(blockposition, this)) {
-            world.I().a(blockposition, this, this.a((IWorldReader) world));
+        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() == this.a(world, blockposition, iblockdata) && !world.J().b(blockposition, this)) {
+            world.J().a(blockposition, this, this.a((IWorldReader) world));
         }
 
     }

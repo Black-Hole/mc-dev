@@ -4,13 +4,13 @@ import java.util.BitSet;
 
 public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
-    private final BitSet e;
+    private final BitSet d;
+    private int e;
     private int f;
     private int g;
     private int h;
     private int i;
     private int j;
-    private int k;
 
     public VoxelShapeBitSet(int i, int j, int k) {
         this(i, j, k, i, j, k, 0, 0, 0);
@@ -18,88 +18,84 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
     public VoxelShapeBitSet(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2) {
         super(i, j, k);
-        this.e = new BitSet(i * j * k);
-        this.f = l;
-        this.g = i1;
-        this.h = j1;
-        this.i = k1;
-        this.j = l1;
-        this.k = i2;
+        this.d = new BitSet(i * j * k);
+        this.e = l;
+        this.f = i1;
+        this.g = j1;
+        this.h = k1;
+        this.i = l1;
+        this.j = i2;
     }
 
     public VoxelShapeBitSet(VoxelShapeDiscrete voxelshapediscrete) {
-        super(voxelshapediscrete.b, voxelshapediscrete.c, voxelshapediscrete.d);
+        super(voxelshapediscrete.a, voxelshapediscrete.b, voxelshapediscrete.c);
         if (voxelshapediscrete instanceof VoxelShapeBitSet) {
-            this.e = (BitSet) ((VoxelShapeBitSet) voxelshapediscrete).e.clone();
+            this.d = (BitSet) ((VoxelShapeBitSet) voxelshapediscrete).d.clone();
         } else {
-            this.e = new BitSet(this.b * this.c * this.d);
+            this.d = new BitSet(this.a * this.b * this.c);
 
-            for (int i = 0; i < this.b; ++i) {
-                for (int j = 0; j < this.c; ++j) {
-                    for (int k = 0; k < this.d; ++k) {
+            for (int i = 0; i < this.a; ++i) {
+                for (int j = 0; j < this.b; ++j) {
+                    for (int k = 0; k < this.c; ++k) {
                         if (voxelshapediscrete.b(i, j, k)) {
-                            this.e.set(this.a(i, j, k));
+                            this.d.set(this.a(i, j, k));
                         }
                     }
                 }
             }
         }
 
-        this.f = voxelshapediscrete.a(EnumDirection.EnumAxis.X);
-        this.g = voxelshapediscrete.a(EnumDirection.EnumAxis.Y);
-        this.h = voxelshapediscrete.a(EnumDirection.EnumAxis.Z);
-        this.i = voxelshapediscrete.b(EnumDirection.EnumAxis.X);
-        this.j = voxelshapediscrete.b(EnumDirection.EnumAxis.Y);
-        this.k = voxelshapediscrete.b(EnumDirection.EnumAxis.Z);
+        this.e = voxelshapediscrete.a(EnumDirection.EnumAxis.X);
+        this.f = voxelshapediscrete.a(EnumDirection.EnumAxis.Y);
+        this.g = voxelshapediscrete.a(EnumDirection.EnumAxis.Z);
+        this.h = voxelshapediscrete.b(EnumDirection.EnumAxis.X);
+        this.i = voxelshapediscrete.b(EnumDirection.EnumAxis.Y);
+        this.j = voxelshapediscrete.b(EnumDirection.EnumAxis.Z);
     }
 
     protected int a(int i, int j, int k) {
-        return (i * this.c + j) * this.d + k;
+        return (i * this.b + j) * this.c + k;
     }
 
     public boolean b(int i, int j, int k) {
-        return this.e.get(this.a(i, j, k));
+        return this.d.get(this.a(i, j, k));
     }
 
-    public boolean a(int i, int j, int k, boolean flag, boolean flag1) {
-        int l = this.a(i, j, k);
-        boolean flag2 = this.e.get(l);
-
-        this.e.set(l, flag1);
+    public void a(int i, int j, int k, boolean flag, boolean flag1) {
+        this.d.set(this.a(i, j, k), flag1);
         if (flag && flag1) {
-            this.f = Math.min(this.f, i);
-            this.g = Math.min(this.g, j);
-            this.h = Math.min(this.h, k);
-            this.i = Math.max(this.i, i + 1);
-            this.j = Math.max(this.j, j + 1);
-            this.k = Math.max(this.k, k + 1);
+            this.e = Math.min(this.e, i);
+            this.f = Math.min(this.f, j);
+            this.g = Math.min(this.g, k);
+            this.h = Math.max(this.h, i + 1);
+            this.i = Math.max(this.i, j + 1);
+            this.j = Math.max(this.j, k + 1);
         }
 
-        return flag2;
     }
 
     public boolean a() {
-        return this.e.isEmpty();
+        return this.d.isEmpty();
     }
 
     public int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.f, this.g, this.h);
+        return enumdirection_enumaxis.a(this.e, this.f, this.g);
     }
 
     public int b(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.i, this.j, this.k);
+        return enumdirection_enumaxis.a(this.h, this.i, this.j);
     }
 
     protected boolean a(int i, int j, int k, int l) {
-        return k >= 0 && l >= 0 && i >= 0 ? (k < this.b && l < this.c && j <= this.d ? this.e.nextClearBit(this.a(k, l, i)) >= this.a(k, l, j) : false) : false;
+        return k >= 0 && l >= 0 && i >= 0 ? (k < this.a && l < this.b && j <= this.c ? this.d.nextClearBit(this.a(k, l, i)) >= this.a(k, l, j) : false) : false;
     }
 
     protected void a(int i, int j, int k, int l, boolean flag) {
-        this.e.set(this.a(k, l, i), this.a(k, l, j), flag);
+        this.d.set(this.a(k, l, i), this.a(k, l, j), flag);
     }
 
     static VoxelShapeBitSet a(VoxelShapeDiscrete voxelshapediscrete, VoxelShapeDiscrete voxelshapediscrete1, VoxelShapeMerger voxelshapemerger, VoxelShapeMerger voxelshapemerger1, VoxelShapeMerger voxelshapemerger2, OperatorBoolean operatorboolean) {
-        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(voxelshapemerger.size() - 1, voxelshapemerger1.size() - 1, voxelshapemerger2.size() - 1);
+        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(voxelshapemerger.a().size() - 1, voxelshapemerger1.a().size() - 1, voxelshapemerger2.a().size() - 1);
         int[] aint = new int[] { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
 
         voxelshapemerger.a((i, j, k) -> {
@@ -110,7 +106,7 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
                     boolean flag = operatorboolean.apply(voxelshapediscrete.c(i, ix, ixx), voxelshapediscrete1.c(j, jx, jxx));
 
                     if (flag) {
-                        voxelshapebitset.e.set(voxelshapebitset.a(k, kx, kxx));
+                        voxelshapebitset.d.set(voxelshapebitset.a(k, kx, kxx));
                         aint[2] = Math.min(aint[2], kxx);
                         aint[5] = Math.max(aint[5], kxx);
                         aboolean[0] = true;
@@ -135,12 +131,12 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
             return flag;
         });
-        voxelshapebitset.f = aint[0];
-        voxelshapebitset.g = aint[1];
-        voxelshapebitset.h = aint[2];
-        voxelshapebitset.i = aint[3] + 1;
-        voxelshapebitset.j = aint[4] + 1;
-        voxelshapebitset.k = aint[5] + 1;
+        voxelshapebitset.e = aint[0];
+        voxelshapebitset.f = aint[1];
+        voxelshapebitset.g = aint[2];
+        voxelshapebitset.h = aint[3] + 1;
+        voxelshapebitset.i = aint[4] + 1;
+        voxelshapebitset.j = aint[5] + 1;
         return voxelshapebitset;
     }
 }

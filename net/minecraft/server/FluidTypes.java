@@ -13,7 +13,7 @@ public class FluidTypes {
     public static final FluidTypeFlowing e;
 
     private static FluidType a(String s) {
-        FluidType fluidtype = (FluidType) FluidType.c.get(new MinecraftKey(s));
+        FluidType fluidtype = (FluidType) IRegistry.FLUID.getOrDefault(new MinecraftKey(s));
 
         if (!FluidTypes.f.add(fluidtype)) {
             throw new IllegalStateException("Invalid Fluid requested: " + s);

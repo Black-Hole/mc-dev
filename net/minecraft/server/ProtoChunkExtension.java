@@ -31,8 +31,8 @@ public class ProtoChunkExtension extends ProtoChunk {
         return this.a.b(blockposition);
     }
 
-    public int J() {
-        return this.a.J();
+    public int K() {
+        return this.a.K();
     }
 
     @Nullable
@@ -145,28 +145,28 @@ public class ProtoChunkExtension extends ProtoChunk {
         Predicate predicate = (block) -> {
             return block.getBlockData().isAir();
         };
-        RegistryBlocks registryblocks = Block.REGISTRY;
+        IRegistry iregistry = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        Function function = registryblocks::b;
-        RegistryBlocks registryblocks1 = Block.REGISTRY;
+        IRegistry.BLOCK.getClass();
+        Function function = iregistry::getKey;
+        IRegistry iregistry1 = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        return new ProtoChunkTickList(predicate, function, registryblocks1::get, this.getPos());
+        IRegistry.BLOCK.getClass();
+        return new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, this.getPos());
     }
 
     public ProtoChunkTickList<FluidType> o() {
         Predicate predicate = (fluidtype) -> {
             return fluidtype == FluidTypes.a;
         };
-        RegistryBlocks registryblocks = FluidType.c;
+        IRegistry iregistry = IRegistry.FLUID;
 
-        FluidType.c.getClass();
-        Function function = registryblocks::b;
-        RegistryBlocks registryblocks1 = FluidType.c;
+        IRegistry.FLUID.getClass();
+        Function function = iregistry::getKey;
+        IRegistry iregistry1 = IRegistry.FLUID;
 
-        FluidType.c.getClass();
-        return new ProtoChunkTickList(predicate, function, registryblocks1::get, this.getPos());
+        IRegistry.FLUID.getClass();
+        return new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, this.getPos());
     }
 
     public BitSet a(WorldGenStage.Features worldgenstage_features) {

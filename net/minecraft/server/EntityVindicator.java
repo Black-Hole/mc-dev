@@ -41,7 +41,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
         super.x_();
     }
 
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aC;
     }
 

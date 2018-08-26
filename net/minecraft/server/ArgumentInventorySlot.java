@@ -82,7 +82,7 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.b(ArgumentInventorySlot.c.keySet(), suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) ArgumentInventorySlot.c.keySet(), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

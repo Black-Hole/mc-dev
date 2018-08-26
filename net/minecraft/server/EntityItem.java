@@ -59,7 +59,7 @@ public class EntityItem extends Entity {
             double d1 = this.motY;
             double d2 = this.motZ;
 
-            if (this.a(TagsFluid.a)) {
+            if (this.a(TagsFluid.WATER)) {
                 this.u();
             } else if (!this.isNoGravity()) {
                 this.motY -= 0.03999999910593033D;
@@ -75,7 +75,7 @@ public class EntityItem extends Entity {
             boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
 
             if (flag || this.ticksLived % 25 == 0) {
-                if (this.world.b(new BlockPosition(this)).a(TagsFluid.b)) {
+                if (this.world.b(new BlockPosition(this)).a(TagsFluid.LAVA)) {
                     this.motY = 0.20000000298023224D;
                     this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
                     this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
@@ -279,8 +279,8 @@ public class EntityItem extends Entity {
     }
 
     @Nullable
-    public Entity d(int i) {
-        Entity entity = super.d(i);
+    public Entity a(DimensionManager dimensionmanager) {
+        Entity entity = super.a(dimensionmanager);
 
         if (!this.world.isClientSide && entity instanceof EntityItem) {
             ((EntityItem) entity).v();

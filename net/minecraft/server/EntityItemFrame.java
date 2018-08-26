@@ -155,7 +155,7 @@ public class EntityItemFrame extends EntityHanging {
         if (itemstack.getItem() == Items.FILLED_MAP) {
             WorldMap worldmap = ItemWorldMap.getSavedMap(itemstack, this.world);
 
-            worldmap.decorations.remove("frame-" + this.getId());
+            worldmap.a(this.blockPosition, this.getId());
         }
 
         itemstack.a((EntityItemFrame) null);

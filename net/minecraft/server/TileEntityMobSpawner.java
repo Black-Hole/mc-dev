@@ -29,7 +29,7 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
     };
 
     public TileEntityMobSpawner() {
-        super(TileEntityTypes.j);
+        super(TileEntityTypes.MOB_SPAWNER);
     }
 
     public void load(NBTTagCompound nbttagcompound) {

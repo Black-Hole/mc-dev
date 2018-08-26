@@ -4,7 +4,7 @@ public class BlockEndRod extends BlockDirectional {
 
     protected static final VoxelShape b = Block.a(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
     protected static final VoxelShape c = Block.a(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 16.0D);
-    protected static final VoxelShape p = Block.a(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
+    protected static final VoxelShape o = Block.a(0.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D);
 
     protected BlockEndRod(Block.Info block_info) {
         super(block_info);
@@ -23,7 +23,7 @@ public class BlockEndRod extends BlockDirectional {
         switch (((EnumDirection) iblockdata.get(BlockEndRod.FACING)).k()) {
         case X:
         default:
-            return BlockEndRod.p;
+            return BlockEndRod.o;
 
         case Z:
             return BlockEndRod.c;

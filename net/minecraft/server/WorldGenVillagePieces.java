@@ -1661,7 +1661,7 @@ public class WorldGenVillagePieces {
                         entityzombievillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
                         entityzombievillager.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityzombievillager)), (GroupDataEntity) null, (NBTTagCompound) null);
                         entityzombievillager.setProfession(this.c(i1, 0));
-                        entityzombievillager.dj();
+                        entityzombievillager.di();
                         generatoraccess.addEntity(entityzombievillager);
                     } else {
                         EntityVillager entityvillager = new EntityVillager(generatoraccess.getMinecraftWorld());
@@ -1684,11 +1684,11 @@ public class WorldGenVillagePieces {
             Block block = iblockdata.getBlock();
 
             if (this.g == WorldGenVillagePieces.Material.SANDSTONE) {
-                if (block.a(TagsBlock.n) || block == Blocks.COBBLESTONE) {
+                if (block.a(TagsBlock.LOGS) || block == Blocks.COBBLESTONE) {
                     return Blocks.SANDSTONE.getBlockData();
                 }
 
-                if (block.a(TagsBlock.b)) {
+                if (block.a(TagsBlock.PLANKS)) {
                     return Blocks.CUT_SANDSTONE.getBlockData();
                 }
 
@@ -1708,11 +1708,11 @@ public class WorldGenVillagePieces {
                     return Blocks.BIRCH_PRESSURE_PLATE.getBlockData();
                 }
             } else if (this.g == WorldGenVillagePieces.Material.SPRUCE) {
-                if (block.a(TagsBlock.n)) {
+                if (block.a(TagsBlock.LOGS)) {
                     return (IBlockData) Blocks.SPRUCE_LOG.getBlockData().set(BlockLogAbstract.AXIS, iblockdata.get(BlockLogAbstract.AXIS));
                 }
 
-                if (block.a(TagsBlock.b)) {
+                if (block.a(TagsBlock.PLANKS)) {
                     return Blocks.SPRUCE_PLANKS.getBlockData();
                 }
 
@@ -1728,11 +1728,11 @@ public class WorldGenVillagePieces {
                     return Blocks.SPRUCE_PRESSURE_PLATE.getBlockData();
                 }
             } else if (this.g == WorldGenVillagePieces.Material.ACACIA) {
-                if (block.a(TagsBlock.n)) {
+                if (block.a(TagsBlock.LOGS)) {
                     return (IBlockData) Blocks.ACACIA_LOG.getBlockData().set(BlockLogAbstract.AXIS, iblockdata.get(BlockLogAbstract.AXIS));
                 }
 
-                if (block.a(TagsBlock.b)) {
+                if (block.a(TagsBlock.PLANKS)) {
                     return Blocks.ACACIA_PLANKS.getBlockData();
                 }
 

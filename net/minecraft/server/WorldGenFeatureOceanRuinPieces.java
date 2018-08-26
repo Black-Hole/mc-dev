@@ -148,17 +148,18 @@ public class WorldGenFeatureOceanRuinPieces {
 
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("chest".equals(s)) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.c, Boolean.valueOf(generatoraccess.b(blockposition).a(TagsFluid.a))), 2);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.c, Boolean.valueOf(generatoraccess.b(blockposition).a(TagsFluid.WATER))), 2);
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityChest) {
-                    ((TileEntityChest) tileentity).a(this.h ? LootTables.q : LootTables.p, random.nextLong());
+                    ((TileEntityChest) tileentity).setLootTable(this.h ? LootTables.q : LootTables.p, random.nextLong());
                 }
             } else if ("drowned".equals(s)) {
                 EntityDrowned entitydrowned = new EntityDrowned(generatoraccess.getMinecraftWorld());
 
-                entitydrowned.dj();
+                entitydrowned.di();
                 entitydrowned.setPositionRotation(blockposition, 0.0F, 0.0F);
+                entitydrowned.prepare(generatoraccess.getDamageScaler(blockposition), (GroupDataEntity) null, (NBTTagCompound) null);
                 generatoraccess.addEntity(entitydrowned);
                 if (blockposition.getY() > generatoraccess.getSeaLevel()) {
                     generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
@@ -195,7 +196,7 @@ public class WorldGenFeatureOceanRuinPieces {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i1, k1, j1);
                 IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
 
-                for (Fluid fluid = iblockaccess.b(blockposition_mutableblockposition); (iblockdata.isAir() || fluid.a(TagsFluid.a) || iblockdata.getBlock().a(TagsBlock.H)) && k1 > 1; fluid = iblockaccess.b(blockposition_mutableblockposition)) {
+                for (Fluid fluid = iblockaccess.b(blockposition_mutableblockposition); (iblockdata.isAir() || fluid.a(TagsFluid.WATER) || iblockdata.getBlock().a(TagsBlock.ICE)) && k1 > 1; fluid = iblockaccess.b(blockposition_mutableblockposition)) {
                     --k1;
                     blockposition_mutableblockposition.c(i1, k1, j1);
                     iblockdata = iblockaccess.getType(blockposition_mutableblockposition);

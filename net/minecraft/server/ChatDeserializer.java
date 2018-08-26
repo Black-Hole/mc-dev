@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -18,6 +19,8 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
 public class ChatDeserializer {
+
+    private static final Gson a = (new GsonBuilder()).create();
 
     public static boolean a(JsonObject jsonobject, String s) {
         return !f(jsonobject, s) ? false : jsonobject.getAsJsonPrimitive(s).isString();
@@ -62,7 +65,7 @@ public class ChatDeserializer {
     public static Item b(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             String s1 = jsonelement.getAsString();
-            Item item = (Item) Item.REGISTRY.get(new MinecraftKey(s1));
+            Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s1));
 
             if (item == null) {
                 throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string \'" + s1 + "\'");
@@ -283,5 +286,21 @@ public class ChatDeserializer {
     @Nullable
     public static <T> T a(Gson gson, String s, Class<T> oclass) {
         return a(gson, s, oclass, false);
+    }
+
+    public static JsonObject a(String s, boolean flag) {
+        return a((Reader) (new StringReader(s)), flag);
+    }
+
+    public static JsonObject a(Reader reader, boolean flag) {
+        return (JsonObject) a(ChatDeserializer.a, reader, JsonObject.class, flag);
+    }
+
+    public static JsonObject a(String s) {
+        return a(s, false);
+    }
+
+    public static JsonObject a(Reader reader) {
+        return a(reader, false);
     }
 }

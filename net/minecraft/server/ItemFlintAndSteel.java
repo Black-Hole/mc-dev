@@ -14,7 +14,7 @@ public class ItemFlintAndSteel extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition().shift(itemactioncontext.getClickedFace());
 
         if (a((GeneratorAccess) world, blockposition)) {
-            world.a(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.k.nextFloat() * 0.4F + 0.8F);
+            world.a(entityhuman, blockposition, SoundEffects.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, ItemFlintAndSteel.i.nextFloat() * 0.4F + 0.8F);
             IBlockData iblockdata = ((BlockFire) Blocks.FIRE).a((IBlockAccess) world, blockposition);
 
             world.setTypeAndData(blockposition, iblockdata, 11);

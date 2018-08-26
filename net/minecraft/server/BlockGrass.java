@@ -10,7 +10,7 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        return true;
+        return iblockaccess.getType(blockposition.up()).isAir();
     }
 
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
@@ -33,25 +33,33 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                         ++j;
                         continue;
                     }
-                } else if (world.getType(blockposition2).isAir()) {
-                    label33:
-                    {
-                        IBlockData iblockdata2;
+                } else {
+                    IBlockData iblockdata2 = world.getType(blockposition2);
 
-                        if (random.nextInt(8) == 0) {
-                            List list = world.getBiome(blockposition2).f();
+                    if (iblockdata2.getBlock() == iblockdata1.getBlock() && random.nextInt(10) == 0) {
+                        ((IBlockFragilePlantElement) iblockdata1.getBlock()).b(world, random, blockposition2, iblockdata2);
+                    }
 
-                            if (list.isEmpty()) {
-                                break label33;
+                    if (iblockdata2.isAir()) {
+                        label38:
+                        {
+                            IBlockData iblockdata3;
+
+                            if (random.nextInt(8) == 0) {
+                                List list = world.getBiome(blockposition2).f();
+
+                                if (list.isEmpty()) {
+                                    break label38;
+                                }
+
+                                iblockdata3 = ((WorldGenFeatureCompositeFlower) list.get(0)).a(random, blockposition2);
+                            } else {
+                                iblockdata3 = iblockdata1;
                             }
 
-                            iblockdata2 = ((WorldGenFeatureCompositeFlower) list.get(0)).a(random, blockposition2);
-                        } else {
-                            iblockdata2 = iblockdata1;
-                        }
-
-                        if (iblockdata2.canPlace(world, blockposition2)) {
-                            world.setTypeAndData(blockposition2, iblockdata2, 3);
+                            if (iblockdata3.canPlace(world, blockposition2)) {
+                                world.setTypeAndData(blockposition2, iblockdata3, 3);
+                            }
                         }
                     }
                 }

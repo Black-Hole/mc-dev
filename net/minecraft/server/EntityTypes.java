@@ -4,14 +4,14 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EntityTypes<T extends Entity> {
 
-    private static final Logger aS = LogManager.getLogger();
-    public static final RegistryMaterials<MinecraftKey, EntityTypes<?>> REGISTRY = new RegistryMaterials();
+    private static final Logger aR = LogManager.getLogger();
     public static final EntityTypes<EntityAreaEffectCloud> AREA_EFFECT_CLOUD = a("area_effect_cloud", EntityTypes.a.a(EntityAreaEffectCloud.class, EntityAreaEffectCloud::new));
     public static final EntityTypes<EntityArmorStand> ARMOR_STAND = a("armor_stand", EntityTypes.a.a(EntityArmorStand.class, EntityArmorStand::new));
     public static final EntityTypes<EntityTippedArrow> ARROW = a("arrow", EntityTypes.a.a(EntityTippedArrow.class, EntityTippedArrow::new));
@@ -107,37 +107,39 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityHuman> PLAYER = a("player", EntityTypes.a.a(EntityHuman.class).b().a());
     public static final EntityTypes<EntityFishingHook> FISHING_BOBBER = a("fishing_bobber", EntityTypes.a.a(EntityFishingHook.class).b().a());
     public static final EntityTypes<EntityThrownTrident> TRIDENT = a("trident", EntityTypes.a.a(EntityThrownTrident.class, EntityThrownTrident::new));
-    private final Class<? extends T> aT;
-    private final Function<? super World, ? extends T> aU;
+    private final Class<? extends T> aS;
+    private final Function<? super World, ? extends T> aT;
+    private final boolean aU;
     private final boolean aV;
-    private final boolean aW;
     @Nullable
-    private String aX;
+    private String aW;
+    @Nullable
+    private IChatBaseComponent aX;
     @Nullable
     private final Type<?> aY;
 
     public static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.a<T> entitytypes_a) {
         EntityTypes entitytypes = entitytypes_a.a(s);
 
-        EntityTypes.REGISTRY.a(new MinecraftKey(s), entitytypes);
+        IRegistry.ENTITY_TYPE.a(new MinecraftKey(s), (Object) entitytypes);
         return entitytypes;
     }
 
     @Nullable
     public static MinecraftKey getName(EntityTypes<?> entitytypes) {
-        return (MinecraftKey) EntityTypes.REGISTRY.b(entitytypes);
+        return IRegistry.ENTITY_TYPE.getKey(entitytypes);
     }
 
     @Nullable
     public static EntityTypes<?> a(String s) {
-        return (EntityTypes) EntityTypes.REGISTRY.get(MinecraftKey.a(s));
+        return (EntityTypes) IRegistry.ENTITY_TYPE.get(MinecraftKey.a(s));
     }
 
     public EntityTypes(Class<? extends T> oclass, Function<? super World, ? extends T> function, boolean flag, boolean flag1, @Nullable Type<?> type) {
-        this.aT = oclass;
-        this.aU = function;
-        this.aV = flag;
-        this.aW = flag1;
+        this.aS = oclass;
+        this.aT = function;
+        this.aU = flag;
+        this.aV = flag1;
         this.aY = type;
     }
 
@@ -196,9 +198,9 @@ public class EntityTypes<T extends Entity> {
             axisalignedbb1 = axisalignedbb1.b(0.0D, -1.0D, 0.0D);
         }
 
-        VoxelShape voxelshape = iworldreader.c((Entity) null, axisalignedbb1);
+        Stream stream = iworldreader.b((Entity) null, axisalignedbb1);
 
-        return !flag && voxelshape.b() ? 0.0D : 1.0D + VoxelShapes.a(EnumDirection.EnumAxis.Y, axisalignedbb, voxelshape, flag ? -2.0D : -1.0D);
+        return 1.0D + VoxelShapes.a(EnumDirection.EnumAxis.Y, axisalignedbb, stream, flag ? -2.0D : -1.0D);
     }
 
     public static void a(World world, @Nullable EntityHuman entityhuman, @Nullable Entity entity, @Nullable NBTTagCompound nbttagcompound) {
@@ -219,20 +221,28 @@ public class EntityTypes<T extends Entity> {
     }
 
     public boolean a() {
-        return this.aV;
+        return this.aU;
     }
 
     public boolean b() {
-        return this.aW;
+        return this.aV;
     }
 
     public Class<? extends T> c() {
-        return this.aT;
+        return this.aS;
     }
 
     public String d() {
+        if (this.aW == null) {
+            this.aW = SystemUtils.a("entity", IRegistry.ENTITY_TYPE.getKey(this));
+        }
+
+        return this.aW;
+    }
+
+    public IChatBaseComponent e() {
         if (this.aX == null) {
-            this.aX = SystemUtils.a("entity", (MinecraftKey) EntityTypes.REGISTRY.b(this));
+            this.aX = new ChatMessage(this.d(), new Object[0]);
         }
 
         return this.aX;
@@ -240,12 +250,12 @@ public class EntityTypes<T extends Entity> {
 
     @Nullable
     public T a(World world) {
-        return (Entity) this.aU.apply(world);
+        return (Entity) this.aT.apply(world);
     }
 
     @Nullable
     public static Entity a(World world, MinecraftKey minecraftkey) {
-        return a(world, (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey));
+        return a(world, (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey));
     }
 
     @Nullable
@@ -254,7 +264,7 @@ public class EntityTypes<T extends Entity> {
         Entity entity = a(world, minecraftkey);
 
         if (entity == null) {
-            EntityTypes.aS.warn("Skipping Entity with id {}", minecraftkey);
+            EntityTypes.aR.warn("Skipping Entity with id {}", minecraftkey);
         } else {
             entity.f(nbttagcompound);
         }
@@ -304,13 +314,13 @@ public class EntityTypes<T extends Entity> {
 
             if (this.c) {
                 try {
-                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1519)).getChoiceType(DataConverterTypes.n, s);
+                    type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1628)).getChoiceType(DataConverterTypes.n, s);
                 } catch (IllegalStateException illegalstateexception) {
                     if (SharedConstants.b) {
                         throw illegalstateexception;
                     }
 
-                    EntityTypes.aS.warn("No data fixer registered for entity {}", s);
+                    EntityTypes.aR.warn("No data fixer registered for entity {}", s);
                 }
             }
 

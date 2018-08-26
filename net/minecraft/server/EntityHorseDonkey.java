@@ -9,7 +9,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.O;
     }
 
@@ -29,7 +29,7 @@ public class EntityHorseDonkey extends EntityHorseChestedAbstract {
     }
 
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ec() && ((EntityHorseAbstract) entityanimal).ec());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.eb() && ((EntityHorseAbstract) entityanimal).eb());
     }
 
     public EntityAgeable createChild(EntityAgeable entityageable) {

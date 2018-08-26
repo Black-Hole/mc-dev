@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockSkull extends BlockSkullAbstract {
 
-    public static final BlockStateInteger a = BlockProperties.am;
+    public static final BlockStateInteger a = BlockProperties.an;
     protected static final VoxelShape b = Block.a(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
 
     protected BlockSkull(BlockSkull.a blockskull_a, Block.Info block_info) {

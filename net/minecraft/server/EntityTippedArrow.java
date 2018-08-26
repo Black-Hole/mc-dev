@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class EntityTippedArrow extends EntityArrow {
 
-    private static final DataWatcherObject<Integer> f = DataWatcher.a(EntityTippedArrow.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityTippedArrow.class, DataWatcherRegistry.b);
     private PotionRegistry potionRegistry;
     public final Set<MobEffect> effects;
     private boolean hasColor;
@@ -49,14 +49,14 @@ public class EntityTippedArrow extends EntityArrow {
             int i = c(itemstack);
 
             if (i == -1) {
-                this.r();
+                this.s();
             } else {
                 this.setColor(i);
             }
         } else if (itemstack.getItem() == Items.ARROW) {
             this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(-1));
+            this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(-1));
         }
 
     }
@@ -67,36 +67,36 @@ public class EntityTippedArrow extends EntityArrow {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("CustomPotionColor", 99) ? nbttagcompound.getInt("CustomPotionColor") : -1;
     }
 
-    private void r() {
+    private void s() {
         this.hasColor = false;
-        this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+        this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
     }
 
     public void a(MobEffect mobeffect) {
         this.effects.add(mobeffect);
-        this.getDataWatcher().set(EntityTippedArrow.f, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+        this.getDataWatcher().set(EntityTippedArrow.g, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
     }
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityTippedArrow.f, Integer.valueOf(-1));
+        this.datawatcher.register(EntityTippedArrow.g, Integer.valueOf(-1));
     }
 
     public void tick() {
         super.tick();
         if (this.world.isClientSide) {
             if (this.inGround) {
-                if (this.b % 5 == 0) {
+                if (this.c % 5 == 0) {
                     this.b(1);
                 }
             } else {
                 this.b(2);
             }
-        } else if (this.inGround && this.b != 0 && !this.effects.isEmpty() && this.b >= 600) {
+        } else if (this.inGround && this.c != 0 && !this.effects.isEmpty() && this.c >= 600) {
             this.world.broadcastEntityEffect(this, (byte) 0);
             this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
-            this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(-1));
+            this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(-1));
         }
 
     }
@@ -117,18 +117,18 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     public int getColor() {
-        return ((Integer) this.datawatcher.get(EntityTippedArrow.f)).intValue();
+        return ((Integer) this.datawatcher.get(EntityTippedArrow.g)).intValue();
     }
 
     public void setColor(int i) {
         this.hasColor = true;
-        this.datawatcher.set(EntityTippedArrow.f, Integer.valueOf(i));
+        this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(i));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         if (this.potionRegistry != Potions.EMPTY && this.potionRegistry != null) {
-            nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.potionRegistry)).toString());
+            nbttagcompound.setString("Potion", IRegistry.POTION.getKey(this.potionRegistry).toString());
         }
 
         if (this.hasColor) {
@@ -167,7 +167,7 @@ public class EntityTippedArrow extends EntityArrow {
         if (nbttagcompound.hasKeyOfType("Color", 99)) {
             this.setColor(nbttagcompound.getInt("Color"));
         } else {
-            this.r();
+            this.s();
         }
 
     }

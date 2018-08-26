@@ -27,7 +27,7 @@ public class CommandTag {
         })).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("add").then(CommandDispatcher.a("name", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), StringArgumentType.getString(commandcontext, "name"));
         })))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("name", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
-            return ICompletionProvider.b(a(ArgumentEntity.b(commandcontext, "targets")), suggestionsbuilder);
+            return ICompletionProvider.b((Iterable) a(ArgumentEntity.b(commandcontext, "targets")), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), StringArgumentType.getString(commandcontext, "name"));
         })))).then(CommandDispatcher.a("list").executes((commandcontext) -> {

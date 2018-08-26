@@ -44,8 +44,8 @@ public class WorldLoaderServer extends WorldLoader {
         ArrayList arraylist1 = Lists.newArrayList();
         ArrayList arraylist2 = Lists.newArrayList();
         File file = new File(this.a.toFile(), s);
-        File file1 = new File(file, "DIM-1");
-        File file2 = new File(file, "DIM1");
+        File file1 = DimensionManager.NETHER.a(file);
+        File file2 = DimensionManager.THE_END.a(file);
 
         WorldLoaderServer.e.info("Scanning folders...");
         this.a(file, (Collection) arraylist);
@@ -61,19 +61,19 @@ public class WorldLoaderServer extends WorldLoader {
 
         WorldLoaderServer.e.info("Total conversion count is {}", Integer.valueOf(i));
         WorldData worlddata = this.c(s);
-        BiomeLayout biomelayout = BiomeLayout.c;
-        BiomeLayout biomelayout1 = BiomeLayout.d;
+        BiomeLayout biomelayout = BiomeLayout.b;
+        BiomeLayout biomelayout1 = BiomeLayout.c;
         WorldChunkManager worldchunkmanager;
 
         if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
-            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.c));
+            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.c));
         } else {
-            worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.b.a()));
+            worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.a.b()));
         }
 
         this.a(new File(file, "region"), (Iterable) arraylist, worldchunkmanager, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.j)), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.k)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.j)), arraylist.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.k)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
         worlddata.d(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);

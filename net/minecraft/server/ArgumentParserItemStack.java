@@ -52,8 +52,8 @@ public class ArgumentParserItemStack {
         int i = this.d.getCursor();
         MinecraftKey minecraftkey = MinecraftKey.a(this.d);
 
-        if (Item.REGISTRY.d(minecraftkey)) {
-            this.g = (Item) Item.REGISTRY.get(minecraftkey);
+        if (IRegistry.ITEM.c(minecraftkey)) {
+            this.g = (Item) IRegistry.ITEM.get(minecraftkey);
         } else {
             this.d.setCursor(i);
             throw ArgumentParserItemStack.b.createWithContext(this.d, minecraftkey.toString());
@@ -109,7 +109,7 @@ public class ArgumentParserItemStack {
             ICompletionProvider.a((Iterable) TagsItem.a().a(), suggestionsbuilder, String.valueOf('#'));
         }
 
-        return ICompletionProvider.a((Iterable) Item.REGISTRY.keySet(), suggestionsbuilder);
+        return ICompletionProvider.a((Iterable) IRegistry.ITEM.keySet(), suggestionsbuilder);
     }
 
     public CompletableFuture<Suggestions> a(SuggestionsBuilder suggestionsbuilder) {

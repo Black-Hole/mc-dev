@@ -21,7 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent> {
@@ -30,19 +32,102 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
     ChatModifier getChatModifier();
 
-    IChatBaseComponent a(String s);
+    default IChatBaseComponent a(String s) {
+        return this.addSibling(new ChatComponentText(s));
+    }
 
     IChatBaseComponent addSibling(IChatBaseComponent ichatbasecomponent);
 
     String getText();
 
-    String getString();
+    default String getString() {
+        StringBuilder stringbuilder = new StringBuilder();
 
-    String c();
+        this.c().forEach((ichatbasecomponent) -> {
+            stringbuilder.append(ichatbasecomponent.getText());
+        });
+        return stringbuilder.toString();
+    }
+
+    default String a(int i) {
+        StringBuilder stringbuilder = new StringBuilder();
+        Iterator iterator = this.c().iterator();
+
+        while (iterator.hasNext()) {
+            int j = i - stringbuilder.length();
+
+            if (j <= 0) {
+                break;
+            }
+
+            String s = ((IChatBaseComponent) iterator.next()).getText();
+
+            stringbuilder.append(s.length() <= j ? s : s.substring(0, j));
+        }
+
+        return stringbuilder.toString();
+    }
+
+    default String e() {
+        StringBuilder stringbuilder = new StringBuilder();
+        String s = "";
+        Iterator iterator = this.c().iterator();
+
+        while (iterator.hasNext()) {
+            IChatBaseComponent ichatbasecomponent = (IChatBaseComponent) iterator.next();
+            String s1 = ichatbasecomponent.getText();
+
+            if (!s1.isEmpty()) {
+                String s2 = ichatbasecomponent.getChatModifier().k();
+
+                if (!s2.equals(s)) {
+                    if (!s.isEmpty()) {
+                        stringbuilder.append(EnumChatFormat.RESET);
+                    }
+
+                    stringbuilder.append(s2);
+                    s = s2;
+                }
+
+                stringbuilder.append(s1);
+            }
+        }
+
+        if (!s.isEmpty()) {
+            stringbuilder.append(EnumChatFormat.RESET);
+        }
+
+        return stringbuilder.toString();
+    }
 
     List<IChatBaseComponent> a();
 
-    IChatBaseComponent e();
+    Stream<IChatBaseComponent> c();
+
+    default Stream<IChatBaseComponent> f() {
+        return this.c().map(IChatBaseComponent::b);
+    }
+
+    default Iterator<IChatBaseComponent> iterator() {
+        return this.f().iterator();
+    }
+
+    IChatBaseComponent g();
+
+    default IChatBaseComponent h() {
+        IChatBaseComponent ichatbasecomponent = this.g();
+
+        ichatbasecomponent.setChatModifier(this.getChatModifier().clone());
+        Iterator iterator = this.a().iterator();
+
+        while (iterator.hasNext()) {
+            IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
+
+            ichatbasecomponent.addSibling(ichatbasecomponent1.h());
+        }
+
+        return ichatbasecomponent;
+    }
 
     default IChatBaseComponent a(Consumer<ChatModifier> consumer) {
         consumer.accept(this.getChatModifier());
@@ -93,6 +178,13 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         }
 
         return this;
+    }
+
+    static default IChatBaseComponent b(IChatBaseComponent ichatbasecomponent) {
+        IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.g();
+
+        ichatbasecomponent1.setChatModifier(ichatbasecomponent.getChatModifier().n());
+        return ichatbasecomponent1;
     }
 
     public static class ChatSerializer implements JsonDeserializer<IChatBaseComponent>, JsonSerializer<IChatBaseComponent> {
@@ -173,7 +265,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                                 ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
 
                                 if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.a().isEmpty()) {
-                                    aobject[i] = chatcomponenttext.f();
+                                    aobject[i] = chatcomponenttext.i();
                                 }
                             }
                         }
@@ -257,14 +349,14 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
             }
 
             if (ichatbasecomponent instanceof ChatComponentText) {
-                jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).f());
+                jsonobject.addProperty("text", ((ChatComponentText) ichatbasecomponent).i());
             } else if (ichatbasecomponent instanceof ChatMessage) {
                 ChatMessage chatmessage = (ChatMessage) ichatbasecomponent;
 
-                jsonobject.addProperty("translate", chatmessage.h());
-                if (chatmessage.i() != null && chatmessage.i().length > 0) {
+                jsonobject.addProperty("translate", chatmessage.k());
+                if (chatmessage.l() != null && chatmessage.l().length > 0) {
                     JsonArray jsonarray1 = new JsonArray();
-                    Object[] aobject = chatmessage.i();
+                    Object[] aobject = chatmessage.l();
                     int i = aobject.length;
 
                     for (int j = 0; j < i; ++j) {
@@ -283,14 +375,14 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
                 JsonObject jsonobject1 = new JsonObject();
 
-                jsonobject1.addProperty("name", chatcomponentscore.f());
-                jsonobject1.addProperty("objective", chatcomponentscore.h());
+                jsonobject1.addProperty("name", chatcomponentscore.i());
+                jsonobject1.addProperty("objective", chatcomponentscore.k());
                 jsonobject1.addProperty("value", chatcomponentscore.getText());
                 jsonobject.add("score", jsonobject1);
             } else if (ichatbasecomponent instanceof ChatComponentSelector) {
                 ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
 
-                jsonobject.addProperty("selector", chatcomponentselector.f());
+                jsonobject.addProperty("selector", chatcomponentselector.i());
             } else {
                 if (!(ichatbasecomponent instanceof ChatComponentKeybind)) {
                     throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
@@ -298,7 +390,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                 ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
 
-                jsonobject.addProperty("keybind", chatcomponentkeybind.g());
+                jsonobject.addProperty("keybind", chatcomponentkeybind.j());
             }
 
             return jsonobject;

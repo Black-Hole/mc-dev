@@ -30,7 +30,7 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
         for (int j = 0; j < i; ++j) {
             Item item = aitem[j];
 
-            advancement_serializedadvancement.a(((MinecraftKey) Item.REGISTRY.b(item)).getKey(), (CriterionInstance) CriterionTriggerConsumeItem.b.a((IMaterial) item));
+            advancement_serializedadvancement.a(IRegistry.ITEM.getKey(item).getKey(), (CriterionInstance) CriterionTriggerConsumeItem.b.a((IMaterial) item));
         }
 
         return advancement_serializedadvancement;
@@ -56,7 +56,7 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
         for (int j = 0; j < i; ++j) {
             Item item = aitem[j];
 
-            advancement_serializedadvancement.a(((MinecraftKey) Item.REGISTRY.b(item)).getKey(), (CriterionInstance) CriterionTriggerFilledBucket.b.a(CriterionConditionItem.a.a().a((IMaterial) item).b()));
+            advancement_serializedadvancement.a(IRegistry.ITEM.getKey(item).getKey(), (CriterionInstance) CriterionTriggerFilledBucket.b.a(CriterionConditionItem.a.a().a((IMaterial) item).b()));
         }
 
         return advancement_serializedadvancement;
@@ -69,7 +69,7 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
         for (int j = 0; j < i; ++j) {
             Item item = aitem[j];
 
-            advancement_serializedadvancement.a(((MinecraftKey) Item.REGISTRY.b(item)).getKey(), (CriterionInstance) CriterionTriggerFishingRodHooked.b.a(CriterionConditionItem.a, CriterionConditionEntity.a, CriterionConditionItem.a.a().a((IMaterial) item).b()));
+            advancement_serializedadvancement.a(IRegistry.ITEM.getKey(item).getKey(), (CriterionInstance) CriterionTriggerFishingRodHooked.b.a(CriterionConditionItem.a, CriterionConditionEntity.a, CriterionConditionItem.a.a().a((IMaterial) item).b()));
         }
 
         return advancement_serializedadvancement;

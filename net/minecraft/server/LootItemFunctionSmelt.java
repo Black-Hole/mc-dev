@@ -41,7 +41,7 @@ public class LootItemFunctionSmelt extends LootItemFunction {
 
     @Nullable
     public static IRecipe a(LootTableInfo loottableinfo, ItemStack itemstack) {
-        Iterator iterator = loottableinfo.h().D().b().iterator();
+        Iterator iterator = loottableinfo.h().E().b().iterator();
 
         IRecipe irecipe;
 

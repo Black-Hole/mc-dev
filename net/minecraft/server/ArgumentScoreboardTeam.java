@@ -42,7 +42,7 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return commandcontext.getSource() instanceof ICompletionProvider ? ICompletionProvider.b(((ICompletionProvider) commandcontext.getSource()).m(), suggestionsbuilder) : Suggestions.empty();
+        return commandcontext.getSource() instanceof ICompletionProvider ? ICompletionProvider.b((Iterable) ((ICompletionProvider) commandcontext.getSource()).m(), suggestionsbuilder) : Suggestions.empty();
     }
 
     public Collection<String> getExamples() {

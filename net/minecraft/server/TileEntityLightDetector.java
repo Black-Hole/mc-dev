@@ -3,7 +3,7 @@ package net.minecraft.server;
 public class TileEntityLightDetector extends TileEntity implements ITickable {
 
     public TileEntityLightDetector() {
-        super(TileEntityTypes.q);
+        super(TileEntityTypes.DAYLIGHT_DETECTOR);
     }
 
     public void Y_() {

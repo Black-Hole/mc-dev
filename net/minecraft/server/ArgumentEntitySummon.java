@@ -27,7 +27,7 @@ public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
     }
 
     private static final MinecraftKey a(MinecraftKey minecraftkey) throws CommandSyntaxException {
-        EntityTypes entitytypes = (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey);
+        EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
         if (entitytypes != null && entitytypes.b()) {
             return minecraftkey;

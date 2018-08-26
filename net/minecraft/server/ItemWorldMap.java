@@ -15,7 +15,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     public static ItemStack a(World world, int i, int j, byte b0, boolean flag, boolean flag1) {
         ItemStack itemstack = new ItemStack(Items.FILLED_MAP);
 
-        a(itemstack, world, i, j, b0, flag, flag1, world.worldProvider.getDimensionManager().getDimensionID());
+        a(itemstack, world, i, j, b0, flag, flag1, world.worldProvider.getDimensionManager());
         return itemstack;
     }
 
@@ -24,7 +24,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         WorldMap worldmap = a((GeneratorAccess) world, "map_" + e(itemstack));
 
         if (worldmap == null && !world.isClientSide) {
-            worldmap = a(itemstack, world, world.getWorldData().b(), world.getWorldData().d(), 3, false, false, world.worldProvider.getDimensionManager().getDimensionID());
+            worldmap = a(itemstack, world, world.getWorldData().b(), world.getWorldData().d(), 3, false, false, world.worldProvider.getDimensionManager());
         }
 
         return worldmap;
@@ -36,23 +36,23 @@ public class ItemWorldMap extends ItemWorldMapBase {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("map", 99) ? nbttagcompound.getInt("map") : 0;
     }
 
-    private static WorldMap a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, int l) {
-        int i1 = world.b("map");
-        WorldMap worldmap = new WorldMap("map_" + i1);
+    private static WorldMap a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, DimensionManager dimensionmanager) {
+        int l = world.a(DimensionManager.OVERWORLD, "map");
+        WorldMap worldmap = new WorldMap("map_" + l);
 
-        worldmap.a(i, j, k, flag, flag1, l);
-        world.a(worldmap.getId(), (PersistentBase) worldmap);
-        itemstack.getOrCreateTag().setInt("map", i1);
+        worldmap.a(i, j, k, flag, flag1, dimensionmanager);
+        world.a(DimensionManager.OVERWORLD, worldmap.getId(), (PersistentBase) worldmap);
+        itemstack.getOrCreateTag().setInt("map", l);
         return worldmap;
     }
 
     @Nullable
     public static WorldMap a(GeneratorAccess generatoraccess, String s) {
-        return (WorldMap) generatoraccess.a(WorldMap::new, s);
+        return (WorldMap) generatoraccess.a(DimensionManager.OVERWORLD, WorldMap::new, s);
     }
 
     public void a(World world, Entity entity, WorldMap worldmap) {
-        if (world.worldProvider.getDimensionManager().getDimensionID() == worldmap.map && entity instanceof EntityHuman) {
+        if (world.worldProvider.getDimensionManager() == worldmap.map && entity instanceof EntityHuman) {
             int i = 1 << worldmap.scale;
             int j = worldmap.centerX;
             int k = worldmap.centerZ;
@@ -199,7 +199,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {
-            if (world.worldProvider.getDimensionManager().getDimensionID() == worldmap.map) {
+            if (world.worldProvider.getDimensionManager() == worldmap.map) {
                 int i = 1 << worldmap.scale;
                 int j = worldmap.centerX;
                 int k = worldmap.centerZ;
@@ -329,7 +329,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         IBlockData iblockdata = itemactioncontext.getWorld().getType(itemactioncontext.getClickPosition());
 
-        if (iblockdata.a(TagsBlock.u)) {
+        if (iblockdata.a(TagsBlock.BANNERS)) {
             if (!itemactioncontext.g.isClientSide) {
                 WorldMap worldmap = getSavedMap(itemactioncontext.getItemStack(), itemactioncontext.getWorld());
 

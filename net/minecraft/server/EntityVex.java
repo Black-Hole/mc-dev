@@ -90,7 +90,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    public BlockPosition dA() {
+    public BlockPosition dz() {
         return this.c;
     }
 
@@ -117,7 +117,7 @@ public class EntityVex extends EntityMonster {
         this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
     }
 
-    public boolean dB() {
+    public boolean dA() {
         return this.b(1);
     }
 
@@ -147,7 +147,7 @@ public class EntityVex extends EntityMonster {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aG;
     }
 
@@ -198,7 +198,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public void e() {
-            BlockPosition blockposition = EntityVex.this.dA();
+            BlockPosition blockposition = EntityVex.this.dz();
 
             if (blockposition == null) {
                 blockposition = new BlockPosition(EntityVex.this);
@@ -230,7 +230,7 @@ public class EntityVex extends EntityMonster {
         }
 
         public boolean b() {
-            return EntityVex.this.getControllerMove().b() && EntityVex.this.dB() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
+            return EntityVex.this.getControllerMove().b() && EntityVex.this.dA() && EntityVex.this.getGoalTarget() != null && EntityVex.this.getGoalTarget().isAlive();
         }
 
         public void c() {

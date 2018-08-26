@@ -116,7 +116,7 @@ public class PlayerInteractManager {
 
                     ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
 
-                    if (!itemstack.a(this.world.E(), shapedetectorblock)) {
+                    if (!itemstack.a(this.world.F(), shapedetectorblock)) {
                         return;
                     }
                 }
@@ -215,7 +215,7 @@ public class PlayerInteractManager {
 
                         ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
 
-                        if (!itemstack.a(this.world.E(), shapedetectorblock)) {
+                        if (!itemstack.a(this.world.F(), shapedetectorblock)) {
                             return false;
                         }
                     }

@@ -7,16 +7,15 @@ import javax.annotation.Nullable;
 
 public abstract class Enchantment {
 
-    public static final RegistryMaterials<MinecraftKey, Enchantment> enchantments = new RegistryMaterials();
     private final EnumItemSlot[] a;
-    private final Enchantment.Rarity e;
+    private final Enchantment.Rarity d;
     @Nullable
     public EnchantmentSlotType itemTarget;
     @Nullable
-    protected String d;
+    protected String c;
 
     protected Enchantment(Enchantment.Rarity enchantment_rarity, EnchantmentSlotType enchantmentslottype, EnumItemSlot[] aenumitemslot) {
-        this.e = enchantment_rarity;
+        this.d = enchantment_rarity;
         this.itemTarget = enchantmentslottype;
         this.a = aenumitemslot;
     }
@@ -39,7 +38,7 @@ public abstract class Enchantment {
     }
 
     public Enchantment.Rarity d() {
-        return this.e;
+        return this.d;
     }
 
     public int getStartLevel() {
@@ -75,11 +74,11 @@ public abstract class Enchantment {
     }
 
     protected String f() {
-        if (this.d == null) {
-            this.d = SystemUtils.a("enchantment", (MinecraftKey) Enchantment.enchantments.b(this));
+        if (this.c == null) {
+            this.c = SystemUtils.a("enchantment", IRegistry.ENCHANTMENT.getKey(this));
         }
 
-        return this.d;
+        return this.c;
     }
 
     public String g() {
@@ -91,6 +90,8 @@ public abstract class Enchantment {
 
         if (this.c()) {
             chatmessage.a(EnumChatFormat.RED);
+        } else {
+            chatmessage.a(EnumChatFormat.GRAY);
         }
 
         if (i != 1 || this.getMaxLevel() != 1) {
@@ -156,7 +157,7 @@ public abstract class Enchantment {
     }
 
     private static void a(String s, Enchantment enchantment) {
-        Enchantment.enchantments.a(new MinecraftKey(s), enchantment);
+        IRegistry.ENCHANTMENT.a(new MinecraftKey(s), (Object) enchantment);
     }
 
     public static enum Rarity {

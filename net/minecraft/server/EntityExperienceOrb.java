@@ -41,13 +41,13 @@ public class EntityExperienceOrb extends Entity {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
-        if (this.a(TagsFluid.a)) {
+        if (this.a(TagsFluid.WATER)) {
             this.k();
         } else if (!this.isNoGravity()) {
             this.motY -= 0.029999999329447746D;
         }
 
-        if (this.world.b(new BlockPosition(this)).a(TagsFluid.b)) {
+        if (this.world.b(new BlockPosition(this)).a(TagsFluid.LAVA)) {
             this.motY = 0.20000000298023224D;
             this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
             this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);

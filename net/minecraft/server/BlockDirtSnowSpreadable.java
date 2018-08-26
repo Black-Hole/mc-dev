@@ -11,13 +11,13 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
     private static boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
-        return iworldreader.getLightLevel(blockposition1) >= 4 || iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.J();
+        return iworldreader.getLightLevel(blockposition1) >= 4 || iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.K();
     }
 
     private static boolean b(IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
-        return iworldreader.getLightLevel(blockposition1) >= 4 && iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.J() && !iworldreader.b(blockposition1).a(TagsFluid.a);
+        return iworldreader.getLightLevel(blockposition1) >= 4 && iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.K() && !iworldreader.b(blockposition1).a(TagsFluid.WATER);
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {

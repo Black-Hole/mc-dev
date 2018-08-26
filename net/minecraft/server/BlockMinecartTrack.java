@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.Q;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.R;
 
     protected BlockMinecartTrack(Block.Info block_info) {
         super(false, block_info);

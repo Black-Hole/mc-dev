@@ -39,7 +39,7 @@ public class EntityPig extends EntityAnimal {
         return this.bP().isEmpty() ? null : (Entity) this.bP().get(0);
     }
 
-    public boolean di() {
+    public boolean dh() {
         Entity entity = this.bO();
 
         if (!(entity instanceof EntityHuman)) {
@@ -128,7 +128,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.L;
     }
 
@@ -165,7 +165,7 @@ public class EntityPig extends EntityAnimal {
     public void a(float f, float f1, float f2) {
         Entity entity = this.bP().isEmpty() ? null : (Entity) this.bP().get(0);
 
-        if (this.isVehicle() && this.di()) {
+        if (this.isVehicle() && this.dh()) {
             this.yaw = entity.yaw;
             this.lastYaw = this.yaw;
             this.pitch = entity.pitch * 0.5F;
@@ -211,7 +211,7 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public boolean dA() {
+    public boolean dz() {
         if (this.bG) {
             return false;
         } else {

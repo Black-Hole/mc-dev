@@ -14,7 +14,7 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (!this.a.dC() && !this.a.dA()) {
+        if (!this.a.dB() && !this.a.dz()) {
             List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
@@ -34,7 +34,7 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
                             }
 
                             entityfish = (EntityFish) iterator.next();
-                        } while (entityfish.equals(this.a) || entityfish.dA() || entityfish.dC());
+                        } while (entityfish.equals(this.a) || entityfish.dz() || entityfish.dB());
 
                         entityfish.t(true);
                         ++entityfish.a;
@@ -55,7 +55,7 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
     }
 
     public boolean b() {
-        if (this.b.isAlive() && this.b.dC()) {
+        if (this.b.isAlive() && this.b.dB()) {
             double d0 = this.a.h(this.b);
 
             return d0 <= 121.0D;

@@ -6,12 +6,12 @@ import java.util.List;
 public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     public static final BlockStateBoolean POWERED = BlockProperties.t;
-    private final BlockPressurePlateBinary.EnumMobType q;
+    private final BlockPressurePlateBinary.EnumMobType p;
 
     protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, Block.Info block_info) {
         super(block_info);
         this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
-        this.q = blockpressureplatebinary_enummobtype;
+        this.p = blockpressureplatebinary_enummobtype;
     }
 
     protected int getPower(IBlockData iblockdata) {
@@ -44,7 +44,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.c.a(blockposition);
         List list;
 
-        switch (this.q) {
+        switch (this.p) {
         case EVERYTHING:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;

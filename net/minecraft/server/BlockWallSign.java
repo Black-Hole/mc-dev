@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class BlockWallSign extends BlockSign {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    private static final Map<EnumDirection, VoxelShape> p = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
+    private static final Map<EnumDirection, VoxelShape> o = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
 
     public BlockWallSign(Block.Info block_info) {
         super(block_info);
@@ -20,7 +20,7 @@ public class BlockWallSign extends BlockSign {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (VoxelShape) BlockWallSign.p.get(iblockdata.get(BlockWallSign.FACING));
+        return (VoxelShape) BlockWallSign.o.get(iblockdata.get(BlockWallSign.FACING));
     }
 
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {

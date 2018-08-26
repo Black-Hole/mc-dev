@@ -25,8 +25,8 @@ public class CommandTell {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[] { commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.e()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}));
-            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent.e()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
+            entityplayer.sendMessage((new ChatMessage("commands.message.display.incoming", new Object[] { commandlistenerwrapper.getScoreboardDisplayName(), ichatbasecomponent.h()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}));
+            commandlistenerwrapper.sendMessage((new ChatMessage("commands.message.display.outgoing", new Object[] { entityplayer.getScoreboardDisplayName(), ichatbasecomponent.h()})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC}), false);
         }
 
         return collection.size();

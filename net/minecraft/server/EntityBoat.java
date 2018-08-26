@@ -120,7 +120,7 @@ public class EntityBoat extends Entity {
             this.aO = true;
             this.aP = flag;
             if (this.z() == 0) {
-                this.e(60);
+                this.d(60);
             }
         }
 
@@ -169,7 +169,7 @@ public class EntityBoat extends Entity {
         return !this.dead;
     }
 
-    public EnumDirection bB() {
+    public EnumDirection getAdjustedDirection() {
         return this.getDirection().e();
     }
 
@@ -276,17 +276,17 @@ public class EntityBoat extends Entity {
             this.aR = 10.0F * (float) Math.sin((double) (0.5F * (float) this.world.getTime())) * this.aQ;
         } else {
             if (!this.aO) {
-                this.e(0);
+                this.d(0);
             }
 
             i = this.z();
             if (i > 0) {
                 --i;
-                this.e(i);
+                this.d(i);
                 int j = 60 - i - 1;
 
                 if (j > 0 && i == 0) {
-                    this.e(0);
+                    this.d(0);
                     if (this.aP) {
                         this.motY -= 0.7D;
                         this.ejectPassengers();
@@ -379,7 +379,7 @@ public class EntityBoat extends Entity {
                         blockposition_b.f(l1, k1, i2);
                         Fluid fluid = this.world.b((BlockPosition) blockposition_b);
 
-                        if (fluid.a(TagsFluid.a)) {
+                        if (fluid.a(TagsFluid.WATER)) {
                             f = Math.max(f, (float) k1 + fluid.f());
                         }
 
@@ -495,7 +495,7 @@ public class EntityBoat extends Entity {
                         blockposition_b.f(k1, l1, i2);
                         Fluid fluid = this.world.b((BlockPosition) blockposition_b);
 
-                        if (fluid.a(TagsFluid.a)) {
+                        if (fluid.a(TagsFluid.WATER)) {
                             float f = (float) l1 + fluid.f();
 
                             this.aJ = Math.max((double) f, this.aJ);
@@ -546,7 +546,7 @@ public class EntityBoat extends Entity {
                         blockposition_b.f(k1, l1, i2);
                         Fluid fluid = this.world.b((BlockPosition) blockposition_b);
 
-                        if (fluid.a(TagsFluid.a) && d0 < (double) ((float) blockposition_b.getY() + fluid.f())) {
+                        if (fluid.a(TagsFluid.WATER) && d0 < (double) ((float) blockposition_b.getY() + fluid.f())) {
                             if (!fluid.d()) {
                                 EntityBoat.EnumStatus entityboat_enumstatus = EntityBoat.EnumStatus.UNDER_FLOWING_WATER;
 
@@ -753,7 +753,7 @@ public class EntityBoat extends Entity {
                 }
 
                 this.fallDistance = 0.0F;
-            } else if (!this.world.b((new BlockPosition(this)).down()).a(TagsFluid.a) && d0 < 0.0D) {
+            } else if (!this.world.b((new BlockPosition(this)).down()).a(TagsFluid.WATER) && d0 < 0.0D) {
                 this.fallDistance = (float) ((double) this.fallDistance - d0);
             }
 
@@ -780,7 +780,7 @@ public class EntityBoat extends Entity {
         return ((Integer) this.datawatcher.get(EntityBoat.a)).intValue();
     }
 
-    private void e(int i) {
+    private void d(int i) {
         this.datawatcher.set(EntityBoat.g, Integer.valueOf(i));
     }
 
@@ -805,7 +805,7 @@ public class EntityBoat extends Entity {
     }
 
     protected boolean q(Entity entity) {
-        return this.bP().size() < 2 && !this.a(TagsFluid.a);
+        return this.bP().size() < 2 && !this.a(TagsFluid.WATER);
     }
 
     @Nullable

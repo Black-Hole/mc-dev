@@ -19,7 +19,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
     private IChatBaseComponent o;
 
     public TileEntityEnchantTable() {
-        super(TileEntityTypes.m);
+        super(TileEntityTypes.ENCHANTING_TABLE);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {

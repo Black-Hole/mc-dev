@@ -131,7 +131,7 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
     }
 
     public int getSpawnHeight() {
-        IChunkAccess ichunkaccess = this.a.c(0, 0);
+        IChunkAccess ichunkaccess = this.a.b(0, 0);
 
         return ichunkaccess.a(HeightMap.Type.MOTION_BLOCKING, 8, 8);
     }
@@ -198,8 +198,8 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
     }
 
     @Nullable
-    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i) {
-        return !this.g.u().keySet().contains(s) ? null : super.findNearestMapFeature(world, s, blockposition, i);
+    public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
+        return !this.g.u().keySet().contains(s) ? null : super.findNearestMapFeature(world, s, blockposition, i, flag);
     }
 
     public GeneratorSettings getSettings() {

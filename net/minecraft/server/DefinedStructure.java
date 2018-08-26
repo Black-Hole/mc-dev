@@ -225,7 +225,7 @@ public class DefinedStructure {
                                 }
 
                                 if (fluid != null && iblockdata1.getBlock() instanceof IFluidContainer) {
-                                    ((IFluidContainer) iblockdata1.getBlock()).a(generatoraccess, blockposition1, iblockdata1, fluid);
+                                    ((IFluidContainer) iblockdata1.getBlock()).place(generatoraccess, blockposition1, iblockdata1, fluid);
                                     if (!fluid.d()) {
                                         arraylist.add(blockposition1);
                                     }
@@ -260,7 +260,7 @@ public class DefinedStructure {
                             IBlockData iblockdata2 = generatoraccess.getType(blockposition2);
 
                             if (iblockdata2.getBlock() instanceof IFluidContainer) {
-                                ((IFluidContainer) iblockdata2.getBlock()).a(generatoraccess, blockposition2, iblockdata2, fluid1);
+                                ((IFluidContainer) iblockdata2.getBlock()).place(generatoraccess, blockposition2, iblockdata2, fluid1);
                                 flag = true;
                                 iterator1.remove();
                             }
@@ -584,7 +584,7 @@ public class DefinedStructure {
 
         nbttagcompound.set("entities", nbttaglist3);
         nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
-        nbttagcompound.setInt("DataVersion", 1519);
+        nbttagcompound.setInt("DataVersion", 1628);
         return nbttagcompound;
     }
 

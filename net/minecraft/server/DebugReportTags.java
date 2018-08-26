@@ -24,12 +24,12 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
     private static final Logger e = LogManager.getLogger();
     private static final Gson f = (new GsonBuilder()).setPrettyPrinting().create();
     protected final DebugReportGenerator b;
-    protected final RegistryMaterials<MinecraftKey, T> c;
+    protected final IRegistry<T> c;
     protected final Map<Tag<T>, Tag.a<T>> d = Maps.newLinkedHashMap();
 
-    protected DebugReportTags(DebugReportGenerator debugreportgenerator, RegistryMaterials<MinecraftKey, T> registrymaterials) {
+    protected DebugReportTags(DebugReportGenerator debugreportgenerator, IRegistry<T> iregistry) {
         this.b = debugreportgenerator;
-        this.c = registrymaterials;
+        this.c = iregistry;
     }
 
     protected abstract void b();
@@ -55,10 +55,10 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
             }
 
             Tag tag = ((Tag.a) entry.getValue()).b(minecraftkey);
-            RegistryMaterials registrymaterials = this.c;
+            IRegistry iregistry = this.c;
 
             this.c.getClass();
-            JsonObject jsonobject = tag.a(registrymaterials::b);
+            JsonObject jsonobject = tag.a(iregistry::getKey);
             java.nio.file.Path java_nio_file_path = this.a(minecraftkey);
 
             tags.a(tag);

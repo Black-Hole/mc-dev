@@ -31,14 +31,14 @@ public class AdvancementRewards {
 
     public void a(EntityPlayer entityplayer) {
         entityplayer.giveExp(this.b);
-        LootTableInfo loottableinfo = (new LootTableInfo.a(entityplayer.getWorldServer())).a((Entity) entityplayer).a(new BlockPosition(entityplayer)).a();
+        LootTableInfo loottableinfo = (new LootTableInfo.Builder(entityplayer.getWorldServer())).entity(entityplayer).position(new BlockPosition(entityplayer)).build();
         boolean flag = false;
         MinecraftKey[] aminecraftkey = this.c;
         int i = aminecraftkey.length;
 
         for (int j = 0; j < i; ++j) {
             MinecraftKey minecraftkey = aminecraftkey[j];
-            Iterator iterator = entityplayer.server.aP().a(minecraftkey).a(entityplayer.getRandom(), loottableinfo).iterator();
+            Iterator iterator = entityplayer.server.getLootTableRegistry().getLootTable(minecraftkey).a(entityplayer.getRandom(), loottableinfo).iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();

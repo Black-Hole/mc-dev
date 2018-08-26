@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public interface Counter {
 
-    DecimalFormat DECIMAL_FORMAT = new DecimalFormat("########0.00");
+    DecimalFormat DECIMAL_FORMAT = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("########0.00")), (decimalformat) -> {
+        decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
+    });
     Counter DEFAULT;
     Counter DIVIDE_BY_TEN;
     Counter DISTANCE;

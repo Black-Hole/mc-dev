@@ -30,8 +30,8 @@ public abstract class EntityInsentient extends EntityLiving {
     public boolean canPickUpLoot;
     public boolean persistent;
     private final Map<PathType, Float> bH;
-    private MinecraftKey bI;
-    private long bJ;
+    public MinecraftKey lootTableKey;
+    public long lootTableSeed;
     private boolean bK;
     private Entity leashHolder;
     private NBTTagCompound bM;
@@ -200,7 +200,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void tick() {
         super.tick();
         if (!this.world.isClientSide) {
-            this.dm();
+            this.dl();
             if (this.ticksLived % 5 == 0) {
                 boolean flag = !(this.bO() instanceof EntityInsentient);
                 boolean flag1 = !(this.getVehicle() instanceof EntityBoat);
@@ -247,7 +247,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setBoolean("CanPickUpLoot", this.dk());
+        nbttagcompound.setBoolean("CanPickUpLoot", this.dj());
         nbttagcompound.setBoolean("PersistenceRequired", this.persistent);
         NBTTagList nbttaglist = new NBTTagList();
 
@@ -321,10 +321,10 @@ public abstract class EntityInsentient extends EntityLiving {
         }
 
         nbttagcompound.setBoolean("LeftHanded", this.isLeftHanded());
-        if (this.bI != null) {
-            nbttagcompound.setString("DeathLootTable", this.bI.toString());
-            if (this.bJ != 0L) {
-                nbttagcompound.setLong("DeathLootTableSeed", this.bJ);
+        if (this.lootTableKey != null) {
+            nbttagcompound.setString("DeathLootTable", this.lootTableKey.toString());
+            if (this.lootTableSeed != 0L) {
+                nbttagcompound.setLong("DeathLootTableSeed", this.lootTableSeed);
             }
         }
 
@@ -383,36 +383,36 @@ public abstract class EntityInsentient extends EntityLiving {
 
         this.r(nbttagcompound.getBoolean("LeftHanded"));
         if (nbttagcompound.hasKeyOfType("DeathLootTable", 8)) {
-            this.bI = new MinecraftKey(nbttagcompound.getString("DeathLootTable"));
-            this.bJ = nbttagcompound.getLong("DeathLootTableSeed");
+            this.lootTableKey = new MinecraftKey(nbttagcompound.getString("DeathLootTable"));
+            this.lootTableSeed = nbttagcompound.getLong("DeathLootTableSeed");
         }
 
         this.setNoAI(nbttagcompound.getBoolean("NoAI"));
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return null;
     }
 
     protected void a(boolean flag, int i, DamageSource damagesource) {
-        MinecraftKey minecraftkey = this.bI;
+        MinecraftKey minecraftkey = this.lootTableKey;
 
         if (minecraftkey == null) {
-            minecraftkey = this.G();
+            minecraftkey = this.getDefaultLootTable();
         }
 
         if (minecraftkey != null) {
-            LootTable loottable = this.world.getMinecraftServer().aP().a(minecraftkey);
+            LootTable loottable = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(minecraftkey);
 
-            this.bI = null;
-            LootTableInfo.a loottableinfo_a = (new LootTableInfo.a((WorldServer) this.world)).a((Entity) this).a(damagesource).a(new BlockPosition(this));
+            this.lootTableKey = null;
+            LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).entity(this).damageSource(damagesource).position(new BlockPosition(this));
 
             if (flag && this.killer != null) {
-                loottableinfo_a = loottableinfo_a.a(this.killer).a(this.killer.dJ());
+                loottableinfo_builder = loottableinfo_builder.killer(this.killer).luck(this.killer.dJ());
             }
 
-            List list = loottable.a(this.bJ == 0L ? this.random : new Random(this.bJ), loottableinfo_a.a());
+            List list = loottable.a(this.lootTableSeed == 0L ? this.random : new Random(this.lootTableSeed), loottableinfo_builder.build());
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -448,7 +448,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void k() {
         super.k();
         this.world.methodProfiler.a("looting");
-        if (!this.world.isClientSide && this.dk() && !this.aX && this.world.getGameRules().getBoolean("mobGriefing")) {
+        if (!this.world.isClientSide && this.dj() && !this.aX && this.world.getGameRules().getBoolean("mobGriefing")) {
             List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
             Iterator iterator = list.iterator();
 
@@ -471,7 +471,7 @@ public abstract class EntityInsentient extends EntityLiving {
         boolean flag = this.a(itemstack, itemstack1, enumitemslot);
 
         if (flag && this.d(itemstack)) {
-            double d0 = this.c(enumitemslot);
+            double d0 = (double) this.c(enumitemslot);
 
             if (!itemstack1.isEmpty() && (double) (this.random.nextFloat() - 0.1F) < d0) {
                 this.a_(itemstack1);
@@ -577,10 +577,10 @@ public abstract class EntityInsentient extends EntityLiving {
         this.bC.a();
         this.world.methodProfiler.e();
         this.world.methodProfiler.a("targetSelector");
-        this.targetSelector.a();
+        this.targetSelector.doTick();
         this.world.methodProfiler.e();
         this.world.methodProfiler.a("goalSelector");
-        this.goalSelector.a();
+        this.goalSelector.doTick();
         this.world.methodProfiler.e();
         this.world.methodProfiler.a("navigation");
         this.navigation.d();
@@ -651,11 +651,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return f + f3;
     }
 
-    public final boolean M() {
-        return this.a((GeneratorAccess) this.world);
-    }
-
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         IBlockData iblockdata = generatoraccess.getType((new BlockPosition(this)).down());
 
         return iblockdata.a((Entity) this);
@@ -666,10 +662,10 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return !iworldreader.containsLiquid(this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.b(this, this.getBoundingBox());
+        return !iworldreader.containsLiquid(this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.a_(this, this.getBoundingBox());
     }
 
-    public int dh() {
+    public int dg() {
         return 4;
     }
 
@@ -732,10 +728,10 @@ public abstract class EntityInsentient extends EntityLiving {
         for (int k = 0; k < j; ++k) {
             EnumItemSlot enumitemslot = aenumitemslot[k];
             ItemStack itemstack = this.getEquipment(enumitemslot);
-            double d0 = this.c(enumitemslot);
-            boolean flag1 = d0 > 1.0D;
+            float f = this.c(enumitemslot);
+            boolean flag1 = f > 1.0F;
 
-            if (!itemstack.isEmpty() && !EnchantmentManager.shouldNotDrop(itemstack) && (flag || flag1) && (double) (this.random.nextFloat() - (float) i * 0.01F) < d0) {
+            if (!itemstack.isEmpty() && !EnchantmentManager.shouldNotDrop(itemstack) && (flag || flag1) && this.random.nextFloat() - (float) i * 0.01F < f) {
                 if (!flag1 && itemstack.e()) {
                     itemstack.setDamage(itemstack.h() - this.random.nextInt(1 + this.random.nextInt(Math.max(itemstack.h() - 3, 1))));
                 }
@@ -746,23 +742,23 @@ public abstract class EntityInsentient extends EntityLiving {
 
     }
 
-    protected double c(EnumItemSlot enumitemslot) {
-        double d0;
+    protected float c(EnumItemSlot enumitemslot) {
+        float f;
 
         switch (enumitemslot.a()) {
         case HAND:
-            d0 = (double) this.dropChanceHand[enumitemslot.b()];
+            f = this.dropChanceHand[enumitemslot.b()];
             break;
 
         case ARMOR:
-            d0 = (double) this.dropChanceArmor[enumitemslot.b()];
+            f = this.dropChanceArmor[enumitemslot.b()];
             break;
 
         default:
-            d0 = 0.0D;
+            f = 0.0F;
         }
 
-        return d0;
+        return f;
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
@@ -912,11 +908,11 @@ public abstract class EntityInsentient extends EntityLiving {
         return groupdataentity;
     }
 
-    public boolean di() {
+    public boolean dh() {
         return false;
     }
 
-    public void dj() {
+    public void di() {
         this.persistent = true;
     }
 
@@ -932,7 +928,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     }
 
-    public boolean dk() {
+    public boolean dj() {
         return this.canPickUpLoot;
     }
 
@@ -965,9 +961,9 @@ public abstract class EntityInsentient extends EntityLiving {
         return false;
     }
 
-    protected void dm() {
+    protected void dl() {
         if (this.bM != null) {
-            this.ds();
+            this.dr();
         }
 
         if (this.bK) {
@@ -1031,7 +1027,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag1;
     }
 
-    private void ds() {
+    private void dr() {
         if (this.bK && this.bM != null) {
             if (this.bM.b("UUID")) {
                 UUID uuid = this.bM.a("UUID");
@@ -1093,7 +1089,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean bT() {
-        return this.di() && super.bT();
+        return this.dh() && super.bT();
     }
 
     public static boolean b(EnumItemSlot enumitemslot, ItemStack itemstack) {
@@ -1175,8 +1171,8 @@ public abstract class EntityInsentient extends EntityLiving {
         return flag;
     }
 
-    protected boolean dr() {
-        if (this.world.K() && !this.world.isClientSide) {
+    protected boolean dq() {
+        if (this.world.L() && !this.world.isClientSide) {
             float f = this.az();
             BlockPosition blockposition = this.getVehicle() instanceof EntityBoat ? (new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ)).up() : new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 

@@ -10,11 +10,11 @@ import java.util.function.Predicate;
 
 public class TagsServer<T> extends Tags<T> {
 
-    private final RegistryMaterials<MinecraftKey, T> a;
+    private final IRegistry<T> a;
 
-    public TagsServer(RegistryMaterials<MinecraftKey, T> registrymaterials, String s, String s1) {
-        super(registrymaterials::d, registrymaterials::get, s, false, s1);
-        this.a = registrymaterials;
+    public TagsServer(IRegistry<T> iregistry, String s, String s1) {
+        super(iregistry::c, iregistry::get, s, false, s1);
+        this.a = iregistry;
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -46,7 +46,7 @@ public class TagsServer<T> extends Tags<T> {
             ArrayList arraylist = Lists.newArrayList();
 
             for (int l = 0; l < k; ++l) {
-                arraylist.add(this.a.getId(packetdataserializer.g()));
+                arraylist.add(this.a.fromId(packetdataserializer.g()));
             }
 
             this.c().put(minecraftkey, Tag.a.a().a((Collection) arraylist).b(minecraftkey));

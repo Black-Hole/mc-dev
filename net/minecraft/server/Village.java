@@ -76,7 +76,7 @@ public class Village {
                 EntityIronGolem entityirongolem = (EntityIronGolem) EntityTypes.IRON_GOLEM.b(this.a, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition1, false, false);
 
                 if (entityirongolem != null) {
-                    if (entityirongolem.M() && entityirongolem.a((IWorldReader) this.a)) {
+                    if (entityirongolem.a((GeneratorAccess) this.a, false) && entityirongolem.a((IWorldReader) this.a)) {
                         this.a.addEntity(entityirongolem);
                         return entityirongolem;
                     }

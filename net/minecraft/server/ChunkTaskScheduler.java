@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -19,13 +20,13 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
     private final ChunkGenerator<?> d;
     private final IChunkLoader e;
     private final IAsyncTaskHandler f;
-    private final Long2ObjectMap<Scheduler.a> g = Long2ObjectMaps.synchronize(new ExpiringMap(8192, 5000) {
+    private final Long2ObjectMap<Scheduler.a> progressCache = new ExpiringMap(8192, 5000) {
         protected boolean a(Scheduler.a scheduler_a) {
             ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
 
             return !protochunk.ab_() && !protochunk.h();
         }
-    });
+    };
 
     public ChunkTaskScheduler(int i, World world, ChunkGenerator<?> chunkgenerator, IChunkLoader ichunkloader, IAsyncTaskHandler iasynctaskhandler) {
         super("WorldGen", i, ChunkStatus.FINALIZED, () -> {
@@ -39,34 +40,36 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
         this.f = iasynctaskhandler;
     }
 
-    protected Scheduler.a a(ChunkCoordIntPair chunkcoordintpair) {
-        return (Scheduler.a) this.g.computeIfAbsent(Long.valueOf(chunkcoordintpair.a()), (olong) -> {
-            ProtoChunk protochunk = this.a(chunkcoordintpair.x, chunkcoordintpair.z);
+    @Nullable
+    protected Scheduler.a a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+        IChunkLoader ichunkloader = this.e;
 
-            if (protochunk != null) {
-                protochunk.setLastSaved(this.c.getTime());
-                return new Scheduler.a(chunkcoordintpair, protochunk, protochunk.i());
-            } else {
-                return new Scheduler.a(chunkcoordintpair, new ProtoChunk(chunkcoordintpair, ChunkConverter.a), ChunkStatus.EMPTY);
-            }
-        });
+        synchronized (this.e) {
+            return flag ? (Scheduler.a) this.progressCache.computeIfAbsent(chunkcoordintpair.a(), (i) -> {
+                ProtoChunk protochunk;
+
+                try {
+                    protochunk = this.e.b(this.c, chunkcoordintpair.x, chunkcoordintpair.z, (ichunkaccess) -> {
+                    });
+                } catch (ReportedException reportedexception) {
+                    throw reportedexception;
+                } catch (Exception exception) {
+                    ChunkTaskScheduler.b.error("Couldn\'t load protochunk", exception);
+                    protochunk = null;
+                }
+
+                if (protochunk != null) {
+                    protochunk.setLastSaved(this.c.getTime());
+                    return new Scheduler.a(chunkcoordintpair, protochunk, protochunk.i());
+                } else {
+                    return new Scheduler.a(chunkcoordintpair, new ProtoChunk(chunkcoordintpair, ChunkConverter.a), ChunkStatus.EMPTY);
+                }
+            }) : (Scheduler.a) this.progressCache.get(chunkcoordintpair.a());
+        }
     }
 
     protected ProtoChunk a(ChunkCoordIntPair chunkcoordintpair, ChunkStatus chunkstatus, Map<ChunkCoordIntPair, ProtoChunk> map) {
         return chunkstatus.a(this.c, this.d, map, chunkcoordintpair.x, chunkcoordintpair.z);
-    }
-
-    @Nullable
-    private ProtoChunk a(int i, int j) {
-        try {
-            return this.e.b(this.c, i, j, (ichunkaccess) -> {
-            });
-        } catch (ReportedException reportedexception) {
-            throw reportedexception;
-        } catch (Exception exception) {
-            ChunkTaskScheduler.b.error("Couldn\'t load protochunk", exception);
-            return null;
-        }
     }
 
     protected Scheduler.a a(ChunkCoordIntPair chunkcoordintpair, Scheduler.a scheduler_a) {
@@ -78,22 +81,33 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
         ((ProtoChunk) scheduler_a.a()).a(-1);
     }
 
-    public void a() {
-        this.g.values().forEach((scheduler_a) -> {
-            ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
+    public void a(BooleanSupplier booleansupplier) {
+        IChunkLoader ichunkloader = this.e;
 
-            if (protochunk.h() && protochunk.i().d() == ChunkStatus.Type.PROTOCHUNK) {
-                try {
-                    protochunk.setLastSaved(this.c.getTime());
-                    this.e.saveChunk(this.c, protochunk);
-                    protochunk.a(false);
-                } catch (IOException ioexception) {
-                    ChunkTaskScheduler.b.error("Couldn\'t save chunk", ioexception);
-                } catch (ExceptionWorldConflict exceptionworldconflict) {
-                    ChunkTaskScheduler.b.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
+        synchronized (this.e) {
+            ObjectIterator objectiterator = this.progressCache.values().iterator();
+
+            do {
+                if (!objectiterator.hasNext()) {
+                    return;
                 }
-            }
 
-        });
+                Scheduler.a scheduler_a = (Scheduler.a) objectiterator.next();
+                ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
+
+                if (protochunk.h() && protochunk.i().d() == ChunkStatus.Type.PROTOCHUNK) {
+                    try {
+                        protochunk.setLastSaved(this.c.getTime());
+                        this.e.saveChunk(this.c, protochunk);
+                        protochunk.a(false);
+                    } catch (IOException ioexception) {
+                        ChunkTaskScheduler.b.error("Couldn\'t save chunk", ioexception);
+                    } catch (ExceptionWorldConflict exceptionworldconflict) {
+                        ChunkTaskScheduler.b.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
+                    }
+                }
+            } while (booleansupplier.getAsBoolean());
+
+        }
     }
 }

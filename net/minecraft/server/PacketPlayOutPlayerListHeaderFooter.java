@@ -4,19 +4,19 @@ import java.io.IOException;
 
 public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListenerPlayOut> {
 
-    private IChatBaseComponent a;
-    private IChatBaseComponent b;
+    public IChatBaseComponent header;
+    public IChatBaseComponent footer;
 
     public PacketPlayOutPlayerListHeaderFooter() {}
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.f();
-        this.b = packetdataserializer.f();
+        this.header = packetdataserializer.f();
+        this.footer = packetdataserializer.f();
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.a);
-        packetdataserializer.a(this.b);
+        packetdataserializer.a(this.header);
+        packetdataserializer.a(this.footer);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

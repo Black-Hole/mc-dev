@@ -67,10 +67,10 @@ public final class SpawnerCreature {
                 EnumCreatureType enumcreaturetype = aenumcreaturetype[k1];
 
                 if ((!enumcreaturetype.c() || flag1) && (enumcreaturetype.c() || flag) && (!enumcreaturetype.d() || flag2)) {
-                    k = worldserver.a(enumcreaturetype.a());
-                    int l1 = enumcreaturetype.b() * i / SpawnerCreature.b;
+                    k = enumcreaturetype.b() * i / SpawnerCreature.b;
+                    int l1 = worldserver.a(enumcreaturetype.a(), k);
 
-                    if (k <= l1) {
+                    if (l1 <= k) {
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
                         Iterator iterator1 = this.c.iterator();
 
@@ -133,7 +133,7 @@ public final class SpawnerCreature {
                                                             }
 
                                                             entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                            if (entityinsentient.M() && entityinsentient.a((IWorldReader) worldserver)) {
+                                                            if (entityinsentient.a((GeneratorAccess) worldserver, false) && entityinsentient.a((IWorldReader) worldserver)) {
                                                                 groupdataentity = entityinsentient.prepare(worldserver.getDamageScaler(new BlockPosition(entityinsentient)), groupdataentity, (NBTTagCompound) null);
                                                                 if (entityinsentient.a((IWorldReader) worldserver)) {
                                                                     ++l2;
@@ -143,7 +143,7 @@ public final class SpawnerCreature {
                                                                     entityinsentient.die();
                                                                 }
 
-                                                                if (l2 >= entityinsentient.dh()) {
+                                                                if (l2 >= entityinsentient.dg()) {
                                                                     continue label128;
                                                                 }
 
@@ -187,7 +187,7 @@ public final class SpawnerCreature {
     }
 
     public static boolean a(IBlockData iblockdata, Fluid fluid) {
-        return iblockdata.k() ? false : (iblockdata.isPowerSource() ? false : (!fluid.e() ? false : !iblockdata.a(TagsBlock.z)));
+        return iblockdata.k() ? false : (iblockdata.isPowerSource() ? false : (!fluid.e() ? false : !iblockdata.a(TagsBlock.RAILS)));
     }
 
     public static boolean a(EntityPositionTypes.Surface entitypositiontypes_surface, IWorldReader iworldreader, BlockPosition blockposition, @Nullable EntityTypes<? extends EntityInsentient> entitytypes) {
@@ -197,7 +197,7 @@ public final class SpawnerCreature {
 
             switch (entitypositiontypes_surface) {
             case IN_WATER:
-                return fluid.a(TagsFluid.a) && iworldreader.b(blockposition.down()).a(TagsFluid.a) && !iworldreader.getType(blockposition.up()).isOccluding();
+                return fluid.a(TagsFluid.WATER) && iworldreader.b(blockposition.down()).a(TagsFluid.WATER) && !iworldreader.getType(blockposition.up()).isOccluding();
 
             case ON_GROUND:
             default:
@@ -249,11 +249,11 @@ public final class SpawnerCreature {
                                 continue;
                             }
 
-                            float f = MathHelper.a((float) j1, (float) k + entityinsentient.width, (float) (k + 16) - entityinsentient.width);
-                            float f1 = MathHelper.a((float) k1, (float) l + entityinsentient.width, (float) (l + 16) - entityinsentient.width);
+                            double d0 = MathHelper.a((double) j1, (double) k + (double) entityinsentient.width, (double) k + 16.0D - (double) entityinsentient.width);
+                            double d1 = MathHelper.a((double) k1, (double) l + (double) entityinsentient.width, (double) l + 16.0D - (double) entityinsentient.width);
 
-                            entityinsentient.setPositionRotation((double) f, (double) blockposition.getY(), (double) f1, random.nextFloat() * 360.0F, 0.0F);
-                            if (entityinsentient.a(generatoraccess) && entityinsentient.a((IWorldReader) generatoraccess)) {
+                            entityinsentient.setPositionRotation(d0, (double) blockposition.getY(), d1, random.nextFloat() * 360.0F, 0.0F);
+                            if (entityinsentient.a(generatoraccess, false) && entityinsentient.a((IWorldReader) generatoraccess)) {
                                 groupdataentity = entityinsentient.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityinsentient)), groupdataentity, (NBTTagCompound) null);
                                 generatoraccess.addEntity(entityinsentient);
                                 flag = true;

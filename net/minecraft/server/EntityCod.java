@@ -14,12 +14,12 @@ public class EntityCod extends EntityFish {
         this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dA() {
         return new ItemStack(Items.COD_BUCKET);
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aK;
     }
 
@@ -35,7 +35,7 @@ public class EntityCod extends EntityFish {
         return SoundEffects.ENTITY_COD_HURT;
     }
 
-    protected SoundEffect dD() {
+    protected SoundEffect dC() {
         return SoundEffects.ENTITY_COD_FLOP;
     }
 }

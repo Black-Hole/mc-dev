@@ -1,14 +1,13 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
-public interface GeneratorAccess extends IWorldReader, IWorldWriter {
+public interface GeneratorAccess extends IWorldReader, IPersistentAccess, IWorldWriter {
 
     long getSeed();
 
-    default float af() {
+    default float ah() {
         return WorldProvider.a[this.o().a(this.getWorldData().getDayTime())];
     }
 
@@ -16,27 +15,21 @@ public interface GeneratorAccess extends IWorldReader, IWorldWriter {
         return this.o().a(this.getWorldData().getDayTime(), f);
     }
 
-    TickList<Block> I();
+    TickList<Block> J();
 
-    TickList<FluidType> H();
+    TickList<FluidType> I();
 
     default IChunkAccess y(BlockPosition blockposition) {
-        return this.c(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        return this.b(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
-    IChunkAccess c(int i, int j);
+    IChunkAccess b(int i, int j);
 
     World getMinecraftWorld();
 
     WorldData getWorldData();
 
     DifficultyDamageScaler getDamageScaler(BlockPosition blockposition);
-
-    @Nullable
-    <T extends PersistentBase> T a(Function<String, T> function, String s);
-
-    @Nullable
-    PersistentCollection s_();
 
     default EnumDifficulty getDifficulty() {
         return this.getWorldData().getDifficulty();

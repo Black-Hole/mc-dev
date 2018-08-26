@@ -18,7 +18,7 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
         this.b = entitypainting.getUniqueID();
         this.c = entitypainting.getBlockPosition();
         this.d = entitypainting.direction;
-        this.e = Paintings.a.a((Object) entitypainting.art);
+        this.e = IRegistry.MOTIVE.a((Object) entitypainting.art);
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {

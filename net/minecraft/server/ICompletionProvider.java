@@ -104,43 +104,29 @@ public interface ICompletionProvider {
         return suggestionsbuilder.buildFuture();
     }
 
+    static default CompletableFuture<Suggestions> a(Stream<MinecraftKey> stream, SuggestionsBuilder suggestionsbuilder) {
+        return a(stream::iterator, suggestionsbuilder);
+    }
+
     static default <T> CompletableFuture<Suggestions> a(Stream<T> stream, SuggestionsBuilder suggestionsbuilder, Function<T, MinecraftKey> function, Function<T, Message> function1) {
         return a(stream::iterator, suggestionsbuilder, function, function1);
     }
 
     static default CompletableFuture<Suggestions> a(String s, Collection<ICompletionProvider.a> collection, SuggestionsBuilder suggestionsbuilder, Predicate<String> predicate) {
         ArrayList arraylist = Lists.newArrayList();
-        boolean flag = true;
 
         if (Strings.isNullOrEmpty(s)) {
             Iterator iterator = collection.iterator();
 
-            ICompletionProvider.a icompletionprovider_a;
-
             while (iterator.hasNext()) {
-                icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                arraylist.add(icompletionprovider_a.c);
-            }
-
-            iterator = collection.iterator();
-
-            while (iterator.hasNext()) {
-                icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                arraylist.add(icompletionprovider_a.c + " " + icompletionprovider_a.d);
-            }
-
-            iterator = collection.iterator();
-
-            while (iterator.hasNext()) {
-                icompletionprovider_a = (ICompletionProvider.a) iterator.next();
+                ICompletionProvider.a icompletionprovider_a = (ICompletionProvider.a) iterator.next();
                 String s1 = icompletionprovider_a.c + " " + icompletionprovider_a.d + " " + icompletionprovider_a.e;
 
-                if (!predicate.test(s1)) {
-                    flag = false;
-                    break;
+                if (predicate.test(s1)) {
+                    arraylist.add(icompletionprovider_a.c);
+                    arraylist.add(icompletionprovider_a.c + " " + icompletionprovider_a.d);
+                    arraylist.add(s1);
                 }
-
-                arraylist.add(s1);
             }
         } else {
             String[] astring = s.split(" ");
@@ -153,20 +139,11 @@ public interface ICompletionProvider {
 
                 while (iterator1.hasNext()) {
                     icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
-                    arraylist.add(astring[0] + " " + icompletionprovider_a1.d);
-                }
-
-                iterator1 = collection.iterator();
-
-                while (iterator1.hasNext()) {
-                    icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
                     s2 = astring[0] + " " + icompletionprovider_a1.d + " " + icompletionprovider_a1.e;
-                    if (!predicate.test(s2)) {
-                        flag = false;
-                        break;
+                    if (predicate.test(s2)) {
+                        arraylist.add(astring[0] + " " + icompletionprovider_a1.d);
+                        arraylist.add(s2);
                     }
-
-                    arraylist.add(s2);
                 }
             } else if (astring.length == 2) {
                 iterator1 = collection.iterator();
@@ -174,37 +151,30 @@ public interface ICompletionProvider {
                 while (iterator1.hasNext()) {
                     icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
                     s2 = astring[0] + " " + astring[1] + " " + icompletionprovider_a1.e;
-                    if (!predicate.test(s2)) {
-                        flag = false;
-                        break;
+                    if (predicate.test(s2)) {
+                        arraylist.add(s2);
                     }
-
-                    arraylist.add(s2);
                 }
             }
         }
 
-        return flag ? b(arraylist, suggestionsbuilder) : suggestionsbuilder.buildFuture();
+        return b((Iterable) arraylist, suggestionsbuilder);
     }
 
-    static default CompletableFuture<Suggestions> a(String s, Collection<ICompletionProvider.a> collection, SuggestionsBuilder suggestionsbuilder) {
+    static default CompletableFuture<Suggestions> b(String s, Collection<ICompletionProvider.a> collection, SuggestionsBuilder suggestionsbuilder, Predicate<String> predicate) {
         ArrayList arraylist = Lists.newArrayList();
 
         if (Strings.isNullOrEmpty(s)) {
             Iterator iterator = collection.iterator();
 
-            ICompletionProvider.a icompletionprovider_a;
-
             while (iterator.hasNext()) {
-                icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                arraylist.add(icompletionprovider_a.c);
-            }
+                ICompletionProvider.a icompletionprovider_a = (ICompletionProvider.a) iterator.next();
+                String s1 = icompletionprovider_a.c + " " + icompletionprovider_a.e;
 
-            iterator = collection.iterator();
-
-            while (iterator.hasNext()) {
-                icompletionprovider_a = (ICompletionProvider.a) iterator.next();
-                arraylist.add(icompletionprovider_a.c + " " + icompletionprovider_a.d);
+                if (predicate.test(s1)) {
+                    arraylist.add(icompletionprovider_a.c);
+                    arraylist.add(s1);
+                }
             }
         } else {
             String[] astring = s.split(" ");
@@ -214,13 +184,16 @@ public interface ICompletionProvider {
 
                 while (iterator1.hasNext()) {
                     ICompletionProvider.a icompletionprovider_a1 = (ICompletionProvider.a) iterator1.next();
+                    String s2 = astring[0] + " " + icompletionprovider_a1.e;
 
-                    arraylist.add(astring[0] + " " + icompletionprovider_a1.e);
+                    if (predicate.test(s2)) {
+                        arraylist.add(s2);
+                    }
                 }
             }
         }
 
-        return b(arraylist, suggestionsbuilder);
+        return b((Iterable) arraylist, suggestionsbuilder);
     }
 
     static default CompletableFuture<Suggestions> b(Iterable<String> iterable, SuggestionsBuilder suggestionsbuilder) {
@@ -238,7 +211,7 @@ public interface ICompletionProvider {
         return suggestionsbuilder.buildFuture();
     }
 
-    static default CompletableFuture<Suggestions> a(Stream<String> stream, SuggestionsBuilder suggestionsbuilder) {
+    static default CompletableFuture<Suggestions> b(Stream<String> stream, SuggestionsBuilder suggestionsbuilder) {
         String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
 
         stream.filter((s) -> {

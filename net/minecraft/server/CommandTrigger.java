@@ -55,7 +55,7 @@ public class CommandTrigger {
             }
         }
 
-        return ICompletionProvider.b(arraylist, suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) arraylist, suggestionsbuilder);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardScore scoreboardscore, int i) {

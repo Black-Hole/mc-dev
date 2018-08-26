@@ -51,8 +51,8 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
     }
 
     public CriterionTriggerChangedDimension.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        DimensionManager dimensionmanager = jsonobject.has("from") ? DimensionManager.a(ChatDeserializer.h(jsonobject, "from")) : null;
-        DimensionManager dimensionmanager1 = jsonobject.has("to") ? DimensionManager.a(ChatDeserializer.h(jsonobject, "to")) : null;
+        DimensionManager dimensionmanager = jsonobject.has("from") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
+        DimensionManager dimensionmanager1 = jsonobject.has("to") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
 
         return new CriterionTriggerChangedDimension.b(dimensionmanager, dimensionmanager1);
     }
@@ -145,11 +145,11 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
             JsonObject jsonobject = new JsonObject();
 
             if (this.a != null) {
-                jsonobject.addProperty("from", this.a.b());
+                jsonobject.addProperty("from", DimensionManager.a(this.a).toString());
             }
 
             if (this.b != null) {
-                jsonobject.addProperty("to", this.b.b());
+                jsonobject.addProperty("to", DimensionManager.a(this.b).toString());
             }
 
             return jsonobject;

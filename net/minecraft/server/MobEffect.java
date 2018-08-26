@@ -65,7 +65,7 @@ public class MobEffect implements Comparable<MobEffect> {
             flag = true;
         }
 
-        if (!mobeffect.ambient && this.ambient) {
+        if (!mobeffect.ambient && this.ambient || flag) {
             this.ambient = mobeffect.ambient;
             flag = true;
         }

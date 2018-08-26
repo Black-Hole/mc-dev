@@ -37,7 +37,7 @@ public class MobEffects {
 
     @Nullable
     private static MobEffectList a(String s) {
-        MobEffectList mobeffectlist = (MobEffectList) MobEffectList.REGISTRY.get(new MinecraftKey(s));
+        MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(new MinecraftKey(s));
 
         if (mobeffectlist == null) {
             throw new IllegalStateException("Invalid MobEffect requested: " + s);

@@ -73,7 +73,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureStrong
     }
 
     @Nullable
-    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, BlockPosition blockposition, int i) {
+    public BlockPosition getNearestGeneratedFeature(World world, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, BlockPosition blockposition, int i, boolean flag) {
         if (!chunkgenerator.getWorldChunkManager().a(this)) {
             return null;
         } else {
@@ -114,7 +114,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureStrong
     private void a(ChunkGenerator<?> chunkgenerator) {
         this.d = chunkgenerator.getSeed();
         ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = BiomeBase.REGISTRY_ID.iterator();
+        Iterator iterator = IRegistry.BIOME.iterator();
 
         while (iterator.hasNext()) {
             BiomeBase biomebase = (BiomeBase) iterator.next();

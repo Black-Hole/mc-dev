@@ -5,38 +5,38 @@ import javax.annotation.Nullable;
 public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource, IFluidContainer {
 
     public static final BlockStateBoolean OPEN = BlockProperties.r;
-    public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.P;
+    public static final BlockStateEnum<BlockPropertyHalf> HALF = BlockProperties.Q;
     public static final BlockStateBoolean c = BlockProperties.t;
-    public static final BlockStateBoolean p = BlockProperties.x;
-    protected static final VoxelShape q = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
-    protected static final VoxelShape r = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
-    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape u = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
-    protected static final VoxelShape v = Block.a(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    public static final BlockStateBoolean o = BlockProperties.y;
+    protected static final VoxelShape p = Block.a(0.0D, 0.0D, 0.0D, 3.0D, 16.0D, 16.0D);
+    protected static final VoxelShape q = Block.a(13.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 3.0D);
+    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 13.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 3.0D, 16.0D);
+    protected static final VoxelShape u = Block.a(0.0D, 13.0D, 0.0D, 16.0D, 16.0D, 16.0D);
 
     protected BlockTrapdoor(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, Boolean.valueOf(false))).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, Boolean.valueOf(false))).set(BlockTrapdoor.p, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTrapdoor.FACING, EnumDirection.NORTH)).set(BlockTrapdoor.OPEN, Boolean.valueOf(false))).set(BlockTrapdoor.HALF, BlockPropertyHalf.BOTTOM)).set(BlockTrapdoor.c, Boolean.valueOf(false))).set(BlockTrapdoor.o, Boolean.valueOf(false)));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         if (!((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue()) {
-            return iblockdata.get(BlockTrapdoor.HALF) == BlockPropertyHalf.TOP ? BlockTrapdoor.v : BlockTrapdoor.u;
+            return iblockdata.get(BlockTrapdoor.HALF) == BlockPropertyHalf.TOP ? BlockTrapdoor.u : BlockTrapdoor.t;
         } else {
             switch ((EnumDirection) iblockdata.get(BlockTrapdoor.FACING)) {
             case NORTH:
             default:
-                return BlockTrapdoor.t;
-
-            case SOUTH:
                 return BlockTrapdoor.s;
 
-            case WEST:
+            case SOUTH:
                 return BlockTrapdoor.r;
 
-            case EAST:
+            case WEST:
                 return BlockTrapdoor.q;
+
+            case EAST:
+                return BlockTrapdoor.p;
             }
         }
     }
@@ -51,7 +51,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
             return ((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue();
 
         case WATER:
-            return ((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue();
+            return ((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue();
 
         case AIR:
             return ((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue();
@@ -67,8 +67,8 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
         } else {
             iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockTrapdoor.OPEN);
             world.setTypeAndData(blockposition, iblockdata, 2);
-            if (((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue()) {
-                world.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) world));
+            if (((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue()) {
+                world.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) world));
             }
 
             this.a(entityhuman, world, blockposition, ((Boolean) iblockdata.get(BlockTrapdoor.OPEN)).booleanValue());
@@ -100,8 +100,8 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
                 }
 
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTrapdoor.c, Boolean.valueOf(flag)), 2);
-                if (((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue()) {
-                    world.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) world));
+                if (((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue()) {
+                    world.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) world));
                 }
             }
 
@@ -123,7 +123,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
             iblockdata = (IBlockData) ((IBlockData) iblockdata.set(BlockTrapdoor.OPEN, Boolean.valueOf(true))).set(BlockTrapdoor.c, Boolean.valueOf(true));
         }
 
-        return (IBlockData) iblockdata.set(BlockTrapdoor.p, Boolean.valueOf(fluid.c() == FluidTypes.c));
+        return (IBlockData) iblockdata.set(BlockTrapdoor.o, Boolean.valueOf(fluid.c() == FluidTypes.c));
     }
 
     public TextureType c() {
@@ -131,7 +131,7 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockTrapdoor.FACING, BlockTrapdoor.OPEN, BlockTrapdoor.HALF, BlockTrapdoor.c, BlockTrapdoor.p});
+        blockstatelist_a.a(new IBlockState[] { BlockTrapdoor.FACING, BlockTrapdoor.OPEN, BlockTrapdoor.HALF, BlockTrapdoor.c, BlockTrapdoor.o});
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -139,8 +139,8 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTrapdoor.p, Boolean.valueOf(false)), 3);
+        if (((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue()) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTrapdoor.o, Boolean.valueOf(false)), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -148,18 +148,18 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return ((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue() && fluidtype == FluidTypes.c;
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+        return !((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue() && fluid.c() == FluidTypes.c) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+        if (!((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTrapdoor.p, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTrapdoor.o, Boolean.valueOf(true)), 3);
+                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;
@@ -169,8 +169,8 @@ public class BlockTrapdoor extends BlockFacingHorizontal implements IFluidSource
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockTrapdoor.p)).booleanValue()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+        if (((Boolean) iblockdata.get(BlockTrapdoor.o)).booleanValue()) {
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

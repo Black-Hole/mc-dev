@@ -6,12 +6,17 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.function.Consumer;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
 public class GuiStatsComponent extends JComponent {
 
-    private static final DecimalFormat a = new DecimalFormat("########0.000");
+    private static final DecimalFormat a = (DecimalFormat) SystemUtils.a((Object) (new DecimalFormat("########0.000")), (decimalformat) -> {
+        decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
+    });
     private final int[] b = new int[256];
     private int c;
     private final String[] d = new String[11];
@@ -32,7 +37,7 @@ public class GuiStatsComponent extends JComponent {
         long i = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
         this.d[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.e) * 1.0E-6D) + " ms";
+        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.d) * 1.0E-6D) + " ms";
         this.b[this.c++ & 255] = (int) (i * 100L / Runtime.getRuntime().maxMemory());
         this.repaint();
     }

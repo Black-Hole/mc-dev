@@ -115,6 +115,10 @@ public class CommandTeleport {
     private static void a(CommandListenerWrapper commandlistenerwrapper, Entity entity, WorldServer worldserver, double d0, double d1, double d2, Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set, float f, float f1, @Nullable CommandTeleport.a commandteleport_a) {
         if (entity instanceof EntityPlayer) {
             entity.stopRiding();
+            if (((EntityPlayer) entity).isSleeping()) {
+                ((EntityPlayer) entity).a(true, true, false);
+            }
+
             if (worldserver == entity.world) {
                 ((EntityPlayer) entity).playerConnection.a(d0, d1, d2, f, f1, set);
             } else {
@@ -134,7 +138,7 @@ public class CommandTeleport {
                 WorldServer worldserver1 = (WorldServer) entity.world;
 
                 worldserver1.kill(entity);
-                entity.dimension = worldserver.worldProvider.getDimensionManager().getDimensionID();
+                entity.dimension = worldserver.worldProvider.getDimensionManager();
                 entity.dead = false;
                 Entity entity1 = entity;
 

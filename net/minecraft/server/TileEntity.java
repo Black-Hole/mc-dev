@@ -28,7 +28,7 @@ public abstract class TileEntity {
         this.world = world;
     }
 
-    public boolean u() {
+    public boolean hasWorld() {
         return this.world != null;
     }
 
@@ -133,7 +133,7 @@ public abstract class TileEntity {
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
         crashreportsystemdetails.a("Name", () -> {
-            return TileEntityTypes.a.b(this.C()) + " // " + this.getClass().getCanonicalName();
+            return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.C()) + " // " + this.getClass().getCanonicalName();
         });
         if (this.world != null) {
             CrashReportSystemDetails.a(crashreportsystemdetails, this.position, this.getBlock());

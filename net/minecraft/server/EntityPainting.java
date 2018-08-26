@@ -17,7 +17,7 @@ public class EntityPainting extends EntityHanging {
         super(EntityTypes.PAINTING, world, blockposition);
         ArrayList arraylist = Lists.newArrayList();
         int i = 0;
-        Iterator iterator = Paintings.a.iterator();
+        Iterator iterator = IRegistry.MOTIVE.iterator();
 
         Paintings paintings;
 
@@ -52,12 +52,12 @@ public class EntityPainting extends EntityHanging {
     }
 
     public void b(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setString("Motive", ((MinecraftKey) Paintings.a.b(this.art)).toString());
+        nbttagcompound.setString("Motive", IRegistry.MOTIVE.getKey(this.art).toString());
         super.b(nbttagcompound);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        this.art = (Paintings) Paintings.a.get(MinecraftKey.a(nbttagcompound.getString("Motive")));
+        this.art = (Paintings) IRegistry.MOTIVE.getOrDefault(MinecraftKey.a(nbttagcompound.getString("Motive")));
         super.a(nbttagcompound);
     }
 

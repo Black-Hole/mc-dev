@@ -1,30 +1,36 @@
 package net.minecraft.server;
 
 import com.google.common.math.IntMath;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
 
-public final class VoxelShapeCubeMerger extends VoxelShapeCubePoint implements VoxelShapeMerger {
+public final class VoxelShapeCubeMerger implements VoxelShapeMerger {
 
-    private final int a;
+    private final VoxelShapeCubePoint a;
     private final int b;
     private final int c;
+    private final int d;
 
     VoxelShapeCubeMerger(int i, int j) {
-        super((int) VoxelShapes.a(i, j));
-        this.a = i;
-        this.b = j;
-        this.c = IntMath.gcd(i, j);
+        this.a = new VoxelShapeCubePoint((int) VoxelShapes.a(i, j));
+        this.b = i;
+        this.c = j;
+        this.d = IntMath.gcd(i, j);
     }
 
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
-        int i = this.a / this.c;
-        int j = this.b / this.c;
+        int i = this.b / this.d;
+        int j = this.c / this.d;
 
-        for (int k = 0; k <= this.size(); ++k) {
+        for (int k = 0; k <= this.a.size(); ++k) {
             if (!voxelshapemerger_a.merge(k / j, k / i, k)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public DoubleList a() {
+        return this.a;
     }
 }

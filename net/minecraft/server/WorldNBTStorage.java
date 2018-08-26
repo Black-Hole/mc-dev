@@ -19,10 +19,9 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     private static final Logger b = LogManager.getLogger();
     private final File baseDir;
     private final File playerDir;
-    private final File dataDir;
     private final long sessionId = SystemUtils.b();
-    private final String g;
-    private final DefinedStructureManager h;
+    private final String f;
+    private final DefinedStructureManager g;
     protected final DataFixer a;
 
     public WorldNBTStorage(File file, String s, @Nullable MinecraftServer minecraftserver, DataFixer datafixer) {
@@ -30,14 +29,12 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         this.baseDir = new File(file, s);
         this.baseDir.mkdirs();
         this.playerDir = new File(this.baseDir, "playerdata");
-        this.dataDir = new File(this.baseDir, "data");
-        this.dataDir.mkdirs();
-        this.g = s;
+        this.f = s;
         if (minecraftserver != null) {
             this.playerDir.mkdirs();
-            this.h = new DefinedStructureManager(minecraftserver, this.baseDir, datafixer);
+            this.g = new DefinedStructureManager(minecraftserver, this.baseDir, datafixer);
         } else {
-            this.h = null;
+            this.g = null;
         }
 
         this.j();
@@ -200,12 +197,15 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
 
     public void a() {}
 
-    public File getDataFile(String s) {
-        return new File(this.dataDir, s + ".dat");
+    public File getDataFile(DimensionManager dimensionmanager, String s) {
+        File file = new File(dimensionmanager.a(this.baseDir), "data");
+
+        file.mkdirs();
+        return new File(file, s + ".dat");
     }
 
     public DefinedStructureManager h() {
-        return this.h;
+        return this.g;
     }
 
     public DataFixer i() {

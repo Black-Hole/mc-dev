@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class BlockFloorSign extends BlockSign {
 
-    public static final BlockStateInteger ROTATION = BlockProperties.am;
+    public static final BlockStateInteger ROTATION = BlockProperties.an;
 
     public BlockFloorSign(Block.Info block_info) {
         super(block_info);

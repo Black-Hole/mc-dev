@@ -1,19 +1,30 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
 public class BlockFluids extends Block implements IFluidSource {
 
-    public static final BlockStateInteger LEVEL = BlockProperties.ag;
+    public static final BlockStateInteger LEVEL = BlockProperties.ah;
     protected final FluidTypeFlowing b;
-    private final Map<IBlockData, VoxelShape> c = Maps.newIdentityHashMap();
+    private final List<Fluid> c;
+    private final Map<IBlockData, VoxelShape> o = Maps.newIdentityHashMap();
 
     protected BlockFluids(FluidTypeFlowing fluidtypeflowing, Block.Info block_info) {
         super(block_info);
         this.b = fluidtypeflowing;
+        this.c = Lists.newArrayList();
+        this.c.add(fluidtypeflowing.a(false));
+
+        for (int i = 1; i < 8; ++i) {
+            this.c.add(fluidtypeflowing.a(8 - i, false));
+        }
+
+        this.c.add(fluidtypeflowing.a(8, true));
         this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, Integer.valueOf(0)));
     }
 
@@ -26,13 +37,13 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
-        return !this.b.a(TagsFluid.b);
+        return !this.b.a(TagsFluid.LAVA);
     }
 
     public Fluid h(IBlockData iblockdata) {
         int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
 
-        return i >= 8 ? this.b.a(8, true) : (i == 0 ? this.b.a(false) : this.b.a(8 - i, false));
+        return (Fluid) this.c.get(Math.min(i, 8));
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -46,7 +57,7 @@ public class BlockFluids extends Block implements IFluidSource {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         Fluid fluid = iblockaccess.b(blockposition.up());
 
-        return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.c.computeIfAbsent(iblockdata, (iblockdata) -> {
+        return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.o.computeIfAbsent(iblockdata, (iblockdata) -> {
             Fluid fluid = iblockdata.s();
 
             return VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D);
@@ -67,14 +78,14 @@ public class BlockFluids extends Block implements IFluidSource {
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
+            world.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
         }
 
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (iblockdata.s().d() || iblockdata1.s().d()) {
-            generatoraccess.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -82,13 +93,13 @@ public class BlockFluids extends Block implements IFluidSource {
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.H().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
+            world.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
         }
 
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.b.a(TagsFluid.b)) {
+        if (this.b.a(TagsFluid.LAVA)) {
             boolean flag = false;
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
@@ -96,7 +107,7 @@ public class BlockFluids extends Block implements IFluidSource {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (enumdirection != EnumDirection.DOWN && world.b(blockposition.shift(enumdirection)).a(TagsFluid.a)) {
+                if (enumdirection != EnumDirection.DOWN && world.b(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
                     flag = true;
                     break;
                 }

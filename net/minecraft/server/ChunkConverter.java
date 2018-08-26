@@ -309,7 +309,7 @@ public class ChunkConverter {
                 IBlockData iblockdata2 = iblockdata.updateState(enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
 
                 if (iblockdata != iblockdata2) {
-                    int i = ((Integer) iblockdata2.get(BlockProperties.aa)).intValue();
+                    int i = ((Integer) iblockdata2.get(BlockProperties.ab)).intValue();
                     List list = (List) this.g.get();
 
                     if (list.isEmpty()) {
@@ -338,8 +338,8 @@ public class ChunkConverter {
                         BlockPosition blockposition = (BlockPosition) objectiterator.next();
                         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-                        if (((Integer) iblockdata.get(BlockProperties.aa)).intValue() >= j) {
-                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.aa, Integer.valueOf(j)), 18);
+                        if (((Integer) iblockdata.get(BlockProperties.ab)).intValue() >= j) {
+                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.ab, Integer.valueOf(j)), 18);
                             if (i != 7) {
                                 EnumDirection[] aenumdirection = null.f;
                                 int k = aenumdirection.length;
@@ -350,7 +350,7 @@ public class ChunkConverter {
                                     blockposition_mutableblockposition.g(blockposition).c(enumdirection);
                                     IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition);
 
-                                    if (iblockdata1.b(BlockProperties.aa) && ((Integer) iblockdata.get(BlockProperties.aa)).intValue() > i) {
+                                    if (iblockdata1.b(BlockProperties.ab) && ((Integer) iblockdata.get(BlockProperties.ab)).intValue() > i) {
                                         objectset1.add(blockposition_mutableblockposition.h());
                                     }
                                 }

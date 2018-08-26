@@ -41,7 +41,7 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.b(EnumChatFormat.a(true, false), suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) EnumChatFormat.a(true, false), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

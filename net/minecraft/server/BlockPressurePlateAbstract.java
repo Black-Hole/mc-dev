@@ -79,7 +79,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         }
 
         if (flag1) {
-            world.I().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.J().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
         }
 
     }

@@ -69,20 +69,20 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
         throw new RuntimeException("Not yet implemented");
     }
 
-    public Object remove(Object object) {
-        return this.a(object);
-    }
-
     public Object remove(long i) {
         return this.a(i);
     }
 
-    public Object put(Long olong, Object object) {
-        return this.a(olong, (Chunk) object);
-    }
-
     public Object put(long i, Object object) {
         return this.a(i, (Chunk) object);
+    }
+
+    public Object remove(Object object) {
+        return this.a(object);
+    }
+
+    public Object put(Long olong, Object object) {
+        return this.a(olong, (Chunk) object);
     }
 
     public Object put(Object object, Object object1) {

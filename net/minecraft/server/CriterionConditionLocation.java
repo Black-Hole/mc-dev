@@ -76,7 +76,7 @@ public class CriterionConditionLocation {
             }
 
             if (this.g != null) {
-                jsonobject.addProperty("dimension", this.g.b());
+                jsonobject.addProperty("dimension", DimensionManager.a(this.g).toString());
             }
 
             if (this.f != null) {
@@ -84,7 +84,7 @@ public class CriterionConditionLocation {
             }
 
             if (this.e != null) {
-                jsonobject.addProperty("biome", ((MinecraftKey) BiomeBase.REGISTRY_ID.b(this.e)).toString());
+                jsonobject.addProperty("biome", IRegistry.BIOME.getKey(this.e).toString());
             }
 
             return jsonobject;
@@ -98,14 +98,14 @@ public class CriterionConditionLocation {
             CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject1.get("x"));
             CriterionConditionValue.c criterionconditionvalue_c1 = CriterionConditionValue.c.a(jsonobject1.get("y"));
             CriterionConditionValue.c criterionconditionvalue_c2 = CriterionConditionValue.c.a(jsonobject1.get("z"));
-            DimensionManager dimensionmanager = jsonobject.has("dimension") ? DimensionManager.a(ChatDeserializer.h(jsonobject, "dimension")) : null;
+            DimensionManager dimensionmanager = jsonobject.has("dimension") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "dimension"))) : null;
             String s = jsonobject.has("feature") ? ChatDeserializer.h(jsonobject, "feature") : null;
             BiomeBase biomebase = null;
 
             if (jsonobject.has("biome")) {
                 MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "biome"));
 
-                biomebase = (BiomeBase) BiomeBase.REGISTRY_ID.get(minecraftkey);
+                biomebase = (BiomeBase) IRegistry.BIOME.get(minecraftkey);
                 if (biomebase == null) {
                     throw new JsonSyntaxException("Unknown biome \'" + minecraftkey + "\'");
                 }

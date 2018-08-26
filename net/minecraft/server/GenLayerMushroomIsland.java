@@ -4,7 +4,7 @@ public enum GenLayerMushroomIsland implements AreaTransformer4 {
 
     INSTANCE;
 
-    private static final int b = BiomeBase.a(Biomes.p);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.p);
 
     private GenLayerMushroomIsland() {}
 

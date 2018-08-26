@@ -162,7 +162,7 @@ public class PlayerSelector {
                 String s = argumentparserselector.f().readUnquotedString();
 
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
-                    return ICompletionProvider.b(Arrays.asList(new String[] { "nearest", "furthest", "random", "arbitrary"}), suggestionsbuilder);
+                    return ICompletionProvider.b((Iterable) Arrays.asList(new String[] { "nearest", "furthest", "random", "arbitrary"}), suggestionsbuilder);
                 });
                 byte b0 = -1;
 
@@ -314,9 +314,9 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.team.description", new Object[0]));
             a("type", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
-                    ICompletionProvider.a((Iterable) EntityTypes.REGISTRY.keySet(), suggestionsbuilder, String.valueOf('!'));
+                    ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder, String.valueOf('!'));
                     if (!argumentparserselector.F()) {
-                        ICompletionProvider.a((Iterable) EntityTypes.REGISTRY.keySet(), suggestionsbuilder);
+                        ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder);
                     }
 
                     return suggestionsbuilder.buildFuture();
@@ -329,7 +329,7 @@ public class PlayerSelector {
                     throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "type");
                 } else {
                     MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.f());
-                    EntityTypes entitytypes = (EntityTypes) EntityTypes.REGISTRY.get(minecraftkey);
+                    EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
                     if (entitytypes == null) {
                         argumentparserselector.f().setCursor(i);

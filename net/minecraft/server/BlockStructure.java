@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockStructure extends BlockTileEntity {
 
-    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.av;
+    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aw;
 
     protected BlockStructure(Block.Info block_info) {
         super(block_info);

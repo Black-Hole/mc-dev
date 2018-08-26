@@ -198,7 +198,7 @@ public class GameRules {
             return this.c;
         }
 
-        public GameRules.EnumGameRuleType e() {
+        public GameRules.EnumGameRuleType getType() {
             return this.e;
         }
     }

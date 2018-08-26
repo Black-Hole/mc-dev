@@ -136,7 +136,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
                 if (j == 0) {
                     throw ArgumentMathOperation.c.create();
                 } else {
-                    return i / j;
+                    return MathHelper.a(i, j);
                 }
             };
 
@@ -145,7 +145,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
                 if (j == 0) {
                     throw ArgumentMathOperation.c.create();
                 } else {
-                    return i % j;
+                    return MathHelper.b(i, j);
                 }
             };
 

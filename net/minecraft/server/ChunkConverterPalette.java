@@ -472,6 +472,8 @@ public class ChunkConverterPalette extends DataFix {
 
                 });
             });
+            boolean flag = dynamic.getBoolean("convertedFromAlphaFormat");
+
             dynamic.get("Sections").flatMap(Dynamic::getStream).ifPresent((stream) -> {
                 stream.forEach((dynamic) -> {
                     // $FF: Couldn't be decompiled
@@ -486,7 +488,7 @@ public class ChunkConverterPalette extends DataFix {
                 if (chunkconverterpalette_c != null) {
                     ObjectIterator objectiterator = chunkconverterpalette_c.f.entrySet().iterator();
 
-                    label219:
+                    label229:
                     while (objectiterator.hasNext()) {
                         java.util.Map.Entry java_util_map_entry = (java.util.Map.Entry) objectiterator.next();
                         int k = chunkconverterpalette_c.a << 12;
@@ -521,7 +523,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -540,7 +542,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -557,7 +559,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -586,7 +588,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -602,8 +604,8 @@ public class ChunkConverterPalette extends DataFix {
                                         if (s3.equals(ChunkConverterPalette.a(dynamic3))) {
                                             String s4 = ChunkConverterPalette.a(dynamic2, "facing");
                                             String s5 = ChunkConverterPalette.a(dynamic2, "open");
-                                            String s6 = ChunkConverterPalette.a(dynamic3, "hinge");
-                                            String s7 = ChunkConverterPalette.a(dynamic3, "powered");
+                                            String s6 = flag ? "left" : ChunkConverterPalette.a(dynamic3, "hinge");
+                                            String s7 = flag ? "false" : ChunkConverterPalette.a(dynamic3, "powered");
 
                                             this.a(l, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "lower" + s6 + s5 + s7));
                                             this.a(i1, (Dynamic) ChunkConverterPalette.p.get(s3 + s4 + "upper" + s6 + s5 + s7));
@@ -617,7 +619,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -636,7 +638,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -655,7 +657,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -672,7 +674,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();
@@ -699,7 +701,7 @@ public class ChunkConverterPalette extends DataFix {
 
                             while (true) {
                                 if (!intlistiterator.hasNext()) {
-                                    continue label219;
+                                    continue label229;
                                 }
 
                                 l = ((Integer) intlistiterator.next()).intValue();

@@ -42,7 +42,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return (BlockPosition) this.datawatcher.get(EntityDolphin.b);
     }
 
-    public boolean dz() {
+    public boolean dy() {
         return ((Boolean) this.datawatcher.get(EntityDolphin.c)).booleanValue();
     }
 
@@ -50,7 +50,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.datawatcher.set(EntityDolphin.c, Boolean.valueOf(flag));
     }
 
-    public int dA() {
+    public int dz() {
         return ((Integer) this.datawatcher.get(EntityDolphin.bC)).intValue();
     }
 
@@ -70,8 +70,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         nbttagcompound.setInt("TreasurePosX", this.l().getX());
         nbttagcompound.setInt("TreasurePosY", this.l().getY());
         nbttagcompound.setInt("TreasurePosZ", this.l().getZ());
-        nbttagcompound.setBoolean("GotFish", this.dz());
-        nbttagcompound.setInt("Moistness", this.dA());
+        nbttagcompound.setBoolean("GotFish", this.dy());
+        nbttagcompound.setInt("Moistness", this.dz());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -128,7 +128,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         return 4800;
     }
 
-    protected int m(int i) {
+    protected int l(int i) {
         return this.bf();
     }
 
@@ -168,8 +168,8 @@ public class EntityDolphin extends EntityWaterAnimal {
             if (this.ap()) {
                 this.b(2400);
             } else {
-                this.b(this.dA() - 1);
-                if (this.dA() <= 0) {
+                this.b(this.dz() - 1);
+                if (this.dz() <= 0) {
                     this.damageEntity(DamageSource.DRYOUT, 1.0F);
                 }
 
@@ -201,7 +201,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (!itemstack.isEmpty() && itemstack.getItem().a(TagsItem.D)) {
+        if (!itemstack.isEmpty() && itemstack.getItem().a(TagsItem.FISHES)) {
             if (!this.world.isClientSide) {
                 this.a(SoundEffects.ENTITY_DOLPHIN_EAT, 1.0F, 1.0F);
             }
@@ -242,8 +242,8 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel() && generatoraccess.getBiome(new BlockPosition(this)) != Biomes.a || generatoraccess.getBiome(new BlockPosition(this)) != Biomes.z && super.a(generatoraccess);
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel() && generatoraccess.getBiome(new BlockPosition(this)) != Biomes.a || generatoraccess.getBiome(new BlockPosition(this)) != Biomes.z && super.a(generatoraccess, flag);
     }
 
     protected SoundEffect d(DamageSource damagesource) {
@@ -269,11 +269,11 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aN;
     }
 
-    protected boolean dB() {
+    protected boolean dA() {
         BlockPosition blockposition = this.getNavigation().i();
 
         return blockposition != null ? this.c(blockposition) < 144.0D : false;
@@ -314,7 +314,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
 
         public boolean a() {
-            return this.a.dz() && this.a.getAirTicks() >= 100;
+            return this.a.dy() && this.a.getAirTicks() >= 100;
         }
 
         public boolean b() {
@@ -329,10 +329,10 @@ public class EntityDolphin extends EntityWaterAnimal {
             World world = this.a.world;
             BlockPosition blockposition = new BlockPosition(this.a);
             String s = (double) world.random.nextFloat() >= 0.5D ? "Ocean_Ruin" : "Shipwreck";
-            BlockPosition blockposition1 = world.a(s, blockposition, 50);
+            BlockPosition blockposition1 = world.a(s, blockposition, 50, false);
 
             if (blockposition1 == null) {
-                BlockPosition blockposition2 = world.a(s.equals("Ocean_Ruin") ? "Shipwreck" : "Ocean_Ruin", blockposition, 50);
+                BlockPosition blockposition2 = world.a(s.equals("Ocean_Ruin") ? "Shipwreck" : "Ocean_Ruin", blockposition, 50, false);
 
                 if (blockposition2 == null) {
                     this.b = true;
@@ -360,7 +360,7 @@ public class EntityDolphin extends EntityWaterAnimal {
             BlockPosition blockposition = this.a.l();
             World world = this.a.world;
 
-            if (this.a.dB() || this.a.getNavigation().p()) {
+            if (this.a.dA() || this.a.getNavigation().p()) {
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 1, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.39269909262657166D);
 
                 if (vec3d == null) {
@@ -370,7 +370,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                 if (vec3d != null) {
                     BlockPosition blockposition1 = new BlockPosition(vec3d);
 
-                    if (!world.b(blockposition1).a(TagsFluid.a) || !world.getType(blockposition1).a((IBlockAccess) world, blockposition1, PathMode.WATER)) {
+                    if (!world.b(blockposition1).a(TagsFluid.WATER) || !world.getType(blockposition1).a((IBlockAccess) world, blockposition1, PathMode.WATER)) {
                         vec3d = RandomPositionGenerator.a(this.a, 8, 5, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
                     }
                 }

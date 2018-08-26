@@ -112,7 +112,7 @@ public class PotionUtil {
     }
 
     public static ItemStack a(ItemStack itemstack, PotionRegistry potionregistry) {
-        MinecraftKey minecraftkey = (MinecraftKey) PotionRegistry.a.b(potionregistry);
+        MinecraftKey minecraftkey = IRegistry.POTION.getKey(potionregistry);
 
         if (potionregistry == Potions.EMPTY) {
             itemstack.c("Potion");

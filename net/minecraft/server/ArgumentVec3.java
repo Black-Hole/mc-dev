@@ -11,12 +11,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 
 public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
 
     private static final Collection<String> c = Arrays.asList(new String[] { "0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5"});
-    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos.incomplete", new Object[0]));
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete", new Object[0]));
     public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed", new Object[0]));
     private final boolean d;
 
@@ -57,14 +56,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(true);
             }
 
-            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, (s) -> {
-                try {
-                    this.a(new StringReader(s));
-                    return true;
-                } catch (CommandSyntaxException commandsyntaxexception) {
-                    return false;
-                }
-            });
+            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
         }
     }
 

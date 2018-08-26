@@ -102,6 +102,10 @@ public class MathHelper {
         return d0 > d1 ? d0 : d1;
     }
 
+    public static int a(int i, int j) {
+        return Math.floorDiv(i, j);
+    }
+
     public static int nextInt(Random random, int i, int j) {
         return i >= j ? i : random.nextInt(j - i + 1) + i;
     }
@@ -126,6 +130,10 @@ public class MathHelper {
         }
 
         return (double) i / (double) along.length;
+    }
+
+    public static int b(int i, int j) {
+        return Math.floorMod(i, j);
     }
 
     public static float g(float f) {

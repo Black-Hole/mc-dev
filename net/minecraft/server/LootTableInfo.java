@@ -137,7 +137,7 @@ public class LootTableInfo {
         }
     }
 
-    public static class a {
+    public static class Builder {
 
         private final WorldServer a;
         private float b;
@@ -146,37 +146,37 @@ public class LootTableInfo {
         private DamageSource e;
         private BlockPosition f;
 
-        public a(WorldServer worldserver) {
+        public Builder(WorldServer worldserver) {
             this.a = worldserver;
         }
 
-        public LootTableInfo.a a(float f) {
+        public LootTableInfo.Builder luck(float f) {
             this.b = f;
             return this;
         }
 
-        public LootTableInfo.a a(Entity entity) {
+        public LootTableInfo.Builder entity(Entity entity) {
             this.c = entity;
             return this;
         }
 
-        public LootTableInfo.a a(EntityHuman entityhuman) {
+        public LootTableInfo.Builder killer(EntityHuman entityhuman) {
             this.d = entityhuman;
             return this;
         }
 
-        public LootTableInfo.a a(DamageSource damagesource) {
+        public LootTableInfo.Builder damageSource(DamageSource damagesource) {
             this.e = damagesource;
             return this;
         }
 
-        public LootTableInfo.a a(BlockPosition blockposition) {
+        public LootTableInfo.Builder position(BlockPosition blockposition) {
             this.f = blockposition;
             return this;
         }
 
-        public LootTableInfo a() {
-            return new LootTableInfo(this.b, this.a, this.a.getMinecraftServer().aP(), this.c, this.d, this.e, this.f);
+        public LootTableInfo build() {
+            return new LootTableInfo(this.b, this.a, this.a.getMinecraftServer().getLootTableRegistry(), this.c, this.d, this.e, this.f);
         }
     }
 }

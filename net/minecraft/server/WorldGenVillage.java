@@ -25,8 +25,8 @@ public class WorldGenVillage extends StructureGenerator<WorldGenFeatureVillageCo
         int j1 = chunkgenerator.getSettings().b();
         int k1 = i + i1 * k;
         int l1 = j + i1 * l;
-        int i2 = k1 < 0 ? k1 - i1 - 1 : k1;
-        int j2 = l1 < 0 ? l1 - i1 - 1 : l1;
+        int i2 = k1 < 0 ? k1 - i1 + 1 : k1;
+        int j2 = l1 < 0 ? l1 - i1 + 1 : l1;
         int k2 = i2 / i1;
         int l2 = j2 / i1;
 

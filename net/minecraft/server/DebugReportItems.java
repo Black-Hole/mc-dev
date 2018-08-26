@@ -20,11 +20,11 @@ public class DebugReportItems implements DebugReportProvider {
 
     public void a(HashCache hashcache) throws IOException {
         JsonObject jsonobject = new JsonObject();
-        Iterator iterator = Item.REGISTRY.iterator();
+        Iterator iterator = IRegistry.ITEM.iterator();
 
         while (iterator.hasNext()) {
             Item item = (Item) iterator.next();
-            MinecraftKey minecraftkey = (MinecraftKey) Item.REGISTRY.b(item);
+            MinecraftKey minecraftkey = IRegistry.ITEM.getKey(item);
             JsonObject jsonobject1 = new JsonObject();
 
             jsonobject1.addProperty("protocol_id", Integer.valueOf(Item.getId(item)));

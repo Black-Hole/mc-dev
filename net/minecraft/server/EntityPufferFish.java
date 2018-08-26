@@ -32,10 +32,10 @@ public class EntityPufferFish extends EntityFish {
 
     public void setPuffState(int i) {
         this.datawatcher.set(EntityPufferFish.b, Integer.valueOf(i));
-        this.e(i);
+        this.d(i);
     }
 
-    private void e(int i) {
+    private void d(int i) {
         float f = 1.0F;
 
         if (i == 1) {
@@ -63,7 +63,7 @@ public class EntityPufferFish extends EntityFish {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        this.e(this.getPuffState());
+        this.d(this.getPuffState());
         super.a(datawatcherobject);
     }
 
@@ -78,11 +78,11 @@ public class EntityPufferFish extends EntityFish {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aF;
     }
 
-    protected ItemStack dB() {
+    protected ItemStack dA() {
         return new ItemStack(Items.PUFFERFISH_BUCKET);
     }
 
@@ -168,7 +168,7 @@ public class EntityPufferFish extends EntityFish {
         return SoundEffects.ENTITY_PUFFER_FISH_HURT;
     }
 
-    protected SoundEffect dD() {
+    protected SoundEffect dC() {
         return SoundEffects.ENTITY_PUFFER_FISH_FLOP;
     }
 

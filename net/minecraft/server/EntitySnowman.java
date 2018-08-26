@@ -79,7 +79,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.H;
     }
 

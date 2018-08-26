@@ -5,16 +5,16 @@ import java.util.function.LongFunction;
 
 public class GenLayers {
 
-    protected static final int a = BiomeBase.a(Biomes.T);
-    protected static final int b = BiomeBase.a(Biomes.U);
-    protected static final int c = BiomeBase.a(Biomes.a);
-    protected static final int d = BiomeBase.a(Biomes.V);
-    protected static final int e = BiomeBase.a(Biomes.l);
-    protected static final int f = BiomeBase.a(Biomes.W);
-    protected static final int g = BiomeBase.a(Biomes.X);
-    protected static final int h = BiomeBase.a(Biomes.z);
-    protected static final int i = BiomeBase.a(Biomes.Y);
-    protected static final int j = BiomeBase.a(Biomes.Z);
+    protected static final int a = IRegistry.BIOME.a((Object) Biomes.T);
+    protected static final int b = IRegistry.BIOME.a((Object) Biomes.U);
+    protected static final int c = IRegistry.BIOME.a((Object) Biomes.a);
+    protected static final int d = IRegistry.BIOME.a((Object) Biomes.V);
+    protected static final int e = IRegistry.BIOME.a((Object) Biomes.l);
+    protected static final int f = IRegistry.BIOME.a((Object) Biomes.W);
+    protected static final int g = IRegistry.BIOME.a((Object) Biomes.X);
+    protected static final int h = IRegistry.BIOME.a((Object) Biomes.z);
+    protected static final int i = IRegistry.BIOME.a((Object) Biomes.Y);
+    protected static final int j = IRegistry.BIOME.a((Object) Biomes.Z);
 
     private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(long i, AreaTransformer2 areatransformer2, AreaFactory<T> areafactory, int j, LongFunction<C> longfunction) {
         AreaFactory areafactory1 = areafactory;
@@ -115,8 +115,8 @@ public class GenLayers {
         if (i == j) {
             return true;
         } else {
-            BiomeBase biomebase = BiomeBase.getBiome(i);
-            BiomeBase biomebase1 = BiomeBase.getBiome(j);
+            BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
+            BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
             return biomebase != null && biomebase1 != null ? (biomebase != Biomes.N && biomebase != Biomes.O ? (biomebase.p() != BiomeBase.Geography.NONE && biomebase1.p() != BiomeBase.Geography.NONE && biomebase.p() == biomebase1.p() ? true : biomebase == biomebase1) : biomebase1 == Biomes.N || biomebase1 == Biomes.O) : false;
         }

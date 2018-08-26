@@ -15,7 +15,7 @@ public class ContainerHorse extends Container {
 
         this.a(new Slot(iinventory1, 0, 8, 18) {
             public boolean isAllowed(ItemStack itemstack) {
-                return itemstack.getItem() == Items.SADDLE && !this.hasItem() && entityhorseabstract.dV();
+                return itemstack.getItem() == Items.SADDLE && !this.hasItem() && entityhorseabstract.dU();
             }
         });
         this.a(new Slot(iinventory1, 1, 8, 36) {
@@ -32,8 +32,8 @@ public class ContainerHorse extends Container {
 
         if (entityhorseabstract instanceof EntityHorseChestedAbstract && ((EntityHorseChestedAbstract) entityhorseabstract).isCarryingChest()) {
             for (i = 0; i < 3; ++i) {
-                for (j = 0; j < ((EntityHorseChestedAbstract) entityhorseabstract).dI(); ++j) {
-                    this.a(new Slot(iinventory1, 2 + j + i * ((EntityHorseChestedAbstract) entityhorseabstract).dI(), 80 + j * 18, 18 + i * 18));
+                for (j = 0; j < ((EntityHorseChestedAbstract) entityhorseabstract).dH(); ++j) {
+                    this.a(new Slot(iinventory1, 2 + j + i * ((EntityHorseChestedAbstract) entityhorseabstract).dH(), 80 + j * 18, 18 + i * 18));
                 }
             }
         }

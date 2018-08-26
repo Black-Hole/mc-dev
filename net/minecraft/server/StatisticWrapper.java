@@ -7,11 +7,11 @@ import java.util.function.Function;
 
 public class StatisticWrapper<T> implements Iterable<Statistic<T>> {
 
-    private final RegistryMaterials<MinecraftKey, T> a;
+    private final IRegistry<T> a;
     private final Map<T, Statistic<T>> b = new IdentityHashMap();
 
-    public StatisticWrapper(RegistryMaterials<MinecraftKey, T> registrymaterials) {
-        this.a = registrymaterials;
+    public StatisticWrapper(IRegistry<T> iregistry) {
+        this.a = iregistry;
     }
 
     public Statistic<T> a(T t0, Counter counter) {
@@ -20,7 +20,7 @@ public class StatisticWrapper<T> implements Iterable<Statistic<T>> {
         });
     }
 
-    public RegistryMaterials<MinecraftKey, T> a() {
+    public IRegistry<T> a() {
         return this.a;
     }
 

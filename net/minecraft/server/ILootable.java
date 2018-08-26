@@ -2,5 +2,5 @@ package net.minecraft.server;
 
 public interface ILootable {
 
-    MinecraftKey Q_();
+    MinecraftKey getLootTable();
 }

@@ -14,15 +14,15 @@ public interface IMinecraftServer {
 
     String e();
 
-    int f();
+    int e_();
 
-    String e_();
+    String m();
 
     String getVersion();
 
-    int A();
+    int y();
 
-    int B();
+    int z();
 
     String[] getPlayers();
 

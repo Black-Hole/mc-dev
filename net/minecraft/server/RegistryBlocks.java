@@ -3,60 +3,57 @@ package net.minecraft.server;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.apache.commons.lang3.Validate;
 
-public class RegistryBlocks<K, V> extends RegistryMaterials<K, V> {
+public class RegistryBlocks<V> extends RegistryMaterials<V> {
 
-    private final K d;
-    private V e;
+    private final MinecraftKey x;
+    private V y;
 
-    public RegistryBlocks(K k0) {
-        this.d = k0;
+    public RegistryBlocks(MinecraftKey minecraftkey) {
+        this.x = minecraftkey;
     }
 
-    public void a(int i, K k0, V v0) {
-        if (this.d.equals(k0)) {
-            this.e = v0;
+    public void a(int i, MinecraftKey minecraftkey, V v0) {
+        if (this.x.equals(minecraftkey)) {
+            this.y = v0;
         }
 
-        super.a(i, k0, v0);
+        super.a(i, minecraftkey, v0);
     }
 
-    public void a() {
-        Validate.notNull(this.e, "Missing default of DefaultedMappedRegistry: " + this.d, new Object[0]);
-    }
-
-    public int a(V v0) {
+    public int a(@Nullable V v0) {
         int i = super.a(v0);
 
-        return i == -1 ? super.a(this.e) : i;
+        return i == -1 ? super.a(this.y) : i;
+    }
+
+    public MinecraftKey getKey(V v0) {
+        MinecraftKey minecraftkey = super.getKey(v0);
+
+        return minecraftkey == null ? this.x : minecraftkey;
+    }
+
+    public V getOrDefault(@Nullable MinecraftKey minecraftkey) {
+        Object object = this.get(minecraftkey);
+
+        return object == null ? this.y : object;
     }
 
     @Nonnull
-    public K b(V v0) {
-        Object object = super.b(v0);
+    public V fromId(int i) {
+        Object object = super.fromId(i);
 
-        return object == null ? this.d : object;
-    }
-
-    @Nonnull
-    public V get(@Nullable K k0) {
-        Object object = super.get(k0);
-
-        return object == null ? this.e : object;
-    }
-
-    @Nonnull
-    public V getId(int i) {
-        Object object = super.getId(i);
-
-        return object == null ? this.e : object;
+        return object == null ? this.y : object;
     }
 
     @Nonnull
     public V a(Random random) {
         Object object = super.a(random);
 
-        return object == null ? this.e : object;
+        return object == null ? this.y : object;
+    }
+
+    public MinecraftKey b() {
+        return this.x;
     }
 }

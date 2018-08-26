@@ -66,7 +66,7 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
     private void a(int i) {
         this.g = (i & 1) > 0;
         this.h = (i & 2) > 0;
-        this.i = (i & 2) > 0;
+        this.i = (i & 4) > 0;
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
@@ -115,7 +115,7 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         }
 
         if (this.i) {
-            i |= 2;
+            i |= 4;
         }
 
         return i;

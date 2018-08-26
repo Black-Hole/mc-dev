@@ -393,7 +393,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
         if (iblockdata.isAir()) {
             return PathType.OPEN;
-        } else if (!block.a(TagsBlock.E) && block != Blocks.LILY_PAD) {
+        } else if (!block.a(TagsBlock.TRAPDOORS) && block != Blocks.LILY_PAD) {
             if (block == Blocks.FIRE) {
                 return PathType.DAMAGE_FIRE;
             } else if (block == Blocks.CACTUS) {
@@ -409,7 +409,7 @@ public class PathfinderNormal extends PathfinderAbstract {
             } else if (!(block instanceof BlockFence) && !(block instanceof BlockCobbleWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue())) {
                 Fluid fluid = iblockaccess.b(blockposition);
 
-                return fluid.a(TagsFluid.a) ? PathType.WATER : (fluid.a(TagsFluid.b) ? PathType.LAVA : (iblockdata.a(iblockaccess, blockposition, PathMode.LAND) ? PathType.OPEN : PathType.BLOCKED));
+                return fluid.a(TagsFluid.WATER) ? PathType.WATER : (fluid.a(TagsFluid.LAVA) ? PathType.LAVA : (iblockdata.a(iblockaccess, blockposition, PathMode.LAND) ? PathType.OPEN : PathType.BLOCKED));
             } else {
                 return PathType.FENCE;
             }

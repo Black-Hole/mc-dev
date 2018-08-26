@@ -27,7 +27,7 @@ public class TileEntityStructure extends TileEntity {
     public long seed;
 
     public TileEntityStructure() {
-        super(TileEntityTypes.u);
+        super(TileEntityTypes.STRUCTURE_BLOCK);
         this.size = BlockPosition.ZERO;
         this.mirror = EnumBlockMirror.NONE;
         this.rotation = EnumBlockRotation.NONE;
@@ -313,7 +313,7 @@ public class TileEntityStructure extends TileEntity {
         if (this.usageMode == BlockPropertyStructureMode.SAVE && !this.world.isClientSide && this.structureName != null) {
             BlockPosition blockposition = this.getPosition().a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.C();
+            DefinedStructureManager definedstructuremanager = worldserver.D();
 
             DefinedStructure definedstructure;
 
@@ -348,7 +348,7 @@ public class TileEntityStructure extends TileEntity {
             BlockPosition blockposition = this.getPosition();
             BlockPosition blockposition1 = blockposition.a((BaseBlockPosition) this.relativePosition);
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.C();
+            DefinedStructureManager definedstructuremanager = worldserver.D();
 
             DefinedStructure definedstructure;
 
@@ -397,7 +397,7 @@ public class TileEntityStructure extends TileEntity {
     public void s() {
         if (this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.C();
+            DefinedStructureManager definedstructuremanager = worldserver.D();
 
             definedstructuremanager.d(this.structureName);
         }
@@ -406,7 +406,7 @@ public class TileEntityStructure extends TileEntity {
     public boolean D() {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
-            DefinedStructureManager definedstructuremanager = worldserver.C();
+            DefinedStructureManager definedstructuremanager = worldserver.D();
 
             try {
                 return definedstructuremanager.b(this.structureName) != null;

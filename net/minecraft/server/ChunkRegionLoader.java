@@ -5,9 +5,6 @@ import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.DataFixer;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.shorts.ShortList;
 import it.unimi.dsi.fastutil.shorts.ShortListIterator;
 import java.io.DataInputStream;
@@ -30,7 +27,7 @@ import org.apache.logging.log4j.Logger;
 public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     private static final Logger a = LogManager.getLogger();
-    private final Object2ObjectMap<ChunkCoordIntPair, NBTTagCompound> b = Object2ObjectMaps.synchronize(new Object2ObjectLinkedOpenHashMap());
+    private final Map<ChunkCoordIntPair, NBTTagCompound> b = Maps.newHashMap();
     private final File c;
     private final DataFixer d;
     private PersistentStructureLegacy e;
@@ -42,47 +39,55 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     }
 
     @Nullable
-    private synchronized NBTTagCompound a(GeneratorAccess generatoraccess, int i, int j) throws IOException {
-        NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(new ChunkCoordIntPair(i, j));
-
-        return nbttagcompound != null ? nbttagcompound : this.a(generatoraccess.o().getDimensionManager(), generatoraccess.s_(), i, j);
+    private NBTTagCompound a(GeneratorAccess generatoraccess, int i, int j) throws IOException {
+        return this.a(generatoraccess.o().getDimensionManager(), generatoraccess.h(), i, j);
     }
 
     @Nullable
     private NBTTagCompound a(DimensionManager dimensionmanager, @Nullable PersistentCollection persistentcollection, int i, int j) throws IOException {
-        DataInputStream datainputstream = RegionFileCache.read(this.c, i, j);
+        NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(new ChunkCoordIntPair(i, j));
 
-        if (datainputstream == null) {
-            return null;
-        } else {
-            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
-
-            datainputstream.close();
-            int k = nbttagcompound.hasKeyOfType("DataVersion", 99) ? nbttagcompound.getInt("DataVersion") : -1;
-
-            if (k < 1493) {
-                nbttagcompound = GameProfileSerializer.a(this.d, DataFixTypes.CHUNK, nbttagcompound, k, 1493);
-                if (nbttagcompound.getCompound("Level").getBoolean("hasLegacyStructureData")) {
-                    if (this.e == null) {
-                        this.e = PersistentStructureLegacy.a(dimensionmanager, persistentcollection);
-                    }
-
-                    nbttagcompound = this.e.a(nbttagcompound);
-                }
-            }
-
-            nbttagcompound = GameProfileSerializer.a(this.d, DataFixTypes.CHUNK, nbttagcompound, Math.max(1493, k));
-            if (k < 1519) {
-                nbttagcompound.setInt("DataVersion", 1519);
-                this.a(new ChunkCoordIntPair(i, j), nbttagcompound);
-            }
-
+        if (nbttagcompound != null) {
             return nbttagcompound;
+        } else {
+            DataInputStream datainputstream = RegionFileCache.read(this.c, i, j);
+
+            if (datainputstream == null) {
+                return null;
+            } else {
+                NBTTagCompound nbttagcompound1 = NBTCompressedStreamTools.a(datainputstream);
+
+                datainputstream.close();
+                int k = nbttagcompound1.hasKeyOfType("DataVersion", 99) ? nbttagcompound1.getInt("DataVersion") : -1;
+
+                if (k < 1493) {
+                    nbttagcompound1 = GameProfileSerializer.a(this.d, DataFixTypes.CHUNK, nbttagcompound1, k, 1493);
+                    if (nbttagcompound1.getCompound("Level").getBoolean("hasLegacyStructureData")) {
+                        this.a(dimensionmanager, persistentcollection);
+                        nbttagcompound1 = this.e.a(nbttagcompound1);
+                    }
+                }
+
+                nbttagcompound1 = GameProfileSerializer.a(this.d, DataFixTypes.CHUNK, nbttagcompound1, Math.max(1493, k));
+                if (k < 1628) {
+                    nbttagcompound1.setInt("DataVersion", 1628);
+                    this.a(new ChunkCoordIntPair(i, j), nbttagcompound1);
+                }
+
+                return nbttagcompound1;
+            }
         }
     }
 
+    public void a(DimensionManager dimensionmanager, @Nullable PersistentCollection persistentcollection) {
+        if (this.e == null) {
+            this.e = PersistentStructureLegacy.a(dimensionmanager, persistentcollection);
+        }
+
+    }
+
     @Nullable
-    public synchronized Chunk a(GeneratorAccess generatoraccess, int i, int j, Consumer<Chunk> consumer) throws IOException {
+    public Chunk a(GeneratorAccess generatoraccess, int i, int j, Consumer<Chunk> consumer) throws IOException {
         NBTTagCompound nbttagcompound = this.a(generatoraccess, i, j);
 
         if (nbttagcompound == null) {
@@ -100,8 +105,18 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     }
 
     @Nullable
-    public synchronized ProtoChunk b(GeneratorAccess generatoraccess, int i, int j, Consumer<IChunkAccess> consumer) throws IOException {
-        NBTTagCompound nbttagcompound = this.a(generatoraccess, i, j);
+    public ProtoChunk b(GeneratorAccess generatoraccess, int i, int j, Consumer<IChunkAccess> consumer) throws IOException {
+        NBTTagCompound nbttagcompound;
+
+        try {
+            nbttagcompound = this.a(generatoraccess, i, j);
+        } catch (ReportedException reportedexception) {
+            if (reportedexception.getCause() instanceof IOException) {
+                throw (IOException) reportedexception.getCause();
+            }
+
+            throw reportedexception;
+        }
 
         if (nbttagcompound == null) {
             return null;
@@ -114,13 +129,6 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
             return protochunk;
         }
-    }
-
-    public synchronized boolean chunkExists(int i, int j) {
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-        NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
-
-        return nbttagcompound != null ? true : RegionFileCache.chunkExists(this.c, i, j);
     }
 
     @Nullable
@@ -173,14 +181,14 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
     }
 
-    public synchronized void saveChunk(World world, IChunkAccess ichunkaccess) throws IOException, ExceptionWorldConflict {
+    public void saveChunk(World world, IChunkAccess ichunkaccess) throws IOException, ExceptionWorldConflict {
         world.checkSession();
 
         try {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound.setInt("DataVersion", 1519);
+            nbttagcompound.setInt("DataVersion", 1628);
             ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
 
             nbttagcompound.set("Level", nbttagcompound1);
@@ -203,40 +211,44 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
     }
 
-    protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
+    protected void a(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
         this.b.put(chunkcoordintpair, nbttagcompound);
         FileIOThread.a().a(this);
     }
 
-    public synchronized boolean a() {
-        if (this.b.isEmpty()) {
+    public boolean a() {
+        Iterator iterator = this.b.entrySet().iterator();
+
+        if (!iterator.hasNext()) {
             if (this.f) {
                 ChunkRegionLoader.a.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", this.c.getName());
             }
 
             return false;
         } else {
-            ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) this.b.keySet().iterator().next();
+            Entry entry = (Entry) iterator.next();
 
-            boolean flag;
+            iterator.remove();
+            ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) entry.getKey();
+            NBTTagCompound nbttagcompound = (NBTTagCompound) entry.getValue();
 
-            try {
-                NBTTagCompound nbttagcompound = (NBTTagCompound) this.b.get(chunkcoordintpair);
+            if (nbttagcompound == null) {
+                return true;
+            } else {
+                try {
+                    DataOutputStream dataoutputstream = RegionFileCache.write(this.c, chunkcoordintpair.x, chunkcoordintpair.z);
 
-                if (nbttagcompound != null) {
-                    try {
-                        this.b(chunkcoordintpair, nbttagcompound);
-                    } catch (Exception exception) {
-                        ChunkRegionLoader.a.error("Failed to save chunk", exception);
+                    NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
+                    dataoutputstream.close();
+                    if (this.e != null) {
+                        this.e.a(chunkcoordintpair.a());
                     }
+                } catch (Exception exception) {
+                    ChunkRegionLoader.a.error("Failed to save chunk", exception);
                 }
 
-                flag = true;
-            } finally {
-                this.b.remove(chunkcoordintpair);
+                return true;
             }
-
-            return flag;
         }
     }
 
@@ -252,22 +264,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         return ChunkStatus.Type.PROTOCHUNK;
     }
 
-    private void b(ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) throws IOException {
-        DataOutputStream dataoutputstream = RegionFileCache.write(this.c, chunkcoordintpair.x, chunkcoordintpair.z);
-
-        NBTCompressedStreamTools.a(nbttagcompound, (DataOutput) dataoutputstream);
-        dataoutputstream.close();
-        if (this.e != null) {
-            this.e.a(chunkcoordintpair.a());
-        }
-
-    }
-
-    public void a(IBlockAccess iblockaccess, Chunk chunk) throws IOException {}
-
-    public void b() {}
-
-    public void c() {
+    public void b() {
         try {
             this.f = true;
 
@@ -306,7 +303,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
         if (abiomebase != null) {
             for (int k = 0; k < abiomebase.length; ++k) {
-                aint[k] = BiomeBase.REGISTRY_ID.a((Object) abiomebase[k]);
+                aint[k] = IRegistry.BIOME.a((Object) abiomebase[k]);
             }
         }
 
@@ -388,7 +385,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         int[] aint = new int[abiomebase.length];
 
         for (int i = 0; i < abiomebase.length; ++i) {
-            aint[i] = BiomeBase.REGISTRY_ID.a((Object) abiomebase[i]);
+            aint[i] = IRegistry.BIOME.a((Object) abiomebase[i]);
         }
 
         nbttagcompound.setIntArray("Biomes", aint);
@@ -436,12 +433,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
 
         nbttagcompound.set("TileEntities", nbttaglist2);
-        if (world.I() instanceof TickListServer) {
-            nbttagcompound.set("TileTicks", ((TickListServer) world.I()).a(chunk));
+        if (world.J() instanceof TickListServer) {
+            nbttagcompound.set("TileTicks", ((TickListServer) world.J()).a(chunk));
         }
 
-        if (world.H() instanceof TickListServer) {
-            nbttagcompound.set("LiquidTicks", ((TickListServer) world.H()).a(chunk));
+        if (world.I() instanceof TickListServer) {
+            nbttagcompound.set("LiquidTicks", ((TickListServer) world.I()).a(chunk));
         }
 
         nbttagcompound.set("PostProcessing", a(chunk.G()));
@@ -478,7 +475,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             int[] aint = nbttagcompound.getIntArray("Biomes");
 
             for (int k = 0; k < aint.length; ++k) {
-                abiomebase[k] = BiomeBase.a(aint[k]);
+                abiomebase[k] = (BiomeBase) IRegistry.BIOME.fromId(aint[k]);
                 if (abiomebase[k] == null) {
                     abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.c);
                 }
@@ -493,24 +490,24 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         Predicate predicate = (block) -> {
             return block.getBlockData().isAir();
         };
-        RegistryBlocks registryblocks = Block.REGISTRY;
+        IRegistry iregistry = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        Function function = registryblocks::b;
-        RegistryBlocks registryblocks1 = Block.REGISTRY;
+        IRegistry.BLOCK.getClass();
+        Function function = iregistry::getKey;
+        IRegistry iregistry1 = IRegistry.BLOCK;
 
-        Block.REGISTRY.getClass();
-        ProtoChunkTickList protochunkticklist = new ProtoChunkTickList(predicate, function, registryblocks1::get, new ChunkCoordIntPair(i, j));
+        IRegistry.BLOCK.getClass();
+        ProtoChunkTickList protochunkticklist = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, new ChunkCoordIntPair(i, j));
 
         predicate = (fluidtype) -> {
             return fluidtype == FluidTypes.a;
         };
-        registryblocks = FluidType.c;
-        FluidType.c.getClass();
-        function = registryblocks::b;
-        registryblocks1 = FluidType.c;
-        FluidType.c.getClass();
-        ProtoChunkTickList protochunkticklist1 = new ProtoChunkTickList(predicate, function, registryblocks1::get, new ChunkCoordIntPair(i, j));
+        iregistry = IRegistry.FLUID;
+        IRegistry.FLUID.getClass();
+        function = iregistry::getKey;
+        iregistry1 = IRegistry.FLUID;
+        IRegistry.FLUID.getClass();
+        ProtoChunkTickList protochunkticklist1 = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, new ChunkCoordIntPair(i, j));
         long i1 = nbttagcompound.getLong("InhabitedTime");
         Chunk chunk = new Chunk(generatoraccess.getMinecraftWorld(), i, j, abiomebase, chunkconverter, protochunkticklist, protochunkticklist1, i1);
 
@@ -589,12 +586,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             }
         }
 
-        if (nbttagcompound.hasKeyOfType("TileTicks", 9) && world.I() instanceof TickListServer) {
-            ((TickListServer) world.I()).a(nbttagcompound.getList("TileTicks", 10));
+        if (nbttagcompound.hasKeyOfType("TileTicks", 9) && world.J() instanceof TickListServer) {
+            ((TickListServer) world.J()).a(nbttagcompound.getList("TileTicks", 10));
         }
 
-        if (nbttagcompound.hasKeyOfType("LiquidTicks", 9) && world.H() instanceof TickListServer) {
-            ((TickListServer) world.H()).a(nbttagcompound.getList("LiquidTicks", 10));
+        if (nbttagcompound.hasKeyOfType("LiquidTicks", 9) && world.I() instanceof TickListServer) {
+            ((TickListServer) world.I()).a(nbttagcompound.getList("LiquidTicks", 10));
         }
 
     }
@@ -609,7 +606,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             int[] aint = nbttagcompound.getIntArray("Biomes");
 
             for (int k = 0; k < aint.length; ++k) {
-                abiomebase[k] = BiomeBase.a(aint[k]);
+                abiomebase[k] = (BiomeBase) IRegistry.BIOME.fromId(aint[k]);
                 if (abiomebase[k] == null) {
                     abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.c);
                 }
@@ -896,8 +893,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         try {
             this.a(dimensionmanager, persistentcollection, chunkcoordintpair.x, chunkcoordintpair.z);
 
-            while (!this.b.isEmpty()) {
-                this.a();
+            while (this.a()) {
                 flag = true;
             }
         } catch (IOException ioexception) {

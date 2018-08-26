@@ -15,15 +15,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class CommandAdvancement {
 
     private static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
         Collection collection = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b();
-        List list = (List) collection.stream().map(Advancement::getName).map(MinecraftKey::toString).collect(Collectors.toList());
 
-        return ICompletionProvider.b(list, suggestionsbuilder);
+        return ICompletionProvider.a(collection.stream().map(Advancement::getName), suggestionsbuilder);
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
@@ -31,8 +29,8 @@ public class CommandAdvancement {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("grant").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("only").then(((RequiredArgumentBuilder) CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
-        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
-            return ICompletionProvider.b(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
+        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.greedyString()).suggests((commandcontext, suggestionsbuilder) -> {
+            return ICompletionProvider.b((Iterable) ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
         }))))).then(CommandDispatcher.a("from").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
@@ -45,8 +43,8 @@ public class CommandAdvancement {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.GRANT, ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b());
         }))))).then(CommandDispatcher.a("revoke").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(CommandDispatcher.a("only").then(((RequiredArgumentBuilder) CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, a(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), CommandAdvancement.Filter.ONLY));
-        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
-            return ICompletionProvider.b(ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
+        })).then(CommandDispatcher.a("criterion", (ArgumentType) StringArgumentType.greedyString()).suggests((commandcontext, suggestionsbuilder) -> {
+            return ICompletionProvider.b((Iterable) ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement").getCriteria().keySet(), suggestionsbuilder);
         }).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), CommandAdvancement.Action.REVOKE, ArgumentMinecraftKeyRegistered.a(commandcontext, "advancement"), StringArgumentType.getString(commandcontext, "criterion"));
         }))))).then(CommandDispatcher.a("from").then(CommandDispatcher.a("advancement", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CommandAdvancement.a).executes((commandcontext) -> {

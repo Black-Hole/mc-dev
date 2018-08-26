@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockSnow extends Block {
 
-    public static final BlockStateInteger LAYERS = BlockProperties.ad;
+    public static final BlockStateInteger LAYERS = BlockProperties.ae;
     protected static final VoxelShape[] b = new VoxelShape[] { VoxelShapes.a(), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     protected BlockSnow(Block.Info block_info) {
@@ -52,7 +52,7 @@ public class BlockSnow extends Block {
         if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
             EnumBlockFaceShape enumblockfaceshape = iblockdata1.c(iworldreader, blockposition.down(), EnumDirection.UP);
 
-            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.D) || block == this && ((Integer) iblockdata1.get(BlockSnow.LAYERS)).intValue() == 8;
+            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.LEAVES) || block == this && ((Integer) iblockdata1.get(BlockSnow.LAYERS)).intValue() == 8;
         } else {
             return false;
         }

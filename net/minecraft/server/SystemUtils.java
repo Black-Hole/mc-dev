@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Iterators;
+import it.unimi.dsi.fastutil.Hash.Strategy;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.nio.file.InvalidPathException;
@@ -168,6 +169,25 @@ public class SystemUtils {
     public static <T> T a(T t0, Consumer<T> consumer) {
         consumer.accept(t0);
         return t0;
+    }
+
+    public static <K> Strategy<K> g() {
+        return SystemUtils.IdentityHashingStrategy.INSTANCE;
+    }
+
+    static enum IdentityHashingStrategy implements Strategy<Object> {
+
+        INSTANCE;
+
+        private IdentityHashingStrategy() {}
+
+        public int hashCode(Object object) {
+            return System.identityHashCode(object);
+        }
+
+        public boolean equals(Object object, Object object1) {
+            return object == object1;
+        }
     }
 
     public static enum OS {

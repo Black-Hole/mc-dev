@@ -28,27 +28,23 @@ public class BlockObserver extends BlockDirectional {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)), 2);
         } else {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(true)), 2);
-            world.I().a(blockposition, this, 2);
+            world.J().a(blockposition, this, 2);
         }
 
         this.a(world, blockposition, iblockdata);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (iblockdata.get(BlockObserver.FACING) == enumdirection) {
-            if (!((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
-                this.a(generatoraccess, blockposition);
-            } else if (!generatoraccess.e() && !generatoraccess.I().a(blockposition, this)) {
-                return (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false));
-            }
+        if (iblockdata.get(BlockObserver.FACING) == enumdirection && !((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
+            this.a(generatoraccess, blockposition);
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!generatoraccess.e() && !generatoraccess.I().a(blockposition, this)) {
-            generatoraccess.I().a(blockposition, this, 2);
+        if (!generatoraccess.e() && !generatoraccess.J().a(blockposition, this)) {
+            generatoraccess.J().a(blockposition, this, 2);
         }
 
     }
@@ -73,9 +69,21 @@ public class BlockObserver extends BlockDirectional {
         return ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
     }
 
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            if (!world.e() && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && !world.J().a(blockposition, this)) {
+                IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false));
+
+                world.setTypeAndData(blockposition, iblockdata2, 18);
+                this.a(world, blockposition, iblockdata2);
+            }
+
+        }
+    }
+
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
-        if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (!world.isClientSide && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && world.I().a(blockposition, this)) {
+        if (iblockdata.getBlock() != iblockdata1.getBlock()) {
+            if (!world.isClientSide && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && world.J().a(blockposition, this)) {
                 this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)));
             }
 

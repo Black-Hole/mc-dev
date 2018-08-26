@@ -1,11 +1,10 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.doubles.AbstractDoubleList;
 import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 
-final class VoxelShapeMergerList extends AbstractDoubleList implements VoxelShapeMerger {
+final class VoxelShapeMergerList implements VoxelShapeMerger {
 
     private final DoubleArrayList a;
     private final IntArrayList b;
@@ -62,11 +61,7 @@ final class VoxelShapeMergerList extends AbstractDoubleList implements VoxelShap
         return true;
     }
 
-    public double getDouble(int i) {
-        return this.a.getDouble(i);
-    }
-
-    public int size() {
-        return this.a.size();
+    public DoubleList a() {
+        return this.a;
     }
 }

@@ -44,6 +44,7 @@ public abstract class BlockBannerAbstract extends BlockTileEntity {
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         if (tileentity instanceof TileEntityBanner) {
             a(world, blockposition, ((TileEntityBanner) tileentity).a(iblockdata));
+            entityhuman.b(StatisticList.BLOCK_MINED.b(this));
         } else {
             super.a(world, entityhuman, blockposition, iblockdata, (TileEntity) null, itemstack);
         }

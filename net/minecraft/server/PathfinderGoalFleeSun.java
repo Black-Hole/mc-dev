@@ -20,7 +20,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     }
 
     public boolean a() {
-        if (!this.f.K()) {
+        if (!this.f.L()) {
             return false;
         } else if (!this.a.isBurning()) {
             return false;

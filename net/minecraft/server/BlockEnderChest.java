@@ -5,7 +5,7 @@ import java.util.Random;
 public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IFluidContainer {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    public static final BlockStateBoolean b = BlockProperties.x;
+    public static final BlockStateBoolean b = BlockProperties.y;
     protected static final VoxelShape c = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
     protected BlockEnderChest(Block.Info block_info) {
@@ -96,15 +96,15 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
         return ((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
-    public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
+    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
         return !((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue() && fluidtype == FluidTypes.c;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
+    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
         if (!((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue() && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockEnderChest.b, Boolean.valueOf(true)), 3);
-                generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             return true;
@@ -115,7 +115,7 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (((Boolean) iblockdata.get(BlockEnderChest.b)).booleanValue()) {
-            generatoraccess.H().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

@@ -17,7 +17,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
     private int fuelLevel;
 
     public TileEntityBrewingStand() {
-        super(TileEntityTypes.l);
+        super(TileEntityTypes.BREWING_STAND);
         this.items = NonNullList.a(5, ItemStack.a);
     }
 

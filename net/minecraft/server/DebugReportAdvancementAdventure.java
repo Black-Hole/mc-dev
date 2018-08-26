@@ -31,7 +31,7 @@ public class DebugReportAdvancementAdventure implements Consumer<Consumer<Advanc
         for (int j = 0; j < i; ++j) {
             EntityTypes entitytypes = aentitytypes[j];
 
-            advancement_serializedadvancement.a(((MinecraftKey) EntityTypes.REGISTRY.b(entitytypes)).toString(), (CriterionInstance) CriterionTriggerKilled.b.a(CriterionConditionEntity.a.a().a(entitytypes)));
+            advancement_serializedadvancement.a(IRegistry.ENTITY_TYPE.getKey(entitytypes).toString(), (CriterionInstance) CriterionTriggerKilled.b.a(CriterionConditionEntity.a.a().a(entitytypes)));
         }
 
         return advancement_serializedadvancement;
@@ -44,7 +44,7 @@ public class DebugReportAdvancementAdventure implements Consumer<Consumer<Advanc
         for (int j = 0; j < i; ++j) {
             BiomeBase biomebase = abiomebase[j];
 
-            advancement_serializedadvancement.a(((MinecraftKey) BiomeBase.REGISTRY_ID.b(biomebase)).toString(), (CriterionInstance) CriterionTriggerLocation.b.a(CriterionConditionLocation.a(biomebase)));
+            advancement_serializedadvancement.a(IRegistry.BIOME.getKey(biomebase).toString(), (CriterionInstance) CriterionTriggerLocation.b.a(CriterionConditionLocation.a(biomebase)));
         }
 
         return advancement_serializedadvancement;

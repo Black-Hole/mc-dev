@@ -146,7 +146,7 @@ public class ContainerEnchantTable extends Container {
                             if (list != null && !list.isEmpty()) {
                                 WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.l.nextInt(list.size()));
 
-                                this.h[j] = Enchantment.enchantments.a((Object) weightedrandomenchant.enchantment);
+                                this.h[j] = IRegistry.ENCHANTMENT.a((Object) weightedrandomenchant.enchantment);
                                 this.i[j] = weightedrandomenchant.level;
                             }
                         }

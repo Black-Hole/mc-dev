@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class BiomeFrozenDeepOcean extends BiomeBase {
 
-    protected static final NoiseGenerator3 ba = new NoiseGenerator3(new Random(3456L), 3);
+    protected static final NoiseGenerator3 aZ = new NoiseGenerator3(new Random(3456L), 3);
 
     public BiomeFrozenDeepOcean() {
         super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeFrozenDeepOcean.aD, BiomeFrozenDeepOcean.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.OCEAN).a(-1.8F).b(0.1F).c(0.5F).d(0.5F).a(3750089).b(329011).a((String) null));
@@ -65,7 +65,7 @@ public class BiomeFrozenDeepOcean extends BiomeBase {
 
     public float c(BlockPosition blockposition) {
         float f = this.getTemperature();
-        double d0 = BiomeFrozenDeepOcean.ba.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D);
+        double d0 = BiomeFrozenDeepOcean.aZ.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D);
         double d1 = BiomeFrozenDeepOcean.aJ.a((double) blockposition.getX() * 0.2D, (double) blockposition.getZ() * 0.2D);
         double d2 = d0 + d1;
 

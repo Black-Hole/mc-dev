@@ -2,11 +2,10 @@ package net.minecraft.server;
 
 public class SoundEffect {
 
-    public static final RegistryMaterials<MinecraftKey, SoundEffect> a = new RegistryMaterials();
-    private final MinecraftKey b;
+    private final MinecraftKey a;
 
     public SoundEffect(MinecraftKey minecraftkey) {
-        this.b = minecraftkey;
+        this.a = minecraftkey;
     }
 
     public static void b() {
@@ -677,6 +676,6 @@ public class SoundEffect {
     private static void a(String s) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
-        SoundEffect.a.a(minecraftkey, new SoundEffect(minecraftkey));
+        IRegistry.SOUND_EVENT.a(minecraftkey, (Object) (new SoundEffect(minecraftkey)));
     }
 }

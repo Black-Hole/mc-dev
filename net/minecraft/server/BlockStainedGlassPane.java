@@ -7,7 +7,7 @@ public class BlockStainedGlassPane extends BlockGlassPane {
     public BlockStainedGlassPane(EnumColor enumcolor, Block.Info block_info) {
         super(block_info);
         this.color = enumcolor;
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false))).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false))).set(BlockStainedGlassPane.q, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStainedGlassPane.NORTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.EAST, Boolean.valueOf(false))).set(BlockStainedGlassPane.SOUTH, Boolean.valueOf(false))).set(BlockStainedGlassPane.WEST, Boolean.valueOf(false))).set(BlockStainedGlassPane.p, Boolean.valueOf(false)));
     }
 
     public EnumColor d() {

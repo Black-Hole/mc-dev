@@ -15,7 +15,7 @@ public abstract class EntityWaterAnimal extends EntityCreature implements IAnima
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.b(this, this.getBoundingBox());
+        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
     }
 
     public int z() {

@@ -60,11 +60,11 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
         if (jsonobject.has("block")) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
 
-            if (!Block.REGISTRY.d(minecraftkey)) {
+            if (!IRegistry.BLOCK.c(minecraftkey)) {
                 throw new JsonSyntaxException("Unknown block type \'" + minecraftkey + "\'");
             }
 
-            block = (Block) Block.REGISTRY.get(minecraftkey);
+            block = (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
         }
 
         HashMap hashmap = null;
@@ -84,14 +84,14 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
                 iblockstate = blockstatelist.a((String) entry.getKey());
                 if (iblockstate == null) {
-                    throw new JsonSyntaxException("Unknown block state property \'" + (String) entry.getKey() + "\' for block \'" + Block.REGISTRY.b(block) + "\'");
+                    throw new JsonSyntaxException("Unknown block state property \'" + (String) entry.getKey() + "\' for block \'" + IRegistry.BLOCK.getKey(block) + "\'");
                 }
 
                 String s = ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey());
 
                 optional = iblockstate.b(s);
                 if (!optional.isPresent()) {
-                    throw new JsonSyntaxException("Invalid block state value \'" + s + "\' for property \'" + (String) entry.getKey() + "\' on block \'" + Block.REGISTRY.b(block) + "\'");
+                    throw new JsonSyntaxException("Invalid block state value \'" + s + "\' for property \'" + (String) entry.getKey() + "\' on block \'" + IRegistry.BLOCK.getKey(block) + "\'");
                 }
 
                 if (hashmap == null) {
@@ -213,7 +213,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
             JsonObject jsonobject = new JsonObject();
 
             if (this.a != null) {
-                jsonobject.addProperty("block", ((MinecraftKey) Block.REGISTRY.b(this.a)).toString());
+                jsonobject.addProperty("block", IRegistry.BLOCK.getKey(this.a).toString());
             }
 
             if (this.b != null) {

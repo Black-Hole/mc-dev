@@ -67,7 +67,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {
         int i = regionlimitedworldaccess.a();
         int j = regionlimitedworldaccess.b();
-        BiomeBase biomebase = regionlimitedworldaccess.c(i, j).getBiomeIndex()[0];
+        BiomeBase biomebase = regionlimitedworldaccess.b(i, j).getBiomeIndex()[0];
         SeededRandom seededrandom = new SeededRandom();
 
         seededrandom.a(regionlimitedworldaccess.getSeed(), i << 4, j << 4);

@@ -19,15 +19,15 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
-        return super.a(generatoraccess) && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+        return super.a(generatoraccess, flag) && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean ds() {
+    public boolean dr() {
         return !this.navigation.p();
     }
 
-    public boolean dt() {
+    public boolean ds() {
         return this.f(new BlockPosition(this));
     }
 
@@ -40,24 +40,24 @@ public abstract class EntityCreature extends EntityInsentient {
         this.b = (float) i;
     }
 
-    public BlockPosition du() {
+    public BlockPosition dt() {
         return this.a;
     }
 
-    public float dv() {
+    public float du() {
         return this.b;
     }
 
-    public void dw() {
+    public void dv() {
         this.b = -1.0F;
     }
 
-    public boolean dx() {
+    public boolean dw() {
         return this.b != -1.0F;
     }
 
-    protected void dm() {
-        super.dm();
+    protected void dl() {
+        super.dl();
         if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
             Entity entity = this.getLeashHolder();
 
@@ -89,13 +89,13 @@ public abstract class EntityCreature extends EntityInsentient {
                 float f1 = 2.0F;
                 Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dy());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dx());
             }
         }
 
     }
 
-    protected double dy() {
+    protected double dx() {
         return 1.0D;
     }
 

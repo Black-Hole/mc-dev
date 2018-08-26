@@ -12,8 +12,8 @@ public class TagsFluid {
         return null;
     }, "", false, "");
     private static int d;
-    public static final Tag<FluidType> a = a("water");
-    public static final Tag<FluidType> b = a("lava");
+    public static final Tag<FluidType> WATER = a("water");
+    public static final Tag<FluidType> LAVA = a("lava");
 
     public static void a(Tags<FluidType> tags) {
         TagsFluid.c = tags;

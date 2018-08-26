@@ -192,7 +192,7 @@ public class NameReferencingFileConverter {
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
-                        oplist.add(new OpListEntry(gameprofile, minecraftserver.k(), false));
+                        oplist.add(new OpListEntry(gameprofile, minecraftserver.j(), false));
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
@@ -269,7 +269,7 @@ public class NameReferencingFileConverter {
 
             if (gameprofile != null && gameprofile.getId() != null) {
                 return gameprofile.getId().toString();
-            } else if (!minecraftserver.J() && minecraftserver.getOnlineMode()) {
+            } else if (!minecraftserver.H() && minecraftserver.getOnlineMode()) {
                 final ArrayList arraylist = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {

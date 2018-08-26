@@ -46,7 +46,7 @@ public class EntityCaveSpider extends EntitySpider {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.z;
     }
 }

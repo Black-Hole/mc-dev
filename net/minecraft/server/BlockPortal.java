@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class BlockPortal extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.y;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.z;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
     protected static final VoxelShape c = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 

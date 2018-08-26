@@ -163,7 +163,7 @@ public class EntityBat extends EntityAmbient {
         nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
     }
 
-    public boolean a(GeneratorAccess generatoraccess) {
+    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
         if (blockposition.getY() >= generatoraccess.getSeaLevel()) {
@@ -172,17 +172,17 @@ public class EntityBat extends EntityAmbient {
             int i = generatoraccess.getLightLevel(blockposition);
             byte b0 = 4;
 
-            if (this.ds()) {
+            if (this.dr()) {
                 b0 = 7;
             } else if (this.random.nextBoolean()) {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.a(generatoraccess);
+            return i > this.random.nextInt(b0) ? false : super.a(generatoraccess, flag);
         }
     }
 
-    private boolean ds() {
+    private boolean dr() {
         LocalDate localdate = LocalDate.now();
         int i = localdate.get(ChronoField.DAY_OF_MONTH);
         int j = localdate.get(ChronoField.MONTH_OF_YEAR);
@@ -195,7 +195,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.an;
     }
 }

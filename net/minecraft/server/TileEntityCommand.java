@@ -30,7 +30,7 @@ public class TileEntityCommand extends TileEntity {
     };
 
     public TileEntityCommand() {
-        super(TileEntityTypes.w);
+        super(TileEntityTypes.COMMAND_BLOCK);
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -91,7 +91,7 @@ public class TileEntityCommand extends TileEntity {
 
             if (block instanceof BlockCommand) {
                 this.h();
-                this.world.I().a(this.position, block, block.a((IWorldReader) this.world));
+                this.world.J().a(this.position, block, block.a((IWorldReader) this.world));
             }
         }
 

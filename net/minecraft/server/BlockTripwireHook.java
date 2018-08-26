@@ -9,10 +9,10 @@ public class BlockTripwireHook extends Block {
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean POWERED = BlockProperties.t;
     public static final BlockStateBoolean ATTACHED = BlockProperties.a;
-    protected static final VoxelShape p = Block.a(5.0D, 0.0D, 10.0D, 11.0D, 10.0D, 16.0D);
-    protected static final VoxelShape q = Block.a(5.0D, 0.0D, 0.0D, 11.0D, 10.0D, 6.0D);
-    protected static final VoxelShape r = Block.a(10.0D, 0.0D, 5.0D, 16.0D, 10.0D, 11.0D);
-    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 5.0D, 6.0D, 10.0D, 11.0D);
+    protected static final VoxelShape o = Block.a(5.0D, 0.0D, 10.0D, 11.0D, 10.0D, 16.0D);
+    protected static final VoxelShape p = Block.a(5.0D, 0.0D, 0.0D, 11.0D, 10.0D, 6.0D);
+    protected static final VoxelShape q = Block.a(10.0D, 0.0D, 5.0D, 16.0D, 10.0D, 11.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 0.0D, 5.0D, 6.0D, 10.0D, 11.0D);
 
     public BlockTripwireHook(Block.Info block_info) {
         super(block_info);
@@ -23,16 +23,16 @@ public class BlockTripwireHook extends Block {
         switch ((EnumDirection) iblockdata.get(BlockTripwireHook.FACING)) {
         case EAST:
         default:
-            return BlockTripwireHook.s;
-
-        case WEST:
             return BlockTripwireHook.r;
 
-        case SOUTH:
+        case WEST:
             return BlockTripwireHook.q;
 
-        case NORTH:
+        case SOUTH:
             return BlockTripwireHook.p;
+
+        case NORTH:
+            return BlockTripwireHook.o;
         }
     }
 
@@ -118,7 +118,7 @@ public class BlockTripwireHook extends Block {
                 flag5 |= flag6 && flag7;
                 aiblockdata[k] = iblockdata2;
                 if (k == i) {
-                    world.I().a(blockposition, this, this.a((IWorldReader) world));
+                    world.J().a(blockposition, this, this.a((IWorldReader) world));
                     flag4 &= flag6;
                 }
             }

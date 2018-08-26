@@ -2,20 +2,26 @@ package net.minecraft.server;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.longs.LongSets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class World implements GeneratorAccess, IIBlockAccess, AutoCloseable {
+public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAccess, AutoCloseable {
 
     protected static final Logger e = LogManager.getLogger();
     private static final EnumDirection[] a = EnumDirection.values();
@@ -29,15 +35,15 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     public final List<EntityHuman> players = Lists.newArrayList();
     public final List<Entity> k = Lists.newArrayList();
     protected final IntHashMap<Entity> entitiesById = new IntHashMap();
-    private final long G = 16777215L;
-    private int H;
+    private final long F = 16777215L;
+    private int G;
     protected int m = (new Random()).nextInt();
     protected final int n = 1013904223;
     protected float o;
     protected float p;
     protected float q;
     protected float r;
-    private int I;
+    private int H;
     public final Random random = new Random();
     public WorldProvider worldProvider;
     protected NavigationListener u = new NavigationListener();
@@ -45,7 +51,8 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     protected IChunkProvider chunkProvider;
     protected final IDataManager dataManager;
     public WorldData worldData;
-    public PersistentCollection worldMaps;
+    @Nullable
+    public final PersistentCollection worldMaps;
     protected PersistentVillage villages;
     public final MethodProfiler methodProfiler;
     public final boolean isClientSide;
@@ -53,23 +60,20 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     public boolean allowAnimals;
     private boolean J;
     private final WorldBorder K;
-    int[] F;
+    int[] E;
 
-    protected World(IDataManager idatamanager, WorldData worlddata, WorldProvider worldprovider, MethodProfiler methodprofiler, boolean flag) {
+    protected World(IDataManager idatamanager, @Nullable PersistentCollection persistentcollection, WorldData worlddata, WorldProvider worldprovider, MethodProfiler methodprofiler, boolean flag) {
         this.v = Lists.newArrayList(new IWorldAccess[] { this.u});
         this.allowMonsters = true;
         this.allowAnimals = true;
-        this.F = new int['\u8000'];
+        this.E = new int['\u8000'];
         this.dataManager = idatamanager;
+        this.worldMaps = persistentcollection;
         this.methodProfiler = methodprofiler;
         this.worldData = worlddata;
         this.worldProvider = worldprovider;
         this.isClientSide = flag;
         this.K = worldprovider.getWorldBorder();
-    }
-
-    public GeneratorAccess b() {
-        return this;
     }
 
     public BiomeBase getBiome(BlockPosition blockposition) {
@@ -92,7 +96,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         }
     }
 
-    protected abstract IChunkProvider q();
+    protected abstract IChunkProvider r();
 
     public void a(WorldSettings worldsettings) {
         this.worldData.d(true);
@@ -134,7 +138,13 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     }
 
     public Chunk getChunkAt(int i, int j) {
-        return this.chunkProvider.getChunkAt(i, j);
+        Chunk chunk = this.chunkProvider.getChunkAt(i, j, true, true);
+
+        if (chunk == null) {
+            throw new IllegalStateException("Should always be able to create a chunk!");
+        } else {
+            return chunk;
+        }
     }
 
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
@@ -306,9 +316,9 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
 
                 crashreportsystemdetails.a("Source block type", () -> {
                     try {
-                        return String.format("ID #%s (%s // %s)", new Object[] { Block.REGISTRY.b(block), block.m(), block.getClass().getCanonicalName()});
+                        return String.format("ID #%s (%s // %s)", new Object[] { IRegistry.BLOCK.getKey(block), block.m(), block.getClass().getCanonicalName()});
                     } catch (Throwable throwable) {
-                        return "ID #" + Block.REGISTRY.b(block);
+                        return "ID #" + IRegistry.BLOCK.getKey(block);
                     }
                 });
                 CrashReportSystemDetails.a(crashreportsystemdetails, blockposition, iblockdata);
@@ -354,7 +364,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     }
 
     @Deprecated
-    public int f(int i, int j) {
+    public int d(int i, int j) {
         if (i >= -30000000 && j >= -30000000 && i < 30000000 && j < 30000000) {
             if (!this.isChunkLoaded(i >> 4, j >> 4, true)) {
                 return 0;
@@ -412,8 +422,8 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         }
     }
 
-    public boolean K() {
-        return this.H < 4;
+    public boolean L() {
+        return this.G < 4;
     }
 
     @Nullable
@@ -457,7 +467,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                         }
 
                         if (movingobjectposition == null && flag3) {
-                            movingobjectposition = VoxelShapes.a(VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D), vec3d, vec3d1, blockposition);
+                            movingobjectposition = VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D).a(vec3d, vec3d1, blockposition);
                         }
 
                         if (movingobjectposition != null) {
@@ -580,7 +590,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                             }
 
                             if (movingobjectposition2 == null && flag6) {
-                                movingobjectposition2 = VoxelShapes.a(VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.f(), 1.0D), vec3d, vec3d1, blockposition);
+                                movingobjectposition2 = VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.f(), 1.0D).a(vec3d, vec3d1, blockposition);
                             }
 
                             if (movingobjectposition2 != null) {
@@ -848,7 +858,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         while (iterator.hasNext()) {
             TileEntity tileentity = (TileEntity) iterator.next();
 
-            if (!tileentity.x() && tileentity.u()) {
+            if (!tileentity.x() && tileentity.hasWorld()) {
                 BlockPosition blockposition = tileentity.getPosition();
 
                 if (this.isLoaded(blockposition) && this.K.a(blockposition)) {
@@ -923,7 +933,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return flag;
     }
 
-    public void b(Collection<TileEntity> collection) {
+    public void a(Collection<TileEntity> collection) {
         if (this.J) {
             this.c.addAll(collection);
         } else {
@@ -967,7 +977,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                 entity.aH();
             } else {
                 this.methodProfiler.a(() -> {
-                    return ((MinecraftKey) EntityTypes.REGISTRY.b(entity.P())).toString();
+                    return IRegistry.ENTITY_TYPE.getKey(entity.P()).toString();
                 });
                 entity.tick();
                 this.methodProfiler.e();
@@ -1392,7 +1402,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         if (k(blockposition)) {
             return false;
         } else {
-            Chunk chunk = this.chunkProvider.getLoadedChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+            Chunk chunk = this.chunkProvider.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4, false, false);
 
             return chunk != null && !chunk.isEmpty();
         }
@@ -1402,11 +1412,11 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return this.p(blockposition) && this.getType(blockposition).q();
     }
 
-    public void O() {
+    public void P() {
         int i = this.a(1.0F);
 
-        if (i != this.H) {
-            this.H = i;
+        if (i != this.G) {
+            this.G = i;
         }
 
     }
@@ -1416,11 +1426,12 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         this.allowAnimals = flag1;
     }
 
-    public void doTick() {
-        this.v();
+    public void doTick(BooleanSupplier booleansupplier) {
+        this.K.r();
+        this.w();
     }
 
-    protected void P() {
+    protected void Q() {
         if (this.worldData.hasStorm()) {
             this.p = 1.0F;
             if (this.worldData.isThundering()) {
@@ -1434,7 +1445,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         this.chunkProvider.close();
     }
 
-    protected void v() {
+    protected void w() {
         if (this.worldProvider.g()) {
             if (!this.isClientSide) {
                 boolean flag = this.getGameRules().getBoolean("doWeatherCycle");
@@ -1502,7 +1513,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         }
     }
 
-    protected void l() {}
+    protected void n_() {}
 
     public boolean r(BlockPosition blockposition) {
         boolean flag = false;
@@ -1605,12 +1616,12 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
             int k3;
 
             if (l > k) {
-                this.F[j++] = 133152;
+                this.E[j++] = 133152;
             } else if (l < k) {
-                this.F[j++] = 133152 | k << 18;
+                this.E[j++] = 133152 | k << 18;
 
                 while (i < j) {
-                    l1 = this.F[i++];
+                    l1 = this.E[i++];
                     i2 = (l1 & 63) - 32 + i1;
                     j2 = (l1 >> 6 & 63) - 32 + j1;
                     k2 = (l1 >> 12 & 63) - 32 + k1;
@@ -1642,8 +1653,8 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                                         int j5 = Math.max(1, this.getType(blockposition_b).b(this, blockposition_b));
 
                                         l2 = this.getBrightness(enumskyblock, blockposition_b);
-                                        if (l2 == l3 - j5 && j < this.F.length) {
-                                            this.F[j++] = k4 - i1 + 32 | l4 - j1 + 32 << 6 | i5 - k1 + 32 << 12 | l3 - j5 << 18;
+                                        if (l2 == l3 - j5 && j < this.E.length) {
+                                            this.E[j++] = k4 - i1 + 32 | l4 - j1 + 32 << 6 | i5 - k1 + 32 << 12 | l3 - j5 << 18;
                                         }
                                     }
                                 } catch (Throwable throwable1) {
@@ -1675,7 +1686,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
             this.methodProfiler.a("checkedPosition < toCheckCount");
 
             while (i < j) {
-                l1 = this.F[i++];
+                l1 = this.E[i++];
                 i2 = (l1 & 63) - 32 + i1;
                 j2 = (l1 >> 6 & 63) - 32 + j1;
                 k2 = (l1 >> 12 & 63) - 32 + k1;
@@ -1689,31 +1700,31 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
                         i3 = Math.abs(i2 - i1);
                         j3 = Math.abs(j2 - j1);
                         k3 = Math.abs(k2 - k1);
-                        boolean flag = j < this.F.length - 6;
+                        boolean flag = j < this.E.length - 6;
 
                         if (i3 + j3 + k3 < 17 && flag) {
                             if (this.getBrightness(enumskyblock, blockposition2.west()) < l2) {
-                                this.F[j++] = i2 - 1 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
+                                this.E[j++] = i2 - 1 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
                             }
 
                             if (this.getBrightness(enumskyblock, blockposition2.east()) < l2) {
-                                this.F[j++] = i2 + 1 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
+                                this.E[j++] = i2 + 1 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
                             }
 
                             if (this.getBrightness(enumskyblock, blockposition2.down()) < l2) {
-                                this.F[j++] = i2 - i1 + 32 + (j2 - 1 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
+                                this.E[j++] = i2 - i1 + 32 + (j2 - 1 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
                             }
 
                             if (this.getBrightness(enumskyblock, blockposition2.up()) < l2) {
-                                this.F[j++] = i2 - i1 + 32 + (j2 + 1 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
+                                this.E[j++] = i2 - i1 + 32 + (j2 + 1 - j1 + 32 << 6) + (k2 - k1 + 32 << 12);
                             }
 
                             if (this.getBrightness(enumskyblock, blockposition2.north()) < l2) {
-                                this.F[j++] = i2 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - 1 - k1 + 32 << 12);
+                                this.E[j++] = i2 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 - 1 - k1 + 32 << 12);
                             }
 
                             if (this.getBrightness(enumskyblock, blockposition2.south()) < l2) {
-                                this.F[j++] = i2 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 + 1 - k1 + 32 << 12);
+                                this.E[j++] = i2 - i1 + 32 + (j2 - j1 + 32 << 6) + (k2 + 1 - k1 + 32 << 12);
                             }
                         }
                     }
@@ -1725,8 +1736,10 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         }
     }
 
-    public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.getEntities(entity, axisalignedbb, IEntitySelector.e);
+    public Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, VoxelShape voxelshape1, Set<Entity> set) {
+        Stream stream = super.a(entity, voxelshape, voxelshape1, set);
+
+        return entity == null ? stream : Stream.concat(stream, this.a(entity, voxelshape, set));
     }
 
     public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super Entity> predicate) {
@@ -1778,7 +1791,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     }
 
     public <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
-        return this.a(oclass, axisalignedbb, IEntitySelector.e);
+        return this.a(oclass, axisalignedbb, IEntitySelector.f);
     }
 
     public <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
@@ -1808,7 +1821,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         for (int i = 0; i < list.size(); ++i) {
             Entity entity1 = (Entity) list.get(i);
 
-            if (entity1 != t0 && IEntitySelector.e.test(entity1)) {
+            if (entity1 != t0 && IEntitySelector.f.test(entity1)) {
                 double d1 = t0.h(entity1);
 
                 if (d1 <= d0) {
@@ -1833,34 +1846,35 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
 
     }
 
-    public int a(Class<?> oclass) {
-        int i = 0;
+    public int a(Class<?> oclass, int i) {
+        int j = 0;
         Iterator iterator = this.entityList.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            if ((!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) && oclass.isAssignableFrom(entity.getClass())) {
-                ++i;
+            if (!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) {
+                if (oclass.isAssignableFrom(entity.getClass())) {
+                    ++j;
+                }
+
+                if (j > i) {
+                    return j;
+                }
             }
         }
 
-        return i;
+        return j;
     }
 
-    public void a(Collection<Entity> collection) {
-        this.entityList.addAll(collection);
-        Iterator iterator = collection.iterator();
-
-        while (iterator.hasNext()) {
-            Entity entity = (Entity) iterator.next();
-
+    public void a(Stream<Entity> stream) {
+        stream.forEach((entity) -> {
+            this.entityList.add(entity);
             this.b(entity);
-        }
-
+        });
     }
 
-    public void c(Collection<Entity> collection) {
+    public void b(Collection<Entity> collection) {
         this.g.addAll(collection);
     }
 
@@ -1880,7 +1894,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return this.getType(blockposition).b((IBlockAccess) this, blockposition, enumdirection);
     }
 
-    public WorldType R() {
+    public WorldType S() {
         return this.worldData.getType();
     }
 
@@ -1976,7 +1990,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         for (int i = 0; i < this.players.size(); ++i) {
             EntityHuman entityhuman = (EntityHuman) this.players.get(i);
 
-            if (IEntitySelector.e.test(entityhuman)) {
+            if (IEntitySelector.f.test(entityhuman)) {
                 double d4 = entityhuman.d(d0, d1, d2);
 
                 if (d3 < 0.0D || d4 < d3 * d3) {
@@ -1986,6 +2000,30 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         }
 
         return false;
+    }
+
+    public boolean b(double d0, double d1, double d2, double d3) {
+        Iterator iterator = this.players.iterator();
+
+        double d4;
+
+        do {
+            EntityHuman entityhuman;
+
+            do {
+                do {
+                    if (!iterator.hasNext()) {
+                        return false;
+                    }
+
+                    entityhuman = (EntityHuman) iterator.next();
+                } while (!IEntitySelector.f.test(entityhuman));
+            } while (!IEntitySelector.b.test(entityhuman));
+
+            d4 = entityhuman.d(d0, d1, d2);
+        } while (d3 >= 0.0D && d4 >= d3 * d3);
+
+        return true;
     }
 
     @Nullable
@@ -2134,7 +2172,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return this.o + (this.p - this.o) * f;
     }
 
-    public boolean X() {
+    public boolean Y() {
         return this.worldProvider.g() && !this.worldProvider.h() ? (double) this.g(1.0F) > 0.9D : false;
     }
 
@@ -2153,21 +2191,8 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     }
 
     @Nullable
-    public PersistentCollection s_() {
+    public PersistentCollection h() {
         return this.worldMaps;
-    }
-
-    public void a(String s, PersistentBase persistentbase) {
-        this.worldMaps.a(s, persistentbase);
-    }
-
-    @Nullable
-    public <T extends PersistentBase> T a(Function<String, T> function, String s) {
-        return this.worldMaps.get(function, s);
-    }
-
-    public int b(String s) {
-        return this.worldMaps.a(s);
     }
 
     public void a(int i, BlockPosition blockposition, int j) {
@@ -2203,7 +2228,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return 256;
     }
 
-    public int aa() {
+    public int ab() {
         return this.worldProvider.h() ? 128 : 256;
     }
 
@@ -2267,7 +2292,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         float f = 0.0F;
 
         if (this.isLoaded(blockposition)) {
-            f = this.af();
+            f = this.ah();
             i = this.getChunkAtWorldCoords(blockposition).m();
         }
 
@@ -2275,18 +2300,18 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
     }
 
     public int c() {
-        return this.H;
+        return this.G;
     }
 
     public void c(int i) {
-        this.H = i;
+        this.G = i;
     }
 
     public void d(int i) {
-        this.I = i;
+        this.H = i;
     }
 
-    public PersistentVillage ae() {
+    public PersistentVillage af() {
         return this.villages;
     }
 
@@ -2294,7 +2319,7 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return this.K;
     }
 
-    public boolean g(int i, int j) {
+    public boolean e(int i, int j) {
         BlockPosition blockposition = this.getSpawn();
         int k = i * 16 + 8 - blockposition.getX();
         int l = j * 16 + 8 - blockposition.getZ();
@@ -2303,12 +2328,49 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return k >= -128 && k <= 128 && l >= -128 && l <= 128;
     }
 
+    public LongSet ag() {
+        ForcedChunk forcedchunk = (ForcedChunk) this.a(this.worldProvider.getDimensionManager(), ForcedChunk::new, "chunks");
+
+        return (LongSet) (forcedchunk != null ? LongSets.unmodifiable(forcedchunk.a()) : LongSets.EMPTY_SET);
+    }
+
+    public boolean f(int i, int j) {
+        ForcedChunk forcedchunk = (ForcedChunk) this.a(this.worldProvider.getDimensionManager(), ForcedChunk::new, "chunks");
+
+        return forcedchunk != null && forcedchunk.a().contains(ChunkCoordIntPair.a(i, j));
+    }
+
+    public boolean b(int i, int j, boolean flag) {
+        String s = "chunks";
+        ForcedChunk forcedchunk = (ForcedChunk) this.a(this.worldProvider.getDimensionManager(), ForcedChunk::new, "chunks");
+
+        if (forcedchunk == null) {
+            forcedchunk = new ForcedChunk("chunks");
+            this.a(this.worldProvider.getDimensionManager(), "chunks", (PersistentBase) forcedchunk);
+        }
+
+        long k = ChunkCoordIntPair.a(i, j);
+        boolean flag1;
+
+        if (flag) {
+            flag1 = forcedchunk.a().add(k);
+            if (flag1) {
+                this.getChunkAt(i, j);
+            }
+        } else {
+            flag1 = forcedchunk.a().remove(k);
+        }
+
+        forcedchunk.a(flag1);
+        return flag1;
+    }
+
     public void a(Packet<?> packet) {
         throw new UnsupportedOperationException("Can\'t send packets to server unless you\'re on the client.");
     }
 
     @Nullable
-    public BlockPosition a(String s, BlockPosition blockposition, int i) {
+    public BlockPosition a(String s, BlockPosition blockposition, int i, boolean flag) {
         return null;
     }
 
@@ -2320,11 +2382,11 @@ public abstract class World implements GeneratorAccess, IIBlockAccess, AutoClose
         return this.random;
     }
 
-    public abstract CraftingManager D();
+    public abstract CraftingManager E();
 
-    public abstract TagRegistry E();
+    public abstract TagRegistry F();
 
-    public IChunkAccess c(int i, int j) {
+    public IChunkAccess b(int i, int j) {
         return this.getChunkAt(i, j);
     }
 }

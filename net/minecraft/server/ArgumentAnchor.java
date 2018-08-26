@@ -49,7 +49,7 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.b(ArgumentAnchor.Anchor.c.keySet(), suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) ArgumentAnchor.Anchor.c.keySet(), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

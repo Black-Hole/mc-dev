@@ -9,19 +9,19 @@ import javax.annotation.Nullable;
 
 public class BlockVine extends Block {
 
-    public static final BlockStateBoolean UP = BlockSprawling.q;
+    public static final BlockStateBoolean UP = BlockSprawling.p;
     public static final BlockStateBoolean NORTH = BlockSprawling.a;
     public static final BlockStateBoolean EAST = BlockSprawling.b;
     public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.p;
-    public static final Map<EnumDirection, BlockStateBoolean> r = (Map) BlockSprawling.s.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean WEST = BlockSprawling.o;
+    public static final Map<EnumDirection, BlockStateBoolean> q = (Map) BlockSprawling.r.entrySet().stream().filter((entry) -> {
         return entry.getKey() != EnumDirection.DOWN;
     }).collect(SystemUtils.a());
-    protected static final VoxelShape s = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape t = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
-    protected static final VoxelShape u = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-    protected static final VoxelShape v = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
-    protected static final VoxelShape w = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape r = Block.a(0.0D, 15.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape s = Block.a(0.0D, 0.0D, 0.0D, 1.0D, 16.0D, 16.0D);
+    protected static final VoxelShape t = Block.a(15.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+    protected static final VoxelShape u = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 1.0D);
+    protected static final VoxelShape v = Block.a(0.0D, 0.0D, 15.0D, 16.0D, 16.0D, 16.0D);
 
     public BlockVine(Block.Info block_info) {
         super(block_info);
@@ -32,23 +32,23 @@ public class BlockVine extends Block {
         VoxelShape voxelshape = VoxelShapes.a();
 
         if (((Boolean) iblockdata.get(BlockVine.UP)).booleanValue()) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.s);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.r);
         }
 
         if (((Boolean) iblockdata.get(BlockVine.NORTH)).booleanValue()) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.v);
-        }
-
-        if (((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue()) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.u);
         }
 
+        if (((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue()) {
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.t);
+        }
+
         if (((Boolean) iblockdata.get(BlockVine.SOUTH)).booleanValue()) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.w);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.v);
         }
 
         if (((Boolean) iblockdata.get(BlockVine.WEST)).booleanValue()) {
-            voxelshape = VoxelShapes.a(voxelshape, BlockVine.t);
+            voxelshape = VoxelShapes.a(voxelshape, BlockVine.s);
         }
 
         return voxelshape;
@@ -68,7 +68,7 @@ public class BlockVine extends Block {
 
     private int w(IBlockData iblockdata) {
         int i = 0;
-        Iterator iterator = BlockVine.r.values().iterator();
+        Iterator iterator = BlockVine.q.values().iterator();
 
         while (iterator.hasNext()) {
             BlockStateBoolean blockstateboolean = (BlockStateBoolean) iterator.next();
@@ -92,7 +92,7 @@ public class BlockVine extends Block {
             } else if (enumdirection.k() == EnumDirection.EnumAxis.Y) {
                 return false;
             } else {
-                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.r.get(enumdirection);
+                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.q.get(enumdirection);
                 IBlockData iblockdata = iblockaccess.getType(blockposition.up());
 
                 return iblockdata.getBlock() == this && ((Boolean) iblockdata.get(blockstateboolean)).booleanValue();
@@ -107,7 +107,7 @@ public class BlockVine extends Block {
     }
 
     protected static boolean f(Block block) {
-        return block instanceof BlockShulkerBox || block instanceof BlockStainedGlass || block == Blocks.BEACON || block == Blocks.CAULDRON || block == Blocks.GLASS || block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD || block.a(TagsBlock.k);
+        return block instanceof BlockShulkerBox || block instanceof BlockStainedGlass || block == Blocks.BEACON || block == Blocks.CAULDRON || block == Blocks.GLASS || block == Blocks.PISTON || block == Blocks.STICKY_PISTON || block == Blocks.PISTON_HEAD || block.a(TagsBlock.WOODEN_TRAPDOORS);
     }
 
     private IBlockData m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -296,7 +296,7 @@ public class BlockVine extends Block {
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         IBlockData iblockdata1 = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata1.getBlock() == this ? this.w(iblockdata1) < BlockVine.r.size() : super.a(iblockdata, blockactioncontext);
+        return iblockdata1.getBlock() == this ? this.w(iblockdata1) < BlockVine.q.size() : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
@@ -376,7 +376,7 @@ public class BlockVine extends Block {
     }
 
     public static BlockStateBoolean getDirection(EnumDirection enumdirection) {
-        return (BlockStateBoolean) BlockVine.r.get(enumdirection);
+        return (BlockStateBoolean) BlockVine.q.get(enumdirection);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

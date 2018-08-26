@@ -23,7 +23,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private long k;
 
     public TileEntityPiston() {
-        super(TileEntityTypes.k);
+        super(TileEntityTypes.PISTON);
     }
 
     public TileEntityPiston(IBlockData iblockdata, EnumDirection enumdirection, boolean flag, boolean flag1) {
@@ -40,6 +40,10 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     public boolean c() {
         return this.f;
+    }
+
+    public EnumDirection d() {
+        return this.e;
     }
 
     public boolean f() {
@@ -264,14 +268,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                 IBlockData iblockdata = Block.b(this.a, this.world, this.position);
 
                 if (iblockdata.isAir()) {
-                    this.world.setTypeAndData(this.position, this.a, 20);
+                    this.world.setTypeAndData(this.position, this.a, 84);
                     Block.a(this.a, iblockdata, this.world, this.position, 3);
                 } else {
-                    if (iblockdata.b(BlockProperties.x) && ((Boolean) iblockdata.get(BlockProperties.x)).booleanValue()) {
-                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.x, Boolean.valueOf(false));
+                    if (iblockdata.b(BlockProperties.y) && ((Boolean) iblockdata.get(BlockProperties.y)).booleanValue()) {
+                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.y, Boolean.valueOf(false));
                     }
 
-                    this.world.setTypeAndData(this.position, iblockdata, 3);
+                    this.world.setTypeAndData(this.position, iblockdata, 67);
                     this.world.a(this.position, iblockdata.getBlock(), this.position);
                 }
             }

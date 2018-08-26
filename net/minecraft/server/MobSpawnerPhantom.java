@@ -37,7 +37,7 @@ public class MobSpawnerPhantom {
 
                                 if (difficultydamagescaler.a(random.nextFloat() * 3.0F)) {
                                     ServerStatisticManager serverstatisticmanager = ((EntityPlayer) entityhuman).getStatisticManager();
-                                    int j = MathHelper.clamp(serverstatisticmanager.getStatisticValue(StatisticList.CUSTOM.b(StatisticList.n)), 1, Integer.MAX_VALUE);
+                                    int j = MathHelper.clamp(serverstatisticmanager.getStatisticValue(StatisticList.CUSTOM.b(StatisticList.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
                                     boolean flag2 = true;
 
                                     if (random.nextInt(j) >= 72000) {

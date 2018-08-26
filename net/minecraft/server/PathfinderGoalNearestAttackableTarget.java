@@ -30,7 +30,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         this.b = new PathfinderGoalNearestAttackableTarget.DistanceComparator(entitycreature);
         this.a(1);
         this.c = (entityliving) -> {
-            return entityliving == null ? false : (predicate != null && !predicate.test(entityliving) ? false : (!IEntitySelector.e.test(entityliving) ? false : this.a(entityliving, false)));
+            return entityliving == null ? false : (predicate != null && !predicate.test(entityliving) ? false : (!IEntitySelector.f.test(entityliving) ? false : this.a(entityliving, false)));
         };
     }
 

@@ -105,7 +105,7 @@ public class DataWatcherRegistry {
         }
 
         public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
-            return ichatbasecomponent.e();
+            return ichatbasecomponent.h();
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -132,7 +132,7 @@ public class DataWatcherRegistry {
         }
 
         public Optional<IChatBaseComponent> a(Optional<IChatBaseComponent> optional) {
-            return optional.isPresent() ? Optional.of(((IChatBaseComponent) optional.get()).e()) : Optional.empty();
+            return optional.isPresent() ? Optional.of(((IChatBaseComponent) optional.get()).h()) : Optional.empty();
         }
 
         public Object a(PacketDataSerializer packetdataserializer) {
@@ -211,12 +211,12 @@ public class DataWatcherRegistry {
     };
     public static final DataWatcherSerializer<ParticleParam> j = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, ParticleParam particleparam) {
-            packetdataserializer.d(Particle.REGISTRY.a((Object) particleparam.b()));
+            packetdataserializer.d(IRegistry.PARTICLE_TYPE.a((Object) particleparam.b()));
             particleparam.a(packetdataserializer);
         }
 
         public ParticleParam b(PacketDataSerializer packetdataserializer) {
-            return this.a(packetdataserializer, (Particle) Particle.REGISTRY.getId(packetdataserializer.g()));
+            return this.a(packetdataserializer, (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.g()));
         }
 
         private <T extends ParticleParam> T a(PacketDataSerializer packetdataserializer, Particle<T> particle) {

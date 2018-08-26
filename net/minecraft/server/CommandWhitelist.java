@@ -33,7 +33,7 @@ public class CommandWhitelist {
         }))).then(CommandDispatcher.a("add").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentProfile.a()).suggests((commandcontext, suggestionsbuilder) -> {
             PlayerList playerlist = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getPlayerList();
 
-            return ICompletionProvider.a(playerlist.v().stream().filter((entityplayer) -> {
+            return ICompletionProvider.b(playerlist.v().stream().filter((entityplayer) -> {
                 return !playerlist.getWhitelist().isWhitelisted(entityplayer.getProfile());
             }).map((entityplayer) -> {
                 return entityplayer.getProfile().getName();

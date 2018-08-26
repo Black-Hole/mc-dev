@@ -7,16 +7,17 @@ import javax.annotation.Nullable;
 public final class IEntitySelector {
 
     public static final Predicate<Entity> a = Entity::isAlive;
-    public static final Predicate<Entity> b = (entity) -> {
+    public static final Predicate<EntityLiving> b = EntityLiving::isAlive;
+    public static final Predicate<Entity> c = (entity) -> {
         return entity.isAlive() && !entity.isVehicle() && !entity.isPassenger();
     };
-    public static final Predicate<Entity> c = (entity) -> {
+    public static final Predicate<Entity> d = (entity) -> {
         return entity instanceof IInventory && entity.isAlive();
     };
-    public static final Predicate<Entity> d = (entity) -> {
+    public static final Predicate<Entity> e = (entity) -> {
         return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).u();
     };
-    public static final Predicate<Entity> e = (entity) -> {
+    public static final Predicate<Entity> f = (entity) -> {
         return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator();
     };
 
@@ -32,7 +33,7 @@ public final class IEntitySelector {
         ScoreboardTeamBase scoreboardteambase = entity.be();
         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
-        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.e.and((entity) -> {
+        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity) -> {
             if (!entity.isCollidable()) {
                 return false;
             } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).dn())) {
@@ -84,8 +85,9 @@ public final class IEntitySelector {
                 return false;
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
+                EnumItemSlot enumitemslot = EntityInsentient.e(this.a);
 
-                return !entityliving.getEquipment(EntityInsentient.e(this.a)).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dk() : (entityliving instanceof EntityArmorStand ? true : entityliving instanceof EntityHuman));
+                return !entityliving.getEquipment(enumitemslot).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dj() : (entityliving instanceof EntityArmorStand ? !((EntityArmorStand) entityliving).c(enumitemslot) : entityliving instanceof EntityHuman));
             }
         }
 

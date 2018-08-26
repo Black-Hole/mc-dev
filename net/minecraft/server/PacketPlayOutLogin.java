@@ -7,7 +7,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
     private int a;
     private boolean b;
     private EnumGamemode c;
-    private int d;
+    private DimensionManager d;
     private EnumDifficulty e;
     private int f;
     private WorldType g;
@@ -15,12 +15,12 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutLogin() {}
 
-    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, int j, EnumDifficulty enumdifficulty, int k, WorldType worldtype, boolean flag1) {
+    public PacketPlayOutLogin(int i, EnumGamemode enumgamemode, boolean flag, DimensionManager dimensionmanager, EnumDifficulty enumdifficulty, int j, WorldType worldtype, boolean flag1) {
         this.a = i;
-        this.d = j;
+        this.d = dimensionmanager;
         this.e = enumdifficulty;
         this.c = enumgamemode;
-        this.f = k;
+        this.f = j;
         this.b = flag;
         this.g = worldtype;
         this.h = flag1;
@@ -34,7 +34,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         int i = short0 & -9;
 
         this.c = EnumGamemode.getById(i);
-        this.d = packetdataserializer.readInt();
+        this.d = DimensionManager.a(packetdataserializer.readInt());
         this.e = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
         this.f = packetdataserializer.readUnsignedByte();
         this.g = WorldType.getType(packetdataserializer.e(16));
@@ -54,7 +54,7 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
         }
 
         packetdataserializer.writeByte(i);
-        packetdataserializer.writeInt(this.d);
+        packetdataserializer.writeInt(this.d.getDimensionID());
         packetdataserializer.writeByte(this.e.a());
         packetdataserializer.writeByte(this.f);
         packetdataserializer.a(this.g.name());

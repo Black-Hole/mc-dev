@@ -1088,14 +1088,14 @@ public class WorldGenWoodlandMansionPieces {
             } else if ("Mage".equals(s)) {
                 EntityEvoker entityevoker = new EntityEvoker(generatoraccess.getMinecraftWorld());
 
-                entityevoker.dj();
+                entityevoker.di();
                 entityevoker.setPositionRotation(blockposition, 0.0F, 0.0F);
                 generatoraccess.addEntity(entityevoker);
                 generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
             } else if ("Warrior".equals(s)) {
                 EntityVindicator entityvindicator = new EntityVindicator(generatoraccess.getMinecraftWorld());
 
-                entityvindicator.dj();
+                entityvindicator.di();
                 entityvindicator.setPositionRotation(blockposition, 0.0F, 0.0F);
                 entityvindicator.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityvindicator)), (GroupDataEntity) null, (NBTTagCompound) null);
                 generatoraccess.addEntity(entityvindicator);

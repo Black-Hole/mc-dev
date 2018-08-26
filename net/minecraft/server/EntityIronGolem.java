@@ -41,9 +41,9 @@ public class EntityIronGolem extends EntityGolem {
     protected void mobTick() {
         if (--this.b <= 0) {
             this.b = 70 + this.random.nextInt(50);
-            this.c = this.world.ae().getClosestVillage(new BlockPosition(this), 32);
+            this.c = this.world.af().getClosestVillage(new BlockPosition(this), 32);
             if (this.c == null) {
-                this.dw();
+                this.dv();
             } else {
                 BlockPosition blockposition = this.c.a();
 
@@ -61,7 +61,7 @@ public class EntityIronGolem extends EntityGolem {
         this.getAttributeInstance(GenericAttributes.c).setValue(1.0D);
     }
 
-    protected int l(int i) {
+    protected int k(int i) {
         return i;
     }
 
@@ -152,11 +152,11 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.G;
     }
 
-    public int dA() {
+    public int dz() {
         return this.bD;
     }
 
@@ -184,6 +184,11 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.b(this, this.getBoundingBox());
+        BlockPosition blockposition = new BlockPosition(this.locX, this.locY, this.locZ);
+        IBlockData iblockdata = iworldreader.getType(blockposition);
+        IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
+        IBlockData iblockdata2 = iworldreader.getType(blockposition.up());
+
+        return iblockdata1.q() && SpawnerCreature.a(iblockdata2, iblockdata2.s()) && SpawnerCreature.a(iblockdata, FluidTypes.a.i()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.a_(this, this.getBoundingBox());
     }
 }

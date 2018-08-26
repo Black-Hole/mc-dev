@@ -22,11 +22,11 @@ public class DebugReportBlocks implements DebugReportProvider {
 
     public void a(HashCache hashcache) throws IOException {
         JsonObject jsonobject = new JsonObject();
-        Iterator iterator = Block.REGISTRY.iterator();
+        Iterator iterator = IRegistry.BLOCK.iterator();
 
         while (iterator.hasNext()) {
             Block block = (Block) iterator.next();
-            MinecraftKey minecraftkey = (MinecraftKey) Block.REGISTRY.b(block);
+            MinecraftKey minecraftkey = IRegistry.BLOCK.getKey(block);
             JsonObject jsonobject1 = new JsonObject();
             BlockStateList blockstatelist = block.getStates();
 

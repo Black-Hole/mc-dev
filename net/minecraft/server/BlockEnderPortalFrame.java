@@ -7,9 +7,9 @@ public class BlockEnderPortalFrame extends Block {
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean EYE = BlockProperties.g;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 13.0D, 16.0D);
-    protected static final VoxelShape p = Block.a(4.0D, 13.0D, 4.0D, 12.0D, 16.0D, 12.0D);
-    protected static final VoxelShape q = VoxelShapes.a(BlockEnderPortalFrame.c, BlockEnderPortalFrame.p);
-    private static ShapeDetector r;
+    protected static final VoxelShape o = Block.a(4.0D, 13.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+    protected static final VoxelShape p = VoxelShapes.a(BlockEnderPortalFrame.c, BlockEnderPortalFrame.o);
+    private static ShapeDetector q;
 
     public BlockEnderPortalFrame(Block.Info block_info) {
         super(block_info);
@@ -17,7 +17,7 @@ public class BlockEnderPortalFrame extends Block {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue() ? BlockEnderPortalFrame.q : BlockEnderPortalFrame.c;
+        return ((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue() ? BlockEnderPortalFrame.p : BlockEnderPortalFrame.c;
     }
 
     public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
@@ -53,11 +53,11 @@ public class BlockEnderPortalFrame extends Block {
     }
 
     public static ShapeDetector d() {
-        if (BlockEnderPortalFrame.r == null) {
-            BlockEnderPortalFrame.r = ShapeDetectorBuilder.a().a(new String[] { "?vvv?", ">???<", ">???<", ">???<", "?^^^?"}).a('?', ShapeDetectorBlock.a(BlockStatePredicate.a)).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.SOUTH)))).a('>', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.WEST)))).a('v', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.NORTH)))).a('<', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.EAST)))).b();
+        if (BlockEnderPortalFrame.q == null) {
+            BlockEnderPortalFrame.q = ShapeDetectorBuilder.a().a(new String[] { "?vvv?", ">???<", ">???<", ">???<", "?^^^?"}).a('?', ShapeDetectorBlock.a(BlockStatePredicate.a)).a('^', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.SOUTH)))).a('>', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.WEST)))).a('v', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.NORTH)))).a('<', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.END_PORTAL_FRAME).a(BlockEnderPortalFrame.EYE, Predicates.equalTo(Boolean.valueOf(true))).a(BlockEnderPortalFrame.FACING, Predicates.equalTo(EnumDirection.EAST)))).b();
         }
 
-        return BlockEnderPortalFrame.r;
+        return BlockEnderPortalFrame.q;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

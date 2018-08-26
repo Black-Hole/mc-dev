@@ -7,13 +7,11 @@ import javax.annotation.Nullable;
 
 public class PotionRegistry {
 
-    private static final MinecraftKey b = new MinecraftKey("empty");
-    public static final RegistryBlocks<MinecraftKey, PotionRegistry> a = new RegistryBlocks(PotionRegistry.b);
-    private final String c;
-    private final ImmutableList<MobEffect> d;
+    private final String a;
+    private final ImmutableList<MobEffect> b;
 
     public static PotionRegistry a(String s) {
-        return (PotionRegistry) PotionRegistry.a.get(MinecraftKey.a(s));
+        return (PotionRegistry) IRegistry.POTION.getOrDefault(MinecraftKey.a(s));
     }
 
     public PotionRegistry(MobEffect... amobeffect) {
@@ -21,16 +19,16 @@ public class PotionRegistry {
     }
 
     public PotionRegistry(@Nullable String s, MobEffect... amobeffect) {
-        this.c = s;
-        this.d = ImmutableList.copyOf(amobeffect);
+        this.a = s;
+        this.b = ImmutableList.copyOf(amobeffect);
     }
 
     public String b(String s) {
-        return s + (this.c == null ? ((MinecraftKey) PotionRegistry.a.b(this)).getKey() : this.c);
+        return s + (this.a == null ? IRegistry.POTION.getKey(this).getKey() : this.a);
     }
 
     public List<MobEffect> a() {
-        return this.d;
+        return this.b;
     }
 
     public static void b() {
@@ -77,16 +75,15 @@ public class PotionRegistry {
         a("luck", new PotionRegistry("luck", new MobEffect[] { new MobEffect(MobEffects.LUCK, 6000)}));
         a("slow_falling", new PotionRegistry(new MobEffect[] { new MobEffect(MobEffects.SLOW_FALLING, 1800)}));
         a("long_slow_falling", new PotionRegistry("slow_falling", new MobEffect[] { new MobEffect(MobEffects.SLOW_FALLING, 4800)}));
-        PotionRegistry.a.a();
     }
 
     protected static void a(String s, PotionRegistry potionregistry) {
-        PotionRegistry.a.a(new MinecraftKey(s), potionregistry);
+        IRegistry.POTION.a(new MinecraftKey(s), (Object) potionregistry);
     }
 
     public boolean c() {
-        if (!this.d.isEmpty()) {
-            UnmodifiableIterator unmodifiableiterator = this.d.iterator();
+        if (!this.b.isEmpty()) {
+            UnmodifiableIterator unmodifiableiterator = this.b.iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 MobEffect mobeffect = (MobEffect) unmodifiableiterator.next();

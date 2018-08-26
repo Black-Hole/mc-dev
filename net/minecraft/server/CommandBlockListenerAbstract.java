@@ -100,7 +100,7 @@ public abstract class CommandBlockListenerAbstract implements ICommandListener {
                 this.d = 0;
                 MinecraftServer minecraftserver = this.d().getMinecraftServer();
 
-                if (minecraftserver != null && minecraftserver.F() && minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.g)) {
+                if (minecraftserver != null && minecraftserver.D() && minecraftserver.getEnableCommandBlock() && !UtilColor.b(this.g)) {
                     try {
                         this.f = null;
                         CommandListenerWrapper commandlistenerwrapper = this.getWrapper().a((commandcontext, flag, i) -> {

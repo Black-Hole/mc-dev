@@ -78,7 +78,7 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
                     this.d = PathfinderGoalBoat.GO_IN_BOAT_DIRECTION;
                 }
             } else if (this.d == PathfinderGoalBoat.GO_IN_BOAT_DIRECTION) {
-                EnumDirection enumdirection = this.c.bB();
+                EnumDirection enumdirection = this.c.getAdjustedDirection();
                 BlockPosition blockposition1 = (new BlockPosition(this.c)).shift(enumdirection, 10);
 
                 this.b.getNavigation().a((double) blockposition1.getX(), (double) (blockposition1.getY() - 1), (double) blockposition1.getZ(), 1.0D);

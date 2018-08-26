@@ -52,7 +52,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     }
 
     public int b() {
-        return this.f.aQ().c("maxCommandChainLength");
+        return this.f.getGameRules().c("maxCommandChainLength");
     }
 
     public Map<MinecraftKey, CustomFunction> c() {

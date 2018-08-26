@@ -5,12 +5,12 @@ public class BlockLever extends BlockAttachable {
     public static final BlockStateBoolean POWERED = BlockProperties.t;
     protected static final VoxelShape b = Block.a(5.0D, 4.0D, 10.0D, 11.0D, 12.0D, 16.0D);
     protected static final VoxelShape c = Block.a(5.0D, 4.0D, 0.0D, 11.0D, 12.0D, 6.0D);
-    protected static final VoxelShape p = Block.a(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 11.0D);
-    protected static final VoxelShape q = Block.a(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 11.0D);
-    protected static final VoxelShape r = Block.a(5.0D, 0.0D, 4.0D, 11.0D, 6.0D, 12.0D);
-    protected static final VoxelShape s = Block.a(4.0D, 0.0D, 5.0D, 12.0D, 6.0D, 11.0D);
-    protected static final VoxelShape t = Block.a(5.0D, 10.0D, 4.0D, 11.0D, 16.0D, 12.0D);
-    protected static final VoxelShape u = Block.a(4.0D, 10.0D, 5.0D, 12.0D, 16.0D, 11.0D);
+    protected static final VoxelShape o = Block.a(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 11.0D);
+    protected static final VoxelShape p = Block.a(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 11.0D);
+    protected static final VoxelShape q = Block.a(5.0D, 0.0D, 4.0D, 11.0D, 6.0D, 12.0D);
+    protected static final VoxelShape r = Block.a(4.0D, 0.0D, 5.0D, 12.0D, 6.0D, 11.0D);
+    protected static final VoxelShape s = Block.a(5.0D, 10.0D, 4.0D, 11.0D, 16.0D, 12.0D);
+    protected static final VoxelShape t = Block.a(4.0D, 10.0D, 5.0D, 12.0D, 16.0D, 11.0D);
 
     protected BlockLever(Block.Info block_info) {
         super(block_info);
@@ -26,20 +26,20 @@ public class BlockLever extends BlockAttachable {
         case FLOOR:
             switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
             case X:
-                return BlockLever.s;
+                return BlockLever.r;
 
             case Z:
             default:
-                return BlockLever.r;
+                return BlockLever.q;
             }
 
         case WALL:
             switch ((EnumDirection) iblockdata.get(BlockLever.FACING)) {
             case EAST:
-                return BlockLever.q;
+                return BlockLever.p;
 
             case WEST:
-                return BlockLever.p;
+                return BlockLever.o;
 
             case SOUTH:
                 return BlockLever.c;
@@ -53,11 +53,11 @@ public class BlockLever extends BlockAttachable {
         default:
             switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
             case X:
-                return BlockLever.u;
+                return BlockLever.t;
 
             case Z:
             default:
-                return BlockLever.t;
+                return BlockLever.s;
             }
         }
     }

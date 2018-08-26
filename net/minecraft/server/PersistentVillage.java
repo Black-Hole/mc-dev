@@ -130,20 +130,23 @@ public class PersistentVillage extends PersistentBase {
         boolean flag = true;
         boolean flag1 = true;
         boolean flag2 = true;
-        Iterable iterable = BlockPosition.b(blockposition.getX() - 16, blockposition.getY() - 4, blockposition.getZ() - 16, blockposition.getX() + 16, blockposition.getY() + 4, blockposition.getZ() + 16);
-        Iterator iterator = iterable.iterator();
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        while (iterator.hasNext()) {
-            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
-            IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition);
+        for (int i = -16; i < 16; ++i) {
+            for (int j = -4; j < 4; ++j) {
+                for (int k = -16; k < 16; ++k) {
+                    blockposition_mutableblockposition.g(blockposition).d(i, j, k);
+                    IBlockData iblockdata = this.world.getType(blockposition_mutableblockposition);
 
-            if (this.a(iblockdata)) {
-                VillageDoor villagedoor = this.c(blockposition_mutableblockposition);
+                    if (this.a(iblockdata)) {
+                        VillageDoor villagedoor = this.c(blockposition_mutableblockposition);
 
-                if (villagedoor == null) {
-                    this.a(iblockdata, blockposition_mutableblockposition);
-                } else {
-                    villagedoor.a(this.time);
+                        if (villagedoor == null) {
+                            this.a(iblockdata, blockposition_mutableblockposition);
+                        } else {
+                            villagedoor.a(this.time);
+                        }
+                    }
                 }
             }
         }
@@ -260,6 +263,6 @@ public class PersistentVillage extends PersistentBase {
     }
 
     public static String a(WorldProvider worldprovider) {
-        return "villages" + worldprovider.getDimensionManager().c();
+        return "villages" + worldprovider.getDimensionManager().d();
     }
 }

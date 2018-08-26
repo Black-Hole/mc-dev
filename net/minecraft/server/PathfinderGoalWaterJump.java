@@ -17,7 +17,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
         if (this.b.getRandom().nextInt(this.c) != 0) {
             return false;
         } else {
-            EnumDirection enumdirection = this.b.bB();
+            EnumDirection enumdirection = this.b.getAdjustedDirection();
             int i = enumdirection.getAdjacentX();
             int j = enumdirection.getAdjacentZ();
             BlockPosition blockposition = new BlockPosition(this.b);
@@ -39,7 +39,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
     private boolean a(BlockPosition blockposition, int i, int j, int k) {
         BlockPosition blockposition1 = blockposition.a(i * k, 0, j * k);
 
-        return this.b.world.b(blockposition1).a(TagsFluid.a) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
+        return this.b.world.b(blockposition1).a(TagsFluid.WATER) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
     }
 
     private boolean b(BlockPosition blockposition, int i, int j, int k) {
@@ -55,7 +55,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
     }
 
     public void c() {
-        EnumDirection enumdirection = this.b.bB();
+        EnumDirection enumdirection = this.b.getAdjustedDirection();
 
         this.b.motX += (double) enumdirection.getAdjacentX() * 0.6D;
         this.b.motY += 0.7D;
@@ -73,7 +73,7 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
         if (!flag) {
             Fluid fluid = this.b.world.b(new BlockPosition(this.b));
 
-            this.d = fluid.a(TagsFluid.a);
+            this.d = fluid.a(TagsFluid.WATER);
         }
 
         if (this.d && !flag) {

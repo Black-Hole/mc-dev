@@ -28,6 +28,14 @@ public class ChunkCoordIntPair {
         return (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
     }
 
+    public static int a(long i) {
+        return (int) (i & 4294967295L);
+    }
+
+    public static int b(long i) {
+        return (int) (i >>> 32 & 4294967295L);
+    }
+
     public int hashCode() {
         int i = 1664525 * this.x + 1013904223;
         int j = 1664525 * (this.z ^ -559038737) + 1013904223;

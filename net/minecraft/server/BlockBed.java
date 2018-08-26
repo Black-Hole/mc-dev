@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
 
-    public static final BlockStateEnum<BlockPropertyBedPart> PART = BlockProperties.an;
+    public static final BlockStateEnum<BlockPropertyBedPart> PART = BlockProperties.ao;
     public static final BlockStateBoolean OCCUPIED = BlockProperties.q;
     protected static final VoxelShape c = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D);
     private final EnumColor color;
@@ -148,6 +148,8 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                     iblockdata1.a(world, blockposition1, 0);
                 }
             }
+
+            entityhuman.b(StatisticList.BLOCK_MINED.b(this));
         }
 
         super.a(world, blockposition, iblockdata, entityhuman);

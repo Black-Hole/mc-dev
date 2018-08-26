@@ -385,7 +385,7 @@ public class EntityAreaEffectCloud extends Entity {
         }
 
         if (this.potionRegistry != Potions.EMPTY && this.potionRegistry != null) {
-            nbttagcompound.setString("Potion", ((MinecraftKey) PotionRegistry.a.b(this.potionRegistry)).toString());
+            nbttagcompound.setString("Potion", IRegistry.POTION.getKey(this.potionRegistry).toString());
         }
 
         if (!this.effects.isEmpty()) {

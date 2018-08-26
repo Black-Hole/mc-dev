@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 
 public class ArgumentPosition implements ArgumentType<IVectorPosition> {
 
@@ -61,14 +60,7 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(false);
             }
 
-            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, (s) -> {
-                try {
-                    this.a(new StringReader(s));
-                    return true;
-                } catch (CommandSyntaxException commandsyntaxexception) {
-                    return false;
-                }
-            });
+            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
         }
     }
 

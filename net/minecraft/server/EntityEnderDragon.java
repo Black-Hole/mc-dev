@@ -110,7 +110,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
             this.world.addParticle(Particles.u, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         } else {
-            this.du();
+            this.dt();
             f = 0.2F / (MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ) * 10.0F + 1.0F);
             f *= (float) Math.pow(2.0D, this.motY);
             if (this.bS.a().a()) {
@@ -321,7 +321,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return (float) d0;
     }
 
-    private void du() {
+    private void dt() {
         if (this.currentEnderCrystal != null) {
             if (this.currentEnderCrystal.dead) {
                 this.currentEnderCrystal = null;
@@ -799,7 +799,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     @Nullable
-    protected MinecraftKey G() {
+    protected MinecraftKey getDefaultLootTable() {
         return LootTables.aH;
     }
 
@@ -865,7 +865,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     @Nullable
-    public EnderDragonBattle dt() {
+    public EnderDragonBattle ds() {
         return this.bR;
     }
 
