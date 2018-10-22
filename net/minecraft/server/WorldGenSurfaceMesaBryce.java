@@ -41,7 +41,7 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
         for (int j2 = Math.max(k, (int) d1 + 1); j2 >= 0; --j2) {
             blockposition_mutableblockposition.c(j1, j2, k1);
             if (ichunkaccess.getType(blockposition_mutableblockposition).isAir() && j2 < (int) d1) {
-                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata, false);
+                ichunkaccess.setType(blockposition_mutableblockposition, iblockdata, false);
             }
 
             IBlockData iblockdata4 = ichunkaccess.getType(blockposition_mutableblockposition);
@@ -78,25 +78,25 @@ public class WorldGenSurfaceMesaBryce extends WorldGenSurfaceMesa {
                                 iblockdata5 = WorldGenSurfaceMesaBryce.g;
                             }
 
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata5, false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                         } else {
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, biomebase.r().a(), false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, biomebase.r().a(), false);
                             flag1 = true;
                         }
                     } else {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata3, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata3, false);
                         Block block = iblockdata3.getBlock();
 
                         if (block == Blocks.WHITE_TERRACOTTA || block == Blocks.ORANGE_TERRACOTTA || block == Blocks.MAGENTA_TERRACOTTA || block == Blocks.LIGHT_BLUE_TERRACOTTA || block == Blocks.YELLOW_TERRACOTTA || block == Blocks.LIME_TERRACOTTA || block == Blocks.PINK_TERRACOTTA || block == Blocks.GRAY_TERRACOTTA || block == Blocks.LIGHT_GRAY_TERRACOTTA || block == Blocks.CYAN_TERRACOTTA || block == Blocks.PURPLE_TERRACOTTA || block == Blocks.BLUE_TERRACOTTA || block == Blocks.BROWN_TERRACOTTA || block == Blocks.GREEN_TERRACOTTA || block == Blocks.RED_TERRACOTTA || block == Blocks.BLACK_TERRACOTTA) {
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceMesaBryce.g, false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaBryce.g, false);
                         }
                     }
                 } else if (i2 > 0) {
                     --i2;
                     if (flag1) {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceMesaBryce.g, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceMesaBryce.g, false);
                     } else {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, this.a(i, j2, j), false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, this.a(i, j2, j), false);
                     }
                 }
             }

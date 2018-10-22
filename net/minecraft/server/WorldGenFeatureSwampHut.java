@@ -18,7 +18,7 @@ public class WorldGenFeatureSwampHut extends WorldGenFeatureRandomScattered<Worl
     }
 
     protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.c);
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.PLAINS);
 
         return new WorldGenFeatureSwampHut.a(generatoraccess, seededrandom, i, j, biomebase);
     }

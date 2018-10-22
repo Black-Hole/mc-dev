@@ -28,7 +28,7 @@ public enum EnumItemSlot {
         return this.i;
     }
 
-    public String d() {
+    public String getSlotName() {
         return this.j;
     }
 
@@ -39,7 +39,7 @@ public enum EnumItemSlot {
         for (int j = 0; j < i; ++j) {
             EnumItemSlot enumitemslot = aenumitemslot[j];
 
-            if (enumitemslot.d().equals(s)) {
+            if (enumitemslot.getSlotName().equals(s)) {
                 return enumitemslot;
             }
         }

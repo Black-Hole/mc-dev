@@ -18,9 +18,9 @@ public class WorldGenSurfaceSwamp implements WorldGenSurface<WorldGenSurfaceConf
                 blockposition_mutableblockposition.c(j1, l1, k1);
                 if (!ichunkaccess.getType(blockposition_mutableblockposition).isAir()) {
                     if (l1 == 62 && ichunkaccess.getType(blockposition_mutableblockposition).getBlock() != iblockdata1.getBlock()) {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata1, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata1, false);
                         if (d1 < 0.12D) {
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.d(0, 1, 0), Blocks.LILY_PAD.getBlockData(), false);
+                            ichunkaccess.setType(blockposition_mutableblockposition.d(0, 1, 0), Blocks.LILY_PAD.getBlockData(), false);
                         }
                     }
                     break;

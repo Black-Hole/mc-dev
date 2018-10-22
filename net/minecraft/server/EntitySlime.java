@@ -97,7 +97,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
                 double d0 = this.locX + (double) f2;
                 double d1 = this.locZ + (double) f3;
 
-                world.addParticle(particleparam, d0, this.getBoundingBox().b, d1, 0.0D, 0.0D, 0.0D);
+                world.addParticle(particleparam, d0, this.getBoundingBox().minY, d1, 0.0D, 0.0D, 0.0D);
             }
 
             this.a(this.dv(), this.cD(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) / 0.8F);
@@ -232,7 +232,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
             if (generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL) {
                 BiomeBase biomebase = generatoraccess.getBiome(blockposition);
 
-                if (biomebase == Biomes.h && this.locY > 50.0D && this.locY < 70.0D && this.random.nextFloat() < 0.5F && this.random.nextFloat() < generatoraccess.ah() && generatoraccess.getLightLevel(new BlockPosition(this)) <= this.random.nextInt(8)) {
+                if (biomebase == Biomes.SWAMP && this.locY > 50.0D && this.locY < 70.0D && this.random.nextFloat() < 0.5F && this.random.nextFloat() < generatoraccess.ah() && generatoraccess.getLightLevel(new BlockPosition(this)) <= this.random.nextInt(8)) {
                     return super.a(generatoraccess, flag);
                 }
 

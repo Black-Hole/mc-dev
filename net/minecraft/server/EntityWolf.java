@@ -162,7 +162,7 @@ public class EntityWolf extends EntityTameableAnimal {
             }
 
             if (this.bN > 0.4F) {
-                float f = (float) this.getBoundingBox().b;
+                float f = (float) this.getBoundingBox().minY;
                 int i = (int) (MathHelper.sin((this.bN - 0.4F) * 3.1415927F) * 7.0F);
 
                 for (int j = 0; j < i; ++j) {

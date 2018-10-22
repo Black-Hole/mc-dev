@@ -26,7 +26,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     public int riches;
     private String bO;
     public int careerId;
-    private int bQ;
+    public int careerLevel;
     private boolean bR;
     private boolean bS;
     public final InventorySubcontainer inventory;
@@ -178,7 +178,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         nbttagcompound.setInt("Profession", this.getProfession());
         nbttagcompound.setInt("Riches", this.riches);
         nbttagcompound.setInt("Career", this.careerId);
-        nbttagcompound.setInt("CareerLevel", this.bQ);
+        nbttagcompound.setInt("CareerLevel", this.careerLevel);
         nbttagcompound.setBoolean("Willing", this.bM);
         if (this.trades != null) {
             nbttagcompound.set("Offers", this.trades.a());
@@ -202,7 +202,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.setProfession(nbttagcompound.getInt("Profession"));
         this.riches = nbttagcompound.getInt("Riches");
         this.careerId = nbttagcompound.getInt("Career");
-        this.bQ = nbttagcompound.getInt("CareerLevel");
+        this.careerLevel = nbttagcompound.getInt("CareerLevel");
         this.bM = nbttagcompound.getBoolean("Willing");
         if (nbttagcompound.hasKeyOfType("Offers", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Offers");
@@ -224,7 +224,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.dJ();
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return false;
     }
 
@@ -269,8 +269,8 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         return this.bG;
     }
 
-    public void a(@Nullable EntityLiving entityliving) {
-        super.a(entityliving);
+    public void setLastDamager(@Nullable EntityLiving entityliving) {
+        super.setLastDamager(entityliving);
         if (this.village != null && entityliving != null) {
             this.village.a(entityliving);
             if (entityliving instanceof EntityHuman) {
@@ -409,11 +409,11 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     public void populateTrades() {
         EntityVillager.IMerchantRecipeOption[][][] aentityvillager_imerchantrecipeoption = EntityVillager.bU[this.getProfession()];
 
-        if (this.careerId != 0 && this.bQ != 0) {
-            ++this.bQ;
+        if (this.careerId != 0 && this.careerLevel != 0) {
+            ++this.careerLevel;
         } else {
             this.careerId = this.random.nextInt(aentityvillager_imerchantrecipeoption.length) + 1;
-            this.bQ = 1;
+            this.careerLevel = 1;
         }
 
         if (this.trades == null) {
@@ -421,7 +421,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         }
 
         int i = this.careerId - 1;
-        int j = this.bQ - 1;
+        int j = this.careerLevel - 1;
 
         if (i >= 0 && i < aentityvillager_imerchantrecipeoption.length) {
             EntityVillager.IMerchantRecipeOption[][] aentityvillager_imerchantrecipeoption1 = aentityvillager_imerchantrecipeoption[i];
@@ -708,10 +708,10 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
             BlockPosition blockposition = world.a(this.b, imerchant.getPosition(), 100, true);
 
             if (blockposition != null) {
-                ItemStack itemstack = ItemWorldMap.a(world, blockposition.getX(), blockposition.getZ(), (byte) 2, true, true);
+                ItemStack itemstack = ItemWorldMap.createFilledMapView(world, blockposition.getX(), blockposition.getZ(), (byte) 2, true, true);
 
-                ItemWorldMap.a(world, itemstack);
-                WorldMap.a(itemstack, blockposition, "+", this.c);
+                ItemWorldMap.applySepiaFilter(world, itemstack);
+                WorldMap.decorateMap(itemstack, blockposition, "+", this.c);
                 itemstack.a((IChatBaseComponent) (new ChatMessage("filled_map." + this.b.toLowerCase(Locale.ROOT), new Object[0])));
                 merchantrecipelist.add(new MerchantRecipe(new ItemStack(Items.EMERALD, i), new ItemStack(Items.COMPASS), itemstack));
             }

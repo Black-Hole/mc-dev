@@ -27,7 +27,7 @@ public class PathfinderNormal extends PathfinderAbstract {
         BlockPosition blockposition;
 
         if (this.e() && this.b.isInWater()) {
-            i = (int) this.b.getBoundingBox().b;
+            i = (int) this.b.getBoundingBox().minY;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
 
             for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
@@ -37,7 +37,7 @@ public class PathfinderNormal extends PathfinderAbstract {
 
             --i;
         } else if (this.b.onGround) {
-            i = MathHelper.floor(this.b.getBoundingBox().b + 0.5D);
+            i = MathHelper.floor(this.b.getBoundingBox().minY + 0.5D);
         } else {
             for (blockposition = new BlockPosition(this.b); (this.a.getType(blockposition).isAir() || this.a.getType(blockposition).a(this.a, blockposition, PathMode.LAND)) && blockposition.getY() > 0; blockposition = blockposition.down()) {
                 ;
@@ -52,10 +52,10 @@ public class PathfinderNormal extends PathfinderAbstract {
         if (this.b.a(pathtype) < 0.0F) {
             HashSet hashset = Sets.newHashSet();
 
-            hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().c));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().f));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().d, (double) i, this.b.getBoundingBox().c));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().d, (double) i, this.b.getBoundingBox().f));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().minZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().maxZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().minZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().maxZ));
             Iterator iterator = hashset.iterator();
 
             while (iterator.hasNext()) {
@@ -244,9 +244,9 @@ public class PathfinderNormal extends PathfinderAbstract {
 
     public static double a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
-        VoxelShape voxelshape = iblockaccess.getType(blockposition1).h(iblockaccess, blockposition1);
+        VoxelShape voxelshape = iblockaccess.getType(blockposition1).getCollisionShape(iblockaccess, blockposition1);
 
-        return (double) blockposition1.getY() + (voxelshape.b() ? 0.0D : voxelshape.c(EnumDirection.EnumAxis.Y));
+        return (double) blockposition1.getY() + (voxelshape.isEmpty() ? 0.0D : voxelshape.c(EnumDirection.EnumAxis.Y));
     }
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1) {

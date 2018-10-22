@@ -148,7 +148,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
                     double d1 = 4.0D;
                     Vec3D vec3d = this.ghast.f(1.0F);
                     double d2 = entityliving.locX - (this.ghast.locX + vec3d.x * 4.0D);
-                    double d3 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (0.5D + this.ghast.locY + (double) (this.ghast.length / 2.0F));
+                    double d3 = entityliving.getBoundingBox().minY + (double) (entityliving.length / 2.0F) - (0.5D + this.ghast.locY + (double) (this.ghast.length / 2.0F));
                     double d4 = entityliving.locZ - (this.ghast.locZ + vec3d.z * 4.0D);
 
                     world.a((EntityHuman) null, 1016, new BlockPosition(this.ghast), 0);

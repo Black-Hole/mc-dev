@@ -284,7 +284,7 @@ public abstract class EntityHuman extends EntityLiving {
         if (f != this.width || f1 != this.length) {
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
-            axisalignedbb = new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.a + (double) f, axisalignedbb.b + (double) f1, axisalignedbb.c + (double) f);
+            axisalignedbb = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + (double) f, axisalignedbb.minY + (double) f1, axisalignedbb.minZ + (double) f);
             if (this.world.getCubes((Entity) null, axisalignedbb)) {
                 this.setSize(f, f1);
             }
@@ -678,7 +678,7 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("DataVersion", 1628);
+        nbttagcompound.setInt("DataVersion", 1631);
         nbttagcompound.set("Inventory", this.inventory.a(new NBTTagList()));
         nbttagcompound.setInt("SelectedItemSlot", this.inventory.itemInHandIndex);
         nbttagcompound.setBoolean("Sleeping", this.sleeping);
@@ -1124,7 +1124,7 @@ public abstract class EntityHuman extends EntityLiving {
                 return EntityHuman.EnumBedResult.OTHER_PROBLEM;
             }
 
-            if (!this.world.worldProvider.o()) {
+            if (!this.world.worldProvider.isOverworld()) {
                 return EntityHuman.EnumBedResult.NOT_POSSIBLE_HERE;
             }
 
@@ -1286,13 +1286,13 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void a(Statistic<?> statistic) {}
 
-    public int a(Collection<IRecipe> collection) {
+    public int discoverRecipes(Collection<IRecipe> collection) {
         return 0;
     }
 
     public void a(MinecraftKey[] aminecraftkey) {}
 
-    public int b(Collection<IRecipe> collection) {
+    public int undiscoverRecipes(Collection<IRecipe> collection) {
         return 0;
     }
 

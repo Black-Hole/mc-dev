@@ -352,8 +352,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     private void a(List<Entity> list) {
-        double d0 = (this.bF.getBoundingBox().a + this.bF.getBoundingBox().d) / 2.0D;
-        double d1 = (this.bF.getBoundingBox().c + this.bF.getBoundingBox().f) / 2.0D;
+        double d0 = (this.bF.getBoundingBox().minX + this.bF.getBoundingBox().maxX) / 2.0D;
+        double d1 = (this.bF.getBoundingBox().minZ + this.bF.getBoundingBox().maxZ) / 2.0D;
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -391,12 +391,12 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     private boolean b(AxisAlignedBB axisalignedbb) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.floor(axisalignedbb.b);
-        int k = MathHelper.floor(axisalignedbb.c);
-        int l = MathHelper.floor(axisalignedbb.d);
-        int i1 = MathHelper.floor(axisalignedbb.e);
-        int j1 = MathHelper.floor(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.floor(axisalignedbb.minY);
+        int k = MathHelper.floor(axisalignedbb.minZ);
+        int l = MathHelper.floor(axisalignedbb.maxX);
+        int i1 = MathHelper.floor(axisalignedbb.maxY);
+        int j1 = MathHelper.floor(axisalignedbb.maxZ);
         boolean flag = false;
         boolean flag1 = false;
 
@@ -425,9 +425,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         if (flag1) {
-            double d0 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * (double) this.random.nextFloat();
-            double d1 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * (double) this.random.nextFloat();
-            double d2 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * (double) this.random.nextFloat();
+            double d0 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX) * (double) this.random.nextFloat();
+            double d1 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY) * (double) this.random.nextFloat();
+            double d2 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ) * (double) this.random.nextFloat();
 
             this.world.addParticle(Particles.u, d0, d1, d2, 0.0D, 0.0D, 0.0D);
         }

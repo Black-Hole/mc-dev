@@ -27,7 +27,7 @@ public abstract class EntityFlying extends EntityInsentient {
             float f3 = 0.91F;
 
             if (this.onGround) {
-                f3 = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.91F;
+                f3 = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.91F;
             }
 
             float f4 = 0.16277137F / (f3 * f3 * f3);
@@ -35,7 +35,7 @@ public abstract class EntityFlying extends EntityInsentient {
             this.a(f, f1, f2, this.onGround ? 0.1F * f4 : 0.02F);
             f3 = 0.91F;
             if (this.onGround) {
-                f3 = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.91F;
+                f3 = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.91F;
             }
 
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 public interface IChunkAccess extends IBlockAccess {
 
     @Nullable
-    IBlockData a(BlockPosition blockposition, IBlockData iblockdata, boolean flag);
+    IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag);
 
     void a(BlockPosition blockposition, TileEntity tileentity);
 

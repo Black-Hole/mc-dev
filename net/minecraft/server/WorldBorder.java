@@ -27,7 +27,7 @@ public class WorldBorder {
     }
 
     public boolean a(AxisAlignedBB axisalignedbb) {
-        return axisalignedbb.d > this.b() && axisalignedbb.a < this.d() && axisalignedbb.f > this.c() && axisalignedbb.c < this.e();
+        return axisalignedbb.maxX > this.b() && axisalignedbb.minX < this.d() && axisalignedbb.maxZ > this.c() && axisalignedbb.minZ < this.e();
     }
 
     public double a(Entity entity) {

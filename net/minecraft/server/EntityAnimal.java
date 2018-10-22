@@ -7,7 +7,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     protected Block bF;
     private int bC;
-    private UUID bD;
+    public UUID breedCause;
 
     protected EntityAnimal(EntityTypes<?> entitytypes, World world) {
         super(entitytypes, world);
@@ -57,8 +57,8 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("InLove", this.bC);
-        if (this.bD != null) {
-            nbttagcompound.a("LoveCause", this.bD);
+        if (this.breedCause != null) {
+            nbttagcompound.a("LoveCause", this.breedCause);
         }
 
     }
@@ -70,12 +70,12 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.bC = nbttagcompound.getInt("InLove");
-        this.bD = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
+        this.breedCause = nbttagcompound.b("LoveCause") ? nbttagcompound.a("LoveCause") : null;
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().b);
+        int j = MathHelper.floor(this.getBoundingBox().minY);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
 
@@ -86,7 +86,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         return 120;
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return false;
     }
 
@@ -132,7 +132,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
     public void f(@Nullable EntityHuman entityhuman) {
         this.bC = 600;
         if (entityhuman != null) {
-            this.bD = entityhuman.getUniqueID();
+            this.breedCause = entityhuman.getUniqueID();
         }
 
         this.world.broadcastEntityEffect(this, (byte) 18);
@@ -144,10 +144,10 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
 
     @Nullable
     public EntityPlayer getBreedCause() {
-        if (this.bD == null) {
+        if (this.breedCause == null) {
             return null;
         } else {
-            EntityHuman entityhuman = this.world.b(this.bD);
+            EntityHuman entityhuman = this.world.b(this.breedCause);
 
             return entityhuman instanceof EntityPlayer ? (EntityPlayer) entityhuman : null;
         }

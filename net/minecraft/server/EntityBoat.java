@@ -133,10 +133,10 @@ public class EntityBoat extends Entity {
 
     public void collide(Entity entity) {
         if (entity instanceof EntityBoat) {
-            if (entity.getBoundingBox().b < this.getBoundingBox().e) {
+            if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
                 super.collide(entity);
             }
-        } else if (entity.getBoundingBox().b <= this.getBoundingBox().b) {
+        } else if (entity.getBoundingBox().minY <= this.getBoundingBox().minY) {
             super.collide(entity);
         }
 
@@ -342,7 +342,7 @@ public class EntityBoat extends Entity {
         EntityBoat.EnumStatus entityboat_enumstatus = this.u();
 
         if (entityboat_enumstatus != null) {
-            this.aJ = this.getBoundingBox().e;
+            this.aJ = this.getBoundingBox().maxY;
             return entityboat_enumstatus;
         } else if (this.t()) {
             return EntityBoat.EnumStatus.IN_WATER;
@@ -360,12 +360,12 @@ public class EntityBoat extends Entity {
 
     public float k() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.e);
-        int l = MathHelper.f(axisalignedbb.e - this.aN);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.maxY);
+        int l = MathHelper.f(axisalignedbb.maxY - this.aN);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
 
@@ -420,13 +420,13 @@ public class EntityBoat extends Entity {
 
     public float l() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b - 0.001D, axisalignedbb.c, axisalignedbb.d, axisalignedbb.b, axisalignedbb.f);
-        int i = MathHelper.floor(axisalignedbb1.a) - 1;
-        int j = MathHelper.f(axisalignedbb1.d) + 1;
-        int k = MathHelper.floor(axisalignedbb1.b) - 1;
-        int l = MathHelper.f(axisalignedbb1.e) + 1;
-        int i1 = MathHelper.floor(axisalignedbb1.c) - 1;
-        int j1 = MathHelper.f(axisalignedbb1.f) + 1;
+        AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY - 0.001D, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxZ);
+        int i = MathHelper.floor(axisalignedbb1.minX) - 1;
+        int j = MathHelper.f(axisalignedbb1.maxX) + 1;
+        int k = MathHelper.floor(axisalignedbb1.minY) - 1;
+        int l = MathHelper.f(axisalignedbb1.maxY) + 1;
+        int i1 = MathHelper.floor(axisalignedbb1.minZ) - 1;
+        int j1 = MathHelper.f(axisalignedbb1.maxZ) + 1;
         VoxelShape voxelshape = VoxelShapes.a(axisalignedbb1);
         float f = 0.0F;
         int k1 = 0;
@@ -444,7 +444,7 @@ public class EntityBoat extends Entity {
                                 blockposition_b.f(l1, k2, i2);
                                 IBlockData iblockdata = this.world.getType(blockposition_b);
 
-                                if (!(iblockdata.getBlock() instanceof BlockWaterLily) && VoxelShapes.c(iblockdata.h(this.world, blockposition_b).a((double) l1, (double) k2, (double) i2), voxelshape, OperatorBoolean.AND)) {
+                                if (!(iblockdata.getBlock() instanceof BlockWaterLily) && VoxelShapes.c(iblockdata.getCollisionShape(this.world, blockposition_b).a((double) l1, (double) k2, (double) i2), voxelshape, OperatorBoolean.AND)) {
                                     f += iblockdata.getBlock().n();
                                     ++k1;
                                 }
@@ -476,12 +476,12 @@ public class EntityBoat extends Entity {
 
     private boolean t() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.b + 0.001D);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.minY + 0.001D);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         boolean flag = false;
 
         this.aJ = Double.MIN_VALUE;
@@ -499,7 +499,7 @@ public class EntityBoat extends Entity {
                             float f = (float) l1 + fluid.f();
 
                             this.aJ = Math.max((double) f, this.aJ);
-                            flag |= axisalignedbb.b < (double) f;
+                            flag |= axisalignedbb.minY < (double) f;
                         }
                     }
                 }
@@ -528,13 +528,13 @@ public class EntityBoat extends Entity {
     @Nullable
     private EntityBoat.EnumStatus u() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        double d0 = axisalignedbb.e + 0.001D;
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.e);
+        double d0 = axisalignedbb.maxY + 0.001D;
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.maxY);
         int l = MathHelper.f(d0);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         boolean flag = false;
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
@@ -586,14 +586,14 @@ public class EntityBoat extends Entity {
 
         this.aw = 0.05F;
         if (this.aM == EntityBoat.EnumStatus.IN_AIR && this.aL != EntityBoat.EnumStatus.IN_AIR && this.aL != EntityBoat.EnumStatus.ON_LAND) {
-            this.aJ = this.getBoundingBox().b + (double) this.length;
+            this.aJ = this.getBoundingBox().minY + (double) this.length;
             this.setPosition(this.locX, (double) (this.k() - this.length) + 0.101D, this.locZ);
             this.motY = 0.0D;
             this.aN = 0.0D;
             this.aL = EntityBoat.EnumStatus.IN_WATER;
         } else {
             if (this.aL == EntityBoat.EnumStatus.IN_WATER) {
-                d2 = (this.aJ - this.getBoundingBox().b) / (double) this.length;
+                d2 = (this.aJ - this.getBoundingBox().minY) / (double) this.length;
                 this.aw = 0.9F;
             } else if (this.aL == EntityBoat.EnumStatus.UNDER_FLOWING_WATER) {
                 d1 = -7.0E-4D;

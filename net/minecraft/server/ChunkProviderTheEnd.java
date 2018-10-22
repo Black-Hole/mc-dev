@@ -77,7 +77,7 @@ public class ChunkProviderTheEnd extends ChunkGeneratorAbstract<GeneratorSetting
                                 int j2 = j1 + i1 * 4;
                                 int k2 = l1 + l * 8;
 
-                                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(i2, j2, k2), iblockdata, false);
+                                ichunkaccess.setType(blockposition_mutableblockposition.c(i2, j2, k2), iblockdata, false);
                                 d15 += d16;
                             }
 

@@ -19,7 +19,7 @@ public class ControllerLook {
         if (entity instanceof EntityLiving) {
             this.f = entity.locY + (double) entity.getHeadHeight();
         } else {
-            this.f = (entity.getBoundingBox().b + entity.getBoundingBox().e) / 2.0D;
+            this.f = (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2.0D;
         }
 
         this.g = entity.locZ;

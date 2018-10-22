@@ -49,12 +49,12 @@ public class EntityPolarBear extends EntityAnimal {
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().b);
+        int j = MathHelper.floor(this.getBoundingBox().minY);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
         BiomeBase biomebase = generatoraccess.getBiome(blockposition);
 
-        return biomebase != Biomes.l && biomebase != Biomes.Z ? super.a(generatoraccess, flag) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
+        return biomebase != Biomes.FROZEN_OCEAN && biomebase != Biomes.DEEP_FROZEN_OCEAN ? super.a(generatoraccess, flag) : generatoraccess.getLightLevel(blockposition, 0) > 8 && generatoraccess.getType(blockposition.down()).getBlock() == Blocks.ICE;
     }
 
     protected SoundEffect D() {

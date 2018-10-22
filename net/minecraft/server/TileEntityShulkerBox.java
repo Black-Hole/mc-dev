@@ -107,9 +107,9 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                         switch (enumdirection.k()) {
                         case X:
                             if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d0 = axisalignedbb.d - axisalignedbb1.a;
+                                d0 = axisalignedbb.maxX - axisalignedbb1.minX;
                             } else {
-                                d0 = axisalignedbb1.d - axisalignedbb.a;
+                                d0 = axisalignedbb1.maxX - axisalignedbb.minX;
                             }
 
                             d0 += 0.01D;
@@ -117,9 +117,9 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
                         case Y:
                             if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d1 = axisalignedbb.e - axisalignedbb1.b;
+                                d1 = axisalignedbb.maxY - axisalignedbb1.minY;
                             } else {
-                                d1 = axisalignedbb1.e - axisalignedbb.b;
+                                d1 = axisalignedbb1.maxY - axisalignedbb.minY;
                             }
 
                             d1 += 0.01D;
@@ -127,9 +127,9 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
                         case Z:
                             if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
-                                d2 = axisalignedbb.f - axisalignedbb1.c;
+                                d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;
                             } else {
-                                d2 = axisalignedbb1.f - axisalignedbb.c;
+                                d2 = axisalignedbb1.maxZ - axisalignedbb.minZ;
                             }
 
                             d2 += 0.01D;

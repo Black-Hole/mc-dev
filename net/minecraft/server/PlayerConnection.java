@@ -230,7 +230,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     return;
                 }
 
-                this.minecraftServer.getPlayerList().d(this.player);
+                this.minecraftServer.getPlayerList().updateChunks(this.player);
                 this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
                 this.D = d11 >= -0.03125D && !this.minecraftServer.getAllowFlight() && !worldserver.a(entity.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                 this.v = entity.locX;
@@ -575,7 +575,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     this.A = this.e;
                     if (this.player.isPassenger()) {
                         this.player.setLocation(this.player.locX, this.player.locY, this.player.locZ, packetplayinflying.a(this.player.yaw), packetplayinflying.b(this.player.pitch));
-                        this.minecraftServer.getPlayerList().d(this.player);
+                        this.minecraftServer.getPlayerList().updateChunks(this.player);
                     } else {
                         double d0 = this.player.locX;
                         double d1 = this.player.locY;
@@ -659,7 +659,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             this.B &= !this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly;
                             this.B &= !this.player.hasEffect(MobEffects.LEVITATION) && !this.player.dc() && !worldserver.a(this.player.getBoundingBox().g(0.0625D).b(0.0D, -0.55D, 0.0D));
                             this.player.onGround = packetplayinflying.b();
-                            this.minecraftServer.getPlayerList().d(this.player);
+                            this.minecraftServer.getPlayerList().updateChunks(this.player);
                             this.player.a(this.player.locY - d3, packetplayinflying.b());
                             this.o = this.player.locX;
                             this.p = this.player.locY;

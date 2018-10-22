@@ -4,28 +4,28 @@ public enum GenLayerMushroomShore implements AreaTransformer7 {
 
     INSTANCE;
 
-    private static final int b = IRegistry.BIOME.a((Object) Biomes.r);
-    private static final int c = IRegistry.BIOME.a((Object) Biomes.B);
-    private static final int d = IRegistry.BIOME.a((Object) Biomes.d);
-    private static final int e = IRegistry.BIOME.a((Object) Biomes.e);
-    private static final int f = IRegistry.BIOME.a((Object) Biomes.J);
-    private static final int g = IRegistry.BIOME.a((Object) Biomes.f);
-    private static final int h = IRegistry.BIOME.a((Object) Biomes.w);
-    private static final int i = IRegistry.BIOME.a((Object) Biomes.y);
-    private static final int j = IRegistry.BIOME.a((Object) Biomes.x);
-    private static final int k = IRegistry.BIOME.a((Object) Biomes.M);
-    private static final int l = IRegistry.BIOME.a((Object) Biomes.N);
-    private static final int m = IRegistry.BIOME.a((Object) Biomes.O);
-    private static final int n = IRegistry.BIOME.a((Object) Biomes.at);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.au);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.av);
-    private static final int q = IRegistry.BIOME.a((Object) Biomes.p);
-    private static final int r = IRegistry.BIOME.a((Object) Biomes.q);
-    private static final int s = IRegistry.BIOME.a((Object) Biomes.i);
-    private static final int t = IRegistry.BIOME.a((Object) Biomes.v);
-    private static final int u = IRegistry.BIOME.a((Object) Biomes.A);
-    private static final int v = IRegistry.BIOME.a((Object) Biomes.h);
-    private static final int w = IRegistry.BIOME.a((Object) Biomes.g);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.BEACH);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.SNOWY_BEACH);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.DESERT);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.MOUNTAINS);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.WOODED_MOUNTAINS);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.FOREST);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.JUNGLE_EDGE);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.JUNGLE_HILLS);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.BADLANDS_PLATEAU);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.ERODED_BADLANDS);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.MODIFIED_BADLANDS_PLATEAU);
+    private static final int q = IRegistry.BIOME.a((Object) Biomes.MUSHROOM_FIELDS);
+    private static final int r = IRegistry.BIOME.a((Object) Biomes.MUSHROOM_FIELD_SHORE);
+    private static final int s = IRegistry.BIOME.a((Object) Biomes.RIVER);
+    private static final int t = IRegistry.BIOME.a((Object) Biomes.MOUNTAIN_EDGE);
+    private static final int u = IRegistry.BIOME.a((Object) Biomes.STONE_SHORE);
+    private static final int v = IRegistry.BIOME.a((Object) Biomes.SWAMP);
+    private static final int w = IRegistry.BIOME.a((Object) Biomes.TAIGA);
 
     private GenLayerMushroomShore() {}
 

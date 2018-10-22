@@ -60,7 +60,7 @@ public class Navigation extends NavigationAbstract {
 
     private int u() {
         if (this.a.isInWater() && this.t()) {
-            int i = (int) this.a.getBoundingBox().b;
+            int i = (int) this.a.getBoundingBox().minY;
             Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
             int j = 0;
 
@@ -74,16 +74,16 @@ public class Navigation extends NavigationAbstract {
                 ++j;
             } while (j <= 16);
 
-            return (int) this.a.getBoundingBox().b;
+            return (int) this.a.getBoundingBox().minY;
         } else {
-            return (int) (this.a.getBoundingBox().b + 0.5D);
+            return (int) (this.a.getBoundingBox().minY + 0.5D);
         }
     }
 
     protected void E_() {
         super.E_();
         if (this.p) {
-            if (this.b.e(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().b + 0.5D), MathHelper.floor(this.a.locZ)))) {
+            if (this.b.e(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().minY + 0.5D), MathHelper.floor(this.a.locZ)))) {
                 return;
             }
 

@@ -21,7 +21,7 @@ public class ItemBoneMeal extends ItemDye {
             return EnumInteractionResult.SUCCESS;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
-            boolean flag = iblockdata.c(world, blockposition1, itemactioncontext.getClickedFace()) == EnumBlockFaceShape.SOLID;
+            boolean flag = iblockdata.c(world, blockposition, itemactioncontext.getClickedFace()) == EnumBlockFaceShape.SOLID;
 
             if (flag && a(itemactioncontext.getItemStack(), world, blockposition1, itemactioncontext.getClickedFace())) {
                 if (!world.isClientSide) {
@@ -76,7 +76,7 @@ public class ItemBoneMeal extends ItemDye {
                         }
                     }
 
-                    if (biomebase == Biomes.T || biomebase == Biomes.W) {
+                    if (biomebase == Biomes.WARM_OCEAN || biomebase == Biomes.DEEP_WARM_OCEAN) {
                         if (i == 0 && enumdirection != null && enumdirection.k().c()) {
                             iblockdata = (IBlockData) ((Block) TagsBlock.WALL_CORALS.a(world.random)).getBlockData().set(BlockCoralFanWallAbstract.a, enumdirection);
                         } else if (ItemBoneMeal.i.nextInt(4) == 0) {

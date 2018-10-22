@@ -211,7 +211,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().b);
+        int j = MathHelper.floor(this.getBoundingBox().minY);
         int k = MathHelper.floor(this.locZ);
         BlockPosition blockposition = new BlockPosition(i, j, k);
         Block block = generatoraccess.getType(blockposition.down()).getBlock();

@@ -39,10 +39,10 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
                 BlockPosition blockposition1 = worldserver.a(this.b, blockposition, this.e, this.f);
 
                 if (blockposition1 != null) {
-                    ItemStack itemstack1 = ItemWorldMap.a(worldserver, blockposition1.getX(), blockposition1.getZ(), this.d, true, true);
+                    ItemStack itemstack1 = ItemWorldMap.createFilledMapView(worldserver, blockposition1.getX(), blockposition1.getZ(), this.d, true, true);
 
-                    ItemWorldMap.a((World) worldserver, itemstack1);
-                    WorldMap.a(itemstack1, blockposition1, "+", this.c);
+                    ItemWorldMap.applySepiaFilter(worldserver, itemstack1);
+                    WorldMap.decorateMap(itemstack1, blockposition1, "+", this.c);
                     itemstack1.a((IChatBaseComponent) (new ChatMessage("filled_map." + this.b.toLowerCase(Locale.ROOT), new Object[0])));
                     return itemstack1;
                 } else {

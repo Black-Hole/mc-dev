@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -56,12 +55,13 @@ public class Chunk implements IChunkAccess {
     private ChunkStatus C;
     private int D;
     private final AtomicInteger E;
+    private final ChunkCoordIntPair F;
 
     public Chunk(World world, int i, int j, BiomeBase[] abiomebase, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long k) {
         this.sections = new ChunkSection[16];
         this.g = new boolean[256];
         this.h = Maps.newHashMap();
-        this.heightMap = Maps.newHashMap();
+        this.heightMap = Maps.newEnumMap(HeightMap.Type.class);
         this.tileEntities = Maps.newHashMap();
         this.p = Maps.newHashMap();
         this.q = Maps.newHashMap();
@@ -74,6 +74,7 @@ public class Chunk implements IChunkAccess {
         this.world = world;
         this.locX = i;
         this.locZ = j;
+        this.F = new ChunkCoordIntPair(i, j);
         this.m = chunkconverter;
         HeightMap.Type[] aheightmap_type = HeightMap.Type.values();
         int l = aheightmap_type.length;
@@ -413,7 +414,7 @@ public class Chunk implements IChunkAccess {
     }
 
     @Nullable
-    public IBlockData a(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         int i = blockposition.getX() & 15;
         int j = blockposition.getY();
         int k = blockposition.getZ() & 15;
@@ -656,6 +657,18 @@ public class Chunk implements IChunkAccess {
         TileEntity tileentity = (TileEntity) this.tileEntities.get(blockposition);
 
         if (tileentity == null) {
+            NBTTagCompound nbttagcompound = (NBTTagCompound) this.h.remove(blockposition);
+
+            if (nbttagcompound != null) {
+                TileEntity tileentity1 = this.a(blockposition, nbttagcompound);
+
+                if (tileentity1 != null) {
+                    return tileentity1;
+                }
+            }
+        }
+
+        if (tileentity == null) {
             if (chunk_enumtileentitystate == Chunk.EnumTileEntityState.IMMEDIATE) {
                 tileentity = this.j(blockposition);
                 this.world.setTileEntity(blockposition, tileentity);
@@ -687,7 +700,7 @@ public class Chunk implements IChunkAccess {
             }
 
             tileentity.z();
-            this.tileEntities.put(blockposition, tileentity);
+            this.tileEntities.put(blockposition.h(), tileentity);
         }
     }
 
@@ -748,8 +761,8 @@ public class Chunk implements IChunkAccess {
     }
 
     public void a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, List<Entity> list, Predicate<? super Entity> predicate) {
-        int i = MathHelper.floor((axisalignedbb.b - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.e + 2.0D) / 16.0D);
+        int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
+        int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
 
         i = MathHelper.clamp(i, 0, this.entitySlices.length - 1);
         j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
@@ -788,8 +801,8 @@ public class Chunk implements IChunkAccess {
     }
 
     public <T extends Entity> void a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, List<T> list, @Nullable Predicate<? super T> predicate) {
-        int i = MathHelper.floor((axisalignedbb.b - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.e + 2.0D) / 16.0D);
+        int i = MathHelper.floor((axisalignedbb.minY - 2.0D) / 16.0D);
+        int j = MathHelper.floor((axisalignedbb.maxY + 2.0D) / 16.0D);
 
         i = MathHelper.clamp(i, 0, this.entitySlices.length - 1);
         j = MathHelper.clamp(j, 0, this.entitySlices.length - 1);
@@ -853,7 +866,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public ChunkCoordIntPair getPos() {
-        return new ChunkCoordIntPair(this.locX, this.locZ);
+        return this.F;
     }
 
     public boolean b(int i, int j) {
@@ -1072,42 +1085,45 @@ public class Chunk implements IChunkAccess {
                 });
             }
 
-            Iterator iterator = this.h.entrySet().iterator();
+            Iterator iterator = (new HashSet(this.h.keySet())).iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
-                BlockPosition blockposition1 = (BlockPosition) entry.getKey();
-                NBTTagCompound nbttagcompound = (NBTTagCompound) entry.getValue();
+                BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                if (this.getTileEntity(blockposition1) == null) {
-                    TileEntity tileentity;
-
-                    if ("DUMMY".equals(nbttagcompound.getString("id"))) {
-                        Block block = this.getType(blockposition1).getBlock();
-
-                        if (block instanceof ITileEntity) {
-                            tileentity = ((ITileEntity) block).a(this.world);
-                        } else {
-                            tileentity = null;
-                            Chunk.d.warn("Tried to load a DUMMY block entity @ {} but found not tile entity block {} at location", blockposition1, this.getType(blockposition1));
-                        }
-                    } else {
-                        tileentity = TileEntity.create(nbttagcompound);
-                    }
-
-                    if (tileentity != null) {
-                        tileentity.setPosition(blockposition1);
-                        this.a(tileentity);
-                    } else {
-                        Chunk.d.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition1), blockposition1);
-                    }
-                }
+                this.getTileEntity(blockposition1);
             }
 
             this.h.clear();
             this.a(ChunkStatus.POSTPROCESSED);
             this.m.a(this);
         }
+    }
+
+    @Nullable
+    private TileEntity a(BlockPosition blockposition, NBTTagCompound nbttagcompound) {
+        TileEntity tileentity;
+
+        if ("DUMMY".equals(nbttagcompound.getString("id"))) {
+            Block block = this.getType(blockposition).getBlock();
+
+            if (block instanceof ITileEntity) {
+                tileentity = ((ITileEntity) block).a(this.world);
+            } else {
+                tileentity = null;
+                Chunk.d.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, this.getType(blockposition));
+            }
+        } else {
+            tileentity = TileEntity.create(nbttagcompound);
+        }
+
+        if (tileentity != null) {
+            tileentity.setPosition(blockposition);
+            this.a(tileentity);
+        } else {
+            Chunk.d.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition), blockposition);
+        }
+
+        return tileentity;
     }
 
     public ChunkConverter F() {

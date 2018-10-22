@@ -129,7 +129,7 @@ public abstract class PlayerList {
                 if (entity.getUniqueID().equals(uuid)) {
                     entityplayer.a(entity, true);
                 } else {
-                    iterator1 = entity.bQ().iterator();
+                    iterator1 = entity.getAllPassengers().iterator();
 
                     while (iterator1.hasNext()) {
                         entity1 = (Entity) iterator1.next();
@@ -143,7 +143,7 @@ public abstract class PlayerList {
                 if (!entityplayer.isPassenger()) {
                     PlayerList.f.warn("Couldn\'t reattach entity to player");
                     worldserver.removeEntity(entity);
-                    iterator1 = entity.bQ().iterator();
+                    iterator1 = entity.getAllPassengers().iterator();
 
                     while (iterator1.hasNext()) {
                         entity1 = (Entity) iterator1.next();
@@ -283,7 +283,7 @@ public abstract class PlayerList {
         this.server.aP().a(entityplayer);
     }
 
-    public void d(EntityPlayer entityplayer) {
+    public void updateChunks(EntityPlayer entityplayer) {
         entityplayer.getWorldServer().getPlayerChunkMap().movePlayer(entityplayer);
     }
 
@@ -299,7 +299,7 @@ public abstract class PlayerList {
                 PlayerList.f.debug("Removing player mount");
                 entityplayer.stopRiding();
                 worldserver.removeEntity(entity);
-                Iterator iterator = entity.bQ().iterator();
+                Iterator iterator = entity.getAllPassengers().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity1 = (Entity) iterator.next();

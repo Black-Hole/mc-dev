@@ -61,7 +61,7 @@ public class Block implements IMaterial {
     }
 
     public static IBlockData a(IBlockData iblockdata, IBlockData iblockdata1, World world, BlockPosition blockposition) {
-        VoxelShape voxelshape = VoxelShapes.b(iblockdata.h(world, blockposition), iblockdata1.h(world, blockposition), OperatorBoolean.ONLY_SECOND).a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
+        VoxelShape voxelshape = VoxelShapes.b(iblockdata.getCollisionShape(world, blockposition), iblockdata1.getCollisionShape(world, blockposition), OperatorBoolean.ONLY_SECOND).a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
         List list = world.getEntities((Entity) null, voxelshape.a());
         Iterator iterator = list.iterator();
 

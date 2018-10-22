@@ -47,7 +47,7 @@ public class TileEntityTypes<T extends TileEntity> {
         Type type = null;
 
         try {
-            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1628)).getChoiceType(DataConverterTypes.j, s);
+            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1631)).getChoiceType(DataConverterTypes.j, s);
         } catch (IllegalStateException illegalstateexception) {
             if (SharedConstants.b) {
                 throw illegalstateexception;

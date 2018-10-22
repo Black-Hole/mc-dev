@@ -88,7 +88,7 @@ public class EntityZombieVillager extends EntityZombie {
         return false;
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return !this.isConverting();
     }
 

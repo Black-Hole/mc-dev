@@ -164,7 +164,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
+        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
 
         if (blockposition.getY() >= generatoraccess.getSeaLevel()) {
             return false;

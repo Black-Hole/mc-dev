@@ -2,19 +2,14 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class EntitySalmon extends EntityFish {
+public class EntitySalmon extends EntityFishSchool {
 
     public EntitySalmon(World world) {
         super(EntityTypes.SALMON, world);
         this.setSize(0.7F, 0.4F);
     }
 
-    protected void n() {
-        super.n();
-        this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
-    }
-
-    protected int dy() {
+    public int dA() {
         return 5;
     }
 
@@ -23,7 +18,7 @@ public class EntitySalmon extends EntityFish {
         return LootTables.aJ;
     }
 
-    protected ItemStack dA() {
+    protected ItemStack l() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 
@@ -39,7 +34,7 @@ public class EntitySalmon extends EntityFish {
         return SoundEffects.ENTITY_SALMON_HURT;
     }
 
-    protected SoundEffect dC() {
+    protected SoundEffect dz() {
         return SoundEffects.ENTITY_SALMON_FLOP;
     }
 }

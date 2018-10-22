@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
-import java.util.Collection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +38,7 @@ public class ItemKnowledgeBook extends Item {
                     arraylist.add(irecipe);
                 }
 
-                entityhuman.a((Collection) arraylist);
+                entityhuman.discoverRecipes(arraylist);
                 entityhuman.b(StatisticList.ITEM_USED.b(this));
             }
 

@@ -165,7 +165,7 @@ public class WorldMap extends PersistentBase {
 
     }
 
-    public static void a(ItemStack itemstack, BlockPosition blockposition, String s, MapIcon.Type mapicon_type) {
+    public static void decorateMap(ItemStack itemstack, BlockPosition blockposition, String s, MapIcon.Type mapicon_type) {
         NBTTagList nbttaglist;
 
         if (itemstack.hasTag() && itemstack.getTag().hasKeyOfType("Decorations", 9)) {

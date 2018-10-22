@@ -249,9 +249,9 @@ public abstract class EntityLiving extends Entity {
 
         if (this.lastDamager != null) {
             if (!this.lastDamager.isAlive()) {
-                this.a((EntityLiving) null);
+                this.setLastDamager((EntityLiving) null);
             } else if (this.ticksLived - this.hurtTimestamp > 100) {
-                this.a((EntityLiving) null);
+                this.setLastDamager((EntityLiving) null);
             }
         }
 
@@ -345,7 +345,7 @@ public abstract class EntityLiving extends Entity {
         return this.hurtTimestamp;
     }
 
-    public void a(@Nullable EntityLiving entityliving) {
+    public void setLastDamager(@Nullable EntityLiving entityliving) {
         this.lastDamager = entityliving;
         this.hurtTimestamp = this.ticksLived;
     }
@@ -758,7 +758,7 @@ public abstract class EntityLiving extends Entity {
 
             if (entity1 != null) {
                 if (entity1 instanceof EntityLiving) {
-                    this.a((EntityLiving) entity1);
+                    this.setLastDamager((EntityLiving) entity1);
                 }
 
                 if (entity1 instanceof EntityHuman) {
@@ -1010,7 +1010,7 @@ public abstract class EntityLiving extends Entity {
 
     public boolean z_() {
         int i = MathHelper.floor(this.locX);
-        int j = MathHelper.floor(this.getBoundingBox().b);
+        int j = MathHelper.floor(this.getBoundingBox().minY);
         int k = MathHelper.floor(this.locZ);
 
         if (this instanceof EntityHuman && ((EntityHuman) this).isSpectator()) {
@@ -1288,7 +1288,7 @@ public abstract class EntityLiving extends Entity {
 
         if (!(entity instanceof EntityBoat) && !(entity instanceof EntityHorseAbstract)) {
             double d1 = entity.locX;
-            double d2 = entity.getBoundingBox().b + (double) entity.length;
+            double d2 = entity.getBoundingBox().minY + (double) entity.length;
 
             d0 = entity.locZ;
             EnumDirection enumdirection = entity.getAdjustedDirection();
@@ -1298,9 +1298,9 @@ public abstract class EntityLiving extends Entity {
                 int[][] aint = new int[][] { { 0, 1}, { 0, -1}, { -1, 1}, { -1, -1}, { 1, 1}, { 1, -1}, { -1, 0}, { 1, 0}, { 0, 1}};
                 double d3 = Math.floor(this.locX) + 0.5D;
                 double d4 = Math.floor(this.locZ) + 0.5D;
-                double d5 = this.getBoundingBox().d - this.getBoundingBox().a;
-                double d6 = this.getBoundingBox().f - this.getBoundingBox().c;
-                AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d5 / 2.0D, entity.getBoundingBox().b, d4 - d6 / 2.0D, d3 + d5 / 2.0D, Math.floor(entity.getBoundingBox().b) + (double) this.length, d4 + d6 / 2.0D);
+                double d5 = this.getBoundingBox().maxX - this.getBoundingBox().minX;
+                double d6 = this.getBoundingBox().maxZ - this.getBoundingBox().minZ;
+                AxisAlignedBB axisalignedbb = new AxisAlignedBB(d3 - d5 / 2.0D, entity.getBoundingBox().minY, d4 - d6 / 2.0D, d3 + d5 / 2.0D, Math.floor(entity.getBoundingBox().minY) + (double) this.length, d4 + d6 / 2.0D);
                 int[][] aint1 = aint;
                 int i = aint.length;
 
@@ -1513,7 +1513,7 @@ public abstract class EntityLiving extends Entity {
                 }
             } else {
                 float f9 = 0.91F;
-                BlockPosition.b blockposition_b = BlockPosition.b.d(this.locX, this.getBoundingBox().b - 1.0D, this.locZ);
+                BlockPosition.b blockposition_b = BlockPosition.b.d(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ);
                 Throwable throwable = null;
 
                 try {
@@ -1531,7 +1531,7 @@ public abstract class EntityLiving extends Entity {
                     this.a(f, f1, f2, f3);
                     f9 = 0.91F;
                     if (this.onGround) {
-                        f9 = this.world.getType(blockposition_b.e(this.locX, this.getBoundingBox().b - 1.0D, this.locZ)).getBlock().n() * 0.91F;
+                        f9 = this.world.getType(blockposition_b.e(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().n() * 0.91F;
                     }
 
                     if (this.z_()) {

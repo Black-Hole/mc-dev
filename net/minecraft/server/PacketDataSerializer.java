@@ -235,11 +235,12 @@ public class PacketDataSerializer extends ByteBuf {
 
     public PacketDataSerializer a(ItemStack itemstack) {
         if (itemstack.isEmpty()) {
-            this.writeShort(-1);
+            this.writeBoolean(false);
         } else {
+            this.writeBoolean(true);
             Item item = itemstack.getItem();
 
-            this.writeShort(Item.getId(item));
+            this.d(Item.getId(item));
             this.writeByte(itemstack.getCount());
             NBTTagCompound nbttagcompound = null;
 
@@ -254,13 +255,12 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public ItemStack k() {
-        short short0 = this.readShort();
-
-        if (short0 < 0) {
+        if (!this.readBoolean()) {
             return ItemStack.a;
         } else {
+            int i = this.g();
             byte b0 = this.readByte();
-            ItemStack itemstack = new ItemStack(Item.getById(short0), b0);
+            ItemStack itemstack = new ItemStack(Item.getById(i), b0);
 
             itemstack.setTag(this.j());
             return itemstack;

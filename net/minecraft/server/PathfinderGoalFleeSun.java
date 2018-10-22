@@ -24,7 +24,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
             return false;
         } else if (!this.a.isBurning()) {
             return false;
-        } else if (!this.f.e(new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ))) {
+        } else if (!this.f.e(new BlockPosition(this.a.locX, this.a.getBoundingBox().minY, this.a.locZ))) {
             return false;
         } else if (!this.a.getEquipment(EnumItemSlot.HEAD).isEmpty()) {
             return false;
@@ -53,7 +53,7 @@ public class PathfinderGoalFleeSun extends PathfinderGoal {
     @Nullable
     private Vec3D g() {
         Random random = this.a.getRandom();
-        BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ);
+        BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().minY, this.a.locZ);
 
         for (int i = 0; i < 10; ++i) {
             BlockPosition blockposition1 = blockposition.a(random.nextInt(20) - 10, random.nextInt(6) - 3, random.nextInt(20) - 10);

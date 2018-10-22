@@ -59,7 +59,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     }
 
     protected boolean K_() {
-        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
+        BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
 
         if (this.world.getBrightness(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
             return false;

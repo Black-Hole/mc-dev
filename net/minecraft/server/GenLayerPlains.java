@@ -4,8 +4,8 @@ public enum GenLayerPlains implements AreaTransformer6 {
 
     INSTANCE;
 
-    private static final int b = IRegistry.BIOME.a((Object) Biomes.c);
-    private static final int c = IRegistry.BIOME.a((Object) Biomes.ab);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.PLAINS);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.SUNFLOWER_PLAINS);
 
     private GenLayerPlains() {}
 

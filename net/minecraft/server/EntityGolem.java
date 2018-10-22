@@ -29,7 +29,7 @@ public abstract class EntityGolem extends EntityCreature implements IAnimal {
         return 120;
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return false;
     }
 }

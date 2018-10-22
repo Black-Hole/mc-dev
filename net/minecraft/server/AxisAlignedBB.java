@@ -5,20 +5,20 @@ import javax.annotation.Nullable;
 
 public class AxisAlignedBB {
 
-    public final double a;
-    public final double b;
-    public final double c;
-    public final double d;
-    public final double e;
-    public final double f;
+    public final double minX;
+    public final double minY;
+    public final double minZ;
+    public final double maxX;
+    public final double maxY;
+    public final double maxZ;
 
     public AxisAlignedBB(double d0, double d1, double d2, double d3, double d4, double d5) {
-        this.a = Math.min(d0, d3);
-        this.b = Math.min(d1, d4);
-        this.c = Math.min(d2, d5);
-        this.d = Math.max(d0, d3);
-        this.e = Math.max(d1, d4);
-        this.f = Math.max(d2, d5);
+        this.minX = Math.min(d0, d3);
+        this.minY = Math.min(d1, d4);
+        this.minZ = Math.min(d2, d5);
+        this.maxX = Math.max(d0, d3);
+        this.maxY = Math.max(d1, d4);
+        this.maxZ = Math.max(d2, d5);
     }
 
     public AxisAlignedBB(BlockPosition blockposition) {
@@ -30,11 +30,11 @@ public class AxisAlignedBB {
     }
 
     public double a(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.a, this.b, this.c);
+        return enumdirection_enumaxis.a(this.minX, this.minY, this.minZ);
     }
 
     public double b(EnumDirection.EnumAxis enumdirection_enumaxis) {
-        return enumdirection_enumaxis.a(this.d, this.e, this.f);
+        return enumdirection_enumaxis.a(this.maxX, this.maxY, this.maxZ);
     }
 
     public boolean equals(Object object) {
@@ -45,34 +45,34 @@ public class AxisAlignedBB {
         } else {
             AxisAlignedBB axisalignedbb = (AxisAlignedBB) object;
 
-            return Double.compare(axisalignedbb.a, this.a) != 0 ? false : (Double.compare(axisalignedbb.b, this.b) != 0 ? false : (Double.compare(axisalignedbb.c, this.c) != 0 ? false : (Double.compare(axisalignedbb.d, this.d) != 0 ? false : (Double.compare(axisalignedbb.e, this.e) != 0 ? false : Double.compare(axisalignedbb.f, this.f) == 0))));
+            return Double.compare(axisalignedbb.minX, this.minX) != 0 ? false : (Double.compare(axisalignedbb.minY, this.minY) != 0 ? false : (Double.compare(axisalignedbb.minZ, this.minZ) != 0 ? false : (Double.compare(axisalignedbb.maxX, this.maxX) != 0 ? false : (Double.compare(axisalignedbb.maxY, this.maxY) != 0 ? false : Double.compare(axisalignedbb.maxZ, this.maxZ) == 0))));
         }
     }
 
     public int hashCode() {
-        long i = Double.doubleToLongBits(this.a);
+        long i = Double.doubleToLongBits(this.minX);
         int j = (int) (i ^ i >>> 32);
 
-        i = Double.doubleToLongBits(this.b);
+        i = Double.doubleToLongBits(this.minY);
         j = 31 * j + (int) (i ^ i >>> 32);
-        i = Double.doubleToLongBits(this.c);
+        i = Double.doubleToLongBits(this.minZ);
         j = 31 * j + (int) (i ^ i >>> 32);
-        i = Double.doubleToLongBits(this.d);
+        i = Double.doubleToLongBits(this.maxX);
         j = 31 * j + (int) (i ^ i >>> 32);
-        i = Double.doubleToLongBits(this.e);
+        i = Double.doubleToLongBits(this.maxY);
         j = 31 * j + (int) (i ^ i >>> 32);
-        i = Double.doubleToLongBits(this.f);
+        i = Double.doubleToLongBits(this.maxZ);
         j = 31 * j + (int) (i ^ i >>> 32);
         return j;
     }
 
     public AxisAlignedBB a(double d0, double d1, double d2) {
-        double d3 = this.a;
-        double d4 = this.b;
-        double d5 = this.c;
-        double d6 = this.d;
-        double d7 = this.e;
-        double d8 = this.f;
+        double d3 = this.minX;
+        double d4 = this.minY;
+        double d5 = this.minZ;
+        double d6 = this.maxX;
+        double d7 = this.maxY;
+        double d8 = this.maxZ;
 
         if (d0 < 0.0D) {
             d3 -= d0;
@@ -96,12 +96,12 @@ public class AxisAlignedBB {
     }
 
     public AxisAlignedBB b(double d0, double d1, double d2) {
-        double d3 = this.a;
-        double d4 = this.b;
-        double d5 = this.c;
-        double d6 = this.d;
-        double d7 = this.e;
-        double d8 = this.f;
+        double d3 = this.minX;
+        double d4 = this.minY;
+        double d5 = this.minZ;
+        double d6 = this.maxX;
+        double d7 = this.maxY;
+        double d8 = this.maxZ;
 
         if (d0 < 0.0D) {
             d3 += d0;
@@ -125,12 +125,12 @@ public class AxisAlignedBB {
     }
 
     public AxisAlignedBB grow(double d0, double d1, double d2) {
-        double d3 = this.a - d0;
-        double d4 = this.b - d1;
-        double d5 = this.c - d2;
-        double d6 = this.d + d0;
-        double d7 = this.e + d1;
-        double d8 = this.f + d2;
+        double d3 = this.minX - d0;
+        double d4 = this.minY - d1;
+        double d5 = this.minZ - d2;
+        double d6 = this.maxX + d0;
+        double d7 = this.maxY + d1;
+        double d8 = this.maxZ + d2;
 
         return new AxisAlignedBB(d3, d4, d5, d6, d7, d8);
     }
@@ -140,33 +140,33 @@ public class AxisAlignedBB {
     }
 
     public AxisAlignedBB a(AxisAlignedBB axisalignedbb) {
-        double d0 = Math.max(this.a, axisalignedbb.a);
-        double d1 = Math.max(this.b, axisalignedbb.b);
-        double d2 = Math.max(this.c, axisalignedbb.c);
-        double d3 = Math.min(this.d, axisalignedbb.d);
-        double d4 = Math.min(this.e, axisalignedbb.e);
-        double d5 = Math.min(this.f, axisalignedbb.f);
+        double d0 = Math.max(this.minX, axisalignedbb.minX);
+        double d1 = Math.max(this.minY, axisalignedbb.minY);
+        double d2 = Math.max(this.minZ, axisalignedbb.minZ);
+        double d3 = Math.min(this.maxX, axisalignedbb.maxX);
+        double d4 = Math.min(this.maxY, axisalignedbb.maxY);
+        double d5 = Math.min(this.maxZ, axisalignedbb.maxZ);
 
         return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
     }
 
     public AxisAlignedBB b(AxisAlignedBB axisalignedbb) {
-        double d0 = Math.min(this.a, axisalignedbb.a);
-        double d1 = Math.min(this.b, axisalignedbb.b);
-        double d2 = Math.min(this.c, axisalignedbb.c);
-        double d3 = Math.max(this.d, axisalignedbb.d);
-        double d4 = Math.max(this.e, axisalignedbb.e);
-        double d5 = Math.max(this.f, axisalignedbb.f);
+        double d0 = Math.min(this.minX, axisalignedbb.minX);
+        double d1 = Math.min(this.minY, axisalignedbb.minY);
+        double d2 = Math.min(this.minZ, axisalignedbb.minZ);
+        double d3 = Math.max(this.maxX, axisalignedbb.maxX);
+        double d4 = Math.max(this.maxY, axisalignedbb.maxY);
+        double d5 = Math.max(this.maxZ, axisalignedbb.maxZ);
 
         return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
     }
 
     public AxisAlignedBB d(double d0, double d1, double d2) {
-        return new AxisAlignedBB(this.a + d0, this.b + d1, this.c + d2, this.d + d0, this.e + d1, this.f + d2);
+        return new AxisAlignedBB(this.minX + d0, this.minY + d1, this.minZ + d2, this.maxX + d0, this.maxY + d1, this.maxZ + d2);
     }
 
     public AxisAlignedBB a(BlockPosition blockposition) {
-        return new AxisAlignedBB(this.a + (double) blockposition.getX(), this.b + (double) blockposition.getY(), this.c + (double) blockposition.getZ(), this.d + (double) blockposition.getX(), this.e + (double) blockposition.getY(), this.f + (double) blockposition.getZ());
+        return new AxisAlignedBB(this.minX + (double) blockposition.getX(), this.minY + (double) blockposition.getY(), this.minZ + (double) blockposition.getZ(), this.maxX + (double) blockposition.getX(), this.maxY + (double) blockposition.getY(), this.maxZ + (double) blockposition.getZ());
     }
 
     public AxisAlignedBB a(Vec3D vec3d) {
@@ -174,11 +174,11 @@ public class AxisAlignedBB {
     }
 
     public boolean c(AxisAlignedBB axisalignedbb) {
-        return this.a(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d, axisalignedbb.e, axisalignedbb.f);
+        return this.a(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ);
     }
 
     public boolean a(double d0, double d1, double d2, double d3, double d4, double d5) {
-        return this.a < d3 && this.d > d0 && this.b < d4 && this.e > d1 && this.c < d5 && this.f > d2;
+        return this.minX < d3 && this.maxX > d0 && this.minY < d4 && this.maxY > d1 && this.minZ < d5 && this.maxZ > d2;
     }
 
     public boolean b(Vec3D vec3d) {
@@ -186,13 +186,13 @@ public class AxisAlignedBB {
     }
 
     public boolean e(double d0, double d1, double d2) {
-        return d0 >= this.a && d0 < this.d && d1 >= this.b && d1 < this.e && d2 >= this.c && d2 < this.f;
+        return d0 >= this.minX && d0 < this.maxX && d1 >= this.minY && d1 < this.maxY && d2 >= this.minZ && d2 < this.maxZ;
     }
 
     public double a() {
-        double d0 = this.d - this.a;
-        double d1 = this.e - this.b;
-        double d2 = this.f - this.c;
+        double d0 = this.maxX - this.minX;
+        double d1 = this.maxY - this.minY;
+        double d2 = this.maxZ - this.minZ;
 
         return (d0 + d1 + d2) / 3.0D;
     }
@@ -254,21 +254,21 @@ public class AxisAlignedBB {
     @Nullable
     private static EnumDirection a(AxisAlignedBB axisalignedbb, Vec3D vec3d, double[] adouble, @Nullable EnumDirection enumdirection, double d0, double d1, double d2) {
         if (d0 > 1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.a, axisalignedbb.b, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, EnumDirection.WEST, vec3d.x, vec3d.y, vec3d.z);
+            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.maxY, axisalignedbb.minZ, axisalignedbb.maxZ, EnumDirection.WEST, vec3d.x, vec3d.y, vec3d.z);
         } else if (d0 < -1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, EnumDirection.EAST, vec3d.x, vec3d.y, vec3d.z);
+            enumdirection = a(adouble, enumdirection, d0, d1, d2, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxY, axisalignedbb.minZ, axisalignedbb.maxZ, EnumDirection.EAST, vec3d.x, vec3d.y, vec3d.z);
         }
 
         if (d1 > 1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.b, axisalignedbb.c, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, EnumDirection.DOWN, vec3d.y, vec3d.z, vec3d.x);
+            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxZ, axisalignedbb.minX, axisalignedbb.maxX, EnumDirection.DOWN, vec3d.y, vec3d.z, vec3d.x);
         } else if (d1 < -1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.e, axisalignedbb.c, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, EnumDirection.UP, vec3d.y, vec3d.z, vec3d.x);
+            enumdirection = a(adouble, enumdirection, d1, d2, d0, axisalignedbb.maxY, axisalignedbb.minZ, axisalignedbb.maxZ, axisalignedbb.minX, axisalignedbb.maxX, EnumDirection.UP, vec3d.y, vec3d.z, vec3d.x);
         }
 
         if (d2 > 1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.c, axisalignedbb.a, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, EnumDirection.NORTH, vec3d.z, vec3d.x, vec3d.y);
+            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.minZ, axisalignedbb.minX, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxY, EnumDirection.NORTH, vec3d.z, vec3d.x, vec3d.y);
         } else if (d2 < -1.0E-7D) {
-            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.f, axisalignedbb.a, axisalignedbb.d, axisalignedbb.b, axisalignedbb.e, EnumDirection.SOUTH, vec3d.z, vec3d.x, vec3d.y);
+            enumdirection = a(adouble, enumdirection, d2, d0, d1, axisalignedbb.maxZ, axisalignedbb.minX, axisalignedbb.maxX, axisalignedbb.minY, axisalignedbb.maxY, EnumDirection.SOUTH, vec3d.z, vec3d.x, vec3d.y);
         }
 
         return enumdirection;
@@ -289,6 +289,6 @@ public class AxisAlignedBB {
     }
 
     public String toString() {
-        return "box[" + this.a + ", " + this.b + ", " + this.c + " -> " + this.d + ", " + this.e + ", " + this.f + "]";
+        return "box[" + this.minX + ", " + this.minY + ", " + this.minZ + " -> " + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
     }
 }

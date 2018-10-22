@@ -33,9 +33,9 @@ public final class VoxelShapes {
     }
 
     public static VoxelShape a(AxisAlignedBB axisalignedbb) {
-        int i = a(axisalignedbb.a, axisalignedbb.d);
-        int j = a(axisalignedbb.b, axisalignedbb.e);
-        int k = a(axisalignedbb.c, axisalignedbb.f);
+        int i = a(axisalignedbb.minX, axisalignedbb.maxX);
+        int j = a(axisalignedbb.minY, axisalignedbb.maxY);
+        int k = a(axisalignedbb.minZ, axisalignedbb.maxZ);
 
         if (i >= 0 && j >= 0 && k >= 0) {
             if (i == 0 && j == 0 && k == 0) {
@@ -44,12 +44,12 @@ public final class VoxelShapes {
                 int l = 1 << i;
                 int i1 = 1 << j;
                 int j1 = 1 << k;
-                int k1 = (int) Math.round(axisalignedbb.a * (double) l);
-                int l1 = (int) Math.round(axisalignedbb.d * (double) l);
-                int i2 = (int) Math.round(axisalignedbb.b * (double) i1);
-                int j2 = (int) Math.round(axisalignedbb.e * (double) i1);
-                int k2 = (int) Math.round(axisalignedbb.c * (double) j1);
-                int l2 = (int) Math.round(axisalignedbb.f * (double) j1);
+                int k1 = (int) Math.round(axisalignedbb.minX * (double) l);
+                int l1 = (int) Math.round(axisalignedbb.maxX * (double) l);
+                int i2 = (int) Math.round(axisalignedbb.minY * (double) i1);
+                int j2 = (int) Math.round(axisalignedbb.maxY * (double) i1);
+                int k2 = (int) Math.round(axisalignedbb.minZ * (double) j1);
+                int l2 = (int) Math.round(axisalignedbb.maxZ * (double) j1);
                 VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(l, i1, j1, k1, i2, k2, l1, j2, l2);
 
                 for (long i3 = (long) k1; i3 < (long) l1; ++i3) {
@@ -63,7 +63,7 @@ public final class VoxelShapes {
                 return new VoxelShapeCube(voxelshapebitset);
             }
         } else {
-            return new VoxelShapeArray(VoxelShapes.b.a, new double[] { axisalignedbb.a, axisalignedbb.d}, new double[] { axisalignedbb.b, axisalignedbb.e}, new double[] { axisalignedbb.c, axisalignedbb.f});
+            return new VoxelShapeArray(VoxelShapes.b.a, new double[] { axisalignedbb.minX, axisalignedbb.maxX}, new double[] { axisalignedbb.minY, axisalignedbb.maxY}, new double[] { axisalignedbb.minZ, axisalignedbb.maxZ});
         }
     }
 
@@ -107,9 +107,9 @@ public final class VoxelShapes {
             boolean flag = operatorboolean.apply(true, false);
             boolean flag1 = operatorboolean.apply(false, true);
 
-            if (voxelshape.b()) {
+            if (voxelshape.isEmpty()) {
                 return flag1 ? voxelshape1 : a();
-            } else if (voxelshape1.b()) {
+            } else if (voxelshape1.isEmpty()) {
                 return flag ? voxelshape : a();
             } else {
                 VoxelShapeMerger voxelshapemerger = a(1, voxelshape.a(EnumDirection.EnumAxis.X), voxelshape1.a(EnumDirection.EnumAxis.X), flag, flag1);
@@ -127,10 +127,10 @@ public final class VoxelShapes {
             throw new IllegalArgumentException();
         } else if (voxelshape == voxelshape1) {
             return operatorboolean.apply(true, true);
-        } else if (voxelshape.b()) {
-            return operatorboolean.apply(false, !voxelshape1.b());
-        } else if (voxelshape1.b()) {
-            return operatorboolean.apply(!voxelshape.b(), false);
+        } else if (voxelshape.isEmpty()) {
+            return operatorboolean.apply(false, !voxelshape1.isEmpty());
+        } else if (voxelshape1.isEmpty()) {
+            return operatorboolean.apply(!voxelshape.isEmpty(), false);
         } else {
             boolean flag = operatorboolean.apply(true, false);
             boolean flag1 = operatorboolean.apply(false, true);

@@ -66,14 +66,14 @@ public class WorldLoaderServer extends WorldLoader {
         WorldChunkManager worldchunkmanager;
 
         if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
-            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.c));
+            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.PLAINS));
         } else {
             worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.a.b()));
         }
 
         this.a(new File(file, "region"), (Iterable) arraylist, worldchunkmanager, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.j)), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.k)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.NETHER)), arraylist.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.THE_END)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
         worlddata.d(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);

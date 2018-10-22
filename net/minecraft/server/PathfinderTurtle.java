@@ -26,7 +26,7 @@ public class PathfinderTurtle extends PathfinderNormal {
     }
 
     public PathPoint b() {
-        return this.a(MathHelper.floor(this.b.getBoundingBox().a), MathHelper.floor(this.b.getBoundingBox().b + 0.5D), MathHelper.floor(this.b.getBoundingBox().c));
+        return this.a(MathHelper.floor(this.b.getBoundingBox().minX), MathHelper.floor(this.b.getBoundingBox().minY + 0.5D), MathHelper.floor(this.b.getBoundingBox().minZ));
     }
 
     public PathPoint a(double d0, double d1, double d2) {
@@ -109,9 +109,9 @@ public class PathfinderTurtle extends PathfinderNormal {
     private double a(BlockPosition blockposition) {
         if (!this.b.isInWater()) {
             BlockPosition blockposition1 = blockposition.down();
-            VoxelShape voxelshape = this.a.getType(blockposition1).h(this.a, blockposition1);
+            VoxelShape voxelshape = this.a.getType(blockposition1).getCollisionShape(this.a, blockposition1);
 
-            return (double) blockposition1.getY() + (voxelshape.b() ? 0.0D : voxelshape.c(EnumDirection.EnumAxis.Y));
+            return (double) blockposition1.getY() + (voxelshape.isEmpty() ? 0.0D : voxelshape.c(EnumDirection.EnumAxis.Y));
         } else {
             return (double) blockposition.getY() + 0.5D;
         }

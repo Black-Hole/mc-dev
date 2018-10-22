@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -487,7 +486,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
                 }
             }
 
-            entityhuman.a((Collection) arraylist);
+            entityhuman.discoverRecipes(arraylist);
         }
 
         this.m.clear();

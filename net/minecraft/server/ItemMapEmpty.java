@@ -7,7 +7,7 @@ public class ItemMapEmpty extends ItemWorldMapBase {
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        ItemStack itemstack = ItemWorldMap.a(world, MathHelper.floor(entityhuman.locX), MathHelper.floor(entityhuman.locZ), (byte) 0, true, false);
+        ItemStack itemstack = ItemWorldMap.createFilledMapView(world, MathHelper.floor(entityhuman.locX), MathHelper.floor(entityhuman.locZ), (byte) 0, true, false);
         ItemStack itemstack1 = entityhuman.b(enumhand);
 
         itemstack1.subtract(1);

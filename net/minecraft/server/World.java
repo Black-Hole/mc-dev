@@ -92,7 +92,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 throw new ReportedException(crashreport);
             }
         } else {
-            return this.chunkProvider.getChunkGenerator().getWorldChunkManager().getBiome(blockposition, Biomes.c);
+            return this.chunkProvider.getChunkGenerator().getWorldChunkManager().getBiome(blockposition, Biomes.PLAINS);
         }
     }
 
@@ -155,7 +155,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         } else {
             Chunk chunk = this.getChunkAtWorldCoords(blockposition);
             Block block = iblockdata.getBlock();
-            IBlockData iblockdata1 = chunk.a(blockposition, iblockdata, (i & 64) != 0);
+            IBlockData iblockdata1 = chunk.setType(blockposition, iblockdata, (i & 64) != 0);
 
             if (iblockdata1 == null) {
                 return false;
@@ -456,7 +456,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 boolean flag2;
                 boolean flag3;
 
-                if (!flag || !iblockdata.h(this, blockposition).b()) {
+                if (!flag || !iblockdata.getCollisionShape(this, blockposition).isEmpty()) {
                     flag2 = iblockdata.getBlock().d(iblockdata);
                     flag3 = fluidcollisionoption.d.test(fluid);
                     if (flag2 || flag3) {
@@ -576,7 +576,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                     IBlockData iblockdata1 = this.getType(blockposition);
                     Fluid fluid1 = this.b(blockposition);
 
-                    if (!flag || iblockdata1.getMaterial() == Material.PORTAL || !iblockdata1.h(this, blockposition).b()) {
+                    if (!flag || iblockdata1.getMaterial() == Material.PORTAL || !iblockdata1.getCollisionShape(this, blockposition).isEmpty()) {
                         boolean flag5 = iblockdata1.getBlock().d(iblockdata1);
                         boolean flag6 = fluidcollisionoption.d.test(fluid1);
 
@@ -1039,7 +1039,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
-        if (voxelshape.b()) {
+        if (voxelshape.isEmpty()) {
             return true;
         } else {
             List list = this.getEntities((Entity) null, voxelshape.a());
@@ -1057,12 +1057,12 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean a(AxisAlignedBB axisalignedbb) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
 
@@ -1102,12 +1102,12 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean b(AxisAlignedBB axisalignedbb) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
 
         if (this.isAreaLoaded(i, k, i1, j, l, j1, true)) {
             BlockPosition.b blockposition_b = BlockPosition.b.r();
@@ -1153,12 +1153,12 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
     @Nullable
     public IBlockData a(AxisAlignedBB axisalignedbb, Block block) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
 
         if (this.isAreaLoaded(i, k, i1, j, l, j1, true)) {
             BlockPosition.b blockposition_b = BlockPosition.b.r();
@@ -1203,12 +1203,12 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean a(AxisAlignedBB axisalignedbb, Material material) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         MaterialPredicate materialpredicate = MaterialPredicate.a(material);
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
@@ -1267,9 +1267,9 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public float a(Vec3D vec3d, AxisAlignedBB axisalignedbb) {
-        double d0 = 1.0D / ((axisalignedbb.d - axisalignedbb.a) * 2.0D + 1.0D);
-        double d1 = 1.0D / ((axisalignedbb.e - axisalignedbb.b) * 2.0D + 1.0D);
-        double d2 = 1.0D / ((axisalignedbb.f - axisalignedbb.c) * 2.0D + 1.0D);
+        double d0 = 1.0D / ((axisalignedbb.maxX - axisalignedbb.minX) * 2.0D + 1.0D);
+        double d1 = 1.0D / ((axisalignedbb.maxY - axisalignedbb.minY) * 2.0D + 1.0D);
+        double d2 = 1.0D / ((axisalignedbb.maxZ - axisalignedbb.minZ) * 2.0D + 1.0D);
         double d3 = (1.0D - Math.floor(1.0D / d0) * d0) / 2.0D;
         double d4 = (1.0D - Math.floor(1.0D / d2) * d2) / 2.0D;
 
@@ -1280,9 +1280,9 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             for (float f = 0.0F; f <= 1.0F; f = (float) ((double) f + d0)) {
                 for (float f1 = 0.0F; f1 <= 1.0F; f1 = (float) ((double) f1 + d1)) {
                     for (float f2 = 0.0F; f2 <= 1.0F; f2 = (float) ((double) f2 + d2)) {
-                        double d5 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * (double) f;
-                        double d6 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * (double) f1;
-                        double d7 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * (double) f2;
+                        double d5 = axisalignedbb.minX + (axisalignedbb.maxX - axisalignedbb.minX) * (double) f;
+                        double d6 = axisalignedbb.minY + (axisalignedbb.maxY - axisalignedbb.minY) * (double) f1;
+                        double d7 = axisalignedbb.minZ + (axisalignedbb.maxZ - axisalignedbb.minZ) * (double) f2;
 
                         if (this.rayTrace(new Vec3D(d5 + d3, d6, d7 + d4), vec3d) == null) {
                             ++i;
@@ -1395,7 +1395,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean o(BlockPosition blockposition) {
-        return Block.a(this.getType(blockposition).h(this, blockposition));
+        return Block.a(this.getType(blockposition).getCollisionShape(this, blockposition));
     }
 
     public boolean p(BlockPosition blockposition) {
@@ -1744,10 +1744,10 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
     public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super Entity> predicate) {
         ArrayList arraylist = Lists.newArrayList();
-        int i = MathHelper.floor((axisalignedbb.a - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.d + 2.0D) / 16.0D);
-        int k = MathHelper.floor((axisalignedbb.c - 2.0D) / 16.0D);
-        int l = MathHelper.floor((axisalignedbb.f + 2.0D) / 16.0D);
+        int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
+        int j = MathHelper.floor((axisalignedbb.maxX + 2.0D) / 16.0D);
+        int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
+        int l = MathHelper.floor((axisalignedbb.maxZ + 2.0D) / 16.0D);
 
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
@@ -1795,10 +1795,10 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super T> predicate) {
-        int i = MathHelper.floor((axisalignedbb.a - 2.0D) / 16.0D);
-        int j = MathHelper.f((axisalignedbb.d + 2.0D) / 16.0D);
-        int k = MathHelper.floor((axisalignedbb.c - 2.0D) / 16.0D);
-        int l = MathHelper.f((axisalignedbb.f + 2.0D) / 16.0D);
+        int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
+        int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
+        int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
+        int l = MathHelper.f((axisalignedbb.maxZ + 2.0D) / 16.0D);
         ArrayList arraylist = Lists.newArrayList();
 
         for (int i1 = i; i1 < j; ++i1) {
@@ -2024,6 +2024,27 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         } while (d3 >= 0.0D && d4 >= d3 * d3);
 
         return true;
+    }
+
+    @Nullable
+    public EntityHuman a(double d0, double d1, double d2) {
+        double d3 = -1.0D;
+        EntityHuman entityhuman = null;
+
+        for (int i = 0; i < this.players.size(); ++i) {
+            EntityHuman entityhuman1 = (EntityHuman) this.players.get(i);
+
+            if (IEntitySelector.f.test(entityhuman1)) {
+                double d4 = entityhuman1.d(d0, entityhuman1.locY, d1);
+
+                if ((d2 < 0.0D || d4 < d2 * d2) && (d3 == -1.0D || d4 < d3)) {
+                    d3 = d4;
+                    entityhuman = entityhuman1;
+                }
+            }
+        }
+
+        return entityhuman;
     }
 
     @Nullable
@@ -2334,13 +2355,13 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         return (LongSet) (forcedchunk != null ? LongSets.unmodifiable(forcedchunk.a()) : LongSets.EMPTY_SET);
     }
 
-    public boolean f(int i, int j) {
+    public boolean isForceLoaded(int i, int j) {
         ForcedChunk forcedchunk = (ForcedChunk) this.a(this.worldProvider.getDimensionManager(), ForcedChunk::new, "chunks");
 
         return forcedchunk != null && forcedchunk.a().contains(ChunkCoordIntPair.a(i, j));
     }
 
-    public boolean b(int i, int j, boolean flag) {
+    public boolean setForceLoaded(int i, int j, boolean flag) {
         String s = "chunks";
         ForcedChunk forcedchunk = (ForcedChunk) this.a(this.worldProvider.getDimensionManager(), ForcedChunk::new, "chunks");
 

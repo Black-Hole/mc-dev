@@ -72,7 +72,7 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
 
             for (int k = 4; k >= 0; --k) {
                 if (k <= random.nextInt(5)) {
-                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
+                    ichunkaccess.setType(blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                 }
             }
         }

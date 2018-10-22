@@ -23,7 +23,7 @@ public class ChunkProviderServer implements IChunkProvider {
     private static final Logger a = LogManager.getLogger();
     public final LongSet unloadQueue = new LongOpenHashSet();
     public final ChunkGenerator<?> chunkGenerator;
-    private final IChunkLoader chunkLoader;
+    public final IChunkLoader chunkLoader;
     public final Long2ObjectMap<Chunk> chunks = Long2ObjectMaps.synchronize(new ChunkMap(8192));
     private Chunk lastChunk;
     private final ChunkTaskScheduler chunkScheduler;

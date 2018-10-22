@@ -63,7 +63,7 @@ public class BlockKelp extends Block implements IFluidContainer {
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
         Block block = iblockdata1.getBlock();
 
-        return block == Blocks.MAGMA_BLOCK ? false : block == this || block == Blocks.KELP_PLANT || Block.a(iblockdata1.h(iworldreader, blockposition1), EnumDirection.UP);
+        return block == Blocks.MAGMA_BLOCK ? false : block == this || block == Blocks.KELP_PLANT || Block.a(iblockdata1.getCollisionShape(iworldreader, blockposition1), EnumDirection.UP);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {

@@ -115,7 +115,7 @@ public class EntityChicken extends EntityAnimal {
         nbttagcompound.setInt("EggLayTime", this.bI);
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return this.isChickenJockey() && !this.isVehicle();
     }
 

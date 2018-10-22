@@ -31,7 +31,7 @@ public class BlockCauldron extends Block {
         int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
         float f = (float) blockposition.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
-        if (!world.isClientSide && entity.isBurning() && i > 0 && entity.getBoundingBox().b <= (double) f) {
+        if (!world.isClientSide && entity.isBurning() && i > 0 && entity.getBoundingBox().minY <= (double) f) {
             entity.extinguish();
             this.a(world, blockposition, iblockdata, i - 1);
         }

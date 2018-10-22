@@ -15,7 +15,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
     private final BiomeBase[] e;
 
     public WorldChunkManagerTheEnd(BiomeLayoutTheEndConfiguration biomelayouttheendconfiguration) {
-        this.e = new BiomeBase[] { Biomes.k, Biomes.R, Biomes.Q, Biomes.P, Biomes.S};
+        this.e = new BiomeBase[] { Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS};
         this.d = new SeededRandom(biomelayouttheendconfiguration.a());
         this.d.a(17292);
         this.c = new NoiseGenerator3Handler(this.d);
@@ -28,11 +28,11 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
 
     private BiomeBase a(int i, int j) {
         if ((long) i * (long) i + (long) j * (long) j <= 4096L) {
-            return Biomes.k;
+            return Biomes.THE_END;
         } else {
             float f = this.c(i, j, 1, 1);
 
-            return f > 40.0F ? Biomes.R : (f >= 0.0F ? Biomes.Q : (f < -20.0F ? Biomes.P : Biomes.S));
+            return f > 40.0F ? Biomes.END_HIGHLANDS : (f >= 0.0F ? Biomes.END_MIDLANDS : (f < -20.0F ? Biomes.SMALL_END_ISLANDS : Biomes.END_BARRENS));
         }
     }
 

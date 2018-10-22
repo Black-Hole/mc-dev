@@ -118,7 +118,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     public void a(EntityLiving entityliving, float f) {
         EntityArrow entityarrow = this.v(f);
         double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entityarrow.locY;
+        double d1 = entityliving.getBoundingBox().minY + (double) (entityliving.length / 3.0F) - entityarrow.locY;
         double d2 = entityliving.locZ - this.locZ;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 

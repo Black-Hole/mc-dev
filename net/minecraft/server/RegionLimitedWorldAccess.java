@@ -171,7 +171,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
         IChunkAccess ichunkaccess = this.y(blockposition);
-        IBlockData iblockdata1 = ichunkaccess.a(blockposition, iblockdata, false);
+        IBlockData iblockdata1 = ichunkaccess.setType(blockposition, iblockdata, false);
         Block block = iblockdata.getBlock();
 
         if (block.isTileEntity()) {

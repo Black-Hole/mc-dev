@@ -17,7 +17,7 @@ public interface IEntityAccess {
     }
 
     default Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, Set<Entity> set) {
-        if (voxelshape.b()) {
+        if (voxelshape.isEmpty()) {
             return Stream.empty();
         } else {
             AxisAlignedBB axisalignedbb = voxelshape.a();

@@ -146,7 +146,7 @@ public class AdvancementDataPlayer {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
                     }
 
-                    dynamic = this.d.az().update(DataFixTypes.ADVANCEMENTS, dynamic, dynamic.getInt("DataVersion"), 1628);
+                    dynamic = this.d.az().update(DataFixTypes.ADVANCEMENTS, dynamic, dynamic.getInt("DataVersion"), 1631);
                     dynamic = dynamic.remove("DataVersion");
                     Map map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 

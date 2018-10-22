@@ -17,7 +17,7 @@ public class Pathfinder {
 
     @Nullable
     public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, Entity entity, float f) {
-        return this.a(iblockaccess, entityinsentient, entity.locX, entity.getBoundingBox().b, entity.locZ, f);
+        return this.a(iblockaccess, entityinsentient, entity.locX, entity.getBoundingBox().minY, entity.locZ, f);
     }
 
     @Nullable

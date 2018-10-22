@@ -48,7 +48,7 @@ public class CommandForceload {
     private static int a(CommandListenerWrapper commandlistenerwrapper, ArgumentVec2I.a argumentvec2i_a) throws CommandSyntaxException {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(argumentvec2i_a.a >> 4, argumentvec2i_a.b >> 4);
         DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
-        boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).f(chunkcoordintpair.x, chunkcoordintpair.z);
+        boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).isForceLoaded(chunkcoordintpair.x, chunkcoordintpair.z);
 
         if (flag) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[] { chunkcoordintpair, dimensionmanager}), false);
@@ -84,7 +84,7 @@ public class CommandForceload {
         LongSet longset = worldserver.ag();
 
         longset.forEach((i) -> {
-            worldserver.b(ChunkCoordIntPair.a(i), ChunkCoordIntPair.b(i), false);
+            worldserver.setForceLoaded(ChunkCoordIntPair.a(i), ChunkCoordIntPair.b(i), false);
         });
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[] { dimensionmanager}), true);
         return 0;
@@ -113,7 +113,7 @@ public class CommandForceload {
 
                 for (int k2 = i1; k2 <= k1; ++k2) {
                     for (int l2 = j1; l2 <= l1; ++l2) {
-                        boolean flag1 = worldserver.b(k2, l2, flag);
+                        boolean flag1 = worldserver.setForceLoaded(k2, l2, flag);
 
                         if (flag1) {
                             ++j2;

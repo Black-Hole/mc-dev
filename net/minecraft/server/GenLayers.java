@@ -5,16 +5,16 @@ import java.util.function.LongFunction;
 
 public class GenLayers {
 
-    protected static final int a = IRegistry.BIOME.a((Object) Biomes.T);
-    protected static final int b = IRegistry.BIOME.a((Object) Biomes.U);
-    protected static final int c = IRegistry.BIOME.a((Object) Biomes.a);
-    protected static final int d = IRegistry.BIOME.a((Object) Biomes.V);
-    protected static final int e = IRegistry.BIOME.a((Object) Biomes.l);
-    protected static final int f = IRegistry.BIOME.a((Object) Biomes.W);
-    protected static final int g = IRegistry.BIOME.a((Object) Biomes.X);
-    protected static final int h = IRegistry.BIOME.a((Object) Biomes.z);
-    protected static final int i = IRegistry.BIOME.a((Object) Biomes.Y);
-    protected static final int j = IRegistry.BIOME.a((Object) Biomes.Z);
+    protected static final int a = IRegistry.BIOME.a((Object) Biomes.WARM_OCEAN);
+    protected static final int b = IRegistry.BIOME.a((Object) Biomes.LUKEWARM_OCEAN);
+    protected static final int c = IRegistry.BIOME.a((Object) Biomes.OCEAN);
+    protected static final int d = IRegistry.BIOME.a((Object) Biomes.COLD_OCEAN);
+    protected static final int e = IRegistry.BIOME.a((Object) Biomes.FROZEN_OCEAN);
+    protected static final int f = IRegistry.BIOME.a((Object) Biomes.DEEP_WARM_OCEAN);
+    protected static final int g = IRegistry.BIOME.a((Object) Biomes.DEEP_LUKEWARM_OCEAN);
+    protected static final int h = IRegistry.BIOME.a((Object) Biomes.DEEP_OCEAN);
+    protected static final int i = IRegistry.BIOME.a((Object) Biomes.DEEP_COLD_OCEAN);
+    protected static final int j = IRegistry.BIOME.a((Object) Biomes.DEEP_FROZEN_OCEAN);
 
     private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(long i, AreaTransformer2 areatransformer2, AreaFactory<T> areafactory, int j, LongFunction<C> longfunction) {
         AreaFactory areafactory1 = areafactory;
@@ -118,7 +118,7 @@ public class GenLayers {
             BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
-            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.N && biomebase != Biomes.O ? (biomebase.p() != BiomeBase.Geography.NONE && biomebase1.p() != BiomeBase.Geography.NONE && biomebase.p() == biomebase1.p() ? true : biomebase == biomebase1) : biomebase1 == Biomes.N || biomebase1 == Biomes.O) : false;
+            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.p() != BiomeBase.Geography.NONE && biomebase1.p() != BiomeBase.Geography.NONE && biomebase.p() == biomebase1.p() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
         }
     }
 

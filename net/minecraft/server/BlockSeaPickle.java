@@ -40,7 +40,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return !iblockdata.h(iblockaccess, blockposition).a(EnumDirection.UP).b();
+        return !iblockdata.getCollisionShape(iblockaccess, blockposition).a(EnumDirection.UP).isEmpty();
     }
 
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {

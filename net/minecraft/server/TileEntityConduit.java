@@ -16,7 +16,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     private boolean g;
     private boolean h;
     private final List<BlockPosition> i;
-    private EntityLiving j;
+    private EntityLiving target;
     private UUID k;
     private long l;
 
@@ -41,8 +41,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (this.j != null) {
-            nbttagcompound.set("target_uuid", GameProfileSerializer.a(this.j.getUniqueID()));
+        if (this.target != null) {
+            nbttagcompound.set("target_uuid", GameProfileSerializer.a(this.target.getUniqueID()));
         }
 
         return nbttagcompound;
@@ -160,32 +160,32 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     private void i() {
-        EntityLiving entityliving = this.j;
+        EntityLiving entityliving = this.target;
         int i = this.i.size();
 
         if (i < 42) {
-            this.j = null;
-        } else if (this.j == null && this.k != null) {
-            this.j = this.l();
+            this.target = null;
+        } else if (this.target == null && this.k != null) {
+            this.target = this.l();
             this.k = null;
-        } else if (this.j == null) {
+        } else if (this.target == null) {
             List list = this.world.a(EntityLiving.class, this.k(), (entityliving) -> {
                 return entityliving instanceof IMonster && entityliving.ao();
             });
 
             if (!list.isEmpty()) {
-                this.j = (EntityLiving) list.get(this.world.random.nextInt(list.size()));
+                this.target = (EntityLiving) list.get(this.world.random.nextInt(list.size()));
             }
-        } else if (!this.j.isAlive() || this.position.m(new BlockPosition(this.j)) > 8.0D) {
-            this.j = null;
+        } else if (!this.target.isAlive() || this.position.m(new BlockPosition(this.target)) > 8.0D) {
+            this.target = null;
         }
 
-        if (this.j != null) {
-            this.world.a((EntityHuman) null, this.j.locX, this.j.locY, this.j.locZ, SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            this.j.damageEntity(DamageSource.MAGIC, 4.0F);
+        if (this.target != null) {
+            this.world.a((EntityHuman) null, this.target.locX, this.target.locY, this.target.locZ, SoundEffects.BLOCK_CONDUIT_ATTACK_TARGET, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            this.target.damageEntity(DamageSource.MAGIC, 4.0F);
         }
 
-        if (entityliving != this.j) {
+        if (entityliving != this.target) {
             IBlockData iblockdata = this.getBlock();
 
             this.world.notify(this.position, iblockdata, iblockdata, 2);
@@ -195,10 +195,10 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     private void j() {
         if (this.k == null) {
-            this.j = null;
-        } else if (this.j == null || !this.j.getUniqueID().equals(this.k)) {
-            this.j = this.l();
-            if (this.j == null) {
+            this.target = null;
+        } else if (this.target == null || !this.target.getUniqueID().equals(this.k)) {
+            this.target = this.l();
+            if (this.target == null) {
                 this.k = null;
             }
         }
@@ -247,12 +247,12 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             }
         }
 
-        if (this.j != null) {
-            Vec3D vec3d2 = new Vec3D(this.j.locX, this.j.locY + (double) this.j.getHeadHeight(), this.j.locZ);
-            float f4 = (-0.5F + random.nextFloat()) * (3.0F + this.j.width);
+        if (this.target != null) {
+            Vec3D vec3d2 = new Vec3D(this.target.locX, this.target.locY + (double) this.target.getHeadHeight(), this.target.locZ);
+            float f4 = (-0.5F + random.nextFloat()) * (3.0F + this.target.width);
 
-            f1 = -1.0F + random.nextFloat() * this.j.length;
-            f2 = (-0.5F + random.nextFloat()) * (3.0F + this.j.width);
+            f1 = -1.0F + random.nextFloat() * this.target.length;
+            f2 = (-0.5F + random.nextFloat()) * (3.0F + this.target.width);
             Vec3D vec3d3 = new Vec3D((double) f4, (double) f1, (double) f2);
 
             this.world.addParticle(Particles.W, vec3d2.x, vec3d2.y, vec3d2.z, vec3d3.x, vec3d3.y, vec3d3.z);

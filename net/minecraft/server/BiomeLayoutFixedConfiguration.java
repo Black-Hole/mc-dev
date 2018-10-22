@@ -5,7 +5,7 @@ public class BiomeLayoutFixedConfiguration implements BiomeLayoutConfiguration {
     private BiomeBase a;
 
     public BiomeLayoutFixedConfiguration() {
-        this.a = Biomes.c;
+        this.a = Biomes.PLAINS;
     }
 
     public BiomeLayoutFixedConfiguration a(BiomeBase biomebase) {

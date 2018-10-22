@@ -46,4 +46,8 @@ public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
         super.tick();
         this.a.c();
     }
+
+    public boolean bM() {
+        return true;
+    }
 }

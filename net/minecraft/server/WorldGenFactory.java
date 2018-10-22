@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 public class WorldGenFactory {
 
     private static final Logger a = LogManager.getLogger();
-    private static final Map<String, Class<? extends StructureStart>> b = Maps.newHashMap();
+    public static final Map<String, Class<? extends StructureStart>> structureStartMap = Maps.newHashMap();
     private static final Map<Class<? extends StructureStart>, String> c = Maps.newHashMap();
     private static final Map<String, Class<? extends StructurePiece>> d = Maps.newHashMap();
     private static final Map<Class<? extends StructurePiece>, String> e = Maps.newHashMap();
 
     private static void b(Class<? extends StructureStart> oclass, String s) {
-        WorldGenFactory.b.put(s, oclass);
+        WorldGenFactory.structureStartMap.put(s, oclass);
         WorldGenFactory.c.put(oclass, s);
     }
 
@@ -41,7 +41,7 @@ public class WorldGenFactory {
             return StructureGenerator.a;
         } else {
             try {
-                Class oclass = (Class) WorldGenFactory.b.get(s);
+                Class oclass = (Class) WorldGenFactory.structureStartMap.get(s);
 
                 if (oclass != null) {
                     structurestart = (StructureStart) oclass.newInstance();

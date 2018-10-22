@@ -165,7 +165,7 @@ public class PlayerChunkMap {
         if (this.managedPlayers.isEmpty()) {
             WorldProvider worldprovider = this.world.worldProvider;
 
-            if (!worldprovider.p()) {
+            if (!worldprovider.canRespawn()) {
                 this.world.getChunkProviderServer().b();
             }
         }

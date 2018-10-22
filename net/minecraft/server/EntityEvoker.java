@@ -266,9 +266,9 @@ public class EntityEvoker extends EntityIllagerWizard {
                 if (!EntityEvoker.this.world.q(blockposition) && EntityEvoker.this.world.q(blockposition.down())) {
                     if (!EntityEvoker.this.world.isEmpty(blockposition)) {
                         IBlockData iblockdata = EntityEvoker.this.world.getType(blockposition);
-                        VoxelShape voxelshape = iblockdata.h(EntityEvoker.this.world, blockposition);
+                        VoxelShape voxelshape = iblockdata.getCollisionShape(EntityEvoker.this.world, blockposition);
 
-                        if (!voxelshape.b()) {
+                        if (!voxelshape.isEmpty()) {
                             d4 = voxelshape.c(EnumDirection.EnumAxis.Y);
                         }
                     }

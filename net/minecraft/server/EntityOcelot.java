@@ -59,7 +59,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return !this.isTamed() && this.ticksLived > 2400;
     }
 
@@ -194,7 +194,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     public boolean a(IWorldReader iworldreader) {
         if (iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox())) {
-            BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
+            BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
 
             if (blockposition.getY() < iworldreader.getSeaLevel()) {
                 return false;

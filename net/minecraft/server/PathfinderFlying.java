@@ -24,7 +24,7 @@ public class PathfinderFlying extends PathfinderNormal {
         int i;
 
         if (this.e() && this.b.isInWater()) {
-            i = (int) this.b.getBoundingBox().b;
+            i = (int) this.b.getBoundingBox().minY;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
 
             for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
@@ -32,7 +32,7 @@ public class PathfinderFlying extends PathfinderNormal {
                 blockposition_mutableblockposition.c(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
             }
         } else {
-            i = MathHelper.floor(this.b.getBoundingBox().b + 0.5D);
+            i = MathHelper.floor(this.b.getBoundingBox().minY + 0.5D);
         }
 
         BlockPosition blockposition = new BlockPosition(this.b);
@@ -41,10 +41,10 @@ public class PathfinderFlying extends PathfinderNormal {
         if (this.b.a(pathtype) < 0.0F) {
             HashSet hashset = Sets.newHashSet();
 
-            hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().c));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().a, (double) i, this.b.getBoundingBox().f));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().d, (double) i, this.b.getBoundingBox().c));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().d, (double) i, this.b.getBoundingBox().f));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().minZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().maxZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().minZ));
+            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().maxZ));
             Iterator iterator = hashset.iterator();
 
             while (iterator.hasNext()) {

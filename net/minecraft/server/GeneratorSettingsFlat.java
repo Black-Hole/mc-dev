@@ -250,7 +250,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     public static GeneratorSettingsFlat x() {
         GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
 
-        generatorsettingsflat.a(Biomes.c);
+        generatorsettingsflat.a(Biomes.PLAINS);
         generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));
         generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
         generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS_BLOCK));

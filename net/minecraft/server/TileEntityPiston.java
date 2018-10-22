@@ -69,9 +69,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private void f(float f) {
         EnumDirection enumdirection = this.h();
         double d0 = (double) (f - this.i);
-        VoxelShape voxelshape = this.l().h(this.world, this.getPosition());
+        VoxelShape voxelshape = this.l().getCollisionShape(this.world, this.getPosition());
 
-        if (!voxelshape.b()) {
+        if (!voxelshape.isEmpty()) {
             List list = voxelshape.d();
             AxisAlignedBB axisalignedbb = this.a(this.a(list));
             List list1 = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
@@ -142,13 +142,13 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
         AxisAlignedBB axisalignedbb;
 
-        for (Iterator iterator = list.iterator(); iterator.hasNext(); d5 = Math.max(axisalignedbb.f, d5)) {
+        for (Iterator iterator = list.iterator(); iterator.hasNext(); d5 = Math.max(axisalignedbb.maxZ, d5)) {
             axisalignedbb = (AxisAlignedBB) iterator.next();
-            d0 = Math.min(axisalignedbb.a, d0);
-            d1 = Math.min(axisalignedbb.b, d1);
-            d2 = Math.min(axisalignedbb.c, d2);
-            d3 = Math.max(axisalignedbb.d, d3);
-            d4 = Math.max(axisalignedbb.e, d4);
+            d0 = Math.min(axisalignedbb.minX, d0);
+            d1 = Math.min(axisalignedbb.minY, d1);
+            d2 = Math.min(axisalignedbb.minZ, d2);
+            d3 = Math.max(axisalignedbb.maxX, d3);
+            d4 = Math.max(axisalignedbb.maxY, d4);
         }
 
         return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
@@ -181,23 +181,23 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
         switch (enumdirection) {
         case WEST:
-            return new AxisAlignedBB(axisalignedbb.a + d2, axisalignedbb.b, axisalignedbb.c, axisalignedbb.a + d3, axisalignedbb.e, axisalignedbb.f);
+            return new AxisAlignedBB(axisalignedbb.minX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
 
         case EAST:
-            return new AxisAlignedBB(axisalignedbb.d + d2, axisalignedbb.b, axisalignedbb.c, axisalignedbb.d + d3, axisalignedbb.e, axisalignedbb.f);
+            return new AxisAlignedBB(axisalignedbb.maxX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
 
         case DOWN:
-            return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b + d2, axisalignedbb.c, axisalignedbb.d, axisalignedbb.b + d3, axisalignedbb.f);
+            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY + d3, axisalignedbb.maxZ);
 
         case UP:
         default:
-            return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.e + d2, axisalignedbb.c, axisalignedbb.d, axisalignedbb.e + d3, axisalignedbb.f);
+            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.maxY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY + d3, axisalignedbb.maxZ);
 
         case NORTH:
-            return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c + d2, axisalignedbb.d, axisalignedbb.e, axisalignedbb.c + d3);
+            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.minZ + d3);
 
         case SOUTH:
-            return new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.f + d2, axisalignedbb.d, axisalignedbb.e, axisalignedbb.f + d3);
+            return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.maxZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ + d3);
         }
     }
 
@@ -221,15 +221,15 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     }
 
     private static double b(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, AxisAlignedBB axisalignedbb1) {
-        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.d - axisalignedbb1.a : axisalignedbb1.d - axisalignedbb.a;
+        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.maxX - axisalignedbb1.minX : axisalignedbb1.maxX - axisalignedbb.minX;
     }
 
     private static double c(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, AxisAlignedBB axisalignedbb1) {
-        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.e - axisalignedbb1.b : axisalignedbb1.e - axisalignedbb.b;
+        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.maxY - axisalignedbb1.minY : axisalignedbb1.maxY - axisalignedbb.minY;
     }
 
     private static double d(AxisAlignedBB axisalignedbb, EnumDirection enumdirection, AxisAlignedBB axisalignedbb1) {
-        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.f - axisalignedbb1.c : axisalignedbb1.f - axisalignedbb.c;
+        return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.maxZ - axisalignedbb1.minZ : axisalignedbb1.maxZ - axisalignedbb.minZ;
     }
 
     public IBlockData i() {
@@ -316,7 +316,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         VoxelShape voxelshape;
 
         if (!this.f && this.g) {
-            voxelshape = ((IBlockData) this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true))).h(iblockaccess, blockposition);
+            voxelshape = ((IBlockData) this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true))).getCollisionShape(iblockaccess, blockposition);
         } else {
             voxelshape = VoxelShapes.a();
         }
@@ -339,7 +339,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             double d1 = (double) ((float) this.e.getAdjacentY() * f);
             double d2 = (double) ((float) this.e.getAdjacentZ() * f);
 
-            return VoxelShapes.a(voxelshape, iblockdata.h(iblockaccess, blockposition).a(d0, d1, d2));
+            return VoxelShapes.a(voxelshape, iblockdata.getCollisionShape(iblockaccess, blockposition).a(d0, d1, d2));
         }
     }
 

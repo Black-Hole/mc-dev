@@ -538,7 +538,7 @@ public abstract class EntityInsentient extends EntityLiving {
         return true;
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return true;
     }
 
@@ -626,7 +626,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
             d2 = entityliving.locY + (double) entityliving.getHeadHeight() - (this.locY + (double) this.getHeadHeight());
         } else {
-            d2 = (entity.getBoundingBox().b + entity.getBoundingBox().e) / 2.0D - (this.locY + (double) this.getHeadHeight());
+            d2 = (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2.0D - (this.locY + (double) this.getHeadHeight());
         }
 
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1);

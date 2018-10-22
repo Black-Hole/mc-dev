@@ -56,7 +56,7 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
             }
         }
 
-        boolean flag = (!this.g.y() || biomebase == Biomes.aa) && map.containsKey("decoration");
+        boolean flag = (!this.g.y() || biomebase == Biomes.THE_VOID) && map.containsKey("decoration");
 
         if (flag) {
             ArrayList arraylist = Lists.newArrayList();
@@ -167,7 +167,7 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
             if (iblockdata != null) {
                 for (int l = 0; l < 16; ++l) {
                     for (int i1 = 0; i1 < 16; ++i1) {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(l, k, i1), iblockdata, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition.c(l, k, i1), iblockdata, false);
                     }
                 }
             }

@@ -85,7 +85,7 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
                                 int k2 = k1 + j1 * 8;
                                 int l2 = i2 + i1 * 4;
 
-                                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(j2, k2, l2), iblockdata, false);
+                                ichunkaccess.setType(blockposition_mutableblockposition.c(j2, k2, l2), iblockdata, false);
                                 d15 += d16;
                             }
 
@@ -117,13 +117,13 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
 
             for (k = 127; k > 122; --k) {
                 if (k >= 127 - random.nextInt(5)) {
-                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
+                    ichunkaccess.setType(blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                 }
             }
 
             for (k = 4; k >= 0; --k) {
                 if (k <= random.nextInt(5)) {
-                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
+                    ichunkaccess.setType(blockposition_mutableblockposition.c(blockposition.getX(), k, blockposition.getZ()), Blocks.BEDROCK.getBlockData(), false);
                 }
             }
         }

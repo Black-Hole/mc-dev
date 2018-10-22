@@ -22,58 +22,60 @@ public class DataConverterBook extends DataFix {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("pages").flatMap(Dynamic::getStream).map((stream) -> {
-            return stream.map((dynamic) -> {
-                if (!dynamic.getStringValue().isPresent()) {
-                    return dynamic;
-                } else {
-                    String s = (String) dynamic.getStringValue().get();
-                    Object object = null;
-
-                    if (!"null".equals(s) && !StringUtils.isEmpty(s)) {
-                        if ((s.charAt(0) != 34 || s.charAt(s.length() - 1) != 34) && (s.charAt(0) != 123 || s.charAt(s.length() - 1) != 125)) {
-                            object = new ChatComponentText(s);
-                        } else {
-                            try {
-                                object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s, IChatBaseComponent.class, true);
-                                if (object == null) {
-                                    object = new ChatComponentText("");
-                                }
-                            } catch (JsonParseException jsonparseexception) {
-                                ;
-                            }
-
-                            if (object == null) {
-                                try {
-                                    object = IChatBaseComponent.ChatSerializer.a(s);
-                                } catch (JsonParseException jsonparseexception1) {
-                                    ;
-                                }
-                            }
-
-                            if (object == null) {
-                                try {
-                                    object = IChatBaseComponent.ChatSerializer.b(s);
-                                } catch (JsonParseException jsonparseexception2) {
-                                    ;
-                                }
-                            }
-
-                            if (object == null) {
-                                object = new ChatComponentText(s);
-                            }
-                        }
+        return dynamic.update("pages", (dynamic) -> {
+            Optional optional = dynamic.getStream().map((stream) -> {
+                return stream.map((dynamic) -> {
+                    if (!dynamic.getStringValue().isPresent()) {
+                        return dynamic;
                     } else {
-                        object = new ChatComponentText("");
+                        String s = (String) dynamic.getStringValue().get();
+                        Object object = null;
+
+                        if (!"null".equals(s) && !StringUtils.isEmpty(s)) {
+                            if ((s.charAt(0) != 34 || s.charAt(s.length() - 1) != 34) && (s.charAt(0) != 123 || s.charAt(s.length() - 1) != 125)) {
+                                object = new ChatComponentText(s);
+                            } else {
+                                try {
+                                    object = (IChatBaseComponent) ChatDeserializer.a(DataConverterSignText.a, s, IChatBaseComponent.class, true);
+                                    if (object == null) {
+                                        object = new ChatComponentText("");
+                                    }
+                                } catch (JsonParseException jsonparseexception) {
+                                    ;
+                                }
+
+                                if (object == null) {
+                                    try {
+                                        object = IChatBaseComponent.ChatSerializer.a(s);
+                                    } catch (JsonParseException jsonparseexception1) {
+                                        ;
+                                    }
+                                }
+
+                                if (object == null) {
+                                    try {
+                                        object = IChatBaseComponent.ChatSerializer.b(s);
+                                    } catch (JsonParseException jsonparseexception2) {
+                                        ;
+                                    }
+                                }
+
+                                if (object == null) {
+                                    object = new ChatComponentText(s);
+                                }
+                            }
+                        } else {
+                            object = new ChatComponentText("");
+                        }
+
+                        return dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
                     }
-
-                    return dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
-                }
+                });
             });
-        });
 
-        dynamic.getClass();
-        return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic);
+            dynamic1.getClass();
+            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1.emptyList());
+        });
     }
 
     public TypeRewriteRule makeRule() {

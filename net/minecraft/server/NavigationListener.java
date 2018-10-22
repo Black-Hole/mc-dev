@@ -36,8 +36,8 @@ public class NavigationListener implements IWorldAccess {
     }
 
     protected boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        VoxelShape voxelshape = iblockdata.h(iblockaccess, blockposition);
-        VoxelShape voxelshape1 = iblockdata1.h(iblockaccess, blockposition);
+        VoxelShape voxelshape = iblockdata.getCollisionShape(iblockaccess, blockposition);
+        VoxelShape voxelshape1 = iblockdata1.getCollisionShape(iblockaccess, blockposition);
 
         return VoxelShapes.c(voxelshape, voxelshape1, OperatorBoolean.NOT_SAME);
     }

@@ -79,7 +79,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         thread.setDaemon(true);
         thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(DedicatedServer.LOGGER));
         thread.start();
-        DedicatedServer.LOGGER.info("Starting minecraft server version 1.13.1");
+        DedicatedServer.LOGGER.info("Starting minecraft server version 1.13.2");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             DedicatedServer.LOGGER.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
         }

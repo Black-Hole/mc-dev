@@ -68,7 +68,7 @@ public class PathfinderGoalFollowOwner extends PathfinderGoal {
                         if (this.b.h(this.c) >= 144.0D) {
                             int i = MathHelper.floor(this.c.locX) - 2;
                             int j = MathHelper.floor(this.c.locZ) - 2;
-                            int k = MathHelper.floor(this.c.getBoundingBox().b);
+                            int k = MathHelper.floor(this.c.getBoundingBox().minY);
 
                             for (int l = 0; l <= 4; ++l) {
                                 for (int i1 = 0; i1 <= 4; ++i1) {

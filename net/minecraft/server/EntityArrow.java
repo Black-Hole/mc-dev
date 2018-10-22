@@ -111,9 +111,9 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         IBlockData iblockdata = this.world.getType(blockposition);
 
         if (!iblockdata.isAir() && !flag) {
-            VoxelShape voxelshape = iblockdata.h(this.world, blockposition);
+            VoxelShape voxelshape = iblockdata.getCollisionShape(this.world, blockposition);
 
-            if (!voxelshape.b()) {
+            if (!voxelshape.isEmpty()) {
                 Iterator iterator = voxelshape.d().iterator();
 
                 while (iterator.hasNext()) {

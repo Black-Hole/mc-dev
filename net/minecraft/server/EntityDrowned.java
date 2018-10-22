@@ -50,11 +50,11 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
         BiomeBase biomebase = generatoraccess.getBiome(new BlockPosition(this.locX, this.locY, this.locZ));
 
-        return biomebase != Biomes.i && biomebase != Biomes.m ? this.random.nextInt(40) == 0 && this.dF() && super.a(generatoraccess, flag) : this.random.nextInt(15) == 0 && super.a(generatoraccess, flag);
+        return biomebase != Biomes.RIVER && biomebase != Biomes.FROZEN_RIVER ? this.random.nextInt(40) == 0 && this.dF() && super.a(generatoraccess, flag) : this.random.nextInt(15) == 0 && super.a(generatoraccess, flag);
     }
 
     private boolean dF() {
-        return this.getBoundingBox().b < (double) (this.world.getSeaLevel() - 5);
+        return this.getBoundingBox().minY < (double) (this.world.getSeaLevel() - 5);
     }
 
     protected boolean dz() {
@@ -180,7 +180,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
     public void a(EntityLiving entityliving, float f) {
         EntityThrownTrident entitythrowntrident = new EntityThrownTrident(this.world, this, new ItemStack(Items.TRIDENT));
         double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entitythrowntrident.locY;
+        double d1 = entityliving.getBoundingBox().minY + (double) (entityliving.length / 3.0F) - entitythrowntrident.locY;
         double d2 = entityliving.locZ - this.locZ;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
 
@@ -323,7 +323,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         @Nullable
         private Vec3D g() {
             Random random = this.a.getRandom();
-            BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().b, this.a.locZ);
+            BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.getBoundingBox().minY, this.a.locZ);
 
             for (int i = 0; i < 10; ++i) {
                 BlockPosition blockposition1 = blockposition.a(random.nextInt(20) - 10, 2 - random.nextInt(8), random.nextInt(20) - 10);

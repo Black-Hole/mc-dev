@@ -56,13 +56,13 @@ public class WorldGenSurfaceNether implements WorldGenSurface<WorldGenSurfaceCon
 
                         j2 = i2;
                         if (k2 >= j1 - 1) {
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata2, false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, iblockdata2, false);
                         } else {
-                            ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata3, false);
+                            ichunkaccess.setType(blockposition_mutableblockposition, iblockdata3, false);
                         }
                     } else if (j2 > 0) {
                         --j2;
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata3, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata3, false);
                     }
                 }
             } else {

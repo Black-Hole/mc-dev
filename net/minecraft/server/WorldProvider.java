@@ -69,7 +69,7 @@ public abstract class WorldProvider {
     public void l() {}
 
     public boolean a(int i, int j) {
-        return !this.b.f(i, j);
+        return !this.b.isForceLoaded(i, j);
     }
 
     protected abstract void m();
@@ -84,9 +84,9 @@ public abstract class WorldProvider {
 
     public abstract float a(long i, float f);
 
-    public abstract boolean o();
+    public abstract boolean isOverworld();
 
-    public abstract boolean p();
+    public abstract boolean canRespawn();
 
     public abstract DimensionManager getDimensionManager();
 }

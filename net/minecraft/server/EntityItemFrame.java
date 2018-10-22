@@ -169,7 +169,7 @@ public class EntityItemFrame extends EntityHanging {
         this.setItem(itemstack, true);
     }
 
-    private void setItem(ItemStack itemstack, boolean flag) {
+    public void setItem(ItemStack itemstack, boolean flag) {
         if (!itemstack.isEmpty()) {
             itemstack = itemstack.cloneItemStack();
             itemstack.setCount(1);

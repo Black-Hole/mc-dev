@@ -150,7 +150,7 @@ public class EntityFishingHook extends Entity {
                             this.locX = this.hooked.locX;
                             double d1 = (double) this.hooked.length;
 
-                            this.locY = this.hooked.getBoundingBox().b + d1 * 0.8D;
+                            this.locY = this.hooked.getBoundingBox().minY + d1 * 0.8D;
                             this.locZ = this.hooked.locZ;
                             this.setPosition(this.locX, this.locY, this.locZ);
                         }
@@ -318,7 +318,7 @@ public class EntityFishingHook extends Entity {
                     f1 = MathHelper.sin(f);
                     f2 = MathHelper.cos(f);
                     d0 = this.locX + (double) (f1 * (float) this.aw * 0.1F);
-                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
+                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().minY) + 1.0F);
                     d2 = this.locZ + (double) (f2 * (float) this.aw * 0.1F);
                     block = worldserver.getType(new BlockPosition(d0, d1 - 1.0D, d2)).getBlock();
                     if (block == Blocks.WATER) {
@@ -335,7 +335,7 @@ public class EntityFishingHook extends Entity {
                 } else {
                     this.motY = (double) (-0.4F * MathHelper.a(this.random, 0.6F, 1.0F));
                     this.a(SoundEffects.ENTITY_FISHING_BOBBER_SPLASH, 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
-                    double d3 = this.getBoundingBox().b + 0.5D;
+                    double d3 = this.getBoundingBox().minY + 0.5D;
 
                     worldserver.a(Particles.e, this.locX, d3, this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D);
                     worldserver.a(Particles.x, this.locX, d3, this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D);
@@ -356,7 +356,7 @@ public class EntityFishingHook extends Entity {
                     f1 = MathHelper.a(this.random, 0.0F, 360.0F) * 0.017453292F;
                     f2 = MathHelper.a(this.random, 25.0F, 60.0F);
                     d0 = this.locX + (double) (MathHelper.sin(f1) * f2 * 0.1F);
-                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
+                    d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().minY) + 1.0F);
                     d2 = this.locZ + (double) (MathHelper.cos(f1) * f2 * 0.1F);
                     block = worldserver.getType(new BlockPosition((int) d0, (int) d1 - 1, (int) d2)).getBlock();
                     if (block == Blocks.WATER) {

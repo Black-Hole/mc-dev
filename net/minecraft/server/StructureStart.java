@@ -99,7 +99,7 @@ public abstract class StructureStart {
         this.c = nbttagcompound.getInt("ChunkX");
         this.d = nbttagcompound.getInt("ChunkZ");
         this.f = nbttagcompound.getInt("references");
-        this.e = nbttagcompound.hasKey("biome") ? (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(nbttagcompound.getString("biome"))) : generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9), Biomes.c);
+        this.e = nbttagcompound.hasKey("biome") ? (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(nbttagcompound.getString("biome"))) : generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9), Biomes.PLAINS);
         if (nbttagcompound.hasKey("BB")) {
             this.b = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
         }

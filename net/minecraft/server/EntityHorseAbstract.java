@@ -184,7 +184,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         if (i > 0) {
             this.damageEntity(DamageSource.FALL, (float) i);
             if (this.isVehicle()) {
-                Iterator iterator = this.bQ().iterator();
+                Iterator iterator = this.getAllPassengers().iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();

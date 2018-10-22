@@ -1,84 +1,62 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PathfinderGoalFishSchool extends PathfinderGoal {
 
-    private final EntityFish a;
-    private EntityFish b;
+    private final EntityFishSchool a;
+    private int b;
     private int c;
 
-    public PathfinderGoalFishSchool(EntityFish entityfish) {
-        this.a = entityfish;
+    public PathfinderGoalFishSchool(EntityFishSchool entityfishschool) {
+        this.a = entityfishschool;
+        this.c = this.a(entityfishschool);
+    }
+
+    protected int a(EntityFishSchool entityfishschool) {
+        return 200 + entityfishschool.getRandom().nextInt(200) % 20;
     }
 
     public boolean a() {
-        if (!this.a.dB() && !this.a.dz()) {
-            List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
-
-            if (list.size() <= 1) {
-                return false;
-            } else {
-                Iterator iterator = list.iterator();
-
-                EntityFish entityfish;
-
-                do {
-                    if (!iterator.hasNext()) {
-                        iterator = list.iterator();
-
-                        do {
-                            if (!iterator.hasNext()) {
-                                return false;
-                            }
-
-                            entityfish = (EntityFish) iterator.next();
-                        } while (entityfish.equals(this.a) || entityfish.dz() || entityfish.dB());
-
-                        entityfish.t(true);
-                        ++entityfish.a;
-                        this.b = entityfish;
-                        return true;
-                    }
-
-                    entityfish = (EntityFish) iterator.next();
-                } while (!entityfish.l() || entityfish.equals(this.a));
-
-                ++entityfish.a;
-                this.b = entityfish;
-                return true;
-            }
-        } else {
+        if (this.a.dE()) {
             return false;
+        } else if (this.a.dB()) {
+            return true;
+        } else if (this.c > 0) {
+            --this.c;
+            return false;
+        } else {
+            this.c = this.a(this.a);
+            Predicate predicate = (entityfishschool) -> {
+                return entityfishschool.dD() || !entityfishschool.dB();
+            };
+            List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
+            EntityFishSchool entityfishschool = (EntityFishSchool) list.stream().filter(EntityFishSchool::dD).findAny().orElse(this.a);
+
+            entityfishschool.a(list.stream().filter((entityfishschool) -> {
+                return !entityfishschool.dB();
+            }));
+            return this.a.dB();
         }
     }
 
     public boolean b() {
-        if (this.b.isAlive() && this.b.dB()) {
-            double d0 = this.a.h(this.b);
-
-            return d0 <= 121.0D;
-        } else {
-            return false;
-        }
+        return this.a.dB() && this.a.dF();
     }
 
     public void c() {
-        this.a.a(true);
-        this.c = 0;
+        this.b = 0;
     }
 
     public void d() {
-        this.a.a(false);
-        --this.b.a;
-        this.b = null;
+        this.a.dC();
     }
 
     public void e() {
-        if (--this.c <= 0) {
-            this.c = 10;
-            this.a.getNavigation().a((Entity) this.b, 1.0D);
+        if (--this.b <= 0) {
+            this.b = 10;
+            this.a.dG();
         }
     }
 }

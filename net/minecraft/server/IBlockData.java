@@ -179,7 +179,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
         return this.getBlock().a(this, iblockaccess, blockposition);
     }
 
-    default VoxelShape h(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    default VoxelShape getCollisionShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.getBlock().f(this, iblockaccess, blockposition);
     }
 

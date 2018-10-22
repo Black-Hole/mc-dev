@@ -12,7 +12,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
         super(item_info);
     }
 
-    public static ItemStack a(World world, int i, int j, byte b0, boolean flag, boolean flag1) {
+    public static ItemStack createFilledMapView(World world, int i, int j, byte b0, boolean flag, boolean flag1) {
         ItemStack itemstack = new ItemStack(Items.FILLED_MAP);
 
         a(itemstack, world, i, j, b0, flag, flag1, world.worldProvider.getDimensionManager());
@@ -188,14 +188,14 @@ public class ItemWorldMap extends ItemWorldMapBase {
     private IBlockData a(World world, IBlockData iblockdata, BlockPosition blockposition) {
         Fluid fluid = iblockdata.s();
 
-        return !fluid.e() && !Block.a(iblockdata.h(world, blockposition), EnumDirection.UP) ? fluid.i() : iblockdata;
+        return !fluid.e() && !Block.a(iblockdata.getCollisionShape(world, blockposition), EnumDirection.UP) ? fluid.i() : iblockdata;
     }
 
     private static boolean a(BiomeBase[] abiomebase, int i, int j, int k) {
         return abiomebase[j * i + k * i * 128 * i].h() >= 0.0F;
     }
 
-    public static void a(World world, ItemStack itemstack) {
+    public static void applySepiaFilter(World world, ItemStack itemstack) {
         WorldMap worldmap = getSavedMap(itemstack, world);
 
         if (worldmap != null) {

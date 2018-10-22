@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public abstract class WorldChunkManager implements ITickable {
 
-    private static final List<BiomeBase> c = Lists.newArrayList(new BiomeBase[] { Biomes.f, Biomes.c, Biomes.g, Biomes.u, Biomes.t, Biomes.w, Biomes.x});
+    private static final List<BiomeBase> c = Lists.newArrayList(new BiomeBase[] { Biomes.FOREST, Biomes.PLAINS, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.WOODED_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS});
     protected final Map<StructureGenerator<?>, Boolean> a = Maps.newHashMap();
     protected final Set<IBlockData> b = Sets.newHashSet();
 

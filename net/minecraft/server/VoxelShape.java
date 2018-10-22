@@ -29,7 +29,7 @@ public abstract class VoxelShape {
     }
 
     public AxisAlignedBB a() {
-        if (this.b()) {
+        if (this.isEmpty()) {
             throw new UnsupportedOperationException("No bounds for empty shape.");
         } else {
             return new AxisAlignedBB(this.b(EnumDirection.EnumAxis.X), this.b(EnumDirection.EnumAxis.Y), this.b(EnumDirection.EnumAxis.Z), this.c(EnumDirection.EnumAxis.X), this.c(EnumDirection.EnumAxis.Y), this.c(EnumDirection.EnumAxis.Z));
@@ -42,12 +42,12 @@ public abstract class VoxelShape {
 
     protected abstract DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis);
 
-    public boolean b() {
+    public boolean isEmpty() {
         return this.a.a();
     }
 
     public VoxelShape a(double d0, double d1, double d2) {
-        return (VoxelShape) (this.b() ? VoxelShapes.a() : new VoxelShapeArray(this.a, new DoubleListOffset(this.a(EnumDirection.EnumAxis.X), d0), new DoubleListOffset(this.a(EnumDirection.EnumAxis.Y), d1), new DoubleListOffset(this.a(EnumDirection.EnumAxis.Z), d2)));
+        return (VoxelShape) (this.isEmpty() ? VoxelShapes.a() : new VoxelShapeArray(this.a, new DoubleListOffset(this.a(EnumDirection.EnumAxis.X), d0), new DoubleListOffset(this.a(EnumDirection.EnumAxis.Y), d1), new DoubleListOffset(this.a(EnumDirection.EnumAxis.Z), d2)));
     }
 
     public VoxelShape c() {
@@ -86,7 +86,7 @@ public abstract class VoxelShape {
 
     @Nullable
     public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
-        if (this.b()) {
+        if (this.isEmpty()) {
             return null;
         } else {
             Vec3D vec3d2 = vec3d1.d(vec3d);
@@ -103,7 +103,7 @@ public abstract class VoxelShape {
     }
 
     public VoxelShape a(EnumDirection enumdirection) {
-        if (!this.b() && this != VoxelShapes.b()) {
+        if (!this.isEmpty() && this != VoxelShapes.b()) {
             EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
             EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
             DoubleList doublelist = this.a(enumdirection_enumaxis);
@@ -125,7 +125,7 @@ public abstract class VoxelShape {
     }
 
     protected double a(EnumAxisCycle enumaxiscycle, AxisAlignedBB axisalignedbb, double d0) {
-        if (this.b()) {
+        if (this.isEmpty()) {
             return d0;
         } else if (Math.abs(d0) < 1.0E-7D) {
             return 0.0D;
@@ -185,6 +185,6 @@ public abstract class VoxelShape {
     }
 
     public String toString() {
-        return this.b() ? "EMPTY" : "VoxelShape[" + this.a() + "]";
+        return this.isEmpty() ? "EMPTY" : "VoxelShape[" + this.a() + "]";
     }
 }

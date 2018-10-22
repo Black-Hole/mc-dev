@@ -47,7 +47,7 @@ public class WorldPersistentData {
 
                 if (file != null && file.exists()) {
                     persistentbase = (PersistentBase) function.apply(s);
-                    persistentbase.a(a(this.e, this.b, s, 1628).getCompound("data"));
+                    persistentbase.a(a(this.e, this.b, s, 1631).getCompound("data"));
                     this.c.put(s, persistentbase);
                 }
             } catch (Exception exception) {
@@ -183,7 +183,7 @@ public class WorldPersistentData {
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
 
                     nbttagcompound.set("data", persistentbase.b(new NBTTagCompound()));
-                    nbttagcompound.setInt("DataVersion", 1628);
+                    nbttagcompound.setInt("DataVersion", 1631);
                     FileOutputStream fileoutputstream = new FileOutputStream(file);
 
                     NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) fileoutputstream);

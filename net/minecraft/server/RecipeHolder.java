@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.Collection;
 import javax.annotation.Nullable;
 
 public interface RecipeHolder {
@@ -15,7 +14,7 @@ public interface RecipeHolder {
         IRecipe irecipe = this.i();
 
         if (irecipe != null && !irecipe.c()) {
-            entityhuman.a((Collection) Lists.newArrayList(new IRecipe[] { irecipe}));
+            entityhuman.discoverRecipes(Lists.newArrayList(new IRecipe[] { irecipe}));
             this.a((IRecipe) null);
         }
 

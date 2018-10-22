@@ -58,9 +58,9 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
         for (int i3 = Math.max(k, (int) d1 + 1); i3 >= 0; --i3) {
             blockposition_mutableblockposition.c(j1, i3, k1);
             if (ichunkaccess.getType(blockposition_mutableblockposition).isAir() && i3 < (int) d1 && random.nextDouble() > 0.01D) {
-                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.a, false);
+                ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.a, false);
             } else if (ichunkaccess.getType(blockposition_mutableblockposition).getMaterial() == Material.WATER && i3 > (int) d2 && i3 < l && d2 != 0.0D && random.nextDouble() > 0.15D) {
-                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.a, false);
+                ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.a, false);
             }
 
             IBlockData iblockdata4 = ichunkaccess.getType(blockposition_mutableblockposition);
@@ -87,24 +87,24 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
 
                     i2 = l1;
                     if (i3 >= l - 1) {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata3, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata3, false);
                     } else if (i3 < l - 7 - l1) {
                         iblockdata3 = WorldGenSurfaceFrozenOcean.c;
                         iblockdata2 = iblockdata;
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.d, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.d, false);
                     } else {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata2, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata2, false);
                     }
                 } else if (i2 > 0) {
                     --i2;
-                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata2, false);
+                    ichunkaccess.setType(blockposition_mutableblockposition, iblockdata2, false);
                     if (i2 == 0 && iblockdata2.getBlock() == Blocks.SAND && l1 > 1) {
                         i2 = random.nextInt(4) + Math.max(0, i3 - 63);
                         iblockdata2 = iblockdata2.getBlock() == Blocks.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();
                     }
                 }
             } else if (iblockdata4.getBlock() == Blocks.PACKED_ICE && j2 <= k2 && i3 > l2) {
-                ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.b, false);
+                ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.b, false);
                 ++j2;
             }
         }

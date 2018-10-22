@@ -36,7 +36,7 @@ public class CommandRecipe {
 
         EntityPlayer entityplayer;
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.a(collection1)) {
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.discoverRecipes(collection1)) {
             entityplayer = (EntityPlayer) iterator.next();
         }
 
@@ -58,7 +58,7 @@ public class CommandRecipe {
 
         EntityPlayer entityplayer;
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.b(collection1)) {
+        for (Iterator iterator = collection.iterator(); iterator.hasNext(); i += entityplayer.undiscoverRecipes(collection1)) {
             entityplayer = (EntityPlayer) iterator.next();
         }
 

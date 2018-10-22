@@ -303,7 +303,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     private void f(EntityLiving entityliving) {
         EntityLlamaSpit entityllamaspit = new EntityLlamaSpit(this.world, this);
         double d0 = entityliving.locX - this.locX;
-        double d1 = entityliving.getBoundingBox().b + (double) (entityliving.length / 3.0F) - entityllamaspit.locY;
+        double d1 = entityliving.getBoundingBox().minY + (double) (entityliving.length / 3.0F) - entityllamaspit.locY;
         double d2 = entityliving.locZ - this.locZ;
         float f = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
 
@@ -324,7 +324,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             if (f >= 6.0F) {
                 this.damageEntity(DamageSource.FALL, (float) i);
                 if (this.isVehicle()) {
-                    Iterator iterator = this.bQ().iterator();
+                    Iterator iterator = this.getAllPassengers().iterator();
 
                     while (iterator.hasNext()) {
                         Entity entity = (Entity) iterator.next();

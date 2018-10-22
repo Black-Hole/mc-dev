@@ -117,9 +117,9 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
                             for (int j3 = 0; j3 < 4; ++j3) {
                                 blockposition_mutableblockposition.c(k * 4 + i3, k2 * 8 + l2, j1 * 4 + j3);
                                 if ((d16 += d15) > 0.0D) {
-                                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, this.q, false);
+                                    ichunkaccess.setType(blockposition_mutableblockposition, this.q, false);
                                 } else if (k2 * 8 + l2 < this.k.w()) {
-                                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, this.r, false);
+                                    ichunkaccess.setType(blockposition_mutableblockposition, this.r, false);
                                 }
                             }
 

@@ -561,7 +561,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     private void b(WorldSettings worldsettings) {
-        if (!this.worldProvider.p()) {
+        if (!this.worldProvider.canRespawn()) {
             this.worldData.setSpawn(BlockPosition.ZERO.up(this.chunkProvider.getChunkGenerator().getSpawnHeight()));
         } else if (this.worldData.getType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             this.worldData.setSpawn(BlockPosition.ZERO.up());

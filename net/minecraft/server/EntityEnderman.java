@@ -117,7 +117,7 @@ public class EntityEnderman extends EntityMonster {
             return false;
         } else {
             Vec3D vec3d = entityhuman.f(1.0F).a();
-            Vec3D vec3d1 = new Vec3D(this.locX - entityhuman.locX, this.getBoundingBox().b + (double) this.getHeadHeight() - (entityhuman.locY + (double) entityhuman.getHeadHeight()), this.locZ - entityhuman.locZ);
+            Vec3D vec3d1 = new Vec3D(this.locX - entityhuman.locX, this.getBoundingBox().minY + (double) this.getHeadHeight() - (entityhuman.locY + (double) entityhuman.getHeadHeight()), this.locZ - entityhuman.locZ);
             double d0 = vec3d1.b();
 
             vec3d1 = vec3d1.a();
@@ -168,7 +168,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected boolean a(Entity entity) {
-        Vec3D vec3d = new Vec3D(this.locX - entity.locX, this.getBoundingBox().b + (double) (this.length / 2.0F) - entity.locY + (double) entity.getHeadHeight(), this.locZ - entity.locZ);
+        Vec3D vec3d = new Vec3D(this.locX - entity.locX, this.getBoundingBox().minY + (double) (this.length / 2.0F) - entity.locY + (double) entity.getHeadHeight(), this.locZ - entity.locZ);
 
         vec3d = vec3d.a();
         double d0 = 16.0D;

@@ -203,7 +203,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
-            this.a(new AxisAlignedBB(axisalignedbb.a, axisalignedbb.b, axisalignedbb.c, axisalignedbb.a + (double) this.width, axisalignedbb.b + (double) this.length, axisalignedbb.c + (double) this.width));
+            this.a(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + (double) this.width, axisalignedbb.minY + (double) this.length, axisalignedbb.minZ + (double) this.width));
             if (this.width > f2 && !this.justCreated && !this.world.isClientSide) {
                 this.move(EnumMoveType.SELF, (double) (f2 - this.width), 0.0D, (double) (f2 - this.width));
             }
@@ -703,9 +703,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public void recalcPosition() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
-        this.locX = (axisalignedbb.a + axisalignedbb.d) / 2.0D;
-        this.locY = axisalignedbb.b;
-        this.locZ = (axisalignedbb.c + axisalignedbb.f) / 2.0D;
+        this.locX = (axisalignedbb.minX + axisalignedbb.maxX) / 2.0D;
+        this.locY = axisalignedbb.minY;
+        this.locZ = (axisalignedbb.minZ + axisalignedbb.maxZ) / 2.0D;
     }
 
     protected SoundEffect ad() {
@@ -722,11 +722,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     protected void checkBlockCollisions() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
-        BlockPosition.b blockposition_b = BlockPosition.b.d(axisalignedbb.a + 0.001D, axisalignedbb.b + 0.001D, axisalignedbb.c + 0.001D);
+        BlockPosition.b blockposition_b = BlockPosition.b.d(axisalignedbb.minX + 0.001D, axisalignedbb.minY + 0.001D, axisalignedbb.minZ + 0.001D);
         Throwable throwable = null;
 
         try {
-            BlockPosition.b blockposition_b1 = BlockPosition.b.d(axisalignedbb.d - 0.001D, axisalignedbb.e - 0.001D, axisalignedbb.f - 0.001D);
+            BlockPosition.b blockposition_b1 = BlockPosition.b.d(axisalignedbb.maxX - 0.001D, axisalignedbb.maxY - 0.001D, axisalignedbb.maxZ - 0.001D);
             Throwable throwable1 = null;
 
             try {
@@ -1005,7 +1005,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             this.a(this.af(), f1, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
         }
 
-        float f2 = (float) MathHelper.floor(this.getBoundingBox().b);
+        float f2 = (float) MathHelper.floor(this.getBoundingBox().minY);
 
         int i;
         float f3;
@@ -1040,7 +1040,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         IBlockData iblockdata = this.world.getType(blockposition);
 
         if (iblockdata.i() != EnumRenderType.INVISIBLE) {
-            this.world.addParticle(new ParticleParamBlock(Particles.d, iblockdata), this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, -this.motX * 4.0D, 1.5D, -this.motZ * 4.0D);
+            this.world.addParticle(new ParticleParamBlock(Particles.d, iblockdata), this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().minY + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, -this.motX * 4.0D, 1.5D, -this.motZ * 4.0D);
         }
 
     }
@@ -1658,7 +1658,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             this.vehicle = entity;
-            this.vehicle.o(this);
+            this.vehicle.addPassenger(this);
             return true;
         }
     }
@@ -1684,7 +1684,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     }
 
-    protected void o(Entity entity) {
+    protected void addPassenger(Entity entity) {
         if (entity.getVehicle() != this) {
             throw new IllegalStateException("Use x.startRiding(y), not y.addPassenger(x)");
         } else {
@@ -2386,7 +2386,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         return true;
     }
 
-    public Collection<Entity> bQ() {
+    public Collection<Entity> getAllPassengers() {
         HashSet hashset = Sets.newHashSet();
         Iterator iterator = this.bP().iterator();
 
@@ -2515,12 +2515,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public boolean b(Tag<FluidType> tag) {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().shrink(0.001D);
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
 
         if (!this.world.isAreaLoaded(i, k, i1, j, l, j1, true)) {
             return false;
@@ -2543,9 +2543,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                             if (fluid.a(tag)) {
                                 double d1 = (double) ((float) i2 + fluid.f());
 
-                                if (d1 >= axisalignedbb.b) {
+                                if (d1 >= axisalignedbb.minY) {
                                     flag1 = true;
-                                    d0 = Math.max(d1 - axisalignedbb.b, d0);
+                                    d0 = Math.max(d1 - axisalignedbb.minY, d0);
                                     if (flag) {
                                         Vec3D vec3d1 = fluid.a((IWorldReader) this.world, (BlockPosition) blockposition_b);
 

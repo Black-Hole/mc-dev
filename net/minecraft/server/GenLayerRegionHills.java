@@ -8,30 +8,30 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
     INSTANCE;
 
     private static final Logger b = LogManager.getLogger();
-    private static final int c = IRegistry.BIOME.a((Object) Biomes.C);
-    private static final int d = IRegistry.BIOME.a((Object) Biomes.D);
-    private static final int e = IRegistry.BIOME.a((Object) Biomes.d);
-    private static final int f = IRegistry.BIOME.a((Object) Biomes.s);
-    private static final int g = IRegistry.BIOME.a((Object) Biomes.e);
-    private static final int h = IRegistry.BIOME.a((Object) Biomes.J);
-    private static final int i = IRegistry.BIOME.a((Object) Biomes.f);
-    private static final int j = IRegistry.BIOME.a((Object) Biomes.t);
-    private static final int k = IRegistry.BIOME.a((Object) Biomes.n);
-    private static final int l = IRegistry.BIOME.a((Object) Biomes.o);
-    private static final int m = IRegistry.BIOME.a((Object) Biomes.w);
-    private static final int n = IRegistry.BIOME.a((Object) Biomes.x);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.M);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.N);
-    private static final int q = IRegistry.BIOME.a((Object) Biomes.c);
-    private static final int r = IRegistry.BIOME.a((Object) Biomes.H);
-    private static final int s = IRegistry.BIOME.a((Object) Biomes.I);
-    private static final int t = IRegistry.BIOME.a((Object) Biomes.E);
-    private static final int u = IRegistry.BIOME.a((Object) Biomes.K);
-    private static final int v = IRegistry.BIOME.a((Object) Biomes.L);
-    private static final int w = IRegistry.BIOME.a((Object) Biomes.g);
-    private static final int x = IRegistry.BIOME.a((Object) Biomes.F);
-    private static final int y = IRegistry.BIOME.a((Object) Biomes.G);
-    private static final int z = IRegistry.BIOME.a((Object) Biomes.u);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST_HILLS);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.DESERT);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.DESERT_HILLS);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.MOUNTAINS);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.WOODED_MOUNTAINS);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.FOREST);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.WOODED_HILLS);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.SNOWY_TUNDRA);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.SNOWY_MOUNTAINS);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.JUNGLE_HILLS);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
+    private static final int q = IRegistry.BIOME.a((Object) Biomes.PLAINS);
+    private static final int r = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
+    private static final int s = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA_HILLS);
+    private static final int t = IRegistry.BIOME.a((Object) Biomes.DARK_FOREST);
+    private static final int u = IRegistry.BIOME.a((Object) Biomes.SAVANNA);
+    private static final int v = IRegistry.BIOME.a((Object) Biomes.SAVANNA_PLATEAU);
+    private static final int w = IRegistry.BIOME.a((Object) Biomes.TAIGA);
+    private static final int x = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
+    private static final int y = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA_HILLS);
+    private static final int z = IRegistry.BIOME.a((Object) Biomes.TAIGA_HILLS);
 
     private GenLayerRegionHills() {}
 

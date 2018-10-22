@@ -165,7 +165,7 @@ public class EntityBlaze extends EntityMonster {
                 this.a.getControllerMove().a(entityliving.locX, entityliving.locY, entityliving.locZ, 1.0D);
             } else if (d0 < this.g() * this.g()) {
                 double d1 = entityliving.locX - this.a.locX;
-                double d2 = entityliving.getBoundingBox().b + (double) (entityliving.length / 2.0F) - (this.a.locY + (double) (this.a.length / 2.0F));
+                double d2 = entityliving.getBoundingBox().minY + (double) (entityliving.length / 2.0F) - (this.a.locY + (double) (this.a.length / 2.0F));
                 double d3 = entityliving.locZ - this.a.locZ;
 
                 if (this.c <= 0) {

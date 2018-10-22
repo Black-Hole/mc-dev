@@ -22,7 +22,7 @@ public abstract class EntityWaterAnimal extends EntityCreature implements IAnima
         return 120;
     }
 
-    protected boolean isTypeNotPersistent() {
+    public boolean isTypeNotPersistent() {
         return true;
     }
 

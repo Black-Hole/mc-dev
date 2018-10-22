@@ -137,7 +137,7 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     @Nullable
-    public IBlockData a(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -440,7 +440,10 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     public void e(BlockPosition blockposition) {
-        a(this.m, blockposition.getY() >> 4).add(i(blockposition));
+        if (!World.k(blockposition)) {
+            a(this.m, blockposition.getY() >> 4).add(i(blockposition));
+        }
+
     }
 
     public ShortList[] u() {

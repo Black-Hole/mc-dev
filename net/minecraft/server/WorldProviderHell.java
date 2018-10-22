@@ -28,10 +28,10 @@ public class WorldProviderHell extends WorldProvider {
 
         generatorsettingsnether.a(Blocks.NETHERRACK.getBlockData());
         generatorsettingsnether.b(Blocks.LAVA.getBlockData());
-        return ChunkGeneratorType.b.create(this.b, BiomeLayout.b.a(((BiomeLayoutFixedConfiguration) BiomeLayout.b.b()).a(Biomes.j)), generatorsettingsnether);
+        return ChunkGeneratorType.b.create(this.b, BiomeLayout.b.a(((BiomeLayoutFixedConfiguration) BiomeLayout.b.b()).a(Biomes.NETHER)), generatorsettingsnether);
     }
 
-    public boolean o() {
+    public boolean isOverworld() {
         return false;
     }
 
@@ -49,7 +49,7 @@ public class WorldProviderHell extends WorldProvider {
         return 0.5F;
     }
 
-    public boolean p() {
+    public boolean canRespawn() {
         return false;
     }
 

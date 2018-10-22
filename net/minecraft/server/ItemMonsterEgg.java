@@ -53,7 +53,7 @@ public class ItemMonsterEgg extends Item {
 
             BlockPosition blockposition1;
 
-            if (iblockdata.h(world, blockposition).b()) {
+            if (iblockdata.getCollisionShape(world, blockposition).isEmpty()) {
                 blockposition1 = blockposition;
             } else {
                 blockposition1 = blockposition.shift(enumdirection);

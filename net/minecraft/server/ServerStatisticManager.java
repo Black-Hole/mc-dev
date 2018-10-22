@@ -208,7 +208,7 @@ public class ServerStatisticManager extends StatisticManager {
         JsonObject jsonobject1 = new JsonObject();
 
         jsonobject1.add("stats", jsonobject);
-        jsonobject1.addProperty("DataVersion", Integer.valueOf(1628));
+        jsonobject1.addProperty("DataVersion", Integer.valueOf(1631));
         return jsonobject1.toString();
     }
 

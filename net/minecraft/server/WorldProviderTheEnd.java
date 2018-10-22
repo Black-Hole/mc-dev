@@ -30,11 +30,11 @@ public class WorldProviderTheEnd extends WorldProvider {
         return 0.0F;
     }
 
-    public boolean p() {
+    public boolean canRespawn() {
         return false;
     }
 
-    public boolean o() {
+    public boolean isOverworld() {
         return false;
     }
 

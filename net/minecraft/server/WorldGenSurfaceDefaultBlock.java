@@ -47,17 +47,17 @@ public class WorldGenSurfaceDefaultBlock implements WorldGenSurface<WorldGenSurf
 
                     i1 = j1;
                     if (i2 >= l - 1) {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata5, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata5, false);
                     } else if (i2 < l - 7 - j1) {
                         iblockdata5 = Blocks.AIR.getBlockData();
                         iblockdata6 = iblockdata;
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata4, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata4, false);
                     } else {
-                        ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata6, false);
+                        ichunkaccess.setType(blockposition_mutableblockposition, iblockdata6, false);
                     }
                 } else if (i1 > 0) {
                     --i1;
-                    ichunkaccess.a((BlockPosition) blockposition_mutableblockposition, iblockdata6, false);
+                    ichunkaccess.setType(blockposition_mutableblockposition, iblockdata6, false);
                     if (i1 == 0 && iblockdata6.getBlock() == Blocks.SAND && j1 > 1) {
                         i1 = random.nextInt(4) + Math.max(0, i2 - 63);
                         iblockdata6 = iblockdata6.getBlock() == Blocks.RED_SAND ? Blocks.RED_SANDSTONE.getBlockData() : Blocks.SANDSTONE.getBlockData();

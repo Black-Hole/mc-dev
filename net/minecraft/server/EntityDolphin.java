@@ -243,7 +243,7 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel() && generatoraccess.getBiome(new BlockPosition(this)) != Biomes.a || generatoraccess.getBiome(new BlockPosition(this)) != Biomes.z && super.a(generatoraccess, flag);
+        return this.locY > 45.0D && this.locY < (double) generatoraccess.getSeaLevel() && generatoraccess.getBiome(new BlockPosition(this)) != Biomes.OCEAN || generatoraccess.getBiome(new BlockPosition(this)) != Biomes.DEEP_OCEAN && super.a(generatoraccess, flag);
     }
 
     protected SoundEffect d(DamageSource damagesource) {

@@ -88,9 +88,9 @@ public interface IWorldReader extends IBlockAccess {
     int getSeaLevel();
 
     default boolean a(IBlockData iblockdata, BlockPosition blockposition) {
-        VoxelShape voxelshape = iblockdata.h(this, blockposition);
+        VoxelShape voxelshape = iblockdata.getCollisionShape(this, blockposition);
 
-        return voxelshape.b() || this.a((Entity) null, voxelshape.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
+        return voxelshape.isEmpty() || this.a((Entity) null, voxelshape.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
     }
 
     default boolean a_(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
@@ -108,7 +108,7 @@ public interface IWorldReader extends IBlockAccess {
         boolean flag1 = worldborder.b() < (double) i && (double) j < worldborder.d() && worldborder.c() < (double) i1 && (double) j1 < worldborder.e();
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(j - i, l - k, j1 - i1);
         Predicate predicate = (voxelshape) -> {
-            return !voxelshape.b() && VoxelShapes.c(voxelshape1, voxelshape, OperatorBoolean.AND);
+            return !voxelshape.isEmpty() && VoxelShapes.c(voxelshape1, voxelshape, OperatorBoolean.AND);
         };
         Stream stream = StreamSupport.stream(BlockPosition.MutableBlockPosition.b(i, k, i1, j - 1, l - 1, j1 - 1).spliterator(), false).map((blockposition_mutableblockposition) -> {
             int i = blockposition_mutableblockposition.getX();
@@ -124,7 +124,7 @@ public interface IWorldReader extends IBlockAccess {
                 if (flag3 && !flag4 && !worldborder.a((BlockPosition) blockposition_mutableblockposition)) {
                     voxelshape = VoxelShapes.b();
                 } else {
-                    voxelshape = this.getType(blockposition_mutableblockposition).h(this, blockposition_mutableblockposition);
+                    voxelshape = this.getType(blockposition_mutableblockposition).getCollisionShape(this, blockposition_mutableblockposition);
                 }
 
                 VoxelShape voxelshape1 = voxelshape2.a((double) (-i), (double) (-j), (double) (-k));
@@ -198,7 +198,7 @@ public interface IWorldReader extends IBlockAccess {
     }
 
     default boolean a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        return this.a(entity, VoxelShapes.a(axisalignedbb), VoxelShapes.a(), set).allMatch(VoxelShape::b);
+        return this.a(entity, VoxelShapes.a(axisalignedbb), VoxelShapes.a(), set).allMatch(VoxelShape::isEmpty);
     }
 
     default boolean getCubes(@Nullable Entity entity, AxisAlignedBB axisalignedbb) {
@@ -210,12 +210,12 @@ public interface IWorldReader extends IBlockAccess {
     }
 
     default boolean containsLiquid(AxisAlignedBB axisalignedbb) {
-        int i = MathHelper.floor(axisalignedbb.a);
-        int j = MathHelper.f(axisalignedbb.d);
-        int k = MathHelper.floor(axisalignedbb.b);
-        int l = MathHelper.f(axisalignedbb.e);
-        int i1 = MathHelper.floor(axisalignedbb.c);
-        int j1 = MathHelper.f(axisalignedbb.f);
+        int i = MathHelper.floor(axisalignedbb.minX);
+        int j = MathHelper.f(axisalignedbb.maxX);
+        int k = MathHelper.floor(axisalignedbb.minY);
+        int l = MathHelper.f(axisalignedbb.maxY);
+        int i1 = MathHelper.floor(axisalignedbb.minZ);
+        int j1 = MathHelper.f(axisalignedbb.maxZ);
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
 

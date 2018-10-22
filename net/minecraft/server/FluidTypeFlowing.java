@@ -246,8 +246,8 @@ public abstract class FluidTypeFlowing extends FluidType {
             block_a = null;
         }
 
-        VoxelShape voxelshape = iblockdata.h(iblockaccess, blockposition);
-        VoxelShape voxelshape1 = iblockdata1.h(iblockaccess, blockposition1);
+        VoxelShape voxelshape = iblockdata.getCollisionShape(iblockaccess, blockposition);
+        VoxelShape voxelshape1 = iblockdata1.getCollisionShape(iblockaccess, blockposition1);
         boolean flag = !VoxelShapes.b(voxelshape, voxelshape1, enumdirection);
 
         if (object2bytelinkedopenhashmap != null) {

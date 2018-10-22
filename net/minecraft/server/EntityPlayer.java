@@ -241,7 +241,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (entity != this) {
             if (entity.isAlive()) {
                 this.setLocation(entity.locX, entity.locY, entity.locZ, entity.yaw, entity.pitch);
-                this.server.getPlayerList().d(this);
+                this.server.getPlayerList().updateChunks(this);
                 if (this.isSneaking()) {
                     this.setSpectatorTarget(this);
                 }
@@ -785,7 +785,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.getScoreboard().getObjectivesForCriteria(statistic, this.getName(), ScoreboardScore::c);
     }
 
-    public int a(Collection<IRecipe> collection) {
+    public int discoverRecipes(Collection<IRecipe> collection) {
         return this.cy.a(collection, this);
     }
 
@@ -803,10 +803,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             }
         }
 
-        this.a((Collection) arraylist);
+        this.discoverRecipes(arraylist);
     }
 
-    public int b(Collection<IRecipe> collection) {
+    public int undiscoverRecipes(Collection<IRecipe> collection) {
         return this.cy.b(collection, this);
     }
 

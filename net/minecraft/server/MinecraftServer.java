@@ -507,7 +507,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             if (this.init()) {
                 this.aa = SystemUtils.b();
                 this.m.setMOTD(new ChatComponentText(this.motd));
-                this.m.setServerInfo(new ServerPing.ServerData("1.13.1", 401));
+                this.m.setServerInfo(new ServerPing.ServerData("1.13.2", 404));
                 this.a(this.m);
 
                 while (this.isRunning) {
@@ -675,7 +675,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             i = SystemUtils.c();
             if (worldserver.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD || this.getAllowNether()) {
                 this.methodProfiler.a(() -> {
-                    return worldserver.getWorldData().getName();
+                    return "dim-" + worldserver.worldProvider.getDimensionManager().getDimensionID();
                 });
                 if (this.ticks % 20 == 0) {
                     this.methodProfiler.a("timeSync");
@@ -866,7 +866,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public String getVersion() {
-        return "1.13.1";
+        return "1.13.2";
     }
 
     public int y() {

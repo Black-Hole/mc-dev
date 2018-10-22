@@ -11,7 +11,7 @@ public class PathfinderWater extends PathfinderAbstract {
     }
 
     public PathPoint b() {
-        return super.a(MathHelper.floor(this.b.getBoundingBox().a), MathHelper.floor(this.b.getBoundingBox().b + 0.5D), MathHelper.floor(this.b.getBoundingBox().c));
+        return super.a(MathHelper.floor(this.b.getBoundingBox().minX), MathHelper.floor(this.b.getBoundingBox().minY + 0.5D), MathHelper.floor(this.b.getBoundingBox().minZ));
     }
 
     public PathPoint a(double d0, double d1, double d2) {

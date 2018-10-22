@@ -40,7 +40,7 @@ public class WorldProviderNormal extends WorldProvider {
 
             return chunkgeneratortype.create(this.b, biomelayout.a(biomelayoutfixedconfiguration), generatorsettingsflat);
         } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.c);
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.PLAINS);
 
             return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.b());
         } else if (worldtype != WorldType.g) {
@@ -56,17 +56,17 @@ public class WorldProviderNormal extends WorldProvider {
             if (jsonobject.has("biome_source") && jsonobject.getAsJsonObject("biome_source").has("type") && jsonobject.getAsJsonObject("biome_source").has("options")) {
                 MinecraftKey minecraftkey = new MinecraftKey(jsonobject.getAsJsonObject("biome_source").getAsJsonPrimitive("type").getAsString());
                 JsonObject jsonobject1 = jsonobject.getAsJsonObject("biome_source").getAsJsonObject("options");
-                BiomeBase[] abiomebase = new BiomeBase[] { Biomes.a};
+                BiomeBase[] abiomebase = new BiomeBase[] { Biomes.OCEAN};
 
                 if (jsonobject1.has("biomes")) {
                     JsonArray jsonarray = jsonobject1.getAsJsonArray("biomes");
 
-                    abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[] { Biomes.a};
+                    abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[] { Biomes.OCEAN};
 
                     for (int i = 0; i < jsonarray.size(); ++i) {
                         BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(jsonarray.get(i).getAsString()));
 
-                        abiomebase[i] = biomebase != null ? biomebase : Biomes.a;
+                        abiomebase[i] = biomebase != null ? biomebase : Biomes.OCEAN;
                     }
                 }
 
@@ -91,7 +91,7 @@ public class WorldProviderNormal extends WorldProvider {
             }
 
             if (worldchunkmanager == null) {
-                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.a));
+                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.OCEAN));
             }
 
             IBlockData iblockdata = Blocks.STONE.getBlockData();
@@ -216,11 +216,11 @@ public class WorldProviderNormal extends WorldProvider {
         return f1;
     }
 
-    public boolean o() {
+    public boolean isOverworld() {
         return true;
     }
 
-    public boolean p() {
+    public boolean canRespawn() {
         return true;
     }
 }

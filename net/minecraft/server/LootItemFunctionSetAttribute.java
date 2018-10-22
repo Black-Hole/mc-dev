@@ -75,7 +75,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
             }
 
             if (this.f.length == 1) {
-                jsonobject.addProperty("slot", this.f[0].d());
+                jsonobject.addProperty("slot", this.f[0].getSlotName());
             } else {
                 JsonArray jsonarray = new JsonArray();
                 EnumItemSlot[] aenumitemslot = this.f;
@@ -84,7 +84,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
                 for (int j = 0; j < i; ++j) {
                     EnumItemSlot enumitemslot = aenumitemslot[j];
 
-                    jsonarray.add(new JsonPrimitive(enumitemslot.d()));
+                    jsonarray.add(new JsonPrimitive(enumitemslot.getSlotName()));
                 }
 
                 jsonobject.add("slot", jsonarray);

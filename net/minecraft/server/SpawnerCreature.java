@@ -74,7 +74,7 @@ public final class SpawnerCreature {
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
                         Iterator iterator1 = this.c.iterator();
 
-                        label128:
+                        label137:
                         while (iterator1.hasNext()) {
                             ChunkCoordIntPair chunkcoordintpair1 = (ChunkCoordIntPair) iterator1.next();
                             BlockPosition blockposition1 = getRandomPosition(worldserver, chunkcoordintpair1.x, chunkcoordintpair1.z);
@@ -100,7 +100,7 @@ public final class SpawnerCreature {
 
                                     while (true) {
                                         if (k4 < i4) {
-                                            label121:
+                                            label130:
                                             {
                                                 j3 += worldserver.random.nextInt(6) - worldserver.random.nextInt(6);
                                                 k3 += worldserver.random.nextInt(1) - worldserver.random.nextInt(1);
@@ -108,51 +108,56 @@ public final class SpawnerCreature {
                                                 blockposition_mutableblockposition.c(j3, k3, l3);
                                                 float f = (float) j3 + 0.5F;
                                                 float f1 = (float) l3 + 0.5F;
+                                                EntityHuman entityhuman1 = worldserver.a((double) f, (double) f1, -1.0D);
 
-                                                if (!worldserver.isPlayerNearby((double) f, (double) k3, (double) f1, 24.0D) && blockposition.distanceSquared((double) f, (double) k3, (double) f1) >= 576.0D) {
-                                                    if (biomebase_biomemeta == null) {
-                                                        biomebase_biomemeta = worldserver.a(enumcreaturetype, (BlockPosition) blockposition_mutableblockposition);
+                                                if (entityhuman1 != null) {
+                                                    double d0 = entityhuman1.d((double) f, (double) k3, (double) f1);
+
+                                                    if (d0 > 576.0D && blockposition.distanceSquared((double) f, (double) k3, (double) f1) >= 576.0D) {
                                                         if (biomebase_biomemeta == null) {
-                                                            break label121;
+                                                            biomebase_biomemeta = worldserver.a(enumcreaturetype, (BlockPosition) blockposition_mutableblockposition);
+                                                            if (biomebase_biomemeta == null) {
+                                                                break label130;
+                                                            }
+
+                                                            i4 = biomebase_biomemeta.c + worldserver.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
                                                         }
 
-                                                        i4 = biomebase_biomemeta.c + worldserver.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
-                                                    }
+                                                        if (worldserver.a(enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
+                                                            EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(biomebase_biomemeta.b);
 
-                                                    if (worldserver.a(enumcreaturetype, biomebase_biomemeta, (BlockPosition) blockposition_mutableblockposition)) {
-                                                        EntityPositionTypes.Surface entitypositiontypes_surface = EntityPositionTypes.a(biomebase_biomemeta.b);
+                                                            if (entitypositiontypes_surface != null && a(entitypositiontypes_surface, worldserver, blockposition_mutableblockposition, biomebase_biomemeta.b)) {
+                                                                EntityInsentient entityinsentient;
 
-                                                        if (entitypositiontypes_surface != null && a(entitypositiontypes_surface, worldserver, blockposition_mutableblockposition, biomebase_biomemeta.b)) {
-                                                            EntityInsentient entityinsentient;
+                                                                try {
+                                                                    entityinsentient = (EntityInsentient) biomebase_biomemeta.b.a((World) worldserver);
+                                                                } catch (Exception exception) {
+                                                                    SpawnerCreature.a.warn("Failed to create mob", exception);
+                                                                    return j1;
+                                                                }
 
-                                                            try {
-                                                                entityinsentient = (EntityInsentient) biomebase_biomemeta.b.a((World) worldserver);
-                                                            } catch (Exception exception) {
-                                                                SpawnerCreature.a.warn("Failed to create mob", exception);
-                                                                return j1;
+                                                                entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
+                                                                if ((d0 <= 16384.0D || !entityinsentient.isTypeNotPersistent()) && entityinsentient.a((GeneratorAccess) worldserver, false) && entityinsentient.a((IWorldReader) worldserver)) {
+                                                                    groupdataentity = entityinsentient.prepare(worldserver.getDamageScaler(new BlockPosition(entityinsentient)), groupdataentity, (NBTTagCompound) null);
+                                                                    if (entityinsentient.a((IWorldReader) worldserver)) {
+                                                                        ++l2;
+                                                                        ++j4;
+                                                                        worldserver.addEntity(entityinsentient);
+                                                                    } else {
+                                                                        entityinsentient.die();
+                                                                    }
+
+                                                                    if (l2 >= entityinsentient.dg()) {
+                                                                        continue label137;
+                                                                    }
+
+                                                                    if (entityinsentient.c(j4)) {
+                                                                        break label130;
+                                                                    }
+                                                                }
+
+                                                                j1 += l2;
                                                             }
-
-                                                            entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
-                                                            if (entityinsentient.a((GeneratorAccess) worldserver, false) && entityinsentient.a((IWorldReader) worldserver)) {
-                                                                groupdataentity = entityinsentient.prepare(worldserver.getDamageScaler(new BlockPosition(entityinsentient)), groupdataentity, (NBTTagCompound) null);
-                                                                if (entityinsentient.a((IWorldReader) worldserver)) {
-                                                                    ++l2;
-                                                                    ++j4;
-                                                                    worldserver.addEntity(entityinsentient);
-                                                                } else {
-                                                                    entityinsentient.die();
-                                                                }
-
-                                                                if (l2 >= entityinsentient.dg()) {
-                                                                    continue label128;
-                                                                }
-
-                                                                if (entityinsentient.c(j4)) {
-                                                                    break label121;
-                                                                }
-                                                            }
-
-                                                            j1 += l2;
                                                         }
                                                     }
                                                 }

@@ -69,8 +69,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 }
 
                 nbttagcompound1 = GameProfileSerializer.a(this.d, DataFixTypes.CHUNK, nbttagcompound1, Math.max(1493, k));
-                if (k < 1628) {
-                    nbttagcompound1.setInt("DataVersion", 1628);
+                if (k < 1631) {
+                    nbttagcompound1.setInt("DataVersion", 1631);
                     this.a(new ChunkCoordIntPair(i, j), nbttagcompound1);
                 }
 
@@ -188,7 +188,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            nbttagcompound.setInt("DataVersion", 1628);
+            nbttagcompound.setInt("DataVersion", 1631);
             ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
 
             nbttagcompound.set("Level", nbttagcompound1);
@@ -477,12 +477,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             for (int k = 0; k < aint.length; ++k) {
                 abiomebase[k] = (BiomeBase) IRegistry.BIOME.fromId(aint[k]);
                 if (abiomebase[k] == null) {
-                    abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.c);
+                    abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.PLAINS);
                 }
             }
         } else {
             for (int l = 0; l < abiomebase.length; ++l) {
-                abiomebase[l] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((l & 15) + (i << 4), 0, (l >> 4 & 15) + (j << 4)), Biomes.c);
+                abiomebase[l] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((l & 15) + (i << 4), 0, (l >> 4 & 15) + (j << 4)), Biomes.PLAINS);
             }
         }
 
@@ -608,12 +608,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             for (int k = 0; k < aint.length; ++k) {
                 abiomebase[k] = (BiomeBase) IRegistry.BIOME.fromId(aint[k]);
                 if (abiomebase[k] == null) {
-                    abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.c);
+                    abiomebase[k] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((k & 15) + (i << 4), 0, (k >> 4 & 15) + (j << 4)), Biomes.PLAINS);
                 }
             }
         } else {
             for (int l = 0; l < abiomebase.length; ++l) {
-                abiomebase[l] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((l & 15) + (i << 4), 0, (l >> 4 & 15) + (j << 4)), Biomes.c);
+                abiomebase[l] = generatoraccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(blockposition_mutableblockposition.c((l & 15) + (i << 4), 0, (l >> 4 & 15) + (j << 4)), Biomes.PLAINS);
             }
         }
 

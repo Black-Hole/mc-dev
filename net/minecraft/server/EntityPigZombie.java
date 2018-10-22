@@ -16,8 +16,8 @@ public class EntityPigZombie extends EntityZombie {
         this.fireProof = true;
     }
 
-    public void a(@Nullable EntityLiving entityliving) {
-        super.a(entityliving);
+    public void setLastDamager(@Nullable EntityLiving entityliving) {
+        super.setLastDamager(entityliving);
         if (entityliving != null) {
             this.hurtBy = entityliving.getUniqueID();
         }
@@ -62,7 +62,7 @@ public class EntityPigZombie extends EntityZombie {
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
             EntityHuman entityhuman = this.world.b(this.hurtBy);
 
-            this.a((EntityLiving) entityhuman);
+            this.setLastDamager(entityhuman);
             this.killer = entityhuman;
             this.lastDamageByPlayerTime = this.cg();
         }
@@ -98,7 +98,7 @@ public class EntityPigZombie extends EntityZombie {
             this.hurtBy = UUID.fromString(s);
             EntityHuman entityhuman = this.world.b(this.hurtBy);
 
-            this.a((EntityLiving) entityhuman);
+            this.setLastDamager(entityhuman);
             if (entityhuman != null) {
                 this.killer = entityhuman;
                 this.lastDamageByPlayerTime = this.cg();
@@ -125,7 +125,7 @@ public class EntityPigZombie extends EntityZombie {
         this.angerLevel = 400 + this.random.nextInt(400);
         this.soundDelay = this.random.nextInt(40);
         if (entity instanceof EntityLiving) {
-            this.a((EntityLiving) entity);
+            this.setLastDamager((EntityLiving) entity);
         }
 
     }

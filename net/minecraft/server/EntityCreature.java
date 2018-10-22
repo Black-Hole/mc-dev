@@ -20,7 +20,7 @@ public abstract class EntityCreature extends EntityInsentient {
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return super.a(generatoraccess, flag) && this.a(new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
+        return super.a(generatoraccess, flag) && this.a(new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
     public boolean dr() {

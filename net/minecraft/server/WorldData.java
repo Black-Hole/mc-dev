@@ -78,7 +78,7 @@ public class WorldData {
         this.T = Maps.newIdentityHashMap();
         this.V = new GameRules();
         this.p = null;
-        this.q = 1628;
+        this.q = 1631;
         this.b(new NBTTagCompound());
     }
 
@@ -267,7 +267,7 @@ public class WorldData {
         this.T = Maps.newIdentityHashMap();
         this.V = new GameRules();
         this.p = null;
-        this.q = 1628;
+        this.q = 1631;
         this.a(worldsettings);
         this.levelName = s;
         this.G = WorldData.a;
@@ -299,11 +299,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.13.1");
-        nbttagcompound2.setInt("Id", 1628);
+        nbttagcompound2.setString("Name", "1.13.2");
+        nbttagcompound2.setInt("Id", 1631);
         nbttagcompound2.setBoolean("Snapshot", false);
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 1628);
+        nbttagcompound.setInt("DataVersion", 1631);
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.b());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -417,7 +417,7 @@ public class WorldData {
 
     private void Q() {
         if (!this.r && this.s != null) {
-            if (this.q < 1628) {
+            if (this.q < 1631) {
                 if (this.p == null) {
                     throw new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded.");
                 }

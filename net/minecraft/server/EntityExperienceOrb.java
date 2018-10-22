@@ -54,7 +54,7 @@ public class EntityExperienceOrb extends Entity {
             this.a(SoundEffects.ENTITY_GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
         }
 
-        this.i(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
+        this.i(this.locX, (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ);
         double d0 = 8.0D;
 
         if (this.targetTime < this.a - 20 + this.getId() % 100) {
@@ -88,7 +88,7 @@ public class EntityExperienceOrb extends Entity {
         float f = 0.98F;
 
         if (this.onGround) {
-            f = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.98F;
+            f = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.98F;
         }
 
         this.motX *= (double) f;

@@ -68,7 +68,7 @@ public class EntityItem extends Entity {
             if (this.world.isClientSide) {
                 this.noclip = false;
             } else {
-                this.noclip = this.i(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
+                this.noclip = this.i(this.locX, (this.getBoundingBox().minY + this.getBoundingBox().maxY) / 2.0D, this.locZ);
             }
 
             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
@@ -90,7 +90,7 @@ public class EntityItem extends Entity {
             float f = 0.98F;
 
             if (this.onGround) {
-                f = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().b) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.98F;
+                f = this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.locZ))).getBlock().n() * 0.98F;
             }
 
             this.motX *= (double) f;

@@ -32,7 +32,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                 }
             }
 
-            if (world.worldProvider.p() && world.getBiome(blockposition) != Biomes.j) {
+            if (world.worldProvider.canRespawn() && world.getBiome(blockposition) != Biomes.NETHER) {
                 if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
                     EntityHuman entityhuman1 = this.a(world, blockposition);
 

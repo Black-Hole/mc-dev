@@ -36,7 +36,7 @@ public class BlockConcretePowder extends BlockFalling {
             if (enumdirection != EnumDirection.DOWN || x(iblockdata)) {
                 blockposition_mutableblockposition.g(blockposition).c(enumdirection);
                 iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
-                if (x(iblockdata) && !Block.a(iblockdata.h(iblockaccess, blockposition), enumdirection.opposite())) {
+                if (x(iblockdata) && !Block.a(iblockdata.getCollisionShape(iblockaccess, blockposition), enumdirection.opposite())) {
                     flag = true;
                     break;
                 }

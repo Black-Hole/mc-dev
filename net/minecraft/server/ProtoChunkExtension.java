@@ -36,7 +36,7 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     @Nullable
-    public IBlockData a(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
+    public IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return null;
     }
 

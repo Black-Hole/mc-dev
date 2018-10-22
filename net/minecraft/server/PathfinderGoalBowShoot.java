@@ -53,7 +53,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         EntityLiving entityliving = this.a.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.d(entityliving.locX, entityliving.getBoundingBox().b, entityliving.locZ);
+            double d0 = this.a.d(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
             boolean flag = this.a.getEntitySenses().a(entityliving);
             boolean flag1 = this.f > 0;
 

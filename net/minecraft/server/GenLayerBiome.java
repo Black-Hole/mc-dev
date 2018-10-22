@@ -2,22 +2,22 @@ package net.minecraft.server;
 
 public class GenLayerBiome implements AreaTransformer5 {
 
-    private static final int a = IRegistry.BIOME.a((Object) Biomes.C);
-    private static final int b = IRegistry.BIOME.a((Object) Biomes.d);
-    private static final int c = IRegistry.BIOME.a((Object) Biomes.e);
-    private static final int d = IRegistry.BIOME.a((Object) Biomes.f);
-    private static final int e = IRegistry.BIOME.a((Object) Biomes.n);
-    private static final int f = IRegistry.BIOME.a((Object) Biomes.w);
-    private static final int g = IRegistry.BIOME.a((Object) Biomes.O);
-    private static final int h = IRegistry.BIOME.a((Object) Biomes.N);
-    private static final int i = IRegistry.BIOME.a((Object) Biomes.p);
-    private static final int j = IRegistry.BIOME.a((Object) Biomes.c);
-    private static final int k = IRegistry.BIOME.a((Object) Biomes.H);
-    private static final int l = IRegistry.BIOME.a((Object) Biomes.E);
-    private static final int m = IRegistry.BIOME.a((Object) Biomes.K);
-    private static final int n = IRegistry.BIOME.a((Object) Biomes.h);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.g);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.F);
+    private static final int a = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST);
+    private static final int b = IRegistry.BIOME.a((Object) Biomes.DESERT);
+    private static final int c = IRegistry.BIOME.a((Object) Biomes.MOUNTAINS);
+    private static final int d = IRegistry.BIOME.a((Object) Biomes.FOREST);
+    private static final int e = IRegistry.BIOME.a((Object) Biomes.SNOWY_TUNDRA);
+    private static final int f = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.BADLANDS_PLATEAU);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.MUSHROOM_FIELDS);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.PLAINS);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.DARK_FOREST);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.SAVANNA);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.SWAMP);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.TAIGA);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
     private static final int[] q = new int[] { GenLayerBiome.b, GenLayerBiome.d, GenLayerBiome.c, GenLayerBiome.n, GenLayerBiome.j, GenLayerBiome.o};
     private static final int[] r = new int[] { GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.b, GenLayerBiome.m, GenLayerBiome.m, GenLayerBiome.j};
     private static final int[] s = new int[] { GenLayerBiome.d, GenLayerBiome.l, GenLayerBiome.c, GenLayerBiome.j, GenLayerBiome.a, GenLayerBiome.n};
