@@ -43,7 +43,7 @@ public class MobSpawnerPhantom {
                                     if (random.nextInt(j) >= 72000) {
                                         BlockPosition blockposition1 = blockposition.up(20 + random.nextInt(15)).east(-10 + random.nextInt(21)).south(-10 + random.nextInt(21));
                                         IBlockData iblockdata = world.getType(blockposition1);
-                                        Fluid fluid = world.b(blockposition1);
+                                        Fluid fluid = world.getFluid(blockposition1);
 
                                         if (SpawnerCreature.a(iblockdata, fluid)) {
                                             GroupDataEntity groupdataentity = null;

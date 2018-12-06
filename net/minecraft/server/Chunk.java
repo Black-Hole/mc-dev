@@ -222,8 +222,8 @@ public class Chunk implements IChunkAccess {
                         int i1 = this.locZ * 16 + j;
                         int j1 = Integer.MAX_VALUE;
 
-                        Iterator iterator;
                         EnumDirection enumdirection;
+                        Iterator iterator;
 
                         for (iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator(); iterator.hasNext(); j1 = Math.min(j1, this.world.d(l + enumdirection.getAdjacentX(), i1 + enumdirection.getAdjacentZ()))) {
                             enumdirection = (EnumDirection) iterator.next();
@@ -387,7 +387,7 @@ public class Chunk implements IChunkAccess {
         }
     }
 
-    public Fluid b(BlockPosition blockposition) {
+    public Fluid getFluid(BlockPosition blockposition) {
         return this.b(blockposition.getX(), blockposition.getY(), blockposition.getZ());
     }
 
@@ -586,7 +586,7 @@ public class Chunk implements IChunkAccess {
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.locX || j != this.locZ) {
-            Chunk.d.warn("Wrong location! ({}, {}) should be ({}, {}), {}", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(this.locX), Integer.valueOf(this.locZ), entity);
+            Chunk.d.warn("Wrong location! ({}, {}) should be ({}, {}), {}", i, j, this.locX, this.locZ, entity);
             entity.die();
         }
 
@@ -891,7 +891,7 @@ public class Chunk implements IChunkAccess {
 
     public void a(ChunkSection[] achunksection) {
         if (this.sections.length != achunksection.length) {
-            Chunk.d.warn("Could not set level chunk sections, array length is {} instead of {}", Integer.valueOf(achunksection.length), Integer.valueOf(this.sections.length));
+            Chunk.d.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.sections.length);
         } else {
             System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
         }
@@ -1062,7 +1062,7 @@ public class Chunk implements IChunkAccess {
 
                     while (shortlistiterator.hasNext()) {
                         Short oshort = (Short) shortlistiterator.next();
-                        BlockPosition blockposition = ProtoChunk.a(oshort.shortValue(), i, chunkcoordintpair);
+                        BlockPosition blockposition = ProtoChunk.a(oshort, i, chunkcoordintpair);
                         IBlockData iblockdata = this.world.getType(blockposition);
                         IBlockData iblockdata1 = Block.b(iblockdata, this.world, blockposition);
 
@@ -1081,7 +1081,7 @@ public class Chunk implements IChunkAccess {
 
             if (this.t instanceof ProtoChunkTickList) {
                 ((ProtoChunkTickList) this.t).a(this.world.I(), (blockposition) -> {
-                    return this.world.b(blockposition).c();
+                    return this.world.getFluid(blockposition).c();
                 });
             }
 

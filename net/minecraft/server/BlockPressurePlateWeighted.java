@@ -7,7 +7,7 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateWeighted(int i, Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateWeighted.POWER, 0));
         this.weight = i;
     }
 
@@ -32,11 +32,11 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     }
 
     protected int getPower(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockPressurePlateWeighted.POWER)).intValue();
+        return (Integer) iblockdata.get(BlockPressurePlateWeighted.POWER);
     }
 
     protected IBlockData a(IBlockData iblockdata, int i) {
-        return (IBlockData) iblockdata.set(BlockPressurePlateWeighted.POWER, Integer.valueOf(i));
+        return (IBlockData) iblockdata.set(BlockPressurePlateWeighted.POWER, i);
     }
 
     public int a(IWorldReader iworldreader) {
@@ -44,6 +44,6 @@ public class BlockPressurePlateWeighted extends BlockPressurePlateAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPressurePlateWeighted.POWER});
+        blockstatelist_a.a(BlockPressurePlateWeighted.POWER);
     }
 }

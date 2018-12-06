@@ -13,7 +13,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public BlockMinecartDetector(Block.Info block_info) {
         super(true, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, Boolean.valueOf(false))).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartDetector.POWERED, false)).set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
     }
 
     public int a(IWorldReader iworldreader) {
@@ -26,28 +26,28 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide) {
-            if (!((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
+            if (!(Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
                 this.a(world, blockposition, iblockdata);
             }
         }
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!world.isClientSide && ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
+        if (!world.isClientSide && (Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
             this.a(world, blockposition, iblockdata);
         }
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue() ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockMinecartDetector.POWERED) ? 15 : 0;
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return !((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue() ? 0 : (enumdirection == EnumDirection.UP ? 15 : 0);
+        return !(Boolean) iblockdata.get(BlockMinecartDetector.POWERED) ? 0 : (enumdirection == EnumDirection.UP ? 15 : 0);
     }
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        boolean flag = ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue();
+        boolean flag = (Boolean) iblockdata.get(BlockMinecartDetector.POWERED);
         boolean flag1 = false;
         List list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
 
@@ -56,7 +56,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
 
         if (flag1 && !flag) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, Boolean.valueOf(true)), 3);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, true), 3);
             this.b(world, blockposition, iblockdata, true);
             world.applyPhysics(blockposition, this);
             world.applyPhysics(blockposition.down(), this);
@@ -64,7 +64,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
 
         if (!flag1 && flag) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, Boolean.valueOf(false)), 3);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockMinecartDetector.POWERED, false), 3);
             this.b(world, blockposition, iblockdata, false);
             world.applyPhysics(blockposition, this);
             world.applyPhysics(blockposition.down(), this);
@@ -108,7 +108,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        if (((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
             List list = this.a(world, blockposition, EntityMinecartCommandBlock.class, (Predicate) null);
 
             if (!list.isEmpty()) {
@@ -141,95 +141,67 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
             switch ((BlockPropertyTrackPosition) iblockdata.get(BlockMinecartDetector.SHAPE)) {
             case ASCENDING_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_WEST);
-
             case ASCENDING_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_EAST);
-
             case ASCENDING_NORTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_SOUTH);
-
             case ASCENDING_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_NORTH);
-
             case SOUTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_WEST);
-
             case SOUTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_EAST);
-
             case NORTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_EAST);
-
             case NORTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_WEST);
             }
-
         case COUNTERCLOCKWISE_90:
             switch ((BlockPropertyTrackPosition) iblockdata.get(BlockMinecartDetector.SHAPE)) {
             case ASCENDING_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_NORTH);
-
             case ASCENDING_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_SOUTH);
-
             case ASCENDING_NORTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_WEST);
-
             case ASCENDING_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_EAST);
-
             case SOUTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_EAST);
-
             case SOUTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_EAST);
-
             case NORTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_WEST);
-
             case NORTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_WEST);
-
             case NORTH_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.EAST_WEST);
-
             case EAST_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH);
             }
-
         case CLOCKWISE_90:
             switch ((BlockPropertyTrackPosition) iblockdata.get(BlockMinecartDetector.SHAPE)) {
             case ASCENDING_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_SOUTH);
-
             case ASCENDING_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_NORTH);
-
             case ASCENDING_NORTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_EAST);
-
             case ASCENDING_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_WEST);
-
             case SOUTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_WEST);
-
             case SOUTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_WEST);
-
             case NORTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_EAST);
-
             case NORTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_EAST);
-
             case NORTH_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.EAST_WEST);
-
             case EAST_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH);
             }
-
         default:
             return iblockdata;
         }
@@ -243,48 +215,35 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
             switch (blockpropertytrackposition) {
             case ASCENDING_NORTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_SOUTH);
-
             case ASCENDING_SOUTH:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_NORTH);
-
             case SOUTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_EAST);
-
             case SOUTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_WEST);
-
             case NORTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_WEST);
-
             case NORTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_EAST);
-
             default:
                 return super.a(iblockdata, enumblockmirror);
             }
-
         case FRONT_BACK:
             switch (blockpropertytrackposition) {
             case ASCENDING_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_WEST);
-
             case ASCENDING_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.ASCENDING_EAST);
-
             case ASCENDING_NORTH:
             case ASCENDING_SOUTH:
             default:
                 break;
-
             case SOUTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_WEST);
-
             case SOUTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.SOUTH_EAST);
-
             case NORTH_WEST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_EAST);
-
             case NORTH_EAST:
                 return (IBlockData) iblockdata.set(BlockMinecartDetector.SHAPE, BlockPropertyTrackPosition.NORTH_WEST);
             }
@@ -294,6 +253,6 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockMinecartDetector.SHAPE, BlockMinecartDetector.POWERED});
+        blockstatelist_a.a(BlockMinecartDetector.SHAPE, BlockMinecartDetector.POWERED);
     }
 }

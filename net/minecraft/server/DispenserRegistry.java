@@ -297,7 +297,7 @@ public class DispenserRegistry {
 
                 this.a = true;
                 if (world.isEmpty(blockposition) && BlockWitherSkull.b(world, blockposition, itemstack)) {
-                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, Integer.valueOf(enumdirection.k() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4)), 3);
+                    world.setTypeAndData(blockposition, (IBlockData) Blocks.WITHER_SKELETON_SKULL.getBlockData().set(BlockSkull.a, enumdirection.k() == EnumDirection.EnumAxis.Y ? 0 : enumdirection.opposite().get2DRotationValue() * 4), 3);
                     TileEntity tileentity = world.getTileEntity(blockposition);
 
                     if (tileentity instanceof TileEntitySkull) {
@@ -396,7 +396,7 @@ public class DispenserRegistry {
             String s = (String) function.apply(object);
 
             if (!localelanguage.b(s)) {
-                DispenserRegistry.c.warn("Missing translation for {}: {} (key: \'{}\')", s1, iregistry.getKey(object), s);
+                DispenserRegistry.c.warn("Missing translation for {}: {} (key: '{}')", s1, iregistry.getKey(object), s);
             }
 
         });
@@ -443,19 +443,14 @@ public class DispenserRegistry {
             case DOWN:
             default:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.UP};
-
             case UP:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.UP, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST};
-
             case NORTH:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.WEST, EnumDirection.UP, EnumDirection.SOUTH};
-
             case SOUTH:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.SOUTH, EnumDirection.EAST, EnumDirection.WEST, EnumDirection.UP, EnumDirection.NORTH};
-
             case WEST:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.WEST, EnumDirection.SOUTH, EnumDirection.UP, EnumDirection.NORTH, EnumDirection.EAST};
-
             case EAST:
                 return new EnumDirection[] { EnumDirection.DOWN, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.UP, EnumDirection.NORTH, EnumDirection.WEST};
             }
@@ -530,10 +525,10 @@ public class DispenserRegistry {
             BlockPosition blockposition = isourceblock.getBlockPosition().shift(enumdirection);
             double d3;
 
-            if (world.b(blockposition).a(TagsFluid.WATER)) {
+            if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
                 d3 = 1.0D;
             } else {
-                if (!world.getType(blockposition).isAir() || !world.b(blockposition.down()).a(TagsFluid.WATER)) {
+                if (!world.getType(blockposition).isAir() || !world.getFluid(blockposition.down()).a(TagsFluid.WATER)) {
                     return this.a.dispense(isourceblock, itemstack);
                 }
 

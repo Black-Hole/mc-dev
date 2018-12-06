@@ -15,13 +15,10 @@ public class WorldGenFeatureFlowerPlain extends WorldGenFlowers {
             switch (i) {
             case 0:
                 return Blocks.ORANGE_TULIP.getBlockData();
-
             case 1:
                 return Blocks.RED_TULIP.getBlockData();
-
             case 2:
                 return Blocks.PINK_TULIP.getBlockData();
-
             case 3:
             default:
                 return Blocks.WHITE_TULIP.getBlockData();

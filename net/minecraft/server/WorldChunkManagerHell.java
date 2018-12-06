@@ -42,7 +42,7 @@ public class WorldChunkManagerHell extends WorldChunkManager {
         BiomeBase biomebase = this.c;
 
         this.c.getClass();
-        return ((Boolean) map.computeIfAbsent(structuregenerator, biomebase::a)).booleanValue();
+        return (Boolean) map.computeIfAbsent(structuregenerator, biomebase::a);
     }
 
     public Set<IBlockData> b() {

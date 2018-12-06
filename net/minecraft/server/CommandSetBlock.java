@@ -55,7 +55,7 @@ public class CommandSetBlock {
                 throw CommandSetBlock.a.create();
             } else {
                 worldserver.update(blockposition, argumenttilelocation.a().getBlock());
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.setblock.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.setblock.success", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ()}), true);
                 return 1;
             }
         }

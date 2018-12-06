@@ -10,7 +10,7 @@ public abstract class BlockSign extends BlockTileEntity implements IFluidSource,
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockSign.a)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockSign.a)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
@@ -48,8 +48,8 @@ public abstract class BlockSign extends BlockTileEntity implements IFluidSource,
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockSign.a)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSign.a, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockSign.a)) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSign.a, false), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -57,17 +57,17 @@ public abstract class BlockSign extends BlockTileEntity implements IFluidSource,
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockSign.a)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockSign.a) ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockSign.a)).booleanValue() && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockSign.a) && fluidtype == FluidTypes.c;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockSign.a)).booleanValue() && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockSign.a) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSign.a, Boolean.valueOf(true)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSign.a, true), 3);
                 generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 

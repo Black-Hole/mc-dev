@@ -79,7 +79,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
 
                             if (iblockdata.b(BlockProperties.ab)) {
                                 ((Set) arraylist.get(0)).add(blockposition_b.h());
-                                this.b(generatoraccess, blockposition_b, (IBlockData) iblockdata.set(BlockProperties.ab, Integer.valueOf(1)));
+                                this.b(generatoraccess, blockposition_b, (IBlockData) iblockdata.set(BlockProperties.ab, 1));
                             }
                         }
                     }
@@ -113,10 +113,10 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                                 IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
 
                                 if (iblockdata1.b(BlockProperties.ab)) {
-                                    int k1 = ((Integer) iblockdata1.get(BlockProperties.ab)).intValue();
+                                    int k1 = (Integer) iblockdata1.get(BlockProperties.ab);
 
                                     if (k1 > l + 1) {
-                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ab, Integer.valueOf(l + 1));
+                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ab, l + 1);
 
                                         this.b(generatoraccess, blockposition_b, iblockdata2);
                                         set1.add(blockposition_b.h());

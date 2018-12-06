@@ -18,11 +18,11 @@ public class BlockFenceGate extends BlockFacingHorizontal {
 
     public BlockFenceGate(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFenceGate.OPEN, Boolean.valueOf(false))).set(BlockFenceGate.POWERED, Boolean.valueOf(false))).set(BlockFenceGate.IN_WALL, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFenceGate.OPEN, false)).set(BlockFenceGate.POWERED, false)).set(BlockFenceGate.IN_WALL, false));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.r : BlockFenceGate.q) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.p : BlockFenceGate.o);
+        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.r : BlockFenceGate.q) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.p : BlockFenceGate.o);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -33,16 +33,16 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         } else {
             boolean flag = this.k(iblockdata1) || this.k(generatoraccess.getType(blockposition.shift(enumdirection.opposite())));
 
-            return (IBlockData) iblockdata.set(BlockFenceGate.IN_WALL, Boolean.valueOf(flag));
+            return (IBlockData) iblockdata.set(BlockFenceGate.IN_WALL, flag);
         }
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.s : BlockFenceGate.t);
+        return (Boolean) iblockdata.get(BlockFenceGate.OPEN) ? VoxelShapes.a() : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.Z ? BlockFenceGate.s : BlockFenceGate.t);
     }
 
     public VoxelShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Boolean) iblockdata.get(BlockFenceGate.IN_WALL)).booleanValue() ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.x : BlockFenceGate.w) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.v : BlockFenceGate.u);
+        return (Boolean) iblockdata.get(BlockFenceGate.IN_WALL) ? (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.x : BlockFenceGate.w) : (((EnumDirection) iblockdata.get(BlockFenceGate.FACING)).k() == EnumDirection.EnumAxis.X ? BlockFenceGate.v : BlockFenceGate.u);
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -52,14 +52,11 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
         case LAND:
-            return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue();
-
+            return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
         case WATER:
             return false;
-
         case AIR:
-            return ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue();
-
+            return (Boolean) iblockdata.get(BlockFenceGate.OPEN);
         default:
             return false;
         }
@@ -73,7 +70,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
         boolean flag1 = enumdirection_enumaxis == EnumDirection.EnumAxis.Z && (this.k(world.getType(blockposition.west())) || this.k(world.getType(blockposition.east()))) || enumdirection_enumaxis == EnumDirection.EnumAxis.X && (this.k(world.getType(blockposition.north())) || this.k(world.getType(blockposition.south())));
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockFenceGate.FACING, enumdirection)).set(BlockFenceGate.OPEN, Boolean.valueOf(flag))).set(BlockFenceGate.POWERED, Boolean.valueOf(flag))).set(BlockFenceGate.IN_WALL, Boolean.valueOf(flag1));
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockFenceGate.FACING, enumdirection)).set(BlockFenceGate.OPEN, flag)).set(BlockFenceGate.POWERED, flag)).set(BlockFenceGate.IN_WALL, flag1);
     }
 
     private boolean k(IBlockData iblockdata) {
@@ -81,8 +78,8 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue()) {
-            iblockdata = (IBlockData) iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(false));
+        if ((Boolean) iblockdata.get(BlockFenceGate.OPEN)) {
+            iblockdata = (IBlockData) iblockdata.set(BlockFenceGate.OPEN, false);
             world.setTypeAndData(blockposition, iblockdata, 10);
         } else {
             EnumDirection enumdirection1 = entityhuman.getDirection();
@@ -91,11 +88,11 @@ public class BlockFenceGate extends BlockFacingHorizontal {
                 iblockdata = (IBlockData) iblockdata.set(BlockFenceGate.FACING, enumdirection1);
             }
 
-            iblockdata = (IBlockData) iblockdata.set(BlockFenceGate.OPEN, Boolean.valueOf(true));
+            iblockdata = (IBlockData) iblockdata.set(BlockFenceGate.OPEN, true);
             world.setTypeAndData(blockposition, iblockdata, 10);
         }
 
-        world.a(entityhuman, ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() ? 1008 : 1014, blockposition, 0);
+        world.a(entityhuman, (Boolean) iblockdata.get(BlockFenceGate.OPEN) ? 1008 : 1014, blockposition, 0);
         return true;
     }
 
@@ -103,9 +100,9 @@ public class BlockFenceGate extends BlockFacingHorizontal {
         if (!world.isClientSide) {
             boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
-            if (((Boolean) iblockdata.get(BlockFenceGate.POWERED)).booleanValue() != flag) {
-                world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockFenceGate.POWERED, Boolean.valueOf(flag))).set(BlockFenceGate.OPEN, Boolean.valueOf(flag)), 2);
-                if (((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue() != flag) {
+            if ((Boolean) iblockdata.get(BlockFenceGate.POWERED) != flag) {
+                world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockFenceGate.POWERED, flag)).set(BlockFenceGate.OPEN, flag), 2);
+                if ((Boolean) iblockdata.get(BlockFenceGate.OPEN) != flag) {
                     world.a((EntityHuman) null, flag ? 1008 : 1014, blockposition, 0);
                 }
             }
@@ -114,7 +111,7 @@ public class BlockFenceGate extends BlockFacingHorizontal {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockFenceGate.FACING, BlockFenceGate.OPEN, BlockFenceGate.POWERED, BlockFenceGate.IN_WALL});
+        blockstatelist_a.a(BlockFenceGate.FACING, BlockFenceGate.OPEN, BlockFenceGate.POWERED, BlockFenceGate.IN_WALL);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

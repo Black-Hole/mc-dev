@@ -66,7 +66,7 @@ public class CommandTag {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.add.success.single", new Object[] { s, ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.add.success.multiple", new Object[] { s, Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.add.success.multiple", new Object[] { s, collection.size()}), true);
             }
 
             return i;
@@ -91,7 +91,7 @@ public class CommandTag {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.remove.success.single", new Object[] { s, ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.remove.success.multiple", new Object[] { s, Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.remove.success.multiple", new Object[] { s, collection.size()}), true);
             }
 
             return i;
@@ -114,12 +114,12 @@ public class CommandTag {
             if (hashset.isEmpty()) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.empty", new Object[] { entity1.getScoreboardDisplayName()}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.success", new Object[] { entity1.getScoreboardDisplayName(), Integer.valueOf(hashset.size()), ChatComponentUtils.a((Collection) hashset)}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.success", new Object[] { entity1.getScoreboardDisplayName(), hashset.size(), ChatComponentUtils.a((Collection) hashset)}), false);
             }
         } else if (hashset.isEmpty()) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.empty", new Object[] { Integer.valueOf(collection.size())}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.empty", new Object[] { collection.size()}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.success", new Object[] { Integer.valueOf(collection.size()), Integer.valueOf(hashset.size()), ChatComponentUtils.a((Collection) hashset)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.success", new Object[] { collection.size(), hashset.size(), ChatComponentUtils.a((Collection) hashset)}), false);
         }
 
         return hashset.size();

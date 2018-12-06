@@ -19,7 +19,7 @@ public class BlockHugeMushroom extends Block {
     public BlockHugeMushroom(@Nullable Block block, Block.Info block_info) {
         super(block_info);
         this.s = block;
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, Boolean.valueOf(true))).set(BlockHugeMushroom.b, Boolean.valueOf(true))).set(BlockHugeMushroom.c, Boolean.valueOf(true))).set(BlockHugeMushroom.o, Boolean.valueOf(true))).set(BlockHugeMushroom.p, Boolean.valueOf(true))).set(BlockHugeMushroom.q, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHugeMushroom.a, true)).set(BlockHugeMushroom.b, true)).set(BlockHugeMushroom.c, true)).set(BlockHugeMushroom.o, true)).set(BlockHugeMushroom.p, true)).set(BlockHugeMushroom.q, true));
     }
 
     public int a(IBlockData iblockdata, Random random) {
@@ -34,11 +34,11 @@ public class BlockHugeMushroom extends Block {
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockHugeMushroom.q, Boolean.valueOf(this != world.getType(blockposition.down()).getBlock()))).set(BlockHugeMushroom.p, Boolean.valueOf(this != world.getType(blockposition.up()).getBlock()))).set(BlockHugeMushroom.a, Boolean.valueOf(this != world.getType(blockposition.north()).getBlock()))).set(BlockHugeMushroom.b, Boolean.valueOf(this != world.getType(blockposition.east()).getBlock()))).set(BlockHugeMushroom.c, Boolean.valueOf(this != world.getType(blockposition.south()).getBlock()))).set(BlockHugeMushroom.o, Boolean.valueOf(this != world.getType(blockposition.west()).getBlock()));
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockHugeMushroom.q, this != world.getType(blockposition.down()).getBlock())).set(BlockHugeMushroom.p, this != world.getType(blockposition.up()).getBlock())).set(BlockHugeMushroom.a, this != world.getType(blockposition.north()).getBlock())).set(BlockHugeMushroom.b, this != world.getType(blockposition.east()).getBlock())).set(BlockHugeMushroom.c, this != world.getType(blockposition.south()).getBlock())).set(BlockHugeMushroom.o, this != world.getType(blockposition.west()).getBlock());
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        return iblockdata1.getBlock() == this ? (IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.r.get(enumdirection), Boolean.valueOf(false)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return iblockdata1.getBlock() == this ? (IBlockData) iblockdata.set((IBlockState) BlockHugeMushroom.r.get(enumdirection), false) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -50,6 +50,6 @@ public class BlockHugeMushroom extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockHugeMushroom.p, BlockHugeMushroom.q, BlockHugeMushroom.a, BlockHugeMushroom.b, BlockHugeMushroom.c, BlockHugeMushroom.o});
+        blockstatelist_a.a(BlockHugeMushroom.p, BlockHugeMushroom.q, BlockHugeMushroom.a, BlockHugeMushroom.b, BlockHugeMushroom.c, BlockHugeMushroom.o);
     }
 }

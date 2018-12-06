@@ -40,7 +40,7 @@ public class DebugReportRecipeFurnace {
         MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.b);
 
         if ((new MinecraftKey(s)).equals(minecraftkey)) {
-            throw new IllegalStateException("Smelting Recipe " + s + " should remove its \'save\' argument");
+            throw new IllegalStateException("Smelting Recipe " + s + " should remove its 'save' argument");
         } else {
             this.a(consumer, new MinecraftKey(s));
         }
@@ -90,8 +90,8 @@ public class DebugReportRecipeFurnace {
 
             jsonobject.add("ingredient", this.c.c());
             jsonobject.addProperty("result", IRegistry.ITEM.getKey(this.d).toString());
-            jsonobject.addProperty("experience", Float.valueOf(this.e));
-            jsonobject.addProperty("cookingtime", Integer.valueOf(this.f));
+            jsonobject.addProperty("experience", this.e);
+            jsonobject.addProperty("cookingtime", this.f);
             return jsonobject;
         }
 

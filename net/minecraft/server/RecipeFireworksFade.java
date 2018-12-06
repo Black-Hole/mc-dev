@@ -6,7 +6,7 @@ import java.util.List;
 
 public class RecipeFireworksFade extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(new IMaterial[] { Items.FIREWORK_STAR});
+    private static final RecipeItemStack a = RecipeItemStack.a(Items.FIREWORK_STAR);
 
     public RecipeFireworksFade(MinecraftKey minecraftkey) {
         super(minecraftkey);
@@ -52,7 +52,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
             Item item = itemstack1.getItem();
 
             if (item instanceof ItemDye) {
-                arraylist.add(Integer.valueOf(((ItemDye) item).d().f()));
+                arraylist.add(((ItemDye) item).d().f());
             } else if (RecipeFireworksFade.a.a(itemstack1)) {
                 itemstack = itemstack1.cloneItemStack();
                 itemstack.setCount(1);

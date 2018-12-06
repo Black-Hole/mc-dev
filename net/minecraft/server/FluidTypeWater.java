@@ -29,7 +29,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     }
 
     public IBlockData b(Fluid fluid) {
-        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(e(fluid)));
+        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, e(fluid));
     }
 
     public boolean a(FluidType fluidtype) {
@@ -58,11 +58,11 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
 
         protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {
             super.a(blockstatelist_a);
-            blockstatelist_a.a(new IBlockState[] { FluidTypeWater.a.LEVEL});
+            blockstatelist_a.a(FluidTypeWater.a.LEVEL);
         }
 
         public int d(Fluid fluid) {
-            return ((Integer) fluid.get(FluidTypeWater.a.LEVEL)).intValue();
+            return (Integer) fluid.get(FluidTypeWater.a.LEVEL);
         }
 
         public boolean c(Fluid fluid) {

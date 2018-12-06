@@ -34,7 +34,7 @@ public abstract class MobSpawnerAbstract {
         } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
             BlockPosition blockposition = this.b();
 
-            MobSpawnerAbstract.a.warn("Invalid entity id \'{}\' at spawner {}:[{},{},{}]", s, this.a().worldProvider.getDimensionManager(), Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()));
+            MobSpawnerAbstract.a.warn("Invalid entity id '{}' at spawner {}:[{},{},{}]", s, this.a().worldProvider.getDimensionManager(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
             return null;
         }
     }

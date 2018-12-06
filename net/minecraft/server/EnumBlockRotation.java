@@ -12,47 +12,35 @@ public enum EnumBlockRotation {
             switch (this) {
             case NONE:
                 return EnumBlockRotation.CLOCKWISE_180;
-
             case CLOCKWISE_90:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
-
             case CLOCKWISE_180:
                 return EnumBlockRotation.NONE;
-
             case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_90;
             }
-
         case COUNTERCLOCKWISE_90:
             switch (this) {
             case NONE:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
-
             case CLOCKWISE_90:
                 return EnumBlockRotation.NONE;
-
             case CLOCKWISE_180:
                 return EnumBlockRotation.CLOCKWISE_90;
-
             case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_180;
             }
-
         case CLOCKWISE_90:
             switch (this) {
             case NONE:
                 return EnumBlockRotation.CLOCKWISE_90;
-
             case CLOCKWISE_90:
                 return EnumBlockRotation.CLOCKWISE_180;
-
             case CLOCKWISE_180:
                 return EnumBlockRotation.COUNTERCLOCKWISE_90;
-
             case COUNTERCLOCKWISE_90:
                 return EnumBlockRotation.NONE;
             }
-
         default:
             return this;
         }
@@ -65,13 +53,10 @@ public enum EnumBlockRotation {
             switch (this) {
             case CLOCKWISE_90:
                 return enumdirection.e();
-
             case CLOCKWISE_180:
                 return enumdirection.opposite();
-
             case COUNTERCLOCKWISE_90:
                 return enumdirection.f();
-
             default:
                 return enumdirection;
             }
@@ -82,13 +67,10 @@ public enum EnumBlockRotation {
         switch (this) {
         case CLOCKWISE_90:
             return (i + j / 4) % j;
-
         case CLOCKWISE_180:
             return (i + j / 2) % j;
-
         case COUNTERCLOCKWISE_90:
             return (i + j * 3 / 4) % j;
-
         default:
             return i;
         }

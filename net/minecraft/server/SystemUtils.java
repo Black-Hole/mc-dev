@@ -149,17 +149,17 @@ public class SystemUtils {
         Object object;
         Object object1;
 
-        for (object = null; iterator.hasNext(); object = object1) {
-            object1 = iterator.next();
-            if (object1 == t0) {
-                if (object == null) {
-                    object = iterator.hasNext() ? Iterators.getLast(iterator) : t0;
+        for (object1 = null; iterator.hasNext(); object1 = object) {
+            object = iterator.next();
+            if (object == t0) {
+                if (object1 == null) {
+                    object1 = iterator.hasNext() ? Iterators.getLast(iterator) : t0;
                 }
                 break;
             }
         }
 
-        return object;
+        return object1;
     }
 
     public static <T> T a(Supplier<T> supplier) {
@@ -193,10 +193,8 @@ public class SystemUtils {
     public static enum OS {
 
         LINUX, SOLARIS, WINDOWS {
-            ;
         },
         OSX {
-            ;
         },
         UNKNOWN;
 

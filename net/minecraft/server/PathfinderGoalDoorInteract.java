@@ -27,7 +27,7 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
                 this.c = false;
                 return false;
             } else {
-                return ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue();
+                return (Boolean) iblockdata.get(BlockDoor.OPEN);
             }
         }
     }

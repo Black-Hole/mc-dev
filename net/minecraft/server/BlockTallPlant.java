@@ -77,7 +77,7 @@ public class BlockTallPlant extends BlockPlant {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockTallPlant.HALF});
+        blockstatelist_a.a(BlockTallPlant.HALF);
     }
 
     public Block.EnumRandomOffset q() {

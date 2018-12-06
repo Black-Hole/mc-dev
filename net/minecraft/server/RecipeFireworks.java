@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 public class RecipeFireworks extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(new IMaterial[] { Items.PAPER});
-    private static final RecipeItemStack b = RecipeItemStack.a(new IMaterial[] { Items.GUNPOWDER});
-    private static final RecipeItemStack c = RecipeItemStack.a(new IMaterial[] { Items.FIREWORK_STAR});
+    private static final RecipeItemStack a = RecipeItemStack.a(Items.PAPER);
+    private static final RecipeItemStack b = RecipeItemStack.a(Items.GUNPOWDER);
+    private static final RecipeItemStack c = RecipeItemStack.a(Items.FIREWORK_STAR);
 
     public RecipeFireworks(MinecraftKey minecraftkey) {
         super(minecraftkey);

@@ -7,7 +7,7 @@ public class BlockSkull extends BlockSkullAbstract {
 
     protected BlockSkull(BlockSkull.a blockskull_a, Block.Info block_info) {
         super(blockskull_a, block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkull.a, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkull.a, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -19,19 +19,19 @@ public class BlockSkull extends BlockSkullAbstract {
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockSkull.a, Integer.valueOf(MathHelper.floor((double) (blockactioncontext.h() * 16.0F / 360.0F) + 0.5D) & 15));
+        return (IBlockData) this.getBlockData().set(BlockSkull.a, MathHelper.floor((double) (blockactioncontext.h() * 16.0F / 360.0F) + 0.5D) & 15);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockSkull.a, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockSkull.a)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockSkull.a, enumblockrotation.a((Integer) iblockdata.get(BlockSkull.a), 16));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return (IBlockData) iblockdata.set(BlockSkull.a, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockSkull.a)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockSkull.a, enumblockmirror.a((Integer) iblockdata.get(BlockSkull.a), 16));
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockSkull.a});
+        blockstatelist_a.a(BlockSkull.a);
     }
 
     public static enum Type implements BlockSkull.a {

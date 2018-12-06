@@ -76,7 +76,7 @@ public class ServerGUI extends JComponent {
             this.add(this.d(), "Center");
             this.add(this.b(), "West");
         } catch (Exception exception) {
-            ServerGUI.b.error("Couldn\'t build server GUI", exception);
+            ServerGUI.b.error("Couldn't build server GUI", exception);
         }
 
     }

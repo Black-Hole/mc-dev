@@ -38,15 +38,15 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityFish.a, Boolean.valueOf(false));
+        this.datawatcher.register(EntityFish.a, false);
     }
 
     public boolean isFromBucket() {
-        return ((Boolean) this.datawatcher.get(EntityFish.a)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityFish.a);
     }
 
     public void setFromBucket(boolean flag) {
-        this.datawatcher.set(EntityFish.a, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityFish.a, flag);
     }
 
     public void b(NBTTagCompound nbttagcompound) {

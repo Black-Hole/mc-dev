@@ -20,7 +20,6 @@ public class DataConverterZombieType extends DataConverterEntityNameAbstract {
             case 0:
             default:
                 break;
-
             case 1:
             case 2:
             case 3:
@@ -29,7 +28,6 @@ public class DataConverterZombieType extends DataConverterEntityNameAbstract {
                 s1 = "ZombieVillager";
                 dynamic = dynamic.set("Profession", dynamic.createInt(i - 1));
                 break;
-
             case 6:
                 s1 = "Husk";
             }

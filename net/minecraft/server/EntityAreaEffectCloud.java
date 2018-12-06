@@ -54,9 +54,9 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     protected void x_() {
-        this.getDataWatcher().register(EntityAreaEffectCloud.c, Integer.valueOf(0));
-        this.getDataWatcher().register(EntityAreaEffectCloud.b, Float.valueOf(0.5F));
-        this.getDataWatcher().register(EntityAreaEffectCloud.d, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityAreaEffectCloud.c, 0);
+        this.getDataWatcher().register(EntityAreaEffectCloud.b, 0.5F);
+        this.getDataWatcher().register(EntityAreaEffectCloud.d, false);
         this.getDataWatcher().register(EntityAreaEffectCloud.e, Particles.s);
     }
 
@@ -68,13 +68,13 @@ public class EntityAreaEffectCloud extends Entity {
         this.setSize(f * 2.0F, 0.5F);
         this.setPosition(d0, d1, d2);
         if (!this.world.isClientSide) {
-            this.getDataWatcher().set(EntityAreaEffectCloud.b, Float.valueOf(f));
+            this.getDataWatcher().set(EntityAreaEffectCloud.b, f);
         }
 
     }
 
     public float getRadius() {
-        return ((Float) this.getDataWatcher().get(EntityAreaEffectCloud.b)).floatValue();
+        return (Float) this.getDataWatcher().get(EntityAreaEffectCloud.b);
     }
 
     public void a(PotionRegistry potionregistry) {
@@ -87,9 +87,9 @@ public class EntityAreaEffectCloud extends Entity {
 
     private void x() {
         if (this.potionRegistry == Potions.EMPTY && this.effects.isEmpty()) {
-            this.getDataWatcher().set(EntityAreaEffectCloud.c, Integer.valueOf(0));
+            this.getDataWatcher().set(EntityAreaEffectCloud.c, 0);
         } else {
-            this.getDataWatcher().set(EntityAreaEffectCloud.c, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+            this.getDataWatcher().set(EntityAreaEffectCloud.c, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
         }
 
     }
@@ -103,12 +103,12 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     public int getColor() {
-        return ((Integer) this.getDataWatcher().get(EntityAreaEffectCloud.c)).intValue();
+        return (Integer) this.getDataWatcher().get(EntityAreaEffectCloud.c);
     }
 
     public void setColor(int i) {
         this.hasColor = true;
-        this.getDataWatcher().set(EntityAreaEffectCloud.c, Integer.valueOf(i));
+        this.getDataWatcher().set(EntityAreaEffectCloud.c, i);
     }
 
     public ParticleParam getParticle() {
@@ -120,11 +120,11 @@ public class EntityAreaEffectCloud extends Entity {
     }
 
     protected void a(boolean flag) {
-        this.getDataWatcher().set(EntityAreaEffectCloud.d, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityAreaEffectCloud.d, flag);
     }
 
     public boolean l() {
-        return ((Boolean) this.getDataWatcher().get(EntityAreaEffectCloud.d)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityAreaEffectCloud.d);
     }
 
     public int getDuration() {
@@ -222,7 +222,7 @@ public class EntityAreaEffectCloud extends Entity {
                 while (iterator.hasNext()) {
                     Entry entry = (Entry) iterator.next();
 
-                    if (this.ticksLived >= ((Integer) entry.getValue()).intValue()) {
+                    if (this.ticksLived >= (Integer) entry.getValue()) {
                         iterator.remove();
                     }
                 }
@@ -254,7 +254,7 @@ public class EntityAreaEffectCloud extends Entity {
                                 double d2 = d0 * d0 + d1 * d1;
 
                                 if (d2 <= (double) (f * f)) {
-                                    this.h.put(entityliving, Integer.valueOf(this.ticksLived + this.reapplicationDelay));
+                                    this.h.put(entityliving, this.ticksLived + this.reapplicationDelay);
                                     Iterator iterator3 = arraylist.iterator();
 
                                     while (iterator3.hasNext()) {
@@ -338,7 +338,7 @@ public class EntityAreaEffectCloud extends Entity {
             try {
                 this.setParticle(ArgumentParticle.b(new StringReader(nbttagcompound.getString("Particle"))));
             } catch (CommandSyntaxException commandsyntaxexception) {
-                EntityAreaEffectCloud.a.warn("Couldn\'t load custom particle {}", nbttagcompound.getString("Particle"), commandsyntaxexception);
+                EntityAreaEffectCloud.a.warn("Couldn't load custom particle {}", nbttagcompound.getString("Particle"), commandsyntaxexception);
             }
         }
 

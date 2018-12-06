@@ -68,7 +68,7 @@ public class ChatDeserializer {
             Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s1));
 
             if (item == null) {
-                throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string \'" + s1 + "\'");
+                throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string '" + s1 + "'");
             } else {
                 return item;
             }

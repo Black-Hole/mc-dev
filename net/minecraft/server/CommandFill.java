@@ -50,7 +50,7 @@ public class CommandFill {
         int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
         if (i > '\u8000') {
-            throw CommandFill.a.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
+            throw CommandFill.a.create('\u8000', i);
         } else {
             ArrayList arraylist = Lists.newArrayList();
             WorldServer worldserver = commandlistenerwrapper.getWorld();
@@ -91,7 +91,7 @@ public class CommandFill {
             if (j == 0) {
                 throw CommandFill.c.create();
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.fill.success", new Object[] { Integer.valueOf(j)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.fill.success", new Object[] { j}), true);
                 return j;
             }
         }

@@ -8,11 +8,11 @@ public class BlockRedstoneOre extends Block {
 
     public BlockRedstoneOre(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, Boolean.valueOf(false)));
+        this.v((IBlockData) this.getBlockData().set(BlockRedstoneOre.a, false));
     }
 
     public int m(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue() ? super.m(iblockdata) : 0;
+        return (Boolean) iblockdata.get(BlockRedstoneOre.a) ? super.m(iblockdata) : 0;
     }
 
     public void attack(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
@@ -32,15 +32,15 @@ public class BlockRedstoneOre extends Block {
 
     private static void interact(IBlockData iblockdata, World world, BlockPosition blockposition) {
         playEffect(world, blockposition);
-        if (!((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue()) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, Boolean.valueOf(true)), 3);
+        if (!(Boolean) iblockdata.get(BlockRedstoneOre.a)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, true), 3);
         }
 
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (((Boolean) iblockdata.get(BlockRedstoneOre.a)).booleanValue()) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockRedstoneOre.a)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneOre.a, false), 3);
         }
 
     }
@@ -90,6 +90,6 @@ public class BlockRedstoneOre extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockRedstoneOre.a});
+        blockstatelist_a.a(BlockRedstoneOre.a);
     }
 }

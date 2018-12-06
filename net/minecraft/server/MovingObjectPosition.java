@@ -29,7 +29,7 @@ public class MovingObjectPosition {
         this.pos = vec3d;
     }
 
-    public BlockPosition a() {
+    public BlockPosition getBlockPosition() {
         return this.e;
     }
 

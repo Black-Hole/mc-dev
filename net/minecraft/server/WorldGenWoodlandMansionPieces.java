@@ -333,7 +333,7 @@ public class WorldGenWoodlandMansionPieces {
 
                     j = l & 983040;
                     if (j == 131072 && (l & 2097152) == 2097152) {
-                        arraylist.add(new Tuple(Integer.valueOf(i), Integer.valueOf(k)));
+                        arraylist.add(new Tuple(i, k));
                     }
                 }
             }
@@ -343,18 +343,18 @@ public class WorldGenWoodlandMansionPieces {
             } else {
                 Tuple tuple = (Tuple) arraylist.get(this.a.nextInt(arraylist.size()));
 
-                i = worldgenwoodlandmansionpieces_g.a(((Integer) tuple.a()).intValue(), ((Integer) tuple.b()).intValue());
-                worldgenwoodlandmansionpieces_g.a(((Integer) tuple.a()).intValue(), ((Integer) tuple.b()).intValue(), i | 4194304);
-                EnumDirection enumdirection = this.b(this.b, ((Integer) tuple.a()).intValue(), ((Integer) tuple.b()).intValue(), 1, i & '\uffff');
+                i = worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b());
+                worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b(), i | 4194304);
+                EnumDirection enumdirection = this.b(this.b, (Integer) tuple.a(), (Integer) tuple.b(), 1, i & '\uffff');
 
-                j = ((Integer) tuple.a()).intValue() + enumdirection.getAdjacentX();
-                int i1 = ((Integer) tuple.b()).intValue() + enumdirection.getAdjacentZ();
+                j = (Integer) tuple.a() + enumdirection.getAdjacentX();
+                int i1 = (Integer) tuple.b() + enumdirection.getAdjacentZ();
 
                 for (int j1 = 0; j1 < this.c.c; ++j1) {
                     for (int k1 = 0; k1 < this.c.b; ++k1) {
                         if (!a(this.b, k1, j1)) {
                             this.c.a(k1, j1, 5);
-                        } else if (k1 == ((Integer) tuple.a()).intValue() && j1 == ((Integer) tuple.b()).intValue()) {
+                        } else if (k1 == (Integer) tuple.a() && j1 == (Integer) tuple.b()) {
                             this.c.a(k1, j1, 3);
                         } else if (k1 == j && j1 == i1) {
                             this.c.a(k1, j1, 3);
@@ -376,7 +376,7 @@ public class WorldGenWoodlandMansionPieces {
 
                 if (arraylist1.isEmpty()) {
                     this.c.a(0, 0, this.c.b, this.c.c, 5);
-                    worldgenwoodlandmansionpieces_g.a(((Integer) tuple.a()).intValue(), ((Integer) tuple.b()).intValue(), i);
+                    worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b(), i);
                 } else {
                     EnumDirection enumdirection2 = (EnumDirection) arraylist1.get(this.a.nextInt(arraylist1.size()));
 
@@ -398,7 +398,7 @@ public class WorldGenWoodlandMansionPieces {
             for (i = 0; i < worldgenwoodlandmansionpieces_g.c; ++i) {
                 for (int j = 0; j < worldgenwoodlandmansionpieces_g.b; ++j) {
                     if (worldgenwoodlandmansionpieces_g.a(j, i) == 2) {
-                        arraylist.add(new Tuple(Integer.valueOf(j), Integer.valueOf(i)));
+                        arraylist.add(new Tuple(j, i));
                     }
                 }
             }
@@ -409,8 +409,8 @@ public class WorldGenWoodlandMansionPieces {
 
             while (iterator.hasNext()) {
                 Tuple tuple = (Tuple) iterator.next();
-                int k = ((Integer) tuple.a()).intValue();
-                int l = ((Integer) tuple.b()).intValue();
+                int k = (Integer) tuple.a();
+                int l = (Integer) tuple.b();
 
                 if (worldgenwoodlandmansionpieces_g1.a(k, l) == 0) {
                     int i1 = k;
@@ -701,9 +701,9 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         private void a(List<WorldGenWoodlandMansionPieces.i> list, BlockPosition blockposition, EnumBlockRotation enumblockrotation, WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g, @Nullable WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g1) {
+            BlockPosition blockposition1;
             int i;
             int j;
-            BlockPosition blockposition1;
             boolean flag;
             BlockPosition blockposition2;
 

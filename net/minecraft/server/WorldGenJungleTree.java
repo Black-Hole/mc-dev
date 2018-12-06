@@ -90,7 +90,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
 
     private void a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
         if (random.nextInt(3) > 0 && generatoraccess.isEmpty(blockposition)) {
-            this.a(generatoraccess, blockposition, (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true)));
+            this.a(generatoraccess, blockposition, (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, true));
         }
 
     }

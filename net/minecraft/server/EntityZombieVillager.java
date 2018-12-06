@@ -16,16 +16,16 @@ public class EntityZombieVillager extends EntityZombie {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityZombieVillager.a, Boolean.valueOf(false));
-        this.datawatcher.register(EntityZombieVillager.b, Integer.valueOf(0));
+        this.datawatcher.register(EntityZombieVillager.a, false);
+        this.datawatcher.register(EntityZombieVillager.b, 0);
     }
 
     public void setProfession(int i) {
-        this.datawatcher.set(EntityZombieVillager.b, Integer.valueOf(i));
+        this.datawatcher.set(EntityZombieVillager.b, i);
     }
 
     public int getProfession() {
-        return Math.max(((Integer) this.datawatcher.get(EntityZombieVillager.b)).intValue() % 6, 0);
+        return Math.max((Integer) this.datawatcher.get(EntityZombieVillager.b) % 6, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -93,13 +93,13 @@ public class EntityZombieVillager extends EntityZombie {
     }
 
     public boolean isConverting() {
-        return ((Boolean) this.getDataWatcher().get(EntityZombieVillager.a)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityZombieVillager.a);
     }
 
     protected void a(@Nullable UUID uuid, int i) {
         this.bD = uuid;
         this.conversionTime = i;
-        this.getDataWatcher().set(EntityZombieVillager.a, Boolean.valueOf(true));
+        this.getDataWatcher().set(EntityZombieVillager.a, true);
         this.removeEffect(MobEffects.WEAKNESS);
         this.addEffect(new MobEffect(MobEffects.INCREASE_DAMAGE, i, Math.min(this.world.getDifficulty().a() - 1, 0)));
         this.world.broadcastEntityEffect(this, (byte) 16);

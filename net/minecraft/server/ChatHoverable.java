@@ -48,7 +48,7 @@ public class ChatHoverable {
     }
 
     public String toString() {
-        return "HoverEvent{action=" + this.a + ", value=\'" + this.b + '\'' + '}';
+        return "HoverEvent{action=" + this.a + ", value='" + this.b + '\'' + '}';
     }
 
     public int hashCode() {

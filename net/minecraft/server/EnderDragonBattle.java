@@ -21,7 +21,7 @@ public class EnderDragonBattle {
 
     private static final Logger a = LogManager.getLogger();
     private static final Predicate<Entity> b = IEntitySelector.a.and(IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
-    private final BossBattleServer c;
+    public final BossBattleServer bossBattle;
     private final WorldServer d;
     private final List<Integer> e;
     private final ShapeDetector f;
@@ -39,7 +39,7 @@ public class EnderDragonBattle {
     private List<EntityEnderCrystal> r;
 
     public EnderDragonBattle(WorldServer worldserver, NBTTagCompound nbttagcompound) {
-        this.c = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.minecraft.ender_dragon", new Object[0]), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).c(true);
+        this.bossBattle = (BossBattleServer) (new BossBattleServer(new ChatMessage("entity.minecraft.ender_dragon", new Object[0]), BossBattle.BarColor.PINK, BossBattle.BarStyle.PROGRESS)).setPlayMusic(true).c(true);
         this.e = Lists.newArrayList();
         this.n = true;
         this.d = worldserver;
@@ -66,14 +66,14 @@ public class EnderDragonBattle {
             NBTTagList nbttaglist = nbttagcompound.getList("Gateways", 3);
 
             for (int i = 0; i < nbttaglist.size(); ++i) {
-                this.e.add(Integer.valueOf(nbttaglist.h(i)));
+                this.e.add(nbttaglist.h(i));
             }
         } else {
-            this.e.addAll(ContiguousSet.create(Range.closedOpen(Integer.valueOf(0), Integer.valueOf(20)), DiscreteDomain.integers()));
+            this.e.addAll(ContiguousSet.create(Range.closedOpen(0, 20), DiscreteDomain.integers()));
             Collections.shuffle(this.e, new Random(worldserver.getSeed()));
         }
 
-        this.f = ShapeDetectorBuilder.a().a(new String[] { "       ", "       ", "       ", "   #   ", "       ", "       ", "       "}).a(new String[] { "       ", "       ", "       ", "   #   ", "       ", "       ", "       "}).a(new String[] { "       ", "       ", "       ", "   #   ", "       ", "       ", "       "}).a(new String[] { "  ###  ", " #   # ", "#     #", "#  #  #", "#     #", " #   # ", "  ###  "}).a(new String[] { "       ", "  ###  ", " ##### ", " ##### ", " ##### ", "  ###  ", "       "}).a('#', ShapeDetectorBlock.a(BlockPredicate.a(Blocks.BEDROCK))).b();
+        this.f = ShapeDetectorBuilder.a().a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("       ", "       ", "       ", "   #   ", "       ", "       ", "       ").a("  ###  ", " #   # ", "#     #", "#  #  #", "#     #", " #   # ", "  ###  ").a("       ", "  ###  ", " ##### ", " ##### ", " ##### ", "  ###  ", "       ").a('#', ShapeDetectorBlock.a(BlockPredicate.a(Blocks.BEDROCK))).b();
     }
 
     public NBTTagCompound a() {
@@ -93,7 +93,7 @@ public class EnderDragonBattle {
         Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {
-            int i = ((Integer) iterator.next()).intValue();
+            int i = (Integer) iterator.next();
 
             nbttaglist.add((NBTBase) (new NBTTagInt(i)));
         }
@@ -103,7 +103,7 @@ public class EnderDragonBattle {
     }
 
     public void b() {
-        this.c.setVisible(!this.k);
+        this.bossBattle.setVisible(!this.k);
         if (++this.j >= 20) {
             this.k();
             this.j = 0;
@@ -111,7 +111,7 @@ public class EnderDragonBattle {
 
         EnderDragonBattle.b enderdragonbattle_b = new EnderDragonBattle.b(null);
 
-        if (!this.c.getPlayers().isEmpty()) {
+        if (!this.bossBattle.getPlayers().isEmpty()) {
             if (this.n && enderdragonbattle_b.a()) {
                 this.g();
                 this.n = false;
@@ -162,10 +162,10 @@ public class EnderDragonBattle {
             EntityEnderDragon entityenderdragon = (EntityEnderDragon) list.get(0);
 
             this.m = entityenderdragon.getUniqueID();
-            EnderDragonBattle.a.info("Found that there\'s a dragon still alive ({})", entityenderdragon);
+            EnderDragonBattle.a.info("Found that there's a dragon still alive ({})", entityenderdragon);
             this.k = false;
             if (!flag) {
-                EnderDragonBattle.a.info("But we didn\'t have a portal, let\'s remove it.");
+                EnderDragonBattle.a.info("But we didn't have a portal, let's remove it.");
                 entityenderdragon.die();
                 this.m = null;
             }
@@ -181,10 +181,10 @@ public class EnderDragonBattle {
         List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
 
         if (list.isEmpty()) {
-            EnderDragonBattle.a.debug("Haven\'t seen the dragon, respawning it");
+            EnderDragonBattle.a.debug("Haven't seen the dragon, respawning it");
             this.n();
         } else {
-            EnderDragonBattle.a.debug("Haven\'t seen our dragon, but found another one to use.");
+            EnderDragonBattle.a.debug("Haven't seen our dragon, but found another one to use.");
             this.m = ((EntityEnderDragon) list.get(0)).getUniqueID();
         }
 
@@ -192,14 +192,14 @@ public class EnderDragonBattle {
 
     protected void a(EnumDragonRespawn enumdragonrespawn) {
         if (this.p == null) {
-            throw new IllegalStateException("Dragon respawn isn\'t in progress, can\'t skip ahead in the animation.");
+            throw new IllegalStateException("Dragon respawn isn't in progress, can't skip ahead in the animation.");
         } else {
             this.q = 0;
             if (enumdragonrespawn == EnumDragonRespawn.END) {
                 this.p = null;
                 this.k = false;
                 EntityEnderDragon entityenderdragon = this.n();
-                Iterator iterator = this.c.getPlayers().iterator();
+                Iterator iterator = this.bossBattle.getPlayers().iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -332,11 +332,11 @@ public class EnderDragonBattle {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            this.c.addPlayer(entityplayer);
+            this.bossBattle.addPlayer(entityplayer);
             hashset.add(entityplayer);
         }
 
-        HashSet hashset1 = Sets.newHashSet(this.c.getPlayers());
+        HashSet hashset1 = Sets.newHashSet(this.bossBattle.getPlayers());
 
         hashset1.removeAll(hashset);
         Iterator iterator1 = hashset1.iterator();
@@ -344,7 +344,7 @@ public class EnderDragonBattle {
         while (iterator1.hasNext()) {
             EntityPlayer entityplayer1 = (EntityPlayer) iterator1.next();
 
-            this.c.removePlayer(entityplayer1);
+            this.bossBattle.removePlayer(entityplayer1);
         }
 
     }
@@ -361,13 +361,13 @@ public class EnderDragonBattle {
             this.h += this.d.a(EntityEnderCrystal.class, worldgenender_spike.f()).size();
         }
 
-        EnderDragonBattle.a.debug("Found {} end crystals still alive", Integer.valueOf(this.h));
+        EnderDragonBattle.a.debug("Found {} end crystals still alive", this.h);
     }
 
     public void a(EntityEnderDragon entityenderdragon) {
         if (entityenderdragon.getUniqueID().equals(this.m)) {
-            this.c.setProgress(0.0F);
-            this.c.setVisible(false);
+            this.bossBattle.setProgress(0.0F);
+            this.bossBattle.setVisible(false);
             this.a(true);
             this.m();
             if (!this.l) {
@@ -382,7 +382,7 @@ public class EnderDragonBattle {
 
     private void m() {
         if (!this.e.isEmpty()) {
-            int i = ((Integer) this.e.remove(this.e.size() - 1)).intValue();
+            int i = (Integer) this.e.remove(this.e.size() - 1);
             int j = (int) (96.0D * Math.cos(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
             int k = (int) (96.0D * Math.sin(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
 
@@ -420,10 +420,10 @@ public class EnderDragonBattle {
 
     public void b(EntityEnderDragon entityenderdragon) {
         if (entityenderdragon.getUniqueID().equals(this.m)) {
-            this.c.setProgress(entityenderdragon.getHealth() / entityenderdragon.getMaxHealth());
+            this.bossBattle.setProgress(entityenderdragon.getHealth() / entityenderdragon.getMaxHealth());
             this.g = 0;
             if (entityenderdragon.hasCustomName()) {
-                this.c.a(entityenderdragon.getScoreboardDisplayName());
+                this.bossBattle.a(entityenderdragon.getScoreboardDisplayName());
             }
         }
 
@@ -464,7 +464,7 @@ public class EnderDragonBattle {
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j();
 
                 if (shapedetector_shapedetectorcollection == null) {
-                    EnderDragonBattle.a.debug("Couldn\'t find a portal, so we made one.");
+                    EnderDragonBattle.a.debug("Couldn't find a portal, so we made one.");
                     this.a(true);
                 } else {
                     EnderDragonBattle.a.debug("Found the exit portal & temporarily using it.");

@@ -128,7 +128,7 @@ public class AutoRecipeStackManager {
                     this.c(this.h.getInt(k));
 
                     for (int l = 0; l < k; ++l) {
-                        this.c((l & 1) == 0, this.h.get(l).intValue(), this.h.get(l + 1).intValue());
+                        this.c((l & 1) == 0, this.h.get(l), this.h.get(l + 1));
                     }
 
                     this.h.clear();
@@ -310,7 +310,7 @@ public class AutoRecipeStackManager {
                 int k;
 
                 for (IntListIterator intlistiterator = recipeitemstack.b().iterator(); intlistiterator.hasNext(); j = Math.max(j, AutoRecipeStackManager.this.a.get(k))) {
-                    k = ((Integer) intlistiterator.next()).intValue();
+                    k = (Integer) intlistiterator.next();
                 }
 
                 if (i > 0) {

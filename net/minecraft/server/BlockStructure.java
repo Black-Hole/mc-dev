@@ -47,7 +47,7 @@ public class BlockStructure extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockStructure.a});
+        blockstatelist_a.a(BlockStructure.a);
     }
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
@@ -75,14 +75,11 @@ public class BlockStructure extends BlockTileEntity {
         case SAVE:
             tileentitystructure.b(false);
             break;
-
         case LOAD:
             tileentitystructure.c(false);
             break;
-
         case CORNER:
             tileentitystructure.s();
-
         case DATA:
         }
 

@@ -59,8 +59,8 @@ public class EntityGuardian extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityGuardian.bF, Boolean.valueOf(false));
-        this.datawatcher.register(EntityGuardian.bG, Integer.valueOf(0));
+        this.datawatcher.register(EntityGuardian.bF, false);
+        this.datawatcher.register(EntityGuardian.bG, 0);
     }
 
     public boolean ca() {
@@ -72,11 +72,11 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public boolean dB() {
-        return ((Boolean) this.datawatcher.get(EntityGuardian.bF)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityGuardian.bF);
     }
 
     private void a(boolean flag) {
-        this.datawatcher.set(EntityGuardian.bF, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityGuardian.bF, flag);
     }
 
     public int l() {
@@ -84,11 +84,11 @@ public class EntityGuardian extends EntityMonster {
     }
 
     private void a(int i) {
-        this.datawatcher.set(EntityGuardian.bG, Integer.valueOf(i));
+        this.datawatcher.set(EntityGuardian.bG, i);
     }
 
     public boolean dC() {
-        return ((Integer) this.datawatcher.get(EntityGuardian.bG)).intValue() != 0;
+        return (Integer) this.datawatcher.get(EntityGuardian.bG) != 0;
     }
 
     @Nullable
@@ -99,7 +99,7 @@ public class EntityGuardian extends EntityMonster {
             if (this.bH != null) {
                 return this.bH;
             } else {
-                Entity entity = this.world.getEntity(((Integer) this.datawatcher.get(EntityGuardian.bG)).intValue());
+                Entity entity = this.world.getEntity((Integer) this.datawatcher.get(EntityGuardian.bG));
 
                 if (entity instanceof EntityLiving) {
                     this.bH = (EntityLiving) entity;
@@ -147,7 +147,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.b(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
+        return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
     }
 
     public void k() {

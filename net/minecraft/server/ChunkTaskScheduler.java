@@ -54,7 +54,7 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
                 } catch (ReportedException reportedexception) {
                     throw reportedexception;
                 } catch (Exception exception) {
-                    ChunkTaskScheduler.b.error("Couldn\'t load protochunk", exception);
+                    ChunkTaskScheduler.b.error("Couldn't load protochunk", exception);
                     protochunk = null;
                 }
 
@@ -101,9 +101,9 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
                         this.e.saveChunk(this.c, protochunk);
                         protochunk.a(false);
                     } catch (IOException ioexception) {
-                        ChunkTaskScheduler.b.error("Couldn\'t save chunk", ioexception);
+                        ChunkTaskScheduler.b.error("Couldn't save chunk", ioexception);
                     } catch (ExceptionWorldConflict exceptionworldconflict) {
-                        ChunkTaskScheduler.b.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
+                        ChunkTaskScheduler.b.error("Couldn't save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
                     }
                 }
             } while (booleansupplier.getAsBoolean());

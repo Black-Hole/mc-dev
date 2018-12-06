@@ -57,7 +57,7 @@ public abstract class BossBattle {
         this.style = bossbattle_barstyle;
     }
 
-    public boolean n() {
+    public boolean isDarkenSky() {
         return this.e;
     }
 
@@ -66,7 +66,7 @@ public abstract class BossBattle {
         return this;
     }
 
-    public boolean o() {
+    public boolean isPlayMusic() {
         return this.f;
     }
 
@@ -80,7 +80,7 @@ public abstract class BossBattle {
         return this;
     }
 
-    public boolean p() {
+    public boolean isCreateFog() {
         return this.g;
     }
 

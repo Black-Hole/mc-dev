@@ -162,7 +162,7 @@ public abstract class CriterionConditionValue<T extends Number> {
         private final Double g;
 
         private static CriterionConditionValue.c a(StringReader stringreader, @Nullable Float ofloat, @Nullable Float ofloat1) throws CommandSyntaxException {
-            if (ofloat != null && ofloat1 != null && ofloat.floatValue() > ofloat1.floatValue()) {
+            if (ofloat != null && ofloat1 != null && ofloat > ofloat1) {
                 throw CriterionConditionValue.c.b.createWithContext(stringreader);
             } else {
                 return new CriterionConditionValue.c(ofloat, ofloat1);
@@ -171,7 +171,7 @@ public abstract class CriterionConditionValue<T extends Number> {
 
         @Nullable
         private static Double a(@Nullable Float ofloat) {
-            return ofloat == null ? null : Double.valueOf(ofloat.doubleValue() * ofloat.doubleValue());
+            return ofloat == null ? null : ofloat.doubleValue() * ofloat.doubleValue();
         }
 
         private c(@Nullable Float ofloat, @Nullable Float ofloat1) {
@@ -181,15 +181,15 @@ public abstract class CriterionConditionValue<T extends Number> {
         }
 
         public static CriterionConditionValue.c b(float f) {
-            return new CriterionConditionValue.c(Float.valueOf(f), (Float) null);
+            return new CriterionConditionValue.c(f, (Float) null);
         }
 
         public boolean d(float f) {
-            return this.c != null && ((Float) this.c).floatValue() > f ? false : this.d == null || ((Float) this.d).floatValue() >= f;
+            return this.c != null && (Float) this.c > f ? false : this.d == null || (Float) this.d >= f;
         }
 
         public boolean a(double d0) {
-            return this.f != null && this.f.doubleValue() > d0 ? false : this.g == null || this.g.doubleValue() >= d0;
+            return this.f != null && this.f > d0 ? false : this.g == null || this.g >= d0;
         }
 
         public static CriterionConditionValue.c a(@Nullable JsonElement jsonelement) {
@@ -219,7 +219,7 @@ public abstract class CriterionConditionValue<T extends Number> {
         private final Long g;
 
         private static CriterionConditionValue.d a(StringReader stringreader, @Nullable Integer integer, @Nullable Integer integer1) throws CommandSyntaxException {
-            if (integer != null && integer1 != null && integer.intValue() > integer1.intValue()) {
+            if (integer != null && integer1 != null && integer > integer1) {
                 throw CriterionConditionValue.d.b.createWithContext(stringreader);
             } else {
                 return new CriterionConditionValue.d(integer, integer1);
@@ -228,7 +228,7 @@ public abstract class CriterionConditionValue<T extends Number> {
 
         @Nullable
         private static Long a(@Nullable Integer integer) {
-            return integer == null ? null : Long.valueOf(integer.longValue() * integer.longValue());
+            return integer == null ? null : integer.longValue() * integer.longValue();
         }
 
         private d(@Nullable Integer integer, @Nullable Integer integer1) {
@@ -238,15 +238,15 @@ public abstract class CriterionConditionValue<T extends Number> {
         }
 
         public static CriterionConditionValue.d a(int i) {
-            return new CriterionConditionValue.d(Integer.valueOf(i), Integer.valueOf(i));
+            return new CriterionConditionValue.d(i, i);
         }
 
         public static CriterionConditionValue.d b(int i) {
-            return new CriterionConditionValue.d(Integer.valueOf(i), (Integer) null);
+            return new CriterionConditionValue.d(i, (Integer) null);
         }
 
         public boolean d(int i) {
-            return this.c != null && ((Integer) this.c).intValue() > i ? false : this.d == null || ((Integer) this.d).intValue() >= i;
+            return this.c != null && (Integer) this.c > i ? false : this.d == null || (Integer) this.d >= i;
         }
 
         public static CriterionConditionValue.d a(@Nullable JsonElement jsonelement) {

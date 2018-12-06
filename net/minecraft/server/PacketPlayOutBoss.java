@@ -24,9 +24,9 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         this.d = bossbattle.getProgress();
         this.e = bossbattle.l();
         this.f = bossbattle.m();
-        this.g = bossbattle.n();
-        this.h = bossbattle.o();
-        this.i = bossbattle.p();
+        this.g = bossbattle.isDarkenSky();
+        this.h = bossbattle.isPlayMusic();
+        this.i = bossbattle.isCreateFog();
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -39,24 +39,19 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
             this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
             this.a(packetdataserializer.readUnsignedByte());
-
         case REMOVE:
         default:
             break;
-
         case UPDATE_PCT:
             this.d = packetdataserializer.readFloat();
             break;
-
         case UPDATE_NAME:
             this.c = packetdataserializer.f();
             break;
-
         case UPDATE_STYLE:
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
             this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
             break;
-
         case UPDATE_PROPERTIES:
             this.a(packetdataserializer.readUnsignedByte());
         }
@@ -79,24 +74,19 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
             packetdataserializer.a((Enum) this.e);
             packetdataserializer.a((Enum) this.f);
             packetdataserializer.writeByte(this.k());
-
         case REMOVE:
         default:
             break;
-
         case UPDATE_PCT:
             packetdataserializer.writeFloat(this.d);
             break;
-
         case UPDATE_NAME:
             packetdataserializer.a(this.c);
             break;
-
         case UPDATE_STYLE:
             packetdataserializer.a((Enum) this.e);
             packetdataserializer.a((Enum) this.f);
             break;
-
         case UPDATE_PROPERTIES:
             packetdataserializer.writeByte(this.k());
         }

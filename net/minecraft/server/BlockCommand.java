@@ -12,7 +12,7 @@ public class BlockCommand extends BlockTileEntity {
 
     public BlockCommand(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCommand.a, EnumDirection.NORTH)).set(BlockCommand.b, false));
     }
 
     public TileEntity a(IBlockAccess iblockaccess) {
@@ -158,7 +158,7 @@ public class BlockCommand extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCommand.a, BlockCommand.b});
+        blockstatelist_a.a(BlockCommand.a, BlockCommand.b);
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
@@ -169,8 +169,8 @@ public class BlockCommand extends BlockTileEntity {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
         GameRules gamerules = world.getGameRules();
 
-        int i;
         IBlockData iblockdata;
+        int i;
 
         for (i = gamerules.c("maxCommandChainLength"); i-- > 0; enumdirection = (EnumDirection) iblockdata.get(BlockCommand.a)) {
             blockposition_mutableblockposition.c(enumdirection);
@@ -211,7 +211,7 @@ public class BlockCommand extends BlockTileEntity {
         if (i <= 0) {
             int j = Math.max(gamerules.c("maxCommandChainLength"), 0);
 
-            BlockCommand.c.warn("Command Block chain tried to execute more than {} steps!", Integer.valueOf(j));
+            BlockCommand.c.warn("Command Block chain tried to execute more than {} steps!", j);
         }
 
     }

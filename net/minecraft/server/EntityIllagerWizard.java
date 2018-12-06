@@ -15,7 +15,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityIllagerWizard.c, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityIllagerWizard.c, (byte) 0);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -29,16 +29,16 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     }
 
     public boolean dA() {
-        return this.world.isClientSide ? ((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue() > 0 : this.b > 0;
+        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.c) > 0 : this.b > 0;
     }
 
     public void setSpell(EntityIllagerWizard.Spell entityillagerwizard_spell) {
         this.bC = entityillagerwizard_spell;
-        this.datawatcher.set(EntityIllagerWizard.c, Byte.valueOf((byte) entityillagerwizard_spell.g));
+        this.datawatcher.set(EntityIllagerWizard.c, (byte) entityillagerwizard_spell.g);
     }
 
     public EntityIllagerWizard.Spell getSpell() {
-        return !this.world.isClientSide ? this.bC : EntityIllagerWizard.Spell.a(((Byte) this.datawatcher.get(EntityIllagerWizard.c)).byteValue());
+        return !this.world.isClientSide ? this.bC : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.c));
     }
 
     protected void mobTick() {

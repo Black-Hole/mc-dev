@@ -10,7 +10,7 @@ public class BlockSoil extends Block {
 
     protected BlockSoil(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSoil.MOISTURE, 0));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -47,16 +47,16 @@ public class BlockSoil extends Block {
         if (!iblockdata.canPlace(world, blockposition)) {
             b(iblockdata, world, blockposition);
         } else {
-            int i = ((Integer) iblockdata.get(BlockSoil.MOISTURE)).intValue();
+            int i = (Integer) iblockdata.get(BlockSoil.MOISTURE);
 
             if (!a((IWorldReader) world, blockposition) && !world.isRainingAt(blockposition.up())) {
                 if (i > 0) {
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(i - 1)), 2);
+                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, i - 1), 2);
                 } else if (!a((IBlockAccess) world, blockposition)) {
                     b(iblockdata, world, blockposition);
                 }
             } else if (i < 7) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, Integer.valueOf(7)), 2);
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSoil.MOISTURE, 7), 2);
             }
 
         }
@@ -91,7 +91,7 @@ public class BlockSoil extends Block {
             }
 
             blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator.next();
-        } while (!iworldreader.b(blockposition_mutableblockposition).a(TagsFluid.WATER));
+        } while (!iworldreader.getFluid(blockposition_mutableblockposition).a(TagsFluid.WATER));
 
         return true;
     }
@@ -101,7 +101,7 @@ public class BlockSoil extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockSoil.MOISTURE});
+        blockstatelist_a.a(BlockSoil.MOISTURE);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

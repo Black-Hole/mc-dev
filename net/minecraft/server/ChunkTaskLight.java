@@ -8,7 +8,7 @@ public class ChunkTaskLight extends ChunkTask {
         ProtoChunk protochunk = aprotochunk[aprotochunk.length / 2];
         RegionLimitedWorldAccess regionlimitedworldaccess = new RegionLimitedWorldAccess(aprotochunk, chunkstatus.c() * 2 + 1, chunkstatus.c() * 2 + 1, i, j, world);
 
-        protochunk.a(new HeightMap.Type[] { HeightMap.Type.LIGHT_BLOCKING});
+        protochunk.a(HeightMap.Type.LIGHT_BLOCKING);
         if (regionlimitedworldaccess.o().g()) {
             (new LightEngineSky()).a(regionlimitedworldaccess, (IChunkAccess) protochunk);
         }

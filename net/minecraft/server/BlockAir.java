@@ -14,7 +14,7 @@ public class BlockAir extends Block {
         return VoxelShapes.a();
     }
 
-    public boolean d(IBlockData iblockdata) {
+    public boolean isCollidable(IBlockData iblockdata) {
         return false;
     }
 

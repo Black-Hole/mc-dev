@@ -17,7 +17,7 @@ public class BlockCoralFanWall extends BlockCoralFanWallAbstract {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!b_(iblockdata, world, blockposition)) {
-            world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) this.c.getBlockData().set(BlockCoralFanWall.b, Boolean.valueOf(false))).set(BlockCoralFanWall.a, iblockdata.get(BlockCoralFanWall.a)), 2);
+            world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) this.c.getBlockData().set(BlockCoralFanWall.b, false)).set(BlockCoralFanWall.a, iblockdata.get(BlockCoralFanWall.a)), 2);
         }
 
     }
@@ -26,7 +26,7 @@ public class BlockCoralFanWall extends BlockCoralFanWallAbstract {
         if (enumdirection.opposite() == iblockdata.get(BlockCoralFanWall.a) && !iblockdata.canPlace(generatoraccess, blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
-            if (((Boolean) iblockdata.get(BlockCoralFanWall.b)).booleanValue()) {
+            if ((Boolean) iblockdata.get(BlockCoralFanWall.b)) {
                 generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 

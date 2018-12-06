@@ -22,9 +22,9 @@ public class LootItemFunctions {
         Class oclass = lootitemfunction_a.b();
 
         if (LootItemFunctions.a.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("Can\'t re-register item function name " + minecraftkey);
+            throw new IllegalArgumentException("Can't re-register item function name " + minecraftkey);
         } else if (LootItemFunctions.b.containsKey(oclass)) {
-            throw new IllegalArgumentException("Can\'t re-register item function class " + oclass.getName());
+            throw new IllegalArgumentException("Can't re-register item function class " + oclass.getName());
         } else {
             LootItemFunctions.a.put(minecraftkey, lootitemfunction_a);
             LootItemFunctions.b.put(oclass, lootitemfunction_a);
@@ -35,7 +35,7 @@ public class LootItemFunctions {
         LootItemFunction.a lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.a.get(minecraftkey);
 
         if (lootitemfunction_a == null) {
-            throw new IllegalArgumentException("Unknown loot item function \'" + minecraftkey + "\'");
+            throw new IllegalArgumentException("Unknown loot item function '" + minecraftkey + "'");
         } else {
             return lootitemfunction_a;
         }
@@ -77,7 +77,7 @@ public class LootItemFunctions {
             try {
                 lootitemfunction_a = LootItemFunctions.a(minecraftkey);
             } catch (IllegalArgumentException illegalargumentexception) {
-                throw new JsonSyntaxException("Unknown function \'" + minecraftkey + "\'");
+                throw new JsonSyntaxException("Unknown function '" + minecraftkey + "'");
             }
 
             return lootitemfunction_a.b(jsonobject, jsondeserializationcontext, (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class));

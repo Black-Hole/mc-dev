@@ -24,7 +24,7 @@ public class EntityRabbit extends EntityAnimal {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new EntityRabbit.PathfinderGoalRabbitPanic(this, 2.2D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 0.8D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, RecipeItemStack.a(new IMaterial[] { Items.CARROT, Items.GOLDEN_CARROT, Blocks.DANDELION}), false));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.0D, RecipeItemStack.a(Items.CARROT, Items.GOLDEN_CARROT, Blocks.DANDELION), false));
         this.goalSelector.a(4, new EntityRabbit.PathfinderGoalRabbitAvoidTarget(this, EntityHuman.class, 8.0F, 2.2D, 2.2D));
         this.goalSelector.a(4, new EntityRabbit.PathfinderGoalRabbitAvoidTarget(this, EntityWolf.class, 10.0F, 2.2D, 2.2D));
         this.goalSelector.a(4, new EntityRabbit.PathfinderGoalRabbitAvoidTarget(this, EntityMonster.class, 4.0F, 2.2D, 2.2D));
@@ -90,7 +90,7 @@ public class EntityRabbit extends EntityAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityRabbit.bC, Integer.valueOf(0));
+        this.datawatcher.register(EntityRabbit.bC, 0);
     }
 
     public void mobTick() {
@@ -265,7 +265,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     public int getRabbitType() {
-        return ((Integer) this.datawatcher.get(EntityRabbit.bC)).intValue();
+        return (Integer) this.datawatcher.get(EntityRabbit.bC);
     }
 
     public void setRabbitType(int i) {
@@ -280,7 +280,7 @@ public class EntityRabbit extends EntityAnimal {
             }
         }
 
-        this.datawatcher.set(EntityRabbit.bC, Integer.valueOf(i));
+        this.datawatcher.set(EntityRabbit.bC, i);
     }
 
     @Nullable
@@ -396,11 +396,11 @@ public class EntityRabbit extends EntityAnimal {
                 if (this.h && block instanceof BlockCarrots) {
                     Integer integer = (Integer) iblockdata.get(BlockCarrots.AGE);
 
-                    if (integer.intValue() == 0) {
+                    if (integer == 0) {
                         world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
                         world.setAir(blockposition, true);
                     } else {
-                        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCarrots.AGE, Integer.valueOf(integer.intValue() - 1)), 2);
+                        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCarrots.AGE, integer - 1), 2);
                         world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
                     }
 

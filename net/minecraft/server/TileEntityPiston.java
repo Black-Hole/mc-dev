@@ -88,11 +88,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                             case X:
                                 entity.motX = (double) enumdirection.getAdjacentX();
                                 break;
-
                             case Y:
                                 entity.motY = (double) enumdirection.getAdjacentY();
                                 break;
-
                             case Z:
                                 entity.motZ = (double) enumdirection.getAdjacentZ();
                             }
@@ -158,11 +156,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         switch (enumdirection.k()) {
         case X:
             return b(axisalignedbb, enumdirection, axisalignedbb1);
-
         case Y:
         default:
             return c(axisalignedbb, enumdirection, axisalignedbb1);
-
         case Z:
             return d(axisalignedbb, enumdirection, axisalignedbb1);
         }
@@ -182,20 +178,15 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         switch (enumdirection) {
         case WEST:
             return new AxisAlignedBB(axisalignedbb.minX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
-
         case EAST:
             return new AxisAlignedBB(axisalignedbb.maxX + d2, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.maxX + d3, axisalignedbb.maxY, axisalignedbb.maxZ);
-
         case DOWN:
             return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.minY + d3, axisalignedbb.maxZ);
-
         case UP:
         default:
             return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.maxY + d2, axisalignedbb.minZ, axisalignedbb.maxX, axisalignedbb.maxY + d3, axisalignedbb.maxZ);
-
         case NORTH:
             return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.minZ + d3);
-
         case SOUTH:
             return new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.maxZ + d2, axisalignedbb.maxX, axisalignedbb.maxY, axisalignedbb.maxZ + d3);
         }
@@ -271,8 +262,8 @@ public class TileEntityPiston extends TileEntity implements ITickable {
                     this.world.setTypeAndData(this.position, this.a, 84);
                     Block.a(this.a, iblockdata, this.world, this.position, 3);
                 } else {
-                    if (iblockdata.b(BlockProperties.y) && ((Boolean) iblockdata.get(BlockProperties.y)).booleanValue()) {
-                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.y, Boolean.valueOf(false));
+                    if (iblockdata.b(BlockProperties.y) && (Boolean) iblockdata.get(BlockProperties.y)) {
+                        iblockdata = (IBlockData) iblockdata.set(BlockProperties.y, false);
                     }
 
                     this.world.setTypeAndData(this.position, iblockdata, 67);
@@ -316,7 +307,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         VoxelShape voxelshape;
 
         if (!this.f && this.g) {
-            voxelshape = ((IBlockData) this.a.set(BlockPiston.EXTENDED, Boolean.valueOf(true))).getCollisionShape(iblockaccess, blockposition);
+            voxelshape = ((IBlockData) this.a.set(BlockPiston.EXTENDED, true)).getCollisionShape(iblockaccess, blockposition);
         } else {
             voxelshape = VoxelShapes.a();
         }
@@ -329,7 +320,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
             IBlockData iblockdata;
 
             if (this.f()) {
-                iblockdata = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.e)).set(BlockPistonExtension.SHORT, Boolean.valueOf(this.f != 1.0F - this.i < 4.0F));
+                iblockdata = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, this.e)).set(BlockPistonExtension.SHORT, this.f != 1.0F - this.i < 4.0F);
             } else {
                 iblockdata = this.a;
             }

@@ -92,7 +92,7 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
 
         ichunkaccess.a(abiomebase);
         this.a(i, j, ichunkaccess);
-        ichunkaccess.a(new HeightMap.Type[] { HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG});
+        ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG);
         ichunkaccess.a(ChunkStatus.BASE);
     }
 

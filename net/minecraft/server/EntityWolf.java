@@ -68,14 +68,14 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected void mobTick() {
-        this.datawatcher.set(EntityWolf.DATA_HEALTH, Float.valueOf(this.getHealth()));
+        this.datawatcher.set(EntityWolf.DATA_HEALTH, this.getHealth());
     }
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityWolf.DATA_HEALTH, Float.valueOf(this.getHealth()));
-        this.datawatcher.register(EntityWolf.bH, Boolean.valueOf(false));
-        this.datawatcher.register(EntityWolf.bI, Integer.valueOf(EnumColor.RED.getColorIndex()));
+        this.datawatcher.register(EntityWolf.DATA_HEALTH, this.getHealth());
+        this.datawatcher.register(EntityWolf.bH, false);
+        this.datawatcher.register(EntityWolf.bI, EnumColor.RED.getColorIndex());
     }
 
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
@@ -98,7 +98,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     protected SoundEffect D() {
-        return this.isAngry() ? SoundEffects.ENTITY_WOLF_GROWL : (this.random.nextInt(3) == 0 ? (this.isTamed() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 10.0F ? SoundEffects.ENTITY_WOLF_WHINE : SoundEffects.ENTITY_WOLF_PANT) : SoundEffects.ENTITY_WOLF_AMBIENT);
+        return this.isAngry() ? SoundEffects.ENTITY_WOLF_GROWL : (this.random.nextInt(3) == 0 ? (this.isTamed() && (Float) this.datawatcher.get(EntityWolf.DATA_HEALTH) < 10.0F ? SoundEffects.ENTITY_WOLF_WHINE : SoundEffects.ENTITY_WOLF_PANT) : SoundEffects.ENTITY_WOLF_AMBIENT);
     }
 
     protected SoundEffect d(DamageSource damagesource) {
@@ -232,7 +232,7 @@ public class EntityWolf extends EntityTameableAnimal {
                 if (item instanceof ItemFood) {
                     ItemFood itemfood = (ItemFood) item;
 
-                    if (itemfood.d() && ((Float) this.datawatcher.get(EntityWolf.DATA_HEALTH)).floatValue() < 20.0F) {
+                    if (itemfood.d() && (Float) this.datawatcher.get(EntityWolf.DATA_HEALTH) < 20.0F) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack.subtract(1);
                         }
@@ -297,26 +297,26 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     public boolean isAngry() {
-        return (((Byte) this.datawatcher.get(EntityWolf.bC)).byteValue() & 2) != 0;
+        return ((Byte) this.datawatcher.get(EntityWolf.bC) & 2) != 0;
     }
 
     public void setAngry(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityWolf.bC)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityWolf.bC);
 
         if (flag) {
-            this.datawatcher.set(EntityWolf.bC, Byte.valueOf((byte) (b0 | 2)));
+            this.datawatcher.set(EntityWolf.bC, (byte) (b0 | 2));
         } else {
-            this.datawatcher.set(EntityWolf.bC, Byte.valueOf((byte) (b0 & -3)));
+            this.datawatcher.set(EntityWolf.bC, (byte) (b0 & -3));
         }
 
     }
 
     public EnumColor getCollarColor() {
-        return EnumColor.fromColorIndex(((Integer) this.datawatcher.get(EntityWolf.bI)).intValue());
+        return EnumColor.fromColorIndex((Integer) this.datawatcher.get(EntityWolf.bI));
     }
 
     public void setCollarColor(EnumColor enumcolor) {
-        this.datawatcher.set(EntityWolf.bI, Integer.valueOf(enumcolor.getColorIndex()));
+        this.datawatcher.set(EntityWolf.bI, enumcolor.getColorIndex());
     }
 
     public EntityWolf b(EntityAgeable entityageable) {
@@ -332,7 +332,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     public void w(boolean flag) {
-        this.datawatcher.set(EntityWolf.bH, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityWolf.bH, flag);
     }
 
     public boolean mate(EntityAnimal entityanimal) {
@@ -350,7 +350,7 @@ public class EntityWolf extends EntityTameableAnimal {
     }
 
     public boolean dL() {
-        return ((Boolean) this.datawatcher.get(EntityWolf.bH)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityWolf.bH);
     }
 
     public boolean a(EntityLiving entityliving, EntityLiving entityliving1) {

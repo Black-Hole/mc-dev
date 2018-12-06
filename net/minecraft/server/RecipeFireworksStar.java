@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 
 public class RecipeFireworksStar extends IRecipeComplex {
 
-    private static final RecipeItemStack a = RecipeItemStack.a(new IMaterial[] { Items.FIRE_CHARGE, Items.FEATHER, Items.GOLD_NUGGET, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.CREEPER_HEAD, Items.PLAYER_HEAD, Items.DRAGON_HEAD, Items.ZOMBIE_HEAD});
-    private static final RecipeItemStack b = RecipeItemStack.a(new IMaterial[] { Items.DIAMOND});
-    private static final RecipeItemStack c = RecipeItemStack.a(new IMaterial[] { Items.GLOWSTONE_DUST});
+    private static final RecipeItemStack a = RecipeItemStack.a(Items.FIRE_CHARGE, Items.FEATHER, Items.GOLD_NUGGET, Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, Items.CREEPER_HEAD, Items.PLAYER_HEAD, Items.DRAGON_HEAD, Items.ZOMBIE_HEAD);
+    private static final RecipeItemStack b = RecipeItemStack.a(Items.DIAMOND);
+    private static final RecipeItemStack c = RecipeItemStack.a(Items.GLOWSTONE_DUST);
     private static final Map<Item, ItemFireworks.EffectType> d = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(Items.FIRE_CHARGE, ItemFireworks.EffectType.LARGE_BALL);
         hashmap.put(Items.FEATHER, ItemFireworks.EffectType.BURST);
@@ -24,7 +24,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
         hashmap.put(Items.DRAGON_HEAD, ItemFireworks.EffectType.CREEPER);
         hashmap.put(Items.ZOMBIE_HEAD, ItemFireworks.EffectType.CREEPER);
     });
-    private static final RecipeItemStack e = RecipeItemStack.a(new IMaterial[] { Items.GUNPOWDER});
+    private static final RecipeItemStack e = RecipeItemStack.a(Items.GUNPOWDER);
 
     public RecipeFireworksStar(MinecraftKey minecraftkey) {
         super(minecraftkey);
@@ -99,7 +99,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
                 } else if (RecipeFireworksStar.b.a(itemstack1)) {
                     nbttagcompound.setBoolean("Trail", true);
                 } else if (itemstack1.getItem() instanceof ItemDye) {
-                    arraylist.add(Integer.valueOf(((ItemDye) itemstack1.getItem()).d().f()));
+                    arraylist.add(((ItemDye) itemstack1.getItem()).d().f());
                 }
             }
         }

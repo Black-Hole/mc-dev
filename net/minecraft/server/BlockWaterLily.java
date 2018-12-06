@@ -21,7 +21,7 @@ public class BlockWaterLily extends BlockPlant {
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Fluid fluid = iblockaccess.b(blockposition);
+        Fluid fluid = iblockaccess.getFluid(blockposition);
 
         return fluid.c() == FluidTypes.c || iblockdata.getMaterial() == Material.ICE;
     }

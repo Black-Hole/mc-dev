@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 public class EntityChicken extends EntityAnimal {
 
-    private static final RecipeItemStack bK = RecipeItemStack.a(new IMaterial[] { Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS});
+    private static final RecipeItemStack bK = RecipeItemStack.a(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS);
     public float bC;
     public float bD;
     public float bE;

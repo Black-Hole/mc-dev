@@ -116,7 +116,7 @@ public class CommandDatapack {
         if (resourcepackrepository.c().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[] { Integer.valueOf(resourcepackrepository.c().size()), ChatComponentUtils.b(resourcepackrepository.c(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.success", new Object[] { resourcepackrepository.c().size(), ChatComponentUtils.b(resourcepackrepository.c(), (resourcepackloader) -> {
                         return resourcepackloader.a(false);
                     })}), false);
         }
@@ -130,7 +130,7 @@ public class CommandDatapack {
         if (resourcepackrepository.d().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[] { Integer.valueOf(resourcepackrepository.d().size()), ChatComponentUtils.b(resourcepackrepository.d(), (resourcepackloader) -> {
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.success", new Object[] { resourcepackrepository.d().size(), ChatComponentUtils.b(resourcepackrepository.d(), (resourcepackloader) -> {
                         return resourcepackloader.a(true);
                     })}), false);
         }

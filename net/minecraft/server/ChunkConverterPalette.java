@@ -37,38 +37,38 @@ public class ChunkConverterPalette extends DataFix {
     private static final Logger a = LogManager.getLogger();
     private static final BitSet b = new BitSet(256);
     private static final BitSet c = new BitSet(256);
-    private static final Dynamic<?> d = DataConverterFlattenData.b("{Name:\'minecraft:pumpkin\'}");
-    private static final Dynamic<?> e = DataConverterFlattenData.b("{Name:\'minecraft:podzol\',Properties:{snowy:\'true\'}}");
-    private static final Dynamic<?> f = DataConverterFlattenData.b("{Name:\'minecraft:grass_block\',Properties:{snowy:\'true\'}}");
-    private static final Dynamic<?> g = DataConverterFlattenData.b("{Name:\'minecraft:mycelium\',Properties:{snowy:\'true\'}}");
-    private static final Dynamic<?> h = DataConverterFlattenData.b("{Name:\'minecraft:sunflower\',Properties:{half:\'upper\'}}");
-    private static final Dynamic<?> i = DataConverterFlattenData.b("{Name:\'minecraft:lilac\',Properties:{half:\'upper\'}}");
-    private static final Dynamic<?> j = DataConverterFlattenData.b("{Name:\'minecraft:tall_grass\',Properties:{half:\'upper\'}}");
-    private static final Dynamic<?> k = DataConverterFlattenData.b("{Name:\'minecraft:large_fern\',Properties:{half:\'upper\'}}");
-    private static final Dynamic<?> l = DataConverterFlattenData.b("{Name:\'minecraft:rose_bush\',Properties:{half:\'upper\'}}");
-    private static final Dynamic<?> m = DataConverterFlattenData.b("{Name:\'minecraft:peony\',Properties:{half:\'upper\'}}");
+    private static final Dynamic<?> d = DataConverterFlattenData.b("{Name:'minecraft:pumpkin'}");
+    private static final Dynamic<?> e = DataConverterFlattenData.b("{Name:'minecraft:podzol',Properties:{snowy:'true'}}");
+    private static final Dynamic<?> f = DataConverterFlattenData.b("{Name:'minecraft:grass_block',Properties:{snowy:'true'}}");
+    private static final Dynamic<?> g = DataConverterFlattenData.b("{Name:'minecraft:mycelium',Properties:{snowy:'true'}}");
+    private static final Dynamic<?> h = DataConverterFlattenData.b("{Name:'minecraft:sunflower',Properties:{half:'upper'}}");
+    private static final Dynamic<?> i = DataConverterFlattenData.b("{Name:'minecraft:lilac',Properties:{half:'upper'}}");
+    private static final Dynamic<?> j = DataConverterFlattenData.b("{Name:'minecraft:tall_grass',Properties:{half:'upper'}}");
+    private static final Dynamic<?> k = DataConverterFlattenData.b("{Name:'minecraft:large_fern',Properties:{half:'upper'}}");
+    private static final Dynamic<?> l = DataConverterFlattenData.b("{Name:'minecraft:rose_bush',Properties:{half:'upper'}}");
+    private static final Dynamic<?> m = DataConverterFlattenData.b("{Name:'minecraft:peony',Properties:{half:'upper'}}");
     private static final Map<String, Dynamic<?>> n = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
-        hashmap.put("minecraft:air0", DataConverterFlattenData.b("{Name:\'minecraft:flower_pot\'}"));
-        hashmap.put("minecraft:red_flower0", DataConverterFlattenData.b("{Name:\'minecraft:potted_poppy\'}"));
-        hashmap.put("minecraft:red_flower1", DataConverterFlattenData.b("{Name:\'minecraft:potted_blue_orchid\'}"));
-        hashmap.put("minecraft:red_flower2", DataConverterFlattenData.b("{Name:\'minecraft:potted_allium\'}"));
-        hashmap.put("minecraft:red_flower3", DataConverterFlattenData.b("{Name:\'minecraft:potted_azure_bluet\'}"));
-        hashmap.put("minecraft:red_flower4", DataConverterFlattenData.b("{Name:\'minecraft:potted_red_tulip\'}"));
-        hashmap.put("minecraft:red_flower5", DataConverterFlattenData.b("{Name:\'minecraft:potted_orange_tulip\'}"));
-        hashmap.put("minecraft:red_flower6", DataConverterFlattenData.b("{Name:\'minecraft:potted_white_tulip\'}"));
-        hashmap.put("minecraft:red_flower7", DataConverterFlattenData.b("{Name:\'minecraft:potted_pink_tulip\'}"));
-        hashmap.put("minecraft:red_flower8", DataConverterFlattenData.b("{Name:\'minecraft:potted_oxeye_daisy\'}"));
-        hashmap.put("minecraft:yellow_flower0", DataConverterFlattenData.b("{Name:\'minecraft:potted_dandelion\'}"));
-        hashmap.put("minecraft:sapling0", DataConverterFlattenData.b("{Name:\'minecraft:potted_oak_sapling\'}"));
-        hashmap.put("minecraft:sapling1", DataConverterFlattenData.b("{Name:\'minecraft:potted_spruce_sapling\'}"));
-        hashmap.put("minecraft:sapling2", DataConverterFlattenData.b("{Name:\'minecraft:potted_birch_sapling\'}"));
-        hashmap.put("minecraft:sapling3", DataConverterFlattenData.b("{Name:\'minecraft:potted_jungle_sapling\'}"));
-        hashmap.put("minecraft:sapling4", DataConverterFlattenData.b("{Name:\'minecraft:potted_acacia_sapling\'}"));
-        hashmap.put("minecraft:sapling5", DataConverterFlattenData.b("{Name:\'minecraft:potted_dark_oak_sapling\'}"));
-        hashmap.put("minecraft:red_mushroom0", DataConverterFlattenData.b("{Name:\'minecraft:potted_red_mushroom\'}"));
-        hashmap.put("minecraft:brown_mushroom0", DataConverterFlattenData.b("{Name:\'minecraft:potted_brown_mushroom\'}"));
-        hashmap.put("minecraft:deadbush0", DataConverterFlattenData.b("{Name:\'minecraft:potted_dead_bush\'}"));
-        hashmap.put("minecraft:tallgrass2", DataConverterFlattenData.b("{Name:\'minecraft:potted_fern\'}"));
+        hashmap.put("minecraft:air0", DataConverterFlattenData.b("{Name:'minecraft:flower_pot'}"));
+        hashmap.put("minecraft:red_flower0", DataConverterFlattenData.b("{Name:'minecraft:potted_poppy'}"));
+        hashmap.put("minecraft:red_flower1", DataConverterFlattenData.b("{Name:'minecraft:potted_blue_orchid'}"));
+        hashmap.put("minecraft:red_flower2", DataConverterFlattenData.b("{Name:'minecraft:potted_allium'}"));
+        hashmap.put("minecraft:red_flower3", DataConverterFlattenData.b("{Name:'minecraft:potted_azure_bluet'}"));
+        hashmap.put("minecraft:red_flower4", DataConverterFlattenData.b("{Name:'minecraft:potted_red_tulip'}"));
+        hashmap.put("minecraft:red_flower5", DataConverterFlattenData.b("{Name:'minecraft:potted_orange_tulip'}"));
+        hashmap.put("minecraft:red_flower6", DataConverterFlattenData.b("{Name:'minecraft:potted_white_tulip'}"));
+        hashmap.put("minecraft:red_flower7", DataConverterFlattenData.b("{Name:'minecraft:potted_pink_tulip'}"));
+        hashmap.put("minecraft:red_flower8", DataConverterFlattenData.b("{Name:'minecraft:potted_oxeye_daisy'}"));
+        hashmap.put("minecraft:yellow_flower0", DataConverterFlattenData.b("{Name:'minecraft:potted_dandelion'}"));
+        hashmap.put("minecraft:sapling0", DataConverterFlattenData.b("{Name:'minecraft:potted_oak_sapling'}"));
+        hashmap.put("minecraft:sapling1", DataConverterFlattenData.b("{Name:'minecraft:potted_spruce_sapling'}"));
+        hashmap.put("minecraft:sapling2", DataConverterFlattenData.b("{Name:'minecraft:potted_birch_sapling'}"));
+        hashmap.put("minecraft:sapling3", DataConverterFlattenData.b("{Name:'minecraft:potted_jungle_sapling'}"));
+        hashmap.put("minecraft:sapling4", DataConverterFlattenData.b("{Name:'minecraft:potted_acacia_sapling'}"));
+        hashmap.put("minecraft:sapling5", DataConverterFlattenData.b("{Name:'minecraft:potted_dark_oak_sapling'}"));
+        hashmap.put("minecraft:red_mushroom0", DataConverterFlattenData.b("{Name:'minecraft:potted_red_mushroom'}"));
+        hashmap.put("minecraft:brown_mushroom0", DataConverterFlattenData.b("{Name:'minecraft:potted_brown_mushroom'}"));
+        hashmap.put("minecraft:deadbush0", DataConverterFlattenData.b("{Name:'minecraft:potted_dead_bush'}"));
+        hashmap.put("minecraft:tallgrass2", DataConverterFlattenData.b("{Name:'minecraft:potted_fern'}"));
         hashmap.put("minecraft:cactus0", DataConverterFlattenData.b(2240));
     });
     private static final Map<String, Dynamic<?>> o = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
@@ -90,8 +90,8 @@ public class ChunkConverterPalette extends DataFix {
     });
     private static final Map<String, Dynamic<?>> q = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         for (int i = 0; i < 26; ++i) {
-            hashmap.put("true" + i, DataConverterFlattenData.b("{Name:\'minecraft:note_block\',Properties:{powered:\'true\',note:\'" + i + "\'}}"));
-            hashmap.put("false" + i, DataConverterFlattenData.b("{Name:\'minecraft:note_block\',Properties:{powered:\'false\',note:\'" + i + "\'}}"));
+            hashmap.put("true" + i, DataConverterFlattenData.b("{Name:'minecraft:note_block',Properties:{powered:'true',note:'" + i + "'}}"));
+            hashmap.put("false" + i, DataConverterFlattenData.b("{Name:'minecraft:note_block',Properties:{powered:'false',note:'" + i + "'}}"));
         }
 
     });
@@ -144,108 +144,108 @@ public class ChunkConverterPalette extends DataFix {
     }
 
     private static void a(Map<String, Dynamic<?>> map, int i, String s, String s1) {
-        map.put(i + "north", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_" + s1 + "\',Properties:{facing:\'north\'}}"));
-        map.put(i + "east", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_" + s1 + "\',Properties:{facing:\'east\'}}"));
-        map.put(i + "south", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_" + s1 + "\',Properties:{facing:\'south\'}}"));
-        map.put(i + "west", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_" + s1 + "\',Properties:{facing:\'west\'}}"));
+        map.put(i + "north", DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_" + s1 + "',Properties:{facing:'north'}}"));
+        map.put(i + "east", DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_" + s1 + "',Properties:{facing:'east'}}"));
+        map.put(i + "south", DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_" + s1 + "',Properties:{facing:'south'}}"));
+        map.put(i + "west", DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_" + s1 + "',Properties:{facing:'west'}}"));
 
         for (int j = 0; j < 16; ++j) {
-            map.put(i + "" + j, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_" + s1 + "\',Properties:{rotation:\'" + j + "\'}}"));
+            map.put(i + "" + j, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_" + s1 + "',Properties:{rotation:'" + j + "'}}"));
         }
 
     }
 
     private static void a(Map<String, Dynamic<?>> map, String s, int i) {
-        map.put("minecraft:" + s + "eastlowerleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "eastlowerleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "eastlowerlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "eastlowerlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "eastlowerleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "eastlowerleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "eastlowerlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "eastlowerlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "eastlowerrightfalsefalse", DataConverterFlattenData.b(i));
-        map.put("minecraft:" + s + "eastlowerrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "eastlowerrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
         map.put("minecraft:" + s + "eastlowerrighttruefalse", DataConverterFlattenData.b(i + 4));
-        map.put("minecraft:" + s + "eastlowerrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'lower\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "eastlowerrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "eastupperleftfalsefalse", DataConverterFlattenData.b(i + 8));
         map.put("minecraft:" + s + "eastupperleftfalsetrue", DataConverterFlattenData.b(i + 10));
-        map.put("minecraft:" + s + "eastupperlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "eastupperlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "eastupperlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "eastupperlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "eastupperrightfalsefalse", DataConverterFlattenData.b(i + 9));
         map.put("minecraft:" + s + "eastupperrightfalsetrue", DataConverterFlattenData.b(i + 11));
-        map.put("minecraft:" + s + "eastupperrighttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "eastupperrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'east\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northlowerleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northlowerleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northlowerlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northlowerlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "eastupperrighttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "eastupperrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'east',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "northlowerleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "northlowerleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "northlowerlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "northlowerlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "northlowerrightfalsefalse", DataConverterFlattenData.b(i + 3));
-        map.put("minecraft:" + s + "northlowerrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "northlowerrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
         map.put("minecraft:" + s + "northlowerrighttruefalse", DataConverterFlattenData.b(i + 7));
-        map.put("minecraft:" + s + "northlowerrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'lower\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northupperleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northupperleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northupperlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northupperlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northupperrightfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northupperrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "northupperrighttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "northupperrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'north\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southlowerleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southlowerleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southlowerlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southlowerlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "northlowerrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "northupperleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "northupperleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "northupperlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "northupperlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "northupperrightfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "northupperrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "northupperrighttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "northupperrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'north',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "southlowerleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "southlowerleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "southlowerlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "southlowerlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "southlowerrightfalsefalse", DataConverterFlattenData.b(i + 1));
-        map.put("minecraft:" + s + "southlowerrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "southlowerrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
         map.put("minecraft:" + s + "southlowerrighttruefalse", DataConverterFlattenData.b(i + 5));
-        map.put("minecraft:" + s + "southlowerrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'lower\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southupperleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southupperleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southupperlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southupperlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southupperrightfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southupperrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "southupperrighttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "southupperrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'south\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westlowerleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westlowerleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westlowerlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westlowerlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "southlowerrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "southupperleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "southupperleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "southupperlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "southupperlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "southupperrightfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "southupperrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "southupperrighttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "southupperrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'south',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "westlowerleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "westlowerleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "westlowerlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "westlowerlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'left',open:'true',powered:'true'}}"));
         map.put("minecraft:" + s + "westlowerrightfalsefalse", DataConverterFlattenData.b(i + 2));
-        map.put("minecraft:" + s + "westlowerrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "westlowerrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'false',powered:'true'}}"));
         map.put("minecraft:" + s + "westlowerrighttruefalse", DataConverterFlattenData.b(i + 6));
-        map.put("minecraft:" + s + "westlowerrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'lower\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westupperleftfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westupperleftfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'left\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westupperlefttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westupperlefttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'left\',open:\'true\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westupperrightfalsefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westupperrightfalsetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'right\',open:\'false\',powered:\'true\'}}"));
-        map.put("minecraft:" + s + "westupperrighttruefalse", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'false\'}}"));
-        map.put("minecraft:" + s + "westupperrighttruetrue", DataConverterFlattenData.b("{Name:\'minecraft:" + s + "\',Properties:{facing:\'west\',half:\'upper\',hinge:\'right\',open:\'true\',powered:\'true\'}}"));
+        map.put("minecraft:" + s + "westlowerrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'lower',hinge:'right',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "westupperleftfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "westupperleftfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "westupperlefttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "westupperlefttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'left',open:'true',powered:'true'}}"));
+        map.put("minecraft:" + s + "westupperrightfalsefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'false'}}"));
+        map.put("minecraft:" + s + "westupperrightfalsetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'false',powered:'true'}}"));
+        map.put("minecraft:" + s + "westupperrighttruefalse", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'false'}}"));
+        map.put("minecraft:" + s + "westupperrighttruetrue", DataConverterFlattenData.b("{Name:'minecraft:" + s + "',Properties:{facing:'west',half:'upper',hinge:'right',open:'true',powered:'true'}}"));
     }
 
     private static void a(Map<String, Dynamic<?>> map, int i, String s) {
-        map.put("southfalsefoot" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'south\',occupied:\'false\',part:\'foot\'}}"));
-        map.put("westfalsefoot" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'west\',occupied:\'false\',part:\'foot\'}}"));
-        map.put("northfalsefoot" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'north\',occupied:\'false\',part:\'foot\'}}"));
-        map.put("eastfalsefoot" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'east\',occupied:\'false\',part:\'foot\'}}"));
-        map.put("southfalsehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'south\',occupied:\'false\',part:\'head\'}}"));
-        map.put("westfalsehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'west\',occupied:\'false\',part:\'head\'}}"));
-        map.put("northfalsehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'north\',occupied:\'false\',part:\'head\'}}"));
-        map.put("eastfalsehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'east\',occupied:\'false\',part:\'head\'}}"));
-        map.put("southtruehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'south\',occupied:\'true\',part:\'head\'}}"));
-        map.put("westtruehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'west\',occupied:\'true\',part:\'head\'}}"));
-        map.put("northtruehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'north\',occupied:\'true\',part:\'head\'}}"));
-        map.put("easttruehead" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_bed\',Properties:{facing:\'east\',occupied:\'true\',part:\'head\'}}"));
+        map.put("southfalsefoot" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'south',occupied:'false',part:'foot'}}"));
+        map.put("westfalsefoot" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'west',occupied:'false',part:'foot'}}"));
+        map.put("northfalsefoot" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'north',occupied:'false',part:'foot'}}"));
+        map.put("eastfalsefoot" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'east',occupied:'false',part:'foot'}}"));
+        map.put("southfalsehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'south',occupied:'false',part:'head'}}"));
+        map.put("westfalsehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'west',occupied:'false',part:'head'}}"));
+        map.put("northfalsehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'north',occupied:'false',part:'head'}}"));
+        map.put("eastfalsehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'east',occupied:'false',part:'head'}}"));
+        map.put("southtruehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'south',occupied:'true',part:'head'}}"));
+        map.put("westtruehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'west',occupied:'true',part:'head'}}"));
+        map.put("northtruehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'north',occupied:'true',part:'head'}}"));
+        map.put("easttruehead" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_bed',Properties:{facing:'east',occupied:'true',part:'head'}}"));
     }
 
     private static void b(Map<String, Dynamic<?>> map, int i, String s) {
         for (int j = 0; j < 16; ++j) {
-            map.put("" + j + "_" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_banner\',Properties:{rotation:\'" + j + "\'}}"));
+            map.put("" + j + "_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_banner',Properties:{rotation:'" + j + "'}}"));
         }
 
-        map.put("north_" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_banner\',Properties:{facing:\'north\'}}"));
-        map.put("south_" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_banner\',Properties:{facing:\'south\'}}"));
-        map.put("west_" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_banner\',Properties:{facing:\'west\'}}"));
-        map.put("east_" + i, DataConverterFlattenData.b("{Name:\'minecraft:" + s + "_wall_banner\',Properties:{facing:\'east\'}}"));
+        map.put("north_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_banner',Properties:{facing:'north'}}"));
+        map.put("south_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_banner',Properties:{facing:'south'}}"));
+        map.put("west_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_banner',Properties:{facing:'west'}}"));
+        map.put("east_" + i, DataConverterFlattenData.b("{Name:'minecraft:" + s + "_wall_banner',Properties:{facing:'east'}}"));
     }
 
     public static String a(Dynamic<?> dynamic) {
@@ -467,7 +467,7 @@ public class ChunkConverterPalette extends DataFix {
                     int l = j << 8 | k << 4 | i;
 
                     if (this.f.put(l, dynamic) != null) {
-                        ChunkConverterPalette.a.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", Integer.valueOf(this.d), Integer.valueOf(this.e), Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(k));
+                        ChunkConverterPalette.a.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.d, this.e, i, j, k);
                     }
 
                 });
@@ -495,29 +495,28 @@ public class ChunkConverterPalette extends DataFix {
                         IntListIterator intlistiterator;
                         int l;
                         Dynamic dynamic1;
+                        String s;
                         Dynamic dynamic2;
                         int i1;
-                        String s;
                         String s1;
                         String s2;
 
-                        switch (((Integer) java_util_map_entry.getKey()).intValue()) {
+                        switch ((Integer) java_util_map_entry.getKey()) {
                         case 2:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
                             while (intlistiterator.hasNext()) {
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if ("minecraft:grass_block".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s1 = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s1) || "minecraft:snow_layer".equals(s1)) {
+                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
                                         this.a(l, ChunkConverterPalette.f);
                                     }
                                 }
                             }
                             break;
-
                         case 3:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -526,17 +525,16 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if ("minecraft:podzol".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s1 = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s1) || "minecraft:snow_layer".equals(s1)) {
+                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
                                         this.a(l, ChunkConverterPalette.e);
                                     }
                                 }
                             }
-
                         case 25:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -545,15 +543,14 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.c(l);
                                 if (dynamic1 != null) {
-                                    s1 = Boolean.toString(dynamic1.getBoolean("powered")) + (byte) Math.min(Math.max(dynamic1.getByte("note"), 0), 24);
-                                    this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s1, ChunkConverterPalette.q.get("false0")));
+                                    s = Boolean.toString(dynamic1.getBoolean("powered")) + (byte) Math.min(Math.max(dynamic1.getByte("note"), 0), 24);
+                                    this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s, ChunkConverterPalette.q.get("false0")));
                                 }
                             }
-
                         case 26:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -562,21 +559,20 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.b(l);
                                 dynamic2 = this.a(l);
                                 if (dynamic1 != null) {
                                     i1 = dynamic1.getInt("color");
                                     if (i1 != 14 && i1 >= 0 && i1 < 16) {
-                                        s = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
-                                        if (ChunkConverterPalette.s.containsKey(s)) {
-                                            this.a(l, (Dynamic) ChunkConverterPalette.s.get(s));
+                                        s1 = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
+                                        if (ChunkConverterPalette.s.containsKey(s1)) {
+                                            this.a(l, (Dynamic) ChunkConverterPalette.s.get(s1));
                                         }
                                     }
                                 }
                             }
-
                         case 64:
                         case 71:
                         case 193:
@@ -591,7 +587,7 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if (ChunkConverterPalette.a(dynamic1).endsWith("_door")) {
@@ -613,7 +609,6 @@ public class ChunkConverterPalette extends DataFix {
                                     }
                                 }
                             }
-
                         case 86:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -622,17 +617,16 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if ("minecraft:carved_pumpkin".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s1 = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.DOWN)));
-                                    if ("minecraft:grass_block".equals(s1) || "minecraft:dirt".equals(s1)) {
+                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.DOWN)));
+                                    if ("minecraft:grass_block".equals(s) || "minecraft:dirt".equals(s)) {
                                         this.a(l, ChunkConverterPalette.d);
                                     }
                                 }
                             }
-
                         case 110:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -641,17 +635,16 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if ("minecraft:mycelium".equals(ChunkConverterPalette.a(dynamic1))) {
-                                    s1 = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
-                                    if ("minecraft:snow".equals(s1) || "minecraft:snow_layer".equals(s1)) {
+                                    s = ChunkConverterPalette.a(this.a(a(l, ChunkConverterPalette.Direction.UP)));
+                                    if ("minecraft:snow".equals(s) || "minecraft:snow_layer".equals(s)) {
                                         this.a(l, ChunkConverterPalette.g);
                                     }
                                 }
                             }
-
                         case 140:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -660,15 +653,14 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.c(l);
                                 if (dynamic1 != null) {
-                                    s1 = dynamic1.getString("Item") + dynamic1.getInt("Data");
-                                    this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s1, ChunkConverterPalette.n.get("minecraft:air0")));
+                                    s = dynamic1.getString("Item") + dynamic1.getInt("Data");
+                                    this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s, ChunkConverterPalette.n.get("minecraft:air0")));
                                 }
                             }
-
                         case 144:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -677,25 +669,24 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.b(l);
                                 if (dynamic1 != null) {
-                                    s1 = String.valueOf(dynamic1.getByte("SkullType"));
+                                    s = String.valueOf(dynamic1.getByte("SkullType"));
                                     s2 = ChunkConverterPalette.a(this.a(l), "facing");
                                     if (!"up".equals(s2) && !"down".equals(s2)) {
-                                        s = s1 + s2;
+                                        s1 = s + s2;
                                     } else {
-                                        s = s1 + String.valueOf(dynamic1.getInt("Rot"));
+                                        s1 = s + String.valueOf(dynamic1.getInt("Rot"));
                                     }
 
                                     dynamic1.remove("SkullType");
                                     dynamic1.remove("facing");
                                     dynamic1.remove("Rot");
-                                    this.a(l, (Dynamic) ChunkConverterPalette.o.getOrDefault(s, ChunkConverterPalette.o.get("0north")));
+                                    this.a(l, (Dynamic) ChunkConverterPalette.o.getOrDefault(s1, ChunkConverterPalette.o.get("0north")));
                                 }
                             }
-
                         case 175:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
@@ -704,7 +695,7 @@ public class ChunkConverterPalette extends DataFix {
                                     continue label229;
                                 }
 
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.a(l);
                                 if ("upper".equals(ChunkConverterPalette.a(dynamic1, "half"))) {
@@ -725,22 +716,21 @@ public class ChunkConverterPalette extends DataFix {
                                     }
                                 }
                             }
-
                         case 176:
                         case 177:
                             intlistiterator = ((IntList) java_util_map_entry.getValue()).iterator();
 
                             while (intlistiterator.hasNext()) {
-                                l = ((Integer) intlistiterator.next()).intValue();
+                                l = (Integer) intlistiterator.next();
                                 l |= k;
                                 dynamic1 = this.b(l);
                                 dynamic2 = this.a(l);
                                 if (dynamic1 != null) {
                                     i1 = dynamic1.getInt("Base");
                                     if (i1 != 15 && i1 >= 0 && i1 < 16) {
-                                        s = ChunkConverterPalette.a(dynamic2, ((Integer) java_util_map_entry.getKey()).intValue() == 176 ? "rotation" : "facing") + "_" + i1;
-                                        if (ChunkConverterPalette.t.containsKey(s)) {
-                                            this.a(l, (Dynamic) ChunkConverterPalette.t.get(s));
+                                        s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing") + "_" + i1;
+                                        if (ChunkConverterPalette.t.containsKey(s1)) {
+                                            this.a(l, (Dynamic) ChunkConverterPalette.t.get(s1));
                                         }
                                     }
                                 }
@@ -768,17 +758,14 @@ public class ChunkConverterPalette extends DataFix {
                 int j = (i & 15) + chunkconverterpalette_direction.a().a();
 
                 return j >= 0 && j <= 15 ? i & -16 | j : -1;
-
             case Y:
                 int k = (i >> 8) + chunkconverterpalette_direction.a().a();
 
                 return k >= 0 && k <= 255 ? i & 255 | k << 8 : -1;
-
             case Z:
                 int l = (i >> 4 & 15) + chunkconverterpalette_direction.a().a();
 
                 return l >= 0 && l <= 15 ? i & -241 | l << 4 : -1;
-
             default:
                 return -1;
             }

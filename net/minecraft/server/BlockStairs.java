@@ -58,7 +58,7 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
 
     protected BlockStairs(IBlockData iblockdata, Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStairs.FACING, EnumDirection.NORTH)).set(BlockStairs.HALF, BlockPropertyHalf.BOTTOM)).set(BlockStairs.SHAPE, BlockPropertyStairsShape.STRAIGHT)).set(BlockStairs.o, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStairs.FACING, EnumDirection.NORTH)).set(BlockStairs.HALF, BlockPropertyHalf.BOTTOM)).set(BlockStairs.SHAPE, BlockPropertyStairsShape.STRAIGHT)).set(BlockStairs.o, false));
         this.C = iblockdata.getBlock();
         this.D = iblockdata;
     }
@@ -87,13 +87,10 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
                 switch (blockpropertystairsshape) {
                 case STRAIGHT:
                     return enumdirection1 == enumdirection ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
-
                 case INNER_LEFT:
                     return enumdirection1 != enumdirection && enumdirection1 != enumdirection.e() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
-
                 case INNER_RIGHT:
                     return enumdirection1 != enumdirection && enumdirection1 != enumdirection.f() ? EnumBlockFaceShape.UNDEFINED : EnumBlockFaceShape.SOLID;
-
                 default:
                     return EnumBlockFaceShape.UNDEFINED;
                 }
@@ -131,8 +128,8 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
         return this.C.j();
     }
 
-    public boolean d(IBlockData iblockdata) {
-        return this.C.d(iblockdata);
+    public boolean isCollidable(IBlockData iblockdata) {
+        return this.C.isCollidable(iblockdata);
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
@@ -170,14 +167,14 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         EnumDirection enumdirection = blockactioncontext.getClickedFace();
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
-        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.o, Boolean.valueOf(fluid.c() == FluidTypes.c));
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
+        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.o, fluid.c() == FluidTypes.c);
 
         return (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, blockactioncontext.getWorld(), blockactioncontext.getClickPosition()));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockStairs.o)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockStairs.o)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
@@ -241,37 +238,28 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
                 switch (blockpropertystairsshape) {
                 case INNER_LEFT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
-
                 case INNER_RIGHT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
-
                 case OUTER_LEFT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
-
                 case OUTER_RIGHT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
-
                 default:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
                 }
             }
             break;
-
         case FRONT_BACK:
             if (enumdirection.k() == EnumDirection.EnumAxis.X) {
                 switch (blockpropertystairsshape) {
                 case STRAIGHT:
                     return iblockdata.a(EnumBlockRotation.CLOCKWISE_180);
-
                 case INNER_LEFT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_LEFT);
-
                 case INNER_RIGHT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.INNER_RIGHT);
-
                 case OUTER_LEFT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_RIGHT);
-
                 case OUTER_RIGHT:
                     return (IBlockData) iblockdata.a(EnumBlockRotation.CLOCKWISE_180).set(BlockStairs.SHAPE, BlockPropertyStairsShape.OUTER_LEFT);
                 }
@@ -282,12 +270,12 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE, BlockStairs.o});
+        blockstatelist_a.a(BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE, BlockStairs.o);
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockStairs.o)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockStairs.o)) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, false), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -295,17 +283,17 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockStairs.o)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockStairs.o) ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockStairs.o)).booleanValue() && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockStairs.o) && fluidtype == FluidTypes.c;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockStairs.o)).booleanValue() && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockStairs.o) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, Boolean.valueOf(true)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, true), 3);
                 generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 

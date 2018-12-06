@@ -131,12 +131,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
 
         this.datawatcher = new DataWatcher(this);
-        this.datawatcher.register(Entity.ac, Byte.valueOf((byte) 0));
-        this.datawatcher.register(Entity.aD, Integer.valueOf(this.bf()));
-        this.datawatcher.register(Entity.aF, Boolean.valueOf(false));
+        this.datawatcher.register(Entity.ac, (byte) 0);
+        this.datawatcher.register(Entity.aD, this.bf());
+        this.datawatcher.register(Entity.aF, false);
         this.datawatcher.register(Entity.aE, Optional.empty());
-        this.datawatcher.register(Entity.aG, Boolean.valueOf(false));
-        this.datawatcher.register(Entity.aH, Boolean.valueOf(false));
+        this.datawatcher.register(Entity.aG, false);
+        this.datawatcher.register(Entity.aH, false);
         this.x_();
     }
 
@@ -839,19 +839,19 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean isSilent() {
-        return ((Boolean) this.datawatcher.get(Entity.aG)).booleanValue();
+        return (Boolean) this.datawatcher.get(Entity.aG);
     }
 
     public void setSilent(boolean flag) {
-        this.datawatcher.set(Entity.aG, Boolean.valueOf(flag));
+        this.datawatcher.set(Entity.aG, flag);
     }
 
     public boolean isNoGravity() {
-        return ((Boolean) this.datawatcher.get(Entity.aH)).booleanValue();
+        return (Boolean) this.datawatcher.get(Entity.aH);
     }
 
     public void setNoGravity(boolean flag) {
-        this.datawatcher.set(Entity.aH, Boolean.valueOf(flag));
+        this.datawatcher.set(Entity.aH, flag);
     }
 
     protected boolean playStepSound() {
@@ -1007,9 +1007,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
         float f2 = (float) MathHelper.floor(this.getBoundingBox().minY);
 
-        int i;
         float f3;
         float f4;
+        int i;
 
         for (i = 0; (float) i < 1.0F + this.width * 20.0F; ++i) {
             f3 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
@@ -1051,9 +1051,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         } else {
             double d0 = this.locY + (double) this.getHeadHeight();
             BlockPosition blockposition = new BlockPosition(this.locX, d0, this.locZ);
-            Fluid fluid = this.world.b(blockposition);
+            Fluid fluid = this.world.getFluid(blockposition);
 
-            return fluid.a(tag) && d0 < (double) ((float) blockposition.getY() + fluid.f() + 0.11111111F);
+            return fluid.a(tag) && d0 < (double) ((float) blockposition.getY() + fluid.getHeight() + 0.11111111F);
         }
     }
 
@@ -1317,9 +1317,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         try {
-            nbttagcompound.set("Pos", this.a(new double[] { this.locX, this.locY, this.locZ}));
-            nbttagcompound.set("Motion", this.a(new double[] { this.motX, this.motY, this.motZ}));
-            nbttagcompound.set("Rotation", this.a(new float[] { this.yaw, this.pitch}));
+            nbttagcompound.set("Pos", this.a(this.locX, this.locY, this.locZ));
+            nbttagcompound.set("Motion", this.a(this.motX, this.motY, this.motZ));
+            nbttagcompound.set("Rotation", this.a(this.yaw, this.pitch));
             nbttagcompound.setFloat("FallDistance", this.fallDistance);
             nbttagcompound.setShort("Fire", (short) this.fireTicks);
             nbttagcompound.setShort("Air", (short) this.getAirTicks());
@@ -1837,16 +1837,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean getFlag(int i) {
-        return (((Byte) this.datawatcher.get(Entity.ac)).byteValue() & 1 << i) != 0;
+        return ((Byte) this.datawatcher.get(Entity.ac) & 1 << i) != 0;
     }
 
     public void setFlag(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(Entity.ac)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(Entity.ac);
 
         if (flag) {
-            this.datawatcher.set(Entity.ac, Byte.valueOf((byte) (b0 | 1 << i)));
+            this.datawatcher.set(Entity.ac, (byte) (b0 | 1 << i));
         } else {
-            this.datawatcher.set(Entity.ac, Byte.valueOf((byte) (b0 & ~(1 << i))));
+            this.datawatcher.set(Entity.ac, (byte) (b0 & ~(1 << i)));
         }
 
     }
@@ -1856,11 +1856,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public int getAirTicks() {
-        return ((Integer) this.datawatcher.get(Entity.aD)).intValue();
+        return (Integer) this.datawatcher.get(Entity.aD);
     }
 
     public void setAirTicks(int i) {
-        this.datawatcher.set(Entity.aD, Integer.valueOf(i));
+        this.datawatcher.set(Entity.aD, i);
     }
 
     public void onLightningStrike(EntityLightning entitylightning) {
@@ -2001,7 +2001,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public String toString() {
-        return String.format(Locale.ROOT, "%s[\'%s\'/%d, l=\'%s\', x=%.2f, y=%.2f, z=%.2f]", new Object[] { this.getClass().getSimpleName(), this.getDisplayName().getText(), Integer.valueOf(this.id), this.world == null ? "~NULL~" : this.world.getWorldData().getName(), Double.valueOf(this.locX), Double.valueOf(this.locY), Double.valueOf(this.locZ)});
+        return String.format(Locale.ROOT, "%s['%s'/%d, l='%s', x=%.2f, y=%.2f, z=%.2f]", new Object[] { this.getClass().getSimpleName(), this.getDisplayName().getText(), this.id, this.world == null ? "~NULL~" : this.world.getWorldData().getName(), this.locX, this.locY, this.locZ});
     }
 
     public boolean isInvulnerable(DamageSource damagesource) {
@@ -2142,17 +2142,17 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         crashreportsystemdetails.a("Entity Type", () -> {
             return EntityTypes.getName(this.P()) + " (" + this.getClass().getCanonicalName() + ")";
         });
-        crashreportsystemdetails.a("Entity ID", (Object) Integer.valueOf(this.id));
+        crashreportsystemdetails.a("Entity ID", (Object) this.id);
         crashreportsystemdetails.a("Entity Name", () -> {
             return this.getDisplayName().getString();
         });
-        crashreportsystemdetails.a("Entity\'s Exact location", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { Double.valueOf(this.locX), Double.valueOf(this.locY), Double.valueOf(this.locZ)}));
-        crashreportsystemdetails.a("Entity\'s Block location", (Object) CrashReportSystemDetails.a(MathHelper.floor(this.locX), MathHelper.floor(this.locY), MathHelper.floor(this.locZ)));
-        crashreportsystemdetails.a("Entity\'s Momentum", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { Double.valueOf(this.motX), Double.valueOf(this.motY), Double.valueOf(this.motZ)}));
-        crashreportsystemdetails.a("Entity\'s Passengers", () -> {
+        crashreportsystemdetails.a("Entity's Exact location", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { this.locX, this.locY, this.locZ}));
+        crashreportsystemdetails.a("Entity's Block location", (Object) CrashReportSystemDetails.a(MathHelper.floor(this.locX), MathHelper.floor(this.locY), MathHelper.floor(this.locZ)));
+        crashreportsystemdetails.a("Entity's Momentum", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { this.motX, this.motY, this.motZ}));
+        crashreportsystemdetails.a("Entity's Passengers", () -> {
             return this.bP().toString();
         });
-        crashreportsystemdetails.a("Entity\'s Vehicle", () -> {
+        crashreportsystemdetails.a("Entity's Vehicle", () -> {
             return this.getVehicle().toString();
         });
     }
@@ -2198,11 +2198,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void setCustomNameVisible(boolean flag) {
-        this.datawatcher.set(Entity.aF, Boolean.valueOf(flag));
+        this.datawatcher.set(Entity.aF, flag);
     }
 
     public boolean getCustomNameVisible() {
-        return ((Boolean) this.datawatcher.get(Entity.aF)).booleanValue();
+        return (Boolean) this.datawatcher.get(Entity.aF);
     }
 
     public void enderTeleportTo(double d0, double d1, double d2) {
@@ -2307,13 +2307,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
             return f + 180.0F;
-
         case COUNTERCLOCKWISE_90:
             return f + 270.0F;
-
         case CLOCKWISE_90:
             return f + 90.0F;
-
         default:
             return f;
         }
@@ -2325,10 +2322,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         switch (enumblockmirror) {
         case LEFT_RIGHT:
             return -f;
-
         case FRONT_BACK:
             return 180.0F - f;
-
         default:
             return f;
         }
@@ -2538,10 +2533,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     for (int i2 = k; i2 < l; ++i2) {
                         for (int j2 = i1; j2 < j1; ++j2) {
                             blockposition_b.f(l1, i2, j2);
-                            Fluid fluid = this.world.b((BlockPosition) blockposition_b);
+                            Fluid fluid = this.world.getFluid(blockposition_b);
 
                             if (fluid.a(tag)) {
-                                double d1 = (double) ((float) i2 + fluid.f());
+                                double d1 = (double) ((float) i2 + fluid.getHeight());
 
                                 if (d1 >= axisalignedbb.minY) {
                                     flag1 = true;

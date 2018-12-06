@@ -80,17 +80,17 @@ public class PlayerInventory implements IInventory {
         int i;
         int j;
 
-        for (i = 0; i < 9; ++i) {
-            j = (this.itemInHandIndex + i) % 9;
-            if (((ItemStack) this.items.get(j)).isEmpty()) {
-                return j;
+        for (j = 0; j < 9; ++j) {
+            i = (this.itemInHandIndex + j) % 9;
+            if (((ItemStack) this.items.get(i)).isEmpty()) {
+                return i;
             }
         }
 
-        for (i = 0; i < 9; ++i) {
-            j = (this.itemInHandIndex + i) % 9;
-            if (!((ItemStack) this.items.get(j)).hasEnchantments()) {
-                return j;
+        for (j = 0; j < 9; ++j) {
+            i = (this.itemInHandIndex + j) % 9;
+            if (!((ItemStack) this.items.get(i)).hasEnchantments()) {
+                return i;
             }
         }
 
@@ -263,8 +263,8 @@ public class PlayerInventory implements IInventory {
                 CrashReport crashreport = CrashReport.a(throwable, "Adding item to inventory");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Item being added");
 
-                crashreportsystemdetails.a("Item ID", (Object) Integer.valueOf(Item.getId(itemstack.getItem())));
-                crashreportsystemdetails.a("Item data", (Object) Integer.valueOf(itemstack.getDamage()));
+                crashreportsystemdetails.a("Item ID", (Object) Item.getId(itemstack.getItem()));
+                crashreportsystemdetails.a("Item data", (Object) itemstack.getDamage());
                 crashreportsystemdetails.a("Item name", () -> {
                     return itemstack.getName().getString();
                 });
@@ -376,8 +376,8 @@ public class PlayerInventory implements IInventory {
     }
 
     public NBTTagList a(NBTTagList nbttaglist) {
-        int i;
         NBTTagCompound nbttagcompound;
+        int i;
 
         for (i = 0; i < this.items.size(); ++i) {
             if (!((ItemStack) this.items.get(i)).isEmpty()) {

@@ -25,7 +25,6 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
             this.d = combattracker.f();
             this.c = entityliving == null ? -1 : entityliving.getId();
             break;
-
         case ENTITY_DIED:
             this.b = combattracker.h().getId();
             this.c = entityliving == null ? -1 : entityliving.getId();

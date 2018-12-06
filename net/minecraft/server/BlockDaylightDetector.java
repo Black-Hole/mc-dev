@@ -8,7 +8,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
 
     public BlockDaylightDetector(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, Integer.valueOf(0))).set(BlockDaylightDetector.b, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDaylightDetector.POWER, 0)).set(BlockDaylightDetector.b, false));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -16,14 +16,14 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Integer) iblockdata.get(BlockDaylightDetector.POWER)).intValue();
+        return (Integer) iblockdata.get(BlockDaylightDetector.POWER);
     }
 
     public static void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
         if (world.worldProvider.g()) {
             int i = world.getBrightness(EnumSkyBlock.SKY, blockposition) - world.c();
             float f = world.c(1.0F);
-            boolean flag = ((Boolean) iblockdata.get(BlockDaylightDetector.b)).booleanValue();
+            boolean flag = (Boolean) iblockdata.get(BlockDaylightDetector.b);
 
             if (flag) {
                 i = 15 - i;
@@ -35,8 +35,8 @@ public class BlockDaylightDetector extends BlockTileEntity {
             }
 
             i = MathHelper.clamp(i, 0, 15);
-            if (((Integer) iblockdata.get(BlockDaylightDetector.POWER)).intValue() != i) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDaylightDetector.POWER, Integer.valueOf(i)), 3);
+            if ((Integer) iblockdata.get(BlockDaylightDetector.POWER) != i) {
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDaylightDetector.POWER, i), 3);
             }
 
         }
@@ -75,7 +75,7 @@ public class BlockDaylightDetector extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockDaylightDetector.POWER, BlockDaylightDetector.b});
+        blockstatelist_a.a(BlockDaylightDetector.POWER, BlockDaylightDetector.b);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

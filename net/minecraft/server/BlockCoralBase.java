@@ -10,7 +10,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
 
     protected BlockCoralBase(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralBase.b, true));
     }
 
     protected void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
@@ -21,7 +21,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
     }
 
     protected static boolean b_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        if (((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
             return true;
         } else {
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -30,7 +30,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (iblockaccess.b(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
+                if (iblockaccess.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
                     return true;
                 }
             }
@@ -49,9 +49,9 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
 
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, Boolean.valueOf(fluid.a(TagsFluid.WATER) && fluid.g() == 8));
+        return (IBlockData) this.getBlockData().set(BlockCoralBase.b, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -71,7 +71,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
@@ -83,16 +83,16 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCoralBase.b});
+        blockstatelist_a.a(BlockCoralBase.b);
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockCoralBase.b) ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCoralBase.b, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCoralBase.b, false), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -100,13 +100,13 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue() && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockCoralBase.b) && fluidtype == FluidTypes.c;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockCoralBase.b)).booleanValue() && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockCoralBase.b) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCoralBase.b, Boolean.valueOf(true)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCoralBase.b, true), 3);
                 generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 

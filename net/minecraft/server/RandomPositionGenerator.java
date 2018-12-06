@@ -155,6 +155,6 @@ public class RandomPositionGenerator {
     }
 
     private static boolean b(BlockPosition blockposition, EntityCreature entitycreature) {
-        return entitycreature.world.b(blockposition).a(TagsFluid.WATER);
+        return entitycreature.world.getFluid(blockposition).a(TagsFluid.WATER);
     }
 }

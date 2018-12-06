@@ -27,8 +27,8 @@ public class ProtoChunkExtension extends ProtoChunk {
         return this.a.getType(blockposition);
     }
 
-    public Fluid b(BlockPosition blockposition) {
-        return this.a.b(blockposition);
+    public Fluid getFluid(BlockPosition blockposition) {
+        return this.a.getFluid(blockposition);
     }
 
     public int K() {

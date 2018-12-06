@@ -193,7 +193,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 double d10 = d6 * d6 + d7 * d7 + d8 * d8;
 
                 if (d10 - d9 > 100.0D && (!this.minecraftServer.H() || !this.minecraftServer.G().equals(entity.getDisplayName().getString()))) {
-                    PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", entity.getDisplayName().getString(), this.player.getDisplayName().getString(), Double.valueOf(d6), Double.valueOf(d7), Double.valueOf(d8));
+                    PlayerConnection.LOGGER.warn("{} (vehicle of {}) moved too quickly! {},{},{}", entity.getDisplayName().getString(), this.player.getDisplayName().getString(), d6, d7, d8);
                     this.networkManager.sendPacket(new PacketPlayOutVehicleMove(entity));
                     return;
                 }
@@ -329,18 +329,16 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 switch (packetplayinsetcommandblock.g()) {
                 case SEQUENCE:
                     iblockdata = Blocks.CHAIN_COMMAND_BLOCK.getBlockData();
-                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, Boolean.valueOf(packetplayinsetcommandblock.e())), 2);
+                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, packetplayinsetcommandblock.e()), 2);
                     break;
-
                 case AUTO:
                     iblockdata = Blocks.REPEATING_COMMAND_BLOCK.getBlockData();
-                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, Boolean.valueOf(packetplayinsetcommandblock.e())), 2);
+                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, packetplayinsetcommandblock.e()), 2);
                     break;
-
                 case REDSTONE:
                 default:
                     iblockdata = Blocks.COMMAND_BLOCK.getBlockData();
-                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, Boolean.valueOf(packetplayinsetcommandblock.e())), 2);
+                    this.player.world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) iblockdata.set(BlockCommand.a, enumdirection)).set(BlockCommand.b, packetplayinsetcommandblock.e()), 2);
                 }
 
                 tileentity.z();
@@ -602,7 +600,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                             int i = this.receivedMovePackets - this.processedMovePackets;
 
                             if (i > 5) {
-                                PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", this.player.getDisplayName().getString(), Integer.valueOf(i));
+                                PlayerConnection.LOGGER.debug("{} is sending move packets too frequently ({} packets since last tick)", this.player.getDisplayName().getString(), i);
                                 i = 1;
                             }
 
@@ -610,7 +608,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                                 float f2 = this.player.dc() ? 300.0F : 100.0F;
 
                                 if (d11 - d10 > (double) (f2 * (float) i) && (!this.minecraftServer.H() || !this.minecraftServer.G().equals(this.player.getProfile().getName()))) {
-                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getDisplayName().getString(), Double.valueOf(d7), Double.valueOf(d8), Double.valueOf(d9));
+                                    PlayerConnection.LOGGER.warn("{} moved too quickly! {},{},{}", this.player.getDisplayName().getString(), d7, d8, d9);
                                     this.a(this.player.locX, this.player.locY, this.player.locZ, this.player.yaw, this.player.pitch);
                                     return;
                                 }
@@ -708,25 +706,21 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             }
 
             return;
-
         case DROP_ITEM:
             if (!this.player.isSpectator()) {
                 this.player.a(false);
             }
 
             return;
-
         case DROP_ALL_ITEMS:
             if (!this.player.isSpectator()) {
                 this.player.a(true);
             }
 
             return;
-
         case RELEASE_USE_ITEM:
             this.player.clearActiveItem();
             return;
-
         case START_DESTROY_BLOCK:
         case ABORT_DESTROY_BLOCK:
         case STOP_DESTROY_BLOCK:
@@ -760,7 +754,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
                 return;
             }
-
         default:
             throw new IllegalArgumentException("Invalid player action");
         }
@@ -776,7 +769,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
 
         this.player.resetIdleTimer();
         if (blockposition.getY() >= this.minecraftServer.getMaxBuildHeight() - 1 && (enumdirection == EnumDirection.UP || blockposition.getY() >= this.minecraftServer.getMaxBuildHeight())) {
-            IChatBaseComponent ichatbasecomponent = (new ChatMessage("build.tooHigh", new Object[] { Integer.valueOf(this.minecraftServer.getMaxBuildHeight())})).a(EnumChatFormat.RED);
+            IChatBaseComponent ichatbasecomponent = (new ChatMessage("build.tooHigh", new Object[] { this.minecraftServer.getMaxBuildHeight()})).a(EnumChatFormat.RED);
 
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(ichatbasecomponent, ChatMessageType.GAME_INFO));
         } else if (this.teleportPos == null && this.player.d((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
@@ -939,26 +932,21 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         case START_SNEAKING:
             this.player.setSneaking(true);
             break;
-
         case STOP_SNEAKING:
             this.player.setSneaking(false);
             break;
-
         case START_SPRINTING:
             this.player.setSprinting(true);
             break;
-
         case STOP_SPRINTING:
             this.player.setSprinting(false);
             break;
-
         case STOP_SLEEPING:
             if (this.player.isSleeping()) {
                 this.player.a(false, true, true);
                 this.teleportPos = new Vec3D(this.player.locX, this.player.locY, this.player.locZ);
             }
             break;
-
         case START_RIDING_JUMP:
             if (this.player.getVehicle() instanceof IJumpable) {
                 ijumpable = (IJumpable) this.player.getVehicle();
@@ -969,20 +957,17 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 }
             }
             break;
-
         case STOP_RIDING_JUMP:
             if (this.player.getVehicle() instanceof IJumpable) {
                 ijumpable = (IJumpable) this.player.getVehicle();
                 ijumpable.I_();
             }
             break;
-
         case OPEN_INVENTORY:
             if (this.player.getVehicle() instanceof EntityHorseAbstract) {
                 ((EntityHorseAbstract) this.player.getVehicle()).c((EntityHuman) this.player);
             }
             break;
-
         case START_FALL_FLYING:
             if (!this.player.onGround && this.player.motY < 0.0D && !this.player.dc() && !this.player.isInWater()) {
                 ItemStack itemstack = this.player.getEquipment(EnumItemSlot.CHEST);
@@ -994,7 +979,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 this.player.K();
             }
             break;
-
         default:
             throw new IllegalArgumentException("Invalid client command!");
         }
@@ -1061,7 +1045,6 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                 }
             }
             break;
-
         case REQUEST_STATS:
             this.player.getStatisticManager().a(this.player);
         }
@@ -1095,7 +1078,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     this.player.broadcastCarriedItem();
                     this.player.f = false;
                 } else {
-                    this.k.a(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.e()));
+                    this.k.a(this.player.activeContainer.windowId, packetplayinwindowclick.e());
                     this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.b(), packetplayinwindowclick.e(), false));
                     this.player.activeContainer.a(this.player, false);
                     NonNullList nonnulllist1 = NonNullList.a();
@@ -1186,7 +1169,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         PlayerConnectionUtils.ensureMainThread(packetplayintransaction, this, this.player.getWorldServer());
         Short oshort = (Short) this.k.get(this.player.activeContainer.windowId);
 
-        if (oshort != null && packetplayintransaction.c() == oshort.shortValue() && this.player.activeContainer.windowId == packetplayintransaction.b() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
+        if (oshort != null && packetplayintransaction.c() == oshort && this.player.activeContainer.windowId == packetplayintransaction.b() && !this.player.activeContainer.c(this.player) && !this.player.isSpectator()) {
             this.player.activeContainer.a(this.player, true);
         }
 

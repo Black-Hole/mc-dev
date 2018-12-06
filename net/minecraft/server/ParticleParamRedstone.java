@@ -56,7 +56,7 @@ public class ParticleParamRedstone implements ParticleParam {
     }
 
     public String a() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", new Object[] { this.b().d(), Float.valueOf(this.c), Float.valueOf(this.d), Float.valueOf(this.e), Float.valueOf(this.f)});
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", new Object[] { this.b().d(), this.c, this.d, this.e, this.f});
     }
 
     public Particle<ParticleParamRedstone> b() {

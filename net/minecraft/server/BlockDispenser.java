@@ -19,7 +19,7 @@ public class BlockDispenser extends BlockTileEntity {
 
     protected BlockDispenser(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDispenser.FACING, EnumDirection.NORTH)).set(BlockDispenser.TRIGGERED, false));
     }
 
     public int a(IWorldReader iworldreader) {
@@ -69,13 +69,13 @@ public class BlockDispenser extends BlockTileEntity {
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition) || world.isBlockIndirectlyPowered(blockposition.up());
-        boolean flag1 = ((Boolean) iblockdata.get(BlockDispenser.TRIGGERED)).booleanValue();
+        boolean flag1 = (Boolean) iblockdata.get(BlockDispenser.TRIGGERED);
 
         if (flag && !flag1) {
             world.J().a(blockposition, this, this.a((IWorldReader) world));
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, Boolean.valueOf(true)), 4);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, true), 4);
         } else if (!flag && flag1) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, Boolean.valueOf(false)), 4);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, false), 4);
         }
 
     }
@@ -149,6 +149,6 @@ public class BlockDispenser extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockDispenser.FACING, BlockDispenser.TRIGGERED});
+        blockstatelist_a.a(BlockDispenser.FACING, BlockDispenser.TRIGGERED);
     }
 }

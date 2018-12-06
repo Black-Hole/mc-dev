@@ -32,7 +32,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
         for (int i = 0; i < list.size(); ++i) {
             Long olong = (Long) list.get(i);
 
-            along[i] = olong == null ? 0L : olong.longValue();
+            along[i] = olong == null ? 0L : olong;
         }
 
         return along;
@@ -127,7 +127,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
     }
 
     public void a(int i, NBTBase nbtbase) {
-        this.f[i] = ((NBTNumber) nbtbase).d();
+        this.f[i] = ((NBTNumber) nbtbase).asLong();
     }
 
     public void b(int i) {

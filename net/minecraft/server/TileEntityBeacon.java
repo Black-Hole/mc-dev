@@ -313,13 +313,10 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
         switch (i) {
         case 0:
             return this.levels;
-
         case 1:
             return MobEffectList.getId(this.primaryEffect);
-
         case 2:
             return MobEffectList.getId(this.secondaryEffect);
-
         default:
             return 0;
         }
@@ -330,11 +327,9 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
         case 0:
             this.levels = j;
             break;
-
         case 1:
             this.primaryEffect = e(j);
             break;
-
         case 2:
             this.secondaryEffect = e(j);
         }

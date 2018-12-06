@@ -40,7 +40,7 @@ public class ResourcePackLoader {
                 }
 
                 if (resourcepackinfo == null) {
-                    ResourcePackLoader.a.warn("Couldn\'t find pack meta for pack {}", s);
+                    ResourcePackLoader.a.warn("Couldn't find pack meta for pack {}", s);
                     return null;
                 }
 
@@ -65,7 +65,7 @@ public class ResourcePackLoader {
 
             return resourcepackloader;
         } catch (IOException ioexception) {
-            ResourcePackLoader.a.warn("Couldn\'t get pack info for: {}", ioexception.toString());
+            ResourcePackLoader.a.warn("Couldn't get pack info for: {}", ioexception.toString());
             return null;
         }
     }
@@ -139,8 +139,8 @@ public class ResourcePackLoader {
 
         public <T, P extends ResourcePackLoader> int a(List<T> list, T t0, Function<T, P> function, boolean flag) {
             ResourcePackLoader.Position resourcepackloader_position = flag ? this.a() : this;
-            int i;
             ResourcePackLoader resourcepackloader;
+            int i;
 
             if (resourcepackloader_position == ResourcePackLoader.Position.BOTTOM) {
                 for (i = 0; i < list.size(); ++i) {

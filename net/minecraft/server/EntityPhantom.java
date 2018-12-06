@@ -41,7 +41,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityPhantom.a, Integer.valueOf(0));
+        this.datawatcher.register(EntityPhantom.a, 0);
     }
 
     public void setSize(int i) {
@@ -51,19 +51,19 @@ public class EntityPhantom extends EntityFlying implements IMonster {
             i = 64;
         }
 
-        this.datawatcher.set(EntityPhantom.a, Integer.valueOf(i));
+        this.datawatcher.set(EntityPhantom.a, i);
         this.l();
     }
 
     public void l() {
-        int i = ((Integer) this.datawatcher.get(EntityPhantom.a)).intValue();
+        int i = (Integer) this.datawatcher.get(EntityPhantom.a);
 
         this.setSize(0.9F + 0.2F * (float) i, 0.5F + 0.1F * (float) i);
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double) (6 + i));
     }
 
     public int getSize() {
-        return ((Integer) this.datawatcher.get(EntityPhantom.a)).intValue();
+        return (Integer) this.datawatcher.get(EntityPhantom.a);
     }
 
     public float getHeadHeight() {

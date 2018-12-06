@@ -87,7 +87,7 @@ public class CommandData {
                 throw CommandData.d.create(argumentnbtkey_c.toString());
             }
 
-            i = ((NBTTagString) nbtbase).b_().length();
+            i = ((NBTTagString) nbtbase).asString().length();
         }
 
         commandlistenerwrapper.sendMessage(commanddataaccessor.a(nbtbase), false);

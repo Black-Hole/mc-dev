@@ -55,7 +55,7 @@ public class AdvancementDataWorld implements IResourcePackListener {
                     Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) ChatDeserializer.a(AdvancementDataWorld.DESERIALIZER, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), Advancement.SerializedAdvancement.class);
 
                     if (advancement_serializedadvancement == null) {
-                        AdvancementDataWorld.c.error("Couldn\'t load custom advancement {} from {} as it\'s empty or null", minecraftkey1, minecraftkey);
+                        AdvancementDataWorld.c.error("Couldn't load custom advancement {} from {} as it's empty or null", minecraftkey1, minecraftkey);
                     } else {
                         hashmap.put(minecraftkey1, advancement_serializedadvancement);
                     }
@@ -80,7 +80,7 @@ public class AdvancementDataWorld implements IResourcePackListener {
                 AdvancementDataWorld.c.error("Parsing error loading custom advancement {}: {}", minecraftkey1, jsonparseexception.getMessage());
                 this.f = true;
             } catch (IOException ioexception) {
-                AdvancementDataWorld.c.error("Couldn\'t read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
+                AdvancementDataWorld.c.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
                 this.f = true;
             }
         }

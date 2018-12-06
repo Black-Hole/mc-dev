@@ -107,7 +107,7 @@ public class CriterionConditionLocation {
 
                 biomebase = (BiomeBase) IRegistry.BIOME.get(minecraftkey);
                 if (biomebase == null) {
-                    throw new JsonSyntaxException("Unknown biome \'" + minecraftkey + "\'");
+                    throw new JsonSyntaxException("Unknown biome '" + minecraftkey + "'");
                 }
             }
 

@@ -136,7 +136,7 @@ public class CommandWhitelist {
         if (astring.length == 0) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.none", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.list", new Object[] { Integer.valueOf(astring.length), String.join(", ", astring)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.list", new Object[] { astring.length, String.join(", ", astring)}), false);
         }
 
         return astring.length;

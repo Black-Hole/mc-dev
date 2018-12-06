@@ -56,7 +56,7 @@ public class EntitySlice<T> extends AbstractSet<T> {
 
             return oclass;
         } else {
-            throw new IllegalArgumentException("Don\'t know how to search for " + oclass);
+            throw new IllegalArgumentException("Don't know how to search for " + oclass);
         }
     }
 

@@ -19,14 +19,14 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     private final int[] bI = new int[2];
     private final int[] bJ = new int[2];
     private int bK;
-    private final BossBattleServer bL;
+    public final BossBattleServer bossBattle;
     private static final Predicate<Entity> bM = (entity) -> {
         return entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() != EnumMonsterType.UNDEAD && ((EntityLiving) entity).df();
     };
 
     public EntityWither(World world) {
         super(EntityTypes.WITHER, world);
-        this.bL = (BossBattleServer) (new BossBattleServer(this.getScoreboardDisplayName(), BossBattle.BarColor.PURPLE, BossBattle.BarStyle.PROGRESS)).setDarkenSky(true);
+        this.bossBattle = (BossBattleServer) (new BossBattleServer(this.getScoreboardDisplayName(), BossBattle.BarColor.PURPLE, BossBattle.BarStyle.PROGRESS)).setDarkenSky(true);
         this.setHealth(this.getMaxHealth());
         this.setSize(0.9F, 3.5F);
         this.fireProof = true;
@@ -46,10 +46,10 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityWither.a, Integer.valueOf(0));
-        this.datawatcher.register(EntityWither.b, Integer.valueOf(0));
-        this.datawatcher.register(EntityWither.c, Integer.valueOf(0));
-        this.datawatcher.register(EntityWither.bD, Integer.valueOf(0));
+        this.datawatcher.register(EntityWither.a, 0);
+        this.datawatcher.register(EntityWither.b, 0);
+        this.datawatcher.register(EntityWither.c, 0);
+        this.datawatcher.register(EntityWither.bD, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -61,14 +61,14 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         super.a(nbttagcompound);
         this.d(nbttagcompound.getInt("Invul"));
         if (this.hasCustomName()) {
-            this.bL.a(this.getScoreboardDisplayName());
+            this.bossBattle.a(this.getScoreboardDisplayName());
         }
 
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
         super.setCustomName(ichatbasecomponent);
-        this.bL.a(this.getScoreboardDisplayName());
+        this.bossBattle.a(this.getScoreboardDisplayName());
     }
 
     protected SoundEffect D() {
@@ -294,7 +294,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                 this.heal(1.0F);
             }
 
-            this.bL.setProgress(this.getHealth() / this.getMaxHealth());
+            this.bossBattle.setProgress(this.getHealth() / this.getMaxHealth());
         }
     }
 
@@ -311,12 +311,12 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
 
     public void b(EntityPlayer entityplayer) {
         super.b(entityplayer);
-        this.bL.addPlayer(entityplayer);
+        this.bossBattle.addPlayer(entityplayer);
     }
 
     public void c(EntityPlayer entityplayer) {
         super.c(entityplayer);
-        this.bL.removePlayer(entityplayer);
+        this.bossBattle.removePlayer(entityplayer);
     }
 
     private double q(int i) {
@@ -451,19 +451,19 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
     }
 
     public int dz() {
-        return ((Integer) this.datawatcher.get(EntityWither.bD)).intValue();
+        return (Integer) this.datawatcher.get(EntityWither.bD);
     }
 
     public void d(int i) {
-        this.datawatcher.set(EntityWither.bD, Integer.valueOf(i));
+        this.datawatcher.set(EntityWither.bD, i);
     }
 
     public int p(int i) {
-        return ((Integer) this.datawatcher.get((DataWatcherObject) EntityWither.bC.get(i))).intValue();
+        return (Integer) this.datawatcher.get((DataWatcherObject) EntityWither.bC.get(i));
     }
 
     public void a(int i, int j) {
-        this.datawatcher.set((DataWatcherObject) EntityWither.bC.get(i), Integer.valueOf(j));
+        this.datawatcher.set((DataWatcherObject) EntityWither.bC.get(i), j);
     }
 
     public boolean dA() {

@@ -80,7 +80,7 @@ public class DebugReportNBT implements DebugReportProvider {
 
             DebugReportNBT.b.info("Converted {} from NBT to SNBT", s);
         } catch (IOException ioexception) {
-            DebugReportNBT.b.error("Couldn\'t convert {} from NBT to SNBT at {}", s, java_nio_file_path, ioexception);
+            DebugReportNBT.b.error("Couldn't convert {} from NBT to SNBT at {}", s, java_nio_file_path, ioexception);
         }
 
     }

@@ -6,7 +6,7 @@ public class EntityPig extends EntityAnimal {
 
     private static final DataWatcherObject<Boolean> bC = DataWatcher.a(EntityPig.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Integer> bD = DataWatcher.a(EntityPig.class, DataWatcherRegistry.b);
-    private static final RecipeItemStack bE = RecipeItemStack.a(new IMaterial[] { Items.CARROT, Items.POTATO, Items.BEETROOT});
+    private static final RecipeItemStack bE = RecipeItemStack.a(Items.CARROT, Items.POTATO, Items.BEETROOT);
     private boolean bG;
     private int bH;
     private int bI;
@@ -20,7 +20,7 @@ public class EntityPig extends EntityAnimal {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(3, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, RecipeItemStack.a(new IMaterial[] { Items.CARROT_ON_A_STICK}), false));
+        this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, RecipeItemStack.a(Items.CARROT_ON_A_STICK), false));
         this.goalSelector.a(4, new PathfinderGoalTempt(this, 1.2D, false, EntityPig.bE));
         this.goalSelector.a(5, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
@@ -55,7 +55,7 @@ public class EntityPig extends EntityAnimal {
         if (EntityPig.bD.equals(datawatcherobject) && this.world.isClientSide) {
             this.bG = true;
             this.bH = 0;
-            this.bI = ((Integer) this.datawatcher.get(EntityPig.bD)).intValue();
+            this.bI = (Integer) this.datawatcher.get(EntityPig.bD);
         }
 
         super.a(datawatcherobject);
@@ -63,8 +63,8 @@ public class EntityPig extends EntityAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityPig.bC, Boolean.valueOf(false));
-        this.datawatcher.register(EntityPig.bD, Integer.valueOf(0));
+        this.datawatcher.register(EntityPig.bC, false);
+        this.datawatcher.register(EntityPig.bD, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -133,14 +133,14 @@ public class EntityPig extends EntityAnimal {
     }
 
     public boolean hasSaddle() {
-        return ((Boolean) this.datawatcher.get(EntityPig.bC)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityPig.bC);
     }
 
     public void setSaddle(boolean flag) {
         if (flag) {
-            this.datawatcher.set(EntityPig.bC, Boolean.valueOf(true));
+            this.datawatcher.set(EntityPig.bC, true);
         } else {
-            this.datawatcher.set(EntityPig.bC, Boolean.valueOf(false));
+            this.datawatcher.set(EntityPig.bC, false);
         }
 
     }
@@ -218,7 +218,7 @@ public class EntityPig extends EntityAnimal {
             this.bG = true;
             this.bH = 0;
             this.bI = this.getRandom().nextInt(841) + 140;
-            this.getDataWatcher().set(EntityPig.bD, Integer.valueOf(this.bI));
+            this.getDataWatcher().set(EntityPig.bD, this.bI);
             return true;
         }
     }

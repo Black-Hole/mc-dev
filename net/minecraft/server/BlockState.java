@@ -39,10 +39,10 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
 
     public final int hashCode() {
         if (this.c == null) {
-            this.c = Integer.valueOf(this.c());
+            this.c = this.c();
         }
 
-        return this.c.intValue();
+        return this.c;
     }
 
     public int c() {

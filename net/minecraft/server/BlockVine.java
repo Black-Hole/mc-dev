@@ -25,29 +25,29 @@ public class BlockVine extends Block {
 
     public BlockVine(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, Boolean.valueOf(false))).set(BlockVine.NORTH, Boolean.valueOf(false))).set(BlockVine.EAST, Boolean.valueOf(false))).set(BlockVine.SOUTH, Boolean.valueOf(false))).set(BlockVine.WEST, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockVine.UP, false)).set(BlockVine.NORTH, false)).set(BlockVine.EAST, false)).set(BlockVine.SOUTH, false)).set(BlockVine.WEST, false));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         VoxelShape voxelshape = VoxelShapes.a();
 
-        if (((Boolean) iblockdata.get(BlockVine.UP)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockVine.UP)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.r);
         }
 
-        if (((Boolean) iblockdata.get(BlockVine.NORTH)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockVine.NORTH)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.u);
         }
 
-        if (((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockVine.EAST)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.t);
         }
 
-        if (((Boolean) iblockdata.get(BlockVine.SOUTH)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockVine.SOUTH)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.v);
         }
 
-        if (((Boolean) iblockdata.get(BlockVine.WEST)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockVine.WEST)) {
             voxelshape = VoxelShapes.a(voxelshape, BlockVine.s);
         }
 
@@ -73,7 +73,7 @@ public class BlockVine extends Block {
         while (iterator.hasNext()) {
             BlockStateBoolean blockstateboolean = (BlockStateBoolean) iterator.next();
 
-            if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue()) {
+            if ((Boolean) iblockdata.get(blockstateboolean)) {
                 ++i;
             }
         }
@@ -95,7 +95,7 @@ public class BlockVine extends Block {
                 BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockVine.q.get(enumdirection);
                 IBlockData iblockdata = iblockaccess.getType(blockposition.up());
 
-                return iblockdata.getBlock() == this && ((Boolean) iblockdata.get(blockstateboolean)).booleanValue();
+                return iblockdata.getBlock() == this && (Boolean) iblockdata.get(blockstateboolean);
             }
         }
     }
@@ -113,8 +113,8 @@ public class BlockVine extends Block {
     private IBlockData m(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
-        if (((Boolean) iblockdata.get(BlockVine.UP)).booleanValue()) {
-            iblockdata = (IBlockData) iblockdata.set(BlockVine.UP, Boolean.valueOf(this.b(iblockaccess, blockposition1, EnumDirection.DOWN)));
+        if ((Boolean) iblockdata.get(BlockVine.UP)) {
+            iblockdata = (IBlockData) iblockdata.set(BlockVine.UP, this.b(iblockaccess, blockposition1, EnumDirection.DOWN));
         }
 
         IBlockData iblockdata1 = null;
@@ -124,7 +124,7 @@ public class BlockVine extends Block {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
             BlockStateBoolean blockstateboolean = getDirection(enumdirection);
 
-            if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue()) {
+            if ((Boolean) iblockdata.get(blockstateboolean)) {
                 boolean flag = this.a(iblockaccess, blockposition, enumdirection);
 
                 if (!flag) {
@@ -132,10 +132,10 @@ public class BlockVine extends Block {
                         iblockdata1 = iblockaccess.getType(blockposition1);
                     }
 
-                    flag = iblockdata1.getBlock() == this && ((Boolean) iblockdata1.get(blockstateboolean)).booleanValue();
+                    flag = iblockdata1.getBlock() == this && (Boolean) iblockdata1.get(blockstateboolean);
                 }
 
-                iblockdata = (IBlockData) iblockdata.set(blockstateboolean, Boolean.valueOf(flag));
+                iblockdata = (IBlockData) iblockdata.set(blockstateboolean, flag);
             }
         }
 
@@ -171,42 +171,42 @@ public class BlockVine extends Block {
                 IBlockData iblockdata2;
                 EnumDirection enumdirection1;
 
-                if (enumdirection.k().c() && !((Boolean) iblockdata.get(getDirection(enumdirection))).booleanValue()) {
+                if (enumdirection.k().c() && !(Boolean) iblockdata.get(getDirection(enumdirection))) {
                     if (this.a((IBlockAccess) world, blockposition)) {
                         blockposition2 = blockposition.shift(enumdirection);
                         iblockdata2 = world.getType(blockposition2);
                         if (iblockdata2.isAir()) {
                             enumdirection1 = enumdirection.e();
                             EnumDirection enumdirection2 = enumdirection.f();
-                            boolean flag = ((Boolean) iblockdata.get(getDirection(enumdirection1))).booleanValue();
-                            boolean flag1 = ((Boolean) iblockdata.get(getDirection(enumdirection2))).booleanValue();
+                            boolean flag = (Boolean) iblockdata.get(getDirection(enumdirection1));
+                            boolean flag1 = (Boolean) iblockdata.get(getDirection(enumdirection2));
                             BlockPosition blockposition3 = blockposition2.shift(enumdirection1);
                             BlockPosition blockposition4 = blockposition2.shift(enumdirection2);
 
                             if (flag && this.b((IBlockAccess) world, blockposition3, enumdirection1)) {
-                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection1), Boolean.valueOf(true)), 2);
+                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection1), true), 2);
                             } else if (flag1 && this.b((IBlockAccess) world, blockposition4, enumdirection2)) {
-                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection2), Boolean.valueOf(true)), 2);
+                                world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(getDirection(enumdirection2), true), 2);
                             } else {
                                 EnumDirection enumdirection3 = enumdirection.opposite();
 
                                 if (flag && world.isEmpty(blockposition3) && this.b((IBlockAccess) world, blockposition.shift(enumdirection1), enumdirection3)) {
-                                    world.setTypeAndData(blockposition3, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition3, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
                                 } else if (flag1 && world.isEmpty(blockposition4) && this.b((IBlockAccess) world, blockposition.shift(enumdirection2), enumdirection3)) {
-                                    world.setTypeAndData(blockposition4, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition4, (IBlockData) this.getBlockData().set(getDirection(enumdirection3), true), 2);
                                 } else if ((double) world.random.nextFloat() < 0.05D && this.b((IBlockAccess) world, blockposition2.up(), EnumDirection.UP)) {
-                                    world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(BlockVine.UP, Boolean.valueOf(true)), 2);
+                                    world.setTypeAndData(blockposition2, (IBlockData) this.getBlockData().set(BlockVine.UP, true), 2);
                                 }
                             }
                         } else if (this.b((IBlockAccess) world, blockposition2, enumdirection)) {
-                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(getDirection(enumdirection), Boolean.valueOf(true)), 2);
+                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(getDirection(enumdirection), true), 2);
                         }
 
                     }
                 } else {
                     if (enumdirection == EnumDirection.UP && blockposition.getY() < 255) {
                         if (this.a((IBlockAccess) world, blockposition, enumdirection)) {
-                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockVine.UP, Boolean.valueOf(true)), 2);
+                            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockVine.UP, true), 2);
                             return;
                         }
 
@@ -221,7 +221,7 @@ public class BlockVine extends Block {
                             while (iterator.hasNext()) {
                                 enumdirection1 = (EnumDirection) iterator.next();
                                 if (random.nextBoolean() || !this.b((IBlockAccess) world, blockposition1.shift(enumdirection1), EnumDirection.UP)) {
-                                    iblockdata3 = (IBlockData) iblockdata3.set(getDirection(enumdirection1), Boolean.valueOf(false));
+                                    iblockdata3 = (IBlockData) iblockdata3.set(getDirection(enumdirection1), false);
                                 }
                             }
 
@@ -260,8 +260,8 @@ public class BlockVine extends Block {
             if (random.nextBoolean()) {
                 BlockStateBoolean blockstateboolean = getDirection(enumdirection);
 
-                if (((Boolean) iblockdata.get(blockstateboolean)).booleanValue()) {
-                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, Boolean.valueOf(true));
+                if ((Boolean) iblockdata.get(blockstateboolean)) {
+                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, true);
                 }
             }
         }
@@ -270,7 +270,7 @@ public class BlockVine extends Block {
     }
 
     private boolean x(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockVine.NORTH)).booleanValue() || ((Boolean) iblockdata.get(BlockVine.EAST)).booleanValue() || ((Boolean) iblockdata.get(BlockVine.SOUTH)).booleanValue() || ((Boolean) iblockdata.get(BlockVine.WEST)).booleanValue();
+        return (Boolean) iblockdata.get(BlockVine.NORTH) || (Boolean) iblockdata.get(BlockVine.EAST) || (Boolean) iblockdata.get(BlockVine.SOUTH) || (Boolean) iblockdata.get(BlockVine.WEST);
     }
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -312,10 +312,10 @@ public class BlockVine extends Block {
 
             if (enumdirection != EnumDirection.DOWN) {
                 BlockStateBoolean blockstateboolean = getDirection(enumdirection);
-                boolean flag1 = flag && ((Boolean) iblockdata.get(blockstateboolean)).booleanValue();
+                boolean flag1 = flag && (Boolean) iblockdata.get(blockstateboolean);
 
                 if (!flag1 && this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition(), enumdirection)) {
-                    return (IBlockData) iblockdata1.set(blockstateboolean, Boolean.valueOf(true));
+                    return (IBlockData) iblockdata1.set(blockstateboolean, true);
                 }
             }
         }
@@ -343,20 +343,17 @@ public class BlockVine extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockVine.UP, BlockVine.NORTH, BlockVine.EAST, BlockVine.SOUTH, BlockVine.WEST});
+        blockstatelist_a.a(BlockVine.UP, BlockVine.NORTH, BlockVine.EAST, BlockVine.SOUTH, BlockVine.WEST);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
-
         case COUNTERCLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.EAST, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.NORTH));
-
         case CLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.WEST))).set(BlockVine.EAST, iblockdata.get(BlockVine.NORTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.EAST))).set(BlockVine.WEST, iblockdata.get(BlockVine.SOUTH));
-
         default:
             return iblockdata;
         }
@@ -366,10 +363,8 @@ public class BlockVine extends Block {
         switch (enumblockmirror) {
         case LEFT_RIGHT:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.NORTH, iblockdata.get(BlockVine.SOUTH))).set(BlockVine.SOUTH, iblockdata.get(BlockVine.NORTH));
-
         case FRONT_BACK:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockVine.EAST, iblockdata.get(BlockVine.WEST))).set(BlockVine.WEST, iblockdata.get(BlockVine.EAST));
-
         default:
             return super.a(iblockdata, enumblockmirror);
         }

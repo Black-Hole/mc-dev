@@ -11,7 +11,7 @@ public class BlockCactus extends Block {
 
     protected BlockCactus(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCactus.AGE, 0));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
@@ -28,16 +28,16 @@ public class BlockCactus extends Block {
                 }
 
                 if (i < 3) {
-                    int j = ((Integer) iblockdata.get(BlockCactus.AGE)).intValue();
+                    int j = (Integer) iblockdata.get(BlockCactus.AGE);
 
                     if (j == 15) {
                         world.setTypeUpdate(blockposition1, this.getBlockData());
-                        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockCactus.AGE, Integer.valueOf(0));
+                        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockCactus.AGE, 0);
 
                         world.setTypeAndData(blockposition, iblockdata1, 4);
                         iblockdata1.doPhysics(world, blockposition1, this, blockposition);
                     } else {
-                        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, Integer.valueOf(j + 1)), 4);
+                        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCactus.AGE, j + 1), 4);
                     }
 
                 }
@@ -86,7 +86,7 @@ public class BlockCactus extends Block {
             IBlockData iblockdata1 = iworldreader.getType(blockposition.shift(enumdirection));
 
             material = iblockdata1.getMaterial();
-        } while (!material.isBuildable() && !iworldreader.b(blockposition.shift(enumdirection)).a(TagsFluid.LAVA));
+        } while (!material.isBuildable() && !iworldreader.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.LAVA));
 
         return false;
     }
@@ -100,7 +100,7 @@ public class BlockCactus extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCactus.AGE});
+        blockstatelist_a.a(BlockCactus.AGE);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

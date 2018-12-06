@@ -43,7 +43,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
             }
 
             if (arraylist.isEmpty()) {
-                LootItemFunctionEnchant.a.warn("Couldn\'t find a compatible enchantment for {}", itemstack);
+                LootItemFunctionEnchant.a.warn("Couldn't find a compatible enchantment for {}", itemstack);
                 return itemstack;
             }
 
@@ -80,7 +80,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
                     MinecraftKey minecraftkey = IRegistry.ENCHANTMENT.getKey(enchantment);
 
                     if (minecraftkey == null) {
-                        throw new IllegalArgumentException("Don\'t know how to serialize enchantment " + enchantment);
+                        throw new IllegalArgumentException("Don't know how to serialize enchantment " + enchantment);
                     }
 
                     jsonarray.add(new JsonPrimitive(minecraftkey.toString()));
@@ -104,7 +104,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
                     Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(new MinecraftKey(s));
 
                     if (enchantment == null) {
-                        throw new JsonSyntaxException("Unknown enchantment \'" + s + "\'");
+                        throw new JsonSyntaxException("Unknown enchantment '" + s + "'");
                     }
 
                     arraylist.add(enchantment);

@@ -59,7 +59,7 @@ public class WorldLoaderServer extends WorldLoader {
 
         int i = arraylist.size() + arraylist1.size() + arraylist2.size();
 
-        WorldLoaderServer.e.info("Total conversion count is {}", Integer.valueOf(i));
+        WorldLoaderServer.e.info("Total conversion count is {}", i);
         WorldData worlddata = this.c(s);
         BiomeLayout biomelayout = BiomeLayout.b;
         BiomeLayout biomelayout1 = BiomeLayout.c;

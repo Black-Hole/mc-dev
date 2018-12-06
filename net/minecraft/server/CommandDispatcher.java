@@ -111,7 +111,7 @@ public class CommandDispatcher {
         try {
             Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(this.b, (CommandNode) this.b.getRoot())), file, StandardCharsets.UTF_8);
         } catch (IOException ioexception) {
-            CommandDispatcher.a.error("Couldn\'t write out command tree!", ioexception);
+            CommandDispatcher.a.error("Couldn't write out command tree!", ioexception);
         }
 
     }
@@ -119,7 +119,7 @@ public class CommandDispatcher {
     public int a(CommandListenerWrapper commandlistenerwrapper, String s) {
         StringReader stringreader = new StringReader(s);
 
-        if (stringreader.canRead() && stringreader.peek() == 47) {
+        if(stringreader.canRead() && stringreader.peek() == 47) {
             stringreader.skip();
         }
 
@@ -141,24 +141,24 @@ public class CommandDispatcher {
                 return b1;
             } catch (CommandSyntaxException commandsyntaxexception) {
                 commandlistenerwrapper.sendFailureMessage(ChatComponentUtils.a(commandsyntaxexception.getRawMessage()));
-                if (commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
+                if(commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
                     int j = Math.min(commandsyntaxexception.getInput().length(), commandsyntaxexception.getCursor());
                     IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).a(EnumChatFormat.GRAY).a((chatmodifier) -> {
                         chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, s));
                     });
 
-                    if (j > 10) {
+                    if(j > 10) {
                         ichatbasecomponent.a("...");
                     }
 
                     ichatbasecomponent.a(commandsyntaxexception.getInput().substring(Math.max(0, j - 10), j));
-                    if (j < commandsyntaxexception.getInput().length()) {
-                        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
+                    if(j < commandsyntaxexception.getInput().length()) {
+                        IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
 
                         ichatbasecomponent.addSibling(ichatbasecomponent1);
                     }
 
-                    ichatbasecomponent.addSibling((new ChatMessage("command.context.here", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}));
+                    ichatbasecomponent.addSibling((new ChatMessage("command.context.here", new Object[0])).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.ITALIC}));
                     commandlistenerwrapper.sendFailureMessage(ichatbasecomponent);
                 }
 
@@ -168,13 +168,13 @@ public class CommandDispatcher {
                 chatcomponenttext = new ChatComponentText;
             }
 
-            chatcomponenttext.<init>(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
+            chatcomponenttext.<init>(exception.getMessage() == null?exception.getClass().getName():exception.getMessage());
             ChatComponentText chatcomponenttext1 = chatcomponenttext;
 
-            if (CommandDispatcher.a.isDebugEnabled()) {
+            if(CommandDispatcher.a.isDebugEnabled()) {
                 StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
-                for (int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
+                for(int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
                     chatcomponenttext1.a("\n\n").a(astacktraceelement[k].getMethodName()).a("\n ").a(astacktraceelement[k].getFileName()).a(":").a(String.valueOf(astacktraceelement[k].getLineNumber()));
                 }
             }

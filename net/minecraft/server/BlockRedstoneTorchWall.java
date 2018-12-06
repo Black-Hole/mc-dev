@@ -9,7 +9,7 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
 
     protected BlockRedstoneTorchWall(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorchWall.b, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.c, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorchWall.b, EnumDirection.NORTH)).set(BlockRedstoneTorchWall.c, true));
     }
 
     public String m() {
@@ -42,7 +42,7 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockRedstoneTorchWall.c)).booleanValue() && iblockdata.get(BlockRedstoneTorchWall.b) != enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockRedstoneTorchWall.c) && iblockdata.get(BlockRedstoneTorchWall.b) != enumdirection ? 15 : 0;
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -54,6 +54,6 @@ public class BlockRedstoneTorchWall extends BlockRedstoneTorch {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockRedstoneTorchWall.b, BlockRedstoneTorchWall.c});
+        blockstatelist_a.a(BlockRedstoneTorchWall.b, BlockRedstoneTorchWall.c);
     }
 }

@@ -12,7 +12,7 @@ public class BlockChorusFlower extends Block {
     protected BlockChorusFlower(BlockChorusFruit blockchorusfruit, Block.Info block_info) {
         super(block_info);
         this.b = blockchorusfruit;
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFlower.AGE, 0));
     }
 
     public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
@@ -26,7 +26,7 @@ public class BlockChorusFlower extends Block {
             BlockPosition blockposition1 = blockposition.up();
 
             if (world.isEmpty(blockposition1) && blockposition1.getY() < 256) {
-                int i = ((Integer) iblockdata.get(BlockChorusFlower.AGE)).intValue();
+                int i = (Integer) iblockdata.get(BlockChorusFlower.AGE);
 
                 if (i < 5) {
                     boolean flag = false;
@@ -96,12 +96,12 @@ public class BlockChorusFlower extends Block {
     }
 
     private void b(World world, BlockPosition blockposition, int i) {
-        world.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(i)), 2);
+        world.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockChorusFlower.AGE, i), 2);
         world.triggerEffect(1033, blockposition, 0);
     }
 
     private void a(World world, BlockPosition blockposition) {
-        world.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(5)), 2);
+        world.setTypeAndData(blockposition, (IBlockData) this.getBlockData().set(BlockChorusFlower.AGE, 5), 2);
         world.triggerEffect(1034, blockposition, 0);
     }
 
@@ -180,7 +180,7 @@ public class BlockChorusFlower extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockChorusFlower.AGE});
+        blockstatelist_a.a(BlockChorusFlower.AGE);
     }
 
     public static void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Random random, int i) {
@@ -230,7 +230,7 @@ public class BlockChorusFlower extends Block {
         }
 
         if (!flag) {
-            generatoraccess.setTypeAndData(blockposition.up(k), (IBlockData) Blocks.CHORUS_FLOWER.getBlockData().set(BlockChorusFlower.AGE, Integer.valueOf(5)), 2);
+            generatoraccess.setTypeAndData(blockposition.up(k), (IBlockData) Blocks.CHORUS_FLOWER.getBlockData().set(BlockChorusFlower.AGE, 5), 2);
         }
 
     }

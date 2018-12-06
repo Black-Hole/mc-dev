@@ -93,7 +93,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         } catch (FileNotFoundException filenotfoundexception) {
             return null;
         } catch (Throwable throwable3) {
-            DefinedStructureManager.a.error("Couldn\'t load structure {}: {}", minecraftkey, throwable3.toString());
+            DefinedStructureManager.a.error("Couldn't load structure {}: {}", minecraftkey, throwable3.toString());
             return null;
         }
     }
@@ -135,7 +135,7 @@ public class DefinedStructureManager implements IResourcePackListener {
             } catch (FileNotFoundException filenotfoundexception) {
                 return null;
             } catch (IOException ioexception) {
-                DefinedStructureManager.a.error("Couldn\'t load structure from {}", java_nio_file_path, ioexception);
+                DefinedStructureManager.a.error("Couldn't load structure from {}", java_nio_file_path, ioexception);
                 return null;
             }
         }

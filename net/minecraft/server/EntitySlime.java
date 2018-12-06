@@ -30,11 +30,11 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntitySlime.bC, Integer.valueOf(1));
+        this.datawatcher.register(EntitySlime.bC, 1);
     }
 
     public void setSize(int i, boolean flag) {
-        this.datawatcher.set(EntitySlime.bC, Integer.valueOf(i));
+        this.datawatcher.set(EntitySlime.bC, i);
         this.setSize(0.51000005F * (float) i, 0.51000005F * (float) i);
         this.setPosition(this.locX, this.locY, this.locZ);
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue((double) (i * i));
@@ -47,7 +47,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
     }
 
     public int getSize() {
-        return ((Integer) this.datawatcher.get(EntitySlime.bC)).intValue();
+        return (Integer) this.datawatcher.get(EntitySlime.bC);
     }
 
     public void b(NBTTagCompound nbttagcompound) {

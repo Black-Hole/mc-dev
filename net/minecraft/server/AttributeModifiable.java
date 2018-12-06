@@ -27,7 +27,7 @@ public class AttributeModifiable implements AttributeInstance {
         this.f = iattribute.getDefault();
 
         for (int i = 0; i < 3; ++i) {
-            this.c.put(Integer.valueOf(i), Sets.newHashSet());
+            this.c.put(i, Sets.newHashSet());
         }
 
     }
@@ -48,7 +48,7 @@ public class AttributeModifiable implements AttributeInstance {
     }
 
     public Collection<AttributeModifier> a(int i) {
-        return (Collection) this.c.get(Integer.valueOf(i));
+        return (Collection) this.c.get(i);
     }
 
     public Collection<AttributeModifier> c() {
@@ -81,7 +81,7 @@ public class AttributeModifiable implements AttributeInstance {
                 this.d.put(attributemodifier.b(), object);
             }
 
-            ((Set) this.c.get(Integer.valueOf(attributemodifier.c()))).add(attributemodifier);
+            ((Set) this.c.get(attributemodifier.c())).add(attributemodifier);
             ((Set) object).add(attributemodifier);
             this.e.put(attributemodifier.a(), attributemodifier);
             this.f();
@@ -95,7 +95,7 @@ public class AttributeModifiable implements AttributeInstance {
 
     public void c(AttributeModifier attributemodifier) {
         for (int i = 0; i < 3; ++i) {
-            Set set = (Set) this.c.get(Integer.valueOf(i));
+            Set set = (Set) this.c.get(i);
 
             set.remove(attributemodifier);
         }
@@ -142,8 +142,8 @@ public class AttributeModifiable implements AttributeInstance {
 
         double d1 = d0;
 
-        Iterator iterator1;
         AttributeModifier attributemodifier1;
+        Iterator iterator1;
 
         for (iterator1 = this.b(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();

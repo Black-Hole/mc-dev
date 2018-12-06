@@ -138,7 +138,7 @@ public class WorldUpgrader {
 
         this.n = new ChatMessage("optimizeWorld.stage.finished", new Object[0]);
         i = SystemUtils.b() - i;
-        WorldUpgrader.a.info("World optimizaton finished after {} ms", Long.valueOf(i));
+        WorldUpgrader.a.info("World optimizaton finished after {} ms", i);
         immutablemap.values().forEach(ChunkRegionLoader::b);
         this.e.a();
         this.d.a();

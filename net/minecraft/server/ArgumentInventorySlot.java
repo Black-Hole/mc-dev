@@ -26,39 +26,39 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
         int i;
 
         for (i = 0; i < 54; ++i) {
-            hashmap.put("container." + i, Integer.valueOf(i));
+            hashmap.put("container." + i, i);
         }
 
         for (i = 0; i < 9; ++i) {
-            hashmap.put("hotbar." + i, Integer.valueOf(i));
+            hashmap.put("hotbar." + i, i);
         }
 
         for (i = 0; i < 27; ++i) {
-            hashmap.put("inventory." + i, Integer.valueOf(9 + i));
+            hashmap.put("inventory." + i, 9 + i);
         }
 
         for (i = 0; i < 27; ++i) {
-            hashmap.put("enderchest." + i, Integer.valueOf(200 + i));
+            hashmap.put("enderchest." + i, 200 + i);
         }
 
         for (i = 0; i < 8; ++i) {
-            hashmap.put("villager." + i, Integer.valueOf(300 + i));
+            hashmap.put("villager." + i, 300 + i);
         }
 
         for (i = 0; i < 15; ++i) {
-            hashmap.put("horse." + i, Integer.valueOf(500 + i));
+            hashmap.put("horse." + i, 500 + i);
         }
 
-        hashmap.put("weapon", Integer.valueOf(98));
-        hashmap.put("weapon.mainhand", Integer.valueOf(98));
-        hashmap.put("weapon.offhand", Integer.valueOf(99));
-        hashmap.put("armor.head", Integer.valueOf(100 + EnumItemSlot.HEAD.b()));
-        hashmap.put("armor.chest", Integer.valueOf(100 + EnumItemSlot.CHEST.b()));
-        hashmap.put("armor.legs", Integer.valueOf(100 + EnumItemSlot.LEGS.b()));
-        hashmap.put("armor.feet", Integer.valueOf(100 + EnumItemSlot.FEET.b()));
-        hashmap.put("horse.saddle", Integer.valueOf(400));
-        hashmap.put("horse.armor", Integer.valueOf(401));
-        hashmap.put("horse.chest", Integer.valueOf(499));
+        hashmap.put("weapon", 98);
+        hashmap.put("weapon.mainhand", 98);
+        hashmap.put("weapon.offhand", 99);
+        hashmap.put("armor.head", 100 + EnumItemSlot.HEAD.b());
+        hashmap.put("armor.chest", 100 + EnumItemSlot.CHEST.b());
+        hashmap.put("armor.legs", 100 + EnumItemSlot.LEGS.b());
+        hashmap.put("armor.feet", 100 + EnumItemSlot.FEET.b());
+        hashmap.put("horse.saddle", 400);
+        hashmap.put("horse.armor", 401);
+        hashmap.put("horse.chest", 499);
     });
 
     public ArgumentInventorySlot() {}
@@ -68,7 +68,7 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
     }
 
     public static int a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
-        return ((Integer) commandcontext.getArgument(s, Integer.class)).intValue();
+        return (Integer) commandcontext.getArgument(s, Integer.class);
     }
 
     public Integer a(StringReader stringreader) throws CommandSyntaxException {

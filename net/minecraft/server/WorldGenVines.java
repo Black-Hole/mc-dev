@@ -19,7 +19,7 @@ public class WorldGenVines extends WorldGenerator<WorldGenFeatureEmptyConfigurat
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
-                    IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.getDirection(enumdirection), Boolean.valueOf(true));
+                    IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.getDirection(enumdirection), true);
 
                     if (iblockdata.canPlace(generatoraccess, blockposition_mutableblockposition)) {
                         generatoraccess.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);

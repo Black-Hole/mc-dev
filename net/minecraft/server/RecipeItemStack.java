@@ -179,7 +179,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 Item item = (Item) IRegistry.ITEM.get(minecraftkey);
 
                 if (item == null) {
-                    throw new JsonSyntaxException("Unknown item \'" + minecraftkey + "\'");
+                    throw new JsonSyntaxException("Unknown item '" + minecraftkey + "'");
                 } else {
                     return new RecipeItemStack.StackProvider(new ItemStack(item), null);
                 }
@@ -188,7 +188,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 Tag tag = TagsItem.a().a(minecraftkey);
 
                 if (tag == null) {
-                    throw new JsonSyntaxException("Unknown item tag \'" + minecraftkey + "\'");
+                    throw new JsonSyntaxException("Unknown item tag '" + minecraftkey + "'");
                 } else {
                     return new RecipeItemStack.b(tag, null);
                 }

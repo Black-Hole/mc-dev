@@ -110,9 +110,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             this.setIdleTimeout(this.propertyManager.getInt("player-idle-timeout", 0));
             this.l(this.propertyManager.getBoolean("enforce-whitelist", false));
             if (this.propertyManager.getInt("difficulty", 1) < 0) {
-                this.propertyManager.setProperty("difficulty", Integer.valueOf(0));
+                this.propertyManager.setProperty("difficulty", 0);
             } else if (this.propertyManager.getInt("difficulty", 1) > 3) {
-                this.propertyManager.setProperty("difficulty", Integer.valueOf(3));
+                this.propertyManager.setProperty("difficulty", 3);
             }
 
             this.generateStructures = this.propertyManager.getBoolean("generate-structures", true);
@@ -132,7 +132,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
             DedicatedServer.LOGGER.info("Generating keypair");
             this.a(MinecraftEncryption.b());
-            DedicatedServer.LOGGER.info("Starting Minecraft server on {}:{}", this.getServerIp().isEmpty() ? "*" : this.getServerIp(), Integer.valueOf(this.F()));
+            DedicatedServer.LOGGER.info("Starting Minecraft server on {}:{}", this.getServerIp().isEmpty() ? "*" : this.getServerIp(), this.F());
 
             try {
                 this.getServerConnection().a(inetaddress, this.F());
@@ -194,7 +194,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                 this.b(this.propertyManager.getInt("max-build-height", 256));
                 this.b((this.getMaxBuildHeight() + 8) / 16 * 16);
                 this.b(MathHelper.clamp(this.getMaxBuildHeight(), 64, 256));
-                this.propertyManager.setProperty("max-build-height", Integer.valueOf(this.getMaxBuildHeight()));
+                this.propertyManager.setProperty("max-build-height", this.getMaxBuildHeight());
                 TileEntitySkull.a(this.getUserCache());
                 TileEntitySkull.a(this.ap());
                 UserCache.a(this.getOnlineMode());
@@ -209,7 +209,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
                 this.a(this.getWorld(), this.getWorld(), k, worldtype, jsonobject);
                 long i1 = SystemUtils.c() - j;
-                String s3 = String.format(Locale.ROOT, "%.3fs", new Object[] { Double.valueOf((double) i1 / 1.0E9D)});
+                String s3 = String.format(Locale.ROOT, "%.3fs", new Object[] { (double) i1 / 1.0E9D});
 
                 DedicatedServer.LOGGER.info("Done ({})! For help, type \"help\"", s3);
                 if (this.propertyManager.a("announce-player-achievements")) {
@@ -295,7 +295,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         crashreport.g().a("Is Modded", () -> {
             String s = this.getServerModName();
 
-            return !"vanilla".equals(s) ? "Definitely; Server brand changed to \'" + s + "\'" : "Unknown (can\'t tell)";
+            return !"vanilla".equals(s) ? "Definitely; Server brand changed to '" + s + "'" : "Unknown (can't tell)";
         });
         crashreport.g().a("Type", () -> {
             return "Dedicated Server (map_server.txt)";
@@ -321,8 +321,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        mojangstatisticsgenerator.a("whitelist_enabled", Boolean.valueOf(this.aV().getHasWhitelist()));
-        mojangstatisticsgenerator.a("whitelist_count", Integer.valueOf(this.aV().getWhitelisted().length));
+        mojangstatisticsgenerator.a("whitelist_enabled", this.aV().getHasWhitelist());
+        mojangstatisticsgenerator.a("whitelist_count", this.aV().getWhitelisted().length);
         super.a(mojangstatisticsgenerator);
     }
 
@@ -447,7 +447,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public void setIdleTimeout(int i) {
         super.setIdleTimeout(i);
-        this.propertyManager.setProperty("player-idle-timeout", Integer.valueOf(i));
+        this.propertyManager.setProperty("player-idle-timeout", i);
         this.c_();
     }
 

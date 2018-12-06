@@ -69,15 +69,15 @@ public class EntityWitherSkull extends EntityFireball {
     }
 
     protected void x_() {
-        this.datawatcher.register(EntityWitherSkull.e, Boolean.valueOf(false));
+        this.datawatcher.register(EntityWitherSkull.e, false);
     }
 
     public boolean isCharged() {
-        return ((Boolean) this.datawatcher.get(EntityWitherSkull.e)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityWitherSkull.e);
     }
 
     public void setCharged(boolean flag) {
-        this.datawatcher.set(EntityWitherSkull.e, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityWitherSkull.e, flag);
     }
 
     protected boolean f() {

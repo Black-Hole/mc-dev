@@ -3,7 +3,6 @@ package net.minecraft.server;
 public enum EnumAxisCycle {
 
     NONE {
-        ;
         public int a(int i, int j, int k, EnumDirection.EnumAxis enumdirection_enumaxis) {
             return enumdirection_enumaxis.a(i, j, k);
         }
@@ -17,7 +16,6 @@ public enum EnumAxisCycle {
         }
     },
     FORWARD {
-        ;
         public int a(int i, int j, int k, EnumDirection.EnumAxis enumdirection_enumaxis) {
             return enumdirection_enumaxis.a(k, i, j);
         }
@@ -31,7 +29,6 @@ public enum EnumAxisCycle {
         }
     },
     BACKWARD {
-        ;
         public int a(int i, int j, int k, EnumDirection.EnumAxis enumdirection_enumaxis) {
             return enumdirection_enumaxis.a(j, k, i);
         }

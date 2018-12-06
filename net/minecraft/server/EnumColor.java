@@ -17,7 +17,7 @@ public enum EnumColor implements INamable {
         return new EnumColor[i];
     });
     private static final Int2ObjectOpenHashMap<EnumColor> r = new Int2ObjectOpenHashMap((Map) Arrays.stream(values()).collect(Collectors.toMap((enumcolor) -> {
-        return Integer.valueOf(enumcolor.y);
+        return enumcolor.y;
     }, (enumcolor) -> {
         return enumcolor;
     })));

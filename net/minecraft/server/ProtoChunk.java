@@ -103,7 +103,7 @@ public class ProtoChunk implements IChunkAccess {
         return j >= 0 && j < 256 ? (this.j[j >> 4] == Chunk.a ? Blocks.AIR.getBlockData() : this.j[j >> 4].getType(i & 15, j & 15, k & 15)) : Blocks.VOID_AIR.getBlockData();
     }
 
-    public Fluid b(BlockPosition blockposition) {
+    public Fluid getFluid(BlockPosition blockposition) {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
@@ -293,7 +293,7 @@ public class ProtoChunk implements IChunkAccess {
 
     public void a(ChunkSection[] achunksection) {
         if (this.j.length != achunksection.length) {
-            ProtoChunk.a.warn("Could not set level chunk sections, array length is {} instead of {}", Integer.valueOf(achunksection.length), Integer.valueOf(this.j.length));
+            ProtoChunk.a.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.j.length);
         } else {
             System.arraycopy(achunksection, 0, this.j, 0, this.j.length);
         }
@@ -337,7 +337,7 @@ public class ProtoChunk implements IChunkAccess {
         HeightMap heightmap = (HeightMap) this.f.get(heightmap_type);
 
         if (heightmap == null) {
-            this.a(new HeightMap.Type[] { heightmap_type});
+            this.a(heightmap_type);
             heightmap = (HeightMap) this.f.get(heightmap_type);
         }
 

@@ -6,13 +6,13 @@ public class BlockJukeBox extends BlockTileEntity {
 
     protected BlockJukeBox(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockJukeBox.HAS_RECORD, false));
     }
 
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)) {
             this.dropRecord(world, blockposition);
-            iblockdata = (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(false));
+            iblockdata = (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, false);
             world.setTypeAndData(blockposition, iblockdata, 2);
             return true;
         } else {
@@ -25,7 +25,7 @@ public class BlockJukeBox extends BlockTileEntity {
 
         if (tileentity instanceof TileEntityJukeBox) {
             ((TileEntityJukeBox) tileentity).setRecord(itemstack.cloneItemStack());
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, Boolean.valueOf(true)), 2);
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockJukeBox.HAS_RECORD, true), 2);
         }
     }
 
@@ -95,6 +95,6 @@ public class BlockJukeBox extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockJukeBox.HAS_RECORD});
+        blockstatelist_a.a(BlockJukeBox.HAS_RECORD);
     }
 }

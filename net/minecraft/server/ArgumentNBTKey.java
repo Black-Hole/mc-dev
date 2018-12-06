@@ -40,16 +40,14 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
         while (stringreader.canRead() && stringreader.peek() != 32) {
             switch (stringreader.peek()) {
-            case '\"':
+            case '"':
                 arraylist.add(new ArgumentNBTKey.a(stringreader.readString()));
                 break;
-
             case '[':
                 stringreader.skip();
                 arraylist.add(new ArgumentNBTKey.b(stringreader.readInt()));
                 stringreader.expect(']');
                 break;
-
             default:
                 arraylist.add(new ArgumentNBTKey.a(this.b(stringreader)));
             }
@@ -109,7 +107,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
                 }
             }
 
-            throw ArgumentNBTKey.c.create(Integer.valueOf(this.a));
+            throw ArgumentNBTKey.c.create(this.a);
         }
 
         public NBTBase a(NBTBase nbtbase, Supplier<NBTBase> supplier) throws CommandSyntaxException {
@@ -130,7 +128,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
                 }
             }
 
-            throw ArgumentNBTKey.c.create(Integer.valueOf(this.a));
+            throw ArgumentNBTKey.c.create(this.a);
         }
 
         public void b(NBTBase nbtbase) throws CommandSyntaxException {
@@ -143,7 +141,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
                 }
             }
 
-            throw ArgumentNBTKey.c.create(Integer.valueOf(this.a));
+            throw ArgumentNBTKey.c.create(this.a);
         }
     }
 

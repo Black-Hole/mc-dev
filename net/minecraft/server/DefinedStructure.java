@@ -190,7 +190,7 @@ public class DefinedStructure {
                         Block block1 = definedstructure_blockinfo1.b.getBlock();
 
                         if ((block == null || block != block1) && (!definedstructureinfo.k() || block1 != Blocks.STRUCTURE_BLOCK) && (structureboundingbox == null || structureboundingbox.b((BaseBlockPosition) blockposition1))) {
-                            Fluid fluid = definedstructureinfo.m() ? generatoraccess.b(blockposition1) : null;
+                            Fluid fluid = definedstructureinfo.m() ? generatoraccess.getFluid(blockposition1) : null;
                             IBlockData iblockdata = definedstructure_blockinfo1.b.a(definedstructureinfo.b());
                             IBlockData iblockdata1 = iblockdata.a(definedstructureinfo.c());
                             TileEntity tileentity;
@@ -246,12 +246,12 @@ public class DefinedStructure {
 
                     while (iterator1.hasNext()) {
                         BlockPosition blockposition2 = (BlockPosition) iterator1.next();
-                        Fluid fluid1 = generatoraccess.b(blockposition2);
+                        Fluid fluid1 = generatoraccess.getFluid(blockposition2);
 
                         for (l1 = 0; l1 < aenumdirection.length && !fluid1.d(); ++l1) {
-                            Fluid fluid2 = generatoraccess.b(blockposition2.shift(aenumdirection[l1]));
+                            Fluid fluid2 = generatoraccess.getFluid(blockposition2.shift(aenumdirection[l1]));
 
-                            if (fluid2.f() > fluid1.f() || fluid2.d() && !fluid1.d()) {
+                            if (fluid2.getHeight() > fluid1.getHeight() || fluid2.d() && !fluid1.d()) {
                                 fluid1 = fluid2;
                             }
                         }
@@ -381,7 +381,6 @@ public class DefinedStructure {
         case COUNTERCLOCKWISE_90:
         case CLOCKWISE_90:
             return new BlockPosition(this.c.getZ(), this.c.getY(), this.c.getX());
-
         default:
             return this.c;
         }
@@ -397,11 +396,9 @@ public class DefinedStructure {
         case LEFT_RIGHT:
             k = -k;
             break;
-
         case FRONT_BACK:
             i = -i;
             break;
-
         default:
             flag = false;
         }
@@ -412,13 +409,10 @@ public class DefinedStructure {
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
             return new BlockPosition(l - i1 + k, j, l + i1 - i);
-
         case CLOCKWISE_90:
             return new BlockPosition(l + i1 - k, j, i1 - l + i);
-
         case CLOCKWISE_180:
             return new BlockPosition(l + l - i, j, i1 + i1 - k);
-
         default:
             return flag ? new BlockPosition(i, j, k) : blockposition;
         }
@@ -434,11 +428,9 @@ public class DefinedStructure {
         case LEFT_RIGHT:
             d2 = 1.0D - d2;
             break;
-
         case FRONT_BACK:
             d0 = 1.0D - d0;
             break;
-
         default:
             flag = false;
         }
@@ -449,13 +441,10 @@ public class DefinedStructure {
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
             return new Vec3D((double) (i - j) + d2, d1, (double) (i + j + 1) - d0);
-
         case CLOCKWISE_90:
             return new Vec3D((double) (i + j + 1) - d2, d1, (double) (j - i) + d0);
-
         case CLOCKWISE_180:
             return new Vec3D((double) (i + i + 1) - d0, d1, (double) (j + j + 1) - d2);
-
         default:
             return flag ? new Vec3D(d0, d1, d2) : vec3d;
         }
@@ -476,15 +465,12 @@ public class DefinedStructure {
         case COUNTERCLOCKWISE_90:
             blockposition1 = blockposition.a(l, 0, i - k);
             break;
-
         case CLOCKWISE_90:
             blockposition1 = blockposition.a(j - l, 0, k);
             break;
-
         case CLOCKWISE_180:
             blockposition1 = blockposition.a(i - k, 0, j - l);
             break;
-
         case NONE:
             blockposition1 = blockposition.a(k, 0, l);
         }
@@ -513,7 +499,7 @@ public class DefinedStructure {
                 DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) list.get(j);
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-                nbttagcompound1.set("pos", this.a(new int[] { definedstructure_blockinfo.a.getX(), definedstructure_blockinfo.a.getY(), definedstructure_blockinfo.a.getZ()}));
+                nbttagcompound1.set("pos", this.a(definedstructure_blockinfo.a.getX(), definedstructure_blockinfo.a.getY(), definedstructure_blockinfo.a.getZ()));
                 int k = definedstructure_a.a(definedstructure_blockinfo.b);
 
                 nbttagcompound1.setInt("state", k);
@@ -575,15 +561,15 @@ public class DefinedStructure {
             DefinedStructure.EntityInfo definedstructure_entityinfo = (DefinedStructure.EntityInfo) iterator2.next();
 
             nbttagcompound2 = new NBTTagCompound();
-            nbttagcompound2.set("pos", this.a(new double[] { definedstructure_entityinfo.a.x, definedstructure_entityinfo.a.y, definedstructure_entityinfo.a.z}));
-            nbttagcompound2.set("blockPos", this.a(new int[] { definedstructure_entityinfo.b.getX(), definedstructure_entityinfo.b.getY(), definedstructure_entityinfo.b.getZ()}));
+            nbttagcompound2.set("pos", this.a(definedstructure_entityinfo.a.x, definedstructure_entityinfo.a.y, definedstructure_entityinfo.a.z));
+            nbttagcompound2.set("blockPos", this.a(definedstructure_entityinfo.b.getX(), definedstructure_entityinfo.b.getY(), definedstructure_entityinfo.b.getZ()));
             if (definedstructure_entityinfo.c != null) {
                 nbttagcompound2.set("nbt", definedstructure_entityinfo.c);
             }
         }
 
         nbttagcompound.set("entities", nbttaglist3);
-        nbttagcompound.set("size", this.a(new int[] { this.c.getX(), this.c.getY(), this.c.getZ()}));
+        nbttagcompound.set("size", this.a(this.c.getX(), this.c.getY(), this.c.getZ()));
         nbttagcompound.setInt("DataVersion", 1631);
         return nbttagcompound;
     }

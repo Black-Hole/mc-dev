@@ -67,7 +67,7 @@ public class HashCache {
             return (String) entry.getValue() + ' ' + this.b.relativize((java.nio.file.Path) entry.getKey());
         }).collect(Collectors.toList()), System.lineSeparator(), bufferedwriter);
         bufferedwriter.close();
-        HashCache.a.debug("Caching: cache hits: {}, created: {} removed: {}", Integer.valueOf(this.d), Integer.valueOf(this.f.size() - this.d), Integer.valueOf(this.e.size()));
+        HashCache.a.debug("Caching: cache hits: {}, created: {} removed: {}", this.d, this.f.size() - this.d, this.e.size());
     }
 
     @Nullable

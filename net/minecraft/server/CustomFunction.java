@@ -39,12 +39,12 @@ public class CustomFunction {
                 if (stringreader.peek() == 47) {
                     stringreader.skip();
                     if (stringreader.peek() == 47) {
-                        throw new IllegalArgumentException("Unknown or invalid command \'" + s + "\' on line " + j + " (if you intended to make a comment, use \'#\' not \'//\')");
+                        throw new IllegalArgumentException("Unknown or invalid command '" + s + "' on line " + j + " (if you intended to make a comment, use '#' not '//')");
                     }
 
                     String s1 = stringreader.readUnquotedString();
 
-                    throw new IllegalArgumentException("Unknown or invalid command \'" + s + "\' on line " + j + " (did you mean \'" + s1 + "\'? Do not use a preceding forwards slash.)");
+                    throw new IllegalArgumentException("Unknown or invalid command '" + s + "' on line " + j + " (did you mean '" + s1 + "'? Do not use a preceding forwards slash.)");
                 }
 
                 try {

@@ -39,7 +39,7 @@ public class Tags<T> {
 
     public void a(Tag<T> tag) {
         if (this.d.containsKey(tag.c())) {
-            throw new IllegalArgumentException("Duplicate " + this.i + " tag \'" + tag.c() + "\'");
+            throw new IllegalArgumentException("Duplicate " + this.i + " tag '" + tag.c() + "'");
         } else {
             this.d.put(tag.c(), tag);
         }
@@ -85,7 +85,7 @@ public class Tags<T> {
                         JsonObject jsonobject = (JsonObject) ChatDeserializer.a(Tags.b, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
 
                         if (jsonobject == null) {
-                            Tags.a.error("Couldn\'t load {} tag list {} from {} in data pack {} as it\'s empty or null", this.i, minecraftkey1, minecraftkey, iresource.d());
+                            Tags.a.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.i, minecraftkey1, minecraftkey, iresource.d());
                         } else {
                             Tag.a tag_a = (Tag.a) hashmap.getOrDefault(minecraftkey1, Tag.a.a());
 
@@ -93,13 +93,13 @@ public class Tags<T> {
                             hashmap.put(minecraftkey1, tag_a);
                         }
                     } catch (RuntimeException | IOException ioexception) {
-                        Tags.a.error("Couldn\'t read {} tag list {} from {} in data pack {}", this.i, minecraftkey1, minecraftkey, iresource.d(), ioexception);
+                        Tags.a.error("Couldn't read {} tag list {} from {} in data pack {}", this.i, minecraftkey1, minecraftkey, iresource.d(), ioexception);
                     } finally {
                         IOUtils.closeQuietly(iresource);
                     }
                 }
             } catch (IOException ioexception1) {
-                Tags.a.error("Couldn\'t read {} tag list {} from {}", this.i, minecraftkey1, minecraftkey, ioexception1);
+                Tags.a.error("Couldn't read {} tag list {} from {}", this.i, minecraftkey1, minecraftkey, ioexception1);
             }
         }
 
@@ -128,7 +128,7 @@ public class Tags<T> {
                     }
 
                     entry = (Entry) iterator2.next();
-                    Tags.a.error("Couldn\'t load {} tag {} as it either references another tag that doesn\'t exist, or ultimately references itself", this.i, entry.getKey());
+                    Tags.a.error("Couldn't load {} tag {} as it either references another tag that doesn't exist, or ultimately references itself", this.i, entry.getKey());
                 }
             }
         }

@@ -10,16 +10,16 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
         this.p = blockpressureplatebinary_enummobtype;
     }
 
     protected int getPower(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockPressurePlateBinary.POWERED)).booleanValue() ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockPressurePlateBinary.POWERED) ? 15 : 0;
     }
 
     protected IBlockData a(IBlockData iblockdata, int i) {
-        return (IBlockData) iblockdata.set(BlockPressurePlateBinary.POWERED, Boolean.valueOf(i > 0));
+        return (IBlockData) iblockdata.set(BlockPressurePlateBinary.POWERED, i > 0);
     }
 
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
@@ -48,11 +48,9 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         case EVERYTHING:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;
-
         case MOBS:
             list = world.a(EntityLiving.class, axisalignedbb);
             break;
-
         default:
             return 0;
         }
@@ -73,7 +71,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPressurePlateBinary.POWERED});
+        blockstatelist_a.a(BlockPressurePlateBinary.POWERED);
     }
 
     public static enum EnumMobType {

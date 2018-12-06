@@ -72,7 +72,7 @@ public class EntityArmorStand extends EntityLiving {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityArmorStand.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityArmorStand.a, (byte) 0);
         this.datawatcher.register(EntityArmorStand.b, EntityArmorStand.bx);
         this.datawatcher.register(EntityArmorStand.c, EntityArmorStand.by);
         this.datawatcher.register(EntityArmorStand.d, EntityArmorStand.bz);
@@ -93,10 +93,8 @@ public class EntityArmorStand extends EntityLiving {
         switch (enumitemslot.a()) {
         case HAND:
             return (ItemStack) this.bE.get(enumitemslot.b());
-
         case ARMOR:
             return (ItemStack) this.bF.get(enumitemslot.b());
-
         default:
             return ItemStack.a;
         }
@@ -108,7 +106,6 @@ public class EntityArmorStand extends EntityLiving {
             this.b(itemstack);
             this.bE.set(enumitemslot.b(), itemstack);
             break;
-
         case ARMOR:
             this.b(itemstack);
             this.bF.set(enumitemslot.b(), itemstack);
@@ -462,8 +459,8 @@ public class EntityArmorStand extends EntityLiving {
     private void D() {
         this.F();
 
-        int i;
         ItemStack itemstack;
+        int i;
 
         for (i = 0; i < this.bE.size(); ++i) {
             itemstack = (ItemStack) this.bE.get(i);
@@ -600,37 +597,37 @@ public class EntityArmorStand extends EntityLiving {
     }
 
     public void setSmall(boolean flag) {
-        this.datawatcher.set(EntityArmorStand.a, Byte.valueOf(this.a(((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue(), 1, flag)));
+        this.datawatcher.set(EntityArmorStand.a, this.a((Byte) this.datawatcher.get(EntityArmorStand.a), 1, flag));
         this.setSize(0.5F, 1.975F);
     }
 
     public boolean isSmall() {
-        return (((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityArmorStand.a) & 1) != 0;
     }
 
     public void setArms(boolean flag) {
-        this.datawatcher.set(EntityArmorStand.a, Byte.valueOf(this.a(((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue(), 4, flag)));
+        this.datawatcher.set(EntityArmorStand.a, this.a((Byte) this.datawatcher.get(EntityArmorStand.a), 4, flag));
     }
 
     public boolean hasArms() {
-        return (((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue() & 4) != 0;
+        return ((Byte) this.datawatcher.get(EntityArmorStand.a) & 4) != 0;
     }
 
     public void setBasePlate(boolean flag) {
-        this.datawatcher.set(EntityArmorStand.a, Byte.valueOf(this.a(((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue(), 8, flag)));
+        this.datawatcher.set(EntityArmorStand.a, this.a((Byte) this.datawatcher.get(EntityArmorStand.a), 8, flag));
     }
 
     public boolean hasBasePlate() {
-        return (((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue() & 8) != 0;
+        return ((Byte) this.datawatcher.get(EntityArmorStand.a) & 8) != 0;
     }
 
     public void setMarker(boolean flag) {
-        this.datawatcher.set(EntityArmorStand.a, Byte.valueOf(this.a(((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue(), 16, flag)));
+        this.datawatcher.set(EntityArmorStand.a, this.a((Byte) this.datawatcher.get(EntityArmorStand.a), 16, flag));
         this.setSize(0.5F, 1.975F);
     }
 
     public boolean isMarker() {
-        return (((Byte) this.datawatcher.get(EntityArmorStand.a)).byteValue() & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntityArmorStand.a) & 16) != 0;
     }
 
     private byte a(byte b0, int i, boolean flag) {

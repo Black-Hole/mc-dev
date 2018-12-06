@@ -49,7 +49,7 @@ public class ExpiringMap<T> extends Long2ObjectOpenHashMap<T> {
     }
 
     public T put(Long olong, T t0) {
-        this.a(olong.longValue());
+        this.a(olong);
         return super.put(olong, t0);
     }
 

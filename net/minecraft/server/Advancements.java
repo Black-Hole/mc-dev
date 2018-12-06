@@ -67,12 +67,12 @@ public class Advancements {
                     }
 
                     entry = (Entry) iterator.next();
-                    Advancements.a.error("Couldn\'t load advancement {}: {}", entry.getKey(), entry.getValue());
+                    Advancements.a.error("Couldn't load advancement {}: {}", entry.getKey(), entry.getValue());
                 }
             }
         }
 
-        Advancements.a.info("Loaded {} advancements", Integer.valueOf(this.advancements.size()));
+        Advancements.a.info("Loaded {} advancements", this.advancements.size());
     }
 
     public void a() {

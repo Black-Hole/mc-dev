@@ -52,7 +52,7 @@ public class ItemBoat extends Item {
             if (flag) {
                 return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
             } else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.a();
+                BlockPosition blockposition = movingobjectposition.getBlockPosition();
                 Block block = world.getType(blockposition).getBlock();
                 EntityBoat entityboat = new EntityBoat(world, movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
 

@@ -55,6 +55,6 @@ public class BlockSkullWall extends BlockSkullAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockSkullWall.a});
+        blockstatelist_a.a(BlockSkullWall.a);
     }
 }

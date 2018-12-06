@@ -61,7 +61,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
 
             if (!IRegistry.BLOCK.c(minecraftkey)) {
-                throw new JsonSyntaxException("Unknown block type \'" + minecraftkey + "\'");
+                throw new JsonSyntaxException("Unknown block type '" + minecraftkey + "'");
             }
 
             block = (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
@@ -71,7 +71,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
         if (jsonobject.has("state")) {
             if (block == null) {
-                throw new JsonSyntaxException("Can\'t define block state without a specific block type");
+                throw new JsonSyntaxException("Can't define block state without a specific block type");
             }
 
             BlockStateList blockstatelist = block.getStates();
@@ -84,14 +84,14 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
                 iblockstate = blockstatelist.a((String) entry.getKey());
                 if (iblockstate == null) {
-                    throw new JsonSyntaxException("Unknown block state property \'" + (String) entry.getKey() + "\' for block \'" + IRegistry.BLOCK.getKey(block) + "\'");
+                    throw new JsonSyntaxException("Unknown block state property '" + (String) entry.getKey() + "' for block '" + IRegistry.BLOCK.getKey(block) + "'");
                 }
 
                 String s = ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey());
 
                 optional = iblockstate.b(s);
                 if (!optional.isPresent()) {
-                    throw new JsonSyntaxException("Invalid block state value \'" + s + "\' for property \'" + (String) entry.getKey() + "\' on block \'" + IRegistry.BLOCK.getKey(block) + "\'");
+                    throw new JsonSyntaxException("Invalid block state value '" + s + "' for property '" + (String) entry.getKey() + "' on block '" + IRegistry.BLOCK.getKey(block) + "'");
                 }
 
                 if (hashmap == null) {

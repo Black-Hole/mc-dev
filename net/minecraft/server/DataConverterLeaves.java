@@ -368,7 +368,7 @@ public class DataConverterLeaves extends DataFix {
         }
 
         protected int a(String s, boolean flag, int i) {
-            return DataConverterLeaves.b.get(s).intValue() << 5 | (flag ? 16 : 0) | i;
+            return DataConverterLeaves.b.get(s) << 5 | (flag ? 16 : 0) | i;
         }
 
         int c() {

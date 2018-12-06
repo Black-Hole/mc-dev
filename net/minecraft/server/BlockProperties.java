@@ -29,7 +29,7 @@ public class BlockProperties {
     public static final BlockStateBoolean w = BlockStateBoolean.of("triggered");
     public static final BlockStateBoolean x = BlockStateBoolean.of("unstable");
     public static final BlockStateBoolean y = BlockStateBoolean.of("waterlogged");
-    public static final BlockStateEnum<EnumDirection.EnumAxis> z = BlockStateEnum.of("axis", EnumDirection.EnumAxis.class, new EnumDirection.EnumAxis[] { EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z});
+    public static final BlockStateEnum<EnumDirection.EnumAxis> z = BlockStateEnum.of("axis", EnumDirection.EnumAxis.class, EnumDirection.EnumAxis.X, EnumDirection.EnumAxis.Z);
     public static final BlockStateEnum<EnumDirection.EnumAxis> A = BlockStateEnum.of("axis", EnumDirection.EnumAxis.class);
     public static final BlockStateBoolean B = BlockStateBoolean.of("up");
     public static final BlockStateBoolean C = BlockStateBoolean.of("down");
@@ -37,7 +37,7 @@ public class BlockProperties {
     public static final BlockStateBoolean E = BlockStateBoolean.of("east");
     public static final BlockStateBoolean F = BlockStateBoolean.of("south");
     public static final BlockStateBoolean G = BlockStateBoolean.of("west");
-    public static final BlockStateDirection H = BlockStateDirection.a("facing", new EnumDirection[] { EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.UP, EnumDirection.DOWN});
+    public static final BlockStateDirection H = BlockStateDirection.a("facing", EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.UP, EnumDirection.DOWN);
     public static final BlockStateDirection I = BlockStateDirection.a("facing", (enumdirection) -> {
         return enumdirection != EnumDirection.UP;
     });

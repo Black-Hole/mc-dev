@@ -73,7 +73,7 @@ public class BlockAnvil extends BlockFalling {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockAnvil.FACING});
+        blockstatelist_a.a(BlockAnvil.FACING);
     }
 
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {

@@ -57,7 +57,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
         String s = stringreader.readUnquotedString();
 
         if (s.length() > 16) {
-            throw ArgumentScoreboardObjective.a.create(Integer.valueOf(16));
+            throw ArgumentScoreboardObjective.a.create(16);
         } else {
             return s;
         }

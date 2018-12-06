@@ -25,7 +25,7 @@ public class LootEntityPropertyOnFire implements LootEntityProperty {
         }
 
         public JsonElement a(LootEntityPropertyOnFire lootentitypropertyonfire, JsonSerializationContext jsonserializationcontext) {
-            return new JsonPrimitive(Boolean.valueOf(lootentitypropertyonfire.a));
+            return new JsonPrimitive(lootentitypropertyonfire.a);
         }
 
         public LootEntityPropertyOnFire b(JsonElement jsonelement, JsonDeserializationContext jsondeserializationcontext) {

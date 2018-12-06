@@ -57,6 +57,6 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     private boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
 
-        return (iworldreader.b(blockposition).e() || iblockdata.getBlock() == Blocks.BUBBLE_COLUMN) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
+        return (iworldreader.getFluid(blockposition).e() || iblockdata.getBlock() == Blocks.BUBBLE_COLUMN) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
     }
 }

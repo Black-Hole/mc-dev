@@ -68,7 +68,7 @@ public class DataConverterEquipment extends DataFix {
                 Iterator iterator = Stream.concat((Stream) optional1.get(), Stream.generate(() -> {
                     return dynamic.createInt(0);
                 })).iterator();
-                float f = ((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue();
+                float f = ((Dynamic) iterator.next()).getNumberValue(0).floatValue();
                 Dynamic dynamic1;
 
                 if (!dynamic.get("HandDropChances").isPresent()) {
@@ -77,7 +77,7 @@ public class DataConverterEquipment extends DataFix {
                 }
 
                 if (!dynamic.get("ArmorDropChances").isPresent()) {
-                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(Integer.valueOf(0)).floatValue()));
+                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue()));
                     dynamic = dynamic.set("ArmorDropChances", dynamic1);
                 }
 

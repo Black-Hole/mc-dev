@@ -169,7 +169,7 @@ public class NBTTagCompound implements NBTBase {
     public byte getByte(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).g();
+                return ((NBTNumber) this.map.get(s)).asByte();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -181,7 +181,7 @@ public class NBTTagCompound implements NBTBase {
     public short getShort(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).f();
+                return ((NBTNumber) this.map.get(s)).asShort();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -193,7 +193,7 @@ public class NBTTagCompound implements NBTBase {
     public int getInt(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).e();
+                return ((NBTNumber) this.map.get(s)).asInt();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -205,7 +205,7 @@ public class NBTTagCompound implements NBTBase {
     public long getLong(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).d();
+                return ((NBTNumber) this.map.get(s)).asLong();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -217,7 +217,7 @@ public class NBTTagCompound implements NBTBase {
     public float getFloat(String s) {
         try {
             if (this.hasKeyOfType(s, 99)) {
-                return ((NBTNumber) this.map.get(s)).i();
+                return ((NBTNumber) this.map.get(s)).asFloat();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -241,7 +241,7 @@ public class NBTTagCompound implements NBTBase {
     public String getString(String s) {
         try {
             if (this.hasKeyOfType(s, 8)) {
-                return ((NBTBase) this.map.get(s)).b_();
+                return ((NBTBase) this.map.get(s)).asString();
             }
         } catch (ClassCastException classcastexception) {
             ;
@@ -413,7 +413,7 @@ public class NBTTagCompound implements NBTBase {
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("NBT Tag");
 
             crashreportsystemdetails.a("Tag name", (Object) s);
-            crashreportsystemdetails.a("Tag type", (Object) Byte.valueOf(b0));
+            crashreportsystemdetails.a("Tag type", (Object) b0);
             throw new ReportedException(crashreport);
         }
     }

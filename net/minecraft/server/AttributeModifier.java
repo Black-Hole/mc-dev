@@ -85,6 +85,6 @@ public class AttributeModifier {
     }
 
     public String toString() {
-        return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name=\'" + (String) this.c.get() + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
+        return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name='" + (String) this.c.get() + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
     }
 }

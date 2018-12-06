@@ -72,9 +72,9 @@ public class DebugReportBlocks implements DebugReportProvider {
                     jsonobject3.add("properties", jsonobject4);
                 }
 
-                jsonobject3.addProperty("id", Integer.valueOf(Block.getCombinedId(iblockdata)));
+                jsonobject3.addProperty("id", Block.getCombinedId(iblockdata));
                 if (iblockdata == block.getBlockData()) {
-                    jsonobject3.addProperty("default", Boolean.valueOf(true));
+                    jsonobject3.addProperty("default", true);
                 }
             }
 

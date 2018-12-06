@@ -63,7 +63,7 @@ public class EntitySheep extends EntityAnimal {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.25D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
-        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(new IMaterial[] { Items.WHEAT}), false));
+        this.goalSelector.a(3, new PathfinderGoalTempt(this, 1.1D, RecipeItemStack.a(Items.WHEAT), false));
         this.goalSelector.a(4, new PathfinderGoalFollowParent(this, 1.1D));
         this.goalSelector.a(5, this.bI);
         this.goalSelector.a(6, new PathfinderGoalRandomStrollLand(this, 1.0D));
@@ -92,7 +92,7 @@ public class EntitySheep extends EntityAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntitySheep.bC, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntitySheep.bC, (byte) 0);
     }
 
     @Nullable
@@ -104,49 +104,34 @@ public class EntitySheep extends EntityAnimal {
             case WHITE:
             default:
                 return LootTables.X;
-
             case ORANGE:
                 return LootTables.Y;
-
             case MAGENTA:
                 return LootTables.Z;
-
             case LIGHT_BLUE:
                 return LootTables.aa;
-
             case YELLOW:
                 return LootTables.ab;
-
             case LIME:
                 return LootTables.ac;
-
             case PINK:
                 return LootTables.ad;
-
             case GRAY:
                 return LootTables.ae;
-
             case LIGHT_GRAY:
                 return LootTables.af;
-
             case CYAN:
                 return LootTables.ag;
-
             case PURPLE:
                 return LootTables.ah;
-
             case BLUE:
                 return LootTables.ai;
-
             case BROWN:
                 return LootTables.aj;
-
             case GREEN:
                 return LootTables.ak;
-
             case RED:
                 return LootTables.al;
-
             case BLACK:
                 return LootTables.am;
             }
@@ -208,26 +193,26 @@ public class EntitySheep extends EntityAnimal {
     }
 
     public EnumColor getColor() {
-        return EnumColor.fromColorIndex(((Byte) this.datawatcher.get(EntitySheep.bC)).byteValue() & 15);
+        return EnumColor.fromColorIndex((Byte) this.datawatcher.get(EntitySheep.bC) & 15);
     }
 
     public void setColor(EnumColor enumcolor) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bC)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bC);
 
-        this.datawatcher.set(EntitySheep.bC, Byte.valueOf((byte) (b0 & 240 | enumcolor.getColorIndex() & 15)));
+        this.datawatcher.set(EntitySheep.bC, (byte) (b0 & 240 | enumcolor.getColorIndex() & 15));
     }
 
     public boolean isSheared() {
-        return (((Byte) this.datawatcher.get(EntitySheep.bC)).byteValue() & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntitySheep.bC) & 16) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySheep.bC)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntitySheep.bC);
 
         if (flag) {
-            this.datawatcher.set(EntitySheep.bC, Byte.valueOf((byte) (b0 | 16)));
+            this.datawatcher.set(EntitySheep.bC, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySheep.bC, Byte.valueOf((byte) (b0 & -17)));
+            this.datawatcher.set(EntitySheep.bC, (byte) (b0 & -17));
         }
 
     }

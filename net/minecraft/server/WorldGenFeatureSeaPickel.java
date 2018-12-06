@@ -14,7 +14,7 @@ public class WorldGenFeatureSeaPickel extends WorldGenerator<WorldGenFeatureKelp
             int l = random.nextInt(8) - random.nextInt(8);
             int i1 = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR, blockposition.getX() + k, blockposition.getZ() + l);
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX() + k, i1, blockposition.getZ() + l);
-            IBlockData iblockdata = (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, Integer.valueOf(random.nextInt(4) + 1));
+            IBlockData iblockdata = (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, random.nextInt(4) + 1);
 
             if (generatoraccess.getType(blockposition1).getBlock() == Blocks.WATER && iblockdata.canPlace(generatoraccess, blockposition1)) {
                 generatoraccess.setTypeAndData(blockposition1, iblockdata, 2);

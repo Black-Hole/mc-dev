@@ -12,7 +12,7 @@ public class BlockWallSign extends BlockSign {
 
     public BlockWallSign(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
     }
 
     public String m() {
@@ -30,7 +30,7 @@ public class BlockWallSign extends BlockSign {
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlockData();
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
         EnumDirection[] aenumdirection = blockactioncontext.e();
@@ -45,7 +45,7 @@ public class BlockWallSign extends BlockSign {
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);
                 if (iblockdata.canPlace(world, blockposition)) {
-                    return (IBlockData) iblockdata.set(BlockWallSign.a, Boolean.valueOf(fluid.c() == FluidTypes.c));
+                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.c() == FluidTypes.c);
                 }
             }
         }
@@ -66,6 +66,6 @@ public class BlockWallSign extends BlockSign {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockWallSign.FACING, BlockWallSign.a});
+        blockstatelist_a.a(BlockWallSign.FACING, BlockWallSign.a);
     }
 }

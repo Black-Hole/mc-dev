@@ -76,7 +76,7 @@ public class CriterionConditionRange {
             return null;
         } else {
             try {
-                return Float.valueOf(Float.parseFloat(s));
+                return Float.parseFloat(s);
             } catch (NumberFormatException numberformatexception) {
                 if (flag) {
                     throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidDouble().createWithContext(stringreader, s);

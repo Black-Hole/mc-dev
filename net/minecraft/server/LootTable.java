@@ -64,9 +64,9 @@ public class LootTable {
             }
 
             if (itemstack.isEmpty()) {
-                iinventory.setItem(((Integer) list1.remove(list1.size() - 1)).intValue(), ItemStack.a);
+                iinventory.setItem((Integer) list1.remove(list1.size() - 1), ItemStack.a);
             } else {
-                iinventory.setItem(((Integer) list1.remove(list1.size() - 1)).intValue(), itemstack);
+                iinventory.setItem((Integer) list1.remove(list1.size() - 1), itemstack);
             }
         }
 
@@ -114,7 +114,7 @@ public class LootTable {
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
             if (iinventory.getItem(i).isEmpty()) {
-                arraylist.add(Integer.valueOf(i));
+                arraylist.add(i);
             }
         }
 

@@ -46,7 +46,7 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
     }
 
     public boolean a(StructureGenerator<?> structuregenerator) {
-        return ((Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator) -> {
+        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator) -> {
             BiomeBase[] abiomebase = this.c;
             int i = abiomebase.length;
 
@@ -54,12 +54,12 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
                 BiomeBase biomebase = abiomebase[j];
 
                 if (biomebase.a(structuregenerator)) {
-                    return Boolean.valueOf(true);
+                    return true;
                 }
             }
 
-            return Boolean.valueOf(false);
-        })).booleanValue();
+            return false;
+        });
     }
 
     public Set<IBlockData> b() {

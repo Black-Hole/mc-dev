@@ -27,7 +27,7 @@ public class RegistryMaterials<V> implements IRegistry<V> {
         Validate.notNull(v0);
         this.d = null;
         if (this.c.containsKey(minecraftkey)) {
-            RegistryMaterials.a.debug("Adding duplicate key \'{}\' to registry", minecraftkey);
+            RegistryMaterials.a.debug("Adding duplicate key '{}' to registry", minecraftkey);
         }
 
         this.c.put(minecraftkey, v0);

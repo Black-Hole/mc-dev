@@ -57,7 +57,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
     }
 
     public String toString() {
-        return "SelectorComponent{pattern=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "SelectorComponent{pattern='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
     public IChatBaseComponent g() {

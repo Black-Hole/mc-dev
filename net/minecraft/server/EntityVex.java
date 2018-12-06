@@ -56,7 +56,7 @@ public class EntityVex extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityVex.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityVex.a, (byte) 0);
     }
 
     public void a(NBTTagCompound nbttagcompound) {
@@ -99,13 +99,13 @@ public class EntityVex extends EntityMonster {
     }
 
     private boolean b(int i) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityVex.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityVex.a);
 
         return (b0 & i) != 0;
     }
 
     private void a(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityVex.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityVex.a);
         int j;
 
         if (flag) {
@@ -114,7 +114,7 @@ public class EntityVex extends EntityMonster {
             j = b0 & ~i;
         }
 
-        this.datawatcher.set(EntityVex.a, Byte.valueOf((byte) (j & 255)));
+        this.datawatcher.set(EntityVex.a, (byte) (j & 255));
     }
 
     public boolean dA() {

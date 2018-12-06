@@ -117,14 +117,14 @@ public class ArgumentParserSelector {
 
         if (this.v == null && this.w == null && this.x == null) {
             if (this.q.b() != null) {
-                float f = ((Float) this.q.b()).floatValue();
+                float f = (Float) this.q.b();
 
                 axisalignedbb = new AxisAlignedBB((double) (-f), (double) (-f), (double) (-f), (double) (f + 1.0F), (double) (f + 1.0F), (double) (f + 1.0F));
             } else {
                 axisalignedbb = null;
             }
         } else {
-            axisalignedbb = this.a(this.v == null ? 0.0D : this.v.doubleValue(), this.w == null ? 0.0D : this.w.doubleValue(), this.x == null ? 0.0D : this.x.doubleValue());
+            axisalignedbb = this.a(this.v == null ? 0.0D : this.v, this.w == null ? 0.0D : this.w, this.x == null ? 0.0D : this.x);
         }
 
         Function function;
@@ -135,7 +135,7 @@ public class ArgumentParserSelector {
             };
         } else {
             function = (vec3d) -> {
-                return new Vec3D(this.s == null ? vec3d.x : this.s.doubleValue(), this.t == null ? vec3d.y : this.t.doubleValue(), this.u == null ? vec3d.z : this.u.doubleValue());
+                return new Vec3D(this.s == null ? vec3d.x : this.s, this.t == null ? vec3d.y : this.t, this.u == null ? vec3d.z : this.u);
             };
         }
 
@@ -178,8 +178,8 @@ public class ArgumentParserSelector {
     }
 
     private Predicate<Entity> a(CriterionConditionRange criterionconditionrange, ToDoubleFunction<Entity> todoublefunction) {
-        double d0 = (double) MathHelper.g(criterionconditionrange.a() == null ? 0.0F : criterionconditionrange.a().floatValue());
-        double d1 = (double) MathHelper.g(criterionconditionrange.b() == null ? 359.0F : criterionconditionrange.b().floatValue());
+        double d0 = (double) MathHelper.g(criterionconditionrange.a() == null ? 0.0F : criterionconditionrange.a());
+        double d1 = (double) MathHelper.g(criterionconditionrange.b() == null ? 359.0F : criterionconditionrange.b());
 
         return (entity) -> {
             double d0 = MathHelper.g(todoublefunction.applyAsDouble(entity));
@@ -381,27 +381,27 @@ public class ArgumentParserSelector {
     }
 
     public void a(double d0) {
-        this.s = Double.valueOf(d0);
+        this.s = d0;
     }
 
     public void b(double d0) {
-        this.t = Double.valueOf(d0);
+        this.t = d0;
     }
 
     public void c(double d0) {
-        this.u = Double.valueOf(d0);
+        this.u = d0;
     }
 
     public void d(double d0) {
-        this.v = Double.valueOf(d0);
+        this.v = d0;
     }
 
     public void e(double d0) {
-        this.w = Double.valueOf(d0);
+        this.w = d0;
     }
 
     public void f(double d0) {
-        this.x = Double.valueOf(d0);
+        this.x = d0;
     }
 
     @Nullable

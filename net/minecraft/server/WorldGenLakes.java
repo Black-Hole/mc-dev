@@ -46,9 +46,9 @@ public class WorldGenLakes extends WorldGenerator<WorldGenFeatureLakeConfigurati
                 }
             }
 
+            boolean flag;
             int j1;
             int k1;
-            boolean flag;
 
             for (j = 0; j < 16; ++j) {
                 for (k1 = 0; k1 < 16; ++k1) {

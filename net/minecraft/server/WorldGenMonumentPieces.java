@@ -512,8 +512,8 @@ public class WorldGenMonumentPieces {
                 this.a(generatoraccess, structureboundingbox, 1, 8, 8, 6, 8, 14, WorldGenMonumentPieces.WorldGenMonumentPiece6.a);
             }
 
-            int i;
             IBlockData iblockdata;
+            int i;
 
             for (i = 1; i <= 7; ++i) {
                 iblockdata = WorldGenMonumentPieces.WorldGenMonumentPiece6.b;
@@ -1285,32 +1285,32 @@ public class WorldGenMonumentPieces {
         private List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> a(Random random) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker[] aworldgenmonumentpieces_worldgenmonumentstatetracker = new WorldGenMonumentPieces.WorldGenMonumentStateTracker[75];
 
+            boolean flag;
             int i;
             int j;
-            boolean flag;
             int k;
 
-            for (i = 0; i < 5; ++i) {
-                for (j = 0; j < 4; ++j) {
+            for (j = 0; j < 5; ++j) {
+                for (k = 0; k < 4; ++k) {
                     flag = false;
-                    k = b(i, 0, j);
-                    aworldgenmonumentpieces_worldgenmonumentstatetracker[k] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(k);
+                    i = b(j, 0, k);
+                    aworldgenmonumentpieces_worldgenmonumentstatetracker[i] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(i);
                 }
             }
 
-            for (i = 0; i < 5; ++i) {
-                for (j = 0; j < 4; ++j) {
+            for (j = 0; j < 5; ++j) {
+                for (k = 0; k < 4; ++k) {
                     flag = true;
-                    k = b(i, 1, j);
-                    aworldgenmonumentpieces_worldgenmonumentstatetracker[k] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(k);
+                    i = b(j, 1, k);
+                    aworldgenmonumentpieces_worldgenmonumentstatetracker[i] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(i);
                 }
             }
 
-            for (i = 1; i < 4; ++i) {
-                for (j = 0; j < 2; ++j) {
+            for (j = 1; j < 4; ++j) {
+                for (k = 0; k < 2; ++k) {
                     flag = true;
-                    k = b(i, 2, j);
-                    aworldgenmonumentpieces_worldgenmonumentstatetracker[k] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(k);
+                    i = b(j, 2, k);
+                    aworldgenmonumentpieces_worldgenmonumentstatetracker[i] = new WorldGenMonumentPieces.WorldGenMonumentStateTracker(i);
                 }
             }
 
@@ -1322,11 +1322,11 @@ public class WorldGenMonumentPieces {
             int k1;
             int l1;
 
-            for (i = 0; i < 5; ++i) {
-                for (j = 0; j < 5; ++j) {
+            for (j = 0; j < 5; ++j) {
+                for (k = 0; k < 5; ++k) {
                     for (int i2 = 0; i2 < 3; ++i2) {
-                        k = b(i, i2, j);
-                        if (aworldgenmonumentpieces_worldgenmonumentstatetracker[k] != null) {
+                        i = b(j, i2, k);
+                        if (aworldgenmonumentpieces_worldgenmonumentstatetracker[i] != null) {
                             EnumDirection[] aenumdirection = EnumDirection.values();
 
                             l = aenumdirection.length;
@@ -1334,17 +1334,17 @@ public class WorldGenMonumentPieces {
                             for (i1 = 0; i1 < l; ++i1) {
                                 EnumDirection enumdirection = aenumdirection[i1];
 
-                                j1 = i + enumdirection.getAdjacentX();
+                                j1 = j + enumdirection.getAdjacentX();
                                 k1 = i2 + enumdirection.getAdjacentY();
-                                l1 = j + enumdirection.getAdjacentZ();
+                                l1 = k + enumdirection.getAdjacentZ();
                                 if (j1 >= 0 && j1 < 5 && l1 >= 0 && l1 < 5 && k1 >= 0 && k1 < 3) {
                                     int j2 = b(j1, k1, l1);
 
                                     if (aworldgenmonumentpieces_worldgenmonumentstatetracker[j2] != null) {
-                                        if (l1 == j) {
-                                            aworldgenmonumentpieces_worldgenmonumentstatetracker[k].a(enumdirection, aworldgenmonumentpieces_worldgenmonumentstatetracker[j2]);
+                                        if (l1 == k) {
+                                            aworldgenmonumentpieces_worldgenmonumentstatetracker[i].a(enumdirection, aworldgenmonumentpieces_worldgenmonumentstatetracker[j2]);
                                         } else {
-                                            aworldgenmonumentpieces_worldgenmonumentstatetracker[k].a(enumdirection.opposite(), aworldgenmonumentpieces_worldgenmonumentstatetracker[j2]);
+                                            aworldgenmonumentpieces_worldgenmonumentstatetracker[i].a(enumdirection.opposite(), aworldgenmonumentpieces_worldgenmonumentstatetracker[j2]);
                                         }
                                     }
                                 }
@@ -1873,15 +1873,12 @@ public class WorldGenMonumentPieces {
             case NORTH:
                 this.n.a(j1 * 8, l1 * 4, -(k1 + l) * 8 + 1);
                 break;
-
             case SOUTH:
                 this.n.a(j1 * 8, l1 * 4, k1 * 8);
                 break;
-
             case WEST:
                 this.n.a(-(k1 + l) * 8 + 1, l1 * 4, j1 * 8);
                 break;
-
             default:
                 this.n.a(k1 * 8, l1 * 4, j1 * 8);
             }

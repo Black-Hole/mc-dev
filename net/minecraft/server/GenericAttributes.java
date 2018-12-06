@@ -76,7 +76,7 @@ public class GenericAttributes {
             AttributeInstance attributeinstance = attributemapbase.a(nbttagcompound.getString("Name"));
 
             if (attributeinstance == null) {
-                GenericAttributes.k.warn("Ignoring unknown attribute \'{}\'", nbttagcompound.getString("Name"));
+                GenericAttributes.k.warn("Ignoring unknown attribute '{}'", nbttagcompound.getString("Name"));
             } else {
                 a(attributeinstance, nbttagcompound);
             }

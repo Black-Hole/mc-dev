@@ -56,15 +56,15 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
                 this.r = inetaddress.getHostAddress();
             } catch (UnknownHostException unknownhostexception) {
-                this.c("Unable to determine local host IP, please set server-ip in \'" + iminecraftserver.d_() + "\' : " + unknownhostexception.getMessage());
+                this.c("Unable to determine local host IP, please set server-ip in '" + iminecraftserver.d_() + "' : " + unknownhostexception.getMessage());
             }
         }
 
         if (0 == this.i) {
             this.i = this.j;
             this.b("Setting default query port to " + this.i);
-            iminecraftserver.a("query.port", (Object) Integer.valueOf(this.i));
-            iminecraftserver.a("debug", (Object) Boolean.valueOf(false));
+            iminecraftserver.a("query.port", (Object) this.i);
+            iminecraftserver.a("debug", (Object) false);
             iminecraftserver.c_();
         }
 
@@ -85,10 +85,10 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
         this.a("Packet len " + i + " [" + socketaddress + "]");
         if (3 <= i && -2 == abyte[0] && -3 == abyte[1]) {
-            this.a("Packet \'" + StatusChallengeUtils.a(abyte[2]) + "\' [" + socketaddress + "]");
+            this.a("Packet '" + StatusChallengeUtils.a(abyte[2]) + "' [" + socketaddress + "]");
             switch (abyte[2]) {
             case 0:
-                if (!this.c(datagrampacket).booleanValue()) {
+                if (!this.c(datagrampacket)) {
                     this.a("Invalid challenge [" + socketaddress + "]");
                     return false;
                 } else if (15 == i) {
@@ -109,10 +109,8 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                     this.a(remotestatusreply.a(), datagrampacket);
                     this.a("Status [" + socketaddress + "]");
                 }
-
             default:
                 return true;
-
             case 9:
                 this.d(datagrampacket);
                 this.a("Challenge [" + socketaddress + "]");
@@ -191,11 +189,11 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         SocketAddress socketaddress = datagrampacket.getSocketAddress();
 
         if (!this.t.containsKey(socketaddress)) {
-            return Boolean.valueOf(false);
+            return false;
         } else {
             byte[] abyte = datagrampacket.getData();
 
-            return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).a() != StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength()) ? Boolean.valueOf(false) : Boolean.valueOf(true);
+            return ((RemoteStatusListener.RemoteStatusChallenge) this.t.get(socketaddress)).a() != StatusChallengeUtils.c(abyte, 7, datagrampacket.getLength()) ? false : true;
         }
     }
 
@@ -217,7 +215,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 while (iterator.hasNext()) {
                     Entry entry = (Entry) iterator.next();
 
-                    if (((RemoteStatusListener.RemoteStatusChallenge) entry.getValue()).a(i).booleanValue()) {
+                    if (((RemoteStatusListener.RemoteStatusChallenge) entry.getValue()).a(i)) {
                         iterator.remove();
                     }
                 }
@@ -259,7 +257,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 }
 
             } else {
-                this.c("Invalid query port " + this.i + " found in \'" + this.b.d_() + "\' (queries disabled)");
+                this.c("Invalid query port " + this.i + " found in '" + this.b.d_() + "' (queries disabled)");
             }
         }
     }
@@ -310,11 +308,11 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             this.identity[3] = abyte[6];
             this.f = new String(this.identity, StandardCharsets.UTF_8);
             this.token = (new Random()).nextInt(16777216);
-            this.e = String.format("\t%s%d\u0000", new Object[] { this.f, Integer.valueOf(this.token)}).getBytes(StandardCharsets.UTF_8);
+            this.e = String.format("\t%s%d\u0000", new Object[] { this.f, this.token}).getBytes(StandardCharsets.UTF_8);
         }
 
         public Boolean a(long i) {
-            return Boolean.valueOf(this.time < i);
+            return this.time < i;
         }
 
         public int a() {

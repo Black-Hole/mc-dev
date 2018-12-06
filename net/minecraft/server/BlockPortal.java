@@ -19,7 +19,6 @@ public class BlockPortal extends Block {
         switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
         case Z:
             return BlockPortal.c;
-
         case X:
         default:
             return BlockPortal.b;
@@ -109,21 +108,18 @@ public class BlockPortal extends Block {
             switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
             case Z:
                 return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.X);
-
             case X:
                 return (IBlockData) iblockdata.set(BlockPortal.AXIS, EnumDirection.EnumAxis.Z);
-
             default:
                 return iblockdata;
             }
-
         default:
             return iblockdata;
         }
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPortal.AXIS});
+        blockstatelist_a.a(BlockPortal.AXIS);
     }
 
     public ShapeDetector.ShapeDetectorCollection c(GeneratorAccess generatoraccess, BlockPosition blockposition) {

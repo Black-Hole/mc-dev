@@ -30,12 +30,12 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
         int i2;
         int j2;
 
-        for (k1 = -j1; k1 < j1; ++k1) {
-            for (l1 = -j1; l1 < j1; ++l1) {
-                for (i2 = 0; i2 < k; ++i2) {
-                    j2 = flag1 ? this.b(i2, k, i1) : this.a(random, i2, k, i1);
-                    if (flag1 || k1 < j2) {
-                        this.a(generatoraccess, random, blockposition, k, k1, i2, l1, j2, j1, flag1, j, d0, flag, iblockdata);
+        for (i2 = -j1; i2 < j1; ++i2) {
+            for (j2 = -j1; j2 < j1; ++j2) {
+                for (l1 = 0; l1 < k; ++l1) {
+                    k1 = flag1 ? this.b(l1, k, i1) : this.a(random, l1, k, i1);
+                    if (flag1 || i2 < k1) {
+                        this.a(generatoraccess, random, blockposition, k, i2, l1, j2, k1, j1, flag1, j, d0, flag, iblockdata);
                     }
                 }
             }
@@ -43,14 +43,14 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
 
         this.a(generatoraccess, blockposition, i1, k, flag1, i);
 
-        for (k1 = -j1; k1 < j1; ++k1) {
-            for (l1 = -j1; l1 < j1; ++l1) {
-                for (i2 = -1; i2 > -l; --i2) {
-                    j2 = flag1 ? MathHelper.f((float) j1 * (1.0F - (float) Math.pow((double) i2, 2.0D) / ((float) l * 8.0F))) : j1;
-                    int k2 = this.b(random, -i2, l, i1);
+        for (i2 = -j1; i2 < j1; ++i2) {
+            for (j2 = -j1; j2 < j1; ++j2) {
+                for (l1 = -1; l1 > -l; --l1) {
+                    k1 = flag1 ? MathHelper.f((float) j1 * (1.0F - (float) Math.pow((double) l1, 2.0D) / ((float) l * 8.0F))) : j1;
+                    int k2 = this.b(random, -l1, l, i1);
 
-                    if (k1 < k2) {
-                        this.a(generatoraccess, random, blockposition, l, k1, i2, l1, k2, j2, flag1, j, d0, flag, iblockdata);
+                    if (i2 < k2) {
+                        this.a(generatoraccess, random, blockposition, l, i2, l1, j2, k2, k1, flag1, j, d0, flag, iblockdata);
                     }
                 }
             }
@@ -90,14 +90,14 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
         int i2;
         int j2;
 
-        for (i2 = 0; i2 < j - 3; ++i2) {
-            j2 = this.a(random, i2, j, i);
-            this.a(j2, i2, blockposition, generatoraccess, false, d1, blockposition1, k, l);
+        for (j2 = 0; j2 < j - 3; ++j2) {
+            i2 = this.a(random, j2, j, i);
+            this.a(i2, j2, blockposition, generatoraccess, false, d1, blockposition1, k, l);
         }
 
-        for (i2 = -1; i2 > -j + random.nextInt(5); --i2) {
-            j2 = this.b(random, -i2, j, i);
-            this.a(j2, i2, blockposition, generatoraccess, true, d1, blockposition1, k, l);
+        for (j2 = -1; j2 > -j + random.nextInt(5); --j2) {
+            i2 = this.b(random, -j2, j, i);
+            this.a(i2, j2, blockposition, generatoraccess, true, d1, blockposition1, k, l);
         }
 
     }

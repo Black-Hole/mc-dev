@@ -79,7 +79,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
 
             }
         } catch (JsonParseException | IOException ioexception) {
-            ResourcePackAbstract.b.error("Couldn\'t load {} metadata", resourcepackmetaparser.a(), ioexception);
+            ResourcePackAbstract.b.error("Couldn't load {} metadata", resourcepackmetaparser.a(), ioexception);
             return null;
         }
 
@@ -89,7 +89,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
             try {
                 return resourcepackmetaparser.a(ChatDeserializer.t(jsonobject, resourcepackmetaparser.a()));
             } catch (JsonParseException jsonparseexception) {
-                ResourcePackAbstract.b.error("Couldn\'t load {} metadata", resourcepackmetaparser.a(), jsonparseexception);
+                ResourcePackAbstract.b.error("Couldn't load {} metadata", resourcepackmetaparser.a(), jsonparseexception);
                 return null;
             }
         }

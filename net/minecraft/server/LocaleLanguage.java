@@ -39,7 +39,7 @@ public class LocaleLanguage {
 
             this.e = SystemUtils.b();
         } catch (JsonParseException jsonparseexception) {
-            LocaleLanguage.a.error("Couldn\'t read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
+            LocaleLanguage.a.error("Couldn't read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
         }
 
     }

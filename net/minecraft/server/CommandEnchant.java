@@ -43,7 +43,7 @@ public class CommandEnchant {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, Enchantment enchantment, int i) throws CommandSyntaxException {
         if (i > enchantment.getMaxLevel()) {
-            throw CommandEnchant.d.create(Integer.valueOf(i), Integer.valueOf(enchantment.getMaxLevel()));
+            throw CommandEnchant.d.create(i, enchantment.getMaxLevel());
         } else {
             int j = 0;
             Iterator iterator = collection.iterator();
@@ -76,7 +76,7 @@ public class CommandEnchant {
                 if (collection.size() == 1) {
                     commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.single", new Object[] { enchantment.d(i), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
                 } else {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.multiple", new Object[] { enchantment.d(i), Integer.valueOf(collection.size())}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.enchant.success.multiple", new Object[] { enchantment.d(i), collection.size()}), true);
                 }
 
                 return j;

@@ -16,21 +16,18 @@ public class BlockRotatable extends Block {
             switch ((EnumDirection.EnumAxis) iblockdata.get(BlockRotatable.AXIS)) {
             case X:
                 return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Z);
-
             case Z:
                 return (IBlockData) iblockdata.set(BlockRotatable.AXIS, EnumDirection.EnumAxis.X);
-
             default:
                 return iblockdata;
             }
-
         default:
             return iblockdata;
         }
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockRotatable.AXIS});
+        blockstatelist_a.a(BlockRotatable.AXIS);
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {

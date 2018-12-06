@@ -73,15 +73,12 @@ public abstract class DefinedStructurePiece extends StructurePiece {
         case NONE:
             this.n = new StructureBoundingBox(0, 0, 0, k, l, i1);
             break;
-
         case CLOCKWISE_180:
             this.n = new StructureBoundingBox(i + i - k, 0, j + j - i1, i + i, l, j + j);
             break;
-
         case COUNTERCLOCKWISE_90:
             this.n = new StructureBoundingBox(i - j, 0, i + j - i1, i - j + k, l, i + j);
             break;
-
         case CLOCKWISE_90:
             this.n = new StructureBoundingBox(i + j - k, 0, j - i, i + j, l, j - i + i1);
         }
@@ -92,7 +89,6 @@ public abstract class DefinedStructurePiece extends StructurePiece {
         case NONE:
         default:
             break;
-
         case FRONT_BACK:
             blockposition2 = BlockPosition.ZERO;
             if (enumblockrotation != EnumBlockRotation.CLOCKWISE_90 && enumblockrotation != EnumBlockRotation.COUNTERCLOCKWISE_90) {
@@ -107,7 +103,6 @@ public abstract class DefinedStructurePiece extends StructurePiece {
 
             this.n.a(blockposition2.getX(), 0, blockposition2.getZ());
             break;
-
         case LEFT_RIGHT:
             blockposition2 = BlockPosition.ZERO;
             if (enumblockrotation != EnumBlockRotation.CLOCKWISE_90 && enumblockrotation != EnumBlockRotation.COUNTERCLOCKWISE_90) {

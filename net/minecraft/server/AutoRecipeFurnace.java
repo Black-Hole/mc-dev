@@ -43,7 +43,7 @@ public class AutoRecipeFurnace extends AutoRecipe {
     protected void a(int i, IntList intlist) {
         IntListIterator intlistiterator = intlist.iterator();
         Slot slot = this.d.getSlot(0);
-        ItemStack itemstack = AutoRecipeStackManager.b(((Integer) intlistiterator.next()).intValue());
+        ItemStack itemstack = AutoRecipeStackManager.b((Integer) intlistiterator.next());
 
         if (!itemstack.isEmpty()) {
             int j = Math.min(itemstack.getMaxStackSize(), i);

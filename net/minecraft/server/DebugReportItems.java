@@ -27,7 +27,7 @@ public class DebugReportItems implements DebugReportProvider {
             MinecraftKey minecraftkey = IRegistry.ITEM.getKey(item);
             JsonObject jsonobject1 = new JsonObject();
 
-            jsonobject1.addProperty("protocol_id", Integer.valueOf(Item.getId(item)));
+            jsonobject1.addProperty("protocol_id", Item.getId(item));
             jsonobject.add(minecraftkey.toString(), jsonobject1);
         }
 

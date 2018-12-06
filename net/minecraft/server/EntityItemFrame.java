@@ -27,7 +27,7 @@ public class EntityItemFrame extends EntityHanging {
 
     protected void x_() {
         this.getDataWatcher().register(EntityItemFrame.e, ItemStack.a);
-        this.getDataWatcher().register(EntityItemFrame.f, Integer.valueOf(0));
+        this.getDataWatcher().register(EntityItemFrame.f, 0);
     }
 
     public void setDirection(EnumDirection enumdirection) {
@@ -62,11 +62,9 @@ public class EntityItemFrame extends EntityHanging {
             case X:
                 d1 = 1.0D;
                 break;
-
             case Y:
                 d2 = 1.0D;
                 break;
-
             case Z:
                 d3 = 1.0D;
             }
@@ -199,7 +197,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     public int getRotation() {
-        return ((Integer) this.getDataWatcher().get(EntityItemFrame.f)).intValue();
+        return (Integer) this.getDataWatcher().get(EntityItemFrame.f);
     }
 
     public void setRotation(int i) {
@@ -207,7 +205,7 @@ public class EntityItemFrame extends EntityHanging {
     }
 
     private void setRotation(int i, boolean flag) {
-        this.getDataWatcher().set(EntityItemFrame.f, Integer.valueOf(i % 8));
+        this.getDataWatcher().set(EntityItemFrame.f, i % 8);
         if (flag && this.blockPosition != null) {
             this.world.updateAdjacentComparators(this.blockPosition, Blocks.AIR);
         }

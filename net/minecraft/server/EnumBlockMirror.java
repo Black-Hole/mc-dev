@@ -13,10 +13,8 @@ public enum EnumBlockMirror {
         switch (this) {
         case FRONT_BACK:
             return (j - l) % j;
-
         case LEFT_RIGHT:
             return (k - l + j) % j;
-
         default:
             return i;
         }

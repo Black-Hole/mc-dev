@@ -50,11 +50,11 @@ public class EntityEnderman extends EntityMonster {
 
         if (entityliving == null) {
             this.bE = 0;
-            this.datawatcher.set(EntityEnderman.bC, Boolean.valueOf(false));
+            this.datawatcher.set(EntityEnderman.bC, false);
             attributeinstance.c(EntityEnderman.b);
         } else {
             this.bE = this.ticksLived;
-            this.datawatcher.set(EntityEnderman.bC, Boolean.valueOf(true));
+            this.datawatcher.set(EntityEnderman.bC, true);
             if (!attributeinstance.a(EntityEnderman.b)) {
                 attributeinstance.b(EntityEnderman.b);
             }
@@ -65,7 +65,7 @@ public class EntityEnderman extends EntityMonster {
     protected void x_() {
         super.x_();
         this.datawatcher.register(EntityEnderman.c, Optional.empty());
-        this.datawatcher.register(EntityEnderman.bC, Boolean.valueOf(false));
+        this.datawatcher.register(EntityEnderman.bC, false);
     }
 
     public void l() {
@@ -249,7 +249,7 @@ public class EntityEnderman extends EntityMonster {
     }
 
     public boolean dB() {
-        return ((Boolean) this.datawatcher.get(EntityEnderman.bC)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityEnderman.bC);
     }
 
     static class PathfinderGoalEndermanPickupBlock extends PathfinderGoal {
@@ -274,7 +274,7 @@ public class EntityEnderman extends EntityMonster {
             IBlockData iblockdata = world.getType(blockposition);
             Block block = iblockdata.getBlock();
             MovingObjectPosition movingobjectposition = world.rayTrace(new Vec3D((double) ((float) MathHelper.floor(this.enderman.locX) + 0.5F), (double) ((float) j + 0.5F), (double) ((float) MathHelper.floor(this.enderman.locZ) + 0.5F)), new Vec3D((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F)), FluidCollisionOption.NEVER, true, false);
-            boolean flag = movingobjectposition != null && movingobjectposition.a().equals(blockposition);
+            boolean flag = movingobjectposition != null && movingobjectposition.getBlockPosition().equals(blockposition);
 
             if (block.a(TagsBlock.ENDERMAN_HOLDABLE) && flag) {
                 this.enderman.setCarried(iblockdata);

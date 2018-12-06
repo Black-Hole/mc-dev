@@ -7,11 +7,11 @@ public class BlockFurnace extends BlockTileEntity {
 
     protected BlockFurnace(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
     }
 
     public int m(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockFurnace.LIT)).booleanValue() ? super.m(iblockdata) : 0;
+        return (Boolean) iblockdata.get(BlockFurnace.LIT) ? super.m(iblockdata) : 0;
     }
 
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -82,6 +82,6 @@ public class BlockFurnace extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockFurnace.FACING, BlockFurnace.LIT});
+        blockstatelist_a.a(BlockFurnace.FACING, BlockFurnace.LIT);
     }
 }

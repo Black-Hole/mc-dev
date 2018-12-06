@@ -14,7 +14,7 @@ public class BlockLever extends BlockAttachable {
 
     protected BlockLever(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, Boolean.valueOf(false))).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLever.FACING, EnumDirection.NORTH)).set(BlockLever.POWERED, false)).set(BlockLever.FACE, BlockPropertyAttachPosition.WALL));
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -27,34 +27,27 @@ public class BlockLever extends BlockAttachable {
             switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
             case X:
                 return BlockLever.r;
-
             case Z:
             default:
                 return BlockLever.q;
             }
-
         case WALL:
             switch ((EnumDirection) iblockdata.get(BlockLever.FACING)) {
             case EAST:
                 return BlockLever.p;
-
             case WEST:
                 return BlockLever.o;
-
             case SOUTH:
                 return BlockLever.c;
-
             case NORTH:
             default:
                 return BlockLever.b;
             }
-
         case CEILING:
         default:
             switch (((EnumDirection) iblockdata.get(BlockLever.FACING)).k()) {
             case X:
                 return BlockLever.t;
-
             case Z:
             default:
                 return BlockLever.s;
@@ -64,7 +57,7 @@ public class BlockLever extends BlockAttachable {
 
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
         iblockdata = (IBlockData) iblockdata.a((IBlockState) BlockLever.POWERED);
-        boolean flag = ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue();
+        boolean flag = (Boolean) iblockdata.get(BlockLever.POWERED);
 
         if (world.isClientSide) {
             if (flag) {
@@ -94,7 +87,7 @@ public class BlockLever extends BlockAttachable {
 
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue()) {
+            if ((Boolean) iblockdata.get(BlockLever.POWERED)) {
                 this.b(iblockdata, world, blockposition);
             }
 
@@ -103,11 +96,11 @@ public class BlockLever extends BlockAttachable {
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockLever.POWERED) ? 15 : 0;
     }
 
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockLever.POWERED)).booleanValue() && k(iblockdata) == enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockLever.POWERED) && k(iblockdata) == enumdirection ? 15 : 0;
     }
 
     public boolean isPowerSource(IBlockData iblockdata) {
@@ -120,7 +113,7 @@ public class BlockLever extends BlockAttachable {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockLever.FACE, BlockLever.FACING, BlockLever.POWERED});
+        blockstatelist_a.a(BlockLever.FACE, BlockLever.FACING, BlockLever.POWERED);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

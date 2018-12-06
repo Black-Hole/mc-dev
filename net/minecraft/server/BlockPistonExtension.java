@@ -27,7 +27,7 @@ public class BlockPistonExtension extends BlockDirectional {
 
     public BlockPistonExtension(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonExtension.FACING, EnumDirection.NORTH)).set(BlockPistonExtension.TYPE, BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.SHORT, false));
     }
 
     private VoxelShape k(IBlockData iblockdata) {
@@ -35,19 +35,14 @@ public class BlockPistonExtension extends BlockDirectional {
         case DOWN:
         default:
             return BlockPistonExtension.t;
-
         case UP:
             return BlockPistonExtension.s;
-
         case NORTH:
             return BlockPistonExtension.r;
-
         case SOUTH:
             return BlockPistonExtension.q;
-
         case WEST:
             return BlockPistonExtension.p;
-
         case EAST:
             return BlockPistonExtension.o;
         }
@@ -58,25 +53,20 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     private VoxelShape w(IBlockData iblockdata) {
-        boolean flag = ((Boolean) iblockdata.get(BlockPistonExtension.SHORT)).booleanValue();
+        boolean flag = (Boolean) iblockdata.get(BlockPistonExtension.SHORT);
 
         switch ((EnumDirection) iblockdata.get(BlockPistonExtension.FACING)) {
         case DOWN:
         default:
             return flag ? BlockPistonExtension.B : BlockPistonExtension.v;
-
         case UP:
             return flag ? BlockPistonExtension.A : BlockPistonExtension.u;
-
         case NORTH:
             return flag ? BlockPistonExtension.D : BlockPistonExtension.x;
-
         case SOUTH:
             return flag ? BlockPistonExtension.C : BlockPistonExtension.w;
-
         case WEST:
             return flag ? BlockPistonExtension.F : BlockPistonExtension.z;
-
         case EAST:
             return flag ? BlockPistonExtension.E : BlockPistonExtension.y;
         }
@@ -107,7 +97,7 @@ public class BlockPistonExtension extends BlockDirectional {
             blockposition = blockposition.shift(enumdirection);
             IBlockData iblockdata2 = world.getType(blockposition);
 
-            if ((iblockdata2.getBlock() == Blocks.PISTON || iblockdata2.getBlock() == Blocks.STICKY_PISTON) && ((Boolean) iblockdata2.get(BlockPiston.EXTENDED)).booleanValue()) {
+            if ((iblockdata2.getBlock() == Blocks.PISTON || iblockdata2.getBlock() == Blocks.STICKY_PISTON) && (Boolean) iblockdata2.get(BlockPiston.EXTENDED)) {
                 iblockdata2.a(world, blockposition, 0);
                 world.setAir(blockposition);
             }
@@ -155,7 +145,7 @@ public class BlockPistonExtension extends BlockDirectional {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPistonExtension.FACING, BlockPistonExtension.TYPE, BlockPistonExtension.SHORT});
+        blockstatelist_a.a(BlockPistonExtension.FACING, BlockPistonExtension.TYPE, BlockPistonExtension.SHORT);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

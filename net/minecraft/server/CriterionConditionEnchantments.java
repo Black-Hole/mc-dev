@@ -31,7 +31,7 @@ public class CriterionConditionEnchantments {
                 return false;
             }
 
-            int i = ((Integer) map.get(this.b)).intValue();
+            int i = (Integer) map.get(this.b);
 
             if (this.c != null && !this.c.d(i)) {
                 return false;
@@ -47,7 +47,7 @@ public class CriterionConditionEnchantments {
                 }
 
                 integer = (Integer) iterator.next();
-            } while (!this.c.d(integer.intValue()));
+            } while (!this.c.d(integer));
 
             return true;
         }
@@ -80,7 +80,7 @@ public class CriterionConditionEnchantments {
 
                 enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
                 if (enchantment == null) {
-                    throw new JsonSyntaxException("Unknown enchantment \'" + minecraftkey + "\'");
+                    throw new JsonSyntaxException("Unknown enchantment '" + minecraftkey + "'");
                 }
             }
 

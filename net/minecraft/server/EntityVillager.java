@@ -170,7 +170,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityVillager.bD, Integer.valueOf(0));
+        this.datawatcher.register(EntityVillager.bD, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -246,11 +246,11 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     }
 
     public void setProfession(int i) {
-        this.datawatcher.set(EntityVillager.bD, Integer.valueOf(i));
+        this.datawatcher.set(EntityVillager.bD, i);
     }
 
     public int getProfession() {
-        return Math.max(((Integer) this.datawatcher.get(EntityVillager.bD)).intValue() % 6, 0);
+        return Math.max((Integer) this.datawatcher.get(EntityVillager.bD) % 6, 0);
     }
 
     public boolean isInLove() {
@@ -476,7 +476,6 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                     s = "fletcher";
                 }
                 break;
-
             case 1:
                 if (this.careerId == 1) {
                     s = "librarian";
@@ -484,11 +483,9 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                     s = "cartographer";
                 }
                 break;
-
             case 2:
                 s = "cleric";
                 break;
-
             case 3:
                 if (this.careerId == 1) {
                     s = "armorer";
@@ -498,7 +495,6 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                     s = "tool_smith";
                 }
                 break;
-
             case 4:
                 if (this.careerId == 1) {
                     s = "butcher";
@@ -506,7 +502,6 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                     s = "leatherworker";
                 }
                 break;
-
             case 5:
                 s = "nitwit";
             }
@@ -830,15 +825,15 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     static class MerchantOptionRandomRange extends Tuple<Integer, Integer> {
 
         public MerchantOptionRandomRange(int i, int j) {
-            super(Integer.valueOf(i), Integer.valueOf(j));
+            super(i, j);
             if (j < i) {
-                EntityVillager.bC.warn("PriceRange({}, {}) invalid, {} smaller than {}", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(j), Integer.valueOf(i));
+                EntityVillager.bC.warn("PriceRange({}, {}) invalid, {} smaller than {}", i, j, j, i);
             }
 
         }
 
         public int a(Random random) {
-            return ((Integer) this.a()).intValue() >= ((Integer) this.b()).intValue() ? ((Integer) this.a()).intValue() : ((Integer) this.a()).intValue() + random.nextInt(((Integer) this.b()).intValue() - ((Integer) this.a()).intValue() + 1);
+            return (Integer) this.a() >= (Integer) this.b() ? (Integer) this.a() : (Integer) this.a() + random.nextInt((Integer) this.b() - (Integer) this.a() + 1);
         }
     }
 }

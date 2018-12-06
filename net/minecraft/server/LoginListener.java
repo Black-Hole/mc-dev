@@ -149,7 +149,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username", new Object[0]));
-                            LoginListener.c.error("Username \'{}\' tried to join with an invalid session", gameprofile.getName());
+                            LoginListener.c.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
                         if (LoginListener.this.server.H()) {
@@ -158,7 +158,7 @@ public class LoginListener implements PacketLoginInListener, ITickable {
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down", new Object[0]));
-                            LoginListener.c.error("Couldn\'t verify username because servers are unavailable");
+                            LoginListener.c.error("Couldn't verify username because servers are unavailable");
                         }
                     }
 

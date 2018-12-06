@@ -25,11 +25,11 @@ public class BlockFluids extends Block implements IFluidSource {
         }
 
         this.c.add(fluidtypeflowing.a(8, true));
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFluids.LEVEL, 0));
     }
 
     public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        world.b(blockposition).b(world, blockposition, random);
+        world.getFluid(blockposition).b(world, blockposition, random);
     }
 
     public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -41,7 +41,7 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     public Fluid h(IBlockData iblockdata) {
-        int i = ((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue();
+        int i = (Integer) iblockdata.get(BlockFluids.LEVEL);
 
         return (Fluid) this.c.get(Math.min(i, 8));
     }
@@ -50,17 +50,17 @@ public class BlockFluids extends Block implements IFluidSource {
         return false;
     }
 
-    public boolean d(IBlockData iblockdata) {
+    public boolean isCollidable(IBlockData iblockdata) {
         return false;
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        Fluid fluid = iblockaccess.b(blockposition.up());
+        Fluid fluid = iblockaccess.getFluid(blockposition.up());
 
         return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.o.computeIfAbsent(iblockdata, (iblockdata) -> {
             Fluid fluid = iblockdata.s();
 
-            return VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D);
+            return VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.getHeight(), 1.0D);
         });
     }
 
@@ -107,14 +107,14 @@ public class BlockFluids extends Block implements IFluidSource {
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
 
-                if (enumdirection != EnumDirection.DOWN && world.b(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
+                if (enumdirection != EnumDirection.DOWN && world.getFluid(blockposition.shift(enumdirection)).a(TagsFluid.WATER)) {
                     flag = true;
                     break;
                 }
             }
 
             if (flag) {
-                Fluid fluid = world.b(blockposition);
+                Fluid fluid = world.getFluid(blockposition);
 
                 if (fluid.d()) {
                     world.setTypeUpdate(blockposition, Blocks.OBSIDIAN.getBlockData());
@@ -122,7 +122,7 @@ public class BlockFluids extends Block implements IFluidSource {
                     return false;
                 }
 
-                if (fluid.f() >= 0.44444445F) {
+                if (fluid.getHeight() >= 0.44444445F) {
                     world.setTypeUpdate(blockposition, Blocks.COBBLESTONE.getBlockData());
                     this.fizz(world, blockposition);
                     return false;
@@ -147,7 +147,7 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockFluids.LEVEL});
+        blockstatelist_a.a(BlockFluids.LEVEL);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -155,7 +155,7 @@ public class BlockFluids extends Block implements IFluidSource {
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Integer) iblockdata.get(BlockFluids.LEVEL)).intValue() == 0) {
+        if ((Integer) iblockdata.get(BlockFluids.LEVEL) == 0) {
             generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
             return this.b;
         } else {

@@ -31,7 +31,7 @@ public class CriterionConditionDamageSource {
     }
 
     public boolean a(EntityPlayer entityplayer, DamageSource damagesource) {
-        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b.booleanValue() != damagesource.b() ? false : (this.c != null && this.c.booleanValue() != damagesource.isExplosion() ? false : (this.d != null && this.d.booleanValue() != damagesource.ignoresArmor() ? false : (this.e != null && this.e.booleanValue() != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f.booleanValue() != damagesource.isStarvation() ? false : (this.g != null && this.g.booleanValue() != damagesource.p() ? false : (this.h != null && this.h.booleanValue() != damagesource.isMagic() ? false : (!this.i.a(entityplayer, damagesource.j()) ? false : this.j.a(entityplayer, damagesource.getEntity())))))))));
+        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b != damagesource.b() ? false : (this.c != null && this.c != damagesource.isExplosion() ? false : (this.d != null && this.d != damagesource.ignoresArmor() ? false : (this.e != null && this.e != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f != damagesource.isStarvation() ? false : (this.g != null && this.g != damagesource.p() ? false : (this.h != null && this.h != damagesource.isMagic() ? false : (!this.i.a(entityplayer, damagesource.j()) ? false : this.j.a(entityplayer, damagesource.getEntity())))))))));
     }
 
     public static CriterionConditionDamageSource a(@Nullable JsonElement jsonelement) {
@@ -55,7 +55,7 @@ public class CriterionConditionDamageSource {
 
     @Nullable
     private static Boolean a(JsonObject jsonobject, String s) {
-        return jsonobject.has(s) ? Boolean.valueOf(ChatDeserializer.j(jsonobject, s)) : null;
+        return jsonobject.has(s) ? ChatDeserializer.j(jsonobject, s) : null;
     }
 
     public JsonElement a() {

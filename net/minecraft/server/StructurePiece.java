@@ -142,13 +142,10 @@ public abstract class StructurePiece {
             case NORTH:
             case SOUTH:
                 return this.n.a + i;
-
             case WEST:
                 return this.n.d - j;
-
             case EAST:
                 return this.n.a + j;
-
             default:
                 return i;
             }
@@ -168,14 +165,11 @@ public abstract class StructurePiece {
             switch (enumdirection) {
             case NORTH:
                 return this.n.f - j;
-
             case SOUTH:
                 return this.n.c + j;
-
             case WEST:
             case EAST:
                 return this.n.c + i;
-
             default:
                 return j;
             }
@@ -195,7 +189,7 @@ public abstract class StructurePiece {
             }
 
             generatoraccess.setTypeAndData(blockposition, iblockdata, 2);
-            Fluid fluid = generatoraccess.b(blockposition);
+            Fluid fluid = generatoraccess.getFluid(blockposition);
 
             if (!fluid.e()) {
                 generatoraccess.I().a(blockposition, fluid.c(), 0);
@@ -462,17 +456,14 @@ public abstract class StructurePiece {
                 this.b = EnumBlockMirror.LEFT_RIGHT;
                 this.c = EnumBlockRotation.NONE;
                 break;
-
             case WEST:
                 this.b = EnumBlockMirror.LEFT_RIGHT;
                 this.c = EnumBlockRotation.CLOCKWISE_90;
                 break;
-
             case EAST:
                 this.b = EnumBlockMirror.NONE;
                 this.c = EnumBlockRotation.CLOCKWISE_90;
                 break;
-
             default:
                 this.b = EnumBlockMirror.NONE;
                 this.c = EnumBlockRotation.NONE;

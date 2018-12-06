@@ -9,11 +9,11 @@ public class BlockConduit extends BlockTileEntity implements IFluidSource, IFlui
 
     public BlockConduit(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockConduit.a, true));
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockConduit.a});
+        blockstatelist_a.a(BlockConduit.a);
     }
 
     public TileEntity a(IBlockAccess iblockaccess) {
@@ -29,11 +29,11 @@ public class BlockConduit extends BlockTileEntity implements IFluidSource, IFlui
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockConduit.a)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockConduit.a) ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockConduit.a)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockConduit.a)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
@@ -57,9 +57,9 @@ public class BlockConduit extends BlockTileEntity implements IFluidSource, IFlui
 
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) this.getBlockData().set(BlockConduit.a, Boolean.valueOf(fluid.a(TagsFluid.WATER) && fluid.g() == 8));
+        return (IBlockData) this.getBlockData().set(BlockConduit.a, fluid.a(TagsFluid.WATER) && fluid.g() == 8);
     }
 
     public TextureType c() {
@@ -75,8 +75,8 @@ public class BlockConduit extends BlockTileEntity implements IFluidSource, IFlui
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockConduit.a)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockConduit.a, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockConduit.a)) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockConduit.a, false), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -84,13 +84,13 @@ public class BlockConduit extends BlockTileEntity implements IFluidSource, IFlui
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockConduit.a)).booleanValue() && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockConduit.a) && fluidtype == FluidTypes.c;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockConduit.a)).booleanValue() && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockConduit.a) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockConduit.a, Boolean.valueOf(true)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockConduit.a, true), 3);
                 generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 

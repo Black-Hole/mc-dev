@@ -6,7 +6,7 @@ public class BlockDirtSnow extends Block {
 
     protected BlockDirtSnow(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDirtSnow.a, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockDirtSnow.a, false));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -15,18 +15,18 @@ public class BlockDirtSnow extends Block {
         } else {
             Block block = iblockdata1.getBlock();
 
-            return (IBlockData) iblockdata.set(BlockDirtSnow.a, Boolean.valueOf(block == Blocks.SNOW_BLOCK || block == Blocks.SNOW));
+            return (IBlockData) iblockdata.set(BlockDirtSnow.a, block == Blocks.SNOW_BLOCK || block == Blocks.SNOW);
         }
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Block block = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition().up()).getBlock();
 
-        return (IBlockData) this.getBlockData().set(BlockDirtSnow.a, Boolean.valueOf(block == Blocks.SNOW_BLOCK || block == Blocks.SNOW));
+        return (IBlockData) this.getBlockData().set(BlockDirtSnow.a, block == Blocks.SNOW_BLOCK || block == Blocks.SNOW);
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockDirtSnow.a});
+        blockstatelist_a.a(BlockDirtSnow.a);
     }
 
     public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {

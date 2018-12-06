@@ -22,7 +22,7 @@ public class AdvancementTree {
 
     public AdvancementTree(Advancement advancement, @Nullable AdvancementTree advancementtree, @Nullable AdvancementTree advancementtree1, int i, int j) {
         if (advancement.c() == null) {
-            throw new IllegalArgumentException("Can\'t position an invisible advancement!");
+            throw new IllegalArgumentException("Can't position an invisible advancement!");
         } else {
             this.a = advancement;
             this.b = advancementtree;
@@ -227,7 +227,7 @@ public class AdvancementTree {
 
     public static void a(Advancement advancement) {
         if (advancement.c() == null) {
-            throw new IllegalArgumentException("Can\'t position children of an invisible root!");
+            throw new IllegalArgumentException("Can't position children of an invisible root!");
         } else {
             AdvancementTree advancementtree = new AdvancementTree(advancement, (AdvancementTree) null, (AdvancementTree) null, 1, 0);
 

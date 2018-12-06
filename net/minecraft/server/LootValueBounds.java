@@ -64,12 +64,12 @@ public class LootValueBounds {
 
         public JsonElement a(LootValueBounds lootvaluebounds, Type type, JsonSerializationContext jsonserializationcontext) {
             if (lootvaluebounds.a == lootvaluebounds.b) {
-                return new JsonPrimitive(Float.valueOf(lootvaluebounds.a));
+                return new JsonPrimitive(lootvaluebounds.a);
             } else {
                 JsonObject jsonobject = new JsonObject();
 
-                jsonobject.addProperty("min", Float.valueOf(lootvaluebounds.a));
-                jsonobject.addProperty("max", Float.valueOf(lootvaluebounds.b));
+                jsonobject.addProperty("min", lootvaluebounds.a);
+                jsonobject.addProperty("max", lootvaluebounds.b);
                 return jsonobject;
             }
         }

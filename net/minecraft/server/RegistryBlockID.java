@@ -24,7 +24,7 @@ public class RegistryBlockID<T> implements Registry<T> {
     }
 
     public void a(T t0, int i) {
-        this.b.put(t0, Integer.valueOf(i));
+        this.b.put(t0, i);
 
         while (this.c.size() <= i) {
             this.c.add((Object) null);
@@ -44,7 +44,7 @@ public class RegistryBlockID<T> implements Registry<T> {
     public int getId(T t0) {
         Integer integer = (Integer) this.b.get(t0);
 
-        return integer == null ? -1 : integer.intValue();
+        return integer == null ? -1 : integer;
     }
 
     @Nullable

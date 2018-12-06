@@ -10,27 +10,24 @@ public class BlockSnow extends Block {
 
     protected BlockSnow(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, Integer.valueOf(1)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSnow.LAYERS, 1));
     }
 
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
         case LAND:
-            return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() < 5;
-
+            return (Integer) iblockdata.get(BlockSnow.LAYERS) < 5;
         case WATER:
             return false;
-
         case AIR:
             return false;
-
         default:
             return false;
         }
     }
 
     public boolean a(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() == 8;
+        return (Integer) iblockdata.get(BlockSnow.LAYERS) == 8;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -38,11 +35,11 @@ public class BlockSnow extends Block {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockSnow.b[((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue()];
+        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS)];
     }
 
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockSnow.b[((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue() - 1];
+        return BlockSnow.b[(Integer) iblockdata.get(BlockSnow.LAYERS) - 1];
     }
 
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
@@ -52,7 +49,7 @@ public class BlockSnow extends Block {
         if (block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
             EnumBlockFaceShape enumblockfaceshape = iblockdata1.c(iworldreader, blockposition.down(), EnumDirection.UP);
 
-            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.LEAVES) || block == this && ((Integer) iblockdata1.get(BlockSnow.LAYERS)).intValue() == 8;
+            return enumblockfaceshape == EnumBlockFaceShape.SOLID || iblockdata1.a(TagsBlock.LEAVES) || block == this && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 8;
         } else {
             return false;
         }
@@ -66,15 +63,15 @@ public class BlockSnow extends Block {
         Integer integer = (Integer) iblockdata.get(BlockSnow.LAYERS);
 
         if (this.X_() && EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) > 0) {
-            if (integer.intValue() == 8) {
+            if (integer == 8) {
                 a(world, blockposition, new ItemStack(Blocks.SNOW_BLOCK));
             } else {
-                for (int i = 0; i < integer.intValue(); ++i) {
+                for (int i = 0; i < integer; ++i) {
                     a(world, blockposition, this.t(iblockdata));
                 }
             }
         } else {
-            a(world, blockposition, new ItemStack(Items.SNOWBALL, integer.intValue()));
+            a(world, blockposition, new ItemStack(Items.SNOWBALL, integer));
         }
 
         world.setAir(blockposition);
@@ -95,7 +92,7 @@ public class BlockSnow extends Block {
     }
 
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
-        int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue();
+        int i = (Integer) iblockdata.get(BlockSnow.LAYERS);
 
         return blockactioncontext.getItemStack().getItem() == this.getItem() && i < 8 ? (blockactioncontext.c() ? blockactioncontext.getClickedFace() == EnumDirection.UP : true) : i == 1;
     }
@@ -105,16 +102,16 @@ public class BlockSnow extends Block {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
         if (iblockdata.getBlock() == this) {
-            int i = ((Integer) iblockdata.get(BlockSnow.LAYERS)).intValue();
+            int i = (Integer) iblockdata.get(BlockSnow.LAYERS);
 
-            return (IBlockData) iblockdata.set(BlockSnow.LAYERS, Integer.valueOf(Math.min(8, i + 1)));
+            return (IBlockData) iblockdata.set(BlockSnow.LAYERS, Math.min(8, i + 1));
         } else {
             return super.getPlacedState(blockactioncontext);
         }
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockSnow.LAYERS});
+        blockstatelist_a.a(BlockSnow.LAYERS);
     }
 
     protected boolean X_() {

@@ -7,7 +7,7 @@ public class WorldGenFeatureCircle extends WorldGenerator<WorldGenFeatureCircleC
     public WorldGenFeatureCircle() {}
 
     public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCircleConfiguration worldgenfeaturecircleconfiguration) {
-        if (!generatoraccess.b(blockposition).a(TagsFluid.WATER)) {
+        if (!generatoraccess.getFluid(blockposition).a(TagsFluid.WATER)) {
             return false;
         } else {
             int i = 0;

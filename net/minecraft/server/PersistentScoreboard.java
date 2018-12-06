@@ -241,7 +241,7 @@ public class PersistentScoreboard extends PersistentBase {
                 nbttagcompound.setString("Name", scoreboardobjective.getName());
                 nbttagcompound.setString("CriteriaName", scoreboardobjective.getCriteria().getName());
                 nbttagcompound.setString("DisplayName", IChatBaseComponent.ChatSerializer.a(scoreboardobjective.getDisplayName()));
-                nbttagcompound.setString("RenderType", scoreboardobjective.f().a());
+                nbttagcompound.setString("RenderType", scoreboardobjective.getRenderType().a());
                 nbttaglist.add((NBTBase) nbttagcompound);
             }
         }

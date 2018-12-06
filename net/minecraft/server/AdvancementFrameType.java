@@ -30,7 +30,7 @@ public enum AdvancementFrameType {
             }
         }
 
-        throw new IllegalArgumentException("Unknown frame type \'" + s + "\'");
+        throw new IllegalArgumentException("Unknown frame type '" + s + "'");
     }
 
     public EnumChatFormat c() {

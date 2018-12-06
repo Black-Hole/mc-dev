@@ -24,9 +24,9 @@ public class LootItemConditions {
         Class oclass = lootitemcondition_a.b();
 
         if (LootItemConditions.a.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("Can\'t re-register item condition name " + minecraftkey);
+            throw new IllegalArgumentException("Can't re-register item condition name " + minecraftkey);
         } else if (LootItemConditions.b.containsKey(oclass)) {
-            throw new IllegalArgumentException("Can\'t re-register item condition class " + oclass.getName());
+            throw new IllegalArgumentException("Can't re-register item condition class " + oclass.getName());
         } else {
             LootItemConditions.a.put(minecraftkey, lootitemcondition_a);
             LootItemConditions.b.put(oclass, lootitemcondition_a);
@@ -56,7 +56,7 @@ public class LootItemConditions {
         LootItemCondition.a lootitemcondition_a = (LootItemCondition.a) LootItemConditions.a.get(minecraftkey);
 
         if (lootitemcondition_a == null) {
-            throw new IllegalArgumentException("Unknown loot item condition \'" + minecraftkey + "\'");
+            throw new IllegalArgumentException("Unknown loot item condition '" + minecraftkey + "'");
         } else {
             return lootitemcondition_a;
         }
@@ -93,7 +93,7 @@ public class LootItemConditions {
             try {
                 lootitemcondition_a = LootItemConditions.a(minecraftkey);
             } catch (IllegalArgumentException illegalargumentexception) {
-                throw new JsonSyntaxException("Unknown condition \'" + minecraftkey + "\'");
+                throw new JsonSyntaxException("Unknown condition '" + minecraftkey + "'");
             }
 
             return lootitemcondition_a.b(jsonobject, jsondeserializationcontext);

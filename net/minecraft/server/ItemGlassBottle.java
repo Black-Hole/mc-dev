@@ -28,13 +28,13 @@ public class ItemGlassBottle extends Item {
                 return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
             } else {
                 if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                    BlockPosition blockposition = movingobjectposition.a();
+                    BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
                     if (!world.a(entityhuman, blockposition)) {
                         return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
                     }
 
-                    if (world.b(blockposition).a(TagsFluid.WATER)) {
+                    if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
                         world.a(entityhuman, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, PotionUtil.a(new ItemStack(Items.POTION), Potions.b)));
                     }

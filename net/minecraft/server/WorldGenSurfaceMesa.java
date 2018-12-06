@@ -136,55 +136,55 @@ public class WorldGenSurfaceMesa implements WorldGenSurface<WorldGenSurfaceConfi
         int i1;
         int j1;
 
-        for (k = 0; k < j; ++k) {
-            l = seededrandom.nextInt(3) + 1;
+        for (j1 = 0; j1 < j; ++j1) {
+            k = seededrandom.nextInt(3) + 1;
+            l = seededrandom.nextInt(64);
+
+            for (i1 = 0; l + i1 < 64 && i1 < k; ++i1) {
+                this.a[l + i1] = WorldGenSurfaceMesa.i;
+            }
+        }
+
+        j1 = seededrandom.nextInt(4) + 2;
+
+        int k1;
+
+        for (k = 0; k < j1; ++k) {
+            l = seededrandom.nextInt(3) + 2;
             i1 = seededrandom.nextInt(64);
 
-            for (j1 = 0; i1 + j1 < 64 && j1 < l; ++j1) {
-                this.a[i1 + j1] = WorldGenSurfaceMesa.i;
+            for (k1 = 0; i1 + k1 < 64 && k1 < l; ++k1) {
+                this.a[i1 + k1] = WorldGenSurfaceMesa.j;
             }
         }
 
         k = seededrandom.nextInt(4) + 2;
 
-        int k1;
-
         for (l = 0; l < k; ++l) {
-            i1 = seededrandom.nextInt(3) + 2;
-            j1 = seededrandom.nextInt(64);
-
-            for (k1 = 0; j1 + k1 < 64 && k1 < i1; ++k1) {
-                this.a[j1 + k1] = WorldGenSurfaceMesa.j;
-            }
-        }
-
-        l = seededrandom.nextInt(4) + 2;
-
-        for (i1 = 0; i1 < l; ++i1) {
-            j1 = seededrandom.nextInt(3) + 1;
+            i1 = seededrandom.nextInt(3) + 1;
             k1 = seededrandom.nextInt(64);
 
-            for (int l1 = 0; k1 + l1 < 64 && l1 < j1; ++l1) {
+            for (int l1 = 0; k1 + l1 < 64 && l1 < i1; ++l1) {
                 this.a[k1 + l1] = WorldGenSurfaceMesa.k;
             }
         }
 
-        i1 = seededrandom.nextInt(3) + 3;
-        j1 = 0;
+        l = seededrandom.nextInt(3) + 3;
+        i1 = 0;
 
-        for (k1 = 0; k1 < i1; ++k1) {
+        for (k1 = 0; k1 < l; ++k1) {
             boolean flag = true;
 
-            j1 += seededrandom.nextInt(16) + 4;
+            i1 += seededrandom.nextInt(16) + 4;
 
-            for (int i2 = 0; j1 + i2 < 64 && i2 < 1; ++i2) {
-                this.a[j1 + i2] = WorldGenSurfaceMesa.f;
-                if (j1 + i2 > 1 && seededrandom.nextBoolean()) {
-                    this.a[j1 + i2 - 1] = WorldGenSurfaceMesa.l;
+            for (int i2 = 0; i1 + i2 < 64 && i2 < 1; ++i2) {
+                this.a[i1 + i2] = WorldGenSurfaceMesa.f;
+                if (i1 + i2 > 1 && seededrandom.nextBoolean()) {
+                    this.a[i1 + i2 - 1] = WorldGenSurfaceMesa.l;
                 }
 
-                if (j1 + i2 < 63 && seededrandom.nextBoolean()) {
-                    this.a[j1 + i2 + 1] = WorldGenSurfaceMesa.l;
+                if (i1 + i2 < 63 && seededrandom.nextBoolean()) {
+                    this.a[i1 + i2 + 1] = WorldGenSurfaceMesa.l;
                 }
             }
         }

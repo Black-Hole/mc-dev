@@ -23,15 +23,15 @@ public class EntityPufferFish extends EntityFish {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityPufferFish.a, Integer.valueOf(0));
+        this.datawatcher.register(EntityPufferFish.a, 0);
     }
 
     public int getPuffState() {
-        return ((Integer) this.datawatcher.get(EntityPufferFish.a)).intValue();
+        return (Integer) this.datawatcher.get(EntityPufferFish.a);
     }
 
     public void setPuffState(int i) {
-        this.datawatcher.set(EntityPufferFish.a, Integer.valueOf(i));
+        this.datawatcher.set(EntityPufferFish.a, i);
         this.d(i);
     }
 

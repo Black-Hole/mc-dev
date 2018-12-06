@@ -44,8 +44,8 @@ public class PacketPlayOutAdvancements implements Packet<PacketListenerPlayOut> 
         this.d = Maps.newHashMap();
         int i = packetdataserializer.g();
 
-        int j;
         MinecraftKey minecraftkey;
+        int j;
 
         for (j = 0; j < i; ++j) {
             minecraftkey = packetdataserializer.l();

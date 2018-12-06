@@ -32,7 +32,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
         IBlockData iblockdata = super.getPlacedState(blockactioncontext);
 
         if (iblockdata != null) {
-            Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition().up());
+            Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition().up());
 
             if (fluid.a(TagsFluid.WATER) && fluid.g() == 8) {
                 return iblockdata;
@@ -48,7 +48,7 @@ public class BlockTallSeaGrass extends BlockTallPlantShearable implements IFluid
 
             return iblockdata1.getBlock() == this && iblockdata1.get(BlockTallSeaGrass.c) == BlockPropertyDoubleBlockHalf.LOWER;
         } else {
-            Fluid fluid = iworldreader.b(blockposition);
+            Fluid fluid = iworldreader.getFluid(blockposition);
 
             return super.canPlace(iblockdata, iworldreader, blockposition) && fluid.a(TagsFluid.WATER) && fluid.g() == 8;
         }

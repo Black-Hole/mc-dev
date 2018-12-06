@@ -29,7 +29,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
     protected void x_() {
         super.x_();
-        this.getDataWatcher().register(EntityWitch.c, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityWitch.c, false);
     }
 
     protected SoundEffect D() {
@@ -45,11 +45,11 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     public void a(boolean flag) {
-        this.getDataWatcher().set(EntityWitch.c, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityWitch.c, flag);
     }
 
     public boolean l() {
-        return ((Boolean) this.getDataWatcher().get(EntityWitch.c)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityWitch.c);
     }
 
     protected void initAttributes() {

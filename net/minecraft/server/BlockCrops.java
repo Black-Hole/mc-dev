@@ -9,11 +9,11 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
     protected BlockCrops(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.d(), Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(this.d(), 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockCrops.a[((Integer) iblockdata.get(this.d())).intValue()];
+        return BlockCrops.a[(Integer) iblockdata.get(this.d())];
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -29,15 +29,15 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     protected int k(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(this.d())).intValue();
+        return (Integer) iblockdata.get(this.d());
     }
 
     public IBlockData setAge(int i) {
-        return (IBlockData) this.getBlockData().set(this.d(), Integer.valueOf(i));
+        return (IBlockData) this.getBlockData().set(this.d(), i);
     }
 
     public boolean w(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(this.d())).intValue() >= this.e();
+        return (Integer) iblockdata.get(this.d()) >= this.e();
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
@@ -82,7 +82,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
 
                 if (iblockdata.getBlock() == Blocks.FARMLAND) {
                     f1 = 1.0F;
-                    if (((Integer) iblockdata.get(BlockSoil.MOISTURE)).intValue() > 0) {
+                    if ((Integer) iblockdata.get(BlockSoil.MOISTURE) > 0) {
                         f1 = 3.0F;
                     }
                 }
@@ -166,6 +166,6 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCrops.AGE});
+        blockstatelist_a.a(BlockCrops.AGE);
     }
 }

@@ -119,7 +119,7 @@ public class ResourceManagerFallback implements IResourceManager {
             ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
 
             (new Exception()).printStackTrace(new PrintStream(bytearrayoutputstream));
-            this.b = "Leaked resource: \'" + minecraftkey + "\' loaded from pack: \'" + s + "\'\n" + bytearrayoutputstream;
+            this.b = "Leaked resource: '" + minecraftkey + "' loaded from pack: '" + s + "'\n" + bytearrayoutputstream;
         }
 
         public void close() throws IOException {

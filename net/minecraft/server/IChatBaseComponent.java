@@ -157,23 +157,19 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         if (enumchatformat.isFormat()) {
             switch (enumchatformat) {
             case OBFUSCATED:
-                chatmodifier.setRandom(Boolean.valueOf(true));
+                chatmodifier.setRandom(true);
                 break;
-
             case BOLD:
-                chatmodifier.setBold(Boolean.valueOf(true));
+                chatmodifier.setBold(true);
                 break;
-
             case STRIKETHROUGH:
-                chatmodifier.setStrikethrough(Boolean.valueOf(true));
+                chatmodifier.setStrikethrough(true);
                 break;
-
             case UNDERLINE:
-                chatmodifier.setUnderline(Boolean.valueOf(true));
+                chatmodifier.setUnderline(true);
                 break;
-
             case ITALIC:
-                chatmodifier.setItalic(Boolean.valueOf(true));
+                chatmodifier.setItalic(true);
             }
         }
 
@@ -205,7 +201,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 field.setAccessible(true);
                 return field;
             } catch (NoSuchFieldException nosuchfieldexception) {
-                throw new IllegalStateException("Couldn\'t get field \'pos\' for JsonReader", nosuchfieldexception);
+                throw new IllegalStateException("Couldn't get field 'pos' for JsonReader", nosuchfieldexception);
             }
         });
         private static final Field c = (Field) SystemUtils.a(() -> {
@@ -216,7 +212,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 field.setAccessible(true);
                 return field;
             } catch (NoSuchFieldException nosuchfieldexception) {
-                throw new IllegalStateException("Couldn\'t get field \'lineStart\' for JsonReader", nosuchfieldexception);
+                throw new IllegalStateException("Couldn't get field 'lineStart' for JsonReader", nosuchfieldexception);
             }
         });
 
@@ -244,7 +240,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                     return ichatbasecomponent;
                 } else {
-                    throw new JsonParseException("Don\'t know how to turn " + jsonelement + " into a Component");
+                    throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
                 }
             } else {
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
@@ -289,7 +285,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                     object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
                 } else {
                     if (!jsonobject.has("keybind")) {
-                        throw new JsonParseException("Don\'t know how to turn " + jsonelement + " into a Component");
+                        throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
                     }
 
                     object = new ChatComponentKeybind(ChatDeserializer.h(jsonobject, "keybind"));
@@ -385,7 +381,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 jsonobject.addProperty("selector", chatcomponentselector.i());
             } else {
                 if (!(ichatbasecomponent instanceof ChatComponentKeybind)) {
-                    throw new IllegalArgumentException("Don\'t know how to serialize " + ichatbasecomponent + " as a Component");
+                    throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
                 }
 
                 ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
@@ -437,7 +433,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
             try {
                 return IChatBaseComponent.ChatSerializer.b.getInt(jsonreader) - IChatBaseComponent.ChatSerializer.c.getInt(jsonreader) + 1;
             } catch (IllegalAccessException illegalaccessexception) {
-                throw new IllegalStateException("Couldn\'t read position of JsonReader", illegalaccessexception);
+                throw new IllegalStateException("Couldn't read position of JsonReader", illegalaccessexception);
             }
         }
 

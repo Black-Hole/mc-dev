@@ -33,13 +33,10 @@ final class VoxelShapeArray extends VoxelShape {
         switch (enumdirection_enumaxis) {
         case X:
             return this.b;
-
         case Y:
             return this.c;
-
         case Z:
             return this.d;
-
         default:
             throw new IllegalArgumentException();
         }

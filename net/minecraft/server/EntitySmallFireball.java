@@ -33,7 +33,7 @@ public class EntitySmallFireball extends EntityFireball {
                 }
 
                 if (flag) {
-                    BlockPosition blockposition = movingobjectposition.a().shift(movingobjectposition.direction);
+                    BlockPosition blockposition = movingobjectposition.getBlockPosition().shift(movingobjectposition.direction);
 
                     if (this.world.isEmpty(blockposition)) {
                         this.world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());

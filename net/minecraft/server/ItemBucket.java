@@ -18,7 +18,7 @@ public class ItemBucket extends Item {
         if (movingobjectposition == null) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            BlockPosition blockposition = movingobjectposition.a();
+            BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
             if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectposition.direction, itemstack)) {
                 IBlockData iblockdata;
@@ -67,7 +67,7 @@ public class ItemBucket extends Item {
     }
 
     private BlockPosition a(IBlockData iblockdata, BlockPosition blockposition, MovingObjectPosition movingobjectposition) {
-        return iblockdata.getBlock() instanceof IFluidContainer ? blockposition : movingobjectposition.a().shift(movingobjectposition.direction);
+        return iblockdata.getBlock() instanceof IFluidContainer ? blockposition : movingobjectposition.getBlockPosition().shift(movingobjectposition.direction);
     }
 
     protected ItemStack a(ItemStack itemstack, EntityHuman entityhuman) {
@@ -103,7 +103,7 @@ public class ItemBucket extends Item {
             boolean flag1 = material.isReplaceable();
 
             if (!world.isEmpty(blockposition) && !flag && !flag1 && (!(iblockdata.getBlock() instanceof IFluidContainer) || !((IFluidContainer) iblockdata.getBlock()).canPlace(world, blockposition, iblockdata, this.fluidType))) {
-                return movingobjectposition == null ? false : this.a(entityhuman, world, movingobjectposition.a().shift(movingobjectposition.direction), (MovingObjectPosition) null);
+                return movingobjectposition == null ? false : this.a(entityhuman, world, movingobjectposition.getBlockPosition().shift(movingobjectposition.direction), (MovingObjectPosition) null);
             } else {
                 if (world.worldProvider.isNether() && this.fluidType.a(TagsFluid.WATER)) {
                     int i = blockposition.getX();

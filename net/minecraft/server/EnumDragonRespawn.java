@@ -7,7 +7,6 @@ import java.util.Random;
 public enum EnumDragonRespawn {
 
     START {
-        ;
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             BlockPosition blockposition1 = new BlockPosition(0, 128, 0);
             Iterator iterator = list.iterator();
@@ -22,7 +21,6 @@ public enum EnumDragonRespawn {
         }
     },
     PREPARING_TO_SUMMON_PILLARS {
-        ;
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             if (i < 100) {
                 if (i == 0 || i == 50 || i == 51 || i == 52 || i >= 95) {
@@ -35,7 +33,6 @@ public enum EnumDragonRespawn {
         }
     },
     SUMMONING_PILLARS {
-        ;
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             boolean flag = true;
             boolean flag1 = i % 40 == 0;
@@ -82,7 +79,6 @@ public enum EnumDragonRespawn {
         }
     },
     SUMMONING_DRAGON {
-        ;
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             Iterator iterator;
             EntityEnderCrystal entityendercrystal;
@@ -114,7 +110,6 @@ public enum EnumDragonRespawn {
         }
     },
     END {
-        ;
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {}
     };
 

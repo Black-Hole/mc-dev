@@ -116,7 +116,7 @@ public class ShapedRecipes implements IRecipe {
                 RecipeItemStack recipeitemstack = (RecipeItemStack) map.get(s);
 
                 if (recipeitemstack == null) {
-                    throw new JsonSyntaxException("Pattern references symbol \'" + s + "\' but it\'s not defined in the key");
+                    throw new JsonSyntaxException("Pattern references symbol '" + s + "' but it's not defined in the key");
                 }
 
                 hashset.remove(s);
@@ -125,7 +125,7 @@ public class ShapedRecipes implements IRecipe {
         }
 
         if (!hashset.isEmpty()) {
-            throw new JsonSyntaxException("Key defines symbols that aren\'t used in pattern: " + hashset);
+            throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + hashset);
         } else {
             return nonnulllist;
         }
@@ -223,11 +223,11 @@ public class ShapedRecipes implements IRecipe {
             Entry entry = (Entry) iterator.next();
 
             if (((String) entry.getKey()).length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: \'" + (String) entry.getKey() + "\' is an invalid symbol (must be 1 character only).");
+                throw new JsonSyntaxException("Invalid key entry: '" + (String) entry.getKey() + "' is an invalid symbol (must be 1 character only).");
             }
 
             if (" ".equals(entry.getKey())) {
-                throw new JsonSyntaxException("Invalid key entry: \' \' is a reserved symbol.");
+                throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
             }
 
             hashmap.put(entry.getKey(), RecipeItemStack.a((JsonElement) entry.getValue()));
@@ -242,7 +242,7 @@ public class ShapedRecipes implements IRecipe {
         Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s));
 
         if (item == null) {
-            throw new JsonSyntaxException("Unknown item \'" + s + "\'");
+            throw new JsonSyntaxException("Unknown item '" + s + "'");
         } else if (jsonobject.has("data")) {
             throw new JsonParseException("Disallowed data tag found");
         } else {

@@ -51,6 +51,6 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
     }
 
     public IChatBaseComponent a(ArgumentNBTKey.c argumentnbtkey_c, double d0, int i) {
-        return new ChatMessage("commands.data.entity.get", new Object[] { argumentnbtkey_c, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(d0)}), Integer.valueOf(i)});
+        return new ChatMessage("commands.data.entity.get", new Object[] { argumentnbtkey_c, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", new Object[] { d0}), i});
     }
 }

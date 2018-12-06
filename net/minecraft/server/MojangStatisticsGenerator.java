@@ -38,10 +38,10 @@ public class MojangStatisticsGenerator {
     }
 
     public void b() {
-        this.b("memory_total", Long.valueOf(Runtime.getRuntime().totalMemory()));
-        this.b("memory_max", Long.valueOf(Runtime.getRuntime().maxMemory()));
-        this.b("memory_free", Long.valueOf(Runtime.getRuntime().freeMemory()));
-        this.b("cpu_cores", Integer.valueOf(Runtime.getRuntime().availableProcessors()));
+        this.b("memory_total", Runtime.getRuntime().totalMemory());
+        this.b("memory_max", Runtime.getRuntime().maxMemory());
+        this.b("memory_free", Runtime.getRuntime().freeMemory());
+        this.b("cpu_cores", Runtime.getRuntime().availableProcessors());
         this.e.a(this);
     }
 

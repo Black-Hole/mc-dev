@@ -21,26 +21,21 @@ public class BlockHopper extends BlockTileEntity {
 
     public BlockHopper(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHopper.FACING, EnumDirection.DOWN)).set(BlockHopper.ENABLED, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockHopper.FACING, EnumDirection.DOWN)).set(BlockHopper.ENABLED, true));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
         case DOWN:
             return BlockHopper.r;
-
         case NORTH:
             return BlockHopper.t;
-
         case SOUTH:
             return BlockHopper.u;
-
         case WEST:
             return BlockHopper.v;
-
         case EAST:
             return BlockHopper.s;
-
         default:
             return BlockHopper.q;
         }
@@ -50,19 +45,14 @@ public class BlockHopper extends BlockTileEntity {
         switch ((EnumDirection) iblockdata.get(BlockHopper.FACING)) {
         case DOWN:
             return BlockHopper.w;
-
         case NORTH:
             return BlockHopper.y;
-
         case SOUTH:
             return BlockHopper.z;
-
         case WEST:
             return BlockHopper.A;
-
         case EAST:
             return BlockHopper.x;
-
         default:
             return IHopper.a;
         }
@@ -71,7 +61,7 @@ public class BlockHopper extends BlockTileEntity {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         EnumDirection enumdirection = blockactioncontext.getClickedFace().opposite();
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockHopper.FACING, enumdirection.k() == EnumDirection.EnumAxis.Y ? EnumDirection.DOWN : enumdirection)).set(BlockHopper.ENABLED, Boolean.valueOf(true));
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockHopper.FACING, enumdirection.k() == EnumDirection.EnumAxis.Y ? EnumDirection.DOWN : enumdirection)).set(BlockHopper.ENABLED, true);
     }
 
     public TileEntity a(IBlockAccess iblockaccess) {
@@ -121,8 +111,8 @@ public class BlockHopper extends BlockTileEntity {
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         boolean flag = !world.isBlockIndirectlyPowered(blockposition);
 
-        if (flag != ((Boolean) iblockdata.get(BlockHopper.ENABLED)).booleanValue()) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockHopper.ENABLED, Boolean.valueOf(flag)), 4);
+        if (flag != (Boolean) iblockdata.get(BlockHopper.ENABLED)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockHopper.ENABLED, flag), 4);
         }
 
     }
@@ -169,7 +159,7 @@ public class BlockHopper extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockHopper.FACING, BlockHopper.ENABLED});
+        blockstatelist_a.a(BlockHopper.FACING, BlockHopper.ENABLED);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

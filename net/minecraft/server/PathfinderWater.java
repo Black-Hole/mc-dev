@@ -41,7 +41,7 @@ public class PathfinderWater extends PathfinderAbstract {
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
         BlockPosition blockposition = new BlockPosition(i, j, k);
-        Fluid fluid = iblockaccess.b(blockposition);
+        Fluid fluid = iblockaccess.getFluid(blockposition);
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
         return fluid.e() && iblockdata.a(iblockaccess, blockposition.down(), PathMode.WATER) && iblockdata.isAir() ? PathType.BREACH : (fluid.a(TagsFluid.WATER) && iblockdata.a(iblockaccess, blockposition, PathMode.WATER) ? PathType.WATER : PathType.BLOCKED);
@@ -64,7 +64,7 @@ public class PathfinderWater extends PathfinderAbstract {
             pathpoint = super.a(i, j, k);
             pathpoint.m = pathtype;
             pathpoint.l = Math.max(pathpoint.l, f);
-            if (this.a.b(new BlockPosition(i, j, k)).e()) {
+            if (this.a.getFluid(new BlockPosition(i, j, k)).e()) {
                 pathpoint.l += 8.0F;
             }
         }
@@ -78,7 +78,7 @@ public class PathfinderWater extends PathfinderAbstract {
         for (int l = i; l < i + this.d; ++l) {
             for (int i1 = j; i1 < j + this.e; ++i1) {
                 for (int j1 = k; j1 < k + this.f; ++j1) {
-                    Fluid fluid = this.a.b(blockposition_mutableblockposition.c(l, i1, j1));
+                    Fluid fluid = this.a.getFluid(blockposition_mutableblockposition.c(l, i1, j1));
                     IBlockData iblockdata = this.a.getType(blockposition_mutableblockposition.c(l, i1, j1));
 
                     if (fluid.e() && iblockdata.a(this.a, blockposition_mutableblockposition.down(), PathMode.WATER) && iblockdata.isAir()) {

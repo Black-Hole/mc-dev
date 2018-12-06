@@ -28,7 +28,7 @@ public class ChunkProviderDebug extends ChunkGeneratorAbstract<GeneratorSettings
         BiomeBase[] abiomebase = this.c.getBiomeBlock(i * 16, j * 16, 16, 16);
 
         ichunkaccess.a(abiomebase);
-        ichunkaccess.a(new HeightMap.Type[] { HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG});
+        ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG);
         ichunkaccess.a(ChunkStatus.BASE);
     }
 

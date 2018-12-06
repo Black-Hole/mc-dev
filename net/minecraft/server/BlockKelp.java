@@ -10,7 +10,7 @@ public class BlockKelp extends Block implements IFluidContainer {
 
     protected BlockKelp(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockKelp.a, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockKelp.a, 0));
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -23,13 +23,13 @@ public class BlockKelp extends Block implements IFluidContainer {
 
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
         return fluid.a(TagsFluid.WATER) && fluid.g() == 8 ? this.a((GeneratorAccess) blockactioncontext.getWorld()) : null;
     }
 
     public IBlockData a(GeneratorAccess generatoraccess) {
-        return (IBlockData) this.getBlockData().set(BlockKelp.a, Integer.valueOf(generatoraccess.m().nextInt(25)));
+        return (IBlockData) this.getBlockData().set(BlockKelp.a, generatoraccess.m().nextInt(25));
     }
 
     public TextureType c() {
@@ -51,7 +51,7 @@ public class BlockKelp extends Block implements IFluidContainer {
             BlockPosition blockposition1 = blockposition.up();
             IBlockData iblockdata1 = world.getType(blockposition1);
 
-            if (iblockdata1.getBlock() == Blocks.WATER && ((Integer) iblockdata.get(BlockKelp.a)).intValue() < 25 && random.nextDouble() < 0.14D) {
+            if (iblockdata1.getBlock() == Blocks.WATER && (Integer) iblockdata.get(BlockKelp.a) < 25 && random.nextDouble() < 0.14D) {
                 world.setTypeUpdate(blockposition1, (IBlockData) iblockdata.a((IBlockState) BlockKelp.a));
             }
 
@@ -84,7 +84,7 @@ public class BlockKelp extends Block implements IFluidContainer {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockKelp.a});
+        blockstatelist_a.a(BlockKelp.a);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {

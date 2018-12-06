@@ -48,11 +48,11 @@ public abstract class EntityAgeable extends EntityCreature {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityAgeable.bC, Boolean.valueOf(false));
+        this.datawatcher.register(EntityAgeable.bC, false);
     }
 
     public int getAge() {
-        return this.world.isClientSide ? (((Boolean) this.datawatcher.get(EntityAgeable.bC)).booleanValue() ? -1 : 1) : this.a;
+        return this.world.isClientSide ? ((Boolean) this.datawatcher.get(EntityAgeable.bC) ? -1 : 1) : this.a;
     }
 
     public void setAge(int i, boolean flag) {
@@ -88,7 +88,7 @@ public abstract class EntityAgeable extends EntityCreature {
     }
 
     public void setAgeRaw(int i) {
-        this.datawatcher.set(EntityAgeable.bC, Boolean.valueOf(i < 0));
+        this.datawatcher.set(EntityAgeable.bC, i < 0);
         this.a = i;
         this.a(this.isBaby());
     }

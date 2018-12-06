@@ -34,7 +34,7 @@ public class DataConverterBlockName extends DataFix {
                 };
             });
         } else {
-            throw new IllegalStateException("Expected and actual types don\'t match.");
+            throw new IllegalStateException("Expected and actual types don't match.");
         }
     }
 }

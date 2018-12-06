@@ -53,7 +53,7 @@ public class Tag<T> {
             tag_b.a(jsonarray, function);
         }
 
-        jsonobject.addProperty("replace", Boolean.valueOf(false));
+        jsonobject.addProperty("replace", false);
         jsonobject.add("values", jsonarray);
         return jsonobject;
     }
@@ -257,7 +257,7 @@ public class Tag<T> {
                         Object object = function.apply(minecraftkey);
 
                         if (object == null || !predicate.test(minecraftkey)) {
-                            throw new JsonParseException("Unknown value \'" + minecraftkey + "\'");
+                            throw new JsonParseException("Unknown value '" + minecraftkey + "'");
                         }
 
                         this.a(object);

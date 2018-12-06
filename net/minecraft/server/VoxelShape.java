@@ -54,7 +54,7 @@ public abstract class VoxelShape {
         VoxelShape[] avoxelshape = new VoxelShape[] { VoxelShapes.a()};
 
         this.b((d0, d1, d2, d3, d4, d5) -> {
-            avoxelshape[0] = VoxelShapes.b(avoxelshape[0], VoxelShapes.a(d0, d1, d2, d3, d4, d5), OperatorBoolean.OR);
+            avoxelshape[0] = VoxelShapes.b(avoxelshape[0], VoxelShapes.create(d0, d1, d2, d3, d4, d5), OperatorBoolean.OR);
         });
         return avoxelshape[0];
     }
@@ -85,7 +85,7 @@ public abstract class VoxelShape {
     }
 
     @Nullable
-    public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
+    public MovingObjectPosition rayTrace(Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
         if (this.isEmpty()) {
             return null;
         } else {
@@ -143,10 +143,10 @@ public abstract class VoxelShape {
             int i1 = Math.max(0, this.a(enumdirection_enumaxis2, axisalignedbb.a(enumdirection_enumaxis2) + 1.0E-7D));
             int j1 = Math.min(this.a.c(enumdirection_enumaxis2), this.a(enumdirection_enumaxis2, axisalignedbb.b(enumdirection_enumaxis2) - 1.0E-7D) + 1);
             int k1 = this.a.c(enumdirection_enumaxis);
+            double d3;
             int l1;
             int i2;
             int j2;
-            double d3;
 
             if (d0 > 0.0D) {
                 for (l1 = j + 1; l1 < k1; ++l1) {

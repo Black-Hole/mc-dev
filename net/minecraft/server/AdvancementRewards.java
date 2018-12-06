@@ -85,14 +85,14 @@ public class AdvancementRewards {
             JsonObject jsonobject = new JsonObject();
 
             if (this.b != 0) {
-                jsonobject.addProperty("experience", Integer.valueOf(this.b));
+                jsonobject.addProperty("experience", this.b);
             }
 
             JsonArray jsonarray;
             MinecraftKey[] aminecraftkey;
             int i;
-            int j;
             MinecraftKey minecraftkey;
+            int j;
 
             if (this.c.length > 0) {
                 jsonarray = new JsonArray();

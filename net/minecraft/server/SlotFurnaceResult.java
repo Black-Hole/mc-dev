@@ -52,7 +52,7 @@ public class SlotFurnaceResult extends Slot {
                     f = 0.0F;
                 }
 
-                int i = ((Integer) entry.getValue()).intValue();
+                int i = (Integer) entry.getValue();
                 int j;
 
                 if (f == 0.0F) {

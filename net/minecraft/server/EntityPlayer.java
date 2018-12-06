@@ -229,7 +229,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             int j = 0;
 
             while (iterator.hasNext() && j < i) {
-                aint[j++] = ((Integer) iterator.next()).intValue();
+                aint[j++] = (Integer) iterator.next();
                 iterator.remove();
             }
 
@@ -991,8 +991,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.locale = packetplayinsettings.b();
         this.cs = packetplayinsettings.d();
         this.ct = packetplayinsettings.e();
-        this.getDataWatcher().set(EntityPlayer.bx, Byte.valueOf((byte) packetplayinsettings.f()));
-        this.getDataWatcher().set(EntityPlayer.by, Byte.valueOf((byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1)));
+        this.getDataWatcher().set(EntityPlayer.bx, (byte) packetplayinsettings.f());
+        this.getDataWatcher().set(EntityPlayer.by, (byte) (packetplayinsettings.getMainHand() == EnumMainHand.LEFT ? 0 : 1));
     }
 
     public EntityHuman.EnumChatVisibility getChatFlags() {
@@ -1023,13 +1023,13 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         if (entity instanceof EntityHuman) {
             this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[] { entity.getId()}));
         } else {
-            this.removeQueue.add(Integer.valueOf(entity.getId()));
+            this.removeQueue.add(entity.getId());
         }
 
     }
 
     public void d(Entity entity) {
-        this.removeQueue.remove(Integer.valueOf(entity.getId()));
+        this.removeQueue.remove(entity.getId());
     }
 
     protected void C() {

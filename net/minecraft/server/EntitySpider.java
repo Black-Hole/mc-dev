@@ -38,7 +38,7 @@ public class EntitySpider extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntitySpider.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntitySpider.a, (byte) 0);
     }
 
     public void tick() {
@@ -91,11 +91,11 @@ public class EntitySpider extends EntityMonster {
     }
 
     public boolean l() {
-        return (((Byte) this.datawatcher.get(EntitySpider.a)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntitySpider.a) & 1) != 0;
     }
 
     public void a(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySpider.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntitySpider.a);
 
         if (flag) {
             b0 = (byte) (b0 | 1);
@@ -103,7 +103,7 @@ public class EntitySpider extends EntityMonster {
             b0 &= -2;
         }
 
-        this.datawatcher.set(EntitySpider.a, Byte.valueOf(b0));
+        this.datawatcher.set(EntitySpider.a, b0);
     }
 
     @Nullable

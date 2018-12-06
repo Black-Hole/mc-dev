@@ -41,11 +41,11 @@ public class ScoreboardObjective {
         this.a.handleObjectiveChanged(this);
     }
 
-    public IScoreboardCriteria.EnumScoreboardHealthDisplay f() {
+    public IScoreboardCriteria.EnumScoreboardHealthDisplay getRenderType() {
         return this.e;
     }
 
-    public void a(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
+    public void setRenderType(IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
         this.e = iscoreboardcriteria_enumscoreboardhealthdisplay;
         this.a.handleObjectiveChanged(this);
     }

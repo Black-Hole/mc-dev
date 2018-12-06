@@ -43,26 +43,26 @@ public class EntityDolphin extends EntityWaterAnimal {
     }
 
     public boolean dy() {
-        return ((Boolean) this.datawatcher.get(EntityDolphin.c)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityDolphin.c);
     }
 
     public void a(boolean flag) {
-        this.datawatcher.set(EntityDolphin.c, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityDolphin.c, flag);
     }
 
     public int dz() {
-        return ((Integer) this.datawatcher.get(EntityDolphin.bC)).intValue();
+        return (Integer) this.datawatcher.get(EntityDolphin.bC);
     }
 
     public void b(int i) {
-        this.datawatcher.set(EntityDolphin.bC, Integer.valueOf(i));
+        this.datawatcher.set(EntityDolphin.bC, i);
     }
 
     protected void x_() {
         super.x_();
         this.datawatcher.register(EntityDolphin.b, BlockPosition.ZERO);
-        this.datawatcher.register(EntityDolphin.c, Boolean.valueOf(false));
-        this.datawatcher.register(EntityDolphin.bC, Integer.valueOf(2400));
+        this.datawatcher.register(EntityDolphin.c, false);
+        this.datawatcher.register(EntityDolphin.bC, 2400);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -370,7 +370,7 @@ public class EntityDolphin extends EntityWaterAnimal {
                 if (vec3d != null) {
                     BlockPosition blockposition1 = new BlockPosition(vec3d);
 
-                    if (!world.b(blockposition1).a(TagsFluid.WATER) || !world.getType(blockposition1).a((IBlockAccess) world, blockposition1, PathMode.WATER)) {
+                    if (!world.getFluid(blockposition1).a(TagsFluid.WATER) || !world.getType(blockposition1).a((IBlockAccess) world, blockposition1, PathMode.WATER)) {
                         vec3d = RandomPositionGenerator.a(this.a, 8, 5, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
                     }
                 }

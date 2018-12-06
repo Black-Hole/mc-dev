@@ -17,6 +17,6 @@ public class BlockCarrots extends BlockCrops {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockCarrots.a[((Integer) iblockdata.get(this.d())).intValue()];
+        return BlockCarrots.a[(Integer) iblockdata.get(this.d())];
     }
 }

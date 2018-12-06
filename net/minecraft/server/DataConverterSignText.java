@@ -40,7 +40,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
 
                 return ichatbasecomponent;
             } else {
-                throw new JsonParseException("Don\'t know how to turn " + jsonelement + " into a Component");
+                throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
             }
         }
 

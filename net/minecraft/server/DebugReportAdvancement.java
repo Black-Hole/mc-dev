@@ -84,7 +84,7 @@ public class DebugReportAdvancement implements DebugReportProvider {
 
             hashcache.a(java_nio_file_path, s1);
         } catch (IOException ioexception) {
-            DebugReportAdvancement.b.error("Couldn\'t save advancement {}", java_nio_file_path, ioexception);
+            DebugReportAdvancement.b.error("Couldn't save advancement {}", java_nio_file_path, ioexception);
         }
 
     }

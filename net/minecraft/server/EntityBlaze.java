@@ -37,7 +37,7 @@ public class EntityBlaze extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityBlaze.c, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityBlaze.c, (byte) 0);
     }
 
     protected SoundEffect D() {
@@ -107,11 +107,11 @@ public class EntityBlaze extends EntityMonster {
     }
 
     public boolean l() {
-        return (((Byte) this.datawatcher.get(EntityBlaze.c)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityBlaze.c) & 1) != 0;
     }
 
     public void a(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityBlaze.c)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityBlaze.c);
 
         if (flag) {
             b0 = (byte) (b0 | 1);
@@ -119,7 +119,7 @@ public class EntityBlaze extends EntityMonster {
             b0 &= -2;
         }
 
-        this.datawatcher.set(EntityBlaze.c, Byte.valueOf(b0));
+        this.datawatcher.set(EntityBlaze.c, b0);
     }
 
     protected boolean K_() {

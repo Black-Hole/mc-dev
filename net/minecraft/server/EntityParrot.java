@@ -318,16 +318,16 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
     }
 
     public int getVariant() {
-        return MathHelper.clamp(((Integer) this.datawatcher.get(EntityParrot.bL)).intValue(), 0, 4);
+        return MathHelper.clamp((Integer) this.datawatcher.get(EntityParrot.bL), 0, 4);
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityParrot.bL, Integer.valueOf(i));
+        this.datawatcher.set(EntityParrot.bL, i);
     }
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityParrot.bL, Integer.valueOf(0));
+        this.datawatcher.register(EntityParrot.bL, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {

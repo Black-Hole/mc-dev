@@ -87,7 +87,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     public IBlockData b(Fluid fluid) {
-        return (IBlockData) Blocks.LAVA.getBlockData().set(BlockFluids.LEVEL, Integer.valueOf(e(fluid)));
+        return (IBlockData) Blocks.LAVA.getBlockData().set(BlockFluids.LEVEL, e(fluid));
     }
 
     public boolean a(FluidType fluidtype) {
@@ -99,7 +99,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     public boolean a(Fluid fluid, FluidType fluidtype, EnumDirection enumdirection) {
-        return fluid.f() >= 0.44444445F && fluidtype.a(TagsFluid.WATER);
+        return fluid.getHeight() >= 0.44444445F && fluidtype.a(TagsFluid.WATER);
     }
 
     public int a(IWorldReader iworldreader) {
@@ -109,7 +109,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     public int a(World world, Fluid fluid, Fluid fluid1) {
         int i = this.a((IWorldReader) world);
 
-        if (!fluid.e() && !fluid1.e() && !((Boolean) fluid.get(FluidTypeLava.FALLING)).booleanValue() && !((Boolean) fluid1.get(FluidTypeLava.FALLING)).booleanValue() && fluid1.f() > fluid.f() && world.m().nextInt(4) != 0) {
+        if (!fluid.e() && !fluid1.e() && !(Boolean) fluid.get(FluidTypeLava.FALLING) && !(Boolean) fluid1.get(FluidTypeLava.FALLING) && fluid1.getHeight() > fluid.getHeight() && world.m().nextInt(4) != 0) {
             i *= 4;
         }
 
@@ -135,7 +135,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, EnumDirection enumdirection, Fluid fluid) {
         if (enumdirection == EnumDirection.DOWN) {
-            Fluid fluid1 = generatoraccess.b(blockposition);
+            Fluid fluid1 = generatoraccess.getFluid(blockposition);
 
             if (this.a(TagsFluid.LAVA) && fluid1.a(TagsFluid.WATER)) {
                 if (iblockdata.getBlock() instanceof BlockFluids) {
@@ -164,11 +164,11 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
 
         protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {
             super.a(blockstatelist_a);
-            blockstatelist_a.a(new IBlockState[] { FluidTypeLava.a.LEVEL});
+            blockstatelist_a.a(FluidTypeLava.a.LEVEL);
         }
 
         public int d(Fluid fluid) {
-            return ((Integer) fluid.get(FluidTypeLava.a.LEVEL)).intValue();
+            return (Integer) fluid.get(FluidTypeLava.a.LEVEL);
         }
 
         public boolean c(Fluid fluid) {

@@ -80,7 +80,7 @@ public class CommandClone {
             int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
             if (i > '\u8000') {
-                throw CommandClone.c.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
+                throw CommandClone.c.create('\u8000', i);
             } else {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
 
@@ -122,8 +122,8 @@ public class CommandClone {
                     }
 
                     if (commandclone_mode == CommandClone.Mode.MOVE) {
-                        Iterator iterator;
                         BlockPosition blockposition6;
+                        Iterator iterator;
 
                         for (iterator = linkedlist.iterator(); iterator.hasNext(); worldserver.setTypeAndData(blockposition6, Blocks.BARRIER.getBlockData(), 2)) {
                             blockposition6 = (BlockPosition) iterator.next();
@@ -196,7 +196,7 @@ public class CommandClone {
                     if (j == 0) {
                         throw CommandClone.d.create();
                     } else {
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.clone.success", new Object[] { Integer.valueOf(j)}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.clone.success", new Object[] { j}), true);
                         return j;
                     }
                 } else {

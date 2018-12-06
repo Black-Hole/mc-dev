@@ -11,13 +11,11 @@ import org.apache.logging.log4j.LogManager;
 public enum EnumProtocol {
 
     HANDSHAKING(-1) {
-        ;
         {
             this.a(EnumProtocolDirection.SERVERBOUND, PacketHandshakingInSetProtocol.class);
         }
     },
     PLAY(0) {
-        ;
         {
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntity.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutSpawnEntityExperienceOrb.class);
@@ -151,7 +149,6 @@ public enum EnumProtocol {
         }
     },
     STATUS(1) {
-        ;
         {
             this.a(EnumProtocolDirection.SERVERBOUND, PacketStatusInStart.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketStatusOutServerInfo.class);
@@ -160,7 +157,6 @@ public enum EnumProtocol {
         }
     },
     LOGIN(2) {
-        ;
         {
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutDisconnect.class);
             this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutEncryptionBegin.class);
@@ -197,7 +193,7 @@ public enum EnumProtocol {
             LogManager.getLogger().fatal(s);
             throw new IllegalArgumentException(s);
         } else {
-            ((BiMap) object).put(Integer.valueOf(((BiMap) object).size()), oclass);
+            ((BiMap) object).put(((BiMap) object).size(), oclass);
             return this;
         }
     }
@@ -208,7 +204,7 @@ public enum EnumProtocol {
 
     @Nullable
     public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
-        Class oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(Integer.valueOf(i));
+        Class oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(i);
 
         return oclass == null ? null : (Packet) oclass.newInstance();
     }
@@ -252,7 +248,7 @@ public enum EnumProtocol {
                 for (Iterator iterator1 = ((BiMap) enumprotocol.h.get(enumprotocoldirection)).values().iterator(); iterator1.hasNext(); EnumProtocol.f.put(oclass, enumprotocol)) {
                     oclass = (Class) iterator1.next();
                     if (EnumProtocol.f.containsKey(oclass) && EnumProtocol.f.get(oclass) != enumprotocol) {
-                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.f.get(oclass) + " - can\'t reassign to " + enumprotocol);
+                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.f.get(oclass) + " - can't reassign to " + enumprotocol);
                     }
 
                     try {

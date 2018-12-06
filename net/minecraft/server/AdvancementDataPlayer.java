@@ -162,7 +162,7 @@ public class AdvancementDataPlayer {
                         Advancement advancement = this.d.getAdvancementData().a((MinecraftKey) entry.getKey());
 
                         if (advancement == null) {
-                            AdvancementDataPlayer.a.warn("Ignored advancement \'{}\' in progress file {} - it doesn\'t exist anymore?", entry.getKey(), this.e);
+                            AdvancementDataPlayer.a.warn("Ignored advancement '{}' in progress file {} - it doesn't exist anymore?", entry.getKey(), this.e);
                         } else {
                             this.a(advancement, (AdvancementProgress) entry.getValue());
                         }
@@ -185,9 +185,9 @@ public class AdvancementDataPlayer {
 
                 }
             } catch (JsonParseException jsonparseexception) {
-                AdvancementDataPlayer.a.error("Couldn\'t parse player advancements in {}", this.e, jsonparseexception);
+                AdvancementDataPlayer.a.error("Couldn't parse player advancements in {}", this.e, jsonparseexception);
             } catch (IOException ioexception) {
-                AdvancementDataPlayer.a.error("Couldn\'t access player advancements in {}", this.e, ioexception);
+                AdvancementDataPlayer.a.error("Couldn't access player advancements in {}", this.e, ioexception);
             }
         }
 
@@ -216,7 +216,7 @@ public class AdvancementDataPlayer {
         try {
             Files.write(AdvancementDataPlayer.b.toJson(hashmap), this.e, StandardCharsets.UTF_8);
         } catch (IOException ioexception) {
-            AdvancementDataPlayer.a.error("Couldn\'t save player advancements to {}", this.e, ioexception);
+            AdvancementDataPlayer.a.error("Couldn't save player advancements to {}", this.e, ioexception);
         }
 
     }

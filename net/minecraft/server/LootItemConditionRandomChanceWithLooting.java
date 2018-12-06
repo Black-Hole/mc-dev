@@ -32,8 +32,8 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
         }
 
         public void a(JsonObject jsonobject, LootItemConditionRandomChanceWithLooting lootitemconditionrandomchancewithlooting, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("chance", Float.valueOf(lootitemconditionrandomchancewithlooting.a));
-            jsonobject.addProperty("looting_multiplier", Float.valueOf(lootitemconditionrandomchancewithlooting.b));
+            jsonobject.addProperty("chance", lootitemconditionrandomchancewithlooting.a);
+            jsonobject.addProperty("looting_multiplier", lootitemconditionrandomchancewithlooting.b);
         }
 
         public LootItemConditionRandomChanceWithLooting a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {

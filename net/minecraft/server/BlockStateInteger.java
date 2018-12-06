@@ -20,7 +20,7 @@ public class BlockStateInteger extends BlockState<Integer> {
             HashSet hashset = Sets.newHashSet();
 
             for (int k = i; k <= j; ++k) {
-                hashset.add(Integer.valueOf(k));
+                hashset.add(k);
             }
 
             this.a = ImmutableSet.copyOf(hashset);

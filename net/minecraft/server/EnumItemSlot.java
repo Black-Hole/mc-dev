@@ -44,7 +44,7 @@ public enum EnumItemSlot {
             }
         }
 
-        throw new IllegalArgumentException("Invalid slot \'" + s + "\'");
+        throw new IllegalArgumentException("Invalid slot '" + s + "'");
     }
 
     public static enum Function {

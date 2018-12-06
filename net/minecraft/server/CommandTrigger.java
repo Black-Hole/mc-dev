@@ -60,13 +60,13 @@ public class CommandTrigger {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardScore scoreboardscore, int i) {
         scoreboardscore.addScore(i);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.trigger.add.success", new Object[] { scoreboardscore.getObjective().e(), Integer.valueOf(i)}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.trigger.add.success", new Object[] { scoreboardscore.getObjective().e(), i}), true);
         return scoreboardscore.getScore();
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper, ScoreboardScore scoreboardscore, int i) {
         scoreboardscore.setScore(i);
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.trigger.set.success", new Object[] { scoreboardscore.getObjective().e(), Integer.valueOf(i)}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.trigger.set.success", new Object[] { scoreboardscore.getObjective().e(), i}), true);
         return i;
     }
 

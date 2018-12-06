@@ -54,11 +54,11 @@ public class CommandLocate {
             throw CommandLocate.a.create();
         } else {
             int i = MathHelper.d(a(blockposition.getX(), blockposition.getZ(), blockposition1.getX(), blockposition1.getZ()));
-            IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatMessage("chat.coordinates", new Object[] { Integer.valueOf(blockposition1.getX()), "~", Integer.valueOf(blockposition1.getZ())}))).a((chatmodifier) -> {
+            IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatMessage("chat.coordinates", new Object[] { blockposition1.getX(), "~", blockposition1.getZ()}))).a((chatmodifier) -> {
                 chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tp @s " + blockposition.getX() + " ~ " + blockposition.getZ())).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.coordinates.tooltip", new Object[0])));
             });
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.locate.success", new Object[] { s, ichatbasecomponent, Integer.valueOf(i)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.locate.success", new Object[] { s, ichatbasecomponent, i}), false);
             return i;
         }
     }

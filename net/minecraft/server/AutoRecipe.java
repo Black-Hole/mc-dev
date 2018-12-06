@@ -64,7 +64,7 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
 
                 itemstack1.setCount(1);
                 if (!this.c.c(j, itemstack1)) {
-                    AutoRecipe.a.error("Can\'t find any space for item in the inventory");
+                    AutoRecipe.a.error("Can't find any space for item in the inventory");
                 }
             }
 
@@ -96,7 +96,7 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
             IntListIterator intlistiterator = intarraylist.iterator();
 
             while (intlistiterator.hasNext()) {
-                int l = ((Integer) intlistiterator.next()).intValue();
+                int l = (Integer) intlistiterator.next();
                 int i1 = AutoRecipeStackManager.b(l).getMaxStackSize();
 
                 if (i1 < k) {
@@ -114,7 +114,7 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
 
     public void a(Iterator<Integer> iterator, int i, int j, int k, int l) {
         Slot slot = this.d.getSlot(i);
-        ItemStack itemstack = AutoRecipeStackManager.b(((Integer) iterator.next()).intValue());
+        ItemStack itemstack = AutoRecipeStackManager.b((Integer) iterator.next());
 
         if (!itemstack.isEmpty()) {
             for (int i1 = 0; i1 < j; ++i1) {

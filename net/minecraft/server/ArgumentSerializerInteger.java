@@ -33,11 +33,11 @@ public class ArgumentSerializerInteger implements ArgumentSerializer<IntegerArgu
 
     public void a(IntegerArgumentType integerargumenttype, JsonObject jsonobject) {
         if (integerargumenttype.getMinimum() != Integer.MIN_VALUE) {
-            jsonobject.addProperty("min", Integer.valueOf(integerargumenttype.getMinimum()));
+            jsonobject.addProperty("min", integerargumenttype.getMinimum());
         }
 
         if (integerargumenttype.getMaximum() != Integer.MAX_VALUE) {
-            jsonobject.addProperty("max", Integer.valueOf(integerargumenttype.getMaximum()));
+            jsonobject.addProperty("max", integerargumenttype.getMaximum());
         }
 
     }

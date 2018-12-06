@@ -46,22 +46,16 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         switch (entityminecartabstract_enumminecarttype) {
         case CHEST:
             return new EntityMinecartChest(world, d0, d1, d2);
-
         case FURNACE:
             return new EntityMinecartFurnace(world, d0, d1, d2);
-
         case TNT:
             return new EntityMinecartTNT(world, d0, d1, d2);
-
         case SPAWNER:
             return new EntityMinecartMobSpawner(world, d0, d1, d2);
-
         case HOPPER:
             return new EntityMinecartHopper(world, d0, d1, d2);
-
         case COMMAND_BLOCK:
             return new EntityMinecartCommandBlock(world, d0, d1, d2);
-
         default:
             return new EntityMinecartRideable(world, d0, d1, d2);
         }
@@ -72,12 +66,12 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     protected void x_() {
-        this.datawatcher.register(EntityMinecartAbstract.a, Integer.valueOf(0));
-        this.datawatcher.register(EntityMinecartAbstract.b, Integer.valueOf(1));
-        this.datawatcher.register(EntityMinecartAbstract.c, Float.valueOf(0.0F));
-        this.datawatcher.register(EntityMinecartAbstract.d, Integer.valueOf(Block.getCombinedId(Blocks.AIR.getBlockData())));
-        this.datawatcher.register(EntityMinecartAbstract.e, Integer.valueOf(6));
-        this.datawatcher.register(EntityMinecartAbstract.f, Boolean.valueOf(false));
+        this.datawatcher.register(EntityMinecartAbstract.a, 0);
+        this.datawatcher.register(EntityMinecartAbstract.b, 1);
+        this.datawatcher.register(EntityMinecartAbstract.c, 0.0F);
+        this.datawatcher.register(EntityMinecartAbstract.d, Block.getCombinedId(Blocks.AIR.getBlockData()));
+        this.datawatcher.register(EntityMinecartAbstract.e, 6);
+        this.datawatcher.register(EntityMinecartAbstract.f, false);
     }
 
     @Nullable
@@ -237,7 +231,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             if (iblockdata.a(TagsBlock.RAILS)) {
                 this.b(blockposition, iblockdata);
                 if (iblockdata.getBlock() == Blocks.ACTIVATOR_RAIL) {
-                    this.a(j, i, k, ((Boolean) iblockdata.get(BlockPoweredRail.POWERED)).booleanValue());
+                    this.a(j, i, k, (Boolean) iblockdata.get(BlockPoweredRail.POWERED));
                 }
             } else {
                 this.q();
@@ -329,7 +323,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         BlockMinecartTrackAbstract blockminecarttrackabstract = (BlockMinecartTrackAbstract) iblockdata.getBlock();
 
         if (blockminecarttrackabstract == Blocks.POWERED_RAIL) {
-            flag = ((Boolean) iblockdata.get(BlockPoweredRail.POWERED)).booleanValue();
+            flag = (Boolean) iblockdata.get(BlockPoweredRail.POWERED);
             flag1 = !flag;
         }
 
@@ -341,17 +335,14 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
             this.motX -= 0.0078125D;
             ++this.locY;
             break;
-
         case ASCENDING_WEST:
             this.motX += 0.0078125D;
             ++this.locY;
             break;
-
         case ASCENDING_NORTH:
             this.motZ += 0.0078125D;
             ++this.locY;
             break;
-
         case ASCENDING_SOUTH:
             this.motZ -= 0.0078125D;
             ++this.locY;
@@ -669,33 +660,33 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     public void setDamage(float f) {
-        this.datawatcher.set(EntityMinecartAbstract.c, Float.valueOf(f));
+        this.datawatcher.set(EntityMinecartAbstract.c, f);
     }
 
     public float getDamage() {
-        return ((Float) this.datawatcher.get(EntityMinecartAbstract.c)).floatValue();
+        return (Float) this.datawatcher.get(EntityMinecartAbstract.c);
     }
 
     public void d(int i) {
-        this.datawatcher.set(EntityMinecartAbstract.a, Integer.valueOf(i));
+        this.datawatcher.set(EntityMinecartAbstract.a, i);
     }
 
     public int getType() {
-        return ((Integer) this.datawatcher.get(EntityMinecartAbstract.a)).intValue();
+        return (Integer) this.datawatcher.get(EntityMinecartAbstract.a);
     }
 
     public void k(int i) {
-        this.datawatcher.set(EntityMinecartAbstract.b, Integer.valueOf(i));
+        this.datawatcher.set(EntityMinecartAbstract.b, i);
     }
 
     public int u() {
-        return ((Integer) this.datawatcher.get(EntityMinecartAbstract.b)).intValue();
+        return (Integer) this.datawatcher.get(EntityMinecartAbstract.b);
     }
 
     public abstract EntityMinecartAbstract.EnumMinecartType v();
 
     public IBlockData getDisplayBlock() {
-        return !this.C() ? this.z() : Block.getByCombinedId(((Integer) this.getDataWatcher().get(EntityMinecartAbstract.d)).intValue());
+        return !this.C() ? this.z() : Block.getByCombinedId((Integer) this.getDataWatcher().get(EntityMinecartAbstract.d));
     }
 
     public IBlockData z() {
@@ -703,7 +694,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     public int getDisplayBlockOffset() {
-        return !this.C() ? this.B() : ((Integer) this.getDataWatcher().get(EntityMinecartAbstract.e)).intValue();
+        return !this.C() ? this.B() : (Integer) this.getDataWatcher().get(EntityMinecartAbstract.e);
     }
 
     public int B() {
@@ -711,21 +702,21 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
     }
 
     public void setDisplayBlock(IBlockData iblockdata) {
-        this.getDataWatcher().set(EntityMinecartAbstract.d, Integer.valueOf(Block.getCombinedId(iblockdata)));
+        this.getDataWatcher().set(EntityMinecartAbstract.d, Block.getCombinedId(iblockdata));
         this.a(true);
     }
 
     public void setDisplayBlockOffset(int i) {
-        this.getDataWatcher().set(EntityMinecartAbstract.e, Integer.valueOf(i));
+        this.getDataWatcher().set(EntityMinecartAbstract.e, i);
         this.a(true);
     }
 
     public boolean C() {
-        return ((Boolean) this.getDataWatcher().get(EntityMinecartAbstract.f)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityMinecartAbstract.f);
     }
 
     public void a(boolean flag) {
-        this.getDataWatcher().set(EntityMinecartAbstract.f, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityMinecartAbstract.f, flag);
     }
 
     public static enum EnumMinecartType {

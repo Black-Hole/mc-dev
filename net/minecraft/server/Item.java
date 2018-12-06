@@ -184,10 +184,8 @@ public class Item implements IMaterial {
             case COMMON:
             case UNCOMMON:
                 return EnumItemRarity.RARE;
-
             case RARE:
                 return EnumItemRarity.EPIC;
-
             case EPIC:
             default:
                 return this.k;

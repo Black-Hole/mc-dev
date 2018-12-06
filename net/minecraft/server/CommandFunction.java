@@ -37,9 +37,9 @@ public class CommandFunction {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.function.success.single", new Object[] { Integer.valueOf(i), ((CustomFunction) collection.iterator().next()).a()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.function.success.single", new Object[] { i, ((CustomFunction) collection.iterator().next()).a()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.function.success.multiple", new Object[] { Integer.valueOf(i), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.function.success.multiple", new Object[] { i, collection.size()}), true);
         }
 
         return i;

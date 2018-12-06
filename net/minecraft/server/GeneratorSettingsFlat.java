@@ -124,8 +124,8 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     public void w() {
         int i = 0;
 
-        Iterator iterator;
         WorldGenFlatLayerInfo worldgenflatlayerinfo;
+        Iterator iterator;
 
         for (iterator = this.M.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
             worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
@@ -217,7 +217,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     public static GeneratorSettingsFlat a(Dynamic<?> dynamic) {
         GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
         List list = (List) ((Stream) dynamic.get("layers").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic) -> {
-            return Pair.of(Integer.valueOf(dynamic.getInt("height", 1)), a(dynamic.getString("block")));
+            return Pair.of(dynamic.getInt("height", 1), a(dynamic.getString("block")));
         }).collect(Collectors.toList());
 
         if (list.stream().anyMatch((pair) -> {
@@ -226,7 +226,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
             return x();
         } else {
             List list1 = (List) list.stream().map((pair) -> {
-                return new WorldGenFlatLayerInfo(((Integer) pair.getFirst()).intValue(), (Block) pair.getSecond());
+                return new WorldGenFlatLayerInfo((Integer) pair.getFirst(), (Block) pair.getSecond());
             }).collect(Collectors.toList());
 
             if (list1.isEmpty()) {

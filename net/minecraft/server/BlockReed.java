@@ -10,7 +10,7 @@ public class BlockReed extends Block {
 
     protected BlockReed(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockReed.AGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockReed.AGE, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -26,13 +26,13 @@ public class BlockReed extends Block {
             }
 
             if (i < 3) {
-                int j = ((Integer) iblockdata.get(BlockReed.AGE)).intValue();
+                int j = (Integer) iblockdata.get(BlockReed.AGE);
 
                 if (j == 15) {
                     world.setTypeUpdate(blockposition.up(), this.getBlockData());
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, Integer.valueOf(0)), 4);
+                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, 0), 4);
                 } else {
-                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, Integer.valueOf(j + 1)), 4);
+                    world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockReed.AGE, j + 1), 4);
                 }
             }
         }
@@ -56,7 +56,7 @@ public class BlockReed extends Block {
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection = (EnumDirection) iterator.next();
                     IBlockData iblockdata1 = iworldreader.getType(blockposition1.shift(enumdirection));
-                    Fluid fluid = iworldreader.b(blockposition1.shift(enumdirection));
+                    Fluid fluid = iworldreader.getFluid(blockposition1.shift(enumdirection));
 
                     if (fluid.a(TagsFluid.WATER) || iblockdata1.getBlock() == Blocks.FROSTED_ICE) {
                         return true;
@@ -77,7 +77,7 @@ public class BlockReed extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockReed.AGE});
+        blockstatelist_a.a(BlockReed.AGE);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

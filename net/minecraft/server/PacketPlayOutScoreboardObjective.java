@@ -14,7 +14,7 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
     public PacketPlayOutScoreboardObjective(ScoreboardObjective scoreboardobjective, int i) {
         this.a = scoreboardobjective.getName();
         this.b = scoreboardobjective.getDisplayName();
-        this.c = scoreboardobjective.f();
+        this.c = scoreboardobjective.getRenderType();
         this.d = i;
     }
 

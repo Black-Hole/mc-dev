@@ -59,7 +59,7 @@ public class MethodProfiler {
 
             this.e = this.e + s;
             this.b.add(this.e);
-            this.c.add(Long.valueOf(SystemUtils.c()));
+            this.c.add(SystemUtils.c());
         }
     }
 
@@ -72,19 +72,19 @@ public class MethodProfiler {
     public void e() {
         if (this.d && !this.c.isEmpty()) {
             long i = SystemUtils.c();
-            long j = ((Long) this.c.remove(this.c.size() - 1)).longValue();
+            long j = (Long) this.c.remove(this.c.size() - 1);
 
             this.b.remove(this.b.size() - 1);
             long k = i - j;
 
             if (this.f.containsKey(this.e)) {
-                this.f.put(this.e, Long.valueOf(((Long) this.f.get(this.e)).longValue() + k));
+                this.f.put(this.e, (Long) this.f.get(this.e) + k);
             } else {
-                this.f.put(this.e, Long.valueOf(k));
+                this.f.put(this.e, k);
             }
 
             if (k > 100000000L) {
-                MethodProfiler.a.warn("Something\'s taking too long! \'{}\' took aprox {} ms", this.e, Double.valueOf((double) k / 1000000.0D));
+                MethodProfiler.a.warn("Something's taking too long! '{}' took aprox {} ms", this.e, (double) k / 1000000.0D);
             }
 
             this.e = this.b.isEmpty() ? "" : (String) this.b.get(this.b.size() - 1);
@@ -92,8 +92,8 @@ public class MethodProfiler {
     }
 
     public List<MethodProfiler.ProfilerInfo> b(String s) {
-        long i = this.f.containsKey("root") ? ((Long) this.f.get("root")).longValue() : 0L;
-        long j = this.f.containsKey(s) ? ((Long) this.f.get(s)).longValue() : -1L;
+        long i = this.f.containsKey("root") ? (Long) this.f.get("root") : 0L;
+        long j = this.f.containsKey(s) ? (Long) this.f.get(s) : -1L;
         ArrayList arraylist = Lists.newArrayList();
 
         if (!s.isEmpty()) {
@@ -107,7 +107,7 @@ public class MethodProfiler {
             String s1 = (String) iterator.next();
 
             if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
-                k += ((Long) this.f.get(s1)).longValue();
+                k += (Long) this.f.get(s1);
             }
         }
 
@@ -128,7 +128,7 @@ public class MethodProfiler {
         while (iterator1.hasNext()) {
             s2 = (String) iterator1.next();
             if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
-                long l = ((Long) this.f.get(s2)).longValue();
+                long l = (Long) this.f.get(s2);
                 double d0 = (double) l * 100.0D / (double) k;
                 double d1 = (double) l * 100.0D / (double) i;
                 String s3 = s2.substring(s.length());
@@ -141,7 +141,7 @@ public class MethodProfiler {
 
         while (iterator1.hasNext()) {
             s2 = (String) iterator1.next();
-            this.f.put(s2, Long.valueOf(((Long) this.f.get(s2)).longValue() * 999L / 1000L));
+            this.f.put(s2, (Long) this.f.get(s2) * 999L / 1000L);
         }
 
         if ((float) k > f) {

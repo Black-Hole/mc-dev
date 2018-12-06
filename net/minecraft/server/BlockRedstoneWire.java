@@ -25,7 +25,7 @@ public class BlockRedstoneWire extends Block {
 
     public BlockRedstoneWire(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneWire.NORTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.EAST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.SOUTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.WEST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.POWER, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneWire.NORTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.EAST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.SOUTH, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.WEST, BlockPropertyRedstoneSide.NONE)).set(BlockRedstoneWire.POWER, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -170,7 +170,7 @@ public class BlockRedstoneWire extends Block {
 
     private IBlockData b(World world, BlockPosition blockposition, IBlockData iblockdata) {
         IBlockData iblockdata1 = iblockdata;
-        int i = ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue();
+        int i = (Integer) iblockdata.get(BlockRedstoneWire.POWER);
         byte b0 = 0;
         int j = this.getPower(b0, iblockdata);
 
@@ -217,7 +217,7 @@ public class BlockRedstoneWire extends Block {
         }
 
         if (i != j) {
-            iblockdata = (IBlockData) iblockdata.set(BlockRedstoneWire.POWER, Integer.valueOf(j));
+            iblockdata = (IBlockData) iblockdata.set(BlockRedstoneWire.POWER, j);
             if (world.getType(blockposition) == iblockdata1) {
                 world.setTypeAndData(blockposition, iblockdata, 2);
             }
@@ -330,7 +330,7 @@ public class BlockRedstoneWire extends Block {
         if (iblockdata.getBlock() != this) {
             return i;
         } else {
-            int j = ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue();
+            int j = (Integer) iblockdata.get(BlockRedstoneWire.POWER);
 
             return j > i ? j : i;
         }
@@ -356,7 +356,7 @@ public class BlockRedstoneWire extends Block {
         if (!this.s) {
             return 0;
         } else {
-            int i = ((Integer) iblockdata.get(BlockRedstoneWire.POWER)).intValue();
+            int i = (Integer) iblockdata.get(BlockRedstoneWire.POWER);
 
             if (i == 0) {
                 return 0;
@@ -391,7 +391,7 @@ public class BlockRedstoneWire extends Block {
         boolean flag = iblockdata.isOccluding();
         boolean flag1 = iblockaccess.getType(blockposition.up()).isOccluding();
 
-        return !flag1 && flag && a(iblockaccess, blockposition1.up()) ? true : (a(iblockdata, enumdirection) ? true : (iblockdata.getBlock() == Blocks.REPEATER && ((Boolean) iblockdata.get(BlockDiodeAbstract.c)).booleanValue() && iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? true : !flag && a(iblockaccess, blockposition1.down())));
+        return !flag1 && flag && a(iblockaccess, blockposition1.up()) ? true : (a(iblockdata, enumdirection) ? true : (iblockdata.getBlock() == Blocks.REPEATER && (Boolean) iblockdata.get(BlockDiodeAbstract.c) && iblockdata.get(BlockDiodeAbstract.FACING) == enumdirection ? true : !flag && a(iblockaccess, blockposition1.down())));
     }
 
     protected static boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -428,13 +428,10 @@ public class BlockRedstoneWire extends Block {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockRedstoneWire.NORTH, iblockdata.get(BlockRedstoneWire.SOUTH))).set(BlockRedstoneWire.EAST, iblockdata.get(BlockRedstoneWire.WEST))).set(BlockRedstoneWire.SOUTH, iblockdata.get(BlockRedstoneWire.NORTH))).set(BlockRedstoneWire.WEST, iblockdata.get(BlockRedstoneWire.EAST));
-
         case COUNTERCLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockRedstoneWire.NORTH, iblockdata.get(BlockRedstoneWire.EAST))).set(BlockRedstoneWire.EAST, iblockdata.get(BlockRedstoneWire.SOUTH))).set(BlockRedstoneWire.SOUTH, iblockdata.get(BlockRedstoneWire.WEST))).set(BlockRedstoneWire.WEST, iblockdata.get(BlockRedstoneWire.NORTH));
-
         case CLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockRedstoneWire.NORTH, iblockdata.get(BlockRedstoneWire.WEST))).set(BlockRedstoneWire.EAST, iblockdata.get(BlockRedstoneWire.NORTH))).set(BlockRedstoneWire.SOUTH, iblockdata.get(BlockRedstoneWire.EAST))).set(BlockRedstoneWire.WEST, iblockdata.get(BlockRedstoneWire.SOUTH));
-
         default:
             return iblockdata;
         }
@@ -444,17 +441,15 @@ public class BlockRedstoneWire extends Block {
         switch (enumblockmirror) {
         case LEFT_RIGHT:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockRedstoneWire.NORTH, iblockdata.get(BlockRedstoneWire.SOUTH))).set(BlockRedstoneWire.SOUTH, iblockdata.get(BlockRedstoneWire.NORTH));
-
         case FRONT_BACK:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockRedstoneWire.EAST, iblockdata.get(BlockRedstoneWire.WEST))).set(BlockRedstoneWire.WEST, iblockdata.get(BlockRedstoneWire.EAST));
-
         default:
             return super.a(iblockdata, enumblockmirror);
         }
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockRedstoneWire.NORTH, BlockRedstoneWire.EAST, BlockRedstoneWire.SOUTH, BlockRedstoneWire.WEST, BlockRedstoneWire.POWER});
+        blockstatelist_a.a(BlockRedstoneWire.NORTH, BlockRedstoneWire.EAST, BlockRedstoneWire.SOUTH, BlockRedstoneWire.WEST, BlockRedstoneWire.POWER);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

@@ -69,7 +69,7 @@ public class CommandForceload {
             if (i == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.single", new Object[] { dimensionmanager, s}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[] { Integer.valueOf(i), dimensionmanager, s}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.list.multiple", new Object[] { i, dimensionmanager, s}), false);
             }
         } else {
             commandlistenerwrapper.sendFailureMessage(new ChatMessage("commands.forceload.added.none", new Object[] { dimensionmanager}));
@@ -104,7 +104,7 @@ public class CommandForceload {
             long i2 = ((long) (k1 - i1) + 1L) * ((long) (l1 - j1) + 1L);
 
             if (i2 > 256L) {
-                throw CommandForceload.a.create(Integer.valueOf(256), Long.valueOf(i2));
+                throw CommandForceload.a.create(256, i2);
             } else {
                 DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
                 WorldServer worldserver = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager);
@@ -133,7 +133,7 @@ public class CommandForceload {
                         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(i1, j1);
                         ChunkCoordIntPair chunkcoordintpair2 = new ChunkCoordIntPair(k1, l1);
 
-                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[] { Integer.valueOf(j2), dimensionmanager, chunkcoordintpair1, chunkcoordintpair2}), true);
+                        commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload." + (flag ? "added" : "removed") + ".multiple", new Object[] { j2, dimensionmanager, chunkcoordintpair1, chunkcoordintpair2}), true);
                     }
 
                     return j2;

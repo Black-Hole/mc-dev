@@ -34,7 +34,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     public void setHasWhitelist(boolean flag) {
         super.setHasWhitelist(flag);
-        this.getServer().a("white-list", (Object) Boolean.valueOf(flag));
+        this.getServer().a("white-list", (Object) flag);
         this.getServer().c_();
     }
 

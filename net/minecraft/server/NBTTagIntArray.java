@@ -27,7 +27,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
         for (int i = 0; i < list.size(); ++i) {
             Integer integer = (Integer) list.get(i);
 
-            aint[i] = integer == null ? 0 : integer.intValue();
+            aint[i] = integer == null ? 0 : integer;
         }
 
         return aint;
@@ -120,7 +120,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
     }
 
     public void a(int i, NBTBase nbtbase) {
-        this.data[i] = ((NBTNumber) nbtbase).e();
+        this.data[i] = ((NBTNumber) nbtbase).asInt();
     }
 
     public void b(int i) {

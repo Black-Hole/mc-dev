@@ -11,7 +11,7 @@ public class BlockBanner extends BlockBannerAbstract {
 
     public BlockBanner(EnumColor enumcolor, Block.Info block_info) {
         super(enumcolor, block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBanner.ROTATION, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBanner.ROTATION, 0));
         BlockBanner.b.put(enumcolor, this);
     }
 
@@ -24,7 +24,7 @@ public class BlockBanner extends BlockBannerAbstract {
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return (IBlockData) this.getBlockData().set(BlockBanner.ROTATION, Integer.valueOf(MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15));
+        return (IBlockData) this.getBlockData().set(BlockBanner.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -32,15 +32,15 @@ public class BlockBanner extends BlockBannerAbstract {
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
-        return (IBlockData) iblockdata.set(BlockBanner.ROTATION, Integer.valueOf(enumblockrotation.a(((Integer) iblockdata.get(BlockBanner.ROTATION)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockBanner.ROTATION, enumblockrotation.a((Integer) iblockdata.get(BlockBanner.ROTATION), 16));
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
-        return (IBlockData) iblockdata.set(BlockBanner.ROTATION, Integer.valueOf(enumblockmirror.a(((Integer) iblockdata.get(BlockBanner.ROTATION)).intValue(), 16)));
+        return (IBlockData) iblockdata.set(BlockBanner.ROTATION, enumblockmirror.a((Integer) iblockdata.get(BlockBanner.ROTATION), 16));
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockBanner.ROTATION});
+        blockstatelist_a.a(BlockBanner.ROTATION);
     }
 
     public static Block a(EnumColor enumcolor) {

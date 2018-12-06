@@ -13,7 +13,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     protected BlockRedstoneTorch(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockRedstoneTorch.LIT, true));
     }
 
     public int a(IWorldReader iworldreader) {
@@ -47,7 +47,7 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() && EnumDirection.UP != enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockRedstoneTorch.LIT) && EnumDirection.UP != enumdirection ? 15 : 0;
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -65,9 +65,9 @@ public class BlockRedstoneTorch extends BlockTorch {
             list.remove(0);
         }
 
-        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)) {
             if (flag) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, Boolean.valueOf(false)), 3);
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, false), 3);
                 if (a(world, blockposition, true)) {
                     world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_REDSTONE_TORCH_BURNOUT, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
@@ -83,13 +83,13 @@ public class BlockRedstoneTorch extends BlockTorch {
                 }
             }
         } else if (!flag && !a(world, blockposition, false)) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, Boolean.valueOf(true)), 3);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockRedstoneTorch.LIT, true), 3);
         }
 
     }
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() == this.a(world, blockposition, iblockdata) && !world.J().b(blockposition, this)) {
+        if ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT) == this.a(world, blockposition, iblockdata) && !world.J().b(blockposition, this)) {
             world.J().a(blockposition, this, this.a((IWorldReader) world));
         }
 
@@ -104,11 +104,11 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     public int m(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockRedstoneTorch.LIT)).booleanValue() ? super.m(iblockdata) : 0;
+        return (Boolean) iblockdata.get(BlockRedstoneTorch.LIT) ? super.m(iblockdata) : 0;
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockRedstoneTorch.LIT});
+        blockstatelist_a.a(BlockRedstoneTorch.LIT);
     }
 
     private static boolean a(World world, BlockPosition blockposition, boolean flag) {

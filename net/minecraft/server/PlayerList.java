@@ -26,7 +26,7 @@ public abstract class PlayerList {
     public static final File c = new File("ops.json");
     public static final File d = new File("whitelist.json");
     private static final Logger f = LogManager.getLogger();
-    private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd \'at\' HH:mm:ss z");
+    private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
     private final MinecraftServer server;
     public final List<EntityPlayer> players = Lists.newArrayList();
     private final Map<UUID, EntityPlayer> j = Maps.newHashMap();
@@ -74,7 +74,7 @@ public abstract class PlayerList {
             s1 = networkmanager.getSocketAddress().toString();
         }
 
-        PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, Integer.valueOf(entityplayer.getId()), Double.valueOf(entityplayer.locX), Double.valueOf(entityplayer.locY), Double.valueOf(entityplayer.locZ));
+        PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, entityplayer.getId(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);
         WorldData worlddata = worldserver.getWorldData();
 
@@ -141,7 +141,7 @@ public abstract class PlayerList {
                 }
 
                 if (!entityplayer.isPassenger()) {
-                    PlayerList.f.warn("Couldn\'t reattach entity to player");
+                    PlayerList.f.warn("Couldn't reattach entity to player");
                     worldserver.removeEntity(entity);
                     iterator1 = entity.getAllPassengers().iterator();
 
@@ -280,7 +280,7 @@ public abstract class PlayerList {
 
         worldserver.addEntity(entityplayer);
         this.a(entityplayer, (WorldServer) null);
-        this.server.aP().a(entityplayer);
+        this.server.getBossBattleCustomData().a(entityplayer);
     }
 
     public void updateChunks(EntityPlayer entityplayer) {
@@ -315,7 +315,7 @@ public abstract class PlayerList {
         worldserver.getPlayerChunkMap().removePlayer(entityplayer);
         entityplayer.getAdvancementData().a();
         this.players.remove(entityplayer);
-        this.server.aP().b(entityplayer);
+        this.server.getBossBattleCustomData().b(entityplayer);
         UUID uuid = entityplayer.getUniqueID();
         EntityPlayer entityplayer1 = (EntityPlayer) this.j.get(uuid);
 

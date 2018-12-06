@@ -48,7 +48,7 @@ public class CraftingManager implements IResourcePackListener {
                     JsonObject jsonobject = (JsonObject) ChatDeserializer.a(gson, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (jsonobject == null) {
-                        CraftingManager.c.error("Couldn\'t load recipe {} as it\'s null or empty", minecraftkey1);
+                        CraftingManager.c.error("Couldn't load recipe {} as it's null or empty", minecraftkey1);
                     } else {
                         this.a(RecipeSerializers.a(minecraftkey1, jsonobject));
                     }
@@ -73,12 +73,12 @@ public class CraftingManager implements IResourcePackListener {
                 CraftingManager.c.error("Parsing error loading recipe {}", minecraftkey1, jsonparseexception);
                 this.e = true;
             } catch (IOException ioexception) {
-                CraftingManager.c.error("Couldn\'t read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
+                CraftingManager.c.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
                 this.e = true;
             }
         }
 
-        CraftingManager.c.info("Loaded {} recipes", Integer.valueOf(this.recipes.size()));
+        CraftingManager.c.info("Loaded {} recipes", this.recipes.size());
     }
 
     public void a(IRecipe irecipe) {

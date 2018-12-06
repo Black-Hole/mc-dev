@@ -14,7 +14,7 @@ public interface Fluid extends IBlockDataHolder<Fluid> {
         return this.c().c();
     }
 
-    default float f() {
+    default float getHeight() {
         return this.c().a(this);
     }
 

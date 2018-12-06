@@ -134,7 +134,7 @@ public class CommandScoreboard {
         } else {
             ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.get.success", new Object[] { s, Integer.valueOf(scoreboardscore.getScore()), scoreboardobjective.e()}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.get.success", new Object[] { s, scoreboardscore.getScore(), scoreboardobjective.e()}), false);
             return scoreboardscore.getScore();
         }
     }
@@ -160,9 +160,9 @@ public class CommandScoreboard {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.operation.success.single", new Object[] { scoreboardobjective.e(), collection.iterator().next(), Integer.valueOf(i)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.operation.success.single", new Object[] { scoreboardobjective.e(), collection.iterator().next(), i}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.operation.success.multiple", new Object[] { scoreboardobjective.e(), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.operation.success.multiple", new Object[] { scoreboardobjective.e(), collection.size()}), true);
         }
 
         return i;
@@ -192,7 +192,7 @@ public class CommandScoreboard {
                 if (collection.size() == 1) {
                     commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.enable.success.single", new Object[] { scoreboardobjective.e(), collection.iterator().next()}), true);
                 } else {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.enable.success.multiple", new Object[] { scoreboardobjective.e(), Integer.valueOf(collection.size())}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.enable.success.multiple", new Object[] { scoreboardobjective.e(), collection.size()}), true);
                 }
 
                 return i;
@@ -213,7 +213,7 @@ public class CommandScoreboard {
         if (collection.size() == 1) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.all.single", new Object[] { collection.iterator().next()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.all.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.all.multiple", new Object[] { collection.size()}), true);
         }
 
         return collection.size();
@@ -232,7 +232,7 @@ public class CommandScoreboard {
         if (collection.size() == 1) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.specific.single", new Object[] { scoreboardobjective.e(), collection.iterator().next()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.specific.multiple", new Object[] { scoreboardobjective.e(), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.reset.specific.multiple", new Object[] { scoreboardobjective.e(), collection.size()}), true);
         }
 
         return collection.size();
@@ -250,9 +250,9 @@ public class CommandScoreboard {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.set.success.single", new Object[] { scoreboardobjective.e(), collection.iterator().next(), Integer.valueOf(i)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.set.success.single", new Object[] { scoreboardobjective.e(), collection.iterator().next(), i}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.set.success.multiple", new Object[] { scoreboardobjective.e(), Integer.valueOf(collection.size()), Integer.valueOf(i)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.set.success.multiple", new Object[] { scoreboardobjective.e(), collection.size(), i}), true);
         }
 
         return i * collection.size();
@@ -272,9 +272,9 @@ public class CommandScoreboard {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.add.success.single", new Object[] { Integer.valueOf(i), scoreboardobjective.e(), collection.iterator().next(), Integer.valueOf(j)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.add.success.single", new Object[] { i, scoreboardobjective.e(), collection.iterator().next(), j}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.add.success.multiple", new Object[] { Integer.valueOf(i), scoreboardobjective.e(), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.add.success.multiple", new Object[] { i, scoreboardobjective.e(), collection.size()}), true);
         }
 
         return j;
@@ -294,9 +294,9 @@ public class CommandScoreboard {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.remove.success.single", new Object[] { Integer.valueOf(i), scoreboardobjective.e(), collection.iterator().next(), Integer.valueOf(j)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.remove.success.single", new Object[] { i, scoreboardobjective.e(), collection.iterator().next(), j}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.remove.success.multiple", new Object[] { Integer.valueOf(i), scoreboardobjective.e(), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.remove.success.multiple", new Object[] { i, scoreboardobjective.e(), collection.size()}), true);
         }
 
         return j;
@@ -308,7 +308,7 @@ public class CommandScoreboard {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.empty", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.success", new Object[] { Integer.valueOf(collection.size()), ChatComponentUtils.a(collection)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.success", new Object[] { collection.size(), ChatComponentUtils.a(collection)}), false);
         }
 
         return collection.size();
@@ -320,13 +320,13 @@ public class CommandScoreboard {
         if (map.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.empty", new Object[] { s}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.success", new Object[] { s, Integer.valueOf(map.size())}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.success", new Object[] { s, map.size()}), false);
             Iterator iterator = map.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Entry entry = (Entry) iterator.next();
 
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.entry", new Object[] { ((ScoreboardObjective) entry.getKey()).e(), Integer.valueOf(((ScoreboardScore) entry.getValue()).getScore())}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.entry", new Object[] { ((ScoreboardObjective) entry.getKey()).e(), ((ScoreboardScore) entry.getValue()).getScore()}), false);
             }
         }
 
@@ -367,8 +367,8 @@ public class CommandScoreboard {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardObjective scoreboardobjective, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
-        if (scoreboardobjective.f() != iscoreboardcriteria_enumscoreboardhealthdisplay) {
-            scoreboardobjective.a(iscoreboardcriteria_enumscoreboardhealthdisplay);
+        if (scoreboardobjective.getRenderType() != iscoreboardcriteria_enumscoreboardhealthdisplay) {
+            scoreboardobjective.setRenderType(iscoreboardcriteria_enumscoreboardhealthdisplay);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.modify.rendertype", new Object[] { scoreboardobjective.e()}), true);
         }
 
@@ -389,7 +389,7 @@ public class CommandScoreboard {
         if (scoreboardserver.getObjective(s) != null) {
             throw CommandScoreboard.a.create();
         } else if (s.length() > 16) {
-            throw ArgumentScoreboardObjective.a.create(Integer.valueOf(16));
+            throw ArgumentScoreboardObjective.a.create(16);
         } else {
             scoreboardserver.registerObjective(s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria.e());
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(s);
@@ -405,7 +405,7 @@ public class CommandScoreboard {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.empty", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.success", new Object[] { Integer.valueOf(collection.size()), ChatComponentUtils.b(collection, ScoreboardObjective::e)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.success", new Object[] { collection.size(), ChatComponentUtils.b(collection, ScoreboardObjective::e)}), false);
         }
 
         return collection.size();

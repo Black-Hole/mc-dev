@@ -173,7 +173,7 @@ public class ChunkConverter {
 
                 for (i = 0; i < this.e.length; ++i) {
                     if (this.e[i] != null) {
-                        ChunkConverter.b.warn("Discarding update data for section {} for chunk ({} {})", Integer.valueOf(i), Integer.valueOf(chunk.locX), Integer.valueOf(chunk.locZ));
+                        ChunkConverter.b.warn("Discarding update data for section {} for chunk ({} {})", i, chunk.locX, chunk.locZ);
                     }
 
                     this.e[i] = null;
@@ -263,19 +263,16 @@ public class ChunkConverter {
     static enum Type implements ChunkConverter.a {
 
         BLACKLIST(new Block[] { Blocks.OBSERVER, Blocks.NETHER_PORTAL, Blocks.WHITE_CONCRETE_POWDER, Blocks.ORANGE_CONCRETE_POWDER, Blocks.MAGENTA_CONCRETE_POWDER, Blocks.LIGHT_BLUE_CONCRETE_POWDER, Blocks.YELLOW_CONCRETE_POWDER, Blocks.LIME_CONCRETE_POWDER, Blocks.PINK_CONCRETE_POWDER, Blocks.GRAY_CONCRETE_POWDER, Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER, Blocks.PURPLE_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLACK_CONCRETE_POWDER, Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL, Blocks.DRAGON_EGG, Blocks.GRAVEL, Blocks.SAND, Blocks.RED_SAND, Blocks.SIGN, Blocks.WALL_SIGN}) {
-            ;
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 return iblockdata;
             }
         },
         DEFAULT(new Block[0]) {
-            ;
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 return iblockdata.updateState(enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
             }
         },
         CHEST(new Block[] { Blocks.CHEST, Blocks.TRAPPED_CHEST}) {
-            ;
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 if (iblockdata1.getBlock() == iblockdata.getBlock() && enumdirection.k().c() && iblockdata.get(BlockChest.b) == BlockPropertyChestType.SINGLE && iblockdata1.get(BlockChest.b) == BlockPropertyChestType.SINGLE) {
                     EnumDirection enumdirection1 = (EnumDirection) iblockdata.get(BlockChest.FACING);
@@ -303,13 +300,13 @@ public class ChunkConverter {
         LEAVES(true, new Block[] { Blocks.ACACIA_LEAVES, Blocks.BIRCH_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES}) {
             private final ThreadLocal<List<ObjectSet<BlockPosition>>> g = ThreadLocal.withInitial(() -> {
                 return Lists.newArrayListWithCapacity(7);
-            });;
+            });
 
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
                 IBlockData iblockdata2 = iblockdata.updateState(enumdirection, generatoraccess.getType(blockposition1), generatoraccess, blockposition, blockposition1);
 
                 if (iblockdata != iblockdata2) {
-                    int i = ((Integer) iblockdata2.get(BlockProperties.ab)).intValue();
+                    int i = (Integer) iblockdata2.get(BlockProperties.ab);
                     List list = (List) this.g.get();
 
                     if (list.isEmpty()) {
@@ -338,8 +335,8 @@ public class ChunkConverter {
                         BlockPosition blockposition = (BlockPosition) objectiterator.next();
                         IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-                        if (((Integer) iblockdata.get(BlockProperties.ab)).intValue() >= j) {
-                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.ab, Integer.valueOf(j)), 18);
+                        if ((Integer) iblockdata.get(BlockProperties.ab) >= j) {
+                            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.ab, j), 18);
                             if (i != 7) {
                                 EnumDirection[] aenumdirection = null.f;
                                 int k = aenumdirection.length;
@@ -350,7 +347,7 @@ public class ChunkConverter {
                                     blockposition_mutableblockposition.g(blockposition).c(enumdirection);
                                     IBlockData iblockdata1 = generatoraccess.getType(blockposition_mutableblockposition);
 
-                                    if (iblockdata1.b(BlockProperties.ab) && ((Integer) iblockdata.get(BlockProperties.ab)).intValue() > i) {
+                                    if (iblockdata1.b(BlockProperties.ab) && (Integer) iblockdata.get(BlockProperties.ab) > i) {
                                         objectset1.add(blockposition_mutableblockposition.h());
                                     }
                                 }
@@ -363,9 +360,8 @@ public class ChunkConverter {
             }
         },
         STEM_BLOCK(new Block[] { Blocks.MELON_STEM, Blocks.PUMPKIN_STEM}) {
-            ;
             public IBlockData a(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-                if (((Integer) iblockdata.get(BlockStem.AGE)).intValue() == 7) {
+                if ((Integer) iblockdata.get(BlockStem.AGE) == 7) {
                     BlockStemmed blockstemmed = ((BlockStem) iblockdata.getBlock()).e();
 
                     if (iblockdata1.getBlock() == blockstemmed) {

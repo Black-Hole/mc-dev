@@ -6,17 +6,17 @@ import javax.annotation.Nullable;
 public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     private final Block f;
-    private final EntityInsentient g;
+    private final EntityInsentient entity;
     private int h;
 
     public PathfinderGoalRemoveBlock(Block block, EntityCreature entitycreature, double d0, int i) {
         super(entitycreature, d0, 24, i);
         this.f = block;
-        this.g = entitycreature;
+        this.entity = entitycreature;
     }
 
     public boolean a() {
-        return !this.g.world.getGameRules().getBoolean("mobGriefing") ? false : (this.g.getRandom().nextInt(20) != 0 ? false : super.a());
+        return !this.entity.world.getGameRules().getBoolean("mobGriefing") ? false : (this.entity.getRandom().nextInt(20) != 0 ? false : super.a());
     }
 
     protected int a(EntityCreature entitycreature) {
@@ -29,7 +29,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     public void d() {
         super.d();
-        this.g.fallDistance = 1.0F;
+        this.entity.fallDistance = 1.0F;
     }
 
     public void c() {
@@ -43,14 +43,14 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
     public void e() {
         super.e();
-        World world = this.g.world;
-        BlockPosition blockposition = new BlockPosition(this.g);
+        World world = this.entity.world;
+        BlockPosition blockposition = new BlockPosition(this.entity);
         BlockPosition blockposition1 = this.a(blockposition, (IBlockAccess) world);
-        Random random = this.g.getRandom();
+        Random random = this.entity.getRandom();
 
         if (this.k() && blockposition1 != null) {
             if (this.h > 0) {
-                this.g.motY = 0.3D;
+                this.entity.motY = 0.3D;
                 if (!world.isClientSide) {
                     double d0 = 0.08D;
 
@@ -59,7 +59,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
             }
 
             if (this.h % 2 == 0) {
-                this.g.motY = -0.3D;
+                this.entity.motY = -0.3D;
                 if (this.h % 6 == 0) {
                     this.a((GeneratorAccess) world, this.d);
                 }

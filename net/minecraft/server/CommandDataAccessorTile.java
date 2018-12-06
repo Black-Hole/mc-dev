@@ -51,14 +51,14 @@ public class CommandDataAccessorTile implements CommandDataAccessor {
     }
 
     public IChatBaseComponent b() {
-        return new ChatMessage("commands.data.block.modified", new Object[] { Integer.valueOf(this.d.getX()), Integer.valueOf(this.d.getY()), Integer.valueOf(this.d.getZ())});
+        return new ChatMessage("commands.data.block.modified", new Object[] { this.d.getX(), this.d.getY(), this.d.getZ()});
     }
 
     public IChatBaseComponent a(NBTBase nbtbase) {
-        return new ChatMessage("commands.data.block.query", new Object[] { Integer.valueOf(this.d.getX()), Integer.valueOf(this.d.getY()), Integer.valueOf(this.d.getZ()), nbtbase.k()});
+        return new ChatMessage("commands.data.block.query", new Object[] { this.d.getX(), this.d.getY(), this.d.getZ(), nbtbase.k()});
     }
 
     public IChatBaseComponent a(ArgumentNBTKey.c argumentnbtkey_c, double d0, int i) {
-        return new ChatMessage("commands.data.block.get", new Object[] { argumentnbtkey_c, Integer.valueOf(this.d.getX()), Integer.valueOf(this.d.getY()), Integer.valueOf(this.d.getZ()), String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(d0)}), Integer.valueOf(i)});
+        return new ChatMessage("commands.data.block.get", new Object[] { argumentnbtkey_c, this.d.getX(), this.d.getY(), this.d.getZ(), String.format(Locale.ROOT, "%.2f", new Object[] { d0}), i});
     }
 }

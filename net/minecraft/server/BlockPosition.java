@@ -118,13 +118,10 @@ public class BlockPosition extends BaseBlockPosition {
         case NONE:
         default:
             return this;
-
         case CLOCKWISE_90:
             return new BlockPosition(-this.getZ(), this.getY(), this.getX());
-
         case CLOCKWISE_180:
             return new BlockPosition(-this.getX(), this.getY(), -this.getZ());
-
         case COUNTERCLOCKWISE_90:
             return new BlockPosition(this.getZ(), this.getY(), -this.getX());
         }

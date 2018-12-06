@@ -58,7 +58,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     protected void x_() {
         super.x_();
-        this.getDataWatcher().register(EntityEnderDragon.PHASE, Integer.valueOf(DragonControllerPhase.k.b()));
+        this.getDataWatcher().register(EntityEnderDragon.PHASE, DragonControllerPhase.k.b());
     }
 
     public double[] a(int i, float f) {
@@ -723,7 +723,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         if (pathpoint3 == pathpoint2) {
             return null;
         } else {
-            EntityEnderDragon.bQ.debug("Failed to find path from {} to {}", Integer.valueOf(i), Integer.valueOf(j));
+            EntityEnderDragon.bQ.debug("Failed to find path from {} to {}", i, j);
             if (pathpoint != null) {
                 pathpoint.h = pathpoint3;
                 pathpoint3 = pathpoint;
@@ -806,8 +806,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     public Vec3D a(float f) {
         IDragonController idragoncontroller = this.bS.a();
         DragonControllerPhase dragoncontrollerphase = idragoncontroller.getControllerPhase();
-        Vec3D vec3d;
         float f1;
+        Vec3D vec3d;
 
         if (dragoncontrollerphase != DragonControllerPhase.d && dragoncontrollerphase != DragonControllerPhase.e) {
             if (idragoncontroller.a()) {
@@ -854,7 +854,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityEnderDragon.PHASE.equals(datawatcherobject) && this.world.isClientSide) {
-            this.bS.setControllerPhase(DragonControllerPhase.getById(((Integer) this.getDataWatcher().get(EntityEnderDragon.PHASE)).intValue()));
+            this.bS.setControllerPhase(DragonControllerPhase.getById((Integer) this.getDataWatcher().get(EntityEnderDragon.PHASE)));
         }
 
         super.a(datawatcherobject);
@@ -865,7 +865,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
     }
 
     @Nullable
-    public EnderDragonBattle ds() {
+    public EnderDragonBattle getEnderDragonBattle() {
         return this.bR;
     }
 

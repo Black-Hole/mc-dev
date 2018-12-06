@@ -198,12 +198,11 @@ public final class SpawnerCreature {
     public static boolean a(EntityPositionTypes.Surface entitypositiontypes_surface, IWorldReader iworldreader, BlockPosition blockposition, @Nullable EntityTypes<? extends EntityInsentient> entitytypes) {
         if (entitytypes != null && iworldreader.getWorldBorder().a(blockposition)) {
             IBlockData iblockdata = iworldreader.getType(blockposition);
-            Fluid fluid = iworldreader.b(blockposition);
+            Fluid fluid = iworldreader.getFluid(blockposition);
 
             switch (entitypositiontypes_surface) {
             case IN_WATER:
-                return fluid.a(TagsFluid.WATER) && iworldreader.b(blockposition.down()).a(TagsFluid.WATER) && !iworldreader.getType(blockposition.up()).isOccluding();
-
+                return fluid.a(TagsFluid.WATER) && iworldreader.getFluid(blockposition.down()).a(TagsFluid.WATER) && !iworldreader.getType(blockposition.up()).isOccluding();
             case ON_GROUND:
             default:
                 IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
@@ -214,7 +213,7 @@ public final class SpawnerCreature {
                     Block block = iblockdata1.getBlock();
                     boolean flag = block != Blocks.BEDROCK && block != Blocks.BARRIER;
 
-                    return flag && a(iblockdata, fluid) && a(iworldreader.getType(blockposition.up()), iworldreader.b(blockposition.up()));
+                    return flag && a(iblockdata, fluid) && a(iworldreader.getType(blockposition.up()), iworldreader.getFluid(blockposition.up()));
                 }
             }
         } else {

@@ -124,7 +124,7 @@ public class DefinedStructureInfo {
     }
 
     public Random b(@Nullable BlockPosition blockposition) {
-        return this.k != null ? this.k : (this.l != null ? (this.l.longValue() == 0L ? new Random(SystemUtils.b()) : new Random(this.l.longValue())) : (blockposition == null ? new Random(SystemUtils.b()) : SeededRandom.a(blockposition.getX(), blockposition.getZ(), 0L, 987234911L)));
+        return this.k != null ? this.k : (this.l != null ? (this.l == 0L ? new Random(SystemUtils.b()) : new Random(this.l)) : (blockposition == null ? new Random(SystemUtils.b()) : SeededRandom.a(blockposition.getX(), blockposition.getZ(), 0L, 987234911L)));
     }
 
     public float g() {
@@ -165,12 +165,12 @@ public class DefinedStructureInfo {
     }
 
     public List<DefinedStructure.BlockInfo> a(List<List<DefinedStructure.BlockInfo>> list, @Nullable BlockPosition blockposition) {
-        this.m = Integer.valueOf(8);
-        if (this.m != null && this.m.intValue() >= 0 && this.m.intValue() < list.size()) {
-            return (List) list.get(this.m.intValue());
+        this.m = 8;
+        if (this.m != null && this.m >= 0 && this.m < list.size()) {
+            return (List) list.get(this.m);
         } else {
-            this.m = Integer.valueOf(this.b(blockposition).nextInt(list.size()));
-            return (List) list.get(this.m.intValue());
+            this.m = this.b(blockposition).nextInt(list.size());
+            return (List) list.get(this.m);
         }
     }
 

@@ -40,7 +40,7 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                     }
                 }
 
-                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.p, Boolean.valueOf(true))).set(BlockHugeMushroom.q, Boolean.valueOf(false));
+                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.p, true)).set(BlockHugeMushroom.q, false);
                 boolean flag = true;
 
                 for (k = -3; k <= 3; ++k) {
@@ -60,13 +60,13 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                                 boolean flag9 = flag3 || flag5 && l == -2;
                                 boolean flag10 = flag4 || flag5 && l == 2;
 
-                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.o, Boolean.valueOf(flag7))).set(BlockHugeMushroom.b, Boolean.valueOf(flag8))).set(BlockHugeMushroom.a, Boolean.valueOf(flag9))).set(BlockHugeMushroom.c, Boolean.valueOf(flag10)));
+                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.o, flag7)).set(BlockHugeMushroom.b, flag8)).set(BlockHugeMushroom.a, flag9)).set(BlockHugeMushroom.c, flag10));
                             }
                         }
                     }
                 }
 
-                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, Boolean.valueOf(false))).set(BlockHugeMushroom.q, Boolean.valueOf(false));
+                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, false)).set(BlockHugeMushroom.q, false);
 
                 for (l = 0; l < i; ++l) {
                     blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, l);

@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class EntityOcelot extends EntityTameableAnimal {
 
-    private static final RecipeItemStack bG = RecipeItemStack.a(new IMaterial[] { Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH});
+    private static final RecipeItemStack bG = RecipeItemStack.a(Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH);
     private static final DataWatcherObject<Integer> bH = DataWatcher.a(EntityOcelot.class, DataWatcherRegistry.b);
     private static final MinecraftKey bI = new MinecraftKey("cat");
     private PathfinderGoalAvoidTarget<EntityHuman> bJ;
@@ -35,7 +35,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityOcelot.bH, Integer.valueOf(0));
+        this.datawatcher.register(EntityOcelot.bH, 0);
     }
 
     public void mobTick() {
@@ -181,11 +181,11 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     public int getCatType() {
-        return ((Integer) this.datawatcher.get(EntityOcelot.bH)).intValue();
+        return (Integer) this.datawatcher.get(EntityOcelot.bH);
     }
 
     public void setCatType(int i) {
-        this.datawatcher.set(EntityOcelot.bH, Integer.valueOf(i));
+        this.datawatcher.set(EntityOcelot.bH, i);
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {

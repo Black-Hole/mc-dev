@@ -10,7 +10,7 @@ public class SharedConstants {
 
     public static final Level a = Level.DISABLED;
     public static boolean b;
-    public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '\"', ':'};
+    public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '"', ':'};
 
     public static boolean isAllowedChatCharacter(char c0) {
         return c0 != 167 && c0 >= 32 && c0 != 127;

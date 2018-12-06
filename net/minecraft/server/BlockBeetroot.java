@@ -39,10 +39,10 @@ public class BlockBeetroot extends BlockCrops {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockBeetroot.a});
+        blockstatelist_a.a(BlockBeetroot.a);
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockBeetroot.c[((Integer) iblockdata.get(this.d())).intValue()];
+        return BlockBeetroot.c[(Integer) iblockdata.get(this.d())];
     }
 }

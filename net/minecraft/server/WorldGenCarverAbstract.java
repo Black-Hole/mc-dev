@@ -40,7 +40,7 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenFeatureConfigurat
         for (int i2 = k; i2 < l; ++i2) {
             for (int j2 = k1; j2 < l1; ++j2) {
                 for (int k2 = i1 - 1; k2 <= j1 + 1; ++k2) {
-                    if (this.f.contains(iworldreader.b(blockposition_mutableblockposition.c(i2 + i * 16, k2, j2 + j * 16)).c())) {
+                    if (this.f.contains(iworldreader.getFluid(blockposition_mutableblockposition.c(i2 + i * 16, k2, j2 + j * 16)).c())) {
                         return true;
                     }
 

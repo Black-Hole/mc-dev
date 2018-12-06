@@ -23,7 +23,7 @@ public class ShapeDetectorBuilder {
     private int e;
 
     private ShapeDetectorBuilder() {
-        this.c.put(Character.valueOf(' '), Predicates.alwaysTrue());
+        this.c.put(' ', Predicates.alwaysTrue());
     }
 
     public ShapeDetectorBuilder a(String... astring) {
@@ -52,8 +52,8 @@ public class ShapeDetectorBuilder {
                     for (int l = 0; l < k; ++l) {
                         char c0 = achar[l];
 
-                        if (!this.c.containsKey(Character.valueOf(c0))) {
-                            this.c.put(Character.valueOf(c0), (Object) null);
+                        if (!this.c.containsKey(c0)) {
+                            this.c.put(c0, (Object) null);
                         }
                     }
                 }
@@ -71,7 +71,7 @@ public class ShapeDetectorBuilder {
     }
 
     public ShapeDetectorBuilder a(char c0, Predicate<ShapeDetectorBlock> predicate) {
-        this.c.put(Character.valueOf(c0), predicate);
+        this.c.put(c0, predicate);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class ShapeDetectorBuilder {
         for (int i = 0; i < this.b.size(); ++i) {
             for (int j = 0; j < this.d; ++j) {
                 for (int k = 0; k < this.e; ++k) {
-                    apredicate[i][j][k] = (Predicate) this.c.get(Character.valueOf(((String[]) this.b.get(i))[j].charAt(k)));
+                    apredicate[i][j][k] = (Predicate) this.c.get(((String[]) this.b.get(i))[j].charAt(k));
                 }
             }
         }

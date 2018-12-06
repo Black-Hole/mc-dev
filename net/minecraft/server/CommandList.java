@@ -29,7 +29,7 @@ public class CommandList {
         List list = playerlist.v();
         IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { Integer.valueOf(list.size()), Integer.valueOf(playerlist.getMaxPlayers()), ichatbasecomponent}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);
         return list.size();
     }
 }

@@ -46,7 +46,7 @@ public class DataWatcher {
         int i;
 
         if (DataWatcher.b.containsKey(oclass)) {
-            i = ((Integer) DataWatcher.b.get(oclass)).intValue() + 1;
+            i = (Integer) DataWatcher.b.get(oclass) + 1;
         } else {
             int j = 0;
             Class oclass2 = oclass;
@@ -54,7 +54,7 @@ public class DataWatcher {
             while (oclass2 != Entity.class) {
                 oclass2 = oclass2.getSuperclass();
                 if (DataWatcher.b.containsKey(oclass2)) {
-                    j = ((Integer) DataWatcher.b.get(oclass2)).intValue() + 1;
+                    j = (Integer) DataWatcher.b.get(oclass2) + 1;
                     break;
                 }
             }
@@ -65,7 +65,7 @@ public class DataWatcher {
         if (i > 254) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 254 + ")");
         } else {
-            DataWatcher.b.put(oclass, Integer.valueOf(i));
+            DataWatcher.b.put(oclass, i);
             return datawatcherserializer.a(i);
         }
     }
@@ -75,7 +75,7 @@ public class DataWatcher {
 
         if (i > 254) {
             throw new IllegalArgumentException("Data value id is too big with " + i + "! (Max is " + 254 + ")");
-        } else if (this.d.containsKey(Integer.valueOf(i))) {
+        } else if (this.d.containsKey(i)) {
             throw new IllegalArgumentException("Duplicate id value for " + i + "!");
         } else if (DataWatcherRegistry.b(datawatcherobject.b()) < 0) {
             throw new IllegalArgumentException("Unregistered serializer " + datawatcherobject.b() + " for " + i + "!");
@@ -88,7 +88,7 @@ public class DataWatcher {
         DataWatcher.Item datawatcher_item = new DataWatcher.Item(datawatcherobject, t0);
 
         this.e.writeLock().lock();
-        this.d.put(Integer.valueOf(datawatcherobject.a()), datawatcher_item);
+        this.d.put(datawatcherobject.a(), datawatcher_item);
         this.f = false;
         this.e.writeLock().unlock();
     }
@@ -99,7 +99,7 @@ public class DataWatcher {
         DataWatcher.Item datawatcher_item;
 
         try {
-            datawatcher_item = (DataWatcher.Item) this.d.get(Integer.valueOf(datawatcherobject.a()));
+            datawatcher_item = (DataWatcher.Item) this.d.get(datawatcherobject.a());
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting synched entity data");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Synched entity data");

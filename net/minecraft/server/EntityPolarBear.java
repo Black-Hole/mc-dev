@@ -88,7 +88,7 @@ public class EntityPolarBear extends EntityAnimal {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityPolarBear.bC, Boolean.valueOf(false));
+        this.datawatcher.register(EntityPolarBear.bC, false);
     }
 
     public void tick() {
@@ -119,11 +119,11 @@ public class EntityPolarBear extends EntityAnimal {
     }
 
     public boolean dz() {
-        return ((Boolean) this.datawatcher.get(EntityPolarBear.bC)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityPolarBear.bC);
     }
 
     public void s(boolean flag) {
-        this.datawatcher.set(EntityPolarBear.bC, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityPolarBear.bC, flag);
     }
 
     protected float cJ() {
@@ -232,7 +232,7 @@ public class EntityPolarBear extends EntityAnimal {
     class c extends PathfinderGoalHurtByTarget {
 
         public c() {
-            super(EntityPolarBear.this, false, new Class[0]);
+            super(EntityPolarBear.this, false);
         }
 
         public void c() {

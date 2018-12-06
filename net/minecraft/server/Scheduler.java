@@ -81,8 +81,8 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
     }
 
     public CompletableFuture<R> a() {
-        CompletableFuture completablefuture = (CompletableFuture) this.e.remove(this.e.size() - 1);
-        CompletableFuture completablefuture1 = CompletableFuture.allOf((CompletableFuture[]) this.e.toArray(new CompletableFuture[0])).thenCompose((void) -> {
+        CompletableFuture completablefuture = (CompletableFuture)this.e.remove(this.e.size() - 1);
+        CompletableFuture completablefuture1 = CompletableFuture.allOf((CompletableFuture[])this.e.toArray(new CompletableFuture[0])).thenCompose((void) -> {
             return completablefuture;
         });
 
@@ -150,14 +150,14 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
         private CompletableFuture<R> a(CompletableFuture<R> completablefuture, T t0) {
             ConcurrentHashMap concurrenthashmap = new ConcurrentHashMap();
 
-            return (CompletableFuture) this.b.computeIfAbsent(t0, (schedulertask) -> {
-                if (schedulertask1.a() == null) {
+            return (CompletableFuture)this.b.computeIfAbsent(t0, (schedulertask) -> {
+                if(schedulertask1.a() == null) {
                     return CompletableFuture.completedFuture(this.d);
                 } else {
                     schedulertask1.a(this.c, (object, schedulertaskx) -> {
-                        CompletableFuture completablefuture = (CompletableFuture) map.put(object, Scheduler.this.a(object, Scheduler.this.b(object)).a(completablefuture1, schedulertaskx));
+                        CompletableFuture completablefuture = (CompletableFuture)map.put(object, Scheduler.this.a(object, Scheduler.this.b(object)).a(completablefuture1, schedulertaskx));
                     });
-                    CompletableFuture[] acompletablefuture = (CompletableFuture[]) Streams.concat(new Stream[] { Stream.of(completablefuture), map.values().stream()}).toArray((i) -> {
+                    CompletableFuture[] acompletablefuture = (CompletableFuture[])Streams.concat(new Stream[]{Stream.of(completablefuture), map.values().stream()}).toArray((i) -> {
                         return new CompletableFuture[i];
                     });
                     CompletableFuture completablefuture1 = CompletableFuture.allOf(acompletablefuture).thenApplyAsync((void) -> {
@@ -171,7 +171,7 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
                     }, Scheduler.this.c).thenApplyAsync((object) -> {
                         Iterator iterator = map.keySet().iterator();
 
-                        while (iterator.hasNext()) {
+                        while(iterator.hasNext()) {
                             Object object1 = iterator.next();
 
                             Scheduler.this.b(object1, Scheduler.this.b(object1));

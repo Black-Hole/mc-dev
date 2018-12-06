@@ -237,7 +237,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
                 jsonobject.add("criteria", jsonobject1);
             }
 
-            jsonobject.addProperty("done", Boolean.valueOf(advancementprogress.isDone()));
+            jsonobject.addProperty("done", advancementprogress.isDone());
             return jsonobject;
         }
 

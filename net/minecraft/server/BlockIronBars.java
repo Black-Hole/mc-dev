@@ -4,13 +4,13 @@ public class BlockIronBars extends BlockTall {
 
     protected BlockIronBars(Block.Info block_info) {
         super(1.0F, 1.0F, 16.0F, 16.0F, 16.0F, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIronBars.NORTH, Boolean.valueOf(false))).set(BlockIronBars.EAST, Boolean.valueOf(false))).set(BlockIronBars.SOUTH, Boolean.valueOf(false))).set(BlockIronBars.WEST, Boolean.valueOf(false))).set(BlockIronBars.p, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIronBars.NORTH, false)).set(BlockIronBars.EAST, false)).set(BlockIronBars.SOUTH, false)).set(BlockIronBars.WEST, false)).set(BlockIronBars.p, false));
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         World world = blockactioncontext.getWorld();
         BlockPosition blockposition = blockactioncontext.getClickPosition();
-        Fluid fluid = blockactioncontext.getWorld().b(blockactioncontext.getClickPosition());
+        Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
         BlockPosition blockposition1 = blockposition.north();
         BlockPosition blockposition2 = blockposition.south();
         BlockPosition blockposition3 = blockposition.west();
@@ -20,15 +20,15 @@ public class BlockIronBars extends BlockTall {
         IBlockData iblockdata2 = world.getType(blockposition3);
         IBlockData iblockdata3 = world.getType(blockposition4);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockIronBars.NORTH, Boolean.valueOf(this.a(iblockdata, iblockdata.c(world, blockposition1, EnumDirection.SOUTH))))).set(BlockIronBars.SOUTH, Boolean.valueOf(this.a(iblockdata1, iblockdata1.c(world, blockposition2, EnumDirection.NORTH))))).set(BlockIronBars.WEST, Boolean.valueOf(this.a(iblockdata2, iblockdata2.c(world, blockposition3, EnumDirection.EAST))))).set(BlockIronBars.EAST, Boolean.valueOf(this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.WEST))))).set(BlockIronBars.p, Boolean.valueOf(fluid.c() == FluidTypes.c));
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockIronBars.NORTH, this.a(iblockdata, iblockdata.c(world, blockposition1, EnumDirection.SOUTH)))).set(BlockIronBars.SOUTH, this.a(iblockdata1, iblockdata1.c(world, blockposition2, EnumDirection.NORTH)))).set(BlockIronBars.WEST, this.a(iblockdata2, iblockdata2.c(world, blockposition3, EnumDirection.EAST)))).set(BlockIronBars.EAST, this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.WEST)))).set(BlockIronBars.p, fluid.c() == FluidTypes.c);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockIronBars.p)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockIronBars.p)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
-        return enumdirection.k().c() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.q.get(enumdirection), Boolean.valueOf(this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite())))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+        return enumdirection.k().c() ? (IBlockData) iblockdata.set((IBlockState) BlockIronBars.q.get(enumdirection), this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -54,7 +54,7 @@ public class BlockIronBars extends BlockTall {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockIronBars.NORTH, BlockIronBars.EAST, BlockIronBars.WEST, BlockIronBars.SOUTH, BlockIronBars.p});
+        blockstatelist_a.a(BlockIronBars.NORTH, BlockIronBars.EAST, BlockIronBars.WEST, BlockIronBars.SOUTH, BlockIronBars.p);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

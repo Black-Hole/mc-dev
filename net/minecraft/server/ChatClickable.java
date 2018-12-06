@@ -48,7 +48,7 @@ public class ChatClickable {
     }
 
     public String toString() {
-        return "ClickEvent{action=" + this.a + ", value=\'" + this.b + '\'' + '}';
+        return "ClickEvent{action=" + this.a + ", value='" + this.b + '\'' + '}';
     }
 
     public int hashCode() {

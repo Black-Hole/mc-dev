@@ -107,9 +107,9 @@ public class DebugReportMojangson implements DebugReportProvider {
 
             }
         } catch (CommandSyntaxException commandsyntaxexception) {
-            DebugReportMojangson.b.error("Couldn\'t convert {} from SNBT to NBT at {} as it\'s invalid SNBT", s, java_nio_file_path, commandsyntaxexception);
+            DebugReportMojangson.b.error("Couldn't convert {} from SNBT to NBT at {} as it's invalid SNBT", s, java_nio_file_path, commandsyntaxexception);
         } catch (IOException ioexception) {
-            DebugReportMojangson.b.error("Couldn\'t convert {} from SNBT to NBT at {}", s, java_nio_file_path, ioexception);
+            DebugReportMojangson.b.error("Couldn't convert {} from SNBT to NBT at {}", s, java_nio_file_path, ioexception);
         }
 
     }

@@ -126,23 +126,23 @@ public class ChatModifier {
     }
 
     public boolean isBold() {
-        return this.c == null ? this.o().isBold() : this.c.booleanValue();
+        return this.c == null ? this.o().isBold() : this.c;
     }
 
     public boolean isItalic() {
-        return this.d == null ? this.o().isItalic() : this.d.booleanValue();
+        return this.d == null ? this.o().isItalic() : this.d;
     }
 
     public boolean isStrikethrough() {
-        return this.f == null ? this.o().isStrikethrough() : this.f.booleanValue();
+        return this.f == null ? this.o().isStrikethrough() : this.f;
     }
 
     public boolean isUnderlined() {
-        return this.e == null ? this.o().isUnderlined() : this.e.booleanValue();
+        return this.e == null ? this.o().isUnderlined() : this.e;
     }
 
     public boolean isRandom() {
-        return this.g == null ? this.o().isRandom() : this.g.booleanValue();
+        return this.g == null ? this.o().isRandom() : this.g;
     }
 
     public boolean g() {
@@ -325,11 +325,11 @@ public class ChatModifier {
     public ChatModifier n() {
         ChatModifier chatmodifier = new ChatModifier();
 
-        chatmodifier.setBold(Boolean.valueOf(this.isBold()));
-        chatmodifier.setItalic(Boolean.valueOf(this.isItalic()));
-        chatmodifier.setStrikethrough(Boolean.valueOf(this.isStrikethrough()));
-        chatmodifier.setUnderline(Boolean.valueOf(this.isUnderlined()));
-        chatmodifier.setRandom(Boolean.valueOf(this.isRandom()));
+        chatmodifier.setBold(this.isBold());
+        chatmodifier.setItalic(this.isItalic());
+        chatmodifier.setStrikethrough(this.isStrikethrough());
+        chatmodifier.setUnderline(this.isUnderlined());
+        chatmodifier.setRandom(this.isRandom());
         chatmodifier.setColor(this.getColor());
         chatmodifier.setChatClickable(this.h());
         chatmodifier.setChatHoverable(this.i());
@@ -351,23 +351,23 @@ public class ChatModifier {
                     return null;
                 } else {
                     if (jsonobject.has("bold")) {
-                        chatmodifier.c = Boolean.valueOf(jsonobject.get("bold").getAsBoolean());
+                        chatmodifier.c = jsonobject.get("bold").getAsBoolean();
                     }
 
                     if (jsonobject.has("italic")) {
-                        chatmodifier.d = Boolean.valueOf(jsonobject.get("italic").getAsBoolean());
+                        chatmodifier.d = jsonobject.get("italic").getAsBoolean();
                     }
 
                     if (jsonobject.has("underlined")) {
-                        chatmodifier.e = Boolean.valueOf(jsonobject.get("underlined").getAsBoolean());
+                        chatmodifier.e = jsonobject.get("underlined").getAsBoolean();
                     }
 
                     if (jsonobject.has("strikethrough")) {
-                        chatmodifier.f = Boolean.valueOf(jsonobject.get("strikethrough").getAsBoolean());
+                        chatmodifier.f = jsonobject.get("strikethrough").getAsBoolean();
                     }
 
                     if (jsonobject.has("obfuscated")) {
-                        chatmodifier.g = Boolean.valueOf(jsonobject.get("obfuscated").getAsBoolean());
+                        chatmodifier.g = jsonobject.get("obfuscated").getAsBoolean();
                     }
 
                     if (jsonobject.has("color")) {

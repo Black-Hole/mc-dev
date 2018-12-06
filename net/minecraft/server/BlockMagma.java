@@ -31,7 +31,7 @@ public class BlockMagma extends Block {
     public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         BlockPosition blockposition1 = blockposition.up();
 
-        if (world.b(blockposition).a(TagsFluid.WATER)) {
+        if (world.getFluid(blockposition).a(TagsFluid.WATER)) {
             world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
             if (world instanceof WorldServer) {
                 ((WorldServer) world).a(Particles.F, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.25D, (double) blockposition1.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D);

@@ -473,7 +473,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     private void a(NextTickListEntry<FluidType> nextticklistentry) {
-        Fluid fluid = this.b(nextticklistentry.a);
+        Fluid fluid = this.getFluid(nextticklistentry.a);
 
         if (fluid.c() == nextticklistentry.a()) {
             fluid.a((World) this, nextticklistentry.a);
@@ -700,7 +700,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.worldData.i(this.getWorldBorder().getWarningTime());
         this.worldData.b(this.getWorldBorder().j());
         this.worldData.c(this.getWorldBorder().i());
-        this.worldData.c(this.server.aP().c());
+        this.worldData.c(this.server.getBossBattleCustomData().c());
         this.dataManager.saveWorldData(this.worldData, this.server.getPlayerList().t());
         this.h().a();
     }

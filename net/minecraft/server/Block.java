@@ -76,7 +76,7 @@ public class Block implements IMaterial {
     }
 
     public static VoxelShape a(double d0, double d1, double d2, double d3, double d4, double d5) {
-        return VoxelShapes.a(d0 / 16.0D, d1 / 16.0D, d2 / 16.0D, d3 / 16.0D, d4 / 16.0D, d5 / 16.0D);
+        return VoxelShapes.create(d0 / 16.0D, d1 / 16.0D, d2 / 16.0D, d3 / 16.0D, d4 / 16.0D, d5 / 16.0D);
     }
 
     @Deprecated
@@ -249,13 +249,10 @@ public class Block implements IMaterial {
         switch (pathmode) {
         case LAND:
             return !a(this.f(iblockdata, iblockaccess, blockposition));
-
         case WATER:
-            return iblockaccess.b(blockposition).a(TagsFluid.WATER);
-
+            return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
         case AIR:
             return !a(this.f(iblockdata, iblockaccess, blockposition));
-
         default:
             return false;
         }
@@ -351,7 +348,7 @@ public class Block implements IMaterial {
         return !iblockdata.f(iblockaccess, blockposition) && iblockdata.b(iblockaccess, blockposition) == iblockaccess.K();
     }
 
-    public boolean d(IBlockData iblockdata) {
+    public boolean isCollidable(IBlockData iblockdata) {
         return this.j();
     }
 
@@ -451,11 +448,11 @@ public class Block implements IMaterial {
     }
 
     @Nullable
-    public static MovingObjectPosition a(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        MovingObjectPosition movingobjectposition = iblockdata.g(world, blockposition).a(vec3d, vec3d1, blockposition);
+    public static MovingObjectPosition rayTrace(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
+        MovingObjectPosition movingobjectposition = iblockdata.g(world, blockposition).rayTrace(vec3d, vec3d1, blockposition);
 
         if (movingobjectposition != null) {
-            MovingObjectPosition movingobjectposition1 = iblockdata.j(world, blockposition).a(vec3d, vec3d1, blockposition);
+            MovingObjectPosition movingobjectposition1 = iblockdata.j(world, blockposition).rayTrace(vec3d, vec3d1, blockposition);
 
             if (movingobjectposition1 != null && movingobjectposition1.pos.d(vec3d).c() < movingobjectposition.pos.d(vec3d).c()) {
                 movingobjectposition.direction = movingobjectposition1.direction;

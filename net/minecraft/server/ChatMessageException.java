@@ -7,7 +7,7 @@ public class ChatMessageException extends IllegalArgumentException {
     }
 
     public ChatMessageException(ChatMessage chatmessage, int i) {
-        super(String.format("Invalid index %d requested for %s", new Object[] { Integer.valueOf(i), chatmessage}));
+        super(String.format("Invalid index %d requested for %s", new Object[] { i, chatmessage}));
     }
 
     public ChatMessageException(ChatMessage chatmessage, Throwable throwable) {

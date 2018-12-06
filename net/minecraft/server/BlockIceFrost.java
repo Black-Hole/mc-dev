@@ -8,11 +8,11 @@ public class BlockIceFrost extends BlockIce {
 
     public BlockIceFrost(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - ((Integer) iblockdata.get(BlockIceFrost.a)).intValue() - iblockdata.b(world, blockposition) && this.c(iblockdata, world, blockposition)) {
+        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b(world, blockposition) && this.c(iblockdata, world, blockposition)) {
             BlockPosition.b blockposition_b = BlockPosition.b.r();
             Throwable throwable = null;
 
@@ -54,10 +54,10 @@ public class BlockIceFrost extends BlockIce {
     }
 
     private boolean c(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        int i = ((Integer) iblockdata.get(BlockIceFrost.a)).intValue();
+        int i = (Integer) iblockdata.get(BlockIceFrost.a);
 
         if (i < 3) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.a, Integer.valueOf(i + 1)), 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.a, i + 1), 2);
             return false;
         } else {
             this.b(iblockdata, world, blockposition);
@@ -117,7 +117,7 @@ public class BlockIceFrost extends BlockIce {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockIceFrost.a});
+        blockstatelist_a.a(BlockIceFrost.a);
     }
 
     public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {

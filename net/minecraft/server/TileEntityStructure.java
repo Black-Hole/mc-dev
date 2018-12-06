@@ -382,7 +382,7 @@ public class TileEntityStructure extends TileEntity {
                     DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(this.mirror).a(this.rotation).a(this.ignoreEntities).a((ChunkCoordIntPair) null).a((Block) null).c(false);
 
                     if (this.integrity < 1.0F) {
-                        definedstructureinfo.a(MathHelper.a(this.integrity, 0.0F, 1.0F)).a(Long.valueOf(this.seed));
+                        definedstructureinfo.a(MathHelper.a(this.integrity, 0.0F, 1.0F)).a(this.seed);
                     }
 
                     definedstructure.a((GeneratorAccess) this.world, blockposition1, definedstructureinfo);

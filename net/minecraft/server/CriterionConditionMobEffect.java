@@ -72,7 +72,7 @@ public class CriterionConditionMobEffect {
                 MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
 
                 if (mobeffectlist == null) {
-                    throw new JsonSyntaxException("Unknown effect \'" + minecraftkey + "\'");
+                    throw new JsonSyntaxException("Unknown effect '" + minecraftkey + "'");
                 }
 
                 CriterionConditionMobEffect.a criterionconditionmobeffect_a = CriterionConditionMobEffect.a.a(ChatDeserializer.m((JsonElement) entry.getValue(), (String) entry.getKey()));
@@ -124,7 +124,7 @@ public class CriterionConditionMobEffect {
         }
 
         public boolean a(@Nullable MobEffect mobeffect) {
-            return mobeffect == null ? false : (!this.a.d(mobeffect.getAmplifier()) ? false : (!this.b.d(mobeffect.getDuration()) ? false : (this.c != null && this.c.booleanValue() != mobeffect.isAmbient() ? false : this.d == null || this.d.booleanValue() == mobeffect.isShowParticles())));
+            return mobeffect == null ? false : (!this.a.d(mobeffect.getAmplifier()) ? false : (!this.b.d(mobeffect.getDuration()) ? false : (this.c != null && this.c != mobeffect.isAmbient() ? false : this.d == null || this.d == mobeffect.isShowParticles())));
         }
 
         public JsonElement a() {
@@ -140,8 +140,8 @@ public class CriterionConditionMobEffect {
         public static CriterionConditionMobEffect.a a(JsonObject jsonobject) {
             CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("amplifier"));
             CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("duration"));
-            Boolean obool = jsonobject.has("ambient") ? Boolean.valueOf(ChatDeserializer.j(jsonobject, "ambient")) : null;
-            Boolean obool1 = jsonobject.has("visible") ? Boolean.valueOf(ChatDeserializer.j(jsonobject, "visible")) : null;
+            Boolean obool = jsonobject.has("ambient") ? ChatDeserializer.j(jsonobject, "ambient") : null;
+            Boolean obool1 = jsonobject.has("visible") ? ChatDeserializer.j(jsonobject, "visible") : null;
 
             return new CriterionConditionMobEffect.a(criterionconditionvalue_d, criterionconditionvalue_d1, obool, obool1);
         }

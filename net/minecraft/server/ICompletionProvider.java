@@ -130,9 +130,9 @@ public interface ICompletionProvider {
             }
         } else {
             String[] astring = s.split(" ");
-            String s2;
             Iterator iterator1;
             ICompletionProvider.a icompletionprovider_a1;
+            String s2;
 
             if (astring.length == 1) {
                 iterator1 = collection.iterator();

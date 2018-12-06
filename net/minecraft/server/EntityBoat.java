@@ -60,13 +60,13 @@ public class EntityBoat extends Entity {
     }
 
     protected void x_() {
-        this.datawatcher.register(EntityBoat.a, Integer.valueOf(0));
-        this.datawatcher.register(EntityBoat.b, Integer.valueOf(1));
-        this.datawatcher.register(EntityBoat.c, Float.valueOf(0.0F));
-        this.datawatcher.register(EntityBoat.d, Integer.valueOf(EntityBoat.EnumBoatType.OAK.ordinal()));
-        this.datawatcher.register(EntityBoat.e, Boolean.valueOf(false));
-        this.datawatcher.register(EntityBoat.f, Boolean.valueOf(false));
-        this.datawatcher.register(EntityBoat.g, Integer.valueOf(0));
+        this.datawatcher.register(EntityBoat.a, 0);
+        this.datawatcher.register(EntityBoat.b, 1);
+        this.datawatcher.register(EntityBoat.c, 0.0F);
+        this.datawatcher.register(EntityBoat.d, EntityBoat.EnumBoatType.OAK.ordinal());
+        this.datawatcher.register(EntityBoat.e, false);
+        this.datawatcher.register(EntityBoat.f, false);
+        this.datawatcher.register(EntityBoat.g, 0);
     }
 
     @Nullable
@@ -147,19 +147,14 @@ public class EntityBoat extends Entity {
         case OAK:
         default:
             return Items.OAK_BOAT;
-
         case SPRUCE:
             return Items.SPRUCE_BOAT;
-
         case BIRCH:
             return Items.BIRCH_BOAT;
-
         case JUNGLE:
             return Items.JUNGLE_BOAT;
-
         case ACACIA:
             return Items.ACACIA_BOAT;
-
         case DARK_OAK:
             return Items.DARK_OAK_BOAT;
         }
@@ -308,10 +303,8 @@ public class EntityBoat extends Entity {
         case UNDER_WATER:
         case UNDER_FLOWING_WATER:
             return SoundEffects.ENTITY_BOAT_PADDLE_WATER;
-
         case ON_LAND:
             return SoundEffects.ENTITY_BOAT_PADDLE_LAND;
-
         case IN_AIR:
         default:
             return null;
@@ -334,8 +327,8 @@ public class EntityBoat extends Entity {
     }
 
     public void a(boolean flag, boolean flag1) {
-        this.datawatcher.set(EntityBoat.e, Boolean.valueOf(flag));
-        this.datawatcher.set(EntityBoat.f, Boolean.valueOf(flag1));
+        this.datawatcher.set(EntityBoat.e, flag);
+        this.datawatcher.set(EntityBoat.f, flag1);
     }
 
     private EntityBoat.EnumStatus s() {
@@ -377,10 +370,10 @@ public class EntityBoat extends Entity {
                 for (int l1 = i; l1 < j; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
                         blockposition_b.f(l1, k1, i2);
-                        Fluid fluid = this.world.b((BlockPosition) blockposition_b);
+                        Fluid fluid = this.world.getFluid(blockposition_b);
 
                         if (fluid.a(TagsFluid.WATER)) {
-                            f = Math.max(f, (float) k1 + fluid.f());
+                            f = Math.max(f, (float) k1 + fluid.getHeight());
                         }
 
                         if (f >= 1.0F) {
@@ -493,10 +486,10 @@ public class EntityBoat extends Entity {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
                         blockposition_b.f(k1, l1, i2);
-                        Fluid fluid = this.world.b((BlockPosition) blockposition_b);
+                        Fluid fluid = this.world.getFluid(blockposition_b);
 
                         if (fluid.a(TagsFluid.WATER)) {
-                            float f = (float) l1 + fluid.f();
+                            float f = (float) l1 + fluid.getHeight();
 
                             this.aJ = Math.max((double) f, this.aJ);
                             flag |= axisalignedbb.minY < (double) f;
@@ -544,9 +537,9 @@ public class EntityBoat extends Entity {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
                         blockposition_b.f(k1, l1, i2);
-                        Fluid fluid = this.world.b((BlockPosition) blockposition_b);
+                        Fluid fluid = this.world.getFluid(blockposition_b);
 
-                        if (fluid.a(TagsFluid.WATER) && d0 < (double) ((float) blockposition_b.getY() + fluid.f())) {
+                        if (fluid.a(TagsFluid.WATER) && d0 < (double) ((float) blockposition_b.getY() + fluid.getHeight())) {
                             if (!fluid.d()) {
                                 EntityBoat.EnumStatus entityboat_enumstatus = EntityBoat.EnumStatus.UNDER_FLOWING_WATER;
 
@@ -753,7 +746,7 @@ public class EntityBoat extends Entity {
                 }
 
                 this.fallDistance = 0.0F;
-            } else if (!this.world.b((new BlockPosition(this)).down()).a(TagsFluid.WATER) && d0 < 0.0D) {
+            } else if (!this.world.getFluid((new BlockPosition(this)).down()).a(TagsFluid.WATER) && d0 < 0.0D) {
                 this.fallDistance = (float) ((double) this.fallDistance - d0);
             }
 
@@ -761,47 +754,47 @@ public class EntityBoat extends Entity {
     }
 
     public boolean a(int i) {
-        return ((Boolean) this.datawatcher.get(i == 0 ? EntityBoat.e : EntityBoat.f)).booleanValue() && this.bO() != null;
+        return (Boolean) this.datawatcher.get(i == 0 ? EntityBoat.e : EntityBoat.f) && this.bO() != null;
     }
 
     public void setDamage(float f) {
-        this.datawatcher.set(EntityBoat.c, Float.valueOf(f));
+        this.datawatcher.set(EntityBoat.c, f);
     }
 
     public float m() {
-        return ((Float) this.datawatcher.get(EntityBoat.c)).floatValue();
+        return (Float) this.datawatcher.get(EntityBoat.c);
     }
 
     public void b(int i) {
-        this.datawatcher.set(EntityBoat.a, Integer.valueOf(i));
+        this.datawatcher.set(EntityBoat.a, i);
     }
 
     public int n() {
-        return ((Integer) this.datawatcher.get(EntityBoat.a)).intValue();
+        return (Integer) this.datawatcher.get(EntityBoat.a);
     }
 
     private void d(int i) {
-        this.datawatcher.set(EntityBoat.g, Integer.valueOf(i));
+        this.datawatcher.set(EntityBoat.g, i);
     }
 
     private int z() {
-        return ((Integer) this.datawatcher.get(EntityBoat.g)).intValue();
+        return (Integer) this.datawatcher.get(EntityBoat.g);
     }
 
     public void c(int i) {
-        this.datawatcher.set(EntityBoat.b, Integer.valueOf(i));
+        this.datawatcher.set(EntityBoat.b, i);
     }
 
     public int o() {
-        return ((Integer) this.datawatcher.get(EntityBoat.b)).intValue();
+        return (Integer) this.datawatcher.get(EntityBoat.b);
     }
 
     public void setType(EntityBoat.EnumBoatType entityboat_enumboattype) {
-        this.datawatcher.set(EntityBoat.d, Integer.valueOf(entityboat_enumboattype.ordinal()));
+        this.datawatcher.set(EntityBoat.d, entityboat_enumboattype.ordinal());
     }
 
     public EntityBoat.EnumBoatType getType() {
-        return EntityBoat.EnumBoatType.a(((Integer) this.datawatcher.get(EntityBoat.d)).intValue());
+        return EntityBoat.EnumBoatType.a((Integer) this.datawatcher.get(EntityBoat.d));
     }
 
     protected boolean q(Entity entity) {

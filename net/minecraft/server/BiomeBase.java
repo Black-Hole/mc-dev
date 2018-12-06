@@ -145,12 +145,12 @@ public abstract class BiomeBase {
             this.aS = biomebase_a.a;
             this.aU = biomebase_a.b;
             this.aT = biomebase_a.c;
-            this.aL = biomebase_a.d.floatValue();
-            this.aM = biomebase_a.e.floatValue();
-            this.aN = biomebase_a.f.floatValue();
-            this.aO = biomebase_a.g.floatValue();
-            this.aP = biomebase_a.h.intValue();
-            this.aQ = biomebase_a.i.intValue();
+            this.aL = biomebase_a.d;
+            this.aM = biomebase_a.e;
+            this.aN = biomebase_a.f;
+            this.aO = biomebase_a.g;
+            this.aP = biomebase_a.h;
+            this.aQ = biomebase_a.i;
             this.aR = biomebase_a.j;
             WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
             int i = aworldgenstage_decoration.length;
@@ -237,7 +237,7 @@ public abstract class BiomeBase {
         } else {
             if (blockposition.getY() >= 0 && blockposition.getY() < 256 && iworldreader.getBrightness(EnumSkyBlock.BLOCK, blockposition) < 10) {
                 IBlockData iblockdata = iworldreader.getType(blockposition);
-                Fluid fluid = iworldreader.b(blockposition);
+                Fluid fluid = iworldreader.getFluid(blockposition);
 
                 if (fluid.c() == FluidTypes.c && iblockdata.getBlock() instanceof BlockFluids) {
                     if (!flag) {
@@ -515,32 +515,32 @@ public abstract class BiomeBase {
         }
 
         public BiomeBase.a a(float f) {
-            this.d = Float.valueOf(f);
+            this.d = f;
             return this;
         }
 
         public BiomeBase.a b(float f) {
-            this.e = Float.valueOf(f);
+            this.e = f;
             return this;
         }
 
         public BiomeBase.a c(float f) {
-            this.f = Float.valueOf(f);
+            this.f = f;
             return this;
         }
 
         public BiomeBase.a d(float f) {
-            this.g = Float.valueOf(f);
+            this.g = f;
             return this;
         }
 
         public BiomeBase.a a(int i) {
-            this.h = Integer.valueOf(i);
+            this.h = i;
             return this;
         }
 
         public BiomeBase.a b(int i) {
-            this.i = Integer.valueOf(i);
+            this.i = i;
             return this;
         }
 
@@ -550,7 +550,7 @@ public abstract class BiomeBase {
         }
 
         public String toString() {
-            return "BiomeBuilder{\nsurfaceBuilder=" + this.a + ",\nprecipitation=" + this.b + ",\nbiomeCategory=" + this.c + ",\ndepth=" + this.d + ",\nscale=" + this.e + ",\ntemperature=" + this.f + ",\ndownfall=" + this.g + ",\nwaterColor=" + this.h + ",\nwaterFogColor=" + this.i + ",\nparent=\'" + this.j + '\'' + "\n" + '}';
+            return "BiomeBuilder{\nsurfaceBuilder=" + this.a + ",\nprecipitation=" + this.b + ",\nbiomeCategory=" + this.c + ",\ndepth=" + this.d + ",\nscale=" + this.e + ",\ntemperature=" + this.f + ",\ndownfall=" + this.g + ",\nwaterColor=" + this.h + ",\nwaterFogColor=" + this.i + ",\nparent='" + this.j + '\'' + "\n" + '}';
         }
     }
 

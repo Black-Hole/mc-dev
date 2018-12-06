@@ -81,8 +81,8 @@ public class PlayerChunkMap {
 
     public void flush() {
         long i = this.world.getTime();
-        int j;
         PlayerChunk playerchunk;
+        int j;
 
         if (i - this.k > 8000L) {
             this.k = i;

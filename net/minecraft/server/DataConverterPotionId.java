@@ -163,7 +163,7 @@ public class DataConverterPotionId extends DataFix {
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:potion")) {
                 Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
                 Optional optional1 = typed.getOptionalTyped(opticfinder1);
-                short short0 = ((Number) dynamic.get("Damage").flatMap(Dynamic::getNumberValue).orElse(Integer.valueOf(0))).shortValue();
+                short short0 = ((Number) dynamic.get("Damage").flatMap(Dynamic::getNumberValue).orElse(0)).shortValue();
 
                 if (optional1.isPresent()) {
                     Typed typed1 = typed;

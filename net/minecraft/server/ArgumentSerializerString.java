@@ -19,10 +19,8 @@ public class ArgumentSerializerString implements ArgumentSerializer<StringArgume
         switch (stringtype) {
         case SINGLE_WORD:
             return StringArgumentType.word();
-
         case QUOTABLE_PHRASE:
             return StringArgumentType.string();
-
         case GREEDY_PHRASE:
         default:
             return StringArgumentType.greedyString();
@@ -34,11 +32,9 @@ public class ArgumentSerializerString implements ArgumentSerializer<StringArgume
         case SINGLE_WORD:
             jsonobject.addProperty("type", "word");
             break;
-
         case QUOTABLE_PHRASE:
             jsonobject.addProperty("type", "phrase");
             break;
-
         case GREEDY_PHRASE:
         default:
             jsonobject.addProperty("type", "greedy");

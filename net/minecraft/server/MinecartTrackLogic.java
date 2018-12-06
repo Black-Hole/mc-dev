@@ -36,47 +36,38 @@ public class MinecartTrackLogic {
             this.f.add(this.b.north());
             this.f.add(this.b.south());
             break;
-
         case EAST_WEST:
             this.f.add(this.b.west());
             this.f.add(this.b.east());
             break;
-
         case ASCENDING_EAST:
             this.f.add(this.b.west());
             this.f.add(this.b.east().up());
             break;
-
         case ASCENDING_WEST:
             this.f.add(this.b.west().up());
             this.f.add(this.b.east());
             break;
-
         case ASCENDING_NORTH:
             this.f.add(this.b.north().up());
             this.f.add(this.b.south());
             break;
-
         case ASCENDING_SOUTH:
             this.f.add(this.b.north());
             this.f.add(this.b.south().up());
             break;
-
         case SOUTH_EAST:
             this.f.add(this.b.east());
             this.f.add(this.b.south());
             break;
-
         case SOUTH_WEST:
             this.f.add(this.b.west());
             this.f.add(this.b.south());
             break;
-
         case NORTH_WEST:
             this.f.add(this.b.west());
             this.f.add(this.b.north());
             break;
-
         case NORTH_EAST:
             this.f.add(this.b.east());
             this.f.add(this.b.north());

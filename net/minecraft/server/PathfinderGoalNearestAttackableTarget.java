@@ -53,7 +53,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 public Double a(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
-                    return (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton) || itemstack.getItem() != Items.SKELETON_SKULL) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie) || itemstack.getItem() != Items.ZOMBIE_HEAD) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper) || itemstack.getItem() != Items.CREEPER_HEAD) ? Double.valueOf(1.0D) : Double.valueOf(0.5D);
+                    return (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton) || itemstack.getItem() != Items.SKELETON_SKULL) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie) || itemstack.getItem() != Items.ZOMBIE_HEAD) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper) || itemstack.getItem() != Items.CREEPER_HEAD) ? 1.0D : 0.5D;
                 }
 
                 @Nullable

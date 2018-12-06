@@ -9,11 +9,11 @@ public class DataWatcherRegistry {
     private static final RegistryID<DataWatcherSerializer<?>> q = new RegistryID(16);
     public static final DataWatcherSerializer<Byte> a = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Byte obyte) {
-            packetdataserializer.writeByte(obyte.byteValue());
+            packetdataserializer.writeByte(obyte);
         }
 
         public Byte b(PacketDataSerializer packetdataserializer) {
-            return Byte.valueOf(packetdataserializer.readByte());
+            return packetdataserializer.readByte();
         }
 
         public DataWatcherObject<Byte> a(int i) {
@@ -30,11 +30,11 @@ public class DataWatcherRegistry {
     };
     public static final DataWatcherSerializer<Integer> b = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Integer integer) {
-            packetdataserializer.d(integer.intValue());
+            packetdataserializer.d(integer);
         }
 
         public Integer b(PacketDataSerializer packetdataserializer) {
-            return Integer.valueOf(packetdataserializer.g());
+            return packetdataserializer.g();
         }
 
         public DataWatcherObject<Integer> a(int i) {
@@ -51,11 +51,11 @@ public class DataWatcherRegistry {
     };
     public static final DataWatcherSerializer<Float> c = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Float ofloat) {
-            packetdataserializer.writeFloat(ofloat.floatValue());
+            packetdataserializer.writeFloat(ofloat);
         }
 
         public Float b(PacketDataSerializer packetdataserializer) {
-            return Float.valueOf(packetdataserializer.readFloat());
+            return packetdataserializer.readFloat();
         }
 
         public DataWatcherObject<Float> a(int i) {
@@ -190,11 +190,11 @@ public class DataWatcherRegistry {
     };
     public static final DataWatcherSerializer<Boolean> i = new DataWatcherSerializer() {
         public void a(PacketDataSerializer packetdataserializer, Boolean obool) {
-            packetdataserializer.writeBoolean(obool.booleanValue());
+            packetdataserializer.writeBoolean(obool);
         }
 
         public Boolean b(PacketDataSerializer packetdataserializer) {
-            return Boolean.valueOf(packetdataserializer.readBoolean());
+            return packetdataserializer.readBoolean();
         }
 
         public DataWatcherObject<Boolean> a(int i) {

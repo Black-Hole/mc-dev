@@ -64,7 +64,7 @@ public class LootTableRegistry implements IResourcePackListener {
 
                 }
             } catch (Throwable throwable3) {
-                LootTableRegistry.c.error("Couldn\'t read loot table {} from {}", minecraftkey1, minecraftkey, throwable3);
+                LootTableRegistry.c.error("Couldn't read loot table {} from {}", minecraftkey1, minecraftkey, throwable3);
             }
         }
 

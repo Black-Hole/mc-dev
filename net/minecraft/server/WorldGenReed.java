@@ -15,7 +15,7 @@ public class WorldGenReed extends WorldGenerator<WorldGenFeatureEmptyConfigurati
             if (generatoraccess.isEmpty(blockposition1)) {
                 BlockPosition blockposition2 = blockposition1.down();
 
-                if (generatoraccess.b(blockposition2.west()).a(TagsFluid.WATER) || generatoraccess.b(blockposition2.east()).a(TagsFluid.WATER) || generatoraccess.b(blockposition2.north()).a(TagsFluid.WATER) || generatoraccess.b(blockposition2.south()).a(TagsFluid.WATER)) {
+                if (generatoraccess.getFluid(blockposition2.west()).a(TagsFluid.WATER) || generatoraccess.getFluid(blockposition2.east()).a(TagsFluid.WATER) || generatoraccess.getFluid(blockposition2.north()).a(TagsFluid.WATER) || generatoraccess.getFluid(blockposition2.south()).a(TagsFluid.WATER)) {
                     int k = 2 + random.nextInt(random.nextInt(3) + 1);
 
                     for (int l = 0; l < k; ++l) {

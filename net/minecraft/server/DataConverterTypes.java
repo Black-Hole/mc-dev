@@ -6,7 +6,7 @@ import com.mojang.datafixers.DSL.TypeReference;
 public class DataConverterTypes {
 
     public static final TypeReference a = DataFixTypes.LEVEL;
-    public static final TypeReference b = DataFixTypes.PLAYER;
+    public static final TypeReference PLAYER = DataFixTypes.PLAYER;
     public static final TypeReference c = DataFixTypes.CHUNK;
     public static final TypeReference d = DataFixTypes.HOTBAR;
     public static final TypeReference e = DataFixTypes.OPTIONS;

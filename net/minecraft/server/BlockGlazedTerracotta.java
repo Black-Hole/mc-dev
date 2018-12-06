@@ -7,7 +7,7 @@ public class BlockGlazedTerracotta extends BlockFacingHorizontal {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockGlazedTerracotta.FACING});
+        blockstatelist_a.a(BlockGlazedTerracotta.FACING);
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {

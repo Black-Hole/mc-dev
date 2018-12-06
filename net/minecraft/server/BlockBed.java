@@ -13,7 +13,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     public BlockBed(EnumColor enumcolor, Block.Info block_info) {
         super(block_info);
         this.color = enumcolor;
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBed.PART, BlockPropertyBedPart.FOOT)).set(BlockBed.OCCUPIED, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBed.PART, BlockPropertyBedPart.FOOT)).set(BlockBed.OCCUPIED, false));
     }
 
     public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -33,7 +33,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
             }
 
             if (world.worldProvider.canRespawn() && world.getBiome(blockposition) != Biomes.NETHER) {
-                if (((Boolean) iblockdata.get(BlockBed.OCCUPIED)).booleanValue()) {
+                if ((Boolean) iblockdata.get(BlockBed.OCCUPIED)) {
                     EntityHuman entityhuman1 = this.a(world, blockposition);
 
                     if (entityhuman1 != null) {
@@ -41,14 +41,14 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
                         return true;
                     }
 
-                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(false));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, false);
                     world.setTypeAndData(blockposition, iblockdata, 4);
                 }
 
                 EntityHuman.EnumBedResult entityhuman_enumbedresult = entityhuman.a(blockposition);
 
                 if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.OK) {
-                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(true));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBed.OCCUPIED, true);
                     world.setTypeAndData(blockposition, iblockdata, 4);
                     return true;
                 } else {
@@ -224,7 +224,7 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockBed.FACING, BlockBed.PART, BlockBed.OCCUPIED});
+        blockstatelist_a.a(BlockBed.FACING, BlockBed.PART, BlockBed.OCCUPIED);
     }
 
     public TileEntity a(IBlockAccess iblockaccess) {

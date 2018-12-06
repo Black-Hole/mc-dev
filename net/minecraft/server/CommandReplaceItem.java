@@ -51,10 +51,10 @@ public class CommandReplaceItem {
 
             if (i >= 0 && i < iinventory.getSize()) {
                 iinventory.setItem(i, itemstack);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ(), itemstack.A()}), true);
                 return 1;
             } else {
-                throw CommandReplaceItem.b.create(Integer.valueOf(i));
+                throw CommandReplaceItem.b.create(i);
             }
         }
     }
@@ -79,12 +79,12 @@ public class CommandReplaceItem {
         }
 
         if (arraylist.isEmpty()) {
-            throw CommandReplaceItem.c.create(itemstack.A(), Integer.valueOf(i));
+            throw CommandReplaceItem.c.create(itemstack.A(), i);
         } else {
             if (arraylist.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) arraylist.iterator().next()).getScoreboardDisplayName(), itemstack.A()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { Integer.valueOf(arraylist.size()), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { arraylist.size(), itemstack.A()}), true);
             }
 
             return arraylist.size();

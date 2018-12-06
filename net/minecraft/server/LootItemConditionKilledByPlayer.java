@@ -26,7 +26,7 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
         }
 
         public void a(JsonObject jsonobject, LootItemConditionKilledByPlayer lootitemconditionkilledbyplayer, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("inverse", Boolean.valueOf(lootitemconditionkilledbyplayer.a));
+            jsonobject.addProperty("inverse", lootitemconditionkilledbyplayer.a);
         }
 
         public LootItemConditionKilledByPlayer a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {

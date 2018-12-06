@@ -24,7 +24,7 @@ public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatur
             if (random.nextFloat() < 0.25F) {
                 generatoraccess.setTypeAndData(blockposition1, ((Block) TagsBlock.CORALS.a(random)).getBlockData(), 2);
             } else if (random.nextFloat() < 0.05F) {
-                generatoraccess.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, Integer.valueOf(random.nextInt(4) + 1)), 2);
+                generatoraccess.setTypeAndData(blockposition1, (IBlockData) Blocks.SEA_PICKLE.getBlockData().set(BlockSeaPickle.a, random.nextInt(4) + 1), 2);
             }
 
             Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();

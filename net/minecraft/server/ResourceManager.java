@@ -131,7 +131,7 @@ public class ResourceManager implements IReloadableResourceManager {
     }
 
     private void d() {
-        ResourceManager.a.info("Reloading all resources! {} listeners to update.", Integer.valueOf(this.c.size()));
+        ResourceManager.a.info("Reloading all resources! {} listeners to update.", this.c.size());
         ArrayList arraylist = Lists.newArrayList();
         Stopwatch stopwatch = Stopwatch.createStarted();
         Iterator iterator = this.c.iterator();
@@ -144,7 +144,7 @@ public class ResourceManager implements IReloadableResourceManager {
 
         stopwatch.stop();
         ResourceManager.a.info("----");
-        ResourceManager.a.info("Complete resource reload took {} ms", Long.valueOf(stopwatch.elapsed(TimeUnit.MILLISECONDS)));
+        ResourceManager.a.info("Complete resource reload took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         iterator = arraylist.iterator();
 
         while (iterator.hasNext()) {

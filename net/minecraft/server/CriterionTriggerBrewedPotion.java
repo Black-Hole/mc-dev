@@ -58,7 +58,7 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
             if (!IRegistry.POTION.c(minecraftkey)) {
-                throw new JsonSyntaxException("Unknown potion \'" + minecraftkey + "\'");
+                throw new JsonSyntaxException("Unknown potion '" + minecraftkey + "'");
             }
 
             potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey);

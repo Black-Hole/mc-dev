@@ -42,7 +42,7 @@ public class DebugReportGenerator {
             stopwatch.start();
             debugreportprovider.a(hashcache);
             stopwatch.stop();
-            DebugReportGenerator.a.info("{} finished after {} ms", debugreportprovider.a(), Long.valueOf(stopwatch.elapsed(TimeUnit.MILLISECONDS)));
+            DebugReportGenerator.a.info("{} finished after {} ms", debugreportprovider.a(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
             stopwatch.reset();
         }
 

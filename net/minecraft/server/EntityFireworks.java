@@ -18,7 +18,7 @@ public class EntityFireworks extends Entity {
 
     protected void x_() {
         this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.a);
-        this.datawatcher.register(EntityFireworks.b, Integer.valueOf(0));
+        this.datawatcher.register(EntityFireworks.b, 0);
     }
 
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
@@ -41,7 +41,7 @@ public class EntityFireworks extends Entity {
 
     public EntityFireworks(World world, ItemStack itemstack, EntityLiving entityliving) {
         this(world, entityliving.locX, entityliving.locY, entityliving.locZ, itemstack);
-        this.datawatcher.set(EntityFireworks.b, Integer.valueOf(entityliving.getId()));
+        this.datawatcher.set(EntityFireworks.b, entityliving.getId());
         this.e = entityliving;
     }
 
@@ -52,7 +52,7 @@ public class EntityFireworks extends Entity {
         super.tick();
         if (this.f()) {
             if (this.e == null) {
-                Entity entity = this.world.getEntity(((Integer) this.datawatcher.get(EntityFireworks.b)).intValue());
+                Entity entity = this.world.getEntity((Integer) this.datawatcher.get(EntityFireworks.b));
 
                 if (entity instanceof EntityLiving) {
                     this.e = (EntityLiving) entity;
@@ -168,7 +168,7 @@ public class EntityFireworks extends Entity {
     }
 
     public boolean f() {
-        return ((Integer) this.datawatcher.get(EntityFireworks.b)).intValue() > 0;
+        return (Integer) this.datawatcher.get(EntityFireworks.b) > 0;
     }
 
     public void b(NBTTagCompound nbttagcompound) {

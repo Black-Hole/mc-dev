@@ -20,22 +20,22 @@ public class BossBattleCustomData {
         return (BossBattleCustom) this.b.get(minecraftkey);
     }
 
-    public BossBattleCustom a(MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) {
+    public BossBattleCustom register(MinecraftKey minecraftkey, IChatBaseComponent ichatbasecomponent) {
         BossBattleCustom bossbattlecustom = new BossBattleCustom(minecraftkey, ichatbasecomponent);
 
         this.b.put(minecraftkey, bossbattlecustom);
         return bossbattlecustom;
     }
 
-    public void a(BossBattleCustom bossbattlecustom) {
-        this.b.remove(bossbattlecustom.a());
+    public void remove(BossBattleCustom bossbattlecustom) {
+        this.b.remove(bossbattlecustom.getKey());
     }
 
     public Collection<MinecraftKey> a() {
         return this.b.keySet();
     }
 
-    public Collection<BossBattleCustom> b() {
+    public Collection<BossBattleCustom> getBattles() {
         return this.b.values();
     }
 
@@ -46,7 +46,7 @@ public class BossBattleCustomData {
         while (iterator.hasNext()) {
             BossBattleCustom bossbattlecustom = (BossBattleCustom) iterator.next();
 
-            nbttagcompound.set(bossbattlecustom.a().toString(), bossbattlecustom.f());
+            nbttagcompound.set(bossbattlecustom.getKey().toString(), bossbattlecustom.f());
         }
 
         return nbttagcompound;

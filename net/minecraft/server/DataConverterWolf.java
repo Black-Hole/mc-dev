@@ -14,7 +14,7 @@ public class DataConverterWolf extends DataConverterNamedEntity {
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         return dynamic.update("CollarColor", (dynamic) -> {
-            return dynamic.createByte((byte) (15 - dynamic.getNumberValue(Integer.valueOf(0)).intValue()));
+            return dynamic.createByte((byte) (15 - dynamic.getNumberValue(0).intValue()));
         });
     }
 

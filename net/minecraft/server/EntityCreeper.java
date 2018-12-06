@@ -52,14 +52,14 @@ public class EntityCreeper extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityCreeper.a, Integer.valueOf(-1));
-        this.datawatcher.register(EntityCreeper.b, Boolean.valueOf(false));
-        this.datawatcher.register(EntityCreeper.c, Boolean.valueOf(false));
+        this.datawatcher.register(EntityCreeper.a, -1);
+        this.datawatcher.register(EntityCreeper.b, false);
+        this.datawatcher.register(EntityCreeper.c, false);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if (((Boolean) this.datawatcher.get(EntityCreeper.b)).booleanValue()) {
+        if ((Boolean) this.datawatcher.get(EntityCreeper.b)) {
             nbttagcompound.setBoolean("powered", true);
         }
 
@@ -70,7 +70,7 @@ public class EntityCreeper extends EntityMonster {
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.datawatcher.set(EntityCreeper.b, Boolean.valueOf(nbttagcompound.getBoolean("powered")));
+        this.datawatcher.set(EntityCreeper.b, nbttagcompound.getBoolean("powered"));
         if (nbttagcompound.hasKeyOfType("Fuse", 99)) {
             this.maxFuseTicks = nbttagcompound.getShort("Fuse");
         }
@@ -138,7 +138,7 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean isPowered() {
-        return ((Boolean) this.datawatcher.get(EntityCreeper.b)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityCreeper.b);
     }
 
     @Nullable
@@ -147,16 +147,16 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public int dz() {
-        return ((Integer) this.datawatcher.get(EntityCreeper.a)).intValue();
+        return (Integer) this.datawatcher.get(EntityCreeper.a);
     }
 
     public void a(int i) {
-        this.datawatcher.set(EntityCreeper.a, Integer.valueOf(i));
+        this.datawatcher.set(EntityCreeper.a, i);
     }
 
     public void onLightningStrike(EntityLightning entitylightning) {
         super.onLightningStrike(entitylightning);
-        this.datawatcher.set(EntityCreeper.b, Boolean.valueOf(true));
+        this.datawatcher.set(EntityCreeper.b, true);
     }
 
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
@@ -213,11 +213,11 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean isIgnited() {
-        return ((Boolean) this.datawatcher.get(EntityCreeper.c)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityCreeper.c);
     }
 
     public void dB() {
-        this.datawatcher.set(EntityCreeper.c, Boolean.valueOf(true));
+        this.datawatcher.set(EntityCreeper.c, true);
     }
 
     public boolean canCauseHeadDrop() {

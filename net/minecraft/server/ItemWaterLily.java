@@ -18,7 +18,7 @@ public class ItemWaterLily extends ItemBlock {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.a();
+                BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
                 if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
                     return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
@@ -27,7 +27,7 @@ public class ItemWaterLily extends ItemBlock {
                 BlockPosition blockposition1 = blockposition.up();
                 IBlockData iblockdata = world.getType(blockposition);
                 Material material = iblockdata.getMaterial();
-                Fluid fluid = world.b(blockposition);
+                Fluid fluid = world.getFluid(blockposition);
 
                 if ((fluid.c() == FluidTypes.c || material == Material.ICE) && world.isEmpty(blockposition1)) {
                     world.setTypeAndData(blockposition1, Blocks.LILY_PAD.getBlockData(), 11);

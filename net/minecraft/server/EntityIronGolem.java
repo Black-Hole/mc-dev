@@ -35,7 +35,7 @@ public class EntityIronGolem extends EntityGolem {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityIronGolem.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityIronGolem.a, (byte) 0);
     }
 
     protected void mobTick() {
@@ -161,16 +161,16 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     public boolean isPlayerCreated() {
-        return (((Byte) this.datawatcher.get(EntityIronGolem.a)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityIronGolem.a) & 1) != 0;
     }
 
     public void setPlayerCreated(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityIronGolem.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityIronGolem.a);
 
         if (flag) {
-            this.datawatcher.set(EntityIronGolem.a, Byte.valueOf((byte) (b0 | 1)));
+            this.datawatcher.set(EntityIronGolem.a, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityIronGolem.a, Byte.valueOf((byte) (b0 & -2)));
+            this.datawatcher.set(EntityIronGolem.a, (byte) (b0 & -2));
         }
 
     }

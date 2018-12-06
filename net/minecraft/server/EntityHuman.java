@@ -84,10 +84,10 @@ public abstract class EntityHuman extends EntityLiving {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityHuman.a, Float.valueOf(0.0F));
-        this.datawatcher.register(EntityHuman.b, Integer.valueOf(0));
-        this.datawatcher.register(EntityHuman.bx, Byte.valueOf((byte) 0));
-        this.datawatcher.register(EntityHuman.by, Byte.valueOf((byte) 1));
+        this.datawatcher.register(EntityHuman.a, 0.0F);
+        this.datawatcher.register(EntityHuman.b, 0);
+        this.datawatcher.register(EntityHuman.bx, (byte) 0);
+        this.datawatcher.register(EntityHuman.by, (byte) 1);
         this.datawatcher.register(EntityHuman.bz, new NBTTagCompound());
         this.datawatcher.register(EntityHuman.bA, new NBTTagCompound());
     }
@@ -198,7 +198,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         if (iblockdata != null) {
             if (!this.d && !this.justCreated && iblockdata.getBlock() == Blocks.BUBBLE_COLUMN && !this.isSpectator()) {
-                boolean flag = ((Boolean) iblockdata.get(BlockBubbleColumn.a)).booleanValue();
+                boolean flag = (Boolean) iblockdata.get(BlockBubbleColumn.a);
 
                 if (flag) {
                     this.world.a(this.locX, this.locY, this.locZ, SoundEffects.BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE, this.bV(), 1.0F, 1.0F, false);
@@ -453,17 +453,17 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public int getScore() {
-        return ((Integer) this.datawatcher.get(EntityHuman.b)).intValue();
+        return (Integer) this.datawatcher.get(EntityHuman.b);
     }
 
     public void setScore(int i) {
-        this.datawatcher.set(EntityHuman.b, Integer.valueOf(i));
+        this.datawatcher.set(EntityHuman.b, i);
     }
 
     public void addScore(int i) {
         int j = this.getScore();
 
-        this.datawatcher.set(EntityHuman.b, Integer.valueOf(j + i));
+        this.datawatcher.set(EntityHuman.b, j + i);
     }
 
     public void die(DamageSource damagesource) {
@@ -600,15 +600,12 @@ public abstract class EntityHuman extends EntityLiving {
             case 0:
                 f1 = 0.3F;
                 break;
-
             case 1:
                 f1 = 0.09F;
                 break;
-
             case 2:
                 f1 = 0.0027F;
                 break;
-
             case 3:
             default:
                 f1 = 8.1E-4F;
@@ -1197,7 +1194,7 @@ public abstract class EntityHuman extends EntityLiving {
         IBlockData iblockdata = this.world.getType(this.bedPosition);
 
         if (this.bedPosition != null && iblockdata.getBlock() instanceof BlockBed) {
-            this.world.setTypeAndData(this.bedPosition, (IBlockData) iblockdata.set(BlockBed.OCCUPIED, Boolean.valueOf(false)), 4);
+            this.world.setTypeAndData(this.bedPosition, (IBlockData) iblockdata.set(BlockBed.OCCUPIED, false), 4);
             BlockPosition blockposition = BlockBed.a(this.world, this.bedPosition, 0);
 
             if (blockposition == null) {
@@ -1710,11 +1707,11 @@ public abstract class EntityHuman extends EntityLiving {
             f = 0.0F;
         }
 
-        this.getDataWatcher().set(EntityHuman.a, Float.valueOf(f));
+        this.getDataWatcher().set(EntityHuman.a, f);
     }
 
     public float getAbsorptionHearts() {
-        return ((Float) this.getDataWatcher().get(EntityHuman.a)).floatValue();
+        return (Float) this.getDataWatcher().get(EntityHuman.a);
     }
 
     public static UUID a(GameProfile gameprofile) {
@@ -1793,11 +1790,11 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public EnumMainHand getMainHand() {
-        return ((Byte) this.datawatcher.get(EntityHuman.by)).byteValue() == 0 ? EnumMainHand.LEFT : EnumMainHand.RIGHT;
+        return (Byte) this.datawatcher.get(EntityHuman.by) == 0 ? EnumMainHand.LEFT : EnumMainHand.RIGHT;
     }
 
     public void a(EnumMainHand enummainhand) {
-        this.datawatcher.set(EntityHuman.by, Byte.valueOf((byte) (enummainhand == EnumMainHand.LEFT ? 0 : 1)));
+        this.datawatcher.set(EntityHuman.by, (byte) (enummainhand == EnumMainHand.LEFT ? 0 : 1));
     }
 
     public NBTTagCompound getShoulderEntityLeft() {

@@ -36,7 +36,7 @@ public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
         }
 
         if (flag && i > itemstack.getMaxStackSize()) {
-            throw ArgumentPredicateItemStack.a.create(IRegistry.ITEM.getKey(this.b), Integer.valueOf(itemstack.getMaxStackSize()));
+            throw ArgumentPredicateItemStack.a.create(IRegistry.ITEM.getKey(this.b), itemstack.getMaxStackSize());
         } else {
             return itemstack;
         }

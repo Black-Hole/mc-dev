@@ -11,15 +11,15 @@ public class BlockLeaves extends Block {
 
     public BlockLeaves(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLeaves.DISTANCE, Integer.valueOf(7))).set(BlockLeaves.PERSISTENT, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockLeaves.DISTANCE, 7)).set(BlockLeaves.PERSISTENT, false));
     }
 
     public boolean isTicking(IBlockData iblockdata) {
-        return ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() == 7 && !((Boolean) iblockdata.get(BlockLeaves.PERSISTENT)).booleanValue();
+        return (Integer) iblockdata.get(BlockLeaves.DISTANCE) == 7 && !(Boolean) iblockdata.get(BlockLeaves.PERSISTENT);
     }
 
     public void b(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (!((Boolean) iblockdata.get(BlockLeaves.PERSISTENT)).booleanValue() && ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() == 7) {
+        if (!(Boolean) iblockdata.get(BlockLeaves.PERSISTENT) && (Integer) iblockdata.get(BlockLeaves.DISTANCE) == 7) {
             iblockdata.a(world, blockposition, 0);
             world.setAir(blockposition);
         }
@@ -37,7 +37,7 @@ public class BlockLeaves extends Block {
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         int i = w(iblockdata1) + 1;
 
-        if (i != 1 || ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() != i) {
+        if (i != 1 || (Integer) iblockdata.get(BlockLeaves.DISTANCE) != i) {
             generatoraccess.J().a(blockposition, this, 1);
         }
 
@@ -80,11 +80,11 @@ public class BlockLeaves extends Block {
 
         }
 
-        return (IBlockData) iblockdata.set(BlockLeaves.DISTANCE, Integer.valueOf(i));
+        return (IBlockData) iblockdata.set(BlockLeaves.DISTANCE, i);
     }
 
     private static int w(IBlockData iblockdata) {
-        return TagsBlock.LOGS.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? ((Integer) iblockdata.get(BlockLeaves.DISTANCE)).intValue() : 7);
+        return TagsBlock.LOGS.isTagged(iblockdata.getBlock()) ? 0 : (iblockdata.getBlock() instanceof BlockLeaves ? (Integer) iblockdata.get(BlockLeaves.DISTANCE) : 7);
     }
 
     public int a(IBlockData iblockdata, Random random) {
@@ -155,10 +155,10 @@ public class BlockLeaves extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockLeaves.DISTANCE, BlockLeaves.PERSISTENT});
+        blockstatelist_a.a(BlockLeaves.DISTANCE, BlockLeaves.PERSISTENT);
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
-        return a((IBlockData) this.getBlockData().set(BlockLeaves.PERSISTENT, Boolean.valueOf(true)), (GeneratorAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
+        return a((IBlockData) this.getBlockData().set(BlockLeaves.PERSISTENT, true), (GeneratorAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
     }
 }

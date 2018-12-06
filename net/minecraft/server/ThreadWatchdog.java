@@ -30,7 +30,7 @@ public class ThreadWatchdog implements Runnable {
             long k = j - i;
 
             if (k > this.c) {
-                ThreadWatchdog.a.fatal("A single server tick took {} seconds (should be max {})", String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf((float) k / 1000.0F)}), String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(0.05F)}));
+                ThreadWatchdog.a.fatal("A single server tick took {} seconds (should be max {})", String.format(Locale.ROOT, "%.2f", new Object[] { (float) k / 1000.0F}), String.format(Locale.ROOT, "%.2f", new Object[] { 0.05F}));
                 ThreadWatchdog.a.fatal("Considering it to be crashed, server will forcibly shutdown.");
                 ThreadMXBean threadmxbean = ManagementFactory.getThreadMXBean();
                 ThreadInfo[] athreadinfo = threadmxbean.dumpAllThreads(true, true);

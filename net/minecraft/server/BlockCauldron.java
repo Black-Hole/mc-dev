@@ -8,7 +8,7 @@ public class BlockCauldron extends Block {
 
     public BlockCauldron(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCauldron.LEVEL, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -28,7 +28,7 @@ public class BlockCauldron extends Block {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+        int i = (Integer) iblockdata.get(BlockCauldron.LEVEL);
         float f = (float) blockposition.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
         if (!world.isClientSide && entity.isBurning() && i > 0 && entity.getBoundingBox().minY <= (double) f) {
@@ -44,7 +44,7 @@ public class BlockCauldron extends Block {
         if (itemstack.isEmpty()) {
             return true;
         } else {
-            int i = ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+            int i = (Integer) iblockdata.get(BlockCauldron.LEVEL);
             Item item = itemstack.getItem();
 
             if (item == Items.WATER_BUCKET) {
@@ -173,7 +173,7 @@ public class BlockCauldron extends Block {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCauldron.LEVEL, Integer.valueOf(MathHelper.clamp(i, 0, 3))), 2);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCauldron.LEVEL, MathHelper.clamp(i, 0, 3)), 2);
         world.updateAdjacentComparators(blockposition, this);
     }
 
@@ -184,7 +184,7 @@ public class BlockCauldron extends Block {
             if (f >= 0.15F) {
                 IBlockData iblockdata = world.getType(blockposition);
 
-                if (((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue() < 3) {
+                if ((Integer) iblockdata.get(BlockCauldron.LEVEL) < 3) {
                     world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockCauldron.LEVEL), 2);
                 }
 
@@ -197,11 +197,11 @@ public class BlockCauldron extends Block {
     }
 
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return ((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue();
+        return (Integer) iblockdata.get(BlockCauldron.LEVEL);
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCauldron.LEVEL});
+        blockstatelist_a.a(BlockCauldron.LEVEL);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

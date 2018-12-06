@@ -182,14 +182,14 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
             }
         } else {
             object = Lists.newArrayList();
-            ((List) object).add(Pair.of(Integer.valueOf(1), "minecraft:bedrock"));
-            ((List) object).add(Pair.of(Integer.valueOf(2), "minecraft:dirt"));
-            ((List) object).add(Pair.of(Integer.valueOf(1), "minecraft:grass_block"));
+            ((List) object).add(Pair.of(1, "minecraft:bedrock"));
+            ((List) object).add(Pair.of(2, "minecraft:dirt"));
+            ((List) object).add(Pair.of(1, "minecraft:grass_block"));
             hashmap.put("village", Maps.newHashMap());
         }
 
         Object object1 = dynamicops.createList(((List) object).stream().map((pair) -> {
-            return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("height"), dynamicops.createInt(((Integer) pair.getFirst()).intValue()), dynamicops.createString("block"), dynamicops.createString((String) pair.getSecond())));
+            return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("height"), dynamicops.createInt((Integer) pair.getFirst()), dynamicops.createString("block"), dynamicops.createString((String) pair.getSecond())));
         }));
         Object object2 = dynamicops.createMap((Map) hashmap.entrySet().stream().map((entry) -> {
             return Pair.of(dynamicops.createString(((String) entry.getKey()).toLowerCase(Locale.ROOT)), dynamicops.createMap((Map) ((Map) entry.getValue()).entrySet().stream().map((entryx) -> {
@@ -217,7 +217,7 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
 
         String s1 = astring[astring.length - 1];
 
-        return Pair.of(Integer.valueOf(i), s1);
+        return Pair.of(i, s1);
     }
 
     private static List<Pair<Integer, String>> b(String s) {

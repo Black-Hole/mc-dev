@@ -11,7 +11,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     protected BlockSapling(WorldGenTreeProvider worldgentreeprovider, Block.Info block_info) {
         super(block_info);
         this.c = worldgentreeprovider;
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSapling.STAGE, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -27,7 +27,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     }
 
     public void grow(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (((Integer) iblockdata.get(BlockSapling.STAGE)).intValue() == 0) {
+        if ((Integer) iblockdata.get(BlockSapling.STAGE) == 0) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockSapling.STAGE), 4);
         } else {
             this.c.a(generatoraccess, blockposition, iblockdata, random);
@@ -48,6 +48,6 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockSapling.STAGE});
+        blockstatelist_a.a(BlockSapling.STAGE);
     }
 }

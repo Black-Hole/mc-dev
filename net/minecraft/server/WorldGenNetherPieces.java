@@ -93,8 +93,8 @@ public class WorldGenNetherPieces {
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
 
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 8, 1, 8, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 8, 5, 8, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
@@ -107,8 +107,8 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 1, 1, 4, 2, 2, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 6, 1, 4, 7, 2, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 3, 8, 7, 3, 8, iblockdata1, iblockdata1, false);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true)), 0, 3, 8, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true)), 8, 3, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true)).set(BlockFence.SOUTH, true), 0, 3, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.SOUTH, true), 8, 3, 8, structureboundingbox);
             this.a(generatoraccess, structureboundingbox, 0, 3, 6, 0, 3, 7, iblockdata, iblockdata, false);
             this.a(generatoraccess, structureboundingbox, 8, 3, 6, 8, 3, 7, iblockdata, iblockdata, false);
             this.a(generatoraccess, structureboundingbox, 0, 3, 4, 0, 5, 5, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -150,7 +150,7 @@ public class WorldGenNetherPieces {
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             IBlockData iblockdata = (IBlockData) Blocks.NETHER_BRICK_STAIRS.getBlockData().set(BlockStairs.FACING, EnumDirection.SOUTH);
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             for (int i = 0; i <= 9; ++i) {
                 int j = Math.max(1, 7 - i);
@@ -218,8 +218,8 @@ public class WorldGenNetherPieces {
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             this.a(generatoraccess, structureboundingbox, 4, 2, 0, 4, 5, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 4, 3, 1, 4, 4, 1, iblockdata1, iblockdata1, false);
@@ -281,8 +281,8 @@ public class WorldGenNetherPieces {
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 0, 5, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 3, 1, 0, 4, 1, iblockdata1, iblockdata1, false);
@@ -372,7 +372,7 @@ public class WorldGenNetherPieces {
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 0, 0, 4, 1, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 4, 5, 4, Blocks.AIR.getBlockData(), Blocks.AIR.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             this.a(generatoraccess, structureboundingbox, 0, 2, 0, 0, 5, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 4, 2, 0, 4, 5, 4, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -425,10 +425,10 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 8, 5, 0, 10, 12, 1, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 5, 9, 0, 7, 12, 1, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 2, 11, 2, 10, 12, 10, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
-            IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockFence.WEST, Boolean.valueOf(true));
-            IBlockData iblockdata3 = (IBlockData) iblockdata1.set(BlockFence.EAST, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
+            IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockFence.WEST, true);
+            IBlockData iblockdata3 = (IBlockData) iblockdata1.set(BlockFence.EAST, true);
 
             int i;
 
@@ -449,10 +449,10 @@ public class WorldGenNetherPieces {
                 }
             }
 
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true)), 0, 13, 0, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true)), 0, 13, 12, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, Boolean.valueOf(true))).set(BlockFence.WEST, Boolean.valueOf(true)), 12, 13, 12, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.WEST, Boolean.valueOf(true)), 12, 13, 0, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.EAST, true), 0, 13, 0, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, true)).set(BlockFence.EAST, true), 0, 13, 12, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, true)).set(BlockFence.WEST, true), 12, 13, 12, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.WEST, true), 12, 13, 0, structureboundingbox);
 
             for (i = 3; i <= 9; i += 2) {
                 this.a(generatoraccess, structureboundingbox, 1, 7, i, 1, 8, i, iblockdata2, iblockdata2, false);
@@ -570,8 +570,8 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 5, 9, 0, 7, 12, 1, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 2, 11, 2, 10, 12, 10, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 5, 8, 0, 7, 8, 0, Blocks.NETHER_BRICK_FENCE.getBlockData(), Blocks.NETHER_BRICK_FENCE.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             int i;
 
@@ -592,14 +592,14 @@ public class WorldGenNetherPieces {
                 }
             }
 
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true)), 0, 13, 0, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true)), 0, 13, 12, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, Boolean.valueOf(true))).set(BlockFence.WEST, Boolean.valueOf(true)), 12, 13, 12, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.WEST, Boolean.valueOf(true)), 12, 13, 0, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.EAST, true), 0, 13, 0, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, true)).set(BlockFence.EAST, true), 0, 13, 12, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.SOUTH, true)).set(BlockFence.WEST, true), 12, 13, 12, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.WEST, true), 12, 13, 0, structureboundingbox);
 
             for (i = 3; i <= 9; i += 2) {
-                this.a(generatoraccess, structureboundingbox, 1, 7, i, 1, 8, i, (IBlockData) iblockdata1.set(BlockFence.WEST, Boolean.valueOf(true)), (IBlockData) iblockdata1.set(BlockFence.WEST, Boolean.valueOf(true)), false);
-                this.a(generatoraccess, structureboundingbox, 11, 7, i, 11, 8, i, (IBlockData) iblockdata1.set(BlockFence.EAST, Boolean.valueOf(true)), (IBlockData) iblockdata1.set(BlockFence.EAST, Boolean.valueOf(true)), false);
+                this.a(generatoraccess, structureboundingbox, 1, 7, i, 1, 8, i, (IBlockData) iblockdata1.set(BlockFence.WEST, true), (IBlockData) iblockdata1.set(BlockFence.WEST, true), false);
+                this.a(generatoraccess, structureboundingbox, 11, 7, i, 11, 8, i, (IBlockData) iblockdata1.set(BlockFence.EAST, true), (IBlockData) iblockdata1.set(BlockFence.EAST, true), false);
             }
 
             this.a(generatoraccess, structureboundingbox, 4, 2, 0, 8, 2, 12, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
@@ -680,24 +680,24 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 0, 5, 3, 0, 5, 8, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 6, 5, 3, 6, 5, 8, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 5, 8, 5, 5, 8, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true)), 1, 6, 3, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true)), 5, 6, 3, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true))).set(BlockFence.NORTH, Boolean.valueOf(true)), 0, 6, 3, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.NORTH, Boolean.valueOf(true)), 6, 6, 3, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true), 1, 6, 3, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true), 5, 6, 3, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true)).set(BlockFence.NORTH, true), 0, 6, 3, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.NORTH, true), 6, 6, 3, structureboundingbox);
             this.a(generatoraccess, structureboundingbox, 0, 6, 4, 0, 6, 7, iblockdata1, iblockdata1, false);
             this.a(generatoraccess, structureboundingbox, 6, 6, 4, 6, 6, 7, iblockdata1, iblockdata1, false);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true)), 0, 6, 8, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true)), 6, 6, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true)).set(BlockFence.SOUTH, true), 0, 6, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.SOUTH, true), 6, 6, 8, structureboundingbox);
             this.a(generatoraccess, structureboundingbox, 1, 6, 8, 5, 6, 8, iblockdata, iblockdata, false);
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true)), 1, 7, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true), 1, 7, 8, structureboundingbox);
             this.a(generatoraccess, structureboundingbox, 2, 7, 8, 4, 7, 8, iblockdata, iblockdata, false);
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true)), 5, 7, 8, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, Boolean.valueOf(true)), 2, 8, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true), 5, 7, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.EAST, true), 2, 8, 8, structureboundingbox);
             this.a(generatoraccess, iblockdata, 3, 8, 8, structureboundingbox);
-            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true)), 4, 8, 8, structureboundingbox);
+            this.a(generatoraccess, (IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true), 4, 8, 8, structureboundingbox);
             if (!this.a) {
                 BlockPosition blockposition = new BlockPosition(this.a(3, 5), this.d(5), this.b(3, 5));
 
@@ -750,8 +750,8 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 0, 2, 1, 0, 8, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 6, 2, 1, 6, 8, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 1, 2, 6, 5, 8, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             this.a(generatoraccess, structureboundingbox, 0, 3, 2, 0, 5, 4, iblockdata1, iblockdata1, false);
             this.a(generatoraccess, structureboundingbox, 6, 3, 2, 6, 5, 2, iblockdata1, iblockdata1, false);
@@ -809,8 +809,8 @@ public class WorldGenNetherPieces {
             this.a(generatoraccess, structureboundingbox, 0, 2, 5, 0, 6, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 6, 2, 0, 6, 6, 1, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 6, 2, 5, 6, 6, 6, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, Boolean.valueOf(true))).set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.WEST, true)).set(BlockFence.EAST, true);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
 
             this.a(generatoraccess, structureboundingbox, 2, 6, 0, 4, 6, 0, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             this.a(generatoraccess, structureboundingbox, 2, 5, 0, 4, 5, 0, iblockdata, iblockdata, false);
@@ -944,27 +944,27 @@ public class WorldGenNetherPieces {
             int j;
             int k;
 
-            for (i = 0; i <= 4; ++i) {
-                for (j = 3; j <= 4; ++j) {
-                    k = random1.nextInt(8);
-                    this.a(generatoraccess, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
+            for (j = 0; j <= 4; ++j) {
+                for (k = 3; k <= 4; ++k) {
+                    i = random1.nextInt(8);
+                    this.a(generatoraccess, structureboundingbox, j, k, 0, j, k, i, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
                 }
             }
 
-            i = random1.nextInt(8);
-            this.a(generatoraccess, structureboundingbox, 0, 5, 0, 0, 5, i, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
-            i = random1.nextInt(8);
-            this.a(generatoraccess, structureboundingbox, 4, 5, 0, 4, 5, i, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
+            j = random1.nextInt(8);
+            this.a(generatoraccess, structureboundingbox, 0, 5, 0, 0, 5, j, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
+            j = random1.nextInt(8);
+            this.a(generatoraccess, structureboundingbox, 4, 5, 0, 4, 5, j, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
 
-            for (i = 0; i <= 4; ++i) {
-                j = random1.nextInt(5);
-                this.a(generatoraccess, structureboundingbox, i, 2, 0, i, 2, j, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
+            for (j = 0; j <= 4; ++j) {
+                k = random1.nextInt(5);
+                this.a(generatoraccess, structureboundingbox, j, 2, 0, j, 2, k, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
             }
 
-            for (i = 0; i <= 4; ++i) {
-                for (j = 0; j <= 1; ++j) {
-                    k = random1.nextInt(3);
-                    this.a(generatoraccess, structureboundingbox, i, j, 0, i, j, k, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
+            for (j = 0; j <= 4; ++j) {
+                for (k = 0; k <= 1; ++k) {
+                    i = random1.nextInt(3);
+                    this.a(generatoraccess, structureboundingbox, j, k, 0, j, k, i, Blocks.NETHER_BRICKS.getBlockData(), Blocks.NETHER_BRICKS.getBlockData(), false);
                 }
             }
 
@@ -1009,9 +1009,9 @@ public class WorldGenNetherPieces {
                 }
             }
 
-            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, Boolean.valueOf(true))).set(BlockFence.SOUTH, Boolean.valueOf(true));
-            IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockFence.EAST, Boolean.valueOf(true));
-            IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockFence.WEST, Boolean.valueOf(true));
+            IBlockData iblockdata = (IBlockData) ((IBlockData) Blocks.NETHER_BRICK_FENCE.getBlockData().set(BlockFence.NORTH, true)).set(BlockFence.SOUTH, true);
+            IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockFence.EAST, true);
+            IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockFence.WEST, true);
 
             this.a(generatoraccess, structureboundingbox, 0, 1, 1, 0, 4, 1, iblockdata1, iblockdata1, false);
             this.a(generatoraccess, structureboundingbox, 0, 3, 4, 0, 4, 4, iblockdata1, iblockdata1, false);
@@ -1040,8 +1040,8 @@ public class WorldGenNetherPieces {
             WorldGenNetherPieces.WorldGenNetherPieceWeight[] aworldgennetherpieces_worldgennetherpieceweight = WorldGenNetherPieces.a;
             int k = aworldgennetherpieces_worldgennetherpieceweight.length;
 
-            int l;
             WorldGenNetherPieces.WorldGenNetherPieceWeight worldgennetherpieces_worldgennetherpieceweight;
+            int l;
 
             for (l = 0; l < k; ++l) {
                 worldgennetherpieces_worldgennetherpieceweight = aworldgennetherpieces_worldgennetherpieceweight[l];
@@ -1156,13 +1156,10 @@ public class WorldGenNetherPieces {
                 switch (enumdirection) {
                 case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + i, this.n.b + j, this.n.c - 1, enumdirection, this.e(), flag);
-
                 case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + i, this.n.b + j, this.n.f + 1, enumdirection, this.e(), flag);
-
                 case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + j, this.n.c + i, enumdirection, this.e(), flag);
-
                 case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + j, this.n.c + i, enumdirection, this.e(), flag);
                 }
@@ -1179,13 +1176,10 @@ public class WorldGenNetherPieces {
                 switch (enumdirection) {
                 case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e(), flag);
-
                 case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a - 1, this.n.b + i, this.n.c + j, EnumDirection.WEST, this.e(), flag);
-
                 case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e(), flag);
-
                 case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.c - 1, EnumDirection.NORTH, this.e(), flag);
                 }
@@ -1202,13 +1196,10 @@ public class WorldGenNetherPieces {
                 switch (enumdirection) {
                 case NORTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e(), flag);
-
                 case SOUTH:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.d + 1, this.n.b + i, this.n.c + j, EnumDirection.EAST, this.e(), flag);
-
                 case WEST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e(), flag);
-
                 case EAST:
                     return this.a(worldgennetherpieces_worldgennetherpiece15, list, random, this.n.a + j, this.n.b + i, this.n.f + 1, EnumDirection.SOUTH, this.e(), flag);
                 }

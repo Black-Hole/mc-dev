@@ -25,10 +25,10 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
         int j1 = l + 1;
         int k1 = 0;
 
+        BlockPosition blockposition1;
         int l1;
         int i2;
         int j2;
-        BlockPosition blockposition1;
 
         for (l1 = j; l1 <= k; ++l1) {
             for (i2 = -1; i2 <= 4; ++i2) {
@@ -123,7 +123,7 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
             if (tileentity instanceof TileEntityMobSpawner) {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(this.a(random));
             } else {
-                WorldGenDungeons.a.error("Failed to fetch mob spawner entity at ({}, {}, {})", Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ()));
+                WorldGenDungeons.a.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
             }
 
             return true;

@@ -31,13 +31,13 @@ public class BlockSponge extends Block {
     private boolean b(World world, BlockPosition blockposition) {
         LinkedList linkedlist = Lists.newLinkedList();
 
-        linkedlist.add(new Tuple(blockposition, Integer.valueOf(0)));
+        linkedlist.add(new Tuple(blockposition, 0));
         int i = 0;
 
         while (!linkedlist.isEmpty()) {
             Tuple tuple = (Tuple) linkedlist.poll();
             BlockPosition blockposition1 = (BlockPosition) tuple.a();
-            int j = ((Integer) tuple.b()).intValue();
+            int j = (Integer) tuple.b();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int k = aenumdirection.length;
 
@@ -45,27 +45,27 @@ public class BlockSponge extends Block {
                 EnumDirection enumdirection = aenumdirection[l];
                 BlockPosition blockposition2 = blockposition1.shift(enumdirection);
                 IBlockData iblockdata = world.getType(blockposition2);
-                Fluid fluid = world.b(blockposition2);
+                Fluid fluid = world.getFluid(blockposition2);
                 Material material = iblockdata.getMaterial();
 
                 if (fluid.a(TagsFluid.WATER)) {
                     if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).a(world, blockposition2, iblockdata) != FluidTypes.a) {
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                            linkedlist.add(new Tuple(blockposition2, j + 1));
                         }
                     } else if (iblockdata.getBlock() instanceof BlockFluids) {
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                            linkedlist.add(new Tuple(blockposition2, j + 1));
                         }
                     } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
                         iblockdata.a(world, blockposition2, 0);
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, Integer.valueOf(j + 1)));
+                            linkedlist.add(new Tuple(blockposition2, j + 1));
                         }
                     }
                 }

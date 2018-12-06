@@ -35,7 +35,7 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
     }
 
     public Chunk a(Long olong, Chunk chunk) {
-        return this.a(olong.longValue(), chunk);
+        return this.a(olong, chunk);
     }
 
     public Chunk a(long i) {
@@ -58,7 +58,7 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
     }
 
     public Chunk a(Object object) {
-        return this.a(((Long) object).longValue());
+        return this.a((Long) object);
     }
 
     public void putAll(Map<? extends Long, ? extends Chunk> map) {

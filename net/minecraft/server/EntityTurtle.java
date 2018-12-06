@@ -44,46 +44,46 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     public boolean dy() {
-        return ((Boolean) this.datawatcher.get(EntityTurtle.bE)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityTurtle.bE);
     }
 
     private void s(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bE, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityTurtle.bE, flag);
     }
 
     public boolean dz() {
-        return ((Boolean) this.datawatcher.get(EntityTurtle.bG)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityTurtle.bG);
     }
 
     private void t(boolean flag) {
         this.bK = flag ? 1 : 0;
-        this.datawatcher.set(EntityTurtle.bG, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityTurtle.bG, flag);
     }
 
     private boolean dC() {
-        return ((Boolean) this.datawatcher.get(EntityTurtle.bI)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityTurtle.bI);
     }
 
     private void u(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bI, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityTurtle.bI, flag);
     }
 
     private boolean dH() {
-        return ((Boolean) this.datawatcher.get(EntityTurtle.bJ)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityTurtle.bJ);
     }
 
     private void v(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bJ, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityTurtle.bJ, flag);
     }
 
     protected void x_() {
         super.x_();
         this.datawatcher.register(EntityTurtle.bD, BlockPosition.ZERO);
-        this.datawatcher.register(EntityTurtle.bE, Boolean.valueOf(false));
+        this.datawatcher.register(EntityTurtle.bE, false);
         this.datawatcher.register(EntityTurtle.bH, BlockPosition.ZERO);
-        this.datawatcher.register(EntityTurtle.bI, Boolean.valueOf(false));
-        this.datawatcher.register(EntityTurtle.bJ, Boolean.valueOf(false));
-        this.datawatcher.register(EntityTurtle.bG, Boolean.valueOf(false));
+        this.datawatcher.register(EntityTurtle.bI, false);
+        this.datawatcher.register(EntityTurtle.bJ, false);
+        this.datawatcher.register(EntityTurtle.bG, false);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -214,7 +214,7 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return !this.dC() && iworldreader.b(blockposition).a(TagsFluid.WATER) ? 10.0F : super.a(blockposition, iworldreader);
+        return !this.dC() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : super.a(blockposition, iworldreader);
     }
 
     public void k() {
@@ -436,7 +436,7 @@ public class EntityTurtle extends EntityAnimal {
                     World world = this.f.world;
 
                     world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_LAY_EGG, SoundCategory.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
-                    world.setTypeAndData(this.d.up(), (IBlockData) Blocks.TURTLE_EGG.getBlockData().set(BlockTurtleEgg.b, Integer.valueOf(this.f.random.nextInt(4) + 1)), 3);
+                    world.setTypeAndData(this.d.up(), (IBlockData) Blocks.TURTLE_EGG.getBlockData().set(BlockTurtleEgg.b, this.f.random.nextInt(4) + 1), 3);
                     this.f.s(false);
                     this.f.t(false);
                     this.f.d(600);

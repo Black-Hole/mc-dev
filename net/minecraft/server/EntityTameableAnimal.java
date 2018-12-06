@@ -17,7 +17,7 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityTameableAnimal.bC, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityTameableAnimal.bC, (byte) 0);
         this.datawatcher.register(EntityTameableAnimal.bD, Optional.empty());
     }
 
@@ -82,16 +82,16 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
     }
 
     public boolean isTamed() {
-        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue() & 4) != 0;
+        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bC) & 4) != 0;
     }
 
     public void setTamed(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bC);
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 | 4)));
+            this.datawatcher.set(EntityTameableAnimal.bC, (byte) (b0 | 4));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 & -5)));
+            this.datawatcher.set(EntityTameableAnimal.bC, (byte) (b0 & -5));
         }
 
         this.dz();
@@ -100,16 +100,16 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
     protected void dz() {}
 
     public boolean isSitting() {
-        return (((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityTameableAnimal.bC) & 1) != 0;
     }
 
     public void setSitting(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityTameableAnimal.bC)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityTameableAnimal.bC);
 
         if (flag) {
-            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 | 1)));
+            this.datawatcher.set(EntityTameableAnimal.bC, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityTameableAnimal.bC, Byte.valueOf((byte) (b0 & -2)));
+            this.datawatcher.set(EntityTameableAnimal.bC, (byte) (b0 & -2));
         }
 
     }

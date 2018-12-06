@@ -41,9 +41,9 @@ public interface IRegistry<T> extends Registry<T> {
     static default void e() {
         IRegistry.f.forEach((iregistry) -> {
             if (iregistry.d()) {
-                IRegistry.e.error("Registry \'{}\' was empty after loading", IRegistry.f.getKey(iregistry));
+                IRegistry.e.error("Registry '{}' was empty after loading", IRegistry.f.getKey(iregistry));
                 if (SharedConstants.b) {
-                    throw new IllegalStateException("Registry: \'" + IRegistry.f.getKey(iregistry) + "\' is empty, not allowed, fix me!");
+                    throw new IllegalStateException("Registry: '" + IRegistry.f.getKey(iregistry) + "' is empty, not allowed, fix me!");
                 }
             }
 

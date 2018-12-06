@@ -142,13 +142,13 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
 
                 if (!nbttagcompound1.hasKeyOfType("Sections", 9)) {
-                    ChunkRegionLoader.a.error("Chunk file at {},{} is missing block data, skipping", Integer.valueOf(i), Integer.valueOf(j));
+                    ChunkRegionLoader.a.error("Chunk file at {},{} is missing block data, skipping", i, j);
                     return null;
                 } else {
                     Chunk chunk = this.a(generatoraccess, nbttagcompound1);
 
                     if (!chunk.a(i, j)) {
-                        ChunkRegionLoader.a.error("Chunk file at {},{} is in the wrong location; relocating. (Expected {}, {}, got {}, {})", Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(i), Integer.valueOf(j), Integer.valueOf(chunk.locX), Integer.valueOf(chunk.locZ));
+                        ChunkRegionLoader.a.error("Chunk file at {},{} is in the wrong location; relocating. (Expected {}, {}, got {}, {})", i, j, i, j, chunk.locX, chunk.locZ);
                         nbttagcompound1.setInt("xPos", i);
                         nbttagcompound1.setInt("zPos", j);
                         chunk = this.a(generatoraccess, nbttagcompound1);
@@ -158,7 +158,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 }
             }
         } else {
-            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", Integer.valueOf(i), Integer.valueOf(j));
+            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", i, j);
             return null;
         }
     }
@@ -176,7 +176,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 return this.b(generatoraccess, nbttagcompound1);
             }
         } else {
-            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", Integer.valueOf(i), Integer.valueOf(j));
+            ChunkRegionLoader.a.error("Chunk file at {},{} is missing level data, skipping", i, j);
             return null;
         }
     }
@@ -807,7 +807,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
                 while (shortlistiterator.hasNext()) {
                     Short oshort = (Short) shortlistiterator.next();
 
-                    nbttaglist1.add((NBTBase) (new NBTTagShort(oshort.shortValue())));
+                    nbttaglist1.add((NBTBase) (new NBTTagShort(oshort)));
                 }
             }
 

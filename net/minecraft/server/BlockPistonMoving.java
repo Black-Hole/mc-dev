@@ -38,7 +38,7 @@ public class BlockPistonMoving extends BlockTileEntity {
         BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.a)).opposite());
         IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
-        if (iblockdata1.getBlock() instanceof BlockPiston && ((Boolean) iblockdata1.get(BlockPiston.EXTENDED)).booleanValue()) {
+        if (iblockdata1.getBlock() instanceof BlockPiston && (Boolean) iblockdata1.get(BlockPiston.EXTENDED)) {
             generatoraccess.setAir(blockposition1);
         }
 
@@ -105,7 +105,7 @@ public class BlockPistonMoving extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPistonMoving.a, BlockPistonMoving.b});
+        blockstatelist_a.a(BlockPistonMoving.a, BlockPistonMoving.b);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

@@ -148,7 +148,7 @@ public class WorldGenFeatureOceanRuinPieces {
 
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if ("chest".equals(s)) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.c, Boolean.valueOf(generatoraccess.b(blockposition).a(TagsFluid.WATER))), 2);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.c, generatoraccess.getFluid(blockposition).a(TagsFluid.WATER)), 2);
                 TileEntity tileentity = generatoraccess.getTileEntity(blockposition);
 
                 if (tileentity instanceof TileEntityChest) {
@@ -196,7 +196,7 @@ public class WorldGenFeatureOceanRuinPieces {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i1, k1, j1);
                 IBlockData iblockdata = iblockaccess.getType(blockposition_mutableblockposition);
 
-                for (Fluid fluid = iblockaccess.b(blockposition_mutableblockposition); (iblockdata.isAir() || fluid.a(TagsFluid.WATER) || iblockdata.getBlock().a(TagsBlock.ICE)) && k1 > 1; fluid = iblockaccess.b(blockposition_mutableblockposition)) {
+                for (Fluid fluid = iblockaccess.getFluid(blockposition_mutableblockposition); (iblockdata.isAir() || fluid.a(TagsFluid.WATER) || iblockdata.getBlock().a(TagsBlock.ICE)) && k1 > 1; fluid = iblockaccess.getFluid(blockposition_mutableblockposition)) {
                     --k1;
                     blockposition_mutableblockposition.c(i1, k1, j1);
                     iblockdata = iblockaccess.getType(blockposition_mutableblockposition);

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class TileEntityEndGateway extends TileEntityEnderPortal implements ITickable {
 
     private static final Logger a = LogManager.getLogger();
-    private long e;
+    public long age;
     private int f;
     public BlockPosition exitPortal;
     public boolean exactTeleport;
@@ -21,7 +21,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        nbttagcompound.setLong("Age", this.e);
+        nbttagcompound.setLong("Age", this.age);
         if (this.exitPortal != null) {
             nbttagcompound.set("ExitPortal", GameProfileSerializer.a(this.exitPortal));
         }
@@ -35,7 +35,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
 
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
-        this.e = nbttagcompound.getLong("Age");
+        this.age = nbttagcompound.getLong("Age");
         if (nbttagcompound.hasKeyOfType("ExitPortal", 10)) {
             this.exitPortal = GameProfileSerializer.c(nbttagcompound.getCompound("ExitPortal"));
         }
@@ -47,7 +47,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         boolean flag = this.c();
         boolean flag1 = this.d();
 
-        ++this.e;
+        ++this.age;
         if (flag1) {
             --this.f;
         } else if (!this.world.isClientSide) {
@@ -57,7 +57,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
                 this.a((Entity) list.get(0));
             }
 
-            if (this.e % 2400L == 0L) {
+            if (this.age % 2400L == 0L) {
                 this.f();
             }
         }
@@ -69,7 +69,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     }
 
     public boolean c() {
-        return this.e < 200L;
+        return this.age < 200L;
     }
 
     public boolean d() {
@@ -222,7 +222,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
             tileentityendgateway.exitPortal = new BlockPosition(this.getPosition());
             tileentityendgateway.update();
         } else {
-            TileEntityEndGateway.a.warn("Couldn\'t save exit portal at {}", blockposition);
+            TileEntityEndGateway.a.warn("Couldn't save exit portal at {}", blockposition);
         }
 
     }

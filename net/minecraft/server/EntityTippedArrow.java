@@ -56,7 +56,7 @@ public class EntityTippedArrow extends EntityArrow {
         } else if (itemstack.getItem() == Items.ARROW) {
             this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
-            this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(-1));
+            this.datawatcher.set(EntityTippedArrow.g, -1);
         }
 
     }
@@ -69,17 +69,17 @@ public class EntityTippedArrow extends EntityArrow {
 
     private void s() {
         this.hasColor = false;
-        this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+        this.datawatcher.set(EntityTippedArrow.g, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
     }
 
     public void a(MobEffect mobeffect) {
         this.effects.add(mobeffect);
-        this.getDataWatcher().set(EntityTippedArrow.g, Integer.valueOf(PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects))));
+        this.getDataWatcher().set(EntityTippedArrow.g, PotionUtil.a((Collection) PotionUtil.a(this.potionRegistry, (Collection) this.effects)));
     }
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityTippedArrow.g, Integer.valueOf(-1));
+        this.datawatcher.register(EntityTippedArrow.g, -1);
     }
 
     public void tick() {
@@ -96,7 +96,7 @@ public class EntityTippedArrow extends EntityArrow {
             this.world.broadcastEntityEffect(this, (byte) 0);
             this.potionRegistry = Potions.EMPTY;
             this.effects.clear();
-            this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(-1));
+            this.datawatcher.set(EntityTippedArrow.g, -1);
         }
 
     }
@@ -117,12 +117,12 @@ public class EntityTippedArrow extends EntityArrow {
     }
 
     public int getColor() {
-        return ((Integer) this.datawatcher.get(EntityTippedArrow.g)).intValue();
+        return (Integer) this.datawatcher.get(EntityTippedArrow.g);
     }
 
     public void setColor(int i) {
         this.hasColor = true;
-        this.datawatcher.set(EntityTippedArrow.g, Integer.valueOf(i));
+        this.datawatcher.set(EntityTippedArrow.g, i);
     }
 
     public void b(NBTTagCompound nbttagcompound) {

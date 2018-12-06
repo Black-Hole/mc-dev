@@ -341,14 +341,14 @@ public class Village {
     public int a(String s) {
         Integer integer = (Integer) this.j.get(s);
 
-        return integer == null ? 0 : integer.intValue();
+        return integer == null ? 0 : integer;
     }
 
     public int a(String s, int i) {
         int j = this.a(s);
         int k = MathHelper.clamp(j + i, -30, 10);
 
-        this.j.put(s, Integer.valueOf(k));
+        this.j.put(s, k);
         return k;
     }
 
@@ -384,10 +384,10 @@ public class Village {
                 GameProfile gameprofile = usercache.a(UUID.fromString(nbttagcompound2.getString("UUID")));
 
                 if (gameprofile != null) {
-                    this.j.put(gameprofile.getName(), Integer.valueOf(nbttagcompound2.getInt("S")));
+                    this.j.put(gameprofile.getName(), nbttagcompound2.getInt("S"));
                 }
             } else {
-                this.j.put(nbttagcompound2.getString("Name"), Integer.valueOf(nbttagcompound2.getInt("S")));
+                this.j.put(nbttagcompound2.getString("Name"), nbttagcompound2.getInt("S"));
             }
         }
 
@@ -436,7 +436,7 @@ public class Village {
 
                 if (gameprofile != null) {
                     nbttagcompound2.setString("UUID", gameprofile.getId().toString());
-                    nbttagcompound2.setInt("S", ((Integer) this.j.get(s)).intValue());
+                    nbttagcompound2.setInt("S", (Integer) this.j.get(s));
                     nbttaglist1.add((NBTBase) nbttagcompound2);
                 }
             } catch (RuntimeException runtimeexception) {

@@ -17,13 +17,13 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         dynamic = dynamic.update("Base", (dynamic) -> {
-            return dynamic.createInt(15 - dynamic.getNumberValue(Integer.valueOf(0)).intValue());
+            return dynamic.createInt(15 - dynamic.getNumberValue(0).intValue());
         });
         dynamic = dynamic.update("Patterns", (dynamic) -> {
             Optional optional = dynamic.getStream().map((stream) -> {
                 return stream.map((dynamic) -> {
                     return dynamic.update("Color", (dynamicx) -> {
-                        return dynamicx.createInt(15 - dynamicx.getNumberValue(Integer.valueOf(0)).intValue());
+                        return dynamicx.createInt(15 - dynamicx.getNumberValue(0).intValue());
                     });
                 });
             });

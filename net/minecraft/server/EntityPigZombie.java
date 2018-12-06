@@ -181,7 +181,7 @@ public class EntityPigZombie extends EntityZombie {
     static class PathfinderGoalAngerOther extends PathfinderGoalHurtByTarget {
 
         public PathfinderGoalAngerOther(EntityPigZombie entitypigzombie) {
-            super(entitypigzombie, true, new Class[0]);
+            super(entitypigzombie, true);
         }
 
         protected void a(EntityCreature entitycreature, EntityLiving entityliving) {

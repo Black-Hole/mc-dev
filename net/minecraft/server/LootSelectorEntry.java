@@ -56,15 +56,15 @@ public abstract class LootSelectorEntry {
             } else if ("empty".equals(s)) {
                 return LootSelectorEmpty.a(jsonobject, jsondeserializationcontext, i, j, alootitemcondition);
             } else {
-                throw new JsonSyntaxException("Unknown loot entry type \'" + s + "\'");
+                throw new JsonSyntaxException("Unknown loot entry type '" + s + "'");
             }
         }
 
         public JsonElement a(LootSelectorEntry lootselectorentry, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.addProperty("weight", Integer.valueOf(lootselectorentry.c));
-            jsonobject.addProperty("quality", Integer.valueOf(lootselectorentry.d));
+            jsonobject.addProperty("weight", lootselectorentry.c);
+            jsonobject.addProperty("quality", lootselectorentry.d);
             if (lootselectorentry.e.length > 0) {
                 jsonobject.add("conditions", jsonserializationcontext.serialize(lootselectorentry.e));
             }
@@ -75,7 +75,7 @@ public abstract class LootSelectorEntry {
                 jsonobject.addProperty("type", "loot_table");
             } else {
                 if (!(lootselectorentry instanceof LootSelectorEmpty)) {
-                    throw new IllegalArgumentException("Don\'t know how to serialize " + lootselectorentry);
+                    throw new IllegalArgumentException("Don't know how to serialize " + lootselectorentry);
                 }
 
                 jsonobject.addProperty("type", "empty");

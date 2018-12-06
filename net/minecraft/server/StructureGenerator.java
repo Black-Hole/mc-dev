@@ -179,7 +179,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
             if (structurestart != null) {
                 arraylist.add(structurestart);
             } else {
-                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong.longValue());
+                ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong);
                 IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().a(chunkcoordintpair.x, chunkcoordintpair.z, true);
 
                 structurestart = ichunkaccess.a(this.a());

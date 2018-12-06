@@ -7,13 +7,13 @@ public enum EnumToolMaterial implements ToolMaterial {
     WOOD(0, 59, 2.0F, 0.0F, 15, () -> {
         return RecipeItemStack.a(TagsItem.PLANKS);
     }), STONE(1, 131, 4.0F, 1.0F, 5, () -> {
-        return RecipeItemStack.a(new IMaterial[] { Blocks.COBBLESTONE});
+        return RecipeItemStack.a(Blocks.COBBLESTONE);
     }), IRON(2, 250, 6.0F, 2.0F, 14, () -> {
-        return RecipeItemStack.a(new IMaterial[] { Items.IRON_INGOT});
+        return RecipeItemStack.a(Items.IRON_INGOT);
     }), DIAMOND(3, 1561, 8.0F, 3.0F, 10, () -> {
-        return RecipeItemStack.a(new IMaterial[] { Items.DIAMOND});
+        return RecipeItemStack.a(Items.DIAMOND);
     }), GOLD(0, 32, 12.0F, 0.0F, 22, () -> {
-        return RecipeItemStack.a(new IMaterial[] { Items.GOLD_INGOT});
+        return RecipeItemStack.a(Items.GOLD_INGOT);
     });
 
     private final int f;

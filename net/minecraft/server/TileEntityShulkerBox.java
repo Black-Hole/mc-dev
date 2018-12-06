@@ -44,7 +44,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         case CLOSED:
             this.l = 0.0F;
             break;
-
         case OPENING:
             this.l += 0.1F;
             if (this.l >= 1.0F) {
@@ -53,7 +52,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                 this.l = 1.0F;
             }
             break;
-
         case CLOSING:
             this.l -= 0.1F;
             if (this.l <= 0.0F) {
@@ -61,7 +59,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
                 this.l = 0.0F;
             }
             break;
-
         case OPENED:
             this.l = 1.0F;
         }
@@ -114,7 +111,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
                             d0 += 0.01D;
                             break;
-
                         case Y:
                             if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                 d1 = axisalignedbb.maxY - axisalignedbb1.minY;
@@ -124,7 +120,6 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
                             d1 += 0.01D;
                             break;
-
                         case Z:
                             if (enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE) {
                                 d2 = axisalignedbb.maxZ - axisalignedbb1.minZ;

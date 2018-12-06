@@ -91,7 +91,7 @@ public class ChunkProviderServer implements IChunkProvider {
                         this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
                     });
                 } catch (Exception exception) {
-                    ChunkProviderServer.a.error("Couldn\'t load chunk", exception);
+                    ChunkProviderServer.a.error("Couldn't load chunk", exception);
                 }
             }
         }
@@ -142,8 +142,8 @@ public class ChunkProviderServer implements IChunkProvider {
         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
 
-        crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
-        crashreportsystemdetails.a("Position hash", (Object) Long.valueOf(ChunkCoordIntPair.a(i, j)));
+        crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", new Object[] { i, j}));
+        crashreportsystemdetails.a("Position hash", (Object) ChunkCoordIntPair.a(i, j));
         crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
         return new ReportedException(crashreport);
     }
@@ -186,9 +186,9 @@ public class ChunkProviderServer implements IChunkProvider {
             ichunkaccess.setLastSaved(this.world.getTime());
             this.chunkLoader.saveChunk(this.world, ichunkaccess);
         } catch (IOException ioexception) {
-            ChunkProviderServer.a.error("Couldn\'t save chunk", ioexception);
+            ChunkProviderServer.a.error("Couldn't save chunk", ioexception);
         } catch (ExceptionWorldConflict exceptionworldconflict) {
-            ChunkProviderServer.a.error("Couldn\'t save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
+            ChunkProviderServer.a.error("Couldn't save chunk; already in use by another instance of Minecraft?", exceptionworldconflict);
         }
 
     }
@@ -225,7 +225,7 @@ public class ChunkProviderServer implements IChunkProvider {
         try {
             this.batchScheduler.a();
         } catch (InterruptedException interruptedexception) {
-            ChunkProviderServer.a.error("Couldn\'t stop taskManager", interruptedexception);
+            ChunkProviderServer.a.error("Couldn't stop taskManager", interruptedexception);
         }
 
     }

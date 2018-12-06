@@ -59,19 +59,19 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     protected int k(IBlockData iblockdata) {
         int i = 0;
 
-        if (((Boolean) iblockdata.get(BlockTall.NORTH)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockTall.NORTH)) {
             i |= a(EnumDirection.NORTH);
         }
 
-        if (((Boolean) iblockdata.get(BlockTall.EAST)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockTall.EAST)) {
             i |= a(EnumDirection.EAST);
         }
 
-        if (((Boolean) iblockdata.get(BlockTall.SOUTH)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockTall.SOUTH)) {
             i |= a(EnumDirection.SOUTH);
         }
 
-        if (((Boolean) iblockdata.get(BlockTall.WEST)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockTall.WEST)) {
             i |= a(EnumDirection.WEST);
         }
 
@@ -79,8 +79,8 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (((Boolean) iblockdata.get(BlockTall.p)).booleanValue()) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, Boolean.valueOf(false)), 3);
+        if ((Boolean) iblockdata.get(BlockTall.p)) {
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, false), 3);
             return FluidTypes.c;
         } else {
             return FluidTypes.a;
@@ -88,17 +88,17 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return ((Boolean) iblockdata.get(BlockTall.p)).booleanValue() ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockTall.p) ? FluidTypes.c.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !((Boolean) iblockdata.get(BlockTall.p)).booleanValue() && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockTall.p) && fluidtype == FluidTypes.c;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!((Boolean) iblockdata.get(BlockTall.p)).booleanValue() && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockTall.p) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, Boolean.valueOf(true)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, true), 3);
                 generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
@@ -116,13 +116,10 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
-
         case COUNTERCLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.EAST, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.NORTH));
-
         case CLOCKWISE_90:
             return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.WEST))).set(BlockTall.EAST, iblockdata.get(BlockTall.NORTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.EAST))).set(BlockTall.WEST, iblockdata.get(BlockTall.SOUTH));
-
         default:
             return iblockdata;
         }
@@ -132,10 +129,8 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         switch (enumblockmirror) {
         case LEFT_RIGHT:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.NORTH, iblockdata.get(BlockTall.SOUTH))).set(BlockTall.SOUTH, iblockdata.get(BlockTall.NORTH));
-
         case FRONT_BACK:
             return (IBlockData) ((IBlockData) iblockdata.set(BlockTall.EAST, iblockdata.get(BlockTall.WEST))).set(BlockTall.WEST, iblockdata.get(BlockTall.EAST));
-
         default:
             return super.a(iblockdata, enumblockmirror);
         }

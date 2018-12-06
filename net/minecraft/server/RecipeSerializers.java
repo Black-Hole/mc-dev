@@ -40,7 +40,7 @@ public class RecipeSerializers {
         RecipeSerializer recipeserializer = (RecipeSerializer) RecipeSerializers.q.get(s);
 
         if (recipeserializer == null) {
-            throw new JsonSyntaxException("Invalid or unsupported recipe type \'" + s + "\'");
+            throw new JsonSyntaxException("Invalid or unsupported recipe type '" + s + "'");
         } else {
             return recipeserializer.a(minecraftkey, jsonobject);
         }

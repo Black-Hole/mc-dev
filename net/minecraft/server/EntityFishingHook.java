@@ -75,12 +75,12 @@ public class EntityFishingHook extends Entity {
     }
 
     protected void x_() {
-        this.getDataWatcher().register(EntityFishingHook.b, Integer.valueOf(0));
+        this.getDataWatcher().register(EntityFishingHook.b, 0);
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityFishingHook.b.equals(datawatcherobject)) {
-            int i = ((Integer) this.getDataWatcher().get(EntityFishingHook.b)).intValue();
+            int i = (Integer) this.getDataWatcher().get(EntityFishingHook.b);
 
             this.hooked = i > 0 ? this.world.getEntity(i - 1) : null;
         }
@@ -103,10 +103,10 @@ public class EntityFishingHook extends Entity {
 
             float f = 0.0F;
             BlockPosition blockposition = new BlockPosition(this);
-            Fluid fluid = this.world.b(blockposition);
+            Fluid fluid = this.world.getFluid(blockposition);
 
             if (fluid.a(TagsFluid.WATER)) {
-                f = fluid.f();
+                f = fluid.getHeight();
             }
 
             double d0;
@@ -277,7 +277,7 @@ public class EntityFishingHook extends Entity {
     }
 
     private void o() {
-        this.getDataWatcher().set(EntityFishingHook.b, Integer.valueOf(this.hooked.getId() + 1));
+        this.getDataWatcher().set(EntityFishingHook.b, this.hooked.getId() + 1);
     }
 
     private void a(BlockPosition blockposition) {

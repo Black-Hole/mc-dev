@@ -143,7 +143,7 @@ public class ServerPing {
                 JsonObject jsonobject = new JsonObject();
 
                 jsonobject.addProperty("name", serverping_serverdata.a());
-                jsonobject.addProperty("protocol", Integer.valueOf(serverping_serverdata.getProtocolVersion()));
+                jsonobject.addProperty("protocol", serverping_serverdata.getProtocolVersion());
                 return jsonobject;
             }
 
@@ -215,8 +215,8 @@ public class ServerPing {
             public JsonElement a(ServerPing.ServerPingPlayerSample serverping_serverpingplayersample, Type type, JsonSerializationContext jsonserializationcontext) {
                 JsonObject jsonobject = new JsonObject();
 
-                jsonobject.addProperty("max", Integer.valueOf(serverping_serverpingplayersample.a()));
-                jsonobject.addProperty("online", Integer.valueOf(serverping_serverpingplayersample.b()));
+                jsonobject.addProperty("max", serverping_serverpingplayersample.a());
+                jsonobject.addProperty("online", serverping_serverpingplayersample.b());
                 if (serverping_serverpingplayersample.c() != null && serverping_serverpingplayersample.c().length > 0) {
                     JsonArray jsonarray = new JsonArray();
 

@@ -163,7 +163,7 @@ public class ChunkCache implements IIBlockAccess {
         return Blocks.AIR.getBlockData();
     }
 
-    public Fluid b(BlockPosition blockposition) {
+    public Fluid getFluid(BlockPosition blockposition) {
         if (blockposition.getY() >= 0 && blockposition.getY() < 256) {
             int i = (blockposition.getX() >> 4) - this.a;
             int j = (blockposition.getZ() >> 4) - this.b;
@@ -172,7 +172,7 @@ public class ChunkCache implements IIBlockAccess {
                 Chunk chunk = this.c[i][j];
 
                 if (chunk != null) {
-                    return chunk.b(blockposition);
+                    return chunk.getFluid(blockposition);
                 }
             }
         }

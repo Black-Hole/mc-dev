@@ -63,6 +63,6 @@ public class BlockBannerWall extends BlockBannerAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockBannerWall.a});
+        blockstatelist_a.a(BlockBannerWall.a);
     }
 }

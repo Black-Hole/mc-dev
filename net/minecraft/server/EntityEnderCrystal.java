@@ -27,7 +27,7 @@ public class EntityEnderCrystal extends Entity {
 
     protected void x_() {
         this.getDataWatcher().register(EntityEnderCrystal.b, Optional.empty());
-        this.getDataWatcher().register(EntityEnderCrystal.c, Boolean.valueOf(true));
+        this.getDataWatcher().register(EntityEnderCrystal.c, true);
     }
 
     public void tick() {
@@ -116,10 +116,10 @@ public class EntityEnderCrystal extends Entity {
     }
 
     public void setShowingBottom(boolean flag) {
-        this.getDataWatcher().set(EntityEnderCrystal.c, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityEnderCrystal.c, flag);
     }
 
     public boolean isShowingBottom() {
-        return ((Boolean) this.getDataWatcher().get(EntityEnderCrystal.c)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityEnderCrystal.c);
     }
 }

@@ -56,7 +56,7 @@ public class LootItem extends LootSelectorEntry {
         MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.a);
 
         if (minecraftkey == null) {
-            throw new IllegalArgumentException("Can\'t serialize unknown item " + this.a);
+            throw new IllegalArgumentException("Can't serialize unknown item " + this.a);
         } else {
             jsonobject.addProperty("name", minecraftkey.toString());
         }

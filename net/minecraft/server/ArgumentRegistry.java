@@ -26,7 +26,7 @@ public class ArgumentRegistry {
         if (ArgumentRegistry.b.containsKey(oclass)) {
             throw new IllegalArgumentException("Class " + oclass.getName() + " already has a serializer!");
         } else if (ArgumentRegistry.c.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("\'" + minecraftkey + "\' is already a registered serializer!");
+            throw new IllegalArgumentException("'" + minecraftkey + "' is already a registered serializer!");
         } else {
             ArgumentRegistry.a argumentregistry_a = new ArgumentRegistry.a(oclass, argumentserializer, minecraftkey, null);
 
@@ -155,7 +155,7 @@ public class ArgumentRegistry {
         }
 
         if (commandnode.getCommand() != null) {
-            jsonobject.addProperty("executable", Boolean.valueOf(true));
+            jsonobject.addProperty("executable", true);
         }
 
         if (commandnode.getRedirect() != null) {

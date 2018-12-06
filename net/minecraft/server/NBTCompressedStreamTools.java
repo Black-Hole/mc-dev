@@ -81,7 +81,7 @@ public class NBTCompressedStreamTools {
                 CrashReport crashreport = CrashReport.a(ioexception, "Loading NBT data");
                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("NBT Tag");
 
-                crashreportsystemdetails.a("Tag type", (Object) Byte.valueOf(b0));
+                crashreportsystemdetails.a("Tag type", (Object) b0);
                 throw new ReportedException(crashreport);
             }
         }

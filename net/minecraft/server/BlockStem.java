@@ -12,11 +12,11 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     protected BlockStem(BlockStemmed blockstemmed, Block.Info block_info) {
         super(block_info);
         this.blockFruit = blockstemmed;
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockStem.b[((Integer) iblockdata.get(BlockStem.AGE)).intValue()];
+        return BlockStem.b[(Integer) iblockdata.get(BlockStem.AGE)];
     }
 
     protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -29,10 +29,10 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
             float f = BlockCrops.a((Block) this, (IBlockAccess) world, blockposition);
 
             if (random.nextInt((int) (25.0F / f) + 1) == 0) {
-                int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
+                int i = (Integer) iblockdata.get(BlockStem.AGE);
 
                 if (i < 7) {
-                    iblockdata = (IBlockData) iblockdata.set(BlockStem.AGE, Integer.valueOf(i + 1));
+                    iblockdata = (IBlockData) iblockdata.set(BlockStem.AGE, i + 1);
                     world.setTypeAndData(blockposition, iblockdata, 2);
                 } else {
                     EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
@@ -55,7 +55,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
             Item item = this.d();
 
             if (item != null) {
-                int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
+                int j = (Integer) iblockdata.get(BlockStem.AGE);
 
                 for (int k = 0; k < 3; ++k) {
                     if (world.random.nextInt(15) <= j) {
@@ -83,7 +83,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        return ((Integer) iblockdata.get(BlockStem.AGE)).intValue() != 7;
+        return (Integer) iblockdata.get(BlockStem.AGE) != 7;
     }
 
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
@@ -91,8 +91,8 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = Math.min(7, ((Integer) iblockdata.get(BlockStem.AGE)).intValue() + MathHelper.nextInt(world.random, 2, 5));
-        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockStem.AGE, Integer.valueOf(i));
+        int i = Math.min(7, (Integer) iblockdata.get(BlockStem.AGE) + MathHelper.nextInt(world.random, 2, 5));
+        IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockStem.AGE, i);
 
         world.setTypeAndData(blockposition, iblockdata1, 2);
         if (i == 7) {
@@ -102,7 +102,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockStem.AGE});
+        blockstatelist_a.a(BlockStem.AGE);
     }
 
     public BlockStemmed e() {

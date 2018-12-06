@@ -30,11 +30,11 @@ public class CommandEffect {
         }))))).then(CommandDispatcher.a("give").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), (Integer) null, 0, true);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("seconds", (ArgumentType) IntegerArgumentType.integer(1, 1000000)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), 0, true);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), IntegerArgumentType.getInteger(commandcontext, "seconds"), 0, true);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("amplifier", (ArgumentType) IntegerArgumentType.integer(0, 255)).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), IntegerArgumentType.getInteger(commandcontext, "amplifier"), true);
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), IntegerArgumentType.getInteger(commandcontext, "seconds"), IntegerArgumentType.getInteger(commandcontext, "amplifier"), true);
         })).then(CommandDispatcher.a("hideParticles", (ArgumentType) BoolArgumentType.bool()).executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), Integer.valueOf(IntegerArgumentType.getInteger(commandcontext, "seconds")), IntegerArgumentType.getInteger(commandcontext, "amplifier"), !BoolArgumentType.getBool(commandcontext, "hideParticles"));
+            return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), IntegerArgumentType.getInteger(commandcontext, "seconds"), IntegerArgumentType.getInteger(commandcontext, "amplifier"), !BoolArgumentType.getBool(commandcontext, "hideParticles"));
         }))))))));
     }
 
@@ -44,9 +44,9 @@ public class CommandEffect {
 
         if (integer != null) {
             if (mobeffectlist.isInstant()) {
-                k = integer.intValue();
+                k = integer;
             } else {
-                k = integer.intValue() * 20;
+                k = integer * 20;
             }
         } else if (mobeffectlist.isInstant()) {
             k = 1;
@@ -72,9 +72,9 @@ public class CommandEffect {
             throw CommandEffect.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), Integer.valueOf(k / 20)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName(), k / 20}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.multiple", new Object[] { mobeffectlist.d(), Integer.valueOf(collection.size()), Integer.valueOf(k / 20)}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.give.success.multiple", new Object[] { mobeffectlist.d(), collection.size(), k / 20}), true);
             }
 
             return j;
@@ -99,7 +99,7 @@ public class CommandEffect {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.everything.success.multiple", new Object[] { collection.size()}), true);
             }
 
             return i;
@@ -124,7 +124,7 @@ public class CommandEffect {
             if (collection.size() == 1) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.single", new Object[] { mobeffectlist.d(), ((Entity) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.multiple", new Object[] { mobeffectlist.d(), Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.effect.clear.specific.success.multiple", new Object[] { mobeffectlist.d(), collection.size()}), true);
             }
 
             return i;

@@ -486,7 +486,7 @@ public class EntityTrackerEntry {
             } else if (this.tracker instanceof EntityAreaEffectCloud) {
                 return new PacketPlayOutSpawnEntity(this.tracker, 3);
             } else {
-                throw new IllegalArgumentException("Don\'t know how to add " + this.tracker.getClass() + "!");
+                throw new IllegalArgumentException("Don't know how to add " + this.tracker.getClass() + "!");
             }
         }
     }

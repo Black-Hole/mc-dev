@@ -8,7 +8,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
 
     public BlockBubbleColumn(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBubbleColumn.a, true));
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -19,7 +19,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         IBlockData iblockdata1 = world.getType(blockposition.up());
 
         if (iblockdata1.isAir()) {
-            entity.j(((Boolean) iblockdata.get(BlockBubbleColumn.a)).booleanValue());
+            entity.j((Boolean) iblockdata.get(BlockBubbleColumn.a));
             if (!world.isClientSide) {
                 WorldServer worldserver = (WorldServer) world;
 
@@ -29,7 +29,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
                 }
             }
         } else {
-            entity.k(((Boolean) iblockdata.get(BlockBubbleColumn.a)).booleanValue());
+            entity.k((Boolean) iblockdata.get(BlockBubbleColumn.a));
         }
 
     }
@@ -48,13 +48,13 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
 
     public static void a(GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
         if (a(generatoraccess, blockposition)) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, Boolean.valueOf(flag)), 2);
+            generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, flag), 2);
         }
 
     }
 
     public static boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        Fluid fluid = generatoraccess.b(blockposition);
+        Fluid fluid = generatoraccess.getFluid(blockposition);
 
         return generatoraccess.getType(blockposition).getBlock() == Blocks.WATER && fluid.g() >= 8 && fluid.d();
     }
@@ -63,7 +63,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        return block == Blocks.BUBBLE_COLUMN ? ((Boolean) iblockdata.get(BlockBubbleColumn.a)).booleanValue() : block != Blocks.SOUL_SAND;
+        return block == Blocks.BUBBLE_COLUMN ? (Boolean) iblockdata.get(BlockBubbleColumn.a) : block != Blocks.SOUL_SAND;
     }
 
     public int a(IWorldReader iworldreader) {
@@ -75,7 +75,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
             return Blocks.WATER.getBlockData();
         } else {
             if (enumdirection == EnumDirection.DOWN) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, Boolean.valueOf(a((IBlockAccess) generatoraccess, blockposition1))), 2);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) Blocks.BUBBLE_COLUMN.getBlockData().set(BlockBubbleColumn.a, a((IBlockAccess) generatoraccess, blockposition1)), 2);
             } else if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() != Blocks.BUBBLE_COLUMN && a(generatoraccess, blockposition1)) {
                 generatoraccess.J().a(blockposition, this, this.a((IWorldReader) generatoraccess));
             }
@@ -112,7 +112,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockBubbleColumn.a});
+        blockstatelist_a.a(BlockBubbleColumn.a);
     }
 
     public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {

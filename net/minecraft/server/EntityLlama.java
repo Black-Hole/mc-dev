@@ -21,7 +21,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     public void setStrength(int i) {
-        this.datawatcher.set(EntityLlama.bM, Integer.valueOf(Math.max(1, Math.min(5, i))));
+        this.datawatcher.set(EntityLlama.bM, Math.max(1, Math.min(5, i)));
     }
 
     private void eo() {
@@ -31,7 +31,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     public int getStrength() {
-        return ((Integer) this.datawatcher.get(EntityLlama.bM)).intValue();
+        return (Integer) this.datawatcher.get(EntityLlama.bM);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -77,17 +77,17 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityLlama.bM, Integer.valueOf(0));
-        this.datawatcher.register(EntityLlama.bN, Integer.valueOf(-1));
-        this.datawatcher.register(EntityLlama.bO, Integer.valueOf(0));
+        this.datawatcher.register(EntityLlama.bM, 0);
+        this.datawatcher.register(EntityLlama.bN, -1);
+        this.datawatcher.register(EntityLlama.bO, 0);
     }
 
     public int getVariant() {
-        return MathHelper.clamp(((Integer) this.datawatcher.get(EntityLlama.bO)).intValue(), 0, 3);
+        return MathHelper.clamp((Integer) this.datawatcher.get(EntityLlama.bO), 0, 3);
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityLlama.bO, Integer.valueOf(i));
+        this.datawatcher.set(EntityLlama.bO, i);
     }
 
     protected int dA() {
@@ -259,7 +259,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     }
 
     private void a(@Nullable EnumColor enumcolor) {
-        this.datawatcher.set(EntityLlama.bN, Integer.valueOf(enumcolor == null ? -1 : enumcolor.getColorIndex()));
+        this.datawatcher.set(EntityLlama.bN, enumcolor == null ? -1 : enumcolor.getColorIndex());
     }
 
     @Nullable
@@ -271,7 +271,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     @Nullable
     public EnumColor ej() {
-        int i = ((Integer) this.datawatcher.get(EntityLlama.bN)).intValue();
+        int i = (Integer) this.datawatcher.get(EntityLlama.bN);
 
         return i == -1 ? null : EnumColor.fromColorIndex(i);
     }
@@ -420,7 +420,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
     static class c extends PathfinderGoalHurtByTarget {
 
         public c(EntityLlama entityllama) {
-            super(entityllama, false, new Class[0]);
+            super(entityllama, false);
         }
 
         public boolean b() {

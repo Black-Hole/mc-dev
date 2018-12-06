@@ -57,11 +57,11 @@ public class RegionFile {
             int j;
 
             for (j = 0; j < i; ++j) {
-                this.f.add(Boolean.valueOf(true));
+                this.f.add(true);
             }
 
-            this.f.set(0, Boolean.valueOf(false));
-            this.f.set(1, Boolean.valueOf(false));
+            this.f.set(0, false);
+            this.f.set(1, false);
             this.c.seek(0L);
 
             int k;
@@ -71,7 +71,7 @@ public class RegionFile {
                 this.d[j] = k;
                 if (k != 0 && (k >> 8) + (k & 255) <= this.f.size()) {
                     for (int l = 0; l < (k & 255); ++l) {
-                        this.f.set((k >> 8) + l, Boolean.valueOf(false));
+                        this.f.set((k >> 8) + l, false);
                     }
                 }
             }
@@ -184,22 +184,22 @@ public class RegionFile {
                 int l1;
 
                 for (l1 = 0; l1 < j1; ++l1) {
-                    this.f.set(i1 + l1, Boolean.valueOf(true));
+                    this.f.set(i1 + l1, true);
                 }
 
-                l1 = this.f.indexOf(Boolean.valueOf(true));
+                l1 = this.f.indexOf(true);
                 int i2 = 0;
                 int j2;
 
                 if (l1 != -1) {
                     for (j2 = l1; j2 < this.f.size(); ++j2) {
                         if (i2 != 0) {
-                            if (((Boolean) this.f.get(j2)).booleanValue()) {
+                            if ((Boolean) this.f.get(j2)) {
                                 ++i2;
                             } else {
                                 i2 = 0;
                             }
-                        } else if (((Boolean) this.f.get(j2)).booleanValue()) {
+                        } else if ((Boolean) this.f.get(j2)) {
                             l1 = j2;
                             i2 = 1;
                         }
@@ -215,7 +215,7 @@ public class RegionFile {
                     this.a(i, j, l1 << 8 | k1);
 
                     for (j2 = 0; j2 < k1; ++j2) {
-                        this.f.set(i1 + j2, Boolean.valueOf(false));
+                        this.f.set(i1 + j2, false);
                     }
 
                     this.a(i1, abyte, k);
@@ -225,7 +225,7 @@ public class RegionFile {
 
                     for (j2 = 0; j2 < k1; ++j2) {
                         this.c.write(RegionFile.a);
-                        this.f.add(Boolean.valueOf(false));
+                        this.f.add(false);
                     }
 
                     this.g += 4096 * k1;

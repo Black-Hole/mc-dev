@@ -74,7 +74,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
             if (!hashmap.containsKey(commandnode)) {
                 int i = hashmap.size();
 
-                hashmap.put(commandnode, Integer.valueOf(i));
+                hashmap.put(commandnode, i);
                 arraydeque.addAll(commandnode.getChildren());
                 if (commandnode.getRedirect() != null) {
                     arraydeque.add(commandnode.getRedirect());
@@ -86,7 +86,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
         Entry entry;
 
-        for (Iterator iterator = hashmap.entrySet().iterator(); iterator.hasNext(); acommandnode[((Integer) entry.getValue()).intValue()] = (CommandNode) entry.getKey()) {
+        for (Iterator iterator = hashmap.entrySet().iterator(); iterator.hasNext(); acommandnode[(Integer) entry.getValue()] = (CommandNode) entry.getKey()) {
             entry = (Entry) iterator.next();
         }
 
@@ -100,7 +100,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
             this.a(packetdataserializer, commandnode1, hashmap);
         }
 
-        packetdataserializer.d(((Integer) hashmap.get(this.a)).intValue());
+        packetdataserializer.d((Integer) hashmap.get(this.a));
     }
 
     private PacketPlayOutCommands.a c(PacketDataSerializer packetdataserializer) {
@@ -169,11 +169,11 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         while (iterator.hasNext()) {
             CommandNode commandnode1 = (CommandNode) iterator.next();
 
-            packetdataserializer.d(((Integer) map.get(commandnode1)).intValue());
+            packetdataserializer.d((Integer) map.get(commandnode1));
         }
 
         if (commandnode.getRedirect() != null) {
-            packetdataserializer.d(((Integer) map.get(commandnode.getRedirect())).intValue());
+            packetdataserializer.d((Integer) map.get(commandnode.getRedirect()));
         }
 
         if (commandnode instanceof ArgumentCommandNode) {
@@ -239,9 +239,9 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
             int j;
             int k;
 
-            for (j = 0; j < i; ++j) {
-                k = aint[j];
-                if (apacketplayoutcommands_a[k].e == null) {
+            for (k = 0; k < i; ++k) {
+                j = aint[k];
+                if (apacketplayoutcommands_a[j].e == null) {
                     return false;
                 }
             }
@@ -249,9 +249,9 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
             aint = this.d;
             i = aint.length;
 
-            for (j = 0; j < i; ++j) {
-                k = aint[j];
-                CommandNode commandnode = apacketplayoutcommands_a[k].e;
+            for (k = 0; k < i; ++k) {
+                j = aint[k];
+                CommandNode commandnode = apacketplayoutcommands_a[j].e;
 
                 if (!(commandnode instanceof RootCommandNode)) {
                     this.e.addChild(commandnode);

@@ -73,7 +73,7 @@ public class PlayerSelector {
                 int i = argumentparserselector.f().getCursor();
                 CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(argumentparserselector.f());
 
-                if ((criterionconditionvalue_c.a() == null || ((Float) criterionconditionvalue_c.a()).floatValue() >= 0.0F) && (criterionconditionvalue_c.b() == null || ((Float) criterionconditionvalue_c.b()).floatValue() >= 0.0F)) {
+                if ((criterionconditionvalue_c.a() == null || (Float) criterionconditionvalue_c.a() >= 0.0F) && (criterionconditionvalue_c.b() == null || (Float) criterionconditionvalue_c.b() >= 0.0F)) {
                     argumentparserselector.a(criterionconditionvalue_c);
                     argumentparserselector.g();
                 } else {
@@ -87,7 +87,7 @@ public class PlayerSelector {
                 int i = argumentparserselector.f().getCursor();
                 CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(argumentparserselector.f());
 
-                if ((criterionconditionvalue_d.a() == null || ((Integer) criterionconditionvalue_d.a()).intValue() >= 0) && (criterionconditionvalue_d.b() == null || ((Integer) criterionconditionvalue_d.b()).intValue() >= 0)) {
+                if ((criterionconditionvalue_d.a() == null || (Integer) criterionconditionvalue_d.a() >= 0) && (criterionconditionvalue_d.b() == null || (Integer) criterionconditionvalue_d.b() >= 0)) {
                     argumentparserselector.a(criterionconditionvalue_d);
                     argumentparserselector.a(false);
                 } else {
@@ -172,19 +172,16 @@ public class PlayerSelector {
                         b0 = 2;
                     }
                     break;
-
                 case 1510793967:
                     if (s.equals("furthest")) {
                         b0 = 1;
                     }
                     break;
-
                 case 1780188658:
                     if (s.equals("arbitrary")) {
                         b0 = 3;
                     }
                     break;
-
                 case 1825779806:
                     if (s.equals("nearest")) {
                         b0 = 0;
@@ -197,19 +194,15 @@ public class PlayerSelector {
                 case 0:
                     biconsumer = ArgumentParserSelector.h;
                     break;
-
                 case 1:
                     biconsumer = ArgumentParserSelector.i;
                     break;
-
                 case 2:
                     biconsumer = ArgumentParserSelector.j;
                     break;
-
                 case 3:
                     biconsumer = ArgumentParserSelector.g;
                     break;
-
                 default:
                     argumentparserselector.f().setCursor(i);
                     throw PlayerSelector.f.createWithContext(argumentparserselector.f(), s);

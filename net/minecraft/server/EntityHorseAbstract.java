@@ -58,21 +58,21 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityHorseAbstract.bN, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityHorseAbstract.bN, (byte) 0);
         this.datawatcher.register(EntityHorseAbstract.bO, Optional.empty());
     }
 
     protected boolean p(int i) {
-        return (((Byte) this.datawatcher.get(EntityHorseAbstract.bN)).byteValue() & i) != 0;
+        return ((Byte) this.datawatcher.get(EntityHorseAbstract.bN) & i) != 0;
     }
 
     protected void d(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityHorseAbstract.bN)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityHorseAbstract.bN);
 
         if (flag) {
-            this.datawatcher.set(EntityHorseAbstract.bN, Byte.valueOf((byte) (b0 | i)));
+            this.datawatcher.set(EntityHorseAbstract.bN, (byte) (b0 | i));
         } else {
-            this.datawatcher.set(EntityHorseAbstract.bN, Byte.valueOf((byte) (b0 & ~i)));
+            this.datawatcher.set(EntityHorseAbstract.bN, (byte) (b0 & ~i));
         }
 
     }

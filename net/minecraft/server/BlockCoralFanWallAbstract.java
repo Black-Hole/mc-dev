@@ -12,7 +12,7 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
 
     protected BlockCoralFanWallAbstract(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, Boolean.valueOf(true)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -28,11 +28,11 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCoralFanWallAbstract.a, BlockCoralFanWallAbstract.b});
+        blockstatelist_a.a(BlockCoralFanWallAbstract.a, BlockCoralFanWallAbstract.b);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (((Boolean) iblockdata.get(BlockCoralFanWallAbstract.b)).booleanValue()) {
+        if ((Boolean) iblockdata.get(BlockCoralFanWallAbstract.b)) {
             generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 

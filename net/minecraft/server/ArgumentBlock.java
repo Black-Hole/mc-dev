@@ -220,7 +220,7 @@ public class ArgumentBlock {
             Comparable comparable = (Comparable) iterator.next();
 
             if (comparable instanceof Integer) {
-                suggestionsbuilder.suggest(((Integer) comparable).intValue());
+                suggestionsbuilder.suggest((Integer) comparable);
             } else {
                 suggestionsbuilder.suggest(iblockstate.a(comparable));
             }

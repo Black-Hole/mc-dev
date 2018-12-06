@@ -30,7 +30,7 @@ public class ItemRecord extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() == Blocks.JUKEBOX && !((Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)).booleanValue()) {
+        if (iblockdata.getBlock() == Blocks.JUKEBOX && !(Boolean) iblockdata.get(BlockJukeBox.HAS_RECORD)) {
             ItemStack itemstack = itemactioncontext.getItemStack();
 
             if (!world.isClientSide) {

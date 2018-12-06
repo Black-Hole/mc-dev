@@ -31,7 +31,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     public FluidTypeFlowing() {}
 
     protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { FluidTypeFlowing.FALLING});
+        blockstatelist_a.a(FluidTypeFlowing.FALLING);
     }
 
     public Vec3D a(IWorldReader iworldreader, BlockPosition blockposition, Fluid fluid) {
@@ -49,25 +49,25 @@ public abstract class FluidTypeFlowing extends FluidType {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                 blockposition_b.j(blockposition).d(enumdirection);
-                Fluid fluid1 = iworldreader.b(blockposition_b);
+                Fluid fluid1 = iworldreader.getFluid(blockposition_b);
 
                 if (this.g(fluid1)) {
-                    float f = fluid1.f();
+                    float f = fluid1.getHeight();
                     float f1 = 0.0F;
 
                     if (f == 0.0F) {
                         if (!iworldreader.getType(blockposition_b).getMaterial().isSolid()) {
-                            Fluid fluid2 = iworldreader.b(blockposition_b.down());
+                            Fluid fluid2 = iworldreader.getFluid(blockposition_b.down());
 
                             if (this.g(fluid2)) {
-                                f = fluid2.f();
+                                f = fluid2.getHeight();
                                 if (f > 0.0F) {
-                                    f1 = fluid.f() - (f - 0.8888889F);
+                                    f1 = fluid.getHeight() - (f - 0.8888889F);
                                 }
                             }
                         }
                     } else if (f > 0.0F) {
-                        f1 = fluid.f() - f;
+                        f1 = fluid.getHeight() - f;
                     }
 
                     if (f1 != 0.0F) {
@@ -79,7 +79,7 @@ public abstract class FluidTypeFlowing extends FluidType {
 
             Vec3D vec3d1 = new Vec3D(d0, 0.0D, d1);
 
-            if (((Boolean) fluid.get(FluidTypeFlowing.FALLING)).booleanValue()) {
+            if ((Boolean) fluid.get(FluidTypeFlowing.FALLING)) {
                 Iterator iterator1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator1.hasNext()) {
@@ -122,7 +122,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     protected boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
         Block block = iblockdata.getBlock();
-        Fluid fluid = iblockaccess.b(blockposition);
+        Fluid fluid = iblockaccess.getFluid(blockposition);
 
         if (fluid.c().a((FluidType) this)) {
             return false;
@@ -144,7 +144,7 @@ public abstract class FluidTypeFlowing extends FluidType {
             IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
             Fluid fluid1 = this.a((IWorldReader) generatoraccess, blockposition1, iblockdata1);
 
-            if (this.a(generatoraccess, blockposition, iblockdata, EnumDirection.DOWN, blockposition1, iblockdata1, generatoraccess.b(blockposition1), fluid1.c())) {
+            if (this.a(generatoraccess, blockposition, iblockdata, EnumDirection.DOWN, blockposition1, iblockdata1, generatoraccess.getFluid(blockposition1), fluid1.c())) {
                 this.a(generatoraccess, blockposition1, iblockdata1, EnumDirection.DOWN, fluid1);
                 if (this.a((IWorldReader) generatoraccess, blockposition) >= 3) {
                     this.a(generatoraccess, blockposition, fluid, iblockdata);
@@ -159,7 +159,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, Fluid fluid, IBlockData iblockdata) {
         int i = fluid.g() - this.c((IWorldReader) generatoraccess);
 
-        if (((Boolean) fluid.get(FluidTypeFlowing.FALLING)).booleanValue()) {
+        if ((Boolean) fluid.get(FluidTypeFlowing.FALLING)) {
             i = 7;
         }
 
@@ -174,7 +174,7 @@ public abstract class FluidTypeFlowing extends FluidType {
                 BlockPosition blockposition1 = blockposition.shift(enumdirection);
                 IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
-                if (this.a(generatoraccess, blockposition, iblockdata, enumdirection, blockposition1, iblockdata1, generatoraccess.b(blockposition1), fluid1.c())) {
+                if (this.a(generatoraccess, blockposition, iblockdata, enumdirection, blockposition1, iblockdata1, generatoraccess.getFluid(blockposition1), fluid1.c())) {
                     this.a(generatoraccess, blockposition1, iblockdata1, enumdirection, fluid1);
                 }
             }
@@ -264,13 +264,13 @@ public abstract class FluidTypeFlowing extends FluidType {
     public abstract FluidType e();
 
     public Fluid a(int i, boolean flag) {
-        return (Fluid) ((Fluid) this.e().i().set(FluidTypeFlowing.LEVEL, Integer.valueOf(i))).set(FluidTypeFlowing.FALLING, Boolean.valueOf(flag));
+        return (Fluid) ((Fluid) this.e().i().set(FluidTypeFlowing.LEVEL, i)).set(FluidTypeFlowing.FALLING, flag);
     }
 
     public abstract FluidType f();
 
     public Fluid a(boolean flag) {
-        return (Fluid) this.f().i().set(FluidTypeFlowing.FALLING, Boolean.valueOf(flag));
+        return (Fluid) this.f().i().set(FluidTypeFlowing.FALLING, flag);
     }
 
     protected abstract boolean g();
@@ -362,7 +362,7 @@ public abstract class FluidTypeFlowing extends FluidType {
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();
             BlockPosition blockposition1 = blockposition.shift(enumdirection);
-            Fluid fluid = iworldreader.b(blockposition1);
+            Fluid fluid = iworldreader.getFluid(blockposition1);
 
             if (this.h(fluid)) {
                 ++i;
@@ -467,7 +467,7 @@ public abstract class FluidTypeFlowing extends FluidType {
     }
 
     protected static int e(Fluid fluid) {
-        return fluid.d() ? 0 : 8 - Math.min(fluid.g(), 8) + (((Boolean) fluid.get(FluidTypeFlowing.FALLING)).booleanValue() ? 8 : 0);
+        return fluid.d() ? 0 : 8 - Math.min(fluid.g(), 8) + ((Boolean) fluid.get(FluidTypeFlowing.FALLING) ? 8 : 0);
     }
 
     public float a(Fluid fluid) {

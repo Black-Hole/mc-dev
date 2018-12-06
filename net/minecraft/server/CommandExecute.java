@@ -220,19 +220,19 @@ public class CommandExecute {
             return a(commandcontext, Integer::equals);
         }))))).then(CommandDispatcher.a("<").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
-                return integer.intValue() < integer1.intValue();
+                return integer < integer1;
             });
         }))))).then(CommandDispatcher.a("<=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
-                return integer.intValue() <= integer1.intValue();
+                return integer <= integer1;
             });
         }))))).then(CommandDispatcher.a(">").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
-                return integer.intValue() > integer1.intValue();
+                return integer > integer1;
             });
         }))))).then(CommandDispatcher.a(">=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, (integer, integer1) -> {
-                return integer.intValue() >= integer1.intValue();
+                return integer >= integer1;
             });
         }))))).then(CommandDispatcher.a("matches").then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("range", (ArgumentType) ArgumentCriterionValue.a()), flag, (commandcontext) -> {
             return a(commandcontext, ArgumentCriterionValue.b.a(commandcontext, "range"));
@@ -242,7 +242,7 @@ public class CommandExecute {
             int i = ArgumentEntity.c(commandcontext, "entities").size();
 
             if (i > 0) {
-                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { Integer.valueOf(i)}), false);
+                ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { i}), false);
                 return i;
             } else {
                 throw CommandExecute.b.create();
@@ -254,7 +254,7 @@ public class CommandExecute {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
                 return 1;
             } else {
-                throw CommandExecute.c.create(Integer.valueOf(i));
+                throw CommandExecute.c.create(i);
             }
         })));
     }
@@ -270,7 +270,7 @@ public class CommandExecute {
             ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
             ScoreboardScore scoreboardscore1 = scoreboardserver.getPlayerScoreForObjective(s1, scoreboardobjective1);
 
-            return bipredicate.test(Integer.valueOf(scoreboardscore.getScore()), Integer.valueOf(scoreboardscore1.getScore()));
+            return bipredicate.test(scoreboardscore.getScore(), scoreboardscore1.getScore());
         } else {
             return false;
         }
@@ -315,7 +315,7 @@ public class CommandExecute {
         OptionalInt optionalint = c(commandcontext, flag);
 
         if (optionalint.isPresent()) {
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { Integer.valueOf(optionalint.getAsInt())}), false);
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { optionalint.getAsInt()}), false);
             return optionalint.getAsInt();
         } else {
             throw CommandExecute.b.create();
@@ -329,7 +329,7 @@ public class CommandExecute {
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
             return 1;
         } else {
-            throw CommandExecute.c.create(Integer.valueOf(optionalint.getAsInt()));
+            throw CommandExecute.c.create(optionalint.getAsInt());
         }
     }
 
@@ -344,7 +344,7 @@ public class CommandExecute {
         int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
         if (i > '\u8000') {
-            throw CommandExecute.a.create(Integer.valueOf('\u8000'), Integer.valueOf(i));
+            throw CommandExecute.a.create('\u8000', i);
         } else {
             int j = 0;
 

@@ -38,7 +38,7 @@ public class EntityPotion extends EntityProjectile {
 
         if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
             if (this.world != null) {
-                EntityPotion.g.error("ThrownPotion entity {} has no item?!", Integer.valueOf(this.getId()));
+                EntityPotion.g.error("ThrownPotion entity {} has no item?!", this.getId());
             }
 
             return new ItemStack(Items.SPLASH_POTION);
@@ -63,7 +63,7 @@ public class EntityPotion extends EntityProjectile {
             boolean flag = potionregistry == Potions.b && list.isEmpty();
 
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
-                BlockPosition blockposition = movingobjectposition.a().shift(movingobjectposition.direction);
+                BlockPosition blockposition = movingobjectposition.getBlockPosition().shift(movingobjectposition.direction);
 
                 this.a(blockposition, movingobjectposition.direction);
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();

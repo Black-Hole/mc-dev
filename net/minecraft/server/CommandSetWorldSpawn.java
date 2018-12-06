@@ -21,7 +21,7 @@ public class CommandSetWorldSpawn {
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition) {
         commandlistenerwrapper.getWorld().v(blockposition);
         commandlistenerwrapper.getServer().getPlayerList().sendAll(new PacketPlayOutSpawnPosition(blockposition));
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.setworldspawn.success", new Object[] { Integer.valueOf(blockposition.getX()), Integer.valueOf(blockposition.getY()), Integer.valueOf(blockposition.getZ())}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.setworldspawn.success", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ()}), true);
         return 1;
     }
 }

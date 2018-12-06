@@ -199,7 +199,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public boolean setAir(BlockPosition blockposition) {
-        Fluid fluid = this.b(blockposition);
+        Fluid fluid = this.getFluid(blockposition);
 
         return this.setTypeAndData(blockposition, fluid.i(), 3);
     }
@@ -210,7 +210,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         if (iblockdata.isAir()) {
             return false;
         } else {
-            Fluid fluid = this.b(blockposition);
+            Fluid fluid = this.getFluid(blockposition);
 
             this.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
             if (flag) {
@@ -412,13 +412,13 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         }
     }
 
-    public Fluid b(BlockPosition blockposition) {
+    public Fluid getFluid(BlockPosition blockposition) {
         if (k(blockposition)) {
             return FluidTypes.a.i();
         } else {
             Chunk chunk = this.getChunkAtWorldCoords(blockposition);
 
-            return chunk.b(blockposition);
+            return chunk.getFluid(blockposition);
         }
     }
 
@@ -452,22 +452,22 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 int j1 = MathHelper.floor(d2);
                 BlockPosition blockposition = new BlockPosition(l, i1, j1);
                 IBlockData iblockdata = this.getType(blockposition);
-                Fluid fluid = this.b(blockposition);
+                Fluid fluid = this.getFluid(blockposition);
                 boolean flag2;
                 boolean flag3;
 
                 if (!flag || !iblockdata.getCollisionShape(this, blockposition).isEmpty()) {
-                    flag2 = iblockdata.getBlock().d(iblockdata);
-                    flag3 = fluidcollisionoption.d.test(fluid);
+                    flag2 = iblockdata.getBlock().isCollidable(iblockdata);
+                    flag3 = fluidcollisionoption.predicate.test(fluid);
                     if (flag2 || flag3) {
                         MovingObjectPosition movingobjectposition = null;
 
                         if (flag2) {
-                            movingobjectposition = Block.a(iblockdata, this, blockposition, vec3d, vec3d1);
+                            movingobjectposition = Block.rayTrace(iblockdata, this, blockposition, vec3d, vec3d1);
                         }
 
                         if (movingobjectposition == null && flag3) {
-                            movingobjectposition = VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.f(), 1.0D).a(vec3d, vec3d1, blockposition);
+                            movingobjectposition = VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.getHeight(), 1.0D).rayTrace(vec3d, vec3d1, blockposition);
                         }
 
                         if (movingobjectposition != null) {
@@ -574,11 +574,11 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                     j1 = MathHelper.floor(d2) - (enumdirection == EnumDirection.SOUTH ? 1 : 0);
                     blockposition = new BlockPosition(l, i1, j1);
                     IBlockData iblockdata1 = this.getType(blockposition);
-                    Fluid fluid1 = this.b(blockposition);
+                    Fluid fluid1 = this.getFluid(blockposition);
 
                     if (!flag || iblockdata1.getMaterial() == Material.PORTAL || !iblockdata1.getCollisionShape(this, blockposition).isEmpty()) {
-                        boolean flag5 = iblockdata1.getBlock().d(iblockdata1);
-                        boolean flag6 = fluidcollisionoption.d.test(fluid1);
+                        boolean flag5 = iblockdata1.getBlock().isCollidable(iblockdata1);
+                        boolean flag6 = fluidcollisionoption.predicate.test(fluid1);
 
                         if (!flag5 && !flag6) {
                             movingobjectposition1 = new MovingObjectPosition(MovingObjectPosition.EnumMovingObjectType.MISS, new Vec3D(d0, d1, d2), enumdirection, blockposition);
@@ -586,11 +586,11 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                             MovingObjectPosition movingobjectposition2 = null;
 
                             if (flag5) {
-                                movingobjectposition2 = Block.a(iblockdata1, this, blockposition, vec3d, vec3d1);
+                                movingobjectposition2 = Block.rayTrace(iblockdata1, this, blockposition, vec3d, vec3d1);
                             }
 
                             if (movingobjectposition2 == null && flag6) {
-                                movingobjectposition2 = VoxelShapes.a(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.f(), 1.0D).a(vec3d, vec3d1, blockposition);
+                                movingobjectposition2 = VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.getHeight(), 1.0D).rayTrace(vec3d, vec3d1, blockposition);
                             }
 
                             if (movingobjectposition2 != null) {
@@ -751,8 +751,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         this.methodProfiler.a("entities");
         this.methodProfiler.a("global");
 
-        int i;
         Entity entity;
+        int i;
 
         for (i = 0; i < this.k.size(); ++i) {
             entity = (Entity) this.k.get(i);
@@ -801,8 +801,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         this.p_();
         this.methodProfiler.c("regular");
 
-        CrashReportSystemDetails crashreportsystemdetails1;
         CrashReport crashreport1;
+        CrashReportSystemDetails crashreportsystemdetails1;
 
         for (i = 0; i < this.entityList.size(); ++i) {
             entity = (Entity) this.entityList.get(i);
@@ -2084,7 +2084,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 }
 
                 if (function != null) {
-                    d7 *= ((Double) MoreObjects.firstNonNull(function.apply(entityhuman1), Double.valueOf(1.0D))).doubleValue();
+                    d7 *= (Double) MoreObjects.firstNonNull(function.apply(entityhuman1), 1.0D);
                 }
 
                 if ((d4 < 0.0D || Math.abs(entityhuman1.locY - d1) < d4 * d4) && (d3 < 0.0D || d6 < d7 * d7) && (d5 == -1.0D || d6 < d5)) {
@@ -2239,8 +2239,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
             crashreportsystemdetails.a("Block coordinates", (Object) CrashReportSystemDetails.a(blockposition));
             crashreportsystemdetails.a("Event source", (Object) entityhuman);
-            crashreportsystemdetails.a("Event type", (Object) Integer.valueOf(i));
-            crashreportsystemdetails.a("Event data", (Object) Integer.valueOf(j));
+            crashreportsystemdetails.a("Event type", (Object) i);
+            crashreportsystemdetails.a("Event data", (Object) j);
             throw new ReportedException(crashreport);
         }
     }
@@ -2387,7 +2387,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public void a(Packet<?> packet) {
-        throw new UnsupportedOperationException("Can\'t send packets to server unless you\'re on the client.");
+        throw new UnsupportedOperationException("Can't send packets to server unless you're on the client.");
     }
 
     @Nullable

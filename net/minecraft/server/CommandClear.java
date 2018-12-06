@@ -54,19 +54,19 @@ public class CommandClear {
             if (collection.size() == 1) {
                 throw CommandClear.a.create(((EntityPlayer) collection.iterator().next()).getDisplayName().e());
             } else {
-                throw CommandClear.b.create(Integer.valueOf(collection.size()));
+                throw CommandClear.b.create(collection.size());
             }
         } else {
             if (i == 0) {
                 if (collection.size() == 1) {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.test.single", new Object[] { Integer.valueOf(j), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.test.single", new Object[] { j, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
                 } else {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.test.multiple", new Object[] { Integer.valueOf(j), Integer.valueOf(collection.size())}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.test.multiple", new Object[] { j, collection.size()}), true);
                 }
             } else if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.success.single", new Object[] { Integer.valueOf(j), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.success.single", new Object[] { j, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.success.multiple", new Object[] { Integer.valueOf(j), Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.clear.success.multiple", new Object[] { j, collection.size()}), true);
             }
 
             return j;

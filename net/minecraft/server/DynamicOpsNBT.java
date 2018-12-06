@@ -38,43 +38,30 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         switch (nbtbase.getTypeId()) {
         case 0:
             return DSL.nilType();
-
         case 1:
             return DSL.byteType();
-
         case 2:
             return DSL.shortType();
-
         case 3:
             return DSL.intType();
-
         case 4:
             return DSL.longType();
-
         case 5:
             return DSL.floatType();
-
         case 6:
             return DSL.doubleType();
-
         case 7:
             return DSL.list(DSL.byteType());
-
         case 8:
             return DSL.string();
-
         case 9:
             return DSL.list(DSL.remainderType());
-
         case 10:
             return DSL.compoundList(DSL.remainderType(), DSL.remainderType());
-
         case 11:
             return DSL.list(DSL.intType());
-
         case 12:
             return DSL.list(DSL.longType());
-
         default:
             return DSL.remainderType();
         }
@@ -113,7 +100,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public Optional<String> c(NBTBase nbtbase) {
-        return nbtbase instanceof NBTTagString ? Optional.of(nbtbase.b_()) : Optional.empty();
+        return nbtbase instanceof NBTTagString ? Optional.of(nbtbase.asString()) : Optional.empty();
     }
 
     public NBTBase a(String s) {
@@ -180,7 +167,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
             });
         }
 
-        nbttagcompound.set(nbtbase1.b_(), nbtbase2);
+        nbttagcompound.set(nbtbase1.asString(), nbtbase2);
         return nbttagcompound;
     }
 
@@ -234,7 +221,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
 
-            nbttagcompound.set(((NBTBase) entry.getKey()).b_(), (NBTBase) entry.getValue());
+            nbttagcompound.set(((NBTBase) entry.getKey()).asString(), (NBTBase) entry.getValue());
         }
 
         return nbttagcompound;
@@ -281,17 +268,17 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
             if (nbtbase instanceof NBTTagByte) {
                 arraylist = Lists.newArrayList(Iterators.transform(peekingiterator, (nbtbase) -> {
-                    return Byte.valueOf(((NBTTagByte) nbtbase).g());
+                    return ((NBTTagByte) nbtbase).asByte();
                 }));
                 return new NBTTagByteArray(arraylist);
             } else if (nbtbase instanceof NBTTagInt) {
                 arraylist = Lists.newArrayList(Iterators.transform(peekingiterator, (nbtbase) -> {
-                    return Integer.valueOf(((NBTTagInt) nbtbase).e());
+                    return ((NBTTagInt) nbtbase).asInt();
                 }));
                 return new NBTTagIntArray(arraylist);
             } else if (nbtbase instanceof NBTTagLong) {
                 arraylist = Lists.newArrayList(Iterators.transform(peekingiterator, (nbtbase) -> {
-                    return Long.valueOf(((NBTTagLong) nbtbase).d());
+                    return ((NBTTagLong) nbtbase).asLong();
                 }));
                 return new NBTTagLongArray(arraylist);
             } else {

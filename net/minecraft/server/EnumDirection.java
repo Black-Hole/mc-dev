@@ -97,16 +97,12 @@ public enum EnumDirection implements INamable {
         switch (this) {
         case NORTH:
             return EnumDirection.EAST;
-
         case EAST:
             return EnumDirection.SOUTH;
-
         case SOUTH:
             return EnumDirection.WEST;
-
         case WEST:
             return EnumDirection.NORTH;
-
         default:
             throw new IllegalStateException("Unable to get Y-rotated facing of " + this);
         }
@@ -116,16 +112,12 @@ public enum EnumDirection implements INamable {
         switch (this) {
         case NORTH:
             return EnumDirection.WEST;
-
         case EAST:
             return EnumDirection.NORTH;
-
         case SOUTH:
             return EnumDirection.EAST;
-
         case WEST:
             return EnumDirection.SOUTH;
-
         default:
             throw new IllegalStateException("Unable to get CCW facing of " + this);
         }
@@ -167,10 +159,8 @@ public enum EnumDirection implements INamable {
         switch (enumdirection_enumaxis) {
         case X:
             return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.EAST : EnumDirection.WEST;
-
         case Y:
             return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.UP : EnumDirection.DOWN;
-
         case Z:
         default:
             return enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? EnumDirection.SOUTH : EnumDirection.NORTH;
@@ -284,7 +274,6 @@ public enum EnumDirection implements INamable {
     public static enum EnumAxis implements Predicate<EnumDirection>, INamable {
 
         X("x") {
-            ;
             public int a(int i, int j, int k) {
                 return i;
             }
@@ -298,7 +287,6 @@ public enum EnumDirection implements INamable {
             }
         },
         Y("y") {
-            ;
             public int a(int i, int j, int k) {
                 return j;
             }
@@ -312,7 +300,6 @@ public enum EnumDirection implements INamable {
             }
         },
         Z("z") {
-            ;
             public int a(int i, int j, int k) {
                 return k;
             }
@@ -360,12 +347,10 @@ public enum EnumDirection implements INamable {
             case X:
             case Z:
                 return EnumDirection.EnumDirectionLimit.HORIZONTAL;
-
             case Y:
                 return EnumDirection.EnumDirectionLimit.VERTICAL;
-
             default:
-                throw new Error("Someone\'s been tampering with the universe!");
+                throw new Error("Someone's been tampering with the universe!");
             }
         }
 

@@ -78,7 +78,7 @@ public class ItemMonsterEgg extends Item {
             MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
 
             if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.a();
+                BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
                 if (!(world.getType(blockposition).getBlock() instanceof BlockFluids)) {
                     return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);

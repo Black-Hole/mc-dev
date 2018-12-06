@@ -53,7 +53,7 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEmptyConfigurat
                             if (flag3 || flag4 || flag5) {
                                 boolean flag6 = j == -2 || j == 2 || flag5;
                                 boolean flag7 = k == -2 || k == 2 || flag5;
-                                IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) Blocks.IRON_BARS.getBlockData().set(BlockIronBars.NORTH, Boolean.valueOf(flag6 && k != -2))).set(BlockIronBars.SOUTH, Boolean.valueOf(flag6 && k != 2))).set(BlockIronBars.WEST, Boolean.valueOf(flag7 && j != -2))).set(BlockIronBars.EAST, Boolean.valueOf(flag7 && j != 2));
+                                IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) Blocks.IRON_BARS.getBlockData().set(BlockIronBars.NORTH, flag6 && k != -2)).set(BlockIronBars.SOUTH, flag6 && k != 2)).set(BlockIronBars.WEST, flag7 && j != -2)).set(BlockIronBars.EAST, flag7 && j != 2);
 
                                 this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition1.c(blockposition.getX() + j, this.b.d() + l, blockposition.getZ() + k), iblockdata);
                             }

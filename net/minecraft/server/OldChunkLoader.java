@@ -46,15 +46,15 @@ public class OldChunkLoader {
         for (int l = 0; l < 8; ++l) {
             boolean flag = true;
 
-            for (j = 0; j < 16 && flag; ++j) {
-                k = 0;
+            for (k = 0; k < 16 && flag; ++k) {
+                j = 0;
 
-                while (k < 16 && flag) {
+                while (j < 16 && flag) {
                     int i1 = 0;
 
                     while (true) {
                         if (i1 < 16) {
-                            int j1 = j << 11 | i1 << 7 | k + (l << 4);
+                            int j1 = k << 11 | i1 << 7 | j + (l << 4);
                             byte b0 = oldchunkloader_oldchunk.g[j1];
 
                             if (b0 == 0) {
@@ -65,7 +65,7 @@ public class OldChunkLoader {
                             flag = false;
                         }
 
-                        ++k;
+                        ++j;
                         break;
                     }
                 }
@@ -106,10 +106,10 @@ public class OldChunkLoader {
         byte[] abyte1 = new byte[256];
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        for (j = 0; j < 16; ++j) {
-            for (k = 0; k < 16; ++k) {
-                blockposition_mutableblockposition.c(oldchunkloader_oldchunk.k << 4 | j, 0, oldchunkloader_oldchunk.l << 4 | k);
-                abyte1[k << 4 | j] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition, Biomes.b)) & 255);
+        for (k = 0; k < 16; ++k) {
+            for (j = 0; j < 16; ++j) {
+                blockposition_mutableblockposition.c(oldchunkloader_oldchunk.k << 4 | k, 0, oldchunkloader_oldchunk.l << 4 | j);
+                abyte1[j << 4 | k] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition, Biomes.b)) & 255);
             }
         }
 

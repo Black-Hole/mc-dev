@@ -29,7 +29,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
         if (0 == this.h) {
             this.h = this.i + 10;
             this.b("Setting default rcon port to " + this.h);
-            iminecraftserver.a("rcon.port", (Object) Integer.valueOf(this.h));
+            iminecraftserver.a("rcon.port", (Object) this.h);
             if (this.l.isEmpty()) {
                 iminecraftserver.a("rcon.password", (Object) "");
             }
@@ -92,7 +92,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
 
     public void a() {
         if (this.l.isEmpty()) {
-            this.c("No rcon password set in \'" + this.b.d_() + "\', rcon disabled!");
+            this.c("No rcon password set in '" + this.b.d_() + "', rcon disabled!");
         } else if (0 < this.h && '\uffff' >= this.h) {
             if (!this.a) {
                 try {
@@ -105,7 +105,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
 
             }
         } else {
-            this.c("Invalid rcon port " + this.h + " found in \'" + this.b.d_() + "\', rcon disabled!");
+            this.c("Invalid rcon port " + this.h + " found in '" + this.b.d_() + "', rcon disabled!");
         }
     }
 }

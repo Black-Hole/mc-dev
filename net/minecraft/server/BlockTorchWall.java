@@ -69,6 +69,6 @@ public class BlockTorchWall extends BlockTorch {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockTorchWall.a});
+        blockstatelist_a.a(BlockTorchWall.a);
     }
 }

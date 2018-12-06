@@ -52,24 +52,20 @@ public class GenLayerBiome implements AreaTransformer5 {
                     }
 
                     return this.w[worldgencontext.a(this.w.length)];
-
                 case 2:
                     if (j > 0) {
                         return GenLayerBiome.f;
                     }
 
                     return GenLayerBiome.s[worldgencontext.a(GenLayerBiome.s.length)];
-
                 case 3:
                     if (j > 0) {
                         return GenLayerBiome.k;
                     }
 
                     return GenLayerBiome.t[worldgencontext.a(GenLayerBiome.t.length)];
-
                 case 4:
                     return GenLayerBiome.u[worldgencontext.a(GenLayerBiome.u.length)];
-
                 default:
                     return GenLayerBiome.i;
                 }

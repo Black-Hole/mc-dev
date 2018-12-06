@@ -40,7 +40,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         int l = area1.a(i + 1, j + 1);
 
         if (k > 255) {
-            GenLayerRegionHills.b.debug("old! {}", Integer.valueOf(k));
+            GenLayerRegionHills.b.debug("old! {}", k);
         }
 
         int i1 = (l - 2) % 29;

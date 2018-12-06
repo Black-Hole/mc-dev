@@ -29,7 +29,7 @@ public class WorldGenFeatureIceSnow extends WorldGenerator<WorldGenFeatureEmptyC
                     IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition1);
 
                     if (iblockdata.b(BlockDirtSnow.a)) {
-                        generatoraccess.setTypeAndData(blockposition_mutableblockposition1, (IBlockData) iblockdata.set(BlockDirtSnow.a, Boolean.valueOf(true)), 2);
+                        generatoraccess.setTypeAndData(blockposition_mutableblockposition1, (IBlockData) iblockdata.set(BlockDirtSnow.a, true), 2);
                     }
                 }
             }

@@ -132,7 +132,7 @@ public class DataConverterRegistry {
         }));
         Schema schema32 = datafixerbuilder.addSchema(1022, DataConverterSchemaV1022::new);
 
-        datafixerbuilder.addFixer(new DataConverterShoulderEntity(schema32, "added shoulder entities to players", DataConverterTypes.b));
+        datafixerbuilder.addFixer(new DataConverterShoulderEntity(schema32, "added shoulder entities to players", DataConverterTypes.PLAYER));
         Schema schema33 = datafixerbuilder.addSchema(1125, DataConverterSchemaV1125::new);
 
         datafixerbuilder.addFixer(new DataConverterBedBlock(schema33, true));

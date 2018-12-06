@@ -387,10 +387,10 @@ public class NameReferencingFileConverter {
     private static void b(File file) {
         if (file.exists()) {
             if (!file.isDirectory()) {
-                throw new NameReferencingFileConverter.FileConversionException("Can\'t create directory " + file.getName() + " in world save directory.", null);
+                throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.", null);
             }
         } else if (!file.mkdirs()) {
-            throw new NameReferencingFileConverter.FileConversionException("Can\'t create directory " + file.getName() + " in world save directory.", null);
+            throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.", null);
         }
     }
 
@@ -457,7 +457,7 @@ public class NameReferencingFileConverter {
         if (file.exists() && file.isDirectory() && (file.list().length > 0 || !file.delete())) {
             NameReferencingFileConverter.e.warn("**** DETECTED OLD PLAYER DIRECTORY IN THE WORLD SAVE");
             NameReferencingFileConverter.e.warn("**** THIS USUALLY HAPPENS WHEN THE AUTOMATIC CONVERSION FAILED IN SOME WAY");
-            NameReferencingFileConverter.e.warn("** please restart the server and if the problem persists, remove the directory \'{}\'", file.getPath());
+            NameReferencingFileConverter.e.warn("** please restart the server and if the problem persists, remove the directory '{}'", file.getPath());
             return false;
         } else {
             return true;

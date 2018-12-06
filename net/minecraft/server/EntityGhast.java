@@ -24,7 +24,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     public void a(boolean flag) {
-        this.datawatcher.set(EntityGhast.a, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityGhast.a, flag);
     }
 
     public int getPower() {
@@ -52,7 +52,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityGhast.a, Boolean.valueOf(false));
+        this.datawatcher.register(EntityGhast.a, false);
     }
 
     protected void initAttributes() {

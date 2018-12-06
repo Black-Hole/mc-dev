@@ -78,13 +78,10 @@ public class LootTableInfo {
         switch (loottableinfo_entitytarget) {
         case THIS:
             return this.a();
-
         case KILLER:
             return this.c();
-
         case KILLER_PLAYER:
             return this.b();
-
         default:
             return null;
         }

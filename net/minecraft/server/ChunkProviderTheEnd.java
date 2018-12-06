@@ -108,7 +108,7 @@ public class ChunkProviderTheEnd extends ChunkGeneratorAbstract<GeneratorSetting
         ichunkaccess.a(abiomebase);
         this.a(i, j, ichunkaccess);
         this.a(ichunkaccess, abiomebase, seededrandom, 0);
-        ichunkaccess.a(new HeightMap.Type[] { HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG});
+        ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG);
         ichunkaccess.a(ChunkStatus.BASE);
     }
 

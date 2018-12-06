@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class RecipeMapExtend extends ShapedRecipes {
 
     public RecipeMapExtend(MinecraftKey minecraftkey) {
-        super(minecraftkey, "", 3, 3, NonNullList.a(RecipeItemStack.a, new RecipeItemStack[] { RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.FILLED_MAP}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER}), RecipeItemStack.a(new IMaterial[] { Items.PAPER})}), new ItemStack(Items.MAP));
+        super(minecraftkey, "", 3, 3, NonNullList.a(RecipeItemStack.a, RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.FILLED_MAP), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER)), new ItemStack(Items.MAP));
     }
 
     public boolean a(IInventory iinventory, World world) {

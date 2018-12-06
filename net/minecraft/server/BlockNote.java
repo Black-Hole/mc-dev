@@ -8,7 +8,7 @@ public class BlockNote extends Block {
 
     public BlockNote(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, Integer.valueOf(0))).set(BlockNote.POWERED, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockNote.INSTRUMENT, BlockPropertyInstrument.HARP)).set(BlockNote.NOTE, 0)).set(BlockNote.POWERED, false));
     }
 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
@@ -22,12 +22,12 @@ public class BlockNote extends Block {
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
-        if (flag != ((Boolean) iblockdata.get(BlockNote.POWERED)).booleanValue()) {
+        if (flag != (Boolean) iblockdata.get(BlockNote.POWERED)) {
             if (flag) {
                 this.play(world, blockposition);
             }
 
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockNote.POWERED, Boolean.valueOf(flag)), 3);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockNote.POWERED, flag), 3);
         }
 
     }
@@ -59,7 +59,7 @@ public class BlockNote extends Block {
     }
 
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, int i, int j) {
-        int k = ((Integer) iblockdata.get(BlockNote.NOTE)).intValue();
+        int k = (Integer) iblockdata.get(BlockNote.NOTE);
         float f = (float) Math.pow(2.0D, (double) (k - 12) / 12.0D);
 
         world.a((EntityHuman) null, blockposition, ((BlockPropertyInstrument) iblockdata.get(BlockNote.INSTRUMENT)).a(), SoundCategory.RECORDS, 3.0F, f);
@@ -68,6 +68,6 @@ public class BlockNote extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockNote.INSTRUMENT, BlockNote.POWERED, BlockNote.NOTE});
+        blockstatelist_a.a(BlockNote.INSTRUMENT, BlockNote.POWERED, BlockNote.NOTE);
     }
 }

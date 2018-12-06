@@ -38,7 +38,7 @@ public class BlockSprawling extends Block {
         for (int i = 0; i < BlockSprawling.t.length; ++i) {
             EnumDirection enumdirection = BlockSprawling.t[i];
 
-            avoxelshape[i] = VoxelShapes.a(0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentZ() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentZ() * 0.5D));
+            avoxelshape[i] = VoxelShapes.create(0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.min((double) (-f), (double) enumdirection.getAdjacentZ() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentX() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentY() * 0.5D), 0.5D + Math.max((double) f, (double) enumdirection.getAdjacentZ() * 0.5D));
         }
 
         VoxelShape[] avoxelshape1 = new VoxelShape[64];
@@ -66,7 +66,7 @@ public class BlockSprawling extends Block {
         int i = 0;
 
         for (int j = 0; j < BlockSprawling.t.length; ++j) {
-            if (((Boolean) iblockdata.get((IBlockState) BlockSprawling.r.get(BlockSprawling.t[j]))).booleanValue()) {
+            if ((Boolean) iblockdata.get((IBlockState) BlockSprawling.r.get(BlockSprawling.t[j]))) {
                 i |= 1 << j;
             }
         }

@@ -373,7 +373,7 @@ public class Advancement {
                         String s1 = astring3[i1];
 
                         if (!map.containsKey(s1)) {
-                            throw new JsonSyntaxException("Unknown required criterion \'" + s1 + "\'");
+                            throw new JsonSyntaxException("Unknown required criterion '" + s1 + "'");
                         }
                     }
                 }
@@ -401,7 +401,7 @@ public class Advancement {
                         }
 
                         if (!flag) {
-                            throw new JsonSyntaxException("Criterion \'" + s2 + "\' isn\'t a requirement for completion. This isn\'t supported behaviour, all criteria must be required.");
+                            throw new JsonSyntaxException("Criterion '" + s2 + "' isn't a requirement for completion. This isn't supported behaviour, all criteria must be required.");
                         }
                         break;
                     }

@@ -29,8 +29,8 @@ public class WorldGenFeatureCoralClaw extends WorldGenFeatureCoral {
                 int j = random.nextInt(2) + 1;
 
                 blockposition_mutableblockposition.c(enumdirection1);
-                int k;
                 EnumDirection enumdirection2;
+                int k;
 
                 if (enumdirection1 == enumdirection) {
                     enumdirection2 = enumdirection;

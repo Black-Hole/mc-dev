@@ -67,7 +67,7 @@ public class BlockShulkerBox extends BlockTileEntity {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockShulkerBox.a});
+        blockstatelist_a.a(BlockShulkerBox.a);
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
@@ -161,50 +161,35 @@ public class BlockShulkerBox extends BlockTileEntity {
             switch (enumcolor) {
             case WHITE:
                 return Blocks.WHITE_SHULKER_BOX;
-
             case ORANGE:
                 return Blocks.ORANGE_SHULKER_BOX;
-
             case MAGENTA:
                 return Blocks.MAGENTA_SHULKER_BOX;
-
             case LIGHT_BLUE:
                 return Blocks.LIGHT_BLUE_SHULKER_BOX;
-
             case YELLOW:
                 return Blocks.YELLOW_SHULKER_BOX;
-
             case LIME:
                 return Blocks.LIME_SHULKER_BOX;
-
             case PINK:
                 return Blocks.PINK_SHULKER_BOX;
-
             case GRAY:
                 return Blocks.GRAY_SHULKER_BOX;
-
             case LIGHT_GRAY:
                 return Blocks.LIGHT_GRAY_SHULKER_BOX;
-
             case CYAN:
                 return Blocks.CYAN_SHULKER_BOX;
-
             case PURPLE:
             default:
                 return Blocks.PURPLE_SHULKER_BOX;
-
             case BLUE:
                 return Blocks.BLUE_SHULKER_BOX;
-
             case BROWN:
                 return Blocks.BROWN_SHULKER_BOX;
-
             case GREEN:
                 return Blocks.GREEN_SHULKER_BOX;
-
             case RED:
                 return Blocks.RED_SHULKER_BOX;
-
             case BLACK:
                 return Blocks.BLACK_SHULKER_BOX;
             }

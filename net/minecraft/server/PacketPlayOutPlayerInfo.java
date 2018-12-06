@@ -73,24 +73,20 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     ichatbasecomponent = packetdataserializer.f();
                 }
                 break;
-
             case UPDATE_GAME_MODE:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 enumgamemode = EnumGamemode.getById(packetdataserializer.g());
                 break;
-
             case UPDATE_LATENCY:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 k = packetdataserializer.g();
                 break;
-
             case UPDATE_DISPLAY_NAME:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
                 if (packetdataserializer.readBoolean()) {
                     ichatbasecomponent = packetdataserializer.f();
                 }
                 break;
-
             case REMOVE_PLAYER:
                 gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
             }
@@ -137,17 +133,14 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
                 }
                 break;
-
             case UPDATE_GAME_MODE:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.c().getId());
                 break;
-
             case UPDATE_LATENCY:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 packetdataserializer.d(packetplayoutplayerinfo_playerinfodata.b());
                 break;
-
             case UPDATE_DISPLAY_NAME:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
                 if (packetplayoutplayerinfo_playerinfodata.d() == null) {
@@ -157,7 +150,6 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.d());
                 }
                 break;
-
             case REMOVE_PLAYER:
                 packetdataserializer.a(packetplayoutplayerinfo_playerinfodata.a().getId());
             }

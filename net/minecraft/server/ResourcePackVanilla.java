@@ -105,7 +105,7 @@ public class ResourcePackVanilla implements IResourcePack {
             URL url = ResourcePackVanilla.class.getResource("/" + enumresourcepacktype.a() + "/.mcassetsroot");
 
             if (url == null) {
-                ResourcePackVanilla.d.error("Couldn\'t find .mcassetsroot, cannot load vanilla resources");
+                ResourcePackVanilla.d.error("Couldn't find .mcassetsroot, cannot load vanilla resources");
                 return hashset;
             }
 
@@ -151,7 +151,7 @@ public class ResourcePackVanilla implements IResourcePack {
         } catch (NoSuchFileException | FileNotFoundException filenotfoundexception) {
             ;
         } catch (IOException | URISyntaxException urisyntaxexception1) {
-            ResourcePackVanilla.d.error("Couldn\'t get a list of all vanilla resources", urisyntaxexception1);
+            ResourcePackVanilla.d.error("Couldn't get a list of all vanilla resources", urisyntaxexception1);
         }
 
         return hashset;

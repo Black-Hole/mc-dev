@@ -4,17 +4,17 @@ public abstract class NBTNumber implements NBTBase {
 
     protected NBTNumber() {}
 
-    public abstract long d();
+    public abstract long asLong();
 
-    public abstract int e();
+    public abstract int asInt();
 
-    public abstract short f();
+    public abstract short asShort();
 
-    public abstract byte g();
+    public abstract byte asByte();
 
     public abstract double asDouble();
 
-    public abstract float i();
+    public abstract float asFloat();
 
     public abstract Number j();
 }

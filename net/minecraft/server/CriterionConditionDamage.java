@@ -31,7 +31,7 @@ public class CriterionConditionDamage {
     }
 
     public boolean a(EntityPlayer entityplayer, DamageSource damagesource, float f, float f1, boolean flag) {
-        return this == CriterionConditionDamage.a ? true : (!this.b.d(f) ? false : (!this.c.d(f1) ? false : (!this.d.a(entityplayer, damagesource.getEntity()) ? false : (this.e != null && this.e.booleanValue() != flag ? false : this.f.a(entityplayer, damagesource)))));
+        return this == CriterionConditionDamage.a ? true : (!this.b.d(f) ? false : (!this.c.d(f1) ? false : (!this.d.a(entityplayer, damagesource.getEntity()) ? false : (this.e != null && this.e != flag ? false : this.f.a(entityplayer, damagesource)))));
     }
 
     public static CriterionConditionDamage a(@Nullable JsonElement jsonelement) {
@@ -39,7 +39,7 @@ public class CriterionConditionDamage {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "damage");
             CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject.get("dealt"));
             CriterionConditionValue.c criterionconditionvalue_c1 = CriterionConditionValue.c.a(jsonobject.get("taken"));
-            Boolean obool = jsonobject.has("blocked") ? Boolean.valueOf(ChatDeserializer.j(jsonobject, "blocked")) : null;
+            Boolean obool = jsonobject.has("blocked") ? ChatDeserializer.j(jsonobject, "blocked") : null;
             CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("source_entity"));
             CriterionConditionDamageSource criterionconditiondamagesource = CriterionConditionDamageSource.a(jsonobject.get("type"));
 

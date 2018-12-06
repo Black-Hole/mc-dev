@@ -130,7 +130,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
                 try {
                     uuid = UUID.fromString(s2);
                 } catch (IllegalArgumentException illegalargumentexception) {
-                    throw new JsonSyntaxException("Invalid attribute modifier id \'" + s2 + "\' (must be UUID format, with dashes)");
+                    throw new JsonSyntaxException("Invalid attribute modifier id '" + s2 + "' (must be UUID format, with dashes)");
                 }
             }
 
@@ -141,13 +141,10 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
             switch (i) {
             case 0:
                 return "addition";
-
             case 1:
                 return "multiply_base";
-
             case 2:
                 return "multiply_total";
-
             default:
                 throw new IllegalArgumentException("Unknown operation " + i);
             }

@@ -21,7 +21,7 @@ public class BossBattleCustom extends BossBattleServer {
         this.setProgress(0.0F);
     }
 
-    public MinecraftKey a() {
+    public MinecraftKey getKey() {
         return this.h;
     }
 
@@ -64,7 +64,7 @@ public class BossBattleCustom extends BossBattleServer {
 
     public final IChatBaseComponent e() {
         return ChatComponentUtils.a(this.j()).a((chatmodifier) -> {
-            chatmodifier.setColor(this.l().a()).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.a().toString()))).setInsertion(this.a().toString());
+            chatmodifier.setColor(this.l().a()).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatComponentText(this.getKey().toString()))).setInsertion(this.getKey().toString());
         });
     }
 
@@ -168,9 +168,9 @@ public class BossBattleCustom extends BossBattleServer {
         nbttagcompound.setInt("Max", this.k);
         nbttagcompound.setString("Color", this.l().b());
         nbttagcompound.setString("Overlay", this.m().a());
-        nbttagcompound.setBoolean("DarkenScreen", this.n());
-        nbttagcompound.setBoolean("PlayBossMusic", this.o());
-        nbttagcompound.setBoolean("CreateWorldFog", this.p());
+        nbttagcompound.setBoolean("DarkenScreen", this.isDarkenSky());
+        nbttagcompound.setBoolean("PlayBossMusic", this.isPlayMusic());
+        nbttagcompound.setBoolean("CreateWorldFog", this.isCreateFog());
         NBTTagList nbttaglist = new NBTTagList();
         Iterator iterator = this.i.iterator();
 

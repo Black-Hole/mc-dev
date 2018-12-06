@@ -56,10 +56,8 @@ public class BlockAttachable extends BlockFacingHorizontal {
         switch ((BlockPropertyAttachPosition) iblockdata.get(BlockAttachable.FACE)) {
         case CEILING:
             return EnumDirection.DOWN;
-
         case FLOOR:
             return EnumDirection.UP;
-
         default:
             return (EnumDirection) iblockdata.get(BlockAttachable.FACING);
         }

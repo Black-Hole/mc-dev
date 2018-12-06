@@ -49,19 +49,19 @@ public class NBTTagFloat extends NBTNumber {
         return (new ChatComponentText(String.valueOf(this.data))).addSibling(ichatbasecomponent).a(NBTTagFloat.d);
     }
 
-    public long d() {
+    public long asLong() {
         return (long) this.data;
     }
 
-    public int e() {
+    public int asInt() {
         return MathHelper.d(this.data);
     }
 
-    public short f() {
+    public short asShort() {
         return (short) (MathHelper.d(this.data) & '\uffff');
     }
 
-    public byte g() {
+    public byte asByte() {
         return (byte) (MathHelper.d(this.data) & 255);
     }
 
@@ -69,12 +69,12 @@ public class NBTTagFloat extends NBTNumber {
         return (double) this.data;
     }
 
-    public float i() {
+    public float asFloat() {
         return this.data;
     }
 
     public Number j() {
-        return Float.valueOf(this.data);
+        return this.data;
     }
 
     public NBTBase clone() {

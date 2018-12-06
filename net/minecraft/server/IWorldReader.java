@@ -206,7 +206,7 @@ public interface IWorldReader extends IBlockAccess {
     }
 
     default boolean B(BlockPosition blockposition) {
-        return this.b(blockposition).a(TagsFluid.WATER);
+        return this.getFluid(blockposition).a(TagsFluid.WATER);
     }
 
     default boolean containsLiquid(AxisAlignedBB axisalignedbb) {

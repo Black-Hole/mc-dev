@@ -81,19 +81,19 @@ public class ChatMessage extends ChatBaseComponent {
             int j;
             int k;
 
-            for (j = 0; matcher.find(j); j = k) {
+            for (k = 0; matcher.find(k); k = j) {
                 int l = matcher.start();
 
-                k = matcher.end();
-                if (l > j) {
-                    ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(j, l), new Object[0]));
+                j = matcher.end();
+                if (l > k) {
+                    ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(k, l), new Object[0]));
 
                     chatcomponenttext.getChatModifier().setChatModifier(this.getChatModifier());
                     this.b.add(chatcomponenttext);
                 }
 
                 String s1 = matcher.group(2);
-                String s2 = s.substring(l, k);
+                String s2 = s.substring(l, j);
 
                 if ("%".equals(s1) && "%%".equals(s2)) {
                     ChatComponentText chatcomponenttext1 = new ChatComponentText("%");
@@ -102,7 +102,7 @@ public class ChatMessage extends ChatBaseComponent {
                     this.b.add(chatcomponenttext1);
                 } else {
                     if (!"s".equals(s1)) {
-                        throw new ChatMessageException(this, "Unsupported format: \'" + s2 + "\'");
+                        throw new ChatMessageException(this, "Unsupported format: '" + s2 + "'");
                     }
 
                     String s3 = matcher.group(1);
@@ -114,8 +114,8 @@ public class ChatMessage extends ChatBaseComponent {
                 }
             }
 
-            if (j < s.length()) {
-                ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(j), new Object[0]));
+            if (k < s.length()) {
+                ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(k), new Object[0]));
 
                 chatcomponenttext2.getChatModifier().setChatModifier(this.getChatModifier());
                 this.b.add(chatcomponenttext2);
@@ -224,7 +224,7 @@ public class ChatMessage extends ChatBaseComponent {
     }
 
     public String toString() {
-        return "TranslatableComponent{key=\'" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "TranslatableComponent{key='" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
     public String k() {

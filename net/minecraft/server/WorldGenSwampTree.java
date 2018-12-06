@@ -15,7 +15,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
     public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
         int i;
 
-        for (i = random.nextInt(4) + 5; generatoraccess.b(blockposition.down()).a(TagsFluid.WATER); blockposition = blockposition.down()) {
+        for (i = random.nextInt(4) + 5; generatoraccess.getFluid(blockposition.down()).a(TagsFluid.WATER); blockposition = blockposition.down()) {
             ;
         }
 
@@ -68,15 +68,15 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                 if ((block1 == Blocks.GRASS_BLOCK || Block.d(block1)) && blockposition.getY() < 256 - i - 1) {
                     this.a(generatoraccess, blockposition.down());
 
-                    BlockPosition blockposition1;
                     int i1;
                     int j1;
                     int k1;
                     int l1;
+                    BlockPosition blockposition1;
 
-                    for (i1 = blockposition.getY() - 3 + i; i1 <= blockposition.getY() + i; ++i1) {
-                        j1 = i1 - (blockposition.getY() + i);
-                        j = 2 - j1 / 2;
+                    for (j1 = blockposition.getY() - 3 + i; j1 <= blockposition.getY() + i; ++j1) {
+                        i1 = j1 - (blockposition.getY() + i);
+                        j = 2 - i1 / 2;
 
                         for (k = blockposition.getX() - j; k <= blockposition.getX() + j; ++k) {
                             k1 = k - blockposition.getX();
@@ -84,8 +84,8 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                             for (l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
                                 int i2 = l1 - blockposition.getZ();
 
-                                if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
-                                    blockposition1 = new BlockPosition(k, i1, l1);
+                                if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && i1 != 0) {
+                                    blockposition1 = new BlockPosition(k, j1, l1);
                                     if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
                                         this.a(generatoraccess, blockposition1, WorldGenSwampTree.b);
                                     }
@@ -94,23 +94,23 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                         }
                     }
 
-                    for (i1 = 0; i1 < i; ++i1) {
-                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
+                    for (j1 = 0; j1 < i; ++j1) {
+                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(j1));
                         Block block2 = iblockdata1.getBlock();
 
                         if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES) || block2 == Blocks.WATER) {
-                            this.a(set, generatoraccess, blockposition.up(i1), WorldGenSwampTree.a);
+                            this.a(set, generatoraccess, blockposition.up(j1), WorldGenSwampTree.a);
                         }
                     }
 
-                    for (i1 = blockposition.getY() - 3 + i; i1 <= blockposition.getY() + i; ++i1) {
-                        j1 = i1 - (blockposition.getY() + i);
-                        j = 2 - j1 / 2;
+                    for (j1 = blockposition.getY() - 3 + i; j1 <= blockposition.getY() + i; ++j1) {
+                        i1 = j1 - (blockposition.getY() + i);
+                        j = 2 - i1 / 2;
                         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
 
                         for (k1 = blockposition.getX() - j; k1 <= blockposition.getX() + j; ++k1) {
                             for (l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
-                                blockposition_mutableblockposition1.c(k1, i1, l1);
+                                blockposition_mutableblockposition1.c(k1, j1, l1);
                                 if (generatoraccess.getType(blockposition_mutableblockposition1).a(TagsBlock.LEAVES)) {
                                     BlockPosition blockposition2 = blockposition_mutableblockposition1.west();
 
@@ -149,7 +149,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
-        IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true));
+        IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, true);
 
         this.a(generatoraccess, blockposition, iblockdata);
         int i = 4;

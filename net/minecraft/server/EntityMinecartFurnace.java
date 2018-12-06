@@ -6,7 +6,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     private int d;
     public double a;
     public double b;
-    private static final RecipeItemStack e = RecipeItemStack.a(new IMaterial[] { Items.COAL, Items.CHARCOAL});
+    private static final RecipeItemStack e = RecipeItemStack.a(Items.COAL, Items.CHARCOAL);
 
     public EntityMinecartFurnace(World world) {
         super(EntityTypes.FURNACE_MINECART, world);
@@ -22,7 +22,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityMinecartFurnace.c, Boolean.valueOf(false));
+        this.datawatcher.register(EntityMinecartFurnace.c, false);
     }
 
     public void tick() {
@@ -130,14 +130,14 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     }
 
     protected boolean f() {
-        return ((Boolean) this.datawatcher.get(EntityMinecartFurnace.c)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityMinecartFurnace.c);
     }
 
     protected void o(boolean flag) {
-        this.datawatcher.set(EntityMinecartFurnace.c, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityMinecartFurnace.c, flag);
     }
 
     public IBlockData z() {
-        return (IBlockData) ((IBlockData) Blocks.FURNACE.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, Boolean.valueOf(this.f()));
+        return (IBlockData) ((IBlockData) Blocks.FURNACE.getBlockData().set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, this.f());
     }
 }

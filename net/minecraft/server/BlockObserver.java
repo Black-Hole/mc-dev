@@ -8,11 +8,11 @@ public class BlockObserver extends BlockDirectional {
 
     public BlockObserver(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockObserver.FACING, EnumDirection.SOUTH)).set(BlockObserver.b, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockObserver.FACING, EnumDirection.SOUTH)).set(BlockObserver.b, false));
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockObserver.FACING, BlockObserver.b});
+        blockstatelist_a.a(BlockObserver.FACING, BlockObserver.b);
     }
 
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
@@ -24,10 +24,10 @@ public class BlockObserver extends BlockDirectional {
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if (((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)), 2);
+        if ((Boolean) iblockdata.get(BlockObserver.b)) {
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false), 2);
         } else {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(true)), 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, true), 2);
             world.J().a(blockposition, this, 2);
         }
 
@@ -35,7 +35,7 @@ public class BlockObserver extends BlockDirectional {
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        if (iblockdata.get(BlockObserver.FACING) == enumdirection && !((Boolean) iblockdata.get(BlockObserver.b)).booleanValue()) {
+        if (iblockdata.get(BlockObserver.FACING) == enumdirection && !(Boolean) iblockdata.get(BlockObserver.b)) {
             this.a(generatoraccess, blockposition);
         }
 
@@ -66,13 +66,13 @@ public class BlockObserver extends BlockDirectional {
     }
 
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
+        return (Boolean) iblockdata.get(BlockObserver.b) && iblockdata.get(BlockObserver.FACING) == enumdirection ? 15 : 0;
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (!world.e() && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && !world.J().a(blockposition, this)) {
-                IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false));
+            if (!world.e() && (Boolean) iblockdata.get(BlockObserver.b) && !world.J().a(blockposition, this)) {
+                IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.b, false);
 
                 world.setTypeAndData(blockposition, iblockdata2, 18);
                 this.a(world, blockposition, iblockdata2);
@@ -83,8 +83,8 @@ public class BlockObserver extends BlockDirectional {
 
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (!world.isClientSide && ((Boolean) iblockdata.get(BlockObserver.b)).booleanValue() && world.J().a(blockposition, this)) {
-                this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, Boolean.valueOf(false)));
+            if (!world.isClientSide && (Boolean) iblockdata.get(BlockObserver.b) && world.J().a(blockposition, this)) {
+                this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false));
             }
 
         }

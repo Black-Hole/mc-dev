@@ -10,9 +10,9 @@ public enum FluidCollisionOption {
         return !fluid.e();
     });
 
-    public final Predicate<Fluid> d;
+    public final Predicate<Fluid> predicate;
 
     private FluidCollisionOption(Predicate predicate) {
-        this.d = predicate;
+        this.predicate = predicate;
     }
 }

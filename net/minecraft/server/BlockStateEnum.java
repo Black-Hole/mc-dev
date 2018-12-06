@@ -27,7 +27,7 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
             String s1 = ((INamable) oenum).getName();
 
             if (this.b.containsKey(s1)) {
-                throw new IllegalArgumentException("Multiple values have the same name \'" + s1 + "\'");
+                throw new IllegalArgumentException("Multiple values have the same name '" + s1 + "'");
             }
 
             this.b.put(s1, oenum);

@@ -149,7 +149,7 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
         this.a(i, j, ichunkaccess);
         this.a(ichunkaccess, abiomebase, seededrandom, this.a.getSeaLevel());
         this.a(ichunkaccess, seededrandom);
-        ichunkaccess.a(new HeightMap.Type[] { HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG});
+        ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG);
         ichunkaccess.a(ChunkStatus.BASE);
     }
 

@@ -12,7 +12,7 @@ public class BlockTurtleEgg extends Block {
 
     public BlockTurtleEgg(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, Integer.valueOf(0))).set(BlockTurtleEgg.b, Integer.valueOf(1)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
     }
 
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
@@ -41,12 +41,12 @@ public class BlockTurtleEgg extends Block {
 
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_BREAK, SoundCategory.BLOCKS, 0.7F, 0.9F + world.random.nextFloat() * 0.2F);
-        int i = ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue();
+        int i = (Integer) iblockdata.get(BlockTurtleEgg.b);
 
         if (i <= 1) {
             world.setAir(blockposition, false);
         } else {
-            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.b, Integer.valueOf(i - 1)), 2);
+            world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.b, i - 1), 2);
             world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
         }
 
@@ -54,16 +54,16 @@ public class BlockTurtleEgg extends Block {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (this.a(world) && this.a((IBlockAccess) world, blockposition)) {
-            int i = ((Integer) iblockdata.get(BlockTurtleEgg.a)).intValue();
+            int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
 
             if (i < 2) {
                 world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_CRACK, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, Integer.valueOf(i + 1)), 2);
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
             } else {
                 world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
                 world.setAir(blockposition);
                 if (!world.isClientSide) {
-                    for (int j = 0; j < ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue(); ++j) {
+                    for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {
                         world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
                         EntityTurtle entityturtle = new EntityTurtle(world);
 
@@ -109,14 +109,14 @@ public class BlockTurtleEgg extends Block {
     }
 
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
-        return blockactioncontext.getItemStack().getItem() == this.getItem() && ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue() < 4 ? true : super.a(iblockdata, blockactioncontext);
+        return blockactioncontext.getItemStack().getItem() == this.getItem() && (Integer) iblockdata.get(BlockTurtleEgg.b) < 4 ? true : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
-        return iblockdata.getBlock() == this ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Integer.valueOf(Math.min(4, ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue() + 1))) : super.getPlacedState(blockactioncontext);
+        return iblockdata.getBlock() == this ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
     }
 
     public TextureType c() {
@@ -128,7 +128,7 @@ public class BlockTurtleEgg extends Block {
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return ((Integer) iblockdata.get(BlockTurtleEgg.b)).intValue() > 1 ? BlockTurtleEgg.o : BlockTurtleEgg.c;
+        return (Integer) iblockdata.get(BlockTurtleEgg.b) > 1 ? BlockTurtleEgg.o : BlockTurtleEgg.c;
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -136,7 +136,7 @@ public class BlockTurtleEgg extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockTurtleEgg.a, BlockTurtleEgg.b});
+        blockstatelist_a.a(BlockTurtleEgg.a, BlockTurtleEgg.b);
     }
 
     private boolean a(World world, Entity entity) {

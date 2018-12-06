@@ -9,7 +9,7 @@ public interface IBlockAccess {
 
     IBlockData getType(BlockPosition blockposition);
 
-    Fluid b(BlockPosition blockposition);
+    Fluid getFluid(BlockPosition blockposition);
 
     default int K() {
         return 15;

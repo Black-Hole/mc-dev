@@ -352,7 +352,7 @@ public class DataConverterMaterialId extends DataFix {
         return this.fixTypeEverywhereTyped("ItemIdFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
             return typed.update(opticfinder, type, (either) -> {
                 return (Pair) either.map((integer) -> {
-                    return Pair.of(DataConverterTypes.q.typeName(), a(integer.intValue()));
+                    return Pair.of(DataConverterTypes.q.typeName(), a(integer));
                 }, (pair) -> {
                     return pair;
                 });

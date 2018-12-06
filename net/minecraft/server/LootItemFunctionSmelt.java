@@ -34,7 +34,7 @@ public class LootItemFunctionSmelt extends LootItemFunction {
                 }
             }
 
-            LootItemFunctionSmelt.a.warn("Couldn\'t smelt {} because there is no smelting recipe", itemstack);
+            LootItemFunctionSmelt.a.warn("Couldn't smelt {} because there is no smelting recipe", itemstack);
             return itemstack;
         }
     }

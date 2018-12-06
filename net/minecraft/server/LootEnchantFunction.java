@@ -46,7 +46,7 @@ public class LootEnchantFunction extends LootItemFunction {
         public void a(JsonObject jsonobject, LootEnchantFunction lootenchantfunction, JsonSerializationContext jsonserializationcontext) {
             jsonobject.add("count", jsonserializationcontext.serialize(lootenchantfunction.a));
             if (lootenchantfunction.b > 0) {
-                jsonobject.add("limit", jsonserializationcontext.serialize(Integer.valueOf(lootenchantfunction.b)));
+                jsonobject.add("limit", jsonserializationcontext.serialize(lootenchantfunction.b));
             }
 
         }

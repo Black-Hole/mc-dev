@@ -22,7 +22,7 @@ public class EntityTropicalFish extends EntityFishSchool {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityTropicalFish.b, Integer.valueOf(0));
+        this.datawatcher.register(EntityTropicalFish.b, 0);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -36,7 +36,7 @@ public class EntityTropicalFish extends EntityFishSchool {
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityTropicalFish.b, Integer.valueOf(i));
+        this.datawatcher.set(EntityTropicalFish.b, i);
     }
 
     public boolean c(int i) {
@@ -44,7 +44,7 @@ public class EntityTropicalFish extends EntityFishSchool {
     }
 
     public int getVariant() {
-        return ((Integer) this.datawatcher.get(EntityTropicalFish.b)).intValue();
+        return (Integer) this.datawatcher.get(EntityTropicalFish.b);
     }
 
     protected void f(ItemStack itemstack) {

@@ -18,7 +18,7 @@ public class EntityZombie extends EntityMonster {
     private final PathfinderGoalBreakDoor bG;
     private boolean bH;
     private int bI;
-    private int bJ;
+    private int drownedConversionTime;
     private float bK;
     private float bL;
 
@@ -63,18 +63,18 @@ public class EntityZombie extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.getDataWatcher().register(EntityZombie.bC, Boolean.valueOf(false));
-        this.getDataWatcher().register(EntityZombie.bD, Integer.valueOf(0));
-        this.getDataWatcher().register(EntityZombie.bE, Boolean.valueOf(false));
-        this.getDataWatcher().register(EntityZombie.bF, Boolean.valueOf(false));
+        this.getDataWatcher().register(EntityZombie.bC, false);
+        this.getDataWatcher().register(EntityZombie.bD, 0);
+        this.getDataWatcher().register(EntityZombie.bE, false);
+        this.getDataWatcher().register(EntityZombie.bF, false);
     }
 
-    public boolean dG() {
-        return ((Boolean) this.getDataWatcher().get(EntityZombie.bF)).booleanValue();
+    public boolean isDrownConverting() {
+        return (Boolean) this.getDataWatcher().get(EntityZombie.bF);
     }
 
     public void s(boolean flag) {
-        this.getDataWatcher().set(EntityZombie.bE, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityZombie.bE, flag);
     }
 
     public boolean dH() {
@@ -104,7 +104,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     public boolean isBaby() {
-        return ((Boolean) this.getDataWatcher().get(EntityZombie.bC)).booleanValue();
+        return (Boolean) this.getDataWatcher().get(EntityZombie.bC);
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
@@ -116,7 +116,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     public void setBaby(boolean flag) {
-        this.getDataWatcher().set(EntityZombie.bC, Boolean.valueOf(flag));
+        this.getDataWatcher().set(EntityZombie.bC, flag);
         if (this.world != null && !this.world.isClientSide) {
             AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
@@ -143,9 +143,9 @@ public class EntityZombie extends EntityMonster {
 
     public void tick() {
         if (!this.world.isClientSide) {
-            if (this.dG()) {
-                --this.bJ;
-                if (this.bJ < 0) {
+            if (this.isDrownConverting()) {
+                --this.drownedConversionTime;
+                if (this.drownedConversionTime < 0) {
                     this.dE();
                 }
             } else if (this.dC()) {
@@ -190,8 +190,8 @@ public class EntityZombie extends EntityMonster {
     }
 
     private void a(int i) {
-        this.bJ = i;
-        this.getDataWatcher().set(EntityZombie.bF, Boolean.valueOf(true));
+        this.drownedConversionTime = i;
+        this.getDataWatcher().set(EntityZombie.bF, true);
     }
 
     protected void dE() {
@@ -334,7 +334,7 @@ public class EntityZombie extends EntityMonster {
 
         nbttagcompound.setBoolean("CanBreakDoors", this.dH());
         nbttagcompound.setInt("InWaterTime", this.isInWater() ? this.bI : -1);
-        nbttagcompound.setInt("DrownedConversionTime", this.dG() ? this.bJ : -1);
+        nbttagcompound.setInt("DrownedConversionTime", this.isDrownConverting() ? this.drownedConversionTime : -1);
     }
 
     public void a(NBTTagCompound nbttagcompound) {

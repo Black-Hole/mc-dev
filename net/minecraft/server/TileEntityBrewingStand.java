@@ -104,7 +104,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
                 }
 
                 for (int i = 0; i < BlockBrewingStand.HAS_BOTTLE.length; ++i) {
-                    iblockdata = (IBlockData) iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], Boolean.valueOf(aboolean[i]));
+                    iblockdata = (IBlockData) iblockdata.set(BlockBrewingStand.HAS_BOTTLE[i], aboolean[i]);
                 }
 
                 this.world.setTypeAndData(this.position, iblockdata, 2);
@@ -258,10 +258,8 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         switch (i) {
         case 0:
             return this.brewTime;
-
         case 1:
             return this.fuelLevel;
-
         default:
             return 0;
         }
@@ -272,7 +270,6 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         case 0:
             this.brewTime = j;
             break;
-
         case 1:
             this.fuelLevel = j;
         }

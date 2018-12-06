@@ -398,16 +398,16 @@ public class PathfinderNormal extends PathfinderAbstract {
                 return PathType.DAMAGE_FIRE;
             } else if (block == Blocks.CACTUS) {
                 return PathType.DAMAGE_CACTUS;
-            } else if (block instanceof BlockDoor && material == Material.WOOD && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.WOOD && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {
                 return PathType.DOOR_WOOD_CLOSED;
-            } else if (block instanceof BlockDoor && material == Material.ORE && !((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && material == Material.ORE && !(Boolean) iblockdata.get(BlockDoor.OPEN)) {
                 return PathType.DOOR_IRON_CLOSED;
-            } else if (block instanceof BlockDoor && ((Boolean) iblockdata.get(BlockDoor.OPEN)).booleanValue()) {
+            } else if (block instanceof BlockDoor && (Boolean) iblockdata.get(BlockDoor.OPEN)) {
                 return PathType.DOOR_OPEN;
             } else if (block instanceof BlockMinecartTrackAbstract) {
                 return PathType.RAIL;
-            } else if (!(block instanceof BlockFence) && !(block instanceof BlockCobbleWall) && (!(block instanceof BlockFenceGate) || ((Boolean) iblockdata.get(BlockFenceGate.OPEN)).booleanValue())) {
-                Fluid fluid = iblockaccess.b(blockposition);
+            } else if (!(block instanceof BlockFence) && !(block instanceof BlockCobbleWall) && (!(block instanceof BlockFenceGate) || (Boolean) iblockdata.get(BlockFenceGate.OPEN))) {
+                Fluid fluid = iblockaccess.getFluid(blockposition);
 
                 return fluid.a(TagsFluid.WATER) ? PathType.WATER : (fluid.a(TagsFluid.LAVA) ? PathType.LAVA : (iblockdata.a(iblockaccess, blockposition, PathMode.LAND) ? PathType.OPEN : PathType.BLOCKED));
             } else {

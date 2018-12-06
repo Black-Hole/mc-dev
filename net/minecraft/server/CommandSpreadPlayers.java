@@ -47,7 +47,7 @@ public class CommandSpreadPlayers {
         a(vec2f, (double) f, commandlistenerwrapper.getWorld(), random, d0, d1, d2, d3, acommandspreadplayers_a, flag);
         double d4 = a(collection, commandlistenerwrapper.getWorld(), acommandspreadplayers_a, flag);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[] { Integer.valueOf(acommandspreadplayers_a.length), Float.valueOf(vec2f.i), Float.valueOf(vec2f.j), String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(d4)})}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[] { acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d4})}), true);
         return acommandspreadplayers_a.length;
     }
 
@@ -141,9 +141,9 @@ public class CommandSpreadPlayers {
 
         if (i >= 10000) {
             if (flag) {
-                throw CommandSpreadPlayers.a.create(Integer.valueOf(acommandspreadplayers_a.length), Float.valueOf(vec2f.i), Float.valueOf(vec2f.j), String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(d5)}));
+                throw CommandSpreadPlayers.a.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d5}));
             } else {
-                throw CommandSpreadPlayers.b.create(Integer.valueOf(acommandspreadplayers_a.length), Float.valueOf(vec2f.i), Float.valueOf(vec2f.j), String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(d5)}));
+                throw CommandSpreadPlayers.b.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d5}));
             }
         }
     }

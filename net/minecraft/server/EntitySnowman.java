@@ -27,7 +27,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntitySnowman.a, Byte.valueOf((byte) 16));
+        this.datawatcher.register(EntitySnowman.a, (byte) 16);
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -112,16 +112,16 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
     }
 
     public boolean hasPumpkin() {
-        return (((Byte) this.datawatcher.get(EntitySnowman.a)).byteValue() & 16) != 0;
+        return ((Byte) this.datawatcher.get(EntitySnowman.a) & 16) != 0;
     }
 
     public void setHasPumpkin(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntitySnowman.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntitySnowman.a);
 
         if (flag) {
-            this.datawatcher.set(EntitySnowman.a, Byte.valueOf((byte) (b0 | 16)));
+            this.datawatcher.set(EntitySnowman.a, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(EntitySnowman.a, Byte.valueOf((byte) (b0 & -17)));
+            this.datawatcher.set(EntitySnowman.a, (byte) (b0 & -17));
         }
 
     }

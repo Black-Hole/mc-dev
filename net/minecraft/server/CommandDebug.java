@@ -42,7 +42,7 @@ public class CommandDebug {
             throw CommandDebug.c.create();
         } else {
             minecraftserver.ai();
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[] { "Started the debug profiler. Type \'/debug stop\' to stop it."}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.started", new Object[] { "Started the debug profiler. Type '/debug stop' to stop it."}), true);
             return 0;
         }
     }
@@ -76,7 +76,7 @@ public class CommandDebug {
             float f = (float) k / 1.0E9F;
             float f1 = (float) l / f;
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf(f)}), Integer.valueOf(l), String.format("%.2f", new Object[] { Float.valueOf(f1)})}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { f}), l, String.format("%.2f", new Object[] { f1})}), true);
             return MathHelper.d(f1);
         }
     }
@@ -90,7 +90,7 @@ public class CommandDebug {
         stringbuilder.append("\n\n");
         stringbuilder.append("Time span: ").append(i).append(" ms\n");
         stringbuilder.append("Tick span: ").append(j).append(" ticks\n");
-        stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", new Object[] { Float.valueOf((float) j / ((float) i / 1.0E9F))})).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
+        stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", new Object[] { (float) j / ((float) i / 1.0E9F)})).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
         stringbuilder.append("--- BEGIN PROFILE DUMP ---\n\n");
         a(0, "root", stringbuilder, methodprofiler);
         stringbuilder.append("--- END PROFILE DUMP ---\n\n");
@@ -104,13 +104,13 @@ public class CommandDebug {
             for (int j = 1; j < list.size(); ++j) {
                 MethodProfiler.ProfilerInfo methodprofiler_profilerinfo = (MethodProfiler.ProfilerInfo) list.get(j);
 
-                stringbuilder.append(String.format("[%02d] ", new Object[] { Integer.valueOf(i)}));
+                stringbuilder.append(String.format("[%02d] ", new Object[] { i}));
 
                 for (int k = 0; k < i; ++k) {
                     stringbuilder.append("|   ");
                 }
 
-                stringbuilder.append(methodprofiler_profilerinfo.c).append(" - ").append(String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(methodprofiler_profilerinfo.a)})).append("%/").append(String.format(Locale.ROOT, "%.2f", new Object[] { Double.valueOf(methodprofiler_profilerinfo.b)})).append("%\n");
+                stringbuilder.append(methodprofiler_profilerinfo.c).append(" - ").append(String.format(Locale.ROOT, "%.2f", new Object[] { methodprofiler_profilerinfo.a})).append("%/").append(String.format(Locale.ROOT, "%.2f", new Object[] { methodprofiler_profilerinfo.b})).append("%\n");
                 if (!"unspecified".equals(methodprofiler_profilerinfo.c)) {
                     try {
                         a(i + 1, s + "." + methodprofiler_profilerinfo.c, stringbuilder, methodprofiler);
@@ -124,7 +124,7 @@ public class CommandDebug {
     }
 
     private static String a() {
-        String[] astring = new String[] { "Shiny numbers!", "Am I not running fast enough? :(", "I\'m working as hard as I can!", "Will I ever be good enough for you? :(", "Speedy. Zoooooom!", "Hello world", "40% better than a crash report.", "Now with extra numbers", "Now with less numbers", "Now with the same numbers", "You should add flames to things, it makes them go faster!", "Do you feel the need for... optimization?", "*cracks redstone whip*", "Maybe if you treated it better then it\'ll have more motivation to work faster! Poor server."};
+        String[] astring = new String[] { "Shiny numbers!", "Am I not running fast enough? :(", "I'm working as hard as I can!", "Will I ever be good enough for you? :(", "Speedy. Zoooooom!", "Hello world", "40% better than a crash report.", "Now with extra numbers", "Now with less numbers", "Now with the same numbers", "You should add flames to things, it makes them go faster!", "Do you feel the need for... optimization?", "*cracks redstone whip*", "Maybe if you treated it better then it'll have more motivation to work faster! Poor server."};
 
         try {
             return astring[(int) (SystemUtils.c() % (long) astring.length)];

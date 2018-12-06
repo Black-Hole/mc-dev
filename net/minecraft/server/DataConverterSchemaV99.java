@@ -233,7 +233,7 @@ public class DataConverterSchemaV99 extends Schema {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         schema.registerType(false, DataConverterTypes.a, DSL::remainder);
-        schema.registerType(false, DataConverterTypes.b, () -> {
+        schema.registerType(false, DataConverterTypes.PLAYER, () -> {
             return DSL.optionalFields("Inventory", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)), "EnderItems", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));
         });
         schema.registerType(false, DataConverterTypes.c, () -> {

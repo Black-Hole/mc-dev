@@ -19,7 +19,7 @@ public class WorldGenFeatureKelp extends WorldGenerator<WorldGenFeatureEmptyConf
             for (int l = 0; l <= k; ++l) {
                 if (generatoraccess.getType(blockposition1).getBlock() == Blocks.WATER && generatoraccess.getType(blockposition1.up()).getBlock() == Blocks.WATER && iblockdata1.canPlace(generatoraccess, blockposition1)) {
                     if (l == k) {
-                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata.set(BlockKelp.a, Integer.valueOf(random.nextInt(23))), 2);
+                        generatoraccess.setTypeAndData(blockposition1, (IBlockData) iblockdata.set(BlockKelp.a, random.nextInt(23)), 2);
                         ++i;
                     } else {
                         generatoraccess.setTypeAndData(blockposition1, iblockdata1, 2);
@@ -28,7 +28,7 @@ public class WorldGenFeatureKelp extends WorldGenerator<WorldGenFeatureEmptyConf
                     BlockPosition blockposition2 = blockposition1.down();
 
                     if (iblockdata.canPlace(generatoraccess, blockposition2) && generatoraccess.getType(blockposition2.down()).getBlock() != Blocks.KELP) {
-                        generatoraccess.setTypeAndData(blockposition2, (IBlockData) iblockdata.set(BlockKelp.a, Integer.valueOf(random.nextInt(23))), 2);
+                        generatoraccess.setTypeAndData(blockposition2, (IBlockData) iblockdata.set(BlockKelp.a, random.nextInt(23)), 2);
                         ++i;
                     }
                     break;

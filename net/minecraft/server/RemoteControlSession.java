@@ -71,7 +71,6 @@ public class RemoteControlSession extends RemoteConnectionThread {
 
                         this.f();
                         continue;
-
                     case 3:
                         String s1 = StatusChallengeUtils.a(this.k, k, i);
                         int j1 = k + s1.length();
@@ -85,7 +84,6 @@ public class RemoteControlSession extends RemoteConnectionThread {
                         this.i = false;
                         this.f();
                         continue;
-
                     default:
                         this.a(l, String.format("Unknown request %s", new Object[] { Integer.toHexString(i1)}));
                         continue;

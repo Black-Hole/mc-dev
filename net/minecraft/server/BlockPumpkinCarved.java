@@ -34,8 +34,8 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
         int i;
         Iterator iterator;
         EntityPlayer entityplayer;
-        ShapeDetectorBlock shapedetectorblock;
         int j;
+        ShapeDetectorBlock shapedetectorblock;
         int k;
 
         if (shapedetector_shapedetectorcollection != null) {
@@ -107,12 +107,12 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockPumpkinCarved.a});
+        blockstatelist_a.a(BlockPumpkinCarved.a);
     }
 
     protected ShapeDetector d() {
         if (this.b == null) {
-            this.b = ShapeDetectorBuilder.a().a(new String[] { " ", "#", "#"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
+            this.b = ShapeDetectorBuilder.a().a(" ", "#", "#").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
 
         return this.b;
@@ -120,7 +120,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
 
     protected ShapeDetector e() {
         if (this.c == null) {
-            this.c = ShapeDetectorBuilder.a().a(new String[] { "^", "#", "#"}).a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.q)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
+            this.c = ShapeDetectorBuilder.a().a("^", "#", "#").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.q)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.SNOW_BLOCK))).b();
         }
 
         return this.c;
@@ -128,7 +128,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
 
     protected ShapeDetector f() {
         if (this.o == null) {
-            this.o = ShapeDetectorBuilder.a().a(new String[] { "~ ~", "###", "~#~"}).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+            this.o = ShapeDetectorBuilder.a().a("~ ~", "###", "~#~").a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
         return this.o;
@@ -136,7 +136,7 @@ public class BlockPumpkinCarved extends BlockFacingHorizontal {
 
     protected ShapeDetector g() {
         if (this.p == null) {
-            this.p = ShapeDetectorBuilder.a().a(new String[] { "~^~", "###", "~#~"}).a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.q)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
+            this.p = ShapeDetectorBuilder.a().a("~^~", "###", "~#~").a('^', ShapeDetectorBlock.a(BlockPumpkinCarved.q)).a('#', ShapeDetectorBlock.a(BlockStatePredicate.a(Blocks.IRON_BLOCK))).a('~', ShapeDetectorBlock.a(MaterialPredicate.a(Material.AIR))).b();
         }
 
         return this.p;

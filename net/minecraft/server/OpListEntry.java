@@ -34,8 +34,8 @@ public class OpListEntry extends JsonListEntry<GameProfile> {
             jsonobject.addProperty("uuid", ((GameProfile) this.getKey()).getId() == null ? "" : ((GameProfile) this.getKey()).getId().toString());
             jsonobject.addProperty("name", ((GameProfile) this.getKey()).getName());
             super.a(jsonobject);
-            jsonobject.addProperty("level", Integer.valueOf(this.a));
-            jsonobject.addProperty("bypassesPlayerLimit", Boolean.valueOf(this.b));
+            jsonobject.addProperty("level", this.a);
+            jsonobject.addProperty("bypassesPlayerLimit", this.b);
         }
     }
 

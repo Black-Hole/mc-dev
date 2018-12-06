@@ -46,7 +46,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntitySkeletonAbstract.a, Boolean.valueOf(false));
+        this.datawatcher.register(EntitySkeletonAbstract.a, false);
     }
 
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
@@ -184,6 +184,6 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
     }
 
     public void s(boolean flag) {
-        this.datawatcher.set(EntitySkeletonAbstract.a, Boolean.valueOf(flag));
+        this.datawatcher.set(EntitySkeletonAbstract.a, flag);
     }
 }

@@ -24,10 +24,8 @@ public class BlockEndRod extends BlockDirectional {
         case X:
         default:
             return BlockEndRod.o;
-
         case Z:
             return BlockEndRod.c;
-
         case Y:
             return BlockEndRod.b;
         }
@@ -49,7 +47,7 @@ public class BlockEndRod extends BlockDirectional {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockEndRod.FACING});
+        blockstatelist_a.a(BlockEndRod.FACING);
     }
 
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {

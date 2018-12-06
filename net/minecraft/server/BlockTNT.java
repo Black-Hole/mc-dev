@@ -8,7 +8,7 @@ public class BlockTNT extends Block {
 
     public BlockTNT(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) this.getBlockData().set(BlockTNT.a, Boolean.valueOf(false)));
+        this.v((IBlockData) this.getBlockData().set(BlockTNT.a, false));
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
@@ -30,13 +30,13 @@ public class BlockTNT extends Block {
     }
 
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        if (!((Boolean) iblockdata.get(BlockTNT.a)).booleanValue()) {
+        if (!(Boolean) iblockdata.get(BlockTNT.a)) {
             super.dropNaturally(iblockdata, world, blockposition, f, i);
         }
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.e() && !entityhuman.u() && ((Boolean) iblockdata.get(BlockTNT.a)).booleanValue()) {
+        if (!world.e() && !entityhuman.u() && (Boolean) iblockdata.get(BlockTNT.a)) {
             this.a(world, blockposition);
         }
 
@@ -102,6 +102,6 @@ public class BlockTNT extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockTNT.a});
+        blockstatelist_a.a(BlockTNT.a);
     }
 }

@@ -13,15 +13,15 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
 
     public BlockCocoa(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCocoa.FACING, EnumDirection.NORTH)).set(BlockCocoa.AGE, 0));
     }
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (world.random.nextInt(5) == 0) {
-            int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
+            int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
             if (i < 2) {
-                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, Integer.valueOf(i + 1)), 2);
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, i + 1), 2);
             }
         }
 
@@ -38,19 +38,16 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
+        int i = (Integer) iblockdata.get(BlockCocoa.AGE);
 
         switch ((EnumDirection) iblockdata.get(BlockCocoa.FACING)) {
         case SOUTH:
             return BlockCocoa.p[i];
-
         case NORTH:
         default:
             return BlockCocoa.o[i];
-
         case WEST:
             return BlockCocoa.c[i];
-
         case EAST:
             return BlockCocoa.b[i];
         }
@@ -83,7 +80,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        int j = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
+        int j = (Integer) iblockdata.get(BlockCocoa.AGE);
         byte b0 = 1;
 
         if (j >= 2) {
@@ -101,7 +98,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
-        return ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() < 2;
+        return (Integer) iblockdata.get(BlockCocoa.AGE) < 2;
     }
 
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
@@ -109,7 +106,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, Integer.valueOf(((Integer) iblockdata.get(BlockCocoa.AGE)).intValue() + 1)), 2);
+        world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCocoa.AGE, (Integer) iblockdata.get(BlockCocoa.AGE) + 1), 2);
     }
 
     public TextureType c() {
@@ -117,7 +114,7 @@ public class BlockCocoa extends BlockFacingHorizontal implements IBlockFragilePl
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCocoa.FACING, BlockCocoa.AGE});
+        blockstatelist_a.a(BlockCocoa.FACING, BlockCocoa.AGE);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

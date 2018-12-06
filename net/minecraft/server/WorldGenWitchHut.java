@@ -68,24 +68,24 @@ public class WorldGenWitchHut extends WorldGenScatteredPiece {
             int i;
             int j;
 
-            for (i = 2; i <= 7; i += 5) {
-                for (j = 1; j <= 5; j += 4) {
-                    this.b(generatoraccess, Blocks.OAK_LOG.getBlockData(), j, -1, i, structureboundingbox);
+            for (j = 2; j <= 7; j += 5) {
+                for (i = 1; i <= 5; i += 4) {
+                    this.b(generatoraccess, Blocks.OAK_LOG.getBlockData(), i, -1, j, structureboundingbox);
                 }
             }
 
             if (!this.e) {
-                i = this.a(2, 5);
-                j = this.d(2);
+                j = this.a(2, 5);
+                i = this.d(2);
                 int k = this.b(2, 5);
 
-                if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(i, j, k)))) {
+                if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(j, i, k)))) {
                     this.e = true;
                     EntityWitch entitywitch = new EntityWitch(generatoraccess.getMinecraftWorld());
 
                     entitywitch.di();
-                    entitywitch.setPositionRotation((double) i + 0.5D, (double) j, (double) k + 0.5D, 0.0F, 0.0F);
-                    entitywitch.prepare(generatoraccess.getDamageScaler(new BlockPosition(i, j, k)), (GroupDataEntity) null, (NBTTagCompound) null);
+                    entitywitch.setPositionRotation((double) j + 0.5D, (double) i, (double) k + 0.5D, 0.0F, 0.0F);
+                    entitywitch.prepare(generatoraccess.getDamageScaler(new BlockPosition(j, i, k)), (GroupDataEntity) null, (NBTTagCompound) null);
                     generatoraccess.addEntity(entitywitch);
                 }
             }

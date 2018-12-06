@@ -77,7 +77,7 @@ public class AdvancementDisplay {
 
     private static ItemStack a(JsonObject jsonobject) {
         if (!jsonobject.has("item")) {
-            throw new JsonSyntaxException("Unsupported icon type, currently only items are supported (add \'item\' key)");
+            throw new JsonSyntaxException("Unsupported icon type, currently only items are supported (add 'item' key)");
         } else {
             Item item = ChatDeserializer.i(jsonobject, "item");
 
@@ -151,9 +151,9 @@ public class AdvancementDisplay {
         jsonobject.add("title", IChatBaseComponent.ChatSerializer.b(this.a));
         jsonobject.add("description", IChatBaseComponent.ChatSerializer.b(this.b));
         jsonobject.addProperty("frame", this.e.a());
-        jsonobject.addProperty("show_toast", Boolean.valueOf(this.f));
-        jsonobject.addProperty("announce_to_chat", Boolean.valueOf(this.g));
-        jsonobject.addProperty("hidden", Boolean.valueOf(this.h));
+        jsonobject.addProperty("show_toast", this.f);
+        jsonobject.addProperty("announce_to_chat", this.g);
+        jsonobject.addProperty("hidden", this.h);
         if (this.d != null) {
             jsonobject.addProperty("background", this.d.toString());
         }

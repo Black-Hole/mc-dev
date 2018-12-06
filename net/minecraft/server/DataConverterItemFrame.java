@@ -24,14 +24,11 @@ public class DataConverterItemFrame extends DataConverterNamedEntity {
         switch (b0) {
         case 0:
             return (byte) 3;
-
         case 1:
             return (byte) 4;
-
         case 2:
         default:
             return (byte) 2;
-
         case 3:
             return (byte) 5;
         }

@@ -27,7 +27,7 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
         for (int i = 0; i < list.size(); ++i) {
             Byte obyte = (Byte) list.get(i);
 
-            abyte[i] = obyte == null ? 0 : obyte.byteValue();
+            abyte[i] = obyte == null ? 0 : obyte;
         }
 
         return abyte;
@@ -110,7 +110,7 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
     }
 
     public void a(int i, NBTBase nbtbase) {
-        this.data[i] = ((NBTNumber) nbtbase).g();
+        this.data[i] = ((NBTNumber) nbtbase).asByte();
     }
 
     public void b(int i) {

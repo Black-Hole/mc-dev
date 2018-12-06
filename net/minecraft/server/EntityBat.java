@@ -17,7 +17,7 @@ public class EntityBat extends EntityAmbient {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityBat.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityBat.a, (byte) 0);
     }
 
     protected float cD() {
@@ -55,16 +55,16 @@ public class EntityBat extends EntityAmbient {
     }
 
     public boolean isAsleep() {
-        return (((Byte) this.datawatcher.get(EntityBat.a)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityBat.a) & 1) != 0;
     }
 
     public void setAsleep(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityBat.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityBat.a);
 
         if (flag) {
-            this.datawatcher.set(EntityBat.a, Byte.valueOf((byte) (b0 | 1)));
+            this.datawatcher.set(EntityBat.a, (byte) (b0 | 1));
         } else {
-            this.datawatcher.set(EntityBat.a, Byte.valueOf((byte) (b0 & -2)));
+            this.datawatcher.set(EntityBat.a, (byte) (b0 & -2));
         }
 
     }
@@ -155,12 +155,12 @@ public class EntityBat extends EntityAmbient {
 
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.datawatcher.set(EntityBat.a, Byte.valueOf(nbttagcompound.getByte("BatFlags")));
+        this.datawatcher.set(EntityBat.a, nbttagcompound.getByte("BatFlags"));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setByte("BatFlags", ((Byte) this.datawatcher.get(EntityBat.a)).byteValue());
+        nbttagcompound.setByte("BatFlags", (Byte) this.datawatcher.get(EntityBat.a));
     }
 
     public boolean a(GeneratorAccess generatoraccess, boolean flag) {

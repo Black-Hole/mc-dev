@@ -120,23 +120,23 @@ public class IntHashMap<V> {
         IntHashMap.IntHashMapEntry inthashmap_inthashmapentry1;
         IntHashMap.IntHashMapEntry inthashmap_inthashmapentry2;
 
-        for (inthashmap_inthashmapentry1 = inthashmap_inthashmapentry; inthashmap_inthashmapentry1 != null; inthashmap_inthashmapentry1 = inthashmap_inthashmapentry2) {
-            inthashmap_inthashmapentry2 = inthashmap_inthashmapentry1.c;
-            if (inthashmap_inthashmapentry1.a == i) {
+        for (inthashmap_inthashmapentry2 = inthashmap_inthashmapentry; inthashmap_inthashmapentry2 != null; inthashmap_inthashmapentry2 = inthashmap_inthashmapentry1) {
+            inthashmap_inthashmapentry1 = inthashmap_inthashmapentry2.c;
+            if (inthashmap_inthashmapentry2.a == i) {
                 --this.b;
-                if (inthashmap_inthashmapentry == inthashmap_inthashmapentry1) {
-                    this.a[k] = inthashmap_inthashmapentry2;
+                if (inthashmap_inthashmapentry == inthashmap_inthashmapentry2) {
+                    this.a[k] = inthashmap_inthashmapentry1;
                 } else {
-                    inthashmap_inthashmapentry.c = inthashmap_inthashmapentry2;
+                    inthashmap_inthashmapentry.c = inthashmap_inthashmapentry1;
                 }
 
-                return inthashmap_inthashmapentry1;
+                return inthashmap_inthashmapentry2;
             }
 
-            inthashmap_inthashmapentry = inthashmap_inthashmapentry1;
+            inthashmap_inthashmapentry = inthashmap_inthashmapentry2;
         }
 
-        return inthashmap_inthashmapentry1;
+        return inthashmap_inthashmapentry2;
     }
 
     public void c() {

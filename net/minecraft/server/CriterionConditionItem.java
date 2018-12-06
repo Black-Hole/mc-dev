@@ -94,7 +94,7 @@ public class CriterionConditionItem {
 
                     item = (Item) IRegistry.ITEM.get(minecraftkey);
                     if (item == null) {
-                        throw new JsonSyntaxException("Unknown item id \'" + minecraftkey + "\'");
+                        throw new JsonSyntaxException("Unknown item id '" + minecraftkey + "'");
                     }
                 }
 
@@ -105,7 +105,7 @@ public class CriterionConditionItem {
 
                     tag = TagsItem.a().a(minecraftkey1);
                     if (tag == null) {
-                        throw new JsonSyntaxException("Unknown item tag \'" + minecraftkey1 + "\'");
+                        throw new JsonSyntaxException("Unknown item tag '" + minecraftkey1 + "'");
                     }
                 }
 
@@ -116,7 +116,7 @@ public class CriterionConditionItem {
                     MinecraftKey minecraftkey2 = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
                     if (!IRegistry.POTION.c(minecraftkey2)) {
-                        throw new JsonSyntaxException("Unknown potion \'" + minecraftkey2 + "\'");
+                        throw new JsonSyntaxException("Unknown potion '" + minecraftkey2 + "'");
                     }
 
                     potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey2);

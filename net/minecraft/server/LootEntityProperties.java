@@ -13,9 +13,9 @@ public class LootEntityProperties {
         Class oclass = lootentityproperty_a.b();
 
         if (LootEntityProperties.a.containsKey(minecraftkey)) {
-            throw new IllegalArgumentException("Can\'t re-register entity property name " + minecraftkey);
+            throw new IllegalArgumentException("Can't re-register entity property name " + minecraftkey);
         } else if (LootEntityProperties.b.containsKey(oclass)) {
-            throw new IllegalArgumentException("Can\'t re-register entity property class " + oclass.getName());
+            throw new IllegalArgumentException("Can't re-register entity property class " + oclass.getName());
         } else {
             LootEntityProperties.a.put(minecraftkey, lootentityproperty_a);
             LootEntityProperties.b.put(oclass, lootentityproperty_a);
@@ -26,7 +26,7 @@ public class LootEntityProperties {
         LootEntityProperty.a lootentityproperty_a = (LootEntityProperty.a) LootEntityProperties.a.get(minecraftkey);
 
         if (lootentityproperty_a == null) {
-            throw new IllegalArgumentException("Unknown loot entity property \'" + minecraftkey + "\'");
+            throw new IllegalArgumentException("Unknown loot entity property '" + minecraftkey + "'");
         } else {
             return lootentityproperty_a;
         }

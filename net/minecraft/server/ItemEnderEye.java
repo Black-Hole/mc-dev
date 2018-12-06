@@ -11,11 +11,11 @@ public class ItemEnderEye extends Item {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() == Blocks.END_PORTAL_FRAME && !((Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)).booleanValue()) {
+        if (iblockdata.getBlock() == Blocks.END_PORTAL_FRAME && !(Boolean) iblockdata.get(BlockEnderPortalFrame.EYE)) {
             if (world.isClientSide) {
                 return EnumInteractionResult.SUCCESS;
             } else {
-                IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockEnderPortalFrame.EYE, Boolean.valueOf(true));
+                IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockEnderPortalFrame.EYE, true);
 
                 Block.a(iblockdata, iblockdata1, world, blockposition);
                 world.setTypeAndData(blockposition, iblockdata1, 2);
@@ -59,7 +59,7 @@ public class ItemEnderEye extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, false);
 
-        if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.a()).getBlock() == Blocks.END_PORTAL_FRAME) {
+        if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
             return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
         } else {
             entityhuman.c(enumhand);

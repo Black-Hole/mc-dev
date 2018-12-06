@@ -69,9 +69,9 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             ProtoChunk protochunk = this.b[0];
             ProtoChunk protochunk1 = this.b[this.b.length - 1];
 
-            RegionLimitedWorldAccess.a.error("Requested chunk : {} {}", Integer.valueOf(i), Integer.valueOf(j));
-            RegionLimitedWorldAccess.a.error("Region bounds : {} {} | {} {}", Integer.valueOf(protochunk.getPos().x), Integer.valueOf(protochunk.getPos().z), Integer.valueOf(protochunk1.getPos().x), Integer.valueOf(protochunk1.getPos().z));
-            throw new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", new Object[] { Integer.valueOf(i), Integer.valueOf(j)}));
+            RegionLimitedWorldAccess.a.error("Requested chunk : {} {}", i, j);
+            RegionLimitedWorldAccess.a.error("Region bounds : {} {} | {} {}", protochunk.getPos().x, protochunk.getPos().z, protochunk1.getPos().x, protochunk1.getPos().z);
+            throw new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", new Object[] { i, j}));
         }
     }
 
@@ -79,8 +79,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return this.y(blockposition).getType(blockposition);
     }
 
-    public Fluid b(BlockPosition blockposition) {
-        return this.y(blockposition).b(blockposition);
+    public Fluid getFluid(BlockPosition blockposition) {
+        return this.y(blockposition).getFluid(blockposition);
     }
 
     @Nullable

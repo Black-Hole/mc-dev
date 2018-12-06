@@ -135,7 +135,7 @@ public class TileEntityCommand extends TileEntity {
     public boolean k() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
-        return iblockdata.getBlock() instanceof BlockCommand ? ((Boolean) iblockdata.get(BlockCommand.b)).booleanValue() : false;
+        return iblockdata.getBlock() instanceof BlockCommand ? (Boolean) iblockdata.get(BlockCommand.b) : false;
     }
 
     public void z() {

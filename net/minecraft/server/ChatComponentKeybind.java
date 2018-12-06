@@ -42,7 +42,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
     }
 
     public String toString() {
-        return "KeybindComponent{keybind=\'" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "KeybindComponent{keybind='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
     public String j() {

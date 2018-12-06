@@ -28,12 +28,10 @@ public class HandshakeListener implements PacketHandshakingInListener {
                 this.b.setPacketListener(new LoginListener(this.a, this.b));
             }
             break;
-
         case STATUS:
             this.b.setProtocol(EnumProtocol.STATUS);
             this.b.setPacketListener(new PacketStatusListener(this.a, this.b));
             break;
-
         default:
             throw new UnsupportedOperationException("Invalid intention " + packethandshakinginsetprotocol.b());
         }

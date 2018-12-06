@@ -5,7 +5,7 @@ import java.io.IOException;
 public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     private String a;
-    private int b;
+    public int viewDistance;
     private EntityHuman.EnumChatVisibility c;
     private boolean d;
     private int e;
@@ -15,7 +15,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(16);
-        this.b = packetdataserializer.readByte();
+        this.viewDistance = packetdataserializer.readByte();
         this.c = (EntityHuman.EnumChatVisibility) packetdataserializer.a(EntityHuman.EnumChatVisibility.class);
         this.d = packetdataserializer.readBoolean();
         this.e = packetdataserializer.readUnsignedByte();
@@ -24,7 +24,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
-        packetdataserializer.writeByte(this.b);
+        packetdataserializer.writeByte(this.viewDistance);
         packetdataserializer.a((Enum) this.c);
         packetdataserializer.writeBoolean(this.d);
         packetdataserializer.writeByte(this.e);

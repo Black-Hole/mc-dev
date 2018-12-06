@@ -30,11 +30,11 @@ public class CommandPublish {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, int i) throws CommandSyntaxException {
         if (commandlistenerwrapper.getServer().ad()) {
-            throw CommandPublish.b.create(Integer.valueOf(commandlistenerwrapper.getServer().F()));
+            throw CommandPublish.b.create(commandlistenerwrapper.getServer().F());
         } else if (!commandlistenerwrapper.getServer().a(commandlistenerwrapper.getServer().getGamemode(), false, i)) {
             throw CommandPublish.a.create();
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.publish.success", new Object[] { Integer.valueOf(i)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.publish.success", new Object[] { i}), true);
             return i;
         }
     }

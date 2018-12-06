@@ -73,11 +73,11 @@ public abstract class EntityInsentient extends EntityLiving {
     public float a(PathType pathtype) {
         Float ofloat = (Float) this.bH.get(pathtype);
 
-        return ofloat == null ? pathtype.a() : ofloat.floatValue();
+        return ofloat == null ? pathtype.a() : ofloat;
     }
 
     public void a(PathType pathtype, float f) {
-        this.bH.put(pathtype, Float.valueOf(f));
+        this.bH.put(pathtype, f);
     }
 
     protected EntityAIBodyControl o() {
@@ -121,7 +121,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityInsentient.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityInsentient.a, (byte) 0);
     }
 
     public int z() {
@@ -482,7 +482,6 @@ public abstract class EntityInsentient extends EntityLiving {
             case HAND:
                 this.dropChanceHand[enumitemslot.b()] = 2.0F;
                 break;
-
             case ARMOR:
                 this.dropChanceArmor[enumitemslot.b()] = 2.0F;
             }
@@ -700,10 +699,8 @@ public abstract class EntityInsentient extends EntityLiving {
         switch (enumitemslot.a()) {
         case HAND:
             return (ItemStack) this.bD.get(enumitemslot.b());
-
         case ARMOR:
             return (ItemStack) this.bE.get(enumitemslot.b());
-
         default:
             return ItemStack.a;
         }
@@ -714,7 +711,6 @@ public abstract class EntityInsentient extends EntityLiving {
         case HAND:
             this.bD.set(enumitemslot.b(), itemstack);
             break;
-
         case ARMOR:
             this.bE.set(enumitemslot.b(), itemstack);
         }
@@ -749,11 +745,9 @@ public abstract class EntityInsentient extends EntityLiving {
         case HAND:
             f = this.dropChanceHand[enumitemslot.b()];
             break;
-
         case ARMOR:
             f = this.dropChanceArmor[enumitemslot.b()];
             break;
-
         default:
             f = 0.0F;
         }
@@ -827,7 +821,6 @@ public abstract class EntityInsentient extends EntityLiving {
             } else if (i == 4) {
                 return Items.DIAMOND_HELMET;
             }
-
         case CHEST:
             if (i == 0) {
                 return Items.LEATHER_CHESTPLATE;
@@ -840,7 +833,6 @@ public abstract class EntityInsentient extends EntityLiving {
             } else if (i == 4) {
                 return Items.DIAMOND_CHESTPLATE;
             }
-
         case LEGS:
             if (i == 0) {
                 return Items.LEATHER_LEGGINGS;
@@ -853,7 +845,6 @@ public abstract class EntityInsentient extends EntityLiving {
             } else if (i == 4) {
                 return Items.DIAMOND_LEGGINGS;
             }
-
         case FEET:
             if (i == 0) {
                 return Items.LEATHER_BOOTS;
@@ -866,7 +857,6 @@ public abstract class EntityInsentient extends EntityLiving {
             } else if (i == 4) {
                 return Items.DIAMOND_BOOTS;
             }
-
         default:
             return null;
         }
@@ -921,7 +911,6 @@ public abstract class EntityInsentient extends EntityLiving {
         case HAND:
             this.dropChanceHand[enumitemslot.b()] = f;
             break;
-
         case ARMOR:
             this.dropChanceArmor[enumitemslot.b()] = f;
         }
@@ -1103,23 +1092,23 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public void setNoAI(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityInsentient.a);
 
-        this.datawatcher.set(EntityInsentient.a, Byte.valueOf(flag ? (byte) (b0 | 1) : (byte) (b0 & -2)));
+        this.datawatcher.set(EntityInsentient.a, flag ? (byte) (b0 | 1) : (byte) (b0 & -2));
     }
 
     public void r(boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityInsentient.a);
 
-        this.datawatcher.set(EntityInsentient.a, Byte.valueOf(flag ? (byte) (b0 | 2) : (byte) (b0 & -3)));
+        this.datawatcher.set(EntityInsentient.a, flag ? (byte) (b0 | 2) : (byte) (b0 & -3));
     }
 
     public boolean isNoAI() {
-        return (((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue() & 1) != 0;
+        return ((Byte) this.datawatcher.get(EntityInsentient.a) & 1) != 0;
     }
 
     public boolean isLeftHanded() {
-        return (((Byte) this.datawatcher.get(EntityInsentient.a)).byteValue() & 2) != 0;
+        return ((Byte) this.datawatcher.get(EntityInsentient.a) & 2) != 0;
     }
 
     public EnumMainHand getMainHand() {

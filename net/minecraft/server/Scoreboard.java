@@ -36,9 +36,9 @@ public class Scoreboard {
 
     public ScoreboardObjective registerObjective(String s, IScoreboardCriteria iscoreboardcriteria, IChatBaseComponent ichatbasecomponent, IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay) {
         if (s.length() > 16) {
-            throw new IllegalArgumentException("The objective name \'" + s + "\' is too long!");
+            throw new IllegalArgumentException("The objective name '" + s + "' is too long!");
         } else if (this.objectivesByName.containsKey(s)) {
-            throw new IllegalArgumentException("An objective with the name \'" + s + "\' already exists!");
+            throw new IllegalArgumentException("An objective with the name '" + s + "' already exists!");
         } else {
             ScoreboardObjective scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
 
@@ -71,7 +71,7 @@ public class Scoreboard {
 
     public ScoreboardScore getPlayerScoreForObjective(String s, ScoreboardObjective scoreboardobjective) {
         if (s.length() > 40) {
-            throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
+            throw new IllegalArgumentException("The player name '" + s + "' is too long!");
         } else {
             Map map = (Map) this.playerScores.computeIfAbsent(s, (s) -> {
                 return Maps.newHashMap();
@@ -193,12 +193,12 @@ public class Scoreboard {
 
     public ScoreboardTeam createTeam(String s) {
         if (s.length() > 16) {
-            throw new IllegalArgumentException("The team name \'" + s + "\' is too long!");
+            throw new IllegalArgumentException("The team name '" + s + "' is too long!");
         } else {
             ScoreboardTeam scoreboardteam = this.getTeam(s);
 
             if (scoreboardteam != null) {
-                throw new IllegalArgumentException("A team with the name \'" + s + "\' already exists!");
+                throw new IllegalArgumentException("A team with the name '" + s + "' already exists!");
             } else {
                 scoreboardteam = new ScoreboardTeam(this, s);
                 this.teamsByName.put(s, scoreboardteam);
@@ -223,7 +223,7 @@ public class Scoreboard {
 
     public boolean addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
         if (s.length() > 40) {
-            throw new IllegalArgumentException("The player name \'" + s + "\' is too long!");
+            throw new IllegalArgumentException("The player name '" + s + "' is too long!");
         } else {
             if (this.getPlayerTeam(s) != null) {
                 this.removePlayerFromTeam(s);
@@ -247,7 +247,7 @@ public class Scoreboard {
 
     public void removePlayerFromTeam(String s, ScoreboardTeam scoreboardteam) {
         if (this.getPlayerTeam(s) != scoreboardteam) {
-            throw new IllegalStateException("Player is either on another team or not on any team. Cannot remove from team \'" + scoreboardteam.getName() + "\'.");
+            throw new IllegalStateException("Player is either on another team or not on any team. Cannot remove from team '" + scoreboardteam.getName() + "'.");
         } else {
             this.teamsByPlayer.remove(s);
             scoreboardteam.getPlayerNameSet().remove(s);
@@ -289,13 +289,10 @@ public class Scoreboard {
         switch (i) {
         case 0:
             return "list";
-
         case 1:
             return "sidebar";
-
         case 2:
             return "belowName";
-
         default:
             if (i >= 3 && i <= 18) {
                 EnumChatFormat enumchatformat = EnumChatFormat.a(i - 3);

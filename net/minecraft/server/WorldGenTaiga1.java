@@ -29,17 +29,17 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                 boolean flag1 = true;
 
                 if (l1 - blockposition.getY() < j) {
-                    k1 = 0;
+                    i1 = 0;
                 } else {
-                    k1 = l;
+                    i1 = l;
                 }
 
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-                for (i1 = blockposition.getX() - k1; i1 <= blockposition.getX() + k1 && flag; ++i1) {
-                    for (j1 = blockposition.getZ() - k1; j1 <= blockposition.getZ() + k1 && flag; ++j1) {
+                for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1 && flag; ++j1) {
+                    for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1 && flag; ++k1) {
                         if (l1 >= 0 && l1 < 256) {
-                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(i1, l1, j1)).getBlock())) {
+                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j1, l1, k1)).getBlock())) {
                                 flag = false;
                             }
                         } else {
@@ -56,19 +56,19 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
 
                 if ((block == Blocks.GRASS_BLOCK || Block.d(block)) && blockposition.getY() < 256 - i - 1) {
                     this.a(generatoraccess, blockposition.down());
-                    k1 = 0;
+                    i1 = 0;
 
                     int i2;
 
                     for (i2 = blockposition.getY() + i; i2 >= blockposition.getY() + j; --i2) {
-                        for (i1 = blockposition.getX() - k1; i1 <= blockposition.getX() + k1; ++i1) {
-                            j1 = i1 - blockposition.getX();
+                        for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
+                            k1 = j1 - blockposition.getX();
 
-                            for (int j2 = blockposition.getZ() - k1; j2 <= blockposition.getZ() + k1; ++j2) {
+                            for (int j2 = blockposition.getZ() - i1; j2 <= blockposition.getZ() + i1; ++j2) {
                                 int k2 = j2 - blockposition.getZ();
 
-                                if (Math.abs(j1) != k1 || Math.abs(k2) != k1 || k1 <= 0) {
-                                    BlockPosition blockposition1 = new BlockPosition(i1, i2, j2);
+                                if (Math.abs(k1) != i1 || Math.abs(k2) != i1 || i1 <= 0) {
+                                    BlockPosition blockposition1 = new BlockPosition(j1, i2, j2);
 
                                     if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
                                         this.a(generatoraccess, blockposition1, WorldGenTaiga1.b);
@@ -77,10 +77,10 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                             }
                         }
 
-                        if (k1 >= 1 && i2 == blockposition.getY() + j + 1) {
-                            --k1;
-                        } else if (k1 < l) {
-                            ++k1;
+                        if (i1 >= 1 && i2 == blockposition.getY() + j + 1) {
+                            --i1;
+                        } else if (i1 < l) {
+                            ++i1;
                         }
                     }
 

@@ -151,7 +151,7 @@ public class NBTTagList extends NBTList<NBTBase> {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 2) {
-                return ((NBTTagShort) nbtbase).f();
+                return ((NBTTagShort) nbtbase).asShort();
             }
         }
 
@@ -163,7 +163,7 @@ public class NBTTagList extends NBTList<NBTBase> {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 3) {
-                return ((NBTTagInt) nbtbase).e();
+                return ((NBTTagInt) nbtbase).asInt();
             }
         }
 
@@ -199,7 +199,7 @@ public class NBTTagList extends NBTList<NBTBase> {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
             if (nbtbase.getTypeId() == 5) {
-                return ((NBTTagFloat) nbtbase).i();
+                return ((NBTTagFloat) nbtbase).asFloat();
             }
         }
 
@@ -210,7 +210,7 @@ public class NBTTagList extends NBTList<NBTBase> {
         if (i >= 0 && i < this.list.size()) {
             NBTBase nbtbase = (NBTBase) this.list.get(i);
 
-            return nbtbase.getTypeId() == 8 ? nbtbase.b_() : nbtbase.toString();
+            return nbtbase.getTypeId() == 8 ? nbtbase.asString() : nbtbase.toString();
         } else {
             return "";
         }

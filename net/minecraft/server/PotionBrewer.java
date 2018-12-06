@@ -94,8 +94,8 @@ public class PotionBrewer {
             Item item = itemstack1.getItem();
             int i = 0;
 
-            int j;
             PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination;
+            int j;
 
             for (j = PotionBrewer.b.size(); i < j; ++i) {
                 potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
@@ -186,7 +186,7 @@ public class PotionBrewer {
         } else if (!(item2 instanceof ItemPotion)) {
             throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item2));
         } else {
-            PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(item, RecipeItemStack.a(new IMaterial[] { item1}), item2));
+            PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(item, RecipeItemStack.a(item1), item2));
         }
     }
 
@@ -194,12 +194,12 @@ public class PotionBrewer {
         if (!(item instanceof ItemPotion)) {
             throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item));
         } else {
-            PotionBrewer.c.add(RecipeItemStack.a(new IMaterial[] { item}));
+            PotionBrewer.c.add(RecipeItemStack.a(item));
         }
     }
 
     private static void a(PotionRegistry potionregistry, Item item, PotionRegistry potionregistry1) {
-        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, RecipeItemStack.a(new IMaterial[] { item}), potionregistry1));
+        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, RecipeItemStack.a(item), potionregistry1));
     }
 
     static class PredicatedCombination<T> {

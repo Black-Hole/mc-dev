@@ -26,7 +26,7 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
     }
 
     public static int a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
-        return ((Integer) commandcontext.getArgument(s, Integer.class)).intValue();
+        return (Integer) commandcontext.getArgument(s, Integer.class);
     }
 
     public Integer a(StringReader stringreader) throws CommandSyntaxException {
@@ -36,7 +36,7 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
         if (i == -1) {
             throw ArgumentScoreboardSlot.a.create(s);
         } else {
-            return Integer.valueOf(i);
+            return i;
         }
     }
 

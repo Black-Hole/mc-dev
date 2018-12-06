@@ -24,7 +24,7 @@ public class BlockFire extends Block {
 
     protected BlockFire(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFire.AGE, Integer.valueOf(0))).set(BlockFire.NORTH, Boolean.valueOf(false))).set(BlockFire.EAST, Boolean.valueOf(false))).set(BlockFire.SOUTH, Boolean.valueOf(false))).set(BlockFire.WEST, Boolean.valueOf(false))).set(BlockFire.UPPER, Boolean.valueOf(false)));
+        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFire.AGE, 0)).set(BlockFire.NORTH, false)).set(BlockFire.EAST, false)).set(BlockFire.SOUTH, false)).set(BlockFire.WEST, false)).set(BlockFire.UPPER, false));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
@@ -53,7 +53,7 @@ public class BlockFire extends Block {
                 BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.r.get(enumdirection);
 
                 if (blockstateboolean != null) {
-                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, Boolean.valueOf(this.k(iblockaccess.getType(blockposition.shift(enumdirection)))));
+                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, this.k(iblockaccess.getType(blockposition.shift(enumdirection))));
                 }
             }
 
@@ -87,7 +87,7 @@ public class BlockFire extends Block {
 
             Block block = world.getType(blockposition.down()).getBlock();
             boolean flag = world.worldProvider instanceof WorldProviderTheEnd && block == Blocks.BEDROCK || block == Blocks.NETHERRACK || block == Blocks.MAGMA_BLOCK;
-            int i = ((Integer) iblockdata.get(BlockFire.AGE)).intValue();
+            int i = (Integer) iblockdata.get(BlockFire.AGE);
 
             if (!flag && world.isRaining() && this.a(world, blockposition) && random.nextFloat() < 0.2F + (float) i * 0.03F) {
                 world.setAir(blockposition);
@@ -95,7 +95,7 @@ public class BlockFire extends Block {
                 int j = Math.min(15, i + random.nextInt(3) / 2);
 
                 if (i != j) {
-                    iblockdata = (IBlockData) iblockdata.set(BlockFire.AGE, Integer.valueOf(j));
+                    iblockdata = (IBlockData) iblockdata.set(BlockFire.AGE, j);
                     world.setTypeAndData(blockposition, iblockdata, 4);
                 }
 
@@ -149,7 +149,7 @@ public class BlockFire extends Block {
                                     if (i2 > 0 && random.nextInt(k1) <= i2 && (!world.isRaining() || !this.a(world, (BlockPosition) blockposition_mutableblockposition))) {
                                         int j2 = Math.min(15, i + random.nextInt(5) / 4);
 
-                                        world.setTypeAndData(blockposition_mutableblockposition, (IBlockData) this.a((IBlockAccess) world, (BlockPosition) blockposition_mutableblockposition).set(BlockFire.AGE, Integer.valueOf(j2)), 3);
+                                        world.setTypeAndData(blockposition_mutableblockposition, (IBlockData) this.a((IBlockAccess) world, (BlockPosition) blockposition_mutableblockposition).set(BlockFire.AGE, j2), 3);
                                     }
                                 }
                             }
@@ -182,7 +182,7 @@ public class BlockFire extends Block {
             if (random.nextInt(j + 10) < 5 && !world.isRainingAt(blockposition)) {
                 int l = Math.min(j + random.nextInt(5) / 4, 15);
 
-                world.setTypeAndData(blockposition, (IBlockData) this.a((IBlockAccess) world, blockposition).set(BlockFire.AGE, Integer.valueOf(l)), 3);
+                world.setTypeAndData(blockposition, (IBlockData) this.a((IBlockAccess) world, blockposition).set(BlockFire.AGE, l), 3);
             } else {
                 world.setAir(blockposition);
             }
@@ -254,7 +254,7 @@ public class BlockFire extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockFire.AGE, BlockFire.NORTH, BlockFire.EAST, BlockFire.SOUTH, BlockFire.WEST, BlockFire.UPPER});
+        blockstatelist_a.a(BlockFire.AGE, BlockFire.NORTH, BlockFire.EAST, BlockFire.SOUTH, BlockFire.WEST, BlockFire.UPPER);
     }
 
     public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {

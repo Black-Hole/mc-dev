@@ -191,11 +191,11 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
     }
 
     private void a(GeneratorAccess generatoraccess, int i, BlockPosition blockposition, EnumDirection enumdirection) {
-        this.a(generatoraccess, blockposition, (IBlockData) ((IBlockData) Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, Integer.valueOf(i))).set(BlockCocoa.FACING, enumdirection));
+        this.a(generatoraccess, blockposition, (IBlockData) ((IBlockData) Blocks.COCOA.getBlockData().set(BlockCocoa.AGE, i)).set(BlockCocoa.FACING, enumdirection));
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {
-        this.a(generatoraccess, blockposition, (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, Boolean.valueOf(true)));
+        this.a(generatoraccess, blockposition, (IBlockData) Blocks.VINE.getBlockData().set(blockstateboolean, true));
     }
 
     private void b(GeneratorAccess generatoraccess, BlockPosition blockposition, BlockStateBoolean blockstateboolean) {

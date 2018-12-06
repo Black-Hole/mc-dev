@@ -42,7 +42,7 @@ public class DebugReportRecipeShapeless {
 
     public DebugReportRecipeShapeless b(IMaterial imaterial, int i) {
         for (int j = 0; j < i; ++j) {
-            this.a(RecipeItemStack.a(new IMaterial[] { imaterial}));
+            this.a(RecipeItemStack.a(imaterial));
         }
 
         return this;
@@ -78,7 +78,7 @@ public class DebugReportRecipeShapeless {
         MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.b);
 
         if ((new MinecraftKey(s)).equals(minecraftkey)) {
-            throw new IllegalStateException("Shapeless Recipe " + s + " should remove its \'save\' argument");
+            throw new IllegalStateException("Shapeless Recipe " + s + " should remove its 'save' argument");
         } else {
             this.a(consumer, new MinecraftKey(s));
         }
@@ -138,7 +138,7 @@ public class DebugReportRecipeShapeless {
 
             jsonobject1.addProperty("item", IRegistry.ITEM.getKey(this.b).toString());
             if (this.c > 1) {
-                jsonobject1.addProperty("count", Integer.valueOf(this.c));
+                jsonobject1.addProperty("count", this.c);
             }
 
             jsonobject.add("result", jsonobject1);

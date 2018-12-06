@@ -49,7 +49,7 @@ public class CommandXp {
     private static int a(CommandListenerWrapper commandlistenerwrapper, EntityPlayer entityplayer, CommandXp.Unit commandxp_unit) {
         int i = commandxp_unit.f.applyAsInt(entityplayer);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.e, new Object[] { entityplayer.getScoreboardDisplayName(), Integer.valueOf(i)}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.query." + commandxp_unit.e, new Object[] { entityplayer.getScoreboardDisplayName(), i}), false);
         return i;
     }
 
@@ -59,13 +59,13 @@ public class CommandXp {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            commandxp_unit.c.accept(entityplayer, Integer.valueOf(i));
+            commandxp_unit.c.accept(entityplayer, i);
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.single", new Object[] { Integer.valueOf(i), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.single", new Object[] { i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.multiple", new Object[] { Integer.valueOf(i), Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.add." + commandxp_unit.e + ".success.multiple", new Object[] { i, collection.size()}), true);
         }
 
         return collection.size();
@@ -78,7 +78,7 @@ public class CommandXp {
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-            if (commandxp_unit.d.test(entityplayer, Integer.valueOf(i))) {
+            if (commandxp_unit.d.test(entityplayer, i)) {
                 ++j;
             }
         }
@@ -87,9 +87,9 @@ public class CommandXp {
             throw CommandXp.a.create();
         } else {
             if (collection.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.single", new Object[] { Integer.valueOf(i), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.single", new Object[] { i, ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.multiple", new Object[] { Integer.valueOf(i), Integer.valueOf(collection.size())}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.experience.set." + commandxp_unit.e + ".success.multiple", new Object[] { i, collection.size()}), true);
             }
 
             return collection.size();
@@ -99,16 +99,16 @@ public class CommandXp {
     static enum Unit {
 
         POINTS("points", EntityHuman::giveExp, (entityplayer, integer) -> {
-            if (integer.intValue() >= entityplayer.getExpToLevel()) {
+            if (integer >= entityplayer.getExpToLevel()) {
                 return false;
             } else {
-                entityplayer.a(integer.intValue());
+                entityplayer.a(integer);
                 return true;
             }
         }, (entityplayer) -> {
             return MathHelper.d(entityplayer.exp * (float) entityplayer.getExpToLevel());
         }), LEVELS("levels", EntityPlayer::levelDown, (entityplayer, integer) -> {
-            entityplayer.b(integer.intValue());
+            entityplayer.b(integer);
             return true;
         }, (entityplayer) -> {
             return entityplayer.expLevel;

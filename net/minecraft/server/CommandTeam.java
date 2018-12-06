@@ -108,7 +108,7 @@ public class CommandTeam {
         if (collection.size() == 1) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.single", new Object[] { collection.iterator().next()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.multiple", new Object[] { Integer.valueOf(collection.size())}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.leave.success.multiple", new Object[] { collection.size()}), true);
         }
 
         return collection.size();
@@ -127,7 +127,7 @@ public class CommandTeam {
         if (collection.size() == 1) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.single", new Object[] { collection.iterator().next(), scoreboardteam.d()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.multiple", new Object[] { Integer.valueOf(collection.size()), scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.join.success.multiple", new Object[] { collection.size(), scoreboardteam.d()}), true);
         }
 
         return collection.size();
@@ -226,7 +226,7 @@ public class CommandTeam {
                 scoreboardserver.removePlayerFromTeam(s, scoreboardteam);
             }
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[] { Integer.valueOf(arraylist.size()), scoreboardteam.d()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[] { arraylist.size(), scoreboardteam.d()}), true);
             return arraylist.size();
         }
     }
@@ -249,7 +249,7 @@ public class CommandTeam {
         if (scoreboardserver.getTeam(s) != null) {
             throw CommandTeam.a.create();
         } else if (s.length() > 16) {
-            throw CommandTeam.b.create(Integer.valueOf(16));
+            throw CommandTeam.b.create(16);
         } else {
             ScoreboardTeam scoreboardteam = scoreboardserver.createTeam(s);
 
@@ -265,7 +265,7 @@ public class CommandTeam {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.empty", new Object[] { scoreboardteam.d()}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.success", new Object[] { scoreboardteam.d(), Integer.valueOf(collection.size()), ChatComponentUtils.a(collection)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.success", new Object[] { scoreboardteam.d(), collection.size(), ChatComponentUtils.a(collection)}), false);
         }
 
         return collection.size();
@@ -277,7 +277,7 @@ public class CommandTeam {
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.empty", new Object[0]), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.success", new Object[] { Integer.valueOf(collection.size()), ChatComponentUtils.b(collection, ScoreboardTeam::d)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.success", new Object[] { collection.size(), ChatComponentUtils.b(collection, ScoreboardTeam::d)}), false);
         }
 
         return collection.size();

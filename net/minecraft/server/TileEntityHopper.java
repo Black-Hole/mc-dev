@@ -82,7 +82,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
             if (!this.E()) {
                 this.setCooldown(0);
                 this.a(() -> {
-                    return Boolean.valueOf(a((IHopper) this));
+                    return a((IHopper) this);
                 });
             }
 
@@ -91,7 +91,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
     private boolean a(Supplier<Boolean> supplier) {
         if (this.world != null && !this.world.isClientSide) {
-            if (!this.E() && ((Boolean) this.getBlock().get(BlockHopper.ENABLED)).booleanValue()) {
+            if (!this.E() && (Boolean) this.getBlock().get(BlockHopper.ENABLED)) {
                 boolean flag = false;
 
                 if (!this.p()) {
@@ -99,7 +99,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                 }
 
                 if (!this.r()) {
-                    flag |= ((Boolean) supplier.get()).booleanValue();
+                    flag |= (Boolean) supplier.get();
                 }
 
                 if (flag) {
@@ -494,7 +494,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
 
             if (VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), this.i(), OperatorBoolean.AND)) {
                 this.a(() -> {
-                    return Boolean.valueOf(a((IInventory) this, (EntityItem) entity));
+                    return a((IInventory) this, (EntityItem) entity);
                 });
             }
         }

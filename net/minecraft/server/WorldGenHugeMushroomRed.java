@@ -45,7 +45,7 @@ public class WorldGenHugeMushroomRed extends WorldGenerator<WorldGenFeatureEmpty
                     }
                 }
 
-                IBlockData iblockdata1 = (IBlockData) Blocks.RED_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.q, Boolean.valueOf(false));
+                IBlockData iblockdata1 = (IBlockData) Blocks.RED_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.q, false);
 
                 for (int j1 = i - 3; j1 <= i; ++j1) {
                     k = j1 < i ? 2 : 1;
@@ -63,14 +63,14 @@ public class WorldGenHugeMushroomRed extends WorldGenerator<WorldGenFeatureEmpty
                             if (j1 >= i || flag5 != flag6) {
                                 blockposition_mutableblockposition.g(blockposition).d(k1, j1, l1);
                                 if (!generatoraccess.getType(blockposition_mutableblockposition).f(generatoraccess, blockposition_mutableblockposition)) {
-                                    this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.p, Boolean.valueOf(j1 >= i - 1))).set(BlockHugeMushroom.o, Boolean.valueOf(k1 < 0))).set(BlockHugeMushroom.b, Boolean.valueOf(k1 > 0))).set(BlockHugeMushroom.a, Boolean.valueOf(l1 < 0))).set(BlockHugeMushroom.c, Boolean.valueOf(l1 > 0)));
+                                    this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.p, j1 >= i - 1)).set(BlockHugeMushroom.o, k1 < 0)).set(BlockHugeMushroom.b, k1 > 0)).set(BlockHugeMushroom.a, l1 < 0)).set(BlockHugeMushroom.c, l1 > 0));
                                 }
                             }
                         }
                     }
                 }
 
-                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, Boolean.valueOf(false))).set(BlockHugeMushroom.q, Boolean.valueOf(false));
+                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, false)).set(BlockHugeMushroom.q, false);
 
                 for (k = 0; k < i; ++k) {
                     blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, k);

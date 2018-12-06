@@ -43,14 +43,14 @@ public class DebugReportRecipeShaped {
     }
 
     public DebugReportRecipeShaped a(Character character, IMaterial imaterial) {
-        return this.a(character, RecipeItemStack.a(new IMaterial[] { imaterial}));
+        return this.a(character, RecipeItemStack.a(imaterial));
     }
 
     public DebugReportRecipeShaped a(Character character, RecipeItemStack recipeitemstack) {
         if (this.e.containsKey(character)) {
-            throw new IllegalArgumentException("Symbol \'" + character + "\' is already defined!");
-        } else if (character.charValue() == 32) {
-            throw new IllegalArgumentException("Symbol \' \' (whitespace) is reserved and cannot be defined");
+            throw new IllegalArgumentException("Symbol '" + character + "' is already defined!");
+        } else if (character == 32) {
+            throw new IllegalArgumentException("Symbol ' ' (whitespace) is reserved and cannot be defined");
         } else {
             this.e.put(character, recipeitemstack);
             return this;
@@ -84,7 +84,7 @@ public class DebugReportRecipeShaped {
         MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.b);
 
         if ((new MinecraftKey(s)).equals(minecraftkey)) {
-            throw new IllegalStateException("Shaped Recipe " + s + " should remove its \'save\' argument");
+            throw new IllegalStateException("Shaped Recipe " + s + " should remove its 'save' argument");
         } else {
             this.a(consumer, new MinecraftKey(s));
         }
@@ -102,7 +102,7 @@ public class DebugReportRecipeShaped {
         } else {
             HashSet hashset = Sets.newHashSet(this.e.keySet());
 
-            hashset.remove(Character.valueOf(' '));
+            hashset.remove(' ');
             Iterator iterator = this.d.iterator();
 
             while (iterator.hasNext()) {
@@ -111,11 +111,11 @@ public class DebugReportRecipeShaped {
                 for (int i = 0; i < s.length(); ++i) {
                     char c0 = s.charAt(i);
 
-                    if (!this.e.containsKey(Character.valueOf(c0)) && c0 != 32) {
-                        throw new IllegalStateException("Pattern in recipe " + minecraftkey + " uses undefined symbol \'" + c0 + "\'");
+                    if (!this.e.containsKey(c0) && c0 != 32) {
+                        throw new IllegalStateException("Pattern in recipe " + minecraftkey + " uses undefined symbol '" + c0 + "'");
                     }
 
-                    hashset.remove(Character.valueOf(c0));
+                    hashset.remove(c0);
                 }
             }
 
@@ -183,7 +183,7 @@ public class DebugReportRecipeShaped {
 
             jsonobject2.addProperty("item", IRegistry.ITEM.getKey(this.c).toString());
             if (this.d > 1) {
-                jsonobject2.addProperty("count", Integer.valueOf(this.d));
+                jsonobject2.addProperty("count", this.d);
             }
 
             jsonobject.add("result", jsonobject2);

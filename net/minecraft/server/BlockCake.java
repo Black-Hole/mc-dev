@@ -7,11 +7,11 @@ public class BlockCake extends Block {
 
     protected BlockCake(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, Integer.valueOf(0)));
+        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCake.BITES, 0));
     }
 
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return BlockCake.b[((Integer) iblockdata.get(BlockCake.BITES)).intValue()];
+        return BlockCake.b[(Integer) iblockdata.get(BlockCake.BITES)];
     }
 
     public boolean a(IBlockData iblockdata) {
@@ -34,10 +34,10 @@ public class BlockCake extends Block {
         } else {
             entityhuman.a(StatisticList.EAT_CAKE_SLICE);
             entityhuman.getFoodData().eat(2, 0.1F);
-            int i = ((Integer) iblockdata.get(BlockCake.BITES)).intValue();
+            int i = (Integer) iblockdata.get(BlockCake.BITES);
 
             if (i < 6) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCake.BITES, Integer.valueOf(i + 1)), 3);
+                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCake.BITES, i + 1), 3);
             } else {
                 generatoraccess.setAir(blockposition);
             }
@@ -59,11 +59,11 @@ public class BlockCake extends Block {
     }
 
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(new IBlockState[] { BlockCake.BITES});
+        blockstatelist_a.a(BlockCake.BITES);
     }
 
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        return (7 - ((Integer) iblockdata.get(BlockCake.BITES)).intValue()) * 2;
+        return (7 - (Integer) iblockdata.get(BlockCake.BITES)) * 2;
     }
 
     public boolean isComplexRedstone(IBlockData iblockdata) {

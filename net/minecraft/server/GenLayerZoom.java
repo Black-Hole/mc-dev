@@ -3,9 +3,8 @@ package net.minecraft.server;
 public enum GenLayerZoom implements AreaTransformer2 {
 
     NORMAL, FUZZY {
-        ;
         protected int a(AreaContextTransformed<?> areacontexttransformed, int i, int j, int k, int l) {
-            return areacontexttransformed.a(new int[] { i, j, k, l});
+            return areacontexttransformed.a(i, j, k, l);
         }
     };
 
@@ -39,13 +38,13 @@ public enum GenLayerZoom implements AreaTransformer2 {
             return k2;
         } else {
             int j3 = area.a(k1, j2);
-            int k3 = areacontexttransformed.a(new int[] { k2, j3});
+            int k3 = areacontexttransformed.a(k2, j3);
 
             if (l2 == 0 && i3 == 1) {
                 return k3;
             } else {
                 int l3 = area.a(l1, i2);
-                int i4 = areacontexttransformed.a(new int[] { k2, l3});
+                int i4 = areacontexttransformed.a(k2, l3);
 
                 if (l2 == 1 && i3 == 0) {
                     return i4;
@@ -59,7 +58,7 @@ public enum GenLayerZoom implements AreaTransformer2 {
     }
 
     protected int a(AreaContextTransformed<?> areacontexttransformed, int i, int j, int k, int l) {
-        return j == k && k == l ? j : (i == j && i == k ? i : (i == j && i == l ? i : (i == k && i == l ? i : (i == j && k != l ? i : (i == k && j != l ? i : (i == l && j != k ? i : (j == k && i != l ? j : (j == l && i != k ? j : (k == l && i != j ? k : areacontexttransformed.a(new int[] { i, j, k, l}))))))))));
+        return j == k && k == l ? j : (i == j && i == k ? i : (i == j && i == l ? i : (i == k && i == l ? i : (i == j && k != l ? i : (i == k && j != l ? i : (i == l && j != k ? i : (j == k && i != l ? j : (j == l && i != k ? j : (k == l && i != j ? k : areacontexttransformed.a(i, j, k, l))))))))));
     }
 
     GenLayerZoom(Object object) {

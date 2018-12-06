@@ -33,7 +33,7 @@ public class CriterionConditionEntityType {
             EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
             if (entitytypes == null) {
-                throw new JsonSyntaxException("Unknown entity type \'" + minecraftkey + "\', valid types are: " + CriterionConditionEntityType.b.join(IRegistry.ENTITY_TYPE.keySet()));
+                throw new JsonSyntaxException("Unknown entity type '" + minecraftkey + "', valid types are: " + CriterionConditionEntityType.b.join(IRegistry.ENTITY_TYPE.keySet()));
             } else {
                 return new CriterionConditionEntityType(entitytypes);
             }

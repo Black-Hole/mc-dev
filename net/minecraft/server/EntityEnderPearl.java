@@ -27,7 +27,7 @@ public class EntityEnderPearl extends EntityProjectile {
         }
 
         if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            BlockPosition blockposition = movingobjectposition.a();
+            BlockPosition blockposition = movingobjectposition.getBlockPosition();
             TileEntity tileentity = this.world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityEndGateway) {

@@ -34,26 +34,21 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
         case SET_SIZE:
             this.e = packetdataserializer.readDouble();
             break;
-
         case LERP_SIZE:
             this.f = packetdataserializer.readDouble();
             this.e = packetdataserializer.readDouble();
             this.g = packetdataserializer.h();
             break;
-
         case SET_CENTER:
             this.c = packetdataserializer.readDouble();
             this.d = packetdataserializer.readDouble();
             break;
-
         case SET_WARNING_BLOCKS:
             this.i = packetdataserializer.g();
             break;
-
         case SET_WARNING_TIME:
             this.h = packetdataserializer.g();
             break;
-
         case INITIALIZE:
             this.c = packetdataserializer.readDouble();
             this.d = packetdataserializer.readDouble();
@@ -73,26 +68,21 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
         case SET_SIZE:
             packetdataserializer.writeDouble(this.e);
             break;
-
         case LERP_SIZE:
             packetdataserializer.writeDouble(this.f);
             packetdataserializer.writeDouble(this.e);
             packetdataserializer.b(this.g);
             break;
-
         case SET_CENTER:
             packetdataserializer.writeDouble(this.c);
             packetdataserializer.writeDouble(this.d);
             break;
-
         case SET_WARNING_BLOCKS:
             packetdataserializer.d(this.i);
             break;
-
         case SET_WARNING_TIME:
             packetdataserializer.d(this.h);
             break;
-
         case INITIALIZE:
             packetdataserializer.writeDouble(this.c);
             packetdataserializer.writeDouble(this.d);

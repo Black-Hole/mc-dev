@@ -8,7 +8,7 @@ public class ChunkTaskLiquidCarve extends ChunkTask {
         chunkgenerator.addFeatures(new RegionLimitedWorldAccess(aprotochunk, chunkstatus.c() * 2 + 1, chunkstatus.c() * 2 + 1, i, j, world), WorldGenStage.Features.LIQUID);
         ProtoChunk protochunk = aprotochunk[aprotochunk.length / 2];
 
-        protochunk.a(new HeightMap.Type[] { HeightMap.Type.OCEAN_FLOOR_WG, HeightMap.Type.WORLD_SURFACE_WG});
+        protochunk.a(HeightMap.Type.OCEAN_FLOOR_WG, HeightMap.Type.WORLD_SURFACE_WG);
         protochunk.a(ChunkStatus.LIQUID_CARVED);
         return protochunk;
     }

@@ -24,9 +24,9 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     private static <T> Dynamic<T> a(Dynamic<T> dynamic) {
-        boolean flag = ((Boolean) dynamic.get("Children").flatMap(Dynamic::getStream).map((stream) -> {
-            return Boolean.valueOf(stream.allMatch(DataConverterIglooMetadataRemoval::c));
-        }).orElse(Boolean.valueOf(false))).booleanValue();
+        boolean flag = (Boolean) dynamic.get("Children").flatMap(Dynamic::getStream).map((stream) -> {
+            return stream.allMatch(DataConverterIglooMetadataRemoval::c);
+        }).orElse(false);
 
         return flag ? dynamic.set("id", dynamic.createString("Igloo")).remove("Children") : dynamic.update("Children", DataConverterIglooMetadataRemoval::b);
     }

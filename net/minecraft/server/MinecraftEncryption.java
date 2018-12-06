@@ -42,7 +42,7 @@ public class MinecraftEncryption {
 
     public static byte[] a(String s, PublicKey publickey, SecretKey secretkey) {
         try {
-            return a("SHA-1", new byte[][] { s.getBytes("ISO_8859_1"), secretkey.getEncoded(), publickey.getEncoded()});
+            return a("SHA-1", s.getBytes("ISO_8859_1"), secretkey.getEncoded(), publickey.getEncoded());
         } catch (UnsupportedEncodingException unsupportedencodingexception) {
             unsupportedencodingexception.printStackTrace();
             return null;

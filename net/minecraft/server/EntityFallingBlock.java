@@ -87,14 +87,14 @@ public class EntityFallingBlock extends Entity {
             if (!this.world.isClientSide) {
                 blockposition = new BlockPosition(this);
                 boolean flag = this.block.getBlock() instanceof BlockConcretePowder;
-                boolean flag1 = flag && this.world.b(blockposition).a(TagsFluid.WATER);
+                boolean flag1 = flag && this.world.getFluid(blockposition).a(TagsFluid.WATER);
                 double d0 = this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ;
 
                 if (flag && d0 > 1.0D) {
                     MovingObjectPosition movingobjectposition = this.world.rayTrace(new Vec3D(this.lastX, this.lastY, this.lastZ), new Vec3D(this.locX, this.locY, this.locZ), FluidCollisionOption.SOURCE_ONLY);
 
-                    if (movingobjectposition != null && this.world.b(movingobjectposition.a()).a(TagsFluid.WATER)) {
-                        blockposition = movingobjectposition.a();
+                    if (movingobjectposition != null && this.world.getFluid(movingobjectposition.getBlockPosition()).a(TagsFluid.WATER)) {
+                        blockposition = movingobjectposition.getBlockPosition();
                         flag1 = true;
                     }
                 }

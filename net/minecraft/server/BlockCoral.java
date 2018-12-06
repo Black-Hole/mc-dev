@@ -33,7 +33,7 @@ public class BlockCoral extends Block {
 
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
-            Fluid fluid = iblockaccess.b(blockposition.shift(enumdirection));
+            Fluid fluid = iblockaccess.getFluid(blockposition.shift(enumdirection));
 
             if (fluid.a(TagsFluid.WATER)) {
                 return true;

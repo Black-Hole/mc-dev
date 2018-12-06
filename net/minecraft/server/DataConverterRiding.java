@@ -47,8 +47,8 @@ public class DataConverterRiding extends DataFix {
             OpticFinder opticfinder = DSL.typeFinder(type3);
             OpticFinder opticfinder1 = DSL.typeFinder(type4);
             OpticFinder opticfinder2 = DSL.typeFinder(type1);
-            Type type7 = schema.getType(DataConverterTypes.b);
-            Type type8 = schema1.getType(DataConverterTypes.b);
+            Type type7 = schema.getType(DataConverterTypes.PLAYER);
+            Type type8 = schema1.getType(DataConverterTypes.PLAYER);
 
             return TypeRewriteRule.seq(this.fixTypeEverywhere("EntityRidingToPassengerFix", type3, type4, (dynamicops) -> {
                 return (pair) -> {

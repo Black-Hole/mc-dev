@@ -48,7 +48,7 @@ public class NBTTagString implements NBTBase {
         return this.data.hashCode();
     }
 
-    public String b_() {
+    public String asString() {
         return this.data;
     }
 
@@ -62,7 +62,7 @@ public class NBTTagString implements NBTBase {
         StringBuilder stringbuilder = new StringBuilder();
 
         if (flag) {
-            stringbuilder.append('\"');
+            stringbuilder.append('"');
         }
 
         for (int i = 0; i < s.length(); ++i) {
@@ -76,7 +76,7 @@ public class NBTTagString implements NBTBase {
         }
 
         if (flag) {
-            stringbuilder.append('\"');
+            stringbuilder.append('"');
         }
 
         return stringbuilder.toString();

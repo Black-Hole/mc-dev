@@ -28,19 +28,15 @@ public class DataConverterHorse extends DataConverterEntityName {
             default:
                 s1 = "Horse";
                 break;
-
             case 1:
                 s1 = "Donkey";
                 break;
-
             case 2:
                 s1 = "Mule";
                 break;
-
             case 3:
                 s1 = "ZombieHorse";
                 break;
-
             case 4:
                 s1 = "SkeletonHorse";
             }

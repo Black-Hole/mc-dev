@@ -134,14 +134,14 @@ public class ContainerAnvil extends Container {
                         return;
                     }
 
-                    for (l = 0; k > 0 && l < itemstack2.getCount(); ++l) {
-                        i1 = itemstack1.getDamage() - k;
-                        itemstack1.setDamage(i1);
+                    for (i1 = 0; k > 0 && i1 < itemstack2.getCount(); ++i1) {
+                        l = itemstack1.getDamage() - k;
+                        itemstack1.setDamage(l);
                         ++i;
                         k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     }
 
-                    this.k = l;
+                    this.k = i1;
                 } else {
                     if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
                         this.g.setItem(0, ItemStack.a);
@@ -151,9 +151,9 @@ public class ContainerAnvil extends Container {
 
                     if (itemstack1.e() && !flag) {
                         k = itemstack.h() - itemstack.getDamage();
-                        l = itemstack2.h() - itemstack2.getDamage();
-                        i1 = l + itemstack1.h() * 12 / 100;
-                        int j1 = k + i1;
+                        i1 = itemstack2.h() - itemstack2.getDamage();
+                        l = i1 + itemstack1.h() * 12 / 100;
+                        int j1 = k + l;
                         int k1 = itemstack1.h() - j1;
 
                         if (k1 < 0) {
@@ -175,8 +175,8 @@ public class ContainerAnvil extends Container {
                         Enchantment enchantment = (Enchantment) iterator.next();
 
                         if (enchantment != null) {
-                            int l1 = map.containsKey(enchantment) ? ((Integer) map.get(enchantment)).intValue() : 0;
-                            int i2 = ((Integer) map1.get(enchantment)).intValue();
+                            int l1 = map.containsKey(enchantment) ? (Integer) map.get(enchantment) : 0;
+                            int i2 = (Integer) map1.get(enchantment);
 
                             i2 = l1 == i2 ? i2 + 1 : Math.max(i2, l1);
                             boolean flag3 = enchantment.canEnchant(itemstack);
@@ -204,22 +204,19 @@ public class ContainerAnvil extends Container {
                                     i2 = enchantment.getMaxLevel();
                                 }
 
-                                map.put(enchantment, Integer.valueOf(i2));
+                                map.put(enchantment, i2);
                                 int j2 = 0;
 
                                 switch (enchantment.d()) {
                                 case COMMON:
                                     j2 = 1;
                                     break;
-
                                 case UNCOMMON:
                                     j2 = 2;
                                     break;
-
                                 case RARE:
                                     j2 = 4;
                                     break;
-
                                 case VERY_RARE:
                                     j2 = 8;
                                 }

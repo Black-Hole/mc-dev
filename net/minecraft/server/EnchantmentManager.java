@@ -44,7 +44,7 @@ public class EnchantmentManager {
             Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(nbttagcompound.getString("id")));
 
             if (enchantment != null) {
-                linkedhashmap.put(enchantment, Integer.valueOf(nbttagcompound.getInt("lvl")));
+                linkedhashmap.put(enchantment, nbttagcompound.getInt("lvl"));
             }
         }
 
@@ -60,7 +60,7 @@ public class EnchantmentManager {
             Enchantment enchantment = (Enchantment) entry.getKey();
 
             if (enchantment != null) {
-                int i = ((Integer) entry.getValue()).intValue();
+                int i = (Integer) entry.getValue();
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
 
                 nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));

@@ -33,7 +33,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     protected void x_() {
-        this.datawatcher.register(EntityTNTPrimed.FUSE_TICKS, Integer.valueOf(80));
+        this.datawatcher.register(EntityTNTPrimed.FUSE_TICKS, 80);
     }
 
     protected boolean playStepSound() {
@@ -99,7 +99,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     public void setFuseTicks(int i) {
-        this.datawatcher.set(EntityTNTPrimed.FUSE_TICKS, Integer.valueOf(i));
+        this.datawatcher.set(EntityTNTPrimed.FUSE_TICKS, i);
         this.c = i;
     }
 
@@ -111,7 +111,7 @@ public class EntityTNTPrimed extends Entity {
     }
 
     public int i() {
-        return ((Integer) this.datawatcher.get(EntityTNTPrimed.FUSE_TICKS)).intValue();
+        return (Integer) this.datawatcher.get(EntityTNTPrimed.FUSE_TICKS);
     }
 
     public int getFuseTicks() {

@@ -10,16 +10,15 @@ import javax.annotation.Nullable;
 public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus> {
 
     EMPTY("empty", (ChunkTask) null, -1, false, ChunkStatus.Type.PROTOCHUNK), BASE("base", new ChunkTaskBase(), 0, false, ChunkStatus.Type.PROTOCHUNK), CARVED("carved", new ChunkTaskCarve(), 0, false, ChunkStatus.Type.PROTOCHUNK), LIQUID_CARVED("liquid_carved", new ChunkTaskLiquidCarve(), 1, false, ChunkStatus.Type.PROTOCHUNK), DECORATED("decorated", new ChunkTaskDecorate(), 1, true, ChunkStatus.Type.PROTOCHUNK) {
-        ;
         public void a(ChunkCoordIntPair chunkcoordintpair, BiConsumer<ChunkCoordIntPair, ChunkStatus> biconsumer) {
             int i = chunkcoordintpair.x;
             int j = chunkcoordintpair.z;
             ChunkStatus chunkstatus = this.e();
             boolean flag = true;
 
+            ChunkCoordIntPair chunkcoordintpair1;
             int k;
             int l;
-            ChunkCoordIntPair chunkcoordintpair1;
 
             for (k = i - 8; k <= i + 8; ++k) {
                 if (k < i - 1 || k > i + 1) {

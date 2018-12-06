@@ -8,7 +8,7 @@ public class ChunkTaskFinalize extends ChunkTask {
         ProtoChunk protochunk = aprotochunk[aprotochunk.length / 2];
 
         protochunk.a(ChunkStatus.FINALIZED);
-        protochunk.a(new HeightMap.Type[] { HeightMap.Type.MOTION_BLOCKING, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, HeightMap.Type.LIGHT_BLOCKING, HeightMap.Type.OCEAN_FLOOR, HeightMap.Type.WORLD_SURFACE});
+        protochunk.a(HeightMap.Type.MOTION_BLOCKING, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, HeightMap.Type.LIGHT_BLOCKING, HeightMap.Type.OCEAN_FLOOR, HeightMap.Type.WORLD_SURFACE);
         return protochunk;
     }
 }

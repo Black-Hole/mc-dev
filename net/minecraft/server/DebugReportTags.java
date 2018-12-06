@@ -96,7 +96,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
 
                 hashcache.a(java_nio_file_path, s1);
             } catch (IOException ioexception) {
-                DebugReportTags.e.error("Couldn\'t save tags to {}", java_nio_file_path, ioexception);
+                DebugReportTags.e.error("Couldn't save tags to {}", java_nio_file_path, ioexception);
             }
         }
 

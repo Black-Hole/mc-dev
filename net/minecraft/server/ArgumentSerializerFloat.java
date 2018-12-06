@@ -33,11 +33,11 @@ public class ArgumentSerializerFloat implements ArgumentSerializer<FloatArgument
 
     public void a(FloatArgumentType floatargumenttype, JsonObject jsonobject) {
         if (floatargumenttype.getMinimum() != -3.4028235E38F) {
-            jsonobject.addProperty("min", Float.valueOf(floatargumenttype.getMinimum()));
+            jsonobject.addProperty("min", floatargumenttype.getMinimum());
         }
 
         if (floatargumenttype.getMaximum() != Float.MAX_VALUE) {
-            jsonobject.addProperty("max", Float.valueOf(floatargumenttype.getMaximum()));
+            jsonobject.addProperty("max", floatargumenttype.getMaximum());
         }
 
     }

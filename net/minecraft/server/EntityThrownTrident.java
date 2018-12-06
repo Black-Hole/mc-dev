@@ -5,25 +5,25 @@ import javax.annotation.Nullable;
 public class EntityThrownTrident extends EntityArrow {
 
     private static final DataWatcherObject<Byte> h = DataWatcher.a(EntityThrownTrident.class, DataWatcherRegistry.a);
-    private ItemStack aw;
+    public ItemStack trident;
     private boolean ax;
     public int g;
 
     public EntityThrownTrident(World world) {
         super(EntityTypes.TRIDENT, world);
-        this.aw = new ItemStack(Items.TRIDENT);
+        this.trident = new ItemStack(Items.TRIDENT);
     }
 
     public EntityThrownTrident(World world, EntityLiving entityliving, ItemStack itemstack) {
         super(EntityTypes.TRIDENT, entityliving, world);
-        this.aw = new ItemStack(Items.TRIDENT);
-        this.aw = itemstack.cloneItemStack();
-        this.datawatcher.set(EntityThrownTrident.h, Byte.valueOf((byte) EnchantmentManager.f(itemstack)));
+        this.trident = new ItemStack(Items.TRIDENT);
+        this.trident = itemstack.cloneItemStack();
+        this.datawatcher.set(EntityThrownTrident.h, (byte) EnchantmentManager.f(itemstack));
     }
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityThrownTrident.h, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityThrownTrident.h, (byte) 0);
     }
 
     public void tick() {
@@ -34,7 +34,7 @@ public class EntityThrownTrident extends EntityArrow {
         Entity entity = this.getShooter();
 
         if ((this.ax || this.q()) && entity != null) {
-            byte b0 = ((Byte) this.datawatcher.get(EntityThrownTrident.h)).byteValue();
+            byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.h);
 
             if (b0 > 0 && !this.r()) {
                 if (!this.world.isClientSide && this.fromPlayer == EntityArrow.PickupStatus.ALLOWED) {
@@ -75,7 +75,7 @@ public class EntityThrownTrident extends EntityArrow {
     }
 
     protected ItemStack getItemStack() {
-        return this.aw.cloneItemStack();
+        return this.trident.cloneItemStack();
     }
 
     @Nullable
@@ -90,7 +90,7 @@ public class EntityThrownTrident extends EntityArrow {
         if (entity instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) entity;
 
-            f += EnchantmentManager.a(this.aw, entityliving.getMonsterType());
+            f += EnchantmentManager.a(this.trident, entityliving.getMonsterType());
         }
 
         Entity entity1 = this.getShooter();
@@ -115,7 +115,7 @@ public class EntityThrownTrident extends EntityArrow {
         this.motZ *= -0.009999999776482582D;
         float f1 = 1.0F;
 
-        if (this.world.Y() && EnchantmentManager.h(this.aw)) {
+        if (this.world.Y() && EnchantmentManager.h(this.trident)) {
             BlockPosition blockposition = entity.getChunkCoordinates();
 
             if (this.world.e(blockposition)) {
@@ -146,21 +146,21 @@ public class EntityThrownTrident extends EntityArrow {
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Trident", 10)) {
-            this.aw = ItemStack.a(nbttagcompound.getCompound("Trident"));
+            this.trident = ItemStack.a(nbttagcompound.getCompound("Trident"));
         }
 
         this.ax = nbttagcompound.getBoolean("DealtDamage");
-        this.datawatcher.set(EntityThrownTrident.h, Byte.valueOf((byte) EnchantmentManager.f(this.aw)));
+        this.datawatcher.set(EntityThrownTrident.h, (byte) EnchantmentManager.f(this.trident));
     }
 
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.set("Trident", this.aw.save(new NBTTagCompound()));
+        nbttagcompound.set("Trident", this.trident.save(new NBTTagCompound()));
         nbttagcompound.setBoolean("DealtDamage", this.ax);
     }
 
     protected void f() {
-        byte b0 = ((Byte) this.datawatcher.get(EntityThrownTrident.h)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityThrownTrident.h);
 
         if (this.fromPlayer != EntityArrow.PickupStatus.ALLOWED || b0 <= 0) {
             super.f();

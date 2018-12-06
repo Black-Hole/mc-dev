@@ -95,8 +95,8 @@ public abstract class Container {
         ItemStack itemstack = ItemStack.a;
         PlayerInventory playerinventory = entityhuman.inventory;
         ItemStack itemstack1;
-        int k;
         ItemStack itemstack2;
+        int k;
         int l;
 
         if (inventoryclicktype == InventoryClickType.QUICK_CRAFT) {
@@ -125,7 +125,7 @@ public abstract class Container {
             } else if (this.g == 2) {
                 if (!this.h.isEmpty()) {
                     itemstack2 = playerinventory.getCarried().cloneItemStack();
-                    l = playerinventory.getCarried().getCount();
+                    k = playerinventory.getCarried().getCount();
                     Iterator iterator = this.h.iterator();
 
                     while (iterator.hasNext()) {
@@ -137,17 +137,17 @@ public abstract class Container {
                             int j1 = slot1.hasItem() ? slot1.getItem().getCount() : 0;
 
                             a(this.h, this.dragType, itemstack4, j1);
-                            k = Math.min(itemstack4.getMaxStackSize(), slot1.getMaxStackSize(itemstack4));
-                            if (itemstack4.getCount() > k) {
-                                itemstack4.setCount(k);
+                            l = Math.min(itemstack4.getMaxStackSize(), slot1.getMaxStackSize(itemstack4));
+                            if (itemstack4.getCount() > l) {
+                                itemstack4.setCount(l);
                             }
 
-                            l -= itemstack4.getCount() - j1;
+                            k -= itemstack4.getCount() - j1;
                             slot1.set(itemstack4);
                         }
                     }
 
-                    itemstack2.setCount(l);
+                    itemstack2.setCount(k);
                     playerinventory.setCarried(itemstack2);
                 }
 
@@ -311,21 +311,21 @@ public abstract class Container {
                 slot2 = (Slot) this.slots.get(i);
                 itemstack2 = playerinventory.getCarried();
                 if (!itemstack2.isEmpty() && (slot2 == null || !slot2.hasItem() || !slot2.isAllowed(entityhuman))) {
-                    l = j == 0 ? 0 : this.slots.size() - 1;
+                    k = j == 0 ? 0 : this.slots.size() - 1;
                     k1 = j == 0 ? 1 : -1;
 
                     for (int l1 = 0; l1 < 2; ++l1) {
-                        for (int i2 = l; i2 >= 0 && i2 < this.slots.size() && itemstack2.getCount() < itemstack2.getMaxStackSize(); i2 += k1) {
+                        for (int i2 = k; i2 >= 0 && i2 < this.slots.size() && itemstack2.getCount() < itemstack2.getMaxStackSize(); i2 += k1) {
                             Slot slot3 = (Slot) this.slots.get(i2);
 
                             if (slot3.hasItem() && a(slot3, itemstack2, true) && slot3.isAllowed(entityhuman) && this.a(itemstack2, slot3)) {
                                 ItemStack itemstack5 = slot3.getItem();
 
                                 if (l1 != 0 || itemstack5.getCount() != itemstack5.getMaxStackSize()) {
-                                    k = Math.min(itemstack2.getMaxStackSize() - itemstack2.getCount(), itemstack5.getCount());
-                                    ItemStack itemstack6 = slot3.a(k);
+                                    l = Math.min(itemstack2.getMaxStackSize() - itemstack2.getCount(), itemstack5.getCount());
+                                    ItemStack itemstack6 = slot3.a(l);
 
-                                    itemstack2.add(k);
+                                    itemstack2.add(l);
                                     if (itemstack6.isEmpty()) {
                                         slot3.set(ItemStack.a);
                                     }
@@ -517,11 +517,9 @@ public abstract class Container {
         case 0:
             itemstack.setCount(MathHelper.d((float) itemstack.getCount() / (float) set.size()));
             break;
-
         case 1:
             itemstack.setCount(1);
             break;
-
         case 2:
             itemstack.setCount(itemstack.getItem().getMaxStackSize());
         }

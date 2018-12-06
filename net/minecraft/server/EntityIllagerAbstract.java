@@ -10,11 +10,11 @@ public abstract class EntityIllagerAbstract extends EntityMonster {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityIllagerAbstract.a, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityIllagerAbstract.a, (byte) 0);
     }
 
     protected void a(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityIllagerAbstract.a)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityIllagerAbstract.a);
         int j;
 
         if (flag) {
@@ -23,7 +23,7 @@ public abstract class EntityIllagerAbstract extends EntityMonster {
             j = b0 & ~i;
         }
 
-        this.datawatcher.set(EntityIllagerAbstract.a, Byte.valueOf((byte) (j & 255)));
+        this.datawatcher.set(EntityIllagerAbstract.a, (byte) (j & 255));
     }
 
     public EnumMonsterType getMonsterType() {

@@ -28,13 +28,13 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         while (iterator.hasNext()) {
             Item item = (Item) iterator.next();
 
-            map.put(item, Integer.valueOf(i));
+            map.put(item, i);
         }
 
     }
 
     private static void a(Map<Item, Integer> map, IMaterial imaterial, int i) {
-        map.put(imaterial.getItem(), Integer.valueOf(i));
+        map.put(imaterial.getItem(), i);
     }
 
     public static Map<Item, Integer> p() {
@@ -178,7 +178,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
             MinecraftKey minecraftkey = new MinecraftKey(nbttagcompound.getString("RecipeLocation" + i));
             int j = nbttagcompound.getInt("RecipeAmount" + i);
 
-            this.m.put(minecraftkey, Integer.valueOf(j));
+            this.m.put(minecraftkey, j);
         }
 
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
@@ -200,7 +200,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
             Entry entry = (Entry) iterator.next();
 
             nbttagcompound.setString("RecipeLocation" + i, ((MinecraftKey) entry.getKey()).toString());
-            nbttagcompound.setInt("RecipeAmount" + i, ((Integer) entry.getValue()).intValue());
+            nbttagcompound.setInt("RecipeAmount" + i, (Integer) entry.getValue());
         }
 
         if (this.l != null) {
@@ -269,7 +269,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
 
             if (flag != this.isBurning()) {
                 flag1 = true;
-                this.world.setTypeAndData(this.position, (IBlockData) this.world.getType(this.position).set(BlockFurnace.LIT, Boolean.valueOf(this.isBurning())), 3);
+                this.world.setTypeAndData(this.position, (IBlockData) this.world.getType(this.position).set(BlockFurnace.LIT, this.isBurning()), 3);
             }
         }
 
@@ -331,7 +331,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         } else {
             Item item = itemstack.getItem();
 
-            return ((Integer) p().getOrDefault(item, Integer.valueOf(0))).intValue();
+            return (Integer) p().getOrDefault(item, 0);
         }
     }
 
@@ -391,16 +391,12 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         switch (i) {
         case 0:
             return this.burnTime;
-
         case 1:
             return this.ticksForCurrentFuel;
-
         case 2:
             return this.cookTime;
-
         case 3:
             return this.cookTimeTotal;
-
         default:
             return 0;
         }
@@ -411,15 +407,12 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         case 0:
             this.burnTime = j;
             break;
-
         case 1:
             this.ticksForCurrentFuel = j;
             break;
-
         case 2:
             this.cookTime = j;
             break;
-
         case 3:
             this.cookTimeTotal = j;
         }
@@ -447,9 +440,9 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
 
     public void a(IRecipe irecipe) {
         if (this.m.containsKey(irecipe.getKey())) {
-            this.m.put(irecipe.getKey(), Integer.valueOf(((Integer) this.m.get(irecipe.getKey())).intValue() + 1));
+            this.m.put(irecipe.getKey(), (Integer) this.m.get(irecipe.getKey()) + 1);
         } else {
-            this.m.put(irecipe.getKey(), Integer.valueOf(1));
+            this.m.put(irecipe.getKey(), 1);
         }
 
     }

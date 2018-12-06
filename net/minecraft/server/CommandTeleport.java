@@ -55,7 +55,7 @@ public class CommandTeleport {
         if (collection.size() == 1) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), entity.getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.multiple", new Object[] { Integer.valueOf(collection.size()), entity.getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.entity.multiple", new Object[] { collection.size(), entity.getScoreboardDisplayName()}), true);
         }
 
         return collection.size();
@@ -104,9 +104,9 @@ public class CommandTeleport {
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), Double.valueOf(vec3d.x), Double.valueOf(vec3d.y), Double.valueOf(vec3d.z)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.single", new Object[] { ((Entity) collection.iterator().next()).getScoreboardDisplayName(), vec3d.x, vec3d.y, vec3d.z}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.multiple", new Object[] { Integer.valueOf(collection.size()), Double.valueOf(vec3d.x), Double.valueOf(vec3d.y), Double.valueOf(vec3d.z)}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.teleport.success.location.multiple", new Object[] { collection.size(), vec3d.x, vec3d.y, vec3d.z}), true);
         }
 
         return collection.size();

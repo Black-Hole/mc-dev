@@ -172,7 +172,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
 
         CompletableFuture.allOf((CompletableFuture[]) arraylist.toArray(new CompletableFuture[0])).join();
         if (!this.g.isEmpty()) {
-            CustomFunctionData.c.info("Loaded {} custom command functions", Integer.valueOf(this.g.size()));
+            CustomFunctionData.c.info("Loaded {} custom command functions", this.g.size());
         }
 
         this.j.a(iresourcemanager);
@@ -183,7 +183,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     @Nullable
     private CustomFunction a(CustomFunction customfunction, @Nullable Throwable throwable, MinecraftKey minecraftkey) {
         if (throwable != null) {
-            CustomFunctionData.c.error("Couldn\'t load function at {}", minecraftkey, throwable);
+            CustomFunctionData.c.error("Couldn't load function at {}", minecraftkey, throwable);
             return null;
         } else {
             Map map = this.g;

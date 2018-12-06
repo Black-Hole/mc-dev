@@ -165,10 +165,10 @@ public class PortalTravelAgent {
         int l1 = this.c.nextInt(4);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        int i2;
         double d1;
-        int j2;
+        int i2;
         double d2;
+        int j2;
         int k2;
         int l2;
         int i3;
@@ -194,23 +194,23 @@ public class PortalTravelAgent {
                             --k2;
                         }
 
-                        for (l2 = l1; l2 < l1 + 4; ++l2) {
-                            i3 = l2 % 2;
-                            j3 = 1 - i3;
-                            if (l2 % 4 >= 2) {
-                                i3 = -i3;
+                        for (i3 = l1; i3 < l1 + 4; ++i3) {
+                            l2 = i3 % 2;
+                            j3 = 1 - l2;
+                            if (i3 % 4 >= 2) {
+                                l2 = -l2;
                                 j3 = -j3;
                             }
 
-                            for (k3 = 0; k3 < 3; ++k3) {
-                                for (l3 = 0; l3 < 4; ++l3) {
-                                    for (i4 = -1; i4 < 4; ++i4) {
-                                        j4 = i2 + (l3 - 1) * i3 + k3 * j3;
-                                        k4 = k2 + i4;
-                                        int l4 = j2 + (l3 - 1) * j3 - k3 * i3;
+                            for (l3 = 0; l3 < 3; ++l3) {
+                                for (i4 = 0; i4 < 4; ++i4) {
+                                    for (k4 = -1; k4 < 4; ++k4) {
+                                        k3 = i2 + (i4 - 1) * l2 + l3 * j3;
+                                        j4 = k2 + k4;
+                                        int l4 = j2 + (i4 - 1) * j3 - l3 * l2;
 
-                                        blockposition_mutableblockposition.c(j4, k4, l4);
-                                        if (i4 < 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isBuildable() || i4 >= 0 && !this.world.isEmpty(blockposition_mutableblockposition)) {
+                                        blockposition_mutableblockposition.c(k3, j4, l4);
+                                        if (k4 < 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isBuildable() || k4 >= 0 && !this.world.isEmpty(blockposition_mutableblockposition)) {
                                             continue label257;
                                         }
                                     }
@@ -224,7 +224,7 @@ public class PortalTravelAgent {
                                 l = i2;
                                 i1 = k2;
                                 j1 = j2;
-                                k1 = l2 % 4;
+                                k1 = i3 % 4;
                             }
                         }
                     }
@@ -246,17 +246,17 @@ public class PortalTravelAgent {
                                 --k2;
                             }
 
-                            for (l2 = l1; l2 < l1 + 2; ++l2) {
-                                i3 = l2 % 2;
-                                j3 = 1 - i3;
+                            for (i3 = l1; i3 < l1 + 2; ++i3) {
+                                l2 = i3 % 2;
+                                j3 = 1 - l2;
 
-                                for (k3 = 0; k3 < 4; ++k3) {
-                                    for (l3 = -1; l3 < 4; ++l3) {
-                                        i4 = i2 + (k3 - 1) * i3;
-                                        j4 = k2 + l3;
-                                        k4 = j2 + (k3 - 1) * j3;
-                                        blockposition_mutableblockposition.c(i4, j4, k4);
-                                        if (l3 < 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isBuildable() || l3 >= 0 && !this.world.isEmpty(blockposition_mutableblockposition)) {
+                                for (l3 = 0; l3 < 4; ++l3) {
+                                    for (i4 = -1; i4 < 4; ++i4) {
+                                        k4 = i2 + (l3 - 1) * l2;
+                                        k3 = k2 + i4;
+                                        j4 = j2 + (l3 - 1) * j3;
+                                        blockposition_mutableblockposition.c(k4, k3, j4);
+                                        if (i4 < 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isBuildable() || i4 >= 0 && !this.world.isEmpty(blockposition_mutableblockposition)) {
                                             continue label205;
                                         }
                                     }
@@ -269,7 +269,7 @@ public class PortalTravelAgent {
                                     l = i2;
                                     i1 = k2;
                                     j1 = j2;
-                                    k1 = l2 % 2;
+                                    k1 = i3 % 2;
                                 }
                             }
                         }
@@ -295,14 +295,14 @@ public class PortalTravelAgent {
             j5 = i1;
 
             for (k2 = -1; k2 <= 1; ++k2) {
-                for (l2 = 1; l2 < 3; ++l2) {
-                    for (i3 = -1; i3 < 3; ++i3) {
-                        j3 = i5 + (l2 - 1) * k5 + k2 * l5;
-                        k3 = j5 + i3;
-                        l3 = j2 + (l2 - 1) * l5 - k2 * k5;
-                        boolean flag1 = i3 < 0;
+                for (i3 = 1; i3 < 3; ++i3) {
+                    for (l2 = -1; l2 < 3; ++l2) {
+                        j3 = i5 + (i3 - 1) * k5 + k2 * l5;
+                        l3 = j5 + l2;
+                        i4 = j2 + (i3 - 1) * l5 - k2 * k5;
+                        boolean flag1 = l2 < 0;
 
-                        blockposition_mutableblockposition.c(j3, k3, l3);
+                        blockposition_mutableblockposition.c(j3, l3, i4);
                         this.world.setTypeUpdate(blockposition_mutableblockposition, flag1 ? Blocks.OBSIDIAN.getBlockData() : Blocks.AIR.getBlockData());
                     }
                 }
@@ -310,9 +310,9 @@ public class PortalTravelAgent {
         }
 
         for (k2 = -1; k2 < 3; ++k2) {
-            for (l2 = -1; l2 < 4; ++l2) {
-                if (k2 == -1 || k2 == 2 || l2 == -1 || l2 == 3) {
-                    blockposition_mutableblockposition.c(i5 + k2 * k5, j5 + l2, j2 + k2 * l5);
+            for (i3 = -1; i3 < 4; ++i3) {
+                if (k2 == -1 || k2 == 2 || i3 == -1 || i3 == 3) {
+                    blockposition_mutableblockposition.c(i5 + k2 * k5, j5 + i3, j2 + k2 * l5);
                     this.world.setTypeAndData(blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData(), 3);
                 }
             }
@@ -320,9 +320,9 @@ public class PortalTravelAgent {
 
         IBlockData iblockdata = (IBlockData) PortalTravelAgent.a.getBlockData().set(BlockPortal.AXIS, k5 == 0 ? EnumDirection.EnumAxis.Z : EnumDirection.EnumAxis.X);
 
-        for (l2 = 0; l2 < 2; ++l2) {
-            for (i3 = 0; i3 < 3; ++i3) {
-                blockposition_mutableblockposition.c(i5 + l2 * k5, j5 + i3, j2 + l2 * l5);
+        for (i3 = 0; i3 < 2; ++i3) {
+            for (l2 = 0; l2 < 3; ++l2) {
+                blockposition_mutableblockposition.c(i5 + i3 * k5, j5 + l2, j2 + i3 * l5);
                 this.world.setTypeAndData(blockposition_mutableblockposition, iblockdata, 18);
             }
         }

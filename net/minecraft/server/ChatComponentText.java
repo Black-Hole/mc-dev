@@ -33,7 +33,7 @@ public class ChatComponentText extends ChatBaseComponent {
     }
 
     public String toString() {
-        return "TextComponent{text=\'" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "TextComponent{text='" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
     public IChatBaseComponent g() {

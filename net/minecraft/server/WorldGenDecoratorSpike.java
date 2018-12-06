@@ -40,7 +40,7 @@ public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDec
         Random random = new Random(generatoraccess.getSeed());
         long i = random.nextLong() & 65535L;
 
-        return (WorldGenEnder.Spike[]) WorldGenDecoratorSpike.a.getUnchecked(Long.valueOf(i));
+        return (WorldGenEnder.Spike[]) WorldGenDecoratorSpike.a.getUnchecked(i);
     }
 
     static class a extends CacheLoader<Long, WorldGenEnder.Spike[]> {
@@ -48,15 +48,15 @@ public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDec
         private a() {}
 
         public WorldGenEnder.Spike[] a(Long olong) throws Exception {
-            ArrayList arraylist = Lists.newArrayList(ContiguousSet.create(Range.closedOpen(Integer.valueOf(0), Integer.valueOf(10)), DiscreteDomain.integers()));
+            ArrayList arraylist = Lists.newArrayList(ContiguousSet.create(Range.closedOpen(0, 10), DiscreteDomain.integers()));
 
-            Collections.shuffle(arraylist, new Random(olong.longValue()));
+            Collections.shuffle(arraylist, new Random(olong));
             WorldGenEnder.Spike[] aworldgenender_spike = new WorldGenEnder.Spike[10];
 
             for (int i = 0; i < 10; ++i) {
                 int j = (int) (42.0D * Math.cos(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
                 int k = (int) (42.0D * Math.sin(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
-                int l = ((Integer) arraylist.get(i)).intValue();
+                int l = (Integer) arraylist.get(i);
                 int i1 = 2 + l / 3;
                 int j1 = 76 + l * 3;
                 boolean flag = l == 1 || l == 2;

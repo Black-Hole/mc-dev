@@ -32,11 +32,11 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
             }
 
             if (integer == null) {
-                throw new IOException("Can\'t serialize unregistered packet");
+                throw new IOException("Can't serialize unregistered packet");
             } else {
                 PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
 
-                packetdataserializer.d(integer.intValue());
+                packetdataserializer.d(integer);
 
                 try {
                     packet.b(packetdataserializer);

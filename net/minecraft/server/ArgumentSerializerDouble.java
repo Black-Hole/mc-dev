@@ -33,11 +33,11 @@ public class ArgumentSerializerDouble implements ArgumentSerializer<DoubleArgume
 
     public void a(DoubleArgumentType doubleargumenttype, JsonObject jsonobject) {
         if (doubleargumenttype.getMinimum() != -1.7976931348623157E308D) {
-            jsonobject.addProperty("min", Double.valueOf(doubleargumenttype.getMinimum()));
+            jsonobject.addProperty("min", doubleargumenttype.getMinimum());
         }
 
         if (doubleargumenttype.getMaximum() != Double.MAX_VALUE) {
-            jsonobject.addProperty("max", Double.valueOf(doubleargumenttype.getMaximum()));
+            jsonobject.addProperty("max", doubleargumenttype.getMaximum());
         }
 
     }

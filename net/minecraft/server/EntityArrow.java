@@ -52,7 +52,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     protected void x_() {
-        this.datawatcher.register(EntityArrow.h, Byte.valueOf((byte) 0));
+        this.datawatcher.register(EntityArrow.h, (byte) 0);
         this.datawatcher.register(EntityArrow.a, Optional.empty());
     }
 
@@ -253,7 +253,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
         if (movingobjectposition.entity != null) {
             this.b(movingobjectposition);
         } else {
-            BlockPosition blockposition = movingobjectposition.a();
+            BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
             this.tileX = blockposition.getX();
             this.tileY = blockposition.getY();
@@ -498,18 +498,18 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     private void a(int i, boolean flag) {
-        byte b0 = ((Byte) this.datawatcher.get(EntityArrow.h)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.h);
 
         if (flag) {
-            this.datawatcher.set(EntityArrow.h, Byte.valueOf((byte) (b0 | i)));
+            this.datawatcher.set(EntityArrow.h, (byte) (b0 | i));
         } else {
-            this.datawatcher.set(EntityArrow.h, Byte.valueOf((byte) (b0 & ~i)));
+            this.datawatcher.set(EntityArrow.h, (byte) (b0 & ~i));
         }
 
     }
 
     public boolean isCritical() {
-        byte b0 = ((Byte) this.datawatcher.get(EntityArrow.h)).byteValue();
+        byte b0 = (Byte) this.datawatcher.get(EntityArrow.h);
 
         return (b0 & 1) != 0;
     }
@@ -543,7 +543,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     }
 
     public boolean q() {
-        return !this.world.isClientSide ? this.noclip : (((Byte) this.datawatcher.get(EntityArrow.h)).byteValue() & 2) != 0;
+        return !this.world.isClientSide ? this.noclip : ((Byte) this.datawatcher.get(EntityArrow.h) & 2) != 0;
     }
 
     public static enum PickupStatus {

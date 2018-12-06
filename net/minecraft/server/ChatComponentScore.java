@@ -59,7 +59,7 @@ public class ChatComponentScore extends ChatBaseComponent {
             if (scoreboardserver.b(this.b, scoreboardobjective)) {
                 ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(this.b, scoreboardobjective);
 
-                this.b(String.format("%d", new Object[] { Integer.valueOf(scoreboardscore.getScore())}));
+                this.b(String.format("%d", new Object[] { scoreboardscore.getScore()}));
             } else {
                 this.e = "";
             }
@@ -87,7 +87,7 @@ public class ChatComponentScore extends ChatBaseComponent {
     }
 
     public String toString() {
-        return "ScoreComponent{name=\'" + this.b + '\'' + "objective=\'" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
+        return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }
 
     public IChatBaseComponent g() {

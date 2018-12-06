@@ -63,16 +63,16 @@ public class DataConverterBedBlock extends DataFix {
 
             for (int k = 0; k < list.size(); ++k) {
                 Dynamic dynamic1 = (Dynamic) list.get(k);
-                int l = ((Number) dynamic1.get("Y").flatMap(Dynamic::getNumberValue).orElse(Integer.valueOf(0))).intValue();
+                int l = ((Number) dynamic1.get("Y").flatMap(Dynamic::getNumberValue).orElse(0)).intValue();
                 Stream stream = ((Stream) dynamic1.get("Blocks").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic) -> {
-                    return Integer.valueOf(((Number) dynamic.getNumberValue().orElse(Integer.valueOf(0))).intValue());
+                    return ((Number) dynamic.getNumberValue().orElse(0)).intValue();
                 });
                 int i1 = 0;
 
                 stream.getClass();
 
                 for (Iterator iterator = (stream::iterator).iterator(); iterator.hasNext(); ++i1) {
-                    int j1 = ((Integer) iterator.next()).intValue();
+                    int j1 = (Integer) iterator.next();
 
                     if (416 == (j1 & 255) << 4) {
                         int k1 = i1 & 15;

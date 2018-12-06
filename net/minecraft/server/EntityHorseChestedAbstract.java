@@ -11,7 +11,7 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityHorseChestedAbstract.bM, Boolean.valueOf(false));
+        this.datawatcher.register(EntityHorseChestedAbstract.bM, false);
     }
 
     protected void initAttributes() {
@@ -22,11 +22,11 @@ public abstract class EntityHorseChestedAbstract extends EntityHorseAbstract {
     }
 
     public boolean isCarryingChest() {
-        return ((Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bM)).booleanValue();
+        return (Boolean) this.datawatcher.get(EntityHorseChestedAbstract.bM);
     }
 
     public void setCarryingChest(boolean flag) {
-        this.datawatcher.set(EntityHorseChestedAbstract.bM, Boolean.valueOf(flag));
+        this.datawatcher.set(EntityHorseChestedAbstract.bM, flag);
     }
 
     protected int dA() {

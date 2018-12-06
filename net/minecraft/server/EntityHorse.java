@@ -21,8 +21,8 @@ public class EntityHorse extends EntityHorseAbstract {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityHorse.bN, Integer.valueOf(0));
-        this.datawatcher.register(EntityHorse.bO, Integer.valueOf(EnumHorseArmor.NONE.a()));
+        this.datawatcher.register(EntityHorse.bN, 0);
+        this.datawatcher.register(EntityHorse.bO, EnumHorseArmor.NONE.a());
     }
 
     public void b(NBTTagCompound nbttagcompound) {
@@ -49,12 +49,12 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityHorse.bN, Integer.valueOf(i));
+        this.datawatcher.set(EntityHorse.bN, i);
         this.eg();
     }
 
     public int getVariant() {
-        return ((Integer) this.datawatcher.get(EntityHorse.bN)).intValue();
+        return (Integer) this.datawatcher.get(EntityHorse.bN);
     }
 
     private void eg() {
@@ -69,7 +69,7 @@ public class EntityHorse extends EntityHorseAbstract {
     public void h(ItemStack itemstack) {
         EnumHorseArmor enumhorsearmor = EnumHorseArmor.a(itemstack);
 
-        this.datawatcher.set(EntityHorse.bO, Integer.valueOf(enumhorsearmor.a()));
+        this.datawatcher.set(EntityHorse.bO, enumhorsearmor.a());
         this.eg();
         if (!this.world.isClientSide) {
             this.getAttributeInstance(GenericAttributes.h).b(EntityHorse.bM);
@@ -83,7 +83,7 @@ public class EntityHorse extends EntityHorseAbstract {
     }
 
     public EnumHorseArmor dH() {
-        return EnumHorseArmor.a(((Integer) this.datawatcher.get(EntityHorse.bO)).intValue());
+        return EnumHorseArmor.a((Integer) this.datawatcher.get(EntityHorse.bO));
     }
 
     public void a(IInventory iinventory) {

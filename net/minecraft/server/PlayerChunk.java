@@ -37,7 +37,7 @@ public class PlayerChunk {
 
     public void a(EntityPlayer entityplayer) {
         if (this.c.contains(entityplayer)) {
-            PlayerChunk.a.debug("Failed to add player. {} already is in chunk {}, {}", entityplayer, Integer.valueOf(this.location.x), Integer.valueOf(this.location.z));
+            PlayerChunk.a.debug("Failed to add player. {} already is in chunk {}, {}", entityplayer, this.location.x, this.location.z);
         } else {
             if (this.c.isEmpty()) {
                 this.i = this.playerChunkMap.getWorld().getTime();
