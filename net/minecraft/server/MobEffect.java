@@ -216,13 +216,9 @@ public class MobEffect implements Comparable<MobEffect> {
         }
     }
 
-    public int b(MobEffect mobeffect) {
+    public int compareTo(MobEffect mobeffect) {
         boolean flag = true;
 
         return (this.getDuration() <= 32147 || mobeffect.getDuration() <= 32147) && (!this.isAmbient() || !mobeffect.isAmbient()) ? ComparisonChain.start().compare(this.isAmbient(), mobeffect.isAmbient()).compare(this.getDuration(), mobeffect.getDuration()).compare(this.getMobEffect().getColor(), mobeffect.getMobEffect().getColor()).result() : ComparisonChain.start().compare(this.isAmbient(), mobeffect.isAmbient()).compare(this.getMobEffect().getColor(), mobeffect.getMobEffect().getColor()).result();
-    }
-
-    public int compareTo(Object object) {
-        return this.b((MobEffect) object);
     }
 }

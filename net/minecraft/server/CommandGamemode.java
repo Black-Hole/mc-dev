@@ -36,7 +36,7 @@ public class CommandGamemode {
     private static void a(CommandListenerWrapper commandlistenerwrapper, EntityPlayer entityplayer, EnumGamemode enumgamemode) {
         ChatMessage chatmessage = new ChatMessage("gameMode." + enumgamemode.b(), new Object[0]);
 
-        if (commandlistenerwrapper.f() == entityplayer) {
+        if (commandlistenerwrapper.getEntity() == entityplayer) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.gamemode.success.self", new Object[] { chatmessage}), true);
         } else {
             if (commandlistenerwrapper.getWorld().getGameRules().getBoolean("sendCommandFeedback")) {

@@ -50,7 +50,7 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerChanneledLightning.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerChanneledLightning.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity[] acriterionconditionentity = CriterionConditionEntity.b(jsonobject.get("victims"));
 
         return new CriterionTriggerChanneledLightning.b(acriterionconditionentity);
@@ -63,10 +63,6 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
             criteriontriggerchanneledlightning_a.a(entityplayer, collection);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

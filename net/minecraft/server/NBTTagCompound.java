@@ -492,8 +492,4 @@ public class NBTTagCompound implements NBTBase {
             return chatcomponenttext;
         }
     }
-
-    public NBTBase clone() {
-        return this.clone();
-    }
 }

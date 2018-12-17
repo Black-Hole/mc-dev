@@ -13,7 +13,7 @@ public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus>
         public void a(ChunkCoordIntPair chunkcoordintpair, BiConsumer<ChunkCoordIntPair, ChunkStatus> biconsumer) {
             int i = chunkcoordintpair.x;
             int j = chunkcoordintpair.z;
-            ChunkStatus chunkstatus = this.e();
+            ChunkStatus chunkstatus = this.a();
             boolean flag = true;
 
             ChunkCoordIntPair chunkcoordintpair1;
@@ -38,11 +38,6 @@ public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus>
                 }
             }
 
-        }
-
-        @Nullable
-        public SchedulerTask a() {
-            return super.e();
         }
     },
     LIGHTED("lighted", new ChunkTaskLight(), 1, true, ChunkStatus.Type.PROTOCHUNK), MOBS_SPAWNED("mobs_spawned", new ChunkTaskSpawnMobs(), 0, true, ChunkStatus.Type.PROTOCHUNK), FINALIZED("finalized", new ChunkTaskFinalize(), 0, true, ChunkStatus.Type.PROTOCHUNK), FULLCHUNK("fullchunk", new ChunkTaskNull(), 0, true, ChunkStatus.Type.LEVELCHUNK), POSTPROCESSED("postprocessed", new ChunkTaskNull(), 0, true, ChunkStatus.Type.LEVELCHUNK);
@@ -84,7 +79,7 @@ public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus>
     public void a(ChunkCoordIntPair chunkcoordintpair, BiConsumer<ChunkCoordIntPair, ChunkStatus> biconsumer) {
         int i = chunkcoordintpair.x;
         int j = chunkcoordintpair.z;
-        ChunkStatus chunkstatus = this.e();
+        ChunkStatus chunkstatus = this.a();
 
         for (int k = i - this.n; k <= i + this.n; ++k) {
             for (int l = j - this.n; l <= j + this.n; ++l) {
@@ -108,7 +103,7 @@ public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus>
     }
 
     @Nullable
-    public ChunkStatus e() {
+    public ChunkStatus a() {
         return this.ordinal() == 0 ? null : values()[this.ordinal() - 1];
     }
 
@@ -118,15 +113,6 @@ public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus>
 
     public boolean a(ChunkStatus chunkstatus) {
         return this.ordinal() >= chunkstatus.ordinal();
-    }
-
-    @Nullable
-    public SchedulerTask a() {
-        return this.e();
-    }
-
-    ChunkStatus(String s, ChunkTask chunktask, int i, boolean flag, ChunkStatus.Type chunkstatus_type, Object object) {
-        this(s, chunktask, i, flag, chunkstatus_type);
     }
 
     public static enum Type {

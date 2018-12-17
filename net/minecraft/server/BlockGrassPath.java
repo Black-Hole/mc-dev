@@ -20,7 +20,7 @@ public class BlockGrassPath extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection == EnumDirection.UP && !iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.J().a(blockposition, this, 1);
+            generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

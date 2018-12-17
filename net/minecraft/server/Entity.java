@@ -87,9 +87,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     private static final DataWatcherObject<Boolean> aG = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> aH = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
     public boolean inChunk;
-    public int ae;
-    public int af;
-    public int ag;
+    public int chunkX;
+    public int chunkY;
+    public int chunkZ;
     public boolean ak;
     public boolean impulse;
     public int portalCooldown;
@@ -235,7 +235,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void W() {
-        this.world.methodProfiler.a("entityBaseTick");
+        this.world.methodProfiler.enter("entityBaseTick");
         if (this.isPassenger() && this.getVehicle().dead) {
             this.stopRiding();
         }
@@ -251,7 +251,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.lastPitch = this.pitch;
         this.lastYaw = this.yaw;
         if (!this.world.isClientSide && this.world instanceof WorldServer) {
-            this.world.methodProfiler.a("portal");
+            this.world.methodProfiler.enter("portal");
             if (this.an) {
                 MinecraftServer minecraftserver = this.world.getMinecraftServer();
 
@@ -287,7 +287,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             this.E();
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
         }
 
         this.av();
@@ -323,7 +323,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         }
 
         this.justCreated = false;
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     protected void E() {
@@ -420,7 +420,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 }
             }
 
-            this.world.methodProfiler.a("move");
+            this.world.methodProfiler.enter("move");
             double d4 = this.locX;
             double d5 = this.locY;
             double d6 = this.locZ;
@@ -588,8 +588,8 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 }
             }
 
-            this.world.methodProfiler.e();
-            this.world.methodProfiler.a("rest");
+            this.world.methodProfiler.exit();
+            this.world.methodProfiler.enter("rest");
             this.recalcPosition();
             this.positionChanged = d7 != d0 || d9 != d2;
             this.C = d1 != d1;
@@ -692,7 +692,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 this.fireTicks = -this.getMaxFireTicks();
             }
 
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
         }
     }
 
@@ -738,7 +738,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                         for (int i = blockposition_b.getX(); i <= blockposition_b1.getX(); ++i) {
                             for (int j = blockposition_b.getY(); j <= blockposition_b1.getY(); ++j) {
                                 for (int k = blockposition_b.getZ(); k <= blockposition_b1.getZ(); ++k) {
-                                    blockposition_b2.f(i, j, k);
+                                    blockposition_b2.c(i, j, k);
                                     IBlockData iblockdata = this.world.getType(blockposition_b2);
 
                                     try {
@@ -911,7 +911,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         boolean flag;
 
         try {
-            flag = this.world.isRainingAt(blockposition_b) || this.world.isRainingAt(blockposition_b.e(this.locX, this.locY + (double) this.length, this.locZ));
+            flag = this.world.isRainingAt(blockposition_b) || this.world.isRainingAt(blockposition_b.c(this.locX, this.locY + (double) this.length, this.locZ));
         } catch (Throwable throwable1) {
             throwable = throwable1;
             throw throwable1;
@@ -1570,7 +1570,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                     int l = MathHelper.floor(this.locZ + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
 
                     if (blockposition_b.getX() != k || blockposition_b.getY() != j || blockposition_b.getZ() != l) {
-                        blockposition_b.f(k, j, l);
+                        blockposition_b.c(k, j, l);
                         if (this.world.getType(blockposition_b).r()) {
                             boolean flag = true;
 
@@ -1820,16 +1820,16 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     @Nullable
-    public ScoreboardTeamBase be() {
+    public ScoreboardTeamBase getScoreboardTeam() {
         return this.world.getScoreboard().getPlayerTeam(this.getName());
     }
 
     public boolean r(Entity entity) {
-        return this.a(entity.be());
+        return this.a(entity.getScoreboardTeam());
     }
 
     public boolean a(ScoreboardTeamBase scoreboardteambase) {
-        return this.be() != null ? this.be().isAlly(scoreboardteambase) : false;
+        return this.getScoreboardTeam() != null ? this.getScoreboardTeam().isAlly(scoreboardteambase) : false;
     }
 
     public void setInvisible(boolean flag) {
@@ -2034,7 +2034,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     @Nullable
     public Entity a(DimensionManager dimensionmanager) {
         if (!this.world.isClientSide && !this.dead) {
-            this.world.methodProfiler.a("changeDimension");
+            this.world.methodProfiler.enter("changeDimension");
             MinecraftServer minecraftserver = this.bK();
             DimensionManager dimensionmanager1 = this.dimension;
             WorldServer worldserver = minecraftserver.getWorldServer(dimensionmanager1);
@@ -2048,7 +2048,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
             this.world.kill(this);
             this.dead = false;
-            this.world.methodProfiler.a("reposition");
+            this.world.methodProfiler.enter("reposition");
             BlockPosition blockposition;
 
             if (dimensionmanager == DimensionManager.THE_END) {
@@ -2078,7 +2078,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             worldserver.entityJoinedWorld(this, false);
-            this.world.methodProfiler.c("reloading");
+            this.world.methodProfiler.exitEnter("reloading");
             Entity entity = this.P().a((World) worldserver1);
 
             if (entity != null) {
@@ -2100,10 +2100,10 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             this.dead = true;
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
             worldserver.p();
             worldserver1.p();
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
             return entity;
         } else {
             return null;
@@ -2179,7 +2179,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public IChatBaseComponent getScoreboardDisplayName() {
-        return ScoreboardTeam.a(this.be(), this.getDisplayName()).a((chatmodifier) -> {
+        return ScoreboardTeam.a(this.getScoreboardTeam(), this.getDisplayName()).a((chatmodifier) -> {
             chatmodifier.setChatHoverable(this.bC()).setInsertion(this.bu());
         });
     }
@@ -2532,7 +2532,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 for (int l1 = i; l1 < j; ++l1) {
                     for (int i2 = k; i2 < l; ++i2) {
                         for (int j2 = i1; j2 < j1; ++j2) {
-                            blockposition_b.f(l1, i2, j2);
+                            blockposition_b.c(l1, i2, j2);
                             Fluid fluid = this.world.getFluid(blockposition_b);
 
                             if (fluid.a(tag)) {

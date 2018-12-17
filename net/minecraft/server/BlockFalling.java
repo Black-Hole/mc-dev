@@ -11,11 +11,11 @@ public class BlockFalling extends Block {
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
-        world.J().a(blockposition, this, this.a((IWorldReader) world));
+        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
-        generatoraccess.J().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+        generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
@@ -27,7 +27,7 @@ public class BlockFalling extends Block {
     }
 
     private void b(World world, BlockPosition blockposition) {
-        if (k(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
+        if (canFallThrough(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
             boolean flag = true;
 
             if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
@@ -44,7 +44,7 @@ public class BlockFalling extends Block {
 
                 BlockPosition blockposition1;
 
-                for (blockposition1 = blockposition.down(); k(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
+                for (blockposition1 = blockposition.down(); canFallThrough(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
                     ;
                 }
 
@@ -62,7 +62,7 @@ public class BlockFalling extends Block {
         return 2;
     }
 
-    public static boolean k(IBlockData iblockdata) {
+    public static boolean canFallThrough(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
         Material material = iblockdata.getMaterial();
 

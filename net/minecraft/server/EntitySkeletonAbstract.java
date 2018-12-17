@@ -59,7 +59,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
         return EnumMonsterType.UNDEAD;
     }
 
-    public void k() {
+    public void movementTick() {
         boolean flag = this.dq();
 
         if (flag) {
@@ -82,7 +82,7 @@ public abstract class EntitySkeletonAbstract extends EntityMonster implements IR
             }
         }
 
-        super.k();
+        super.movementTick();
     }
 
     public void aH() {

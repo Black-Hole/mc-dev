@@ -37,7 +37,7 @@ public class PlayerChunkMap {
 
     public PlayerChunkMap(WorldServer worldserver) {
         this.world = worldserver;
-        this.a(worldserver.getMinecraftServer().getPlayerList().s());
+        this.a(worldserver.getMinecraftServer().getPlayerList().getViewDistance());
     }
 
     public WorldServer getWorld() {
@@ -48,7 +48,7 @@ public class PlayerChunkMap {
         final Iterator iterator = this.i.iterator();
 
         return new AbstractIterator() {
-            protected Chunk a() {
+            protected Chunk computeNext() {
                 while (true) {
                     if (iterator.hasNext()) {
                         PlayerChunk playerchunk = (PlayerChunk) iterator.next();
@@ -71,10 +71,6 @@ public class PlayerChunkMap {
 
                     return (Chunk) this.endOfData();
                 }
-            }
-
-            protected Object computeNext() {
-                return this.a();
             }
         };
     }
@@ -120,7 +116,7 @@ public class PlayerChunkMap {
         }
 
         if (!this.h.isEmpty()) {
-            long k = SystemUtils.c() + 50000000L;
+            long k = SystemUtils.getMonotonicNanos() + 50000000L;
             int l = 49;
             Iterator iterator1 = this.h.iterator();
 
@@ -137,7 +133,7 @@ public class PlayerChunkMap {
                         }
 
                         --l;
-                        if (l < 0 || SystemUtils.c() > k) {
+                        if (l < 0 || SystemUtils.getMonotonicNanos() > k) {
                             break;
                         }
                     }
@@ -166,7 +162,7 @@ public class PlayerChunkMap {
             WorldProvider worldprovider = this.world.worldProvider;
 
             if (!worldprovider.canRespawn()) {
-                this.world.getChunkProviderServer().b();
+                this.world.getChunkProvider().b();
             }
         }
 
@@ -370,7 +366,7 @@ public class PlayerChunkMap {
         Chunk chunk = playerchunk.f();
 
         if (chunk != null) {
-            this.getWorld().getChunkProviderServer().unload(chunk);
+            this.getWorld().getChunkProvider().unload(chunk);
         }
 
     }

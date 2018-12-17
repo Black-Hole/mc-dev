@@ -339,8 +339,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         nbttagcompound.set("TileEntities", nbttaglist2);
         nbttagcompound.set("Lights", a(protochunk.p()));
         nbttagcompound.set("PostProcessing", a(protochunk.u()));
-        nbttagcompound.set("ToBeTicked", protochunk.n().a());
-        nbttagcompound.set("LiquidsToBeTicked", protochunk.o().a());
+        nbttagcompound.set("ToBeTicked", protochunk.k().a());
+        nbttagcompound.set("LiquidsToBeTicked", protochunk.l().a());
         nbttagcompound1 = new NBTTagCompound();
         Iterator iterator2 = protochunk.t().iterator();
 
@@ -433,12 +433,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
 
         nbttagcompound.set("TileEntities", nbttaglist2);
-        if (world.J() instanceof TickListServer) {
-            nbttagcompound.set("TileTicks", ((TickListServer) world.J()).a(chunk));
+        if (world.getBlockTickList() instanceof TickListServer) {
+            nbttagcompound.set("TileTicks", ((TickListServer) world.getBlockTickList()).a(chunk));
         }
 
-        if (world.I() instanceof TickListServer) {
-            nbttagcompound.set("LiquidTicks", ((TickListServer) world.I()).a(chunk));
+        if (world.getFluidTickList() instanceof TickListServer) {
+            nbttagcompound.set("LiquidTicks", ((TickListServer) world.getFluidTickList()).a(chunk));
         }
 
         nbttagcompound.set("PostProcessing", a(chunk.G()));
@@ -586,12 +586,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             }
         }
 
-        if (nbttagcompound.hasKeyOfType("TileTicks", 9) && world.J() instanceof TickListServer) {
-            ((TickListServer) world.J()).a(nbttagcompound.getList("TileTicks", 10));
+        if (nbttagcompound.hasKeyOfType("TileTicks", 9) && world.getBlockTickList() instanceof TickListServer) {
+            ((TickListServer) world.getBlockTickList()).a(nbttagcompound.getList("TileTicks", 10));
         }
 
-        if (nbttagcompound.hasKeyOfType("LiquidTicks", 9) && world.I() instanceof TickListServer) {
-            ((TickListServer) world.I()).a(nbttagcompound.getList("LiquidTicks", 10));
+        if (nbttagcompound.hasKeyOfType("LiquidTicks", 9) && world.getFluidTickList() instanceof TickListServer) {
+            ((TickListServer) world.getFluidTickList()).a(nbttagcompound.getList("LiquidTicks", 10));
         }
 
     }
@@ -660,8 +660,8 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
             }
         }
 
-        protochunk.n().a(nbttagcompound.getList("ToBeTicked", 9));
-        protochunk.o().a(nbttagcompound.getList("LiquidsToBeTicked", 9));
+        protochunk.k().a(nbttagcompound.getList("ToBeTicked", 9));
+        protochunk.l().a(nbttagcompound.getList("LiquidsToBeTicked", 9));
         NBTTagCompound nbttagcompound2 = nbttagcompound.getCompound("Heightmaps");
         Iterator iterator = nbttagcompound2.getKeys().iterator();
 

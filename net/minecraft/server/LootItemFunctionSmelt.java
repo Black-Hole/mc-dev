@@ -41,7 +41,7 @@ public class LootItemFunctionSmelt extends LootItemFunction {
 
     @Nullable
     public static IRecipe a(LootTableInfo loottableinfo, ItemStack itemstack) {
-        Iterator iterator = loottableinfo.h().E().b().iterator();
+        Iterator iterator = loottableinfo.h().getCraftingManager().b().iterator();
 
         IRecipe irecipe;
 
@@ -51,7 +51,7 @@ public class LootItemFunctionSmelt extends LootItemFunction {
             }
 
             irecipe = (IRecipe) iterator.next();
-        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).a(itemstack));
+        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).test(itemstack));
 
         return irecipe;
     }
@@ -64,12 +64,8 @@ public class LootItemFunctionSmelt extends LootItemFunction {
 
         public void a(JsonObject jsonobject, LootItemFunctionSmelt lootitemfunctionsmelt, JsonSerializationContext jsonserializationcontext) {}
 
-        public LootItemFunctionSmelt a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionSmelt b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             return new LootItemFunctionSmelt(alootitemcondition);
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

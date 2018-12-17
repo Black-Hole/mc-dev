@@ -150,7 +150,7 @@ public class EntityExperienceOrb extends Entity {
             if (this.c == 0 && entityhuman.bJ == 0) {
                 entityhuman.bJ = 2;
                 entityhuman.receive(this, 1);
-                ItemStack itemstack = EnchantmentManager.b(Enchantments.G, (EntityLiving) entityhuman);
+                ItemStack itemstack = EnchantmentManager.b(Enchantments.MENDING, (EntityLiving) entityhuman);
 
                 if (!itemstack.isEmpty() && itemstack.f()) {
                     int i = Math.min(this.c(this.value), itemstack.getDamage());

@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 public class PersistentCollection {
 
-    private final Map<DimensionManager, WorldPersistentData> a;
+    public final Map<DimensionManager, WorldPersistentData> worldMap;
     @Nullable
     private final IDataManager b;
 
@@ -28,24 +28,24 @@ public class PersistentCollection {
             worldpersistentdata.a();
         }
 
-        this.a = builder.build();
+        this.worldMap = builder.build();
     }
 
     @Nullable
     public <T extends PersistentBase> T get(DimensionManager dimensionmanager, Function<String, T> function, String s) {
-        return ((WorldPersistentData) this.a.get(dimensionmanager)).a(function, s);
+        return ((WorldPersistentData) this.worldMap.get(dimensionmanager)).a(function, s);
     }
 
     public void a(DimensionManager dimensionmanager, String s, PersistentBase persistentbase) {
-        ((WorldPersistentData) this.a.get(dimensionmanager)).a(s, persistentbase);
+        ((WorldPersistentData) this.worldMap.get(dimensionmanager)).a(s, persistentbase);
     }
 
     public void a() {
-        this.a.values().forEach(WorldPersistentData::b);
+        this.worldMap.values().forEach(WorldPersistentData::b);
     }
 
     public int a(DimensionManager dimensionmanager, String s) {
-        return ((WorldPersistentData) this.a.get(dimensionmanager)).a(s);
+        return ((WorldPersistentData) this.worldMap.get(dimensionmanager)).a(s);
     }
 
     public NBTTagCompound a(String s, int i) throws IOException {

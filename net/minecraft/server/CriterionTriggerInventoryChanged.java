@@ -50,7 +50,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerInventoryChanged.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerInventoryChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "slots", new JsonObject());
         CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject1.get("occupied"));
         CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject1.get("full"));
@@ -67,10 +67,6 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
             criteriontriggerinventorychanged_a.a(playerinventory);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

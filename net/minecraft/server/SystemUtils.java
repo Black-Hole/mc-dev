@@ -45,15 +45,15 @@ public class SystemUtils {
         return minecraftkey == null ? s + ".unregistered_sadface" : s + '.' + minecraftkey.b() + '.' + minecraftkey.getKey().replace('/', '.');
     }
 
-    public static long b() {
-        return c() / 1000000L;
+    public static long getMonotonicMillis() {
+        return getMonotonicNanos() / 1000000L;
     }
 
-    public static long c() {
+    public static long getMonotonicNanos() {
         return SystemUtils.a.getAsLong();
     }
 
-    public static long d() {
+    public static long getTimeMillis() {
         return Instant.now().toEpochMilli();
     }
 
@@ -199,9 +199,5 @@ public class SystemUtils {
         UNKNOWN;
 
         private OS() {}
-
-        OS(Object object) {
-            this();
-        }
     }
 }

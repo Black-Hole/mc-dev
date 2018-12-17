@@ -39,7 +39,7 @@ public class SecondaryWorldServer extends WorldServer {
 
     protected void a() {}
 
-    public SecondaryWorldServer b() {
+    public SecondaryWorldServer i_() {
         String s = PersistentVillage.a(this.worldProvider);
         PersistentVillage persistentvillage = (PersistentVillage) this.a(DimensionManager.OVERWORLD, PersistentVillage::new, s);
 
@@ -56,9 +56,5 @@ public class SecondaryWorldServer extends WorldServer {
 
     public void t_() {
         this.worldProvider.k();
-    }
-
-    public WorldServer i_() {
-        return this.b();
     }
 }

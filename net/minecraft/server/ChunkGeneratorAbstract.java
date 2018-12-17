@@ -33,7 +33,7 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
         boolean flag = true;
         int i = regionlimitedworldaccess.a();
         int j = regionlimitedworldaccess.b();
-        BitSet bitset = regionlimitedworldaccess.b(i, j).a(worldgenstage_features);
+        BitSet bitset = regionlimitedworldaccess.getChunkAt(i, j).a(worldgenstage_features);
 
         for (int k = i - 8; k <= i + 8; ++k) {
             for (int l = j - 8; l <= j + 8; ++l) {
@@ -86,7 +86,7 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
         int k = i * 16;
         int l = j * 16;
         BlockPosition blockposition = new BlockPosition(k, 0, l);
-        BiomeBase biomebase = regionlimitedworldaccess.b(i + 1, j + 1).getBiomeIndex()[0];
+        BiomeBase biomebase = regionlimitedworldaccess.getChunkAt(i + 1, j + 1).getBiomeIndex()[0];
         SeededRandom seededrandom = new SeededRandom();
         long i1 = seededrandom.a(regionlimitedworldaccess.getSeed(), k, l);
         WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
@@ -153,7 +153,7 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
         });
     }
 
-    public int e() {
+    public int getGenerationDepth() {
         return 256;
     }
 }

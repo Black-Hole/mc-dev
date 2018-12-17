@@ -54,7 +54,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerPlacedBlock.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerPlacedBlock.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         Block block = null;
 
         if (jsonobject.has("block")) {
@@ -114,10 +114,6 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
             criteriontriggerplacedblock_a.a(iblockdata, blockposition, entityplayer.getWorldServer(), itemstack);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

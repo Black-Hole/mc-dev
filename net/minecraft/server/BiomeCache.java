@@ -12,12 +12,8 @@ public class BiomeCache {
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
         this.b = CacheBuilder.newBuilder().expireAfterAccess(30000L, TimeUnit.MILLISECONDS).build(new CacheLoader() {
-            public BiomeCache.a a(ChunkCoordIntPair chunkcoordintpair) throws Exception {
+            public BiomeCache.a load(ChunkCoordIntPair chunkcoordintpair) throws Exception {
                 return BiomeCache.this.new a(chunkcoordintpair.x, chunkcoordintpair.z);
-            }
-
-            public Object load(Object object) throws Exception {
-                return this.a((ChunkCoordIntPair) object);
             }
         });
         this.a = worldchunkmanager;

@@ -25,7 +25,7 @@ public class ArgumentDimension implements ArgumentType<DimensionManager> {
 
     public ArgumentDimension() {}
 
-    public <S> DimensionManager a(StringReader stringreader) throws CommandSyntaxException {
+    public <S> DimensionManager parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
         DimensionManager dimensionmanager = DimensionManager.a(minecraftkey);
 
@@ -50,9 +50,5 @@ public class ArgumentDimension implements ArgumentType<DimensionManager> {
 
     public static DimensionManager a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         return (DimensionManager) commandcontext.getArgument(s, DimensionManager.class);
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

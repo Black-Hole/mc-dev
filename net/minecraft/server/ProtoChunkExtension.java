@@ -141,7 +141,7 @@ public class ProtoChunkExtension extends ProtoChunk {
         return this.a.j();
     }
 
-    public ProtoChunkTickList<Block> n() {
+    public ProtoChunkTickList<Block> k() {
         Predicate predicate = (block) -> {
             return block.getBlockData().isAir();
         };
@@ -155,7 +155,7 @@ public class ProtoChunkExtension extends ProtoChunk {
         return new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, this.getPos());
     }
 
-    public ProtoChunkTickList<FluidType> o() {
+    public ProtoChunkTickList<FluidType> l() {
         Predicate predicate = (fluidtype) -> {
             return fluidtype == FluidTypes.a;
         };
@@ -174,12 +174,4 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     public void b(boolean flag) {}
-
-    public TickList l() {
-        return this.o();
-    }
-
-    public TickList k() {
-        return this.n();
-    }
 }

@@ -237,16 +237,12 @@ public enum EnumDirection implements INamable {
             return this.c[random.nextInt(this.c.length)];
         }
 
-        public boolean a(@Nullable EnumDirection enumdirection) {
+        public boolean test(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.k().d() == this;
         }
 
         public Iterator<EnumDirection> iterator() {
             return Iterators.forArray(this.c);
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EnumDirection) object);
         }
     }
 
@@ -281,10 +277,6 @@ public enum EnumDirection implements INamable {
             public double a(double d0, double d1, double d2) {
                 return d0;
             }
-
-            public boolean test(@Nullable Object object) {
-                return super.a((EnumDirection) object);
-            }
         },
         Y("y") {
             public int a(int i, int j, int k) {
@@ -294,10 +286,6 @@ public enum EnumDirection implements INamable {
             public double a(double d0, double d1, double d2) {
                 return d1;
             }
-
-            public boolean test(@Nullable Object object) {
-                return super.a((EnumDirection) object);
-            }
         },
         Z("z") {
             public int a(int i, int j, int k) {
@@ -306,10 +294,6 @@ public enum EnumDirection implements INamable {
 
             public double a(double d0, double d1, double d2) {
                 return d2;
-            }
-
-            public boolean test(@Nullable Object object) {
-                return super.a((EnumDirection) object);
             }
         };
 
@@ -338,7 +322,7 @@ public enum EnumDirection implements INamable {
             return this.e;
         }
 
-        public boolean a(@Nullable EnumDirection enumdirection) {
+        public boolean test(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.k() == this;
         }
 
@@ -361,13 +345,5 @@ public enum EnumDirection implements INamable {
         public abstract int a(int i, int j, int k);
 
         public abstract double a(double d0, double d1, double d2);
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EnumDirection) object);
-        }
-
-        EnumAxis(String s, Object object) {
-            this(s);
-        }
     }
 }

@@ -28,7 +28,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     private static final MinecraftKey e = new MinecraftKey("load");
     public static final int a = "functions/".length();
     public static final int b = ".mcfunction".length();
-    private final MinecraftServer f;
+    private final MinecraftServer server;
     private final Map<MinecraftKey, CustomFunction> g = Maps.newHashMap();
     private final ArrayDeque<CustomFunctionData.a> h = new ArrayDeque();
     private boolean i;
@@ -39,7 +39,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     private boolean l;
 
     public CustomFunctionData(MinecraftServer minecraftserver) {
-        this.f = minecraftserver;
+        this.server = minecraftserver;
     }
 
     @Nullable
@@ -48,11 +48,11 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     }
 
     public MinecraftServer a() {
-        return this.f;
+        return this.server;
     }
 
     public int b() {
-        return this.f.getGameRules().c("maxCommandChainLength");
+        return this.server.getGameRules().c("maxCommandChainLength");
     }
 
     public Map<MinecraftKey, CustomFunction> c() {
@@ -60,11 +60,11 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     }
 
     public com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> d() {
-        return this.f.getCommandDispatcher().a();
+        return this.server.getCommandDispatcher().a();
     }
 
-    public void Y_() {
-        MethodProfiler methodprofiler = this.f.methodProfiler;
+    public void tick() {
+        MethodProfiler methodprofiler = this.server.methodProfiler;
         MinecraftKey minecraftkey = CustomFunctionData.d;
 
         CustomFunctionData.d.getClass();
@@ -77,12 +77,12 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
             this.a(customfunction, this.f());
         }
 
-        this.f.methodProfiler.e();
+        this.server.methodProfiler.exit();
         if (this.l) {
             this.l = false;
             Collection collection = this.g().b(CustomFunctionData.e).a();
 
-            methodprofiler = this.f.methodProfiler;
+            methodprofiler = this.server.methodProfiler;
             minecraftkey = CustomFunctionData.e;
             CustomFunctionData.e.getClass();
             methodprofiler.a(minecraftkey::toString);
@@ -94,7 +94,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
                 this.a(customfunction1, this.f());
             }
 
-            this.f.methodProfiler.e();
+            this.server.methodProfiler.exit();
         }
 
     }
@@ -124,10 +124,10 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
                     try {
                         CustomFunctionData.a customfunctiondata_a = (CustomFunctionData.a) this.h.removeFirst();
 
-                        this.f.methodProfiler.a(customfunctiondata_a::toString);
+                        this.server.methodProfiler.a(customfunctiondata_a::toString);
                         customfunctiondata_a.a(this.h, i);
                     } finally {
-                        this.f.methodProfiler.e();
+                        this.server.methodProfiler.exit();
                     }
 
                     ++j;
@@ -229,7 +229,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     }
 
     public CommandListenerWrapper f() {
-        return this.f.getServerCommandListener().a(2).a();
+        return this.server.getServerCommandListener().a(2).a();
     }
 
     public Tags<CustomFunction> g() {

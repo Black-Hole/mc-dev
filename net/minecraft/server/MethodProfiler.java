@@ -47,11 +47,11 @@ public class MethodProfiler {
             this.e = "";
             this.b.clear();
             this.h = i;
-            this.g = SystemUtils.c();
+            this.g = SystemUtils.getMonotonicNanos();
         }
     }
 
-    public void a(String s) {
+    public void enter(String s) {
         if (this.d) {
             if (!this.e.isEmpty()) {
                 this.e = this.e + ".";
@@ -59,19 +59,19 @@ public class MethodProfiler {
 
             this.e = this.e + s;
             this.b.add(this.e);
-            this.c.add(SystemUtils.c());
+            this.c.add(SystemUtils.getMonotonicNanos());
         }
     }
 
     public void a(Supplier<String> supplier) {
         if (this.d) {
-            this.a((String) supplier.get());
+            this.enter((String) supplier.get());
         }
     }
 
-    public void e() {
+    public void exit() {
         if (this.d && !this.c.isEmpty()) {
-            long i = SystemUtils.c();
+            long i = SystemUtils.getMonotonicNanos();
             long j = (Long) this.c.remove(this.c.size() - 1);
 
             this.b.remove(this.b.size() - 1);
@@ -153,9 +153,9 @@ public class MethodProfiler {
         return arraylist;
     }
 
-    public void c(String s) {
-        this.e();
-        this.a(s);
+    public void exitEnter(String s) {
+        this.exit();
+        this.enter(s);
     }
 
     public String f() {
@@ -174,12 +174,8 @@ public class MethodProfiler {
             this.b = d1;
         }
 
-        public int a(MethodProfiler.ProfilerInfo methodprofiler_profilerinfo) {
+        public int compareTo(MethodProfiler.ProfilerInfo methodprofiler_profilerinfo) {
             return methodprofiler_profilerinfo.a < this.a ? -1 : (methodprofiler_profilerinfo.a > this.a ? 1 : methodprofiler_profilerinfo.c.compareTo(this.c));
-        }
-
-        public int compareTo(Object object) {
-            return this.a((MethodProfiler.ProfilerInfo) object);
         }
     }
 }

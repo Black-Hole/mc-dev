@@ -91,7 +91,7 @@ public class CommandWhitelist {
             if (whitelist.isWhitelisted(gameprofile)) {
                 WhiteListEntry whitelistentry = new WhiteListEntry(gameprofile);
 
-                whitelist.b((JsonListEntry) whitelistentry);
+                whitelist.b(whitelistentry);
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.whitelist.remove.success", new Object[] { ChatComponentUtils.a(gameprofile)}), true);
                 ++i;
             }

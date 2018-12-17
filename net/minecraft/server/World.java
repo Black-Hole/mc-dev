@@ -163,9 +163,9 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 IBlockData iblockdata2 = this.getType(blockposition);
 
                 if (iblockdata2.b(this, blockposition) != iblockdata1.b(this, blockposition) || iblockdata2.e() != iblockdata1.e()) {
-                    this.methodProfiler.a("checkLight");
+                    this.methodProfiler.enter("checkLight");
                     this.r(blockposition);
-                    this.methodProfiler.e();
+                    this.methodProfiler.exit();
                 }
 
                 if (iblockdata2 == iblockdata) {
@@ -714,8 +714,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             this.everyoneSleeping();
         }
 
-        int i = entity.ae;
-        int j = entity.ag;
+        int i = entity.chunkX;
+        int j = entity.chunkZ;
 
         if (entity.inChunk && this.isChunkLoaded(i, j, true)) {
             this.getChunkAt(i, j).b(entity);
@@ -748,8 +748,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public void tickEntities() {
-        this.methodProfiler.a("entities");
-        this.methodProfiler.a("global");
+        this.methodProfiler.enter("entities");
+        this.methodProfiler.enter("global");
 
         Entity entity;
         int i;
@@ -778,16 +778,16 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             }
         }
 
-        this.methodProfiler.c("remove");
+        this.methodProfiler.exitEnter("remove");
         this.entityList.removeAll(this.g);
 
         int j;
 
         for (i = 0; i < this.g.size(); ++i) {
             entity = (Entity) this.g.get(i);
-            int k = entity.ae;
+            int k = entity.chunkX;
 
-            j = entity.ag;
+            j = entity.chunkZ;
             if (entity.inChunk && this.isChunkLoaded(k, j, true)) {
                 this.getChunkAt(k, j).b(entity);
             }
@@ -799,7 +799,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
         this.g.clear();
         this.p_();
-        this.methodProfiler.c("regular");
+        this.methodProfiler.exitEnter("regular");
 
         CrashReport crashreport1;
         CrashReportSystemDetails crashreportsystemdetails1;
@@ -816,7 +816,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 entity.stopRiding();
             }
 
-            this.methodProfiler.a("tick");
+            this.methodProfiler.enter("tick");
             if (!entity.dead && !(entity instanceof EntityPlayer)) {
                 try {
                     this.g(entity);
@@ -828,11 +828,11 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 }
             }
 
-            this.methodProfiler.e();
-            this.methodProfiler.a("remove");
+            this.methodProfiler.exit();
+            this.methodProfiler.enter("remove");
             if (entity.dead) {
-                j = entity.ae;
-                int l = entity.ag;
+                j = entity.chunkX;
+                int l = entity.chunkZ;
 
                 if (entity.inChunk && this.isChunkLoaded(j, l, true)) {
                     this.getChunkAt(j, l).b(entity);
@@ -842,10 +842,10 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 this.c(entity);
             }
 
-            this.methodProfiler.e();
+            this.methodProfiler.exit();
         }
 
-        this.methodProfiler.c("blockEntities");
+        this.methodProfiler.exitEnter("blockEntities");
         if (!this.tileEntityListUnload.isEmpty()) {
             this.tileEntityListTick.removeAll(this.tileEntityListUnload);
             this.tileEntityList.removeAll(this.tileEntityListUnload);
@@ -866,8 +866,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                         this.methodProfiler.a(() -> {
                             return String.valueOf(TileEntityTypes.a(tileentity.C()));
                         });
-                        ((ITickable) tileentity).Y_();
-                        this.methodProfiler.e();
+                        ((ITickable) tileentity).tick();
+                        this.methodProfiler.exit();
                     } catch (Throwable throwable2) {
                         crashreport1 = CrashReport.a(throwable2, "Ticking block entity");
                         crashreportsystemdetails1 = crashreport1.a("Block entity being ticked");
@@ -887,7 +887,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         }
 
         this.J = false;
-        this.methodProfiler.c("pendingBlockEntities");
+        this.methodProfiler.exitEnter("pendingBlockEntities");
         if (!this.c.isEmpty()) {
             for (int i1 = 0; i1 < this.c.size(); ++i1) {
                 TileEntity tileentity1 = (TileEntity) this.c.get(i1);
@@ -910,8 +910,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             this.c.clear();
         }
 
-        this.methodProfiler.e();
-        this.methodProfiler.e();
+        this.methodProfiler.exit();
+        this.methodProfiler.exit();
     }
 
     protected void p_() {}
@@ -980,11 +980,11 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                     return IRegistry.ENTITY_TYPE.getKey(entity.P()).toString();
                 });
                 entity.tick();
-                this.methodProfiler.e();
+                this.methodProfiler.exit();
             }
         }
 
-        this.methodProfiler.a("chunkCheck");
+        this.methodProfiler.enter("chunkCheck");
         if (Double.isNaN(entity.locX) || Double.isInfinite(entity.locX)) {
             entity.locX = entity.N;
         }
@@ -1009,9 +1009,9 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         j = MathHelper.floor(entity.locY / 16.0D);
         int k = MathHelper.floor(entity.locZ / 16.0D);
 
-        if (!entity.inChunk || entity.ae != i || entity.af != j || entity.ag != k) {
-            if (entity.inChunk && this.isChunkLoaded(entity.ae, entity.ag, true)) {
-                this.getChunkAt(entity.ae, entity.ag).a(entity, entity.af);
+        if (!entity.inChunk || entity.chunkX != i || entity.chunkY != j || entity.chunkZ != k) {
+            if (entity.inChunk && this.isChunkLoaded(entity.chunkX, entity.chunkZ, true)) {
+                this.getChunkAt(entity.chunkX, entity.chunkZ).a(entity, entity.chunkY);
             }
 
             if (!entity.bN() && !this.isChunkLoaded(i, k, true)) {
@@ -1021,7 +1021,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             }
         }
 
-        this.methodProfiler.e();
+        this.methodProfiler.exit();
         if (flag && entity.inChunk) {
             Iterator iterator = entity.bP().iterator();
 
@@ -1070,7 +1070,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        IBlockData iblockdata = this.getType(blockposition_b.f(k1, l1, i2));
+                        IBlockData iblockdata = this.getType(blockposition_b.c(k1, l1, i2));
 
                         if (!iblockdata.isAir()) {
                             boolean flag = true;
@@ -1117,7 +1117,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 for (int k1 = i; k1 < j; ++k1) {
                     for (int l1 = k; l1 < l; ++l1) {
                         for (int i2 = i1; i2 < j1; ++i2) {
-                            Block block = this.getType(blockposition_b.f(k1, l1, i2)).getBlock();
+                            Block block = this.getType(blockposition_b.c(k1, l1, i2)).getBlock();
 
                             if (block == Blocks.FIRE || block == Blocks.LAVA) {
                                 boolean flag = true;
@@ -1168,7 +1168,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 for (int k1 = i; k1 < j; ++k1) {
                     for (int l1 = k; l1 < l; ++l1) {
                         for (int i2 = i1; i2 < j1; ++i2) {
-                            IBlockData iblockdata = this.getType(blockposition_b.f(k1, l1, i2));
+                            IBlockData iblockdata = this.getType(blockposition_b.c(k1, l1, i2));
 
                             if (iblockdata.getBlock() == block) {
                                 IBlockData iblockdata1 = iblockdata;
@@ -1217,7 +1217,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        if (materialpredicate.a(this.getType(blockposition_b.f(k1, l1, i2)))) {
+                        if (materialpredicate.test(this.getType(blockposition_b.c(k1, l1, i2)))) {
                             boolean flag = true;
 
                             return flag;
@@ -1557,7 +1557,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                     for (int l = 0; l < k; ++l) {
                         EnumDirection enumdirection = aenumdirection[l];
 
-                        blockposition_b.j(blockposition).d(enumdirection);
+                        blockposition_b.g(blockposition).c(enumdirection);
                         int i1 = this.getBrightness(enumskyblock, blockposition_b) - j;
 
                         if (i1 > i) {
@@ -1600,7 +1600,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
             int i = 0;
             int j = 0;
 
-            this.methodProfiler.a("getBrightness");
+            this.methodProfiler.enter("getBrightness");
             int k = this.getBrightness(enumskyblock, blockposition);
             int l = this.a(blockposition, enumskyblock);
             int i1 = blockposition.getX();
@@ -1649,7 +1649,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                                         int l4 = j2 + enumdirection.getAdjacentY();
                                         int i5 = k2 + enumdirection.getAdjacentZ();
 
-                                        blockposition_b.f(k4, l4, i5);
+                                        blockposition_b.c(k4, l4, i5);
                                         int j5 = Math.max(1, this.getType(blockposition_b).b(this, blockposition_b));
 
                                         l2 = this.getBrightness(enumskyblock, blockposition_b);
@@ -1682,8 +1682,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 i = 0;
             }
 
-            this.methodProfiler.e();
-            this.methodProfiler.a("checkedPosition < toCheckCount");
+            this.methodProfiler.exit();
+            this.methodProfiler.enter("checkedPosition < toCheckCount");
 
             while (i < j) {
                 l1 = this.E[i++];
@@ -1731,7 +1731,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
                 }
             }
 
-            this.methodProfiler.e();
+            this.methodProfiler.exit();
             return true;
         }
     }
@@ -2403,11 +2403,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         return this.random;
     }
 
-    public abstract CraftingManager E();
+    public abstract CraftingManager getCraftingManager();
 
     public abstract TagRegistry F();
-
-    public IChunkAccess b(int i, int j) {
-        return this.getChunkAt(i, j);
-    }
 }

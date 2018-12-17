@@ -102,7 +102,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
             EnumItemSlot[] aenumitemslot;
 
             if (ChatDeserializer.a(jsonobject, "slot")) {
-                aenumitemslot = new EnumItemSlot[] { EnumItemSlot.a(ChatDeserializer.h(jsonobject, "slot"))};
+                aenumitemslot = new EnumItemSlot[] { EnumItemSlot.fromName(ChatDeserializer.h(jsonobject, "slot"))};
             } else {
                 if (!ChatDeserializer.d(jsonobject, "slot")) {
                     throw new JsonSyntaxException("Invalid or missing attribute modifier slot; must be either string or array of strings.");
@@ -115,7 +115,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
 
                 JsonElement jsonelement;
 
-                for (Iterator iterator = jsonarray.iterator(); iterator.hasNext(); aenumitemslot[j++] = EnumItemSlot.a(ChatDeserializer.a(jsonelement, "slot"))) {
+                for (Iterator iterator = jsonarray.iterator(); iterator.hasNext(); aenumitemslot[j++] = EnumItemSlot.fromName(ChatDeserializer.a(jsonelement, "slot"))) {
                     jsonelement = (JsonElement) iterator.next();
                 }
 
@@ -183,7 +183,7 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
             jsonobject.add("modifiers", jsonarray);
         }
 
-        public LootItemFunctionSetAttribute a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionSetAttribute b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             JsonArray jsonarray = ChatDeserializer.u(jsonobject, "modifiers");
             LootItemFunctionSetAttribute.a[] alootitemfunctionsetattribute_a = new LootItemFunctionSetAttribute.a[jsonarray.size()];
             int i = 0;
@@ -199,10 +199,6 @@ public class LootItemFunctionSetAttribute extends LootItemFunction {
             } else {
                 return new LootItemFunctionSetAttribute(alootitemcondition, alootitemfunctionsetattribute_a);
             }
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

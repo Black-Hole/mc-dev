@@ -35,8 +35,8 @@ public class DragonControllerLanding extends AbstractDragonController {
         }
 
         if (this.b.c(this.a.locX, this.a.locY, this.a.locZ) < 1.0D) {
-            ((DragonControllerLandedFlame) this.a.getDragonControllerManager().b(DragonControllerPhase.f)).j();
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.g);
+            ((DragonControllerLandedFlame) this.a.getDragonControllerManager().b(DragonControllerPhase.SITTING_FLAMING)).j();
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_SCANNING);
         }
 
     }
@@ -62,6 +62,6 @@ public class DragonControllerLanding extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerLanding> getControllerPhase() {
-        return DragonControllerPhase.d;
+        return DragonControllerPhase.LANDING;
     }
 }

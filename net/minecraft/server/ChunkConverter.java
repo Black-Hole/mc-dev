@@ -151,7 +151,7 @@ public class ChunkConverter {
                             int j1 = l >> 8 & 15;
                             int k1 = l >> 4 & 15;
 
-                            blockposition_b.f(i1 + (chunk.locX << 4), j1 + (i << 4), k1 + (chunk.locZ << 4));
+                            blockposition_b.c(i1 + (chunk.locX << 4), j1 + (i << 4), k1 + (chunk.locZ << 4));
                             IBlockData iblockdata = (IBlockData) datapaletteblock.a(l);
                             IBlockData iblockdata1 = iblockdata;
                             EnumDirection[] aenumdirection1 = aenumdirection;
@@ -160,7 +160,7 @@ public class ChunkConverter {
                             for (int i2 = 0; i2 < l1; ++i2) {
                                 EnumDirection enumdirection = aenumdirection1[i2];
 
-                                blockposition_b1.j(blockposition_b).d(enumdirection);
+                                blockposition_b1.g(blockposition_b).c(enumdirection);
                                 if (blockposition_b.getX() >> 4 == chunk.locX && blockposition_b.getZ() >> 4 == chunk.locZ) {
                                     iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_b, blockposition_b1);
                                 }
@@ -393,14 +393,6 @@ public class ChunkConverter {
                 ChunkConverter.g.add(this);
             }
 
-        }
-
-        Type(Block[] ablock, Object object) {
-            this(ablock);
-        }
-
-        Type(boolean flag, Block[] ablock, Object object) {
-            this(flag, ablock);
         }
     }
 

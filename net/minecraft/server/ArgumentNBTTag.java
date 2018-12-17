@@ -26,15 +26,11 @@ public class ArgumentNBTTag implements ArgumentType<NBTTagCompound> {
         return (NBTTagCompound) commandcontext.getArgument(s, NBTTagCompound.class);
     }
 
-    public NBTTagCompound a(StringReader stringreader) throws CommandSyntaxException {
+    public NBTTagCompound parse(StringReader stringreader) throws CommandSyntaxException {
         return (new MojangsonParser(stringreader)).f();
     }
 
     public Collection<String> getExamples() {
         return ArgumentNBTTag.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

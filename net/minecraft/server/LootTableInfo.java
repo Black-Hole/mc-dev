@@ -116,20 +116,12 @@ public class LootTableInfo {
 
             public a() {}
 
-            public void a(JsonWriter jsonwriter, LootTableInfo.EntityTarget loottableinfo_entitytarget) throws IOException {
+            public void write(JsonWriter jsonwriter, LootTableInfo.EntityTarget loottableinfo_entitytarget) throws IOException {
                 jsonwriter.value(loottableinfo_entitytarget.d);
             }
 
-            public LootTableInfo.EntityTarget a(JsonReader jsonreader) throws IOException {
+            public LootTableInfo.EntityTarget read(JsonReader jsonreader) throws IOException {
                 return LootTableInfo.EntityTarget.a(jsonreader.nextString());
-            }
-
-            public Object read(JsonReader jsonreader) throws IOException {
-                return this.a(jsonreader);
-            }
-
-            public void write(JsonWriter jsonwriter, Object object) throws IOException {
-                this.a(jsonwriter, (LootTableInfo.EntityTarget) object);
             }
         }
     }

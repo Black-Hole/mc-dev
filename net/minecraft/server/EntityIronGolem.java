@@ -73,8 +73,8 @@ public class EntityIronGolem extends EntityGolem {
         super.C(entity);
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.bC > 0) {
             --this.bC;
         }

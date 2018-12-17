@@ -67,7 +67,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
     public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {
         int i = regionlimitedworldaccess.a();
         int j = regionlimitedworldaccess.b();
-        BiomeBase biomebase = regionlimitedworldaccess.b(i, j).getBiomeIndex()[0];
+        BiomeBase biomebase = regionlimitedworldaccess.getChunkAt(i, j).getBiomeIndex()[0];
         SeededRandom seededrandom = new SeededRandom();
 
         seededrandom.a(regionlimitedworldaccess.getSeed(), i << 4, j << 4);
@@ -253,7 +253,7 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
         return i;
     }
 
-    public GeneratorSettingsOverworld f() {
+    public GeneratorSettingsOverworld getSettings() {
         return this.k;
     }
 
@@ -265,9 +265,5 @@ public class ChunkProviderGenerate extends ChunkGeneratorAbstract<GeneratorSetti
 
     public int getSpawnHeight() {
         return this.a.getSeaLevel() + 1;
-    }
-
-    public GeneratorSettings getSettings() {
-        return this.f();
     }
 }

@@ -35,7 +35,7 @@ public class CommandBanList {
             while (iterator.hasNext()) {
                 ExpirableListEntry expirablelistentry = (ExpirableListEntry) iterator.next();
 
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[] { expirablelistentry.e(), expirablelistentry.b(), expirablelistentry.getReason()}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[] { expirablelistentry.e(), expirablelistentry.getSource(), expirablelistentry.getReason()}), false);
             }
         }
 

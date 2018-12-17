@@ -23,7 +23,7 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
         return new BlockStatePredicate(block.getStates());
     }
 
-    public boolean a(@Nullable IBlockData iblockdata) {
+    public boolean test(@Nullable IBlockData iblockdata) {
         if (iblockdata != null && iblockdata.getBlock().equals(this.b.getBlock())) {
             if (this.c.isEmpty()) {
                 return true;
@@ -60,9 +60,5 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
             this.c.put(iblockstate, predicate);
             return this;
         }
-    }
-
-    public boolean test(@Nullable Object object) {
-        return this.a((IBlockData) object);
     }
 }

@@ -74,7 +74,7 @@ public class WorldUpgrader {
         }
 
         ImmutableMap immutablemap = builder.build();
-        long i = SystemUtils.b();
+        long i = SystemUtils.getMonotonicMillis();
 
         this.j = 0;
         Builder builder1 = ImmutableMap.builder();
@@ -137,7 +137,7 @@ public class WorldUpgrader {
         }
 
         this.n = new ChatMessage("optimizeWorld.stage.finished", new Object[0]);
-        i = SystemUtils.b() - i;
+        i = SystemUtils.getMonotonicMillis() - i;
         WorldUpgrader.a.info("World optimizaton finished after {} ms", i);
         immutablemap.values().forEach(ChunkRegionLoader::b);
         this.e.a();

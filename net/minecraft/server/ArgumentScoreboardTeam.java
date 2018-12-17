@@ -37,7 +37,7 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
         }
     }
 
-    public String a(StringReader stringreader) throws CommandSyntaxException {
+    public String parse(StringReader stringreader) throws CommandSyntaxException {
         return stringreader.readUnquotedString();
     }
 
@@ -47,9 +47,5 @@ public class ArgumentScoreboardTeam implements ArgumentType<String> {
 
     public Collection<String> getExamples() {
         return ArgumentScoreboardTeam.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

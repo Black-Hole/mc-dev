@@ -22,7 +22,7 @@ public class FurnaceRecipe implements IRecipe {
     }
 
     public boolean a(IInventory iinventory, World world) {
-        return iinventory instanceof TileEntityFurnace && this.ingredient.a(iinventory.getItem(0));
+        return iinventory instanceof TileEntityFurnace && this.ingredient.test(iinventory.getItem(0));
     }
 
     public ItemStack craftItem(IInventory iinventory) {
@@ -60,7 +60,7 @@ public class FurnaceRecipe implements IRecipe {
 
         public a() {}
 
-        public FurnaceRecipe b(MinecraftKey minecraftkey, JsonObject jsonobject) {
+        public FurnaceRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
             String s = ChatDeserializer.a(jsonobject, "group", "");
             RecipeItemStack recipeitemstack;
 
@@ -84,7 +84,7 @@ public class FurnaceRecipe implements IRecipe {
             }
         }
 
-        public FurnaceRecipe b(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+        public FurnaceRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             String s = packetdataserializer.e(32767);
             RecipeItemStack recipeitemstack = RecipeItemStack.b(packetdataserializer);
             ItemStack itemstack = packetdataserializer.k();
@@ -104,14 +104,6 @@ public class FurnaceRecipe implements IRecipe {
 
         public String a() {
             return "smelting";
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-            return this.b(minecraftkey, packetdataserializer);
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
-            return this.b(minecraftkey, jsonobject);
         }
     }
 }

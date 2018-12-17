@@ -27,7 +27,7 @@ public class BlockCoralFanWall extends BlockCoralFanWallAbstract {
             return Blocks.AIR.getBlockData();
         } else {
             if ((Boolean) iblockdata.get(BlockCoralFanWall.b)) {
-                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             this.a(iblockdata, generatoraccess, blockposition);

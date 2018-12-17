@@ -43,7 +43,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         this.exactTeleport = nbttagcompound.getBoolean("ExactTeleport");
     }
 
-    public void Y_() {
+    public void tick() {
         boolean flag = this.c();
         boolean flag1 = this.d();
 

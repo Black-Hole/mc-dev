@@ -11,12 +11,12 @@ import javax.annotation.Nullable;
 
 public class RegionFileCache {
 
-    private static final Map<File, RegionFile> a = Maps.newHashMap();
+    public static final Map<File, RegionFile> cache = Maps.newHashMap();
 
     public static synchronized RegionFile a(File file, int i, int j) {
         File file1 = new File(file, "region");
         File file2 = new File(file1, "r." + (i >> 5) + "." + (j >> 5) + ".mca");
-        RegionFile regionfile = (RegionFile) RegionFileCache.a.get(file2);
+        RegionFile regionfile = (RegionFile) RegionFileCache.cache.get(file2);
 
         if (regionfile != null) {
             return regionfile;
@@ -25,33 +25,33 @@ public class RegionFileCache {
                 file1.mkdirs();
             }
 
-            if (RegionFileCache.a.size() >= 256) {
+            if (RegionFileCache.cache.size() >= 256) {
                 a();
             }
 
             RegionFile regionfile1 = new RegionFile(file2);
 
-            RegionFileCache.a.put(file2, regionfile1);
+            RegionFileCache.cache.put(file2, regionfile1);
             return regionfile1;
         }
     }
 
     public static synchronized void a() {
-        Iterator iterator = RegionFileCache.a.values().iterator();
+        Iterator iterator = RegionFileCache.cache.values().iterator();
 
         while (iterator.hasNext()) {
             RegionFile regionfile = (RegionFile) iterator.next();
 
             try {
                 if (regionfile != null) {
-                    regionfile.c();
+                    regionfile.close();
                 }
             } catch (IOException ioexception) {
                 ioexception.printStackTrace();
             }
         }
 
-        RegionFileCache.a.clear();
+        RegionFileCache.cache.clear();
     }
 
     @Nullable

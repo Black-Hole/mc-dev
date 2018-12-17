@@ -37,7 +37,7 @@ public class LocaleLanguage {
                 this.d.put(entry.getKey(), s);
             }
 
-            this.e = SystemUtils.b();
+            this.e = SystemUtils.getMonotonicMillis();
         } catch (JsonParseException jsonparseexception) {
             LocaleLanguage.a.error("Couldn't read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
         }

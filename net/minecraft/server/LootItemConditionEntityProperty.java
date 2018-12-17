@@ -62,7 +62,7 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
             jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityproperty.b));
         }
 
-        public LootItemConditionEntityProperty a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionEntityProperty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Set set = ChatDeserializer.t(jsonobject, "properties").entrySet();
             LootEntityProperty[] alootentityproperty = new LootEntityProperty[set.size()];
             int i = 0;
@@ -74,10 +74,6 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
             }
 
             return new LootItemConditionEntityProperty(alootentityproperty, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
-        }
-
-        public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return this.a(jsonobject, jsondeserializationcontext);
         }
     }
 }

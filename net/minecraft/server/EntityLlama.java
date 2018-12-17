@@ -284,7 +284,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
         return entityanimal != this && entityanimal instanceof EntityLlama && this.eb() && ((EntityLlama) entityanimal).eb();
     }
 
-    public EntityLlama b(EntityAgeable entityageable) {
+    public EntityLlama createChild(EntityAgeable entityageable) {
         EntityLlama entityllama = new EntityLlama(this.world);
 
         this.a(entityageable, (EntityHorseAbstract) entityllama);
@@ -393,10 +393,6 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
     public void s(boolean flag) {}
 
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
-    }
-
     static class a extends PathfinderGoalNearestAttackableTarget<EntityWolf> {
 
         public a(EntityLlama entityllama) {
@@ -443,10 +439,6 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
 
         private b(int i) {
             this.a = i;
-        }
-
-        b(int i, Object object) {
-            this(i);
         }
     }
 }

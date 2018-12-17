@@ -43,7 +43,7 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
         return ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).c((CommandListenerWrapper) commandcontext.getSource());
     }
 
-    public IVectorPosition a(StringReader stringreader) throws CommandSyntaxException {
+    public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
         return (IVectorPosition) (stringreader.canRead() && stringreader.peek() == 94 ? ArgumentVectorPosition.a(stringreader) : VectorPosition.a(stringreader));
     }
 
@@ -60,15 +60,11 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(false);
             }
 
-            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
+            return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));
         }
     }
 
     public Collection<String> getExamples() {
         return ArgumentPosition.c;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

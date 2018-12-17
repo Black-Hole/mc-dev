@@ -201,12 +201,8 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
             this.a = entitydrowned;
         }
 
-        public boolean a(@Nullable EntityHuman entityhuman) {
+        public boolean test(@Nullable EntityHuman entityhuman) {
             return this.a.f((EntityLiving) entityhuman);
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EntityHuman) object);
         }
     }
 

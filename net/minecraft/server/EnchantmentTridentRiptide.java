@@ -19,6 +19,6 @@ public class EnchantmentTridentRiptide extends Enchantment {
     }
 
     public boolean a(Enchantment enchantment) {
-        return super.a(enchantment) && enchantment != Enchantments.C && enchantment != Enchantments.F;
+        return super.a(enchantment) && enchantment != Enchantments.LOYALTY && enchantment != Enchantments.CHANNELING;
     }
 }

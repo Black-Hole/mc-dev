@@ -20,13 +20,13 @@ public class ThreadWatchdog implements Runnable {
 
     public ThreadWatchdog(DedicatedServer dedicatedserver) {
         this.b = dedicatedserver;
-        this.c = dedicatedserver.aY();
+        this.c = dedicatedserver.getMaxTickTime();
     }
 
     public void run() {
         while (this.b.isRunning()) {
             long i = this.b.ax();
-            long j = SystemUtils.b();
+            long j = SystemUtils.getMonotonicMillis();
             long k = j - i;
 
             if (k > this.c) {

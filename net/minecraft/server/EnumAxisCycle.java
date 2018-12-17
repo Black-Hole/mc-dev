@@ -56,8 +56,4 @@ public enum EnumAxisCycle {
     public static EnumAxisCycle a(EnumDirection.EnumAxis enumdirection_enumaxis, EnumDirection.EnumAxis enumdirection_enumaxis1) {
         return EnumAxisCycle.e[Math.floorMod(enumdirection_enumaxis1.ordinal() - enumdirection_enumaxis.ordinal(), 3)];
     }
-
-    EnumAxisCycle(Object object) {
-        this();
-    }
 }

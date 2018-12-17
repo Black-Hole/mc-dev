@@ -44,7 +44,7 @@ public class SlotResult extends Slot {
 
     public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
-        NonNullList nonnulllist = entityhuman.world.E().c(this.a, entityhuman.world);
+        NonNullList nonnulllist = entityhuman.world.getCraftingManager().c(this.a, entityhuman.world);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack1 = this.a.getItem(i);

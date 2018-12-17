@@ -124,7 +124,7 @@ public class DefinedStructureInfo {
     }
 
     public Random b(@Nullable BlockPosition blockposition) {
-        return this.k != null ? this.k : (this.l != null ? (this.l == 0L ? new Random(SystemUtils.b()) : new Random(this.l)) : (blockposition == null ? new Random(SystemUtils.b()) : SeededRandom.a(blockposition.getX(), blockposition.getZ(), 0L, 987234911L)));
+        return this.k != null ? this.k : (this.l != null ? (this.l == 0L ? new Random(SystemUtils.getMonotonicMillis()) : new Random(this.l)) : (blockposition == null ? new Random(SystemUtils.getMonotonicMillis()) : SeededRandom.a(blockposition.getX(), blockposition.getZ(), 0L, 987234911L)));
     }
 
     public float g() {

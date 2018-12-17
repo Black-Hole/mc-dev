@@ -57,7 +57,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         return this.save(new NBTTagCompound());
     }
 
-    public void Y_() {
+    public void tick() {
         ++this.a;
         long i = this.world.getTime();
 

@@ -49,7 +49,7 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerVillagerTrade.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerVillagerTrade.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("villager"));
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
@@ -63,10 +63,6 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
             criteriontriggervillagertrade_a.a(entityplayer, entityvillager, itemstack);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

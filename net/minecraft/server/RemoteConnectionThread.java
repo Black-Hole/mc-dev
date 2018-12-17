@@ -59,7 +59,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected int d() {
-        return this.b.y();
+        return this.b.getPlayerCount();
     }
 
     protected void a(DatagramSocket datagramsocket) {

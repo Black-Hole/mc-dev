@@ -32,11 +32,7 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
         return astring;
     }
 
-    protected String b(GameProfile gameprofile) {
+    protected String a(GameProfile gameprofile) {
         return gameprofile.getId().toString();
-    }
-
-    protected String a(Object object) {
-        return this.b((GameProfile) object);
     }
 }

@@ -31,7 +31,7 @@ public class LootItemFunctionSetTag extends LootItemFunction {
             jsonobject.addProperty("tag", lootitemfunctionsettag.a.toString());
         }
 
-        public LootItemFunctionSetTag a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionSetTag b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             try {
                 NBTTagCompound nbttagcompound = MojangsonParser.parse(ChatDeserializer.h(jsonobject, "tag"));
 
@@ -39,10 +39,6 @@ public class LootItemFunctionSetTag extends LootItemFunction {
             } catch (CommandSyntaxException commandsyntaxexception) {
                 throw new JsonSyntaxException(commandsyntaxexception.getMessage());
             }
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

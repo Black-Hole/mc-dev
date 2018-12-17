@@ -257,9 +257,5 @@ public class EntityPolarBear extends EntityAnimal {
         public boolean a;
 
         private b() {}
-
-        b(Object object) {
-            this();
-        }
     }
 }

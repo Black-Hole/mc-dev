@@ -116,7 +116,7 @@ public class Block implements IMaterial {
             for (int k = 0; k < j; ++k) {
                 EnumDirection enumdirection = aenumdirection[k];
 
-                blockposition_b.j(blockposition).d(enumdirection);
+                blockposition_b.g(blockposition).c(enumdirection);
                 IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
                 IBlockData iblockdata2 = iblockdata1.updateState(enumdirection.opposite(), iblockdata, generatoraccess, blockposition_b, blockposition);
 

@@ -49,7 +49,7 @@ public class CriterionTriggerUsedTotem implements CriterionTrigger<CriterionTrig
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerUsedTotem.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerUsedTotem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
         return new CriterionTriggerUsedTotem.b(criterionconditionitem);
@@ -62,10 +62,6 @@ public class CriterionTriggerUsedTotem implements CriterionTrigger<CriterionTrig
             criteriontriggerusedtotem_a.a(itemstack);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

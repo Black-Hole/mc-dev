@@ -62,7 +62,7 @@ public class ItemArmor extends Item {
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return this.e.c().a(itemstack1) || super.a(itemstack, itemstack1);
+        return this.e.c().test(itemstack1) || super.a(itemstack, itemstack1);
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {

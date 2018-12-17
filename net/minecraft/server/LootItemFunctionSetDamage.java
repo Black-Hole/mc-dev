@@ -39,12 +39,8 @@ public class LootItemFunctionSetDamage extends LootItemFunction {
             jsonobject.add("damage", jsonserializationcontext.serialize(lootitemfunctionsetdamage.b));
         }
 
-        public LootItemFunctionSetDamage a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionSetDamage b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             return new LootItemFunctionSetDamage(alootitemcondition, (LootValueBounds) ChatDeserializer.a(jsonobject, "damage", jsondeserializationcontext, LootValueBounds.class));
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

@@ -18,7 +18,7 @@ public class LootSelectorLootTable extends LootSelectorEntry {
     public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
         LootTable loottable = loottableinfo.f().getLootTable(this.a);
 
-        collection.addAll(loottable.a(random, loottableinfo));
+        collection.addAll(loottable.populateLoot(random, loottableinfo));
     }
 
     protected void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {

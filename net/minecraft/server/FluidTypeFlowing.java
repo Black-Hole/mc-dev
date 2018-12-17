@@ -48,7 +48,7 @@ public abstract class FluidTypeFlowing extends FluidType {
             while (iterator.hasNext()) {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
 
-                blockposition_b.j(blockposition).d(enumdirection);
+                blockposition_b.g(blockposition).c(enumdirection);
                 Fluid fluid1 = iworldreader.getFluid(blockposition_b);
 
                 if (this.g(fluid1)) {
@@ -85,7 +85,7 @@ public abstract class FluidTypeFlowing extends FluidType {
                 while (iterator1.hasNext()) {
                     EnumDirection enumdirection1 = (EnumDirection) iterator1.next();
 
-                    blockposition_b.j(blockposition).d(enumdirection1);
+                    blockposition_b.g(blockposition).c(enumdirection1);
                     if (this.a((IBlockAccess) iworldreader, (BlockPosition) blockposition_b, enumdirection1) || this.a((IBlockAccess) iworldreader, blockposition_b.up(), enumdirection1)) {
                         vec3d1 = vec3d1.a().add(0.0D, -6.0D, 0.0D);
                         break;
@@ -458,7 +458,7 @@ public abstract class FluidTypeFlowing extends FluidType {
                 IBlockData iblockdata = fluid1.i();
 
                 world.setTypeAndData(blockposition, iblockdata, 2);
-                world.I().a(blockposition, fluid1.c(), i);
+                world.getFluidTickList().a(blockposition, fluid1.c(), i);
                 world.applyPhysics(blockposition, iblockdata.getBlock());
             }
         }

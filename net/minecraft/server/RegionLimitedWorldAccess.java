@@ -59,7 +59,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return i >= protochunk.getPos().x && i <= protochunk1.getPos().x && j >= protochunk.getPos().z && j <= protochunk1.getPos().z;
     }
 
-    public IChunkAccess b(int i, int j) {
+    public IChunkAccess getChunkAt(int i, int j) {
         if (this.a(i, j)) {
             int k = i - this.b[0].getPos().x;
             int l = j - this.b[0].getPos().z;
@@ -205,7 +205,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         int i = MathHelper.floor(entity.locX / 16.0D);
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
-        this.b(i, j).a(entity);
+        this.getChunkAt(i, j).a(entity);
         return true;
     }
 
@@ -267,11 +267,11 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         return this.h;
     }
 
-    public TickList<Block> J() {
+    public TickList<Block> getBlockTickList() {
         return this.n;
     }
 
-    public TickList<FluidType> I() {
+    public TickList<FluidType> getFluidTickList() {
         return this.o;
     }
 
@@ -286,7 +286,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     public void update(BlockPosition blockposition, Block block) {}
 
     public int a(HeightMap.Type heightmap_type, int i, int j) {
-        return this.b(i >> 4, j >> 4).a(heightmap_type, i & 15, j & 15) + 1;
+        return this.getChunkAt(i >> 4, j >> 4).a(heightmap_type, i & 15, j & 15) + 1;
     }
 
     public void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1) {}

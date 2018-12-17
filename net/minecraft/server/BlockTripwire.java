@@ -141,7 +141,7 @@ public class BlockTripwire extends Block {
         }
 
         if (flag1) {
-            world.J().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
         }
 
     }

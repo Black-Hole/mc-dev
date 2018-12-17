@@ -48,7 +48,7 @@ public abstract class ExpirableListEntry<T> extends JsonListEntry<T> {
         this.e = jsonobject.has("reason") ? jsonobject.get("reason").getAsString() : "Banned by an operator.";
     }
 
-    public String b() {
+    public String getSource() {
         return this.c;
     }
 

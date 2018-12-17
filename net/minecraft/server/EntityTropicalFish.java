@@ -134,10 +134,6 @@ public class EntityTropicalFish extends EntityFishSchool {
             this.d = k;
             this.e = l;
         }
-
-        b(EntityTropicalFish entitytropicalfish, int i, int j, int k, int l, Object object) {
-            this(entitytropicalfish, i, j, k, l);
-        }
     }
 
     static enum Variant {

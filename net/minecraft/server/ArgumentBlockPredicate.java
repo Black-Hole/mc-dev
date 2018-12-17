@@ -31,7 +31,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
         return new ArgumentBlockPredicate();
     }
 
-    public ArgumentBlockPredicate.b a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentBlockPredicate.b parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentBlock argumentblock = (new ArgumentBlock(stringreader, true)).a(true);
 
         if (argumentblock.b() != null) {
@@ -78,10 +78,6 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
         return ArgumentBlockPredicate.a;
     }
 
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
-    }
-
     static class c implements Predicate<ShapeDetectorBlock> {
 
         private final Tag<Block> a;
@@ -95,7 +91,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             this.b = nbttagcompound;
         }
 
-        public boolean a(ShapeDetectorBlock shapedetectorblock) {
+        public boolean test(ShapeDetectorBlock shapedetectorblock) {
             IBlockData iblockdata = shapedetectorblock.a();
 
             if (!iblockdata.a(this.a)) {
@@ -131,14 +127,6 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
                 }
             }
         }
-
-        public boolean test(Object object) {
-            return this.a((ShapeDetectorBlock) object);
-        }
-
-        c(Tag tag, Map map, NBTTagCompound nbttagcompound, Object object) {
-            this(tag, map, nbttagcompound);
-        }
     }
 
     static class a implements Predicate<ShapeDetectorBlock> {
@@ -154,7 +142,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             this.c = nbttagcompound;
         }
 
-        public boolean a(ShapeDetectorBlock shapedetectorblock) {
+        public boolean test(ShapeDetectorBlock shapedetectorblock) {
             IBlockData iblockdata = shapedetectorblock.a();
 
             if (iblockdata.getBlock() != this.a.getBlock()) {
@@ -178,10 +166,6 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
                     return tileentity != null && GameProfileSerializer.a(this.c, tileentity.save(new NBTTagCompound()), true);
                 }
             }
-        }
-
-        public boolean test(Object object) {
-            return this.a((ShapeDetectorBlock) object);
         }
     }
 

@@ -164,8 +164,8 @@ public class WorldLoaderServer extends WorldLoader {
                 }
             }
 
-            regionfile.c();
-            regionfile1.c();
+            regionfile.close();
+            regionfile1.close();
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }

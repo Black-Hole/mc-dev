@@ -82,7 +82,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
         return stringbuilder.append(']').toString();
     }
 
-    public NBTTagLongArray c() {
+    public NBTTagLongArray clone() {
         long[] along = new long[this.f.length];
 
         System.arraycopy(this.f, 0, along, 0, this.f.length);
@@ -122,7 +122,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
         return this.f.length;
     }
 
-    public NBTTagLong a(int i) {
+    public NBTTagLong c(int i) {
         return new NBTTagLong(this.f[i]);
     }
 
@@ -132,13 +132,5 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
 
     public void b(int i) {
         this.f = ArrayUtils.remove(this.f, i);
-    }
-
-    public NBTBase c(int i) {
-        return this.a(i);
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }

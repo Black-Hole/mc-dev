@@ -20,7 +20,7 @@ public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
         return new ArgumentTile();
     }
 
-    public ArgumentTileLocation a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentTileLocation parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentBlock argumentblock = (new ArgumentBlock(stringreader, false)).a(true);
 
         return new ArgumentTileLocation(argumentblock.b(), argumentblock.a().keySet(), argumentblock.c());
@@ -47,9 +47,5 @@ public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
 
     public Collection<String> getExamples() {
         return ArgumentTile.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

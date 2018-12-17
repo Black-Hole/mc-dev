@@ -49,7 +49,7 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerConstructBeacon.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerConstructBeacon.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("level"));
 
         return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_d);
@@ -62,10 +62,6 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
             criteriontriggerconstructbeacon_a.a(tileentitybeacon);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

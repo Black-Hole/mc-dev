@@ -68,7 +68,7 @@ public class LootItemFunctions {
 
         public a() {}
 
-        public LootItemFunction a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootItemFunction deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "function");
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "function"));
 
@@ -83,7 +83,7 @@ public class LootItemFunctions {
             return lootitemfunction_a.b(jsonobject, jsondeserializationcontext, (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class));
         }
 
-        public JsonElement a(LootItemFunction lootitemfunction, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(LootItemFunction lootitemfunction, Type type, JsonSerializationContext jsonserializationcontext) {
             LootItemFunction.a lootitemfunction_a = LootItemFunctions.a(lootitemfunction);
             JsonObject jsonobject = new JsonObject();
 
@@ -94,14 +94,6 @@ public class LootItemFunctions {
             }
 
             return jsonobject;
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootItemFunction) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

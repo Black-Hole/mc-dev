@@ -86,8 +86,8 @@ public class EntityHorseSkeleton extends EntityHorseAbstract {
         return LootTables.R;
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.dy() && this.bO++ >= 18000) {
             this.die();
         }

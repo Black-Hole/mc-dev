@@ -21,7 +21,7 @@ public class WorldGenDesertWell extends WorldGenerator<WorldGenFeatureEmptyConfi
             ;
         }
 
-        if (!WorldGenDesertWell.a.a(generatoraccess.getType(blockposition))) {
+        if (!WorldGenDesertWell.a.test(generatoraccess.getType(blockposition))) {
             return false;
         } else {
             int i;

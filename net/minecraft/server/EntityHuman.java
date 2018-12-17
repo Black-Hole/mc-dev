@@ -362,7 +362,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.aS = this.yaw;
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.bG > 0) {
             --this.bG;
         }
@@ -379,7 +379,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         this.inventory.p();
         this.bH = this.bI;
-        super.k();
+        super.movementTick();
         AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
 
         if (!this.world.isClientSide) {
@@ -477,7 +477,7 @@ public abstract class EntityHuman extends EntityLiving {
 
         if (!this.world.getGameRules().getBoolean("keepInventory") && !this.isSpectator()) {
             this.dj();
-            this.inventory.q();
+            this.inventory.dropContents();
         }
 
         if (damagesource != null) {
@@ -748,8 +748,8 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public boolean a(EntityHuman entityhuman) {
-        ScoreboardTeamBase scoreboardteambase = this.be();
-        ScoreboardTeamBase scoreboardteambase1 = entityhuman.be();
+        ScoreboardTeamBase scoreboardteambase = this.getScoreboardTeam();
+        ScoreboardTeamBase scoreboardteambase1 = entityhuman.getScoreboardTeam();
 
         return scoreboardteambase == null ? true : (!scoreboardteambase.isAlly(scoreboardteambase1) ? true : scoreboardteambase.allowFriendlyFire());
     }
@@ -1665,7 +1665,7 @@ public abstract class EntityHuman extends EntityLiving {
     }
 
     public IChatBaseComponent getScoreboardDisplayName() {
-        IChatBaseComponent ichatbasecomponent = ScoreboardTeam.a(this.be(), this.getDisplayName());
+        IChatBaseComponent ichatbasecomponent = ScoreboardTeam.a(this.getScoreboardTeam(), this.getDisplayName());
 
         return this.c(ichatbasecomponent);
     }
@@ -1852,16 +1852,8 @@ public abstract class EntityHuman extends EntityLiving {
             this.a = entityhuman;
         }
 
-        public boolean a(@Nullable EntityMonster entitymonster) {
+        public boolean test(@Nullable EntityMonster entitymonster) {
             return entitymonster.c(this.a);
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EntityMonster) object);
-        }
-
-        c(EntityHuman entityhuman, Object object) {
-            this(entityhuman);
         }
     }
 

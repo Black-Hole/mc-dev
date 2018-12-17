@@ -8,7 +8,7 @@ public class ParticleParamRedstone implements ParticleParam {
 
     public static final ParticleParamRedstone a = new ParticleParamRedstone(1.0F, 0.0F, 0.0F, 1.0F);
     public static final ParticleParam.a<ParticleParamRedstone> b = new ParticleParam.a() {
-        public ParticleParamRedstone a(Particle<ParticleParamRedstone> particle, StringReader stringreader) throws CommandSyntaxException {
+        public ParticleParamRedstone b(Particle<ParticleParamRedstone> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
             float f = (float) stringreader.readDouble();
 
@@ -24,16 +24,8 @@ public class ParticleParamRedstone implements ParticleParam {
             return new ParticleParamRedstone(f, f1, f2, f3);
         }
 
-        public ParticleParamRedstone a(Particle<ParticleParamRedstone> particle, PacketDataSerializer packetdataserializer) {
+        public ParticleParamRedstone b(Particle<ParticleParamRedstone> particle, PacketDataSerializer packetdataserializer) {
             return new ParticleParamRedstone(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
-        }
-
-        public ParticleParam b(Particle particle, PacketDataSerializer packetdataserializer) {
-            return this.a(particle, packetdataserializer);
-        }
-
-        public ParticleParam b(Particle particle, StringReader stringreader) throws CommandSyntaxException {
-            return this.a(particle, stringreader);
         }
     };
     private final float c;

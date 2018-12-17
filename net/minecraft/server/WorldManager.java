@@ -27,7 +27,7 @@ public class WorldManager implements IWorldAccess {
 
     public void b(Entity entity) {
         this.world.getTracker().untrackEntity(entity);
-        this.world.l_().a(entity);
+        this.world.getScoreboard().a(entity);
         if (entity instanceof EntityPlayer) {
             this.world.worldProvider.b((EntityPlayer) entity);
         }

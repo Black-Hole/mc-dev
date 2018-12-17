@@ -34,17 +34,17 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     private int cl = Integer.MIN_VALUE;
     private int cm = Integer.MIN_VALUE;
     private float lastHealthSent = -1.0E8F;
-    private int co = -99999999;
+    private int lastFoodSent = -99999999;
     private boolean cp = true;
     public int lastSentExp = -99999999;
     public int invulnerableTicks = 60;
     private EntityHuman.EnumChatVisibility cs;
     private boolean ct = true;
-    private long cu = SystemUtils.b();
-    private Entity cv;
+    private long cu = SystemUtils.getMonotonicMillis();
+    private Entity spectatedEntity;
     public boolean worldChangeInvuln;
     private boolean cx;
-    private final RecipeBookServer cy;
+    private final RecipeBookServer recipeBook;
     private Vec3D cz;
     private int cA;
     private boolean cB;
@@ -59,7 +59,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         playerinteractmanager.player = this;
         this.playerInteractManager = playerinteractmanager;
         this.server = minecraftserver;
-        this.cy = new RecipeBookServer(minecraftserver.getCraftingManager());
+        this.recipeBook = new RecipeBookServer(minecraftserver.getCraftingManager());
         this.cg = minecraftserver.getPlayerList().getStatisticManager(this);
         this.cf = minecraftserver.getPlayerList().h(this);
         this.Q = 1.0F;
@@ -130,7 +130,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.cx = nbttagcompound.getBoolean("seenCredits");
         if (nbttagcompound.hasKeyOfType("recipeBook", 10)) {
-            this.cy.a(nbttagcompound.getCompound("recipeBook"));
+            this.recipeBook.a(nbttagcompound.getCompound("recipeBook"));
         }
 
     }
@@ -161,7 +161,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             nbttagcompound.set("RootVehicle", nbttagcompound2);
         }
 
-        nbttagcompound.set("recipeBook", this.cy.e());
+        nbttagcompound.set("recipeBook", this.recipeBook.e());
     }
 
     public void a(int i) {
@@ -274,41 +274,41 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 }
             }
 
-            if (this.getHealth() != this.lastHealthSent || this.co != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cp) {
+            if (this.getHealth() != this.lastHealthSent || this.lastFoodSent != this.foodData.getFoodLevel() || this.foodData.getSaturationLevel() == 0.0F != this.cp) {
                 this.playerConnection.sendPacket(new PacketPlayOutUpdateHealth(this.getHealth(), this.foodData.getFoodLevel(), this.foodData.getSaturationLevel()));
                 this.lastHealthSent = this.getHealth();
-                this.co = this.foodData.getFoodLevel();
+                this.lastFoodSent = this.foodData.getFoodLevel();
                 this.cp = this.foodData.getSaturationLevel() == 0.0F;
             }
 
             if (this.getHealth() + this.getAbsorptionHearts() != this.ch) {
                 this.ch = this.getHealth() + this.getAbsorptionHearts();
-                this.a(IScoreboardCriteria.g, MathHelper.f(this.ch));
+                this.a(IScoreboardCriteria.HEALTH, MathHelper.f(this.ch));
             }
 
             if (this.foodData.getFoodLevel() != this.ci) {
                 this.ci = this.foodData.getFoodLevel();
-                this.a(IScoreboardCriteria.h, MathHelper.f((float) this.ci));
+                this.a(IScoreboardCriteria.FOOD, MathHelper.f((float) this.ci));
             }
 
             if (this.getAirTicks() != this.cj) {
                 this.cj = this.getAirTicks();
-                this.a(IScoreboardCriteria.i, MathHelper.f((float) this.cj));
+                this.a(IScoreboardCriteria.AIR, MathHelper.f((float) this.cj));
             }
 
             if (this.getArmorStrength() != this.ck) {
                 this.ck = this.getArmorStrength();
-                this.a(IScoreboardCriteria.j, MathHelper.f((float) this.ck));
+                this.a(IScoreboardCriteria.ARMOR, MathHelper.f((float) this.ck));
             }
 
             if (this.expTotal != this.cm) {
                 this.cm = this.expTotal;
-                this.a(IScoreboardCriteria.k, MathHelper.f((float) this.cm));
+                this.a(IScoreboardCriteria.XP, MathHelper.f((float) this.cm));
             }
 
             if (this.expLevel != this.cl) {
                 this.cl = this.expLevel;
-                this.a(IScoreboardCriteria.l, MathHelper.f((float) this.cl));
+                this.a(IScoreboardCriteria.LEVEL, MathHelper.f((float) this.cl));
             }
 
             if (this.expTotal != this.lastSentExp) {
@@ -354,7 +354,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 }
 
             });
-            ScoreboardTeamBase scoreboardteambase = this.be();
+            ScoreboardTeamBase scoreboardteambase = this.getScoreboardTeam();
 
             if (scoreboardteambase != null && scoreboardteambase.getDeathMessageVisibility() != ScoreboardTeamBase.EnumNameTagVisibility.ALWAYS) {
                 if (scoreboardteambase.getDeathMessageVisibility() == ScoreboardTeamBase.EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS) {
@@ -371,11 +371,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         this.releaseShoulderEntities();
         if (!this.world.getGameRules().getBoolean("keepInventory") && !this.isSpectator()) {
-            this.dj();
-            this.inventory.q();
+            this.removeCursedItems();
+            this.inventory.dropContents();
         }
 
-        this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.d, this.getName(), ScoreboardScore::incrementScore);
+        this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.DEATH_COUNT, this.getName(), ScoreboardScore::incrementScore);
         EntityLiving entityliving = this.cv();
 
         if (entityliving != null) {
@@ -398,10 +398,10 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             String s = this.getName();
             String s1 = entity.getName();
 
-            this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.f, s, ScoreboardScore::incrementScore);
+            this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.TOTAL_KILL_COUNT, s, ScoreboardScore::incrementScore);
             if (entity instanceof EntityHuman) {
                 this.a(StatisticList.PLAYER_KILLS);
-                this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.e, s, ScoreboardScore::incrementScore);
+                this.getScoreboard().getObjectivesForCriteria(IScoreboardCriteria.PLAYER_KILL_COUNT, s, ScoreboardScore::incrementScore);
             } else {
                 this.a(StatisticList.MOB_KILLS);
             }
@@ -491,7 +491,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.playerConnection.sendPacket(new PacketPlayOutWorldEvent(1032, BlockPosition.ZERO, 0, false));
             this.lastSentExp = -1;
             this.lastHealthSent = -1.0F;
-            this.co = -1;
+            this.lastFoodSent = -1;
             return this;
         }
     }
@@ -786,7 +786,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public int discoverRecipes(Collection<IRecipe> collection) {
-        return this.cy.a(collection, this);
+        return this.recipeBook.a(collection, this);
     }
 
     public void a(MinecraftKey[] aminecraftkey) {
@@ -807,7 +807,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public int undiscoverRecipes(Collection<IRecipe> collection) {
-        return this.cy.b(collection, this);
+        return this.recipeBook.b(collection, this);
     }
 
     public void giveExp(int i) {
@@ -881,8 +881,8 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.getDataWatcher().set(EntityPlayer.bx, entityplayer.getDataWatcher().get(EntityPlayer.bx));
         this.lastSentExp = -1;
         this.lastHealthSent = -1.0F;
-        this.co = -1;
-        this.cy.a((RecipeBook) entityplayer.cy);
+        this.lastFoodSent = -1;
+        this.recipeBook.a((RecipeBook) entityplayer.recipeBook);
         this.removeQueue.addAll(entityplayer.removeQueue);
         this.cx = entityplayer.cx;
         this.cC = entityplayer.cC;
@@ -1008,7 +1008,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void resetIdleTimer() {
-        this.cu = SystemUtils.b();
+        this.cu = SystemUtils.getMonotonicMillis();
     }
 
     public ServerStatisticManager getStatisticManager() {
@@ -1016,7 +1016,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public RecipeBookServer B() {
-        return this.cy;
+        return this.recipeBook;
     }
 
     public void c(Entity entity) {
@@ -1044,16 +1044,16 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public Entity getSpecatorTarget() {
-        return (Entity) (this.cv == null ? this : this.cv);
+        return (Entity) (this.spectatedEntity == null ? this : this.spectatedEntity);
     }
 
     public void setSpectatorTarget(Entity entity) {
         Entity entity1 = this.getSpecatorTarget();
 
-        this.cv = (Entity) (entity == null ? this : entity);
-        if (entity1 != this.cv) {
-            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.cv));
-            this.enderTeleportTo(this.cv.locX, this.cv.locY, this.cv.locZ);
+        this.spectatedEntity = (Entity) (entity == null ? this : entity);
+        if (entity1 != this.spectatedEntity) {
+            this.playerConnection.sendPacket(new PacketPlayOutCamera(this.spectatedEntity));
+            this.enderTeleportTo(this.spectatedEntity.locX, this.spectatedEntity.locY, this.spectatedEntity.locZ);
         }
 
     }

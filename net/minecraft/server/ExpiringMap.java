@@ -18,7 +18,7 @@ public class ExpiringMap<T> extends Long2ObjectOpenHashMap<T> {
     }
 
     private void a(long i) {
-        long j = SystemUtils.b();
+        long j = SystemUtils.getMonotonicMillis();
 
         this.b.put(i, j);
         ObjectIterator objectiterator = this.b.long2LongEntrySet().iterator();

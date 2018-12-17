@@ -353,7 +353,7 @@ public class PathfinderNormal extends PathfinderAbstract {
                 for (int l = -1; l <= 1; ++l) {
                     for (int i1 = -1; i1 <= 1; ++i1) {
                         if (l != 0 || i1 != 0) {
-                            Block block = iblockaccess.getType(blockposition_b.f(l + i, j, i1 + k)).getBlock();
+                            Block block = iblockaccess.getType(blockposition_b.c(l + i, j, i1 + k)).getBlock();
 
                             if (block == Blocks.CACTUS) {
                                 pathtype = PathType.DANGER_CACTUS;

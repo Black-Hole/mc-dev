@@ -71,7 +71,7 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
         return (Integer) commandcontext.getArgument(s, Integer.class);
     }
 
-    public Integer a(StringReader stringreader) throws CommandSyntaxException {
+    public Integer parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
 
         if (!ArgumentInventorySlot.c.containsKey(s)) {
@@ -87,9 +87,5 @@ public class ArgumentInventorySlot implements ArgumentType<Integer> {
 
     public Collection<String> getExamples() {
         return ArgumentInventorySlot.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

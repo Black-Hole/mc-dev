@@ -50,7 +50,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerBredAnimals.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerBredAnimals.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("parent"));
         CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("partner"));
         CriterionConditionEntity criterionconditionentity2 = CriterionConditionEntity.a(jsonobject.get("child"));
@@ -65,10 +65,6 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
             criteriontriggerbredanimals_a.a(entityplayer, entityanimal, entityanimal1, entityageable);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

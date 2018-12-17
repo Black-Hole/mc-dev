@@ -77,7 +77,7 @@ public class LootItemConditionEntityScore implements LootItemCondition {
             jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityscore.b));
         }
 
-        public LootItemConditionEntityScore a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionEntityScore b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Set set = ChatDeserializer.t(jsonobject, "scores").entrySet();
             LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
             Iterator iterator = set.iterator();
@@ -89,10 +89,6 @@ public class LootItemConditionEntityScore implements LootItemCondition {
             }
 
             return new LootItemConditionEntityScore(linkedhashmap, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
-        }
-
-        public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return this.a(jsonobject, jsondeserializationcontext);
         }
     }
 }

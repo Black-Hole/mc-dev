@@ -29,7 +29,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
         this.inventorySlot = ItemStack.a;
     }
 
-    public void Y_() {
+    public void tick() {
         if (this.world.getTime() % 80L == 0L) {
             this.p();
             if (this.i) {
@@ -47,7 +47,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
     public void p() {
         if (this.world != null) {
             this.E();
-            this.D();
+            this.applyEffects();
         }
 
     }
@@ -56,7 +56,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
         this.world.a((EntityHuman) null, this.position, soundeffect, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
-    private void D() {
+    private void applyEffects() {
         if (this.i && this.levels > 0 && !this.world.isClientSide && this.primaryEffect != null) {
             double d0 = (double) (this.levels * 10 + 10);
             byte b0 = 0;

@@ -55,6 +55,6 @@ public class DragonControllerDying extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerDying> getControllerPhase() {
-        return DragonControllerPhase.j;
+        return DragonControllerPhase.DYING;
     }
 }

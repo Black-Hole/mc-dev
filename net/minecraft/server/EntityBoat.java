@@ -369,7 +369,7 @@ public class EntityBoat extends Entity {
 
                 for (int l1 = i; l1 < j; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        blockposition_b.f(l1, k1, i2);
+                        blockposition_b.c(l1, k1, i2);
                         Fluid fluid = this.world.getFluid(blockposition_b);
 
                         if (fluid.a(TagsFluid.WATER)) {
@@ -434,7 +434,7 @@ public class EntityBoat extends Entity {
                     if (j2 != 2) {
                         for (int k2 = k; k2 < l; ++k2) {
                             if (j2 <= 0 || k2 != k && k2 != l - 1) {
-                                blockposition_b.f(l1, k2, i2);
+                                blockposition_b.c(l1, k2, i2);
                                 IBlockData iblockdata = this.world.getType(blockposition_b);
 
                                 if (!(iblockdata.getBlock() instanceof BlockWaterLily) && VoxelShapes.c(iblockdata.getCollisionShape(this.world, blockposition_b).a((double) l1, (double) k2, (double) i2), voxelshape, OperatorBoolean.AND)) {
@@ -485,7 +485,7 @@ public class EntityBoat extends Entity {
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        blockposition_b.f(k1, l1, i2);
+                        blockposition_b.c(k1, l1, i2);
                         Fluid fluid = this.world.getFluid(blockposition_b);
 
                         if (fluid.a(TagsFluid.WATER)) {
@@ -536,7 +536,7 @@ public class EntityBoat extends Entity {
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        blockposition_b.f(k1, l1, i2);
+                        blockposition_b.c(k1, l1, i2);
                         Fluid fluid = this.world.getFluid(blockposition_b);
 
                         if (fluid.a(TagsFluid.WATER) && d0 < (double) ((float) blockposition_b.getY() + fluid.getHeight())) {

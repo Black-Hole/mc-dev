@@ -47,7 +47,7 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerTick.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerTick.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerTick.b();
     }
 
@@ -58,10 +58,6 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
             criteriontriggertick_a.b();
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

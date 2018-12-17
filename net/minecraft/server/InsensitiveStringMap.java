@@ -34,7 +34,7 @@ public class InsensitiveStringMap<V> implements Map<String, V> {
         return this.a.get(object.toString().toLowerCase(Locale.ROOT));
     }
 
-    public V a(String s, V v0) {
+    public V put(String s, V v0) {
         return this.a.put(s.toLowerCase(Locale.ROOT), v0);
     }
 
@@ -48,7 +48,7 @@ public class InsensitiveStringMap<V> implements Map<String, V> {
         while (iterator.hasNext()) {
             Entry entry = (Entry) iterator.next();
 
-            this.a((String) entry.getKey(), entry.getValue());
+            this.put((String) entry.getKey(), entry.getValue());
         }
 
     }
@@ -67,9 +67,5 @@ public class InsensitiveStringMap<V> implements Map<String, V> {
 
     public Set<Entry<String, V>> entrySet() {
         return this.a.entrySet();
-    }
-
-    public Object put(Object object, Object object1) {
-        return this.a((String) object, object1);
     }
 }

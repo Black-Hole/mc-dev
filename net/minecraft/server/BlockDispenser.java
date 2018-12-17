@@ -72,7 +72,7 @@ public class BlockDispenser extends BlockTileEntity {
         boolean flag1 = (Boolean) iblockdata.get(BlockDispenser.TRIGGERED);
 
         if (flag && !flag1) {
-            world.J().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, true), 4);
         } else if (!flag && flag1) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockDispenser.TRIGGERED, false), 4);

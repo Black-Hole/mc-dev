@@ -36,7 +36,7 @@ public abstract class LootSelectorEntry {
 
         public a() {}
 
-        public LootSelectorEntry a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootSelectorEntry deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot item");
             String s = ChatDeserializer.h(jsonobject, "type");
             int i = ChatDeserializer.a(jsonobject, "weight", 1);
@@ -60,7 +60,7 @@ public abstract class LootSelectorEntry {
             }
         }
 
-        public JsonElement a(LootSelectorEntry lootselectorentry, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(LootSelectorEntry lootselectorentry, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             jsonobject.addProperty("weight", lootselectorentry.c);
@@ -83,14 +83,6 @@ public abstract class LootSelectorEntry {
 
             lootselectorentry.a(jsonobject, jsonserializationcontext);
             return jsonobject;
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootSelectorEntry) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

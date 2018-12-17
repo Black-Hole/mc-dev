@@ -20,7 +20,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
     public void c() {
         if (this.f == null) {
             DragonControllerStrafe.b.warn("Skipping player strafe phase because no player was found");
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else {
             double d0;
             double d1;
@@ -75,7 +75,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
                             }
                         }
 
-                        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+                        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
                     }
                 } else if (this.c > 0) {
                     --this.c;
@@ -176,6 +176,6 @@ public class DragonControllerStrafe extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerStrafe> getControllerPhase() {
-        return DragonControllerPhase.b;
+        return DragonControllerPhase.STRAFE_PLAYER;
     }
 }

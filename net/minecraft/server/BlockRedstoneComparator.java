@@ -87,7 +87,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
     }
 
     protected void c(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!world.J().b(blockposition, this)) {
+        if (!world.getBlockTickList().b(blockposition, this)) {
             int i = this.e(world, blockposition, iblockdata);
             TileEntity tileentity = world.getTileEntity(blockposition);
             int j = tileentity instanceof TileEntityComparator ? ((TileEntityComparator) tileentity).c() : 0;
@@ -95,7 +95,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
             if (i != j || (Boolean) iblockdata.get(BlockRedstoneComparator.c) != this.a(world, blockposition, iblockdata)) {
                 TickListPriority ticklistpriority = this.c((IBlockAccess) world, blockposition, iblockdata) ? TickListPriority.HIGH : TickListPriority.NORMAL;
 
-                world.J().a(blockposition, this, 2, ticklistpriority);
+                world.getBlockTickList().a(blockposition, this, 2, ticklistpriority);
             }
 
         }

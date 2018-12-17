@@ -32,7 +32,7 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
         return (IScoreboardCriteria) commandcontext.getArgument(s, IScoreboardCriteria.class);
     }
 
-    public IScoreboardCriteria a(StringReader stringreader) throws CommandSyntaxException {
+    public IScoreboardCriteria parse(StringReader stringreader) throws CommandSyntaxException {
         int i = stringreader.getCursor();
 
         while (stringreader.canRead() && stringreader.peek() != 32) {
@@ -75,9 +75,5 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
 
     public Collection<String> getExamples() {
         return ArgumentScoreboardCriteria.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

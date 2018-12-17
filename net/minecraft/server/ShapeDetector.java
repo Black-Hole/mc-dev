@@ -167,12 +167,8 @@ public class ShapeDetector {
             this.b = flag;
         }
 
-        public ShapeDetectorBlock a(BlockPosition blockposition) throws Exception {
+        public ShapeDetectorBlock load(BlockPosition blockposition) throws Exception {
             return new ShapeDetectorBlock(this.a, blockposition, this.b);
-        }
-
-        public Object load(Object object) throws Exception {
-            return this.a((BlockPosition) object);
         }
     }
 }

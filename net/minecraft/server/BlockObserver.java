@@ -28,7 +28,7 @@ public class BlockObserver extends BlockDirectional {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false), 2);
         } else {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockObserver.b, true), 2);
-            world.J().a(blockposition, this, 2);
+            world.getBlockTickList().a(blockposition, this, 2);
         }
 
         this.a(world, blockposition, iblockdata);
@@ -43,8 +43,8 @@ public class BlockObserver extends BlockDirectional {
     }
 
     private void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!generatoraccess.e() && !generatoraccess.J().a(blockposition, this)) {
-            generatoraccess.J().a(blockposition, this, 2);
+        if (!generatoraccess.e() && !generatoraccess.getBlockTickList().a(blockposition, this)) {
+            generatoraccess.getBlockTickList().a(blockposition, this, 2);
         }
 
     }
@@ -71,7 +71,7 @@ public class BlockObserver extends BlockDirectional {
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (!world.e() && (Boolean) iblockdata.get(BlockObserver.b) && !world.J().a(blockposition, this)) {
+            if (!world.e() && (Boolean) iblockdata.get(BlockObserver.b) && !world.getBlockTickList().a(blockposition, this)) {
                 IBlockData iblockdata2 = (IBlockData) iblockdata.set(BlockObserver.b, false);
 
                 world.setTypeAndData(blockposition, iblockdata2, 18);
@@ -83,7 +83,7 @@ public class BlockObserver extends BlockDirectional {
 
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
-            if (!world.isClientSide && (Boolean) iblockdata.get(BlockObserver.b) && world.J().a(blockposition, this)) {
+            if (!world.isClientSide && (Boolean) iblockdata.get(BlockObserver.b) && world.getBlockTickList().a(blockposition, this)) {
                 this.a(world, blockposition, (IBlockData) iblockdata.set(BlockObserver.b, false));
             }
 

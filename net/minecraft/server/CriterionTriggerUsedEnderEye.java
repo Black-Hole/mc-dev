@@ -48,7 +48,7 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerUsedEnderEye.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerUsedEnderEye.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject.get("distance"));
 
         return new CriterionTriggerUsedEnderEye.b(criterionconditionvalue_c);
@@ -64,10 +64,6 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
             criteriontriggerusedendereye_a.a(d0 * d0 + d1 * d1);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

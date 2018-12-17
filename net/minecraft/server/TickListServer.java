@@ -41,7 +41,7 @@ public class TickListServer<T> implements TickList<T> {
                 i = 65536;
             }
 
-            this.f.methodProfiler.a("cleaning");
+            this.f.methodProfiler.enter("cleaning");
 
             NextTickListEntry nextticklistentry;
 
@@ -56,8 +56,8 @@ public class TickListServer<T> implements TickList<T> {
                 this.g.add(nextticklistentry);
             }
 
-            this.f.methodProfiler.e();
-            this.f.methodProfiler.a("ticking");
+            this.f.methodProfiler.exit();
+            this.f.methodProfiler.enter("ticking");
             Iterator iterator = this.g.iterator();
 
             while (iterator.hasNext()) {
@@ -80,7 +80,7 @@ public class TickListServer<T> implements TickList<T> {
                 }
             }
 
-            this.f.methodProfiler.e();
+            this.f.methodProfiler.exit();
             this.g.clear();
         }
     }

@@ -44,11 +44,11 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         return new DefaultEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
     });
     private final EnumProtocolDirection h;
-    private final Queue<NetworkManager.QueuedPacket> i = Queues.newConcurrentLinkedQueue();
+    private final Queue<NetworkManager.QueuedPacket> packetQueue = Queues.newConcurrentLinkedQueue();
     private final ReentrantReadWriteLock j = new ReentrantReadWriteLock();
     public Channel channel;
-    private SocketAddress l;
-    private PacketListener m;
+    public SocketAddress socketAddress;
+    private PacketListener packetListener;
     private IChatBaseComponent n;
     private boolean o;
     private boolean p;
@@ -66,7 +66,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void channelActive(ChannelHandlerContext channelhandlercontext) throws Exception {
         super.channelActive(channelhandlercontext);
         this.channel = channelhandlercontext.channel();
-        this.l = this.channel.remoteAddress();
+        this.socketAddress = this.channel.remoteAddress();
 
         try {
             this.setProtocol(EnumProtocol.HANDSHAKING);
@@ -116,10 +116,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         }
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet<?> packet) throws Exception {
         if (this.channel.isOpen()) {
             try {
-                a(packet, this.m);
+                a(packet, this.packetListener);
             } catch (CancelledPacketHandleException cancelledpackethandleexception) {
                 ;
             }
@@ -136,7 +136,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void setPacketListener(PacketListener packetlistener) {
         Validate.notNull(packetlistener, "packetListener", new Object[0]);
         NetworkManager.g.debug("Set listener of {} to {}", this, packetlistener);
-        this.m = packetlistener;
+        this.packetListener = packetlistener;
     }
 
     public void sendPacket(Packet<?> packet) {
@@ -151,7 +151,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             this.j.writeLock().lock();
 
             try {
-                this.i.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
+                this.packetQueue.add(new NetworkManager.QueuedPacket(packet, genericfuturelistener));
             } finally {
                 this.j.writeLock().unlock();
             }
@@ -204,8 +204,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             this.j.readLock().lock();
 
             try {
-                while (!this.i.isEmpty()) {
-                    NetworkManager.QueuedPacket networkmanager_queuedpacket = (NetworkManager.QueuedPacket) this.i.poll();
+                while (!this.packetQueue.isEmpty()) {
+                    NetworkManager.QueuedPacket networkmanager_queuedpacket = (NetworkManager.QueuedPacket) this.packetQueue.poll();
 
                     this.b(networkmanager_queuedpacket.a, networkmanager_queuedpacket.b);
                 }
@@ -218,8 +218,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void a() {
         this.o();
-        if (this.m instanceof ITickable) {
-            ((ITickable) this.m).Y_();
+        if (this.packetListener instanceof ITickable) {
+            ((ITickable) this.packetListener).tick();
         }
 
         if (this.channel != null) {
@@ -236,7 +236,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public SocketAddress getSocketAddress() {
-        return this.l;
+        return this.socketAddress;
     }
 
     public void close(IChatBaseComponent ichatbasecomponent) {
@@ -266,7 +266,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public PacketListener i() {
-        return this.m;
+        return this.packetListener;
     }
 
     @Nullable
@@ -317,10 +317,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
             }
 
         }
-    }
-
-    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Object object) throws Exception {
-        this.a(channelhandlercontext, (Packet) object);
     }
 
     static class QueuedPacket {

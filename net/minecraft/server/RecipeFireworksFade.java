@@ -26,7 +26,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
                     if (itemstack.getItem() instanceof ItemDye) {
                         flag = true;
                     } else {
-                        if (!RecipeFireworksFade.a.a(itemstack)) {
+                        if (!RecipeFireworksFade.a.test(itemstack)) {
                             return false;
                         }
 
@@ -53,7 +53,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
 
             if (item instanceof ItemDye) {
                 arraylist.add(((ItemDye) item).d().f());
-            } else if (RecipeFireworksFade.a.a(itemstack1)) {
+            } else if (RecipeFireworksFade.a.test(itemstack1)) {
                 itemstack = itemstack1.cloneItemStack();
                 itemstack.setCount(1);
             }

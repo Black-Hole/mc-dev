@@ -23,11 +23,11 @@ public class BlockIceFrost extends BlockIce {
                 for (int j = 0; j < i; ++j) {
                     EnumDirection enumdirection = aenumdirection[j];
 
-                    blockposition_b.j(blockposition).d(enumdirection);
+                    blockposition_b.g(blockposition).c(enumdirection);
                     IBlockData iblockdata1 = world.getType(blockposition_b);
 
                     if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_b)) {
-                        world.J().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
+                        world.getBlockTickList().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
                     }
                 }
             } catch (Throwable throwable1) {
@@ -49,7 +49,7 @@ public class BlockIceFrost extends BlockIce {
             }
 
         } else {
-            world.J().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
+            world.getBlockTickList().a(blockposition, this, MathHelper.nextInt(random, 20, 40));
         }
     }
 
@@ -85,7 +85,7 @@ public class BlockIceFrost extends BlockIce {
             for (int l = 0; l < k; ++l) {
                 EnumDirection enumdirection = aenumdirection[l];
 
-                blockposition_b.j(blockposition).d(enumdirection);
+                blockposition_b.g(blockposition).c(enumdirection);
                 if (iblockaccess.getType(blockposition_b).getBlock() == this) {
                     ++j;
                     if (j >= i) {

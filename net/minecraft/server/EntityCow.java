@@ -73,15 +73,11 @@ public class EntityCow extends EntityAnimal {
         }
     }
 
-    public EntityCow b(EntityAgeable entityageable) {
+    public EntityCow createChild(EntityAgeable entityageable) {
         return new EntityCow(this.world);
     }
 
     public float getHeadHeight() {
         return this.isBaby() ? this.length : 1.3F;
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 }

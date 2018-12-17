@@ -343,8 +343,8 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         this.motX = 0.0D;
         this.motY = 0.0D;
         this.motZ = 0.0D;
@@ -471,7 +471,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
         }
 
         public boolean a() {
-            return this.e.be() == null ? false : super.a();
+            return this.e.getScoreboardTeam() == null ? false : super.a();
         }
 
         protected AxisAlignedBB a(double d0) {
@@ -574,10 +574,6 @@ public class EntityShulker extends EntityGolem implements IMonster {
 
         public void e() {
             --this.b;
-        }
-
-        e(Object object) {
-            this();
         }
     }
 

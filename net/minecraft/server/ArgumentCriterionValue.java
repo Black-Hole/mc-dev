@@ -29,7 +29,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
         public a() {}
 
-        public CriterionConditionValue.c a(StringReader stringreader) throws CommandSyntaxException {
+        public CriterionConditionValue.c parse(StringReader stringreader) throws CommandSyntaxException {
             return CriterionConditionValue.c.a(stringreader);
         }
 
@@ -37,20 +37,12 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
             return ArgumentCriterionValue.a.a;
         }
 
-        public Object parse(StringReader stringreader) throws CommandSyntaxException {
-            return this.a(stringreader);
-        }
-
         public static class a extends ArgumentCriterionValue.c<ArgumentCriterionValue.a> {
 
             public a() {}
 
-            public ArgumentCriterionValue.a a(PacketDataSerializer packetdataserializer) {
+            public ArgumentCriterionValue.a b(PacketDataSerializer packetdataserializer) {
                 return new ArgumentCriterionValue.a();
-            }
-
-            public ArgumentType b(PacketDataSerializer packetdataserializer) {
-                return this.a(packetdataserializer);
             }
         }
     }
@@ -65,7 +57,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
             return (CriterionConditionValue.d) commandcontext.getArgument(s, CriterionConditionValue.d.class);
         }
 
-        public CriterionConditionValue.d a(StringReader stringreader) throws CommandSyntaxException {
+        public CriterionConditionValue.d parse(StringReader stringreader) throws CommandSyntaxException {
             return CriterionConditionValue.d.a(stringreader);
         }
 
@@ -73,20 +65,12 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
             return ArgumentCriterionValue.b.a;
         }
 
-        public Object parse(StringReader stringreader) throws CommandSyntaxException {
-            return this.a(stringreader);
-        }
-
         public static class a extends ArgumentCriterionValue.c<ArgumentCriterionValue.b> {
 
             public a() {}
 
-            public ArgumentCriterionValue.b a(PacketDataSerializer packetdataserializer) {
+            public ArgumentCriterionValue.b b(PacketDataSerializer packetdataserializer) {
                 return new ArgumentCriterionValue.b();
-            }
-
-            public ArgumentType b(PacketDataSerializer packetdataserializer) {
-                return this.a(packetdataserializer);
             }
         }
     }

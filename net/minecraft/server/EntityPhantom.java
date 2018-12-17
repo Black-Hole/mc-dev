@@ -103,12 +103,12 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.dq()) {
             this.setOnFire(8);
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected void mobTick() {
@@ -211,10 +211,6 @@ public class EntityPhantom extends EntityFlying implements IMonster {
         public boolean b() {
             return PathfinderGoalTarget.a(EntityPhantom.this, EntityPhantom.this.getGoalTarget(), false, false);
         }
-
-        b(Object object) {
-            this();
-        }
     }
 
     class c extends PathfinderGoal {
@@ -257,10 +253,6 @@ public class EntityPhantom extends EntityFlying implements IMonster {
             }
 
         }
-
-        c(Object object) {
-            this();
-        }
     }
 
     class i extends EntityPhantom.h {
@@ -298,10 +290,6 @@ public class EntityPhantom extends EntityFlying implements IMonster {
                 EntityPhantom.this.bC = EntityPhantom.AttackPhase.CIRCLE;
             }
 
-        }
-
-        i(Object object) {
-            this();
         }
     }
 
@@ -368,10 +356,6 @@ public class EntityPhantom extends EntityFlying implements IMonster {
 
             this.c += this.f * 15.0F * 0.017453292F;
             EntityPhantom.this.b = (new Vec3D(EntityPhantom.this.c)).add((double) (this.d * MathHelper.cos(this.c)), (double) (-4.0F + this.e), (double) (this.d * MathHelper.sin(this.c)));
-        }
-
-        e(Object object) {
-            this();
         }
     }
 

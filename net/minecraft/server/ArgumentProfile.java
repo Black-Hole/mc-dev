@@ -33,7 +33,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
         return new ArgumentProfile();
     }
 
-    public ArgumentProfile.a a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentProfile.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == 64) {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
             EntitySelector entityselector = argumentparserselector.s();
@@ -87,10 +87,6 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
 
     public Collection<String> getExamples() {
         return ArgumentProfile.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     public static class b implements ArgumentProfile.a {

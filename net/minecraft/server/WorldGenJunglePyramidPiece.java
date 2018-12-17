@@ -235,9 +235,5 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
             }
 
         }
-
-        a(Object object) {
-            this();
-        }
     }
 }

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 public class ArgumentSerializerInteger implements ArgumentSerializer<IntegerArgumentType> {
@@ -23,7 +22,7 @@ public class ArgumentSerializerInteger implements ArgumentSerializer<IntegerArgu
 
     }
 
-    public IntegerArgumentType a(PacketDataSerializer packetdataserializer) {
+    public IntegerArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         int i = ArgumentSerializers.a(b0) ? packetdataserializer.readInt() : Integer.MIN_VALUE;
         int j = ArgumentSerializers.b(b0) ? packetdataserializer.readInt() : Integer.MAX_VALUE;
@@ -40,9 +39,5 @@ public class ArgumentSerializerInteger implements ArgumentSerializer<IntegerArgu
             jsonobject.addProperty("max", integerargumenttype.getMaximum());
         }
 
-    }
-
-    public ArgumentType b(PacketDataSerializer packetdataserializer) {
-        return this.a(packetdataserializer);
     }
 }

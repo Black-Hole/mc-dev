@@ -22,7 +22,7 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
         return this.a;
     }
 
-    public boolean a(ShapeDetectorBlock shapedetectorblock) {
+    public boolean test(ShapeDetectorBlock shapedetectorblock) {
         IBlockData iblockdata = shapedetectorblock.a();
 
         if (iblockdata.getBlock() != this.a.getBlock()) {
@@ -67,9 +67,5 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
 
             return true;
         }
-    }
-
-    public boolean test(Object object) {
-        return this.a((ShapeDetectorBlock) object);
     }
 }

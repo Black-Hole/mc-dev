@@ -2,5 +2,5 @@ package net.minecraft.server;
 
 public interface ITickable {
 
-    void Y_();
+    void tick();
 }

@@ -29,7 +29,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
         NBTTagCompound nbttagcompound = itemstack.b("BlockEntityTag");
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Patterns", 9)) {
-            this.patterns = nbttagcompound.getList("Patterns", 10).c();
+            this.patterns = nbttagcompound.getList("Patterns", 10).clone();
         }
 
         this.color = enumcolor;
@@ -122,7 +122,7 @@ public class TileEntityBanner extends TileEntity implements INamableTileEntity {
         })));
 
         if (this.patterns != null && !this.patterns.isEmpty()) {
-            itemstack.a("BlockEntityTag").set("Patterns", this.patterns.c());
+            itemstack.a("BlockEntityTag").set("Patterns", this.patterns.clone());
         }
 
         if (this.a != null) {

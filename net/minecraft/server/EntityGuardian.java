@@ -150,7 +150,7 @@ public class EntityGuardian extends EntityMonster {
         return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.world.isClientSide) {
             this.b = this.a;
             if (!this.isInWater()) {
@@ -232,7 +232,7 @@ public class EntityGuardian extends EntityMonster {
             this.yaw = this.aS;
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected SoundEffect dA() {
@@ -428,12 +428,8 @@ public class EntityGuardian extends EntityMonster {
             this.a = entityguardian;
         }
 
-        public boolean a(@Nullable EntityLiving entityliving) {
+        public boolean test(@Nullable EntityLiving entityliving) {
             return (entityliving instanceof EntityHuman || entityliving instanceof EntitySquid) && entityliving.h(this.a) > 9.0D;
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EntityLiving) object);
         }
     }
 }

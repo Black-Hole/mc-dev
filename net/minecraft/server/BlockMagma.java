@@ -22,7 +22,7 @@ public class BlockMagma extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection == EnumDirection.UP && iblockdata1.getBlock() == Blocks.WATER) {
-            generatoraccess.J().a(blockposition, this, this.a((IWorldReader) generatoraccess));
+            generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -45,7 +45,7 @@ public class BlockMagma extends Block {
     }
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
-        world.J().a(blockposition, this, this.a((IWorldReader) world));
+        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
     public boolean a(IBlockData iblockdata, Entity entity) {

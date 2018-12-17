@@ -100,7 +100,7 @@ public class CommandScoreboard {
         while (iterator.hasNext()) {
             ScoreboardObjective scoreboardobjective = (ScoreboardObjective) iterator.next();
 
-            if (scoreboardobjective.getCriteria() == IScoreboardCriteria.c) {
+            if (scoreboardobjective.getCriteria() == IScoreboardCriteria.TRIGGER) {
                 boolean flag = false;
                 Iterator iterator1 = collection.iterator();
 
@@ -169,7 +169,7 @@ public class CommandScoreboard {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<String> collection, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {
-        if (scoreboardobjective.getCriteria() != IScoreboardCriteria.c) {
+        if (scoreboardobjective.getCriteria() != IScoreboardCriteria.TRIGGER) {
             throw CommandScoreboard.e.create();
         } else {
             ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();

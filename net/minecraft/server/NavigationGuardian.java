@@ -90,7 +90,7 @@ public class NavigationGuardian extends NavigationAbstract {
             Vec3D vec3d1 = this.c.f();
 
             if (vec3d1.equals(this.h)) {
-                this.i += SystemUtils.b() - this.j;
+                this.i += SystemUtils.getMonotonicMillis() - this.j;
             } else {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
@@ -105,7 +105,7 @@ public class NavigationGuardian extends NavigationAbstract {
                 this.q();
             }
 
-            this.j = SystemUtils.b();
+            this.j = SystemUtils.getMonotonicMillis();
         }
 
     }

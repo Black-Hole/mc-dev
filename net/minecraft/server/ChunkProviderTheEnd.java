@@ -183,7 +183,7 @@ public class ChunkProviderTheEnd extends ChunkGeneratorAbstract<GeneratorSetting
         return 0;
     }
 
-    public GeneratorSettingsEnd g() {
+    public GeneratorSettingsEnd getSettings() {
         return this.n;
     }
 
@@ -195,9 +195,5 @@ public class ChunkProviderTheEnd extends ChunkGeneratorAbstract<GeneratorSetting
 
     public int getSpawnHeight() {
         return 50;
-    }
-
-    public GeneratorSettings getSettings() {
-        return this.g();
     }
 }

@@ -54,7 +54,7 @@ public class CommandDebug {
         if (!methodprofiler.a()) {
             throw CommandDebug.b.create();
         } else {
-            long i = SystemUtils.c();
+            long i = SystemUtils.getMonotonicNanos();
             int j = minecraftserver.ah();
             long k = i - methodprofiler.c();
             int l = j - methodprofiler.d();
@@ -127,7 +127,7 @@ public class CommandDebug {
         String[] astring = new String[] { "Shiny numbers!", "Am I not running fast enough? :(", "I'm working as hard as I can!", "Will I ever be good enough for you? :(", "Speedy. Zoooooom!", "Hello world", "40% better than a crash report.", "Now with extra numbers", "Now with less numbers", "Now with the same numbers", "You should add flames to things, it makes them go faster!", "Do you feel the need for... optimization?", "*cracks redstone whip*", "Maybe if you treated it better then it'll have more motivation to work faster! Poor server."};
 
         try {
-            return astring[(int) (SystemUtils.c() % (long) astring.length)];
+            return astring[(int) (SystemUtils.getMonotonicNanos() % (long) astring.length)];
         } catch (Throwable throwable) {
             return "Witty comment unavailable :(";
         }

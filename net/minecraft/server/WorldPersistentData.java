@@ -26,7 +26,7 @@ public class WorldPersistentData {
 
     private static final Logger a = LogManager.getLogger();
     private final DimensionManager b;
-    private Map<String, PersistentBase> c = Maps.newHashMap();
+    public Map<String, PersistentBase> data = Maps.newHashMap();
     private final Object2IntMap<String> d = new Object2IntOpenHashMap();
     @Nullable
     private final IDataManager e;
@@ -39,7 +39,7 @@ public class WorldPersistentData {
 
     @Nullable
     public <T extends PersistentBase> T a(Function<String, T> function, String s) {
-        PersistentBase persistentbase = (PersistentBase) this.c.get(s);
+        PersistentBase persistentbase = (PersistentBase) this.data.get(s);
 
         if (persistentbase == null && this.e != null) {
             try {
@@ -48,7 +48,7 @@ public class WorldPersistentData {
                 if (file != null && file.exists()) {
                     persistentbase = (PersistentBase) function.apply(s);
                     persistentbase.a(a(this.e, this.b, s, 1631).getCompound("data"));
-                    this.c.put(s, persistentbase);
+                    this.data.put(s, persistentbase);
                 }
             } catch (Exception exception) {
                 WorldPersistentData.a.error("Error loading saved data: {}", s, exception);
@@ -59,7 +59,7 @@ public class WorldPersistentData {
     }
 
     public void a(String s, PersistentBase persistentbase) {
-        this.c.put(s, persistentbase);
+        this.data.put(s, persistentbase);
     }
 
     public void a() {
@@ -160,7 +160,7 @@ public class WorldPersistentData {
 
     public void b() {
         if (this.e != null) {
-            Iterator iterator = this.c.values().iterator();
+            Iterator iterator = this.data.values().iterator();
 
             while (iterator.hasNext()) {
                 PersistentBase persistentbase = (PersistentBase) iterator.next();

@@ -63,7 +63,7 @@ public class EntityEvoker extends EntityIllagerWizard {
     }
 
     public boolean r(Entity entity) {
-        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).l()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.be() == null && entity.be() == null : false))));
+        return entity == null ? false : (entity == this ? true : (super.r(entity) ? true : (entity instanceof EntityVex ? this.r(((EntityVex) entity).l()) : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false))));
     }
 
     protected SoundEffect D() {
@@ -207,10 +207,6 @@ public class EntityEvoker extends EntityIllagerWizard {
         protected EntityIllagerWizard.Spell l() {
             return EntityIllagerWizard.Spell.SUMMON_VEX;
         }
-
-        c(Object object) {
-            this();
-        }
     }
 
     class a extends EntityIllagerWizard.c {
@@ -295,10 +291,6 @@ public class EntityEvoker extends EntityIllagerWizard {
         protected EntityIllagerWizard.Spell l() {
             return EntityIllagerWizard.Spell.FANGS;
         }
-
-        a(Object object) {
-            this();
-        }
     }
 
     class b extends EntityIllagerWizard.b {
@@ -314,10 +306,6 @@ public class EntityEvoker extends EntityIllagerWizard {
                 EntityEvoker.this.getControllerLook().a(EntityEvoker.this.dD(), (float) EntityEvoker.this.L(), (float) EntityEvoker.this.K());
             }
 
-        }
-
-        b(Object object) {
-            this();
         }
     }
 }

@@ -155,16 +155,16 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         return true;
     }
 
-    public ScoreboardTeamBase be() {
+    public ScoreboardTeamBase getScoreboardTeam() {
         if (this.isTamed()) {
             EntityLiving entityliving = this.getOwner();
 
             if (entityliving != null) {
-                return entityliving.be();
+                return entityliving.getScoreboardTeam();
             }
         }
 
-        return super.be();
+        return super.getScoreboardTeam();
     }
 
     public boolean r(Entity entity) {
@@ -189,10 +189,5 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         }
 
         super.die(damagesource);
-    }
-
-    @Nullable
-    public Entity getOwner() {
-        return this.getOwner();
     }
 }

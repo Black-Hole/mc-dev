@@ -51,7 +51,7 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerLocation.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerLocation.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a((JsonElement) jsonobject);
 
         return new CriterionTriggerLocation.b(this.a, criterionconditionlocation);
@@ -64,10 +64,6 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
             criteriontriggerlocation_a.a(entityplayer.getWorldServer(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

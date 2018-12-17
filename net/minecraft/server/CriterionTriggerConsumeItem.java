@@ -49,7 +49,7 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerConsumeItem.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerConsumeItem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerConsumeItem.b(CriterionConditionItem.a(jsonobject.get("item")));
     }
 
@@ -60,10 +60,6 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
             criteriontriggerconsumeitem_a.a(itemstack);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

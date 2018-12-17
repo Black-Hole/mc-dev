@@ -111,7 +111,7 @@ public class EntitySelector {
             Predicate predicate = this.a(vec3d);
 
             if (this.i) {
-                return (List) (commandlistenerwrapper.f() != null && predicate.test(commandlistenerwrapper.f()) ? Lists.newArrayList(new Entity[] { commandlistenerwrapper.f()}) : Collections.emptyList());
+                return (List) (commandlistenerwrapper.getEntity() != null && predicate.test(commandlistenerwrapper.getEntity()) ? Lists.newArrayList(new Entity[] { commandlistenerwrapper.getEntity()}) : Collections.emptyList());
             } else {
                 ArrayList arraylist = Lists.newArrayList();
 
@@ -175,8 +175,8 @@ public class EntitySelector {
             Predicate predicate = this.a(vec3d);
 
             if (this.i) {
-                if (commandlistenerwrapper.f() instanceof EntityPlayer) {
-                    EntityPlayer entityplayer1 = (EntityPlayer) commandlistenerwrapper.f();
+                if (commandlistenerwrapper.getEntity() instanceof EntityPlayer) {
+                    EntityPlayer entityplayer1 = (EntityPlayer) commandlistenerwrapper.getEntity();
 
                     if (predicate.test(entityplayer1)) {
                         return Lists.newArrayList(new EntityPlayer[] { entityplayer1});

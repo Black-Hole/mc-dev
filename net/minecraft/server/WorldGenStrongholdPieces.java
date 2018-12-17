@@ -193,10 +193,6 @@ public class WorldGenStrongholdPieces {
             }
 
         }
-
-        WorldGenStrongholdStones(Object object) {
-            this();
-        }
     }
 
     public static class WorldGenStrongholdPortalRoom extends WorldGenStrongholdPieces.WorldGenStrongholdPiece {

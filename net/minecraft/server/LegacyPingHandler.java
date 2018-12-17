@@ -38,7 +38,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
             switch (i) {
             case 0:
                 LegacyPingHandler.a.debug("Ping: (<1.3.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                s = String.format("%s\u00a7%d\u00a7%d", new Object[] { minecraftserver.getMotd(), minecraftserver.y(), minecraftserver.z()});
+                s = String.format("%s\u00a7%d\u00a7%d", new Object[] { minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers()});
                 this.a(channelhandlercontext, this.a(s));
                 break;
             case 1:
@@ -47,7 +47,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 LegacyPingHandler.a.debug("Ping: (1.4-1.5.x) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.y(), minecraftserver.z()});
+                s = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers()});
                 this.a(channelhandlercontext, this.a(s));
                 break;
             default:
@@ -66,7 +66,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 LegacyPingHandler.a.debug("Ping: (1.6) from {}:{}", inetsocketaddress.getAddress(), inetsocketaddress.getPort());
-                String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.y(), minecraftserver.z()});
+                String s1 = String.format("\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d", new Object[] { 127, minecraftserver.getVersion(), minecraftserver.getMotd(), minecraftserver.getPlayerCount(), minecraftserver.getMaxPlayers()});
                 ByteBuf bytebuf1 = this.a(s1);
 
                 try {

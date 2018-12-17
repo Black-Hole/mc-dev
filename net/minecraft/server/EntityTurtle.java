@@ -217,8 +217,8 @@ public class EntityTurtle extends EntityAnimal {
         return !this.dC() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : super.a(blockposition, iworldreader);
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.dz() && this.bK >= 1 && this.bK % 5 == 0) {
             BlockPosition blockposition = new BlockPosition(this);
 
@@ -272,10 +272,6 @@ public class EntityTurtle extends EntityAnimal {
             this.a(new ItemStack(Items.BOWL, 1), 0.0F);
         }
 
-    }
-
-    static int g(EntityTurtle entityturtle) {
-        return entityturtle.bK++;
     }
 
     static class g extends NavigationGuardian {
@@ -384,10 +380,6 @@ public class EntityTurtle extends EntityAnimal {
 
             return block == Blocks.WATER;
         }
-
-        c(EntityTurtle entityturtle, double d0, Object object) {
-            this(entityturtle, d0);
-        }
     }
 
     static class h extends PathfinderGoalRandomStroll {
@@ -401,10 +393,6 @@ public class EntityTurtle extends EntityAnimal {
 
         public boolean a() {
             return !this.a.isInWater() && !this.h.dC() && !this.h.dy() ? super.a() : false;
-        }
-
-        h(EntityTurtle entityturtle, double d0, int i, Object object) {
-            this(entityturtle, d0, i);
         }
     }
 

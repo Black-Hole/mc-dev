@@ -247,7 +247,7 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
         return 0;
     }
 
-    public GeneratorSettingsNether f() {
+    public GeneratorSettingsNether getSettings() {
         return this.o;
     }
 
@@ -255,11 +255,7 @@ public class ChunkProviderHell extends ChunkGeneratorAbstract<GeneratorSettingsN
         return this.a.getSeaLevel() + 1;
     }
 
-    public int e() {
+    public int getGenerationDepth() {
         return 128;
-    }
-
-    public GeneratorSettings getSettings() {
-        return this.f();
     }
 }

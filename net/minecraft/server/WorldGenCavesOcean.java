@@ -56,7 +56,7 @@ public class WorldGenCavesOcean extends WorldGenCaves {
 
                                             if ((double) f < 0.25D) {
                                                 generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK.getBlockData(), 2);
-                                                generatoraccess.J().a(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK, 0);
+                                                generatoraccess.getBlockTickList().a(blockposition_mutableblockposition, Blocks.MAGMA_BLOCK, 0);
                                                 flag = true;
                                             } else {
                                                 generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.OBSIDIAN.getBlockData(), 2);
@@ -74,7 +74,7 @@ public class WorldGenCavesOcean extends WorldGenCaves {
 
                                                 if (iblockdata1.isAir()) {
                                                     generatoraccess.setTypeAndData(blockposition_mutableblockposition, WorldGenCavesOcean.c.i(), 2);
-                                                    generatoraccess.I().a(blockposition_mutableblockposition, WorldGenCavesOcean.c.c(), 0);
+                                                    generatoraccess.getFluidTickList().a(blockposition_mutableblockposition, WorldGenCavesOcean.c.c(), 0);
                                                     flag = true;
                                                     flag1 = true;
                                                     break;

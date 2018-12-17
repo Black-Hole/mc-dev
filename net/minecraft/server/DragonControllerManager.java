@@ -12,7 +12,7 @@ public class DragonControllerManager {
 
     public DragonControllerManager(EntityEnderDragon entityenderdragon) {
         this.enderDragon = entityenderdragon;
-        this.setControllerPhase(DragonControllerPhase.k);
+        this.setControllerPhase(DragonControllerPhase.HOVER);
     }
 
     public void setControllerPhase(DragonControllerPhase<?> dragoncontrollerphase) {

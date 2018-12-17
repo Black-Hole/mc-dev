@@ -25,7 +25,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return (String) this.d.get();
     }
 
-    public ChatComponentKeybind i() {
+    public ChatComponentKeybind g() {
         return new ChatComponentKeybind(this.c);
     }
 
@@ -47,9 +47,5 @@ public class ChatComponentKeybind extends ChatBaseComponent {
 
     public String j() {
         return this.c;
-    }
-
-    public IChatBaseComponent g() {
-        return this.i();
     }
 }

@@ -80,8 +80,8 @@ public class BlockRedstoneWire extends Block {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
                 BlockPropertyRedstoneSide blockpropertyredstoneside = (BlockPropertyRedstoneSide) iblockdata.get((IBlockState) BlockRedstoneWire.q.get(enumdirection));
 
-                if (blockpropertyredstoneside != BlockPropertyRedstoneSide.NONE && generatoraccess.getType(blockposition_b.j(blockposition).d(enumdirection)).getBlock() != this) {
-                    blockposition_b.d(EnumDirection.DOWN);
+                if (blockpropertyredstoneside != BlockPropertyRedstoneSide.NONE && generatoraccess.getType(blockposition_b.g(blockposition).c(enumdirection)).getBlock() != this) {
+                    blockposition_b.c(EnumDirection.DOWN);
                     IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
 
                     if (iblockdata1.getBlock() != Blocks.OBSERVER) {
@@ -91,7 +91,7 @@ public class BlockRedstoneWire extends Block {
                         a(iblockdata1, iblockdata2, generatoraccess, blockposition_b, i);
                     }
 
-                    blockposition_b.j(blockposition).d(enumdirection).d(EnumDirection.UP);
+                    blockposition_b.g(blockposition).c(enumdirection).c(EnumDirection.UP);
                     IBlockData iblockdata3 = generatoraccess.getType(blockposition_b);
 
                     if (iblockdata3.getBlock() != Blocks.OBSERVER) {

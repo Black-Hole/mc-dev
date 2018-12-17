@@ -38,7 +38,7 @@ public class BlockLeaves extends Block {
         int i = w(iblockdata1) + 1;
 
         if (i != 1 || (Integer) iblockdata.get(BlockLeaves.DISTANCE) != i) {
-            generatoraccess.J().a(blockposition, this, 1);
+            generatoraccess.getBlockTickList().a(blockposition, this, 1);
         }
 
         return iblockdata;
@@ -56,7 +56,7 @@ public class BlockLeaves extends Block {
             for (int k = 0; k < j; ++k) {
                 EnumDirection enumdirection = aenumdirection[k];
 
-                blockposition_b.j(blockposition).d(enumdirection);
+                blockposition_b.g(blockposition).c(enumdirection);
                 i = Math.min(i, w(generatoraccess.getType(blockposition_b)) + 1);
                 if (i == 1) {
                     break;

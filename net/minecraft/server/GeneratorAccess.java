@@ -15,15 +15,15 @@ public interface GeneratorAccess extends IWorldReader, IPersistentAccess, IWorld
         return this.o().a(this.getWorldData().getDayTime(), f);
     }
 
-    TickList<Block> J();
+    TickList<Block> getBlockTickList();
 
-    TickList<FluidType> I();
+    TickList<FluidType> getFluidTickList();
 
     default IChunkAccess y(BlockPosition blockposition) {
-        return this.b(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
-    IChunkAccess b(int i, int j);
+    IChunkAccess getChunkAt(int i, int j);
 
     World getMinecraftWorld();
 

@@ -84,7 +84,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.be() == null && entity.be() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {

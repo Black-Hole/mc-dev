@@ -28,7 +28,7 @@ public class LightEngineSky extends LightEngine {
                         int k1 = l + j;
 
                         for (int l1 = i1; l1 < ichunkaccess.getSections().length * 16 - 1; ++l1) {
-                            blockposition_b.f(j1, l1, k1);
+                            blockposition_b.c(j1, l1, k1);
                             this.a((IWorldWriter) regionlimitedworldaccess, blockposition_b, 15);
                         }
 
@@ -42,7 +42,7 @@ public class LightEngineSky extends LightEngine {
 
                             if (k2 - i1 >= 2) {
                                 for (int l2 = i1; l2 <= k2; ++l2) {
-                                    blockposition_b1.f(j1 + enumdirection.getAdjacentX(), l2, k1 + enumdirection.getAdjacentZ());
+                                    blockposition_b1.c(j1 + enumdirection.getAdjacentX(), l2, k1 + enumdirection.getAdjacentZ());
                                     int i3 = regionlimitedworldaccess.getType(blockposition_b1).b(regionlimitedworldaccess, blockposition_b1);
 
                                     if (i3 != regionlimitedworldaccess.K()) {

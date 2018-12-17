@@ -79,7 +79,7 @@ public class PathfinderGoalMakeLove extends PathfinderGoal {
     }
 
     private void i() {
-        EntityVillager entityvillager = this.a.b((EntityAgeable) this.b);
+        EntityVillager entityvillager = this.a.createChild(this.b);
 
         this.b.setAgeRaw(6000);
         this.a.setAgeRaw(6000);

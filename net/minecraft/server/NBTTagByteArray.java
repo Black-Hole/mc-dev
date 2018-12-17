@@ -105,7 +105,7 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
         return this.data.length;
     }
 
-    public NBTTagByte a(int i) {
+    public NBTTagByte c(int i) {
         return new NBTTagByte(this.data[i]);
     }
 
@@ -115,9 +115,5 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
 
     public void b(int i) {
         this.data = ArrayUtils.remove(this.data, i);
-    }
-
-    public NBTBase c(int i) {
-        return this.a(i);
     }
 }

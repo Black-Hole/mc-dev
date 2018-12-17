@@ -83,7 +83,7 @@ public class WorldUpgraderIterator {
         } finally {
             if (regionfile != null) {
                 try {
-                    regionfile.c();
+                    regionfile.close();
                 } catch (IOException ioexception) {
                     ;
                 }

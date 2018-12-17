@@ -29,7 +29,7 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
         return (Enchantment) commandcontext.getArgument(s, Enchantment.class);
     }
 
-    public Enchantment a(StringReader stringreader) throws CommandSyntaxException {
+    public Enchantment parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
         Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
 
@@ -46,9 +46,5 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
     public Collection<String> getExamples() {
         return ArgumentEnchantment.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

@@ -27,7 +27,7 @@ public class ArgumentChatComponent implements ArgumentType<IChatBaseComponent> {
         return new ArgumentChatComponent();
     }
 
-    public IChatBaseComponent a(StringReader stringreader) throws CommandSyntaxException {
+    public IChatBaseComponent parse(StringReader stringreader) throws CommandSyntaxException {
         try {
             IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(stringreader);
 
@@ -45,9 +45,5 @@ public class ArgumentChatComponent implements ArgumentType<IChatBaseComponent> {
 
     public Collection<String> getExamples() {
         return ArgumentChatComponent.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

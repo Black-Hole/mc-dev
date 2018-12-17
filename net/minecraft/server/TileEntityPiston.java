@@ -10,12 +10,8 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private boolean f;
     private boolean g;
     private static final ThreadLocal<EnumDirection> h = new ThreadLocal() {
-        protected EnumDirection a() {
+        protected EnumDirection initialValue() {
             return null;
-        }
-
-        protected Object initialValue() {
-            return this.a();
         }
     };
     private float i;
@@ -249,7 +245,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     }
 
-    public void Y_() {
+    public void tick() {
         this.k = this.world.getTime();
         this.j = this.i;
         if (this.j >= 1.0F) {

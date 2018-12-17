@@ -342,7 +342,7 @@ public class ChatModifier {
         public ChatModifierSerializer() {}
 
         @Nullable
-        public ChatModifier a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public ChatModifier deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonObject()) {
                 ChatModifier chatmodifier = new ChatModifier();
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
@@ -416,7 +416,7 @@ public class ChatModifier {
         }
 
         @Nullable
-        public JsonElement a(ChatModifier chatmodifier, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(ChatModifier chatmodifier, Type type, JsonSerializationContext jsonserializationcontext) {
             if (chatmodifier.g()) {
                 return null;
             } else {
@@ -468,16 +468,6 @@ public class ChatModifier {
 
                 return jsonobject;
             }
-        }
-
-        @Nullable
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((ChatModifier) object, type, jsonserializationcontext);
-        }
-
-        @Nullable
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

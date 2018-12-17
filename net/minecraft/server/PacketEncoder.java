@@ -19,7 +19,7 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
         this.c = enumprotocoldirection;
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, Packet<?> packet, ByteBuf bytebuf) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, Packet<?> packet, ByteBuf bytebuf) throws Exception {
         EnumProtocol enumprotocol = (EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get();
 
         if (enumprotocol == null) {
@@ -50,9 +50,5 @@ public class PacketEncoder extends MessageToByteEncoder<Packet<?>> {
                 }
             }
         }
-    }
-
-    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) throws Exception {
-        this.a(channelhandlercontext, (Packet) object, bytebuf);
     }
 }

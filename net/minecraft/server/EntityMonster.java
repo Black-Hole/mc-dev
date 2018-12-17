@@ -11,7 +11,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
         return SoundCategory.HOSTILE;
     }
 
-    public void k() {
+    public void movementTick() {
         this.cy();
         float f = this.az();
 
@@ -19,7 +19,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
             this.ticksFarFromPlayer += 2;
         }
 
-        super.k();
+        super.movementTick();
     }
 
     public void tick() {

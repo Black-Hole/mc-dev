@@ -47,7 +47,7 @@ public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDec
 
         private a() {}
 
-        public WorldGenEnder.Spike[] a(Long olong) throws Exception {
+        public WorldGenEnder.Spike[] load(Long olong) throws Exception {
             ArrayList arraylist = Lists.newArrayList(ContiguousSet.create(Range.closedOpen(0, 10), DiscreteDomain.integers()));
 
             Collections.shuffle(arraylist, new Random(olong));
@@ -65,14 +65,6 @@ public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDec
             }
 
             return aworldgenender_spike;
-        }
-
-        public Object load(Object object) throws Exception {
-            return this.a((Long) object);
-        }
-
-        a(Object object) {
-            this();
         }
     }
 }

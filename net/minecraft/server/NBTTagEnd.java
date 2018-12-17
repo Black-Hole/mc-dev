@@ -22,7 +22,7 @@ public class NBTTagEnd implements NBTBase {
         return "END";
     }
 
-    public NBTTagEnd c() {
+    public NBTTagEnd clone() {
         return new NBTTagEnd();
     }
 
@@ -36,9 +36,5 @@ public class NBTTagEnd implements NBTBase {
 
     public int hashCode() {
         return this.getTypeId();
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }

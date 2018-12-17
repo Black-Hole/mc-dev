@@ -60,7 +60,7 @@ public class EntityEnderPearl extends EntityProjectile {
                     if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
                         EntityEndermite entityendermite = new EntityEndermite(this.world);
 
-                        entityendermite.a(true);
+                        entityendermite.setPlayerSpawned(true);
                         entityendermite.setPositionRotation(entityliving.locX, entityliving.locY, entityliving.locZ, entityliving.yaw, entityliving.pitch);
                         this.world.addEntity(entityendermite);
                     }

@@ -192,7 +192,7 @@ public abstract class StructurePiece {
             Fluid fluid = generatoraccess.getFluid(blockposition);
 
             if (!fluid.e()) {
-                generatoraccess.I().a(blockposition, fluid.c(), 0);
+                generatoraccess.getFluidTickList().a(blockposition, fluid.c(), 0);
             }
 
             if (StructurePiece.d.contains(iblockdata.getBlock())) {

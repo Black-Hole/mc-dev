@@ -135,8 +135,4 @@ public class DedicatedPlayerList extends PlayerList {
     public boolean f(GameProfile gameprofile) {
         return this.getOPs().b(gameprofile);
     }
-
-    public MinecraftServer getServer() {
-        return this.getServer();
-    }
 }

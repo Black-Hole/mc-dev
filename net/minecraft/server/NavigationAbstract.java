@@ -81,13 +81,13 @@ public abstract class NavigationAbstract {
             this.q = blockposition;
             float f = this.j();
 
-            this.b.methodProfiler.a("pathfind");
+            this.b.methodProfiler.enter("pathfind");
             BlockPosition blockposition1 = new BlockPosition(this.a);
             int i = (int) (f + 8.0F);
             ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
             PathEntity pathentity = this.r.a(chunkcache, this.a, this.q, f);
 
-            this.b.methodProfiler.e();
+            this.b.methodProfiler.exit();
             return pathentity;
         }
     }
@@ -105,13 +105,13 @@ public abstract class NavigationAbstract {
                 this.q = blockposition;
                 float f = this.j();
 
-                this.b.methodProfiler.a("pathfind");
+                this.b.methodProfiler.enter("pathfind");
                 BlockPosition blockposition1 = (new BlockPosition(this.a)).up();
                 int i = (int) (f + 16.0F);
                 ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
                 PathEntity pathentity = this.r.a(chunkcache, this.a, entity, f);
 
-                this.b.methodProfiler.e();
+                this.b.methodProfiler.exit();
                 return pathentity;
             }
         }
@@ -233,7 +233,7 @@ public abstract class NavigationAbstract {
             Vec3D vec3d1 = this.c.f();
 
             if (vec3d1.equals(this.h)) {
-                this.i += SystemUtils.b() - this.j;
+                this.i += SystemUtils.getMonotonicMillis() - this.j;
             } else {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
@@ -248,7 +248,7 @@ public abstract class NavigationAbstract {
                 this.q();
             }
 
-            this.j = SystemUtils.b();
+            this.j = SystemUtils.getMonotonicMillis();
         }
 
     }

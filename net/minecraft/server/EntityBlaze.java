@@ -56,7 +56,7 @@ public class EntityBlaze extends EntityMonster {
         return 1.0F;
     }
 
-    public void k() {
+    public void movementTick() {
         if (!this.onGround && this.motY < 0.0D) {
             this.motY *= 0.6D;
         }
@@ -71,7 +71,7 @@ public class EntityBlaze extends EntityMonster {
             }
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected void mobTick() {

@@ -260,9 +260,5 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
             return true;
         }
-
-        a(ArgumentBuilder argumentbuilder, byte b0, int i, int[] aint, Object object) {
-            this(argumentbuilder, b0, i, aint);
-        }
     }
 }

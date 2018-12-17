@@ -99,7 +99,7 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         if (!(Boolean) iblockdata.get(BlockTall.p) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, true), 3);
-                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;

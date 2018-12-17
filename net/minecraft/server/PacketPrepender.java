@@ -10,7 +10,7 @@ public class PacketPrepender extends MessageToByteEncoder<ByteBuf> {
 
     public PacketPrepender() {}
 
-    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
         int i = bytebuf.readableBytes();
         int j = PacketDataSerializer.a(i);
 
@@ -23,9 +23,5 @@ public class PacketPrepender extends MessageToByteEncoder<ByteBuf> {
             packetdataserializer.d(i);
             packetdataserializer.writeBytes(bytebuf, bytebuf.readerIndex(), i);
         }
-    }
-
-    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) throws Exception {
-        this.a(channelhandlercontext, (ByteBuf) object, bytebuf);
     }
 }

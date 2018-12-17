@@ -11,7 +11,7 @@ public class WorldGenDecoratorDungeon extends WorldGenDecorator<WorldGenDecorato
 
         for (int j = 0; j < i; ++j) {
             int k = random.nextInt(16);
-            int l = random.nextInt(chunkgenerator.e());
+            int l = random.nextInt(chunkgenerator.getGenerationDepth());
             int i1 = random.nextInt(16);
 
             worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(k, l, i1), c0);

@@ -29,7 +29,7 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
         return new ArgumentVec2I.a(blockposition.getX(), blockposition.getZ());
     }
 
-    public IVectorPosition a(StringReader stringreader) throws CommandSyntaxException {
+    public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
         int i = stringreader.getCursor();
 
         if (!stringreader.canRead()) {
@@ -62,16 +62,12 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(false);
             }
 
-            return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
+            return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));
         }
     }
 
     public Collection<String> getExamples() {
         return ArgumentVec2I.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     public static class a {

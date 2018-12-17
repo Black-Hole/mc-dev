@@ -43,7 +43,7 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         return nbttagcompound;
     }
 
-    public void Y_() {
+    public void tick() {
         this.a.c();
     }
 

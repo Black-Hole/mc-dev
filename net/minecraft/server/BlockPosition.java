@@ -127,7 +127,7 @@ public class BlockPosition extends BaseBlockPosition {
         }
     }
 
-    public BlockPosition c(BaseBlockPosition baseblockposition) {
+    public BlockPosition d(BaseBlockPosition baseblockposition) {
         return new BlockPosition(this.getY() * baseblockposition.getZ() - this.getZ() * baseblockposition.getY(), this.getZ() * baseblockposition.getX() - this.getX() * baseblockposition.getZ(), this.getX() * baseblockposition.getY() - this.getY() * baseblockposition.getX());
     }
 
@@ -155,7 +155,7 @@ public class BlockPosition extends BaseBlockPosition {
                 private int i;
                 private int j;
 
-                protected BlockPosition a() {
+                protected BlockPosition computeNext() {
                     if (this.g) {
                         this.g = false;
                         this.h = i;
@@ -179,10 +179,6 @@ public class BlockPosition extends BaseBlockPosition {
                         return new BlockPosition(this.h, this.i, this.j);
                     }
                 }
-
-                protected Object computeNext() {
-                    return this.a();
-                }
             };
         };
     }
@@ -200,7 +196,7 @@ public class BlockPosition extends BaseBlockPosition {
             return new AbstractIterator() {
                 private BlockPosition.MutableBlockPosition g;
 
-                protected BlockPosition.MutableBlockPosition a() {
+                protected BlockPosition.MutableBlockPosition computeNext() {
                     if (this.g == null) {
                         this.g = new BlockPosition.MutableBlockPosition(i, j, k);
                         return this.g;
@@ -218,16 +214,8 @@ public class BlockPosition extends BaseBlockPosition {
                         return this.g;
                     }
                 }
-
-                protected Object computeNext() {
-                    return this.a();
-                }
             };
         };
-    }
-
-    public BaseBlockPosition d(BaseBlockPosition baseblockposition) {
-        return this.c(baseblockposition);
     }
 
     public static final class b extends BlockPosition.MutableBlockPosition implements AutoCloseable {
@@ -260,7 +248,7 @@ public class BlockPosition extends BaseBlockPosition {
 
                     if (blockposition_b != null && blockposition_b.f) {
                         blockposition_b.f = false;
-                        blockposition_b.f(i, j, k);
+                        blockposition_b.c(i, j, k);
                         return blockposition_b;
                     }
                 }
@@ -269,27 +257,27 @@ public class BlockPosition extends BaseBlockPosition {
             return new BlockPosition.b(i, j, k);
         }
 
-        public BlockPosition.b f(int i, int j, int k) {
+        public BlockPosition.b c(int i, int j, int k) {
             return (BlockPosition.b) super.c(i, j, k);
         }
 
-        public BlockPosition.b e(double d0, double d1, double d2) {
+        public BlockPosition.b c(double d0, double d1, double d2) {
             return (BlockPosition.b) super.c(d0, d1, d2);
         }
 
-        public BlockPosition.b j(BaseBlockPosition baseblockposition) {
+        public BlockPosition.b g(BaseBlockPosition baseblockposition) {
             return (BlockPosition.b) super.g(baseblockposition);
         }
 
-        public BlockPosition.b d(EnumDirection enumdirection) {
+        public BlockPosition.b c(EnumDirection enumdirection) {
             return (BlockPosition.b) super.c(enumdirection);
         }
 
-        public BlockPosition.b d(EnumDirection enumdirection, int i) {
+        public BlockPosition.b c(EnumDirection enumdirection, int i) {
             return (BlockPosition.b) super.c(enumdirection, i);
         }
 
-        public BlockPosition.b g(int i, int j, int k) {
+        public BlockPosition.b d(int i, int j, int k) {
             return (BlockPosition.b) super.d(i, j, k);
         }
 
@@ -303,30 +291,6 @@ public class BlockPosition extends BaseBlockPosition {
 
                 this.f = true;
             }
-        }
-
-        public BlockPosition.MutableBlockPosition d(int i, int j, int k) {
-            return this.g(i, j, k);
-        }
-
-        public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection, int i) {
-            return this.d(enumdirection, i);
-        }
-
-        public BlockPosition.MutableBlockPosition c(EnumDirection enumdirection) {
-            return this.d(enumdirection);
-        }
-
-        public BlockPosition.MutableBlockPosition g(BaseBlockPosition baseblockposition) {
-            return this.j(baseblockposition);
-        }
-
-        public BlockPosition.MutableBlockPosition c(double d0, double d1, double d2) {
-            return this.e(d0, d1, d2);
-        }
-
-        public BlockPosition.MutableBlockPosition c(int i, int j, int k) {
-            return this.f(i, j, k);
         }
     }
 
@@ -412,10 +376,6 @@ public class BlockPosition extends BaseBlockPosition {
 
         public BlockPosition h() {
             return new BlockPosition(this);
-        }
-
-        public BaseBlockPosition d(BaseBlockPosition baseblockposition) {
-            return super.c(baseblockposition);
         }
     }
 }

@@ -30,7 +30,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         this.o = true;
     }
 
-    public void Y_() {
+    public void tick() {
         this.p();
         if (this.k == TileEntityShulkerBox.AnimationPhase.OPENING || this.k == TileEntityShulkerBox.AnimationPhase.CLOSING) {
             this.H();

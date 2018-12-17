@@ -218,7 +218,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
         public ChatSerializer() {}
 
-        public IChatBaseComponent a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public IChatBaseComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatComponentText(jsonelement.getAsString());
             } else if (!jsonelement.isJsonObject()) {
@@ -229,7 +229,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                     while (iterator.hasNext()) {
                         JsonElement jsonelement1 = (JsonElement) iterator.next();
-                        IChatBaseComponent ichatbasecomponent1 = this.a(jsonelement1, (Type) jsonelement1.getClass(), jsondeserializationcontext);
+                        IChatBaseComponent ichatbasecomponent1 = this.deserialize(jsonelement1, jsonelement1.getClass(), jsondeserializationcontext);
 
                         if (ichatbasecomponent == null) {
                             ichatbasecomponent = ichatbasecomponent1;
@@ -256,7 +256,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                         Object[] aobject = new Object[jsonarray1.size()];
 
                         for (int i = 0; i < aobject.length; ++i) {
-                            aobject[i] = this.a(jsonarray1.get(i), type, jsondeserializationcontext);
+                            aobject[i] = this.deserialize(jsonarray1.get(i), type, jsondeserializationcontext);
                             if (aobject[i] instanceof ChatComponentText) {
                                 ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
 
@@ -299,7 +299,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                     }
 
                     for (int j = 0; j < jsonarray2.size(); ++j) {
-                        ((IChatBaseComponent) object).addSibling(this.a(jsonarray2.get(j), type, jsondeserializationcontext));
+                        ((IChatBaseComponent) object).addSibling(this.deserialize(jsonarray2.get(j), type, jsondeserializationcontext));
                     }
                 }
 
@@ -324,7 +324,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
         }
 
-        public JsonElement a(IChatBaseComponent ichatbasecomponent, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(IChatBaseComponent ichatbasecomponent, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             if (!ichatbasecomponent.getChatModifier().g()) {
@@ -338,7 +338,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 while (iterator.hasNext()) {
                     IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
 
-                    jsonarray.add(this.a(ichatbasecomponent1, (Type) ichatbasecomponent1.getClass(), jsonserializationcontext));
+                    jsonarray.add(this.serialize(ichatbasecomponent1, ichatbasecomponent1.getClass(), jsonserializationcontext));
                 }
 
                 jsonobject.add("extra", jsonarray);
@@ -359,7 +359,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                         Object object = aobject[j];
 
                         if (object instanceof IChatBaseComponent) {
-                            jsonarray1.add(this.a((IChatBaseComponent) object, (Type) object.getClass(), jsonserializationcontext));
+                            jsonarray1.add(this.serialize((IChatBaseComponent) object, object.getClass(), jsonserializationcontext));
                         } else {
                             jsonarray1.add(new JsonPrimitive(String.valueOf(object)));
                         }
@@ -435,14 +435,6 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
             } catch (IllegalAccessException illegalaccessexception) {
                 throw new IllegalStateException("Couldn't read position of JsonReader", illegalaccessexception);
             }
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((IChatBaseComponent) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

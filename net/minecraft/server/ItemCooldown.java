@@ -64,9 +64,5 @@ public class ItemCooldown {
             this.b = i;
             this.endTick = j;
         }
-
-        Info(int i, int j, Object object) {
-            this(i, j);
-        }
     }
 }

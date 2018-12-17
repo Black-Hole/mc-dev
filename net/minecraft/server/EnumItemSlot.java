@@ -32,7 +32,7 @@ public enum EnumItemSlot {
         return this.j;
     }
 
-    public static EnumItemSlot a(String s) {
+    public static EnumItemSlot fromName(String s) {
         EnumItemSlot[] aenumitemslot = values();
         int i = aenumitemslot.length;
 

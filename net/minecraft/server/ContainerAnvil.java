@@ -9,27 +9,27 @@ import org.apache.logging.log4j.Logger;
 public class ContainerAnvil extends Container {
 
     private static final Logger f = LogManager.getLogger();
-    private final IInventory g = new InventoryCraftResult();
-    private final IInventory h = new InventorySubcontainer(new ChatComponentText("Repair"), 2) {
+    private final IInventory resultInventory = new InventoryCraftResult();
+    private final IInventory repairInventory = new InventorySubcontainer(new ChatComponentText("Repair"), 2) {
         public void update() {
             super.update();
             ContainerAnvil.this.a((IInventory) this);
         }
     };
-    private final World i;
-    private final BlockPosition j;
+    private final World world;
+    private final BlockPosition position;
     public int levelCost;
     private int k;
     public String renameText;
-    private final EntityHuman m;
+    private final EntityHuman player;
 
     public ContainerAnvil(PlayerInventory playerinventory, final World world, final BlockPosition blockposition, EntityHuman entityhuman) {
-        this.j = blockposition;
-        this.i = world;
-        this.m = entityhuman;
-        this.a(new Slot(this.h, 0, 27, 47));
-        this.a(new Slot(this.h, 1, 76, 47));
-        this.a(new Slot(this.g, 2, 134, 47) {
+        this.position = blockposition;
+        this.world = world;
+        this.player = entityhuman;
+        this.a(new Slot(this.repairInventory, 0, 27, 47));
+        this.a(new Slot(this.repairInventory, 1, 76, 47));
+        this.a(new Slot(this.resultInventory, 2, 134, 47) {
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
             }
@@ -43,18 +43,18 @@ public class ContainerAnvil extends Container {
                     entityhuman.levelDown(-ContainerAnvil.this.levelCost);
                 }
 
-                ContainerAnvil.this.h.setItem(0, ItemStack.a);
+                ContainerAnvil.this.repairInventory.setItem(0, ItemStack.a);
                 if (ContainerAnvil.this.k > 0) {
-                    ItemStack itemstack1 = ContainerAnvil.this.h.getItem(1);
+                    ItemStack itemstack1 = ContainerAnvil.this.repairInventory.getItem(1);
 
                     if (!itemstack1.isEmpty() && itemstack1.getCount() > ContainerAnvil.this.k) {
                         itemstack1.subtract(ContainerAnvil.this.k);
-                        ContainerAnvil.this.h.setItem(1, itemstack1);
+                        ContainerAnvil.this.repairInventory.setItem(1, itemstack1);
                     } else {
-                        ContainerAnvil.this.h.setItem(1, ItemStack.a);
+                        ContainerAnvil.this.repairInventory.setItem(1, ItemStack.a);
                     }
                 } else {
-                    ContainerAnvil.this.h.setItem(1, ItemStack.a);
+                    ContainerAnvil.this.repairInventory.setItem(1, ItemStack.a);
                 }
 
                 ContainerAnvil.this.levelCost = 0;
@@ -96,14 +96,14 @@ public class ContainerAnvil extends Container {
 
     public void a(IInventory iinventory) {
         super.a(iinventory);
-        if (iinventory == this.h) {
+        if (iinventory == this.repairInventory) {
             this.d();
         }
 
     }
 
     public void d() {
-        ItemStack itemstack = this.h.getItem(0);
+        ItemStack itemstack = this.repairInventory.getItem(0);
 
         this.levelCost = 1;
         int i = 0;
@@ -111,11 +111,11 @@ public class ContainerAnvil extends Container {
         byte b1 = 0;
 
         if (itemstack.isEmpty()) {
-            this.g.setItem(0, ItemStack.a);
+            this.resultInventory.setItem(0, ItemStack.a);
             this.levelCost = 0;
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
-            ItemStack itemstack2 = this.h.getItem(1);
+            ItemStack itemstack2 = this.repairInventory.getItem(1);
             Map map = EnchantmentManager.a(itemstack1);
             int j = b0 + itemstack.getRepairCost() + (itemstack2.isEmpty() ? 0 : itemstack2.getRepairCost());
 
@@ -129,7 +129,7 @@ public class ContainerAnvil extends Container {
                 if (itemstack1.e() && itemstack1.getItem().a(itemstack, itemstack2)) {
                     k = Math.min(itemstack1.getDamage(), itemstack1.h() / 4);
                     if (k <= 0) {
-                        this.g.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.a);
                         this.levelCost = 0;
                         return;
                     }
@@ -144,7 +144,7 @@ public class ContainerAnvil extends Container {
                     this.k = i1;
                 } else {
                     if (!flag && (itemstack1.getItem() != itemstack2.getItem() || !itemstack1.e())) {
-                        this.g.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.a);
                         this.levelCost = 0;
                         return;
                     }
@@ -181,7 +181,7 @@ public class ContainerAnvil extends Container {
                             i2 = l1 == i2 ? i2 + 1 : Math.max(i2, l1);
                             boolean flag3 = enchantment.canEnchant(itemstack);
 
-                            if (this.m.abilities.canInstantlyBuild || itemstack.getItem() == Items.ENCHANTED_BOOK) {
+                            if (this.player.abilities.canInstantlyBuild || itemstack.getItem() == Items.ENCHANTED_BOOK) {
                                 flag3 = true;
                             }
 
@@ -234,7 +234,7 @@ public class ContainerAnvil extends Container {
                     }
 
                     if (flag2 && !flag1) {
-                        this.g.setItem(0, ItemStack.a);
+                        this.resultInventory.setItem(0, ItemStack.a);
                         this.levelCost = 0;
                         return;
                     }
@@ -262,7 +262,7 @@ public class ContainerAnvil extends Container {
                 this.levelCost = 39;
             }
 
-            if (this.levelCost >= 40 && !this.m.abilities.canInstantlyBuild) {
+            if (this.levelCost >= 40 && !this.player.abilities.canInstantlyBuild) {
                 itemstack1 = ItemStack.a;
             }
 
@@ -281,7 +281,7 @@ public class ContainerAnvil extends Container {
                 EnchantmentManager.a(map, itemstack1);
             }
 
-            this.g.setItem(0, itemstack1);
+            this.resultInventory.setItem(0, itemstack1);
             this.b();
         }
     }
@@ -293,13 +293,13 @@ public class ContainerAnvil extends Container {
 
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        if (!this.i.isClientSide) {
-            this.a(entityhuman, this.i, this.h);
+        if (!this.world.isClientSide) {
+            this.a(entityhuman, this.world, this.repairInventory);
         }
     }
 
     public boolean canUse(EntityHuman entityhuman) {
-        return !this.i.getType(this.j).a(TagsBlock.ANVIL) ? false : entityhuman.d((double) this.j.getX() + 0.5D, (double) this.j.getY() + 0.5D, (double) this.j.getZ() + 0.5D) <= 64.0D;
+        return !this.world.getType(this.position).a(TagsBlock.ANVIL) ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {

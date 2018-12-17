@@ -49,7 +49,7 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerEffectsChanged.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEffectsChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionMobEffect criterionconditionmobeffect = CriterionConditionMobEffect.a(jsonobject.get("effects"));
 
         return new CriterionTriggerEffectsChanged.b(criterionconditionmobeffect);
@@ -62,10 +62,6 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
             criteriontriggereffectschanged_a.a(entityplayer);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

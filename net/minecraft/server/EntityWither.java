@@ -83,7 +83,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         return SoundEffects.ENTITY_WITHER_DEATH;
     }
 
-    public void k() {
+    public void movementTick() {
         this.motY *= 0.6000000238418579D;
         double d0;
         double d1;
@@ -117,7 +117,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
             this.yaw = (float) MathHelper.c(this.motZ, this.motX) * 57.295776F - 90.0F;
         }
 
-        super.k();
+        super.movementTick();
 
         int i;
 

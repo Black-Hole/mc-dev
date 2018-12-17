@@ -60,8 +60,4 @@ public enum GenLayerZoom implements AreaTransformer2 {
     protected int a(AreaContextTransformed<?> areacontexttransformed, int i, int j, int k, int l) {
         return j == k && k == l ? j : (i == j && i == k ? i : (i == j && i == l ? i : (i == k && i == l ? i : (i == j && k != l ? i : (i == k && j != l ? i : (i == l && j != k ? i : (j == k && i != l ? j : (j == l && i != k ? j : (k == l && i != j ? k : areacontexttransformed.a(i, j, k, l))))))))));
     }
-
-    GenLayerZoom(Object object) {
-        this();
-    }
 }

@@ -14,11 +14,11 @@ public class AttributeMapServer extends AttributeMapBase {
 
     public AttributeMapServer() {}
 
-    public AttributeModifiable e(IAttribute iattribute) {
+    public AttributeModifiable a(IAttribute iattribute) {
         return (AttributeModifiable) super.a(iattribute);
     }
 
-    public AttributeModifiable b(String s) {
+    public AttributeModifiable a(String s) {
         AttributeInstance attributeinstance = super.a(s);
 
         if (attributeinstance == null) {
@@ -51,7 +51,7 @@ public class AttributeMapServer extends AttributeMapBase {
 
         while (iterator.hasNext()) {
             IAttribute iattribute = (IAttribute) iterator.next();
-            AttributeModifiable attributemodifiable = this.e(iattribute);
+            AttributeModifiable attributemodifiable = this.a(iattribute);
 
             if (attributemodifiable != null) {
                 attributemodifiable.f();
@@ -77,13 +77,5 @@ public class AttributeMapServer extends AttributeMapBase {
         }
 
         return hashset;
-    }
-
-    public AttributeInstance a(String s) {
-        return this.b(s);
-    }
-
-    public AttributeInstance a(IAttribute iattribute) {
-        return this.e(iattribute);
     }
 }

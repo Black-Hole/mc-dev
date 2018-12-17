@@ -29,7 +29,7 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
         return (EnumChatFormat) commandcontext.getArgument(s, EnumChatFormat.class);
     }
 
-    public EnumChatFormat a(StringReader stringreader) throws CommandSyntaxException {
+    public EnumChatFormat parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
         EnumChatFormat enumchatformat = EnumChatFormat.c(s);
 
@@ -46,9 +46,5 @@ public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
 
     public Collection<String> getExamples() {
         return ArgumentChatFormat.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

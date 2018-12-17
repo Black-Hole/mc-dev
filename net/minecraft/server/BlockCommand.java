@@ -35,7 +35,7 @@ public class BlockCommand extends BlockTileEntity {
                 if (!flag1 && !tileentitycommand.e() && tileentitycommand.j() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag) {
                         tileentitycommand.h();
-                        world.J().a(blockposition, this, this.a((IWorldReader) world));
+                        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     }
 
                 }
@@ -63,7 +63,7 @@ public class BlockCommand extends BlockTileEntity {
                     }
 
                     if (tileentitycommand.d() || tileentitycommand.e()) {
-                        world.J().a(blockposition, this, this.a((IWorldReader) world));
+                        world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     }
                 } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
                     if (flag1) {

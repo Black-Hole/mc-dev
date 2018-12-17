@@ -14,11 +14,7 @@ public class PacketDecrypter extends MessageToMessageDecoder<ByteBuf> {
         this.a = new PacketEncryptionHandler(cipher);
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
         list.add(this.a.a(channelhandlercontext, bytebuf));
-    }
-
-    protected void decode(ChannelHandlerContext channelhandlercontext, Object object, List list) throws Exception {
-        this.a(channelhandlercontext, (ByteBuf) object, list);
     }
 }

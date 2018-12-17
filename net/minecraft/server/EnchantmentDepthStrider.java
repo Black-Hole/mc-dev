@@ -19,6 +19,6 @@ public class EnchantmentDepthStrider extends Enchantment {
     }
 
     public boolean a(Enchantment enchantment) {
-        return super.a(enchantment) && enchantment != Enchantments.j;
+        return super.a(enchantment) && enchantment != Enchantments.FROST_WALKER;
     }
 }

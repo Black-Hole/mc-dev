@@ -490,10 +490,6 @@ public class DispenserRegistry {
 
             return itemstack;
         }
-
-        d(Object object) {
-            this();
-        }
     }
 
     public abstract static class c extends DispenseBehaviorItem {

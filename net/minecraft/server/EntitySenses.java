@@ -24,10 +24,10 @@ public class EntitySenses {
         } else if (this.c.contains(entity)) {
             return false;
         } else {
-            this.a.world.methodProfiler.a("canSee");
+            this.a.world.methodProfiler.enter("canSee");
             boolean flag = this.a.hasLineOfSight(entity);
 
-            this.a.world.methodProfiler.e();
+            this.a.world.methodProfiler.exit();
             if (flag) {
                 this.b.add(entity);
             } else {

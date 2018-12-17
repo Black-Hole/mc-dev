@@ -36,7 +36,7 @@ public class NBTTagString implements NBTBase {
         return a(this.data, true);
     }
 
-    public NBTTagString c() {
+    public NBTTagString clone() {
         return new NBTTagString(this.data);
     }
 
@@ -80,9 +80,5 @@ public class NBTTagString implements NBTBase {
         }
 
         return stringbuilder.toString();
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }

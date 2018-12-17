@@ -98,7 +98,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
         return 31 * this.a.hashCode() + this.b.hashCode();
     }
 
-    public int a(MinecraftKey minecraftkey) {
+    public int compareTo(MinecraftKey minecraftkey) {
         int i = this.b.compareTo(minecraftkey.b);
 
         if (i == 0) {
@@ -129,28 +129,16 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
         return c0 >= 48 && c0 <= 57 || c0 >= 97 && c0 <= 122 || c0 == 95 || c0 == 58 || c0 == 47 || c0 == 46 || c0 == 45;
     }
 
-    public int compareTo(Object object) {
-        return this.a((MinecraftKey) object);
-    }
-
     public static class a implements JsonDeserializer<MinecraftKey>, JsonSerializer<MinecraftKey> {
 
         public a() {}
 
-        public MinecraftKey a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public MinecraftKey deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             return new MinecraftKey(ChatDeserializer.a(jsonelement, "location"));
         }
 
-        public JsonElement a(MinecraftKey minecraftkey, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(MinecraftKey minecraftkey, Type type, JsonSerializationContext jsonserializationcontext) {
             return new JsonPrimitive(minecraftkey.toString());
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((MinecraftKey) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

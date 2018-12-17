@@ -58,7 +58,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
-    public void k() {
+    public void movementTick() {
         if (!this.world.isClientSide) {
             if (this.l()) {
                 if (this.bC-- <= 0) {
@@ -112,7 +112,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
             }
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected float applyMagicModifier(DamageSource damagesource, float f) {

@@ -78,14 +78,14 @@ public class BlockFluids extends Block implements IFluidSource {
 
     public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
         }
 
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (iblockdata.s().d() || iblockdata1.s().d()) {
-            generatoraccess.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -93,7 +93,7 @@ public class BlockFluids extends Block implements IFluidSource {
 
     public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
         if (this.a(world, blockposition, iblockdata)) {
-            world.I().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
+            world.getFluidTickList().a(blockposition, iblockdata.s().c(), this.a((IWorldReader) world));
         }
 
     }

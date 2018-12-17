@@ -52,10 +52,6 @@ public final class PredicateBlocks {
 
             return false;
         }
-
-        c(List list, Object object) {
-            this(list);
-        }
     }
 
     static class b<T> implements PredicateBlock<T> {

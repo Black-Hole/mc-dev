@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class DataConverterSignText extends DataConverterNamedEntity {
 
     public static final Gson a = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer() {
-        public IChatBaseComponent a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public IChatBaseComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatComponentText(jsonelement.getAsString());
             } else if (jsonelement.isJsonArray()) {
@@ -29,7 +29,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
 
                 while (iterator.hasNext()) {
                     JsonElement jsonelement1 = (JsonElement) iterator.next();
-                    IChatBaseComponent ichatbasecomponent1 = this.a(jsonelement1, jsonelement1.getClass(), jsondeserializationcontext);
+                    IChatBaseComponent ichatbasecomponent1 = this.deserialize(jsonelement1, jsonelement1.getClass(), jsondeserializationcontext);
 
                     if (ichatbasecomponent == null) {
                         ichatbasecomponent = ichatbasecomponent1;
@@ -42,10 +42,6 @@ public class DataConverterSignText extends DataConverterNamedEntity {
             } else {
                 throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
             }
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }).create();
 

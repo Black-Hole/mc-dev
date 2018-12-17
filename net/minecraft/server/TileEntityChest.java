@@ -78,7 +78,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         return 64;
     }
 
-    public void Y_() {
+    public void tick() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();

@@ -36,15 +36,11 @@ public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
         }
     }
 
-    public MinecraftKey a(StringReader stringreader) throws CommandSyntaxException {
+    public MinecraftKey parse(StringReader stringreader) throws CommandSyntaxException {
         return a(MinecraftKey.a(stringreader));
     }
 
     public Collection<String> getExamples() {
         return ArgumentEntitySummon.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

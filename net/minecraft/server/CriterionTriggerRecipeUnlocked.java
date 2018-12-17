@@ -49,7 +49,7 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerRecipeUnlocked.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerRecipeUnlocked.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "recipe"));
 
         return new CriterionTriggerRecipeUnlocked.b(minecraftkey);
@@ -62,10 +62,6 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
             criteriontriggerrecipeunlocked_a.a(irecipe);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

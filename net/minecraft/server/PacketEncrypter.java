@@ -13,11 +13,7 @@ public class PacketEncrypter extends MessageToByteEncoder<ByteBuf> {
         this.a = new PacketEncryptionHandler(cipher);
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
         this.a.a(bytebuf, bytebuf1);
-    }
-
-    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) throws Exception {
-        this.a(channelhandlercontext, (ByteBuf) object, bytebuf);
     }
 }

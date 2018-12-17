@@ -368,7 +368,7 @@ public class EntityTrackerEntry {
     }
 
     private boolean e(EntityPlayer entityplayer) {
-        return entityplayer.getWorldServer().getPlayerChunkMap().a(entityplayer, this.tracker.ae, this.tracker.ag);
+        return entityplayer.getWorldServer().getPlayerChunkMap().a(entityplayer, this.tracker.chunkX, this.tracker.chunkZ);
     }
 
     public void scanPlayers(List<EntityHuman> list) {

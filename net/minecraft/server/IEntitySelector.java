@@ -30,7 +30,7 @@ public final class IEntitySelector {
     }
 
     public static Predicate<Entity> a(Entity entity) {
-        ScoreboardTeamBase scoreboardteambase = entity.be();
+        ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity) -> {
@@ -39,7 +39,7 @@ public final class IEntitySelector {
             } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).dn())) {
                 return false;
             } else {
-                ScoreboardTeamBase scoreboardteambase = entity.be();
+                ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
                 ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
                 if (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER) {
@@ -78,7 +78,7 @@ public final class IEntitySelector {
             this.a = itemstack;
         }
 
-        public boolean a(@Nullable Entity entity) {
+        public boolean test(@Nullable Entity entity) {
             if (!entity.isAlive()) {
                 return false;
             } else if (!(entity instanceof EntityLiving)) {
@@ -89,10 +89,6 @@ public final class IEntitySelector {
 
                 return !entityliving.getEquipment(enumitemslot).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dj() : (entityliving instanceof EntityArmorStand ? !((EntityArmorStand) entityliving).c(enumitemslot) : entityliving instanceof EntityHuman));
             }
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((Entity) object);
         }
     }
 }

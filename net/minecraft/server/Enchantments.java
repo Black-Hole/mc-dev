@@ -13,15 +13,15 @@ public class Enchantments {
     public static final Enchantment WATER_WORKER = a("aqua_affinity");
     public static final Enchantment THORNS = a("thorns");
     public static final Enchantment DEPTH_STRIDER = a("depth_strider");
-    public static final Enchantment j = a("frost_walker");
-    public static final Enchantment k = a("binding_curse");
+    public static final Enchantment FROST_WALKER = a("frost_walker");
+    public static final Enchantment BINDING_CURSE = a("binding_curse");
     public static final Enchantment DAMAGE_ALL = a("sharpness");
     public static final Enchantment DAMAGE_UNDEAD = a("smite");
     public static final Enchantment DAMAGE_ARTHROPODS = a("bane_of_arthropods");
     public static final Enchantment KNOCKBACK = a("knockback");
     public static final Enchantment FIRE_ASPECT = a("fire_aspect");
     public static final Enchantment LOOT_BONUS_MOBS = a("looting");
-    public static final Enchantment r = a("sweeping");
+    public static final Enchantment SWEEPING = a("sweeping");
     public static final Enchantment DIG_SPEED = a("efficiency");
     public static final Enchantment SILK_TOUCH = a("silk_touch");
     public static final Enchantment DURABILITY = a("unbreaking");
@@ -32,12 +32,12 @@ public class Enchantments {
     public static final Enchantment ARROW_INFINITE = a("infinity");
     public static final Enchantment LUCK = a("luck_of_the_sea");
     public static final Enchantment LURE = a("lure");
-    public static final Enchantment C = a("loyalty");
-    public static final Enchantment D = a("impaling");
-    public static final Enchantment E = a("riptide");
-    public static final Enchantment F = a("channeling");
-    public static final Enchantment G = a("mending");
-    public static final Enchantment H = a("vanishing_curse");
+    public static final Enchantment LOYALTY = a("loyalty");
+    public static final Enchantment IMPALING = a("impaling");
+    public static final Enchantment RIPTIDE = a("riptide");
+    public static final Enchantment CHANNELING = a("channeling");
+    public static final Enchantment MENDING = a("mending");
+    public static final Enchantment VANISHING_CURSE = a("vanishing_curse");
 
     @Nullable
     private static Enchantment a(String s) {

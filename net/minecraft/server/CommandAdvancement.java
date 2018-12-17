@@ -249,9 +249,5 @@ public class CommandAdvancement {
         protected String a() {
             return this.c;
         }
-
-        Action(String s, Object object) {
-            this(s);
-        }
     }
 }

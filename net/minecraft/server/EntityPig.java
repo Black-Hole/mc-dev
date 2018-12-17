@@ -223,15 +223,11 @@ public class EntityPig extends EntityAnimal {
         }
     }
 
-    public EntityPig b(EntityAgeable entityageable) {
+    public EntityPig createChild(EntityAgeable entityageable) {
         return new EntityPig(this.world);
     }
 
     public boolean f(ItemStack itemstack) {
-        return EntityPig.bE.a(itemstack);
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
+        return EntityPig.bE.test(itemstack);
     }
 }

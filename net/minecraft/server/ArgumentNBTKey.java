@@ -34,7 +34,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
         return (ArgumentNBTKey.c) commandcontext.getArgument(s, ArgumentNBTKey.c.class);
     }
 
-    public ArgumentNBTKey.c a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentNBTKey.c parse(StringReader stringreader) throws CommandSyntaxException {
         ArrayList arraylist = Lists.newArrayList();
         int i = stringreader.getCursor();
 
@@ -84,10 +84,6 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
     private static boolean a(char c0) {
         return c0 != 32 && c0 != 34 && c0 != 91 && c0 != 93 && c0 != 46;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     static class b implements ArgumentNBTKey.d {

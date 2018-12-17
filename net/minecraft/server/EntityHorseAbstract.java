@@ -472,12 +472,12 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
         }
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.random.nextInt(200) == 0) {
             this.dz();
         }
 
-        super.k();
+        super.movementTick();
         if (!this.world.isClientSide) {
             if (this.random.nextInt(900) == 0 && this.deathTicks == 0) {
                 this.heal(1.0F);

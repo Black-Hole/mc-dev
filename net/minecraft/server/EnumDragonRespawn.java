@@ -69,7 +69,7 @@ public enum EnumDragonRespawn {
                         worldgenender.a(worldgenender_spike);
                         worldgenender.a(true);
                         worldgenender.a(new BlockPosition(0, 128, 0));
-                        worldgenender.a(worldserver, worldserver.getChunkProviderServer().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()), WorldGenFeatureConfiguration.e);
+                        worldgenender.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()), WorldGenFeatureConfiguration.e);
                     }
                 } else if (flag1) {
                     enderdragonbattle.a(null.SUMMONING_DRAGON);
@@ -116,8 +116,4 @@ public enum EnumDragonRespawn {
     private EnumDragonRespawn() {}
 
     public abstract void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition);
-
-    EnumDragonRespawn(Object object) {
-        this();
-    }
 }

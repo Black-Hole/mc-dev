@@ -73,7 +73,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                     for (int k = 0; k < j; ++k) {
                         EnumDirection enumdirection = aenumdirection[k];
 
-                        blockposition_b.j(blockposition1).d(enumdirection);
+                        blockposition_b.g(blockposition1).c(enumdirection);
                         if (!hashset.contains(blockposition_b)) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_b);
 
@@ -108,7 +108,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
 
                             EnumDirection enumdirection1 = aenumdirection1[j1];
 
-                            blockposition_b.j(blockposition2).d(enumdirection1);
+                            blockposition_b.g(blockposition2).c(enumdirection1);
                             if (!set.contains(blockposition_b) && !set1.contains(blockposition_b)) {
                                 IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
 

@@ -16,7 +16,7 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
         this.b = new Deflater();
     }
 
-    protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
+    protected void encode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
         int i = bytebuf.readableBytes();
         PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
 
@@ -44,9 +44,5 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
     public void a(int i) {
         this.c = i;
-    }
-
-    protected void encode(ChannelHandlerContext channelhandlercontext, Object object, ByteBuf bytebuf) throws Exception {
-        this.a(channelhandlercontext, (ByteBuf) object, bytebuf);
     }
 }

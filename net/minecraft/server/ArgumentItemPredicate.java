@@ -27,7 +27,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
         return new ArgumentItemPredicate();
     }
 
-    public ArgumentItemPredicate.b a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentItemPredicate.b parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, true)).h();
 
         if (argumentparseritemstack.b() != null) {
@@ -74,10 +74,6 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
         return ArgumentItemPredicate.a;
     }
 
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
-    }
-
     static class c implements Predicate<ItemStack> {
 
         private final Tag<Item> a;
@@ -89,12 +85,8 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
             this.b = nbttagcompound;
         }
 
-        public boolean a(ItemStack itemstack) {
+        public boolean test(ItemStack itemstack) {
             return this.a.isTagged(itemstack.getItem()) && GameProfileSerializer.a(this.b, itemstack.getTag(), true);
-        }
-
-        public boolean test(Object object) {
-            return this.a((ItemStack) object);
         }
     }
 
@@ -109,12 +101,8 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
             this.b = nbttagcompound;
         }
 
-        public boolean a(ItemStack itemstack) {
+        public boolean test(ItemStack itemstack) {
             return itemstack.getItem() == this.a && GameProfileSerializer.a(this.b, itemstack.getTag(), true);
-        }
-
-        public boolean test(Object object) {
-            return this.a((ItemStack) object);
         }
     }
 

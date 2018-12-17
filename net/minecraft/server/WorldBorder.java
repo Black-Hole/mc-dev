@@ -277,7 +277,7 @@ public class WorldBorder {
             this.b = d0;
             this.c = d1;
             this.f = (double) i;
-            this.e = SystemUtils.b();
+            this.e = SystemUtils.getMonotonicMillis();
             this.d = this.e + i;
         }
 
@@ -298,13 +298,13 @@ public class WorldBorder {
         }
 
         public double e() {
-            double d0 = (double) (SystemUtils.b() - this.e) / this.f;
+            double d0 = (double) (SystemUtils.getMonotonicMillis() - this.e) / this.f;
 
             return d0 < 1.0D ? this.b + (this.c - this.b) * d0 : this.c;
         }
 
         public long g() {
-            return this.d - SystemUtils.b();
+            return this.d - SystemUtils.getMonotonicMillis();
         }
 
         public double h() {
@@ -317,10 +317,6 @@ public class WorldBorder {
 
         public WorldBorder.a l() {
             return (WorldBorder.a) (this.g() <= 0L ? WorldBorder.this.new c(this.c) : this);
-        }
-
-        b(double d0, double d1, long i, Object object) {
-            this(d0, d1, i);
         }
     }
 

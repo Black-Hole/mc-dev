@@ -24,16 +24,12 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
         return ((ArgumentChat.a) commandcontext.getArgument(s, ArgumentChat.a.class)).a((CommandListenerWrapper) commandcontext.getSource(), ((CommandListenerWrapper) commandcontext.getSource()).hasPermission(2));
     }
 
-    public ArgumentChat.a a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentChat.a parse(StringReader stringreader) throws CommandSyntaxException {
         return ArgumentChat.a.a(stringreader, true);
     }
 
     public Collection<String> getExamples() {
         return ArgumentChat.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     public static class b {

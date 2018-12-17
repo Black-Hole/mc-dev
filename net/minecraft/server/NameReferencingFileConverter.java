@@ -498,13 +498,5 @@ public class NameReferencingFileConverter {
         private FileConversionException(String s) {
             super(s);
         }
-
-        FileConversionException(String s, Object object) {
-            this(s);
-        }
-
-        FileConversionException(String s, Throwable throwable, Object object) {
-            this(s, throwable);
-        }
     }
 }

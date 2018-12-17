@@ -57,7 +57,7 @@ public class ServerPing {
 
         public Serializer() {}
 
-        public ServerPing a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public ServerPing deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "status");
             ServerPing serverping = new ServerPing();
 
@@ -80,7 +80,7 @@ public class ServerPing {
             return serverping;
         }
 
-        public JsonElement a(ServerPing serverping, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(ServerPing serverping, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             if (serverping.a() != null) {
@@ -100,14 +100,6 @@ public class ServerPing {
             }
 
             return jsonobject;
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((ServerPing) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 
@@ -133,26 +125,18 @@ public class ServerPing {
 
             public Serializer() {}
 
-            public ServerPing.ServerData a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            public ServerPing.ServerData deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "version");
 
                 return new ServerPing.ServerData(ChatDeserializer.h(jsonobject, "name"), ChatDeserializer.n(jsonobject, "protocol"));
             }
 
-            public JsonElement a(ServerPing.ServerData serverping_serverdata, Type type, JsonSerializationContext jsonserializationcontext) {
+            public JsonElement serialize(ServerPing.ServerData serverping_serverdata, Type type, JsonSerializationContext jsonserializationcontext) {
                 JsonObject jsonobject = new JsonObject();
 
                 jsonobject.addProperty("name", serverping_serverdata.a());
                 jsonobject.addProperty("protocol", serverping_serverdata.getProtocolVersion());
                 return jsonobject;
-            }
-
-            public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-                return this.a((ServerPing.ServerData) object, type, jsonserializationcontext);
-            }
-
-            public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-                return this.a(jsonelement, type, jsondeserializationcontext);
             }
         }
     }
@@ -188,7 +172,7 @@ public class ServerPing {
 
             public Serializer() {}
 
-            public ServerPing.ServerPingPlayerSample a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+            public ServerPing.ServerPingPlayerSample deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "players");
                 ServerPing.ServerPingPlayerSample serverping_serverpingplayersample = new ServerPing.ServerPingPlayerSample(ChatDeserializer.n(jsonobject, "max"), ChatDeserializer.n(jsonobject, "online"));
 
@@ -212,7 +196,7 @@ public class ServerPing {
                 return serverping_serverpingplayersample;
             }
 
-            public JsonElement a(ServerPing.ServerPingPlayerSample serverping_serverpingplayersample, Type type, JsonSerializationContext jsonserializationcontext) {
+            public JsonElement serialize(ServerPing.ServerPingPlayerSample serverping_serverpingplayersample, Type type, JsonSerializationContext jsonserializationcontext) {
                 JsonObject jsonobject = new JsonObject();
 
                 jsonobject.addProperty("max", serverping_serverpingplayersample.a());
@@ -233,14 +217,6 @@ public class ServerPing {
                 }
 
                 return jsonobject;
-            }
-
-            public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-                return this.a((ServerPing.ServerPingPlayerSample) object, type, jsonserializationcontext);
-            }
-
-            public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-                return this.a(jsonelement, type, jsondeserializationcontext);
             }
         }
     }

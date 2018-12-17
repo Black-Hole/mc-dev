@@ -218,7 +218,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         return this.burnTime > 0;
     }
 
-    public void Y_() {
+    public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
 
@@ -234,7 +234,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
                     this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
                 }
             } else {
-                IRecipe irecipe = this.world.E().b(this, this.world);
+                IRecipe irecipe = this.world.getCraftingManager().b(this, this.world);
 
                 if (!this.isBurning() && this.canBurn(irecipe)) {
                     this.burnTime = fuelTime(itemstack);
@@ -280,7 +280,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
     }
 
     private int s() {
-        FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.world.E().b(this, this.world);
+        FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.world.getCraftingManager().b(this, this.world);
 
         return furnacerecipe != null ? furnacerecipe.h() : 200;
     }
@@ -472,7 +472,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
 
             while (iterator.hasNext()) {
                 MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
-                IRecipe irecipe = entityhuman.world.E().a(minecraftkey);
+                IRecipe irecipe = entityhuman.world.getCraftingManager().a(minecraftkey);
 
                 if (irecipe != null) {
                     arraylist.add(irecipe);

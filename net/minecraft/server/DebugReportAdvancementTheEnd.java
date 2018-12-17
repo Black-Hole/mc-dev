@@ -6,7 +6,7 @@ public class DebugReportAdvancementTheEnd implements Consumer<Consumer<Advanceme
 
     public DebugReportAdvancementTheEnd() {}
 
-    public void a(Consumer<Advancement> consumer) {
+    public void accept(Consumer<Advancement> consumer) {
         Advancement advancement = Advancement.SerializedAdvancement.a().a(Blocks.END_STONE, new ChatMessage("advancements.end.root.title", new Object[0]), new ChatMessage("advancements.end.root.description", new Object[0]), new MinecraftKey("minecraft:textures/gui/advancements/backgrounds/end.png"), AdvancementFrameType.TASK, false, false, false).a("entered_end", (CriterionInstance) CriterionTriggerChangedDimension.b.a(DimensionManager.THE_END)).a(consumer, "end/root");
         Advancement advancement1 = Advancement.SerializedAdvancement.a().a(advancement).a(Blocks.DRAGON_HEAD, new ChatMessage("advancements.end.kill_dragon.title", new Object[0]), new ChatMessage("advancements.end.kill_dragon.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("killed_dragon", (CriterionInstance) CriterionTriggerKilled.b.a(CriterionConditionEntity.a.a().a(EntityTypes.ENDER_DRAGON))).a(consumer, "end/kill_dragon");
         Advancement advancement2 = Advancement.SerializedAdvancement.a().a(advancement1).a(Items.ENDER_PEARL, new ChatMessage("advancements.end.enter_end_gateway.title", new Object[0]), new ChatMessage("advancements.end.enter_end_gateway.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("entered_end_gateway", (CriterionInstance) CriterionTriggerEnterBlock.b.a(Blocks.END_GATEWAY)).a(consumer, "end/enter_end_gateway");
@@ -16,9 +16,5 @@ public class DebugReportAdvancementTheEnd implements Consumer<Consumer<Advanceme
         Advancement advancement6 = Advancement.SerializedAdvancement.a().a(advancement4).a(Items.SHULKER_SHELL, new ChatMessage("advancements.end.levitate.title", new Object[0]), new ChatMessage("advancements.end.levitate.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.CHALLENGE, true, true, false).a(AdvancementRewards.a.a(50)).a("levitated", (CriterionInstance) CriterionTriggerLevitation.b.a(CriterionConditionDistance.b(CriterionConditionValue.c.b(50.0F)))).a(consumer, "end/levitate");
         Advancement advancement7 = Advancement.SerializedAdvancement.a().a(advancement4).a(Items.ELYTRA, new ChatMessage("advancements.end.elytra.title", new Object[0]), new ChatMessage("advancements.end.elytra.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.GOAL, true, true, false).a("elytra", (CriterionInstance) CriterionTriggerInventoryChanged.b.a(Items.ELYTRA)).a(consumer, "end/elytra");
         Advancement advancement8 = Advancement.SerializedAdvancement.a().a(advancement1).a(Blocks.DRAGON_EGG, new ChatMessage("advancements.end.dragon_egg.title", new Object[0]), new ChatMessage("advancements.end.dragon_egg.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.GOAL, true, true, false).a("dragon_egg", (CriterionInstance) CriterionTriggerInventoryChanged.b.a(Blocks.DRAGON_EGG)).a(consumer, "end/dragon_egg");
-    }
-
-    public void accept(Object object) {
-        this.a((Consumer) object);
     }
 }

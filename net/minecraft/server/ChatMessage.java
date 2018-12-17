@@ -189,7 +189,7 @@ public class ChatMessage extends ChatBaseComponent {
         return stringbuilder.toString();
     }
 
-    public ChatMessage j() {
+    public ChatMessage g() {
         Object[] aobject = new Object[this.g.length];
 
         for (int i = 0; i < this.g.length; ++i) {
@@ -233,9 +233,5 @@ public class ChatMessage extends ChatBaseComponent {
 
     public Object[] l() {
         return this.g;
-    }
-
-    public IChatBaseComponent g() {
-        return this.j();
     }
 }

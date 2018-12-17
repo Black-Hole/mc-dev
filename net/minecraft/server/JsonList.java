@@ -195,14 +195,14 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
         private JsonListEntrySerializer() {}
 
-        public JsonElement a(JsonListEntry<K> jsonlistentry, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(JsonListEntry<K> jsonlistentry, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             jsonlistentry.a(jsonobject);
             return jsonobject;
         }
 
-        public JsonListEntry<K> a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public JsonListEntry<K> deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonObject()) {
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
 
@@ -210,18 +210,6 @@ public class JsonList<K, V extends JsonListEntry<K>> {
             } else {
                 return null;
             }
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((JsonListEntry) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
-        }
-
-        JsonListEntrySerializer(Object object) {
-            this();
         }
     }
 }

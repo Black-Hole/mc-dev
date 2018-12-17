@@ -110,7 +110,7 @@ public class EntityFallingBlock extends Entity {
                 } else {
                     IBlockData iblockdata = this.world.getType(blockposition);
 
-                    if (!flag1 && BlockFalling.k(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
+                    if (!flag1 && BlockFalling.canFallThrough(this.world.getType(new BlockPosition(this.locX, this.locY - 0.009999999776482582D, this.locZ)))) {
                         this.onGround = false;
                         return;
                     }
@@ -121,7 +121,7 @@ public class EntityFallingBlock extends Entity {
                     if (iblockdata.getBlock() != Blocks.MOVING_PISTON) {
                         this.die();
                         if (!this.f) {
-                            if (iblockdata.getMaterial().isReplaceable() && (flag1 || !BlockFalling.k(this.world.getType(blockposition.down()))) && this.world.setTypeAndData(blockposition, this.block, 3)) {
+                            if (iblockdata.getMaterial().isReplaceable() && (flag1 || !BlockFalling.canFallThrough(this.world.getType(blockposition.down()))) && this.world.setTypeAndData(blockposition, this.block, 3)) {
                                 if (block instanceof BlockFalling) {
                                     ((BlockFalling) block).a(this.world, blockposition, this.block, iblockdata);
                                 }

@@ -223,7 +223,7 @@ public interface IWorldReader extends IBlockAccess {
             for (int k1 = i; k1 < j; ++k1) {
                 for (int l1 = k; l1 < l; ++l1) {
                     for (int i2 = i1; i2 < j1; ++i2) {
-                        IBlockData iblockdata = this.getType(blockposition_b.f(k1, l1, i2));
+                        IBlockData iblockdata = this.getType(blockposition_b.c(k1, l1, i2));
 
                         if (!iblockdata.s().e()) {
                             boolean flag = true;

@@ -49,7 +49,7 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerCuredZombieVillager.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerCuredZombieVillager.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("zombie"));
         CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("villager"));
 
@@ -63,10 +63,6 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
             criteriontriggercuredzombievillager_a.a(entityplayer, entityzombie, entityvillager);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

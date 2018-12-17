@@ -38,7 +38,7 @@ public class AdvancementRewards {
 
         for (int j = 0; j < i; ++j) {
             MinecraftKey minecraftkey = aminecraftkey[j];
-            Iterator iterator = entityplayer.server.getLootTableRegistry().getLootTable(minecraftkey).a(entityplayer.getRandom(), loottableinfo).iterator();
+            Iterator iterator = entityplayer.server.getLootTableRegistry().getLootTable(minecraftkey).populateLoot(entityplayer.getRandom(), loottableinfo).iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
@@ -165,7 +165,7 @@ public class AdvancementRewards {
 
         public b() {}
 
-        public AdvancementRewards a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public AdvancementRewards deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "rewards");
             int i = ChatDeserializer.a(jsonobject, "experience", 0);
             JsonArray jsonarray = ChatDeserializer.a(jsonobject, "loot", new JsonArray());
@@ -191,10 +191,6 @@ public class AdvancementRewards {
             }
 
             return new AdvancementRewards(i, aminecraftkey, aminecraftkey1, customfunction_a);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

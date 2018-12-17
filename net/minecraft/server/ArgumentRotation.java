@@ -23,7 +23,7 @@ public class ArgumentRotation implements ArgumentType<IVectorPosition> {
         return (IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class);
     }
 
-    public IVectorPosition a(StringReader stringreader) throws CommandSyntaxException {
+    public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
         int i = stringreader.getCursor();
 
         if (!stringreader.canRead()) {
@@ -45,9 +45,5 @@ public class ArgumentRotation implements ArgumentType<IVectorPosition> {
 
     public Collection<String> getExamples() {
         return ArgumentRotation.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

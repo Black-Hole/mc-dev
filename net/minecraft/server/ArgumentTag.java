@@ -26,7 +26,7 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
         return new ArgumentTag();
     }
 
-    public ArgumentTag.a a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentTag.a parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey;
 
         if (stringreader.canRead() && stringreader.peek() == 35) {
@@ -61,10 +61,6 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
     public Collection<String> getExamples() {
         return ArgumentTag.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     public interface a {

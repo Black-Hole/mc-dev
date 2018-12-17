@@ -13,7 +13,7 @@ public class DragonControllerHold extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerHold> getControllerPhase() {
-        return DragonControllerPhase.a;
+        return DragonControllerPhase.HOLDING_PATTERN;
     }
 
     public void c() {
@@ -43,7 +43,7 @@ public class DragonControllerHold extends AbstractDragonController {
 
             i = this.a.getEnderDragonBattle() == null ? 0 : this.a.getEnderDragonBattle().c();
             if (this.a.getRandom().nextInt(i + 3) == 0) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.c);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.LANDING_APPROACH);
                 return;
             }
 
@@ -96,8 +96,8 @@ public class DragonControllerHold extends AbstractDragonController {
     }
 
     private void a(EntityHuman entityhuman) {
-        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.b);
-        ((DragonControllerStrafe) this.a.getDragonControllerManager().b(DragonControllerPhase.b)).a(entityhuman);
+        this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.STRAFE_PLAYER);
+        ((DragonControllerStrafe) this.a.getDragonControllerManager().b(DragonControllerPhase.STRAFE_PLAYER)).a(entityhuman);
     }
 
     private void k() {

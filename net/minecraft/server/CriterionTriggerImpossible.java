@@ -19,12 +19,8 @@ public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTri
 
     public void a(AdvancementDataPlayer advancementdataplayer) {}
 
-    public CriterionTriggerImpossible.a b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerImpossible.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerImpossible.a();
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     public static class a extends CriterionInstanceAbstract {

@@ -67,7 +67,7 @@ public class ChatComponentScore extends ChatBaseComponent {
 
     }
 
-    public ChatComponentScore l() {
+    public ChatComponentScore g() {
         ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.d);
 
         chatcomponentscore.b(this.e);
@@ -88,9 +88,5 @@ public class ChatComponentScore extends ChatBaseComponent {
 
     public String toString() {
         return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
-    }
-
-    public IChatBaseComponent g() {
-        return this.l();
     }
 }

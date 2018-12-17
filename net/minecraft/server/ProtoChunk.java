@@ -454,11 +454,11 @@ public class ProtoChunk implements IChunkAccess {
         a(this.m, i).add(short0);
     }
 
-    public ProtoChunkTickList<Block> n() {
+    public ProtoChunkTickList<Block> k() {
         return this.q;
     }
 
-    public ProtoChunkTickList<FluidType> o() {
+    public ProtoChunkTickList<FluidType> l() {
         return this.r;
     }
 
@@ -515,13 +515,5 @@ public class ProtoChunk implements IChunkAccess {
 
     public void b(boolean flag) {
         this.u = flag;
-    }
-
-    public TickList l() {
-        return this.o();
-    }
-
-    public TickList k() {
-        return this.n();
     }
 }

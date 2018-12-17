@@ -50,7 +50,7 @@ public class LootValueBounds {
 
         public a() {}
 
-        public LootValueBounds a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootValueBounds deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (ChatDeserializer.b(jsonelement)) {
                 return new LootValueBounds(ChatDeserializer.e(jsonelement, "value"));
             } else {
@@ -62,7 +62,7 @@ public class LootValueBounds {
             }
         }
 
-        public JsonElement a(LootValueBounds lootvaluebounds, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(LootValueBounds lootvaluebounds, Type type, JsonSerializationContext jsonserializationcontext) {
             if (lootvaluebounds.a == lootvaluebounds.b) {
                 return new JsonPrimitive(lootvaluebounds.a);
             } else {
@@ -72,14 +72,6 @@ public class LootValueBounds {
                 jsonobject.addProperty("max", lootvaluebounds.b);
                 return jsonobject;
             }
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootValueBounds) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

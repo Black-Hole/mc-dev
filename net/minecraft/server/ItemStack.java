@@ -558,7 +558,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate predicate = ArgumentBlockPredicate.a().a(new StringReader(s)).create(tagregistry);
+                        Predicate predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.k = true;
@@ -587,7 +587,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate predicate = ArgumentBlockPredicate.a().a(new StringReader(s)).create(tagregistry);
+                        Predicate predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.m = true;

@@ -18,7 +18,7 @@ public class DragonControllerFly extends AbstractDragonController {
             double d0 = this.a.d(blockposition);
 
             if (d0 > 100.0D) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
             }
         } else {
             this.b = false;
@@ -77,6 +77,6 @@ public class DragonControllerFly extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerFly> getControllerPhase() {
-        return DragonControllerPhase.e;
+        return DragonControllerPhase.TAKEOFF;
     }
 }

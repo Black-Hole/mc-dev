@@ -40,7 +40,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
         return this.c;
     }
 
-    public ChatComponentSelector k() {
+    public ChatComponentSelector g() {
         return new ChatComponentSelector(this.c);
     }
 
@@ -58,9 +58,5 @@ public class ChatComponentSelector extends ChatBaseComponent {
 
     public String toString() {
         return "SelectorComponent{pattern='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
-    }
-
-    public IChatBaseComponent g() {
-        return this.k();
     }
 }

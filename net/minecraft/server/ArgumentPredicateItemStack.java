@@ -24,7 +24,7 @@ public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
         return this.b;
     }
 
-    public boolean a(ItemStack itemstack) {
+    public boolean test(ItemStack itemstack) {
         return itemstack.getItem() == this.b && GameProfileSerializer.a(this.c, itemstack.getTag(), true);
     }
 
@@ -50,9 +50,5 @@ public class ArgumentPredicateItemStack implements Predicate<ItemStack> {
         }
 
         return stringbuilder.toString();
-    }
-
-    public boolean test(Object object) {
-        return this.a((ItemStack) object);
     }
 }

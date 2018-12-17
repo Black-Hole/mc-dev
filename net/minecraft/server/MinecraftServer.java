@@ -65,18 +65,18 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     public static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("usercache.json");
     public Convertable convertable;
-    private final MojangStatisticsGenerator i = new MojangStatisticsGenerator("server", this, SystemUtils.b());
+    private final MojangStatisticsGenerator snooper = new MojangStatisticsGenerator("server", this, SystemUtils.getMonotonicMillis());
     public File universe;
     private final List<ITickable> k = Lists.newArrayList();
     public final MethodProfiler methodProfiler = new MethodProfiler();
-    private final ServerConnection l;
+    private final ServerConnection serverConnection;
     private final ServerPing m = new ServerPing();
     private final Random n = new Random();
     public final DataFixer dataConverterManager;
     private String serverIp;
     private int q = -1;
     public final Map<DimensionManager, WorldServer> worldServer = Maps.newIdentityHashMap();
-    private PlayerList s;
+    private PlayerList playerList;
     private boolean isRunning = true;
     private boolean isStopped;
     private int ticks;
@@ -102,7 +102,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     private String N = "";
     private String O = "";
     private boolean P;
-    private long Q;
+    private long lastOverloadTime;
     private IChatBaseComponent R;
     private boolean S;
     private boolean T;
@@ -113,7 +113,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     private long Y;
     protected final Queue<FutureTask<?>> f = Queues.newConcurrentLinkedQueue();
     private Thread serverThread;
-    private long aa = SystemUtils.b();
+    private long nextTick = SystemUtils.getMonotonicMillis();
     private final IReloadableResourceManager ac;
     private final ResourcePackRepository<ResourcePackLoader> resourcePackRepository;
     private ResourcePackSourceFolder resourcePackFolder;
@@ -146,7 +146,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         this.W = gameprofilerepository;
         this.X = usercache;
         this.universe = file;
-        this.l = file == null ? null : new ServerConnection(this);
+        this.serverConnection = file == null ? null : new ServerConnection(this);
         this.convertable = file == null ? null : new WorldLoaderServer(file.toPath(), file.toPath().resolve("../backups"), datafixer);
         this.dataConverterManager = datafixer;
         this.ac.a((IResourcePackListener) this.ah);
@@ -163,13 +163,13 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             MinecraftServer.LOGGER.info("Converting map!");
             this.b((IChatBaseComponent) (new ChatMessage("menu.convertingLevel", new Object[0])));
             this.getConvertable().convert(s, new IProgressUpdate() {
-                private long b = SystemUtils.b();
+                private long b = SystemUtils.getMonotonicMillis();
 
                 public void a(IChatBaseComponent ichatbasecomponent) {}
 
                 public void a(int i) {
-                    if (SystemUtils.b() - this.b >= 1000L) {
-                        this.b = SystemUtils.b();
+                    if (SystemUtils.getMonotonicMillis() - this.b >= 1000L) {
+                        this.b = SystemUtils.getMonotonicMillis();
                         MinecraftServer.LOGGER.info("Converting... {}%", i);
                     }
 
@@ -271,7 +271,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             worldserver.getWorldData().setGameType(this.getGamemode());
         }
 
-        SecondaryWorldServer secondaryworldserver = (new SecondaryWorldServer(this, idatamanager, DimensionManager.NETHER, worldserver, this.methodProfiler)).b();
+        SecondaryWorldServer secondaryworldserver = (new SecondaryWorldServer(this, idatamanager, DimensionManager.NETHER, worldserver, this.methodProfiler)).i_();
 
         this.worldServer.put(DimensionManager.NETHER, secondaryworldserver);
         secondaryworldserver.addIWorldAccess(new WorldManager(this, secondaryworldserver));
@@ -279,7 +279,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             secondaryworldserver.getWorldData().setGameType(this.getGamemode());
         }
 
-        SecondaryWorldServer secondaryworldserver1 = (new SecondaryWorldServer(this, idatamanager, DimensionManager.THE_END, worldserver, this.methodProfiler)).b();
+        SecondaryWorldServer secondaryworldserver1 = (new SecondaryWorldServer(this, idatamanager, DimensionManager.THE_END, worldserver, this.methodProfiler)).i_();
 
         this.worldServer.put(DimensionManager.THE_END, secondaryworldserver1);
         secondaryworldserver1.addIWorldAccess(new WorldManager(this, secondaryworldserver1));
@@ -338,7 +338,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
                 arraylist.add(new ChunkCoordIntPair(blockposition.getX() + i >> 4, blockposition.getZ() + j >> 4));
             }
 
-            CompletableFuture completablefuture = worldserver.getChunkProviderServer().a((Iterable) arraylist, (chunk) -> {
+            CompletableFuture completablefuture = worldserver.getChunkProvider().a((Iterable) arraylist, (chunk) -> {
                 set.add(chunk.getPos());
             });
 
@@ -377,7 +377,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
                     long k = longiterator.nextLong();
                     ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k);
 
-                    worldserver1.getChunkProviderServer().getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, true, true);
+                    worldserver1.getChunkProvider().getChunkAt(chunkcoordintpair.x, chunkcoordintpair.z, true, true);
                 }
             }
         }
@@ -448,10 +448,10 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             this.getServerConnection().b();
         }
 
-        if (this.s != null) {
+        if (this.playerList != null) {
             MinecraftServer.LOGGER.info("Saving players");
-            this.s.savePlayers();
-            this.s.u();
+            this.playerList.savePlayers();
+            this.playerList.u();
         }
 
         MinecraftServer.LOGGER.info("Saving worlds");
@@ -476,8 +476,8 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             }
         }
 
-        if (this.i.d()) {
-            this.i.e();
+        if (this.snooper.d()) {
+            this.snooper.e();
         }
 
     }
@@ -498,33 +498,33 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         this.isRunning = false;
     }
 
-    private boolean aT() {
-        return SystemUtils.b() < this.aa;
+    private boolean canSleepForTick() {
+        return SystemUtils.getMonotonicMillis() < this.nextTick;
     }
 
     public void run() {
         try {
             if (this.init()) {
-                this.aa = SystemUtils.b();
+                this.nextTick = SystemUtils.getMonotonicMillis();
                 this.m.setMOTD(new ChatComponentText(this.motd));
                 this.m.setServerInfo(new ServerPing.ServerData("1.13.2", 404));
                 this.a(this.m);
 
                 while (this.isRunning) {
-                    long i = SystemUtils.b() - this.aa;
+                    long i = SystemUtils.getMonotonicMillis() - this.nextTick;
 
-                    if (i > 2000L && this.aa - this.Q >= 15000L) {
+                    if (i > 2000L && this.nextTick - this.lastOverloadTime >= 15000L) {
                         long j = i / 50L;
 
                         MinecraftServer.LOGGER.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", i, j);
-                        this.aa += j * 50L;
-                        this.Q = this.aa;
+                        this.nextTick += j * 50L;
+                        this.lastOverloadTime = this.nextTick;
                     }
 
-                    this.a(this::aT);
-                    this.aa += 50L;
+                    this.a(this::canSleepForTick);
+                    this.nextTick += 50L;
 
-                    while (this.aT()) {
+                    while (this.canSleepForTick()) {
                         Thread.sleep(1L);
                     }
 
@@ -603,7 +603,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     public void t() {}
 
     protected void a(BooleanSupplier booleansupplier) {
-        long i = SystemUtils.c();
+        long i = SystemUtils.getMonotonicNanos();
 
         ++this.ticks;
         if (this.S) {
@@ -611,16 +611,16 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             this.methodProfiler.a(this.ticks);
         }
 
-        this.methodProfiler.a("root");
+        this.methodProfiler.enter("root");
         this.b(booleansupplier);
         if (i - this.Y >= 5000000000L) {
             this.Y = i;
-            this.m.setPlayerSample(new ServerPing.ServerPingPlayerSample(this.z(), this.y()));
-            GameProfile[] agameprofile = new GameProfile[Math.min(this.y(), 12)];
-            int j = MathHelper.nextInt(this.n, 0, this.y() - agameprofile.length);
+            this.m.setPlayerSample(new ServerPing.ServerPingPlayerSample(this.getMaxPlayers(), this.getPlayerCount()));
+            GameProfile[] agameprofile = new GameProfile[Math.min(this.getPlayerCount(), 12)];
+            int j = MathHelper.nextInt(this.n, 0, this.getPlayerCount() - agameprofile.length);
 
             for (int k = 0; k < agameprofile.length; ++k) {
-                agameprofile[k] = ((EntityPlayer) this.s.v().get(j + k)).getProfile();
+                agameprofile[k] = ((EntityPlayer) this.playerList.v().get(j + k)).getProfile();
             }
 
             Collections.shuffle(Arrays.asList(agameprofile));
@@ -628,32 +628,32 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         }
 
         if (this.ticks % 900 == 0) {
-            this.methodProfiler.a("save");
-            this.s.savePlayers();
+            this.methodProfiler.enter("save");
+            this.playerList.savePlayers();
             this.saveChunks(true);
-            this.methodProfiler.e();
+            this.methodProfiler.exit();
         }
 
-        this.methodProfiler.a("snooper");
-        if (!this.i.d() && this.ticks > 100) {
-            this.i.a();
+        this.methodProfiler.enter("snooper");
+        if (!this.snooper.d() && this.ticks > 100) {
+            this.snooper.a();
         }
 
         if (this.ticks % 6000 == 0) {
-            this.i.b();
+            this.snooper.b();
         }
 
-        this.methodProfiler.e();
-        this.methodProfiler.a("tallying");
-        long l = this.d[this.ticks % 100] = SystemUtils.c() - i;
+        this.methodProfiler.exit();
+        this.methodProfiler.enter("tallying");
+        long l = this.d[this.ticks % 100] = SystemUtils.getMonotonicNanos() - i;
 
         this.ap = this.ap * 0.8F + (float) l / 1000000.0F * 0.19999999F;
-        this.methodProfiler.e();
-        this.methodProfiler.e();
+        this.methodProfiler.exit();
+        this.methodProfiler.exit();
     }
 
     public void b(BooleanSupplier booleansupplier) {
-        this.methodProfiler.a("jobs");
+        this.methodProfiler.enter("jobs");
 
         FutureTask futuretask;
 
@@ -661,29 +661,29 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             SystemUtils.a(futuretask, MinecraftServer.LOGGER);
         }
 
-        this.methodProfiler.c("commandFunctions");
-        this.getFunctionData().Y_();
-        this.methodProfiler.c("levels");
+        this.methodProfiler.exitEnter("commandFunctions");
+        this.getFunctionData().tick();
+        this.methodProfiler.exitEnter("levels");
 
         WorldServer worldserver;
         long i;
 
         for (Iterator iterator = this.getWorlds().iterator(); iterator.hasNext();((long[]) this.e.computeIfAbsent(worldserver.worldProvider.getDimensionManager(), (dimensionmanager) -> {
             return new long[100];
-        }))[this.ticks % 100] = SystemUtils.c() - i) {
+        }))[this.ticks % 100] = SystemUtils.getMonotonicNanos() - i) {
             worldserver = (WorldServer) iterator.next();
-            i = SystemUtils.c();
+            i = SystemUtils.getMonotonicNanos();
             if (worldserver.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD || this.getAllowNether()) {
                 this.methodProfiler.a(() -> {
                     return "dim-" + worldserver.worldProvider.getDimensionManager().getDimensionID();
                 });
                 if (this.ticks % 20 == 0) {
-                    this.methodProfiler.a("timeSync");
-                    this.s.a((Packet) (new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle"))), worldserver.worldProvider.getDimensionManager());
-                    this.methodProfiler.e();
+                    this.methodProfiler.enter("timeSync");
+                    this.playerList.a((Packet) (new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle"))), worldserver.worldProvider.getDimensionManager());
+                    this.methodProfiler.exit();
                 }
 
-                this.methodProfiler.a("tick");
+                this.methodProfiler.enter("tick");
 
                 CrashReport crashreport;
 
@@ -703,25 +703,25 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
                     throw new ReportedException(crashreport);
                 }
 
-                this.methodProfiler.e();
-                this.methodProfiler.a("tracker");
+                this.methodProfiler.exit();
+                this.methodProfiler.enter("tracker");
                 worldserver.getTracker().updatePlayers();
-                this.methodProfiler.e();
-                this.methodProfiler.e();
+                this.methodProfiler.exit();
+                this.methodProfiler.exit();
             }
         }
 
-        this.methodProfiler.c("connection");
+        this.methodProfiler.exitEnter("connection");
         this.getServerConnection().c();
-        this.methodProfiler.c("players");
-        this.s.tick();
-        this.methodProfiler.c("tickables");
+        this.methodProfiler.exitEnter("players");
+        this.playerList.tick();
+        this.methodProfiler.exitEnter("tickables");
 
         for (int j = 0; j < this.k.size(); ++j) {
-            ((ITickable) this.k.get(j)).Y_();
+            ((ITickable) this.k.get(j)).tick();
         }
 
-        this.methodProfiler.e();
+        this.methodProfiler.exit();
     }
 
     public boolean getAllowNether() {
@@ -869,16 +869,16 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return "1.13.2";
     }
 
-    public int y() {
-        return this.s.getPlayerCount();
+    public int getPlayerCount() {
+        return this.playerList.getPlayerCount();
     }
 
-    public int z() {
-        return this.s.getMaxPlayers();
+    public int getMaxPlayers() {
+        return this.playerList.getMaxPlayers();
     }
 
     public String[] getPlayers() {
-        return this.s.f();
+        return this.playerList.f();
     }
 
     public boolean isDebugging() {
@@ -904,9 +904,9 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         crashreport.g().a("Profiler Position", () -> {
             return this.methodProfiler.a() ? this.methodProfiler.f() : "N/A (disabled)";
         });
-        if (this.s != null) {
+        if (this.playerList != null) {
             crashreport.g().a("Player Count", () -> {
-                return this.s.getPlayerCount() + " / " + this.s.getMaxPlayers() + "; " + this.s.v();
+                return this.playerList.getPlayerCount() + " / " + this.playerList.getMaxPlayers() + "; " + this.playerList.v();
             });
         }
 
@@ -944,7 +944,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         return this.H;
     }
 
-    public int F() {
+    public int getPort() {
         return this.q;
     }
 
@@ -1032,15 +1032,15 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
         mojangstatisticsgenerator.a("whitelist_enabled", false);
         mojangstatisticsgenerator.a("whitelist_count", 0);
-        if (this.s != null) {
-            mojangstatisticsgenerator.a("players_current", this.y());
-            mojangstatisticsgenerator.a("players_max", this.z());
-            mojangstatisticsgenerator.a("players_seen", this.s.getSeenPlayers().length);
+        if (this.playerList != null) {
+            mojangstatisticsgenerator.a("players_current", this.getPlayerCount());
+            mojangstatisticsgenerator.a("players_max", this.getMaxPlayers());
+            mojangstatisticsgenerator.a("players_seen", this.playerList.getSeenPlayers().length);
         }
 
         mojangstatisticsgenerator.a("uses_auth", this.onlineMode);
         mojangstatisticsgenerator.a("gui_state", this.ag() ? "enabled" : "disabled");
-        mojangstatisticsgenerator.a("run_time", (SystemUtils.b() - mojangstatisticsgenerator.g()) / 60L * 1000L);
+        mojangstatisticsgenerator.a("run_time", (SystemUtils.getMonotonicMillis() - mojangstatisticsgenerator.g()) / 60L * 1000L);
         mojangstatisticsgenerator.a("avg_tick_ms", (int) (MathHelper.a(this.d) * 1.0E-6D));
         int i = 0;
         Iterator iterator = this.getWorlds().iterator();
@@ -1058,7 +1058,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
                 mojangstatisticsgenerator.a("world[" + i + "][generator_name]", worlddata.getType().name());
                 mojangstatisticsgenerator.a("world[" + i + "][generator_version]", worlddata.getType().getVersion());
                 mojangstatisticsgenerator.a("world[" + i + "][height]", this.F);
-                mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", worldserver.getChunkProviderServer().g());
+                mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", worldserver.getChunkProvider().g());
                 ++i;
             }
         }
@@ -1145,11 +1145,11 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public PlayerList getPlayerList() {
-        return this.s;
+        return this.playerList;
     }
 
     public void a(PlayerList playerlist) {
-        this.s = playerlist;
+        this.playerList = playerlist;
     }
 
     public abstract boolean ad();
@@ -1166,7 +1166,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public ServerConnection getServerConnection() {
-        return this.l;
+        return this.serverConnection;
     }
 
     public boolean ag() {
@@ -1261,7 +1261,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     public long ax() {
-        return this.aa;
+        return this.nextTick;
     }
 
     public Thread ay() {

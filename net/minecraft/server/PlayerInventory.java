@@ -527,7 +527,7 @@ public class PlayerInventory implements IInventory {
         }
     }
 
-    public void q() {
+    public void dropContents() {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {

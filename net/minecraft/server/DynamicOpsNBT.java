@@ -30,11 +30,11 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
     protected DynamicOpsNBT() {}
 
-    public NBTBase a() {
+    public NBTBase empty() {
         return new NBTTagEnd();
     }
 
-    public Type<?> a(NBTBase nbtbase) {
+    public Type<?> getType(NBTBase nbtbase) {
         switch (nbtbase.getTypeId()) {
         case 0:
             return DSL.nilType();
@@ -67,47 +67,47 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         }
     }
 
-    public Optional<Number> b(NBTBase nbtbase) {
+    public Optional<Number> getNumberValue(NBTBase nbtbase) {
         return nbtbase instanceof NBTNumber ? Optional.of(((NBTNumber) nbtbase).j()) : Optional.empty();
     }
 
-    public NBTBase a(Number number) {
+    public NBTBase createNumeric(Number number) {
         return new NBTTagDouble(number.doubleValue());
     }
 
-    public NBTBase a(byte b0) {
+    public NBTBase createByte(byte b0) {
         return new NBTTagByte(b0);
     }
 
-    public NBTBase a(short short0) {
+    public NBTBase createShort(short short0) {
         return new NBTTagShort(short0);
     }
 
-    public NBTBase a(int i) {
+    public NBTBase createInt(int i) {
         return new NBTTagInt(i);
     }
 
-    public NBTBase a(long i) {
+    public NBTBase createLong(long i) {
         return new NBTTagLong(i);
     }
 
-    public NBTBase a(float f) {
+    public NBTBase createFloat(float f) {
         return new NBTTagFloat(f);
     }
 
-    public NBTBase a(double d0) {
+    public NBTBase createDouble(double d0) {
         return new NBTTagDouble(d0);
     }
 
-    public Optional<String> c(NBTBase nbtbase) {
+    public Optional<String> getStringValue(NBTBase nbtbase) {
         return nbtbase instanceof NBTTagString ? Optional.of(nbtbase.asString()) : Optional.empty();
     }
 
-    public NBTBase a(String s) {
+    public NBTBase createString(String s) {
         return new NBTTagString(s);
     }
 
-    public NBTBase a(NBTBase nbtbase, NBTBase nbtbase1) {
+    public NBTBase mergeInto(NBTBase nbtbase, NBTBase nbtbase1) {
         if (nbtbase1 instanceof NBTTagEnd) {
             return nbtbase;
         } else if (!(nbtbase instanceof NBTTagCompound)) {
@@ -149,7 +149,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         }
     }
 
-    public NBTBase a(NBTBase nbtbase, NBTBase nbtbase1, NBTBase nbtbase2) {
+    public NBTBase mergeInto(NBTBase nbtbase, NBTBase nbtbase1, NBTBase nbtbase2) {
         NBTTagCompound nbttagcompound;
 
         if (nbtbase instanceof NBTTagEnd) {
@@ -171,7 +171,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         return nbttagcompound;
     }
 
-    public NBTBase b(NBTBase nbtbase, NBTBase nbtbase1) {
+    public NBTBase merge(NBTBase nbtbase, NBTBase nbtbase1) {
         if (nbtbase instanceof NBTTagEnd) {
             return nbtbase1;
         } else if (nbtbase1 instanceof NBTTagEnd) {
@@ -202,19 +202,19 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         }
     }
 
-    public Optional<Map<NBTBase, NBTBase>> d(NBTBase nbtbase) {
+    public Optional<Map<NBTBase, NBTBase>> getMapValues(NBTBase nbtbase) {
         if (nbtbase instanceof NBTTagCompound) {
             NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
 
             return Optional.of(nbttagcompound.getKeys().stream().map((s) -> {
-                return Pair.of(this.a(s), nbttagcompound.get(s));
+                return Pair.of(this.createString(s), nbttagcompound.get(s));
             }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
         } else {
             return Optional.empty();
         }
     }
 
-    public NBTBase a(Map<NBTBase, NBTBase> map) {
+    public NBTBase createMap(Map<NBTBase, NBTBase> map) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         Iterator iterator = map.entrySet().iterator();
 
@@ -227,37 +227,37 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         return nbttagcompound;
     }
 
-    public Optional<Stream<NBTBase>> e(NBTBase nbtbase) {
+    public Optional<Stream<NBTBase>> getStream(NBTBase nbtbase) {
         return nbtbase instanceof NBTList ? Optional.of(((NBTList) nbtbase).stream().map((nbtbase) -> {
             return nbtbase;
         })) : Optional.empty();
     }
 
-    public Optional<ByteBuffer> f(NBTBase nbtbase) {
+    public Optional<ByteBuffer> getByteBuffer(NBTBase nbtbase) {
         return nbtbase instanceof NBTTagByteArray ? Optional.of(ByteBuffer.wrap(((NBTTagByteArray) nbtbase).c())) : super.getByteBuffer(nbtbase);
     }
 
-    public NBTBase a(ByteBuffer bytebuffer) {
+    public NBTBase createByteList(ByteBuffer bytebuffer) {
         return new NBTTagByteArray(DataFixUtils.toArray(bytebuffer));
     }
 
-    public Optional<IntStream> g(NBTBase nbtbase) {
+    public Optional<IntStream> getIntStream(NBTBase nbtbase) {
         return nbtbase instanceof NBTTagIntArray ? Optional.of(Arrays.stream(((NBTTagIntArray) nbtbase).d())) : super.getIntStream(nbtbase);
     }
 
-    public NBTBase a(IntStream intstream) {
+    public NBTBase createIntList(IntStream intstream) {
         return new NBTTagIntArray(intstream.toArray());
     }
 
-    public Optional<LongStream> h(NBTBase nbtbase) {
+    public Optional<LongStream> getLongStream(NBTBase nbtbase) {
         return nbtbase instanceof NBTTagLongArray ? Optional.of(Arrays.stream(((NBTTagLongArray) nbtbase).d())) : super.getLongStream(nbtbase);
     }
 
-    public NBTBase a(LongStream longstream) {
+    public NBTBase createLongList(LongStream longstream) {
         return new NBTTagLongArray(longstream.toArray());
     }
 
-    public NBTBase a(Stream<NBTBase> stream) {
+    public NBTBase createList(Stream<NBTBase> stream) {
         PeekingIterator peekingiterator = Iterators.peekingIterator(stream.iterator());
 
         if (!peekingiterator.hasNext()) {
@@ -297,7 +297,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
         }
     }
 
-    public NBTBase a(NBTBase nbtbase, String s) {
+    public NBTBase remove(NBTBase nbtbase, String s) {
         if (nbtbase instanceof NBTTagCompound) {
             NBTTagCompound nbttagcompound = (NBTTagCompound) nbtbase;
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -315,109 +315,5 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
 
     public String toString() {
         return "NBT";
-    }
-
-    public Object remove(Object object, String s) {
-        return this.a((NBTBase) object, s);
-    }
-
-    public Object createLongList(LongStream longstream) {
-        return this.a(longstream);
-    }
-
-    public Optional getLongStream(Object object) {
-        return this.h((NBTBase) object);
-    }
-
-    public Object createIntList(IntStream intstream) {
-        return this.a(intstream);
-    }
-
-    public Optional getIntStream(Object object) {
-        return this.g((NBTBase) object);
-    }
-
-    public Object createByteList(ByteBuffer bytebuffer) {
-        return this.a(bytebuffer);
-    }
-
-    public Optional getByteBuffer(Object object) {
-        return this.f((NBTBase) object);
-    }
-
-    public Object createList(Stream stream) {
-        return this.a(stream);
-    }
-
-    public Optional getStream(Object object) {
-        return this.e((NBTBase) object);
-    }
-
-    public Object createMap(Map map) {
-        return this.a(map);
-    }
-
-    public Optional getMapValues(Object object) {
-        return this.d((NBTBase) object);
-    }
-
-    public Object merge(Object object, Object object1) {
-        return this.b((NBTBase) object, (NBTBase) object1);
-    }
-
-    public Object mergeInto(Object object, Object object1, Object object2) {
-        return this.a((NBTBase) object, (NBTBase) object1, (NBTBase) object2);
-    }
-
-    public Object mergeInto(Object object, Object object1) {
-        return this.a((NBTBase) object, (NBTBase) object1);
-    }
-
-    public Object createString(String s) {
-        return this.a(s);
-    }
-
-    public Optional getStringValue(Object object) {
-        return this.c((NBTBase) object);
-    }
-
-    public Object createDouble(double d0) {
-        return this.a(d0);
-    }
-
-    public Object createFloat(float f) {
-        return this.a(f);
-    }
-
-    public Object createLong(long i) {
-        return this.a(i);
-    }
-
-    public Object createInt(int i) {
-        return this.a(i);
-    }
-
-    public Object createShort(short short0) {
-        return this.a(short0);
-    }
-
-    public Object createByte(byte b0) {
-        return this.a(b0);
-    }
-
-    public Object createNumeric(Number number) {
-        return this.a(number);
-    }
-
-    public Optional getNumberValue(Object object) {
-        return this.b((NBTBase) object);
-    }
-
-    public Type getType(Object object) {
-        return this.a((NBTBase) object);
-    }
-
-    public Object empty() {
-        return this.a();
     }
 }

@@ -13,7 +13,7 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
         super(i);
     }
 
-    public Chunk a(long i, Chunk chunk) {
+    public Chunk put(long i, Chunk chunk) {
         Chunk chunk1 = (Chunk) super.put(i, chunk);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
 
@@ -34,11 +34,11 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
         return chunk1;
     }
 
-    public Chunk a(Long olong, Chunk chunk) {
-        return this.a(olong, chunk);
+    public Chunk put(Long olong, Chunk chunk) {
+        return this.put(olong, chunk);
     }
 
-    public Chunk a(long i) {
+    public Chunk remove(long i) {
         Chunk chunk = (Chunk) super.remove(i);
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
 
@@ -57,8 +57,8 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
         return chunk;
     }
 
-    public Chunk a(Object object) {
-        return this.a((Long) object);
+    public Chunk remove(Object object) {
+        return this.remove((Long) object);
     }
 
     public void putAll(Map<? extends Long, ? extends Chunk> map) {
@@ -67,25 +67,5 @@ public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
 
     public boolean remove(Object object, Object object1) {
         throw new RuntimeException("Not yet implemented");
-    }
-
-    public Object remove(long i) {
-        return this.a(i);
-    }
-
-    public Object put(long i, Object object) {
-        return this.a(i, (Chunk) object);
-    }
-
-    public Object remove(Object object) {
-        return this.a(object);
-    }
-
-    public Object put(Long olong, Object object) {
-        return this.a(olong, (Chunk) object);
-    }
-
-    public Object put(Object object, Object object1) {
-        return this.a((Long) object, (Chunk) object1);
     }
 }

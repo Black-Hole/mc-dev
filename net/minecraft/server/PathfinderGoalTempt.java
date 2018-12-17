@@ -41,7 +41,7 @@ public class PathfinderGoalTempt extends PathfinderGoal {
     }
 
     protected boolean a(ItemStack itemstack) {
-        return this.k.a(itemstack);
+        return this.k.test(itemstack);
     }
 
     public boolean b() {

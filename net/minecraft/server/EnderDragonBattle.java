@@ -392,7 +392,7 @@ public class EnderDragonBattle {
 
     private void a(BlockPosition blockposition) {
         this.d.triggerEffect(3000, blockposition, 0);
-        WorldGenerator.ax.generate(this.d, this.d.getChunkProviderServer().getChunkGenerator(), new Random(), blockposition, new WorldGenEndGatewayConfiguration(false));
+        WorldGenerator.ax.generate(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), blockposition, new WorldGenEndGatewayConfiguration(false));
     }
 
     private void a(boolean flag) {
@@ -404,14 +404,14 @@ public class EnderDragonBattle {
             }
         }
 
-        worldgenendtrophy.a(this.d, this.d.getChunkProviderServer().getChunkGenerator(), new Random(), this.o, WorldGenFeatureConfiguration.e);
+        worldgenendtrophy.a(this.d, this.d.getChunkProvider().getChunkGenerator(), new Random(), this.o, WorldGenFeatureConfiguration.e);
     }
 
     private EntityEnderDragon n() {
         this.d.getChunkAtWorldCoords(new BlockPosition(0, 128, 0));
         EntityEnderDragon entityenderdragon = new EntityEnderDragon(this.d);
 
-        entityenderdragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+        entityenderdragon.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         entityenderdragon.setPositionRotation(0.0D, 128.0D, 0.0D, this.d.random.nextFloat() * 360.0F, 0.0F);
         this.d.addEntity(entityenderdragon);
         this.m = entityenderdragon.getUniqueID();
@@ -551,10 +551,6 @@ public class EnderDragonBattle {
             }
 
             return this.b == EnderDragonBattle.LoadState.LOADED;
-        }
-
-        b(Object object) {
-            this();
         }
     }
 

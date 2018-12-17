@@ -127,7 +127,7 @@ public class EnchantmentManager {
     }
 
     public static float a(EntityLiving entityliving) {
-        int i = a(Enchantments.r, entityliving);
+        int i = a(Enchantments.SWEEPING, entityliving);
 
         return i > 0 ? EnchantmentSweeping.e(i) : 0.0F;
     }
@@ -221,27 +221,27 @@ public class EnchantmentManager {
     }
 
     public static boolean i(EntityLiving entityliving) {
-        return a(Enchantments.j, entityliving) > 0;
+        return a(Enchantments.FROST_WALKER, entityliving) > 0;
     }
 
     public static boolean d(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.k, itemstack) > 0;
+        return getEnchantmentLevel(Enchantments.BINDING_CURSE, itemstack) > 0;
     }
 
     public static boolean shouldNotDrop(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.H, itemstack) > 0;
+        return getEnchantmentLevel(Enchantments.VANISHING_CURSE, itemstack) > 0;
     }
 
     public static int f(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.C, itemstack);
+        return getEnchantmentLevel(Enchantments.LOYALTY, itemstack);
     }
 
     public static int g(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.E, itemstack);
+        return getEnchantmentLevel(Enchantments.RIPTIDE, itemstack);
     }
 
     public static boolean h(ItemStack itemstack) {
-        return getEnchantmentLevel(Enchantments.F, itemstack) > 0;
+        return getEnchantmentLevel(Enchantments.CHANNELING, itemstack) > 0;
     }
 
     public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {

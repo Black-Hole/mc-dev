@@ -24,7 +24,7 @@ public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.
         return (EnumSet) commandcontext.getArgument(s, EnumSet.class);
     }
 
-    public EnumSet<EnumDirection.EnumAxis> a(StringReader stringreader) throws CommandSyntaxException {
+    public EnumSet<EnumDirection.EnumAxis> parse(StringReader stringreader) throws CommandSyntaxException {
         EnumSet enumset = EnumSet.noneOf(EnumDirection.EnumAxis.class);
 
         while (stringreader.canRead() && stringreader.peek() != 32) {
@@ -57,9 +57,5 @@ public class ArgumentRotationAxis implements ArgumentType<EnumSet<EnumDirection.
 
     public Collection<String> getExamples() {
         return ArgumentRotationAxis.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

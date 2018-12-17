@@ -78,7 +78,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         return new ArgumentScoreholder(true);
     }
 
-    public ArgumentScoreholder.a a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentScoreholder.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == 64) {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
             EntitySelector entityselector = argumentparserselector.s();
@@ -121,10 +121,6 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         return ArgumentScoreholder.b;
     }
 
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
-    }
-
     public static class c implements ArgumentSerializer<ArgumentScoreholder> {
 
         public c() {}
@@ -139,7 +135,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             packetdataserializer.writeByte(b0);
         }
 
-        public ArgumentScoreholder a(PacketDataSerializer packetdataserializer) {
+        public ArgumentScoreholder b(PacketDataSerializer packetdataserializer) {
             byte b0 = packetdataserializer.readByte();
             boolean flag = (b0 & 1) != 0;
 
@@ -148,10 +144,6 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
 
         public void a(ArgumentScoreholder argumentscoreholder, JsonObject jsonobject) {
             jsonobject.addProperty("amount", argumentscoreholder.d ? "multiple" : "single");
-        }
-
-        public ArgumentType b(PacketDataSerializer packetdataserializer) {
-            return this.a(packetdataserializer);
         }
     }
 

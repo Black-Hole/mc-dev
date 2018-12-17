@@ -209,7 +209,7 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
                 loottableinfo_builder.luck(entityhuman.dJ());
             }
 
-            loottable.a(this, random, loottableinfo_builder.build());
+            loottable.fillInventory(this, random, loottableinfo_builder.build());
         }
 
     }

@@ -54,7 +54,7 @@ public abstract class EntityLiving extends Entity {
     public float aU;
     public EntityHuman killer;
     protected int lastDamageByPlayerTime;
-    protected boolean aX;
+    protected boolean killed;
     protected int ticksFarFromPlayer;
     protected float aZ;
     protected float ba;
@@ -159,7 +159,7 @@ public abstract class EntityLiving extends Entity {
     public void W() {
         this.aF = this.aG;
         super.W();
-        this.world.methodProfiler.a("livingEntityBaseTick");
+        this.world.methodProfiler.enter("livingEntityBaseTick");
         boolean flag = this instanceof EntityHuman;
 
         if (this.isAlive()) {
@@ -261,11 +261,11 @@ public abstract class EntityLiving extends Entity {
         this.aT = this.aS;
         this.lastYaw = this.yaw;
         this.lastPitch = this.pitch;
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     protected void b(BlockPosition blockposition) {
-        int i = EnchantmentManager.a(Enchantments.j, this);
+        int i = EnchantmentManager.a(Enchantments.FROST_WALKER, this);
 
         if (i > 0) {
             EnchantmentFrostWalker.a(this, this.world, blockposition, i);
@@ -933,7 +933,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void die(DamageSource damagesource) {
-        if (!this.aX) {
+        if (!this.killed) {
             Entity entity = damagesource.getEntity();
             EntityLiving entityliving = this.cv();
 
@@ -945,7 +945,7 @@ public abstract class EntityLiving extends Entity {
                 entity.b(this);
             }
 
-            this.aX = true;
+            this.killed = true;
             this.getCombatTracker().g();
             if (!this.world.isClientSide) {
                 int i = 0;
@@ -1531,7 +1531,7 @@ public abstract class EntityLiving extends Entity {
                     this.a(f, f1, f2, f3);
                     f9 = 0.91F;
                     if (this.onGround) {
-                        f9 = this.world.getType(blockposition_b.e(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().n() * 0.91F;
+                        f9 = this.world.getType(blockposition_b.c(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().n() * 0.91F;
                     }
 
                     if (this.z_()) {
@@ -1560,7 +1560,7 @@ public abstract class EntityLiving extends Entity {
                         this.motY += (0.05D * (double) (this.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motY) * 0.2D;
                         this.fallDistance = 0.0F;
                     } else {
-                        blockposition_b.e(this.locX, 0.0D, this.locZ);
+                        blockposition_b.c(this.locX, 0.0D, this.locZ);
                         if (this.world.isClientSide && (!this.world.isLoaded(blockposition_b) || !this.world.getChunkAtWorldCoords(blockposition_b).y())) {
                             if (this.locY > 0.0D) {
                                 this.motY = -0.1D;
@@ -1696,7 +1696,7 @@ public abstract class EntityLiving extends Entity {
             }
         }
 
-        this.k();
+        this.movementTick();
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
         float f = (float) (d0 * d0 + d1 * d1);
@@ -1728,10 +1728,10 @@ public abstract class EntityLiving extends Entity {
         }
 
         this.ba += (f3 - this.ba) * 0.3F;
-        this.world.methodProfiler.a("headTurn");
+        this.world.methodProfiler.enter("headTurn");
         f2 = this.e(f1, f2);
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("rangeChecks");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("rangeChecks");
 
         while (this.yaw - this.lastYaw < -180.0F) {
             this.lastYaw -= 360.0F;
@@ -1765,7 +1765,7 @@ public abstract class EntityLiving extends Entity {
             this.aT += 360.0F;
         }
 
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
         this.bb += f2;
         if (this.dc()) {
             ++this.bv;
@@ -1802,7 +1802,7 @@ public abstract class EntityLiving extends Entity {
         return f1;
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.bJ > 0) {
             --this.bJ;
         }
@@ -1841,20 +1841,20 @@ public abstract class EntityLiving extends Entity {
             this.motZ = 0.0D;
         }
 
-        this.world.methodProfiler.a("ai");
+        this.world.methodProfiler.enter("ai");
         if (this.isFrozen()) {
             this.bg = false;
             this.bh = 0.0F;
             this.bj = 0.0F;
             this.bk = 0.0F;
         } else if (this.cP()) {
-            this.world.methodProfiler.a("newAi");
+            this.world.methodProfiler.enter("newAi");
             this.doTick();
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
         }
 
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("jump");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("jump");
         if (this.bg) {
             if (this.W > 0.0D && (!this.onGround || this.W > 0.4D)) {
                 this.c(TagsFluid.WATER);
@@ -1868,8 +1868,8 @@ public abstract class EntityLiving extends Entity {
             this.bJ = 0;
         }
 
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("travel");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("travel");
         this.bh *= 0.98F;
         this.bj *= 0.98F;
         this.bk *= 0.9F;
@@ -1877,15 +1877,15 @@ public abstract class EntityLiving extends Entity {
         AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
         this.a(this.bh, this.bi, this.bj);
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("push");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("push");
         if (this.bw > 0) {
             --this.bw;
             this.a(axisalignedbb, this.getBoundingBox());
         }
 
         this.cN();
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     private void n() {

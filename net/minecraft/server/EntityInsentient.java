@@ -139,13 +139,13 @@ public abstract class EntityInsentient extends EntityLiving {
 
     public void W() {
         super.W();
-        this.world.methodProfiler.a("mobBaseTick");
+        this.world.methodProfiler.enter("mobBaseTick");
         if (this.isAlive() && this.random.nextInt(1000) < this.a_++) {
             this.l();
             this.A();
         }
 
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     protected void c(DamageSource damagesource) {
@@ -412,7 +412,7 @@ public abstract class EntityInsentient extends EntityLiving {
                 loottableinfo_builder = loottableinfo_builder.killer(this.killer).luck(this.killer.dJ());
             }
 
-            List list = loottable.a(this.lootTableSeed == 0L ? this.random : new Random(this.lootTableSeed), loottableinfo_builder.build());
+            List list = loottable.populateLoot(this.lootTableSeed == 0L ? this.random : new Random(this.lootTableSeed), loottableinfo_builder.build());
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -445,10 +445,10 @@ public abstract class EntityInsentient extends EntityLiving {
         this.r(f);
     }
 
-    public void k() {
-        super.k();
-        this.world.methodProfiler.a("looting");
-        if (!this.world.isClientSide && this.dj() && !this.aX && this.world.getGameRules().getBoolean("mobGriefing")) {
+    public void movementTick() {
+        super.movementTick();
+        this.world.methodProfiler.enter("looting");
+        if (!this.world.isClientSide && this.dj() && !this.killed && this.world.getGameRules().getBoolean("mobGriefing")) {
             List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
             Iterator iterator = list.iterator();
 
@@ -461,7 +461,7 @@ public abstract class EntityInsentient extends EntityLiving {
             }
         }
 
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     protected void a(EntityItem entityitem) {
@@ -569,24 +569,24 @@ public abstract class EntityInsentient extends EntityLiving {
 
     protected final void doTick() {
         ++this.ticksFarFromPlayer;
-        this.world.methodProfiler.a("checkDespawn");
+        this.world.methodProfiler.enter("checkDespawn");
         this.I();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("sensing");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("sensing");
         this.bC.a();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("targetSelector");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("targetSelector");
         this.targetSelector.doTick();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("goalSelector");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("goalSelector");
         this.goalSelector.doTick();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("navigation");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("navigation");
         this.navigation.d();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.a("mob tick");
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.enter("mob tick");
         this.mobTick();
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
         if (this.isPassenger() && this.getVehicle() instanceof EntityInsentient) {
             EntityInsentient entityinsentient = (EntityInsentient) this.getVehicle();
 
@@ -594,15 +594,15 @@ public abstract class EntityInsentient extends EntityLiving {
             entityinsentient.getControllerMove().a(this.getControllerMove());
         }
 
-        this.world.methodProfiler.a("controls");
-        this.world.methodProfiler.a("move");
+        this.world.methodProfiler.enter("controls");
+        this.world.methodProfiler.enter("move");
         this.moveController.a();
-        this.world.methodProfiler.c("look");
+        this.world.methodProfiler.exitEnter("look");
         this.lookController.a();
-        this.world.methodProfiler.c("jump");
+        this.world.methodProfiler.exitEnter("jump");
         this.h.b();
-        this.world.methodProfiler.e();
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
+        this.world.methodProfiler.exit();
     }
 
     protected void mobTick() {}

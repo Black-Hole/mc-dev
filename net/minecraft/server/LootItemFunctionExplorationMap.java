@@ -63,7 +63,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
             jsonobject.add("decoration", jsonserializationcontext.serialize(lootitemfunctionexplorationmap.c.toString().toLowerCase(Locale.ROOT)));
         }
 
-        public LootItemFunctionExplorationMap a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionExplorationMap b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             String s = jsonobject.has("destination") ? ChatDeserializer.h(jsonobject, "destination") : "Buried_Treasure";
 
             s = WorldGenerator.aF.containsKey(s.toLowerCase(Locale.ROOT)) ? s : "Buried_Treasure";
@@ -81,10 +81,6 @@ public class LootItemFunctionExplorationMap extends LootItemFunction {
             boolean flag = jsonobject.has("skip_existing_chunks") ? ChatDeserializer.j(jsonobject, "skip_existing_chunks") : true;
 
             return new LootItemFunctionExplorationMap(alootitemcondition, s, mapicon_type, b0, i, flag);
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

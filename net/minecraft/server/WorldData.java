@@ -323,7 +323,7 @@ public class WorldData {
         nbttagcompound.setLong("Time", this.l);
         nbttagcompound.setLong("DayTime", this.m);
         nbttagcompound.setLong("SizeOnDisk", this.o);
-        nbttagcompound.setLong("LastPlayed", SystemUtils.d());
+        nbttagcompound.setLong("LastPlayed", SystemUtils.getTimeMillis());
         nbttagcompound.setString("LevelName", this.levelName);
         nbttagcompound.setInt("version", this.v);
         nbttagcompound.setInt("clearWeatherTime", this.w);

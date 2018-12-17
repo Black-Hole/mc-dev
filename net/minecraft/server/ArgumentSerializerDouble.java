@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 public class ArgumentSerializerDouble implements ArgumentSerializer<DoubleArgumentType> {
@@ -23,7 +22,7 @@ public class ArgumentSerializerDouble implements ArgumentSerializer<DoubleArgume
 
     }
 
-    public DoubleArgumentType a(PacketDataSerializer packetdataserializer) {
+    public DoubleArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         double d0 = ArgumentSerializers.a(b0) ? packetdataserializer.readDouble() : -1.7976931348623157E308D;
         double d1 = ArgumentSerializers.b(b0) ? packetdataserializer.readDouble() : Double.MAX_VALUE;
@@ -40,9 +39,5 @@ public class ArgumentSerializerDouble implements ArgumentSerializer<DoubleArgume
             jsonobject.addProperty("max", doubleargumenttype.getMaximum());
         }
 
-    }
-
-    public ArgumentType b(PacketDataSerializer packetdataserializer) {
-        return this.a(packetdataserializer);
     }
 }

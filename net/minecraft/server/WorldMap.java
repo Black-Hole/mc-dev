@@ -17,7 +17,7 @@ public class WorldMap extends PersistentBase {
     public byte scale;
     public byte[] colors = new byte[16384];
     public List<WorldMap.WorldMapHumanTracker> h = Lists.newArrayList();
-    private final Map<EntityHuman, WorldMap.WorldMapHumanTracker> j = Maps.newHashMap();
+    public final Map<EntityHuman, WorldMap.WorldMapHumanTracker> humans = Maps.newHashMap();
     private final Map<String, MapIconBanner> k = Maps.newHashMap();
     public Map<String, MapIcon> decorations = Maps.newLinkedHashMap();
     private final Map<String, WorldMapFrame> l = Maps.newHashMap();
@@ -108,10 +108,10 @@ public class WorldMap extends PersistentBase {
     }
 
     public void a(EntityHuman entityhuman, ItemStack itemstack) {
-        if (!this.j.containsKey(entityhuman)) {
+        if (!this.humans.containsKey(entityhuman)) {
             WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = new WorldMap.WorldMapHumanTracker(entityhuman);
 
-            this.j.put(entityhuman, worldmap_worldmaphumantracker);
+            this.humans.put(entityhuman, worldmap_worldmaphumantracker);
             this.h.add(worldmap_worldmaphumantracker);
         }
 
@@ -128,7 +128,7 @@ public class WorldMap extends PersistentBase {
                     this.a(MapIcon.Type.PLAYER, worldmap_worldmaphumantracker1.trackee.world, s, worldmap_worldmaphumantracker1.trackee.locX, worldmap_worldmaphumantracker1.trackee.locZ, (double) worldmap_worldmaphumantracker1.trackee.yaw, (IChatBaseComponent) null);
                 }
             } else {
-                this.j.remove(worldmap_worldmaphumantracker1.trackee);
+                this.humans.remove(worldmap_worldmaphumantracker1.trackee);
                 this.h.remove(worldmap_worldmaphumantracker1);
                 this.decorations.remove(s);
             }
@@ -250,7 +250,7 @@ public class WorldMap extends PersistentBase {
 
     @Nullable
     public Packet<?> a(ItemStack itemstack, IBlockAccess iblockaccess, EntityHuman entityhuman) {
-        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.j.get(entityhuman);
+        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.humans.get(entityhuman);
 
         return worldmap_worldmaphumantracker == null ? null : worldmap_worldmaphumantracker.a(itemstack);
     }
@@ -268,11 +268,11 @@ public class WorldMap extends PersistentBase {
     }
 
     public WorldMap.WorldMapHumanTracker a(EntityHuman entityhuman) {
-        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.j.get(entityhuman);
+        WorldMap.WorldMapHumanTracker worldmap_worldmaphumantracker = (WorldMap.WorldMapHumanTracker) this.humans.get(entityhuman);
 
         if (worldmap_worldmaphumantracker == null) {
             worldmap_worldmaphumantracker = new WorldMap.WorldMapHumanTracker(entityhuman);
-            this.j.put(entityhuman, worldmap_worldmaphumantracker);
+            this.humans.put(entityhuman, worldmap_worldmaphumantracker);
             this.h.add(worldmap_worldmaphumantracker);
         }
 

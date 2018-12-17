@@ -84,7 +84,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         }
     }
 
-    public EntitySelector a(StringReader stringreader) throws CommandSyntaxException {
+    public EntitySelector parse(StringReader stringreader) throws CommandSyntaxException {
         boolean flag = false;
         ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
         EntitySelector entityselector = argumentparserselector.s();
@@ -134,10 +134,6 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         return ArgumentEntity.g;
     }
 
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
-    }
-
     public static class a implements ArgumentSerializer<ArgumentEntity> {
 
         public a() {}
@@ -156,7 +152,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
             packetdataserializer.writeByte(b0);
         }
 
-        public ArgumentEntity a(PacketDataSerializer packetdataserializer) {
+        public ArgumentEntity b(PacketDataSerializer packetdataserializer) {
             byte b0 = packetdataserializer.readByte();
 
             return new ArgumentEntity((b0 & 1) != 0, (b0 & 2) != 0);
@@ -165,10 +161,6 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
         public void a(ArgumentEntity argumententity, JsonObject jsonobject) {
             jsonobject.addProperty("amount", argumententity.h ? "single" : "multiple");
             jsonobject.addProperty("type", argumententity.i ? "players" : "entities");
-        }
-
-        public ArgumentType b(PacketDataSerializer packetdataserializer) {
-            return this.a(packetdataserializer);
         }
     }
 }

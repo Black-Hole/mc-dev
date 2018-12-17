@@ -50,15 +50,10 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         } else {
             this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function() {
                 @Nullable
-                public Double a(@Nullable EntityHuman entityhuman) {
+                public Double apply(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);
 
                     return (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntitySkeleton) || itemstack.getItem() != Items.SKELETON_SKULL) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityZombie) || itemstack.getItem() != Items.ZOMBIE_HEAD) && (!(PathfinderGoalNearestAttackableTarget.this.e instanceof EntityCreeper) || itemstack.getItem() != Items.CREEPER_HEAD) ? 1.0D : 0.5D;
-                }
-
-                @Nullable
-                public Object apply(@Nullable Object object) {
-                    return this.a((EntityHuman) object);
                 }
             }, this.c);
             return this.d != null;
@@ -82,15 +77,11 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
             this.a = entity;
         }
 
-        public int a(Entity entity, Entity entity1) {
+        public int compare(Entity entity, Entity entity1) {
             double d0 = this.a.h(entity);
             double d1 = this.a.h(entity1);
 
             return d0 < d1 ? -1 : (d0 > d1 ? 1 : 0);
-        }
-
-        public int compare(Object object, Object object1) {
-            return this.a((Entity) object, (Entity) object1);
         }
     }
 }

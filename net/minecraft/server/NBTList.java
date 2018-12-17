@@ -24,12 +24,4 @@ public abstract class NBTList<T extends NBTBase> extends AbstractList<T> impleme
     public abstract void a(int i, NBTBase nbtbase);
 
     public abstract void b(int i);
-
-    public Object set(int i, Object object) {
-        return this.set(i, (NBTBase) object);
-    }
-
-    public Object get(int i) {
-        return this.get(i);
-    }
 }

@@ -44,25 +44,25 @@ public class RecipeFireworksStar extends IRecipeComplex {
                 ItemStack itemstack = iinventory.getItem(i);
 
                 if (!itemstack.isEmpty()) {
-                    if (RecipeFireworksStar.a.a(itemstack)) {
+                    if (RecipeFireworksStar.a.test(itemstack)) {
                         if (flag2) {
                             return false;
                         }
 
                         flag2 = true;
-                    } else if (RecipeFireworksStar.c.a(itemstack)) {
+                    } else if (RecipeFireworksStar.c.test(itemstack)) {
                         if (flag4) {
                             return false;
                         }
 
                         flag4 = true;
-                    } else if (RecipeFireworksStar.b.a(itemstack)) {
+                    } else if (RecipeFireworksStar.b.test(itemstack)) {
                         if (flag3) {
                             return false;
                         }
 
                         flag3 = true;
-                    } else if (RecipeFireworksStar.e.a(itemstack)) {
+                    } else if (RecipeFireworksStar.e.test(itemstack)) {
                         if (flag) {
                             return false;
                         }
@@ -92,11 +92,11 @@ public class RecipeFireworksStar extends IRecipeComplex {
             ItemStack itemstack1 = iinventory.getItem(i);
 
             if (!itemstack1.isEmpty()) {
-                if (RecipeFireworksStar.a.a(itemstack1)) {
+                if (RecipeFireworksStar.a.test(itemstack1)) {
                     itemfireworks_effecttype = (ItemFireworks.EffectType) RecipeFireworksStar.d.get(itemstack1.getItem());
-                } else if (RecipeFireworksStar.c.a(itemstack1)) {
+                } else if (RecipeFireworksStar.c.test(itemstack1)) {
                     nbttagcompound.setBoolean("Flicker", true);
-                } else if (RecipeFireworksStar.b.a(itemstack1)) {
+                } else if (RecipeFireworksStar.b.test(itemstack1)) {
                     nbttagcompound.setBoolean("Trail", true);
                 } else if (itemstack1.getItem() instanceof ItemDye) {
                     arraylist.add(((ItemDye) itemstack1.getItem()).d().f());

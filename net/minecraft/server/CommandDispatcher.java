@@ -123,7 +123,7 @@ public class CommandDispatcher {
             stringreader.skip();
         }
 
-        commandlistenerwrapper.getServer().methodProfiler.a(s);
+        commandlistenerwrapper.getServer().methodProfiler.enter(s);
 
         byte b0;
 
@@ -184,7 +184,7 @@ public class CommandDispatcher {
             }));
             b0 = 0;
         } finally {
-            commandlistenerwrapper.getServer().methodProfiler.e();
+            commandlistenerwrapper.getServer().methodProfiler.exit();
         }
 
         return b0;

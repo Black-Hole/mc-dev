@@ -49,7 +49,7 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerEntityHurtPlayer.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEntityHurtPlayer.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDamage criterionconditiondamage = CriterionConditionDamage.a(jsonobject.get("damage"));
 
         return new CriterionTriggerEntityHurtPlayer.b(criterionconditiondamage);
@@ -62,10 +62,6 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
             criteriontriggerentityhurtplayer_a.a(entityplayer, damagesource, f, f1, flag);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

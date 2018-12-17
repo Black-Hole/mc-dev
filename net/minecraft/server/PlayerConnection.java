@@ -24,8 +24,8 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     private final MinecraftServer minecraftServer;
     public EntityPlayer player;
     private int e;
-    private long f;
-    private boolean g;
+    private long lastKeepAlive;
+    private boolean awaitingKeepAlive;
     private long h;
     private int chatThrottle;
     private int j;
@@ -61,7 +61,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         entityplayer.playerConnection = this;
     }
 
-    public void Y_() {
+    public void tick() {
         this.syncPosition();
         this.player.playerTick();
         this.player.setLocation(this.l, this.m, this.n, this.player.yaw, this.player.pitch);
@@ -102,21 +102,21 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             this.E = 0;
         }
 
-        this.minecraftServer.methodProfiler.a("keepAlive");
-        long i = SystemUtils.b();
+        this.minecraftServer.methodProfiler.enter("keepAlive");
+        long i = SystemUtils.getMonotonicMillis();
 
-        if (i - this.f >= 15000L) {
-            if (this.g) {
+        if (i - this.lastKeepAlive >= 15000L) {
+            if (this.awaitingKeepAlive) {
                 this.disconnect(new ChatMessage("disconnect.timeout", new Object[0]));
             } else {
-                this.g = true;
-                this.f = i;
+                this.awaitingKeepAlive = true;
+                this.lastKeepAlive = i;
                 this.h = i;
                 this.sendPacket(new PacketPlayOutKeepAlive(this.h));
             }
         }
 
-        this.minecraftServer.methodProfiler.e();
+        this.minecraftServer.methodProfiler.exit();
         if (this.chatThrottle > 0) {
             --this.chatThrottle;
         }
@@ -125,7 +125,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
             --this.j;
         }
 
-        if (this.player.F() > 0L && this.minecraftServer.getIdleTimeout() > 0 && SystemUtils.b() - this.player.F() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
+        if (this.player.F() > 0L && this.minecraftServer.getIdleTimeout() > 0 && SystemUtils.getMonotonicMillis() - this.player.F() > (long) (this.minecraftServer.getIdleTimeout() * 1000 * 60)) {
             this.disconnect(new ChatMessage("multiplayer.disconnect.idling", new Object[0]));
         }
 
@@ -1209,11 +1209,11 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     }
 
     public void a(PacketPlayInKeepAlive packetplayinkeepalive) {
-        if (this.g && packetplayinkeepalive.b() == this.h) {
-            int i = (int) (SystemUtils.b() - this.f);
+        if (this.awaitingKeepAlive && packetplayinkeepalive.b() == this.h) {
+            int i = (int) (SystemUtils.getMonotonicMillis() - this.lastKeepAlive);
 
             this.player.ping = (this.player.ping * 3 + i) / 4;
-            this.g = false;
+            this.awaitingKeepAlive = false;
         } else if (!this.player.getDisplayName().getString().equals(this.minecraftServer.G())) {
             this.disconnect(new ChatMessage("disconnect.timeout", new Object[0]));
         }

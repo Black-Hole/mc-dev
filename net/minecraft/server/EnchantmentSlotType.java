@@ -84,8 +84,4 @@ public enum EnchantmentSlotType {
     private EnchantmentSlotType() {}
 
     public abstract boolean canEnchant(Item item);
-
-    EnchantmentSlotType(Object object) {
-        this();
-    }
 }

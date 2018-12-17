@@ -83,7 +83,7 @@ public class ShapedRecipes implements IRecipe {
                     }
                 }
 
-                if (!recipeitemstack.a(iinventory.getItem(k + l * iinventory.U_()))) {
+                if (!recipeitemstack.test(iinventory.getItem(k + l * iinventory.U_()))) {
                     return false;
                 }
             }
@@ -256,7 +256,7 @@ public class ShapedRecipes implements IRecipe {
 
         public a() {}
 
-        public ShapedRecipes b(MinecraftKey minecraftkey, JsonObject jsonobject) {
+        public ShapedRecipes a(MinecraftKey minecraftkey, JsonObject jsonobject) {
             String s = ChatDeserializer.a(jsonobject, "group", "");
             Map map = ShapedRecipes.c(ChatDeserializer.t(jsonobject, "key"));
             String[] astring = ShapedRecipes.a(ShapedRecipes.b(ChatDeserializer.u(jsonobject, "pattern")));
@@ -272,7 +272,7 @@ public class ShapedRecipes implements IRecipe {
             return "crafting_shaped";
         }
 
-        public ShapedRecipes b(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+        public ShapedRecipes a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             int i = packetdataserializer.g();
             int j = packetdataserializer.g();
             String s = packetdataserializer.e(32767);
@@ -300,14 +300,6 @@ public class ShapedRecipes implements IRecipe {
             }
 
             packetdataserializer.a(shapedrecipes.result);
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-            return this.b(minecraftkey, packetdataserializer);
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
-            return this.b(minecraftkey, jsonobject);
         }
     }
 }

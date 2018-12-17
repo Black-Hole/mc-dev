@@ -87,7 +87,7 @@ public abstract class LightEngine implements ILightEngine {
                         int j2 = i1 + enumdirection1.getAdjacentZ();
 
                         if (i2 <= 255 && i2 >= 0) {
-                            blockposition_b.f(l1 + chunkcoordintpair.d(), i2, j2 + chunkcoordintpair.e());
+                            blockposition_b.c(l1 + chunkcoordintpair.d(), i2, j2 + chunkcoordintpair.e());
                             int k2 = this.a((IBlockAccess) generatoraccess, (BlockPosition) blockposition_b);
                             int l2 = j - Math.max(k2, 1);
 

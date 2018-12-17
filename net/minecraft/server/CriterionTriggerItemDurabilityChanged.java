@@ -49,7 +49,7 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerItemDurabilityChanged.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerItemDurabilityChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
         CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("durability"));
         CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("delta"));
@@ -64,10 +64,6 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
             criteriontriggeritemdurabilitychanged_a.a(itemstack, i);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

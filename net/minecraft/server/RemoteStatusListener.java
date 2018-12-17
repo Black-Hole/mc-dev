@@ -42,7 +42,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
         this.s = iminecraftserver.e();
         this.j = iminecraftserver.e_();
         this.l = iminecraftserver.m();
-        this.k = iminecraftserver.z();
+        this.k = iminecraftserver.getMaxPlayers();
         this.m = iminecraftserver.getWorld();
         this.w = 0L;
         this.r = "0.0.0.0";
@@ -123,7 +123,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
     }
 
     private byte[] b(DatagramPacket datagrampacket) throws IOException {
-        long i = SystemUtils.b();
+        long i = SystemUtils.getMonotonicMillis();
 
         if (i < this.w + 5000L) {
             byte[] abyte = this.v.a();
@@ -206,7 +206,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     private void f() {
         if (this.a) {
-            long i = SystemUtils.b();
+            long i = SystemUtils.getMonotonicMillis();
 
             if (i >= this.h + 30000L) {
                 this.h = i;
@@ -226,7 +226,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void run() {
         this.b("Query running on " + this.s + ":" + this.i);
-        this.h = SystemUtils.b();
+        this.h = SystemUtils.getMonotonicMillis();
         this.p = new DatagramPacket(this.o, this.o.length);
 
         try {

@@ -450,7 +450,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
     }
 
     public IChatBaseComponent getScoreboardDisplayName() {
-        ScoreboardTeamBase scoreboardteambase = this.be();
+        ScoreboardTeamBase scoreboardteambase = this.getScoreboardTeam();
         IChatBaseComponent ichatbasecomponent = this.getCustomName();
 
         if (ichatbasecomponent != null) {
@@ -546,7 +546,7 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
         this.bR = true;
     }
 
-    public EntityVillager b(EntityAgeable entityageable) {
+    public EntityVillager createChild(EntityAgeable entityageable) {
         EntityVillager entityvillager = new EntityVillager(this.world);
 
         entityvillager.prepare(this.world.getDamageScaler(new BlockPosition(entityvillager)), (GroupDataEntity) null, (NBTTagCompound) null);
@@ -657,10 +657,6 @@ public class EntityVillager extends EntityAgeable implements NPC, IMerchant {
                 return false;
             }
         }
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 
     static class MerchantRecipeOptionProcess implements EntityVillager.IMerchantRecipeOption {

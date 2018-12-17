@@ -8,15 +8,11 @@ public class PredicateBlockSolid implements PredicateBlock<IBlockData> {
 
     public PredicateBlockSolid() {}
 
-    public boolean a(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean test(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata != null && !iblockdata.getMaterial().isSolid();
     }
 
     public static PredicateBlockSolid a() {
         return PredicateBlockSolid.a;
-    }
-
-    public boolean test(@Nullable Object object, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.a((IBlockData) object, iblockaccess, blockposition);
     }
 }

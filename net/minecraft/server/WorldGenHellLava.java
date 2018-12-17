@@ -60,7 +60,7 @@ public class WorldGenHellLava extends WorldGenerator<WorldGenFeatureHellFlowingL
 
             if (!worldgenfeaturehellflowinglavaconfiguration.a && i == 4 && j == 1 || i == 5) {
                 generatoraccess.setTypeAndData(blockposition, Blocks.LAVA.getBlockData(), 2);
-                generatoraccess.I().a(blockposition, FluidTypes.e, 0);
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.e, 0);
             }
 
             return true;

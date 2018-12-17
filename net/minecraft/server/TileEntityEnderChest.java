@@ -11,7 +11,7 @@ public class TileEntityEnderChest extends TileEntity implements ITickable {
         super(TileEntityTypes.ENDER_CHEST);
     }
 
-    public void Y_() {
+    public void tick() {
         if (++this.g % 20 * 4 == 0) {
             this.world.playBlockAction(this.position, Blocks.ENDER_CHEST, 1, this.f);
         }

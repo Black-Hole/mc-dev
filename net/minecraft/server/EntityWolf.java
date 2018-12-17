@@ -118,8 +118,8 @@ public class EntityWolf extends EntityTameableAnimal {
         return LootTables.U;
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (!this.world.isClientSide && this.bL && !this.bM && !this.dr() && this.onGround) {
             this.bM = true;
             this.bN = 0.0F;
@@ -319,7 +319,7 @@ public class EntityWolf extends EntityTameableAnimal {
         this.datawatcher.set(EntityWolf.bI, enumcolor.getColorIndex());
     }
 
-    public EntityWolf b(EntityAgeable entityageable) {
+    public EntityWolf createChild(EntityAgeable entityageable) {
         EntityWolf entitywolf = new EntityWolf(this.world);
         UUID uuid = this.getOwnerUUID();
 
@@ -371,10 +371,6 @@ public class EntityWolf extends EntityTameableAnimal {
 
     public boolean a(EntityHuman entityhuman) {
         return !this.isAngry() && super.a(entityhuman);
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 
     class a<T extends Entity> extends PathfinderGoalAvoidTarget<T> {

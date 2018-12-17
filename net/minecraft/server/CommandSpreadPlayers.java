@@ -59,7 +59,7 @@ public class CommandSpreadPlayers {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityHuman) {
-                hashset.add(entity.be());
+                hashset.add(entity.getScoreboardTeam());
             } else {
                 hashset.add((Object) null);
             }
@@ -160,7 +160,7 @@ public class CommandSpreadPlayers {
             CommandSpreadPlayers.a commandspreadplayers_a;
 
             if (flag) {
-                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.be() : null;
+                ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.getScoreboardTeam() : null;
 
                 if (!hashmap.containsKey(scoreboardteambase)) {
                     hashmap.put(scoreboardteambase, acommandspreadplayers_a[i++]);

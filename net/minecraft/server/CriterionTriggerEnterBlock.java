@@ -54,7 +54,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerEnterBlock.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEnterBlock.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         Block block = null;
 
         if (jsonobject.has("block")) {
@@ -110,10 +110,6 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
             criteriontriggerenterblock_a.a(iblockdata);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

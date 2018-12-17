@@ -35,6 +35,6 @@ public class DragonControllerHover extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerHover> getControllerPhase() {
-        return DragonControllerPhase.k;
+        return DragonControllerPhase.HOVER;
     }
 }

@@ -20,9 +20,9 @@ public interface IMinecraftServer {
 
     String getVersion();
 
-    int y();
+    int getPlayerCount();
 
-    int z();
+    int getMaxPlayers();
 
     String[] getPlayers();
 

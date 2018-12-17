@@ -91,7 +91,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
         }
 
-        public LootItemFunctionEnchant a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootItemFunctionEnchant b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             ArrayList arraylist = Lists.newArrayList();
 
             if (jsonobject.has("enchantments")) {
@@ -112,10 +112,6 @@ public class LootItemFunctionEnchant extends LootItemFunction {
             }
 
             return new LootItemFunctionEnchant(alootitemcondition, arraylist);
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

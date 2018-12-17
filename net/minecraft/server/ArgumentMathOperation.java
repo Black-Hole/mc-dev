@@ -27,7 +27,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
         return (ArgumentMathOperation.a) commandcontext.getArgument(s, ArgumentMathOperation.a.class);
     }
 
-    public ArgumentMathOperation.a a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentMathOperation.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (!stringreader.canRead()) {
             throw ArgumentMathOperation.b.create();
         } else {
@@ -143,10 +143,6 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
         default:
             throw ArgumentMathOperation.b.create();
         }
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     @FunctionalInterface

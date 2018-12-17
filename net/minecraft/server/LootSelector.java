@@ -82,7 +82,7 @@ public class LootSelector {
 
         public a() {}
 
-        public LootSelector a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootSelector deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot pool");
             LootSelectorEntry[] alootselectorentry = (LootSelectorEntry[]) ChatDeserializer.a(jsonobject, "entries", jsondeserializationcontext, LootSelectorEntry[].class);
             LootItemCondition[] alootitemcondition = (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class);
@@ -92,7 +92,7 @@ public class LootSelector {
             return new LootSelector(alootselectorentry, alootitemcondition, lootvaluebounds, lootvaluebounds1);
         }
 
-        public JsonElement a(LootSelector lootselector, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(LootSelector lootselector, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             jsonobject.add("entries", jsonserializationcontext.serialize(lootselector.a));
@@ -106,14 +106,6 @@ public class LootSelector {
             }
 
             return jsonobject;
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootSelector) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

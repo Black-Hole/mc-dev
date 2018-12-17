@@ -180,15 +180,15 @@ public class EntityCreeper extends EntityMonster {
             boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
             float f = this.isPowered() ? 2.0F : 1.0F;
 
-            this.aX = true;
+            this.killed = true;
             this.world.explode(this, this.locX, this.locY, this.locZ, (float) this.explosionRadius * f, flag);
             this.die();
-            this.dF();
+            this.createEffectCloud();
         }
 
     }
 
-    private void dF() {
+    private void createEffectCloud() {
         Collection collection = this.getEffects();
 
         if (!collection.isEmpty()) {

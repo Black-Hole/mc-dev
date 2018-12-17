@@ -91,10 +91,6 @@ public class CriterionConditionEntity {
         }
     }
 
-    CriterionConditionEntity(CriterionConditionEntityType criterionconditionentitytype, CriterionConditionDistance criterionconditiondistance, CriterionConditionLocation criterionconditionlocation, CriterionConditionMobEffect criterionconditionmobeffect, CriterionConditionNBT criterionconditionnbt, Object object) {
-        this(criterionconditionentitytype, criterionconditiondistance, criterionconditionlocation, criterionconditionmobeffect, criterionconditionnbt);
-    }
-
     public static class a {
 
         private CriterionConditionEntityType a;

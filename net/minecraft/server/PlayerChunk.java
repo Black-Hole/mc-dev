@@ -12,11 +12,11 @@ public class PlayerChunk {
 
     private static final Logger a = LogManager.getLogger();
     private final PlayerChunkMap playerChunkMap;
-    private final List<EntityPlayer> c = Lists.newArrayList();
+    public final List<EntityPlayer> players = Lists.newArrayList();
     private final ChunkCoordIntPair location;
     private final short[] dirtyBlocks = new short[64];
     @Nullable
-    private Chunk chunk;
+    public Chunk chunk;
     private int dirtyCount;
     private int h;
     private long i;
@@ -25,7 +25,7 @@ public class PlayerChunk {
     public PlayerChunk(PlayerChunkMap playerchunkmap, int i, int j) {
         this.playerChunkMap = playerchunkmap;
         this.location = new ChunkCoordIntPair(i, j);
-        ChunkProviderServer chunkproviderserver = playerchunkmap.getWorld().getChunkProviderServer();
+        ChunkProviderServer chunkproviderserver = playerchunkmap.getWorld().getChunkProvider();
 
         chunkproviderserver.a(i, j);
         this.chunk = chunkproviderserver.getChunkAt(i, j, true, false);
@@ -36,14 +36,14 @@ public class PlayerChunk {
     }
 
     public void a(EntityPlayer entityplayer) {
-        if (this.c.contains(entityplayer)) {
+        if (this.players.contains(entityplayer)) {
             PlayerChunk.a.debug("Failed to add player. {} already is in chunk {}, {}", entityplayer, this.location.x, this.location.z);
         } else {
-            if (this.c.isEmpty()) {
+            if (this.players.isEmpty()) {
                 this.i = this.playerChunkMap.getWorld().getTime();
             }
 
-            this.c.add(entityplayer);
+            this.players.add(entityplayer);
             if (this.done) {
                 this.sendChunk(entityplayer);
             }
@@ -52,13 +52,13 @@ public class PlayerChunk {
     }
 
     public void b(EntityPlayer entityplayer) {
-        if (this.c.contains(entityplayer)) {
+        if (this.players.contains(entityplayer)) {
             if (this.done) {
                 entityplayer.playerConnection.sendPacket(new PacketPlayOutUnloadChunk(this.location.x, this.location.z));
             }
 
-            this.c.remove(entityplayer);
-            if (this.c.isEmpty()) {
+            this.players.remove(entityplayer);
+            if (this.players.isEmpty()) {
                 this.playerChunkMap.b(this);
             }
 
@@ -69,7 +69,7 @@ public class PlayerChunk {
         if (this.chunk != null) {
             return true;
         } else {
-            this.chunk = this.playerChunkMap.getWorld().getChunkProviderServer().getChunkAt(this.location.x, this.location.z, true, flag);
+            this.chunk = this.playerChunkMap.getWorld().getChunkProvider().getChunkAt(this.location.x, this.location.z, true, flag);
             return this.chunk != null;
         }
     }
@@ -85,9 +85,9 @@ public class PlayerChunk {
             this.dirtyCount = 0;
             this.h = 0;
             this.done = true;
-            if (!this.c.isEmpty()) {
+            if (!this.players.isEmpty()) {
                 PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, '\uffff');
-                Iterator iterator = this.c.iterator();
+                Iterator iterator = this.players.iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -142,8 +142,8 @@ public class PlayerChunk {
 
     public void a(Packet<?> packet) {
         if (this.done) {
-            for (int i = 0; i < this.c.size(); ++i) {
-                ((EntityPlayer) this.c.get(i)).playerConnection.sendPacket(packet);
+            for (int i = 0; i < this.players.size(); ++i) {
+                ((EntityPlayer) this.players.get(i)).playerConnection.sendPacket(packet);
             }
 
         }
@@ -201,18 +201,18 @@ public class PlayerChunk {
     }
 
     public boolean d(EntityPlayer entityplayer) {
-        return this.c.contains(entityplayer);
+        return this.players.contains(entityplayer);
     }
 
     public boolean a(Predicate<EntityPlayer> predicate) {
-        return this.c.stream().anyMatch(predicate);
+        return this.players.stream().anyMatch(predicate);
     }
 
     public boolean a(double d0, Predicate<EntityPlayer> predicate) {
         int i = 0;
 
-        for (int j = this.c.size(); i < j; ++i) {
-            EntityPlayer entityplayer = (EntityPlayer) this.c.get(i);
+        for (int j = this.players.size(); i < j; ++i) {
+            EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
             if (predicate.test(entityplayer) && this.location.a(entityplayer) < d0 * d0) {
                 return true;
@@ -233,7 +233,7 @@ public class PlayerChunk {
 
     public double g() {
         double d0 = Double.MAX_VALUE;
-        Iterator iterator = this.c.iterator();
+        Iterator iterator = this.players.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();

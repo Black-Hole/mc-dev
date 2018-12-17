@@ -46,10 +46,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPiece6(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
-
-        WorldGenMonumentPieceSelector4(Object object) {
-            this();
-        }
     }
 
     static class WorldGenMonumentPieceSelector6 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
@@ -73,10 +69,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPiece4(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
-
-        WorldGenMonumentPieceSelector6(Object object) {
-            this();
-        }
     }
 
     static class WorldGenMonumentPieceSelector3 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
@@ -98,10 +90,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker1.b[EnumDirection.NORTH.a()].d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPiece7(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker1, random);
         }
-
-        WorldGenMonumentPieceSelector3(Object object) {
-            this();
-        }
     }
 
     static class WorldGenMonumentPieceSelector7 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
@@ -116,10 +104,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPiece3(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
-        }
-
-        WorldGenMonumentPieceSelector7(Object object) {
-            this();
         }
     }
 
@@ -136,10 +120,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPiece5(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
-
-        WorldGenMonumentPieceSelector5(Object object) {
-            this();
-        }
     }
 
     static class WorldGenMonumentPieceSelector1 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
@@ -154,10 +134,6 @@ public class WorldGenMonumentPieces {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
         }
-
-        WorldGenMonumentPieceSelector1(Object object) {
-            this();
-        }
     }
 
     static class WorldGenMonumentPieceSelector2 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
@@ -171,10 +147,6 @@ public class WorldGenMonumentPieces {
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPieceSimple(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
-        }
-
-        WorldGenMonumentPieceSelector2(Object object) {
-            this();
         }
     }
 

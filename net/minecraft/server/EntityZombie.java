@@ -163,7 +163,7 @@ public class EntityZombie extends EntityMonster {
         super.tick();
     }
 
-    public void k() {
+    public void movementTick() {
         boolean flag = this.L_() && this.dq();
 
         if (flag) {
@@ -186,7 +186,7 @@ public class EntityZombie extends EntityMonster {
             }
         }
 
-        super.k();
+        super.movementTick();
     }
 
     private void a(int i) {
@@ -540,10 +540,6 @@ public class EntityZombie extends EntityMonster {
 
         private GroupDataZombie(boolean flag) {
             this.a = flag;
-        }
-
-        GroupDataZombie(boolean flag, Object object) {
-            this(flag);
         }
     }
 }

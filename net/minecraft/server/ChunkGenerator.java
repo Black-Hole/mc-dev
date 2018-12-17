@@ -39,5 +39,5 @@ public interface ChunkGenerator<C extends GeneratorSettings> {
 
     int getSpawnHeight();
 
-    int e();
+    int getGenerationDepth();
 }

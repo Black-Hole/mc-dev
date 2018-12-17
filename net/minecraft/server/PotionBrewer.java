@@ -21,7 +21,7 @@ public class PotionBrewer {
             }
 
             recipeitemstack = (RecipeItemStack) iterator.next();
-        } while (!recipeitemstack.a(itemstack));
+        } while (!recipeitemstack.test(itemstack));
 
         return true;
     };
@@ -34,7 +34,7 @@ public class PotionBrewer {
         int i = 0;
 
         for (int j = PotionBrewer.b.size(); i < j; ++i) {
-            if (((PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i)).b.a(itemstack)) {
+            if (((PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i)).b.test(itemstack)) {
                 return true;
             }
         }
@@ -46,7 +46,7 @@ public class PotionBrewer {
         int i = 0;
 
         for (int j = PotionBrewer.a.size(); i < j; ++i) {
-            if (((PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i)).b.a(itemstack)) {
+            if (((PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i)).b.test(itemstack)) {
                 return true;
             }
         }
@@ -65,7 +65,7 @@ public class PotionBrewer {
         for (int j = PotionBrewer.b.size(); i < j; ++i) {
             PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
 
-            if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.a(itemstack1)) {
+            if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.test(itemstack1)) {
                 return true;
             }
         }
@@ -80,7 +80,7 @@ public class PotionBrewer {
         for (int j = PotionBrewer.a.size(); i < j; ++i) {
             PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
 
-            if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.a(itemstack1)) {
+            if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.test(itemstack1)) {
                 return true;
             }
         }
@@ -99,7 +99,7 @@ public class PotionBrewer {
 
             for (j = PotionBrewer.b.size(); i < j; ++i) {
                 potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
-                if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.a(itemstack)) {
+                if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.test(itemstack)) {
                     return PotionUtil.a(new ItemStack((IMaterial) potionbrewer_predicatedcombination.c), potionregistry);
                 }
             }
@@ -108,7 +108,7 @@ public class PotionBrewer {
 
             for (j = PotionBrewer.a.size(); i < j; ++i) {
                 potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
-                if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.a(itemstack)) {
+                if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.test(itemstack)) {
                     return PotionUtil.a(new ItemStack(item), (PotionRegistry) potionbrewer_predicatedcombination.c);
                 }
             }

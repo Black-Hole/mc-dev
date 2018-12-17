@@ -41,8 +41,8 @@ public class EntityChicken extends EntityAnimal {
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         this.bG = this.bC;
         this.bE = this.bD;
         this.bD = (float) ((double) this.bD + (double) (this.onGround ? -1 : 4) * 0.3D);
@@ -88,12 +88,12 @@ public class EntityChicken extends EntityAnimal {
         return LootTables.J;
     }
 
-    public EntityChicken b(EntityAgeable entityageable) {
+    public EntityChicken createChild(EntityAgeable entityageable) {
         return new EntityChicken(this.world);
     }
 
     public boolean f(ItemStack itemstack) {
-        return EntityChicken.bK.a(itemstack);
+        return EntityChicken.bK.test(itemstack);
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
@@ -139,9 +139,5 @@ public class EntityChicken extends EntityAnimal {
 
     public void s(boolean flag) {
         this.bJ = flag;
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 }

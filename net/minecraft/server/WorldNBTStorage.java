@@ -19,7 +19,7 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     private static final Logger b = LogManager.getLogger();
     private final File baseDir;
     private final File playerDir;
-    private final long sessionId = SystemUtils.b();
+    private final long sessionId = SystemUtils.getMonotonicMillis();
     private final String f;
     private final DefinedStructureManager g;
     protected final DataFixer a;

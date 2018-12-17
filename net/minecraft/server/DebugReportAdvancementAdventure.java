@@ -9,7 +9,7 @@ public class DebugReportAdvancementAdventure implements Consumer<Consumer<Advanc
 
     public DebugReportAdvancementAdventure() {}
 
-    public void a(Consumer<Advancement> consumer) {
+    public void accept(Consumer<Advancement> consumer) {
         Advancement advancement = Advancement.SerializedAdvancement.a().a(Items.MAP, new ChatMessage("advancements.adventure.root.title", new Object[0]), new ChatMessage("advancements.adventure.root.description", new Object[0]), new MinecraftKey("minecraft:textures/gui/advancements/backgrounds/adventure.png"), AdvancementFrameType.TASK, false, false, false).a(AdvancementRequirements.OR).a("killed_something", (CriterionInstance) CriterionTriggerKilled.b.c()).a("killed_by_something", (CriterionInstance) CriterionTriggerKilled.b.d()).a(consumer, "adventure/root");
         Advancement advancement1 = Advancement.SerializedAdvancement.a().a(advancement).a(Blocks.RED_BED, new ChatMessage("advancements.adventure.sleep_in_bed.title", new Object[0]), new ChatMessage("advancements.adventure.sleep_in_bed.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("slept_in_bed", (CriterionInstance) CriterionTriggerLocation.b.c()).a(consumer, "adventure/sleep_in_bed");
         Advancement advancement2 = this.b(Advancement.SerializedAdvancement.a()).a(advancement1).a(Items.DIAMOND_BOOTS, new ChatMessage("advancements.adventure.adventuring_time.title", new Object[0]), new ChatMessage("advancements.adventure.adventuring_time.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.CHALLENGE, true, true, false).a(AdvancementRewards.a.a(500)).a(consumer, "adventure/adventuring_time");
@@ -48,9 +48,5 @@ public class DebugReportAdvancementAdventure implements Consumer<Consumer<Advanc
         }
 
         return advancement_serializedadvancement;
-    }
-
-    public void accept(Object object) {
-        this.a((Consumer) object);
     }
 }

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 
 public class ArgumentSerializerFloat implements ArgumentSerializer<FloatArgumentType> {
@@ -23,7 +22,7 @@ public class ArgumentSerializerFloat implements ArgumentSerializer<FloatArgument
 
     }
 
-    public FloatArgumentType a(PacketDataSerializer packetdataserializer) {
+    public FloatArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         float f = ArgumentSerializers.a(b0) ? packetdataserializer.readFloat() : -3.4028235E38F;
         float f1 = ArgumentSerializers.b(b0) ? packetdataserializer.readFloat() : Float.MAX_VALUE;
@@ -40,9 +39,5 @@ public class ArgumentSerializerFloat implements ArgumentSerializer<FloatArgument
             jsonobject.addProperty("max", floatargumenttype.getMaximum());
         }
 
-    }
-
-    public ArgumentType b(PacketDataSerializer packetdataserializer) {
-        return this.a(packetdataserializer);
     }
 }

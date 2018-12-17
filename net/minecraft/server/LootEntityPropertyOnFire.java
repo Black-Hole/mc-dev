@@ -28,12 +28,8 @@ public class LootEntityPropertyOnFire implements LootEntityProperty {
             return new JsonPrimitive(lootentitypropertyonfire.a);
         }
 
-        public LootEntityPropertyOnFire b(JsonElement jsonelement, JsonDeserializationContext jsondeserializationcontext) {
+        public LootEntityPropertyOnFire a(JsonElement jsonelement, JsonDeserializationContext jsondeserializationcontext) {
             return new LootEntityPropertyOnFire(ChatDeserializer.c(jsonelement, "on_fire"));
-        }
-
-        public LootEntityProperty a(JsonElement jsonelement, JsonDeserializationContext jsondeserializationcontext) {
-            return this.b(jsonelement, jsondeserializationcontext);
         }
     }
 }

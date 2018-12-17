@@ -72,7 +72,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
         }
 
         if (flag1) {
-            world.J().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
         }
 
         world.updateAdjacentComparators(blockposition, this);

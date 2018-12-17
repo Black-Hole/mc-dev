@@ -485,10 +485,6 @@ public class EntityDolphin extends EntityWaterAnimal {
             }
 
         }
-
-        d(Object object) {
-            this();
-        }
     }
 
     static class a extends ControllerMove {

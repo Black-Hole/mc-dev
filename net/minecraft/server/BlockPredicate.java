@@ -15,11 +15,7 @@ public class BlockPredicate implements Predicate<IBlockData> {
         return new BlockPredicate(block);
     }
 
-    public boolean a(@Nullable IBlockData iblockdata) {
+    public boolean test(@Nullable IBlockData iblockdata) {
         return iblockdata != null && iblockdata.getBlock() == this.a;
-    }
-
-    public boolean test(@Nullable Object object) {
-        return this.a((IBlockData) object);
     }
 }

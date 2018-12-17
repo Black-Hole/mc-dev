@@ -17,12 +17,8 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     private static final DataWatcherObject<Integer> bL = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
     private static final Predicate<EntityInsentient> bM = new Predicate() {
-        public boolean a(@Nullable EntityInsentient entityinsentient) {
+        public boolean test(@Nullable EntityInsentient entityinsentient) {
             return entityinsentient != null && EntityParrot.bP.containsKey(entityinsentient.P());
-        }
-
-        public boolean test(@Nullable Object object) {
-            return this.a((EntityInsentient) object);
         }
     };
     private static final Item bN = Items.COOKIE;
@@ -112,14 +108,14 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
         return this.length * 0.6F;
     }
 
-    public void k() {
+    public void movementTick() {
         b(this.world, (Entity) this);
         if (this.bR == null || this.bR.distanceSquared(this.locX, this.locY, this.locZ) > 12.0D || this.world.getType(this.bR).getBlock() != Blocks.JUKEBOX) {
             this.bQ = false;
             this.bR = null;
         }
 
-        super.k();
+        super.movementTick();
         this.dL();
     }
 

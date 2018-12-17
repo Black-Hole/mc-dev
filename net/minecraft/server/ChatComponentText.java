@@ -16,7 +16,7 @@ public class ChatComponentText extends ChatBaseComponent {
         return this.b;
     }
 
-    public ChatComponentText j() {
+    public ChatComponentText g() {
         return new ChatComponentText(this.b);
     }
 
@@ -34,9 +34,5 @@ public class ChatComponentText extends ChatBaseComponent {
 
     public String toString() {
         return "TextComponent{text='" + this.b + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
-    }
-
-    public IChatBaseComponent g() {
-        return this.j();
     }
 }

@@ -126,7 +126,7 @@ public class EntityOcelot extends EntityTameableAnimal {
             if (this.f((EntityLiving) entityhuman) && !this.world.isClientSide && !this.f(itemstack)) {
                 this.goalSit.setSitting(!this.isSitting());
             }
-        } else if ((this.bK == null || this.bK.g()) && EntityOcelot.bG.a(itemstack) && entityhuman.h(this) < 9.0D) {
+        } else if ((this.bK == null || this.bK.g()) && EntityOcelot.bG.test(itemstack) && entityhuman.h(this) < 9.0D) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }
@@ -150,7 +150,7 @@ public class EntityOcelot extends EntityTameableAnimal {
         return super.a(entityhuman, enumhand);
     }
 
-    public EntityOcelot b(EntityAgeable entityageable) {
+    public EntityOcelot createChild(EntityAgeable entityageable) {
         EntityOcelot entityocelot = new EntityOcelot(this.world);
 
         if (this.isTamed()) {
@@ -163,7 +163,7 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     public boolean f(ItemStack itemstack) {
-        return EntityOcelot.bG.a(itemstack);
+        return EntityOcelot.bG.test(itemstack);
     }
 
     public boolean mate(EntityAnimal entityanimal) {
@@ -243,9 +243,5 @@ public class EntityOcelot extends EntityTameableAnimal {
         }
 
         return groupdataentity;
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 }

@@ -64,7 +64,7 @@ public class ItemEnderEye extends Item {
         } else {
             entityhuman.c(enumhand);
             if (!world.isClientSide) {
-                BlockPosition blockposition = ((WorldServer) world).getChunkProviderServer().a(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
+                BlockPosition blockposition = ((WorldServer) world).getChunkProvider().a(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
 
                 if (blockposition != null) {
                     EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + (double) (entityhuman.length / 2.0F), entityhuman.locZ);

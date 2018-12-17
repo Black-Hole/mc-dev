@@ -236,7 +236,7 @@ public class NBTTagList extends NBTList<NBTBase> {
         this.list.remove(i);
     }
 
-    public NBTTagList c() {
+    public NBTTagList clone() {
         NBTTagList nbttaglist = new NBTTagList();
 
         nbttaglist.type = this.type;
@@ -292,25 +292,5 @@ public class NBTTagList extends NBTList<NBTBase> {
 
     public int d() {
         return this.type;
-    }
-
-    public NBTBase clone() {
-        return this.c();
-    }
-
-    public Object remove(int i) {
-        return this.remove(i);
-    }
-
-    public Object set(int i, Object object) {
-        return this.set(i, (NBTBase) object);
-    }
-
-    public Object get(int i) {
-        return this.get(i);
-    }
-
-    public boolean add(Object object) {
-        return this.add((NBTBase) object);
     }
 }

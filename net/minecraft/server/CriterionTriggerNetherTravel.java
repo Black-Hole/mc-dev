@@ -49,7 +49,7 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerNetherTravel.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerNetherTravel.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject.get("entered"));
         CriterionConditionLocation criterionconditionlocation1 = CriterionConditionLocation.a(jsonobject.get("exited"));
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
@@ -64,10 +64,6 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
             criteriontriggernethertravel_a.a(entityplayer.getWorldServer(), vec3d, entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

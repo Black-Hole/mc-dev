@@ -66,7 +66,7 @@ public class ShapelessRecipes implements IRecipe {
 
         public a() {}
 
-        public ShapelessRecipes b(MinecraftKey minecraftkey, JsonObject jsonobject) {
+        public ShapelessRecipes a(MinecraftKey minecraftkey, JsonObject jsonobject) {
             String s = ChatDeserializer.a(jsonobject, "group", "");
             NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
 
@@ -99,7 +99,7 @@ public class ShapelessRecipes implements IRecipe {
             return "crafting_shapeless";
         }
 
-        public ShapelessRecipes b(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
+        public ShapelessRecipes a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             String s = packetdataserializer.e(32767);
             int i = packetdataserializer.g();
             NonNullList nonnulllist = NonNullList.a(i, RecipeItemStack.a);
@@ -125,14 +125,6 @@ public class ShapelessRecipes implements IRecipe {
             }
 
             packetdataserializer.a(shapelessrecipes.result);
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-            return this.b(minecraftkey, packetdataserializer);
-        }
-
-        public IRecipe a(MinecraftKey minecraftkey, JsonObject jsonobject) {
-            return this.b(minecraftkey, jsonobject);
         }
     }
 }

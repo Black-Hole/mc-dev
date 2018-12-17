@@ -27,7 +27,7 @@ public class LootTable {
         this.c = alootselector;
     }
 
-    public List<ItemStack> a(Random random, LootTableInfo loottableinfo) {
+    public List<ItemStack> populateLoot(Random random, LootTableInfo loottableinfo) {
         ArrayList arraylist = Lists.newArrayList();
 
         if (loottableinfo.a(this)) {
@@ -48,8 +48,8 @@ public class LootTable {
         return arraylist;
     }
 
-    public void a(IInventory iinventory, Random random, LootTableInfo loottableinfo) {
-        List list = this.a(random, loottableinfo);
+    public void fillInventory(IInventory iinventory, Random random, LootTableInfo loottableinfo) {
+        List list = this.populateLoot(random, loottableinfo);
         List list1 = this.a(iinventory, random);
 
         this.a(list, list1.size(), random);
@@ -126,26 +126,18 @@ public class LootTable {
 
         public a() {}
 
-        public LootTable a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public LootTable deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot table");
             LootSelector[] alootselector = (LootSelector[]) ChatDeserializer.a(jsonobject, "pools", new LootSelector[0], jsondeserializationcontext, LootSelector[].class);
 
             return new LootTable(alootselector);
         }
 
-        public JsonElement a(LootTable loottable, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(LootTable loottable, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             jsonobject.add("pools", jsonserializationcontext.serialize(loottable.c));
             return jsonobject;
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((LootTable) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
         }
     }
 }

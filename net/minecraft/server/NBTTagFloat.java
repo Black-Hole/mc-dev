@@ -31,7 +31,7 @@ public class NBTTagFloat extends NBTNumber {
         return this.data + "f";
     }
 
-    public NBTTagFloat c() {
+    public NBTTagFloat clone() {
         return new NBTTagFloat(this.data);
     }
 
@@ -75,9 +75,5 @@ public class NBTTagFloat extends NBTNumber {
 
     public Number j() {
         return this.data;
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }

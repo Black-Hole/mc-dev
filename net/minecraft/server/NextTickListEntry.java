@@ -35,7 +35,7 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
         return this.a.hashCode();
     }
 
-    public int a(NextTickListEntry nextticklistentry) {
+    public int compareTo(NextTickListEntry nextticklistentry) {
         return this.b < nextticklistentry.b ? -1 : (this.b > nextticklistentry.b ? 1 : (this.c.ordinal() < nextticklistentry.c.ordinal() ? -1 : (this.c.ordinal() > nextticklistentry.c.ordinal() ? 1 : (this.f < nextticklistentry.f ? -1 : (this.f > nextticklistentry.f ? 1 : 0)))));
     }
 
@@ -45,9 +45,5 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
 
     public T a() {
         return this.e;
-    }
-
-    public int compareTo(Object object) {
-        return this.a((NextTickListEntry) object);
     }
 }

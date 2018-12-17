@@ -20,7 +20,7 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
         return new ArgumentItemStack();
     }
 
-    public ArgumentPredicateItemStack a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentPredicateItemStack parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).h();
 
         return new ArgumentPredicateItemStack(argumentparseritemstack.b(), argumentparseritemstack.c());
@@ -47,9 +47,5 @@ public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStac
 
     public Collection<String> getExamples() {
         return ArgumentItemStack.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

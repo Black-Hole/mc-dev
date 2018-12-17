@@ -27,7 +27,7 @@ public class BlockChorusFruit extends BlockSprawling {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (!iblockdata.canPlace(generatoraccess, blockposition)) {
-            generatoraccess.J().a(blockposition, this, 1);
+            generatoraccess.getBlockTickList().a(blockposition, this, 1);
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         } else {
             Block block = iblockdata1.getBlock();

@@ -21,7 +21,7 @@ public class BlockCoral extends Block {
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (!this.a((IBlockAccess) generatoraccess, blockposition)) {
-            generatoraccess.J().a(blockposition, this, 60 + generatoraccess.m().nextInt(40));
+            generatoraccess.getBlockTickList().a(blockposition, this, 60 + generatoraccess.m().nextInt(40));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -46,7 +46,7 @@ public class BlockCoral extends Block {
     @Nullable
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         if (!this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) {
-            blockactioncontext.getWorld().J().a(blockactioncontext.getClickPosition(), this, 60 + blockactioncontext.getWorld().m().nextInt(40));
+            blockactioncontext.getWorld().getBlockTickList().a(blockactioncontext.getClickPosition(), this, 60 + blockactioncontext.getWorld().m().nextInt(40));
         }
 
         return this.getBlockData();

@@ -34,7 +34,7 @@ public class CommandTrigger {
     }
 
     public static CompletableFuture<Suggestions> a(CommandListenerWrapper commandlistenerwrapper, SuggestionsBuilder suggestionsbuilder) {
-        Entity entity = commandlistenerwrapper.f();
+        Entity entity = commandlistenerwrapper.getEntity();
         ArrayList arraylist = Lists.newArrayList();
 
         if (entity != null) {
@@ -45,7 +45,7 @@ public class CommandTrigger {
             while (iterator.hasNext()) {
                 ScoreboardObjective scoreboardobjective = (ScoreboardObjective) iterator.next();
 
-                if (scoreboardobjective.getCriteria() == IScoreboardCriteria.c && scoreboardserver.b(s, scoreboardobjective)) {
+                if (scoreboardobjective.getCriteria() == IScoreboardCriteria.TRIGGER && scoreboardserver.b(s, scoreboardobjective)) {
                     ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
 
                     if (!scoreboardscore.g()) {
@@ -77,7 +77,7 @@ public class CommandTrigger {
     }
 
     private static ScoreboardScore a(EntityPlayer entityplayer, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {
-        if (scoreboardobjective.getCriteria() != IScoreboardCriteria.c) {
+        if (scoreboardobjective.getCriteria() != IScoreboardCriteria.TRIGGER) {
             throw CommandTrigger.b.create();
         } else {
             Scoreboard scoreboard = entityplayer.getScoreboard();

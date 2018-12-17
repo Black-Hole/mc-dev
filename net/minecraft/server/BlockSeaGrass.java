@@ -30,7 +30,7 @@ public class BlockSeaGrass extends BlockPlant implements IBlockFragilePlantEleme
         IBlockData iblockdata2 = super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
 
         if (!iblockdata2.isAir()) {
-            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return iblockdata2;

@@ -29,12 +29,8 @@ public class LootItemConditionKilledByPlayer implements LootItemCondition {
             jsonobject.addProperty("inverse", lootitemconditionkilledbyplayer.a);
         }
 
-        public LootItemConditionKilledByPlayer a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionKilledByPlayer b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return new LootItemConditionKilledByPlayer(ChatDeserializer.a(jsonobject, "inverse", false));
-        }
-
-        public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return this.a(jsonobject, jsondeserializationcontext);
         }
     }
 }

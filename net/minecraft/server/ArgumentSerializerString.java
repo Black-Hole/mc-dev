@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.gson.JsonObject;
-import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType.StringType;
 
@@ -13,7 +12,7 @@ public class ArgumentSerializerString implements ArgumentSerializer<StringArgume
         packetdataserializer.a((Enum) stringargumenttype.getType());
     }
 
-    public StringArgumentType a(PacketDataSerializer packetdataserializer) {
+    public StringArgumentType b(PacketDataSerializer packetdataserializer) {
         StringType stringtype = (StringType) packetdataserializer.a(StringType.class);
 
         switch (stringtype) {
@@ -40,9 +39,5 @@ public class ArgumentSerializerString implements ArgumentSerializer<StringArgume
             jsonobject.addProperty("type", "greedy");
         }
 
-    }
-
-    public ArgumentType b(PacketDataSerializer packetdataserializer) {
-        return this.a(packetdataserializer);
     }
 }

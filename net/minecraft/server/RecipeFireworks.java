@@ -21,18 +21,18 @@ public class RecipeFireworks extends IRecipeComplex {
                 ItemStack itemstack = iinventory.getItem(j);
 
                 if (!itemstack.isEmpty()) {
-                    if (RecipeFireworks.a.a(itemstack)) {
+                    if (RecipeFireworks.a.test(itemstack)) {
                         if (flag) {
                             return false;
                         }
 
                         flag = true;
-                    } else if (RecipeFireworks.b.a(itemstack)) {
+                    } else if (RecipeFireworks.b.test(itemstack)) {
                         ++i;
                         if (i > 3) {
                             return false;
                         }
-                    } else if (!RecipeFireworks.c.a(itemstack)) {
+                    } else if (!RecipeFireworks.c.test(itemstack)) {
                         return false;
                     }
                 }
@@ -52,9 +52,9 @@ public class RecipeFireworks extends IRecipeComplex {
             ItemStack itemstack1 = iinventory.getItem(j);
 
             if (!itemstack1.isEmpty()) {
-                if (RecipeFireworks.b.a(itemstack1)) {
+                if (RecipeFireworks.b.test(itemstack1)) {
                     ++i;
-                } else if (RecipeFireworks.c.a(itemstack1)) {
+                } else if (RecipeFireworks.c.test(itemstack1)) {
                     NBTTagCompound nbttagcompound1 = itemstack1.b("Explosion");
 
                     if (nbttagcompound1 != null) {

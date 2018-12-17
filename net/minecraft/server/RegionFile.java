@@ -234,7 +234,7 @@ public class RegionFile {
                 }
             }
 
-            this.b(i, j, (int) (SystemUtils.d() / 1000L));
+            this.b(i, j, (int) (SystemUtils.getTimeMillis() / 1000L));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
@@ -272,7 +272,7 @@ public class RegionFile {
         this.c.writeInt(k);
     }
 
-    public void c() throws IOException {
+    public void close() throws IOException {
         if (this.c != null) {
             this.c.close();
         }

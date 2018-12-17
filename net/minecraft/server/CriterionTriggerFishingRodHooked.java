@@ -50,7 +50,7 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerFishingRodHooked.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerFishingRodHooked.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("rod"));
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
         CriterionConditionItem criterionconditionitem1 = CriterionConditionItem.a(jsonobject.get("item"));
@@ -65,10 +65,6 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
             criteriontriggerfishingrodhooked_a.a(entityplayer, itemstack, entityfishinghook, collection);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

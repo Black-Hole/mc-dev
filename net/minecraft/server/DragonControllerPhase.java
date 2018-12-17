@@ -6,17 +6,17 @@ import java.util.Arrays;
 public class DragonControllerPhase<T extends IDragonController> {
 
     private static DragonControllerPhase<?>[] l = new DragonControllerPhase[0];
-    public static final DragonControllerPhase<DragonControllerHold> a = a(DragonControllerHold.class, "HoldingPattern");
-    public static final DragonControllerPhase<DragonControllerStrafe> b = a(DragonControllerStrafe.class, "StrafePlayer");
-    public static final DragonControllerPhase<DragonControllerLandingFly> c = a(DragonControllerLandingFly.class, "LandingApproach");
-    public static final DragonControllerPhase<DragonControllerLanding> d = a(DragonControllerLanding.class, "Landing");
-    public static final DragonControllerPhase<DragonControllerFly> e = a(DragonControllerFly.class, "Takeoff");
-    public static final DragonControllerPhase<DragonControllerLandedFlame> f = a(DragonControllerLandedFlame.class, "SittingFlaming");
-    public static final DragonControllerPhase<DragonControllerLandedSearch> g = a(DragonControllerLandedSearch.class, "SittingScanning");
-    public static final DragonControllerPhase<DragonControllerLandedAttack> h = a(DragonControllerLandedAttack.class, "SittingAttacking");
-    public static final DragonControllerPhase<DragonControllerCharge> i = a(DragonControllerCharge.class, "ChargingPlayer");
-    public static final DragonControllerPhase<DragonControllerDying> j = a(DragonControllerDying.class, "Dying");
-    public static final DragonControllerPhase<DragonControllerHover> k = a(DragonControllerHover.class, "Hover");
+    public static final DragonControllerPhase<DragonControllerHold> HOLDING_PATTERN = a(DragonControllerHold.class, "HoldingPattern");
+    public static final DragonControllerPhase<DragonControllerStrafe> STRAFE_PLAYER = a(DragonControllerStrafe.class, "StrafePlayer");
+    public static final DragonControllerPhase<DragonControllerLandingFly> LANDING_APPROACH = a(DragonControllerLandingFly.class, "LandingApproach");
+    public static final DragonControllerPhase<DragonControllerLanding> LANDING = a(DragonControllerLanding.class, "Landing");
+    public static final DragonControllerPhase<DragonControllerFly> TAKEOFF = a(DragonControllerFly.class, "Takeoff");
+    public static final DragonControllerPhase<DragonControllerLandedFlame> SITTING_FLAMING = a(DragonControllerLandedFlame.class, "SittingFlaming");
+    public static final DragonControllerPhase<DragonControllerLandedSearch> SITTING_SCANNING = a(DragonControllerLandedSearch.class, "SittingScanning");
+    public static final DragonControllerPhase<DragonControllerLandedAttack> SITTING_ATTACKING = a(DragonControllerLandedAttack.class, "SittingAttacking");
+    public static final DragonControllerPhase<DragonControllerCharge> CHARGING_PLAYER = a(DragonControllerCharge.class, "ChargingPlayer");
+    public static final DragonControllerPhase<DragonControllerDying> DYING = a(DragonControllerDying.class, "Dying");
+    public static final DragonControllerPhase<DragonControllerHover> HOVER = a(DragonControllerHover.class, "Hover");
     private final Class<? extends IDragonController> m;
     private final int n;
     private final String o;
@@ -50,7 +50,7 @@ public class DragonControllerPhase<T extends IDragonController> {
     }
 
     public static DragonControllerPhase<?> getById(int i) {
-        return i >= 0 && i < DragonControllerPhase.l.length ? DragonControllerPhase.l[i] : DragonControllerPhase.a;
+        return i >= 0 && i < DragonControllerPhase.l.length ? DragonControllerPhase.l[i] : DragonControllerPhase.HOLDING_PATTERN;
     }
 
     public static int c() {

@@ -49,7 +49,7 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerSummonedEntity.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerSummonedEntity.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
 
         return new CriterionTriggerSummonedEntity.b(criterionconditionentity);
@@ -62,10 +62,6 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
             criteriontriggersummonedentity_a.a(entityplayer, entity);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

@@ -18,6 +18,6 @@ public class ItemToolMaterial extends Item {
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        return this.a.f().a(itemstack1) || super.a(itemstack, itemstack1);
+        return this.a.f().test(itemstack1) || super.a(itemstack, itemstack1);
     }
 }

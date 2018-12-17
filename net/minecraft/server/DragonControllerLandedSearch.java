@@ -14,7 +14,7 @@ public class DragonControllerLandedSearch extends AbstractDragonControllerLanded
 
         if (entityhuman != null) {
             if (this.b > 25) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.h);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_ATTACKING);
             } else {
                 Vec3D vec3d = (new Vec3D(entityhuman.locX - this.a.locX, 0.0D, entityhuman.locZ - this.a.locZ)).a();
                 Vec3D vec3d1 = (new Vec3D((double) MathHelper.sin(this.a.yaw * 0.017453292F), 0.0D, (double) (-MathHelper.cos(this.a.yaw * 0.017453292F)))).a();
@@ -40,10 +40,10 @@ public class DragonControllerLandedSearch extends AbstractDragonControllerLanded
             }
         } else if (this.b >= 100) {
             entityhuman = this.a.world.a((Entity) this.a, 150.0D, 150.0D);
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.e);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.TAKEOFF);
             if (entityhuman != null) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.i);
-                ((DragonControllerCharge) this.a.getDragonControllerManager().b(DragonControllerPhase.i)).a(new Vec3D(entityhuman.locX, entityhuman.locY, entityhuman.locZ));
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.CHARGING_PLAYER);
+                ((DragonControllerCharge) this.a.getDragonControllerManager().b(DragonControllerPhase.CHARGING_PLAYER)).a(new Vec3D(entityhuman.locX, entityhuman.locY, entityhuman.locZ));
             }
         }
 
@@ -54,6 +54,6 @@ public class DragonControllerLandedSearch extends AbstractDragonControllerLanded
     }
 
     public DragonControllerPhase<DragonControllerLandedSearch> getControllerPhase() {
-        return DragonControllerPhase.g;
+        return DragonControllerPhase.SITTING_SCANNING;
     }
 }

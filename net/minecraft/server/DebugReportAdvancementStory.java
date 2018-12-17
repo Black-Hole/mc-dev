@@ -6,7 +6,7 @@ public class DebugReportAdvancementStory implements Consumer<Consumer<Advancemen
 
     public DebugReportAdvancementStory() {}
 
-    public void a(Consumer<Advancement> consumer) {
+    public void accept(Consumer<Advancement> consumer) {
         Advancement advancement = Advancement.SerializedAdvancement.a().a(Blocks.GRASS_BLOCK, new ChatMessage("advancements.story.root.title", new Object[0]), new ChatMessage("advancements.story.root.description", new Object[0]), new MinecraftKey("minecraft:textures/gui/advancements/backgrounds/stone.png"), AdvancementFrameType.TASK, false, false, false).a("crafting_table", (CriterionInstance) CriterionTriggerInventoryChanged.b.a(Blocks.CRAFTING_TABLE)).a(consumer, "story/root");
         Advancement advancement1 = Advancement.SerializedAdvancement.a().a(advancement).a(Items.WOODEN_PICKAXE, new ChatMessage("advancements.story.mine_stone.title", new Object[0]), new ChatMessage("advancements.story.mine_stone.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("get_stone", (CriterionInstance) CriterionTriggerInventoryChanged.b.a(Blocks.COBBLESTONE)).a(consumer, "story/mine_stone");
         Advancement advancement2 = Advancement.SerializedAdvancement.a().a(advancement1).a(Items.STONE_PICKAXE, new ChatMessage("advancements.story.upgrade_tools.title", new Object[0]), new ChatMessage("advancements.story.upgrade_tools.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("stone_pickaxe", (CriterionInstance) CriterionTriggerInventoryChanged.b.a(Items.STONE_PICKAXE)).a(consumer, "story/upgrade_tools");
@@ -23,9 +23,5 @@ public class DebugReportAdvancementStory implements Consumer<Consumer<Advancemen
         Advancement advancement13 = Advancement.SerializedAdvancement.a().a(advancement12).a(Items.GOLDEN_APPLE, new ChatMessage("advancements.story.cure_zombie_villager.title", new Object[0]), new ChatMessage("advancements.story.cure_zombie_villager.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.GOAL, true, true, false).a("cured_zombie", (CriterionInstance) CriterionTriggerCuredZombieVillager.b.c()).a(consumer, "story/cure_zombie_villager");
         Advancement advancement14 = Advancement.SerializedAdvancement.a().a(advancement12).a(Items.ENDER_EYE, new ChatMessage("advancements.story.follow_ender_eye.title", new Object[0]), new ChatMessage("advancements.story.follow_ender_eye.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("in_stronghold", (CriterionInstance) CriterionTriggerLocation.b.a(CriterionConditionLocation.a("Stronghold"))).a(consumer, "story/follow_ender_eye");
         Advancement advancement15 = Advancement.SerializedAdvancement.a().a(advancement14).a(Blocks.END_STONE, new ChatMessage("advancements.story.enter_the_end.title", new Object[0]), new ChatMessage("advancements.story.enter_the_end.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a("entered_end", (CriterionInstance) CriterionTriggerChangedDimension.b.a(DimensionManager.THE_END)).a(consumer, "story/enter_the_end");
-    }
-
-    public void accept(Object object) {
-        this.a((Consumer) object);
     }
 }

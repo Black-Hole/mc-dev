@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
 
     private static final Function<Entry<IBlockState<?>, Comparable<?>>, String> b = new Function() {
-        public String a(@Nullable Entry<IBlockState<?>, Comparable<?>> entry) {
+        public String apply(@Nullable Entry<IBlockState<?>, Comparable<?>> entry) {
             if (entry == null) {
                 return "<NULL>";
             } else {
@@ -31,10 +31,6 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
 
         private <T extends Comparable<T>> String a(IBlockState<T> iblockstate, Comparable<?> comparable) {
             return iblockstate.a(comparable);
-        }
-
-        public Object apply(@Nullable Object object) {
-            return this.a((Entry) object);
         }
     };
     protected final O e_;

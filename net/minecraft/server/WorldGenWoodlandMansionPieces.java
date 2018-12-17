@@ -26,10 +26,6 @@ public class WorldGenWoodlandMansionPieces {
         private h() {
             super(null);
         }
-
-        h(Object object) {
-            this();
-        }
     }
 
     static class f extends WorldGenWoodlandMansionPieces.b {
@@ -64,10 +60,6 @@ public class WorldGenWoodlandMansionPieces {
 
         public String e(Random random) {
             return "2x2_s1";
-        }
-
-        f(Object object) {
-            this();
         }
     }
 
@@ -104,10 +96,6 @@ public class WorldGenWoodlandMansionPieces {
         public String e(Random random) {
             return "2x2_s1";
         }
-
-        a(Object object) {
-            this();
-        }
     }
 
     abstract static class b {
@@ -127,10 +115,6 @@ public class WorldGenWoodlandMansionPieces {
         public abstract String d(Random random);
 
         public abstract String e(Random random);
-
-        b(Object object) {
-            this();
-        }
     }
 
     static class g {
@@ -1020,10 +1004,6 @@ public class WorldGenWoodlandMansionPieces {
         public String c;
 
         private e() {}
-
-        e(Object object) {
-            this();
-        }
     }
 
     public static class i extends DefinedStructurePiece {

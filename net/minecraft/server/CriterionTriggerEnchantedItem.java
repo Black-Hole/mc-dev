@@ -49,7 +49,7 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerEnchantedItem.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerEnchantedItem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
         CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("levels"));
 
@@ -63,10 +63,6 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
             criteriontriggerenchanteditem_a.a(itemstack, i);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

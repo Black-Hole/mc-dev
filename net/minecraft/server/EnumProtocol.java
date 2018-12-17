@@ -221,10 +221,6 @@ public enum EnumProtocol {
         return (EnumProtocol) EnumProtocol.f.get(packet.getClass());
     }
 
-    EnumProtocol(int i, Object object) {
-        this(i);
-    }
-
     static {
         EnumProtocol[] aenumprotocol = values();
         int i = aenumprotocol.length;

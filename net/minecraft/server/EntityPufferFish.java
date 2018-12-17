@@ -119,8 +119,8 @@ public class EntityPufferFish extends EntityFish {
         super.tick();
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.getPuffState() > 0) {
             List list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bC);
             Iterator iterator = list.iterator();

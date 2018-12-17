@@ -8,15 +8,11 @@ public class PredicateBlockLightTransmission implements PredicateBlock<IBlockDat
 
     public PredicateBlockLightTransmission() {}
 
-    public boolean a(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean test(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata != null && iblockdata.b(iblockaccess, blockposition) == 0;
     }
 
     public static PredicateBlockLightTransmission a() {
         return PredicateBlockLightTransmission.a;
-    }
-
-    public boolean test(@Nullable Object object, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.a((IBlockData) object, iblockaccess, blockposition);
     }
 }

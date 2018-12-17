@@ -39,7 +39,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
 
     }
 
-    public void Y_() {
+    public void tick() {
         this.j = this.i;
         this.l = this.k;
         EntityHuman entityhuman = this.world.a((double) ((float) this.position.getX() + 0.5F), (double) ((float) this.position.getY() + 0.5F), (double) ((float) this.position.getZ() + 0.5F), 3.0D, false);

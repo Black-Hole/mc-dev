@@ -131,7 +131,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     @Nullable
-    public Entity f() {
+    public Entity getEntity() {
         return this.k;
     }
 

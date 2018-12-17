@@ -11,7 +11,7 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
 
     public DebugReportAdvancementHusbandry() {}
 
-    public void a(Consumer<Advancement> consumer) {
+    public void accept(Consumer<Advancement> consumer) {
         Advancement advancement = Advancement.SerializedAdvancement.a().a(Blocks.HAY_BLOCK, new ChatMessage("advancements.husbandry.root.title", new Object[0]), new ChatMessage("advancements.husbandry.root.description", new Object[0]), new MinecraftKey("minecraft:textures/gui/advancements/backgrounds/husbandry.png"), AdvancementFrameType.TASK, false, false, false).a("consumed_item", (CriterionInstance) CriterionTriggerConsumeItem.b.c()).a(consumer, "husbandry/root");
         Advancement advancement1 = Advancement.SerializedAdvancement.a().a(advancement).a(Items.WHEAT, new ChatMessage("advancements.husbandry.plant_seed.title", new Object[0]), new ChatMessage("advancements.husbandry.plant_seed.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a(AdvancementRequirements.OR).a("wheat", (CriterionInstance) CriterionTriggerPlacedBlock.b.a(Blocks.WHEAT)).a("pumpkin_stem", (CriterionInstance) CriterionTriggerPlacedBlock.b.a(Blocks.PUMPKIN_STEM)).a("melon_stem", (CriterionInstance) CriterionTriggerPlacedBlock.b.a(Blocks.MELON_STEM)).a("beetroots", (CriterionInstance) CriterionTriggerPlacedBlock.b.a(Blocks.BEETROOTS)).a("nether_wart", (CriterionInstance) CriterionTriggerPlacedBlock.b.a(Blocks.NETHER_WART)).a(consumer, "husbandry/plant_seed");
         Advancement advancement2 = Advancement.SerializedAdvancement.a().a(advancement).a(Items.WHEAT, new ChatMessage("advancements.husbandry.breed_an_animal.title", new Object[0]), new ChatMessage("advancements.husbandry.breed_an_animal.description", new Object[0]), (MinecraftKey) null, AdvancementFrameType.TASK, true, true, false).a(AdvancementRequirements.OR).a("bred", (CriterionInstance) CriterionTriggerBredAnimals.b.c()).a(consumer, "husbandry/breed_an_animal");
@@ -73,9 +73,5 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
         }
 
         return advancement_serializedadvancement;
-    }
-
-    public void accept(Object object) {
-        this.a((Consumer) object);
     }
 }

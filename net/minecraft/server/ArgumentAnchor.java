@@ -35,7 +35,7 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
         return new ArgumentAnchor();
     }
 
-    public ArgumentAnchor.Anchor a(StringReader stringreader) throws CommandSyntaxException {
+    public ArgumentAnchor.Anchor parse(StringReader stringreader) throws CommandSyntaxException {
         int i = stringreader.getCursor();
         String s = stringreader.readUnquotedString();
         ArgumentAnchor.Anchor argumentanchor_anchor = ArgumentAnchor.Anchor.a(s);
@@ -54,10 +54,6 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
 
     public Collection<String> getExamples() {
         return ArgumentAnchor.a;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 
     public static enum Anchor {
@@ -97,7 +93,7 @@ public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
         }
 
         public Vec3D a(CommandListenerWrapper commandlistenerwrapper) {
-            Entity entity = commandlistenerwrapper.f();
+            Entity entity = commandlistenerwrapper.getEntity();
 
             return entity == null ? commandlistenerwrapper.getPosition() : (Vec3D) this.e.apply(commandlistenerwrapper.getPosition(), entity);
         }

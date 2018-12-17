@@ -91,7 +91,7 @@ public abstract class PlayerList {
         this.f(entityplayer);
         entityplayer.getStatisticManager().c();
         entityplayer.B().a(entityplayer);
-        this.sendScoreboard(worldserver.l_(), entityplayer);
+        this.sendScoreboard(worldserver.getScoreboard(), entityplayer);
         this.server.at();
         ChatMessage chatmessage;
 
@@ -222,7 +222,7 @@ public abstract class PlayerList {
         }
 
         worldserver1.getPlayerChunkMap().addPlayer(entityplayer);
-        worldserver1.getChunkProviderServer().getChunkAt((int) entityplayer.locX >> 4, (int) entityplayer.locZ >> 4, true, true);
+        worldserver1.getChunkProvider().getChunkAt((int) entityplayer.locX >> 4, (int) entityplayer.locZ >> 4, true, true);
         if (worldserver != null) {
             CriterionTriggers.v.a(entityplayer, worldserver.worldProvider.getDimensionManager(), worldserver1.worldProvider.getDimensionManager());
             if (worldserver.worldProvider.getDimensionManager() == DimensionManager.NETHER && entityplayer.world.worldProvider.getDimensionManager() == DimensionManager.OVERWORLD && entityplayer.M() != null) {
@@ -232,8 +232,8 @@ public abstract class PlayerList {
 
     }
 
-    public int d() {
-        return PlayerChunkMap.getFurthestViewableBlock(this.s());
+    public int getFurthestViewableBlock() {
+        return PlayerChunkMap.getFurthestViewableBlock(this.getViewDistance());
     }
 
     @Nullable
@@ -307,7 +307,7 @@ public abstract class PlayerList {
                     worldserver.removeEntity(entity1);
                 }
 
-                worldserver.getChunkAt(entityplayer.ae, entityplayer.ag).markDirty();
+                worldserver.getChunkAt(entityplayer.chunkX, entityplayer.chunkZ).markDirty();
             }
         }
 
@@ -441,7 +441,7 @@ public abstract class PlayerList {
             }
         }
 
-        worldserver.getChunkProviderServer().getChunkAt((int) entityplayer1.locX >> 4, (int) entityplayer1.locZ >> 4, true, true);
+        worldserver.getChunkProvider().getChunkAt((int) entityplayer1.locX >> 4, (int) entityplayer1.locZ >> 4, true, true);
 
         while (!worldserver.getCubes(entityplayer1, entityplayer1.getBoundingBox()) && entityplayer1.locY < 256.0D) {
             entityplayer1.setPosition(entityplayer1.locX, entityplayer1.locY + 1.0D, entityplayer1.locZ);
@@ -504,7 +504,7 @@ public abstract class PlayerList {
         double d2 = 8.0D;
         float f = entity.yaw;
 
-        worldserver.methodProfiler.a("moving");
+        worldserver.methodProfiler.enter("moving");
         if (entity.dimension == DimensionManager.NETHER) {
             d0 = MathHelper.a(d0 / 8.0D, worldserver1.getWorldBorder().b() + 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
             d1 = MathHelper.a(d1 / 8.0D, worldserver1.getWorldBorder().c() + 16.0D, worldserver1.getWorldBorder().e() - 16.0D);
@@ -537,9 +537,9 @@ public abstract class PlayerList {
             }
         }
 
-        worldserver.methodProfiler.e();
+        worldserver.methodProfiler.exit();
         if (dimensionmanager != DimensionManager.THE_END) {
-            worldserver.methodProfiler.a("placing");
+            worldserver.methodProfiler.enter("placing");
             d0 = (double) MathHelper.clamp((int) d0, -29999872, 29999872);
             d1 = (double) MathHelper.clamp((int) d1, -29999872, 29999872);
             if (entity.isAlive()) {
@@ -549,7 +549,7 @@ public abstract class PlayerList {
                 worldserver1.entityJoinedWorld(entity, false);
             }
 
-            worldserver.methodProfiler.e();
+            worldserver.methodProfiler.exit();
         }
 
         entity.spawnIn(worldserver1);
@@ -582,7 +582,7 @@ public abstract class PlayerList {
     }
 
     public void a(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.be();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.getScoreboardTeam();
 
         if (scoreboardteambase != null) {
             Collection collection = scoreboardteambase.getPlayerNameSet();
@@ -601,7 +601,7 @@ public abstract class PlayerList {
     }
 
     public void b(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent) {
-        ScoreboardTeamBase scoreboardteambase = entityhuman.be();
+        ScoreboardTeamBase scoreboardteambase = entityhuman.getScoreboardTeam();
 
         if (scoreboardteambase == null) {
             this.sendMessage(ichatbasecomponent);
@@ -609,7 +609,7 @@ public abstract class PlayerList {
             for (int i = 0; i < this.players.size(); ++i) {
                 EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
-                if (entityplayer.be() != scoreboardteambase) {
+                if (entityplayer.getScoreboardTeam() != scoreboardteambase) {
                     entityplayer.sendMessage(ichatbasecomponent);
                 }
             }
@@ -797,7 +797,7 @@ public abstract class PlayerList {
         return arraylist;
     }
 
-    public int s() {
+    public int getViewDistance() {
         return this.s;
     }
 

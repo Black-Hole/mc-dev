@@ -52,7 +52,7 @@ public class BlockLadder extends Block implements IFluidSource, IFluidContainer 
             return Blocks.AIR.getBlockData();
         } else {
             if ((Boolean) iblockdata.get(BlockLadder.b)) {
-                generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
             }
 
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -132,7 +132,7 @@ public class BlockLadder extends Block implements IFluidSource, IFluidContainer 
         if (!(Boolean) iblockdata.get(BlockLadder.b) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockLadder.b, true), 3);
-                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;

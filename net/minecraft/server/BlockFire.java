@@ -100,7 +100,7 @@ public class BlockFire extends Block {
                 }
 
                 if (!flag) {
-                    world.J().a(blockposition, this, this.a((IWorldReader) world) + random.nextInt(10));
+                    world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world) + random.nextInt(10));
                     if (!this.d(world, blockposition)) {
                         if (!world.getType(blockposition.down()).q() || i > 3) {
                             world.setAir(blockposition);
@@ -243,7 +243,7 @@ public class BlockFire extends Block {
                 if (!iblockdata.canPlace(world, blockposition)) {
                     world.setAir(blockposition);
                 } else {
-                    world.J().a(blockposition, this, this.a((IWorldReader) world) + world.random.nextInt(10));
+                    world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world) + world.random.nextInt(10));
                 }
             }
         }

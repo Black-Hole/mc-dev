@@ -49,7 +49,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
 
     }
 
-    public boolean a(@Nullable ItemStack itemstack) {
+    public boolean test(@Nullable ItemStack itemstack) {
         if (itemstack == null) {
             return false;
         } else if (this.c.length == 0) {
@@ -198,10 +198,6 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         }
     }
 
-    public boolean test(@Nullable Object object) {
-        return this.a((ItemStack) object);
-    }
-
     static class b implements RecipeItemStack.Provider {
 
         private final Tag<Item> a;
@@ -229,10 +225,6 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
             jsonobject.addProperty("tag", this.a.c().toString());
             return jsonobject;
         }
-
-        b(Tag tag, Object object) {
-            this(tag);
-        }
     }
 
     public static class StackProvider implements RecipeItemStack.Provider {
@@ -252,10 +244,6 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
 
             jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.a.getItem()).toString());
             return jsonobject;
-        }
-
-        StackProvider(ItemStack itemstack, Object object) {
-            this(itemstack);
         }
     }
 

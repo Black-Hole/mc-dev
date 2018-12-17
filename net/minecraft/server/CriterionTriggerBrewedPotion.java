@@ -51,7 +51,7 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerBrewedPotion.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerBrewedPotion.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         PotionRegistry potionregistry = null;
 
         if (jsonobject.has("potion")) {
@@ -74,10 +74,6 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
             criteriontriggerbrewedpotion_a.a(potionregistry);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

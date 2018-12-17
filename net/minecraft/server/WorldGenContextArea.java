@@ -16,7 +16,7 @@ public class WorldGenContextArea extends WorldGenContextLayer<AreaLazy> {
         this.a(k);
     }
 
-    public AreaLazy b(AreaDimension areadimension, AreaTransformer8 areatransformer8) {
+    public AreaLazy a(AreaDimension areadimension, AreaTransformer8 areatransformer8) {
         return new AreaLazy(this.c, this.d, areadimension, areatransformer8);
     }
 
@@ -26,9 +26,5 @@ public class WorldGenContextArea extends WorldGenContextLayer<AreaLazy> {
 
     public AreaLazy a(AreaDimension areadimension, AreaTransformer8 areatransformer8, AreaLazy arealazy, AreaLazy arealazy1) {
         return new AreaLazy(this.c, Math.min(256, Math.max(arealazy.a(), arealazy1.a()) * 4), areadimension, areatransformer8);
-    }
-
-    public Area a(AreaDimension areadimension, AreaTransformer8 areatransformer8) {
-        return this.b(areadimension, areatransformer8);
     }
 }

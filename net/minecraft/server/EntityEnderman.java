@@ -33,7 +33,7 @@ public class EntityEnderman extends EntityMonster {
         this.goalSelector.a(11, new EntityEnderman.PathfinderGoalEndermanPickupBlock(this));
         this.targetSelector.a(1, new EntityEnderman.PathfinderGoalPlayerWhoLookedAtTarget(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, EntityEndermite::l));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, EntityEndermite::isPlayerSpawned));
     }
 
     protected void initAttributes() {
@@ -131,7 +131,7 @@ public class EntityEnderman extends EntityMonster {
         return 2.55F;
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
                 this.world.addParticle(Particles.K, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length - 0.25D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
@@ -139,7 +139,7 @@ public class EntityEnderman extends EntityMonster {
         }
 
         this.bg = false;
-        super.k();
+        super.movementTick();
     }
 
     protected void mobTick() {

@@ -152,7 +152,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         int i;
 
         if (!this.world.isClientSide && this.world instanceof WorldServer) {
-            this.world.methodProfiler.a("portal");
+            this.world.methodProfiler.enter("portal");
             MinecraftServer minecraftserver = this.world.getMinecraftServer();
 
             i = this.X();
@@ -188,7 +188,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                 --this.portalCooldown;
             }
 
-            this.world.methodProfiler.e();
+            this.world.methodProfiler.exit();
         }
 
         if (this.world.isClientSide) {

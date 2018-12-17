@@ -397,7 +397,7 @@ public class EntityFishingHook extends Entity {
                 LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).position(new BlockPosition(this));
 
                 loottableinfo_builder.luck((float) this.az + this.owner.dJ());
-                List list = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.aO).a(this.random, loottableinfo_builder.build());
+                List list = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.aO).populateLoot(this.random, loottableinfo_builder.build());
 
                 CriterionTriggers.D.a((EntityPlayer) this.owner, itemstack, this, list);
                 Iterator iterator = list.iterator();

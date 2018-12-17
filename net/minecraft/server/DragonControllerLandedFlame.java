@@ -39,9 +39,9 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
         ++this.b;
         if (this.b >= 200) {
             if (this.c >= 4) {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.e);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.TAKEOFF);
             } else {
-                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.g);
+                this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_SCANNING);
             }
         } else if (this.b == 10) {
             Vec3D vec3d = (new Vec3D(this.a.bD.locX - this.a.locX, 0.0D, this.a.bD.locZ - this.a.locZ)).a();
@@ -82,7 +82,7 @@ public class DragonControllerLandedFlame extends AbstractDragonControllerLanded 
     }
 
     public DragonControllerPhase<DragonControllerLandedFlame> getControllerPhase() {
-        return DragonControllerPhase.f;
+        return DragonControllerPhase.SITTING_FLAMING;
     }
 
     public void j() {

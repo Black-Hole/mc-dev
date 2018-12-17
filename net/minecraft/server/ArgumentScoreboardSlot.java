@@ -29,7 +29,7 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
         return (Integer) commandcontext.getArgument(s, Integer.class);
     }
 
-    public Integer a(StringReader stringreader) throws CommandSyntaxException {
+    public Integer parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
         int i = Scoreboard.getSlotForName(s);
 
@@ -46,9 +46,5 @@ public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
 
     public Collection<String> getExamples() {
         return ArgumentScoreboardSlot.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

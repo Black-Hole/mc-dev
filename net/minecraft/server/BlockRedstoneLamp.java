@@ -31,7 +31,7 @@ public class BlockRedstoneLamp extends Block {
 
             if (flag != world.isBlockIndirectlyPowered(blockposition)) {
                 if (flag) {
-                    world.J().a(blockposition, this, 4);
+                    world.getBlockTickList().a(blockposition, this, 4);
                 } else {
                     world.setTypeAndData(blockposition, (IBlockData) iblockdata.a((IBlockState) BlockRedstoneLamp.a), 2);
                 }

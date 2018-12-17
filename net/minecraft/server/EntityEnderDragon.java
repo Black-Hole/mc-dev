@@ -58,7 +58,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     protected void x_() {
         super.x_();
-        this.getDataWatcher().register(EntityEnderDragon.PHASE, DragonControllerPhase.k.b());
+        this.getDataWatcher().register(EntityEnderDragon.PHASE, DragonControllerPhase.HOVER.b());
     }
 
     public double[] a(int i, float f) {
@@ -81,7 +81,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         return adouble;
     }
 
-    public void k() {
+    public void movementTick() {
         float f;
         float f1;
 
@@ -450,14 +450,14 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 this.dealDamage(damagesource, f);
                 if (this.getHealth() <= 0.0F && !this.bS.a().a()) {
                     this.setHealth(1.0F);
-                    this.bS.setControllerPhase(DragonControllerPhase.j);
+                    this.bS.setControllerPhase(DragonControllerPhase.DYING);
                 }
 
                 if (this.bS.a().a()) {
                     this.bU = (int) ((float) this.bU + (f1 - this.getHealth()));
                     if ((float) this.bU > 0.25F * this.getMaxHealth()) {
                         this.bU = 0;
-                        this.bS.setControllerPhase(DragonControllerPhase.e);
+                        this.bS.setControllerPhase(DragonControllerPhase.TAKEOFF);
                     }
                 }
             }
@@ -809,7 +809,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         float f1;
         Vec3D vec3d;
 
-        if (dragoncontrollerphase != DragonControllerPhase.d && dragoncontrollerphase != DragonControllerPhase.e) {
+        if (dragoncontrollerphase != DragonControllerPhase.LANDING && dragoncontrollerphase != DragonControllerPhase.TAKEOFF) {
             if (idragoncontroller.a()) {
                 float f2 = this.pitch;
 

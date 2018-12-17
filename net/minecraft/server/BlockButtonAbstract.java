@@ -75,7 +75,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockButtonAbstract.POWERED, true), 3);
             this.a(entityhuman, world, blockposition, true);
             this.c(iblockdata, world, blockposition);
-            world.J().a(blockposition, this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
             return true;
         }
     }
@@ -139,7 +139,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
         }
 
         if (flag) {
-            world.J().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
+            world.getBlockTickList().a(new BlockPosition(blockposition), this, this.a((IWorldReader) world));
         }
 
     }

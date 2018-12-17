@@ -98,7 +98,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public Chunk(World world, ProtoChunk protochunk, int i, int j) {
-        this(world, i, j, protochunk.getBiomeIndex(), protochunk.v(), protochunk.n(), protochunk.o(), protochunk.m());
+        this(world, i, j, protochunk.getBiomeIndex(), protochunk.v(), protochunk.k(), protochunk.l(), protochunk.m());
 
         int k;
 
@@ -211,7 +211,7 @@ public class Chunk implements IChunkAccess {
     }
 
     private void g(boolean flag) {
-        this.world.methodProfiler.a("recheckGaps");
+        this.world.methodProfiler.enter("recheckGaps");
         if (this.world.areChunksLoaded(new BlockPosition(this.locX * 16 + 8, 0, this.locZ * 16 + 8), 16)) {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
@@ -238,7 +238,7 @@ public class Chunk implements IChunkAccess {
                         }
 
                         if (flag) {
-                            this.world.methodProfiler.e();
+                            this.world.methodProfiler.exit();
                             return;
                         }
                     }
@@ -248,7 +248,7 @@ public class Chunk implements IChunkAccess {
             this.l = false;
         }
 
-        this.world.methodProfiler.e();
+        this.world.methodProfiler.exit();
     }
 
     private void c(int i, int j, int k) {
@@ -601,9 +601,9 @@ public class Chunk implements IChunkAccess {
         }
 
         entity.inChunk = true;
-        entity.ae = this.locX;
-        entity.af = k;
-        entity.ag = this.locZ;
+        entity.chunkX = this.locX;
+        entity.chunkY = k;
+        entity.chunkZ = this.locZ;
         this.entitySlices[k].add(entity);
     }
 
@@ -612,7 +612,7 @@ public class Chunk implements IChunkAccess {
     }
 
     public void b(Entity entity) {
-        this.a(entity, entity.af);
+        this.a(entity, entity.chunkY);
     }
 
     public void a(Entity entity, int i) {
@@ -1074,13 +1074,13 @@ public class Chunk implements IChunkAccess {
             }
 
             if (this.s instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.s).a(this.world.J(), (blockposition) -> {
+                ((ProtoChunkTickList) this.s).a(this.world.getBlockTickList(), (blockposition) -> {
                     return this.world.getType(blockposition).getBlock();
                 });
             }
 
             if (this.t instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.t).a(this.world.I(), (blockposition) -> {
+                ((ProtoChunkTickList) this.t).a(this.world.getFluidTickList(), (blockposition) -> {
                     return this.world.getFluid(blockposition).c();
                 });
             }

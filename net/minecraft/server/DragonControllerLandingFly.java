@@ -12,7 +12,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerLandingFly> getControllerPhase() {
-        return DragonControllerPhase.c;
+        return DragonControllerPhase.LANDING_APPROACH;
     }
 
     public void d() {
@@ -59,7 +59,7 @@ public class DragonControllerLandingFly extends AbstractDragonController {
 
         this.k();
         if (this.b != null && this.b.b()) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.d);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.LANDING);
         }
 
     }

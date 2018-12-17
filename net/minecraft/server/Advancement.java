@@ -431,9 +431,5 @@ public class Advancement {
         public Map<String, Criterion> c() {
             return this.e;
         }
-
-        SerializedAdvancement(MinecraftKey minecraftkey, AdvancementDisplay advancementdisplay, AdvancementRewards advancementrewards, Map map, String[][] astring, Object object) {
-            this(minecraftkey, advancementdisplay, advancementrewards, map, astring);
-        }
     }
 }

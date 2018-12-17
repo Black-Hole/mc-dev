@@ -31,7 +31,7 @@ public class NBTTagLong extends NBTNumber {
         return this.data + "L";
     }
 
-    public NBTTagLong c() {
+    public NBTTagLong clone() {
         return new NBTTagLong(this.data);
     }
 
@@ -75,9 +75,5 @@ public class NBTTagLong extends NBTNumber {
 
     public Number j() {
         return this.data;
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }

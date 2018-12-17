@@ -730,9 +730,5 @@ public class DefinedStructure {
         public void a(IBlockData iblockdata, int i) {
             this.b.a(iblockdata, i);
         }
-
-        a(Object object) {
-            this();
-        }
     }
 }

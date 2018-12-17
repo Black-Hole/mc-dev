@@ -34,7 +34,7 @@ public class ChunkProviderDebug extends ChunkGeneratorAbstract<GeneratorSettings
 
     public void addFeatures(RegionLimitedWorldAccess regionlimitedworldaccess, WorldGenStage.Features worldgenstage_features) {}
 
-    public GeneratorSettingsDebug f() {
+    public GeneratorSettingsDebug getSettings() {
         return this.k;
     }
 
@@ -95,9 +95,5 @@ public class ChunkProviderDebug extends ChunkGeneratorAbstract<GeneratorSettings
 
     public int a(World world, boolean flag, boolean flag1) {
         return 0;
-    }
-
-    public GeneratorSettings getSettings() {
-        return this.f();
     }
 }

@@ -71,8 +71,8 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
         } else if (entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.isInvulnerable) {
             return false;
         } else {
-            ScoreboardTeamBase scoreboardteambase = this.b.be();
-            ScoreboardTeamBase scoreboardteambase1 = entityliving.be();
+            ScoreboardTeamBase scoreboardteambase = this.b.getScoreboardTeam();
+            ScoreboardTeamBase scoreboardteambase1 = entityliving.getScoreboardTeam();
 
             if (scoreboardteambase != null && scoreboardteambase1 == scoreboardteambase) {
                 return false;

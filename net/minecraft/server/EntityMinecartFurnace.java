@@ -102,7 +102,7 @@ public class EntityMinecartFurnace extends EntityMinecartAbstract {
     public boolean b(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
-        if (EntityMinecartFurnace.e.a(itemstack) && this.d + 3600 <= 32000) {
+        if (EntityMinecartFurnace.e.test(itemstack) && this.d + 3600 <= 32000) {
             if (!entityhuman.abilities.canInstantlyBuild) {
                 itemstack.subtract(1);
             }

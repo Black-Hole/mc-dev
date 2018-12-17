@@ -13,19 +13,19 @@ public class TileEntitySkull extends TileEntity implements ITickable {
     private int e;
     private boolean f;
     public boolean drop = true;
-    private static UserCache h;
-    private static MinecraftSessionService i;
+    private static UserCache userCache;
+    private static MinecraftSessionService sessionService;
 
     public TileEntitySkull() {
         super(TileEntityTypes.SKULL);
     }
 
     public static void a(UserCache usercache) {
-        TileEntitySkull.h = usercache;
+        TileEntitySkull.userCache = usercache;
     }
 
     public static void a(MinecraftSessionService minecraftsessionservice) {
-        TileEntitySkull.i = minecraftsessionservice;
+        TileEntitySkull.sessionService = minecraftsessionservice;
     }
 
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
@@ -54,7 +54,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
-    public void Y_() {
+    public void tick() {
         Block block = this.getBlock().getBlock();
 
         if (block == Blocks.DRAGON_HEAD || block == Blocks.DRAGON_WALL_HEAD) {
@@ -96,8 +96,8 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         if (gameprofile != null && !UtilColor.b(gameprofile.getName())) {
             if (gameprofile.isComplete() && gameprofile.getProperties().containsKey("textures")) {
                 return gameprofile;
-            } else if (TileEntitySkull.h != null && TileEntitySkull.i != null) {
-                GameProfile gameprofile1 = TileEntitySkull.h.getProfile(gameprofile.getName());
+            } else if (TileEntitySkull.userCache != null && TileEntitySkull.sessionService != null) {
+                GameProfile gameprofile1 = TileEntitySkull.userCache.getProfile(gameprofile.getName());
 
                 if (gameprofile1 == null) {
                     return gameprofile;
@@ -105,7 +105,7 @@ public class TileEntitySkull extends TileEntity implements ITickable {
                     Property property = (Property) Iterables.getFirst(gameprofile1.getProperties().get("textures"), (Object) null);
 
                     if (property == null) {
-                        gameprofile1 = TileEntitySkull.i.fillProfileProperties(gameprofile1, true);
+                        gameprofile1 = TileEntitySkull.sessionService.fillProfileProperties(gameprofile1, true);
                     }
 
                     return gameprofile1;

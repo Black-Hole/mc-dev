@@ -37,7 +37,7 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
         return (this.getY() + this.getZ() * 31) * 31 + this.getX();
     }
 
-    public int l(BaseBlockPosition baseblockposition) {
+    public int compareTo(BaseBlockPosition baseblockposition) {
         return this.getY() == baseblockposition.getY() ? (this.getZ() == baseblockposition.getZ() ? this.getX() - baseblockposition.getX() : this.getZ() - baseblockposition.getZ()) : this.getY() - baseblockposition.getY();
     }
 
@@ -91,9 +91,5 @@ public class BaseBlockPosition implements Comparable<BaseBlockPosition> {
 
     public String toString() {
         return MoreObjects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).toString();
-    }
-
-    public int compareTo(Object object) {
-        return this.l((BaseBlockPosition) object);
     }
 }

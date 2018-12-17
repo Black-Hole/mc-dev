@@ -49,7 +49,7 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerLevitation.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerLevitation.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
         CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("duration"));
 
@@ -63,10 +63,6 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
             criteriontriggerlevitation_a.a(entityplayer, vec3d, i);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

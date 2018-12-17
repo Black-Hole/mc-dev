@@ -189,9 +189,5 @@ public class ArgumentRegistry {
             this.b = argumentserializer;
             this.c = minecraftkey;
         }
-
-        a(Class oclass, ArgumentSerializer argumentserializer, MinecraftKey minecraftkey, Object object) {
-            this(oclass, argumentserializer, minecraftkey);
-        }
     }
 }

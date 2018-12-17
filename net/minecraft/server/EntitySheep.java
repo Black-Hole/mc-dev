@@ -76,12 +76,12 @@ public class EntitySheep extends EntityAnimal {
         super.mobTick();
     }
 
-    public void k() {
+    public void movementTick() {
         if (this.world.isClientSide) {
             this.bH = Math.max(0, this.bH - 1);
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected void initAttributes() {
@@ -223,7 +223,7 @@ public class EntitySheep extends EntityAnimal {
         return i < 5 ? EnumColor.BLACK : (i < 10 ? EnumColor.GRAY : (i < 15 ? EnumColor.LIGHT_GRAY : (i < 18 ? EnumColor.BROWN : (random.nextInt(500) == 0 ? EnumColor.PINK : EnumColor.WHITE))));
     }
 
-    public EntitySheep b(EntityAgeable entityageable) {
+    public EntitySheep createChild(EntityAgeable entityageable) {
         EntitySheep entitysheep = (EntitySheep) entityageable;
         EntitySheep entitysheep1 = new EntitySheep(this.world);
 
@@ -252,7 +252,7 @@ public class EntitySheep extends EntityAnimal {
 
         this.container.setItem(0, new ItemStack(ItemDye.a(enumcolor)));
         this.container.setItem(1, new ItemStack(ItemDye.a(enumcolor1)));
-        ItemStack itemstack = entityanimal.world.E().craft(this.container, ((EntitySheep) entityanimal).world);
+        ItemStack itemstack = entityanimal.world.getCraftingManager().craft(this.container, ((EntitySheep) entityanimal).world);
         Item item = itemstack.getItem();
         EnumColor enumcolor2;
 
@@ -267,9 +267,5 @@ public class EntitySheep extends EntityAnimal {
 
     public float getHeadHeight() {
         return 0.95F * this.length;
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.b(entityageable);
     }
 }

@@ -15,7 +15,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
 
     protected void a(IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (!b_(iblockdata, generatoraccess, blockposition)) {
-            generatoraccess.J().a(blockposition, this, 60 + generatoraccess.m().nextInt(40));
+            generatoraccess.getBlockTickList().a(blockposition, this, 60 + generatoraccess.m().nextInt(40));
         }
 
     }
@@ -72,7 +72,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockCoralBase.b)) {
-            generatoraccess.I().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
         }
 
         return enumdirection == EnumDirection.DOWN && !this.canPlace(iblockdata, generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -107,7 +107,7 @@ public class BlockCoralBase extends Block implements IFluidSource, IFluidContain
         if (!(Boolean) iblockdata.get(BlockCoralBase.b) && fluid.c() == FluidTypes.c) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockCoralBase.b, true), 3);
-                generatoraccess.I().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
             }
 
             return true;

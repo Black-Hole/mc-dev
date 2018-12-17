@@ -49,7 +49,7 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerFilledBucket.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerFilledBucket.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
         return new CriterionTriggerFilledBucket.b(criterionconditionitem);
@@ -62,10 +62,6 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
             criteriontriggerfilledbucket_a.a(itemstack);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

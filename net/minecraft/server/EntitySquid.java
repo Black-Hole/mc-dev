@@ -65,8 +65,8 @@ public class EntitySquid extends EntityWaterAnimal {
         return LootTables.ar;
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         this.b = this.a;
         this.bC = this.c;
         this.bE = this.bD;
@@ -233,10 +233,6 @@ public class EntitySquid extends EntityWaterAnimal {
                 }
 
             }
-        }
-
-        a(Object object) {
-            this();
         }
     }
 

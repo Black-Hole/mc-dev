@@ -149,7 +149,7 @@ public class ContainerFurnace extends ContainerRecipeBook {
     }
 
     private boolean a(ItemStack itemstack) {
-        Iterator iterator = this.f.E().b().iterator();
+        Iterator iterator = this.f.getCraftingManager().b().iterator();
 
         IRecipe irecipe;
 
@@ -159,7 +159,7 @@ public class ContainerFurnace extends ContainerRecipeBook {
             }
 
             irecipe = (IRecipe) iterator.next();
-        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).a(itemstack));
+        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).test(itemstack));
 
         return true;
     }

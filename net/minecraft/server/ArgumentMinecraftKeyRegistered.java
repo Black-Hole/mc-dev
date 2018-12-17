@@ -54,15 +54,11 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
         return (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
     }
 
-    public MinecraftKey a(StringReader stringreader) throws CommandSyntaxException {
+    public MinecraftKey parse(StringReader stringreader) throws CommandSyntaxException {
         return MinecraftKey.a(stringreader);
     }
 
     public Collection<String> getExamples() {
         return ArgumentMinecraftKeyRegistered.d;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

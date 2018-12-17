@@ -14,7 +14,7 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
 
     public void c() {
         if (this.b++ >= 40) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.f);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.SITTING_FLAMING);
         }
 
     }
@@ -24,6 +24,6 @@ public class DragonControllerLandedAttack extends AbstractDragonControllerLanded
     }
 
     public DragonControllerPhase<DragonControllerLandedAttack> getControllerPhase() {
-        return DragonControllerPhase.h;
+        return DragonControllerPhase.SITTING_ATTACKING;
     }
 }

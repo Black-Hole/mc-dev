@@ -32,7 +32,7 @@ public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
         return new Vec2F((float) vec3d.x, (float) vec3d.z);
     }
 
-    public IVectorPosition a(StringReader stringreader) throws CommandSyntaxException {
+    public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
         int i = stringreader.getCursor();
 
         if (!stringreader.canRead()) {
@@ -65,15 +65,11 @@ public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(true);
             }
 
-            return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::a));
+            return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));
         }
     }
 
     public Collection<String> getExamples() {
         return ArgumentVec2.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

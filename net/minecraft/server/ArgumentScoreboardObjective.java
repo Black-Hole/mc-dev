@@ -53,7 +53,7 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
         }
     }
 
-    public String a(StringReader stringreader) throws CommandSyntaxException {
+    public String parse(StringReader stringreader) throws CommandSyntaxException {
         String s = stringreader.readUnquotedString();
 
         if (s.length() > 16) {
@@ -77,9 +77,5 @@ public class ArgumentScoreboardObjective implements ArgumentType<String> {
 
     public Collection<String> getExamples() {
         return ArgumentScoreboardObjective.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

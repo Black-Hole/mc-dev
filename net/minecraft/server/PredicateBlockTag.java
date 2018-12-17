@@ -14,11 +14,7 @@ public class PredicateBlockTag implements PredicateBlock<IBlockData> {
         return new PredicateBlockTag(tag);
     }
 
-    public boolean a(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    public boolean test(@Nullable IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata != null && iblockdata.a(this.a);
-    }
-
-    public boolean test(@Nullable Object object, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.a((IBlockData) object, iblockaccess, blockposition);
     }
 }

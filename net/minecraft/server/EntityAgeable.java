@@ -113,8 +113,8 @@ public abstract class EntityAgeable extends EntityCreature {
         super.a(datawatcherobject);
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.world.isClientSide) {
             if (this.c > 0) {
                 if (this.c % 4 == 0) {

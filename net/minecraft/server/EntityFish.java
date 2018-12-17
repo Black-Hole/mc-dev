@@ -86,7 +86,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
 
     }
 
-    public void k() {
+    public void movementTick() {
         if (!this.isInWater() && this.onGround && this.C) {
             this.motY += 0.4000000059604645D;
             this.motX += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.05F);
@@ -96,7 +96,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
             this.a(this.dz(), this.cD(), this.cE());
         }
 
-        super.k();
+        super.movementTick();
     }
 
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {

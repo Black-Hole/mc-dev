@@ -17,9 +17,9 @@ public class DragonControllerCharge extends AbstractDragonController {
     public void c() {
         if (this.c == null) {
             DragonControllerCharge.b.warn("Aborting charge player as no target was set.");
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else if (this.d > 0 && this.d++ >= 10) {
-            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.a);
+            this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else {
             double d0 = this.c.c(this.a.locX, this.a.locY, this.a.locZ);
 
@@ -49,6 +49,6 @@ public class DragonControllerCharge extends AbstractDragonController {
     }
 
     public DragonControllerPhase<DragonControllerCharge> getControllerPhase() {
-        return DragonControllerPhase.i;
+        return DragonControllerPhase.CHARGING_PLAYER;
     }
 }

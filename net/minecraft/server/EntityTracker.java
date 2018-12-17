@@ -14,11 +14,11 @@ public class EntityTracker {
     private final WorldServer world;
     private final Set<EntityTrackerEntry> c = Sets.newHashSet();
     public final IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
-    private int e;
+    private int trackingDistance;
 
     public EntityTracker(WorldServer worldserver) {
         this.world = worldserver;
-        this.e = worldserver.getMinecraftServer().getPlayerList().d();
+        this.trackingDistance = worldserver.getMinecraftServer().getPlayerList().getFurthestViewableBlock();
     }
 
     public static long a(double d0) {
@@ -110,7 +110,7 @@ public class EntityTracker {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i, this.e, j, flag);
+            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entity, i, this.trackingDistance, j, flag);
 
             this.c.add(entitytrackerentry);
             this.trackedEntities.a(entity.getId(), entitytrackerentry);
@@ -247,7 +247,7 @@ public class EntityTracker {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
             Entity entity = entitytrackerentry.b();
 
-            if (entity != entityplayer && entity.ae == chunk.locX && entity.ag == chunk.locZ) {
+            if (entity != entityplayer && entity.chunkX == chunk.locX && entity.chunkZ == chunk.locZ) {
                 entitytrackerentry.updatePlayer(entityplayer);
                 if (entity instanceof EntityInsentient && ((EntityInsentient) entity).getLeashHolder() != null) {
                     arraylist.add(entity);
@@ -282,13 +282,13 @@ public class EntityTracker {
     }
 
     public void a(int i) {
-        this.e = (i - 1) * 16;
+        this.trackingDistance = (i - 1) * 16;
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
 
-            entitytrackerentry.a(this.e);
+            entitytrackerentry.a(this.trackingDistance);
         }
 
     }

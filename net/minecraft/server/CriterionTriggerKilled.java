@@ -51,7 +51,7 @@ public class CriterionTriggerKilled implements CriterionTrigger<CriterionTrigger
         this.a.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerKilled.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerKilled.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerKilled.b(this.b, CriterionConditionEntity.a(jsonobject.get("entity")), CriterionConditionDamageSource.a(jsonobject.get("killing_blow")));
     }
 
@@ -62,10 +62,6 @@ public class CriterionTriggerKilled implements CriterionTrigger<CriterionTrigger
             criteriontriggerkilled_a.a(entityplayer, entity, damagesource);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

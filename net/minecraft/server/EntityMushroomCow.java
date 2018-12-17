@@ -51,20 +51,12 @@ public class EntityMushroomCow extends EntityCow {
         }
     }
 
-    public EntityMushroomCow c(EntityAgeable entityageable) {
+    public EntityMushroomCow createChild(EntityAgeable entityageable) {
         return new EntityMushroomCow(this.world);
     }
 
     @Nullable
     protected MinecraftKey getDefaultLootTable() {
         return LootTables.T;
-    }
-
-    public EntityCow b(EntityAgeable entityageable) {
-        return this.c(entityageable);
-    }
-
-    public EntityAgeable createChild(EntityAgeable entityageable) {
-        return this.c(entityageable);
     }
 }

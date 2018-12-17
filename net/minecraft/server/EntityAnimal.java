@@ -22,8 +22,8 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         super.mobTick();
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.getAge() != 0) {
             this.bC = 0;
         }

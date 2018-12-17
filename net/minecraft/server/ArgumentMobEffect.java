@@ -29,7 +29,7 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
         return (MobEffectList) commandcontext.getArgument(s, MobEffectList.class);
     }
 
-    public MobEffectList a(StringReader stringreader) throws CommandSyntaxException {
+    public MobEffectList parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
         MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
 
@@ -46,9 +46,5 @@ public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
 
     public Collection<String> getExamples() {
         return ArgumentMobEffect.b;
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

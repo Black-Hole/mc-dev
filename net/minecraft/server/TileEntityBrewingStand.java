@@ -58,7 +58,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return false;
     }
 
-    public void Y_() {
+    public void tick() {
         ItemStack itemstack = (ItemStack) this.items.get(4);
 
         if (this.fuelLevel <= 0 && itemstack.getItem() == Items.BLAZE_POWDER) {

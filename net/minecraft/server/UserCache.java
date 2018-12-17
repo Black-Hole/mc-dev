@@ -268,17 +268,13 @@ public class UserCache {
         public Date b() {
             return this.c;
         }
-
-        UserCacheEntry(GameProfile gameprofile, Date date, Object object) {
-            this(gameprofile, date);
-        }
     }
 
     class BanEntrySerializer implements JsonDeserializer<UserCache.UserCacheEntry>, JsonSerializer<UserCache.UserCacheEntry> {
 
         private BanEntrySerializer() {}
 
-        public JsonElement a(UserCache.UserCacheEntry usercache_usercacheentry, Type type, JsonSerializationContext jsonserializationcontext) {
+        public JsonElement serialize(UserCache.UserCacheEntry usercache_usercacheentry, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
             jsonobject.addProperty("name", usercache_usercacheentry.a().getName());
@@ -289,7 +285,7 @@ public class UserCache {
             return jsonobject;
         }
 
-        public UserCache.UserCacheEntry a(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
+        public UserCache.UserCacheEntry deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonObject()) {
                 JsonObject jsonobject = jsonelement.getAsJsonObject();
                 JsonElement jsonelement1 = jsonobject.get("name");
@@ -328,18 +324,6 @@ public class UserCache {
             } else {
                 return null;
             }
-        }
-
-        public JsonElement serialize(Object object, Type type, JsonSerializationContext jsonserializationcontext) {
-            return this.a((UserCache.UserCacheEntry) object, type, jsonserializationcontext);
-        }
-
-        public Object deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
-            return this.a(jsonelement, type, jsondeserializationcontext);
-        }
-
-        BanEntrySerializer(Object object) {
-            this();
         }
     }
 }

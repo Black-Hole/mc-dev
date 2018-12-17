@@ -115,7 +115,7 @@ public class BlockTripwireHook extends Block {
                 flag5 |= flag6 && flag7;
                 aiblockdata[k] = iblockdata2;
                 if (k == i) {
-                    world.J().a(blockposition, this, this.a((IWorldReader) world));
+                    world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     flag4 &= flag6;
                 }
             }

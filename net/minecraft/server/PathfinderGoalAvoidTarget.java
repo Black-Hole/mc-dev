@@ -26,12 +26,8 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super Entity> predicate, float f, double d0, double d1, Predicate<Entity> predicate1) {
         this.c = new Predicate() {
-            public boolean a(@Nullable Entity entity) {
+            public boolean test(@Nullable Entity entity) {
                 return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity) && !PathfinderGoalAvoidTarget.this.a.r(entity);
-            }
-
-            public boolean test(@Nullable Object object) {
-                return this.a((Entity) object);
             }
         };
         this.a = entitycreature;

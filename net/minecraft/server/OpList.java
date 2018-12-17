@@ -34,11 +34,7 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
         return oplistentry != null ? oplistentry.b() : false;
     }
 
-    protected String c(GameProfile gameprofile) {
+    protected String a(GameProfile gameprofile) {
         return gameprofile.getId().toString();
-    }
-
-    protected String a(Object object) {
-        return this.c((GameProfile) object);
     }
 }

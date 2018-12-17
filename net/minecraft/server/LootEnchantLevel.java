@@ -31,15 +31,11 @@ public class LootEnchantLevel extends LootItemFunction {
             jsonobject.addProperty("treasure", lootenchantlevel.b);
         }
 
-        public LootEnchantLevel a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
+        public LootEnchantLevel b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "levels", jsondeserializationcontext, LootValueBounds.class);
             boolean flag = ChatDeserializer.a(jsonobject, "treasure", false);
 
             return new LootEnchantLevel(alootitemcondition, lootvaluebounds, flag);
-        }
-
-        public LootItemFunction b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return this.a(jsonobject, jsondeserializationcontext, alootitemcondition);
         }
     }
 }

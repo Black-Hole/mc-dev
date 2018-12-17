@@ -91,7 +91,7 @@ public class TileEntityCommand extends TileEntity {
 
             if (block instanceof BlockCommand) {
                 this.h();
-                this.world.J().a(this.position, block, block.a((IWorldReader) this.world));
+                this.world.getBlockTickList().a(this.position, block, block.a((IWorldReader) this.world));
             }
         }
 

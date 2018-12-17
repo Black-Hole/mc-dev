@@ -85,16 +85,16 @@ public class EntityEndermite extends EntityMonster {
         return 0.1D;
     }
 
-    public boolean l() {
+    public boolean isPlayerSpawned() {
         return this.b;
     }
 
-    public void a(boolean flag) {
+    public void setPlayerSpawned(boolean flag) {
         this.b = flag;
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
                 this.world.addParticle(Particles.K, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);

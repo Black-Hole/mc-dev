@@ -36,12 +36,8 @@ public class LootItemConditionRandomChanceWithLooting implements LootItemConditi
             jsonobject.addProperty("looting_multiplier", lootitemconditionrandomchancewithlooting.b);
         }
 
-        public LootItemConditionRandomChanceWithLooting a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+        public LootItemConditionRandomChanceWithLooting b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return new LootItemConditionRandomChanceWithLooting(ChatDeserializer.l(jsonobject, "chance"), ChatDeserializer.l(jsonobject, "looting_multiplier"));
-        }
-
-        public LootItemCondition b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return this.a(jsonobject, jsondeserializationcontext);
         }
     }
 }

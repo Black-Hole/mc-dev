@@ -29,7 +29,7 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
         return (ParticleParam) commandcontext.getArgument(s, ParticleParam.class);
     }
 
-    public ParticleParam a(StringReader stringreader) throws CommandSyntaxException {
+    public ParticleParam parse(StringReader stringreader) throws CommandSyntaxException {
         return b(stringreader);
     }
 
@@ -54,9 +54,5 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
         return ICompletionProvider.a((Iterable) IRegistry.PARTICLE_TYPE.keySet(), suggestionsbuilder);
-    }
-
-    public Object parse(StringReader stringreader) throws CommandSyntaxException {
-        return this.a(stringreader);
     }
 }

@@ -49,7 +49,7 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
         this.b.remove(advancementdataplayer);
     }
 
-    public CriterionTriggerTamedAnimal.b b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
+    public CriterionTriggerTamedAnimal.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
 
         return new CriterionTriggerTamedAnimal.b(criterionconditionentity);
@@ -62,10 +62,6 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
             criteriontriggertamedanimal_a.a(entityplayer, entityanimal);
         }
 
-    }
-
-    public CriterionInstance a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        return this.b(jsonobject, jsondeserializationcontext);
     }
 
     static class a {

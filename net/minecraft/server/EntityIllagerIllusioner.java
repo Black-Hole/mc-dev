@@ -56,8 +56,8 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         return LootTables.a;
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (this.world.isClientSide && this.isInvisible()) {
             --this.c;
             if (this.c < 0) {
@@ -96,7 +96,7 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
     }
 
     public boolean r(Entity entity) {
-        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.be() == null && entity.be() == null : false);
+        return super.r(entity) ? true : (entity instanceof EntityLiving && ((EntityLiving) entity).getMonsterType() == EnumMonsterType.ILLAGER ? this.getScoreboardTeam() == null && entity.getScoreboardTeam() == null : false);
     }
 
     protected SoundEffect D() {
@@ -174,10 +174,6 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         protected EntityIllagerWizard.Spell l() {
             return EntityIllagerWizard.Spell.BLINDNESS;
         }
-
-        a(Object object) {
-            this();
-        }
     }
 
     class b extends EntityIllagerWizard.c {
@@ -209,10 +205,6 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
 
         protected EntityIllagerWizard.Spell l() {
             return EntityIllagerWizard.Spell.DISAPPEAR;
-        }
-
-        b(Object object) {
-            this();
         }
     }
 }

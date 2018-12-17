@@ -43,8 +43,8 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
 
     }
 
-    public void k() {
-        super.k();
+    public void movementTick() {
+        super.movementTick();
         if (!this.world.isClientSide) {
             int i = MathHelper.floor(this.locX);
             int j = MathHelper.floor(this.locY);

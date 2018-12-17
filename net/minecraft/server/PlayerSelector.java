@@ -290,7 +290,7 @@ public class PlayerSelector {
                     if (!(entity instanceof EntityLiving)) {
                         return false;
                     } else {
-                        ScoreboardTeamBase scoreboardteambase = entity.be();
+                        ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
                         String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
                         return s.equals(s1) != flag;
@@ -586,10 +586,6 @@ public class PlayerSelector {
             this.a = playerselector_a;
             this.b = predicate;
             this.c = ichatbasecomponent;
-        }
-
-        b(PlayerSelector.a playerselector_a, Predicate predicate, IChatBaseComponent ichatbasecomponent, Object object) {
-            this(playerselector_a, predicate, ichatbasecomponent);
         }
     }
 

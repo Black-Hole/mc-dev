@@ -112,7 +112,7 @@ public class WorldChunkManagerOverworld extends WorldChunkManager {
         return this.b;
     }
 
-    public void Y_() {
+    public void tick() {
         this.c.a();
     }
 }

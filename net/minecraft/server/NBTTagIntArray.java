@@ -77,7 +77,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
         return stringbuilder.append(']').toString();
     }
 
-    public NBTTagIntArray c() {
+    public NBTTagIntArray clone() {
         int[] aint = new int[this.data.length];
 
         System.arraycopy(this.data, 0, aint, 0, this.data.length);
@@ -115,7 +115,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
         return this.data.length;
     }
 
-    public NBTTagInt a(int i) {
+    public NBTTagInt c(int i) {
         return new NBTTagInt(this.data[i]);
     }
 
@@ -125,13 +125,5 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
 
     public void b(int i) {
         this.data = ArrayUtils.remove(this.data, i);
-    }
-
-    public NBTBase c(int i) {
-        return this.a(i);
-    }
-
-    public NBTBase clone() {
-        return this.c();
     }
 }
