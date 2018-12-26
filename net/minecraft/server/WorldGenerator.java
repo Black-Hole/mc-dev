@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public abstract class WorldGenerator<C extends WorldGenFeatureConfiguration> {
 

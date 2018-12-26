@@ -24,16 +24,16 @@ public class EntityIllagerIllusioner extends EntityIllagerWizard implements IRan
         super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new EntityIllagerWizard.b());
-        this.goalSelector.a(4, new EntityIllagerIllusioner.b(null));
-        this.goalSelector.a(5, new EntityIllagerIllusioner.a(null));
-        this.goalSelector.a(6, new PathfinderGoalBowShoot(this, 0.5D, 20, 15.0F));
+        this.goalSelector.a(4, new EntityIllagerIllusioner.b());
+        this.goalSelector.a(5, new EntityIllagerIllusioner.a());
+        this.goalSelector.a(6, new PathfinderGoalBowShoot<>(this, 0.5D, 20, 15.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(9, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 3.0F, 1.0F));
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityIllagerIllusioner.class}));
-        this.targetSelector.a(2, (new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true)).b(300));
-        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, false)).b(300));
-        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget(this, EntityIronGolem.class, false)).b(300));
+        this.targetSelector.a(2, (new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true)).b(300));
+        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false)).b(300));
+        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false)).b(300));
     }
 
     protected void initAttributes() {

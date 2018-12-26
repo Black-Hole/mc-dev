@@ -12,7 +12,6 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
@@ -59,7 +58,7 @@ public class GameRules {
         Iterator iterator = GameRules.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, GameRules.b> entry = (Entry) iterator.next();
 
             this.b.put(entry.getKey(), ((GameRules.b) entry.getValue()).a());
         }
@@ -102,7 +101,7 @@ public class GameRules {
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        Set set = nbttagcompound.getKeys();
+        Set<String> set = nbttagcompound.getKeys();
         Iterator iterator = set.iterator();
 
         while (iterator.hasNext()) {

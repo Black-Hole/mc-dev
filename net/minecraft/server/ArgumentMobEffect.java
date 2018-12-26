@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentMobEffect implements ArgumentType<MobEffectList> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "spooky", "effect"});
+    private static final Collection<String> b = Arrays.asList("spooky", "effect");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("effect.effectNotFound", new Object[] { object});
     });

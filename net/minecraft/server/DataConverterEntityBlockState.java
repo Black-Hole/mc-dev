@@ -9,16 +9,13 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import com.mojang.datafixers.types.templates.Tag.TagType;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.datafixers.util.Unit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class DataConverterEntityBlockState extends DataFix {
 
@@ -292,47 +289,47 @@ public class DataConverterEntityBlockState extends DataFix {
     public TypeRewriteRule makeRule() {
         Schema schema = this.getInputSchema();
         Schema schema1 = this.getOutputSchema();
-        Function function = (typed) -> {
+        Function<Typed<?>, Typed<?>> function = (typed) -> {
             return this.a(typed, "DisplayTile", "DisplayData", "DisplayState");
         };
-        Function function1 = (typed) -> {
+        Function<Typed<?>, Typed<?>> function1 = (typed) -> {
             return this.a(typed, "inTile", "inData", "inBlockState");
         };
-        Type type = DSL.and(DSL.optional(DSL.field("inTile", DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())))), DSL.remainderType());
-        Function function2 = (typed) -> {
+        Type<Pair<Either<Pair<String, Either<Integer, String>>, Unit>, Dynamic<?>>> type = DSL.and(DSL.optional(DSL.field("inTile", DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())))), DSL.remainderType());
+        Function<Typed<?>, Typed<?>> function2 = (typed) -> {
             return typed.update(type.finder(), DSL.remainderType(), Pair::getSecond);
         };
 
         return this.fixTypeEverywhereTyped("EntityBlockStateFix", schema.getType(DataConverterTypes.ENTITY), schema1.getType(DataConverterTypes.ENTITY), (typed) -> {
             typed = this.a(typed, "minecraft:falling_block", this::a);
-            typed = this.a(typed, "minecraft:enderman", (typedx) -> {
-                return this.a(typedx, "carried", "carriedData", "carriedBlockState");
+            typed = this.a(typed, "minecraft:enderman", (typed1) -> {
+                return this.a(typed1, "carried", "carriedData", "carriedBlockState");
             });
-            typed = this.a(typed, "minecraft:arrow", function);
-            typed = this.a(typed, "minecraft:spectral_arrow", function);
-            typed = this.a(typed, "minecraft:egg", function1);
-            typed = this.a(typed, "minecraft:ender_pearl", function1);
-            typed = this.a(typed, "minecraft:fireball", function1);
-            typed = this.a(typed, "minecraft:potion", function1);
-            typed = this.a(typed, "minecraft:small_fireball", function1);
-            typed = this.a(typed, "minecraft:snowball", function1);
-            typed = this.a(typed, "minecraft:wither_skull", function1);
-            typed = this.a(typed, "minecraft:xp_bottle", function1);
-            typed = this.a(typed, "minecraft:commandblock_minecart", function2);
-            typed = this.a(typed, "minecraft:minecart", function2);
-            typed = this.a(typed, "minecraft:chest_minecart", function2);
-            typed = this.a(typed, "minecraft:furnace_minecart", function2);
-            typed = this.a(typed, "minecraft:tnt_minecart", function2);
-            typed = this.a(typed, "minecraft:hopper_minecart", function2);
-            typed = this.a(typed, "minecraft:spawner_minecart", function2);
+            typed = this.a(typed, "minecraft:arrow", function1);
+            typed = this.a(typed, "minecraft:spectral_arrow", function1);
+            typed = this.a(typed, "minecraft:egg", function2);
+            typed = this.a(typed, "minecraft:ender_pearl", function2);
+            typed = this.a(typed, "minecraft:fireball", function2);
+            typed = this.a(typed, "minecraft:potion", function2);
+            typed = this.a(typed, "minecraft:small_fireball", function2);
+            typed = this.a(typed, "minecraft:snowball", function2);
+            typed = this.a(typed, "minecraft:wither_skull", function2);
+            typed = this.a(typed, "minecraft:xp_bottle", function2);
+            typed = this.a(typed, "minecraft:commandblock_minecart", function);
+            typed = this.a(typed, "minecraft:minecart", function);
+            typed = this.a(typed, "minecraft:chest_minecart", function);
+            typed = this.a(typed, "minecraft:furnace_minecart", function);
+            typed = this.a(typed, "minecraft:tnt_minecart", function);
+            typed = this.a(typed, "minecraft:hopper_minecart", function);
+            typed = this.a(typed, "minecraft:spawner_minecart", function);
             return typed;
         });
     }
 
     private Typed<?> a(Typed<?> typed) {
-        Type type = DSL.optional(DSL.field("Block", DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()))));
-        Type type1 = DSL.optional(DSL.field("BlockState", DSL.named(DataConverterTypes.l.typeName(), DSL.remainderType())));
-        Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+        Type<Either<Pair<String, Either<Integer, String>>, Unit>> type = DSL.optional(DSL.field("Block", DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()))));
+        Type<Either<Pair<String, Dynamic<?>>, Unit>> type1 = DSL.optional(DSL.field("BlockState", DSL.named(DataConverterTypes.l.typeName(), DSL.remainderType())));
+        Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
         return typed.update(type.finder(), type1, (either) -> {
             int i = (Integer) either.map((pair) -> {
@@ -340,7 +337,7 @@ public class DataConverterEntityBlockState extends DataFix {
                     return integer;
                 }, DataConverterEntityBlockState::a);
             }, (unit) -> {
-                Optional optional = dynamic.get("TileID").flatMap(Dynamic::getNumberValue);
+                Optional<Number> optional = dynamic.get("TileID").flatMap(Dynamic::getNumberValue);
 
                 return (Integer) optional.map(Number::intValue).orElseGet(() -> {
                     return dynamic.getByte("Tile") & 255;
@@ -353,23 +350,23 @@ public class DataConverterEntityBlockState extends DataFix {
     }
 
     private Typed<?> a(Typed<?> typed, String s, String s1, String s2) {
-        TagType tagtype = DSL.field(s, DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())));
-        TagType tagtype1 = DSL.field(s2, DSL.named(DataConverterTypes.l.typeName(), DSL.remainderType()));
-        Dynamic dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
+        Type<Pair<String, Either<Integer, String>>> type = DSL.field(s, DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString())));
+        Type<Pair<String, Dynamic<?>>> type1 = DSL.field(s2, DSL.named(DataConverterTypes.l.typeName(), DSL.remainderType()));
+        Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
 
-        return typed.update(tagtype.finder(), tagtype1, (pair) -> {
+        return typed.update(type.finder(), type1, (pair) -> {
             int i = (Integer) ((Either) pair.getSecond()).map((integer) -> {
                 return integer;
             }, DataConverterEntityBlockState::a);
-            int j = dynamic.getInt(s) & 15;
+            int j = dynamic.getInt(s1) & 15;
 
             return Pair.of(DataConverterTypes.l.typeName(), DataConverterFlattenData.b(i << 4 | j));
         }).set(DSL.remainderFinder(), dynamic.remove(s1));
     }
 
     private Typed<?> a(Typed<?> typed, String s, Function<Typed<?>, Typed<?>> function) {
-        Type type = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, s);
-        Type type1 = this.getOutputSchema().getChoiceType(DataConverterTypes.ENTITY, s);
+        Type<?> type = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, s);
+        Type<?> type1 = this.getOutputSchema().getChoiceType(DataConverterTypes.ENTITY, s);
 
         return typed.updateTyped(DSL.namedChoice(s, type), type1, function);
     }

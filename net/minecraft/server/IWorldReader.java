@@ -2,9 +2,7 @@ package net.minecraft.server;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
@@ -67,7 +65,7 @@ public interface IWorldReader extends IBlockAccess {
 
     @Nullable
     default EntityHuman a(double d0, double d1, double d2, double d3, boolean flag) {
-        Predicate predicate = flag ? IEntitySelector.e : IEntitySelector.f;
+        Predicate<Entity> predicate = flag ? IEntitySelector.e : IEntitySelector.f;
 
         return this.a(d0, d1, d2, d3, predicate);
     }
@@ -107,35 +105,35 @@ public interface IWorldReader extends IBlockAccess {
         WorldBorder worldborder = this.getWorldBorder();
         boolean flag1 = worldborder.b() < (double) i && (double) j < worldborder.d() && worldborder.c() < (double) i1 && (double) j1 < worldborder.e();
         VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(j - i, l - k, j1 - i1);
-        Predicate predicate = (voxelshape) -> {
-            return !voxelshape.isEmpty() && VoxelShapes.c(voxelshape1, voxelshape, OperatorBoolean.AND);
+        Predicate<VoxelShape> predicate = (voxelshape2) -> {
+            return !voxelshape2.isEmpty() && VoxelShapes.c(voxelshape, voxelshape2, OperatorBoolean.AND);
         };
-        Stream stream = StreamSupport.stream(BlockPosition.MutableBlockPosition.b(i, k, i1, j - 1, l - 1, j1 - 1).spliterator(), false).map((blockposition_mutableblockposition) -> {
-            int i = blockposition_mutableblockposition.getX();
-            int j = blockposition_mutableblockposition.getY();
-            int k = blockposition_mutableblockposition.getZ();
-            boolean flag = i == l || i == i1 - 1;
-            boolean flag1 = j == j1 || j == k1 - 1;
-            boolean flag2 = k == l1 || k == i2 - 1;
+        Stream<VoxelShape> stream = StreamSupport.stream(BlockPosition.MutableBlockPosition.b(i, k, i1, j - 1, l - 1, j1 - 1).spliterator(), false).map((blockposition_mutableblockposition) -> {
+            int k1 = blockposition_mutableblockposition.getX();
+            int l1 = blockposition_mutableblockposition.getY();
+            int i2 = blockposition_mutableblockposition.getZ();
+            boolean flag2 = k1 == i || k1 == j - 1;
+            boolean flag3 = l1 == k || l1 == l - 1;
+            boolean flag4 = i2 == i1 || i2 == j1 - 1;
 
-            if ((!flag || !flag1) && (!flag1 || !flag2) && (!flag2 || !flag) && this.isLoaded(blockposition_mutableblockposition)) {
-                VoxelShape voxelshape;
+            if ((!flag2 || !flag3) && (!flag3 || !flag4) && (!flag4 || !flag2) && this.isLoaded(blockposition_mutableblockposition)) {
+                VoxelShape voxelshape2;
 
-                if (flag3 && !flag4 && !worldborder.a((BlockPosition) blockposition_mutableblockposition)) {
-                    voxelshape = VoxelShapes.b();
+                if (flag && !flag1 && !worldborder.a((BlockPosition) blockposition_mutableblockposition)) {
+                    voxelshape2 = VoxelShapes.b();
                 } else {
-                    voxelshape = this.getType(blockposition_mutableblockposition).getCollisionShape(this, blockposition_mutableblockposition);
+                    voxelshape2 = this.getType(blockposition_mutableblockposition).getCollisionShape(this, blockposition_mutableblockposition);
                 }
 
-                VoxelShape voxelshape1 = voxelshape2.a((double) (-i), (double) (-j), (double) (-k));
+                VoxelShape voxelshape3 = voxelshape1.a((double) (-k1), (double) (-l1), (double) (-i2));
 
-                if (VoxelShapes.c(voxelshape1, voxelshape, OperatorBoolean.AND)) {
+                if (VoxelShapes.c(voxelshape3, voxelshape2, OperatorBoolean.AND)) {
                     return VoxelShapes.a();
-                } else if (voxelshape == VoxelShapes.b()) {
-                    voxelshapediscrete.a(i - l, j - j1, k - l1, true, true);
+                } else if (voxelshape2 == VoxelShapes.b()) {
+                    voxelshapebitset.a(k1 - i, l1 - k, i2 - i1, true, true);
                     return VoxelShapes.a();
                 } else {
-                    return voxelshape.a((double) i, (double) j, (double) k);
+                    return voxelshape2.a((double) k1, (double) l1, (double) i2);
                 }
             } else {
                 return VoxelShapes.a();
@@ -143,7 +141,7 @@ public interface IWorldReader extends IBlockAccess {
         }).filter(predicate);
 
         return Stream.concat(stream, Stream.generate(() -> {
-            return new VoxelShapeWorldRegion(voxelshapediscrete, i, j, k);
+            return new VoxelShapeWorldRegion(voxelshapebitset, i, k, i1);
         }).limit(1L).filter(predicate));
     }
 

@@ -3,9 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.GsonBuilder;
-import com.mojang.brigadier.AmbiguityConsumer;
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.ResultConsumer;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -19,10 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,8 +97,8 @@ public class CommandDispatcher {
         this.b.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
             CommandDispatcher.a.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
         });
-        this.b.setConsumer((commandcontext, flag, i) -> {
-            ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag, i);
+        this.b.setConsumer((commandcontext, flag1, i) -> {
+            ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag1, i);
         });
     }
 
@@ -119,7 +114,7 @@ public class CommandDispatcher {
     public int a(CommandListenerWrapper commandlistenerwrapper, String s) {
         StringReader stringreader = new StringReader(s);
 
-        if(stringreader.canRead() && stringreader.peek() == 47) {
+        if (stringreader.canRead() && stringreader.peek() == '/') {
             stringreader.skip();
         }
 
@@ -141,18 +136,18 @@ public class CommandDispatcher {
                 return b1;
             } catch (CommandSyntaxException commandsyntaxexception) {
                 commandlistenerwrapper.sendFailureMessage(ChatComponentUtils.a(commandsyntaxexception.getRawMessage()));
-                if(commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
+                if (commandsyntaxexception.getInput() != null && commandsyntaxexception.getCursor() >= 0) {
                     int j = Math.min(commandsyntaxexception.getInput().length(), commandsyntaxexception.getCursor());
                     IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).a(EnumChatFormat.GRAY).a((chatmodifier) -> {
                         chatmodifier.setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, s));
                     });
 
-                    if(j > 10) {
+                    if (j > 10) {
                         ichatbasecomponent.a("...");
                     }
 
                     ichatbasecomponent.a(commandsyntaxexception.getInput().substring(Math.max(0, j - 10), j));
-                    if(j < commandsyntaxexception.getInput().length()) {
+                    if (j < commandsyntaxexception.getInput().length()) {
                         IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText(commandsyntaxexception.getInput().substring(j))).a(new EnumChatFormat[]{EnumChatFormat.RED, EnumChatFormat.UNDERLINE});
 
                         ichatbasecomponent.addSibling(ichatbasecomponent1);
@@ -168,10 +163,10 @@ public class CommandDispatcher {
                 chatcomponenttext = new ChatComponentText;
             }
 
-            chatcomponenttext.<init>(exception.getMessage() == null?exception.getClass().getName():exception.getMessage());
+            chatcomponenttext.<init>(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
             ChatComponentText chatcomponenttext1 = chatcomponenttext;
 
-            if(CommandDispatcher.a.isDebugEnabled()) {
+            if (CommandDispatcher.a.isDebugEnabled()) {
                 StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
                 for(int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {
@@ -180,7 +175,7 @@ public class CommandDispatcher {
             }
 
             commandlistenerwrapper.sendFailureMessage((new ChatMessage("command.failed", new Object[0])).a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
+                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatcomponenttext1));
             }));
             b0 = 0;
         } finally {
@@ -191,11 +186,11 @@ public class CommandDispatcher {
     }
 
     public void a(EntityPlayer entityplayer) {
-        HashMap hashmap = Maps.newHashMap();
-        RootCommandNode rootcommandnode = new RootCommandNode();
+        Map<CommandNode<CommandListenerWrapper>, CommandNode<ICompletionProvider>> map = Maps.newHashMap();
+        RootCommandNode<ICompletionProvider> rootcommandnode = new RootCommandNode();
 
-        hashmap.put(this.b.getRoot(), rootcommandnode);
-        this.a(this.b.getRoot(), rootcommandnode, entityplayer.getCommandListener(), (Map) hashmap);
+        map.put(this.b.getRoot(), rootcommandnode);
+        this.a(this.b.getRoot(), rootcommandnode, entityplayer.getCommandListener(), (Map) map);
         entityplayer.playerConnection.sendPacket(new PacketPlayOutCommands(rootcommandnode));
     }
 
@@ -203,10 +198,10 @@ public class CommandDispatcher {
         Iterator iterator = commandnode.getChildren().iterator();
 
         while (iterator.hasNext()) {
-            CommandNode commandnode2 = (CommandNode) iterator.next();
+            CommandNode<CommandListenerWrapper> commandnode2 = (CommandNode) iterator.next();
 
             if (commandnode2.canUse(commandlistenerwrapper)) {
-                ArgumentBuilder argumentbuilder = commandnode2.createBuilder();
+                ArgumentBuilder<ICompletionProvider, ?> argumentbuilder = commandnode2.createBuilder();
 
                 argumentbuilder.requires((icompletionprovider) -> {
                     return true;
@@ -218,7 +213,7 @@ public class CommandDispatcher {
                 }
 
                 if (argumentbuilder instanceof RequiredArgumentBuilder) {
-                    RequiredArgumentBuilder requiredargumentbuilder = (RequiredArgumentBuilder) argumentbuilder;
+                    RequiredArgumentBuilder<ICompletionProvider, ?> requiredargumentbuilder = (RequiredArgumentBuilder) argumentbuilder;
 
                     if (requiredargumentbuilder.getSuggestionsProvider() != null) {
                         requiredargumentbuilder.suggests(CompletionProviders.b(requiredargumentbuilder.getSuggestionsProvider()));
@@ -229,7 +224,7 @@ public class CommandDispatcher {
                     argumentbuilder.redirect((CommandNode) map.get(argumentbuilder.getRedirect()));
                 }
 
-                CommandNode commandnode3 = argumentbuilder.build();
+                CommandNode<ICompletionProvider> commandnode3 = argumentbuilder.build();
 
                 map.put(commandnode2, commandnode3);
                 commandnode1.addChild(commandnode3);

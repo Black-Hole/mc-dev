@@ -26,7 +26,7 @@ public class EntitySlice<T> extends AbstractSet<T> {
         Iterator iterator = Lists.newArrayList(EntitySlice.a).iterator();
 
         while (iterator.hasNext()) {
-            Class oclass1 = (Class) iterator.next();
+            Class<?> oclass1 = (Class) iterator.next();
 
             this.a(oclass1);
         }
@@ -38,10 +38,10 @@ public class EntitySlice<T> extends AbstractSet<T> {
         Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {
-            Object object = iterator.next();
+            T t0 = iterator.next();
 
-            if (oclass.isAssignableFrom(object.getClass())) {
-                this.a(object, oclass);
+            if (oclass.isAssignableFrom(t0.getClass())) {
+                this.a(t0, oclass);
             }
         }
 
@@ -64,7 +64,7 @@ public class EntitySlice<T> extends AbstractSet<T> {
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
-            Class oclass = (Class) iterator.next();
+            Class<?> oclass = (Class) iterator.next();
 
             if (oclass.isAssignableFrom(t0.getClass())) {
                 this.a(t0, oclass);
@@ -75,7 +75,7 @@ public class EntitySlice<T> extends AbstractSet<T> {
     }
 
     private void a(T t0, Class<?> oclass) {
-        List list = (List) this.b.get(oclass);
+        List<T> list = (List) this.b.get(oclass);
 
         if (list == null) {
             this.b.put(oclass, Lists.newArrayList(new Object[] { t0}));
@@ -86,17 +86,17 @@ public class EntitySlice<T> extends AbstractSet<T> {
     }
 
     public boolean remove(Object object) {
-        Object object1 = object;
+        T t0 = object;
         boolean flag = false;
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
-            Class oclass = (Class) iterator.next();
+            Class<?> oclass = (Class) iterator.next();
 
-            if (oclass.isAssignableFrom(object1.getClass())) {
-                List list = (List) this.b.get(oclass);
+            if (oclass.isAssignableFrom(t0.getClass())) {
+                List<T> list = (List) this.b.get(oclass);
 
-                if (list != null && list.remove(object1)) {
+                if (list != null && list.remove(t0)) {
                     flag = true;
                 }
             }
@@ -111,12 +111,12 @@ public class EntitySlice<T> extends AbstractSet<T> {
 
     public <S> Iterable<S> c(Class<S> oclass) {
         return () -> {
-            List list = (List) this.b.get(this.b(oclass));
+            List<T> list = (List) this.b.get(this.b(oclass));
 
             if (list == null) {
                 return Collections.emptyIterator();
             } else {
-                Iterator iterator = list.iterator();
+                Iterator<T> iterator = list.iterator();
 
                 return Iterators.filter(iterator, oclass);
             }

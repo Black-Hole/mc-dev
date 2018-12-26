@@ -64,7 +64,7 @@ public class VillageSiege {
     }
 
     private boolean b() {
-        List list = this.a.players;
+        List<EntityHuman> list = this.a.players;
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

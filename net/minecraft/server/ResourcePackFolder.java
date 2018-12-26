@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -70,7 +68,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
     }
 
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
-        HashSet hashset = Sets.newHashSet();
+        Set<String> set = Sets.newHashSet();
         File file = new File(this.a, enumresourcepacktype.a());
         File[] afile = file.listFiles(DirectoryFileFilter.DIRECTORY);
 
@@ -83,30 +81,30 @@ public class ResourcePackFolder extends ResourcePackAbstract {
                 String s = a(file, file1);
 
                 if (s.equals(s.toLowerCase(Locale.ROOT))) {
-                    hashset.add(s.substring(0, s.length() - 1));
+                    set.add(s.substring(0, s.length() - 1));
                 } else {
                     this.d(s);
                 }
             }
         }
 
-        return hashset;
+        return set;
     }
 
     public void close() throws IOException {}
 
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
         File file = new File(this.a, enumresourcepacktype.a());
-        ArrayList arraylist = Lists.newArrayList();
+        List<MinecraftKey> list = Lists.newArrayList();
         Iterator iterator = this.a(enumresourcepacktype).iterator();
 
         while (iterator.hasNext()) {
             String s1 = (String) iterator.next();
 
-            this.a(new File(new File(file, s1), s), i, s1, arraylist, s + "/", predicate);
+            this.a(new File(new File(file, s1), s), i, s1, list, s + "/", predicate);
         }
 
-        return arraylist;
+        return list;
     }
 
     private void a(File file, int i, String s, List<MinecraftKey> list, String s1, Predicate<String> predicate) {

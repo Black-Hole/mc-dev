@@ -14,11 +14,11 @@ public class EntityZombie extends EntityMonster {
     private static final DataWatcherObject<Boolean> bC = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Integer> bD = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> bE = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.i);
+    public static final DataWatcherObject<Boolean> DROWN_CONVERTING = DataWatcher.a(EntityZombie.class, DataWatcherRegistry.i);
     private final PathfinderGoalBreakDoor bG;
     private boolean bH;
     private int bI;
-    private int drownedConversionTime;
+    public int drownedConversionTime;
     private float bK;
     private float bL;
 
@@ -46,10 +46,10 @@ public class EntityZombie extends EntityMonster {
         this.goalSelector.a(6, new PathfinderGoalMoveThroughVillage(this, 1.0D, false));
         this.goalSelector.a(7, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityPigZombie.class}));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, false));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityIronGolem.class, true));
-        this.targetSelector.a(5, new PathfinderGoalNearestAttackableTarget(this, EntityTurtle.class, 10, true, false, EntityTurtle.bC));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, true));
+        this.targetSelector.a(5, new PathfinderGoalNearestAttackableTarget<>(this, EntityTurtle.class, 10, true, false, EntityTurtle.bC));
     }
 
     protected void initAttributes() {
@@ -66,11 +66,11 @@ public class EntityZombie extends EntityMonster {
         this.getDataWatcher().register(EntityZombie.bC, false);
         this.getDataWatcher().register(EntityZombie.bD, 0);
         this.getDataWatcher().register(EntityZombie.bE, false);
-        this.getDataWatcher().register(EntityZombie.bF, false);
+        this.getDataWatcher().register(EntityZombie.DROWN_CONVERTING, false);
     }
 
     public boolean isDrownConverting() {
-        return (Boolean) this.getDataWatcher().get(EntityZombie.bF);
+        return (Boolean) this.getDataWatcher().get(EntityZombie.DROWN_CONVERTING);
     }
 
     public void s(boolean flag) {
@@ -152,7 +152,7 @@ public class EntityZombie extends EntityMonster {
                 if (this.a(TagsFluid.WATER)) {
                     ++this.bI;
                     if (this.bI >= 600) {
-                        this.a(300);
+                        this.startDrownedConversion(300);
                     }
                 } else {
                     this.bI = -1;
@@ -189,9 +189,9 @@ public class EntityZombie extends EntityMonster {
         super.movementTick();
     }
 
-    private void a(int i) {
+    public void startDrownedConversion(int i) {
         this.drownedConversionTime = i;
-        this.getDataWatcher().set(EntityZombie.bF, true);
+        this.getDataWatcher().set(EntityZombie.DROWN_CONVERTING, true);
     }
 
     protected void dE() {
@@ -346,7 +346,7 @@ public class EntityZombie extends EntityMonster {
         this.t(nbttagcompound.getBoolean("CanBreakDoors"));
         this.bI = nbttagcompound.getInt("InWaterTime");
         if (nbttagcompound.hasKeyOfType("DrownedConversionTime", 99) && nbttagcompound.getInt("DrownedConversionTime") > -1) {
-            this.a(nbttagcompound.getInt("DrownedConversionTime"));
+            this.startDrownedConversion(nbttagcompound.getInt("DrownedConversionTime"));
         }
 
     }
@@ -363,7 +363,7 @@ public class EntityZombie extends EntityMonster {
 
             entityzombievillager.u(entityvillager);
             this.world.kill(entityvillager);
-            entityzombievillager.prepare(this.world.getDamageScaler(new BlockPosition(entityzombievillager)), new EntityZombie.GroupDataZombie(false, null), (NBTTagCompound) null);
+            entityzombievillager.prepare(this.world.getDamageScaler(new BlockPosition(entityzombievillager)), new EntityZombie.GroupDataZombie(false), (NBTTagCompound) null);
             entityzombievillager.setProfession(entityvillager.getProfession());
             entityzombievillager.setBaby(entityvillager.isBaby());
             entityzombievillager.setNoAI(entityvillager.isNoAI());
@@ -399,7 +399,7 @@ public class EntityZombie extends EntityMonster {
 
         this.p(this.random.nextFloat() < 0.55F * f);
         if (object == null) {
-            object = new EntityZombie.GroupDataZombie(this.world.random.nextFloat() < 0.05F, null);
+            object = new EntityZombie.GroupDataZombie(this.world.random.nextFloat() < 0.05F);
         }
 
         if (object instanceof EntityZombie.GroupDataZombie) {
@@ -408,7 +408,7 @@ public class EntityZombie extends EntityMonster {
             if (entityzombie_groupdatazombie.a) {
                 this.setBaby(true);
                 if ((double) this.world.random.nextFloat() < 0.05D) {
-                    List list = this.world.a(EntityChicken.class, this.getBoundingBox().grow(5.0D, 3.0D, 5.0D), IEntitySelector.c);
+                    List<EntityChicken> list = this.world.a(EntityChicken.class, this.getBoundingBox().grow(5.0D, 3.0D, 5.0D), IEntitySelector.c);
 
                     if (!list.isEmpty()) {
                         EntityChicken entitychicken = (EntityChicken) list.get(0);

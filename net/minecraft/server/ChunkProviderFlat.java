@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,14 +26,14 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
     private BiomeBase g() {
         BiomeBase biomebase = this.g.t();
         ChunkProviderFlat.a chunkproviderflat_a = new ChunkProviderFlat.a(biomebase.q(), biomebase.c(), biomebase.p(), biomebase.h(), biomebase.l(), biomebase.getTemperature(), biomebase.getHumidity(), biomebase.n(), biomebase.o(), biomebase.s());
-        Map map = this.g.u();
+        Map<String, Map<String, String>> map = this.g.u();
         Iterator iterator = map.keySet().iterator();
 
         int i;
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            WorldGenFeatureComposite[] aworldgenfeaturecomposite = (WorldGenFeatureComposite[]) GeneratorSettingsFlat.u.get(s);
+            WorldGenFeatureComposite<?, ?>[] aworldgenfeaturecomposite = (WorldGenFeatureComposite[]) GeneratorSettingsFlat.u.get(s);
 
             if (aworldgenfeaturecomposite != null) {
                 WorldGenFeatureComposite[] aworldgenfeaturecomposite1 = aworldgenfeaturecomposite;
@@ -42,10 +41,10 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
                 i = aworldgenfeaturecomposite.length;
 
                 for (int j = 0; j < i; ++j) {
-                    WorldGenFeatureComposite worldgenfeaturecomposite = aworldgenfeaturecomposite1[j];
+                    WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite = aworldgenfeaturecomposite1[j];
 
                     chunkproviderflat_a.a((WorldGenStage.Decoration) GeneratorSettingsFlat.t.get(worldgenfeaturecomposite), worldgenfeaturecomposite);
-                    WorldGenerator worldgenerator = worldgenfeaturecomposite.a();
+                    WorldGenerator<?> worldgenerator = worldgenfeaturecomposite.a();
 
                     if (worldgenerator instanceof StructureGenerator) {
                         WorldGenFeatureConfiguration worldgenfeatureconfiguration = biomebase.b((StructureGenerator) worldgenerator);
@@ -59,21 +58,21 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
         boolean flag = (!this.g.y() || biomebase == Biomes.THE_VOID) && map.containsKey("decoration");
 
         if (flag) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<WorldGenStage.Decoration> list = Lists.newArrayList();
 
-            arraylist.add(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
-            arraylist.add(WorldGenStage.Decoration.SURFACE_STRUCTURES);
+            list.add(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
+            list.add(WorldGenStage.Decoration.SURFACE_STRUCTURES);
             WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
             int k = aworldgenstage_decoration.length;
 
             for (i = 0; i < k; ++i) {
                 WorldGenStage.Decoration worldgenstage_decoration = aworldgenstage_decoration[i];
 
-                if (!arraylist.contains(worldgenstage_decoration)) {
+                if (!list.contains(worldgenstage_decoration)) {
                     Iterator iterator1 = biomebase.a(worldgenstage_decoration).iterator();
 
                     while (iterator1.hasNext()) {
-                        WorldGenFeatureComposite worldgenfeaturecomposite1 = (WorldGenFeatureComposite) iterator1.next();
+                        WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite1 = (WorldGenFeatureComposite) iterator1.next();
 
                         chunkproviderflat_a.a(worldgenstage_decoration, worldgenfeaturecomposite1);
                     }
@@ -105,12 +104,12 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
 
         for (int k = i - 8; k <= i + 8; ++k) {
             for (int l = j - 8; l <= j + 8; ++l) {
-                List list = this.h.a(WorldGenStage.Features.AIR);
+                List<WorldGenCarverWrapper<?>> list = this.h.a(WorldGenStage.Features.AIR);
                 ListIterator listiterator = list.listIterator();
 
                 while (listiterator.hasNext()) {
                     int i1 = listiterator.nextIndex();
-                    WorldGenCarverWrapper worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
+                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
 
                     seededrandom.c(regionlimitedworldaccess.getMinecraftWorld().getSeed() + (long) i1, k, l);
                     if (worldgencarverwrapper.a(regionlimitedworldaccess, seededrandom, k, l, WorldGenFeatureConfiguration.e)) {

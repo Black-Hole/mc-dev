@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeBirchForest extends BiomeBase {
 
     public BiomeBirchForest() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeBirchForest.au, BiomeBirchForest.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.FOREST).a(0.1F).b(0.2F).c(0.6F).d(0.6F).a(4159204).b(329011).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeBirchForest.au, BiomeBirchForest.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.FOREST).a(0.1F).b(0.2F).c(0.6F).d(0.6F).a(4159204).b(329011).a((String) null));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeBirchForest.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -36,8 +36,8 @@ public final class BiomeBirchForest extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeBirchForest.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeBirchForest.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeBirchForest.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeBirchForest.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeBirchForest.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeBirchForest.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeBirchForest.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeBirchForest.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));

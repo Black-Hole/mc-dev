@@ -239,7 +239,7 @@ public class EntityFishingHook extends Entity {
         }
 
         Entity entity = null;
-        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
         double d0 = 0.0D;
         Iterator iterator = list.iterator();
 
@@ -397,7 +397,7 @@ public class EntityFishingHook extends Entity {
                 LootTableInfo.Builder loottableinfo_builder = (new LootTableInfo.Builder((WorldServer) this.world)).position(new BlockPosition(this));
 
                 loottableinfo_builder.luck((float) this.az + this.owner.dJ());
-                List list = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.aO).populateLoot(this.random, loottableinfo_builder.build());
+                List<ItemStack> list = this.world.getMinecraftServer().getLootTableRegistry().getLootTable(LootTables.aO).populateLoot(this.random, loottableinfo_builder.build());
 
                 CriterionTriggers.D.a((EntityPlayer) this.owner, itemstack, this, list);
                 Iterator iterator = list.iterator();

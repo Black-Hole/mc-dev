@@ -5,7 +5,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +80,7 @@ public class ShapeDetectorBuilder {
 
     private Predicate<ShapeDetectorBlock>[][][] c() {
         this.d();
-        Predicate[][][] apredicate = (Predicate[][][]) ((Predicate[][][]) Array.newInstance(Predicate.class, new int[] { this.b.size(), this.d, this.e}));
+        Predicate<ShapeDetectorBlock>[][][] apredicate = (Predicate[][][]) ((Predicate[][][]) Array.newInstance(Predicate.class, new int[] { this.b.size(), this.d, this.e}));
 
         for (int i = 0; i < this.b.size(); ++i) {
             for (int j = 0; j < this.d; ++j) {
@@ -95,19 +94,19 @@ public class ShapeDetectorBuilder {
     }
 
     private void d() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Character> list = Lists.newArrayList();
         Iterator iterator = this.c.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<Character, Predicate<ShapeDetectorBlock>> entry = (Entry) iterator.next();
 
             if (entry.getValue() == null) {
-                arraylist.add(entry.getKey());
+                list.add(entry.getKey());
             }
         }
 
-        if (!arraylist.isEmpty()) {
-            throw new IllegalStateException("Predicates for character(s) " + ShapeDetectorBuilder.a.join(arraylist) + " are missing");
+        if (!list.isEmpty()) {
+            throw new IllegalStateException("Predicates for character(s) " + ShapeDetectorBuilder.a.join(list) + " are missing");
         }
     }
 }

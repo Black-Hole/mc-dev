@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.LinkedList;
+import java.util.Queue;
 
 public class BlockSponge extends Block {
 
@@ -29,13 +29,13 @@ public class BlockSponge extends Block {
     }
 
     private boolean b(World world, BlockPosition blockposition) {
-        LinkedList linkedlist = Lists.newLinkedList();
+        Queue<Tuple<BlockPosition, Integer>> queue = Lists.newLinkedList();
 
-        linkedlist.add(new Tuple(blockposition, 0));
+        queue.add(new Tuple<>(blockposition, 0));
         int i = 0;
 
-        while (!linkedlist.isEmpty()) {
-            Tuple tuple = (Tuple) linkedlist.poll();
+        while (!queue.isEmpty()) {
+            Tuple<BlockPosition, Integer> tuple = (Tuple) queue.poll();
             BlockPosition blockposition1 = (BlockPosition) tuple.a();
             int j = (Integer) tuple.b();
             EnumDirection[] aenumdirection = EnumDirection.values();
@@ -49,23 +49,23 @@ public class BlockSponge extends Block {
                 Material material = iblockdata.getMaterial();
 
                 if (fluid.a(TagsFluid.WATER)) {
-                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).a(world, blockposition2, iblockdata) != FluidTypes.a) {
+                    if (iblockdata.getBlock() instanceof IFluidSource && ((IFluidSource) iblockdata.getBlock()).removeFluid(world, blockposition2, iblockdata) != FluidTypes.EMPTY) {
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, j + 1));
+                            queue.add(new Tuple<>(blockposition2, j + 1));
                         }
                     } else if (iblockdata.getBlock() instanceof BlockFluids) {
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, j + 1));
+                            queue.add(new Tuple<>(blockposition2, j + 1));
                         }
                     } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
                         iblockdata.a(world, blockposition2, 0);
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;
                         if (j < 6) {
-                            linkedlist.add(new Tuple(blockposition2, j + 1));
+                            queue.add(new Tuple<>(blockposition2, j + 1));
                         }
                     }
                 }

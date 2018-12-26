@@ -13,12 +13,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class ArgumentInventorySlot implements ArgumentType<Integer> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "container.5", "12", "weapon"});
+    private static final Collection<String> a = Arrays.asList("container.5", "12", "weapon");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("slot.unknown", new Object[] { object});
     });

@@ -7,8 +7,8 @@ public class DebugReportFluidTags extends DebugReportTags<FluidType> {
     }
 
     protected void b() {
-        this.a(TagsFluid.WATER).a((Object[])(FluidTypes.c, FluidTypes.b));
-        this.a(TagsFluid.LAVA).a((Object[])(FluidTypes.e, FluidTypes.d));
+        this.a(TagsFluid.WATER).a((Object[])(FluidTypes.WATER, FluidTypes.FLOWING_WATER));
+        this.a(TagsFluid.LAVA).a((Object[])(FluidTypes.LAVA, FluidTypes.FLOWING_LAVA));
     }
 
     protected java.nio.file.Path a(MinecraftKey minecraftkey) {

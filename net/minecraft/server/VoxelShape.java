@@ -3,9 +3,7 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.math.DoubleMath;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntPredicate;
 import javax.annotation.Nullable;
 
 public abstract class VoxelShape {
@@ -28,7 +26,7 @@ public abstract class VoxelShape {
         return i <= 0 ? Double.NEGATIVE_INFINITY : this.a(enumdirection_enumaxis, i);
     }
 
-    public AxisAlignedBB a() {
+    public AxisAlignedBB getBoundingBox() {
         if (this.isEmpty()) {
             throw new UnsupportedOperationException("No bounds for empty shape.");
         } else {
@@ -66,12 +64,12 @@ public abstract class VoxelShape {
     }
 
     public List<AxisAlignedBB> d() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<AxisAlignedBB> list = Lists.newArrayList();
 
         this.b((d0, d1, d2, d3, d4, d5) -> {
             list.add(new AxisAlignedBB(d0, d1, d2, d3, d4, d5));
         });
-        return arraylist;
+        return list;
     }
 
     protected int a(EnumDirection.EnumAxis enumdirection_enumaxis, double d0) {
@@ -185,6 +183,6 @@ public abstract class VoxelShape {
     }
 
     public String toString() {
-        return this.isEmpty() ? "EMPTY" : "VoxelShape[" + this.a() + "]";
+        return this.isEmpty() ? "EMPTY" : "VoxelShape[" + this.getBoundingBox() + "]";
     }
 }

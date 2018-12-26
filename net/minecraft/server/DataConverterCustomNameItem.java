@@ -9,7 +9,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterCustomNameItem extends DataFix {
 
@@ -18,16 +17,16 @@ public class DataConverterCustomNameItem extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("display");
+        Optional<? extends Dynamic<?>> optional = dynamic.get("display");
 
         if (optional.isPresent()) {
-            Dynamic dynamic1 = (Dynamic) optional.get();
-            Optional optional1 = dynamic1.get("Name").flatMap(Dynamic::getStringValue);
+            Dynamic<?> dynamic1 = (Dynamic) optional.get();
+            Optional<String> optional1 = dynamic1.get("Name").flatMap(Dynamic::getStringValue);
 
             if (optional1.isPresent()) {
                 dynamic1 = dynamic1.set("Name", dynamic1.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText((String) optional1.get())))));
             } else {
-                Optional optional2 = dynamic1.get("LocName").flatMap(Dynamic::getStringValue);
+                Optional<String> optional2 = dynamic1.get("LocName").flatMap(Dynamic::getStringValue);
 
                 if (optional2.isPresent()) {
                     dynamic1 = dynamic1.set("Name", dynamic1.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatMessage((String) optional2.get(), new Object[0])))));
@@ -42,12 +41,12 @@ public class DataConverterCustomNameItem extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<?> opticfinder = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemCustomNameToComponentFix", type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), this::a);
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), this::a);
             });
         });
     }

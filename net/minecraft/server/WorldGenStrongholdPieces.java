@@ -20,7 +20,7 @@ public class WorldGenStrongholdPieces {
     private static List<WorldGenStrongholdPieces.WorldGenStrongholdPieceWeight> b;
     private static Class<? extends WorldGenStrongholdPieces.WorldGenStrongholdPiece> c;
     private static int d;
-    private static final WorldGenStrongholdPieces.WorldGenStrongholdStones e = new WorldGenStrongholdPieces.WorldGenStrongholdStones(null);
+    private static final WorldGenStrongholdPieces.WorldGenStrongholdStones e = new WorldGenStrongholdPieces.WorldGenStrongholdStones();
 
     public static void a() {
         WorldGenFactory.a(WorldGenStrongholdPieces.WorldGenStrongholdChestCorridor.class, "SHCC");

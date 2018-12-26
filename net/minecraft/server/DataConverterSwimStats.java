@@ -7,7 +7,6 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.function.Function;
 
 public class DataConverterSwimStats extends DataFix {
 
@@ -16,16 +15,16 @@ public class DataConverterSwimStats extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = this.getOutputSchema().getType(DataConverterTypes.g);
-        Type type1 = this.getInputSchema().getType(DataConverterTypes.g);
-        OpticFinder opticfinder = type1.findField("stats");
-        OpticFinder opticfinder1 = opticfinder.type().findField("minecraft:custom");
-        OpticFinder opticfinder2 = DSL.namespacedString().finder();
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.g);
+        Type<?> type1 = this.getInputSchema().getType(DataConverterTypes.g);
+        OpticFinder<?> opticfinder = type1.findField("stats");
+        OpticFinder<?> opticfinder1 = opticfinder.type().findField("minecraft:custom");
+        OpticFinder<String> opticfinder2 = DSL.namespacedString().finder();
 
         return this.fixTypeEverywhereTyped("SwimStatsRenameFix", type1, type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.updateTyped(opticfinder, (typed) -> {
-                    return typed.update(opticfinder, (s) -> {
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.updateTyped(opticfinder1, (typed2) -> {
+                    return typed2.update(opticfinder2, (s) -> {
                         return s.equals("minecraft:swim_one_cm") ? "minecraft:walk_on_water_one_cm" : (s.equals("minecraft:dive_one_cm") ? "minecraft:walk_under_water_one_cm" : s);
                     });
                 });

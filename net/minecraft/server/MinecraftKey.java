@@ -11,7 +11,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.lang.reflect.Type;
-import java.util.function.IntPredicate;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -126,7 +125,7 @@ public class MinecraftKey implements Comparable<MinecraftKey> {
     }
 
     public static boolean a(char c0) {
-        return c0 >= 48 && c0 <= 57 || c0 >= 97 && c0 <= 122 || c0 == 95 || c0 == 58 || c0 == 47 || c0 == 46 || c0 == 45;
+        return c0 >= '0' && c0 <= '9' || c0 >= 'a' && c0 <= 'z' || c0 == '_' || c0 == ':' || c0 == '/' || c0 == '.' || c0 == '-';
     }
 
     public static class a implements JsonDeserializer<MinecraftKey>, JsonSerializer<MinecraftKey> {

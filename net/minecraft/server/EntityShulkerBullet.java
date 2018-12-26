@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -129,39 +128,39 @@ public class EntityShulkerBullet extends Entity {
 
         if (blockposition.g(this.locX, this.locY, this.locZ) >= 4.0D) {
             BlockPosition blockposition1 = new BlockPosition(this);
-            ArrayList arraylist = Lists.newArrayList();
+            List<EnumDirection> list = Lists.newArrayList();
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.X) {
                 if (blockposition1.getX() < blockposition.getX() && this.world.isEmpty(blockposition1.east())) {
-                    arraylist.add(EnumDirection.EAST);
+                    list.add(EnumDirection.EAST);
                 } else if (blockposition1.getX() > blockposition.getX() && this.world.isEmpty(blockposition1.west())) {
-                    arraylist.add(EnumDirection.WEST);
+                    list.add(EnumDirection.WEST);
                 }
             }
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.Y) {
                 if (blockposition1.getY() < blockposition.getY() && this.world.isEmpty(blockposition1.up())) {
-                    arraylist.add(EnumDirection.UP);
+                    list.add(EnumDirection.UP);
                 } else if (blockposition1.getY() > blockposition.getY() && this.world.isEmpty(blockposition1.down())) {
-                    arraylist.add(EnumDirection.DOWN);
+                    list.add(EnumDirection.DOWN);
                 }
             }
 
             if (enumdirection_enumaxis != EnumDirection.EnumAxis.Z) {
                 if (blockposition1.getZ() < blockposition.getZ() && this.world.isEmpty(blockposition1.south())) {
-                    arraylist.add(EnumDirection.SOUTH);
+                    list.add(EnumDirection.SOUTH);
                 } else if (blockposition1.getZ() > blockposition.getZ() && this.world.isEmpty(blockposition1.north())) {
-                    arraylist.add(EnumDirection.NORTH);
+                    list.add(EnumDirection.NORTH);
                 }
             }
 
             enumdirection = EnumDirection.a(this.random);
-            if (arraylist.isEmpty()) {
+            if (list.isEmpty()) {
                 for (int i = 5; !this.world.isEmpty(blockposition1.shift(enumdirection)) && i > 0; --i) {
                     enumdirection = EnumDirection.a(this.random);
                 }
             } else {
-                enumdirection = (EnumDirection) arraylist.get(this.random.nextInt(arraylist.size()));
+                enumdirection = (EnumDirection) list.get(this.random.nextInt(list.size()));
             }
 
             d1 = this.locX + (double) enumdirection.getAdjacentX();

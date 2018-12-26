@@ -32,7 +32,7 @@ public class SchedulerBatch<K, T extends SchedulerTask<K, T>, R> {
         if (!this.c) {
             throw new RuntimeException("Batch not properly started. Please use startBatch to create a new batch.");
         } else {
-            CompletableFuture completablefuture = this.b.a(k0);
+            CompletableFuture<R> completablefuture = this.b.a(k0);
 
             --this.d;
             if (this.d == 0) {

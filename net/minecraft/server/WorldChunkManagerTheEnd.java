@@ -1,11 +1,11 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class WorldChunkManagerTheEnd extends WorldChunkManager {
@@ -42,18 +42,18 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
 
     public BiomeBase[] a(int i, int j, int k, int l, boolean flag) {
         BiomeBase[] abiomebase = new BiomeBase[k * l];
-        Long2ObjectOpenHashMap long2objectopenhashmap = new Long2ObjectOpenHashMap();
+        Long2ObjectMap<BiomeBase> long2objectmap = new Long2ObjectOpenHashMap();
 
         for (int i1 = 0; i1 < k; ++i1) {
             for (int j1 = 0; j1 < l; ++j1) {
                 int k1 = i1 + i >> 4;
                 int l1 = j1 + j >> 4;
                 long i2 = ChunkCoordIntPair.a(k1, l1);
-                BiomeBase biomebase = (BiomeBase) long2objectopenhashmap.get(i2);
+                BiomeBase biomebase = (BiomeBase) long2objectmap.get(i2);
 
                 if (biomebase == null) {
                     biomebase = this.a(k1, l1);
-                    long2objectopenhashmap.put(i2, biomebase);
+                    long2objectmap.put(i2, biomebase);
                 }
 
                 abiomebase[i1 + j1 * k] = biomebase;
@@ -131,14 +131,14 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
     }
 
     public boolean a(StructureGenerator<?> structuregenerator) {
-        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator) -> {
+        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             BiomeBase[] abiomebase = this.e;
             int i = abiomebase.length;
 
             for (int j = 0; j < i; ++j) {
                 BiomeBase biomebase = abiomebase[j];
 
-                if (biomebase.a(structuregenerator)) {
+                if (biomebase.a(structuregenerator1)) {
                     return true;
                 }
             }

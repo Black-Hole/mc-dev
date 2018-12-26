@@ -90,7 +90,7 @@ public class Item implements IMaterial {
     }
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        return new InteractionResultWrapper(EnumInteractionResult.PASS, entityhuman.b(enumhand));
+        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, entityhuman.b(enumhand));
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityLiving entityliving) {
@@ -790,11 +790,11 @@ public class Item implements IMaterial {
         a("golden_apple", (Item) (new ItemGoldenApple(4, 1.2F, false, (new Item.Info()).a(CreativeModeTab.h).a(EnumItemRarity.RARE))).e());
         a("enchanted_golden_apple", (Item) (new ItemGoldenAppleEnchanted(4, 1.2F, false, (new Item.Info()).a(CreativeModeTab.h).a(EnumItemRarity.EPIC))).e());
         a("sign", (Item) (new ItemSign((new Item.Info()).a(16).a(CreativeModeTab.c))));
-        ItemBucket itembucket = new ItemBucket(FluidTypes.a, (new Item.Info()).a(16).a(CreativeModeTab.f));
+        ItemBucket itembucket = new ItemBucket(FluidTypes.EMPTY, (new Item.Info()).a(16).a(CreativeModeTab.f));
 
         a("bucket", (Item) itembucket);
-        a("water_bucket", (Item) (new ItemBucket(FluidTypes.c, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
-        a("lava_bucket", (Item) (new ItemBucket(FluidTypes.e, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
+        a("water_bucket", (Item) (new ItemBucket(FluidTypes.WATER, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
+        a("lava_bucket", (Item) (new ItemBucket(FluidTypes.LAVA, (new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
         a("minecart", (Item) (new ItemMinecart(EntityMinecartAbstract.EnumMinecartType.RIDEABLE, (new Item.Info()).a(1).a(CreativeModeTab.e))));
         a("saddle", (Item) (new ItemSaddle((new Item.Info()).a(1).a(CreativeModeTab.e))));
         a("redstone", (Item) (new ItemBlock(Blocks.REDSTONE_WIRE, (new Item.Info()).a(CreativeModeTab.d))));
@@ -802,10 +802,10 @@ public class Item implements IMaterial {
         a("oak_boat", (Item) (new ItemBoat(EntityBoat.EnumBoatType.OAK, (new Item.Info()).a(1).a(CreativeModeTab.e))));
         a("leather", new Item((new Item.Info()).a(CreativeModeTab.l)));
         a("milk_bucket", (Item) (new ItemMilkBucket((new Item.Info()).a((Item) itembucket).a(1).a(CreativeModeTab.f))));
-        a("pufferfish_bucket", (Item) (new ItemFishBucket(EntityTypes.PUFFERFISH, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
-        a("salmon_bucket", (Item) (new ItemFishBucket(EntityTypes.SALMON, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
-        a("cod_bucket", (Item) (new ItemFishBucket(EntityTypes.COD, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
-        a("tropical_fish_bucket", (Item) (new ItemFishBucket(EntityTypes.TROPICAL_FISH, FluidTypes.c, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("pufferfish_bucket", (Item) (new ItemFishBucket(EntityTypes.PUFFERFISH, FluidTypes.WATER, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("salmon_bucket", (Item) (new ItemFishBucket(EntityTypes.SALMON, FluidTypes.WATER, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("cod_bucket", (Item) (new ItemFishBucket(EntityTypes.COD, FluidTypes.WATER, (new Item.Info()).a(1).a(CreativeModeTab.f))));
+        a("tropical_fish_bucket", (Item) (new ItemFishBucket(EntityTypes.TROPICAL_FISH, FluidTypes.WATER, (new Item.Info()).a(1).a(CreativeModeTab.f))));
         a("brick", new Item((new Item.Info()).a(CreativeModeTab.l)));
         a("clay_ball", new Item((new Item.Info()).a(CreativeModeTab.l)));
         a(Blocks.SUGAR_CANE, CreativeModeTab.f);
@@ -931,14 +931,14 @@ public class Item implements IMaterial {
         a("squid_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.SQUID, 2243405, 7375001, (new Item.Info()).a(CreativeModeTab.f))));
         a("stray_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.STRAY, 6387319, 14543594, (new Item.Info()).a(CreativeModeTab.f))));
         a("tropical_fish_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.TROPICAL_FISH, 15690005, 16775663, (new Item.Info()).a(CreativeModeTab.f))));
-        a("turtle_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.TURTLE, 15198183, '\uafaf', (new Item.Info()).a(CreativeModeTab.f))));
+        a("turtle_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.TURTLE, 15198183, 44975, (new Item.Info()).a(CreativeModeTab.f))));
         a("vex_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VEX, 8032420, 15265265, (new Item.Info()).a(CreativeModeTab.f))));
         a("villager_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VILLAGER, 5651507, 12422002, (new Item.Info()).a(CreativeModeTab.f))));
         a("vindicator_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.VINDICATOR, 9804699, 2580065, (new Item.Info()).a(CreativeModeTab.f))));
         a("witch_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WITCH, 3407872, 5349438, (new Item.Info()).a(CreativeModeTab.f))));
         a("wither_skeleton_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WITHER_SKELETON, 1315860, 4672845, (new Item.Info()).a(CreativeModeTab.f))));
         a("wolf_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.WOLF, 14144467, 13545366, (new Item.Info()).a(CreativeModeTab.f))));
-        a("zombie_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE, '\uafaf', 7969893, (new Item.Info()).a(CreativeModeTab.f))));
+        a("zombie_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE, 44975, 7969893, (new Item.Info()).a(CreativeModeTab.f))));
         a("zombie_horse_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_HORSE, 3232308, 9945732, (new Item.Info()).a(CreativeModeTab.f))));
         a("zombie_pigman_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_PIGMAN, 15373203, 5009705, (new Item.Info()).a(CreativeModeTab.f))));
         a("zombie_villager_spawn_egg", (Item) (new ItemMonsterEgg(EntityTypes.ZOMBIE_VILLAGER, 5651507, 7969893, (new Item.Info()).a(CreativeModeTab.f))));

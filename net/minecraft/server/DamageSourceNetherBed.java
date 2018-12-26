@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.function.Consumer;
-
 public class DamageSourceNetherBed extends DamageSource {
 
     protected DamageSourceNetherBed() {

@@ -276,7 +276,7 @@ public class EntityArmorStand extends EntityLiving {
     protected void C(Entity entity) {}
 
     protected void cN() {
-        List list = this.world.getEntities(this, this.getBoundingBox(), EntityArmorStand.bD);
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox(), EntityArmorStand.bD);
 
         for (int i = 0; i < list.size(); ++i) {
             Entity entity = (Entity) list.get(i);

@@ -9,7 +9,6 @@ import com.mojang.datafixers.schemas.Schema;
 import java.util.Objects;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class DataConverterRegistry {
 
@@ -251,7 +250,7 @@ public class DataConverterRegistry {
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema58, "Rename prismarine_brick(s)_* items", (s) -> {
             return (String) ImmutableMap.of("minecraft:prismarine_bricks_slab", "minecraft:prismarine_brick_slab", "minecraft:prismarine_bricks_stairs", "minecraft:prismarine_brick_stairs").getOrDefault(s, s);
         }));
-        final Schema schema59 = datafixerbuilder.addSchema(1488, DataConverterRegistry.b);
+        Schema schema59 = datafixerbuilder.addSchema(1488, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(DataConverterBlockRename.a(schema59, "Rename kelp/kelptop", (s) -> {
             return (String) ImmutableMap.of("minecraft:kelp_top", "minecraft:kelp", "minecraft:kelp", "minecraft:kelp_plant").getOrDefault(s, s);

@@ -25,7 +25,7 @@ public class ChunkGeneratorType<C extends GeneratorSettings, T extends ChunkGene
 
     public static <C extends GeneratorSettings, T extends ChunkGenerator<C>> ChunkGeneratorType<C, T> a(String s, ChunkGeneratorFactory<C, T> chunkgeneratorfactory, Supplier<C> supplier, boolean flag) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
-        ChunkGeneratorType chunkgeneratortype = new ChunkGeneratorType(chunkgeneratorfactory, flag, supplier, minecraftkey);
+        ChunkGeneratorType<C, T> chunkgeneratortype = new ChunkGeneratorType<>(chunkgeneratorfactory, flag, supplier, minecraftkey);
 
         IRegistry.CHUNK_GENERATOR_TYPE.a(minecraftkey, (Object) chunkgeneratortype);
         return chunkgeneratortype;

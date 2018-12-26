@@ -41,7 +41,7 @@ public class WorldGenFactory {
             return StructureGenerator.a;
         } else {
             try {
-                Class oclass = (Class) WorldGenFactory.structureStartMap.get(s);
+                Class<? extends StructureStart> oclass = (Class) WorldGenFactory.structureStartMap.get(s);
 
                 if (oclass != null) {
                     structurestart = (StructureStart) oclass.newInstance();
@@ -65,7 +65,7 @@ public class WorldGenFactory {
         StructurePiece structurepiece = null;
 
         try {
-            Class oclass = (Class) WorldGenFactory.d.get(nbttagcompound.getString("id"));
+            Class<? extends StructurePiece> oclass = (Class) WorldGenFactory.d.get(nbttagcompound.getString("id"));
 
             if (oclass != null) {
                 structurepiece = (StructurePiece) oclass.newInstance();

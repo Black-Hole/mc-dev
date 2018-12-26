@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
@@ -59,9 +58,9 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
             this.i = i;
             if (this.i <= 4) {
                 this.i = 4;
-                this.h = new DataPaletteLinear(this.d, this.i, this, this.e);
+                this.h = new DataPaletteLinear<>(this.d, this.i, this, this.e);
             } else if (this.i < 9) {
-                this.h = new DataPaletteHash(this.d, this.i, this, this.e, this.f);
+                this.h = new DataPaletteHash<>(this.d, this.i, this, this.e, this.f);
             } else {
                 this.h = this.b;
                 this.i = MathHelper.d(this.d.a());
@@ -75,17 +74,17 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
     public int onResize(int i, T t0) {
         this.b();
         DataBits databits = this.a;
-        DataPalette datapalette = this.h;
+        DataPalette<T> datapalette = this.h;
 
         this.b(i);
 
         int j;
 
         for (j = 0; j < databits.b(); ++j) {
-            Object object = datapalette.a(databits.a(j));
+            T t1 = datapalette.a(databits.a(j));
 
-            if (object != null) {
-                this.setBlockIndex(j, object);
+            if (t1 != null) {
+                this.setBlockIndex(j, t1);
             }
         }
 
@@ -111,9 +110,9 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
     }
 
     protected T a(int i) {
-        Object object = this.h.a(this.a.a(i));
+        T t0 = this.h.a(this.a.a(i));
 
-        return object == null ? this.g : object;
+        return t0 == null ? this.g : t0;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
@@ -138,13 +137,13 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         int j = along.length * 64 / 4096;
 
         if (this.h == this.b) {
-            DataPaletteHash datapalettehash = new DataPaletteHash(this.d, i, this.c, this.e, this.f);
+            DataPalette<T> datapalette = new DataPaletteHash<>(this.d, i, this.c, this.e, this.f);
 
-            datapalettehash.a(nbttaglist);
+            datapalette.a(nbttaglist);
             DataBits databits = new DataBits(i, 4096, along);
 
             for (int k = 0; k < 4096; ++k) {
-                this.a.a(k, this.b.a(datapalettehash.a(databits.a(k))));
+                this.a.a(k, this.b.a(datapalette.a(databits.a(k))));
             }
         } else if (j == this.i) {
             System.arraycopy(along, 0, this.a.a(), 0, along.length);
@@ -161,7 +160,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
 
     public void b(NBTTagCompound nbttagcompound, String s, String s1) {
         this.b();
-        DataPaletteHash datapalettehash = new DataPaletteHash(this.d, this.i, this.c, this.e, this.f);
+        DataPaletteHash<T> datapalettehash = new DataPaletteHash<>(this.d, this.i, this.c, this.e, this.f);
 
         datapalettehash.a(this.g);
         int[] aint = new int[4096];

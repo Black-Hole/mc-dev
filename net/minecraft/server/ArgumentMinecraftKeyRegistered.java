@@ -7,11 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Function;
 
 public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey> {
 
-    private static final Collection<String> d = Arrays.asList(new String[] { "foo", "foo:bar", "012"});
+    private static final Collection<String> d = Arrays.asList("foo", "foo:bar", "012");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.id.unknown", new Object[] { object});
     });

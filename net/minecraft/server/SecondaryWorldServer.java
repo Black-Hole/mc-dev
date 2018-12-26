@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.function.Function;
-
 public class SecondaryWorldServer extends WorldServer {
 
     public SecondaryWorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, DimensionManager dimensionmanager, WorldServer worldserver, MethodProfiler methodprofiler) {

@@ -16,14 +16,12 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.NoSuchFileException;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -48,7 +46,7 @@ public class ResourcePackVanilla implements IResourcePack {
                 java.nio.file.Path java_nio_file_path = ResourcePackVanilla.a.resolve(s);
 
                 if (Files.exists(java_nio_file_path, new LinkOption[0])) {
-                    return Files.newInputStream(java_nio_file_path, new OpenOption[0]);
+                    return Files.newInputStream(java_nio_file_path);
                 }
             }
 
@@ -69,12 +67,12 @@ public class ResourcePackVanilla implements IResourcePack {
     }
 
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
-        HashSet hashset = Sets.newHashSet();
+        Set<MinecraftKey> set = Sets.newHashSet();
         URI uri;
 
         if (ResourcePackVanilla.a != null) {
             try {
-                hashset.addAll(this.a(i, "minecraft", ResourcePackVanilla.a.resolve(enumresourcepacktype.a()).resolve("minecraft"), s, predicate));
+                set.addAll(this.a(i, "minecraft", ResourcePackVanilla.a.resolve(enumresourcepacktype.a()).resolve("minecraft"), s, predicate));
             } catch (IOException ioexception) {
                 ;
             }
@@ -92,7 +90,7 @@ public class ResourcePackVanilla implements IResourcePack {
                     try {
                         uri = ((URL) enumeration.nextElement()).toURI();
                         if ("file".equals(uri.getScheme())) {
-                            hashset.addAll(this.a(i, "minecraft", Paths.get(uri), s, predicate));
+                            set.addAll(this.a(i, "minecraft", Paths.get(uri), s, predicate));
                         }
                     } catch (IOException | URISyntaxException urisyntaxexception) {
                         ;
@@ -106,7 +104,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
             if (url == null) {
                 ResourcePackVanilla.d.error("Couldn't find .mcassetsroot, cannot load vanilla resources");
-                return hashset;
+                return set;
             }
 
             uri = url.toURI();
@@ -114,20 +112,20 @@ public class ResourcePackVanilla implements IResourcePack {
                 URL url1 = new URL(url.toString().substring(0, url.toString().length() - ".mcassetsroot".length()) + "minecraft");
 
                 if (url1 == null) {
-                    return hashset;
+                    return set;
                 }
 
                 java.nio.file.Path java_nio_file_path = Paths.get(url1.toURI());
 
-                hashset.addAll(this.a(i, "minecraft", java_nio_file_path, s, predicate));
+                set.addAll(this.a(i, "minecraft", java_nio_file_path, s, predicate));
             } else if ("jar".equals(uri.getScheme())) {
                 FileSystem filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
                 Throwable throwable = null;
 
                 try {
-                    java.nio.file.Path java_nio_file_path1 = filesystem.getPath("/" + enumresourcepacktype.a() + "/minecraft", new String[0]);
+                    java.nio.file.Path java_nio_file_path1 = filesystem.getPath("/" + enumresourcepacktype.a() + "/minecraft");
 
-                    hashset.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
+                    set.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
                 } catch (Throwable throwable1) {
                     throwable = throwable1;
                     throw throwable1;
@@ -154,22 +152,22 @@ public class ResourcePackVanilla implements IResourcePack {
             ResourcePackVanilla.d.error("Couldn't get a list of all vanilla resources", urisyntaxexception1);
         }
 
-        return hashset;
+        return set;
     }
 
     private Collection<MinecraftKey> a(int i, String s, java.nio.file.Path java_nio_file_path, String s1, Predicate<String> predicate) throws IOException {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MinecraftKey> list = Lists.newArrayList();
         Iterator iterator = Files.walk(java_nio_file_path.resolve(s1), i, new FileVisitOption[0]).iterator();
 
         while (iterator.hasNext()) {
             java.nio.file.Path java_nio_file_path1 = (java.nio.file.Path) iterator.next();
 
             if (!java_nio_file_path1.endsWith(".mcmeta") && Files.isRegularFile(java_nio_file_path1, new LinkOption[0]) && predicate.test(java_nio_file_path1.getFileName().toString())) {
-                arraylist.add(new MinecraftKey(s, java_nio_file_path.relativize(java_nio_file_path1).toString().replaceAll("\\\\", "/")));
+                list.add(new MinecraftKey(s, java_nio_file_path.relativize(java_nio_file_path1).toString().replaceAll("\\\\", "/")));
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     @Nullable
@@ -181,7 +179,7 @@ public class ResourcePackVanilla implements IResourcePack {
 
             if (Files.exists(java_nio_file_path, new LinkOption[0])) {
                 try {
-                    return Files.newInputStream(java_nio_file_path, new OpenOption[0]);
+                    return Files.newInputStream(java_nio_file_path);
                 } catch (IOException ioexception) {
                     ;
                 }

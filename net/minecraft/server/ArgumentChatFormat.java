@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentChatFormat implements ArgumentType<EnumChatFormat> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "red", "green"});
+    private static final Collection<String> b = Arrays.asList("red", "green");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.color.invalid", new Object[] { object});
     });

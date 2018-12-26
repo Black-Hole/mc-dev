@@ -10,13 +10,12 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate.b> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "stick", "minecraft:stick", "#stick", "#stick{foo=bar}"});
+    private static final Collection<String> a = Arrays.asList("stick", "minecraft:stick", "#stick", "#stick{foo=bar}");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.item.tag.unknown", new Object[] { object});
     });
@@ -40,7 +39,7 @@ public class ArgumentItemPredicate implements ArgumentType<ArgumentItemPredicate
             MinecraftKey minecraftkey = argumentparseritemstack.d();
 
             return (commandcontext) -> {
-                Tag tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().b().a(minecraftkey);
+                Tag<Item> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getTagRegistry().b().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentItemPredicate.b.create(minecraftkey.toString());

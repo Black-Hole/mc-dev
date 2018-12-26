@@ -5,7 +5,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -28,17 +27,17 @@ public class CustomFunction {
     }
 
     public static CustomFunction a(MinecraftKey minecraftkey, CustomFunctionData customfunctiondata, List<String> list) {
-        ArrayList arraylist = Lists.newArrayListWithCapacity(list.size());
+        List<CustomFunction.c> list1 = Lists.newArrayListWithCapacity(list.size());
 
         for (int i = 0; i < list.size(); ++i) {
             int j = i + 1;
             String s = ((String) list.get(i)).trim();
             StringReader stringreader = new StringReader(s);
 
-            if (stringreader.canRead() && stringreader.peek() != 35) {
-                if (stringreader.peek() == 47) {
+            if (stringreader.canRead() && stringreader.peek() != '#') {
+                if (stringreader.peek() == '/') {
                     stringreader.skip();
-                    if (stringreader.peek() == 47) {
+                    if (stringreader.peek() == '/') {
                         throw new IllegalArgumentException("Unknown or invalid command '" + s + "' on line " + j + " (if you intended to make a comment, use '#' not '//')");
                     }
 
@@ -48,7 +47,7 @@ public class CustomFunction {
                 }
 
                 try {
-                    ParseResults parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.f());
+                    ParseResults<CommandListenerWrapper> parseresults = customfunctiondata.a().getCommandDispatcher().a().parse(stringreader, customfunctiondata.f());
 
                     if (parseresults.getReader().canRead()) {
                         if (parseresults.getExceptions().size() == 1) {
@@ -62,14 +61,14 @@ public class CustomFunction {
                         throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().createWithContext(parseresults.getReader());
                     }
 
-                    arraylist.add(new CustomFunction.b(parseresults));
+                    list1.add(new CustomFunction.b(parseresults));
                 } catch (CommandSyntaxException commandsyntaxexception) {
                     throw new IllegalArgumentException("Whilst parsing command on line " + j + ": " + commandsyntaxexception.getMessage());
                 }
             }
         }
 
-        return new CustomFunction(minecraftkey, (CustomFunction.c[]) arraylist.toArray(new CustomFunction.c[0]));
+        return new CustomFunction(minecraftkey, (CustomFunction.c[]) list1.toArray(new CustomFunction.c[0]));
     }
 
     public static class a {

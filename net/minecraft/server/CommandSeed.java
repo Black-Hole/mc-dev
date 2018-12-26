@@ -1,10 +1,7 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class CommandSeed {
 

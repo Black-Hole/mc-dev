@@ -23,14 +23,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.Proxy;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
@@ -51,9 +49,6 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.Validate;
@@ -131,7 +126,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
 
     public MinecraftServer(@Nullable File file, Proxy proxy, DataFixer datafixer, CommandDispatcher commanddispatcher, YggdrasilAuthenticationService yggdrasilauthenticationservice, MinecraftSessionService minecraftsessionservice, GameProfileRepository gameprofilerepository, UserCache usercache) {
         this.ac = new ResourceManager(EnumResourcePackType.SERVER_DATA);
-        this.resourcePackRepository = new ResourcePackRepository(ResourcePackLoader::new);
+        this.resourcePackRepository = new ResourcePackRepository<>(ResourcePackLoader::new);
         this.ag = new CraftingManager();
         this.ah = new TagRegistry();
         this.ai = new ScoreboardServer(this);
@@ -299,7 +294,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
         this.resourcePackFolder = new ResourcePackSourceFolder(new File(file, "datapacks"));
         this.resourcePackRepository.a((ResourcePackSource) this.resourcePackFolder);
         this.resourcePackRepository.a();
-        ArrayList arraylist = Lists.newArrayList();
+        List<ResourcePackLoader> list = Lists.newArrayList();
         Iterator iterator = worlddata.O().iterator();
 
         while (iterator.hasNext()) {
@@ -307,13 +302,13 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             ResourcePackLoader resourcepackloader = this.resourcePackRepository.a(s);
 
             if (resourcepackloader != null) {
-                arraylist.add(resourcepackloader);
+                list.add(resourcepackloader);
             } else {
                 MinecraftServer.LOGGER.warn("Missing data pack {}", s);
             }
         }
 
-        this.resourcePackRepository.a((Collection) arraylist);
+        this.resourcePackRepository.a((Collection) list);
         this.a(worlddata);
     }
 
@@ -329,16 +324,16 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
 
         MinecraftServer.LOGGER.info("Preparing start region for dimension " + DimensionManager.a(worldserver.worldProvider.getDimensionManager()));
         BlockPosition blockposition = worldserver.getSpawn();
-        ArrayList arraylist = Lists.newArrayList();
-        Set set = Sets.newConcurrentHashSet();
+        List<ChunkCoordIntPair> list = Lists.newArrayList();
+        Set<ChunkCoordIntPair> set = Sets.newConcurrentHashSet();
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         for (int i = -192; i <= 192 && this.isRunning(); i += 16) {
             for (int j = -192; j <= 192 && this.isRunning(); j += 16) {
-                arraylist.add(new ChunkCoordIntPair(blockposition.getX() + i >> 4, blockposition.getZ() + j >> 4));
+                list.add(new ChunkCoordIntPair(blockposition.getX() + i >> 4, blockposition.getZ() + j >> 4));
             }
 
-            CompletableFuture completablefuture = worldserver.getChunkProvider().a((Iterable) arraylist, (chunk) -> {
+            CompletableFuture completablefuture = worldserver.getChunkProvider().a((Iterable) list, (chunk) -> {
                 set.add(chunk.getPos());
             });
 
@@ -1234,7 +1229,7 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     public <V> ListenableFuture<V> a(Callable<V> callable) {
         Validate.notNull(callable);
         if (!this.isMainThread() && !this.isStopped()) {
-            ListenableFutureTask listenablefuturetask = ListenableFutureTask.create(callable);
+            ListenableFutureTask<V> listenablefuturetask = ListenableFutureTask.create(callable);
 
             this.f.add(listenablefuturetask);
             return listenablefuturetask;
@@ -1296,35 +1291,35 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
     }
 
     private void a(WorldData worlddata) {
-        ArrayList arraylist = Lists.newArrayList(this.resourcePackRepository.d());
+        List<ResourcePackLoader> list = Lists.newArrayList(this.resourcePackRepository.d());
         Iterator iterator = this.resourcePackRepository.b().iterator();
 
         while (iterator.hasNext()) {
             ResourcePackLoader resourcepackloader = (ResourcePackLoader) iterator.next();
 
-            if (!worlddata.N().contains(resourcepackloader.e()) && !arraylist.contains(resourcepackloader)) {
+            if (!worlddata.N().contains(resourcepackloader.e()) && !list.contains(resourcepackloader)) {
                 MinecraftServer.LOGGER.info("Found new data pack {}, loading it automatically", resourcepackloader.e());
-                resourcepackloader.h().a(arraylist, resourcepackloader, (resourcepackloader) -> {
-                    return resourcepackloader;
+                resourcepackloader.h().a(list, resourcepackloader, (resourcepackloader1) -> {
+                    return resourcepackloader1;
                 }, false);
             }
         }
 
-        this.resourcePackRepository.a((Collection) arraylist);
-        ArrayList arraylist1 = Lists.newArrayList();
+        this.resourcePackRepository.a((Collection) list);
+        List<IResourcePack> list1 = Lists.newArrayList();
 
-        this.resourcePackRepository.d().forEach((resourcepackloader) -> {
-            list.add(resourcepackloader.d());
+        this.resourcePackRepository.d().forEach((resourcepackloader1) -> {
+            list1.add(resourcepackloader1.d());
         });
-        this.ac.a((List) arraylist1);
+        this.ac.a((List) list1);
         worlddata.O().clear();
         worlddata.N().clear();
-        this.resourcePackRepository.d().forEach((resourcepackloader) -> {
-            worlddata.O().add(resourcepackloader.e());
+        this.resourcePackRepository.d().forEach((resourcepackloader1) -> {
+            worlddata.O().add(resourcepackloader1.e());
         });
-        this.resourcePackRepository.b().forEach((resourcepackloader) -> {
-            if (!this.resourcePackRepository.d().contains(resourcepackloader)) {
-                worlddata.N().add(resourcepackloader.e());
+        this.resourcePackRepository.b().forEach((resourcepackloader1) -> {
+            if (!this.resourcePackRepository.d().contains(resourcepackloader1)) {
+                worlddata.N().add(resourcepackloader1.e());
             }
 
         });
@@ -1336,8 +1331,8 @@ public abstract class MinecraftServer implements IAsyncTaskHandler, IMojangStati
             WhiteList whitelist = playerlist.getWhitelist();
 
             if (whitelist.isEnabled()) {
-                ArrayList arraylist = Lists.newArrayList(playerlist.v());
-                Iterator iterator = arraylist.iterator();
+                List<EntityPlayer> list = Lists.newArrayList(playerlist.v());
+                Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();

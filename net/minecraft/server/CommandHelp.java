@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Iterables;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -18,7 +17,7 @@ public class CommandHelp {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("help").executes((commandcontext) -> {
-            Map map = com_mojang_brigadier_commanddispatcher.getSmartUsage(com_mojang_brigadier_commanddispatcher.getRoot(), commandcontext.getSource());
+            Map<CommandNode<CommandListenerWrapper>, String> map = com_mojang_brigadier_commanddispatcher.getSmartUsage(com_mojang_brigadier_commanddispatcher.getRoot(), commandcontext.getSource());
             Iterator iterator = map.values().iterator();
 
             while (iterator.hasNext()) {
@@ -29,12 +28,12 @@ public class CommandHelp {
 
             return map.size();
         })).then(CommandDispatcher.a("command", (ArgumentType) StringArgumentType.greedyString()).executes((commandcontext) -> {
-            ParseResults parseresults = com_mojang_brigadier_commanddispatcher.parse(StringArgumentType.getString(commandcontext, "command"), commandcontext.getSource());
+            ParseResults<CommandListenerWrapper> parseresults = com_mojang_brigadier_commanddispatcher.parse(StringArgumentType.getString(commandcontext, "command"), commandcontext.getSource());
 
             if (parseresults.getContext().getNodes().isEmpty()) {
                 throw CommandHelp.a.create();
             } else {
-                Map map = com_mojang_brigadier_commanddispatcher.getSmartUsage((CommandNode) Iterables.getLast(parseresults.getContext().getNodes().keySet()), commandcontext.getSource());
+                Map<CommandNode<CommandListenerWrapper>, String> map = com_mojang_brigadier_commanddispatcher.getSmartUsage((CommandNode) Iterables.getLast(parseresults.getContext().getNodes().keySet()), commandcontext.getSource());
                 Iterator iterator = map.values().iterator();
 
                 while (iterator.hasNext()) {

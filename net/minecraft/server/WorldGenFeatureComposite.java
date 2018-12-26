@@ -21,7 +21,7 @@ public class WorldGenFeatureComposite<F extends WorldGenFeatureConfiguration, D 
     }
 
     public String toString() {
-        return String.format("< %s [%s | %s] >", new Object[] { this.getClass().getSimpleName(), this.c, this.a});
+        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), this.c, this.a);
     }
 
     public WorldGenerator<F> a() {

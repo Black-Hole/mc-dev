@@ -21,7 +21,7 @@ public class LootItemConditions {
 
     public static <T extends LootItemCondition> void a(LootItemCondition.a<? extends T> lootitemcondition_a) {
         MinecraftKey minecraftkey = lootitemcondition_a.a();
-        Class oclass = lootitemcondition_a.b();
+        Class<T> oclass = lootitemcondition_a.b();
 
         if (LootItemConditions.a.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("Can't re-register item condition name " + minecraftkey);
@@ -53,7 +53,7 @@ public class LootItemConditions {
     }
 
     public static LootItemCondition.a<?> a(MinecraftKey minecraftkey) {
-        LootItemCondition.a lootitemcondition_a = (LootItemCondition.a) LootItemConditions.a.get(minecraftkey);
+        LootItemCondition.a<?> lootitemcondition_a = (LootItemCondition.a) LootItemConditions.a.get(minecraftkey);
 
         if (lootitemcondition_a == null) {
             throw new IllegalArgumentException("Unknown loot item condition '" + minecraftkey + "'");
@@ -63,7 +63,7 @@ public class LootItemConditions {
     }
 
     public static <T extends LootItemCondition> LootItemCondition.a<T> a(T t0) {
-        LootItemCondition.a lootitemcondition_a = (LootItemCondition.a) LootItemConditions.b.get(t0.getClass());
+        LootItemCondition.a<T> lootitemcondition_a = (LootItemCondition.a) LootItemConditions.b.get(t0.getClass());
 
         if (lootitemcondition_a == null) {
             throw new IllegalArgumentException("Unknown loot item condition " + t0);
@@ -100,7 +100,7 @@ public class LootItemConditions {
         }
 
         public JsonElement serialize(LootItemCondition lootitemcondition, Type type, JsonSerializationContext jsonserializationcontext) {
-            LootItemCondition.a lootitemcondition_a = LootItemConditions.a(lootitemcondition);
+            LootItemCondition.a<LootItemCondition> lootitemcondition_a = LootItemConditions.a(lootitemcondition);
             JsonObject jsonobject = new JsonObject();
 
             lootitemcondition_a.a(jsonobject, lootitemcondition, jsonserializationcontext);

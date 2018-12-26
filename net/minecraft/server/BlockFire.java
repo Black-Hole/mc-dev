@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class BlockFire extends Block {

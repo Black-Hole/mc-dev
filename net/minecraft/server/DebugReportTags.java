@@ -8,14 +8,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +33,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
     public void a(HashCache hashcache) throws IOException {
         this.d.clear();
         this.b();
-        Tags tags = new Tags((minecraftkey) -> {
+        Tags<T> tags = new Tags<>((minecraftkey) -> {
             return false;
         }, (minecraftkey) -> {
             return null;
@@ -45,7 +41,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
         Iterator iterator = this.d.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<Tag<T>, Tag.a<T>> entry = (Entry) iterator.next();
             MinecraftKey minecraftkey = ((Tag) entry.getKey()).c();
             Tag.a tag_a = (Tag.a) entry.getValue();
 
@@ -54,7 +50,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
                 throw new UnsupportedOperationException("Unsupported referencing of tags!");
             }
 
-            Tag tag = ((Tag.a) entry.getValue()).b(minecraftkey);
+            Tag<T> tag = ((Tag.a) entry.getValue()).b(minecraftkey);
             IRegistry iregistry = this.c;
 
             this.c.getClass();
@@ -69,8 +65,8 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
                 String s1 = DebugReportTags.a.hashUnencodedChars(s).toString();
 
                 if (!Objects.equals(hashcache.a(java_nio_file_path), s1) || !Files.exists(java_nio_file_path, new LinkOption[0])) {
-                    Files.createDirectories(java_nio_file_path.getParent(), new FileAttribute[0]);
-                    BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, new OpenOption[0]);
+                    Files.createDirectories(java_nio_file_path.getParent());
+                    BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
                     Throwable throwable = null;
 
                     try {
@@ -107,7 +103,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
     protected abstract java.nio.file.Path a(MinecraftKey minecraftkey);
 
     protected Tag.a<T> a(Tag<T> tag) {
-        return (Tag.a) this.d.computeIfAbsent(tag, (tag) -> {
+        return (Tag.a) this.d.computeIfAbsent(tag, (tag1) -> {
             return Tag.a.a();
         });
     }

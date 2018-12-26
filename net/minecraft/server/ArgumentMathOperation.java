@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation.a> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "=", ">", "<"});
+    private static final Collection<String> a = Arrays.asList("=", ">", "<");
     private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.invalid", new Object[0]));
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("arguments.operation.div0", new Object[0]));
 
@@ -33,7 +33,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
         } else {
             int i = stringreader.getCursor();
 
-            while (stringreader.canRead() && stringreader.peek() != 32) {
+            while (stringreader.canRead() && stringreader.peek() != ' ') {
                 stringreader.skip();
             }
 

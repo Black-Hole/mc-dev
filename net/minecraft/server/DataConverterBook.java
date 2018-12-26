@@ -11,7 +11,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,17 +21,17 @@ public class DataConverterBook extends DataFix {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.update("pages", (dynamic) -> {
-            Optional optional = dynamic.getStream().map((stream) -> {
-                return stream.map((dynamic) -> {
-                    if (!dynamic.getStringValue().isPresent()) {
-                        return dynamic;
+        return dynamic.update("pages", (dynamic1) -> {
+            Optional optional = dynamic1.getStream().map((stream) -> {
+                return stream.map((dynamic2) -> {
+                    if (!dynamic2.getStringValue().isPresent()) {
+                        return dynamic2;
                     } else {
-                        String s = (String) dynamic.getStringValue().get();
+                        String s = (String) dynamic2.getStringValue().get();
                         Object object = null;
 
                         if (!"null".equals(s) && !StringUtils.isEmpty(s)) {
-                            if ((s.charAt(0) != 34 || s.charAt(s.length() - 1) != 34) && (s.charAt(0) != 123 || s.charAt(s.length() - 1) != 125)) {
+                            if ((s.charAt(0) != '"' || s.charAt(s.length() - 1) != '"') && (s.charAt(0) != '{' || s.charAt(s.length() - 1) != '}')) {
                                 object = new ChatComponentText(s);
                             } else {
                                 try {
@@ -68,23 +67,23 @@ public class DataConverterBook extends DataFix {
                             object = new ChatComponentText("");
                         }
 
-                        return dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
+                        return dynamic2.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object));
                     }
                 });
             });
 
-            dynamic1.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1.emptyList());
+            dynamic.getClass();
+            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic.emptyList());
         });
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<?> opticfinder = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemWrittenBookPagesStrictJsonFix", type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), this::a);
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), this::a);
             });
         });
     }

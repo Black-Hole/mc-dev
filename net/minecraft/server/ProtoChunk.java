@@ -9,14 +9,11 @@ import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 import it.unimi.dsi.fastutil.shorts.ShortList;
 import java.util.BitSet;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,26 +61,12 @@ public class ProtoChunk implements IChunkAccess {
         this.t = Maps.newHashMap();
         this.b = chunkcoordintpair;
         this.p = chunkconverter;
-        Predicate predicate = (block) -> {
+        this.q = new ProtoChunkTickList<>((block) -> {
             return block == null || block.getBlockData().isAir();
-        };
-        IRegistry iregistry = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        Function function = iregistry::getKey;
-        IRegistry iregistry1 = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        this.q = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, chunkcoordintpair);
-        predicate = (fluidtype) -> {
-            return fluidtype == null || fluidtype == FluidTypes.a;
-        };
-        iregistry = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        function = iregistry::getKey;
-        iregistry1 = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        this.r = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, chunkcoordintpair);
+        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::getOrDefault, chunkcoordintpair);
+        this.r = new ProtoChunkTickList<>((fluidtype) -> {
+            return fluidtype == null || fluidtype == FluidTypes.EMPTY;
+        }, IRegistry.FLUID::getKey, IRegistry.FLUID::getOrDefault, chunkcoordintpair);
     }
 
     public static ShortList a(ShortList[] ashortlist, int i) {
@@ -108,7 +91,7 @@ public class ProtoChunk implements IChunkAccess {
         int j = blockposition.getY();
         int k = blockposition.getZ();
 
-        return j >= 0 && j < 256 && this.j[j >> 4] != Chunk.a ? this.j[j >> 4].b(i & 15, j & 15, k & 15) : FluidTypes.a.i();
+        return j >= 0 && j < 256 && this.j[j >> 4] != Chunk.a ? this.j[j >> 4].b(i & 15, j & 15, k & 15) : FluidTypes.EMPTY.i();
     }
 
     public List<BlockPosition> j() {
@@ -177,10 +160,10 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     public Set<BlockPosition> q() {
-        HashSet hashset = Sets.newHashSet(this.i.keySet());
+        Set<BlockPosition> set = Sets.newHashSet(this.i.keySet());
 
-        hashset.addAll(this.h.keySet());
-        return hashset;
+        set.addAll(this.h.keySet());
+        return set;
     }
 
     @Nullable
@@ -325,8 +308,8 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     private HeightMap c(HeightMap.Type heightmap_type) {
-        return (HeightMap) this.f.computeIfAbsent(heightmap_type, (heightmap_type) -> {
-            HeightMap heightmap = new HeightMap(this, heightmap_type);
+        return (HeightMap) this.f.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
+            HeightMap heightmap = new HeightMap(this, heightmap_type1);
 
             heightmap.a();
             return heightmap;
@@ -372,13 +355,13 @@ public class ProtoChunk implements IChunkAccess {
 
     @Nullable
     public LongSet b(String s) {
-        return (LongSet) this.o.computeIfAbsent(s, (s) -> {
+        return (LongSet) this.o.computeIfAbsent(s, (s1) -> {
             return new LongOpenHashSet();
         });
     }
 
     public void a(String s, long i) {
-        ((LongSet) this.o.computeIfAbsent(s, (s) -> {
+        ((LongSet) this.o.computeIfAbsent(s, (s1) -> {
             return new LongOpenHashSet();
         })).add(i);
         this.c = true;
@@ -496,7 +479,7 @@ public class ProtoChunk implements IChunkAccess {
     }
 
     public BitSet a(WorldGenStage.Features worldgenstage_features) {
-        return (BitSet) this.t.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
+        return (BitSet) this.t.computeIfAbsent(worldgenstage_features, (worldgenstage_features1) -> {
             return new BitSet(65536);
         });
     }

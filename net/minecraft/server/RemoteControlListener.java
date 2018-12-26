@@ -53,7 +53,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
         Iterator iterator = this.m.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<SocketAddress, RemoteControlSession> entry = (Entry) iterator.next();
 
             if (!((RemoteControlSession) entry.getValue()).c()) {
                 iterator.remove();
@@ -93,7 +93,7 @@ public class RemoteControlListener extends RemoteConnectionThread {
     public void a() {
         if (this.l.isEmpty()) {
             this.c("No rcon password set in '" + this.b.d_() + "', rcon disabled!");
-        } else if (0 < this.h && '\uffff' >= this.h) {
+        } else if (0 < this.h && 65535 >= this.h) {
             if (!this.a) {
                 try {
                     this.k = new ServerSocket(this.h, 0, InetAddress.getByName(this.j));

@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class ArgumentRotation implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "0 0", "~ ~", "~-5 ~5"});
+    private static final Collection<String> b = Arrays.asList("0 0", "~ ~", "~-5 ~5");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.rotation.incomplete", new Object[0]));
 
     public ArgumentRotation() {}
@@ -31,7 +31,7 @@ public class ArgumentRotation implements ArgumentType<IVectorPosition> {
         } else {
             ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader, false);
 
-            if (stringreader.canRead() && stringreader.peek() == 32) {
+            if (stringreader.canRead() && stringreader.peek() == ' ') {
                 stringreader.skip();
                 ArgumentParserPosition argumentparserposition1 = ArgumentParserPosition.a(stringreader, false);
 

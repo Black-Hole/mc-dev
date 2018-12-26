@@ -209,7 +209,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
                 this.a(this.getWorld(), this.getWorld(), k, worldtype, jsonobject);
                 long i1 = SystemUtils.getMonotonicNanos() - j;
-                String s3 = String.format(Locale.ROOT, "%.3fs", new Object[] { (double) i1 / 1.0E9D});
+                String s3 = String.format(Locale.ROOT, "%.3fs", (double) i1 / 1.0E9D);
 
                 DedicatedServer.LOGGER.info("Done ({})! For help, type \"help\"", s3);
                 if (this.propertyManager.a("announce-player-achievements")) {

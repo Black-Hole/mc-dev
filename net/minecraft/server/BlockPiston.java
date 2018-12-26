@@ -2,10 +2,9 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class BlockPiston extends BlockDirectional {
 
@@ -264,27 +263,27 @@ public class BlockPiston extends BlockDirectional {
         if (!pistonextendschecker.a()) {
             return false;
         } else {
-            List list = pistonextendschecker.getMovedBlocks();
-            ArrayList arraylist = Lists.newArrayList();
+            List<BlockPosition> list = pistonextendschecker.getMovedBlocks();
+            List<IBlockData> list1 = Lists.newArrayList();
 
             for (int i = 0; i < list.size(); ++i) {
                 BlockPosition blockposition2 = (BlockPosition) list.get(i);
 
-                arraylist.add(world.getType(blockposition2));
+                list1.add(world.getType(blockposition2));
             }
 
-            List list1 = pistonextendschecker.getBrokenBlocks();
-            int j = list.size() + list1.size();
+            List<BlockPosition> list2 = pistonextendschecker.getBrokenBlocks();
+            int j = list.size() + list2.size();
             IBlockData[] aiblockdata = new IBlockData[j];
             EnumDirection enumdirection1 = flag ? enumdirection : enumdirection.opposite();
-            HashSet hashset = Sets.newHashSet(list);
+            Set<BlockPosition> set = Sets.newHashSet(list);
 
             BlockPosition blockposition3;
             int k;
             IBlockData iblockdata;
 
-            for (k = list1.size() - 1; k >= 0; --k) {
-                blockposition3 = (BlockPosition) list1.get(k);
+            for (k = list2.size() - 1; k >= 0; --k) {
+                blockposition3 = (BlockPosition) list2.get(k);
                 iblockdata = world.getType(blockposition3);
                 iblockdata.a(world, blockposition3, 0);
                 world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 18);
@@ -296,9 +295,9 @@ public class BlockPiston extends BlockDirectional {
                 blockposition3 = (BlockPosition) list.get(k);
                 iblockdata = world.getType(blockposition3);
                 blockposition3 = blockposition3.shift(enumdirection1);
-                hashset.remove(blockposition3);
+                set.remove(blockposition3);
                 world.setTypeAndData(blockposition3, (IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPiston.FACING, enumdirection), 68);
-                world.setTileEntity(blockposition3, BlockPistonMoving.a((IBlockData) arraylist.get(k), enumdirection, flag, false));
+                world.setTileEntity(blockposition3, BlockPistonMoving.a((IBlockData) list1.get(k), enumdirection, flag, false));
                 --j;
                 aiblockdata[j] = iblockdata;
             }
@@ -310,21 +309,21 @@ public class BlockPiston extends BlockDirectional {
 
                 iblockdata1 = (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.FACING, enumdirection)).set(BlockPistonExtension.TYPE, blockpropertypistontype);
                 iblockdata = (IBlockData) ((IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPistonMoving.a, enumdirection)).set(BlockPistonMoving.b, this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT);
-                hashset.remove(blockposition1);
+                set.remove(blockposition1);
                 world.setTypeAndData(blockposition1, iblockdata, 68);
                 world.setTileEntity(blockposition1, BlockPistonMoving.a(iblockdata1, enumdirection, true, true));
             }
 
-            Iterator iterator = hashset.iterator();
+            Iterator iterator = set.iterator();
 
             while (iterator.hasNext()) {
                 blockposition3 = (BlockPosition) iterator.next();
                 world.setTypeAndData(blockposition3, Blocks.AIR.getBlockData(), 66);
             }
 
-            for (k = list1.size() - 1; k >= 0; --k) {
+            for (k = list2.size() - 1; k >= 0; --k) {
                 iblockdata1 = aiblockdata[j++];
-                BlockPosition blockposition4 = (BlockPosition) list1.get(k);
+                BlockPosition blockposition4 = (BlockPosition) list2.get(k);
 
                 iblockdata1.b(world, blockposition4, 2);
                 world.applyPhysics(blockposition4, iblockdata1.getBlock());

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            Set set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 32);
+            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 32);
             Iterator iterator = set.iterator();
 
             BiomeBase biomebase;
@@ -103,10 +103,10 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
                 this.e = false;
             } else {
                 BlockPosition blockposition = new BlockPosition(i * 16 + 8, k1 + 1, j * 16 + 8);
-                LinkedList linkedlist = Lists.newLinkedList();
+                List<WorldGenWoodlandMansionPieces.i> list = Lists.newLinkedList();
 
-                WorldGenWoodlandMansionPieces.a(generatoraccess.getDataManager().h(), blockposition, enumblockrotation, linkedlist, seededrandom);
-                this.a.addAll(linkedlist);
+                WorldGenWoodlandMansionPieces.a(generatoraccess.getDataManager().h(), blockposition, enumblockrotation, list, seededrandom);
+                this.a.addAll(list);
                 this.a((IBlockAccess) generatoraccess);
                 this.e = true;
             }

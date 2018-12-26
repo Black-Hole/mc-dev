@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "unbreaking", "silk_touch"});
+    private static final Collection<String> b = Arrays.asList("unbreaking", "silk_touch");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("enchantment.unknown", new Object[] { object});
     });

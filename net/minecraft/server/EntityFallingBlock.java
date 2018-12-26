@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class EntityFallingBlock extends Entity {
 
@@ -167,10 +167,10 @@ public class EntityFallingBlock extends Entity {
             int i = MathHelper.f(f - 1.0F);
 
             if (i > 0) {
-                ArrayList arraylist = Lists.newArrayList(this.world.getEntities(this, this.getBoundingBox()));
+                List<Entity> list = Lists.newArrayList(this.world.getEntities(this, this.getBoundingBox()));
                 boolean flag = this.block.a(TagsBlock.ANVIL);
                 DamageSource damagesource = flag ? DamageSource.ANVIL : DamageSource.FALLING_BLOCK;
-                Iterator iterator = arraylist.iterator();
+                Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();

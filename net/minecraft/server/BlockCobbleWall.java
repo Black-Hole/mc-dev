@@ -58,12 +58,12 @@ public class BlockCobbleWall extends BlockTall {
         boolean flag3 = this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.EAST));
         boolean flag4 = (!flag || flag1 || !flag2 || flag3) && (flag || !flag1 || flag2 || !flag3);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, flag4 || !world.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, flag)).set(BlockCobbleWall.EAST, flag1)).set(BlockCobbleWall.SOUTH, flag2)).set(BlockCobbleWall.WEST, flag3)).set(BlockCobbleWall.p, fluid.c() == FluidTypes.c);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockCobbleWall.UP, flag4 || !world.isEmpty(blockposition.up()))).set(BlockCobbleWall.NORTH, flag)).set(BlockCobbleWall.EAST, flag1)).set(BlockCobbleWall.SOUTH, flag2)).set(BlockCobbleWall.WEST, flag3)).set(BlockCobbleWall.p, fluid.c() == FluidTypes.WATER);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockCobbleWall.p)) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
         if (enumdirection == EnumDirection.DOWN) {

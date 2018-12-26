@@ -3,20 +3,18 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityParrot extends EntityPerchable implements EntityBird {
 
     private static final DataWatcherObject<Integer> bL = DataWatcher.a(EntityParrot.class, DataWatcherRegistry.b);
-    private static final Predicate<EntityInsentient> bM = new Predicate() {
+    private static final Predicate<EntityInsentient> bM = new Predicate<EntityInsentient>() {
         public boolean test(@Nullable EntityInsentient entityinsentient) {
             return entityinsentient != null && EntityParrot.bP.containsKey(entityinsentient.P());
         }
@@ -138,7 +136,7 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     private static boolean b(World world, Entity entity) {
         if (!entity.isSilent() && world.random.nextInt(50) == 0) {
-            List list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bM);
+            List<EntityInsentient> list = world.a(EntityInsentient.class, entity.getBoundingBox().g(20.0D), EntityParrot.bM);
 
             if (!list.isEmpty()) {
                 EntityInsentient entityinsentient = (EntityInsentient) list.get(world.random.nextInt(list.size()));
@@ -246,9 +244,9 @@ public class EntityParrot extends EntityPerchable implements EntityBird {
 
     private static SoundEffect a(Random random) {
         if (random.nextInt(1000) == 0) {
-            ArrayList arraylist = Lists.newArrayList(EntityParrot.bP.keySet());
+            List<EntityTypes<?>> list = Lists.newArrayList(EntityParrot.bP.keySet());
 
-            return a((EntityTypes) arraylist.get(random.nextInt(arraylist.size())));
+            return a((EntityTypes) list.get(random.nextInt(list.size())));
         } else {
             return SoundEffects.ENTITY_PARROT_AMBIENT;
         }

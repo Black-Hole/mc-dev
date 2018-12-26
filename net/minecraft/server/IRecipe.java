@@ -9,7 +9,7 @@ public interface IRecipe {
     ItemStack d();
 
     default NonNullList<ItemStack> b(IInventory iinventory) {
-        NonNullList nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             Item item = iinventory.getItem(i).getItem();

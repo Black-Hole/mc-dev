@@ -19,7 +19,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.net.SocketAddress;
 import java.util.Queue;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
 import org.apache.commons.lang3.Validate;
@@ -34,13 +33,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public static final Marker a = MarkerManager.getMarker("NETWORK");
     public static final Marker b = MarkerManager.getMarker("NETWORK_PACKETS", NetworkManager.a);
     public static final AttributeKey<EnumProtocol> c = AttributeKey.valueOf("protocol");
-    public static final LazyInitVar<NioEventLoopGroup> d = new LazyInitVar(() -> {
+    public static final LazyInitVar<NioEventLoopGroup> d = new LazyInitVar<>(() -> {
         return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Client IO #%d").setDaemon(true).build());
     });
-    public static final LazyInitVar<EpollEventLoopGroup> e = new LazyInitVar(() -> {
+    public static final LazyInitVar<EpollEventLoopGroup> e = new LazyInitVar<>(() -> {
         return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Client IO #%d").setDaemon(true).build());
     });
-    public static final LazyInitVar<DefaultEventLoopGroup> f = new LazyInitVar(() -> {
+    public static final LazyInitVar<DefaultEventLoopGroup> f = new LazyInitVar<>(() -> {
         return new DefaultEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Local Client IO #%d").setDaemon(true).build());
     });
     private final EnumProtocolDirection h;
@@ -103,7 +102,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                     if (flag) {
                         NetworkManager.g.debug("Failed to sent packet", throwable);
                         this.sendPacket(new PacketPlayOutKickDisconnect(chatmessage), (future) -> {
-                            this.close(ichatbasecomponent);
+                            this.close(chatmessage);
                         });
                         this.stopReading();
                     } else {
@@ -187,13 +186,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
                     this.setProtocol(enumprotocol);
                 }
 
-                ChannelFuture channelfuture = this.channel.writeAndFlush(packet);
+                ChannelFuture channelfuture1 = this.channel.writeAndFlush(packet);
 
                 if (genericfuturelistener != null) {
-                    channelfuture.addListener(genericfuturelistener);
+                    channelfuture1.addListener(genericfuturelistener);
                 }
 
-                channelfuture.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
+                channelfuture1.addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
             });
         }
 

@@ -43,8 +43,8 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
 
         while (objectiterator.hasNext()) {
-            Entry entry = (Entry) objectiterator.next();
-            Statistic statistic = (Statistic) entry.getKey();
+            Entry<Statistic<?>> entry = (Entry) objectiterator.next();
+            Statistic<?> statistic = (Statistic) entry.getKey();
 
             packetdataserializer.d(IRegistry.STATS.a((Object) statistic.a()));
             packetdataserializer.d(this.a(statistic));

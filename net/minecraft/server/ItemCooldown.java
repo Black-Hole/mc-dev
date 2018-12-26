@@ -35,7 +35,7 @@ public class ItemCooldown {
             Iterator iterator = this.cooldowns.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<Item, ItemCooldown.Info> entry = (Entry) iterator.next();
 
                 if (((ItemCooldown.Info) entry.getValue()).endTick <= this.currentTick) {
                     iterator.remove();
@@ -47,7 +47,7 @@ public class ItemCooldown {
     }
 
     public void a(Item item, int i) {
-        this.cooldowns.put(item, new ItemCooldown.Info(this.currentTick, this.currentTick + i, null));
+        this.cooldowns.put(item, new ItemCooldown.Info(this.currentTick, this.currentTick + i));
         this.b(item, i);
     }
 

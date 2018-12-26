@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -9,10 +8,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
-import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -79,16 +76,16 @@ public class CommandClone {
         } else {
             int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
-            if (i > '\u8000') {
-                throw CommandClone.c.create('\u8000', i);
+            if (i > 32768) {
+                throw CommandClone.c.create(32768, i);
             } else {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
 
                 if (worldserver.a(structureboundingbox) && worldserver.a(structureboundingbox1)) {
-                    ArrayList arraylist = Lists.newArrayList();
-                    ArrayList arraylist1 = Lists.newArrayList();
-                    ArrayList arraylist2 = Lists.newArrayList();
-                    LinkedList linkedlist = Lists.newLinkedList();
+                    List<CommandClone.CommandCloneStoredTileEntity> list = Lists.newArrayList();
+                    List<CommandClone.CommandCloneStoredTileEntity> list1 = Lists.newArrayList();
+                    List<CommandClone.CommandCloneStoredTileEntity> list2 = Lists.newArrayList();
+                    Deque<BlockPosition> deque = Lists.newLinkedList();
                     BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
 
                     int j;
@@ -107,14 +104,14 @@ public class CommandClone {
                                     if (tileentity != null) {
                                         NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-                                        arraylist1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
-                                        linkedlist.addLast(blockposition4);
+                                        list1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
+                                        deque.addLast(blockposition4);
                                     } else if (!iblockdata.f(worldserver, blockposition4) && !iblockdata.g()) {
-                                        arraylist2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
-                                        linkedlist.addFirst(blockposition4);
+                                        list2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
+                                        deque.addFirst(blockposition4);
                                     } else {
-                                        arraylist.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
-                                        linkedlist.addLast(blockposition4);
+                                        list.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
+                                        deque.addLast(blockposition4);
                                     }
                                 }
                             }
@@ -125,7 +122,7 @@ public class CommandClone {
                         BlockPosition blockposition6;
                         Iterator iterator;
 
-                        for (iterator = linkedlist.iterator(); iterator.hasNext(); worldserver.setTypeAndData(blockposition6, Blocks.BARRIER.getBlockData(), 2)) {
+                        for (iterator = deque.iterator(); iterator.hasNext(); worldserver.setTypeAndData(blockposition6, Blocks.BARRIER.getBlockData(), 2)) {
                             blockposition6 = (BlockPosition) iterator.next();
                             TileEntity tileentity1 = worldserver.getTileEntity(blockposition6);
 
@@ -134,7 +131,7 @@ public class CommandClone {
                             }
                         }
 
-                        iterator = linkedlist.iterator();
+                        iterator = deque.iterator();
 
                         while (iterator.hasNext()) {
                             blockposition6 = (BlockPosition) iterator.next();
@@ -142,16 +139,16 @@ public class CommandClone {
                         }
                     }
 
-                    ArrayList arraylist3 = Lists.newArrayList();
+                    List<CommandClone.CommandCloneStoredTileEntity> list3 = Lists.newArrayList();
 
-                    arraylist3.addAll(arraylist);
-                    arraylist3.addAll(arraylist1);
-                    arraylist3.addAll(arraylist2);
-                    List list = Lists.reverse(arraylist3);
+                    list3.addAll(list);
+                    list3.addAll(list1);
+                    list3.addAll(list2);
+                    List<CommandClone.CommandCloneStoredTileEntity> list4 = Lists.reverse(list3);
 
                     CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity;
 
-                    for (Iterator iterator1 = list.iterator(); iterator1.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2)) {
+                    for (Iterator iterator1 = list4.iterator(); iterator1.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2)) {
                         commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
                         TileEntity tileentity2 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity.a);
 
@@ -161,7 +158,7 @@ public class CommandClone {
                     }
 
                     j = 0;
-                    Iterator iterator2 = arraylist3.iterator();
+                    Iterator iterator2 = list3.iterator();
 
                     CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity1;
 
@@ -172,7 +169,7 @@ public class CommandClone {
                         }
                     }
 
-                    for (iterator2 = arraylist1.iterator(); iterator2.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b, 2)) {
+                    for (iterator2 = list1.iterator(); iterator2.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b, 2)) {
                         commandclone_commandclonestoredtileentity1 = (CommandClone.CommandCloneStoredTileEntity) iterator2.next();
                         TileEntity tileentity3 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity1.a);
 
@@ -185,7 +182,7 @@ public class CommandClone {
                         }
                     }
 
-                    iterator2 = list.iterator();
+                    iterator2 = list4.iterator();
 
                     while (iterator2.hasNext()) {
                         commandclone_commandclonestoredtileentity1 = (CommandClone.CommandCloneStoredTileEntity) iterator2.next();

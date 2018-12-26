@@ -10,7 +10,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class DataConverterBiome extends DataFix {
 
@@ -21,7 +20,7 @@ public class DataConverterBiome extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = DSL.named(DataConverterTypes.w.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.w.typeName(), DSL.namespacedString());
 
         if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.w))) {
             throw new IllegalStateException("Biome type is not what was expected.");

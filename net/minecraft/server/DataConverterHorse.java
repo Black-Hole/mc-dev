@@ -8,7 +8,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class DataConverterHorse extends DataConverterEntityName {
 
@@ -17,7 +16,7 @@ public class DataConverterHorse extends DataConverterEntityName {
     }
 
     protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
-        Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+        Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
         if (Objects.equals("EntityHorse", s)) {
             int i = dynamic.getInt("Type");
@@ -42,7 +41,7 @@ public class DataConverterHorse extends DataConverterEntityName {
             }
 
             dynamic.remove("Type");
-            Type type = (Type) this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY).types().get(s1);
+            Type<?> type = (Type) this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY).types().get(s1);
 
             return Pair.of(s1, ((Optional) type.readTyped(typed.write()).getSecond()).orElseThrow(() -> {
                 return new IllegalStateException("Could not parse the new horse");

@@ -7,15 +7,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "foo", "foo.bar", "foo[0]", "[0]", "."});
+    private static final Collection<String> a = Arrays.asList("foo", "foo.bar", "foo[0]", "[0]", ".");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.nbtpath.child.invalid", new Object[] { object});
     });
@@ -35,33 +34,33 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
     }
 
     public ArgumentNBTKey.c parse(StringReader stringreader) throws CommandSyntaxException {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ArgumentNBTKey.d> list = Lists.newArrayList();
         int i = stringreader.getCursor();
 
-        while (stringreader.canRead() && stringreader.peek() != 32) {
+        while (stringreader.canRead() && stringreader.peek() != ' ') {
             switch (stringreader.peek()) {
             case '"':
-                arraylist.add(new ArgumentNBTKey.a(stringreader.readString()));
+                list.add(new ArgumentNBTKey.a(stringreader.readString()));
                 break;
             case '[':
                 stringreader.skip();
-                arraylist.add(new ArgumentNBTKey.b(stringreader.readInt()));
+                list.add(new ArgumentNBTKey.b(stringreader.readInt()));
                 stringreader.expect(']');
                 break;
             default:
-                arraylist.add(new ArgumentNBTKey.a(this.b(stringreader)));
+                list.add(new ArgumentNBTKey.a(this.b(stringreader)));
             }
 
             if (stringreader.canRead()) {
                 char c0 = stringreader.peek();
 
-                if (c0 != 32 && c0 != 91) {
+                if (c0 != ' ' && c0 != '[') {
                     stringreader.expect('.');
                 }
             }
         }
 
-        return new ArgumentNBTKey.c(stringreader.getString().substring(i, stringreader.getCursor()), (ArgumentNBTKey.d[]) arraylist.toArray(new ArgumentNBTKey.d[0]));
+        return new ArgumentNBTKey.c(stringreader.getString().substring(i, stringreader.getCursor()), (ArgumentNBTKey.d[]) list.toArray(new ArgumentNBTKey.d[0]));
     }
 
     private String b(StringReader stringreader) throws CommandSyntaxException {
@@ -83,7 +82,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
     }
 
     private static boolean a(char c0) {
-        return c0 != 32 && c0 != 34 && c0 != 91 && c0 != 93 && c0 != 46;
+        return c0 != ' ' && c0 != '"' && c0 != '[' && c0 != ']' && c0 != '.';
     }
 
     static class b implements ArgumentNBTKey.d {
@@ -96,7 +95,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
         public NBTBase a(NBTBase nbtbase) throws CommandSyntaxException {
             if (nbtbase instanceof NBTList) {
-                NBTList nbtlist = (NBTList) nbtbase;
+                NBTList<?> nbtlist = (NBTList) nbtbase;
 
                 if (nbtlist.size() > this.a) {
                     return nbtlist.c(this.a);
@@ -116,7 +115,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
         public void a(NBTBase nbtbase, NBTBase nbtbase1) throws CommandSyntaxException {
             if (nbtbase instanceof NBTList) {
-                NBTList nbtlist = (NBTList) nbtbase;
+                NBTList<?> nbtlist = (NBTList) nbtbase;
 
                 if (nbtlist.size() > this.a) {
                     nbtlist.a(this.a, nbtbase1);
@@ -129,7 +128,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
 
         public void b(NBTBase nbtbase) throws CommandSyntaxException {
             if (nbtbase instanceof NBTList) {
-                NBTList nbtlist = (NBTList) nbtbase;
+                NBTList<?> nbtlist = (NBTList) nbtbase;
 
                 if (nbtlist.size() > this.a) {
                     nbtlist.b(this.a);
@@ -246,7 +245,7 @@ public class ArgumentNBTKey implements ArgumentType<ArgumentNBTKey.c> {
                     int j = i + 1;
 
                     nbtbase = argumentnbtkey_d.a(nbtbase, () -> {
-                        return this.b[i].a();
+                        return this.b[j].a();
                     });
                 } else {
                     argumentnbtkey_d.a(nbtbase, nbtbase1);

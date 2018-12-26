@@ -12,8 +12,6 @@ import com.mojang.datafixers.types.Type;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DataConverterItemStackEnchantment extends DataFix {
@@ -60,39 +58,39 @@ public class DataConverterItemStackEnchantment extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<?> opticfinder = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemStackEnchantmentFix", type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), this::a);
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), this::a);
             });
         });
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
         Optional optional = dynamic.get("ench").flatMap(Dynamic::getStream).map((stream) -> {
-            return stream.map((dynamic) -> {
-                return dynamic.set("id", dynamic.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic.getInt("id"), "null")));
+            return stream.map((dynamic1) -> {
+                return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic1.getInt("id"), "null")));
             });
         });
 
         dynamic.getClass();
-        Optional optional1 = optional.map(dynamic::createList);
+        Optional<Dynamic<?>> optional1 = optional.map(dynamic::createList);
 
         if (optional1.isPresent()) {
             dynamic = dynamic.remove("ench").set("Enchantments", (Dynamic) optional1.get());
         }
 
-        return dynamic.update("StoredEnchantments", (dynamic) -> {
-            Optional optional = dynamic.getStream().map((stream) -> {
-                return stream.map((dynamic) -> {
-                    return dynamic.set("id", dynamic.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic.getInt("id"), "null")));
+        return dynamic.update("StoredEnchantments", (dynamic1) -> {
+            Optional optional2 = dynamic1.getStream().map((stream) -> {
+                return stream.map((dynamic2) -> {
+                    return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic2.getInt("id"), "null")));
                 });
             });
 
-            dynamic.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic);
+            dynamic1.getClass();
+            return (Dynamic) DataFixUtils.orElse(optional2.map(dynamic1::createList), dynamic1);
         });
     }
 }

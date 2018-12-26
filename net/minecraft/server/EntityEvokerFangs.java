@@ -84,7 +84,7 @@ public class EntityEvokerFangs extends Entity {
             }
         } else if (--this.a < 0) {
             if (this.a == -8) {
-                List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(0.2D, 0.0D, 0.2D));
+                List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(0.2D, 0.0D, 0.2D));
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {

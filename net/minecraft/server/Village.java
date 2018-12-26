@@ -90,13 +90,13 @@ public class Village {
     }
 
     private void j() {
-        List list = this.a.a(EntityIronGolem.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
+        List<EntityIronGolem> list = this.a.a(EntityIronGolem.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
 
         this.l = list.size();
     }
 
     private void k() {
-        List list = this.a.a(EntityVillager.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
+        List<EntityVillager> list = this.a.a(EntityVillager.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
 
         this.h = list.size();
         if (this.h == 0) {

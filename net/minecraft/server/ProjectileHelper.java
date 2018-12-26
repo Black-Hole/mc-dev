@@ -29,7 +29,7 @@ public final class ProjectileHelper {
                 }
 
                 Entity entity2 = null;
-                List list = world.getEntities(entity, entity.getBoundingBox().b(d3, d4, d5).g(1.0D));
+                List<Entity> list = world.getEntities(entity, entity.getBoundingBox().b(d3, d4, d5).g(1.0D));
                 double d6 = 0.0D;
 
                 for (int i = 0; i < list.size(); ++i) {

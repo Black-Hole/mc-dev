@@ -41,7 +41,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 0, false, false, EntityWither.bM));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, 0, false, false, EntityWither.bM));
     }
 
     protected void x_() {
@@ -231,7 +231,7 @@ public class EntityWither extends EntityMonster implements IRangedEntity {
                             this.a(i, 0);
                         }
                     } else {
-                        List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(20.0D, 8.0D, 20.0D), EntityWither.bM.and(IEntitySelector.f));
+                        List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(20.0D, 8.0D, 20.0D), EntityWither.bM.and(IEntitySelector.f));
 
                         for (int i1 = 0; i1 < 10 && !list.isEmpty(); ++i1) {
                             EntityLiving entityliving = (EntityLiving) list.get(this.random.nextInt(list.size()));

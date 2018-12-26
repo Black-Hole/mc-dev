@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -10,14 +9,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 public class CommandPlaySound {
 
     private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.playsound.failed", new Object[0]));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        RequiredArgumentBuilder requiredargumentbuilder = CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c);
+        RequiredArgumentBuilder<CommandListenerWrapper, MinecraftKey> requiredargumentbuilder = CommandDispatcher.a("sound", (ArgumentType) ArgumentMinecraftKeyRegistered.a()).suggests(CompletionProviders.c);
         SoundCategory[] asoundcategory = SoundCategory.values();
         int i = asoundcategory.length;
 

@@ -9,10 +9,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.IntFunction;
 import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
 import javax.annotation.Nullable;
 
 public abstract class EntityHuman extends EntityLiving {
@@ -418,7 +415,7 @@ public abstract class EntityHuman extends EntityLiving {
                 axisalignedbb = this.getBoundingBox().grow(1.0D, 0.5D, 1.0D);
             }
 
-            List list = this.world.getEntities(this, axisalignedbb);
+            List<Entity> list = this.world.getEntities(this, axisalignedbb);
 
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);
@@ -476,7 +473,7 @@ public abstract class EntityHuman extends EntityLiving {
         }
 
         if (!this.world.getGameRules().getBoolean("keepInventory") && !this.isSpectator()) {
-            this.dj();
+            this.removeCursedItems();
             this.inventory.dropContents();
         }
 
@@ -495,7 +492,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.setFlag(0, false);
     }
 
-    protected void dj() {
+    protected void removeCursedItems() {
         for (int i = 0; i < this.inventory.getSize(); ++i) {
             ItemStack itemstack = this.inventory.getItem(i);
 
@@ -966,7 +963,7 @@ public abstract class EntityHuman extends EntityLiving {
 
                         if (flag3) {
                             float f4 = 1.0F + EnchantmentManager.a((EntityLiving) this) * f;
-                            List list = this.world.a(EntityLiving.class, entity.getBoundingBox().grow(1.0D, 0.25D, 1.0D));
+                            List<EntityLiving> list = this.world.a(EntityLiving.class, entity.getBoundingBox().grow(1.0D, 0.25D, 1.0D));
                             Iterator iterator = list.iterator();
 
                             while (iterator.hasNext()) {
@@ -1136,7 +1133,7 @@ public abstract class EntityHuman extends EntityLiving {
             if (!this.u()) {
                 double d0 = 8.0D;
                 double d1 = 5.0D;
-                List list = this.world.a(EntityMonster.class, new AxisAlignedBB((double) blockposition.getX() - 8.0D, (double) blockposition.getY() - 5.0D, (double) blockposition.getZ() - 8.0D, (double) blockposition.getX() + 8.0D, (double) blockposition.getY() + 5.0D, (double) blockposition.getZ() + 8.0D), (Predicate) (new EntityHuman.c(this, null)));
+                List<EntityMonster> list = this.world.a(EntityMonster.class, new AxisAlignedBB((double) blockposition.getX() - 8.0D, (double) blockposition.getY() - 5.0D, (double) blockposition.getZ() - 8.0D, (double) blockposition.getX() + 8.0D, (double) blockposition.getY() + 5.0D, (double) blockposition.getZ() + 8.0D), (Predicate) (new EntityHuman.c(this)));
 
                 if (!list.isEmpty()) {
                     return EntityHuman.EnumBedResult.NOT_SAFE;

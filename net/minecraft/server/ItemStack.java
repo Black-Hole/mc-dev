@@ -10,7 +10,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -558,7 +557,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
+                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.k = true;
@@ -587,7 +586,7 @@ public final class ItemStack {
                     String s = nbttaglist.getString(i);
 
                     try {
-                        Predicate predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
+                        Predicate<ShapeDetectorBlock> predicate = ArgumentBlockPredicate.a().parse(new StringReader(s)).create(tagregistry);
 
                         if (predicate.test(shapedetectorblock)) {
                             this.m = true;

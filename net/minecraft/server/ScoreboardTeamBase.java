@@ -3,7 +3,6 @@ package net.minecraft.server;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 

@@ -13,8 +13,6 @@ import com.mojang.datafixers.types.templates.Hook.HookFunction;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DataConverterSchemaV704 extends Schema {
@@ -113,44 +111,44 @@ public class DataConverterSchemaV704 extends Schema {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerBlockEntities(Schema schema) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, Supplier<TypeTemplate>> map = Maps.newHashMap();
 
-        a(schema, hashmap, "minecraft:furnace");
-        a(schema, hashmap, "minecraft:chest");
-        schema.registerSimple(hashmap, "minecraft:ender_chest");
-        schema.register(hashmap, "minecraft:jukebox", (s) -> {
+        a(schema, map, "minecraft:furnace");
+        a(schema, map, "minecraft:chest");
+        schema.registerSimple(map, "minecraft:ender_chest");
+        schema.register(map, "minecraft:jukebox", (s) -> {
             return DSL.optionalFields("RecordItem", DataConverterTypes.ITEM_STACK.in(schema));
         });
-        a(schema, hashmap, "minecraft:dispenser");
-        a(schema, hashmap, "minecraft:dropper");
-        schema.registerSimple(hashmap, "minecraft:sign");
-        schema.register(hashmap, "minecraft:mob_spawner", (s) -> {
+        a(schema, map, "minecraft:dispenser");
+        a(schema, map, "minecraft:dropper");
+        schema.registerSimple(map, "minecraft:sign");
+        schema.register(map, "minecraft:mob_spawner", (s) -> {
             return DataConverterTypes.r.in(schema);
         });
-        schema.registerSimple(hashmap, "minecraft:noteblock");
-        schema.registerSimple(hashmap, "minecraft:piston");
-        a(schema, hashmap, "minecraft:brewing_stand");
-        schema.registerSimple(hashmap, "minecraft:enchanting_table");
-        schema.registerSimple(hashmap, "minecraft:end_portal");
-        schema.registerSimple(hashmap, "minecraft:beacon");
-        schema.registerSimple(hashmap, "minecraft:skull");
-        schema.registerSimple(hashmap, "minecraft:daylight_detector");
-        a(schema, hashmap, "minecraft:hopper");
-        schema.registerSimple(hashmap, "minecraft:comparator");
-        schema.register(hashmap, "minecraft:flower_pot", (s) -> {
+        schema.registerSimple(map, "minecraft:noteblock");
+        schema.registerSimple(map, "minecraft:piston");
+        a(schema, map, "minecraft:brewing_stand");
+        schema.registerSimple(map, "minecraft:enchanting_table");
+        schema.registerSimple(map, "minecraft:end_portal");
+        schema.registerSimple(map, "minecraft:beacon");
+        schema.registerSimple(map, "minecraft:skull");
+        schema.registerSimple(map, "minecraft:daylight_detector");
+        a(schema, map, "minecraft:hopper");
+        schema.registerSimple(map, "minecraft:comparator");
+        schema.register(map, "minecraft:flower_pot", (s) -> {
             return DSL.optionalFields("Item", DSL.or(DSL.constType(DSL.intType()), DataConverterTypes.q.in(schema)));
         });
-        schema.registerSimple(hashmap, "minecraft:banner");
-        schema.registerSimple(hashmap, "minecraft:structure_block");
-        schema.registerSimple(hashmap, "minecraft:end_gateway");
-        schema.registerSimple(hashmap, "minecraft:command_block");
-        return hashmap;
+        schema.registerSimple(map, "minecraft:banner");
+        schema.registerSimple(map, "minecraft:structure_block");
+        schema.registerSimple(map, "minecraft:end_gateway");
+        schema.registerSimple(map, "minecraft:command_block");
+        return map;
     }
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.j, () -> {
-            return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map);
+            return DSL.taggedChoiceLazy("id", DSL.namespacedString(), map1);
         });
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
             return DSL.hook(DSL.optionalFields("id", DataConverterTypes.q.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.n.in(schema), "BlockEntityTag", DataConverterTypes.j.in(schema), "CanDestroy", DSL.list(DataConverterTypes.p.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.p.in(schema)))), DataConverterSchemaV704.b, HookFunction.IDENTITY);

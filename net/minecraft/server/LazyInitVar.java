@@ -12,7 +12,7 @@ public class LazyInitVar<T> {
     }
 
     public T a() {
-        Supplier supplier = this.a;
+        Supplier<T> supplier = this.a;
 
         if (supplier != null) {
             this.b = supplier.get();

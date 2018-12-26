@@ -36,7 +36,7 @@ public class CriterionConditionRange {
             Float ofloat = a(b(stringreader, flag), function);
             Float ofloat1;
 
-            if (stringreader.canRead(2) && stringreader.peek() == 46 && stringreader.peek(1) == 46) {
+            if (stringreader.canRead(2) && stringreader.peek() == '.' && stringreader.peek(1) == '.') {
                 stringreader.skip();
                 stringreader.skip();
                 ofloat1 = a(b(stringreader, flag), function);
@@ -45,7 +45,7 @@ public class CriterionConditionRange {
                     throw CriterionConditionValue.a.createWithContext(stringreader);
                 }
             } else {
-                if (!flag && stringreader.canRead() && stringreader.peek() == 46) {
+                if (!flag && stringreader.canRead() && stringreader.peek() == '.') {
                     stringreader.setCursor(i);
                     throw CriterionConditionRange.b.createWithContext(stringreader);
                 }
@@ -90,7 +90,7 @@ public class CriterionConditionRange {
     private static boolean c(StringReader stringreader, boolean flag) {
         char c0 = stringreader.peek();
 
-        return (c0 < 48 || c0 > 57) && c0 != 45 ? (flag && c0 == 46 ? !stringreader.canRead(2) || stringreader.peek(1) != 46 : false) : true;
+        return (c0 < '0' || c0 > '9') && c0 != '-' ? (flag && c0 == '.' ? !stringreader.canRead(2) || stringreader.peek(1) != '.' : false) : true;
     }
 
     @Nullable

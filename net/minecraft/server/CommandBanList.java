@@ -2,12 +2,10 @@ package net.minecraft.server;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 public class CommandBanList {
 
@@ -33,7 +31,7 @@ public class CommandBanList {
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
-                ExpirableListEntry expirablelistentry = (ExpirableListEntry) iterator.next();
+                ExpirableListEntry<?> expirablelistentry = (ExpirableListEntry) iterator.next();
 
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.banlist.entry", new Object[] { expirablelistentry.e(), expirablelistentry.getSource(), expirablelistentry.getReason()}), false);
             }

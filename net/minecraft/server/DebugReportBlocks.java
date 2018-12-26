@@ -8,8 +8,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Iterator;
 
 public class DebugReportBlocks implements DebugReportProvider {
@@ -28,19 +26,19 @@ public class DebugReportBlocks implements DebugReportProvider {
             Block block = (Block) iterator.next();
             MinecraftKey minecraftkey = IRegistry.BLOCK.getKey(block);
             JsonObject jsonobject1 = new JsonObject();
-            BlockStateList blockstatelist = block.getStates();
+            BlockStateList<Block, IBlockData> blockstatelist = block.getStates();
 
             if (!blockstatelist.d().isEmpty()) {
                 JsonObject jsonobject2 = new JsonObject();
                 Iterator iterator1 = blockstatelist.d().iterator();
 
                 while (iterator1.hasNext()) {
-                    IBlockState iblockstate = (IBlockState) iterator1.next();
+                    IBlockState<?> iblockstate = (IBlockState) iterator1.next();
                     JsonArray jsonarray = new JsonArray();
                     Iterator iterator2 = iblockstate.d().iterator();
 
                     while (iterator2.hasNext()) {
-                        Comparable comparable = (Comparable) iterator2.next();
+                        Comparable<?> comparable = (Comparable) iterator2.next();
 
                         jsonarray.add(SystemUtils.a(iblockstate, (Object) comparable));
                     }
@@ -63,7 +61,7 @@ public class DebugReportBlocks implements DebugReportProvider {
                 Iterator iterator3 = blockstatelist.d().iterator();
 
                 while (iterator3.hasNext()) {
-                    IBlockState iblockstate1 = (IBlockState) iterator3.next();
+                    IBlockState<?> iblockstate1 = (IBlockState) iterator3.next();
 
                     jsonobject4.addProperty(iblockstate1.a(), SystemUtils.a(iblockstate1, (Object) iblockdata.get(iblockstate1)));
                 }
@@ -84,8 +82,8 @@ public class DebugReportBlocks implements DebugReportProvider {
 
         java.nio.file.Path java_nio_file_path = this.b.b().resolve("reports/blocks.json");
 
-        Files.createDirectories(java_nio_file_path.getParent(), new FileAttribute[0]);
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, StandardCharsets.UTF_8, new OpenOption[0]);
+        Files.createDirectories(java_nio_file_path.getParent());
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, StandardCharsets.UTF_8);
         Throwable throwable = null;
 
         try {

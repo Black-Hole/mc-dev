@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 
 public class EntityPainting extends EntityHanging {
@@ -15,7 +15,7 @@ public class EntityPainting extends EntityHanging {
 
     public EntityPainting(World world, BlockPosition blockposition, EnumDirection enumdirection) {
         super(EntityTypes.PAINTING, world, blockposition);
-        ArrayList arraylist = Lists.newArrayList();
+        List<Paintings> list = Lists.newArrayList();
         int i = 0;
         Iterator iterator = IRegistry.MOTIVE.iterator();
 
@@ -26,7 +26,7 @@ public class EntityPainting extends EntityHanging {
             this.art = paintings;
             this.setDirection(enumdirection);
             if (this.survives()) {
-                arraylist.add(paintings);
+                list.add(paintings);
                 int j = paintings.b() * paintings.c();
 
                 if (j > i) {
@@ -35,8 +35,8 @@ public class EntityPainting extends EntityHanging {
             }
         }
 
-        if (!arraylist.isEmpty()) {
-            iterator = arraylist.iterator();
+        if (!list.isEmpty()) {
+            iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 paintings = (Paintings) iterator.next();
@@ -45,7 +45,7 @@ public class EntityPainting extends EntityHanging {
                 }
             }
 
-            this.art = (Paintings) arraylist.get(this.random.nextInt(arraylist.size()));
+            this.art = (Paintings) list.get(this.random.nextInt(list.size()));
         }
 
         this.setDirection(enumdirection);

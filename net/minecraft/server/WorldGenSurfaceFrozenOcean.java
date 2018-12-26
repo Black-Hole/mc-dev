@@ -19,7 +19,7 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
         double d1 = 0.0D;
         double d2 = 0.0D;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        float f = biomebase.c((BlockPosition) blockposition_mutableblockposition.c(i, 63, j));
+        float f = biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, 63, j));
         double d3 = Math.min(Math.abs(d0), this.f.a((double) i * 0.1D, (double) j * 0.1D));
 
         if (d3 > 1.8D) {
@@ -78,7 +78,7 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
                     }
 
                     if (i3 < l && (iblockdata3 == null || iblockdata3.isAir())) {
-                        if (biomebase.c((BlockPosition) blockposition_mutableblockposition.c(i, i3, j)) < 0.15F) {
+                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, i3, j)) < 0.15F) {
                             iblockdata3 = WorldGenSurfaceFrozenOcean.e;
                         } else {
                             iblockdata3 = iblockdata1;

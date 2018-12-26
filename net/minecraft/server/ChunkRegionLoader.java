@@ -13,13 +13,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -217,7 +215,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     }
 
     public boolean a() {
-        Iterator iterator = this.b.entrySet().iterator();
+        Iterator<Entry<ChunkCoordIntPair, NBTTagCompound>> iterator = this.b.entrySet().iterator();
 
         if (!iterator.hasNext()) {
             if (this.f) {
@@ -226,7 +224,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
 
             return false;
         } else {
-            Entry entry = (Entry) iterator.next();
+            Entry<ChunkCoordIntPair, NBTTagCompound> entry = (Entry) iterator.next();
 
             iterator.remove();
             ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) entry.getKey();
@@ -487,27 +485,12 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         }
 
         ChunkConverter chunkconverter = nbttagcompound.hasKeyOfType("UpgradeData", 10) ? new ChunkConverter(nbttagcompound.getCompound("UpgradeData")) : ChunkConverter.a;
-        Predicate predicate = (block) -> {
+        ProtoChunkTickList<Block> protochunkticklist = new ProtoChunkTickList<>((block) -> {
             return block.getBlockData().isAir();
-        };
-        IRegistry iregistry = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        Function function = iregistry::getKey;
-        IRegistry iregistry1 = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        ProtoChunkTickList protochunkticklist = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, new ChunkCoordIntPair(i, j));
-
-        predicate = (fluidtype) -> {
-            return fluidtype == FluidTypes.a;
-        };
-        iregistry = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        function = iregistry::getKey;
-        iregistry1 = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        ProtoChunkTickList protochunkticklist1 = new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, new ChunkCoordIntPair(i, j));
+        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::getOrDefault, new ChunkCoordIntPair(i, j));
+        ProtoChunkTickList<FluidType> protochunkticklist1 = new ProtoChunkTickList<>((fluidtype) -> {
+            return fluidtype == FluidTypes.EMPTY;
+        }, IRegistry.FLUID::getKey, IRegistry.FLUID::getOrDefault, new ChunkCoordIntPair(i, j));
         long i1 = nbttagcompound.getLong("InhabitedTime");
         Chunk chunk = new Chunk(generatoraccess.getMinecraftWorld(), i, j, abiomebase, chunkconverter, protochunkticklist, protochunkticklist1, i1);
 
@@ -745,7 +728,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, StructureStart> entry = (Entry) iterator.next();
 
             nbttagcompound1.set((String) entry.getKey(), ((StructureStart) entry.getValue()).a(i, j));
         }
@@ -755,7 +738,7 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
         Iterator iterator1 = map1.entrySet().iterator();
 
         while (iterator1.hasNext()) {
-            Entry entry1 = (Entry) iterator1.next();
+            Entry<String, LongSet> entry1 = (Entry) iterator1.next();
 
             nbttagcompound2.set((String) entry1.getKey(), new NBTTagLongArray((LongSet) entry1.getValue()));
         }
@@ -765,31 +748,31 @@ public class ChunkRegionLoader implements IChunkLoader, IAsyncChunkSaver {
     }
 
     private Map<String, StructureStart> c(GeneratorAccess generatoraccess, NBTTagCompound nbttagcompound) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, StructureStart> map = Maps.newHashMap();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Starts");
         Iterator iterator = nbttagcompound1.getKeys().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
-            hashmap.put(s, WorldGenFactory.a(nbttagcompound1.getCompound(s), generatoraccess));
+            map.put(s, WorldGenFactory.a(nbttagcompound1.getCompound(s), generatoraccess));
         }
 
-        return hashmap;
+        return map;
     }
 
     private Map<String, LongSet> b(NBTTagCompound nbttagcompound) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, LongSet> map = Maps.newHashMap();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("References");
         Iterator iterator = nbttagcompound1.getKeys().iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
 
-            hashmap.put(s, new LongOpenHashSet(nbttagcompound1.o(s)));
+            map.put(s, new LongOpenHashSet(nbttagcompound1.o(s)));
         }
 
-        return hashmap;
+        return map;
     }
 
     public static NBTTagList a(ShortList[] ashortlist) {

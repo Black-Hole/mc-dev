@@ -9,7 +9,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
     private EnumDirection e;
     private boolean f;
     private boolean g;
-    private static final ThreadLocal<EnumDirection> h = new ThreadLocal() {
+    private static final ThreadLocal<EnumDirection> h = new ThreadLocal<EnumDirection>() {
         protected EnumDirection initialValue() {
             return null;
         }
@@ -68,9 +68,9 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         VoxelShape voxelshape = this.l().getCollisionShape(this.world, this.getPosition());
 
         if (!voxelshape.isEmpty()) {
-            List list = voxelshape.d();
+            List<AxisAlignedBB> list = voxelshape.d();
             AxisAlignedBB axisalignedbb = this.a(this.a(list));
-            List list1 = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
+            List<Entity> list1 = this.world.getEntities((Entity) null, this.a(axisalignedbb, enumdirection, d0).b(axisalignedbb));
 
             if (!list1.isEmpty()) {
                 boolean flag = this.a.getBlock() == Blocks.SLIME_BLOCK;
@@ -190,7 +190,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
     private void a(Entity entity, EnumDirection enumdirection, double d0) {
         AxisAlignedBB axisalignedbb = entity.getBoundingBox();
-        AxisAlignedBB axisalignedbb1 = VoxelShapes.b().a().a(this.position);
+        AxisAlignedBB axisalignedbb1 = VoxelShapes.b().getBoundingBox().a(this.position);
 
         if (axisalignedbb.c(axisalignedbb1)) {
             EnumDirection enumdirection1 = enumdirection.opposite();

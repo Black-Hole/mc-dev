@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.google.common.base.Function;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.types.constant.NamespacedStringType;
 import io.netty.util.ResourceLeakDetector;
@@ -13,7 +12,7 @@ public class SharedConstants {
     public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '"', ':'};
 
     public static boolean isAllowedChatCharacter(char c0) {
-        return c0 != 167 && c0 >= 32 && c0 != 127;
+        return c0 != 167 && c0 >= ' ' && c0 != 127;
     }
 
     public static String a(String s) {

@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> c = Arrays.asList(new String[] { "0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5"});
+    private static final Collection<String> c = Arrays.asList("0 0 0", "~ ~ ~", "^ ^ ^", "^1 ^ ^-5", "0.1 -0.5 .9", "~0.5 ~1 ~-5");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos3d.incomplete", new Object[0]));
     public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.pos.mixed", new Object[0]));
     private final boolean d;
@@ -40,7 +40,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
     }
 
     public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
-        return (IVectorPosition) (stringreader.canRead() && stringreader.peek() == 94 ? ArgumentVectorPosition.a(stringreader) : VectorPosition.a(stringreader, this.d));
+        return (IVectorPosition) (stringreader.canRead() && stringreader.peek() == '^' ? ArgumentVectorPosition.a(stringreader) : VectorPosition.a(stringreader, this.d));
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
@@ -50,7 +50,7 @@ public class ArgumentVec3 implements ArgumentType<IVectorPosition> {
             String s = suggestionsbuilder.getRemaining();
             Object object;
 
-            if (!s.isEmpty() && s.charAt(0) == 94) {
+            if (!s.isEmpty() && s.charAt(0) == '^') {
                 object = Collections.singleton(ICompletionProvider.a.a);
             } else {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(true);

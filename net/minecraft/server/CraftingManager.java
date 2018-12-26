@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -133,7 +132,7 @@ public class CraftingManager implements IResourcePackListener {
             }
         }
 
-        NonNullList nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             nonnulllist.set(i, iinventory.getItem(i));

@@ -141,7 +141,7 @@ public class ContainerEnchantTable extends Container {
 
                     for (j = 0; j < 3; ++j) {
                         if (this.costs[j] > 0) {
-                            List list = this.a(itemstack, j, this.costs[j]);
+                            List<WeightedRandomEnchant> list = this.a(itemstack, j, this.costs[j]);
 
                             if (list != null && !list.isEmpty()) {
                                 WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) list.get(this.l.nextInt(list.size()));
@@ -174,7 +174,7 @@ public class ContainerEnchantTable extends Container {
             return false;
         } else if (this.costs[i] > 0 && !itemstack.isEmpty() && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
             if (!this.world.isClientSide) {
-                List list = this.a(itemstack, i, this.costs[i]);
+                List<WeightedRandomEnchant> list = this.a(itemstack, i, this.costs[i]);
 
                 if (!list.isEmpty()) {
                     entityhuman.enchantDone(itemstack, j);
@@ -222,7 +222,7 @@ public class ContainerEnchantTable extends Container {
 
     private List<WeightedRandomEnchant> a(ItemStack itemstack, int i, int j) {
         this.l.setSeed((long) (this.f + i));
-        List list = EnchantmentManager.b(this.l, itemstack, j, false);
+        List<WeightedRandomEnchant> list = EnchantmentManager.b(this.l, itemstack, j, false);
 
         if (itemstack.getItem() == Items.BOOK && list.size() > 1) {
             list.remove(this.l.nextInt(list.size()));

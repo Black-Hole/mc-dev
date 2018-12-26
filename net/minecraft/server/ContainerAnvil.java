@@ -34,13 +34,13 @@ public class ContainerAnvil extends Container {
                 return false;
             }
 
-            public boolean isAllowed(EntityHuman entityhuman) {
-                return (entityhuman.abilities.canInstantlyBuild || entityhuman.expLevel >= ContainerAnvil.this.levelCost) && ContainerAnvil.this.levelCost > 0 && this.hasItem();
+            public boolean isAllowed(EntityHuman entityhuman1) {
+                return (entityhuman1.abilities.canInstantlyBuild || entityhuman1.expLevel >= ContainerAnvil.this.levelCost) && ContainerAnvil.this.levelCost > 0 && this.hasItem();
             }
 
-            public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-                if (!entityhuman.abilities.canInstantlyBuild) {
-                    entityhuman.levelDown(-ContainerAnvil.this.levelCost);
+            public ItemStack a(EntityHuman entityhuman1, ItemStack itemstack) {
+                if (!entityhuman1.abilities.canInstantlyBuild) {
+                    entityhuman1.levelDown(-ContainerAnvil.this.levelCost);
                 }
 
                 ContainerAnvil.this.repairInventory.setItem(0, ItemStack.a);
@@ -61,7 +61,7 @@ public class ContainerAnvil extends Container {
                 IBlockData iblockdata = world.getType(blockposition);
 
                 if (!world.isClientSide) {
-                    if (!entityhuman.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.ANVIL) && entityhuman.getRandom().nextFloat() < 0.12F) {
+                    if (!entityhuman1.abilities.canInstantlyBuild && iblockdata.a(TagsBlock.ANVIL) && entityhuman1.getRandom().nextFloat() < 0.12F) {
                         IBlockData iblockdata1 = BlockAnvil.a_(iblockdata);
 
                         if (iblockdata1 == null) {
@@ -116,7 +116,7 @@ public class ContainerAnvil extends Container {
         } else {
             ItemStack itemstack1 = itemstack.cloneItemStack();
             ItemStack itemstack2 = this.repairInventory.getItem(1);
-            Map map = EnchantmentManager.a(itemstack1);
+            Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack1);
             int j = b0 + itemstack.getRepairCost() + (itemstack2.isEmpty() ? 0 : itemstack2.getRepairCost());
 
             this.k = 0;
@@ -166,7 +166,7 @@ public class ContainerAnvil extends Container {
                         }
                     }
 
-                    Map map1 = EnchantmentManager.a(itemstack2);
+                    Map<Enchantment, Integer> map1 = EnchantmentManager.a(itemstack2);
                     boolean flag1 = false;
                     boolean flag2 = false;
                     Iterator iterator = map1.keySet().iterator();

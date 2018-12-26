@@ -28,7 +28,7 @@ public class PathfinderGoalBreath extends PathfinderGoal {
     }
 
     private void g() {
-        Iterable iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 1.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ - 1.0D), MathHelper.floor(this.a.locX + 1.0D), MathHelper.floor(this.a.locY + 8.0D), MathHelper.floor(this.a.locZ + 1.0D));
+        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 1.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ - 1.0D), MathHelper.floor(this.a.locX + 1.0D), MathHelper.floor(this.a.locY + 8.0D), MathHelper.floor(this.a.locZ + 1.0D));
         BlockPosition blockposition = null;
         Iterator iterator = iterable.iterator();
 

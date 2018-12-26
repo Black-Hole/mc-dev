@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -21,7 +20,7 @@ public abstract class Enchantment {
     }
 
     public List<ItemStack> a(EntityLiving entityliving) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ItemStack> list = Lists.newArrayList();
         EnumItemSlot[] aenumitemslot = this.a;
         int i = aenumitemslot.length;
 
@@ -30,11 +29,11 @@ public abstract class Enchantment {
             ItemStack itemstack = entityliving.getEquipment(enumitemslot);
 
             if (!itemstack.isEmpty()) {
-                arraylist.add(itemstack);
+                list.add(itemstack);
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public Enchantment.Rarity d() {

@@ -101,7 +101,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         }
 
         Entity entity = null;
-        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
         double d0 = 0.0D;
         boolean flag = false;
 

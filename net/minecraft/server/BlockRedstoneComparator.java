@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITileEntity {
@@ -65,7 +64,7 @@ public class BlockRedstoneComparator extends BlockDiodeAbstract implements ITile
 
     @Nullable
     private EntityItemFrame a(World world, EnumDirection enumdirection, BlockPosition blockposition) {
-        List list = world.a(EntityItemFrame.class, new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1)), (entityitemframe) -> {
+        List<EntityItemFrame> list = world.a(EntityItemFrame.class, new AxisAlignedBB((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 1), (double) (blockposition.getZ() + 1)), (entityitemframe) -> {
             return entityitemframe != null && entityitemframe.getDirection() == enumdirection;
         });
 

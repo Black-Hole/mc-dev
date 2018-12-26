@@ -39,7 +39,7 @@ public interface CriterionTrigger<T extends CriterionInstance> {
             if (this == object) {
                 return true;
             } else if (object != null && this.getClass() == object.getClass()) {
-                CriterionTrigger.a criteriontrigger_a = (CriterionTrigger.a) object;
+                CriterionTrigger.a<?> criteriontrigger_a = (CriterionTrigger.a) object;
 
                 return !this.a.equals(criteriontrigger_a.a) ? false : (!this.b.equals(criteriontrigger_a.b) ? false : this.c.equals(criteriontrigger_a.c));
             } else {

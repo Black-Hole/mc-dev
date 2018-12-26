@@ -9,9 +9,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -33,8 +30,8 @@ public class DebugReportAdvancement implements DebugReportProvider {
 
     public void a(HashCache hashcache) throws IOException {
         java.nio.file.Path java_nio_file_path = this.d.b();
-        HashSet hashset = Sets.newHashSet();
-        Consumer consumer = (advancement) -> {
+        Set<MinecraftKey> set = Sets.newHashSet();
+        Consumer<Advancement> consumer = (advancement) -> {
             if (!set.add(advancement.getName())) {
                 throw new IllegalStateException("Duplicate advancement " + advancement.getName());
             } else {
@@ -44,7 +41,7 @@ public class DebugReportAdvancement implements DebugReportProvider {
         Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {
-            Consumer consumer1 = (Consumer) iterator.next();
+            Consumer<Consumer<Advancement>> consumer1 = (Consumer) iterator.next();
 
             consumer1.accept(consumer);
         }
@@ -57,8 +54,8 @@ public class DebugReportAdvancement implements DebugReportProvider {
             String s1 = DebugReportAdvancement.a.hashUnencodedChars(s).toString();
 
             if (!Objects.equals(hashcache.a(java_nio_file_path), s1) || !Files.exists(java_nio_file_path, new LinkOption[0])) {
-                Files.createDirectories(java_nio_file_path.getParent(), new FileAttribute[0]);
-                BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, new OpenOption[0]);
+                Files.createDirectories(java_nio_file_path.getParent());
+                BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path);
                 Throwable throwable = null;
 
                 try {

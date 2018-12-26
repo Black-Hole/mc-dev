@@ -10,6 +10,7 @@ import com.google.gson.JsonSyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -67,20 +68,20 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
             block = (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
         }
 
-        HashMap hashmap = null;
+        Map<IBlockState<?>, Object> map = null;
 
         if (jsonobject.has("state")) {
             if (block == null) {
                 throw new JsonSyntaxException("Can't define block state without a specific block type");
             }
 
-            BlockStateList blockstatelist = block.getStates();
+            BlockStateList<Block, IBlockData> blockstatelist = block.getStates();
 
             IBlockState iblockstate;
             Optional optional;
 
-            for (Iterator iterator = ChatDeserializer.t(jsonobject, "state").entrySet().iterator(); iterator.hasNext(); hashmap.put(iblockstate, optional.get())) {
-                Entry entry = (Entry) iterator.next();
+            for (Iterator iterator = ChatDeserializer.t(jsonobject, "state").entrySet().iterator(); iterator.hasNext(); map.put(iblockstate, optional.get())) {
+                Entry<String, JsonElement> entry = (Entry) iterator.next();
 
                 iblockstate = blockstatelist.a((String) entry.getKey());
                 if (iblockstate == null) {
@@ -94,13 +95,13 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
                     throw new JsonSyntaxException("Invalid block state value '" + s + "' for property '" + (String) entry.getKey() + "' on block '" + IRegistry.BLOCK.getKey(block) + "'");
                 }
 
-                if (hashmap == null) {
-                    hashmap = Maps.newHashMap();
+                if (map == null) {
+                    map = Maps.newHashMap();
                 }
             }
         }
 
-        return new CriterionTriggerEnterBlock.b(block, hashmap);
+        return new CriterionTriggerEnterBlock.b(block, map);
     }
 
     public void a(EntityPlayer entityplayer, IBlockData iblockdata) {
@@ -134,7 +135,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
         }
 
         public void a(IBlockData iblockdata) {
-            ArrayList arraylist = null;
+            List<CriterionTrigger.a<CriterionTriggerEnterBlock.b>> list = null;
             Iterator iterator = this.b.iterator();
 
             CriterionTrigger.a criteriontrigger_a;
@@ -142,16 +143,16 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 if (((CriterionTriggerEnterBlock.b) criteriontrigger_a.a()).a(iblockdata)) {
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(criteriontrigger_a);
+                    list.add(criteriontrigger_a);
                 }
             }
 
-            if (arraylist != null) {
-                iterator = arraylist.iterator();
+            if (list != null) {
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     criteriontrigger_a = (CriterionTrigger.a) iterator.next();
@@ -187,7 +188,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
                     Iterator iterator = this.b.entrySet().iterator();
 
                     while (iterator.hasNext()) {
-                        Entry entry = (Entry) iterator.next();
+                        Entry<IBlockState<?>, ?> entry = (Entry) iterator.next();
 
                         jsonobject1.addProperty(((IBlockState) entry.getKey()).a(), SystemUtils.a((IBlockState) entry.getKey(), entry.getValue()));
                     }
@@ -207,7 +208,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
                     Iterator iterator = this.b.entrySet().iterator();
 
                     while (iterator.hasNext()) {
-                        Entry entry = (Entry) iterator.next();
+                        Entry<IBlockState<?>, Object> entry = (Entry) iterator.next();
 
                         if (iblockdata.get((IBlockState) entry.getKey()) != entry.getValue()) {
                             return false;

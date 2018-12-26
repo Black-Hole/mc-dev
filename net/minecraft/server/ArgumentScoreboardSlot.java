@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentScoreboardSlot implements ArgumentType<Integer> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "sidebar", "foo.bar"});
+    private static final Collection<String> b = Arrays.asList("sidebar", "foo.bar");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.scoreboardDisplaySlot.invalid", new Object[] { object});
     });

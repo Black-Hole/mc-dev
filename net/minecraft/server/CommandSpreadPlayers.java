@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
@@ -10,14 +9,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic4CommandExceptionType.Function;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
-import java.util.function.Predicate;
+import java.util.Set;
 
 public class CommandSpreadPlayers {
 
@@ -47,25 +44,25 @@ public class CommandSpreadPlayers {
         a(vec2f, (double) f, commandlistenerwrapper.getWorld(), random, d0, d1, d2, d3, acommandspreadplayers_a, flag);
         double d4 = a(collection, commandlistenerwrapper.getWorld(), acommandspreadplayers_a, flag);
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[] { acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d4})}), true);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.spreadplayers.success." + (flag ? "teams" : "entities"), new Object[] { acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d4)}), true);
         return acommandspreadplayers_a.length;
     }
 
     private static int a(Collection<? extends Entity> collection) {
-        HashSet hashset = Sets.newHashSet();
+        Set<ScoreboardTeamBase> set = Sets.newHashSet();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityHuman) {
-                hashset.add(entity.getScoreboardTeam());
+                set.add(entity.getScoreboardTeam());
             } else {
-                hashset.add((Object) null);
+                set.add((Object) null);
             }
         }
 
-        return hashset.size();
+        return set.size();
     }
 
     private static void a(Vec2F vec2f, double d0, WorldServer worldserver, Random random, double d1, double d2, double d3, double d4, CommandSpreadPlayers.a[] acommandspreadplayers_a, boolean flag) throws CommandSyntaxException {
@@ -141,9 +138,9 @@ public class CommandSpreadPlayers {
 
         if (i >= 10000) {
             if (flag) {
-                throw CommandSpreadPlayers.a.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d5}));
+                throw CommandSpreadPlayers.a.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d5));
             } else {
-                throw CommandSpreadPlayers.b.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", new Object[] { d5}));
+                throw CommandSpreadPlayers.b.create(acommandspreadplayers_a.length, vec2f.i, vec2f.j, String.format(Locale.ROOT, "%.2f", d5));
             }
         }
     }
@@ -151,7 +148,7 @@ public class CommandSpreadPlayers {
     private static double a(Collection<? extends Entity> collection, WorldServer worldserver, CommandSpreadPlayers.a[] acommandspreadplayers_a, boolean flag) {
         double d0 = 0.0D;
         int i = 0;
-        HashMap hashmap = Maps.newHashMap();
+        Map<ScoreboardTeamBase, CommandSpreadPlayers.a> map = Maps.newHashMap();
 
         double d1;
 
@@ -162,11 +159,11 @@ public class CommandSpreadPlayers {
             if (flag) {
                 ScoreboardTeamBase scoreboardteambase = entity instanceof EntityHuman ? entity.getScoreboardTeam() : null;
 
-                if (!hashmap.containsKey(scoreboardteambase)) {
-                    hashmap.put(scoreboardteambase, acommandspreadplayers_a[i++]);
+                if (!map.containsKey(scoreboardteambase)) {
+                    map.put(scoreboardteambase, acommandspreadplayers_a[i++]);
                 }
 
-                commandspreadplayers_a = (CommandSpreadPlayers.a) hashmap.get(scoreboardteambase);
+                commandspreadplayers_a = (CommandSpreadPlayers.a) map.get(scoreboardteambase);
             } else {
                 commandspreadplayers_a = acommandspreadplayers_a[i++];
             }

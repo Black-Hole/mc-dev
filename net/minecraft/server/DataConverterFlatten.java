@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -355,18 +353,18 @@ public class DataConverterFlatten extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemInstanceTheFlatteningFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (!optional.isPresent()) {
                 return typed;
             } else {
-                Typed typed1 = typed;
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Typed<?> typed1 = typed;
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
                 int i = dynamic.getInt("Damage");
                 String s = a((String) ((Pair) optional.get()).getSecond(), i);
 
@@ -375,8 +373,8 @@ public class DataConverterFlatten extends DataFix {
                 }
 
                 if (DataConverterFlatten.c.contains(((Pair) optional.get()).getSecond())) {
-                    Typed typed2 = typed.getOrCreateTyped(opticfinder1);
-                    Dynamic dynamic1 = (Dynamic) typed2.get(DSL.remainderFinder());
+                    Typed<?> typed2 = typed.getOrCreateTyped(opticfinder1);
+                    Dynamic<?> dynamic1 = (Dynamic) typed2.get(DSL.remainderFinder());
 
                     dynamic1 = dynamic1.set("Damage", dynamic1.createInt(i));
                     typed1 = typed1.set(opticfinder1, typed2.set(DSL.remainderFinder(), dynamic1));

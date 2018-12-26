@@ -91,12 +91,12 @@ public class ItemTrident extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getDamage() >= itemstack.h()) {
-            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         } else if (EnchantmentManager.g(itemstack) > 0 && !entityhuman.ao()) {
-            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         } else {
             entityhuman.c(enumhand);
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         }
     }
 
@@ -114,7 +114,7 @@ public class ItemTrident extends Item {
     }
 
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap multimap = super.a(enumitemslot);
+        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
             multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemTrident.g, "Tool modifier", 8.0D, 0));

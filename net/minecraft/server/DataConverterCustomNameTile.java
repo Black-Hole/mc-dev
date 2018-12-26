@@ -9,7 +9,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterCustomNameTile extends DataFix {
 
@@ -18,11 +17,11 @@ public class DataConverterCustomNameTile extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.namespacedString());
+        OpticFinder<String> opticfinder = DSL.fieldFinder("id", DSL.namespacedString());
 
         return this.fixTypeEverywhereTyped("BlockEntityCustomNameToComponentFix", this.getInputSchema().getType(DataConverterTypes.j), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
-                Optional optional = typed.getOptional(opticfinder);
+                Optional<String> optional = typed.getOptional(opticfinder);
 
                 return optional.isPresent() && Objects.equals(optional.get(), "minecraft:command_block") ? dynamic : DataConverterCustomNameEntity.a(dynamic);
             });

@@ -23,6 +23,6 @@ public class ItemEnderPearl extends Item {
         }
 
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

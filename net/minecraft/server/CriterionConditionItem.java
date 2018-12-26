@@ -59,7 +59,7 @@ public class CriterionConditionItem {
         } else if (!this.h.a(itemstack)) {
             return false;
         } else {
-            Map map = EnchantmentManager.a(itemstack);
+            Map<Enchantment, Integer> map = EnchantmentManager.a(itemstack);
 
             for (int i = 0; i < this.f.length; ++i) {
                 if (!this.f[i].a(map)) {
@@ -98,7 +98,7 @@ public class CriterionConditionItem {
                     }
                 }
 
-                Tag tag = null;
+                Tag<Item> tag = null;
 
                 if (jsonobject.has("tag")) {
                     MinecraftKey minecraftkey1 = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));

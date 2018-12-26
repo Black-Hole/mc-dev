@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeColdTaigaHills extends BiomeBase {
 
     public BiomeColdTaigaHills() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeColdTaigaHills.au, BiomeColdTaigaHills.ai)).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.TAIGA).a(0.45F).b(0.3F).c(-0.5F).d(0.4F).a(4020182).b(329011).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeColdTaigaHills.au, BiomeColdTaigaHills.ai)).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.TAIGA).a(0.45F).b(0.3F).c(-0.5F).d(0.4F).a(4020182).b(329011).a((String) null));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeColdTaigaHills.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -38,8 +38,8 @@ public final class BiomeColdTaigaHills extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeColdTaigaHills.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeColdTaigaHills.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeColdTaigaHills.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeColdTaigaHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeColdTaigaHills.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeColdTaigaHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeColdTaigaHills.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeColdTaigaHills.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));

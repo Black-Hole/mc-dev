@@ -3,8 +3,8 @@ package net.minecraft.server;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class BlockStateInteger extends BlockState<Integer> {
 
@@ -17,13 +17,13 @@ public class BlockStateInteger extends BlockState<Integer> {
         } else if (j <= i) {
             throw new IllegalArgumentException("Max value of " + s + " must be greater than min (" + i + ")");
         } else {
-            HashSet hashset = Sets.newHashSet();
+            Set<Integer> set = Sets.newHashSet();
 
             for (int k = i; k <= j; ++k) {
-                hashset.add(k);
+                set.add(k);
             }
 
-            this.a = ImmutableSet.copyOf(hashset);
+            this.a = ImmutableSet.copyOf(set);
         }
     }
 

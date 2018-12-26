@@ -172,7 +172,7 @@ public class PersistentScoreboard extends PersistentBase {
 
     protected NBTTagList a() {
         NBTTagList nbttaglist = new NBTTagList();
-        Collection collection = this.b.getTeams();
+        Collection<ScoreboardTeam> collection = this.b.getTeams();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -229,7 +229,7 @@ public class PersistentScoreboard extends PersistentBase {
 
     protected NBTTagList b() {
         NBTTagList nbttaglist = new NBTTagList();
-        Collection collection = this.b.getObjectives();
+        Collection<ScoreboardObjective> collection = this.b.getObjectives();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {

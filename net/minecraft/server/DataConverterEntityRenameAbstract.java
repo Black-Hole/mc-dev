@@ -9,7 +9,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
-import java.util.function.Function;
 
 public abstract class DataConverterEntityRenameAbstract extends DataFix {
 
@@ -21,9 +20,9 @@ public abstract class DataConverterEntityRenameAbstract extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        Type type = DSL.named(DataConverterTypes.m.typeName(), DSL.namespacedString());
+        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.m.typeName(), DSL.namespacedString());
 
         if (!Objects.equals(this.getOutputSchema().getType(DataConverterTypes.m), type)) {
             throw new IllegalStateException("Entity name type is not what was expected.");
@@ -32,11 +31,11 @@ public abstract class DataConverterEntityRenameAbstract extends DataFix {
                 return (pair) -> {
                     return pair.mapFirst((s) -> {
                         String s1 = this.a(s);
-                        Type type = (Type) taggedchoicetype.types().get(s);
-                        Type type1 = (Type) taggedchoicetype1.types().get(s1);
+                        Type<?> type1 = (Type) taggedchoicetype.types().get(s);
+                        Type<?> type2 = (Type) taggedchoicetype1.types().get(s1);
 
-                        if (!type1.equals(type, true, true)) {
-                            throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", new Object[] { type1, type}));
+                        if (!type2.equals(type1, true, true)) {
+                            throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", type2, type1));
                         } else {
                             return s1;
                         }

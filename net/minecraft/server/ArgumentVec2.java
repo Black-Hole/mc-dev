@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "0 0", "~ ~", "0.1 -0.5", "~1 ~-2"});
+    private static final Collection<String> b = Arrays.asList("0 0", "~ ~", "0.1 -0.5", "~1 ~-2");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.pos2d.incomplete", new Object[0]));
     private final boolean c;
 
@@ -40,7 +40,7 @@ public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
         } else {
             ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader, this.c);
 
-            if (stringreader.canRead() && stringreader.peek() == 32) {
+            if (stringreader.canRead() && stringreader.peek() == ' ') {
                 stringreader.skip();
                 ArgumentParserPosition argumentparserposition1 = ArgumentParserPosition.a(stringreader, this.c);
 
@@ -59,7 +59,7 @@ public class ArgumentVec2 implements ArgumentType<IVectorPosition> {
             String s = suggestionsbuilder.getRemaining();
             Object object;
 
-            if (!s.isEmpty() && s.charAt(0) == 94) {
+            if (!s.isEmpty() && s.charAt(0) == '^') {
                 object = Collections.singleton(ICompletionProvider.a.a);
             } else {
                 object = ((ICompletionProvider) commandcontext.getSource()).a(true);

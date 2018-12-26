@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -14,8 +13,6 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandBossBar {
 
@@ -211,7 +208,7 @@ public class CommandBossBar {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        Collection collection = commandlistenerwrapper.getServer().getBossBattleCustomData().getBattles();
+        Collection<BossBattleCustom> collection = commandlistenerwrapper.getServer().getBossBattleCustomData().getBattles();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.bossbar.list.bars.none", new Object[0]), false);

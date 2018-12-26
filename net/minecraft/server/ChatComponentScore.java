@@ -59,7 +59,7 @@ public class ChatComponentScore extends ChatBaseComponent {
             if (scoreboardserver.b(this.b, scoreboardobjective)) {
                 ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(this.b, scoreboardobjective);
 
-                this.b(String.format("%d", new Object[] { scoreboardscore.getScore()}));
+                this.b(String.format("%d", scoreboardscore.getScore()));
             } else {
                 this.e = "";
             }

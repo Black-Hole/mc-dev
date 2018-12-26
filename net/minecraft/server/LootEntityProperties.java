@@ -10,7 +10,7 @@ public class LootEntityProperties {
 
     public static <T extends LootEntityProperty> void a(LootEntityProperty.a<? extends T> lootentityproperty_a) {
         MinecraftKey minecraftkey = lootentityproperty_a.a();
-        Class oclass = lootentityproperty_a.b();
+        Class<T> oclass = lootentityproperty_a.b();
 
         if (LootEntityProperties.a.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("Can't re-register entity property name " + minecraftkey);
@@ -23,7 +23,7 @@ public class LootEntityProperties {
     }
 
     public static LootEntityProperty.a<?> a(MinecraftKey minecraftkey) {
-        LootEntityProperty.a lootentityproperty_a = (LootEntityProperty.a) LootEntityProperties.a.get(minecraftkey);
+        LootEntityProperty.a<?> lootentityproperty_a = (LootEntityProperty.a) LootEntityProperties.a.get(minecraftkey);
 
         if (lootentityproperty_a == null) {
             throw new IllegalArgumentException("Unknown loot entity property '" + minecraftkey + "'");
@@ -33,7 +33,7 @@ public class LootEntityProperties {
     }
 
     public static <T extends LootEntityProperty> LootEntityProperty.a<T> a(T t0) {
-        LootEntityProperty.a lootentityproperty_a = (LootEntityProperty.a) LootEntityProperties.b.get(t0.getClass());
+        LootEntityProperty.a<?> lootentityproperty_a = (LootEntityProperty.a) LootEntityProperties.b.get(t0.getClass());
 
         if (lootentityproperty_a == null) {
             throw new IllegalArgumentException("Unknown loot entity property " + t0);

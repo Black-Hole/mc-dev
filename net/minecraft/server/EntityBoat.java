@@ -235,7 +235,7 @@ public class EntityBoat extends Entity {
         }
 
         this.checkBlockCollisions();
-        List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), IEntitySelector.a(this));
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), IEntitySelector.a(this));
 
         if (!list.isEmpty()) {
             boolean flag = !this.world.isClientSide && !(this.bO() instanceof EntityHuman);
@@ -803,7 +803,7 @@ public class EntityBoat extends Entity {
 
     @Nullable
     public Entity bO() {
-        List list = this.bP();
+        List<Entity> list = this.bP();
 
         return list.isEmpty() ? null : (Entity) list.get(0);
     }

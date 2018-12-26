@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -220,30 +219,30 @@ public class EntityAreaEffectCloud extends Entity {
                 Iterator iterator = this.h.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                    Entry<Entity, Integer> entry = (Entry) iterator.next();
 
                     if (this.ticksLived >= (Integer) entry.getValue()) {
                         iterator.remove();
                     }
                 }
 
-                ArrayList arraylist = Lists.newArrayList();
+                List<MobEffect> list = Lists.newArrayList();
                 Iterator iterator1 = this.potionRegistry.a().iterator();
 
                 while (iterator1.hasNext()) {
                     MobEffect mobeffect = (MobEffect) iterator1.next();
 
-                    arraylist.add(new MobEffect(mobeffect.getMobEffect(), mobeffect.getDuration() / 4, mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
+                    list.add(new MobEffect(mobeffect.getMobEffect(), mobeffect.getDuration() / 4, mobeffect.getAmplifier(), mobeffect.isAmbient(), mobeffect.isShowParticles()));
                 }
 
-                arraylist.addAll(this.effects);
-                if (arraylist.isEmpty()) {
+                list.addAll(this.effects);
+                if (list.isEmpty()) {
                     this.h.clear();
                 } else {
-                    List list = this.world.a(EntityLiving.class, this.getBoundingBox());
+                    List<EntityLiving> list1 = this.world.a(EntityLiving.class, this.getBoundingBox());
 
-                    if (!list.isEmpty()) {
-                        Iterator iterator2 = list.iterator();
+                    if (!list1.isEmpty()) {
+                        Iterator iterator2 = list1.iterator();
 
                         while (iterator2.hasNext()) {
                             EntityLiving entityliving = (EntityLiving) iterator2.next();
@@ -255,7 +254,7 @@ public class EntityAreaEffectCloud extends Entity {
 
                                 if (d2 <= (double) (f * f)) {
                                     this.h.put(entityliving, this.ticksLived + this.reapplicationDelay);
-                                    Iterator iterator3 = arraylist.iterator();
+                                    Iterator iterator3 = list.iterator();
 
                                     while (iterator3.hasNext()) {
                                         MobEffect mobeffect1 = (MobEffect) iterator3.next();

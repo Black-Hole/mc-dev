@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -215,8 +214,8 @@ public class TileEntityStructure extends TileEntity {
             boolean flag = true;
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX() - 80, 0, blockposition.getZ() - 80);
             BlockPosition blockposition2 = new BlockPosition(blockposition.getX() + 80, 255, blockposition.getZ() + 80);
-            List list = this.a(blockposition1, blockposition2);
-            List list1 = this.a(list);
+            List<TileEntityStructure> list = this.a(blockposition1, blockposition2);
+            List<TileEntityStructure> list1 = this.a(list);
 
             if (list1.size() < 1) {
                 return false;
@@ -239,7 +238,7 @@ public class TileEntityStructure extends TileEntity {
     }
 
     private List<TileEntityStructure> a(List<TileEntityStructure> list) {
-        Predicate predicate = (tileentitystructure) -> {
+        Predicate<TileEntityStructure> predicate = (tileentitystructure) -> {
             return tileentitystructure.usageMode == BlockPropertyStructureMode.CORNER && Objects.equals(this.structureName, tileentitystructure.structureName);
         };
 
@@ -247,7 +246,7 @@ public class TileEntityStructure extends TileEntity {
     }
 
     private List<TileEntityStructure> a(BlockPosition blockposition, BlockPosition blockposition1) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<TileEntityStructure> list = Lists.newArrayList();
         Iterator iterator = BlockPosition.b(blockposition, blockposition1).iterator();
 
         while (iterator.hasNext()) {
@@ -258,12 +257,12 @@ public class TileEntityStructure extends TileEntity {
                 TileEntity tileentity = this.world.getTileEntity(blockposition_mutableblockposition);
 
                 if (tileentity != null && tileentity instanceof TileEntityStructure) {
-                    arraylist.add((TileEntityStructure) tileentity);
+                    list.add((TileEntityStructure) tileentity);
                 }
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     private StructureBoundingBox a(BlockPosition blockposition, List<TileEntityStructure> list) {

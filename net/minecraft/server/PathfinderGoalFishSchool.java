@@ -28,14 +28,14 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
             return false;
         } else {
             this.c = this.a(this.a);
-            Predicate predicate = (entityfishschool) -> {
+            Predicate<EntityFishSchool> predicate = (entityfishschool) -> {
                 return entityfishschool.dD() || !entityfishschool.dB();
             };
-            List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
+            List<EntityFishSchool> list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
             EntityFishSchool entityfishschool = (EntityFishSchool) list.stream().filter(EntityFishSchool::dD).findAny().orElse(this.a);
 
-            entityfishschool.a(list.stream().filter((entityfishschool) -> {
-                return !entityfishschool.dB();
+            entityfishschool.a(list.stream().filter((entityfishschool1) -> {
+                return !entityfishschool1.dB();
             }));
             return this.a.dB();
         }

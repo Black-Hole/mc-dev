@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +9,7 @@ import java.util.Set;
 public class AttributeMapServer extends AttributeMapBase {
 
     private final Set<AttributeInstance> e = Sets.newHashSet();
-    protected final Map<String, AttributeInstance> d = new InsensitiveStringMap();
+    protected final Map<String, AttributeInstance> d = new InsensitiveStringMap<>();
 
     public AttributeMapServer() {}
 
@@ -65,17 +64,17 @@ public class AttributeMapServer extends AttributeMapBase {
     }
 
     public Collection<AttributeInstance> c() {
-        HashSet hashset = Sets.newHashSet();
+        Set<AttributeInstance> set = Sets.newHashSet();
         Iterator iterator = this.a().iterator();
 
         while (iterator.hasNext()) {
             AttributeInstance attributeinstance = (AttributeInstance) iterator.next();
 
             if (attributeinstance.getAttribute().c()) {
-                hashset.add(attributeinstance);
+                set.add(attributeinstance);
             }
         }
 
-        return hashset;
+        return set;
     }
 }

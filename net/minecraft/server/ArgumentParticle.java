@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "foo", "foo:bar", "particle with options"});
+    private static final Collection<String> b = Arrays.asList("foo", "foo:bar", "particle with options");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("particle.notFound", new Object[] { object});
     });
@@ -39,7 +38,7 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
     public static ParticleParam b(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        Particle particle = (Particle) IRegistry.PARTICLE_TYPE.get(minecraftkey);
+        Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.get(minecraftkey);
 
         if (particle == null) {
             throw ArgumentParticle.a.create(minecraftkey);

@@ -59,7 +59,7 @@ public class EntityLeash extends EntityHanging {
         } else {
             boolean flag = false;
             double d0 = 7.0D;
-            List list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - 7.0D, this.locY - 7.0D, this.locZ - 7.0D, this.locX + 7.0D, this.locY + 7.0D, this.locZ + 7.0D));
+            List<EntityInsentient> list = this.world.a(EntityInsentient.class, new AxisAlignedBB(this.locX - 7.0D, this.locY - 7.0D, this.locZ - 7.0D, this.locX + 7.0D, this.locY + 7.0D, this.locZ + 7.0D));
             Iterator iterator = list.iterator();
 
             EntityInsentient entityinsentient;
@@ -107,7 +107,7 @@ public class EntityLeash extends EntityHanging {
         int i = blockposition.getX();
         int j = blockposition.getY();
         int k = blockposition.getZ();
-        List list = world.a(EntityLeash.class, new AxisAlignedBB((double) i - 1.0D, (double) j - 1.0D, (double) k - 1.0D, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D));
+        List<EntityLeash> list = world.a(EntityLeash.class, new AxisAlignedBB((double) i - 1.0D, (double) j - 1.0D, (double) k - 1.0D, (double) i + 1.0D, (double) j + 1.0D, (double) k + 1.0D));
         Iterator iterator = list.iterator();
 
         EntityLeash entityleash;

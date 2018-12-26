@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeJungleEdgeMutated extends BiomeBase {
 
     public BiomeJungleEdgeMutated() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeJungleEdgeMutated.au, BiomeJungleEdgeMutated.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.2F).b(0.4F).c(0.95F).d(0.8F).a(4159204).b(329011).a("jungle_edge"));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeJungleEdgeMutated.au, BiomeJungleEdgeMutated.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.JUNGLE).a(0.2F).b(0.4F).c(0.95F).d(0.8F).a(4159204).b(329011).a("jungle_edge"));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeJungleEdgeMutated.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -35,8 +35,8 @@ public final class BiomeJungleEdgeMutated extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeJungleEdgeMutated.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeJungleEdgeMutated.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeJungleEdgeMutated.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeJungleEdgeMutated.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeJungleEdgeMutated.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeJungleEdgeMutated.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeJungleEdgeMutated.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.X, WorldGenFeatureConfiguration.e, BiomeJungleEdgeMutated.j, new WorldGenDecoratorFrequencyConfiguration(1)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ab, WorldGenFeatureConfiguration.e, BiomeJungleEdgeMutated.k, new WorldGenDecoratorFrequencyConfiguration(50)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeJungleEdgeMutated.n, WorldGenFeatureDecoratorConfiguration.e));

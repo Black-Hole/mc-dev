@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class BlockSprawling extends Block {
 

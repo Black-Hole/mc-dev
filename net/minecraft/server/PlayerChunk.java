@@ -86,13 +86,13 @@ public class PlayerChunk {
             this.h = 0;
             this.done = true;
             if (!this.players.isEmpty()) {
-                PacketPlayOutMapChunk packetplayoutmapchunk = new PacketPlayOutMapChunk(this.chunk, '\uffff');
+                Packet<?> packet = new PacketPlayOutMapChunk(this.chunk, 65535);
                 Iterator iterator = this.players.iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    entityplayer.playerConnection.sendPacket(packetplayoutmapchunk);
+                    entityplayer.playerConnection.sendPacket(packet);
                     this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
                 }
             }
@@ -103,7 +103,7 @@ public class PlayerChunk {
 
     public void sendChunk(EntityPlayer entityplayer) {
         if (this.done) {
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(this.chunk, '\uffff'));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(this.chunk, 65535));
             this.playerChunkMap.getWorld().getTracker().a(entityplayer, this.chunk);
         }
     }

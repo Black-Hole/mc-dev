@@ -8,7 +8,6 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.function.Function;
 
 public class DataConverterHanging extends DataFix {
 
@@ -45,21 +44,21 @@ public class DataConverterHanging extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, "Painting");
-        OpticFinder opticfinder = DSL.namedChoice("Painting", type);
-        Type type1 = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, "ItemFrame");
-        OpticFinder opticfinder1 = DSL.namedChoice("ItemFrame", type1);
-        Type type2 = this.getInputSchema().getType(DataConverterTypes.ENTITY);
+        Type<?> type = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, "Painting");
+        OpticFinder<?> opticfinder = DSL.namedChoice("Painting", type);
+        Type<?> type1 = this.getInputSchema().getChoiceType(DataConverterTypes.ENTITY, "ItemFrame");
+        OpticFinder<?> opticfinder1 = DSL.namedChoice("ItemFrame", type1);
+        Type<?> type2 = this.getInputSchema().getType(DataConverterTypes.ENTITY);
         TypeRewriteRule typerewriterule = this.fixTypeEverywhereTyped("EntityPaintingFix", type2, (typed) -> {
-            return typed.updateTyped(opticfinder, type, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), (dynamic) -> {
+            return typed.updateTyped(opticfinder, type, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     return this.a(dynamic, true, false);
                 });
             });
         });
         TypeRewriteRule typerewriterule1 = this.fixTypeEverywhereTyped("EntityItemFrameFix", type2, (typed) -> {
-            return typed.updateTyped(opticfinder, type, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), (dynamic) -> {
+            return typed.updateTyped(opticfinder1, type1, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     return this.a(dynamic, false, true);
                 });
             });

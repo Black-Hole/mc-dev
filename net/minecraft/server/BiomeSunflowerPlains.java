@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeSunflowerPlains extends BiomeBase {
 
     protected BiomeSunflowerPlains() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeSunflowerPlains.au, BiomeSunflowerPlains.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.PLAINS).a(0.125F).b(0.05F).c(0.8F).d(0.4F).a(4159204).b(329011).a("plains"));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeSunflowerPlains.au, BiomeSunflowerPlains.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.PLAINS).a(0.125F).b(0.05F).c(0.8F).d(0.4F).a(4159204).b(329011).a("plains"));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSunflowerPlains.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -37,8 +37,8 @@ public final class BiomeSunflowerPlains extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeSunflowerPlains.p, new WorldGenDecoratorChanceConfiguration(4)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeSunflowerPlains.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeSunflowerPlains.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeSunflowerPlains.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeSunflowerPlains.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeSunflowerPlains.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeSunflowerPlains.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeSunflowerPlains.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -11,12 +10,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandTeam {
 
@@ -213,12 +209,12 @@ public class CommandTeam {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam) throws CommandSyntaxException {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
-        ArrayList arraylist = Lists.newArrayList(scoreboardteam.getPlayerNameSet());
+        Collection<String> collection = Lists.newArrayList(scoreboardteam.getPlayerNameSet());
 
-        if (arraylist.isEmpty()) {
+        if (collection.isEmpty()) {
             throw CommandTeam.c.create();
         } else {
-            Iterator iterator = arraylist.iterator();
+            Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 String s = (String) iterator.next();
@@ -226,8 +222,8 @@ public class CommandTeam {
                 scoreboardserver.removePlayerFromTeam(s, scoreboardteam);
             }
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[] { arraylist.size(), scoreboardteam.d()}), true);
-            return arraylist.size();
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.empty.success", new Object[] { collection.size(), scoreboardteam.d()}), true);
+            return collection.size();
         }
     }
 
@@ -260,7 +256,7 @@ public class CommandTeam {
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper, ScoreboardTeam scoreboardteam) {
-        Collection collection = scoreboardteam.getPlayerNameSet();
+        Collection<String> collection = scoreboardteam.getPlayerNameSet();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.members.empty", new Object[] { scoreboardteam.d()}), false);
@@ -272,7 +268,7 @@ public class CommandTeam {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        Collection collection = commandlistenerwrapper.getServer().getScoreboard().getTeams();
+        Collection<ScoreboardTeam> collection = commandlistenerwrapper.getServer().getScoreboard().getTeams();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.team.list.teams.empty", new Object[0]), false);

@@ -51,7 +51,7 @@ public class RegistryID<K> implements Registry<K> {
     }
 
     private void d(int i) {
-        Object[] aobject = this.b;
+        K[] ak = this.b;
         int[] aint = this.c;
 
         this.b = (Object[]) (new Object[i]);
@@ -60,9 +60,9 @@ public class RegistryID<K> implements Registry<K> {
         this.e = 0;
         this.f = 0;
 
-        for (int j = 0; j < aobject.length; ++j) {
-            if (aobject[j] != null) {
-                this.a(aobject[j], aint[j]);
+        for (int j = 0; j < ak.length; ++j) {
+            if (ak[j] != null) {
+                this.a(ak[j], aint[j]);
             }
         }
 

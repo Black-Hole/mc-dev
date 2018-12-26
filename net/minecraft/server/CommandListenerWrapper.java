@@ -33,7 +33,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     private final Vec2F n;
 
     public CommandListenerWrapper(ICommandListener icommandlistener, Vec3D vec3d, Vec2F vec2f, WorldServer worldserver, int i, String s, IChatBaseComponent ichatbasecomponent, MinecraftServer minecraftserver, @Nullable Entity entity) {
-        this(icommandlistener, vec3d, vec2f, worldserver, i, s, ichatbasecomponent, minecraftserver, entity, false, (commandcontext, flag, i) -> {
+        this(icommandlistener, vec3d, vec2f, worldserver, i, s, ichatbasecomponent, minecraftserver, entity, false, (commandcontext, flag, j) -> {
         }, ArgumentAnchor.Anchor.FEET);
     }
 
@@ -69,7 +69,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public CommandListenerWrapper a(ResultConsumer<CommandListenerWrapper> resultconsumer, BinaryOperator<ResultConsumer<CommandListenerWrapper>> binaryoperator) {
-        ResultConsumer resultconsumer1 = (ResultConsumer) binaryoperator.apply(this.l, resultconsumer);
+        ResultConsumer<CommandListenerWrapper> resultconsumer1 = (ResultConsumer) binaryoperator.apply(this.l, resultconsumer);
 
         return this.a(resultconsumer1);
     }

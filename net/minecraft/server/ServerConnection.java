@@ -13,16 +13,15 @@ import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,10 +29,10 @@ import org.apache.logging.log4j.Logger;
 public class ServerConnection {
 
     private static final Logger d = LogManager.getLogger();
-    public static final LazyInitVar<NioEventLoopGroup> a = new LazyInitVar(() -> {
+    public static final LazyInitVar<NioEventLoopGroup> a = new LazyInitVar<>(() -> {
         return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
     });
-    public static final LazyInitVar<EpollEventLoopGroup> b = new LazyInitVar(() -> {
+    public static final LazyInitVar<EpollEventLoopGroup> b = new LazyInitVar<>(() -> {
         return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build());
     });
     private final MinecraftServer e;
@@ -63,7 +62,7 @@ public class ServerConnection {
                 ServerConnection.d.info("Using default channel type");
             }
 
-            this.f.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer() {
+            this.f.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer<Channel>() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
@@ -124,7 +123,7 @@ public class ServerConnection {
                             ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 
                             networkmanager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), (future) -> {
-                                networkmanager.close(ichatbasecomponent);
+                                networkmanager.close(chatcomponenttext);
                             });
                             networkmanager.stopReading();
                         }

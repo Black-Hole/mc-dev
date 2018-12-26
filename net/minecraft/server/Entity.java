@@ -6,7 +6,6 @@ import com.google.common.collect.Sets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +13,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -483,7 +481,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
             if (d0 != 0.0D || d1 != 0.0D || d2 != 0.0D) {
-                StreamAccumulator streamaccumulator = new StreamAccumulator(this.world.a(this, this.getBoundingBox(), d0, d1, d2));
+                StreamAccumulator<VoxelShape> streamaccumulator = new StreamAccumulator<>(this.world.a(this, this.getBoundingBox(), d0, d1, d2));
 
                 if (d1 != 0.0D) {
                     d1 = VoxelShapes.a(EnumDirection.EnumAxis.Y, this.getBoundingBox(), streamaccumulator.a(), d1);
@@ -519,7 +517,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 d1 = (double) this.Q;
                 d2 = d9;
                 if (d7 != 0.0D || d1 != 0.0D || d9 != 0.0D) {
-                    StreamAccumulator streamaccumulator1 = new StreamAccumulator(this.world.a(this, this.getBoundingBox(), d7, d1, d9));
+                    StreamAccumulator<VoxelShape> streamaccumulator1 = new StreamAccumulator<>(this.world.a(this, this.getBoundingBox(), d7, d1, d9));
                     AxisAlignedBB axisalignedbb2 = this.getBoundingBox();
                     AxisAlignedBB axisalignedbb3 = axisalignedbb2.b(d7, 0.0D, d9);
 
@@ -1486,7 +1484,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     @Nullable
     public final String getSaveID() {
-        EntityTypes entitytypes = this.P();
+        EntityTypes<?> entitytypes = this.P();
         MinecraftKey minecraftkey = EntityTypes.getName(entitytypes);
 
         return entitytypes.a() && minecraftkey != null ? minecraftkey.toString() : null;
@@ -2001,7 +1999,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public String toString() {
-        return String.format(Locale.ROOT, "%s['%s'/%d, l='%s', x=%.2f, y=%.2f, z=%.2f]", new Object[] { this.getClass().getSimpleName(), this.getDisplayName().getText(), this.id, this.world == null ? "~NULL~" : this.world.getWorldData().getName(), this.locX, this.locY, this.locZ});
+        return String.format(Locale.ROOT, "%s['%s'/%d, l='%s', x=%.2f, y=%.2f, z=%.2f]", this.getClass().getSimpleName(), this.getDisplayName().getText(), this.id, this.world == null ? "~NULL~" : this.world.getWorldData().getName(), this.locX, this.locY, this.locZ);
     }
 
     public boolean isInvulnerable(DamageSource damagesource) {
@@ -2146,9 +2144,9 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         crashreportsystemdetails.a("Entity Name", () -> {
             return this.getDisplayName().getString();
         });
-        crashreportsystemdetails.a("Entity's Exact location", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { this.locX, this.locY, this.locZ}));
+        crashreportsystemdetails.a("Entity's Exact location", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", this.locX, this.locY, this.locZ));
         crashreportsystemdetails.a("Entity's Block location", (Object) CrashReportSystemDetails.a(MathHelper.floor(this.locX), MathHelper.floor(this.locY), MathHelper.floor(this.locZ)));
-        crashreportsystemdetails.a("Entity's Momentum", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", new Object[] { this.motX, this.motY, this.motZ}));
+        crashreportsystemdetails.a("Entity's Momentum", (Object) String.format(Locale.ROOT, "%.2f, %.2f, %.2f", this.motX, this.motY, this.motZ));
         crashreportsystemdetails.a("Entity's Passengers", () -> {
             return this.bP().toString();
         });
@@ -2382,24 +2380,24 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public Collection<Entity> getAllPassengers() {
-        HashSet hashset = Sets.newHashSet();
+        Set<Entity> set = Sets.newHashSet();
         Iterator iterator = this.bP().iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            hashset.add(entity);
-            entity.a(false, hashset);
+            set.add(entity);
+            entity.a(false, set);
         }
 
-        return hashset;
+        return set;
     }
 
     public boolean bR() {
-        HashSet hashset = Sets.newHashSet();
+        Set<Entity> set = Sets.newHashSet();
 
-        this.a(true, hashset);
-        return hashset.size() == 1;
+        this.a(true, set);
+        return set.size() == 1;
     }
 
     private void a(boolean flag, Set<Entity> set) {

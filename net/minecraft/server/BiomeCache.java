@@ -11,7 +11,7 @@ public class BiomeCache {
     private final LoadingCache<ChunkCoordIntPair, BiomeCache.a> b;
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
-        this.b = CacheBuilder.newBuilder().expireAfterAccess(30000L, TimeUnit.MILLISECONDS).build(new CacheLoader() {
+        this.b = CacheBuilder.newBuilder().expireAfterAccess(30000L, TimeUnit.MILLISECONDS).build(new CacheLoader<ChunkCoordIntPair, BiomeCache.a>() {
             public BiomeCache.a load(ChunkCoordIntPair chunkcoordintpair) throws Exception {
                 return BiomeCache.this.new a(chunkcoordintpair.x, chunkcoordintpair.z);
             }

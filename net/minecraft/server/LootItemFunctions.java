@@ -19,7 +19,7 @@ public class LootItemFunctions {
 
     public static <T extends LootItemFunction> void a(LootItemFunction.a<? extends T> lootitemfunction_a) {
         MinecraftKey minecraftkey = lootitemfunction_a.a();
-        Class oclass = lootitemfunction_a.b();
+        Class<T> oclass = lootitemfunction_a.b();
 
         if (LootItemFunctions.a.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("Can't re-register item function name " + minecraftkey);
@@ -32,7 +32,7 @@ public class LootItemFunctions {
     }
 
     public static LootItemFunction.a<?> a(MinecraftKey minecraftkey) {
-        LootItemFunction.a lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.a.get(minecraftkey);
+        LootItemFunction.a<?> lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.a.get(minecraftkey);
 
         if (lootitemfunction_a == null) {
             throw new IllegalArgumentException("Unknown loot item function '" + minecraftkey + "'");
@@ -42,7 +42,7 @@ public class LootItemFunctions {
     }
 
     public static <T extends LootItemFunction> LootItemFunction.a<T> a(T t0) {
-        LootItemFunction.a lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.b.get(t0.getClass());
+        LootItemFunction.a<T> lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.b.get(t0.getClass());
 
         if (lootitemfunction_a == null) {
             throw new IllegalArgumentException("Unknown loot item function " + t0);
@@ -84,7 +84,7 @@ public class LootItemFunctions {
         }
 
         public JsonElement serialize(LootItemFunction lootitemfunction, Type type, JsonSerializationContext jsonserializationcontext) {
-            LootItemFunction.a lootitemfunction_a = LootItemFunctions.a(lootitemfunction);
+            LootItemFunction.a<LootItemFunction> lootitemfunction_a = LootItemFunctions.a(lootitemfunction);
             JsonObject jsonobject = new JsonObject();
 
             lootitemfunction_a.a(jsonobject, lootitemfunction, jsonserializationcontext);

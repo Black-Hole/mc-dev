@@ -32,11 +32,11 @@ public class WeightedRandom {
         int j = 0;
 
         for (int k = list.size(); j < k; ++j) {
-            WeightedRandom.WeightedRandomChoice weightedrandom_weightedrandomchoice = (WeightedRandom.WeightedRandomChoice) list.get(j);
+            T t0 = (WeightedRandom.WeightedRandomChoice) list.get(j);
 
-            i -= weightedrandom_weightedrandomchoice.a;
+            i -= t0.a;
             if (i < 0) {
-                return weightedrandom_weightedrandomchoice;
+                return t0;
             }
         }
 

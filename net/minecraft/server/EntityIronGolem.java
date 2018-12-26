@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityIronGolem extends EntityGolem {
@@ -28,7 +27,7 @@ public class EntityIronGolem extends EntityGolem {
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalDefendVillage(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 10, false, true, (entityinsentient) -> {
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, 10, false, true, (entityinsentient) -> {
             return entityinsentient != null && IMonster.e.test(entityinsentient) && !(entityinsentient instanceof EntityCreeper);
         }));
     }
@@ -189,6 +188,6 @@ public class EntityIronGolem extends EntityGolem {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
         IBlockData iblockdata2 = iworldreader.getType(blockposition.up());
 
-        return iblockdata1.q() && SpawnerCreature.a(iblockdata2, iblockdata2.s()) && SpawnerCreature.a(iblockdata, FluidTypes.a.i()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.a_(this, this.getBoundingBox());
+        return iblockdata1.q() && SpawnerCreature.a(iblockdata2, iblockdata2.s()) && SpawnerCreature.a(iblockdata, FluidTypes.EMPTY.i()) && iworldreader.getCubes(this, this.getBoundingBox()) && iworldreader.a_(this, this.getBoundingBox());
     }
 }

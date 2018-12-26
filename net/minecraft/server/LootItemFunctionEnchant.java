@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -31,23 +30,23 @@ public class LootItemFunctionEnchant extends LootItemFunction {
         Enchantment enchantment;
 
         if (this.b.isEmpty()) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<Enchantment> list = Lists.newArrayList();
             Iterator iterator = IRegistry.ENCHANTMENT.iterator();
 
             while (iterator.hasNext()) {
                 Enchantment enchantment1 = (Enchantment) iterator.next();
 
                 if (itemstack.getItem() == Items.BOOK || enchantment1.canEnchant(itemstack)) {
-                    arraylist.add(enchantment1);
+                    list.add(enchantment1);
                 }
             }
 
-            if (arraylist.isEmpty()) {
+            if (list.isEmpty()) {
                 LootItemFunctionEnchant.a.warn("Couldn't find a compatible enchantment for {}", itemstack);
                 return itemstack;
             }
 
-            enchantment = (Enchantment) arraylist.get(random.nextInt(arraylist.size()));
+            enchantment = (Enchantment) list.get(random.nextInt(list.size()));
         } else {
             enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
         }
@@ -92,7 +91,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
         }
 
         public LootItemFunctionEnchant b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<Enchantment> list = Lists.newArrayList();
 
             if (jsonobject.has("enchantments")) {
                 JsonArray jsonarray = ChatDeserializer.u(jsonobject, "enchantments");
@@ -107,11 +106,11 @@ public class LootItemFunctionEnchant extends LootItemFunction {
                         throw new JsonSyntaxException("Unknown enchantment '" + s + "'");
                     }
 
-                    arraylist.add(enchantment);
+                    list.add(enchantment);
                 }
             }
 
-            return new LootItemFunctionEnchant(alootitemcondition, arraylist);
+            return new LootItemFunctionEnchant(alootitemcondition, list);
         }
     }
 }

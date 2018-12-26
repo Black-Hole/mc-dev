@@ -7,7 +7,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -68,7 +67,7 @@ public class MojangsonParser {
         this.n.skipWhitespace();
         int i = this.n.getCursor();
 
-        if (this.n.peek() == 34) {
+        if (this.n.peek() == '"') {
             return new NBTTagString(this.n.readQuotedString());
         } else {
             String s = this.n.readUnquotedString();
@@ -133,12 +132,12 @@ public class MojangsonParser {
         } else {
             char c0 = this.n.peek();
 
-            return (NBTBase) (c0 == 123 ? this.f() : (c0 == 91 ? this.e() : this.c()));
+            return (NBTBase) (c0 == '{' ? this.f() : (c0 == '[' ? this.e() : this.c()));
         }
     }
 
     protected NBTBase e() throws CommandSyntaxException {
-        return this.n.canRead(3) && this.n.peek(1) != 34 && this.n.peek(2) == 59 ? this.parseArray() : this.g();
+        return this.n.canRead(3) && this.n.peek(1) != '"' && this.n.peek(2) == ';' ? this.parseArray() : this.g();
     }
 
     public NBTTagCompound f() throws CommandSyntaxException {
@@ -147,7 +146,7 @@ public class MojangsonParser {
 
         this.n.skipWhitespace();
 
-        while (this.n.canRead() && this.n.peek() != 125) {
+        while (this.n.canRead() && this.n.peek() != '}') {
             int i = this.n.getCursor();
             String s = this.b();
 
@@ -180,7 +179,7 @@ public class MojangsonParser {
             NBTTagList nbttaglist = new NBTTagList();
             byte b0 = -1;
 
-            while (this.n.peek() != 93) {
+            while (this.n.peek() != ']') {
                 int i = this.n.getCursor();
                 NBTBase nbtbase = this.d();
                 byte b1 = nbtbase.getTypeId();
@@ -216,11 +215,11 @@ public class MojangsonParser {
         this.n.skipWhitespace();
         if (!this.n.canRead()) {
             throw MojangsonParser.c.createWithContext(this.n);
-        } else if (c0 == 66) {
+        } else if (c0 == 'B') {
             return new NBTTagByteArray(this.a((byte) 7, (byte) 1));
-        } else if (c0 == 76) {
+        } else if (c0 == 'L') {
             return new NBTTagLongArray(this.a((byte) 12, (byte) 4));
-        } else if (c0 == 73) {
+        } else if (c0 == 'I') {
             return new NBTTagIntArray(this.a((byte) 11, (byte) 3));
         } else {
             this.n.setCursor(i);
@@ -232,7 +231,7 @@ public class MojangsonParser {
         ArrayList arraylist = Lists.newArrayList();
 
         while (true) {
-            if (this.n.peek() != 93) {
+            if (this.n.peek() != ']') {
                 int i = this.n.getCursor();
                 NBTBase nbtbase = this.d();
                 byte b2 = nbtbase.getTypeId();
@@ -265,7 +264,7 @@ public class MojangsonParser {
 
     private boolean i() {
         this.n.skipWhitespace();
-        if (this.n.canRead() && this.n.peek() == 44) {
+        if (this.n.canRead() && this.n.peek() == ',') {
             this.n.skip();
             this.n.skipWhitespace();
             return true;

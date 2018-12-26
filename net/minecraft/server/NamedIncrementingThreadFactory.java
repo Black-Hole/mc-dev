@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +22,8 @@ public class NamedIncrementingThreadFactory implements ThreadFactory {
     public Thread newThread(Runnable runnable) {
         Thread thread = new Thread(this.b, runnable, this.d + this.c.getAndIncrement(), 0L);
 
-        thread.setUncaughtExceptionHandler((thread, throwable) -> {
-            NamedIncrementingThreadFactory.a.error("Caught exception in thread {} from {}", thread, runnable);
+        thread.setUncaughtExceptionHandler((thread1, throwable) -> {
+            NamedIncrementingThreadFactory.a.error("Caught exception in thread {} from {}", thread1, runnable);
             NamedIncrementingThreadFactory.a.error("", throwable);
         });
         if (thread.getPriority() != 5) {

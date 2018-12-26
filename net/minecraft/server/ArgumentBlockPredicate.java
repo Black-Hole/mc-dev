@@ -14,13 +14,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredicate.b> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "stone", "minecraft:stone", "stone[foo=bar]", "#stone", "#stone[foo=bar]{baz=nbt}"});
+    private static final Collection<String> a = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "#stone", "#stone[foo=bar]{baz=nbt}");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.block.tag.unknown", new Object[] { object});
     });
@@ -34,8 +33,8 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
     public ArgumentBlockPredicate.b parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentBlock argumentblock = (new ArgumentBlock(stringreader, true)).a(true);
 
-        if (argumentblock.b() != null) {
-            ArgumentBlockPredicate.a argumentblockpredicate_a = new ArgumentBlockPredicate.a(argumentblock.b(), argumentblock.a().keySet(), argumentblock.c());
+        if (argumentblock.getBlockData() != null) {
+            ArgumentBlockPredicate.a argumentblockpredicate_a = new ArgumentBlockPredicate.a(argumentblock.getBlockData(), argumentblock.getStateMap().keySet(), argumentblock.c());
 
             return (tagregistry) -> {
                 return argumentblockpredicate_a;
@@ -44,12 +43,12 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
             MinecraftKey minecraftkey = argumentblock.d();
 
             return (tagregistry) -> {
-                Tag tag = tagregistry.a().a(minecraftkey);
+                Tag<Block> tag = tagregistry.a().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentBlockPredicate.b.create(minecraftkey.toString());
                 } else {
-                    return new ArgumentBlockPredicate.c(tag, argumentblock.j(), argumentblock.c(), null);
+                    return new ArgumentBlockPredicate.c(tag, argumentblock.j(), argumentblock.c());
                 }
             };
         }
@@ -100,14 +99,14 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
                 Iterator iterator = this.c.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
-                    IBlockState iblockstate = iblockdata.getBlock().getStates().a((String) entry.getKey());
+                    Entry<String, String> entry = (Entry) iterator.next();
+                    IBlockState<?> iblockstate = iblockdata.getBlock().getStates().a((String) entry.getKey());
 
                     if (iblockstate == null) {
                         return false;
                     }
 
-                    Comparable comparable = (Comparable) iblockstate.b((String) entry.getValue()).orElse((Object) null);
+                    Comparable<?> comparable = (Comparable) iblockstate.b((String) entry.getValue()).orElse((Object) null);
 
                     if (comparable == null) {
                         return false;
@@ -151,7 +150,7 @@ public class ArgumentBlockPredicate implements ArgumentType<ArgumentBlockPredica
                 Iterator iterator = this.b.iterator();
 
                 while (iterator.hasNext()) {
-                    IBlockState iblockstate = (IBlockState) iterator.next();
+                    IBlockState<?> iblockstate = (IBlockState) iterator.next();
 
                     if (iblockdata.get(iblockstate) != this.a.get(iblockstate)) {
                         return false;

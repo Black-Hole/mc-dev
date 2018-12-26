@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeMegaSpruceTaiga extends BiomeBase {
 
     public BiomeMegaSpruceTaiga() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeMegaSpruceTaiga.ay, BiomeMegaSpruceTaiga.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.TAIGA).a(0.2F).b(0.2F).c(0.25F).d(0.8F).a(4159204).b(329011).a("giant_tree_taiga"));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeMegaSpruceTaiga.ay, BiomeMegaSpruceTaiga.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.TAIGA).a(0.2F).b(0.2F).c(0.25F).d(0.8F).a(4159204).b(329011).a("giant_tree_taiga"));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeMegaSpruceTaiga.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -40,8 +40,8 @@ public final class BiomeMegaSpruceTaiga extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeMegaSpruceTaiga.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeMegaSpruceTaiga.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeMegaSpruceTaiga.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeMegaSpruceTaiga.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeMegaSpruceTaiga.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeMegaSpruceTaiga.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeMegaSpruceTaiga.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeMegaSpruceTaiga.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));

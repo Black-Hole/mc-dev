@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,7 +89,7 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
         }
 
         public void a(ItemStack itemstack, int i) {
-            ArrayList arraylist = null;
+            List<CriterionTrigger.a<CriterionTriggerItemDurabilityChanged.b>> list = null;
             Iterator iterator = this.b.iterator();
 
             CriterionTrigger.a criteriontrigger_a;
@@ -96,16 +97,16 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 if (((CriterionTriggerItemDurabilityChanged.b) criteriontrigger_a.a()).a(itemstack, i)) {
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(criteriontrigger_a);
+                    list.add(criteriontrigger_a);
                 }
             }
 
-            if (arraylist != null) {
-                iterator = arraylist.iterator();
+            if (list != null) {
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     criteriontrigger_a = (CriterionTrigger.a) iterator.next();

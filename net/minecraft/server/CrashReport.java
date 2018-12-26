@@ -59,9 +59,9 @@ public class CrashReport {
             return k + " bytes (" + j1 + " MB) / " + j + " bytes (" + i1 + " MB) up to " + i + " bytes (" + l + " MB)";
         });
         this.d.a("JVM Flags", () -> {
-            List list = (List) SystemUtils.f().collect(Collectors.toList());
+            List<String> list = (List) SystemUtils.f().collect(Collectors.toList());
 
-            return String.format("%d total; %s", new Object[] { list.size(), list.stream().collect(Collectors.joining(" "))});
+            return String.format("%d total; %s", list.size(), list.stream().collect(Collectors.joining(" ")));
         });
     }
 

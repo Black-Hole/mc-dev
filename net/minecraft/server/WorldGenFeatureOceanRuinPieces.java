@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -46,7 +45,7 @@ public class WorldGenFeatureOceanRuinPieces {
         BlockPosition blockposition1 = DefinedStructure.a(new BlockPosition(15, 0, 15), EnumBlockMirror.NONE, enumblockrotation, new BlockPosition(0, 0, 0)).a(i, 0, j);
         StructureBoundingBox structureboundingbox = StructureBoundingBox.a(i, 0, j, blockposition1.getX(), 0, blockposition1.getZ());
         BlockPosition blockposition2 = new BlockPosition(Math.min(i, blockposition1.getX()), 0, Math.min(j, blockposition1.getZ()));
-        List list1 = a(random, blockposition2.getX(), blockposition2.getZ());
+        List<BlockPosition> list1 = a(random, blockposition2.getX(), blockposition2.getZ());
         int k = MathHelper.nextInt(random, 4, 8);
 
         for (int l = 0; l < k; ++l) {
@@ -68,17 +67,17 @@ public class WorldGenFeatureOceanRuinPieces {
     }
 
     private static List<BlockPosition> a(Random random, int i, int j) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<BlockPosition> list = Lists.newArrayList();
 
-        arraylist.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j + 16 + MathHelper.nextInt(random, 1, 7)));
-        arraylist.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j + MathHelper.nextInt(random, 1, 7)));
-        arraylist.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j - 16 + MathHelper.nextInt(random, 4, 8)));
-        arraylist.add(new BlockPosition(i + MathHelper.nextInt(random, 1, 7), 90, j + 16 + MathHelper.nextInt(random, 1, 7)));
-        arraylist.add(new BlockPosition(i + MathHelper.nextInt(random, 1, 7), 90, j - 16 + MathHelper.nextInt(random, 4, 6)));
-        arraylist.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j + 16 + MathHelper.nextInt(random, 3, 8)));
-        arraylist.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j + MathHelper.nextInt(random, 1, 7)));
-        arraylist.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j - 16 + MathHelper.nextInt(random, 4, 8)));
-        return arraylist;
+        list.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j + 16 + MathHelper.nextInt(random, 1, 7)));
+        list.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j + MathHelper.nextInt(random, 1, 7)));
+        list.add(new BlockPosition(i - 16 + MathHelper.nextInt(random, 1, 8), 90, j - 16 + MathHelper.nextInt(random, 4, 8)));
+        list.add(new BlockPosition(i + MathHelper.nextInt(random, 1, 7), 90, j + 16 + MathHelper.nextInt(random, 1, 7)));
+        list.add(new BlockPosition(i + MathHelper.nextInt(random, 1, 7), 90, j - 16 + MathHelper.nextInt(random, 4, 6)));
+        list.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j + 16 + MathHelper.nextInt(random, 3, 8)));
+        list.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j + MathHelper.nextInt(random, 1, 7)));
+        list.add(new BlockPosition(i + 16 + MathHelper.nextInt(random, 1, 7), 90, j - 16 + MathHelper.nextInt(random, 4, 8)));
+        return list;
     }
 
     private static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<StructurePiece> list, Random random, WorldGenFeatureOceanRuinConfiguration worldgenfeatureoceanruinconfiguration, boolean flag, float f) {

@@ -11,7 +11,7 @@ public abstract class WorldGenTreeProvider {
     protected abstract WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random);
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        WorldGenTreeAbstract worldgentreeabstract = this.b(random);
+        WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> worldgentreeabstract = this.b(random);
 
         if (worldgentreeabstract == null) {
             return false;

@@ -6,13 +6,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -91,8 +91,8 @@ public class ServerGUI extends JComponent {
     }
 
     private JComponent c() throws Exception {
-        PlayerListBox playerlistbox = new PlayerListBox(this.c);
-        JScrollPane jscrollpane = new JScrollPane(playerlistbox, 22, 30);
+        JList<?> jlist = new PlayerListBox(this.c);
+        JScrollPane jscrollpane = new JScrollPane(jlist, 22, 30);
 
         jscrollpane.setBorder(new TitledBorder(new EtchedBorder(), "Players"));
         return jscrollpane;

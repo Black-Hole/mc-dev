@@ -17,7 +17,7 @@ public class GenLayers {
     protected static final int j = IRegistry.BIOME.a((Object) Biomes.DEEP_FROZEN_OCEAN);
 
     private static <T extends Area, C extends AreaContextTransformed<T>> AreaFactory<T> a(long i, AreaTransformer2 areatransformer2, AreaFactory<T> areafactory, int j, LongFunction<C> longfunction) {
-        AreaFactory areafactory1 = areafactory;
+        AreaFactory<T> areafactory1 = areafactory;
 
         for (int k = 0; k < j; ++k) {
             areafactory1 = areatransformer2.a((AreaContextTransformed) longfunction.apply(i + (long) k), areafactory1);
@@ -27,7 +27,7 @@ public class GenLayers {
     }
 
     public static <T extends Area, C extends AreaContextTransformed<T>> ImmutableList<AreaFactory<T>> a(WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld, LongFunction<C> longfunction) {
-        AreaFactory areafactory = LayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(1L));
+        AreaFactory<T> areafactory = LayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(1L));
 
         areafactory = GenLayerZoom.FUZZY.a((AreaContextTransformed) longfunction.apply(2000L), areafactory);
         areafactory = GenLayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(1L), areafactory);
@@ -36,7 +36,7 @@ public class GenLayers {
         areafactory = GenLayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(50L), areafactory);
         areafactory = GenLayerIsland.INSTANCE.a((AreaContextTransformed) longfunction.apply(70L), areafactory);
         areafactory = GenLayerIcePlains.INSTANCE.a((AreaContextTransformed) longfunction.apply(2L), areafactory);
-        AreaFactory areafactory1 = GenLayerOceanEdge.INSTANCE.a((AreaContextTransformed) longfunction.apply(2L));
+        AreaFactory<T> areafactory1 = GenLayerOceanEdge.INSTANCE.a((AreaContextTransformed) longfunction.apply(2L));
 
         areafactory1 = a(2001L, GenLayerZoom.NORMAL, areafactory1, 6, longfunction);
         areafactory = GenLayerTopSoil.INSTANCE.a((AreaContextTransformed) longfunction.apply(2L), areafactory);
@@ -62,14 +62,14 @@ public class GenLayers {
             i = 6;
         }
 
-        AreaFactory areafactory2 = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
+        AreaFactory<T> areafactory2 = a(1000L, GenLayerZoom.NORMAL, areafactory, 0, longfunction);
 
         areafactory2 = GenLayerCleaner.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory2);
-        AreaFactory areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld)).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
+        AreaFactory<T> areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld)).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
 
         areafactory3 = a(1000L, GenLayerZoom.NORMAL, areafactory3, 2, longfunction);
         areafactory3 = GenLayerDesert.INSTANCE.a((AreaContextTransformed) longfunction.apply(1000L), areafactory3);
-        AreaFactory areafactory4 = a(1000L, GenLayerZoom.NORMAL, areafactory2, 2, longfunction);
+        AreaFactory<T> areafactory4 = a(1000L, GenLayerZoom.NORMAL, areafactory2, 2, longfunction);
 
         areafactory3 = GenLayerRegionHills.INSTANCE.a((AreaContextTransformed) longfunction.apply(1000L), areafactory3, areafactory4);
         areafactory2 = a(1000L, GenLayerZoom.NORMAL, areafactory2, 2, longfunction);
@@ -92,7 +92,7 @@ public class GenLayers {
         areafactory3 = GenLayerSmooth.INSTANCE.a((AreaContextTransformed) longfunction.apply(1000L), areafactory3);
         areafactory3 = GenLayerRiverMix.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory3, areafactory2);
         areafactory3 = GenLayerOcean.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory3, areafactory1);
-        AreaFactory areafactory5 = GenLayerZoomVoronoi.INSTANCE.a((AreaContextTransformed) longfunction.apply(10L), areafactory3);
+        AreaFactory<T> areafactory5 = GenLayerZoomVoronoi.INSTANCE.a((AreaContextTransformed) longfunction.apply(10L), areafactory3);
 
         return ImmutableList.of(areafactory3, areafactory5, areafactory3);
     }
@@ -100,9 +100,10 @@ public class GenLayers {
     public static GenLayer[] a(long i, WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
         boolean flag = true;
         int[] aint = new int[1];
-        ImmutableList immutablelist = a(worldtype, generatorsettingsoverworld, (i) -> {
-            ++aint[0];
-            return new WorldGenContextArea(1, aint[0], j, i);
+        ImmutableList<AreaFactory<AreaLazy>> immutablelist = a(worldtype, generatorsettingsoverworld, (j) -> {
+            int k = aint[0]++;
+
+            return new WorldGenContextArea(1, aint[0], i, j);
         });
         GenLayer genlayer = new GenLayer((AreaFactory) immutablelist.get(0));
         GenLayer genlayer1 = new GenLayer((AreaFactory) immutablelist.get(1));

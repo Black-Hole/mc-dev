@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -9,10 +8,9 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
@@ -49,10 +47,10 @@ public class CommandFill {
     private static int a(CommandListenerWrapper commandlistenerwrapper, StructureBoundingBox structureboundingbox, ArgumentTileLocation argumenttilelocation, CommandFill.Mode commandfill_mode, @Nullable Predicate<ShapeDetectorBlock> predicate) throws CommandSyntaxException {
         int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
-        if (i > '\u8000') {
-            throw CommandFill.a.create('\u8000', i);
+        if (i > 32768) {
+            throw CommandFill.a.create(32768, i);
         } else {
-            ArrayList arraylist = Lists.newArrayList();
+            List<BlockPosition> list = Lists.newArrayList();
             WorldServer worldserver = commandlistenerwrapper.getWorld();
             int j = 0;
             Iterator iterator = BlockPosition.MutableBlockPosition.a(structureboundingbox.a, structureboundingbox.b, structureboundingbox.c, structureboundingbox.d, structureboundingbox.e, structureboundingbox.f).iterator();
@@ -72,14 +70,14 @@ public class CommandFill {
                         }
 
                         if (argumenttilelocation1.a(worldserver, blockposition, 2)) {
-                            arraylist.add(blockposition.h());
+                            list.add(blockposition.h());
                             ++j;
                         }
                     }
                 }
             }
 
-            iterator = arraylist.iterator();
+            iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 blockposition = (BlockPosition) iterator.next();

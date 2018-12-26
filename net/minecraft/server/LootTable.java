@@ -9,7 +9,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +27,7 @@ public class LootTable {
     }
 
     public List<ItemStack> populateLoot(Random random, LootTableInfo loottableinfo) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ItemStack> list = Lists.newArrayList();
 
         if (loottableinfo.a(this)) {
             LootSelector[] alootselector = this.c;
@@ -37,7 +36,7 @@ public class LootTable {
             for (int j = 0; j < i; ++j) {
                 LootSelector lootselector = alootselector[j];
 
-                lootselector.b(arraylist, random, loottableinfo);
+                lootselector.b(list, random, loottableinfo);
             }
 
             loottableinfo.b(this);
@@ -45,12 +44,12 @@ public class LootTable {
             LootTable.b.warn("Detected infinite loop in loot tables");
         }
 
-        return arraylist;
+        return list;
     }
 
     public void fillInventory(IInventory iinventory, Random random, LootTableInfo loottableinfo) {
-        List list = this.populateLoot(random, loottableinfo);
-        List list1 = this.a(iinventory, random);
+        List<ItemStack> list = this.populateLoot(random, loottableinfo);
+        List<Integer> list1 = this.a(iinventory, random);
 
         this.a(list, list1.size(), random);
         Iterator iterator = list.iterator();
@@ -73,7 +72,7 @@ public class LootTable {
     }
 
     private void a(List<ItemStack> list, int i, Random random) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ItemStack> list1 = Lists.newArrayList();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -82,44 +81,44 @@ public class LootTable {
             if (itemstack.isEmpty()) {
                 iterator.remove();
             } else if (itemstack.getCount() > 1) {
-                arraylist.add(itemstack);
+                list1.add(itemstack);
                 iterator.remove();
             }
         }
 
-        while (i - list.size() - arraylist.size() > 0 && !arraylist.isEmpty()) {
-            ItemStack itemstack1 = (ItemStack) arraylist.remove(MathHelper.nextInt(random, 0, arraylist.size() - 1));
+        while (i - list.size() - list1.size() > 0 && !list1.isEmpty()) {
+            ItemStack itemstack1 = (ItemStack) list1.remove(MathHelper.nextInt(random, 0, list1.size() - 1));
             int j = MathHelper.nextInt(random, 1, itemstack1.getCount() / 2);
             ItemStack itemstack2 = itemstack1.cloneAndSubtract(j);
 
             if (itemstack1.getCount() > 1 && random.nextBoolean()) {
-                arraylist.add(itemstack1);
+                list1.add(itemstack1);
             } else {
                 list.add(itemstack1);
             }
 
             if (itemstack2.getCount() > 1 && random.nextBoolean()) {
-                arraylist.add(itemstack2);
+                list1.add(itemstack2);
             } else {
                 list.add(itemstack2);
             }
         }
 
-        list.addAll(arraylist);
+        list.addAll(list1);
         Collections.shuffle(list, random);
     }
 
     private List<Integer> a(IInventory iinventory, Random random) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Integer> list = Lists.newArrayList();
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
             if (iinventory.getItem(i).isEmpty()) {
-                arraylist.add(i);
+                list.add(i);
             }
         }
 
-        Collections.shuffle(arraylist, random);
-        return arraylist;
+        Collections.shuffle(list, random);
+        return list;
     }
 
     public static class a implements JsonDeserializer<LootTable>, JsonSerializer<LootTable> {

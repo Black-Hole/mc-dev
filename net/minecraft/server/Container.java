@@ -38,7 +38,7 @@ public abstract class Container {
     }
 
     public NonNullList<ItemStack> a() {
-        NonNullList nonnulllist = NonNullList.a();
+        NonNullList<ItemStack> nonnulllist = NonNullList.a();
 
         for (int i = 0; i < this.slots.size(); ++i) {
             nonnulllist.add(((Slot) this.slots.get(i)).getItem());

@@ -29,7 +29,7 @@ public enum EnumToolMaterial implements ToolMaterial {
         this.h = f;
         this.i = f1;
         this.j = k;
-        this.k = new LazyInitVar(supplier);
+        this.k = new LazyInitVar<>(supplier);
     }
 
     public int a() {

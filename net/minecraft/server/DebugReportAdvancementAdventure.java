@@ -29,7 +29,7 @@ public class DebugReportAdvancementAdventure implements Consumer<Consumer<Advanc
         int i = aentitytypes.length;
 
         for (int j = 0; j < i; ++j) {
-            EntityTypes entitytypes = aentitytypes[j];
+            EntityTypes<?> entitytypes = aentitytypes[j];
 
             advancement_serializedadvancement.a(IRegistry.ENTITY_TYPE.getKey(entitytypes).toString(), (CriterionInstance) CriterionTriggerKilled.b.a(CriterionConditionEntity.a.a().a(entitytypes)));
         }

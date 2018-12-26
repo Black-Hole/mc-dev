@@ -25,13 +25,13 @@ public class ExpiringMap<T> extends Long2ObjectOpenHashMap<T> {
 
         while (objectiterator.hasNext()) {
             Entry entry = (Entry) objectiterator.next();
-            Object object = super.get(entry.getLongKey());
+            T t0 = super.get(entry.getLongKey());
 
             if (j - entry.getLongValue() <= (long) this.a) {
                 break;
             }
 
-            if (object != null && this.a(object)) {
+            if (t0 != null && this.a(t0)) {
                 super.remove(entry.getLongKey());
                 objectiterator.remove();
             }

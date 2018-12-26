@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -13,7 +12,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 public class CommandXp {
@@ -21,7 +19,7 @@ public class CommandXp {
     private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.experience.set.points.invalid", new Object[0]));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("experience").requires((commandlistenerwrapper) -> {
+        LiteralCommandNode<CommandListenerWrapper> literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("experience").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("add").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.d()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("amount", (ArgumentType) IntegerArgumentType.integer()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.f(commandcontext, "targets"), IntegerArgumentType.getInteger(commandcontext, "amount"), CommandXp.Unit.POINTS);

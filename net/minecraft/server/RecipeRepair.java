@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeRepair extends IRecipeComplex {
 
@@ -13,15 +13,15 @@ public class RecipeRepair extends IRecipeComplex {
         if (!(iinventory instanceof InventoryCrafting)) {
             return false;
         } else {
-            ArrayList arraylist = Lists.newArrayList();
+            List<ItemStack> list = Lists.newArrayList();
 
             for (int i = 0; i < iinventory.getSize(); ++i) {
                 ItemStack itemstack = iinventory.getItem(i);
 
                 if (!itemstack.isEmpty()) {
-                    arraylist.add(itemstack);
-                    if (arraylist.size() > 1) {
-                        ItemStack itemstack1 = (ItemStack) arraylist.get(0);
+                    list.add(itemstack);
+                    if (list.size() > 1) {
+                        ItemStack itemstack1 = (ItemStack) list.get(0);
 
                         if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
                             return false;
@@ -30,21 +30,21 @@ public class RecipeRepair extends IRecipeComplex {
                 }
             }
 
-            return arraylist.size() == 2;
+            return list.size() == 2;
         }
     }
 
     public ItemStack craftItem(IInventory iinventory) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ItemStack> list = Lists.newArrayList();
 
         ItemStack itemstack;
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
             itemstack = iinventory.getItem(i);
             if (!itemstack.isEmpty()) {
-                arraylist.add(itemstack);
-                if (arraylist.size() > 1) {
-                    ItemStack itemstack1 = (ItemStack) arraylist.get(0);
+                list.add(itemstack);
+                if (list.size() > 1) {
+                    ItemStack itemstack1 = (ItemStack) list.get(0);
 
                     if (itemstack.getItem() != itemstack1.getItem() || itemstack1.getCount() != 1 || itemstack.getCount() != 1 || !itemstack1.getItem().usesDurability()) {
                         return ItemStack.a;
@@ -53,10 +53,10 @@ public class RecipeRepair extends IRecipeComplex {
             }
         }
 
-        if (arraylist.size() == 2) {
-            ItemStack itemstack2 = (ItemStack) arraylist.get(0);
+        if (list.size() == 2) {
+            ItemStack itemstack2 = (ItemStack) list.get(0);
 
-            itemstack = (ItemStack) arraylist.get(1);
+            itemstack = (ItemStack) list.get(1);
             if (itemstack2.getItem() == itemstack.getItem() && itemstack2.getCount() == 1 && itemstack.getCount() == 1 && itemstack2.getItem().usesDurability()) {
                 Item item = itemstack2.getItem();
                 int j = item.getMaxDurability() - itemstack2.getDamage();

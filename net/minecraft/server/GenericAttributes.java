@@ -40,7 +40,7 @@ public class GenericAttributes {
 
         nbttagcompound.setString("Name", iattribute.getName());
         nbttagcompound.setDouble("Base", attributeinstance.b());
-        Collection collection = attributeinstance.c();
+        Collection<AttributeModifier> collection = attributeinstance.c();
 
         if (collection != null && !collection.isEmpty()) {
             NBTTagList nbttaglist = new NBTTagList();

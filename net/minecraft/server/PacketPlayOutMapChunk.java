@@ -22,7 +22,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     public PacketPlayOutMapChunk(Chunk chunk, int i) {
         this.a = chunk.locX;
         this.b = chunk.locZ;
-        this.f = i == '\uffff';
+        this.f = i == 65535;
         boolean flag = chunk.getWorld().worldProvider.g();
 
         this.d = new byte[this.a(chunk, flag, i)];
@@ -31,7 +31,7 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
         Iterator iterator = chunk.getTileEntities().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<BlockPosition, TileEntity> entry = (Entry) iterator.next();
             BlockPosition blockposition = (BlockPosition) entry.getKey();
             TileEntity tileentity = (TileEntity) entry.getValue();
             int j = blockposition.getY() >> 4;

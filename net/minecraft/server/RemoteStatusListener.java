@@ -213,7 +213,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
                 Iterator iterator = this.t.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                    Entry<SocketAddress, RemoteStatusListener.RemoteStatusChallenge> entry = (Entry) iterator.next();
 
                     if (((RemoteStatusListener.RemoteStatusChallenge) entry.getValue()).a(i)) {
                         iterator.remove();
@@ -251,7 +251,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
 
     public void a() {
         if (!this.a) {
-            if (0 < this.i && '\uffff' >= this.i) {
+            if (0 < this.i && 65535 >= this.i) {
                 if (this.g()) {
                     super.a();
                 }
@@ -308,7 +308,7 @@ public class RemoteStatusListener extends RemoteConnectionThread {
             this.identity[3] = abyte[6];
             this.f = new String(this.identity, StandardCharsets.UTF_8);
             this.token = (new Random()).nextInt(16777216);
-            this.e = String.format("\t%s%d\u0000", new Object[] { this.f, this.token}).getBytes(StandardCharsets.UTF_8);
+            this.e = String.format("\t%s%d\u0000", this.f, this.token).getBytes(StandardCharsets.UTF_8);
         }
 
         public Boolean a(long i) {

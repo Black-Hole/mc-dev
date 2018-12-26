@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +33,7 @@ public class NameReferencingFileConverter {
     public static final File d = new File("white-list.txt");
 
     static List<String> a(File file, Map<String, String[]> map) throws IOException {
-        List list = Files.readLines(file, StandardCharsets.UTF_8);
+        List<String> list = Files.readLines(file, StandardCharsets.UTF_8);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -89,17 +87,17 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                final HashMap hashmap = Maps.newHashMap();
+                final Map<String, String[]> map = Maps.newHashMap();
 
-                a(NameReferencingFileConverter.b, (Map) hashmap);
+                a(NameReferencingFileConverter.b, (Map) map);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
-                        String[] astring = (String[]) hashmap.get(gameprofile.getName().toLowerCase(Locale.ROOT));
+                        String[] astring = (String[]) map.get(gameprofile.getName().toLowerCase(Locale.ROOT));
 
                         if (astring == null) {
                             NameReferencingFileConverter.e.warn("Could not convert user banlist entry for {}", gameprofile.getName());
-                            throw new NameReferencingFileConverter.FileConversionException("Profile not in the conversionlist", null);
+                            throw new NameReferencingFileConverter.FileConversionException("Profile not in the conversionlist");
                         } else {
                             Date date = astring.length > 1 ? NameReferencingFileConverter.b(astring[1], (Date) null) : null;
                             String s = astring.length > 2 ? astring[2] : null;
@@ -113,12 +111,12 @@ public class NameReferencingFileConverter {
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
                         NameReferencingFileConverter.e.warn("Could not lookup user banlist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception, null);
+                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
                     }
                 };
 
-                a(minecraftserver, hashmap.keySet(), profilelookupcallback);
+                a(minecraftserver, map.keySet(), profilelookupcallback);
                 gameprofilebanlist.save();
                 c(NameReferencingFileConverter.b);
                 return true;
@@ -147,14 +145,14 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                HashMap hashmap = Maps.newHashMap();
+                Map<String, String[]> map = Maps.newHashMap();
 
-                a(NameReferencingFileConverter.a, (Map) hashmap);
-                Iterator iterator = hashmap.keySet().iterator();
+                a(NameReferencingFileConverter.a, (Map) map);
+                Iterator iterator = map.keySet().iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
-                    String[] astring = (String[]) hashmap.get(s);
+                    String[] astring = (String[]) map.get(s);
                     Date date = astring.length > 1 ? b(astring[1], (Date) null) : null;
                     String s1 = astring.length > 2 ? astring[2] : null;
                     Date date1 = astring.length > 3 ? b(astring[3], (Date) null) : null;
@@ -188,7 +186,7 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                List list = Files.readLines(NameReferencingFileConverter.c, StandardCharsets.UTF_8);
+                List<String> list = Files.readLines(NameReferencingFileConverter.c, StandardCharsets.UTF_8);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
@@ -198,7 +196,7 @@ public class NameReferencingFileConverter {
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
                         NameReferencingFileConverter.e.warn("Could not lookup oplist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception, null);
+                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
                     }
                 };
@@ -232,7 +230,7 @@ public class NameReferencingFileConverter {
             }
 
             try {
-                List list = Files.readLines(NameReferencingFileConverter.d, StandardCharsets.UTF_8);
+                List<String> list = Files.readLines(NameReferencingFileConverter.d, StandardCharsets.UTF_8);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         minecraftserver.getUserCache().a(gameprofile);
@@ -242,7 +240,7 @@ public class NameReferencingFileConverter {
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
                         NameReferencingFileConverter.e.warn("Could not lookup user whitelist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception, null);
+                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
                     }
                 };
@@ -270,20 +268,20 @@ public class NameReferencingFileConverter {
             if (gameprofile != null && gameprofile.getId() != null) {
                 return gameprofile.getId().toString();
             } else if (!minecraftserver.H() && minecraftserver.getOnlineMode()) {
-                final ArrayList arraylist = Lists.newArrayList();
+                final List<GameProfile> list = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
-                    public void onProfileLookupSucceeded(GameProfile gameprofile) {
-                        minecraftserver.getUserCache().a(gameprofile);
-                        arraylist.add(gameprofile);
+                    public void onProfileLookupSucceeded(GameProfile gameprofile1) {
+                        minecraftserver.getUserCache().a(gameprofile1);
+                        list.add(gameprofile1);
                     }
 
-                    public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup user whitelist entry for {}", gameprofile.getName(), exception);
+                    public void onProfileLookupFailed(GameProfile gameprofile1, Exception exception) {
+                        NameReferencingFileConverter.e.warn("Could not lookup user whitelist entry for {}", gameprofile1.getName(), exception);
                     }
                 };
 
                 a(minecraftserver, Lists.newArrayList(new String[] { s}), profilelookupcallback);
-                return !arraylist.isEmpty() && ((GameProfile) arraylist.get(0)).getId() != null ? ((GameProfile) arraylist.get(0)).getId().toString() : "";
+                return !list.isEmpty() && ((GameProfile) list.get(0)).getId() != null ? ((GameProfile) list.get(0)).getId().toString() : "";
             } else {
                 return EntityHuman.a(new GameProfile((UUID) null, s)).toString();
             }
@@ -299,7 +297,7 @@ public class NameReferencingFileConverter {
 
         if (file.exists() && file.isDirectory()) {
             File[] afile = file.listFiles();
-            ArrayList arraylist = Lists.newArrayList();
+            List<String> list = Lists.newArrayList();
             File[] afile1 = afile;
             int i = afile.length;
 
@@ -311,64 +309,64 @@ public class NameReferencingFileConverter {
                     String s1 = s.substring(0, s.length() - ".dat".length());
 
                     if (!s1.isEmpty()) {
-                        arraylist.add(s1);
+                        list.add(s1);
                     }
                 }
             }
 
             try {
-                final String[] astring = (String[]) arraylist.toArray(new String[arraylist.size()]);
+                final String[] astring = (String[]) list.toArray(new String[list.size()]);
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile) {
                         dedicatedserver.getUserCache().a(gameprofile);
                         UUID uuid = gameprofile.getId();
 
                         if (uuid == null) {
-                            throw new NameReferencingFileConverter.FileConversionException("Missing UUID for user profile " + gameprofile.getName(), null);
+                            throw new NameReferencingFileConverter.FileConversionException("Missing UUID for user profile " + gameprofile.getName());
                         } else {
-                            this.a(file, this.a(gameprofile), uuid.toString());
+                            this.a(file1, this.a(gameprofile), uuid.toString());
                         }
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
                         NameReferencingFileConverter.e.warn("Could not lookup user uuid for {}", gameprofile.getName(), exception);
                         if (exception instanceof ProfileNotFoundException) {
-                            String s = this.a(gameprofile);
+                            String s2 = this.a(gameprofile);
 
-                            this.a(file, s, s);
+                            this.a(file2, s2, s2);
                         } else {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception, null);
+                            throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
                     }
 
-                    private void a(File file, String s, String s1) {
-                        File file1 = new File(file2, s + ".dat");
-                        File file3 = new File(file, s1 + ".dat");
+                    private void a(File file4, String s2, String s3) {
+                        File file5 = new File(file, s2 + ".dat");
+                        File file6 = new File(file4, s3 + ".dat");
 
-                        NameReferencingFileConverter.b(file);
-                        if (!file1.renameTo(file3)) {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not convert file for " + s, null);
+                        NameReferencingFileConverter.b(file4);
+                        if (!file5.renameTo(file6)) {
+                            throw new NameReferencingFileConverter.FileConversionException("Could not convert file for " + s2);
                         }
                     }
 
                     private String a(GameProfile gameprofile) {
-                        String s = null;
-                        String[] astring = astring1;
-                        int i = astring.length;
+                        String s2 = null;
+                        String[] astring1 = astring;
+                        int k = astring1.length;
 
-                        for (int j = 0; j < i; ++j) {
-                            String s1 = astring[j];
+                        for (int l = 0; l < k; ++l) {
+                            String s3 = astring1[l];
 
-                            if (s1 != null && s1.equalsIgnoreCase(gameprofile.getName())) {
-                                s = s1;
+                            if (s3 != null && s3.equalsIgnoreCase(gameprofile.getName())) {
+                                s2 = s3;
                                 break;
                             }
                         }
 
-                        if (s == null) {
-                            throw new NameReferencingFileConverter.FileConversionException("Could not find the filename for " + gameprofile.getName() + " anymore", null);
+                        if (s2 == null) {
+                            throw new NameReferencingFileConverter.FileConversionException("Could not find the filename for " + gameprofile.getName() + " anymore");
                         } else {
-                            return s;
+                            return s2;
                         }
                     }
                 };
@@ -387,10 +385,10 @@ public class NameReferencingFileConverter {
     private static void b(File file) {
         if (file.exists()) {
             if (!file.isDirectory()) {
-                throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.", null);
+                throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.");
             }
         } else if (!file.mkdirs()) {
-            throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.", null);
+            throw new NameReferencingFileConverter.FileConversionException("Can't create directory " + file.getName() + " in world save directory.");
         }
     }
 

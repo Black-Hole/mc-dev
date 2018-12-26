@@ -25,7 +25,7 @@ public class CrashReportSystemDetails {
         StringBuilder stringbuilder = new StringBuilder();
 
         try {
-            stringbuilder.append(String.format("World: (%d,%d,%d)", new Object[] { i, j, k}));
+            stringbuilder.append(String.format("World: (%d,%d,%d)", i, j, k));
         } catch (Throwable throwable) {
             stringbuilder.append("(Error finding world loc)");
         }
@@ -52,7 +52,7 @@ public class CrashReportSystemDetails {
             j2 = i1 << 4;
             k2 = (l + 1 << 4) - 1;
             l2 = (i1 + 1 << 4) - 1;
-            stringbuilder.append(String.format("Chunk: (at %d,%d,%d in %d,%d; contains blocks %d,0,%d to %d,255,%d)", new Object[] { j1, k1, l1, l, i1, i2, j2, k2, l2}));
+            stringbuilder.append(String.format("Chunk: (at %d,%d,%d in %d,%d; contains blocks %d,0,%d to %d,255,%d)", j1, k1, l1, l, i1, i2, j2, k2, l2));
         } catch (Throwable throwable1) {
             stringbuilder.append("(Error finding chunk loc)");
         }
@@ -71,7 +71,7 @@ public class CrashReportSystemDetails {
             l2 = (l + 1 << 9) - 1;
             int i3 = (i1 + 1 << 9) - 1;
 
-            stringbuilder.append(String.format("Region: (%d,%d; contains chunks %d,%d to %d,%d, blocks %d,0,%d to %d,255,%d)", new Object[] { l, i1, j1, k1, l1, i2, j2, k2, l2, i3}));
+            stringbuilder.append(String.format("Region: (%d,%d; contains chunks %d,%d to %d,%d, blocks %d,0,%d to %d,255,%d)", l, i1, j1, k1, l1, i2, j2, k2, l2, i3));
         } catch (Throwable throwable2) {
             stringbuilder.append("(Error finding world loc)");
         }

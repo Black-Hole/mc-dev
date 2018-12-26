@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class HeightMap {

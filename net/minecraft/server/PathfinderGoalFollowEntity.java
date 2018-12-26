@@ -18,8 +18,8 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
 
     public PathfinderGoalFollowEntity(EntityInsentient entityinsentient, double d0, float f, float f1) {
         this.a = entityinsentient;
-        this.b = (entityinsentient) -> {
-            return entityinsentient != null && entityinsentient1.getClass() != entityinsentient.getClass();
+        this.b = (entityinsentient1) -> {
+            return entityinsentient1 != null && entityinsentient.getClass() != entityinsentient1.getClass();
         };
         this.d = d0;
         this.e = entityinsentient.getNavigation();
@@ -32,7 +32,7 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
     }
 
     public boolean a() {
-        List list = this.a.world.a(EntityInsentient.class, this.a.getBoundingBox().g((double) this.i), this.b);
+        List<EntityInsentient> list = this.a.world.a(EntityInsentient.class, this.a.getBoundingBox().g((double) this.i), this.b);
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();

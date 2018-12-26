@@ -4,7 +4,6 @@ import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -13,10 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -33,7 +28,7 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
     }
 
     public void a() {
-        Set set = (Set) this.c.stream().map(ResourcePackLoader::e).collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> set = (Set) this.c.stream().map(ResourcePackLoader::e).collect(Collectors.toCollection(LinkedHashSet::new));
 
         this.b.clear();
         this.c.clear();
@@ -55,20 +50,20 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
         iterator = this.b.values().iterator();
 
         while (iterator.hasNext()) {
-            ResourcePackLoader resourcepackloader = (ResourcePackLoader) iterator.next();
+            T t0 = (ResourcePackLoader) iterator.next();
 
-            if (resourcepackloader.f() && !this.c.contains(resourcepackloader)) {
-                resourcepackloader.h().a(this.c, resourcepackloader, Functions.identity(), false);
+            if (t0.f() && !this.c.contains(t0)) {
+                t0.h().a(this.c, t0, Functions.identity(), false);
             }
         }
 
     }
 
     private void e() {
-        ArrayList arraylist = Lists.newArrayList(this.b.entrySet());
+        List<Entry<String, T>> list = Lists.newArrayList(this.b.entrySet());
 
         this.b.clear();
-        arraylist.stream().sorted(Entry.comparingByKey()).forEachOrdered((entry) -> {
+        list.stream().sorted(Entry.comparingByKey()).forEachOrdered((entry) -> {
             ResourcePackLoader resourcepackloader = (ResourcePackLoader) this.b.put(entry.getKey(), entry.getValue());
         });
     }
@@ -79,10 +74,10 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
         Iterator iterator = this.b.values().iterator();
 
         while (iterator.hasNext()) {
-            ResourcePackLoader resourcepackloader = (ResourcePackLoader) iterator.next();
+            T t0 = (ResourcePackLoader) iterator.next();
 
-            if (resourcepackloader.f() && !this.c.contains(resourcepackloader)) {
-                resourcepackloader.h().a(this.c, resourcepackloader, Functions.identity(), false);
+            if (t0.f() && !this.c.contains(t0)) {
+                t0.h().a(this.c, t0, Functions.identity(), false);
             }
         }
 
@@ -93,10 +88,10 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
     }
 
     public Collection<T> c() {
-        ArrayList arraylist = Lists.newArrayList(this.b.values());
+        Collection<T> collection = Lists.newArrayList(this.b.values());
 
-        arraylist.removeAll(this.c);
-        return arraylist;
+        collection.removeAll(this.c);
+        return collection;
     }
 
     public Collection<T> d() {

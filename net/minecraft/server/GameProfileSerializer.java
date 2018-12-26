@@ -211,12 +211,12 @@ public final class GameProfileSerializer {
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
                 NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Properties");
-                BlockStateList blockstatelist = block.getStates();
+                BlockStateList<Block, IBlockData> blockstatelist = block.getStates();
                 Iterator iterator = nbttagcompound1.getKeys().iterator();
 
                 while (iterator.hasNext()) {
                     String s = (String) iterator.next();
-                    IBlockState iblockstate = blockstatelist.a(s);
+                    IBlockState<?> iblockstate = blockstatelist.a(s);
 
                     if (iblockstate != null) {
                         iblockdata = (IBlockData) a(iblockdata, iblockstate, s, nbttagcompound1, nbttagcompound);
@@ -229,7 +229,7 @@ public final class GameProfileSerializer {
     }
 
     private static <S extends IBlockDataHolder<S>, T extends Comparable<T>> S a(S s0, IBlockState<T> iblockstate, String s, NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
-        Optional optional = iblockstate.b(nbttagcompound.getString(s));
+        Optional<T> optional = iblockstate.b(nbttagcompound.getString(s));
 
         if (optional.isPresent()) {
             return (IBlockDataHolder) s0.set(iblockstate, (Comparable) optional.get());
@@ -243,15 +243,15 @@ public final class GameProfileSerializer {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("Name", IRegistry.BLOCK.getKey(iblockdata.getBlock()).toString());
-        ImmutableMap immutablemap = iblockdata.b();
+        ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap = iblockdata.getStateMap();
 
         if (!immutablemap.isEmpty()) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
             UnmodifiableIterator unmodifiableiterator = immutablemap.entrySet().iterator();
 
             while (unmodifiableiterator.hasNext()) {
-                Entry entry = (Entry) unmodifiableiterator.next();
-                IBlockState iblockstate = (IBlockState) entry.getKey();
+                Entry<IBlockState<?>, Comparable<?>> entry = (Entry) unmodifiableiterator.next();
+                IBlockState<?> iblockstate = (IBlockState) entry.getKey();
 
                 nbttagcompound1.setString(iblockstate.a(), a(iblockstate, (Comparable) entry.getValue()));
             }

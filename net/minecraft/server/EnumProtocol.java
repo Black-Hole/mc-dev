@@ -180,20 +180,20 @@ public enum EnumProtocol {
     }
 
     protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet<?>> oclass) {
-        Object object = (BiMap) this.h.get(enumprotocoldirection);
+        BiMap<Integer, Class<? extends Packet<?>>> bimap = (BiMap) this.h.get(enumprotocoldirection);
 
-        if (object == null) {
-            object = HashBiMap.create();
-            this.h.put(enumprotocoldirection, object);
+        if (bimap == null) {
+            bimap = HashBiMap.create();
+            this.h.put(enumprotocoldirection, bimap);
         }
 
-        if (((BiMap) object).containsValue(oclass)) {
-            String s = enumprotocoldirection + " packet " + oclass + " is already known to ID " + ((BiMap) object).inverse().get(oclass);
+        if (((BiMap) bimap).containsValue(oclass)) {
+            String s = enumprotocoldirection + " packet " + oclass + " is already known to ID " + ((BiMap) bimap).inverse().get(oclass);
 
             LogManager.getLogger().fatal(s);
             throw new IllegalArgumentException(s);
         } else {
-            ((BiMap) object).put(((BiMap) object).size(), oclass);
+            ((BiMap) bimap).put(((BiMap) bimap).size(), oclass);
             return this;
         }
     }
@@ -204,7 +204,7 @@ public enum EnumProtocol {
 
     @Nullable
     public Packet<?> a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
-        Class oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(i);
+        Class<? extends Packet<?>> oclass = (Class) ((BiMap) this.h.get(enumprotocoldirection)).get(i);
 
         return oclass == null ? null : (Packet) oclass.newInstance();
     }

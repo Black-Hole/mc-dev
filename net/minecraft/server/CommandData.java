@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -14,7 +13,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandData {
 
@@ -28,7 +26,7 @@ public class CommandData {
     public static final List<CommandData.a> a = Lists.newArrayList(new CommandData.a[] { CommandDataAccessorEntity.a, CommandDataAccessorTile.a});
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralArgumentBuilder literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("data").requires((commandlistenerwrapper) -> {
+        LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("data").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         });
         Iterator iterator = CommandData.a.iterator();

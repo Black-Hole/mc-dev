@@ -5,10 +5,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public class ParticleParamBlock implements ParticleParam {
 
-    public static final ParticleParam.a<ParticleParamBlock> a = new ParticleParam.a() {
+    public static final ParticleParam.a<ParticleParamBlock> a = new ParticleParam.a<ParticleParamBlock>() {
         public ParticleParamBlock b(Particle<ParticleParamBlock> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
-            return new ParticleParamBlock(particle, (new ArgumentBlock(stringreader, false)).a(false).b());
+            return new ParticleParamBlock(particle, (new ArgumentBlock(stringreader, false)).a(false).getBlockData());
         }
 
         public ParticleParamBlock b(Particle<ParticleParamBlock> particle, PacketDataSerializer packetdataserializer) {

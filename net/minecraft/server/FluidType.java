@@ -6,12 +6,12 @@ import java.util.Random;
 
 public abstract class FluidType {
 
-    public static final RegistryBlockID<Fluid> c = new RegistryBlockID();
+    public static final RegistryBlockID<Fluid> c = new RegistryBlockID<>();
     protected final BlockStateList<FluidType, Fluid> d;
     private Fluid a;
 
     protected FluidType() {
-        BlockStateList.a blockstatelist_a = new BlockStateList.a(this);
+        BlockStateList.a<FluidType, Fluid> blockstatelist_a = new BlockStateList.a<>(this);
 
         this.a(blockstatelist_a);
         this.d = blockstatelist_a.a(FluidImpl::new);

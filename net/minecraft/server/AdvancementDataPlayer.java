@@ -18,16 +18,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -38,7 +34,7 @@ public class AdvancementDataPlayer {
 
     private static final Logger a = LogManager.getLogger();
     private static final Gson b = (new GsonBuilder()).registerTypeAdapter(AdvancementProgress.class, new AdvancementProgress.a()).registerTypeAdapter(MinecraftKey.class, new MinecraftKey.a()).setPrettyPrinting().create();
-    private static final TypeToken<Map<MinecraftKey, AdvancementProgress>> c = new TypeToken() {
+    private static final TypeToken<Map<MinecraftKey, AdvancementProgress>> c = new TypeToken<Map<MinecraftKey, AdvancementProgress>>() {
     };
     private final MinecraftServer d;
     private final File e;
@@ -66,7 +62,7 @@ public class AdvancementDataPlayer {
         Iterator iterator = CriterionTriggers.a().iterator();
 
         while (iterator.hasNext()) {
-            CriterionTrigger criteriontrigger = (CriterionTrigger) iterator.next();
+            CriterionTrigger<?> criteriontrigger = (CriterionTrigger) iterator.next();
 
             criteriontrigger.a(this);
         }
@@ -96,19 +92,19 @@ public class AdvancementDataPlayer {
     }
 
     private void e() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Advancement> list = Lists.newArrayList();
         Iterator iterator = this.data.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<Advancement, AdvancementProgress> entry = (Entry) iterator.next();
 
             if (((AdvancementProgress) entry.getValue()).isDone()) {
-                arraylist.add(entry.getKey());
+                list.add(entry.getKey());
                 this.i.add(entry.getKey());
             }
         }
 
-        iterator = arraylist.iterator();
+        iterator = list.iterator();
 
         while (iterator.hasNext()) {
             Advancement advancement = (Advancement) iterator.next();
@@ -140,7 +136,7 @@ public class AdvancementDataPlayer {
 
                 try {
                     jsonreader.setLenient(false);
-                    Dynamic dynamic = new Dynamic(JsonOps.INSTANCE, Streams.parse(jsonreader));
+                    Dynamic<JsonElement> dynamic = new Dynamic(JsonOps.INSTANCE, Streams.parse(jsonreader));
 
                     if (!dynamic.get("DataVersion").flatMap(Dynamic::getNumberValue).isPresent()) {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
@@ -148,17 +144,17 @@ public class AdvancementDataPlayer {
 
                     dynamic = this.d.az().update(DataFixTypes.ADVANCEMENTS, dynamic, dynamic.getInt("DataVersion"), 1631);
                     dynamic = dynamic.remove("DataVersion");
-                    Map map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
+                    Map<MinecraftKey, AdvancementProgress> map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 
                     if (map == null) {
                         throw new JsonParseException("Found null for advancements");
                     }
 
-                    Stream stream = map.entrySet().stream().sorted(Comparator.comparing(Entry::getValue));
+                    Stream<Entry<MinecraftKey, AdvancementProgress>> stream = map.entrySet().stream().sorted(Comparator.comparing(Entry::getValue));
                     Iterator iterator = ((List) stream.collect(Collectors.toList())).iterator();
 
                     while (iterator.hasNext()) {
-                        Entry entry = (Entry) iterator.next();
+                        Entry<MinecraftKey, AdvancementProgress> entry = (Entry) iterator.next();
                         Advancement advancement = this.d.getAdvancementData().a((MinecraftKey) entry.getKey());
 
                         if (advancement == null) {
@@ -197,15 +193,15 @@ public class AdvancementDataPlayer {
     }
 
     public void c() {
-        HashMap hashmap = Maps.newHashMap();
+        Map<MinecraftKey, AdvancementProgress> map = Maps.newHashMap();
         Iterator iterator = this.data.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<Advancement, AdvancementProgress> entry = (Entry) iterator.next();
             AdvancementProgress advancementprogress = (AdvancementProgress) entry.getValue();
 
             if (advancementprogress.b()) {
-                hashmap.put(((Advancement) entry.getKey()).getName(), advancementprogress);
+                map.put(((Advancement) entry.getKey()).getName(), advancementprogress);
             }
         }
 
@@ -214,7 +210,7 @@ public class AdvancementDataPlayer {
         }
 
         try {
-            Files.write(AdvancementDataPlayer.b.toJson(hashmap), this.e, StandardCharsets.UTF_8);
+            Files.write(AdvancementDataPlayer.b.toJson(map), this.e, StandardCharsets.UTF_8);
         } catch (IOException ioexception) {
             AdvancementDataPlayer.a.error("Couldn't save player advancements to {}", this.e, ioexception);
         }
@@ -269,17 +265,17 @@ public class AdvancementDataPlayer {
             Iterator iterator = advancement.getCriteria().entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, Criterion> entry = (Entry) iterator.next();
                 CriterionProgress criterionprogress = advancementprogress.getCriterionProgress((String) entry.getKey());
 
                 if (criterionprogress != null && !criterionprogress.a()) {
                     CriterionInstance criterioninstance = ((Criterion) entry.getValue()).a();
 
                     if (criterioninstance != null) {
-                        CriterionTrigger criteriontrigger = CriterionTriggers.a(criterioninstance.a());
+                        CriterionTrigger<CriterionInstance> criteriontrigger = CriterionTriggers.a(criterioninstance.a());
 
                         if (criteriontrigger != null) {
-                            criteriontrigger.a(this, new CriterionTrigger.a(criterioninstance, advancement, (String) entry.getKey()));
+                            criteriontrigger.a(this, new CriterionTrigger.a<>(criterioninstance, advancement, (String) entry.getKey()));
                         }
                     }
                 }
@@ -293,17 +289,17 @@ public class AdvancementDataPlayer {
         Iterator iterator = advancement.getCriteria().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, Criterion> entry = (Entry) iterator.next();
             CriterionProgress criterionprogress = advancementprogress.getCriterionProgress((String) entry.getKey());
 
             if (criterionprogress != null && (criterionprogress.a() || advancementprogress.isDone())) {
                 CriterionInstance criterioninstance = ((Criterion) entry.getValue()).a();
 
                 if (criterioninstance != null) {
-                    CriterionTrigger criteriontrigger = CriterionTriggers.a(criterioninstance.a());
+                    CriterionTrigger<CriterionInstance> criteriontrigger = CriterionTriggers.a(criterioninstance.a());
 
                     if (criteriontrigger != null) {
-                        criteriontrigger.b(this, new CriterionTrigger.a(criterioninstance, advancement, (String) entry.getKey()));
+                        criteriontrigger.b(this, new CriterionTrigger.a<>(criterioninstance, advancement, (String) entry.getKey()));
                     }
                 }
             }
@@ -313,9 +309,9 @@ public class AdvancementDataPlayer {
 
     public void b(EntityPlayer entityplayer) {
         if (this.l || !this.h.isEmpty() || !this.i.isEmpty()) {
-            HashMap hashmap = Maps.newHashMap();
-            LinkedHashSet linkedhashset = Sets.newLinkedHashSet();
-            LinkedHashSet linkedhashset1 = Sets.newLinkedHashSet();
+            Map<MinecraftKey, AdvancementProgress> map = Maps.newHashMap();
+            Set<Advancement> set = Sets.newLinkedHashSet();
+            Set<MinecraftKey> set1 = Sets.newLinkedHashSet();
             Iterator iterator = this.i.iterator();
 
             Advancement advancement;
@@ -323,7 +319,7 @@ public class AdvancementDataPlayer {
             while (iterator.hasNext()) {
                 advancement = (Advancement) iterator.next();
                 if (this.g.contains(advancement)) {
-                    hashmap.put(advancement.getName(), this.data.get(advancement));
+                    map.put(advancement.getName(), this.data.get(advancement));
                 }
             }
 
@@ -332,14 +328,14 @@ public class AdvancementDataPlayer {
             while (iterator.hasNext()) {
                 advancement = (Advancement) iterator.next();
                 if (this.g.contains(advancement)) {
-                    linkedhashset.add(advancement);
+                    set.add(advancement);
                 } else {
-                    linkedhashset1.add(advancement.getName());
+                    set1.add(advancement.getName());
                 }
             }
 
-            if (this.l || !hashmap.isEmpty() || !linkedhashset.isEmpty() || !linkedhashset1.isEmpty()) {
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.l, linkedhashset, linkedhashset1, hashmap));
+            if (this.l || !map.isEmpty() || !set.isEmpty() || !set1.isEmpty()) {
+                entityplayer.playerConnection.sendPacket(new PacketPlayOutAdvancements(this.l, set, set1, map));
                 this.h.clear();
                 this.i.clear();
             }

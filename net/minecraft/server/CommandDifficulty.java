@@ -1,12 +1,9 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandDifficulty {
 
@@ -15,7 +12,7 @@ public class CommandDifficulty {
     });
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralArgumentBuilder literalargumentbuilder = CommandDispatcher.a("difficulty");
+        LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = CommandDispatcher.a("difficulty");
         EnumDifficulty[] aenumdifficulty = EnumDifficulty.values();
         int i = aenumdifficulty.length;
 
@@ -30,10 +27,10 @@ public class CommandDifficulty {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).executes((commandcontext) -> {
-            EnumDifficulty enumdifficulty = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getDifficulty();
+            EnumDifficulty enumdifficulty1 = ((CommandListenerWrapper) commandcontext.getSource()).getWorld().getDifficulty();
 
-            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.difficulty.query", new Object[] { enumdifficulty.b()}), false);
-            return enumdifficulty.a();
+            ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.difficulty.query", new Object[] { enumdifficulty1.b()}), false);
+            return enumdifficulty1.a();
         }));
     }
 

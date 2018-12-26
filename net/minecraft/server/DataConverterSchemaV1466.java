@@ -23,7 +23,7 @@ public class DataConverterSchemaV1466 extends DataConverterSchemaNamed {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerBlockEntities(Schema schema) {
-        Map map = super.registerBlockEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerBlockEntities(schema);
 
         map.put("DUMMY", DSL::remainder);
         return map;

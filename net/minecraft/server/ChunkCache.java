@@ -177,7 +177,7 @@ public class ChunkCache implements IIBlockAccess {
             }
         }
 
-        return FluidTypes.a.i();
+        return FluidTypes.EMPTY.i();
     }
 
     public int c() {

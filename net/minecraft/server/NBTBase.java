@@ -20,7 +20,7 @@ public interface NBTBase {
 
     byte getTypeId();
 
-    static default NBTBase createTag(byte b0) {
+    static NBTBase createTag(byte b0) {
         switch (b0) {
         case 0:
             return new NBTTagEnd();
@@ -53,7 +53,7 @@ public interface NBTBase {
         }
     }
 
-    static default String n(int i) {
+    static String n(int i) {
         switch (i) {
         case 0:
             return "TAG_End";

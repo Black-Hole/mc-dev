@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 
 public class BlockFluids extends Block implements IFluidSource {
 
@@ -57,10 +56,10 @@ public class BlockFluids extends Block implements IFluidSource {
     public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         Fluid fluid = iblockaccess.getFluid(blockposition.up());
 
-        return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.o.computeIfAbsent(iblockdata, (iblockdata) -> {
-            Fluid fluid = iblockdata.s();
+        return fluid.c().a((FluidType) this.b) ? VoxelShapes.b() : (VoxelShape) this.o.computeIfAbsent(iblockdata, (iblockdata1) -> {
+            Fluid fluid1 = iblockdata1.s();
 
-            return VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid.getHeight(), 1.0D);
+            return VoxelShapes.create(0.0D, 0.0D, 0.0D, 1.0D, (double) fluid1.getHeight(), 1.0D);
         });
     }
 
@@ -154,12 +153,12 @@ public class BlockFluids extends Block implements IFluidSource {
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Integer) iblockdata.get(BlockFluids.LEVEL) == 0) {
             generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
             return this.b;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 }

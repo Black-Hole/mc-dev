@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.base.Joiner;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -9,10 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import java.util.function.LongConsumer;
-import java.util.function.Predicate;
 
 public class CommandForceload {
 

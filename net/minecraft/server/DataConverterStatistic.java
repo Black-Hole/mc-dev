@@ -10,14 +10,11 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,18 +31,18 @@ public class DataConverterStatistic extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getOutputSchema().getType(DataConverterTypes.g);
+        Type<?> type = this.getOutputSchema().getType(DataConverterTypes.g);
 
         return this.fixTypeEverywhereTyped("StatsCounterFix", this.getInputSchema().getType(DataConverterTypes.g), type, (typed) -> {
-            Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-            HashMap hashmap = Maps.newHashMap();
-            Optional optional = dynamic.getMapValues();
+            Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+            Map<Dynamic<?>, Dynamic<?>> map = Maps.newHashMap();
+            Optional<? extends Map<? extends Dynamic<?>, ? extends Dynamic<?>>> optional = dynamic.getMapValues();
 
             if (optional.isPresent()) {
                 Iterator iterator = ((Map) optional.get()).entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                    Entry<? extends Dynamic<?>, ? extends Dynamic<?>> entry = (Entry) iterator.next();
 
                     if (((Dynamic) entry.getValue()).getNumberValue().isPresent()) {
                         String s = (String) ((Dynamic) entry.getKey()).getStringValue().orElse("");
@@ -90,18 +87,18 @@ public class DataConverterStatistic extends DataFix {
                                 }
                             }
 
-                            Dynamic dynamic1 = dynamic.createString(s1);
-                            Dynamic dynamic2 = (Dynamic) hashmap.computeIfAbsent(dynamic1, (dynamic) -> {
-                                return dynamic1.emptyMap();
+                            Dynamic<?> dynamic1 = dynamic.createString(s1);
+                            Dynamic<?> dynamic2 = (Dynamic) map.computeIfAbsent(dynamic1, (dynamic3) -> {
+                                return dynamic.emptyMap();
                             });
 
-                            hashmap.put(dynamic1, dynamic2.set(s2, (Dynamic) entry.getValue()));
+                            map.put(dynamic1, dynamic2.set(s2, (Dynamic) entry.getValue()));
                         }
                     }
                 }
             }
 
-            return (Typed) ((Optional) type.readTyped(dynamic.emptyMap().set("stats", dynamic.createMap(hashmap))).getSecond()).orElseThrow(() -> {
+            return (Typed) ((Optional) type.readTyped(dynamic.emptyMap().set("stats", dynamic.createMap(map))).getSecond()).orElseThrow(() -> {
                 return new IllegalStateException("Could not parse new stats object.");
             });
         });

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,12 +10,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandDatapack {
 
@@ -41,8 +36,8 @@ public class CommandDatapack {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("enable").then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("name", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.e).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), a(commandcontext, "name", true), (list, resourcepackloader) -> {
-                resourcepackloader.h().a(list, resourcepackloader, (resourcepackloaderx) -> {
-                    return resourcepackloaderx;
+                resourcepackloader.h().a(list, resourcepackloader, (resourcepackloader1) -> {
+                    return resourcepackloader1;
                 }, false);
             });
         })).then(CommandDispatcher.a("after").then(CommandDispatcher.a("existing", (ArgumentType) StringArgumentType.string()).suggests(CommandDatapack.d).executes((commandcontext) -> {
@@ -71,16 +66,16 @@ public class CommandDatapack {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader, CommandDatapack.a commanddatapack_a) throws CommandSyntaxException {
-        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
-        ArrayList arraylist = Lists.newArrayList(resourcepackrepository.d());
+        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.d());
 
-        commanddatapack_a.apply(arraylist, resourcepackloader);
-        resourcepackrepository.a((Collection) arraylist);
+        commanddatapack_a.apply(list, resourcepackloader);
+        resourcepackrepository.a((Collection) list);
         WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
         worlddata.O().clear();
-        resourcepackrepository.d().forEach((resourcepackloader) -> {
-            worlddata.O().add(resourcepackloader.e());
+        resourcepackrepository.d().forEach((resourcepackloader1) -> {
+            worlddata.O().add(resourcepackloader1.e());
         });
         worlddata.N().remove(resourcepackloader.e());
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.enable.success", new Object[] { resourcepackloader.a(true)}), true);
@@ -89,16 +84,16 @@ public class CommandDatapack {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ResourcePackLoader resourcepackloader) {
-        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
-        ArrayList arraylist = Lists.newArrayList(resourcepackrepository.d());
+        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        List<ResourcePackLoader> list = Lists.newArrayList(resourcepackrepository.d());
 
-        arraylist.remove(resourcepackloader);
-        resourcepackrepository.a((Collection) arraylist);
+        list.remove(resourcepackloader);
+        resourcepackrepository.a((Collection) list);
         WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
         worlddata.O().clear();
-        resourcepackrepository.d().forEach((resourcepackloader) -> {
-            worlddata.O().add(resourcepackloader.e());
+        resourcepackrepository.d().forEach((resourcepackloader1) -> {
+            worlddata.O().add(resourcepackloader1.e());
         });
         worlddata.N().add(resourcepackloader.e());
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.disable.success", new Object[] { resourcepackloader.a(true)}), true);
@@ -111,7 +106,7 @@ public class CommandDatapack {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
         if (resourcepackrepository.c().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.available.none", new Object[0]), false);
@@ -125,7 +120,7 @@ public class CommandDatapack {
     }
 
     private static int c(CommandListenerWrapper commandlistenerwrapper) {
-        ResourcePackRepository resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
+        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = commandlistenerwrapper.getServer().getResourcePackRepository();
 
         if (resourcepackrepository.d().isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.list.enabled.none", new Object[0]), false);
@@ -140,7 +135,7 @@ public class CommandDatapack {
 
     private static ResourcePackLoader a(CommandContext<CommandListenerWrapper> commandcontext, String s, boolean flag) throws CommandSyntaxException {
         String s1 = StringArgumentType.getString(commandcontext, s);
-        ResourcePackRepository resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
+        ResourcePackRepository<ResourcePackLoader> resourcepackrepository = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getResourcePackRepository();
         ResourcePackLoader resourcepackloader = resourcepackrepository.a(s1);
 
         if (resourcepackloader == null) {

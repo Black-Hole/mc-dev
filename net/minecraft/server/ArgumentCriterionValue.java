@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> extends ArgumentType<T> {
 
-    static default ArgumentCriterionValue.b a() {
+    static ArgumentCriterionValue.b a() {
         return new ArgumentCriterionValue.b();
     }
 
@@ -25,7 +25,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
     public static class a implements ArgumentCriterionValue<CriterionConditionValue.c> {
 
-        private static final Collection<String> a = Arrays.asList(new String[] { "0..5.2", "0", "-5.4", "-100.76..", "..100"});
+        private static final Collection<String> a = Arrays.asList("0..5.2", "0", "-5.4", "-100.76..", "..100");
 
         public a() {}
 
@@ -49,7 +49,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
     public static class b implements ArgumentCriterionValue<CriterionConditionValue.d> {
 
-        private static final Collection<String> a = Arrays.asList(new String[] { "0..5", "0", "-5", "-100..", "..100"});
+        private static final Collection<String> a = Arrays.asList("0..5", "0", "-5", "-100..", "..100");
 
         public b() {}
 

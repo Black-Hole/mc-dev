@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.function.Consumer;
-
 public class ScoreboardObjective {
 
     private final Scoreboard a;

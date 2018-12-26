@@ -33,8 +33,8 @@ public class ItemDebugStick extends Item {
     private void a(EntityHuman entityhuman, IBlockData iblockdata, GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag, ItemStack itemstack) {
         if (entityhuman.isCreativeAndOp()) {
             Block block = iblockdata.getBlock();
-            BlockStateList blockstatelist = block.getStates();
-            Collection collection = blockstatelist.d();
+            BlockStateList<Block, IBlockData> blockstatelist = block.getStates();
+            Collection<IBlockState<?>> collection = blockstatelist.d();
             String s = IRegistry.BLOCK.getKey(block).toString();
 
             if (collection.isEmpty()) {
@@ -42,7 +42,7 @@ public class ItemDebugStick extends Item {
             } else {
                 NBTTagCompound nbttagcompound = itemstack.a("DebugProperty");
                 String s1 = nbttagcompound.getString(s);
-                IBlockState iblockstate = blockstatelist.a(s1);
+                IBlockState<?> iblockstate = blockstatelist.a(s1);
 
                 if (flag) {
                     if (iblockstate == null) {

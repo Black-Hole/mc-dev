@@ -13,12 +13,11 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import java.lang.reflect.Type;
 import java.util.Iterator;
-import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 
 public class DataConverterSignText extends DataConverterNamedEntity {
 
-    public static final Gson a = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer() {
+    public static final Gson a = (new GsonBuilder()).registerTypeAdapter(IChatBaseComponent.class, new JsonDeserializer<IChatBaseComponent>() {
         public IChatBaseComponent deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             if (jsonelement.isJsonPrimitive()) {
                 return new ChatComponentText(jsonelement.getAsString());
@@ -54,7 +53,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
         Object object = null;
 
         if (!"null".equals(s1) && !StringUtils.isEmpty(s1)) {
-            if ((s1.charAt(0) != 34 || s1.charAt(s1.length() - 1) != 34) && (s1.charAt(0) != 123 || s1.charAt(s1.length() - 1) != 125)) {
+            if ((s1.charAt(0) != '"' || s1.charAt(s1.length() - 1) != '"') && (s1.charAt(0) != '{' || s1.charAt(s1.length() - 1) != '}')) {
                 object = new ChatComponentText(s1);
             } else {
                 try {

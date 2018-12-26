@@ -6,7 +6,6 @@ import com.google.common.collect.Maps;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -69,7 +68,7 @@ public class NBTTagCompound implements NBTBase {
     }
 
     public byte getTypeId() {
-        return (byte) 10;
+        return 10;
     }
 
     public int d() {
@@ -175,7 +174,7 @@ public class NBTTagCompound implements NBTBase {
             ;
         }
 
-        return (byte) 0;
+        return 0;
     }
 
     public short getShort(String s) {
@@ -187,7 +186,7 @@ public class NBTTagCompound implements NBTBase {
             ;
         }
 
-        return (short) 0;
+        return 0;
     }
 
     public int getInt(String s) {
@@ -326,18 +325,18 @@ public class NBTTagCompound implements NBTBase {
 
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder("{");
-        Object object = this.map.keySet();
+        Collection<String> collection = this.map.keySet();
 
         if (NBTTagCompound.f.isDebugEnabled()) {
-            ArrayList arraylist = Lists.newArrayList(this.map.keySet());
+            List<String> list = Lists.newArrayList(this.map.keySet());
 
-            Collections.sort(arraylist);
-            object = arraylist;
+            Collections.sort(list);
+            collection = list;
         }
 
         String s;
 
-        for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); stringbuilder.append(s(s)).append(':').append(this.map.get(s))) {
+        for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); stringbuilder.append(s(s)).append(':').append(this.map.get(s))) {
             s = (String) iterator.next();
             if (stringbuilder.length() != 1) {
                 stringbuilder.append(',');
@@ -460,13 +459,13 @@ public class NBTTagCompound implements NBTBase {
             return new ChatComponentText("{}");
         } else {
             ChatComponentText chatcomponenttext = new ChatComponentText("{");
-            Object object = this.map.keySet();
+            Collection<String> collection = this.map.keySet();
 
             if (NBTTagCompound.f.isDebugEnabled()) {
-                ArrayList arraylist = Lists.newArrayList(this.map.keySet());
+                List<String> list = Lists.newArrayList(this.map.keySet());
 
-                Collections.sort(arraylist);
-                object = arraylist;
+                Collections.sort(list);
+                collection = list;
             }
 
             if (!s.isEmpty()) {
@@ -475,7 +474,7 @@ public class NBTTagCompound implements NBTBase {
 
             IChatBaseComponent ichatbasecomponent;
 
-            for (Iterator iterator = ((Collection) object).iterator(); iterator.hasNext(); chatcomponenttext.addSibling(ichatbasecomponent)) {
+            for (Iterator iterator = ((Collection) collection).iterator(); iterator.hasNext(); chatcomponenttext.addSibling(ichatbasecomponent)) {
                 String s1 = (String) iterator.next();
 
                 ichatbasecomponent = (new ChatComponentText(Strings.repeat(s, i + 1))).addSibling(t(s1)).a(String.valueOf(':')).a(" ").addSibling(((NBTBase) this.map.get(s1)).a(s, i + 1));

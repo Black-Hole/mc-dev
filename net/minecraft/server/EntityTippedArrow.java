@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class EntityTippedArrow extends EntityArrow {
@@ -34,10 +33,10 @@ public class EntityTippedArrow extends EntityArrow {
     public void b(ItemStack itemstack) {
         if (itemstack.getItem() == Items.TIPPED_ARROW) {
             this.potionRegistry = PotionUtil.d(itemstack);
-            List list = PotionUtil.b(itemstack);
+            Collection<MobEffect> collection = PotionUtil.b(itemstack);
 
-            if (!list.isEmpty()) {
-                Iterator iterator = list.iterator();
+            if (!collection.isEmpty()) {
+                Iterator iterator = collection.iterator();
 
                 while (iterator.hasNext()) {
                     MobEffect mobeffect = (MobEffect) iterator.next();

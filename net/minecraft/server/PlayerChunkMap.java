@@ -6,9 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -45,9 +43,9 @@ public class PlayerChunkMap {
     }
 
     public Iterator<Chunk> b() {
-        final Iterator iterator = this.i.iterator();
+        final Iterator<PlayerChunk> iterator = this.i.iterator();
 
-        return new AbstractIterator() {
+        return new AbstractIterator<Chunk>() {
             protected Chunk computeNext() {
                 while (true) {
                     if (iterator.hasNext()) {
@@ -103,15 +101,15 @@ public class PlayerChunkMap {
 
         if (this.l && i % 4L == 0L) {
             this.l = false;
-            Collections.sort(this.h, (playerchunk, playerchunk1) -> {
-                return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
+            Collections.sort(this.h, (playerchunk1, playerchunk2) -> {
+                return ComparisonChain.start().compare(playerchunk1.g(), playerchunk2.g()).result();
             });
         }
 
         if (this.m && i % 4L == 2L) {
             this.m = false;
-            Collections.sort(this.g, (playerchunk, playerchunk1) -> {
-                return ComparisonChain.start().compare(playerchunk.g(), playerchunk1.g()).result();
+            Collections.sort(this.g, (playerchunk1, playerchunk2) -> {
+                return ComparisonChain.start().compare(playerchunk1.g(), playerchunk2.g()).result();
             });
         }
 
@@ -300,8 +298,8 @@ public class PlayerChunkMap {
         i = MathHelper.clamp(i, 3, 32);
         if (i != this.j) {
             int j = i - this.j;
-            ArrayList arraylist = Lists.newArrayList(this.managedPlayers);
-            Iterator iterator = arraylist.iterator();
+            List<EntityPlayer> list = Lists.newArrayList(this.managedPlayers);
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();

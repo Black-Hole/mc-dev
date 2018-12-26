@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 public class ParticleType extends Particle<ParticleType> implements ParticleParam {
 
-    private static final ParticleParam.a<ParticleType> a = new ParticleParam.a() {
+    private static final ParticleParam.a<ParticleType> a = new ParticleParam.a<ParticleType>() {
         public ParticleType b(Particle<ParticleType> particle, StringReader stringreader) throws CommandSyntaxException {
             return (ParticleType) particle;
         }

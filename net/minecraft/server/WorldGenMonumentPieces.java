@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -1200,27 +1199,27 @@ public class WorldGenMonumentPieces {
                 this.n = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
             }
 
-            List list = this.a(random);
+            List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> list = this.a(random);
 
             this.p.d = true;
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(enumdirection1, this.p));
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.q, random));
-            ArrayList arraylist = Lists.newArrayList();
+            List<WorldGenMonumentPieces.IWorldGenMonumentPieceSelector> list1 = Lists.newArrayList();
 
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector4(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector3(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector7(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector5(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector1(null));
-            arraylist.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector2(null));
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector4());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector3());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector7());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector5());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector1());
+            list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector2());
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = (WorldGenMonumentPieces.WorldGenMonumentStateTracker) iterator.next();
 
                 if (!worldgenmonumentpieces_worldgenmonumentstatetracker.d && !worldgenmonumentpieces_worldgenmonumentstatetracker.b()) {
-                    Iterator iterator1 = arraylist.iterator();
+                    Iterator iterator1 = list1.iterator();
 
                     while (iterator1.hasNext()) {
                         WorldGenMonumentPieces.IWorldGenMonumentPieceSelector worldgenmonumentpieces_iworldgenmonumentpieceselector = (WorldGenMonumentPieces.IWorldGenMonumentPieceSelector) iterator1.next();
@@ -1346,7 +1345,7 @@ public class WorldGenMonumentPieces {
             this.q.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
             this.q.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
             this.q.b[EnumDirection.EAST.a()].b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
-            ArrayList arraylist = Lists.newArrayList();
+            List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> list = Lists.newArrayList();
             WorldGenMonumentPieces.WorldGenMonumentStateTracker[] aworldgenmonumentpieces_worldgenmonumentstatetracker1 = aworldgenmonumentpieces_worldgenmonumentstatetracker;
 
             l = aworldgenmonumentpieces_worldgenmonumentstatetracker.length;
@@ -1356,14 +1355,14 @@ public class WorldGenMonumentPieces {
 
                 if (worldgenmonumentpieces_worldgenmonumentstatetracker3 != null) {
                     worldgenmonumentpieces_worldgenmonumentstatetracker3.a();
-                    arraylist.add(worldgenmonumentpieces_worldgenmonumentstatetracker3);
+                    list.add(worldgenmonumentpieces_worldgenmonumentstatetracker3);
                 }
             }
 
             worldgenmonumentpieces_worldgenmonumentstatetracker.a();
-            Collections.shuffle(arraylist, random);
+            Collections.shuffle(list, random);
             int k2 = 1;
-            Iterator iterator = arraylist.iterator();
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker4 = (WorldGenMonumentPieces.WorldGenMonumentStateTracker) iterator.next();
@@ -1388,10 +1387,10 @@ public class WorldGenMonumentPieces {
                 }
             }
 
-            arraylist.add(worldgenmonumentpieces_worldgenmonumentstatetracker);
-            arraylist.add(worldgenmonumentpieces_worldgenmonumentstatetracker1);
-            arraylist.add(worldgenmonumentpieces_worldgenmonumentstatetracker2);
-            return arraylist;
+            list.add(worldgenmonumentpieces_worldgenmonumentstatetracker);
+            list.add(worldgenmonumentpieces_worldgenmonumentstatetracker1);
+            list.add(worldgenmonumentpieces_worldgenmonumentstatetracker2);
+            return list;
         }
 
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {

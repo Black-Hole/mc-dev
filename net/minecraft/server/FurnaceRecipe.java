@@ -34,7 +34,7 @@ public class FurnaceRecipe implements IRecipe {
     }
 
     public NonNullList<RecipeItemStack> e() {
-        NonNullList nonnulllist = NonNullList.a();
+        NonNullList<RecipeItemStack> nonnulllist = NonNullList.a();
 
         nonnulllist.add(this.ingredient);
         return nonnulllist;

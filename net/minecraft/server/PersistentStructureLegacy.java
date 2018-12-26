@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,7 +85,7 @@ public abstract class PersistentStructureLegacy {
 
         for (int j = 0; j < i; ++j) {
             String s = astring[j];
-            StructureGenerator structuregenerator = (StructureGenerator) WorldGenerator.aF.get(s.toLowerCase(Locale.ROOT));
+            StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.aF.get(s.toLowerCase(Locale.ROOT));
 
             if (!nbttagcompound3.hasKeyOfType(s, 12) && structuregenerator != null) {
                 int k = structuregenerator.b();
@@ -147,7 +145,7 @@ public abstract class PersistentStructureLegacy {
 
         for (int j = 0; j < i; ++j) {
             String s = astring[j];
-            Long2ObjectMap long2objectmap = (Long2ObjectMap) this.e.get(s);
+            Long2ObjectMap<NBTTagCompound> long2objectmap = (Long2ObjectMap) this.e.get(s);
 
             if (long2objectmap != null) {
                 long k = chunkcoordintpair.a();
@@ -205,7 +203,7 @@ public abstract class PersistentStructureLegacy {
                     }
 
                     s2 = nbttagcompound1.getString("id");
-                    ((Long2ObjectMap) this.e.computeIfAbsent(s2, (s) -> {
+                    ((Long2ObjectMap) this.e.computeIfAbsent(s2, (s4) -> {
                         return new Long2ObjectOpenHashMap();
                     })).put(k, nbttagcompound1);
                 }
@@ -244,7 +242,7 @@ public abstract class PersistentStructureLegacy {
         } else if (dimensionmanager == DimensionManager.THE_END) {
             return new PersistentStructureLegacy.c(persistentcollection);
         } else {
-            throw new RuntimeException(String.format("Unknown dimension type : %s", new Object[] { dimensionmanager}));
+            throw new RuntimeException(String.format("Unknown dimension type : %s", dimensionmanager));
         }
     }
 

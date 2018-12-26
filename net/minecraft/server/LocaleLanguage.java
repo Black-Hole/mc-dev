@@ -31,7 +31,7 @@ public class LocaleLanguage {
             Iterator iterator = jsonobject.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, JsonElement> entry = (Entry) iterator.next();
                 String s = LocaleLanguage.b.matcher(ChatDeserializer.a((JsonElement) entry.getValue(), (String) entry.getKey())).replaceAll("%$1s");
 
                 this.d.put(entry.getKey(), s);

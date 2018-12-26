@@ -13,10 +13,10 @@ public abstract class NBTList<T extends NBTBase> extends AbstractList<T> impleme
     }
 
     public T set(int i, T t0) {
-        NBTBase nbtbase = this.get(i);
+        T t1 = this.get(i);
 
         this.a(i, t0);
-        return nbtbase;
+        return t1;
     }
 
     public abstract T c(int i);

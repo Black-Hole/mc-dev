@@ -40,7 +40,7 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockEnderChest.FACING, blockactioncontext.f().opposite())).set(BlockEnderChest.b, fluid.c() == FluidTypes.c);
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockEnderChest.FACING, blockactioncontext.f().opposite())).set(BlockEnderChest.b, fluid.c() == FluidTypes.WATER);
     }
 
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
@@ -83,28 +83,28 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
         return EnumBlockFaceShape.UNDEFINED;
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Boolean) iblockdata.get(BlockEnderChest.b)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockEnderChest.b, false), 3);
-            return FluidTypes.c;
+            return FluidTypes.WATER;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockEnderChest.b) ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockEnderChest.b) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !(Boolean) iblockdata.get(BlockEnderChest.b) && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockEnderChest.b) && fluidtype == FluidTypes.WATER;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!(Boolean) iblockdata.get(BlockEnderChest.b) && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockEnderChest.b) && fluid.c() == FluidTypes.WATER) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockEnderChest.b, true), 3);
-                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
 
             return true;
@@ -115,7 +115,7 @@ public class BlockEnderChest extends BlockTileEntity implements IFluidSource, IF
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockEnderChest.b)) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

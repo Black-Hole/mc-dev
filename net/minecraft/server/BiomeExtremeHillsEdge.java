@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeExtremeHillsEdge extends BiomeBase {
 
     protected BiomeExtremeHillsEdge() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeExtremeHillsEdge.au, BiomeExtremeHillsEdge.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.EXTREME_HILLS).a(0.8F).b(0.3F).c(0.2F).d(0.3F).a(4159204).b(329011).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeExtremeHillsEdge.au, BiomeExtremeHillsEdge.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.EXTREME_HILLS).a(0.8F).b(0.3F).c(0.2F).d(0.3F).a(4159204).b(329011).a((String) null));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeExtremeHillsEdge.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -35,8 +35,8 @@ public final class BiomeExtremeHillsEdge extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeExtremeHillsEdge.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeExtremeHillsEdge.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeExtremeHillsEdge.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeExtremeHillsEdge.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeExtremeHillsEdge.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeExtremeHillsEdge.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeExtremeHillsEdge.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.as, new WorldGenFeatureReplaceBlockConfiguration(BlockPredicate.a(Blocks.STONE), Blocks.EMERALD_ORE.getBlockData()), BiomeExtremeHillsEdge.I, WorldGenFeatureDecoratorConfiguration.e));
         this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.INFESTED_STONE.getBlockData(), 9), BiomeExtremeHillsEdge.t, new WorldGenFeatureChanceDecoratorCountConfiguration(7, 0, 0, 64)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeExtremeHillsEdge.n, WorldGenFeatureDecoratorConfiguration.e));

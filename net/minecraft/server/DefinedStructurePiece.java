@@ -42,11 +42,11 @@ public abstract class DefinedStructurePiece extends StructurePiece {
     public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         this.b.a(structureboundingbox);
         if (this.a.a(generatoraccess, this.c, this.b, 2)) {
-            Map map = this.a.a(this.c, this.b);
+            Map<BlockPosition, String> map = this.a.a(this.c, this.b);
             Iterator iterator = map.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<BlockPosition, String> entry = (Entry) iterator.next();
                 String s = (String) entry.getValue();
 
                 this.a(s, (BlockPosition) entry.getKey(), generatoraccess, random, structureboundingbox);

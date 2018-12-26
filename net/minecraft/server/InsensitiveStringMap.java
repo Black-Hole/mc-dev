@@ -46,7 +46,7 @@ public class InsensitiveStringMap<V> implements Map<String, V> {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<? extends String, ? extends V> entry = (Entry) iterator.next();
 
             this.put((String) entry.getKey(), entry.getValue());
         }

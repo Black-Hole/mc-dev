@@ -9,9 +9,9 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -30,7 +30,7 @@ public class LootSelector {
     }
 
     protected void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<LootSelectorEntry> list = Lists.newArrayList();
         int i = 0;
         LootSelectorEntry[] alootselectorentry = this.a;
         int j = alootselectorentry.length;
@@ -42,15 +42,15 @@ public class LootSelector {
                 int l = lootselectorentry.a(loottableinfo.g());
 
                 if (l > 0) {
-                    arraylist.add(lootselectorentry);
+                    list.add(lootselectorentry);
                     i += l;
                 }
             }
         }
 
-        if (i != 0 && !arraylist.isEmpty()) {
+        if (i != 0 && !list.isEmpty()) {
             int i1 = random.nextInt(i);
-            Iterator iterator = arraylist.iterator();
+            Iterator iterator = list.iterator();
 
             LootSelectorEntry lootselectorentry1;
 

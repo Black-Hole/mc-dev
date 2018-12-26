@@ -74,7 +74,7 @@ public class RecipeBookClone extends IRecipeComplex {
     }
 
     public NonNullList<ItemStack> b(IInventory iinventory) {
-        NonNullList nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
+        NonNullList<ItemStack> nonnulllist = NonNullList.a(iinventory.getSize(), ItemStack.a);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack = iinventory.getItem(i);

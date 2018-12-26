@@ -4,8 +4,6 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class ProtoChunkExtension extends ProtoChunk {
@@ -142,31 +140,15 @@ public class ProtoChunkExtension extends ProtoChunk {
     }
 
     public ProtoChunkTickList<Block> k() {
-        Predicate predicate = (block) -> {
+        return new ProtoChunkTickList<>((block) -> {
             return block.getBlockData().isAir();
-        };
-        IRegistry iregistry = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        Function function = iregistry::getKey;
-        IRegistry iregistry1 = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        return new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, this.getPos());
+        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::getOrDefault, this.getPos());
     }
 
     public ProtoChunkTickList<FluidType> l() {
-        Predicate predicate = (fluidtype) -> {
-            return fluidtype == FluidTypes.a;
-        };
-        IRegistry iregistry = IRegistry.FLUID;
-
-        IRegistry.FLUID.getClass();
-        Function function = iregistry::getKey;
-        IRegistry iregistry1 = IRegistry.FLUID;
-
-        IRegistry.FLUID.getClass();
-        return new ProtoChunkTickList(predicate, function, iregistry1::getOrDefault, this.getPos());
+        return new ProtoChunkTickList<>((fluidtype) -> {
+            return fluidtype == FluidTypes.EMPTY;
+        }, IRegistry.FLUID::getKey, IRegistry.FLUID::getOrDefault, this.getPos());
     }
 
     public BitSet a(WorldGenStage.Features worldgenstage_features) {

@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public enum ChunkStatus implements SchedulerTask<ChunkCoordIntPair, ChunkStatus> {

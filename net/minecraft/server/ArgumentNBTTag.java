@@ -7,11 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Function;
 
 public class ArgumentNBTTag implements ArgumentType<NBTTagCompound> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "{}", "{foo=bar}"});
+    private static final Collection<String> b = Arrays.asList("{}", "{foo=bar}");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.nbt.invalid", new Object[] { object});
     });

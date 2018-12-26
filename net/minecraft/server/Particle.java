@@ -82,6 +82,6 @@ public class Particle<T extends ParticleParam> {
     }
 
     private static <T extends ParticleParam> void a(String s, boolean flag, ParticleParam.a<T> particleparam_a) {
-        IRegistry.PARTICLE_TYPE.a(new MinecraftKey(s), (Object) (new Particle(new MinecraftKey(s), flag, particleparam_a)));
+        IRegistry.PARTICLE_TYPE.a(new MinecraftKey(s), (Object) (new Particle<>(new MinecraftKey(s), flag, particleparam_a)));
     }
 }

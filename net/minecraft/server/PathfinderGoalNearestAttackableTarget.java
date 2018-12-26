@@ -38,7 +38,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
         if (this.i > 0 && this.e.getRandom().nextInt(this.i) != 0) {
             return false;
         } else if (this.a != EntityHuman.class && this.a != EntityPlayer.class) {
-            List list = this.e.world.a(this.a, this.a(this.i()), this.c);
+            List<T> list = this.e.world.a(this.a, this.a(this.i()), this.c);
 
             if (list.isEmpty()) {
                 return false;
@@ -48,7 +48,7 @@ public class PathfinderGoalNearestAttackableTarget<T extends EntityLiving> exten
                 return true;
             }
         } else {
-            this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function() {
+            this.d = this.e.world.a(this.e.locX, this.e.locY + (double) this.e.getHeadHeight(), this.e.locZ, this.i(), this.i(), new Function<EntityHuman, Double>() {
                 @Nullable
                 public Double apply(@Nullable EntityHuman entityhuman) {
                     ItemStack itemstack = entityhuman.getEquipment(EnumItemSlot.HEAD);

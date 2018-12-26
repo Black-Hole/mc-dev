@@ -6,11 +6,11 @@ import java.util.Set;
 public class FluidTypes {
 
     private static final Set<FluidType> f;
-    public static final FluidType a;
-    public static final FluidTypeFlowing b;
-    public static final FluidTypeFlowing c;
-    public static final FluidTypeFlowing d;
-    public static final FluidTypeFlowing e;
+    public static final FluidType EMPTY;
+    public static final FluidTypeFlowing FLOWING_WATER;
+    public static final FluidTypeFlowing WATER;
+    public static final FluidTypeFlowing FLOWING_LAVA;
+    public static final FluidTypeFlowing LAVA;
 
     private static FluidType a(String s) {
         FluidType fluidtype = (FluidType) IRegistry.FLUID.getOrDefault(new MinecraftKey(s));
@@ -27,11 +27,11 @@ public class FluidTypes {
             throw new RuntimeException("Accessed Fluids before Bootstrap!");
         } else {
             f = Sets.newHashSet(new FluidType[] { (FluidType) null});
-            a = a("empty");
-            b = (FluidTypeFlowing) a("flowing_water");
-            c = (FluidTypeFlowing) a("water");
-            d = (FluidTypeFlowing) a("flowing_lava");
-            e = (FluidTypeFlowing) a("lava");
+            EMPTY = a("empty");
+            FLOWING_WATER = (FluidTypeFlowing) a("flowing_water");
+            WATER = (FluidTypeFlowing) a("water");
+            FLOWING_LAVA = (FluidTypeFlowing) a("flowing_lava");
+            LAVA = (FluidTypeFlowing) a("lava");
             FluidTypes.f.clear();
         }
     }

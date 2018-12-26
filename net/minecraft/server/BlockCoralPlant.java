@@ -29,7 +29,7 @@ public class BlockCoralPlant extends BlockCoralBase {
         } else {
             this.a(iblockdata, generatoraccess, blockposition);
             if ((Boolean) iblockdata.get(BlockCoralPlant.b)) {
-                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
 
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

@@ -9,15 +9,12 @@ import com.google.gson.JsonSyntaxException;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.function.Function;
-import java.util.function.IntFunction;
+import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
@@ -130,19 +127,19 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
 
     public static RecipeItemStack a(IMaterial... aimaterial) {
         return a(Arrays.stream(aimaterial).map((imaterial) -> {
-            return new RecipeItemStack.StackProvider(new ItemStack(imaterial), null);
+            return new RecipeItemStack.StackProvider(new ItemStack(imaterial));
         }));
     }
 
     public static RecipeItemStack a(Tag<Item> tag) {
-        return a(Stream.of(new RecipeItemStack.b(tag, null)));
+        return a(Stream.of(new RecipeItemStack.b(tag)));
     }
 
     public static RecipeItemStack b(PacketDataSerializer packetdataserializer) {
         int i = packetdataserializer.g();
 
         return a(Stream.generate(() -> {
-            return new RecipeItemStack.StackProvider(packetdataserializer.k(), null);
+            return new RecipeItemStack.StackProvider(packetdataserializer.k());
         }).limit((long) i));
     }
 
@@ -156,8 +153,8 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 if (jsonarray.size() == 0) {
                     throw new JsonSyntaxException("Item array cannot be empty, at least one item must be defined");
                 } else {
-                    return a(StreamSupport.stream(jsonarray.spliterator(), false).map((jsonelement) -> {
-                        return a(ChatDeserializer.m(jsonelement, "item"));
+                    return a(StreamSupport.stream(jsonarray.spliterator(), false).map((jsonelement1) -> {
+                        return a(ChatDeserializer.m(jsonelement1, "item"));
                     }));
                 }
             } else {
@@ -181,16 +178,16 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
                 if (item == null) {
                     throw new JsonSyntaxException("Unknown item '" + minecraftkey + "'");
                 } else {
-                    return new RecipeItemStack.StackProvider(new ItemStack(item), null);
+                    return new RecipeItemStack.StackProvider(new ItemStack(item));
                 }
             } else if (jsonobject.has("tag")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
-                Tag tag = TagsItem.a().a(minecraftkey);
+                Tag<Item> tag = TagsItem.a().a(minecraftkey);
 
                 if (tag == null) {
                     throw new JsonSyntaxException("Unknown item tag '" + minecraftkey + "'");
                 } else {
-                    return new RecipeItemStack.b(tag, null);
+                    return new RecipeItemStack.b(tag);
                 }
             } else {
                 throw new JsonParseException("An ingredient entry needs either a tag or an item");
@@ -207,16 +204,16 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
         }
 
         public Collection<ItemStack> a() {
-            ArrayList arraylist = Lists.newArrayList();
+            List<ItemStack> list = Lists.newArrayList();
             Iterator iterator = this.a.a().iterator();
 
             while (iterator.hasNext()) {
                 Item item = (Item) iterator.next();
 
-                arraylist.add(new ItemStack(item));
+                list.add(new ItemStack(item));
             }
 
-            return arraylist;
+            return list;
         }
 
         public JsonObject b() {

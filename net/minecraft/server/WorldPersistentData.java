@@ -107,7 +107,7 @@ public class WorldPersistentData {
                     ObjectIterator objectiterator = this.d.object2IntEntrySet().iterator();
 
                     while (objectiterator.hasNext()) {
-                        Entry entry = (Entry) objectiterator.next();
+                        Entry<String> entry = (Entry) objectiterator.next();
 
                         nbttagcompound.setInt((String) entry.getKey(), entry.getIntValue());
                     }

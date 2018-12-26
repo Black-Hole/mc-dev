@@ -86,7 +86,7 @@ public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
     private VillageDoor a(Village village) {
         VillageDoor villagedoor = null;
         int i = Integer.MAX_VALUE;
-        List list = village.f();
+        List<VillageDoor> list = village.f();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

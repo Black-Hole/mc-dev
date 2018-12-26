@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -68,7 +67,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public boolean addPlayerToTeam(String s, ScoreboardTeam scoreboardteam) {
         if (super.addPlayerToTeam(s, scoreboardteam)) {
-            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 3));
+            this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(s), 3));
             this.b();
             return true;
         } else {
@@ -78,7 +77,7 @@ public class ScoreboardServer extends Scoreboard {
 
     public void removePlayerFromTeam(String s, ScoreboardTeam scoreboardteam) {
         super.removePlayerFromTeam(s, scoreboardteam);
-        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(new String[] { s}), 4));
+        this.a.getPlayerList().sendAll(new PacketPlayOutScoreboardTeam(scoreboardteam, Arrays.asList(s), 4));
         this.b();
     }
 
@@ -141,13 +140,13 @@ public class ScoreboardServer extends Scoreboard {
     }
 
     public List<Packet<?>> getScoreboardScorePacketsForObjective(ScoreboardObjective scoreboardobjective) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Packet<?>> list = Lists.newArrayList();
 
-        arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 0));
+        list.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 0));
 
         for (int i = 0; i < 19; ++i) {
             if (this.getObjectiveForSlot(i) == scoreboardobjective) {
-                arraylist.add(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
+                list.add(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
             }
         }
 
@@ -156,14 +155,14 @@ public class ScoreboardServer extends Scoreboard {
         while (iterator.hasNext()) {
             ScoreboardScore scoreboardscore = (ScoreboardScore) iterator.next();
 
-            arraylist.add(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
+            list.add(new PacketPlayOutScoreboardScore(ScoreboardServer.Action.CHANGE, scoreboardscore.getObjective().getName(), scoreboardscore.getPlayerName(), scoreboardscore.getScore()));
         }
 
-        return arraylist;
+        return list;
     }
 
     public void e(ScoreboardObjective scoreboardobjective) {
-        List list = this.getScoreboardScorePacketsForObjective(scoreboardobjective);
+        List<Packet<?>> list = this.getScoreboardScorePacketsForObjective(scoreboardobjective);
         Iterator iterator = this.a.getPlayerList().v().iterator();
 
         while (iterator.hasNext()) {
@@ -171,7 +170,7 @@ public class ScoreboardServer extends Scoreboard {
             Iterator iterator1 = list.iterator();
 
             while (iterator1.hasNext()) {
-                Packet packet = (Packet) iterator1.next();
+                Packet<?> packet = (Packet) iterator1.next();
 
                 entityplayer.playerConnection.sendPacket(packet);
             }
@@ -181,21 +180,21 @@ public class ScoreboardServer extends Scoreboard {
     }
 
     public List<Packet<?>> f(ScoreboardObjective scoreboardobjective) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Packet<?>> list = Lists.newArrayList();
 
-        arraylist.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 1));
+        list.add(new PacketPlayOutScoreboardObjective(scoreboardobjective, 1));
 
         for (int i = 0; i < 19; ++i) {
             if (this.getObjectiveForSlot(i) == scoreboardobjective) {
-                arraylist.add(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
+                list.add(new PacketPlayOutScoreboardDisplayObjective(i, scoreboardobjective));
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public void g(ScoreboardObjective scoreboardobjective) {
-        List list = this.f(scoreboardobjective);
+        List<Packet<?>> list = this.f(scoreboardobjective);
         Iterator iterator = this.a.getPlayerList().v().iterator();
 
         while (iterator.hasNext()) {
@@ -203,7 +202,7 @@ public class ScoreboardServer extends Scoreboard {
             Iterator iterator1 = list.iterator();
 
             while (iterator1.hasNext()) {
-                Packet packet = (Packet) iterator1.next();
+                Packet<?> packet = (Packet) iterator1.next();
 
                 entityplayer.playerConnection.sendPacket(packet);
             }

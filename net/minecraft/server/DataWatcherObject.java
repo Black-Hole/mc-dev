@@ -22,7 +22,7 @@ public class DataWatcherObject<T> {
         if (this == object) {
             return true;
         } else if (object != null && this.getClass() == object.getClass()) {
-            DataWatcherObject datawatcherobject = (DataWatcherObject) object;
+            DataWatcherObject<?> datawatcherobject = (DataWatcherObject) object;
 
             return this.a == datawatcherobject.a;
         } else {

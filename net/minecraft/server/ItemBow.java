@@ -122,10 +122,10 @@ public class ItemBow extends Item {
         boolean flag = !this.a(entityhuman).isEmpty();
 
         if (!entityhuman.abilities.canInstantlyBuild && !flag) {
-            return flag ? new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack) : new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return flag ? new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack) : new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         } else {
             entityhuman.c(enumhand);
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         }
     }
 

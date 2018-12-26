@@ -8,7 +8,6 @@ import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
-import java.util.function.Function;
 
 public abstract class DataConverterEntityName extends DataFix {
 
@@ -20,18 +19,18 @@ public abstract class DataConverterEntityName extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
 
         return this.fixTypeEverywhere(this.a, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {
                 String s = (String) pair.getFirst();
-                Type type = (Type) taggedchoicetype.types().get(s);
-                Pair pair1 = this.a(s, this.a(pair.getSecond(), dynamicops, type));
-                Type type1 = (Type) taggedchoicetype1.types().get(pair1.getFirst());
+                Type<?> type = (Type) taggedchoicetype.types().get(s);
+                Pair<String, Typed<?>> pair1 = this.a(s, this.a(pair.getSecond(), dynamicops, type));
+                Type<?> type1 = (Type) taggedchoicetype1.types().get(pair1.getFirst());
 
                 if (!type1.equals(((Typed) pair1.getSecond()).getType(), true, true)) {
-                    throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", new Object[] { type1, ((Typed) pair1.getSecond()).getType()}));
+                    throw new IllegalStateException(String.format("Dynamic type check failed: %s not equal to %s", type1, ((Typed) pair1.getSecond()).getType()));
                 } else {
                     return Pair.of(pair1.getFirst(), ((Typed) pair1.getSecond()).getValue());
                 }

@@ -56,12 +56,12 @@ public class BlockFence extends BlockTall {
         IBlockData iblockdata2 = world.getType(blockposition3);
         IBlockData iblockdata3 = world.getType(blockposition4);
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) super.getPlacedState(blockactioncontext).set(BlockFence.NORTH, this.a(iblockdata, iblockdata.c(world, blockposition1, EnumDirection.SOUTH)))).set(BlockFence.EAST, this.a(iblockdata1, iblockdata1.c(world, blockposition2, EnumDirection.WEST)))).set(BlockFence.SOUTH, this.a(iblockdata2, iblockdata2.c(world, blockposition3, EnumDirection.NORTH)))).set(BlockFence.WEST, this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.EAST)))).set(BlockFence.p, fluid.c() == FluidTypes.c);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) super.getPlacedState(blockactioncontext).set(BlockFence.NORTH, this.a(iblockdata, iblockdata.c(world, blockposition1, EnumDirection.SOUTH)))).set(BlockFence.EAST, this.a(iblockdata1, iblockdata1.c(world, blockposition2, EnumDirection.WEST)))).set(BlockFence.SOUTH, this.a(iblockdata2, iblockdata2.c(world, blockposition3, EnumDirection.NORTH)))).set(BlockFence.WEST, this.a(iblockdata3, iblockdata3.c(world, blockposition4, EnumDirection.EAST)))).set(BlockFence.p, fluid.c() == FluidTypes.WATER);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockFence.p)) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
         return enumdirection.k().d() == EnumDirection.EnumDirectionLimit.HORIZONTAL ? (IBlockData) iblockdata.set((IBlockState) BlockFence.q.get(enumdirection), this.a(iblockdata1, iblockdata1.c(generatoraccess, blockposition1, enumdirection.opposite()))) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

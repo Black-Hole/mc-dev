@@ -11,7 +11,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterShulkerBoxItem extends DataFix {
 
@@ -22,24 +21,24 @@ public class DataConverterShulkerBoxItem extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = type.findField("tag");
-        OpticFinder opticfinder2 = opticfinder1.type().findField("BlockEntityTag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<?> opticfinder1 = type.findField("tag");
+        OpticFinder<?> opticfinder2 = opticfinder1.type().findField("BlockEntityTag");
 
         return this.fixTypeEverywhereTyped("ItemShulkerBoxColorFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:shulker_box")) {
-                Optional optional1 = typed.getOptionalTyped(opticfinder1);
+                Optional<? extends Typed<?>> optional1 = typed.getOptionalTyped(opticfinder1);
 
                 if (optional1.isPresent()) {
-                    Typed typed1 = (Typed) optional1.get();
-                    Optional optional2 = typed1.getOptionalTyped(opticfinder2);
+                    Typed<?> typed1 = (Typed) optional1.get();
+                    Optional<? extends Typed<?>> optional2 = typed1.getOptionalTyped(opticfinder2);
 
                     if (optional2.isPresent()) {
-                        Typed typed2 = (Typed) optional2.get();
-                        Dynamic dynamic = (Dynamic) typed2.get(DSL.remainderFinder());
+                        Typed<?> typed2 = (Typed) optional2.get();
+                        Dynamic<?> dynamic = (Dynamic) typed2.get(DSL.remainderFinder());
                         int i = dynamic.getInt("Color");
 
                         dynamic.remove("Color");

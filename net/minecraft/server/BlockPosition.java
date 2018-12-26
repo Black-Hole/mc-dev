@@ -149,7 +149,7 @@ public class BlockPosition extends BaseBlockPosition {
 
     public static Iterable<BlockPosition> a(int i, int j, int k, int l, int i1, int j1) {
         return () -> {
-            return new AbstractIterator() {
+            return new AbstractIterator<BlockPosition>() {
                 private boolean g = true;
                 private int h;
                 private int i;
@@ -193,7 +193,7 @@ public class BlockPosition extends BaseBlockPosition {
 
     public static Iterable<BlockPosition.MutableBlockPosition> b(int i, int j, int k, int l, int i1, int j1) {
         return () -> {
-            return new AbstractIterator() {
+            return new AbstractIterator<BlockPosition.MutableBlockPosition>() {
                 private BlockPosition.MutableBlockPosition g;
 
                 protected BlockPosition.MutableBlockPosition computeNext() {
@@ -240,8 +240,6 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         public static BlockPosition.b e(int i, int j, int k) {
-            List list = BlockPosition.b.g;
-
             synchronized (BlockPosition.b.g) {
                 if (!BlockPosition.b.g.isEmpty()) {
                     BlockPosition.b blockposition_b = (BlockPosition.b) BlockPosition.b.g.remove(BlockPosition.b.g.size() - 1);
@@ -282,8 +280,6 @@ public class BlockPosition extends BaseBlockPosition {
         }
 
         public void close() {
-            List list = BlockPosition.b.g;
-
             synchronized (BlockPosition.b.g) {
                 if (BlockPosition.b.g.size() < 100) {
                     BlockPosition.b.g.add(this);

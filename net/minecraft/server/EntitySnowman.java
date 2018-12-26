@@ -16,7 +16,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
         this.goalSelector.a(2, new PathfinderGoalRandomStrollLand(this, 1.0D, 1.0000001E-5F));
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(4, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityInsentient.class, 10, true, false, IMonster.d));
+        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityInsentient.class, 10, true, false, IMonster.d));
     }
 
     protected void initAttributes() {
@@ -54,7 +54,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
                 this.damageEntity(DamageSource.DROWN, 1.0F);
             }
 
-            if (this.world.getBiome(new BlockPosition(i, 0, k)).c(new BlockPosition(i, j, k)) > 1.0F) {
+            if (this.world.getBiome(new BlockPosition(i, 0, k)).getAdjustedTemperature(new BlockPosition(i, j, k)) > 1.0F) {
                 this.damageEntity(DamageSource.BURN, 1.0F);
             }
 
@@ -70,7 +70,7 @@ public class EntitySnowman extends EntityGolem implements IRangedEntity {
                 k = MathHelper.floor(this.locZ + (double) ((float) (l / 2 % 2 * 2 - 1) * 0.25F));
                 BlockPosition blockposition = new BlockPosition(i, j, k);
 
-                if (this.world.getType(blockposition).isAir() && this.world.getBiome(blockposition).c(blockposition) < 0.8F && iblockdata.canPlace(this.world, blockposition)) {
+                if (this.world.getType(blockposition).isAir() && this.world.getBiome(blockposition).getAdjustedTemperature(blockposition) < 0.8F && iblockdata.canPlace(this.world, blockposition)) {
                     this.world.setTypeUpdate(blockposition, iblockdata);
                 }
             }

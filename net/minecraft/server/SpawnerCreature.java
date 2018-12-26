@@ -222,7 +222,7 @@ public final class SpawnerCreature {
     }
 
     public static void a(GeneratorAccess generatoraccess, BiomeBase biomebase, int i, int j, Random random) {
-        List list = biomebase.getMobs(EnumCreatureType.CREATURE);
+        List<BiomeBase.BiomeMeta> list = biomebase.getMobs(EnumCreatureType.CREATURE);
 
         if (!list.isEmpty()) {
             int k = i << 4;

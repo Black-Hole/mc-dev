@@ -9,7 +9,7 @@ public class ContainerPlayer extends ContainerRecipeBook {
     public boolean g;
     private final EntityHuman owner;
 
-    public ContainerPlayer(final PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
+    public ContainerPlayer(PlayerInventory playerinventory, boolean flag, EntityHuman entityhuman) {
         this.g = flag;
         this.owner = entityhuman;
         this.a((Slot) (new SlotResult(playerinventory.player, this.craftInventory, this.resultInventory, 0, 154, 28)));
@@ -35,10 +35,10 @@ public class ContainerPlayer extends ContainerRecipeBook {
                     return enumitemslot == EntityInsentient.e(itemstack);
                 }
 
-                public boolean isAllowed(EntityHuman entityhuman) {
+                public boolean isAllowed(EntityHuman entityhuman1) {
                     ItemStack itemstack = this.getItem();
 
-                    return !itemstack.isEmpty() && !entityhuman.u() && EnchantmentManager.d(itemstack) ? false : super.isAllowed(entityhuman);
+                    return !itemstack.isEmpty() && !entityhuman1.u() && EnchantmentManager.d(itemstack) ? false : super.isAllowed(entityhuman1);
                 }
             });
         }

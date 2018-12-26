@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,7 +90,7 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
         }
 
         public void a(EntityPlayer entityplayer, ItemStack itemstack, EntityFishingHook entityfishinghook, Collection<ItemStack> collection) {
-            ArrayList arraylist = null;
+            List<CriterionTrigger.a<CriterionTriggerFishingRodHooked.b>> list = null;
             Iterator iterator = this.b.iterator();
 
             CriterionTrigger.a criteriontrigger_a;
@@ -97,16 +98,16 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 if (((CriterionTriggerFishingRodHooked.b) criteriontrigger_a.a()).a(entityplayer, itemstack, entityfishinghook, collection)) {
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(criteriontrigger_a);
+                    list.add(criteriontrigger_a);
                 }
             }
 
-            if (arraylist != null) {
-                iterator = arraylist.iterator();
+            if (list != null) {
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     criteriontrigger_a = (CriterionTrigger.a) iterator.next();

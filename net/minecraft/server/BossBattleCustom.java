@@ -2,11 +2,9 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class BossBattleCustom extends BossBattleServer {
 
@@ -69,8 +67,8 @@ public class BossBattleCustom extends BossBattleServer {
     }
 
     public boolean a(Collection<EntityPlayer> collection) {
-        HashSet hashset = Sets.newHashSet();
-        HashSet hashset1 = Sets.newHashSet();
+        Set<UUID> set = Sets.newHashSet();
+        Set<EntityPlayer> set1 = Sets.newHashSet();
         Iterator iterator = this.i.iterator();
 
         UUID uuid;
@@ -94,7 +92,7 @@ public class BossBattleCustom extends BossBattleServer {
                 }
 
                 if (!flag) {
-                    hashset.add(uuid);
+                    set.add(uuid);
                 }
                 break;
             }
@@ -121,13 +119,13 @@ public class BossBattleCustom extends BossBattleServer {
                 }
 
                 if (!flag) {
-                    hashset1.add(entityplayer1);
+                    set1.add(entityplayer1);
                 }
                 break;
             }
         }
 
-        iterator = hashset.iterator();
+        iterator = set.iterator();
 
         while (iterator.hasNext()) {
             uuid = (UUID) iterator.next();
@@ -149,14 +147,14 @@ public class BossBattleCustom extends BossBattleServer {
             }
         }
 
-        iterator = hashset1.iterator();
+        iterator = set1.iterator();
 
         while (iterator.hasNext()) {
             entityplayer1 = (EntityPlayer) iterator.next();
             this.addPlayer(entityplayer1);
         }
 
-        return !hashset.isEmpty() || !hashset1.isEmpty();
+        return !set.isEmpty() || !set1.isEmpty();
     }
 
     public NBTTagCompound f() {

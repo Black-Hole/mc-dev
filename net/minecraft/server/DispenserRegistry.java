@@ -3,7 +3,6 @@ package net.minecraft.server;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,8 +69,8 @@ public class DispenserRegistry {
         BlockDispenser.a((IMaterial) Items.SPLASH_POTION, new IDispenseBehavior() {
             public ItemStack dispense(ISourceBlock isourceblock, final ItemStack itemstack) {
                 return (new DispenseBehaviorProjectile() {
-                    protected IProjectile a(World world, IPosition iposition, ItemStack itemstack) {
-                        return new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ(), itemstack1.cloneItemStack());
+                    protected IProjectile a(World world, IPosition iposition, ItemStack itemstack1) {
+                        return new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ(), itemstack.cloneItemStack());
                     }
 
                     protected float a() {
@@ -87,8 +86,8 @@ public class DispenserRegistry {
         BlockDispenser.a((IMaterial) Items.LINGERING_POTION, new IDispenseBehavior() {
             public ItemStack dispense(ISourceBlock isourceblock, final ItemStack itemstack) {
                 return (new DispenseBehaviorProjectile() {
-                    protected IProjectile a(World world, IPosition iposition, ItemStack itemstack) {
-                        return new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ(), itemstack1.cloneItemStack());
+                    protected IProjectile a(World world, IPosition iposition, ItemStack itemstack1) {
+                        return new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ(), itemstack.cloneItemStack());
                     }
 
                     protected float a() {
@@ -104,7 +103,7 @@ public class DispenserRegistry {
         DispenseBehaviorItem dispensebehavioritem = new DispenseBehaviorItem() {
             public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
                 EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
-                EntityTypes entitytypes = ((ItemMonsterEgg) itemstack.getItem()).b(itemstack.getTag());
+                EntityTypes<?> entitytypes = ((ItemMonsterEgg) itemstack.getItem()).b(itemstack.getTag());
 
                 if (entitytypes != null) {
                     entitytypes.a(isourceblock.getWorld(), itemstack, (EntityHuman) null, isourceblock.getBlockPosition().shift(enumdirection), enumdirection != EnumDirection.UP, false);
@@ -200,7 +199,7 @@ public class DispenserRegistry {
                 Block block = iblockdata.getBlock();
 
                 if (block instanceof IFluidSource) {
-                    FluidType fluidtype = ((IFluidSource) block).a(world, blockposition, iblockdata);
+                    FluidType fluidtype = ((IFluidSource) block).removeFluid(world, blockposition, iblockdata);
 
                     if (!(fluidtype instanceof FluidTypeFlowing)) {
                         return super.a(isourceblock, itemstack);
@@ -336,14 +335,14 @@ public class DispenserRegistry {
                 return itemstack;
             }
         }));
-        BlockDispenser.a((IMaterial) Blocks.SHULKER_BOX.getItem(), (IDispenseBehavior) (new DispenserRegistry.d(null)));
+        BlockDispenser.a((IMaterial) Blocks.SHULKER_BOX.getItem(), (IDispenseBehavior) (new DispenserRegistry.d()));
         EnumColor[] aenumcolor = EnumColor.values();
         int i = aenumcolor.length;
 
         for (int j = 0; j < i; ++j) {
             EnumColor enumcolor = aenumcolor[j];
 
-            BlockDispenser.a((IMaterial) BlockShulkerBox.a(enumcolor).getItem(), (IDispenseBehavior) (new DispenserRegistry.d(null)));
+            BlockDispenser.a((IMaterial) BlockShulkerBox.a(enumcolor).getItem(), (IDispenseBehavior) (new DispenserRegistry.d()));
         }
 
     }
@@ -393,10 +392,10 @@ public class DispenserRegistry {
         LocaleLanguage localelanguage = LocaleLanguage.a();
 
         iregistry.iterator().forEachRemaining((object) -> {
-            String s = (String) function.apply(object);
+            String s1 = (String) function.apply(object);
 
-            if (!localelanguage.b(s)) {
-                DispenserRegistry.c.warn("Missing translation for {}: {} (key: '{}')", s1, iregistry.getKey(object), s);
+            if (!localelanguage.b(s1)) {
+                DispenserRegistry.c.warn("Missing translation for {}: {} (key: '{}')", s, iregistry.getKey(object), s1);
             }
 
         });

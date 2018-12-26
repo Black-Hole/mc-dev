@@ -53,7 +53,7 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
 
             for (int j = 0; j < i; ++j) {
                 LootEntityProperty lootentityproperty = alootentityproperty[j];
-                LootEntityProperty.a lootentityproperty_a = LootEntityProperties.a(lootentityproperty);
+                LootEntityProperty.a<LootEntityProperty> lootentityproperty_a = LootEntityProperties.a(lootentityproperty);
 
                 jsonobject1.add(lootentityproperty_a.a().toString(), lootentityproperty_a.a(lootentityproperty, jsonserializationcontext));
             }
@@ -63,7 +63,7 @@ public class LootItemConditionEntityProperty implements LootItemCondition {
         }
 
         public LootItemConditionEntityProperty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            Set set = ChatDeserializer.t(jsonobject, "properties").entrySet();
+            Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "properties").entrySet();
             LootEntityProperty[] alootentityproperty = new LootEntityProperty[set.size()];
             int i = 0;
 

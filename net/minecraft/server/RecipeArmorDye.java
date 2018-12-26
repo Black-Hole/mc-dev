@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeArmorDye extends IRecipeComplex {
 
@@ -14,7 +14,7 @@ public class RecipeArmorDye extends IRecipeComplex {
             return false;
         } else {
             ItemStack itemstack = ItemStack.a;
-            ArrayList arraylist = Lists.newArrayList();
+            List<ItemStack> list = Lists.newArrayList();
 
             for (int i = 0; i < iinventory.getSize(); ++i) {
                 ItemStack itemstack1 = iinventory.getItem(i);
@@ -31,12 +31,12 @@ public class RecipeArmorDye extends IRecipeComplex {
                             return false;
                         }
 
-                        arraylist.add(itemstack1);
+                        list.add(itemstack1);
                     }
                 }
             }
 
-            return !itemstack.isEmpty() && !arraylist.isEmpty();
+            return !itemstack.isEmpty() && !list.isEmpty();
         }
     }
 

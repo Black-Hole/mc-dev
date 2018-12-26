@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -22,10 +21,10 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     private final Random k;
     private final WorldProvider l;
     private final GeneratorSettings m;
-    private final TickList<Block> n = new TickListWorldGen((blockposition) -> {
+    private final TickList<Block> n = new TickListWorldGen<>((blockposition) -> {
         return this.y(blockposition).k();
     });
-    private final TickList<FluidType> o = new TickListWorldGen((blockposition) -> {
+    private final TickList<FluidType> o = new TickListWorldGen<>((blockposition) -> {
         return this.y(blockposition).l();
     });
 
@@ -71,7 +70,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
 
             RegionLimitedWorldAccess.a.error("Requested chunk : {} {}", i, j);
             RegionLimitedWorldAccess.a.error("Region bounds : {} {} | {} {}", protochunk.getPos().x, protochunk.getPos().z, protochunk1.getPos().x, protochunk1.getPos().z);
-            throw new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", new Object[] { i, j}));
+            throw new RuntimeException(String.format("We are asking a region for a chunk out of bound | %s %s", i, j));
         }
     }
 
@@ -100,7 +99,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
         BiomeBase biomebase = this.y(blockposition).getBiomeIndex()[blockposition.getX() & 15 | (blockposition.getZ() & 15) << 4];
 
         if (biomebase == null) {
-            throw new RuntimeException(String.format("Biome is null @ %s", new Object[] { blockposition}));
+            throw new RuntimeException(String.format("Biome is null @ %s", blockposition));
         } else {
             return biomebase;
         }

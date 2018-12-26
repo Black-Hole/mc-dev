@@ -7,11 +7,11 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     public FluidTypeLava() {}
 
     public FluidType e() {
-        return FluidTypes.d;
+        return FluidTypes.FLOWING_LAVA;
     }
 
     public FluidType f() {
-        return FluidTypes.e;
+        return FluidTypes.LAVA;
     }
 
     public Item b() {
@@ -91,7 +91,7 @@ public abstract class FluidTypeLava extends FluidTypeFlowing {
     }
 
     public boolean a(FluidType fluidtype) {
-        return fluidtype == FluidTypes.e || fluidtype == FluidTypes.d;
+        return fluidtype == FluidTypes.LAVA || fluidtype == FluidTypes.FLOWING_LAVA;
     }
 
     public int c(IWorldReader iworldreader) {

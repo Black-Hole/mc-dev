@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,7 +89,7 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
         }
 
         public void a(double d0) {
-            ArrayList arraylist = null;
+            List<CriterionTrigger.a<CriterionTriggerUsedEnderEye.b>> list = null;
             Iterator iterator = this.b.iterator();
 
             CriterionTrigger.a criteriontrigger_a;
@@ -96,16 +97,16 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 if (((CriterionTriggerUsedEnderEye.b) criteriontrigger_a.a()).a(d0)) {
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(criteriontrigger_a);
+                    list.add(criteriontrigger_a);
                 }
             }
 
-            if (arraylist != null) {
-                iterator = arraylist.iterator();
+            if (list != null) {
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     criteriontrigger_a = (CriterionTrigger.a) iterator.next();

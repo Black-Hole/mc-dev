@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -88,7 +87,7 @@ public class Chunk implements IChunkAccess {
         }
 
         for (int j1 = 0; j1 < this.entitySlices.length; ++j1) {
-            this.entitySlices[j1] = new EntitySlice(Entity.class);
+            this.entitySlices[j1] = new EntitySlice<>(Entity.class);
         }
 
         this.f = abiomebase;
@@ -136,8 +135,8 @@ public class Chunk implements IChunkAccess {
             HeightMap.Type heightmap_type = (HeightMap.Type) iterator.next();
 
             if (heightmap_type.c() == HeightMap.Use.LIVE_WORLD) {
-                ((HeightMap) this.heightMap.computeIfAbsent(heightmap_type, (heightmap_type) -> {
-                    return new HeightMap(this, heightmap_type);
+                ((HeightMap) this.heightMap.computeIfAbsent(heightmap_type, (heightmap_type1) -> {
+                    return new HeightMap(this, heightmap_type1);
                 })).a(protochunk.b(heightmap_type).b());
             }
         }
@@ -147,10 +146,10 @@ public class Chunk implements IChunkAccess {
     }
 
     public Set<BlockPosition> t() {
-        HashSet hashset = Sets.newHashSet(this.h.keySet());
+        Set<BlockPosition> set = Sets.newHashSet(this.h.keySet());
 
-        hashset.addAll(this.tileEntities.keySet());
-        return hashset;
+        set.addAll(this.tileEntities.keySet());
+        return set;
     }
 
     public boolean a(int i, int j) {
@@ -401,7 +400,7 @@ public class Chunk implements IChunkAccess {
                 }
             }
 
-            return FluidTypes.a.i();
+            return FluidTypes.EMPTY.i();
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.a(throwable, "Getting fluid state");
             CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being got");
@@ -726,7 +725,7 @@ public class Chunk implements IChunkAccess {
         int i = aentityslice.length;
 
         for (int j = 0; j < i; ++j) {
-            EntitySlice entityslice = aentityslice[j];
+            EntitySlice<Entity> entityslice = aentityslice[j];
 
             this.world.a(entityslice.stream().filter((entity) -> {
                 return !(entity instanceof EntityHuman);
@@ -749,7 +748,7 @@ public class Chunk implements IChunkAccess {
         int i = aentityslice.length;
 
         for (int j = 0; j < i; ++j) {
-            EntitySlice entityslice = aentityslice[j];
+            EntitySlice<Entity> entityslice = aentityslice[j];
 
             this.world.b((Collection) entityslice);
         }
@@ -811,10 +810,10 @@ public class Chunk implements IChunkAccess {
             Iterator iterator = this.entitySlices[k].c(oclass).iterator();
 
             while (iterator.hasNext()) {
-                Entity entity = (Entity) iterator.next();
+                T t0 = (Entity) iterator.next();
 
-                if (entity.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(entity))) {
-                    list.add(entity);
+                if (t0.getBoundingBox().c(axisalignedbb) && (predicate == null || predicate.test(t0))) {
+                    list.add(t0);
                 }
             }
         }
@@ -1020,13 +1019,13 @@ public class Chunk implements IChunkAccess {
 
     @Nullable
     public LongSet b(String s) {
-        return (LongSet) this.q.computeIfAbsent(s, (s) -> {
+        return (LongSet) this.q.computeIfAbsent(s, (s1) -> {
             return new LongOpenHashSet();
         });
     }
 
     public void a(String s, long i) {
-        ((LongSet) this.q.computeIfAbsent(s, (s) -> {
+        ((LongSet) this.q.computeIfAbsent(s, (s1) -> {
             return new LongOpenHashSet();
         })).add(i);
     }
@@ -1074,14 +1073,14 @@ public class Chunk implements IChunkAccess {
             }
 
             if (this.s instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.s).a(this.world.getBlockTickList(), (blockposition) -> {
-                    return this.world.getType(blockposition).getBlock();
+                ((ProtoChunkTickList) this.s).a(this.world.getBlockTickList(), (blockposition1) -> {
+                    return this.world.getType(blockposition1).getBlock();
                 });
             }
 
             if (this.t instanceof ProtoChunkTickList) {
-                ((ProtoChunkTickList) this.t).a(this.world.getFluidTickList(), (blockposition) -> {
-                    return this.world.getFluid(blockposition).c();
+                ((ProtoChunkTickList) this.t).a(this.world.getFluidTickList(), (blockposition1) -> {
+                    return this.world.getFluid(blockposition1).c();
                 });
             }
 

@@ -23,14 +23,14 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            Enum oenum = (Enum) iterator.next();
-            String s1 = ((INamable) oenum).getName();
+            T t0 = (Enum) iterator.next();
+            String s1 = ((INamable) t0).getName();
 
             if (this.b.containsKey(s1)) {
                 throw new IllegalArgumentException("Multiple values have the same name '" + s1 + "'");
             }
 
-            this.b.put(s1, oenum);
+            this.b.put(s1, t0);
         }
 
     }
@@ -51,7 +51,7 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
         if (this == object) {
             return true;
         } else if (object instanceof BlockStateEnum && super.equals(object)) {
-            BlockStateEnum blockstateenum = (BlockStateEnum) object;
+            BlockStateEnum<?> blockstateenum = (BlockStateEnum) object;
 
             return this.a.equals(blockstateenum.a) && this.b.equals(blockstateenum.b);
         } else {
@@ -80,6 +80,6 @@ public class BlockStateEnum<T extends Enum<T> & INamable> extends BlockState<T> 
     }
 
     public static <T extends Enum<T> & INamable> BlockStateEnum<T> a(String s, Class<T> oclass, Collection<T> collection) {
-        return new BlockStateEnum(s, oclass, collection);
+        return new BlockStateEnum<>(s, oclass, collection);
     }
 }

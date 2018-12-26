@@ -10,14 +10,13 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class AdvancementProgress implements Comparable<AdvancementProgress> {
@@ -28,7 +27,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
     public AdvancementProgress() {}
 
     public void a(Map<String, Criterion> map, String[][] astring) {
-        Set set = map.keySet();
+        Set<String> set = map.keySet();
 
         this.a.entrySet().removeIf((entry) -> {
             return !set.contains(entry.getKey());
@@ -134,7 +133,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, CriterionProgress> entry = (Entry) iterator.next();
 
             packetdataserializer.a((String) entry.getKey());
             ((CriterionProgress) entry.getValue()).a(packetdataserializer);
@@ -159,33 +158,33 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
     }
 
     public Iterable<String> getRemainingCriteria() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, CriterionProgress> entry = (Entry) iterator.next();
 
             if (!((CriterionProgress) entry.getValue()).a()) {
-                arraylist.add(entry.getKey());
+                list.add(entry.getKey());
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public Iterable<String> getAwardedCriteria() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, CriterionProgress> entry = (Entry) iterator.next();
 
             if (((CriterionProgress) entry.getValue()).a()) {
-                arraylist.add(entry.getKey());
+                list.add(entry.getKey());
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     @Nullable
@@ -221,7 +220,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
             Iterator iterator = advancementprogress.a.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, CriterionProgress> entry = (Entry) iterator.next();
                 CriterionProgress criterionprogress = (CriterionProgress) entry.getValue();
 
                 if (criterionprogress.a()) {
@@ -244,7 +243,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
             Iterator iterator = jsonobject1.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, JsonElement> entry = (Entry) iterator.next();
                 String s = (String) entry.getKey();
 
                 advancementprogress.a.put(s, CriterionProgress.a(ChatDeserializer.a((JsonElement) entry.getValue(), s)));

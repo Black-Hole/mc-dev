@@ -46,7 +46,7 @@ public class Advancement {
             EnumChatFormat enumchatformat = advancementdisplay.e().c();
             IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.h().a(enumchatformat).a("\n").addSibling(advancementdisplay.b());
             IChatBaseComponent ichatbasecomponent2 = ichatbasecomponent.h().a((chatmodifier) -> {
-                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
+                chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent1));
             });
 
             this.h = (new ChatComponentText("[")).addSibling(ichatbasecomponent2).a("]").a(enumchatformat);
@@ -55,7 +55,7 @@ public class Advancement {
     }
 
     public Advancement.SerializedAdvancement a() {
-        return new Advancement.SerializedAdvancement(this.a == null ? null : this.a.getName(), this.b, this.c, this.e, this.f, null);
+        return new Advancement.SerializedAdvancement(this.a == null ? null : this.a.getName(), this.b, this.c, this.e, this.f);
     }
 
     @Nullable
@@ -206,7 +206,7 @@ public class Advancement {
         }
 
         public Advancement b(MinecraftKey minecraftkey) {
-            if (!this.a((minecraftkey) -> {
+            if (!this.a((minecraftkey1) -> {
                 return null;
             })) {
                 throw new IllegalStateException("Tried to build incomplete advancement!");
@@ -248,7 +248,7 @@ public class Advancement {
             Iterator iterator = this.e.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, Criterion> entry = (Entry) iterator.next();
 
                 jsonobject1.add((String) entry.getKey(), ((Criterion) entry.getValue()).b());
             }
@@ -321,7 +321,7 @@ public class Advancement {
             MinecraftKey minecraftkey = jsonobject.has("parent") ? new MinecraftKey(ChatDeserializer.h(jsonobject, "parent")) : null;
             AdvancementDisplay advancementdisplay = jsonobject.has("display") ? AdvancementDisplay.a(ChatDeserializer.t(jsonobject, "display"), jsondeserializationcontext) : null;
             AdvancementRewards advancementrewards = (AdvancementRewards) ChatDeserializer.a(jsonobject, "rewards", AdvancementRewards.a, jsondeserializationcontext, AdvancementRewards.class);
-            Map map = Criterion.b(ChatDeserializer.t(jsonobject, "criteria"), jsondeserializationcontext);
+            Map<String, Criterion> map = Criterion.b(ChatDeserializer.t(jsonobject, "criteria"), jsondeserializationcontext);
 
             if (map.isEmpty()) {
                 throw new JsonSyntaxException("Advancement criteria cannot be empty");
@@ -414,7 +414,7 @@ public class Advancement {
         public static Advancement.SerializedAdvancement b(PacketDataSerializer packetdataserializer) {
             MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.l() : null;
             AdvancementDisplay advancementdisplay = packetdataserializer.readBoolean() ? AdvancementDisplay.b(packetdataserializer) : null;
-            Map map = Criterion.c(packetdataserializer);
+            Map<String, Criterion> map = Criterion.c(packetdataserializer);
             String[][] astring = new String[packetdataserializer.g()][];
 
             for (int i = 0; i < astring.length; ++i) {

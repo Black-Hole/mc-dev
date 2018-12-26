@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 public class MaterialPredicate implements Predicate<IBlockData> {
 
-    private static final MaterialPredicate a = new MaterialPredicate(Material.AIR, null) {
+    private static final MaterialPredicate a = new MaterialPredicate(Material.AIR) {
         public boolean test(@Nullable IBlockData iblockdata) {
             return iblockdata != null && iblockdata.isAir();
         }

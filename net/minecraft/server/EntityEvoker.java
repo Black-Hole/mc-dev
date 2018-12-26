@@ -17,18 +17,18 @@ public class EntityEvoker extends EntityIllagerWizard {
     protected void n() {
         super.n();
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
-        this.goalSelector.a(1, new EntityEvoker.b(null));
-        this.goalSelector.a(2, new PathfinderGoalAvoidTarget(this, EntityHuman.class, 8.0F, 0.6D, 1.0D));
-        this.goalSelector.a(4, new EntityEvoker.c(null));
-        this.goalSelector.a(5, new EntityEvoker.a(null));
+        this.goalSelector.a(1, new EntityEvoker.b());
+        this.goalSelector.a(2, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 8.0F, 0.6D, 1.0D));
+        this.goalSelector.a(4, new EntityEvoker.c());
+        this.goalSelector.a(5, new EntityEvoker.a());
         this.goalSelector.a(6, new EntityEvoker.d());
         this.goalSelector.a(8, new PathfinderGoalRandomStroll(this, 0.6D));
         this.goalSelector.a(9, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 3.0F, 1.0F));
         this.goalSelector.a(10, new PathfinderGoalLookAtPlayer(this, EntityInsentient.class, 8.0F));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityEvoker.class}));
-        this.targetSelector.a(2, (new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true)).b(300));
-        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget(this, EntityVillager.class, false)).b(300));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityIronGolem.class, false));
+        this.targetSelector.a(2, (new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true)).b(300));
+        this.targetSelector.a(3, (new PathfinderGoalNearestAttackableTarget<>(this, EntityVillager.class, false)).b(300));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityIronGolem.class, false));
     }
 
     protected void initAttributes() {
@@ -111,7 +111,7 @@ public class EntityEvoker extends EntityIllagerWizard {
             } else if (!EntityEvoker.this.world.getGameRules().getBoolean("mobGriefing")) {
                 return false;
             } else {
-                List list = EntityEvoker.this.world.a(EntitySheep.class, EntityEvoker.this.getBoundingBox().grow(16.0D, 4.0D, 16.0D), this.e);
+                List<EntitySheep> list = EntityEvoker.this.world.a(EntitySheep.class, EntityEvoker.this.getBoundingBox().grow(16.0D, 4.0D, 16.0D), this.e);
 
                 if (list.isEmpty()) {
                     return false;

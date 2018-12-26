@@ -176,7 +176,7 @@ public class EntityLlama extends EntityHorseChestedAbstract implements IRangedEn
             i = ((EntityLlama.b) object).a;
         } else {
             i = this.random.nextInt(4);
-            object = new EntityLlama.b(i, null);
+            object = new EntityLlama.b(i);
         }
 
         this.setVariant(i);

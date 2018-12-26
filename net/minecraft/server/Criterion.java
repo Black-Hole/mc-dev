@@ -5,7 +5,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,7 +26,7 @@ public class Criterion {
 
     public static Criterion a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "trigger"));
-        CriterionTrigger criteriontrigger = CriterionTriggers.a(minecraftkey);
+        CriterionTrigger<?> criteriontrigger = CriterionTriggers.a(minecraftkey);
 
         if (criteriontrigger == null) {
             throw new JsonSyntaxException("Invalid criterion trigger: " + minecraftkey);
@@ -43,27 +42,27 @@ public class Criterion {
     }
 
     public static Map<String, Criterion> b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, Criterion> map = Maps.newHashMap();
         Iterator iterator = jsonobject.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, JsonElement> entry = (Entry) iterator.next();
 
-            hashmap.put(entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), jsondeserializationcontext));
+            map.put(entry.getKey(), a(ChatDeserializer.m((JsonElement) entry.getValue(), "criterion"), jsondeserializationcontext));
         }
 
-        return hashmap;
+        return map;
     }
 
     public static Map<String, Criterion> c(PacketDataSerializer packetdataserializer) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, Criterion> map = Maps.newHashMap();
         int i = packetdataserializer.g();
 
         for (int j = 0; j < i; ++j) {
-            hashmap.put(packetdataserializer.e(32767), b(packetdataserializer));
+            map.put(packetdataserializer.e(32767), b(packetdataserializer));
         }
 
-        return hashmap;
+        return map;
     }
 
     public static void a(Map<String, Criterion> map, PacketDataSerializer packetdataserializer) {
@@ -71,7 +70,7 @@ public class Criterion {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, Criterion> entry = (Entry) iterator.next();
 
             packetdataserializer.a((String) entry.getKey());
             ((Criterion) entry.getValue()).a(packetdataserializer);

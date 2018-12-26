@@ -56,7 +56,7 @@ public class TileEntityTypes<T extends TileEntity> {
             TileEntityTypes.z.warn("No data fixer registered for block entity {}", s);
         }
 
-        TileEntityTypes tileentitytypes = tileentitytypes_a.a(type);
+        TileEntityTypes<T> tileentitytypes = tileentitytypes_a.a(type);
 
         IRegistry.BLOCK_ENTITY_TYPE.a(new MinecraftKey(s), (Object) tileentitytypes);
         return tileentitytypes;
@@ -76,7 +76,7 @@ public class TileEntityTypes<T extends TileEntity> {
 
     @Nullable
     static TileEntity a(String s) {
-        TileEntityTypes tileentitytypes = (TileEntityTypes) IRegistry.BLOCK_ENTITY_TYPE.get(new MinecraftKey(s));
+        TileEntityTypes<?> tileentitytypes = (TileEntityTypes) IRegistry.BLOCK_ENTITY_TYPE.get(new MinecraftKey(s));
 
         return tileentitytypes == null ? null : tileentitytypes.b();
     }
@@ -90,11 +90,11 @@ public class TileEntityTypes<T extends TileEntity> {
         }
 
         public static <T extends TileEntity> TileEntityTypes.a<T> a(Supplier<? extends T> supplier) {
-            return new TileEntityTypes.a(supplier);
+            return new TileEntityTypes.a<>(supplier);
         }
 
         public TileEntityTypes<T> a(Type<?> type) {
-            return new TileEntityTypes(this.a, type);
+            return new TileEntityTypes<>(this.a, type);
         }
     }
 }

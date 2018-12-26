@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntListIterator;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -175,7 +175,7 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
     }
 
     private boolean b() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ItemStack> list = Lists.newArrayList();
         int i = this.c();
 
         for (int j = 0; j < this.d.f() * this.d.g() + 1; ++j) {
@@ -185,8 +185,8 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
                 if (!itemstack.isEmpty()) {
                     int k = this.c.firstPartial(itemstack);
 
-                    if (k == -1 && arraylist.size() <= i) {
-                        Iterator iterator = arraylist.iterator();
+                    if (k == -1 && list.size() <= i) {
+                        Iterator iterator = list.iterator();
 
                         while (iterator.hasNext()) {
                             ItemStack itemstack1 = (ItemStack) iterator.next();
@@ -199,11 +199,11 @@ public class AutoRecipe implements AutoRecipeAbstract<Integer> {
                         }
 
                         if (!itemstack.isEmpty()) {
-                            if (arraylist.size() >= i) {
+                            if (list.size() >= i) {
                                 return false;
                             }
 
-                            arraylist.add(itemstack);
+                            list.add(itemstack);
                         }
                     } else if (k == -1) {
                         return false;

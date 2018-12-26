@@ -58,7 +58,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
             return (IBlockData) ((IBlockData) iblockdata.set(BlockStepAbstract.a, BlockPropertySlabType.DOUBLE)).set(BlockStepAbstract.b, false);
         } else {
             Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
-            IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, fluid.c() == FluidTypes.c);
+            IBlockData iblockdata1 = (IBlockData) ((IBlockData) this.getBlockData().set(BlockStepAbstract.a, BlockPropertySlabType.BOTTOM)).set(BlockStepAbstract.b, fluid.c() == FluidTypes.WATER);
             EnumDirection enumdirection = blockactioncontext.getClickedFace();
 
             return enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? iblockdata1 : (IBlockData) iblockdata1.set(BlockStepAbstract.a, BlockPropertySlabType.TOP);
@@ -91,25 +91,25 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
         }
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Boolean) iblockdata.get(BlockStepAbstract.b)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, false), 3);
-            return FluidTypes.c;
+            return FluidTypes.WATER;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockStepAbstract.b) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !(Boolean) iblockdata.get(BlockStepAbstract.b) && fluidtype == FluidTypes.c;
+        return iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !(Boolean) iblockdata.get(BlockStepAbstract.b) && fluidtype == FluidTypes.WATER;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !(Boolean) iblockdata.get(BlockStepAbstract.b) && fluid.c() == FluidTypes.c) {
+        if (iblockdata.get(BlockStepAbstract.a) != BlockPropertySlabType.DOUBLE && !(Boolean) iblockdata.get(BlockStepAbstract.b) && fluid.c() == FluidTypes.WATER) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStepAbstract.b, true), 3);
                 generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
@@ -123,7 +123,7 @@ public class BlockStepAbstract extends Block implements IFluidSource, IFluidCont
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockStepAbstract.b)) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);

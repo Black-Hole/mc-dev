@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeFireworksFade extends IRecipeComplex {
@@ -44,7 +43,7 @@ public class RecipeFireworksFade extends IRecipeComplex {
     }
 
     public ItemStack craftItem(IInventory iinventory) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Integer> list = Lists.newArrayList();
         ItemStack itemstack = null;
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
@@ -52,15 +51,15 @@ public class RecipeFireworksFade extends IRecipeComplex {
             Item item = itemstack1.getItem();
 
             if (item instanceof ItemDye) {
-                arraylist.add(((ItemDye) item).d().f());
+                list.add(((ItemDye) item).d().f());
             } else if (RecipeFireworksFade.a.test(itemstack1)) {
                 itemstack = itemstack1.cloneItemStack();
                 itemstack.setCount(1);
             }
         }
 
-        if (itemstack != null && !arraylist.isEmpty()) {
-            itemstack.a("Explosion").b("FadeColors", (List) arraylist);
+        if (itemstack != null && !list.isEmpty()) {
+            itemstack.a("Explosion").b("FadeColors", (List) list);
             return itemstack;
         } else {
             return ItemStack.a;

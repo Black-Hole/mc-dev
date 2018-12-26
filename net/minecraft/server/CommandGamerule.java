@@ -1,22 +1,20 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 
 public class CommandGamerule {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralArgumentBuilder literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("gamerule").requires((commandlistenerwrapper) -> {
+        LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("gamerule").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         });
         Iterator iterator = GameRules.getGameRules().entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, GameRules.b> entry = (Entry) iterator.next();
 
             literalargumentbuilder.then(((LiteralArgumentBuilder) CommandDispatcher.a((String) entry.getKey()).executes((commandcontext) -> {
                 return a((CommandListenerWrapper) commandcontext.getSource(), (String) entry.getKey());

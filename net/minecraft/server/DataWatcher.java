@@ -33,7 +33,7 @@ public class DataWatcher {
     public static <T> DataWatcherObject<T> a(Class<? extends Entity> oclass, DataWatcherSerializer<T> datawatcherserializer) {
         if (DataWatcher.a.isDebugEnabled()) {
             try {
-                Class oclass1 = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+                Class<?> oclass1 = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
                 if (!oclass1.equals(oclass)) {
                     DataWatcher.a.debug("defineId called for: {} from {}", oclass, oclass1, new RuntimeException());
@@ -85,7 +85,7 @@ public class DataWatcher {
     }
 
     private <T> void registerObject(DataWatcherObject<T> datawatcherobject, T t0) {
-        DataWatcher.Item datawatcher_item = new DataWatcher.Item(datawatcherobject, t0);
+        DataWatcher.Item<T> datawatcher_item = new DataWatcher.Item<>(datawatcherobject, t0);
 
         this.e.writeLock().lock();
         this.d.put(datawatcherobject.a(), datawatcher_item);
@@ -117,7 +117,7 @@ public class DataWatcher {
     }
 
     public <T> void set(DataWatcherObject<T> datawatcherobject, T t0) {
-        DataWatcher.Item datawatcher_item = this.b(datawatcherobject);
+        DataWatcher.Item<T> datawatcher_item = this.b(datawatcherobject);
 
         if (ObjectUtils.notEqual(t0, datawatcher_item.b())) {
             datawatcher_item.a(t0);
@@ -146,22 +146,22 @@ public class DataWatcher {
 
     @Nullable
     public List<DataWatcher.Item<?>> b() {
-        ArrayList arraylist = null;
+        List<DataWatcher.Item<?>> list = null;
 
         if (this.g) {
             this.e.readLock().lock();
             Iterator iterator = this.d.values().iterator();
 
             while (iterator.hasNext()) {
-                DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
+                DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
 
                 if (datawatcher_item.c()) {
                     datawatcher_item.a(false);
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(datawatcher_item.d());
+                    list.add(datawatcher_item.d());
                 }
             }
 
@@ -169,7 +169,7 @@ public class DataWatcher {
         }
 
         this.g = false;
-        return arraylist;
+        return list;
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
@@ -177,7 +177,7 @@ public class DataWatcher {
         Iterator iterator = this.d.values().iterator();
 
         while (iterator.hasNext()) {
-            DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
+            DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
 
             a(packetdataserializer, datawatcher_item);
         }
@@ -188,25 +188,25 @@ public class DataWatcher {
 
     @Nullable
     public List<DataWatcher.Item<?>> c() {
-        ArrayList arraylist = null;
+        List<DataWatcher.Item<?>> list = null;
 
         this.e.readLock().lock();
 
         DataWatcher.Item datawatcher_item;
 
-        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); arraylist.add(datawatcher_item.d())) {
+        for (Iterator iterator = this.d.values().iterator(); iterator.hasNext(); list.add(datawatcher_item.d())) {
             datawatcher_item = (DataWatcher.Item) iterator.next();
-            if (arraylist == null) {
-                arraylist = Lists.newArrayList();
+            if (list == null) {
+                list = Lists.newArrayList();
             }
         }
 
         this.e.readLock().unlock();
-        return arraylist;
+        return list;
     }
 
     private static <T> void a(PacketDataSerializer packetdataserializer, DataWatcher.Item<T> datawatcher_item) throws IOException {
-        DataWatcherObject datawatcherobject = datawatcher_item.a();
+        DataWatcherObject<T> datawatcherobject = datawatcher_item.a();
         int i = DataWatcherRegistry.b(datawatcherobject.b());
 
         if (i < 0) {
@@ -230,7 +230,7 @@ public class DataWatcher {
             }
 
             int i = packetdataserializer.g();
-            DataWatcherSerializer datawatcherserializer = DataWatcherRegistry.a(i);
+            DataWatcherSerializer<?> datawatcherserializer = DataWatcherRegistry.a(i);
 
             if (datawatcherserializer == null) {
                 throw new DecoderException("Unknown serializer type " + i);
@@ -243,7 +243,7 @@ public class DataWatcher {
     }
 
     private static <T> DataWatcher.Item<T> a(PacketDataSerializer packetdataserializer, int i, DataWatcherSerializer<T> datawatcherserializer) {
-        return new DataWatcher.Item(datawatcherserializer.a(i), datawatcherserializer.a(packetdataserializer));
+        return new DataWatcher.Item<>(datawatcherserializer.a(i), datawatcherserializer.a(packetdataserializer));
     }
 
     public boolean d() {
@@ -256,7 +256,7 @@ public class DataWatcher {
         Iterator iterator = this.d.values().iterator();
 
         while (iterator.hasNext()) {
-            DataWatcher.Item datawatcher_item = (DataWatcher.Item) iterator.next();
+            DataWatcher.Item<?> datawatcher_item = (DataWatcher.Item) iterator.next();
 
             datawatcher_item.a(false);
         }
@@ -297,7 +297,7 @@ public class DataWatcher {
         }
 
         public DataWatcher.Item<T> d() {
-            return new DataWatcher.Item(this.a, this.a.b().a(this.b));
+            return new DataWatcher.Item<>(this.a, this.a.b().a(this.b));
         }
     }
 }

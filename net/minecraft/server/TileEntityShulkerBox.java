@@ -74,7 +74,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
     }
 
     public AxisAlignedBB b(EnumDirection enumdirection) {
-        return VoxelShapes.b().a().b((double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentX()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentY()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentZ()));
+        return VoxelShapes.b().getBoundingBox().b((double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentX()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentY()), (double) (0.5F * this.a(1.0F) * (float) enumdirection.getAdjacentZ()));
     }
 
     private AxisAlignedBB c(EnumDirection enumdirection) {
@@ -89,7 +89,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
             EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockShulkerBox.a);
             AxisAlignedBB axisalignedbb = this.c(enumdirection).a(this.position);
-            List list = this.world.getEntities((Entity) null, axisalignedbb);
+            List<Entity> list = this.world.getEntities((Entity) null, axisalignedbb);
 
             if (!list.isEmpty()) {
                 for (int i = 0; i < list.size(); ++i) {

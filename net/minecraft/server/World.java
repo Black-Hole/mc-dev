@@ -4,7 +4,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.longs.LongSets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,10 +11,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +31,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     private final List<TileEntity> tileEntityListUnload = Lists.newArrayList();
     public final List<EntityHuman> players = Lists.newArrayList();
     public final List<Entity> k = Lists.newArrayList();
-    protected final IntHashMap<Entity> entitiesById = new IntHashMap();
+    protected final IntHashMap<Entity> entitiesById = new IntHashMap<>();
     private final long F = 16777215L;
     private int G;
     protected int m = (new Random()).nextInt();
@@ -316,8 +313,8 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
                 crashreportsystemdetails.a("Source block type", () -> {
                     try {
-                        return String.format("ID #%s (%s // %s)", new Object[] { IRegistry.BLOCK.getKey(block), block.m(), block.getClass().getCanonicalName()});
-                    } catch (Throwable throwable) {
+                        return String.format("ID #%s (%s // %s)", IRegistry.BLOCK.getKey(block), block.m(), block.getClass().getCanonicalName());
+                    } catch (Throwable throwable1) {
                         return "ID #" + IRegistry.BLOCK.getKey(block);
                     }
                 });
@@ -414,7 +411,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
 
     public Fluid getFluid(BlockPosition blockposition) {
         if (k(blockposition)) {
-            return FluidTypes.a.i();
+            return FluidTypes.EMPTY.i();
         } else {
             Chunk chunk = this.getChunkAtWorldCoords(blockposition);
 
@@ -1042,7 +1039,7 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         if (voxelshape.isEmpty()) {
             return true;
         } else {
-            List list = this.getEntities((Entity) null, voxelshape.a());
+            List<Entity> list = this.getEntities((Entity) null, voxelshape.getBoundingBox());
 
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity1 = (Entity) list.get(i);
@@ -1737,13 +1734,13 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
     }
 
     public Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, VoxelShape voxelshape1, Set<Entity> set) {
-        Stream stream = super.a(entity, voxelshape, voxelshape1, set);
+        Stream<VoxelShape> stream = GeneratorAccess.super.a(entity, voxelshape, voxelshape1, set);
 
         return entity == null ? stream : Stream.concat(stream, this.a(entity, voxelshape, set));
     }
 
     public List<Entity> getEntities(@Nullable Entity entity, AxisAlignedBB axisalignedbb, @Nullable Predicate<? super Entity> predicate) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Entity> list = Lists.newArrayList();
         int i = MathHelper.floor((axisalignedbb.minX - 2.0D) / 16.0D);
         int j = MathHelper.floor((axisalignedbb.maxX + 2.0D) / 16.0D);
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
@@ -1752,42 +1749,42 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
                 if (this.isChunkLoaded(i1, j1, true)) {
-                    this.getChunkAt(i1, j1).a(entity, axisalignedbb, arraylist, predicate);
+                    this.getChunkAt(i1, j1).a(entity, axisalignedbb, list, predicate);
                 }
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public <T extends Entity> List<T> a(Class<? extends T> oclass, Predicate<? super T> predicate) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<T> list = Lists.newArrayList();
         Iterator iterator = this.entityList.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
             if (oclass.isAssignableFrom(entity.getClass()) && predicate.test(entity)) {
-                arraylist.add(entity);
+                list.add(entity);
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public <T extends Entity> List<T> b(Class<? extends T> oclass, Predicate<? super T> predicate) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<T> list = Lists.newArrayList();
         Iterator iterator = this.players.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
             if (oclass.isAssignableFrom(entity.getClass()) && predicate.test(entity)) {
-                arraylist.add(entity);
+                list.add(entity);
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public <T extends Entity> List<T> a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb) {
@@ -1799,39 +1796,39 @@ public abstract class World implements IEntityAccess, GeneratorAccess, IIBlockAc
         int j = MathHelper.f((axisalignedbb.maxX + 2.0D) / 16.0D);
         int k = MathHelper.floor((axisalignedbb.minZ - 2.0D) / 16.0D);
         int l = MathHelper.f((axisalignedbb.maxZ + 2.0D) / 16.0D);
-        ArrayList arraylist = Lists.newArrayList();
+        List<T> list = Lists.newArrayList();
 
         for (int i1 = i; i1 < j; ++i1) {
             for (int j1 = k; j1 < l; ++j1) {
                 if (this.isChunkLoaded(i1, j1, true)) {
-                    this.getChunkAt(i1, j1).a(oclass, axisalignedbb, arraylist, predicate);
+                    this.getChunkAt(i1, j1).a(oclass, axisalignedbb, list, predicate);
                 }
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     @Nullable
     public <T extends Entity> T a(Class<? extends T> oclass, AxisAlignedBB axisalignedbb, T t0) {
-        List list = this.a(oclass, axisalignedbb);
-        Entity entity = null;
+        List<T> list = this.a(oclass, axisalignedbb);
+        T t1 = null;
         double d0 = Double.MAX_VALUE;
 
         for (int i = 0; i < list.size(); ++i) {
-            Entity entity1 = (Entity) list.get(i);
+            T t2 = (Entity) list.get(i);
 
-            if (entity1 != t0 && IEntitySelector.f.test(entity1)) {
-                double d1 = t0.h(entity1);
+            if (t2 != t0 && IEntitySelector.f.test(t2)) {
+                double d1 = t0.h(t2);
 
                 if (d1 <= d0) {
-                    entity = entity1;
+                    t1 = t2;
                     d0 = d1;
                 }
             }
         }
 
-        return entity;
+        return t1;
     }
 
     @Nullable

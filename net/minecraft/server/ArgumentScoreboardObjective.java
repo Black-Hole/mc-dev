@@ -10,11 +10,10 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class ArgumentScoreboardObjective implements ArgumentType<String> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "foo", "*", "012"});
+    private static final Collection<String> b = Arrays.asList("foo", "*", "012");
     private static final DynamicCommandExceptionType c = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.objective.notFound", new Object[] { object});
     });

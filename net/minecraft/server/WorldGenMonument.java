@@ -35,14 +35,14 @@ public class WorldGenMonument extends StructureGenerator<WorldGenMonumentConfigu
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
-            Set set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 16);
+            Set<BiomeBase> set = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 16);
             Iterator iterator = set.iterator();
 
             BiomeBase biomebase;
 
             do {
                 if (!iterator.hasNext()) {
-                    Set set1 = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 29);
+                    Set<BiomeBase> set1 = chunkgenerator.getWorldChunkManager().a(i * 16 + 9, j * 16 + 9, 29);
                     Iterator iterator1 = set1.iterator();
 
                     BiomeBase biomebase1;

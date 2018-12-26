@@ -4,18 +4,12 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -36,16 +30,16 @@ public class HashCache {
         this.b = java_nio_file_path;
         java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve(".cache");
 
-        Files.createDirectories(java_nio_file_path1, new FileAttribute[0]);
+        Files.createDirectories(java_nio_file_path1);
         this.c = java_nio_file_path1.resolve(s);
-        this.c().forEach((java_nio_file_path) -> {
-            String s = (String) this.e.put(java_nio_file_path, "");
+        this.c().forEach((java_nio_file_path2) -> {
+            String s1 = (String) this.e.put(java_nio_file_path2, "");
         });
         if (Files.isReadable(this.c)) {
-            IOUtils.readLines(Files.newInputStream(this.c, new OpenOption[0]), Charsets.UTF_8).forEach((s) -> {
-                int i = s.indexOf(32);
+            IOUtils.readLines(Files.newInputStream(this.c), Charsets.UTF_8).forEach((s1) -> {
+                int i = s1.indexOf(32);
 
-                this.e.put(java_nio_file_path.resolve(s.substring(i + 1)), s.substring(0, i));
+                this.e.put(java_nio_file_path.resolve(s1.substring(i + 1)), s1.substring(0, i));
             });
         }
 
@@ -57,7 +51,7 @@ public class HashCache {
         BufferedWriter bufferedwriter;
 
         try {
-            bufferedwriter = Files.newBufferedWriter(this.c, new OpenOption[0]);
+            bufferedwriter = Files.newBufferedWriter(this.c);
         } catch (IOException ioexception) {
             HashCache.a.warn("Unable write cachefile {}: {}", this.c, ioexception.toString());
             return;
@@ -101,7 +95,7 @@ public class HashCache {
     }
 
     private Stream<java.nio.file.Path> c() throws IOException {
-        return Files.walk(this.b, new FileVisitOption[0]).filter((java_nio_file_path) -> {
+        return Files.walk(this.b).filter((java_nio_file_path) -> {
             return !Objects.equals(this.c, java_nio_file_path) && !Files.isDirectory(java_nio_file_path, new LinkOption[0]);
         });
     }

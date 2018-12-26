@@ -14,7 +14,7 @@ public class NonNullList<E> extends AbstractList<E> {
     private final E b;
 
     public static <E> NonNullList<E> a() {
-        return new NonNullList();
+        return new NonNullList<>();
     }
 
     public static <E> NonNullList<E> a(int i, E e0) {
@@ -22,12 +22,12 @@ public class NonNullList<E> extends AbstractList<E> {
         Object[] aobject = new Object[i];
 
         Arrays.fill(aobject, e0);
-        return new NonNullList(Arrays.asList(aobject), e0);
+        return new NonNullList<>(Arrays.asList(aobject), e0);
     }
 
     @SafeVarargs
     public static <E> NonNullList<E> a(E e0, E... ae) {
-        return new NonNullList(Arrays.asList(ae), e0);
+        return new NonNullList<>(Arrays.asList(ae), e0);
     }
 
     protected NonNullList() {

@@ -48,9 +48,9 @@ public class BlockStatePredicate implements Predicate<IBlockData> {
     }
 
     protected <T extends Comparable<T>> boolean a(IBlockData iblockdata, IBlockState<T> iblockstate, Predicate<Object> predicate) {
-        Comparable comparable = iblockdata.get(iblockstate);
+        T t0 = iblockdata.get(iblockstate);
 
-        return predicate.test(comparable);
+        return predicate.test(t0);
     }
 
     public <V extends Comparable<V>> BlockStatePredicate a(IBlockState<V> iblockstate, Predicate<Object> predicate) {

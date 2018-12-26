@@ -68,7 +68,7 @@ public class ShapelessRecipes implements IRecipe {
 
         public ShapelessRecipes a(MinecraftKey minecraftkey, JsonObject jsonobject) {
             String s = ChatDeserializer.a(jsonobject, "group", "");
-            NonNullList nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
+            NonNullList<RecipeItemStack> nonnulllist = a(ChatDeserializer.u(jsonobject, "ingredients"));
 
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
@@ -82,7 +82,7 @@ public class ShapelessRecipes implements IRecipe {
         }
 
         private static NonNullList<RecipeItemStack> a(JsonArray jsonarray) {
-            NonNullList nonnulllist = NonNullList.a();
+            NonNullList<RecipeItemStack> nonnulllist = NonNullList.a();
 
             for (int i = 0; i < jsonarray.size(); ++i) {
                 RecipeItemStack recipeitemstack = RecipeItemStack.a(jsonarray.get(i));
@@ -102,7 +102,7 @@ public class ShapelessRecipes implements IRecipe {
         public ShapelessRecipes a(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
             String s = packetdataserializer.e(32767);
             int i = packetdataserializer.g();
-            NonNullList nonnulllist = NonNullList.a(i, RecipeItemStack.a);
+            NonNullList<RecipeItemStack> nonnulllist = NonNullList.a(i, RecipeItemStack.a);
 
             for (int j = 0; j < nonnulllist.size(); ++j) {
                 nonnulllist.set(j, RecipeItemStack.b(packetdataserializer));

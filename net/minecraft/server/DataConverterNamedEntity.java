@@ -7,7 +7,6 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.function.Function;
 
 public abstract class DataConverterNamedEntity extends DataFix {
 
@@ -23,7 +22,7 @@ public abstract class DataConverterNamedEntity extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder opticfinder = DSL.namedChoice(this.b, this.getInputSchema().getChoiceType(this.c, this.b));
+        OpticFinder<?> opticfinder = DSL.namedChoice(this.b, this.getInputSchema().getChoiceType(this.c, this.b));
 
         return this.fixTypeEverywhereTyped(this.a, this.getInputSchema().getType(this.c), this.getOutputSchema().getType(this.c), (typed) -> {
             return typed.updateTyped(opticfinder, this.getOutputSchema().getChoiceType(this.c, this.b), this::a);

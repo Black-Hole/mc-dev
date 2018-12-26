@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -113,14 +112,14 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureStrong
 
     private void a(ChunkGenerator<?> chunkgenerator) {
         this.d = chunkgenerator.getSeed();
-        ArrayList arraylist = Lists.newArrayList();
+        List<BiomeBase> list = Lists.newArrayList();
         Iterator iterator = IRegistry.BIOME.iterator();
 
         while (iterator.hasNext()) {
             BiomeBase biomebase = (BiomeBase) iterator.next();
 
             if (biomebase != null && chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.m)) {
-                arraylist.add(biomebase);
+                list.add(biomebase);
             }
         }
 
@@ -130,7 +129,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureStrong
 
         this.c = new ChunkCoordIntPair[j];
         int l = 0;
-        Long2ObjectMap long2objectmap = chunkgenerator.getStructureStartCache(this);
+        Long2ObjectMap<StructureStart> long2objectmap = chunkgenerator.getStructureStartCache(this);
 
         synchronized (long2objectmap) {
             ObjectIterator objectiterator = long2objectmap.values().iterator();
@@ -158,7 +157,7 @@ public class WorldGenStronghold extends StructureGenerator<WorldGenFeatureStrong
                 double d1 = (double) (4 * i + i * k1 * 6) + (random.nextDouble() - 0.5D) * (double) i * 2.5D;
                 int i2 = (int) Math.round(Math.cos(d0) * d1);
                 int j2 = (int) Math.round(Math.sin(d0) * d1);
-                BlockPosition blockposition = chunkgenerator.getWorldChunkManager().a((i2 << 4) + 8, (j2 << 4) + 8, 112, arraylist, random);
+                BlockPosition blockposition = chunkgenerator.getWorldChunkManager().a((i2 << 4) + 8, (j2 << 4) + 8, 112, list, random);
 
                 if (blockposition != null) {
                     i2 = blockposition.getX() >> 4;

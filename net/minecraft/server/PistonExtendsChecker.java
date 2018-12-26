@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PistonExtendsChecker {
@@ -146,17 +145,17 @@ public class PistonExtendsChecker {
     }
 
     private void a(int i, int j) {
-        ArrayList arraylist = Lists.newArrayList();
-        ArrayList arraylist1 = Lists.newArrayList();
-        ArrayList arraylist2 = Lists.newArrayList();
+        List<BlockPosition> list = Lists.newArrayList();
+        List<BlockPosition> list1 = Lists.newArrayList();
+        List<BlockPosition> list2 = Lists.newArrayList();
 
-        arraylist.addAll(this.f.subList(0, j));
-        arraylist1.addAll(this.f.subList(this.f.size() - i, this.f.size()));
-        arraylist2.addAll(this.f.subList(j, this.f.size() - i));
+        list.addAll(this.f.subList(0, j));
+        list1.addAll(this.f.subList(this.f.size() - i, this.f.size()));
+        list2.addAll(this.f.subList(j, this.f.size() - i));
         this.f.clear();
-        this.f.addAll(arraylist);
-        this.f.addAll(arraylist1);
-        this.f.addAll(arraylist2);
+        this.f.addAll(list);
+        this.f.addAll(list1);
+        this.f.addAll(list2);
     }
 
     private boolean a(BlockPosition blockposition) {

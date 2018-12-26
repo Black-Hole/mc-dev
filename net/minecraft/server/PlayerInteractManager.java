@@ -248,7 +248,7 @@ public class PlayerInteractManager {
         } else {
             int i = itemstack.getCount();
             int j = itemstack.getDamage();
-            InteractionResultWrapper interactionresultwrapper = itemstack.a(world, entityhuman, enumhand);
+            InteractionResultWrapper<ItemStack> interactionresultwrapper = itemstack.a(world, entityhuman, enumhand);
             ItemStack itemstack1 = (ItemStack) interactionresultwrapper.b();
 
             if (itemstack1 == itemstack && itemstack1.getCount() == i && itemstack1.k() <= 0 && itemstack1.getDamage() == j) {

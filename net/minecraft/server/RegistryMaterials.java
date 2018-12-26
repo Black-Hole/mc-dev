@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
@@ -14,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class RegistryMaterials<V> implements IRegistry<V> {
 
     protected static final Logger a = LogManager.getLogger();
-    protected final RegistryID<V> b = new RegistryID(256);
+    protected final RegistryID<V> b = new RegistryID<>(256);
     protected final BiMap<MinecraftKey, V> c = HashBiMap.create();
     protected Object[] d;
     private int x;
@@ -83,13 +84,13 @@ public class RegistryMaterials<V> implements IRegistry<V> {
     @Nullable
     public V a(Random random) {
         if (this.d == null) {
-            Set set = this.c.values();
+            Collection<?> collection = this.c.values();
 
-            if (set.isEmpty()) {
+            if (collection.isEmpty()) {
                 return null;
             }
 
-            this.d = set.toArray(new Object[set.size()]);
+            this.d = collection.toArray(new Object[collection.size()]);
         }
 
         return this.d[random.nextInt(this.d.length)];

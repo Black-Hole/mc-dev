@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
@@ -46,14 +45,14 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
     }
 
     public boolean a(StructureGenerator<?> structuregenerator) {
-        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator) -> {
+        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             BiomeBase[] abiomebase = this.c;
             int i = abiomebase.length;
 
             for (int j = 0; j < i; ++j) {
                 BiomeBase biomebase = abiomebase[j];
 
-                if (biomebase.a(structuregenerator)) {
+                if (biomebase.a(structuregenerator1)) {
                     return true;
                 }
             }

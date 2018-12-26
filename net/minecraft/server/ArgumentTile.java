@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "stone", "minecraft:stone", "stone[foo=bar]", "foo{bar=baz}"});
+    private static final Collection<String> a = Arrays.asList("stone", "minecraft:stone", "stone[foo=bar]", "foo{bar=baz}");
 
     public ArgumentTile() {}
 
@@ -23,7 +23,7 @@ public class ArgumentTile implements ArgumentType<ArgumentTileLocation> {
     public ArgumentTileLocation parse(StringReader stringreader) throws CommandSyntaxException {
         ArgumentBlock argumentblock = (new ArgumentBlock(stringreader, false)).a(true);
 
-        return new ArgumentTileLocation(argumentblock.b(), argumentblock.a().keySet(), argumentblock.c());
+        return new ArgumentTileLocation(argumentblock.getBlockData(), argumentblock.getStateMap().keySet(), argumentblock.c());
     }
 
     public static ArgumentTileLocation a(CommandContext<CommandListenerWrapper> commandcontext, String s) {

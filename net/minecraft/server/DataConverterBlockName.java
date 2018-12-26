@@ -9,7 +9,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class DataConverterBlockName extends DataFix {
 
@@ -18,10 +17,10 @@ public class DataConverterBlockName extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.p);
-        Type type1 = this.getOutputSchema().getType(DataConverterTypes.p);
-        Type type2 = DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()));
-        Type type3 = DSL.named(DataConverterTypes.p.typeName(), DSL.namespacedString());
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.p);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.p);
+        Type<Pair<String, Either<Integer, String>>> type2 = DSL.named(DataConverterTypes.p.typeName(), DSL.or(DSL.intType(), DSL.namespacedString()));
+        Type<Pair<String, String>> type3 = DSL.named(DataConverterTypes.p.typeName(), DSL.namespacedString());
 
         if (Objects.equals(type, type2) && Objects.equals(type1, type3)) {
             return this.fixTypeEverywhere("BlockNameFlatteningFix", type2, type3, (dynamicops) -> {

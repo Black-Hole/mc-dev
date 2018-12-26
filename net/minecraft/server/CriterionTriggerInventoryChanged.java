@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -91,7 +92,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
         }
 
         public void a(PlayerInventory playerinventory) {
-            ArrayList arraylist = null;
+            List<CriterionTrigger.a<CriterionTriggerInventoryChanged.b>> list = null;
             Iterator iterator = this.b.iterator();
 
             CriterionTrigger.a criteriontrigger_a;
@@ -99,16 +100,16 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
                 if (((CriterionTriggerInventoryChanged.b) criteriontrigger_a.a()).a(playerinventory)) {
-                    if (arraylist == null) {
-                        arraylist = Lists.newArrayList();
+                    if (list == null) {
+                        list = Lists.newArrayList();
                     }
 
-                    arraylist.add(criteriontrigger_a);
+                    list.add(criteriontrigger_a);
                 }
             }
 
-            if (arraylist != null) {
-                iterator = arraylist.iterator();
+            if (list != null) {
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     criteriontrigger_a = (CriterionTrigger.a) iterator.next();
@@ -181,7 +182,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
             int i = 0;
             int j = 0;
             int k = 0;
-            ArrayList arraylist = Lists.newArrayList(this.d);
+            List<CriterionConditionItem> list = Lists.newArrayList(this.d);
 
             for (int l = 0; l < playerinventory.getSize(); ++l) {
                 ItemStack itemstack = playerinventory.getItem(l);
@@ -194,7 +195,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
                         ++i;
                     }
 
-                    Iterator iterator = arraylist.iterator();
+                    Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {
                         CriterionConditionItem criterionconditionitem = (CriterionConditionItem) iterator.next();
@@ -212,7 +213,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
                 return false;
             } else if (!this.a.d(k)) {
                 return false;
-            } else if (!arraylist.isEmpty()) {
+            } else if (!list.isEmpty()) {
                 return false;
             } else {
                 return true;

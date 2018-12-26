@@ -10,7 +10,6 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterPotionWater extends DataFix {
 
@@ -19,19 +18,19 @@ public class DataConverterPotionWater extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemWaterPotionFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent()) {
                 String s = (String) ((Pair) optional.get()).getSecond();
 
                 if ("minecraft:potion".equals(s) || "minecraft:splash_potion".equals(s) || "minecraft:lingering_potion".equals(s) || "minecraft:tipped_arrow".equals(s)) {
-                    Typed typed1 = typed.getOrCreateTyped(opticfinder1);
-                    Dynamic dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
+                    Typed<?> typed1 = typed.getOrCreateTyped(opticfinder1);
+                    Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
 
                     if (!dynamic.get("Potion").flatMap(Dynamic::getStringValue).isPresent()) {
                         dynamic = dynamic.set("Potion", dynamic.createString("minecraft:water"));

@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,9 +50,9 @@ public class Tags<T> {
     }
 
     public Tag<T> b(MinecraftKey minecraftkey) {
-        Tag tag = (Tag) this.d.get(minecraftkey);
+        Tag<T> tag = (Tag) this.d.get(minecraftkey);
 
-        return tag == null ? new Tag(minecraftkey) : tag;
+        return tag == null ? new Tag<>(minecraftkey) : tag;
     }
 
     public Collection<MinecraftKey> a() {
@@ -65,7 +64,7 @@ public class Tags<T> {
     }
 
     public void a(IResourceManager iresourcemanager) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<MinecraftKey, Tag.a<T>> map = Maps.newHashMap();
         Iterator iterator = iresourcemanager.a(this.g, (s) -> {
             return s.endsWith(".json");
         }).iterator();
@@ -87,10 +86,10 @@ public class Tags<T> {
                         if (jsonobject == null) {
                             Tags.a.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.i, minecraftkey1, minecraftkey, iresource.d());
                         } else {
-                            Tag.a tag_a = (Tag.a) hashmap.getOrDefault(minecraftkey1, Tag.a.a());
+                            Tag.a<T> tag_a = (Tag.a) map.getOrDefault(minecraftkey1, Tag.a.a());
 
                             tag_a.a(this.f, this.e, jsonobject);
-                            hashmap.put(minecraftkey1, tag_a);
+                            map.put(minecraftkey1, tag_a);
                         }
                     } catch (RuntimeException | IOException ioexception) {
                         Tags.a.error("Couldn't read {} tag list {} from {} in data pack {}", this.i, minecraftkey1, minecraftkey, iresource.d(), ioexception);
@@ -104,9 +103,9 @@ public class Tags<T> {
         }
 
         label148:
-        while (!hashmap.isEmpty()) {
+        while (!map.isEmpty()) {
             boolean flag = false;
-            Iterator iterator2 = hashmap.entrySet().iterator();
+            Iterator iterator2 = map.entrySet().iterator();
 
             Entry entry;
 
@@ -120,7 +119,7 @@ public class Tags<T> {
             }
 
             if (!flag) {
-                iterator2 = hashmap.entrySet().iterator();
+                iterator2 = map.entrySet().iterator();
 
                 while (true) {
                     if (!iterator2.hasNext()) {
@@ -133,10 +132,10 @@ public class Tags<T> {
             }
         }
 
-        iterator = hashmap.entrySet().iterator();
+        iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry1 = (Entry) iterator.next();
+            Entry<MinecraftKey, Tag.a<T>> entry1 = (Entry) iterator.next();
 
             this.a(((Tag.a) entry1.getValue()).a(this.h).b((MinecraftKey) entry1.getKey()));
         }

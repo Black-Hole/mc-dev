@@ -36,7 +36,7 @@ public class WorldGenSurfaceDefaultBlock implements WorldGenSurface<WorldGenSurf
                     }
 
                     if (i2 < l && (iblockdata5 == null || iblockdata5.isAir())) {
-                        if (biomebase.c((BlockPosition) blockposition_mutableblockposition.c(i, i2, j)) < 0.15F) {
+                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, i2, j)) < 0.15F) {
                             iblockdata5 = Blocks.ICE.getBlockData();
                         } else {
                             iblockdata5 = iblockdata1;

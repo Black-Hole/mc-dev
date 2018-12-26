@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class DataConverterFlattenSpawnEgg extends DataFix {
 
@@ -72,19 +70,19 @@ public class DataConverterFlattenSpawnEgg extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = DSL.fieldFinder("id", DSL.namespacedString());
-        OpticFinder opticfinder2 = type.findField("tag");
-        OpticFinder opticfinder3 = opticfinder2.type().findField("EntityTag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.namespacedString());
+        OpticFinder<?> opticfinder2 = type.findField("tag");
+        OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");
 
         return this.fixTypeEverywhereTyped("ItemInstanceSpawnEggFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:spawn_egg")) {
-                Typed typed1 = typed.getOrCreateTyped(opticfinder1);
-                Typed typed2 = typed1.getOrCreateTyped(opticfinder2);
-                Optional optional1 = typed2.getOptional(opticfinder3);
+                Typed<?> typed1 = typed.getOrCreateTyped(opticfinder2);
+                Typed<?> typed2 = typed1.getOrCreateTyped(opticfinder3);
+                Optional<String> optional1 = typed2.getOptional(opticfinder1);
 
                 if (optional1.isPresent()) {
                     return typed.set(opticfinder, Pair.of(DataConverterTypes.q.typeName(), DataConverterFlattenSpawnEgg.a.getOrDefault(optional1.get(), "minecraft:pig_spawn_egg")));

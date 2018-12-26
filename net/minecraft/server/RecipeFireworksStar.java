@@ -2,11 +2,9 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class RecipeFireworksStar extends IRecipeComplex {
 
@@ -86,7 +84,7 @@ public class RecipeFireworksStar extends IRecipeComplex {
         ItemStack itemstack = new ItemStack(Items.FIREWORK_STAR);
         NBTTagCompound nbttagcompound = itemstack.a("Explosion");
         ItemFireworks.EffectType itemfireworks_effecttype = ItemFireworks.EffectType.SMALL_BALL;
-        ArrayList arraylist = Lists.newArrayList();
+        List<Integer> list = Lists.newArrayList();
 
         for (int i = 0; i < iinventory.getSize(); ++i) {
             ItemStack itemstack1 = iinventory.getItem(i);
@@ -99,12 +97,12 @@ public class RecipeFireworksStar extends IRecipeComplex {
                 } else if (RecipeFireworksStar.b.test(itemstack1)) {
                     nbttagcompound.setBoolean("Trail", true);
                 } else if (itemstack1.getItem() instanceof ItemDye) {
-                    arraylist.add(((ItemDye) itemstack1.getItem()).d().f());
+                    list.add(((ItemDye) itemstack1.getItem()).d().f());
                 }
             }
         }
 
-        nbttagcompound.b("Colors", (List) arraylist);
+        nbttagcompound.b("Colors", (List) list);
         nbttagcompound.setByte("Type", (byte) itemfireworks_effecttype.a());
         return itemstack;
     }

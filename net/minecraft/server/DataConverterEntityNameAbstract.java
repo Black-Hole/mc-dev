@@ -13,7 +13,7 @@ public abstract class DataConverterEntityNameAbstract extends DataConverterEntit
     }
 
     protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
-        Pair pair = this.a(s, (Dynamic) typed.getOrCreate(DSL.remainderFinder()));
+        Pair<String, Dynamic<?>> pair = this.a(s, (Dynamic) typed.getOrCreate(DSL.remainderFinder()));
 
         return Pair.of(pair.getFirst(), typed.set(DSL.remainderFinder(), pair.getSecond()));
     }

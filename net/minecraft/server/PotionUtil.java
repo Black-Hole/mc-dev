@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -14,19 +13,19 @@ public class PotionUtil {
     }
 
     public static List<MobEffect> a(PotionRegistry potionregistry, Collection<MobEffect> collection) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MobEffect> list = Lists.newArrayList();
 
-        arraylist.addAll(potionregistry.a());
-        arraylist.addAll(collection);
-        return arraylist;
+        list.addAll(potionregistry.a());
+        list.addAll(collection);
+        return list;
     }
 
     public static List<MobEffect> a(@Nullable NBTTagCompound nbttagcompound) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MobEffect> list = Lists.newArrayList();
 
-        arraylist.addAll(c(nbttagcompound).a());
-        a(nbttagcompound, (List) arraylist);
-        return arraylist;
+        list.addAll(c(nbttagcompound).a());
+        a(nbttagcompound, (List) list);
+        return list;
     }
 
     public static List<MobEffect> b(ItemStack itemstack) {
@@ -34,10 +33,10 @@ public class PotionUtil {
     }
 
     public static List<MobEffect> b(@Nullable NBTTagCompound nbttagcompound) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MobEffect> list = Lists.newArrayList();
 
-        a(nbttagcompound, (List) arraylist);
-        return arraylist;
+        a(nbttagcompound, (List) list);
+        return list;
     }
 
     public static void a(@Nullable NBTTagCompound nbttagcompound, List<MobEffect> list) {

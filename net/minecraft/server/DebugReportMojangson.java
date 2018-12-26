@@ -4,15 +4,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,10 +28,10 @@ public class DebugReportMojangson implements DebugReportProvider {
         while (iterator.hasNext()) {
             java.nio.file.Path java_nio_file_path1 = (java.nio.file.Path) iterator.next();
 
-            Files.walk(java_nio_file_path1, new FileVisitOption[0]).filter((java_nio_file_path) -> {
-                return java_nio_file_path.toString().endsWith(".snbt");
-            }).forEach((java_nio_file_path) -> {
-                this.a(hashcache, java_nio_file_path, this.a(java_nio_file_path1, java_nio_file_path), java_nio_file_path2);
+            Files.walk(java_nio_file_path1).filter((java_nio_file_path2) -> {
+                return java_nio_file_path2.toString().endsWith(".snbt");
+            }).forEach((java_nio_file_path2) -> {
+                this.a(hashcache, java_nio_file_path2, this.a(java_nio_file_path1, java_nio_file_path2), java_nio_file_path);
             });
         }
 
@@ -63,8 +58,8 @@ public class DebugReportMojangson implements DebugReportProvider {
                 String s2 = DebugReportMojangson.a.hashUnencodedChars(s1).toString();
 
                 if (!Objects.equals(hashcache.a(java_nio_file_path2), s2) || !Files.exists(java_nio_file_path2, new LinkOption[0])) {
-                    Files.createDirectories(java_nio_file_path2.getParent(), new FileAttribute[0]);
-                    OutputStream outputstream = Files.newOutputStream(java_nio_file_path2, new OpenOption[0]);
+                    Files.createDirectories(java_nio_file_path2.getParent());
+                    OutputStream outputstream = Files.newOutputStream(java_nio_file_path2);
                     Throwable throwable1 = null;
 
                     try {

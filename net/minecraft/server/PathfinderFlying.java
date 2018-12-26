@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import javax.annotation.Nullable;
 
 public class PathfinderFlying extends PathfinderNormal {
@@ -39,13 +39,13 @@ public class PathfinderFlying extends PathfinderNormal {
         PathType pathtype = this.a(this.b, blockposition.getX(), i, blockposition.getZ());
 
         if (this.b.a(pathtype) < 0.0F) {
-            HashSet hashset = Sets.newHashSet();
+            Set<BlockPosition> set = Sets.newHashSet();
 
-            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().minZ));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().maxZ));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().minZ));
-            hashset.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().maxZ));
-            Iterator iterator = hashset.iterator();
+            set.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().minZ));
+            set.add(new BlockPosition(this.b.getBoundingBox().minX, (double) i, this.b.getBoundingBox().maxZ));
+            set.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().minZ));
+            set.add(new BlockPosition(this.b.getBoundingBox().maxX, (double) i, this.b.getBoundingBox().maxZ));
+            Iterator iterator = set.iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -211,7 +211,7 @@ public class PathfinderFlying extends PathfinderNormal {
     }
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1) {
-        EnumSet enumset = EnumSet.noneOf(PathType.class);
+        EnumSet<PathType> enumset = EnumSet.noneOf(PathType.class);
         PathType pathtype = PathType.BLOCKED;
         BlockPosition blockposition = new BlockPosition(entityinsentient);
 

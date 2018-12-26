@@ -43,7 +43,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return FluidTypes.c.a(false);
+        return FluidTypes.WATER.a(false);
     }
 
     public static void a(GeneratorAccess generatoraccess, BlockPosition blockposition, boolean flag) {
@@ -80,7 +80,7 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
                 generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
             }
 
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         }
     }
@@ -115,8 +115,8 @@ public class BlockBubbleColumn extends Block implements IFluidSource {
         blockstatelist_a.a(BlockBubbleColumn.a);
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
-        return FluidTypes.c;
+        return FluidTypes.WATER;
     }
 }

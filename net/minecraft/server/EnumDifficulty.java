@@ -2,8 +2,6 @@ package net.minecraft.server;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 
 public enum EnumDifficulty {
 

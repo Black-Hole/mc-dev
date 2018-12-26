@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 
 public class BlockTall extends Block implements IFluidSource, IFluidContainer {
 
@@ -78,25 +77,25 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         return i;
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Boolean) iblockdata.get(BlockTall.p)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, false), 3);
-            return FluidTypes.c;
+            return FluidTypes.WATER;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTall.p) ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockTall.p) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !(Boolean) iblockdata.get(BlockTall.p) && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockTall.p) && fluidtype == FluidTypes.WATER;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!(Boolean) iblockdata.get(BlockTall.p) && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockTall.p) && fluid.c() == FluidTypes.WATER) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, true), 3);
                 generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));

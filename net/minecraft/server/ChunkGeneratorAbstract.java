@@ -11,7 +11,6 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implements ChunkGenerator<C> {
@@ -37,12 +36,12 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
 
         for (int k = i - 8; k <= i + 8; ++k) {
             for (int l = j - 8; l <= j + 8; ++l) {
-                List list = regionlimitedworldaccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition(k * 16, 0, l * 16), (BiomeBase) null).a(worldgenstage_features);
+                List<WorldGenCarverWrapper<?>> list = regionlimitedworldaccess.getChunkProvider().getChunkGenerator().getWorldChunkManager().getBiome(new BlockPosition(k * 16, 0, l * 16), (BiomeBase) null).a(worldgenstage_features);
                 ListIterator listiterator = list.listIterator();
 
                 while (listiterator.hasNext()) {
                     int i1 = listiterator.nextIndex();
-                    WorldGenCarverWrapper worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
+                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
 
                     seededrandom.c(regionlimitedworldaccess.getMinecraftWorld().getSeed() + (long) i1, k, l);
                     if (worldgencarverwrapper.a(regionlimitedworldaccess, seededrandom, k, l, WorldGenFeatureConfiguration.e)) {
@@ -56,7 +55,7 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
 
     @Nullable
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
-        StructureGenerator structuregenerator = (StructureGenerator) WorldGenerator.aF.get(s.toLowerCase(Locale.ROOT));
+        StructureGenerator<?> structuregenerator = (StructureGenerator) WorldGenerator.aF.get(s.toLowerCase(Locale.ROOT));
 
         return structuregenerator != null ? structuregenerator.getNearestGeneratedFeature(world, this, blockposition, i, flag) : null;
     }
@@ -142,14 +141,14 @@ public abstract class ChunkGeneratorAbstract<C extends GeneratorSettings> implem
     }
 
     public Long2ObjectMap<StructureStart> getStructureStartCache(StructureGenerator<? extends WorldGenFeatureConfiguration> structuregenerator) {
-        return (Long2ObjectMap) this.d.computeIfAbsent(structuregenerator, (structuregenerator) -> {
-            return Long2ObjectMaps.synchronize(new ExpiringMap(8192, 10000));
+        return (Long2ObjectMap) this.d.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
+            return Long2ObjectMaps.synchronize(new ExpiringMap<>(8192, 10000));
         });
     }
 
     public Long2ObjectMap<LongSet> getStructureCache(StructureGenerator<? extends WorldGenFeatureConfiguration> structuregenerator) {
-        return (Long2ObjectMap) this.e.computeIfAbsent(structuregenerator, (structuregenerator) -> {
-            return Long2ObjectMaps.synchronize(new ExpiringMap(8192, 10000));
+        return (Long2ObjectMap) this.e.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
+            return Long2ObjectMaps.synchronize(new ExpiringMap<>(8192, 10000));
         });
     }
 

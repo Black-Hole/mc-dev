@@ -1,8 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,12 +48,12 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
     }
 
     protected void a(Tag<Block> tag, Tag<Item> tag1) {
-        Tag.a tag_a = this.a(tag1);
+        Tag.a<Item> tag_a = this.a(tag1);
         Iterator iterator = tag.b().iterator();
 
         while (iterator.hasNext()) {
-            Tag.b tag_b = (Tag.b) iterator.next();
-            Tag.b tag_b1 = this.a(tag_b);
+            Tag.b<Block> tag_b = (Tag.b) iterator.next();
+            Tag.b<Item> tag_b1 = this.a(tag_b);
 
             tag_a.a(tag_b1);
         }
@@ -62,9 +62,9 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
 
     private Tag.b<Item> a(Tag.b<Block> tag_b) {
         if (tag_b instanceof Tag.c) {
-            return new Tag.c(((Tag.c) tag_b).a());
+            return new Tag.c<>(((Tag.c) tag_b).a());
         } else if (tag_b instanceof Tag.d) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<Item> list = Lists.newArrayList();
             Iterator iterator = ((Tag.d) tag_b).a().iterator();
 
             while (iterator.hasNext()) {
@@ -74,11 +74,11 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
                 if (item == Items.AIR) {
                     DebugReportTagsItem.e.warn("Itemless block copied to item tag: {}", IRegistry.BLOCK.getKey(block));
                 } else {
-                    arraylist.add(item);
+                    list.add(item);
                 }
             }
 
-            return new Tag.d(arraylist);
+            return new Tag.d<>(list);
         } else {
             throw new UnsupportedOperationException("Unknown tag entry " + tag_b);
         }

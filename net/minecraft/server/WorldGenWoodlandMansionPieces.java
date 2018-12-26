@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -305,7 +304,7 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         private void b() {
-            ArrayList arraylist = Lists.newArrayList();
+            List<Tuple<Integer, Integer>> list = Lists.newArrayList();
             WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g = this.d[1];
 
             int i;
@@ -317,15 +316,15 @@ public class WorldGenWoodlandMansionPieces {
 
                     j = l & 983040;
                     if (j == 131072 && (l & 2097152) == 2097152) {
-                        arraylist.add(new Tuple(i, k));
+                        list.add(new Tuple<>(i, k));
                     }
                 }
             }
 
-            if (arraylist.isEmpty()) {
+            if (list.isEmpty()) {
                 this.c.a(0, 0, this.c.b, this.c.c, 5);
             } else {
-                Tuple tuple = (Tuple) arraylist.get(this.a.nextInt(arraylist.size()));
+                Tuple<Integer, Integer> tuple = (Tuple) list.get(this.a.nextInt(list.size()));
 
                 i = worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b());
                 worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b(), i | 4194304);
@@ -347,22 +346,22 @@ public class WorldGenWoodlandMansionPieces {
                     }
                 }
 
-                ArrayList arraylist1 = Lists.newArrayList();
+                List<EnumDirection> list1 = Lists.newArrayList();
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {
                     EnumDirection enumdirection1 = (EnumDirection) iterator.next();
 
                     if (this.c.a(j + enumdirection1.getAdjacentX(), i1 + enumdirection1.getAdjacentZ()) == 0) {
-                        arraylist1.add(enumdirection1);
+                        list1.add(enumdirection1);
                     }
                 }
 
-                if (arraylist1.isEmpty()) {
+                if (list1.isEmpty()) {
                     this.c.a(0, 0, this.c.b, this.c.c, 5);
                     worldgenwoodlandmansionpieces_g.a((Integer) tuple.a(), (Integer) tuple.b(), i);
                 } else {
-                    EnumDirection enumdirection2 = (EnumDirection) arraylist1.get(this.a.nextInt(arraylist1.size()));
+                    EnumDirection enumdirection2 = (EnumDirection) list1.get(this.a.nextInt(list1.size()));
 
                     this.a(this.c, j + enumdirection2.getAdjacentX(), i1 + enumdirection2.getAdjacentZ(), enumdirection2, 4);
 
@@ -375,24 +374,24 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         private void a(WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g, WorldGenWoodlandMansionPieces.g worldgenwoodlandmansionpieces_g1) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<Tuple<Integer, Integer>> list = Lists.newArrayList();
 
             int i;
 
             for (i = 0; i < worldgenwoodlandmansionpieces_g.c; ++i) {
                 for (int j = 0; j < worldgenwoodlandmansionpieces_g.b; ++j) {
                     if (worldgenwoodlandmansionpieces_g.a(j, i) == 2) {
-                        arraylist.add(new Tuple(j, i));
+                        list.add(new Tuple<>(j, i));
                     }
                 }
             }
 
-            Collections.shuffle(arraylist, this.a);
+            Collections.shuffle(list, this.a);
             i = 10;
-            Iterator iterator = arraylist.iterator();
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
-                Tuple tuple = (Tuple) iterator.next();
+                Tuple<Integer, Integer> tuple = (Tuple) iterator.next();
                 int k = (Integer) tuple.a();
                 int l = (Integer) tuple.b();
 
@@ -480,12 +479,12 @@ public class WorldGenWoodlandMansionPieces {
         }
 
         public void a(BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<WorldGenWoodlandMansionPieces.i> list, WorldGenWoodlandMansionPieces.c worldgenwoodlandmansionpieces_c) {
-            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e = new WorldGenWoodlandMansionPieces.e(null);
+            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e = new WorldGenWoodlandMansionPieces.e();
 
             worldgenwoodlandmansionpieces_e.b = blockposition;
             worldgenwoodlandmansionpieces_e.a = enumblockrotation;
             worldgenwoodlandmansionpieces_e.c = "wall_flat";
-            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e1 = new WorldGenWoodlandMansionPieces.e(null);
+            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e1 = new WorldGenWoodlandMansionPieces.e();
 
             this.a(list, worldgenwoodlandmansionpieces_e);
             worldgenwoodlandmansionpieces_e1.b = worldgenwoodlandmansionpieces_e.b.up(8);
@@ -505,7 +504,7 @@ public class WorldGenWoodlandMansionPieces {
 
             this.a(list, worldgenwoodlandmansionpieces_e, worldgenwoodlandmansionpieces_g, EnumDirection.SOUTH, this.c, this.d, i, j);
             this.a(list, worldgenwoodlandmansionpieces_e1, worldgenwoodlandmansionpieces_g, EnumDirection.SOUTH, this.c, this.d, i, j);
-            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e2 = new WorldGenWoodlandMansionPieces.e(null);
+            WorldGenWoodlandMansionPieces.e worldgenwoodlandmansionpieces_e2 = new WorldGenWoodlandMansionPieces.e();
 
             worldgenwoodlandmansionpieces_e2.b = worldgenwoodlandmansionpieces_e.b.up(19);
             worldgenwoodlandmansionpieces_e2.a = worldgenwoodlandmansionpieces_e.a;
@@ -532,7 +531,7 @@ public class WorldGenWoodlandMansionPieces {
                 ;
             }
 
-            WorldGenWoodlandMansionPieces.b[] aworldgenwoodlandmansionpieces_b = new WorldGenWoodlandMansionPieces.b[] { new WorldGenWoodlandMansionPieces.a(null), new WorldGenWoodlandMansionPieces.f(null), new WorldGenWoodlandMansionPieces.h(null)};
+            WorldGenWoodlandMansionPieces.b[] aworldgenwoodlandmansionpieces_b = new WorldGenWoodlandMansionPieces.b[] { new WorldGenWoodlandMansionPieces.a(), new WorldGenWoodlandMansionPieces.f(), new WorldGenWoodlandMansionPieces.h()};
 
             for (k = 0; k < 3; ++k) {
                 BlockPosition blockposition1 = blockposition.up(8 * k + (k == 2 ? 3 : 0));
@@ -569,7 +568,7 @@ public class WorldGenWoodlandMansionPieces {
 
                 String s2 = k == 0 ? "indoors_wall_1" : "indoors_wall_2";
                 String s3 = k == 0 ? "indoors_door_1" : "indoors_door_2";
-                ArrayList arraylist = Lists.newArrayList();
+                List<EnumDirection> list1 = Lists.newArrayList();
 
                 for (int k1 = 0; k1 < worldgenwoodlandmansionpieces_g3.c; ++k1) {
                     for (int l1 = 0; l1 < worldgenwoodlandmansionpieces_g3.b; ++l1) {
@@ -581,7 +580,7 @@ public class WorldGenWoodlandMansionPieces {
                             int k2 = i2 & '\uffff';
 
                             flag1 = flag1 && (i2 & 8388608) == 8388608;
-                            arraylist.clear();
+                            list1.clear();
                             if ((i2 & 2097152) == 2097152) {
                                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
@@ -589,15 +588,15 @@ public class WorldGenWoodlandMansionPieces {
                                     EnumDirection enumdirection = (EnumDirection) iterator.next();
 
                                     if (worldgenwoodlandmansionpieces_g3.a(l1 + enumdirection.getAdjacentX(), k1 + enumdirection.getAdjacentZ()) == 1) {
-                                        arraylist.add(enumdirection);
+                                        list1.add(enumdirection);
                                     }
                                 }
                             }
 
                             EnumDirection enumdirection1 = null;
 
-                            if (!arraylist.isEmpty()) {
-                                enumdirection1 = (EnumDirection) arraylist.get(this.b.nextInt(arraylist.size()));
+                            if (!list1.isEmpty()) {
+                                enumdirection1 = (EnumDirection) list1.get(this.b.nextInt(list1.size()));
                             } else if ((i2 & 1048576) == 1048576) {
                                 enumdirection1 = EnumDirection.UP;
                             }

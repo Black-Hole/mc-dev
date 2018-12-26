@@ -48,7 +48,7 @@ public class NBTTagByteArray extends NBTList<NBTTagByte> {
     }
 
     public byte getTypeId() {
-        return (byte) 7;
+        return 7;
     }
 
     public String toString() {

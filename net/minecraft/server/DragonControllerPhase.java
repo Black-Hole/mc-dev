@@ -29,16 +29,16 @@ public class DragonControllerPhase<T extends IDragonController> {
 
     public IDragonController a(EntityEnderDragon entityenderdragon) {
         try {
-            Constructor constructor = this.a();
+            Constructor<? extends IDragonController> constructor = this.a();
 
-            return (IDragonController) constructor.newInstance(new Object[] { entityenderdragon});
+            return (IDragonController) constructor.newInstance(entityenderdragon);
         } catch (Exception exception) {
             throw new Error(exception);
         }
     }
 
     protected Constructor<? extends IDragonController> a() throws NoSuchMethodException {
-        return this.m.getConstructor(new Class[] { EntityEnderDragon.class});
+        return this.m.getConstructor(EntityEnderDragon.class);
     }
 
     public int b() {
@@ -58,7 +58,7 @@ public class DragonControllerPhase<T extends IDragonController> {
     }
 
     private static <T extends IDragonController> DragonControllerPhase<T> a(Class<T> oclass, String s) {
-        DragonControllerPhase dragoncontrollerphase = new DragonControllerPhase(DragonControllerPhase.l.length, oclass, s);
+        DragonControllerPhase<T> dragoncontrollerphase = new DragonControllerPhase<>(DragonControllerPhase.l.length, oclass, s);
 
         DragonControllerPhase.l = (DragonControllerPhase[]) Arrays.copyOf(DragonControllerPhase.l, DragonControllerPhase.l.length + 1);
         DragonControllerPhase.l[dragoncontrollerphase.b()] = dragoncontrollerphase;

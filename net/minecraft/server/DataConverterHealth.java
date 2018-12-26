@@ -9,7 +9,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 
 public class DataConverterHealth extends DataFix {
 
@@ -20,8 +19,8 @@ public class DataConverterHealth extends DataFix {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("HealF").flatMap(Dynamic::getNumberValue);
-        Optional optional1 = dynamic.get("Health").flatMap(Dynamic::getNumberValue);
+        Optional<Number> optional = dynamic.get("HealF").flatMap(Dynamic::getNumberValue);
+        Optional<Number> optional1 = dynamic.get("Health").flatMap(Dynamic::getNumberValue);
         float f;
 
         if (optional.isPresent()) {

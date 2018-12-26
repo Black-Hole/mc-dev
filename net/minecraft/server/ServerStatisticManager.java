@@ -10,17 +10,16 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.DataFixer;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -64,10 +63,10 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     private Set<Statistic<?>> d() {
-        HashSet hashset = Sets.newHashSet(this.e);
+        Set<Statistic<?>> set = Sets.newHashSet(this.e);
 
         this.e.clear();
-        return hashset;
+        return set;
     }
 
     public void a(DataFixer datafixer, String s) {
@@ -95,7 +94,7 @@ public class ServerStatisticManager extends StatisticManager {
                             String s1 = (String) iterator.next();
 
                             if (nbttagcompound1.hasKeyOfType(s1, 10)) {
-                                StatisticWrapper statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(new MinecraftKey(s1));
+                                StatisticWrapper<?> statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(new MinecraftKey(s1));
 
                                 if (statisticwrapper == null) {
                                     ServerStatisticManager.b.warn("Invalid statistic type in {}: Don't know what {} is", this.d, s1);
@@ -107,7 +106,7 @@ public class ServerStatisticManager extends StatisticManager {
                                         String s2 = (String) iterator1.next();
 
                                         if (nbttagcompound2.hasKeyOfType(s2, 99)) {
-                                            Statistic statistic = this.a(statisticwrapper, s2);
+                                            Statistic<?> statistic = this.a(statisticwrapper, s2);
 
                                             if (statistic == null) {
                                                 ServerStatisticManager.b.warn("Invalid statistic in {}: Don't know what {} is", this.d, s2);
@@ -155,9 +154,9 @@ public class ServerStatisticManager extends StatisticManager {
         if (minecraftkey == null) {
             return null;
         } else {
-            Object object = statisticwrapper.a().get(minecraftkey);
+            T t0 = statisticwrapper.a().get(minecraftkey);
 
-            return object == null ? null : statisticwrapper.b(object);
+            return t0 == null ? null : statisticwrapper.b(t0);
         }
     }
 
@@ -166,7 +165,7 @@ public class ServerStatisticManager extends StatisticManager {
         Iterator iterator = jsonobject.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, JsonElement> entry = (Entry) iterator.next();
             JsonElement jsonelement = (JsonElement) entry.getValue();
 
             if (jsonelement.isJsonObject()) {
@@ -184,23 +183,23 @@ public class ServerStatisticManager extends StatisticManager {
     }
 
     protected String b() {
-        HashMap hashmap = Maps.newHashMap();
+        Map<StatisticWrapper<?>, JsonObject> map = Maps.newHashMap();
         ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();
 
         while (objectiterator.hasNext()) {
-            it.unimi.dsi.fastutil.objects.Object2IntMap.Entry it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
-            Statistic statistic = (Statistic) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey();
+            it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Statistic<?>> it_unimi_dsi_fastutil_objects_object2intmap_entry = (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry) objectiterator.next();
+            Statistic<?> statistic = (Statistic) it_unimi_dsi_fastutil_objects_object2intmap_entry.getKey();
 
-            ((JsonObject) hashmap.computeIfAbsent(statistic.a(), (statisticwrapper) -> {
+            ((JsonObject) map.computeIfAbsent(statistic.a(), (statisticwrapper) -> {
                 return new JsonObject();
             })).addProperty(b(statistic).toString(), it_unimi_dsi_fastutil_objects_object2intmap_entry.getIntValue());
         }
 
         JsonObject jsonobject = new JsonObject();
-        Iterator iterator = hashmap.entrySet().iterator();
+        Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<StatisticWrapper<?>, JsonObject> entry = (Entry) iterator.next();
 
             jsonobject.add(IRegistry.STATS.getKey(entry.getKey()).toString(), (JsonElement) entry.getValue());
         }
@@ -222,19 +221,19 @@ public class ServerStatisticManager extends StatisticManager {
 
     public void a(EntityPlayer entityplayer) {
         int i = this.c.ah();
-        Object2IntOpenHashMap object2intopenhashmap = new Object2IntOpenHashMap();
+        Object2IntMap<Statistic<?>> object2intmap = new Object2IntOpenHashMap();
 
         if (i - this.f > 300) {
             this.f = i;
             Iterator iterator = this.d().iterator();
 
             while (iterator.hasNext()) {
-                Statistic statistic = (Statistic) iterator.next();
+                Statistic<?> statistic = (Statistic) iterator.next();
 
-                object2intopenhashmap.put(statistic, this.getStatisticValue(statistic));
+                object2intmap.put(statistic, this.getStatisticValue(statistic));
             }
         }
 
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutStatistic(object2intopenhashmap));
+        entityplayer.playerConnection.sendPacket(new PacketPlayOutStatistic(object2intmap));
     }
 }

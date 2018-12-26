@@ -7,7 +7,7 @@ import java.util.Locale;
 public class ParticleParamRedstone implements ParticleParam {
 
     public static final ParticleParamRedstone a = new ParticleParamRedstone(1.0F, 0.0F, 0.0F, 1.0F);
-    public static final ParticleParam.a<ParticleParamRedstone> b = new ParticleParam.a() {
+    public static final ParticleParam.a<ParticleParamRedstone> b = new ParticleParam.a<ParticleParamRedstone>() {
         public ParticleParamRedstone b(Particle<ParticleParamRedstone> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
             float f = (float) stringreader.readDouble();
@@ -48,7 +48,7 @@ public class ParticleParamRedstone implements ParticleParam {
     }
 
     public String a() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", new Object[] { this.b().d(), this.c, this.d, this.e, this.f});
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", this.b().d(), this.c, this.d, this.e, this.f);
     }
 
     public Particle<ParticleParamRedstone> b() {

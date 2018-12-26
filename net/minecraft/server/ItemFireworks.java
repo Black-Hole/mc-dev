@@ -2,8 +2,6 @@ package net.minecraft.server;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 
 public class ItemFireworks extends Item {
 
@@ -39,9 +37,9 @@ public class ItemFireworks extends Item {
                 }
             }
 
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
         } else {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, entityhuman.b(enumhand));
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, entityhuman.b(enumhand));
         }
     }
 

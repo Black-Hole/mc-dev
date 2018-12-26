@@ -2,10 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -36,7 +34,7 @@ public class EnchantmentManager {
     }
 
     public static Map<Enchantment, Integer> a(ItemStack itemstack) {
-        LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
+        Map<Enchantment, Integer> map = Maps.newLinkedHashMap();
         NBTTagList nbttaglist = itemstack.getItem() == Items.ENCHANTED_BOOK ? ItemEnchantedBook.e(itemstack) : itemstack.getEnchantments();
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
@@ -44,11 +42,11 @@ public class EnchantmentManager {
             Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(nbttagcompound.getString("id")));
 
             if (enchantment != null) {
-                linkedhashmap.put(enchantment, nbttagcompound.getInt("lvl"));
+                map.put(enchantment, nbttagcompound.getInt("lvl"));
             }
         }
 
-        return linkedhashmap;
+        return map;
     }
 
     public static void a(Map<Enchantment, Integer> map, ItemStack itemstack) {
@@ -56,7 +54,7 @@ public class EnchantmentManager {
         Iterator iterator = map.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<Enchantment, Integer> entry = (Entry) iterator.next();
             Enchantment enchantment = (Enchantment) entry.getKey();
 
             if (enchantment != null) {
@@ -163,13 +161,13 @@ public class EnchantmentManager {
     }
 
     public static int a(Enchantment enchantment, EntityLiving entityliving) {
-        List list = enchantment.a(entityliving);
+        Iterable<ItemStack> iterable = enchantment.a(entityliving);
 
-        if (list == null) {
+        if (iterable == null) {
             return 0;
         } else {
             int i = 0;
-            Iterator iterator = list.iterator();
+            Iterator iterator = iterable.iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
@@ -245,23 +243,23 @@ public class EnchantmentManager {
     }
 
     public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
-        List list = enchantment.a(entityliving);
+        List<ItemStack> list = enchantment.a(entityliving);
 
         if (list.isEmpty()) {
             return ItemStack.a;
         } else {
-            ArrayList arraylist = Lists.newArrayList();
+            List<ItemStack> list1 = Lists.newArrayList();
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
 
                 if (!itemstack.isEmpty() && getEnchantmentLevel(enchantment, itemstack) > 0) {
-                    arraylist.add(itemstack);
+                    list1.add(itemstack);
                 }
             }
 
-            return arraylist.isEmpty() ? ItemStack.a : (ItemStack) arraylist.get(entityliving.getRandom().nextInt(arraylist.size()));
+            return list1.isEmpty() ? ItemStack.a : (ItemStack) list1.get(entityliving.getRandom().nextInt(list1.size()));
         }
     }
 
@@ -283,7 +281,7 @@ public class EnchantmentManager {
     }
 
     public static ItemStack a(Random random, ItemStack itemstack, int i, boolean flag) {
-        List list = b(random, itemstack, i, flag);
+        List<WeightedRandomEnchant> list = b(random, itemstack, i, flag);
         boolean flag1 = itemstack.getItem() == Items.BOOK;
 
         if (flag1) {
@@ -306,34 +304,34 @@ public class EnchantmentManager {
     }
 
     public static List<WeightedRandomEnchant> b(Random random, ItemStack itemstack, int i, boolean flag) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<WeightedRandomEnchant> list = Lists.newArrayList();
         Item item = itemstack.getItem();
         int j = item.c();
 
         if (j <= 0) {
-            return arraylist;
+            return list;
         } else {
             i += 1 + random.nextInt(j / 4 + 1) + random.nextInt(j / 4 + 1);
             float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
 
             i = MathHelper.clamp(Math.round((float) i + (float) i * f), 1, Integer.MAX_VALUE);
-            List list = a(i, itemstack, flag);
+            List<WeightedRandomEnchant> list1 = a(i, itemstack, flag);
 
-            if (!list.isEmpty()) {
-                arraylist.add(WeightedRandom.a(random, list));
+            if (!list1.isEmpty()) {
+                list.add(WeightedRandom.a(random, list1));
 
                 while (random.nextInt(50) <= i) {
-                    a(list, (WeightedRandomEnchant) SystemUtils.a((List) arraylist));
-                    if (list.isEmpty()) {
+                    a(list1, (WeightedRandomEnchant) SystemUtils.a((List) list));
+                    if (list1.isEmpty()) {
                         break;
                     }
 
-                    arraylist.add(WeightedRandom.a(random, list));
+                    list.add(WeightedRandom.a(random, list1));
                     i /= 2;
                 }
             }
 
-            return arraylist;
+            return list;
         }
     }
 
@@ -365,7 +363,7 @@ public class EnchantmentManager {
     }
 
     public static List<WeightedRandomEnchant> a(int i, ItemStack itemstack, boolean flag) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<WeightedRandomEnchant> list = Lists.newArrayList();
         Item item = itemstack.getItem();
         boolean flag1 = itemstack.getItem() == Items.BOOK;
         Iterator iterator = IRegistry.ENCHANTMENT.iterator();
@@ -376,14 +374,14 @@ public class EnchantmentManager {
             if ((!enchantment.isTreasure() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
                 for (int j = enchantment.getMaxLevel(); j > enchantment.getStartLevel() - 1; --j) {
                     if (i >= enchantment.a(j) && i <= enchantment.b(j)) {
-                        arraylist.add(new WeightedRandomEnchant(enchantment, j));
+                        list.add(new WeightedRandomEnchant(enchantment, j));
                         break;
                     }
                 }
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     @FunctionalInterface

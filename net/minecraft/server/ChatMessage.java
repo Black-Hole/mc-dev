@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -86,7 +85,7 @@ public class ChatMessage extends ChatBaseComponent {
 
                 j = matcher.end();
                 if (l > k) {
-                    ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(k, l), new Object[0]));
+                    ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(k, l)));
 
                     chatcomponenttext.getChatModifier().setChatModifier(this.getChatModifier());
                     this.b.add(chatcomponenttext);
@@ -115,7 +114,7 @@ public class ChatMessage extends ChatBaseComponent {
             }
 
             if (k < s.length()) {
-                ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(k), new Object[0]));
+                ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(k)));
 
                 chatcomponenttext2.getChatModifier().setChatModifier(this.getChatModifier());
                 this.b.add(chatcomponenttext2);

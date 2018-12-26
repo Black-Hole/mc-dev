@@ -4,16 +4,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.ListenableFuture;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
@@ -41,26 +37,12 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, PersistentCollection persistentcollection, WorldData worlddata, DimensionManager dimensionmanager, MethodProfiler methodprofiler) {
         super(idatamanager, persistentcollection, worlddata, dimensionmanager.e(), methodprofiler, false);
-        Predicate predicate = (block) -> {
+        this.nextTickListBlock = new TickListServer<>(this, (block) -> {
             return block == null || block.getBlockData().isAir();
-        };
-        IRegistry iregistry = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        Function function = iregistry::getKey;
-        IRegistry iregistry1 = IRegistry.BLOCK;
-
-        IRegistry.BLOCK.getClass();
-        this.nextTickListBlock = new TickListServer(this, predicate, function, iregistry1::getOrDefault, this::b);
-        predicate = (fluidtype) -> {
-            return fluidtype == null || fluidtype == FluidTypes.a;
-        };
-        iregistry = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        function = iregistry::getKey;
-        iregistry1 = IRegistry.FLUID;
-        IRegistry.FLUID.getClass();
-        this.nextTickListFluid = new TickListServer(this, predicate, function, iregistry1::getOrDefault, this::a);
+        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::getOrDefault, this::b);
+        this.nextTickListFluid = new TickListServer<>(this, (fluidtype) -> {
+            return fluidtype == null || fluidtype == FluidTypes.EMPTY;
+        }, IRegistry.FLUID::getKey, IRegistry.FLUID::getOrDefault, this::a);
         this.siegeManager = new VillageSiege(this);
         this.d = new ObjectLinkedOpenHashSet();
         this.server = minecraftserver;
@@ -168,13 +150,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     @Nullable
     public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        List list = this.getChunkProvider().a(enumcreaturetype, blockposition);
+        List<BiomeBase.BiomeMeta> list = this.getChunkProvider().a(enumcreaturetype, blockposition);
 
         return list.isEmpty() ? null : (BiomeBase.BiomeMeta) WeightedRandom.a(this.random, list);
     }
 
     public boolean a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition blockposition) {
-        List list = this.getChunkProvider().a(enumcreaturetype, blockposition);
+        List<BiomeBase.BiomeMeta> list = this.getChunkProvider().a(enumcreaturetype, blockposition);
 
         return list != null && !list.isEmpty() ? list.contains(biomebase_biomemeta) : false;
     }
@@ -207,7 +189,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     protected void i() {
         this.J = false;
-        List list = (List) this.players.stream().filter(EntityHuman::isSleeping).collect(Collectors.toList());
+        List<EntityHuman> list = (List) this.players.stream().filter(EntityHuman::isSleeping).collect(Collectors.toList());
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -385,7 +367,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     protected BlockPosition a(BlockPosition blockposition) {
         BlockPosition blockposition1 = this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition);
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getHeight(), blockposition1.getZ()))).g(3.0D);
-        List list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
+        List<EntityLiving> list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
             return entityliving != null && entityliving.isAlive() && this.e(entityliving.getChunkCoordinates());
         });
 
@@ -567,7 +549,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.worldData.setSpawn(BlockPosition.ZERO.up());
         } else {
             WorldChunkManager worldchunkmanager = this.chunkProvider.getChunkGenerator().getWorldChunkManager();
-            List list = worldchunkmanager.a();
+            List<BiomeBase> list = worldchunkmanager.a();
             Random random = new Random(this.getSeed());
             BlockPosition blockposition = worldchunkmanager.a(0, 0, 256, list, random);
             ChunkCoordIntPair chunkcoordintpair = blockposition == null ? new ChunkCoordIntPair(0, 0) : new ChunkCoordIntPair(blockposition);
@@ -657,8 +639,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             }
 
             chunkproviderserver.a(flag);
-            ArrayList arraylist = Lists.newArrayList(chunkproviderserver.a());
-            Iterator iterator = arraylist.iterator();
+            List<Chunk> list = Lists.newArrayList(chunkproviderserver.a());
+            Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 Chunk chunk = (Chunk) iterator.next();
@@ -924,9 +906,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public <T extends ParticleParam> boolean a(EntityPlayer entityplayer, T t0, boolean flag, double d0, double d1, double d2, int i, double d3, double d4, double d5, double d6) {
-        PacketPlayOutWorldParticles packetplayoutworldparticles = new PacketPlayOutWorldParticles(t0, flag, (float) d0, (float) d1, (float) d2, (float) d3, (float) d4, (float) d5, (float) d6, i);
+        Packet<?> packet = new PacketPlayOutWorldParticles(t0, flag, (float) d0, (float) d1, (float) d2, (float) d3, (float) d4, (float) d5, (float) d6, i);
 
-        return this.a(entityplayer, flag, d0, d1, d2, packetplayoutworldparticles);
+        return this.a(entityplayer, flag, d0, d1, d2, packet);
     }
 
     private boolean a(EntityPlayer entityplayer, boolean flag, double d0, double d1, double d2, Packet<?> packet) {

@@ -5,14 +5,14 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javax.annotation.Nullable;
 
 public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "Hello world!", "foo", "@e", "Hello @p :)"});
+    private static final Collection<String> a = Arrays.asList("Hello world!", "foo", "@e", "Hello @p :)");
 
     public ArgumentChat() {}
 
@@ -107,11 +107,11 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                 stringreader.setCursor(stringreader.getTotalLength());
                 return new ArgumentChat.a(s, new ArgumentChat.b[0]);
             } else {
-                ArrayList arraylist = Lists.newArrayList();
+                List<ArgumentChat.b> list = Lists.newArrayList();
                 int i = stringreader.getCursor();
 
                 while (stringreader.canRead()) {
-                    if (stringreader.peek() == 64) {
+                    if (stringreader.peek() == '@') {
                         int j = stringreader.getCursor();
 
                         EntitySelector entityselector;
@@ -129,13 +129,13 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                             continue;
                         }
 
-                        arraylist.add(new ArgumentChat.b(j - i, stringreader.getCursor() - i, entityselector));
+                        list.add(new ArgumentChat.b(j - i, stringreader.getCursor() - i, entityselector));
                     } else {
                         stringreader.skip();
                     }
                 }
 
-                return new ArgumentChat.a(s, (ArgumentChat.b[]) arraylist.toArray(new ArgumentChat.b[arraylist.size()]));
+                return new ArgumentChat.a(s, (ArgumentChat.b[]) list.toArray(new ArgumentChat.b[list.size()]));
             }
         }
     }

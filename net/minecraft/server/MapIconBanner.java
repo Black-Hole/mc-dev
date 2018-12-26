@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public class MapIconBanner {

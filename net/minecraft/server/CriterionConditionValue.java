@@ -5,7 +5,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.BuiltInExceptionProvider;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -63,15 +62,15 @@ public abstract class CriterionConditionValue<T extends Number> {
     protected static <T extends Number, R extends CriterionConditionValue<T>> R a(@Nullable JsonElement jsonelement, R r0, BiFunction<JsonElement, String, T> bifunction, CriterionConditionValue.a<T, R> criterionconditionvalue_a) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             if (ChatDeserializer.b(jsonelement)) {
-                Number number = (Number) bifunction.apply(jsonelement, "value");
+                T t0 = (Number) bifunction.apply(jsonelement, "value");
 
-                return criterionconditionvalue_a.create(number, number);
+                return criterionconditionvalue_a.create(t0, t0);
             } else {
                 JsonObject jsonobject = ChatDeserializer.m(jsonelement, "value");
-                Number number1 = jsonobject.has("min") ? (Number) bifunction.apply(jsonobject.get("min"), "min") : null;
-                Number number2 = jsonobject.has("max") ? (Number) bifunction.apply(jsonobject.get("max"), "max") : null;
+                T t1 = jsonobject.has("min") ? (Number) bifunction.apply(jsonobject.get("min"), "min") : null;
+                T t2 = jsonobject.has("max") ? (Number) bifunction.apply(jsonobject.get("max"), "max") : null;
 
-                return criterionconditionvalue_a.create(number1, number2);
+                return criterionconditionvalue_a.create(t1, t2);
             }
         } else {
             return r0;
@@ -85,24 +84,24 @@ public abstract class CriterionConditionValue<T extends Number> {
             int i = stringreader.getCursor();
 
             try {
-                Number number = (Number) a(a(stringreader, function, supplier), function1);
-                Number number1;
+                T t0 = (Number) a(a(stringreader, function, supplier), function1);
+                Number number;
 
-                if (stringreader.canRead(2) && stringreader.peek() == 46 && stringreader.peek(1) == 46) {
+                if (stringreader.canRead(2) && stringreader.peek() == '.' && stringreader.peek(1) == '.') {
                     stringreader.skip();
                     stringreader.skip();
-                    number1 = (Number) a(a(stringreader, function, supplier), function1);
-                    if (number == null && number1 == null) {
+                    number = (Number) a(a(stringreader, function, supplier), function1);
+                    if (t0 == null && number == null) {
                         throw CriterionConditionValue.a.createWithContext(stringreader);
                     }
                 } else {
-                    number1 = number;
+                    number = t0;
                 }
 
-                if (number == null && number1 == null) {
+                if (t0 == null && number == null) {
                     throw CriterionConditionValue.a.createWithContext(stringreader);
                 } else {
-                    return criterionconditionvalue_b.create(stringreader, number, number1);
+                    return criterionconditionvalue_b.create(stringreader, t0, number);
                 }
             } catch (CommandSyntaxException commandsyntaxexception) {
                 stringreader.setCursor(i);
@@ -135,7 +134,7 @@ public abstract class CriterionConditionValue<T extends Number> {
     private static boolean a(StringReader stringreader) {
         char c0 = stringreader.peek();
 
-        return (c0 < 48 || c0 > 57) && c0 != 45 ? (c0 != 46 ? false : !stringreader.canRead(2) || stringreader.peek(1) != 46) : true;
+        return (c0 < '0' || c0 > '9') && c0 != '-' ? (c0 != '.' ? false : !stringreader.canRead(2) || stringreader.peek(1) != '.') : true;
     }
 
     @Nullable
@@ -203,12 +202,7 @@ public abstract class CriterionConditionValue<T extends Number> {
         }
 
         public static CriterionConditionValue.c a(StringReader stringreader, Function<Float, Float> function) throws CommandSyntaxException {
-            CriterionConditionValue.b criterionconditionvalue_b = CriterionConditionValue.c::a;
-            Function function1 = Float::parseFloat;
-            BuiltInExceptionProvider builtinexceptionprovider = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
-
-            CommandSyntaxException.BUILT_IN_EXCEPTIONS.getClass();
-            return (CriterionConditionValue.c) a(stringreader, criterionconditionvalue_b, function1, builtinexceptionprovider::readerInvalidFloat, function);
+            return (CriterionConditionValue.c) a(stringreader, CriterionConditionValue.c::a, Float::parseFloat, CommandSyntaxException.BUILT_IN_EXCEPTIONS::readerInvalidFloat, function);
         }
     }
 
@@ -260,12 +254,7 @@ public abstract class CriterionConditionValue<T extends Number> {
         }
 
         public static CriterionConditionValue.d a(StringReader stringreader, Function<Integer, Integer> function) throws CommandSyntaxException {
-            CriterionConditionValue.b criterionconditionvalue_b = CriterionConditionValue.d::a;
-            Function function1 = Integer::parseInt;
-            BuiltInExceptionProvider builtinexceptionprovider = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
-
-            CommandSyntaxException.BUILT_IN_EXCEPTIONS.getClass();
-            return (CriterionConditionValue.d) a(stringreader, criterionconditionvalue_b, function1, builtinexceptionprovider::readerInvalidInt, function);
+            return (CriterionConditionValue.d) a(stringreader, CriterionConditionValue.d::a, Integer::parseInt, CommandSyntaxException.BUILT_IN_EXCEPTIONS::readerInvalidInt, function);
         }
     }
 }

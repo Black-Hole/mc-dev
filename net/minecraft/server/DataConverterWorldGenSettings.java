@@ -12,7 +12,6 @@ import com.mojang.datafixers.schemas.Schema;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,11 +35,11 @@ public class DataConverterWorldGenSettings extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.getString("generatorName").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic) -> {
-            Optional optional = dynamic.getStringValue().map(this::a);
+        return dynamic.getString("generatorName").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic1) -> {
+            Optional optional = dynamic1.getStringValue().map(this::a);
 
-            dynamic.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createString), dynamic);
+            dynamic1.getClass();
+            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createString), dynamic1);
         }) : dynamic;
     }
 
@@ -49,7 +48,7 @@ public class DataConverterWorldGenSettings extends DataFix {
         if (s.isEmpty()) {
             return "minecraft:bedrock,2*minecraft:dirt,minecraft:grass_block;1;village";
         } else {
-            Iterator iterator = DataConverterWorldGenSettings.a.split(s).iterator();
+            Iterator<String> iterator = DataConverterWorldGenSettings.a.split(s).iterator();
             String s1 = (String) iterator.next();
             int i;
             String s2;
@@ -66,27 +65,27 @@ public class DataConverterWorldGenSettings extends DataFix {
                 StringBuilder stringbuilder = new StringBuilder();
                 Splitter splitter = i < 3 ? DataConverterWorldGenSettings.c : DataConverterWorldGenSettings.d;
 
-                stringbuilder.append((String) StreamSupport.stream(DataConverterWorldGenSettings.b.split(s2).spliterator(), false).map((s) -> {
-                    List list = splitter.splitToList(s);
-                    int i;
-                    String s1;
+                stringbuilder.append((String) StreamSupport.stream(DataConverterWorldGenSettings.b.split(s2).spliterator(), false).map((s3) -> {
+                    List<String> list = splitter.splitToList(s3);
+                    int j;
+                    String s4;
 
                     if (list.size() == 2) {
-                        i = NumberUtils.toInt((String) list.get(0));
-                        s1 = (String) list.get(1);
+                        j = NumberUtils.toInt((String) list.get(0));
+                        s4 = (String) list.get(1);
                     } else {
-                        i = 1;
-                        s1 = (String) list.get(0);
+                        j = 1;
+                        s4 = (String) list.get(0);
                     }
 
-                    List list1 = DataConverterWorldGenSettings.e.splitToList(s1);
-                    int j = ((String) list1.get(0)).equals("minecraft") ? 1 : 0;
-                    String s2 = (String) list1.get(j);
-                    int k = l == 3 ? DataConverterEntityBlockState.a("minecraft:" + s2) : NumberUtils.toInt(s2, 0);
-                    int i1 = j + 1;
+                    List<String> list1 = DataConverterWorldGenSettings.e.splitToList(s4);
+                    int k = ((String) list1.get(0)).equals("minecraft") ? 1 : 0;
+                    String s5 = (String) list1.get(k);
+                    int l = i == 3 ? DataConverterEntityBlockState.a("minecraft:" + s5) : NumberUtils.toInt(s5, 0);
+                    int i1 = k + 1;
                     int j1 = list1.size() > i1 ? NumberUtils.toInt((String) list1.get(i1), 0) : 0;
 
-                    return (i == 1 ? "" : i + "*") + DataConverterFlattenData.b(k << 4 | j1).getString("Name");
+                    return (j == 1 ? "" : j + "*") + DataConverterFlattenData.b(l << 4 | j1).getString("Name");
                 }).collect(Collectors.joining(",")));
 
                 while (iterator.hasNext()) {

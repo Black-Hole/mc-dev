@@ -63,11 +63,11 @@ public class BlockBeacon extends BlockTileEntity {
 
                 if (iblockdata.getBlock() == Blocks.BEACON) {
                     ((WorldServer) world).postToMainThread(() -> {
-                        TileEntity tileentity = world.getTileEntity(blockposition);
+                        TileEntity tileentity = world.getTileEntity(blockposition1);
 
                         if (tileentity instanceof TileEntityBeacon) {
                             ((TileEntityBeacon) tileentity).p();
-                            world.playBlockAction(blockposition, Blocks.BEACON, 1, 0);
+                            world.playBlockAction(blockposition1, Blocks.BEACON, 1, 0);
                         }
 
                     });

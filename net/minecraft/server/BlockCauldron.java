@@ -179,7 +179,7 @@ public class BlockCauldron extends Block {
 
     public void c(World world, BlockPosition blockposition) {
         if (world.random.nextInt(20) == 1) {
-            float f = world.getBiome(blockposition).c(blockposition);
+            float f = world.getBiome(blockposition).getAdjustedTemperature(blockposition);
 
             if (f >= 0.15F) {
                 IBlockData iblockdata = world.getType(blockposition);

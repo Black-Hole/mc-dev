@@ -2,9 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
@@ -38,58 +37,58 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
     }
 
     public static Map<Item, Integer> p() {
-        LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
+        Map<Item, Integer> map = Maps.newLinkedHashMap();
 
-        a(linkedhashmap, (IMaterial) Items.LAVA_BUCKET, 20000);
-        a(linkedhashmap, (IMaterial) Blocks.COAL_BLOCK, 16000);
-        a(linkedhashmap, (IMaterial) Items.BLAZE_ROD, 2400);
-        a(linkedhashmap, (IMaterial) Items.COAL, 1600);
-        a(linkedhashmap, (IMaterial) Items.CHARCOAL, 1600);
-        a(linkedhashmap, TagsItem.LOGS, 300);
-        a(linkedhashmap, TagsItem.PLANKS, 300);
-        a(linkedhashmap, TagsItem.WOODEN_STAIRS, 300);
-        a(linkedhashmap, TagsItem.WOODEN_SLABS, 150);
-        a(linkedhashmap, TagsItem.WOODEN_TRAPDOORS, 300);
-        a(linkedhashmap, TagsItem.WOODEN_PRESSURE_PLATES, 300);
-        a(linkedhashmap, (IMaterial) Blocks.OAK_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.BIRCH_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.SPRUCE_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.JUNGLE_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.DARK_OAK_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.ACACIA_FENCE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.OAK_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.BIRCH_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.SPRUCE_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.JUNGLE_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.DARK_OAK_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.ACACIA_FENCE_GATE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.NOTE_BLOCK, 300);
-        a(linkedhashmap, (IMaterial) Blocks.BOOKSHELF, 300);
-        a(linkedhashmap, (IMaterial) Blocks.JUKEBOX, 300);
-        a(linkedhashmap, (IMaterial) Blocks.CHEST, 300);
-        a(linkedhashmap, (IMaterial) Blocks.TRAPPED_CHEST, 300);
-        a(linkedhashmap, (IMaterial) Blocks.CRAFTING_TABLE, 300);
-        a(linkedhashmap, (IMaterial) Blocks.DAYLIGHT_DETECTOR, 300);
-        a(linkedhashmap, TagsItem.BANNERS, 300);
-        a(linkedhashmap, (IMaterial) Items.BOW, 300);
-        a(linkedhashmap, (IMaterial) Items.FISHING_ROD, 300);
-        a(linkedhashmap, (IMaterial) Blocks.LADDER, 300);
-        a(linkedhashmap, (IMaterial) Items.SIGN, 200);
-        a(linkedhashmap, (IMaterial) Items.WOODEN_SHOVEL, 200);
-        a(linkedhashmap, (IMaterial) Items.WOODEN_SWORD, 200);
-        a(linkedhashmap, (IMaterial) Items.WOODEN_HOE, 200);
-        a(linkedhashmap, (IMaterial) Items.WOODEN_AXE, 200);
-        a(linkedhashmap, (IMaterial) Items.WOODEN_PICKAXE, 200);
-        a(linkedhashmap, TagsItem.WOODEN_DOORS, 200);
-        a(linkedhashmap, TagsItem.BOATS, 200);
-        a(linkedhashmap, TagsItem.WOOL, 100);
-        a(linkedhashmap, TagsItem.WOODEN_BUTTONS, 100);
-        a(linkedhashmap, (IMaterial) Items.STICK, 100);
-        a(linkedhashmap, TagsItem.SAPLINGS, 100);
-        a(linkedhashmap, (IMaterial) Items.BOWL, 100);
-        a(linkedhashmap, TagsItem.CARPETS, 67);
-        a(linkedhashmap, (IMaterial) Blocks.DRIED_KELP_BLOCK, 4001);
-        return linkedhashmap;
+        a(map, (IMaterial) Items.LAVA_BUCKET, 20000);
+        a(map, (IMaterial) Blocks.COAL_BLOCK, 16000);
+        a(map, (IMaterial) Items.BLAZE_ROD, 2400);
+        a(map, (IMaterial) Items.COAL, 1600);
+        a(map, (IMaterial) Items.CHARCOAL, 1600);
+        a(map, TagsItem.LOGS, 300);
+        a(map, TagsItem.PLANKS, 300);
+        a(map, TagsItem.WOODEN_STAIRS, 300);
+        a(map, TagsItem.WOODEN_SLABS, 150);
+        a(map, TagsItem.WOODEN_TRAPDOORS, 300);
+        a(map, TagsItem.WOODEN_PRESSURE_PLATES, 300);
+        a(map, (IMaterial) Blocks.OAK_FENCE, 300);
+        a(map, (IMaterial) Blocks.BIRCH_FENCE, 300);
+        a(map, (IMaterial) Blocks.SPRUCE_FENCE, 300);
+        a(map, (IMaterial) Blocks.JUNGLE_FENCE, 300);
+        a(map, (IMaterial) Blocks.DARK_OAK_FENCE, 300);
+        a(map, (IMaterial) Blocks.ACACIA_FENCE, 300);
+        a(map, (IMaterial) Blocks.OAK_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.BIRCH_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.SPRUCE_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.JUNGLE_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.DARK_OAK_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.ACACIA_FENCE_GATE, 300);
+        a(map, (IMaterial) Blocks.NOTE_BLOCK, 300);
+        a(map, (IMaterial) Blocks.BOOKSHELF, 300);
+        a(map, (IMaterial) Blocks.JUKEBOX, 300);
+        a(map, (IMaterial) Blocks.CHEST, 300);
+        a(map, (IMaterial) Blocks.TRAPPED_CHEST, 300);
+        a(map, (IMaterial) Blocks.CRAFTING_TABLE, 300);
+        a(map, (IMaterial) Blocks.DAYLIGHT_DETECTOR, 300);
+        a(map, TagsItem.BANNERS, 300);
+        a(map, (IMaterial) Items.BOW, 300);
+        a(map, (IMaterial) Items.FISHING_ROD, 300);
+        a(map, (IMaterial) Blocks.LADDER, 300);
+        a(map, (IMaterial) Items.SIGN, 200);
+        a(map, (IMaterial) Items.WOODEN_SHOVEL, 200);
+        a(map, (IMaterial) Items.WOODEN_SWORD, 200);
+        a(map, (IMaterial) Items.WOODEN_HOE, 200);
+        a(map, (IMaterial) Items.WOODEN_AXE, 200);
+        a(map, (IMaterial) Items.WOODEN_PICKAXE, 200);
+        a(map, TagsItem.WOODEN_DOORS, 200);
+        a(map, TagsItem.BOATS, 200);
+        a(map, TagsItem.WOOL, 100);
+        a(map, TagsItem.WOODEN_BUTTONS, 100);
+        a(map, (IMaterial) Items.STICK, 100);
+        a(map, TagsItem.SAPLINGS, 100);
+        a(map, (IMaterial) Items.BOWL, 100);
+        a(map, TagsItem.CARPETS, 67);
+        a(map, (IMaterial) Blocks.DRIED_KELP_BLOCK, 4001);
+        return map;
     }
 
     public TileEntityFurnace() {
@@ -197,7 +196,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
         int i = 0;
 
         for (Iterator iterator = this.m.entrySet().iterator(); iterator.hasNext(); ++i) {
-            Entry entry = (Entry) iterator.next();
+            Entry<MinecraftKey, Integer> entry = (Entry) iterator.next();
 
             nbttagcompound.setString("RecipeLocation" + i, ((MinecraftKey) entry.getKey()).toString());
             nbttagcompound.setInt("RecipeAmount" + i, (Integer) entry.getValue());
@@ -467,7 +466,7 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
 
     public void d(EntityHuman entityhuman) {
         if (!this.world.getGameRules().getBoolean("doLimitedCrafting")) {
-            ArrayList arraylist = Lists.newArrayList();
+            List<IRecipe> list = Lists.newArrayList();
             Iterator iterator = this.m.keySet().iterator();
 
             while (iterator.hasNext()) {
@@ -475,11 +474,11 @@ public class TileEntityFurnace extends TileEntityContainer implements IWorldInve
                 IRecipe irecipe = entityhuman.world.getCraftingManager().a(minecraftkey);
 
                 if (irecipe != null) {
-                    arraylist.add(irecipe);
+                    list.add(irecipe);
                 }
             }
 
-            entityhuman.discoverRecipes(arraylist);
+            entityhuman.discoverRecipes(list);
         }
 
         this.m.clear();

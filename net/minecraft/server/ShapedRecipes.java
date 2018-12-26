@@ -8,10 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 public class ShapedRecipes implements IRecipe {
@@ -105,10 +104,10 @@ public class ShapedRecipes implements IRecipe {
     }
 
     private static NonNullList<RecipeItemStack> b(String[] astring, Map<String, RecipeItemStack> map, int i, int j) {
-        NonNullList nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
-        HashSet hashset = Sets.newHashSet(map.keySet());
+        NonNullList<RecipeItemStack> nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
+        Set<String> set = Sets.newHashSet(map.keySet());
 
-        hashset.remove(" ");
+        set.remove(" ");
 
         for (int k = 0; k < astring.length; ++k) {
             for (int l = 0; l < astring[k].length(); ++l) {
@@ -119,13 +118,13 @@ public class ShapedRecipes implements IRecipe {
                     throw new JsonSyntaxException("Pattern references symbol '" + s + "' but it's not defined in the key");
                 }
 
-                hashset.remove(s);
+                set.remove(s);
                 nonnulllist.set(l + i * k, recipeitemstack);
             }
         }
 
-        if (!hashset.isEmpty()) {
-            throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + hashset);
+        if (!set.isEmpty()) {
+            throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + set);
         } else {
             return nonnulllist;
         }
@@ -172,7 +171,7 @@ public class ShapedRecipes implements IRecipe {
     private static int a(String s) {
         int i;
 
-        for (i = 0; i < s.length() && s.charAt(i) == 32; ++i) {
+        for (i = 0; i < s.length() && s.charAt(i) == ' '; ++i) {
             ;
         }
 
@@ -182,7 +181,7 @@ public class ShapedRecipes implements IRecipe {
     private static int b(String s) {
         int i;
 
-        for (i = s.length() - 1; i >= 0 && s.charAt(i) == 32; --i) {
+        for (i = s.length() - 1; i >= 0 && s.charAt(i) == ' '; --i) {
             ;
         }
 
@@ -216,11 +215,11 @@ public class ShapedRecipes implements IRecipe {
     }
 
     private static Map<String, RecipeItemStack> c(JsonObject jsonobject) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<String, RecipeItemStack> map = Maps.newHashMap();
         Iterator iterator = jsonobject.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, JsonElement> entry = (Entry) iterator.next();
 
             if (((String) entry.getKey()).length() != 1) {
                 throw new JsonSyntaxException("Invalid key entry: '" + (String) entry.getKey() + "' is an invalid symbol (must be 1 character only).");
@@ -230,11 +229,11 @@ public class ShapedRecipes implements IRecipe {
                 throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
             }
 
-            hashmap.put(entry.getKey(), RecipeItemStack.a((JsonElement) entry.getValue()));
+            map.put(entry.getKey(), RecipeItemStack.a((JsonElement) entry.getValue()));
         }
 
-        hashmap.put(" ", RecipeItemStack.a);
-        return hashmap;
+        map.put(" ", RecipeItemStack.a);
+        return map;
     }
 
     public static ItemStack a(JsonObject jsonobject) {
@@ -258,11 +257,11 @@ public class ShapedRecipes implements IRecipe {
 
         public ShapedRecipes a(MinecraftKey minecraftkey, JsonObject jsonobject) {
             String s = ChatDeserializer.a(jsonobject, "group", "");
-            Map map = ShapedRecipes.c(ChatDeserializer.t(jsonobject, "key"));
+            Map<String, RecipeItemStack> map = ShapedRecipes.c(ChatDeserializer.t(jsonobject, "key"));
             String[] astring = ShapedRecipes.a(ShapedRecipes.b(ChatDeserializer.u(jsonobject, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
-            NonNullList nonnulllist = ShapedRecipes.b(astring, map, i, j);
+            NonNullList<RecipeItemStack> nonnulllist = ShapedRecipes.b(astring, map, i, j);
             ItemStack itemstack = ShapedRecipes.a(ChatDeserializer.t(jsonobject, "result"));
 
             return new ShapedRecipes(minecraftkey, s, i, j, nonnulllist, itemstack);
@@ -276,7 +275,7 @@ public class ShapedRecipes implements IRecipe {
             int i = packetdataserializer.g();
             int j = packetdataserializer.g();
             String s = packetdataserializer.e(32767);
-            NonNullList nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
+            NonNullList<RecipeItemStack> nonnulllist = NonNullList.a(i * j, RecipeItemStack.a);
 
             for (int k = 0; k < nonnulllist.size(); ++k) {
                 nonnulllist.set(k, RecipeItemStack.b(packetdataserializer));

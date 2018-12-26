@@ -29,8 +29,8 @@ public class EntityOcelot extends EntityTameableAnimal {
         this.goalSelector.a(9, new PathfinderGoalBreed(this, 0.8D));
         this.goalSelector.a(10, new PathfinderGoalRandomStrollLand(this, 0.8D, 1.0000001E-5F));
         this.goalSelector.a(11, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 10.0F));
-        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed(this, EntityChicken.class, false, (Predicate) null));
-        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed(this, EntityTurtle.class, false, EntityTurtle.bC));
+        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed<>(this, EntityChicken.class, false, (Predicate) null));
+        this.targetSelector.a(1, new PathfinderGoalRandomTargetNonTamed<>(this, EntityTurtle.class, false, EntityTurtle.bC));
     }
 
     protected void x_() {
@@ -219,7 +219,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     protected void dz() {
         if (this.bJ == null) {
-            this.bJ = new PathfinderGoalAvoidTarget(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
+            this.bJ = new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 16.0F, 0.8D, 1.33D);
         }
 
         this.goalSelector.a((PathfinderGoal) this.bJ);

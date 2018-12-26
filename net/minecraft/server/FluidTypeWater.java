@@ -5,11 +5,11 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     public FluidTypeWater() {}
 
     public FluidType e() {
-        return FluidTypes.b;
+        return FluidTypes.FLOWING_WATER;
     }
 
     public FluidType f() {
-        return FluidTypes.c;
+        return FluidTypes.WATER;
     }
 
     public Item b() {
@@ -33,7 +33,7 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
     }
 
     public boolean a(FluidType fluidtype) {
-        return fluidtype == FluidTypes.c || fluidtype == FluidTypes.b;
+        return fluidtype == FluidTypes.WATER || fluidtype == FluidTypes.FLOWING_WATER;
     }
 
     public int c(IWorldReader iworldreader) {

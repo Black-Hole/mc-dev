@@ -38,7 +38,7 @@ public class ItemMonsterEgg extends Item {
 
                 if (tileentity instanceof TileEntityMobSpawner) {
                     MobSpawnerAbstract mobspawnerabstract = ((TileEntityMobSpawner) tileentity).getSpawner();
-                    EntityTypes entitytypes = this.b(itemstack.getTag());
+                    EntityTypes<?> entitytypes = this.b(itemstack.getTag());
 
                     if (entitytypes != null) {
                         mobspawnerabstract.setMobName(entitytypes);
@@ -59,7 +59,7 @@ public class ItemMonsterEgg extends Item {
                 blockposition1 = blockposition.shift(enumdirection);
             }
 
-            EntityTypes entitytypes1 = this.b(itemstack.getTag());
+            EntityTypes<?> entitytypes1 = this.b(itemstack.getTag());
 
             if (entitytypes1 == null || entitytypes1.a(world, itemstack, itemactioncontext.getEntity(), blockposition1, true, !Objects.equals(blockposition, blockposition1) && enumdirection == EnumDirection.UP) != null) {
                 itemstack.subtract(1);
@@ -73,7 +73,7 @@ public class ItemMonsterEgg extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (world.isClientSide) {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
             MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
 
@@ -81,9 +81,9 @@ public class ItemMonsterEgg extends Item {
                 BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
                 if (!(world.getType(blockposition).getBlock() instanceof BlockFluids)) {
-                    return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
                 } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectposition.direction, itemstack)) {
-                    EntityTypes entitytypes = this.b(itemstack.getTag());
+                    EntityTypes<?> entitytypes = this.b(itemstack.getTag());
 
                     if (entitytypes != null && entitytypes.a(world, itemstack, entityhuman, blockposition, false, false) != null) {
                         if (!entityhuman.abilities.canInstantlyBuild) {
@@ -91,15 +91,15 @@ public class ItemMonsterEgg extends Item {
                         }
 
                         entityhuman.b(StatisticList.ITEM_USED.b(this));
-                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+                        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
                     } else {
-                        return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+                        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
                     }
                 } else {
-                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 }
             } else {
-                return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
             }
         }
     }

@@ -70,7 +70,7 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         }
 
         public static Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> a(int i) {
-            EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
+            Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
             PacketPlayOutPosition.EnumPlayerTeleportFlags[] apacketplayoutposition_enumplayerteleportflags = values();
             int j = apacketplayoutposition_enumplayerteleportflags.length;
 
@@ -78,11 +78,11 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
                 PacketPlayOutPosition.EnumPlayerTeleportFlags packetplayoutposition_enumplayerteleportflags = apacketplayoutposition_enumplayerteleportflags[k];
 
                 if (packetplayoutposition_enumplayerteleportflags.b(i)) {
-                    enumset.add(packetplayoutposition_enumplayerteleportflags);
+                    set.add(packetplayoutposition_enumplayerteleportflags);
                 }
             }
 
-            return enumset;
+            return set;
         }
 
         public static int a(Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set) {

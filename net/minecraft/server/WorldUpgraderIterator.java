@@ -4,10 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ImmutableMap.Builder;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +20,7 @@ public class WorldUpgraderIterator {
 
     public WorldUpgraderIterator(File file) {
         this.b = file;
-        Builder builder = ImmutableMap.builder();
+        Builder<DimensionManager, List<ChunkCoordIntPair>> builder = ImmutableMap.builder();
         Iterator iterator = DimensionManager.b().iterator();
 
         while (iterator.hasNext()) {
@@ -35,9 +33,9 @@ public class WorldUpgraderIterator {
     }
 
     private List<ChunkCoordIntPair> b(DimensionManager dimensionmanager) {
-        ArrayList arraylist = Lists.newArrayList();
+        ArrayList<ChunkCoordIntPair> arraylist = Lists.newArrayList();
         File file = dimensionmanager.a(this.b);
-        List list = this.b(file);
+        List<File> list = this.b(file);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -51,17 +49,17 @@ public class WorldUpgraderIterator {
     }
 
     private List<ChunkCoordIntPair> a(File file) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ChunkCoordIntPair> list = Lists.newArrayList();
         RegionFile regionfile = null;
 
-        ArrayList arraylist1;
+        ArrayList arraylist;
 
         try {
             Matcher matcher = WorldUpgraderIterator.a.matcher(file.getName());
 
             if (!matcher.matches()) {
-                arraylist1 = arraylist;
-                return arraylist1;
+                arraylist = list;
+                return arraylist;
             }
 
             int i = Integer.parseInt(matcher.group(1)) << 5;
@@ -72,14 +70,14 @@ public class WorldUpgraderIterator {
             for (int k = 0; k < 32; ++k) {
                 for (int l = 0; l < 32; ++l) {
                     if (regionfile.b(k, l)) {
-                        arraylist.add(new ChunkCoordIntPair(k + i, l + j));
+                        list.add(new ChunkCoordIntPair(k + i, l + j));
                     }
                 }
             }
 
-            return arraylist;
+            return list;
         } catch (Throwable throwable) {
-            arraylist1 = Lists.newArrayList();
+            arraylist = Lists.newArrayList();
         } finally {
             if (regionfile != null) {
                 try {
@@ -91,12 +89,12 @@ public class WorldUpgraderIterator {
 
         }
 
-        return arraylist1;
+        return arraylist;
     }
 
     private List<File> b(File file) {
         File file1 = new File(file, "region");
-        File[] afile = file1.listFiles((file, s) -> {
+        File[] afile = file1.listFiles((file2, s) -> {
             return s.endsWith(".mca");
         });
 

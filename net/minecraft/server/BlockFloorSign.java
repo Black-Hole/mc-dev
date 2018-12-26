@@ -16,7 +16,7 @@ public class BlockFloorSign extends BlockSign {
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
 
-        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockFloorSign.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15)).set(BlockFloorSign.a, fluid.c() == FluidTypes.c);
+        return (IBlockData) ((IBlockData) this.getBlockData().set(BlockFloorSign.ROTATION, MathHelper.floor((double) ((180.0F + blockactioncontext.h()) * 16.0F / 360.0F) + 0.5D) & 15)).set(BlockFloorSign.a, fluid.c() == FluidTypes.WATER);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {

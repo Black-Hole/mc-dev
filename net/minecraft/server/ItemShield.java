@@ -26,7 +26,7 @@ public class ItemShield extends Item {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {

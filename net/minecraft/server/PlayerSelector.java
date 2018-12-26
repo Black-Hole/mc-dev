@@ -7,16 +7,14 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class PlayerSelector {
@@ -42,7 +40,7 @@ public class PlayerSelector {
     });
 
     private static void a(String s, PlayerSelector.a playerselector_a, Predicate<ArgumentParserSelector> predicate, IChatBaseComponent ichatbasecomponent) {
-        PlayerSelector.i.put(s, new PlayerSelector.b(playerselector_a, predicate, ichatbasecomponent, null));
+        PlayerSelector.i.put(s, new PlayerSelector.b(playerselector_a, predicate, ichatbasecomponent));
     }
 
     public static void a() {
@@ -162,7 +160,7 @@ public class PlayerSelector {
                 String s = argumentparserselector.f().readUnquotedString();
 
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
-                    return ICompletionProvider.b((Iterable) Arrays.asList(new String[] { "nearest", "furthest", "random", "arbitrary"}), suggestionsbuilder);
+                    return ICompletionProvider.b((Iterable) Arrays.asList("nearest", "furthest", "random", "arbitrary"), suggestionsbuilder);
                 });
                 byte b0 = -1;
 
@@ -220,7 +218,7 @@ public class PlayerSelector {
                     boolean flag1 = true;
 
                     if (!s.isEmpty()) {
-                        if (s.charAt(0) == 33) {
+                        if (s.charAt(0) == '!') {
                             flag = false;
                             s = s.substring(1);
                         } else {
@@ -266,9 +264,9 @@ public class PlayerSelector {
                             if (!(entity instanceof EntityPlayer)) {
                                 return false;
                             } else {
-                                EnumGamemode enumgamemode = ((EntityPlayer) entity).playerInteractManager.getGameMode();
+                                EnumGamemode enumgamemode1 = ((EntityPlayer) entity).playerInteractManager.getGameMode();
 
-                                return flag ? enumgamemode != enumgamemode1 : enumgamemode == enumgamemode1;
+                                return flag ? enumgamemode1 != enumgamemode : enumgamemode1 == enumgamemode;
                             }
                         });
                         if (flag) {
@@ -291,9 +289,9 @@ public class PlayerSelector {
                         return false;
                     } else {
                         ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
-                        String s = scoreboardteambase == null ? "" : scoreboardteambase.getName();
+                        String s1 = scoreboardteambase == null ? "" : scoreboardteambase.getName();
 
-                        return s.equals(s1) != flag;
+                        return s1.equals(s) != flag;
                     }
                 });
                 if (flag) {
@@ -322,7 +320,7 @@ public class PlayerSelector {
                     throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "type");
                 } else {
                     MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.f());
-                    EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
+                    EntityTypes<? extends Entity> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
                     if (entitytypes == null) {
                         argumentparserselector.f().setCursor(i);
@@ -361,29 +359,29 @@ public class PlayerSelector {
                 NBTTagCompound nbttagcompound = (new MojangsonParser(argumentparserselector.f())).f();
 
                 argumentparserselector.a((entity) -> {
-                    NBTTagCompound nbttagcompound = entity.save(new NBTTagCompound());
+                    NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
 
                     if (entity instanceof EntityPlayer) {
                         ItemStack itemstack = ((EntityPlayer) entity).inventory.getItemInHand();
 
                         if (!itemstack.isEmpty()) {
-                            nbttagcompound.set("SelectedItem", itemstack.save(new NBTTagCompound()));
+                            nbttagcompound1.set("SelectedItem", itemstack.save(new NBTTagCompound()));
                         }
                     }
 
-                    return GameProfileSerializer.a(nbttagcompound1, nbttagcompound, true) != flag;
+                    return GameProfileSerializer.a(nbttagcompound, nbttagcompound1, true) != flag;
                 });
             }, (argumentparserselector) -> {
                 return true;
             }, new ChatMessage("argument.entity.options.nbt.description", new Object[0]));
             a("scores", (argumentparserselector) -> {
                 StringReader stringreader = argumentparserselector.f();
-                HashMap hashmap = Maps.newHashMap();
+                Map<String, CriterionConditionValue.d> map = Maps.newHashMap();
 
                 stringreader.expect('{');
                 stringreader.skipWhitespace();
 
-                while (stringreader.canRead() && stringreader.peek() != 125) {
+                while (stringreader.canRead() && stringreader.peek() != '}') {
                     stringreader.skipWhitespace();
                     String s = stringreader.readUnquotedString();
 
@@ -392,18 +390,18 @@ public class PlayerSelector {
                     stringreader.skipWhitespace();
                     CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(stringreader);
 
-                    hashmap.put(s, criterionconditionvalue_d);
+                    map.put(s, criterionconditionvalue_d);
                     stringreader.skipWhitespace();
-                    if (stringreader.canRead() && stringreader.peek() == 44) {
+                    if (stringreader.canRead() && stringreader.peek() == ',') {
                         stringreader.skip();
                     }
                 }
 
                 stringreader.expect('}');
-                if (!hashmap.isEmpty()) {
+                if (!map.isEmpty()) {
                     argumentparserselector.a((entity) -> {
                         ScoreboardServer scoreboardserver = entity.bK().getScoreboard();
-                        String s = entity.getName();
+                        String s1 = entity.getName();
                         Iterator iterator = map.entrySet().iterator();
 
                         Entry entry;
@@ -421,11 +419,11 @@ public class PlayerSelector {
                                 return false;
                             }
 
-                            if (!scoreboardserver.b(s, scoreboardobjective)) {
+                            if (!scoreboardserver.b(s1, scoreboardobjective)) {
                                 return false;
                             }
 
-                            ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
+                            ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s1, scoreboardobjective);
 
                             i = scoreboardscore.getScore();
                         } while (((CriterionConditionValue.d) entry.getValue()).d(i));
@@ -440,26 +438,26 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.scores.description", new Object[0]));
             a("advancements", (argumentparserselector) -> {
                 StringReader stringreader = argumentparserselector.f();
-                HashMap hashmap = Maps.newHashMap();
+                Map<MinecraftKey, Predicate<AdvancementProgress>> map = Maps.newHashMap();
 
                 stringreader.expect('{');
                 stringreader.skipWhitespace();
 
-                while (stringreader.canRead() && stringreader.peek() != 125) {
+                while (stringreader.canRead() && stringreader.peek() != '}') {
                     stringreader.skipWhitespace();
                     MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
 
                     stringreader.skipWhitespace();
                     stringreader.expect('=');
                     stringreader.skipWhitespace();
-                    if (stringreader.canRead() && stringreader.peek() == 123) {
-                        HashMap hashmap1 = Maps.newHashMap();
+                    if (stringreader.canRead() && stringreader.peek() == '{') {
+                        Map<String, Predicate<CriterionProgress>> map1 = Maps.newHashMap();
 
                         stringreader.skipWhitespace();
                         stringreader.expect('{');
                         stringreader.skipWhitespace();
 
-                        while (stringreader.canRead() && stringreader.peek() != 125) {
+                        while (stringreader.canRead() && stringreader.peek() != '}') {
                             stringreader.skipWhitespace();
                             String s = stringreader.readUnquotedString();
 
@@ -468,11 +466,11 @@ public class PlayerSelector {
                             stringreader.skipWhitespace();
                             boolean flag = stringreader.readBoolean();
 
-                            hashmap1.put(s, (criterionprogress) -> {
+                            map1.put(s, (criterionprogress) -> {
                                 return criterionprogress.a() == flag;
                             });
                             stringreader.skipWhitespace();
-                            if (stringreader.canRead() && stringreader.peek() == 44) {
+                            if (stringreader.canRead() && stringreader.peek() == ',') {
                                 stringreader.skip();
                             }
                         }
@@ -480,8 +478,8 @@ public class PlayerSelector {
                         stringreader.skipWhitespace();
                         stringreader.expect('}');
                         stringreader.skipWhitespace();
-                        hashmap.put(minecraftkey, (advancementprogress) -> {
-                            Iterator iterator = map.entrySet().iterator();
+                        map.put(minecraftkey, (advancementprogress) -> {
+                            Iterator iterator = map1.entrySet().iterator();
 
                             Entry entry;
                             CriterionProgress criterionprogress;
@@ -500,19 +498,19 @@ public class PlayerSelector {
                     } else {
                         boolean flag1 = stringreader.readBoolean();
 
-                        hashmap.put(minecraftkey, (advancementprogress) -> {
-                            return advancementprogress.isDone() == flag;
+                        map.put(minecraftkey, (advancementprogress) -> {
+                            return advancementprogress.isDone() == flag1;
                         });
                     }
 
                     stringreader.skipWhitespace();
-                    if (stringreader.canRead() && stringreader.peek() == 44) {
+                    if (stringreader.canRead() && stringreader.peek() == ',') {
                         stringreader.skip();
                     }
                 }
 
                 stringreader.expect('}');
-                if (!hashmap.isEmpty()) {
+                if (!map.isEmpty()) {
                     argumentparserselector.a((entity) -> {
                         if (!(entity instanceof EntityPlayer)) {
                             return false;
@@ -567,7 +565,7 @@ public class PlayerSelector {
         Iterator iterator = PlayerSelector.i.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, PlayerSelector.b> entry = (Entry) iterator.next();
 
             if (((PlayerSelector.b) entry.getValue()).b.test(argumentparserselector) && ((String) entry.getKey()).toLowerCase(Locale.ROOT).startsWith(s)) {
                 suggestionsbuilder.suggest((String) entry.getKey() + '=', ((PlayerSelector.b) entry.getValue()).c);

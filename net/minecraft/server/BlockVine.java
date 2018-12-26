@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class BlockVine extends Block {
@@ -275,7 +274,7 @@ public class BlockVine extends Block {
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         boolean flag = true;
-        Iterable iterable = BlockPosition.MutableBlockPosition.b(blockposition.getX() - 4, blockposition.getY() - 1, blockposition.getZ() - 4, blockposition.getX() + 4, blockposition.getY() + 1, blockposition.getZ() + 4);
+        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(blockposition.getX() - 4, blockposition.getY() - 1, blockposition.getZ() - 4, blockposition.getX() + 4, blockposition.getY() + 1, blockposition.getZ() + 4);
         int i = 5;
         Iterator iterator = iterable.iterator();
 

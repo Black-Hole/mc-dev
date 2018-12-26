@@ -21,14 +21,14 @@ public class ArgumentParserPosition {
     }
 
     public static ArgumentParserPosition a(StringReader stringreader, boolean flag) throws CommandSyntaxException {
-        if (stringreader.canRead() && stringreader.peek() == 94) {
+        if (stringreader.canRead() && stringreader.peek() == '^') {
             throw ArgumentVec3.b.createWithContext(stringreader);
         } else if (!stringreader.canRead()) {
             throw ArgumentParserPosition.a.createWithContext(stringreader);
         } else {
             boolean flag1 = b(stringreader);
             int i = stringreader.getCursor();
-            double d0 = stringreader.canRead() && stringreader.peek() != 32 ? stringreader.readDouble() : 0.0D;
+            double d0 = stringreader.canRead() && stringreader.peek() != ' ' ? stringreader.readDouble() : 0.0D;
             String s = stringreader.getString().substring(i, stringreader.getCursor());
 
             if (flag1 && s.isEmpty()) {
@@ -44,7 +44,7 @@ public class ArgumentParserPosition {
     }
 
     public static ArgumentParserPosition a(StringReader stringreader) throws CommandSyntaxException {
-        if (stringreader.canRead() && stringreader.peek() == 94) {
+        if (stringreader.canRead() && stringreader.peek() == '^') {
             throw ArgumentVec3.b.createWithContext(stringreader);
         } else if (!stringreader.canRead()) {
             throw ArgumentParserPosition.b.createWithContext(stringreader);
@@ -52,7 +52,7 @@ public class ArgumentParserPosition {
             boolean flag = b(stringreader);
             double d0;
 
-            if (stringreader.canRead() && stringreader.peek() != 32) {
+            if (stringreader.canRead() && stringreader.peek() != ' ') {
                 d0 = flag ? stringreader.readDouble() : (double) stringreader.readInt();
             } else {
                 d0 = 0.0D;
@@ -65,7 +65,7 @@ public class ArgumentParserPosition {
     private static boolean b(StringReader stringreader) {
         boolean flag;
 
-        if (stringreader.peek() == 126) {
+        if (stringreader.peek() == '~') {
             flag = true;
             stringreader.skip();
         } else {

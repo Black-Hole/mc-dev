@@ -42,7 +42,7 @@ public class SlotFurnaceResult extends Slot {
             Iterator iterator = ((TileEntityFurnace) this.inventory).q().entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<MinecraftKey, Integer> entry = (Entry) iterator.next();
                 FurnaceRecipe furnacerecipe = (FurnaceRecipe) this.a.world.getCraftingManager().a((MinecraftKey) entry.getKey());
                 float f;
 

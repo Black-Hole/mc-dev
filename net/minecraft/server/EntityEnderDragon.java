@@ -331,7 +331,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         }
 
         if (this.random.nextInt(10) == 0) {
-            List list = this.world.a(EntityEnderCrystal.class, this.getBoundingBox().g(32.0D));
+            List<EntityEnderCrystal> list = this.world.a(EntityEnderCrystal.class, this.getBoundingBox().g(32.0D));
             EntityEnderCrystal entityendercrystal = null;
             double d0 = Double.MAX_VALUE;
             Iterator iterator = list.iterator();
@@ -579,8 +579,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             this.bW[1] = 8197;
             this.bW[2] = 8202;
             this.bW[3] = 16404;
-            this.bW[4] = '\u8028';
-            this.bW[5] = '\u8050';
+            this.bW[4] = 32808;
+            this.bW[5] = 32848;
             this.bW[6] = 65696;
             this.bW[7] = 131392;
             this.bW[8] = 131712;
@@ -805,7 +805,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
     public Vec3D a(float f) {
         IDragonController idragoncontroller = this.bS.a();
-        DragonControllerPhase dragoncontrollerphase = idragoncontroller.getControllerPhase();
+        DragonControllerPhase<? extends IDragonController> dragoncontrollerphase = idragoncontroller.getControllerPhase();
         float f1;
         Vec3D vec3d;
 

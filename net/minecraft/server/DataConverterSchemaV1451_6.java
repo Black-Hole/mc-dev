@@ -14,7 +14,7 @@ public class DataConverterSchemaV1451_6 extends DataConverterSchemaNamed {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
-        Supplier supplier = () -> {
+        Supplier<TypeTemplate> supplier = () -> {
             return DSL.compoundList(DataConverterTypes.q.in(schema), DSL.constType(DSL.intType()));
         };
 

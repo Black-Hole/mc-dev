@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class ResourcePackSourceVanilla implements ResourcePackSource {
 
@@ -10,12 +9,12 @@ public class ResourcePackSourceVanilla implements ResourcePackSource {
     public ResourcePackSourceVanilla() {}
 
     public <T extends ResourcePackLoader> void a(Map<String, T> map, ResourcePackLoader.b<T> resourcepackloader_b) {
-        ResourcePackLoader resourcepackloader = ResourcePackLoader.a("vanilla", false, () -> {
+        T t0 = ResourcePackLoader.a("vanilla", false, () -> {
             return this.a;
         }, resourcepackloader_b, ResourcePackLoader.Position.BOTTOM);
 
-        if (resourcepackloader != null) {
-            map.put("vanilla", resourcepackloader);
+        if (t0 != null) {
+            map.put("vanilla", t0);
         }
 
     }

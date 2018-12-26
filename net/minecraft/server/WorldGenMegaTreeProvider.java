@@ -23,7 +23,7 @@ public abstract class WorldGenMegaTreeProvider extends WorldGenTreeProvider {
     protected abstract WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random);
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random, int i, int j) {
-        WorldGenTreeAbstract worldgentreeabstract = this.a(random);
+        WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> worldgentreeabstract = this.a(random);
 
         if (worldgentreeabstract == null) {
             return false;

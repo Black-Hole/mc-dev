@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,7 +18,7 @@ public class RecipeBookServer extends RecipeBook {
     }
 
     public int a(Collection<IRecipe> collection, EntityPlayer entityplayer) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MinecraftKey> list = Lists.newArrayList();
         int i = 0;
         Iterator iterator = collection.iterator();
 
@@ -30,18 +29,18 @@ public class RecipeBookServer extends RecipeBook {
             if (!this.a.contains(minecraftkey) && !irecipe.c()) {
                 this.a(minecraftkey);
                 this.c(minecraftkey);
-                arraylist.add(minecraftkey);
+                list.add(minecraftkey);
                 CriterionTriggers.f.a(entityplayer, irecipe);
                 ++i;
             }
         }
 
-        this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, arraylist);
+        this.a(PacketPlayOutRecipes.Action.ADD, entityplayer, list);
         return i;
     }
 
     public int b(Collection<IRecipe> collection, EntityPlayer entityplayer) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MinecraftKey> list = Lists.newArrayList();
         int i = 0;
         Iterator iterator = collection.iterator();
 
@@ -51,12 +50,12 @@ public class RecipeBookServer extends RecipeBook {
 
             if (this.a.contains(minecraftkey)) {
                 this.b(minecraftkey);
-                arraylist.add(minecraftkey);
+                list.add(minecraftkey);
                 ++i;
             }
         }
 
-        this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, arraylist);
+        this.a(PacketPlayOutRecipes.Action.REMOVE, entityplayer, list);
         return i;
     }
 

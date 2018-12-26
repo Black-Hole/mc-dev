@@ -119,7 +119,7 @@ public class BlockTripwire extends Block {
         IBlockData iblockdata = world.getType(blockposition);
         boolean flag = (Boolean) iblockdata.get(BlockTripwire.POWERED);
         boolean flag1 = false;
-        List list = world.getEntities((Entity) null, iblockdata.g(world, blockposition).a().a(blockposition));
+        List<? extends Entity> list = world.getEntities((Entity) null, iblockdata.getShape(world, blockposition).getBoundingBox().a(blockposition));
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();

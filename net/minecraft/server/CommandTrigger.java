@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -9,11 +8,10 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class CommandTrigger {
@@ -35,7 +33,7 @@ public class CommandTrigger {
 
     public static CompletableFuture<Suggestions> a(CommandListenerWrapper commandlistenerwrapper, SuggestionsBuilder suggestionsbuilder) {
         Entity entity = commandlistenerwrapper.getEntity();
-        ArrayList arraylist = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
 
         if (entity != null) {
             ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
@@ -49,13 +47,13 @@ public class CommandTrigger {
                     ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
 
                     if (!scoreboardscore.g()) {
-                        arraylist.add(scoreboardobjective.getName());
+                        list.add(scoreboardobjective.getName());
                     }
                 }
             }
         }
 
-        return ICompletionProvider.b((Iterable) arraylist, suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) list, suggestionsbuilder);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, ScoreboardScore scoreboardscore, int i) {

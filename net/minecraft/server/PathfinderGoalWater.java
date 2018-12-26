@@ -16,7 +16,7 @@ public class PathfinderGoalWater extends PathfinderGoal {
 
     public void c() {
         BlockPosition blockposition = null;
-        Iterable iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 2.0D), MathHelper.floor(this.a.locY - 2.0D), MathHelper.floor(this.a.locZ - 2.0D), MathHelper.floor(this.a.locX + 2.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + 2.0D));
+        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 2.0D), MathHelper.floor(this.a.locY - 2.0D), MathHelper.floor(this.a.locZ - 2.0D), MathHelper.floor(this.a.locX + 2.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + 2.0D));
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {

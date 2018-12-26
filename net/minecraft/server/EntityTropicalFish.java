@@ -106,7 +106,7 @@ public class EntityTropicalFish extends EntityFishSchool {
                 j = (i1 & '\uff00') >> 8;
                 k = (i1 & 16711680) >> 16;
                 l = (i1 & -16777216) >> 24;
-                object = new EntityTropicalFish.b(this, i, j, k, l, null);
+                object = new EntityTropicalFish.b(this, i, j, k, l);
             } else {
                 this.bE = false;
                 i = this.random.nextInt(2);

@@ -47,7 +47,7 @@ public class IScoreboardCriteria {
             if (i < 0) {
                 return null;
             } else {
-                StatisticWrapper statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(MinecraftKey.a(s.substring(0, i), '.'));
+                StatisticWrapper<?> statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(MinecraftKey.a(s.substring(0, i), '.'));
 
                 return statisticwrapper == null ? null : a(statisticwrapper, MinecraftKey.a(s.substring(i + 1), '.'));
             }
@@ -56,7 +56,7 @@ public class IScoreboardCriteria {
 
     @Nullable
     private static <T> IScoreboardCriteria a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
-        IRegistry iregistry = statisticwrapper.a();
+        IRegistry<T> iregistry = statisticwrapper.a();
 
         return iregistry.c(minecraftkey) ? statisticwrapper.b(iregistry.get(minecraftkey)) : null;
     }
@@ -93,7 +93,7 @@ public class IScoreboardCriteria {
         }
 
         static {
-            Builder builder = ImmutableMap.builder();
+            Builder<String, IScoreboardCriteria.EnumScoreboardHealthDisplay> builder = ImmutableMap.builder();
             IScoreboardCriteria.EnumScoreboardHealthDisplay[] aiscoreboardcriteria_enumscoreboardhealthdisplay = values();
             int i = aiscoreboardcriteria_enumscoreboardhealthdisplay.length;
 

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -38,7 +37,7 @@ public class WorldGenEndCityPieces {
             }
         }
     };
-    private static final List<Tuple<EnumBlockRotation, BlockPosition>> d = Lists.newArrayList(new Tuple[] { new Tuple(EnumBlockRotation.NONE, new BlockPosition(1, -1, 0)), new Tuple(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(6, -1, 1)), new Tuple(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 5)), new Tuple(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(5, -1, 6))});
+    private static final List<Tuple<EnumBlockRotation, BlockPosition>> d = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(1, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(6, -1, 1)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 5)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(5, -1, 6))});
     private static final WorldGenEndCityPieces.PieceGenerator e = new WorldGenEndCityPieces.PieceGenerator() {
         public void a() {}
 
@@ -61,7 +60,7 @@ public class WorldGenEndCityPieces {
                 Iterator iterator = WorldGenEndCityPieces.d.iterator();
 
                 while (iterator.hasNext()) {
-                    Tuple tuple = (Tuple) iterator.next();
+                    Tuple<EnumBlockRotation, BlockPosition> tuple = (Tuple) iterator.next();
 
                     if (random.nextBoolean()) {
                         WorldGenEndCityPieces.Piece worldgenendcitypieces_piece3 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece2, (BlockPosition) tuple.b(), "bridge_end", enumblockrotation.a((EnumBlockRotation) tuple.a()), true));
@@ -124,7 +123,7 @@ public class WorldGenEndCityPieces {
             return true;
         }
     };
-    private static final List<Tuple<EnumBlockRotation, BlockPosition>> g = Lists.newArrayList(new Tuple[] { new Tuple(EnumBlockRotation.NONE, new BlockPosition(4, -1, 0)), new Tuple(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(12, -1, 4)), new Tuple(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 8)), new Tuple(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(8, -1, 12))});
+    private static final List<Tuple<EnumBlockRotation, BlockPosition>> g = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(4, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(12, -1, 4)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 8)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(8, -1, 12))});
     private static final WorldGenEndCityPieces.PieceGenerator h = new WorldGenEndCityPieces.PieceGenerator() {
         public void a() {}
 
@@ -139,7 +138,7 @@ public class WorldGenEndCityPieces {
                 Iterator iterator = WorldGenEndCityPieces.g.iterator();
 
                 while (iterator.hasNext()) {
-                    Tuple tuple = (Tuple) iterator.next();
+                    Tuple<EnumBlockRotation, BlockPosition> tuple = (Tuple) iterator.next();
 
                     if (random.nextBoolean()) {
                         WorldGenEndCityPieces.Piece worldgenendcitypieces_piece2 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece1, (BlockPosition) tuple.b(), "bridge_end", enumblockrotation.a((EnumBlockRotation) tuple.a()), true));
@@ -188,12 +187,12 @@ public class WorldGenEndCityPieces {
         if (i > 8) {
             return false;
         } else {
-            ArrayList arraylist = Lists.newArrayList();
+            List<StructurePiece> list1 = Lists.newArrayList();
 
-            if (worldgenendcitypieces_piecegenerator.a(definedstructuremanager, i, worldgenendcitypieces_piece, blockposition, arraylist, random)) {
+            if (worldgenendcitypieces_piecegenerator.a(definedstructuremanager, i, worldgenendcitypieces_piece, blockposition, list1, random)) {
                 boolean flag = false;
                 int j = random.nextInt();
-                Iterator iterator = arraylist.iterator();
+                Iterator iterator = list1.iterator();
 
                 while (iterator.hasNext()) {
                     StructurePiece structurepiece = (StructurePiece) iterator.next();
@@ -208,7 +207,7 @@ public class WorldGenEndCityPieces {
                 }
 
                 if (!flag) {
-                    list.addAll(arraylist);
+                    list.addAll(list1);
                     return true;
                 }
             }

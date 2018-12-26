@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -182,9 +181,9 @@ public class ArgumentParserSelector {
         double d1 = (double) MathHelper.g(criterionconditionrange.b() == null ? 359.0F : criterionconditionrange.b());
 
         return (entity) -> {
-            double d0 = MathHelper.g(todoublefunction.applyAsDouble(entity));
+            double d2 = MathHelper.g(todoublefunction.applyAsDouble(entity));
 
-            return d1 > d2 ? d0 >= d1 || d0 <= d2 : d0 >= d1 && d0 <= d2;
+            return d0 > d1 ? d2 >= d0 || d2 <= d1 : d2 >= d0 && d2 <= d1;
         };
     }
 
@@ -197,27 +196,27 @@ public class ArgumentParserSelector {
             int i = this.l.getCursor();
             char c0 = this.l.read();
 
-            if (c0 == 112) {
+            if (c0 == 'p') {
                 this.n = 1;
                 this.o = false;
                 this.B = ArgumentParserSelector.h;
                 this.a(EntityPlayer.class);
-            } else if (c0 == 97) {
+            } else if (c0 == 'a') {
                 this.n = Integer.MAX_VALUE;
                 this.o = false;
                 this.B = ArgumentParserSelector.g;
                 this.a(EntityPlayer.class);
-            } else if (c0 == 114) {
+            } else if (c0 == 'r') {
                 this.n = 1;
                 this.o = false;
                 this.B = ArgumentParserSelector.j;
                 this.a(EntityPlayer.class);
-            } else if (c0 == 115) {
+            } else if (c0 == 's') {
                 this.n = 1;
                 this.o = true;
                 this.C = true;
             } else {
-                if (c0 != 101) {
+                if (c0 != 'e') {
                     this.l.setCursor(i);
                     throw ArgumentParserSelector.b.createWithContext(this.l, '@' + String.valueOf(c0));
                 }
@@ -229,7 +228,7 @@ public class ArgumentParserSelector {
             }
 
             this.G = this::e;
-            if (this.l.canRead() && this.l.peek() == 91) {
+            if (this.l.canRead() && this.l.peek() == '[') {
                 this.l.skip();
                 this.G = this::f;
                 this.d();
@@ -267,14 +266,14 @@ public class ArgumentParserSelector {
         this.l.skipWhitespace();
 
         while (true) {
-            if (this.l.canRead() && this.l.peek() != 93) {
+            if (this.l.canRead() && this.l.peek() != ']') {
                 this.l.skipWhitespace();
                 int i = this.l.getCursor();
                 String s = this.l.readString();
                 PlayerSelector.a playerselector_a = PlayerSelector.a(this, s, i);
 
                 this.l.skipWhitespace();
-                if (!this.l.canRead() || this.l.peek() != 61) {
+                if (!this.l.canRead() || this.l.peek() != '=') {
                     this.l.setCursor(i);
                     throw ArgumentParserSelector.f.createWithContext(this.l, s);
                 }
@@ -289,13 +288,13 @@ public class ArgumentParserSelector {
                     continue;
                 }
 
-                if (this.l.peek() == 44) {
+                if (this.l.peek() == ',') {
                     this.l.skip();
                     this.G = this::g;
                     continue;
                 }
 
-                if (this.l.peek() != 93) {
+                if (this.l.peek() != ']') {
                     throw ArgumentParserSelector.e.createWithContext(this.l);
                 }
             }
@@ -312,7 +311,7 @@ public class ArgumentParserSelector {
 
     public boolean e() {
         this.l.skipWhitespace();
-        if (this.l.canRead() && this.l.peek() == 33) {
+        if (this.l.canRead() && this.l.peek() == '!') {
             this.l.skip();
             this.l.skipWhitespace();
             return true;
@@ -434,7 +433,7 @@ public class ArgumentParserSelector {
     public EntitySelector s() throws CommandSyntaxException {
         this.E = this.l.getCursor();
         this.G = this::b;
-        if (this.l.canRead() && this.l.peek() == 64) {
+        if (this.l.canRead() && this.l.peek() == '@') {
             if (!this.m) {
                 throw ArgumentParserSelector.c.createWithContext(this.l);
             }

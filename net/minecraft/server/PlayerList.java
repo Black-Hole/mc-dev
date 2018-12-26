@@ -8,12 +8,11 @@ import io.netty.buffer.Unpooled;
 import java.io.File;
 import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -157,7 +156,7 @@ public abstract class PlayerList {
     }
 
     public void sendScoreboard(ScoreboardServer scoreboardserver, EntityPlayer entityplayer) {
-        HashSet hashset = Sets.newHashSet();
+        Set<ScoreboardObjective> set = Sets.newHashSet();
         Iterator iterator = scoreboardserver.getTeams().iterator();
 
         while (iterator.hasNext()) {
@@ -169,17 +168,17 @@ public abstract class PlayerList {
         for (int i = 0; i < 19; ++i) {
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjectiveForSlot(i);
 
-            if (scoreboardobjective != null && !hashset.contains(scoreboardobjective)) {
-                List list = scoreboardserver.getScoreboardScorePacketsForObjective(scoreboardobjective);
+            if (scoreboardobjective != null && !set.contains(scoreboardobjective)) {
+                List<Packet<?>> list = scoreboardserver.getScoreboardScorePacketsForObjective(scoreboardobjective);
                 Iterator iterator1 = list.iterator();
 
                 while (iterator1.hasNext()) {
-                    Packet packet = (Packet) iterator1.next();
+                    Packet<?> packet = (Packet) iterator1.next();
 
                     entityplayer.playerConnection.sendPacket(packet);
                 }
 
-                hashset.add(scoreboardobjective);
+                set.add(scoreboardobjective);
             }
         }
 
@@ -359,23 +358,23 @@ public abstract class PlayerList {
 
     public EntityPlayer processLogin(GameProfile gameprofile) {
         UUID uuid = EntityHuman.a(gameprofile);
-        ArrayList arraylist = Lists.newArrayList();
+        List<EntityPlayer> list = Lists.newArrayList();
 
         for (int i = 0; i < this.players.size(); ++i) {
             EntityPlayer entityplayer = (EntityPlayer) this.players.get(i);
 
             if (entityplayer.getUniqueID().equals(uuid)) {
-                arraylist.add(entityplayer);
+                list.add(entityplayer);
             }
         }
 
         EntityPlayer entityplayer1 = (EntityPlayer) this.j.get(gameprofile.getId());
 
-        if (entityplayer1 != null && !arraylist.contains(entityplayer1)) {
-            arraylist.add(entityplayer1);
+        if (entityplayer1 != null && !list.contains(entityplayer1)) {
+            list.add(entityplayer1);
         }
 
-        Iterator iterator = arraylist.iterator();
+        Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer2 = (EntityPlayer) iterator.next();
@@ -585,7 +584,7 @@ public abstract class PlayerList {
         ScoreboardTeamBase scoreboardteambase = entityhuman.getScoreboardTeam();
 
         if (scoreboardteambase != null) {
-            Collection collection = scoreboardteambase.getPlayerNameSet();
+            Collection<String> collection = scoreboardteambase.getPlayerNameSet();
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
@@ -783,18 +782,18 @@ public abstract class PlayerList {
     }
 
     public List<EntityPlayer> b(String s) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<EntityPlayer> list = Lists.newArrayList();
         Iterator iterator = this.players.iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
             if (entityplayer.v().equals(s)) {
-                arraylist.add(entityplayer);
+                list.add(entityplayer);
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     public int getViewDistance() {

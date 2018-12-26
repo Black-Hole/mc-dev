@@ -1,10 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.RedirectModifier;
 import com.mojang.brigadier.ResultConsumer;
-import com.mojang.brigadier.SingleRedirectModifier;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -15,18 +12,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.OptionalInt;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.IntFunction;
-import java.util.function.Predicate;
 
 public class CommandExecute {
 
@@ -45,72 +40,72 @@ public class CommandExecute {
     };
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
+        LiteralCommandNode<CommandListenerWrapper> literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         }));
 
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(CommandDispatcher.a("run").redirect(com_mojang_brigadier_commanddispatcher.getRoot()))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("if"), true))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("unless"), false))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
-            ArrayList arraylist = Lists.newArrayList();
+            List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity));
             }
 
-            return arraylist;
+            return list;
         })))).then(CommandDispatcher.a("at").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
-            ArrayList arraylist = Lists.newArrayList();
+            List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bI()).a(entity.aO()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bI()).a(entity.aO()));
             }
 
-            return arraylist;
+            return list;
         })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("store").then(a(literalcommandnode, CommandDispatcher.a("result"), true))).then(a(literalcommandnode, CommandDispatcher.a("success"), false)))).then(((LiteralArgumentBuilder) CommandDispatcher.a("positioned").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentVec3.a(commandcontext, "pos"));
         }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
-            ArrayList arraylist = Lists.newArrayList();
+            List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bI()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bI()));
             }
 
-            return arraylist;
+            return list;
         }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("rotated").then(CommandDispatcher.a("rot", (ArgumentType) ArgumentRotation.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentRotation.a(commandcontext, "rot").b((CommandListenerWrapper) commandcontext.getSource()));
         }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
-            ArrayList arraylist = Lists.newArrayList();
+            List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aO()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aO()));
             }
 
-            return arraylist;
+            return list;
         }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("facing").then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).fork(literalcommandnode, (commandcontext) -> {
-            ArrayList arraylist = Lists.newArrayList();
+            List<CommandListenerWrapper> list = Lists.newArrayList();
             ArgumentAnchor.Anchor argumentanchor_anchor = ArgumentAnchor.a(commandcontext, "anchor");
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                arraylist.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity, argumentanchor_anchor));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity, argumentanchor_anchor));
             }
 
-            return arraylist;
+            return list;
         }))))).then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).b(ArgumentVec3.a(commandcontext, "pos"));
         })))).then(CommandDispatcher.a("align").then(CommandDispatcher.a("axes", (ArgumentType) ArgumentRotationAxis.a()).redirect(literalcommandnode, (commandcontext) -> {
@@ -171,13 +166,13 @@ public class CommandExecute {
     private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, Collection<String> collection, ScoreboardObjective scoreboardobjective, boolean flag) {
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
 
-        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
+        return commandlistenerwrapper.a((commandcontext, flag1, i) -> {
             Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 String s = (String) iterator.next();
-                ScoreboardScore scoreboardscore = scoreboard.getPlayerScoreForObjective(s, scoreboardobjective);
-                int j = flag1 ? i : (flag ? 1 : 0);
+                ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective);
+                int j = flag ? i : (flag1 ? 1 : 0);
 
                 scoreboardscore.setScore(j);
             }
@@ -186,10 +181,10 @@ public class CommandExecute {
     }
 
     private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, BossBattleCustom bossbattlecustom, boolean flag, boolean flag1) {
-        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
-            int j = flag1 ? i : (flag ? 1 : 0);
+        return commandlistenerwrapper.a((commandcontext, flag2, i) -> {
+            int j = flag1 ? i : (flag2 ? 1 : 0);
 
-            if (flag2) {
+            if (flag) {
                 bossbattlecustom.a(j);
             } else {
                 bossbattlecustom.b(j);
@@ -199,10 +194,10 @@ public class CommandExecute {
     }
 
     private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.c argumentnbtkey_c, IntFunction<NBTBase> intfunction, boolean flag) {
-        return commandlistenerwrapper.a((commandcontext, flag, i) -> {
+        return commandlistenerwrapper.a((commandcontext, flag1, i) -> {
             try {
                 NBTTagCompound nbttagcompound = commanddataaccessor.a();
-                int j = flag1 ? i : (flag ? 1 : 0);
+                int j = flag ? i : (flag1 ? 1 : 0);
 
                 argumentnbtkey_c.a(nbttagcompound, (NBTBase) intfunction.apply(j));
                 commanddataaccessor.a(nbttagcompound);
@@ -305,9 +300,9 @@ public class CommandExecute {
         return argumentbuilder.fork(commandnode, (commandcontext) -> {
             return a(commandcontext, flag, c(commandcontext, flag1).isPresent());
         }).executes(flag ? (commandcontext) -> {
-            return a(commandcontext, flag);
+            return a(commandcontext, flag1);
         } : (commandcontext) -> {
-            return b(commandcontext, flag);
+            return b(commandcontext, flag1);
         });
     }
 
@@ -343,8 +338,8 @@ public class CommandExecute {
         BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
         int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
 
-        if (i > '\u8000') {
-            throw CommandExecute.a.create('\u8000', i);
+        if (i > 32768) {
+            throw CommandExecute.a.create(32768, i);
         } else {
             int j = 0;
 

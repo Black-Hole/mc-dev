@@ -3,11 +3,11 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import javax.annotation.Nullable;
 
 public class Explosion {
@@ -38,7 +38,7 @@ public class Explosion {
     }
 
     public void a() {
-        HashSet hashset = Sets.newHashSet();
+        Set<BlockPosition> set = Sets.newHashSet();
         boolean flag = true;
 
         int i;
@@ -77,7 +77,7 @@ public class Explosion {
                             }
 
                             if (f > 0.0F && (this.source == null || this.source.a(this, this.world, blockposition, iblockdata, f))) {
-                                hashset.add(blockposition);
+                                set.add(blockposition);
                             }
 
                             d4 += d0 * 0.30000001192092896D;
@@ -89,7 +89,7 @@ public class Explosion {
             }
         }
 
-        this.blocks.addAll(hashset);
+        this.blocks.addAll(set);
         float f3 = this.size * 2.0F;
 
         i = MathHelper.floor(this.posX - (double) f3 - 1.0D);
@@ -98,7 +98,7 @@ public class Explosion {
         int i1 = MathHelper.floor(this.posY + (double) f3 + 1.0D);
         int j1 = MathHelper.floor(this.posZ - (double) f3 - 1.0D);
         int k1 = MathHelper.floor(this.posZ + (double) f3 + 1.0D);
-        List list = this.world.getEntities(this.source, new AxisAlignedBB((double) i, (double) l, (double) j1, (double) j, (double) i1, (double) k1));
+        List<Entity> list = this.world.getEntities(this.source, new AxisAlignedBB((double) i, (double) l, (double) j1, (double) j, (double) i1, (double) k1));
         Vec3D vec3d = new Vec3D(this.posX, this.posY, this.posZ);
 
         for (int l1 = 0; l1 < list.size(); ++l1) {

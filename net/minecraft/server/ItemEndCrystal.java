@@ -24,7 +24,7 @@ public class ItemEndCrystal extends Item {
                 double d0 = (double) blockposition1.getX();
                 double d1 = (double) blockposition1.getY();
                 double d2 = (double) blockposition1.getZ();
-                List list = world.getEntities((Entity) null, new AxisAlignedBB(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
+                List<Entity> list = world.getEntities((Entity) null, new AxisAlignedBB(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
 
                 if (!list.isEmpty()) {
                     return EnumInteractionResult.FAIL;

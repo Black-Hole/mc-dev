@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 public class MobEffectList {
@@ -149,7 +148,7 @@ public class MobEffectList {
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<IAttribute, AttributeModifier> entry = (Entry) iterator.next();
             AttributeInstance attributeinstance = attributemapbase.a((IAttribute) entry.getKey());
 
             if (attributeinstance != null) {
@@ -163,7 +162,7 @@ public class MobEffectList {
         Iterator iterator = this.a.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<IAttribute, AttributeModifier> entry = (Entry) iterator.next();
             AttributeInstance attributeinstance = attributemapbase.a((IAttribute) entry.getKey());
 
             if (attributeinstance != null) {

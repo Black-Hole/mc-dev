@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +35,7 @@ public class ChunkProviderServer implements IChunkProvider {
         this.chunkGenerator = chunkgenerator;
         this.asyncTaskHandler = iasynctaskhandler;
         this.chunkScheduler = new ChunkTaskScheduler(2, worldserver, chunkgenerator, ichunkloader, iasynctaskhandler);
-        this.batchScheduler = new SchedulerBatch(this.chunkScheduler);
+        this.batchScheduler = new SchedulerBatch<>(this.chunkScheduler);
     }
 
     public Collection<Chunk> a() {
@@ -86,9 +84,9 @@ public class ChunkProviderServer implements IChunkProvider {
 
             if (flag) {
                 try {
-                    chunk = this.chunkLoader.a(this.world, i, j, (chunk) -> {
-                        chunk.setLastSaved(this.world.getTime());
-                        this.chunks.put(ChunkCoordIntPair.a(i, j), chunk);
+                    chunk = this.chunkLoader.a(this.world, i, j, (chunk1) -> {
+                        chunk1.setLastSaved(this.world.getTime());
+                        this.chunks.put(ChunkCoordIntPair.a(i, j), chunk1);
                     });
                 } catch (Exception exception) {
                     ChunkProviderServer.a.error("Couldn't load chunk", exception);
@@ -103,7 +101,7 @@ public class ChunkProviderServer implements IChunkProvider {
             try {
                 this.batchScheduler.b();
                 this.batchScheduler.a(new ChunkCoordIntPair(i, j));
-                CompletableFuture completablefuture = this.batchScheduler.c();
+                CompletableFuture<ProtoChunk> completablefuture = this.batchScheduler.c();
 
                 return (Chunk) completablefuture.thenApply(this::a).join();
             } catch (RuntimeException runtimeexception) {
@@ -142,7 +140,7 @@ public class ChunkProviderServer implements IChunkProvider {
         CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
 
-        crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", new Object[] { i, j}));
+        crashreportsystemdetails.a("Location", (Object) String.format("%d,%d", i, j));
         crashreportsystemdetails.a("Position hash", (Object) ChunkCoordIntPair.a(i, j));
         crashreportsystemdetails.a("Generator", (Object) this.chunkGenerator);
         return new ReportedException(crashreport);
@@ -241,10 +239,10 @@ public class ChunkProviderServer implements IChunkProvider {
     public boolean unloadChunks(BooleanSupplier booleansupplier) {
         if (!this.world.savingDisabled) {
             if (!this.unloadQueue.isEmpty()) {
-                LongIterator longiterator = this.unloadQueue.iterator();
+                Iterator<Long> iterator = this.unloadQueue.iterator();
 
-                for (int i = 0; longiterator.hasNext() && (booleansupplier.getAsBoolean() || i < 200 || this.unloadQueue.size() > 2000); longiterator.remove()) {
-                    Long olong = (Long) longiterator.next();
+                for (int i = 0; iterator.hasNext() && (booleansupplier.getAsBoolean() || i < 200 || this.unloadQueue.size() > 2000); iterator.remove()) {
+                    Long olong = (Long) iterator.next();
                     IChunkLoader ichunkloader = this.chunkLoader;
 
                     synchronized (this.chunkLoader) {

@@ -5,7 +5,7 @@ public class ContainerHorse extends Container {
     private final IInventory a;
     private final EntityHorseAbstract f;
 
-    public ContainerHorse(IInventory iinventory, final IInventory iinventory1, final EntityHorseAbstract entityhorseabstract, EntityHuman entityhuman) {
+    public ContainerHorse(IInventory iinventory, IInventory iinventory1, final EntityHorseAbstract entityhorseabstract, EntityHuman entityhuman) {
         this.a = iinventory1;
         this.f = entityhorseabstract;
         boolean flag = true;

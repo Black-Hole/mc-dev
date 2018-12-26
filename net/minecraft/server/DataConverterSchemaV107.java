@@ -12,7 +12,7 @@ public class DataConverterSchemaV107 extends Schema {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerEntities(Schema schema) {
-        Map map = super.registerEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerEntities(schema);
 
         map.remove("Minecart");
         return map;

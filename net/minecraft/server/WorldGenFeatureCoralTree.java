@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -25,11 +24,11 @@ public class WorldGenFeatureCoralTree extends WorldGenFeatureCoral {
 
         BlockPosition blockposition1 = blockposition_mutableblockposition.h();
         int k = random.nextInt(3) + 2;
-        ArrayList arraylist = Lists.newArrayList(EnumDirection.EnumDirectionLimit.HORIZONTAL);
+        List<EnumDirection> list = Lists.newArrayList(EnumDirection.EnumDirectionLimit.HORIZONTAL);
 
-        Collections.shuffle(arraylist, random);
-        List list = arraylist.subList(0, k);
-        Iterator iterator = list.iterator();
+        Collections.shuffle(list, random);
+        List<EnumDirection> list1 = list.subList(0, k);
+        Iterator iterator = list1.iterator();
 
         while (iterator.hasNext()) {
             EnumDirection enumdirection = (EnumDirection) iterator.next();

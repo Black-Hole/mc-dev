@@ -41,7 +41,7 @@ public class DebugReportAdvancementHusbandry implements Consumer<Consumer<Advanc
         int i = aentitytypes.length;
 
         for (int j = 0; j < i; ++j) {
-            EntityTypes entitytypes = aentitytypes[j];
+            EntityTypes<?> entitytypes = aentitytypes[j];
 
             advancement_serializedadvancement.a(EntityTypes.getName(entitytypes).toString(), (CriterionInstance) CriterionTriggerBredAnimals.b.a(CriterionConditionEntity.a.a().a(entitytypes)));
         }

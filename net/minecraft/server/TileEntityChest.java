@@ -89,7 +89,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
         if (!this.world.isClientSide && this.f != 0 && (this.k + i + j + k) % 200 == 0) {
             this.f = 0;
             f = 5.0F;
-            List list = this.world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - 5.0F), (double) ((float) j - 5.0F), (double) ((float) k - 5.0F), (double) ((float) (i + 1) + 5.0F), (double) ((float) (j + 1) + 5.0F), (double) ((float) (k + 1) + 5.0F)));
+            List<EntityHuman> list = this.world.a(EntityHuman.class, new AxisAlignedBB((double) ((float) i - 5.0F), (double) ((float) j - 5.0F), (double) ((float) k - 5.0F), (double) ((float) (i + 1) + 5.0F), (double) ((float) (j + 1) + 5.0F), (double) ((float) (k + 1) + 5.0F)));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -227,7 +227,7 @@ public class TileEntityChest extends TileEntityLootable implements ITickable {
     }
 
     public static void a(TileEntityChest tileentitychest, TileEntityChest tileentitychest1) {
-        NonNullList nonnulllist = tileentitychest.q();
+        NonNullList<ItemStack> nonnulllist = tileentitychest.q();
 
         tileentitychest.a(tileentitychest1.q());
         tileentitychest1.a(nonnulllist);

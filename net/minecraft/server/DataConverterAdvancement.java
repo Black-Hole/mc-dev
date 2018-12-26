@@ -9,7 +9,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.util.Pair;
 import java.util.Map;
-import java.util.function.Function;
 
 public class DataConverterAdvancement extends DataFix {
 
@@ -25,7 +24,7 @@ public class DataConverterAdvancement extends DataFix {
                 return dynamic.updateMapValues((pair) -> {
                     String s = (String) ((Dynamic) pair.getFirst()).getStringValue().orElse("");
 
-                    return pair.mapFirst((dynamicx) -> {
+                    return pair.mapFirst((dynamic1) -> {
                         return dynamic.createString((String) DataConverterAdvancement.a.getOrDefault(s, s));
                     });
                 });

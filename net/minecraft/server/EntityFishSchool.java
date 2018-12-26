@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
@@ -62,7 +60,7 @@ public abstract class EntityFishSchool extends EntityFish {
     public void tick() {
         super.tick();
         if (this.dE() && this.world.random.nextInt(200) == 1) {
-            List list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
+            List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
                 this.b = 1;

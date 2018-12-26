@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -9,12 +8,10 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.function.Predicate;
+import java.util.Set;
 
 public class CommandTag {
 
@@ -36,16 +33,16 @@ public class CommandTag {
     }
 
     private static Collection<String> a(Collection<? extends Entity> collection) {
-        HashSet hashset = Sets.newHashSet();
+        Set<String> set = Sets.newHashSet();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            hashset.addAll(entity.getScoreboardTags());
+            set.addAll(entity.getScoreboardTags());
         }
 
-        return hashset;
+        return set;
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, String s) throws CommandSyntaxException {
@@ -99,29 +96,29 @@ public class CommandTag {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection) {
-        HashSet hashset = Sets.newHashSet();
+        Set<String> set = Sets.newHashSet();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
             Entity entity = (Entity) iterator.next();
 
-            hashset.addAll(entity.getScoreboardTags());
+            set.addAll(entity.getScoreboardTags());
         }
 
         if (collection.size() == 1) {
             Entity entity1 = (Entity) collection.iterator().next();
 
-            if (hashset.isEmpty()) {
+            if (set.isEmpty()) {
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.empty", new Object[] { entity1.getScoreboardDisplayName()}), false);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.success", new Object[] { entity1.getScoreboardDisplayName(), hashset.size(), ChatComponentUtils.a((Collection) hashset)}), false);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.single.success", new Object[] { entity1.getScoreboardDisplayName(), set.size(), ChatComponentUtils.a((Collection) set)}), false);
             }
-        } else if (hashset.isEmpty()) {
+        } else if (set.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.empty", new Object[] { collection.size()}), false);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.success", new Object[] { collection.size(), hashset.size(), ChatComponentUtils.a((Collection) hashset)}), false);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.tag.list.multiple.success", new Object[] { collection.size(), set.size(), ChatComponentUtils.a((Collection) set)}), false);
         }
 
-        return hashset.size();
+        return set.size();
     }
 }

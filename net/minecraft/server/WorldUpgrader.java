@@ -7,13 +7,12 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenCustomHashMap;
 import java.io.File;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadFactory;
-import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,7 +63,7 @@ public class WorldUpgrader {
     private void i() {
         File file = this.d.getDirectory();
         WorldUpgraderIterator worldupgraderiterator = new WorldUpgraderIterator(file);
-        Builder builder = ImmutableMap.builder();
+        Builder<DimensionManager, ChunkRegionLoader> builder = ImmutableMap.builder();
         Iterator iterator = DimensionManager.b().iterator();
 
         while (iterator.hasNext()) {
@@ -73,11 +72,11 @@ public class WorldUpgrader {
             builder.put(dimensionmanager, new ChunkRegionLoader(dimensionmanager.a(file), this.d.i()));
         }
 
-        ImmutableMap immutablemap = builder.build();
+        Map<DimensionManager, ChunkRegionLoader> map = builder.build();
         long i = SystemUtils.getMonotonicMillis();
 
         this.j = 0;
-        Builder builder1 = ImmutableMap.builder();
+        Builder<DimensionManager, ListIterator<ChunkCoordIntPair>> builder1 = ImmutableMap.builder();
 
         List list;
 
@@ -88,14 +87,14 @@ public class WorldUpgrader {
             builder1.put(dimensionmanager1, list.listIterator());
         }
 
-        ImmutableMap immutablemap1 = builder1.build();
+        ImmutableMap<DimensionManager, ListIterator<ChunkCoordIntPair>> immutablemap = builder1.build();
         float f = (float) this.j;
 
         this.n = new ChatMessage("optimizeWorld.stage.structures", new Object[0]);
-        Iterator iterator2 = immutablemap.entrySet().iterator();
+        Iterator iterator2 = map.entrySet().iterator();
 
         while (iterator2.hasNext()) {
-            Entry entry = (Entry) iterator2.next();
+            Entry<DimensionManager, ChunkRegionLoader> entry = (Entry) iterator2.next();
 
             ((ChunkRegionLoader) entry.getValue()).a((DimensionManager) entry.getKey(), this.e);
         }
@@ -108,7 +107,7 @@ public class WorldUpgrader {
             while (iterator2.hasNext()) {
                 DimensionManager dimensionmanager2 = (DimensionManager) iterator2.next();
 
-                this.m.put(dimensionmanager2, 1.0F / (float) immutablemap.size());
+                this.m.put(dimensionmanager2, 1.0F / (float) map.size());
             }
         }
 
@@ -119,9 +118,9 @@ public class WorldUpgrader {
 
             while (iterator3.hasNext()) {
                 DimensionManager dimensionmanager3 = (DimensionManager) iterator3.next();
-                ListIterator listiterator = (ListIterator) immutablemap1.get(dimensionmanager3);
+                ListIterator<ChunkCoordIntPair> listiterator = (ListIterator) immutablemap.get(dimensionmanager3);
 
-                flag |= this.a((ChunkRegionLoader) immutablemap.get(dimensionmanager3), listiterator, dimensionmanager3);
+                flag |= this.a((ChunkRegionLoader) map.get(dimensionmanager3), listiterator, dimensionmanager3);
                 if (f > 0.0F) {
                     float f2 = (float) listiterator.nextIndex() / f;
 
@@ -139,7 +138,7 @@ public class WorldUpgrader {
         this.n = new ChatMessage("optimizeWorld.stage.finished", new Object[0]);
         i = SystemUtils.getMonotonicMillis() - i;
         WorldUpgrader.a.info("World optimizaton finished after {} ms", i);
-        immutablemap.values().forEach(ChunkRegionLoader::b);
+        map.values().forEach(ChunkRegionLoader::b);
         this.e.a();
         this.d.a();
         this.h = true;

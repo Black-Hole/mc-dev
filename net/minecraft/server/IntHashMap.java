@@ -65,13 +65,13 @@ public class IntHashMap<V> {
     }
 
     private void h(int i) {
-        IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry = this.a;
+        IntHashMap.IntHashMapEntry<V>[] ainthashmap_inthashmapentry = this.a;
         int j = ainthashmap_inthashmapentry.length;
 
         if (j == 1073741824) {
             this.c = Integer.MAX_VALUE;
         } else {
-            IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry1 = (IntHashMap.IntHashMapEntry[]) (new IntHashMap.IntHashMapEntry[i]);
+            IntHashMap.IntHashMapEntry<V>[] ainthashmap_inthashmapentry1 = (IntHashMap.IntHashMapEntry[]) (new IntHashMap.IntHashMapEntry[i]);
 
             this.a(ainthashmap_inthashmapentry1);
             this.a = ainthashmap_inthashmapentry1;
@@ -80,11 +80,11 @@ public class IntHashMap<V> {
     }
 
     private void a(IntHashMap.IntHashMapEntry<V>[] ainthashmap_inthashmapentry) {
-        IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry1 = this.a;
+        IntHashMap.IntHashMapEntry<V>[] ainthashmap_inthashmapentry1 = this.a;
         int i = ainthashmap_inthashmapentry.length;
 
         for (int j = 0; j < ainthashmap_inthashmapentry1.length; ++j) {
-            IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = ainthashmap_inthashmapentry1[j];
+            IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry = ainthashmap_inthashmapentry1[j];
 
             if (inthashmap_inthashmapentry != null) {
                 ainthashmap_inthashmapentry1[j] = null;
@@ -106,7 +106,7 @@ public class IntHashMap<V> {
 
     @Nullable
     public V d(int i) {
-        IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = this.e(i);
+        IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry = this.e(i);
 
         return inthashmap_inthashmapentry == null ? null : inthashmap_inthashmapentry.b;
     }
@@ -115,7 +115,7 @@ public class IntHashMap<V> {
     final IntHashMap.IntHashMapEntry<V> e(int i) {
         int j = g(i);
         int k = a(j, this.a.length);
-        IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = this.a[k];
+        IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry = this.a[k];
 
         IntHashMap.IntHashMapEntry inthashmap_inthashmapentry1;
         IntHashMap.IntHashMapEntry inthashmap_inthashmapentry2;
@@ -140,7 +140,7 @@ public class IntHashMap<V> {
     }
 
     public void c() {
-        IntHashMap.IntHashMapEntry[] ainthashmap_inthashmapentry = this.a;
+        IntHashMap.IntHashMapEntry<V>[] ainthashmap_inthashmapentry = this.a;
 
         for (int i = 0; i < ainthashmap_inthashmapentry.length; ++i) {
             ainthashmap_inthashmapentry[i] = null;
@@ -150,9 +150,9 @@ public class IntHashMap<V> {
     }
 
     private void a(int i, int j, V v0, int k) {
-        IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = this.a[k];
+        IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry = this.a[k];
 
-        this.a[k] = new IntHashMap.IntHashMapEntry(i, j, v0, inthashmap_inthashmapentry);
+        this.a[k] = new IntHashMap.IntHashMapEntry<>(i, j, v0, inthashmap_inthashmapentry);
         if (this.b++ >= this.c) {
             this.h(2 * this.a.length);
         }
@@ -185,7 +185,7 @@ public class IntHashMap<V> {
             if (!(object instanceof IntHashMap.IntHashMapEntry)) {
                 return false;
             } else {
-                IntHashMap.IntHashMapEntry inthashmap_inthashmapentry = (IntHashMap.IntHashMapEntry) object;
+                IntHashMap.IntHashMapEntry<V> inthashmap_inthashmapentry = (IntHashMap.IntHashMapEntry) object;
 
                 if (this.a == inthashmap_inthashmapentry.a) {
                     Object object1 = this.b();

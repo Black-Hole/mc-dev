@@ -34,23 +34,23 @@ public class RegistryBlocks<V> extends RegistryMaterials<V> {
     }
 
     public V getOrDefault(@Nullable MinecraftKey minecraftkey) {
-        Object object = this.get(minecraftkey);
+        V v0 = this.get(minecraftkey);
 
-        return object == null ? this.y : object;
+        return v0 == null ? this.y : v0;
     }
 
     @Nonnull
     public V fromId(int i) {
-        Object object = super.fromId(i);
+        V v0 = super.fromId(i);
 
-        return object == null ? this.y : object;
+        return v0 == null ? this.y : v0;
     }
 
     @Nonnull
     public V a(Random random) {
-        Object object = super.a(random);
+        V v0 = super.a(random);
 
-        return object == null ? this.y : object;
+        return v0 == null ? this.y : v0;
     }
 
     public MinecraftKey b() {

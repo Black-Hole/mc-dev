@@ -22,6 +22,6 @@ public class ItemExpBottle extends Item {
         }
 
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 }

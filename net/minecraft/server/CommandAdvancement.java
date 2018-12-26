@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -9,17 +8,14 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandAdvancement {
 
     private static final SuggestionProvider<CommandListenerWrapper> a = (commandcontext, suggestionsbuilder) -> {
-        Collection collection = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b();
+        Collection<Advancement> collection = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getAdvancementData().b();
 
         return ICompletionProvider.a(collection.stream().map(Advancement::getName), suggestionsbuilder);
     };
@@ -131,20 +127,20 @@ public class CommandAdvancement {
     }
 
     private static List<Advancement> a(Advancement advancement, CommandAdvancement.Filter commandadvancement_filter) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<Advancement> list = Lists.newArrayList();
 
         if (commandadvancement_filter.f) {
             for (Advancement advancement1 = advancement.b(); advancement1 != null; advancement1 = advancement1.b()) {
-                arraylist.add(advancement1);
+                list.add(advancement1);
             }
         }
 
-        arraylist.add(advancement);
+        list.add(advancement);
         if (commandadvancement_filter.g) {
-            a(advancement, (List) arraylist);
+            a(advancement, (List) list);
         }
 
-        return arraylist;
+        return list;
     }
 
     private static void a(Advancement advancement, List<Advancement> list) {

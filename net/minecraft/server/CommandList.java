@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.List;
@@ -26,7 +25,7 @@ public class CommandList {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
-        List list = playerlist.v();
+        List<EntityPlayer> list = playerlist.v();
         IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);

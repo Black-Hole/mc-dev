@@ -50,7 +50,7 @@ public class PathfinderGoalTargetNearestPlayer extends PathfinderGoal {
 
     public boolean a() {
         double d0 = this.g();
-        List list = this.b.world.a(EntityHuman.class, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
+        List<EntityHuman> list = this.b.world.a(EntityHuman.class, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
 
         Collections.sort(list, this.d);
         if (list.isEmpty()) {

@@ -9,7 +9,6 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.util.Pair;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DataConverterKeybind2 extends DataFix {

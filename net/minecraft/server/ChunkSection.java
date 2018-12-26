@@ -1,10 +1,8 @@
 package net.minecraft.server;
 
-import java.util.function.Function;
-
 public class ChunkSection {
 
-    public static final DataPalette<IBlockData> GLOBAL_PALETTE = new DataPaletteGlobal(Block.REGISTRY_ID, Blocks.AIR.getBlockData());
+    public static final DataPalette<IBlockData> GLOBAL_PALETTE = new DataPaletteGlobal<>(Block.REGISTRY_ID, Blocks.AIR.getBlockData());
     private final int yPos;
     private int nonEmptyBlockCount;
     private int tickingBlockCount;
@@ -15,7 +13,7 @@ public class ChunkSection {
 
     public ChunkSection(int i, boolean flag) {
         this.yPos = i;
-        this.blockIds = new DataPaletteBlock(ChunkSection.GLOBAL_PALETTE, Block.REGISTRY_ID, GameProfileSerializer::d, GameProfileSerializer::a, Blocks.AIR.getBlockData());
+        this.blockIds = new DataPaletteBlock<>(ChunkSection.GLOBAL_PALETTE, Block.REGISTRY_ID, GameProfileSerializer::d, GameProfileSerializer::a, Blocks.AIR.getBlockData());
         this.emittedLight = new NibbleArray();
         if (flag) {
             this.skyLight = new NibbleArray();

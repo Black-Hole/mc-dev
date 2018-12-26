@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -28,10 +27,10 @@ public class EntityPhantom extends EntityFlying implements IMonster {
     }
 
     protected void n() {
-        this.goalSelector.a(1, new EntityPhantom.c(null));
-        this.goalSelector.a(2, new EntityPhantom.i(null));
-        this.goalSelector.a(3, new EntityPhantom.e(null));
-        this.targetSelector.a(1, new EntityPhantom.b(null));
+        this.goalSelector.a(1, new EntityPhantom.c());
+        this.goalSelector.a(2, new EntityPhantom.i());
+        this.goalSelector.a(3, new EntityPhantom.e());
+        this.targetSelector.a(1, new EntityPhantom.b());
     }
 
     protected void initAttributes() {
@@ -186,7 +185,7 @@ public class EntityPhantom extends EntityFlying implements IMonster {
             } else {
                 this.b = 60;
                 AxisAlignedBB axisalignedbb = EntityPhantom.this.getBoundingBox().grow(16.0D, 64.0D, 16.0D);
-                List list = EntityPhantom.this.world.a(EntityHuman.class, axisalignedbb);
+                List<EntityHuman> list = EntityPhantom.this.world.a(EntityHuman.class, axisalignedbb);
 
                 if (!list.isEmpty()) {
                     list.sort((entityhuman, entityhuman1) -> {

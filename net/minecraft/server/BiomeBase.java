@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -101,7 +100,7 @@ public abstract class BiomeBase {
     public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> aE = new WorldGenSurfaceNether();
     public static final WorldGenSurface<WorldGenSurfaceConfigurationBase> aF = new WorldGenSurfaceEmpty();
     public static final Set<BiomeBase> aG = Sets.newHashSet();
-    public static final RegistryBlockID<BiomeBase> aH = new RegistryBlockID();
+    public static final RegistryBlockID<BiomeBase> aH = new RegistryBlockID<>();
     protected static final NoiseGenerator3 aI = new NoiseGenerator3(new Random(1234L), 1);
     public static final NoiseGenerator3 aJ = new NoiseGenerator3(new Random(2345L), 1);
     @Nullable
@@ -129,15 +128,15 @@ public abstract class BiomeBase {
     }
 
     public static <C extends WorldGenFeatureConfiguration> WorldGenCarverWrapper<C> a(WorldGenCarver<C> worldgencarver, C c0) {
-        return new WorldGenCarverWrapper(worldgencarver, c0);
+        return new WorldGenCarverWrapper<>(worldgencarver, c0);
     }
 
     public static <F extends WorldGenFeatureConfiguration, D extends WorldGenFeatureDecoratorConfiguration> WorldGenFeatureComposite<F, D> a(WorldGenerator<F> worldgenerator, F f0, WorldGenDecorator<D> worldgendecorator, D d0) {
-        return new WorldGenFeatureComposite(worldgenerator, f0, worldgendecorator, d0);
+        return new WorldGenFeatureComposite<>(worldgenerator, f0, worldgendecorator, d0);
     }
 
     public static <D extends WorldGenFeatureDecoratorConfiguration> WorldGenFeatureCompositeFlower<D> a(WorldGenFlowers worldgenflowers, WorldGenDecorator<D> worldgendecorator, D d0) {
-        return new WorldGenFeatureCompositeFlower(worldgenflowers, worldgendecorator, d0);
+        return new WorldGenFeatureCompositeFlower<>(worldgenflowers, worldgendecorator, d0);
     }
 
     protected BiomeBase(BiomeBase.a biomebase_a) {
@@ -217,7 +216,7 @@ public abstract class BiomeBase {
         return 0.1F;
     }
 
-    public float c(BlockPosition blockposition) {
+    public float getAdjustedTemperature(BlockPosition blockposition) {
         if (blockposition.getY() > 64) {
             float f = (float) (BiomeBase.aI.a((double) ((float) blockposition.getX() / 8.0F), (double) ((float) blockposition.getZ() / 8.0F)) * 4.0D);
 
@@ -232,14 +231,14 @@ public abstract class BiomeBase {
     }
 
     public boolean a(IWorldReader iworldreader, BlockPosition blockposition, boolean flag) {
-        if (this.c(blockposition) >= 0.15F) {
+        if (this.getAdjustedTemperature(blockposition) >= 0.15F) {
             return false;
         } else {
             if (blockposition.getY() >= 0 && blockposition.getY() < 256 && iworldreader.getBrightness(EnumSkyBlock.BLOCK, blockposition) < 10) {
                 IBlockData iblockdata = iworldreader.getType(blockposition);
                 Fluid fluid = iworldreader.getFluid(blockposition);
 
-                if (fluid.c() == FluidTypes.c && iblockdata.getBlock() instanceof BlockFluids) {
+                if (fluid.c() == FluidTypes.WATER && iblockdata.getBlock() instanceof BlockFluids) {
                     if (!flag) {
                         return true;
                     }
@@ -257,7 +256,7 @@ public abstract class BiomeBase {
     }
 
     public boolean b(IWorldReader iworldreader, BlockPosition blockposition) {
-        if (this.c(blockposition) >= 0.15F) {
+        if (this.getAdjustedTemperature(blockposition) >= 0.15F) {
             return false;
         } else {
             if (blockposition.getY() >= 0 && blockposition.getY() < 256 && iworldreader.getBrightness(EnumSkyBlock.BLOCK, blockposition) < 10) {
@@ -281,13 +280,13 @@ public abstract class BiomeBase {
     }
 
     public <C extends WorldGenFeatureConfiguration> void a(WorldGenStage.Features worldgenstage_features, WorldGenCarverWrapper<C> worldgencarverwrapper) {
-        ((List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
+        ((List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features1) -> {
             return Lists.newArrayList();
         })).add(worldgencarverwrapper);
     }
 
     public List<WorldGenCarverWrapper<?>> a(WorldGenStage.Features worldgenstage_features) {
-        return (List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features) -> {
+        return (List) this.aV.computeIfAbsent(worldgenstage_features, (worldgenstage_features1) -> {
             return Lists.newArrayList();
         });
     }
@@ -317,7 +316,7 @@ public abstract class BiomeBase {
         int j = 0;
 
         for (Iterator iterator = ((List) this.aW.get(worldgenstage_decoration)).iterator(); iterator.hasNext(); ++j) {
-            WorldGenFeatureComposite worldgenfeaturecomposite = (WorldGenFeatureComposite) iterator.next();
+            WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite = (WorldGenFeatureComposite) iterator.next();
 
             seededrandom.b(i, j, worldgenstage_decoration.ordinal());
             worldgenfeaturecomposite.a(generatoraccess, chunkgenerator, seededrandom, blockposition, WorldGenFeatureConfiguration.e);

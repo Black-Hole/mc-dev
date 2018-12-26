@@ -54,7 +54,7 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
             return Blocks.AIR.getBlockData();
         } else {
             if ((Boolean) iblockdata.get(BlockSeaPickle.b)) {
-                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             }
 
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -79,25 +79,25 @@ public class BlockSeaPickle extends BlockPlant implements IBlockFragilePlantElem
         }
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Boolean) iblockdata.get(BlockSeaPickle.b)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSeaPickle.b, false), 3);
-            return FluidTypes.c;
+            return FluidTypes.WATER;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockSeaPickle.b) ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockSeaPickle.b) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !(Boolean) iblockdata.get(BlockSeaPickle.b) && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockSeaPickle.b) && fluidtype == FluidTypes.WATER;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!(Boolean) iblockdata.get(BlockSeaPickle.b) && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockSeaPickle.b) && fluid.c() == FluidTypes.WATER) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockSeaPickle.b, true), 3);
                 generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));

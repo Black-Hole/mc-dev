@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.LongFunction;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,8 +17,8 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
     private final ChunkGenerator<?> d;
     private final IChunkLoader e;
     private final IAsyncTaskHandler f;
-    private final Long2ObjectMap<Scheduler.a> progressCache = new ExpiringMap(8192, 5000) {
-        protected boolean a(Scheduler.a scheduler_a) {
+    private final Long2ObjectMap<Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a> progressCache = new ExpiringMap<Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a>(8192, 5000) {
+        protected boolean a(Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a scheduler_a) {
             ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
 
             return !protochunk.ab_() && !protochunk.h();
@@ -41,7 +38,7 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
     }
 
     @Nullable
-    protected Scheduler.a a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
+    protected Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         IChunkLoader ichunkloader = this.e;
 
         synchronized (this.e) {
@@ -72,12 +69,12 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
         return chunkstatus.a(this.c, this.d, map, chunkcoordintpair.x, chunkcoordintpair.z);
     }
 
-    protected Scheduler.a a(ChunkCoordIntPair chunkcoordintpair, Scheduler.a scheduler_a) {
+    protected Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a a(ChunkCoordIntPair chunkcoordintpair, Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a scheduler_a) {
         ((ProtoChunk) scheduler_a.a()).a(1);
         return scheduler_a;
     }
 
-    protected void b(ChunkCoordIntPair chunkcoordintpair, Scheduler.a scheduler_a) {
+    protected void b(ChunkCoordIntPair chunkcoordintpair, Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a scheduler_a) {
         ((ProtoChunk) scheduler_a.a()).a(-1);
     }
 
@@ -92,7 +89,7 @@ public class ChunkTaskScheduler extends Scheduler<ChunkCoordIntPair, ChunkStatus
                     return;
                 }
 
-                Scheduler.a scheduler_a = (Scheduler.a) objectiterator.next();
+                Scheduler<ChunkCoordIntPair, ChunkStatus, ProtoChunk>.a scheduler_a = (Scheduler.a) objectiterator.next();
                 ProtoChunk protochunk = (ProtoChunk) scheduler_a.a();
 
                 if (protochunk.h() && protochunk.i().d() == ChunkStatus.Type.PROTOCHUNK) {

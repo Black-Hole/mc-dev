@@ -34,7 +34,7 @@ public enum EnumArmorMaterial implements ArmorMaterial {
         this.k = j;
         this.l = soundeffect;
         this.m = f;
-        this.n = new LazyInitVar(supplier);
+        this.n = new LazyInitVar<>(supplier);
     }
 
     public int a(EnumItemSlot enumitemslot) {

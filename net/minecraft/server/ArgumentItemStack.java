@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ArgumentItemStack implements ArgumentType<ArgumentPredicateItemStack> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "stick", "minecraft:stick", "stick{foo=bar}"});
+    private static final Collection<String> a = Arrays.asList("stick", "minecraft:stick", "stick{foo=bar}");
 
     public ArgumentItemStack() {}
 

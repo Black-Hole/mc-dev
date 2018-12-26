@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,7 +10,6 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -54,7 +52,7 @@ public class CommandBanIp {
         if (ipbanlist.a(s)) {
             throw CommandBanIp.c.create();
         } else {
-            List list = commandlistenerwrapper.getServer().getPlayerList().b(s);
+            List<EntityPlayer> list = commandlistenerwrapper.getServer().getPlayerList().b(s);
             IpBanEntry ipbanentry = new IpBanEntry(s, (Date) null, commandlistenerwrapper.getName(), (Date) null, ichatbasecomponent == null ? null : ichatbasecomponent.getString());
 
             ipbanlist.add(ipbanentry);

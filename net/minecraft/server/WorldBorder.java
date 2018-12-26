@@ -108,7 +108,7 @@ public class WorldBorder {
     }
 
     public void transitionSizeBetween(double d0, double d1, long i) {
-        this.i = (WorldBorder.a) (d0 != d1 ? new WorldBorder.b(d0, d1, i, null) : new WorldBorder.c(d1));
+        this.i = (WorldBorder.a) (d0 != d1 ? new WorldBorder.b(d0, d1, i) : new WorldBorder.c(d1));
         Iterator iterator = this.k().iterator();
 
         while (iterator.hasNext()) {

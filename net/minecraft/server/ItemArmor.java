@@ -21,7 +21,7 @@ public class ItemArmor extends Item {
 
     public static ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
         BlockPosition blockposition = isourceblock.getBlockPosition().shift((EnumDirection) isourceblock.e().get(BlockDispenser.FACING));
-        List list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.f.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
+        List<EntityLiving> list = isourceblock.getWorld().a(EntityLiving.class, new AxisAlignedBB(blockposition), IEntitySelector.f.and(new IEntitySelector.EntitySelectorEquipable(itemstack)));
 
         if (list.isEmpty()) {
             return ItemStack.a;
@@ -73,14 +73,14 @@ public class ItemArmor extends Item {
         if (itemstack1.isEmpty()) {
             entityhuman.setSlot(enumitemslot, itemstack.cloneItemStack());
             itemstack.setCount(0);
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         } else {
-            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         }
     }
 
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap multimap = super.a(enumitemslot);
+        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == this.b) {
             multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor modifier", (double) this.c, 0));

@@ -142,7 +142,7 @@ public class CriterionConditionEntity {
         }
 
         public CriterionConditionEntity b() {
-            return this.a == CriterionConditionEntityType.a && this.b == CriterionConditionDistance.a && this.c == CriterionConditionLocation.a && this.d == CriterionConditionMobEffect.a && this.e == CriterionConditionNBT.a ? CriterionConditionEntity.a : new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e, null);
+            return this.a == CriterionConditionEntityType.a && this.b == CriterionConditionDistance.a && this.c == CriterionConditionLocation.a && this.d == CriterionConditionMobEffect.a && this.e == CriterionConditionNBT.a ? CriterionConditionEntity.a : new CriterionConditionEntity(this.a, this.b, this.c, this.d, this.e);
         }
     }
 }

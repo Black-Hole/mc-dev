@@ -11,7 +11,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterMap extends DataFix {
 
@@ -20,17 +19,17 @@ public class DataConverterMap extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemInstanceMapIdFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:filled_map")) {
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-                Typed typed1 = typed.getOrCreateTyped(opticfinder1);
-                Dynamic dynamic1 = (Dynamic) typed1.get(DSL.remainderFinder());
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Typed<?> typed1 = typed.getOrCreateTyped(opticfinder1);
+                Dynamic<?> dynamic1 = (Dynamic) typed1.get(DSL.remainderFinder());
 
                 dynamic1 = dynamic1.set("map", dynamic1.createInt(dynamic.getInt("Damage")));
                 return typed.set(opticfinder1, typed1.set(DSL.remainderFinder(), dynamic1));

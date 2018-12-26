@@ -25,14 +25,14 @@ public class WorldProviderNormal extends WorldProvider {
 
     public ChunkGenerator<? extends GeneratorSettings> getChunkGenerator() {
         WorldType worldtype = this.b.getWorldData().getType();
-        ChunkGeneratorType chunkgeneratortype = ChunkGeneratorType.e;
-        ChunkGeneratorType chunkgeneratortype1 = ChunkGeneratorType.d;
-        ChunkGeneratorType chunkgeneratortype2 = ChunkGeneratorType.b;
-        ChunkGeneratorType chunkgeneratortype3 = ChunkGeneratorType.c;
-        ChunkGeneratorType chunkgeneratortype4 = ChunkGeneratorType.a;
-        BiomeLayout biomelayout = BiomeLayout.b;
-        BiomeLayout biomelayout1 = BiomeLayout.c;
-        BiomeLayout biomelayout2 = BiomeLayout.a;
+        ChunkGeneratorType<GeneratorSettingsFlat, ChunkProviderFlat> chunkgeneratortype = ChunkGeneratorType.e;
+        ChunkGeneratorType<GeneratorSettingsDebug, ChunkProviderDebug> chunkgeneratortype1 = ChunkGeneratorType.d;
+        ChunkGeneratorType<GeneratorSettingsNether, ChunkProviderHell> chunkgeneratortype2 = ChunkGeneratorType.b;
+        ChunkGeneratorType<GeneratorSettingsEnd, ChunkProviderTheEnd> chunkgeneratortype3 = ChunkGeneratorType.c;
+        ChunkGeneratorType<GeneratorSettingsOverworld, ChunkProviderGenerate> chunkgeneratortype4 = ChunkGeneratorType.a;
+        BiomeLayout<BiomeLayoutFixedConfiguration, WorldChunkManagerHell> biomelayout = BiomeLayout.b;
+        BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> biomelayout1 = BiomeLayout.c;
+        BiomeLayout<BiomeLayoutCheckerboardConfiguration, WorldChunkManagerCheckerBoard> biomelayout2 = BiomeLayout.a;
 
         if (worldtype == WorldType.FLAT) {
             GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.a(new Dynamic(DynamicOpsNBT.a, this.b.getWorldData().getGeneratorOptions()));

@@ -3,7 +3,6 @@ package net.minecraft.server;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -20,13 +19,13 @@ public interface IEntityAccess {
         if (voxelshape.isEmpty()) {
             return Stream.empty();
         } else {
-            AxisAlignedBB axisalignedbb = voxelshape.a();
+            AxisAlignedBB axisalignedbb = voxelshape.getBoundingBox();
 
-            return this.getEntities(entity, axisalignedbb.g(0.25D)).stream().filter((entity) -> {
-                return !set.contains(entity) && (entity1 == null || !entity1.x(entity));
-            }).flatMap((entity) -> {
-                return Stream.of(new AxisAlignedBB[] { entity.al(), entity1 == null ? null : entity1.j(entity)}).filter(Objects::nonNull).filter((axisalignedbb) -> {
-                    return axisalignedbb.c(axisalignedbb1);
+            return this.getEntities(entity, axisalignedbb.g(0.25D)).stream().filter((entity1) -> {
+                return !set.contains(entity1) && (entity == null || !entity.x(entity1));
+            }).flatMap((entity1) -> {
+                return Stream.of(entity1.al(), entity == null ? null : entity.j(entity1)).filter(Objects::nonNull).filter((axisalignedbb1) -> {
+                    return axisalignedbb1.c(axisalignedbb);
                 }).map(VoxelShapes::a);
             });
         }

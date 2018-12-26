@@ -9,18 +9,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "Player", "0123", "dd12be42-52a9-4a91-a8a1-11c01849e498", "@e"});
+    private static final Collection<String> b = Arrays.asList("Player", "0123", "dd12be42-52a9-4a91-a8a1-11c01849e498", "@e");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.player.unknown", new Object[0]));
 
     public ArgumentProfile() {}
@@ -34,7 +32,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
     }
 
     public ArgumentProfile.a parse(StringReader stringreader) throws CommandSyntaxException {
-        if (stringreader.canRead() && stringreader.peek() == 64) {
+        if (stringreader.canRead() && stringreader.peek() == '@') {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
             EntitySelector entityselector = argumentparserselector.s();
 
@@ -46,7 +44,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
         } else {
             int i = stringreader.getCursor();
 
-            while (stringreader.canRead() && stringreader.peek() != 32) {
+            while (stringreader.canRead() && stringreader.peek() != ' ') {
                 stringreader.skip();
             }
 
@@ -77,8 +75,8 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
                 ;
             }
 
-            return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder) -> {
-                ICompletionProvider.b((Iterable) ((ICompletionProvider) commandcontext.getSource()).l(), suggestionsbuilder);
+            return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder1) -> {
+                ICompletionProvider.b((Iterable) ((ICompletionProvider) commandcontext.getSource()).l(), suggestionsbuilder1);
             });
         } else {
             return Suggestions.empty();
@@ -98,21 +96,21 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
         }
 
         public Collection<GameProfile> getNames(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-            List list = this.a.d(commandlistenerwrapper);
+            List<EntityPlayer> list = this.a.d(commandlistenerwrapper);
 
             if (list.isEmpty()) {
                 throw ArgumentEntity.e.create();
             } else {
-                ArrayList arraylist = Lists.newArrayList();
+                List<GameProfile> list1 = Lists.newArrayList();
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-                    arraylist.add(entityplayer.getProfile());
+                    list1.add(entityplayer.getProfile());
                 }
 
-                return arraylist;
+                return list1;
             }
         }
     }

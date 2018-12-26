@@ -24,7 +24,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
         this.goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget(this, EntityHuman.class, true));
+        this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
     }
 
     protected void x_() {
@@ -67,7 +67,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
 
                     this.setSlot(EnumItemSlot.MAINHAND, ItemStack.a);
                     if (itemstack.getItem() == Items.POTION) {
-                        List list = PotionUtil.getEffects(itemstack);
+                        List<MobEffect> list = PotionUtil.getEffects(itemstack);
 
                         if (list != null) {
                             Iterator iterator = list.iterator();

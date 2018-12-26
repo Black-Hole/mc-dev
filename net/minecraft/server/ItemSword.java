@@ -51,7 +51,7 @@ public class ItemSword extends ItemToolMaterial {
     }
 
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
-        Multimap multimap = super.a(enumitemslot);
+        Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
             multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, 0));

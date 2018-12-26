@@ -4,7 +4,6 @@ import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.function.Function;
 
 public class DataConverterWolf extends DataConverterNamedEntity {
 
@@ -13,8 +12,8 @@ public class DataConverterWolf extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.update("CollarColor", (dynamic) -> {
-            return dynamic.createByte((byte) (15 - dynamic.getNumberValue(0).intValue()));
+        return dynamic.update("CollarColor", (dynamic1) -> {
+            return dynamic1.createByte((byte) (15 - dynamic1.getNumberValue(0).intValue()));
         });
     }
 

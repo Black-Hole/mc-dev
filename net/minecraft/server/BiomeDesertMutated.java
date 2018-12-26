@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeDesertMutated extends BiomeBase {
 
     public BiomeDesertMutated() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeDesertMutated.au, BiomeDesertMutated.ap)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.225F).b(0.25F).c(2.0F).d(0.0F).a(4159204).b(329011).a("desert"));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeDesertMutated.au, BiomeDesertMutated.ap)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.225F).b(0.25F).c(2.0F).d(0.0F).a(4159204).b(329011).a("desert"));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeDesertMutated.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -35,8 +35,8 @@ public final class BiomeDesertMutated extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeDesertMutated.j, new WorldGenDecoratorFrequencyConfiguration(60)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeDesertMutated.p, new WorldGenDecoratorChanceConfiguration(32)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.O, WorldGenFeatureConfiguration.e, BiomeDesertMutated.j, new WorldGenDecoratorFrequencyConfiguration(10)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeDesertMutated.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeDesertMutated.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeDesertMutated.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeDesertMutated.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, a(WorldGenerator.Q, WorldGenFeatureConfiguration.e, BiomeDesertMutated.o, new WorldGenDecoratorChanceConfiguration(1000)));
         this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.R, WorldGenFeatureConfiguration.e, BiomeDesertMutated.q, new WorldGenDecoratorChanceConfiguration(64)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeDesertMutated.n, WorldGenFeatureDecoratorConfiguration.e));

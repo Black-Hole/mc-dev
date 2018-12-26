@@ -10,7 +10,6 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterBedItem extends DataFix {
 
@@ -19,13 +18,13 @@ public class DataConverterBedItem extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
 
         return this.fixTypeEverywhereTyped("BedItemColorFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:bed")) {
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
                 if (dynamic.getShort("Damage") == 0) {
                     return typed.set(DSL.remainderFinder(), dynamic.set("Damage", dynamic.createShort((short) 14)));

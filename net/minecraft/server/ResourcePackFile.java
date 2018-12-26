@@ -6,11 +6,11 @@ import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -63,7 +63,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
             return Collections.emptySet();
         }
 
-        Enumeration enumeration = zipfile.entries();
+        Enumeration<? extends ZipEntry> enumeration = zipfile.entries();
         HashSet hashset = Sets.newHashSet();
 
         while (enumeration.hasMoreElements()) {
@@ -71,10 +71,10 @@ public class ResourcePackFile extends ResourcePackAbstract {
             String s = zipentry.getName();
 
             if (s.startsWith(enumresourcepacktype.a() + "/")) {
-                ArrayList arraylist = Lists.newArrayList(ResourcePackFile.b.split(s));
+                List<String> list = Lists.newArrayList(ResourcePackFile.b.split(s));
 
-                if (arraylist.size() > 1) {
-                    String s1 = (String) arraylist.get(1);
+                if (list.size() > 1) {
+                    String s1 = (String) list.get(1);
 
                     if (s1.equals(s1.toLowerCase(Locale.ROOT))) {
                         hashset.add(s1);
@@ -110,8 +110,8 @@ public class ResourcePackFile extends ResourcePackAbstract {
             return Collections.emptySet();
         }
 
-        Enumeration enumeration = zipfile.entries();
-        ArrayList arraylist = Lists.newArrayList();
+        Enumeration<? extends ZipEntry> enumeration = zipfile.entries();
+        List<MinecraftKey> list = Lists.newArrayList();
         String s1 = enumresourcepacktype.a() + "/";
 
         while (enumeration.hasMoreElements()) {
@@ -132,7 +132,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
                             if (astring.length >= i + 1 && predicate.test(s3)) {
                                 String s4 = s2.substring(0, j);
 
-                                arraylist.add(new MinecraftKey(s4, s3));
+                                list.add(new MinecraftKey(s4, s3));
                             }
                         }
                     }
@@ -140,6 +140,6 @@ public class ResourcePackFile extends ResourcePackAbstract {
             }
         }
 
-        return arraylist;
+        return list;
     }
 }

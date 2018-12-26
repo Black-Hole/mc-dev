@@ -45,7 +45,7 @@ public class BlockWallSign extends BlockSign {
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);
                 if (iblockdata.canPlace(world, blockposition)) {
-                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.c() == FluidTypes.c);
+                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.c() == FluidTypes.WATER);
                 }
             }
         }

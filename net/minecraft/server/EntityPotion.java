@@ -59,7 +59,7 @@ public class EntityPotion extends EntityProjectile {
         if (!this.world.isClientSide) {
             ItemStack itemstack = this.getItem();
             PotionRegistry potionregistry = PotionUtil.d(itemstack);
-            List list = PotionUtil.getEffects(itemstack);
+            List<MobEffect> list = PotionUtil.getEffects(itemstack);
             boolean flag = potionregistry == Potions.b && list.isEmpty();
 
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && flag) {
@@ -94,7 +94,7 @@ public class EntityPotion extends EntityProjectile {
 
     private void l() {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-        List list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.e);
+        List<EntityLiving> list = this.world.a(EntityLiving.class, axisalignedbb, EntityPotion.e);
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();
@@ -113,7 +113,7 @@ public class EntityPotion extends EntityProjectile {
 
     private void a(MovingObjectPosition movingobjectposition, List<MobEffect> list) {
         AxisAlignedBB axisalignedbb = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
-        List list1 = this.world.a(EntityLiving.class, axisalignedbb);
+        List<EntityLiving> list1 = this.world.a(EntityLiving.class, axisalignedbb);
 
         if (!list1.isEmpty()) {
             Iterator iterator = list1.iterator();

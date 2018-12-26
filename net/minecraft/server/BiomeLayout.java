@@ -23,7 +23,7 @@ public class BiomeLayout<C extends BiomeLayoutConfiguration, T extends WorldChun
 
     public static <C extends BiomeLayoutConfiguration, T extends WorldChunkManager> BiomeLayout<C, T> a(String s, Function<C, T> function, Supplier<C> supplier) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
-        BiomeLayout biomelayout = new BiomeLayout(function, supplier, minecraftkey);
+        BiomeLayout<C, T> biomelayout = new BiomeLayout<>(function, supplier, minecraftkey);
 
         IRegistry.BIOME_SOURCE_TYPE.a(minecraftkey, (Object) biomelayout);
         return biomelayout;

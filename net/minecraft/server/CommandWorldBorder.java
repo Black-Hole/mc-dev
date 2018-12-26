@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -10,7 +9,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 public class CommandWorldBorder {
 
@@ -56,7 +54,7 @@ public class CommandWorldBorder {
             throw CommandWorldBorder.g.create();
         } else {
             worldborder.setDamageBuffer((double) f);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.buffer.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { f})}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.buffer.success", new Object[] { String.format(Locale.ROOT, "%.2f", f)}), true);
             return (int) f;
         }
     }
@@ -68,7 +66,7 @@ public class CommandWorldBorder {
             throw CommandWorldBorder.h.create();
         } else {
             worldborder.setDamageAmount((double) f);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.amount.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { f})}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.damage.amount.success", new Object[] { String.format(Locale.ROOT, "%.2f", f)}), true);
             return (int) f;
         }
     }
@@ -100,7 +98,7 @@ public class CommandWorldBorder {
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
         double d0 = commandlistenerwrapper.getWorld().getWorldBorder().getSize();
 
-        commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.get", new Object[] { String.format(Locale.ROOT, "%.0f", new Object[] { d0})}), false);
+        commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.get", new Object[] { String.format(Locale.ROOT, "%.0f", d0)}), false);
         return MathHelper.floor(d0 + 0.5D);
     }
 
@@ -111,7 +109,7 @@ public class CommandWorldBorder {
             throw CommandWorldBorder.a.create();
         } else {
             worldborder.setCenter((double) vec2f.i, (double) vec2f.j);
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.center.success", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { vec2f.i}), String.format("%.2f", new Object[] { vec2f.j})}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.center.success", new Object[] { String.format(Locale.ROOT, "%.2f", vec2f.i), String.format("%.2f", vec2f.j)}), true);
             return 0;
         }
     }
@@ -130,13 +128,13 @@ public class CommandWorldBorder {
             if (i > 0L) {
                 worldborder.transitionSizeBetween(d1, d0, i);
                 if (d0 > d1) {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.grow", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { d0}), Long.toString(i / 1000L)}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.grow", new Object[] { String.format(Locale.ROOT, "%.1f", d0), Long.toString(i / 1000L)}), true);
                 } else {
-                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.shrink", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { d0}), Long.toString(i / 1000L)}), true);
+                    commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.shrink", new Object[] { String.format(Locale.ROOT, "%.1f", d0), Long.toString(i / 1000L)}), true);
                 }
             } else {
                 worldborder.setSize(d0);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.immediate", new Object[] { String.format(Locale.ROOT, "%.1f", new Object[] { d0})}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.worldborder.set.immediate", new Object[] { String.format(Locale.ROOT, "%.1f", d0)}), true);
             }
 
             return (int) (d0 - d1);

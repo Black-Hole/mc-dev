@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityEnderman extends EntityMonster {
@@ -33,7 +32,7 @@ public class EntityEnderman extends EntityMonster {
         this.goalSelector.a(11, new EntityEnderman.PathfinderGoalEndermanPickupBlock(this));
         this.targetSelector.a(1, new EntityEnderman.PathfinderGoalPlayerWhoLookedAtTarget(this));
         this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
-        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget(this, EntityEndermite.class, 10, true, false, EntityEndermite::isPlayerSpawned));
+        this.targetSelector.a(3, new PathfinderGoalNearestAttackableTarget<>(this, EntityEndermite.class, 10, true, false, EntityEndermite::isPlayerSpawned));
     }
 
     protected void initAttributes() {

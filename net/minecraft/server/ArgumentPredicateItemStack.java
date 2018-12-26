@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 

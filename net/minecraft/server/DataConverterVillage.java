@@ -5,7 +5,6 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DataConverterVillage extends DataFix {

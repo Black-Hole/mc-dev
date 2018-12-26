@@ -85,7 +85,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
                         this.f();
                         continue;
                     default:
-                        this.a(l, String.format("Unknown request %s", new Object[] { Integer.toHexString(i1)}));
+                        this.a(l, String.format("Unknown request %s", Integer.toHexString(i1)));
                         continue;
                     }
                 }

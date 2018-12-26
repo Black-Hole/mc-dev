@@ -61,7 +61,7 @@ public class NBTTagList extends NBTList<NBTBase> {
     }
 
     public byte getTypeId() {
-        return (byte) 9;
+        return 9;
     }
 
     public String toString() {
@@ -155,7 +155,7 @@ public class NBTTagList extends NBTList<NBTBase> {
             }
         }
 
-        return (short) 0;
+        return 0;
     }
 
     public int h(int i) {

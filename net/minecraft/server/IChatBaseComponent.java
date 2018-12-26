@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
@@ -176,7 +174,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         return this;
     }
 
-    static default IChatBaseComponent b(IChatBaseComponent ichatbasecomponent) {
+    static IChatBaseComponent b(IChatBaseComponent ichatbasecomponent) {
         IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent.g();
 
         ichatbasecomponent1.setChatModifier(ichatbasecomponent.getChatModifier().n());
@@ -316,7 +314,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 Iterator iterator = jsonobject1.entrySet().iterator();
 
                 while (iterator.hasNext()) {
-                    Entry entry = (Entry) iterator.next();
+                    Entry<String, JsonElement> entry = (Entry) iterator.next();
 
                     jsonobject.add((String) entry.getKey(), (JsonElement) entry.getValue());
                 }

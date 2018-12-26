@@ -11,7 +11,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +28,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
     private long h;
     private int chatThrottle;
     private int j;
-    private final IntHashMap<Short> k = new IntHashMap();
+    private final IntHashMap<Short> k = new IntHashMap<>();
     private double l;
     private double m;
     private double n;
@@ -291,11 +290,11 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.getWorldServer());
         StringReader stringreader = new StringReader(packetplayintabcomplete.c());
 
-        if (stringreader.canRead() && stringreader.peek() == 47) {
+        if (stringreader.canRead() && stringreader.peek() == '/') {
             stringreader.skip();
         }
 
-        ParseResults parseresults = this.minecraftServer.getCommandDispatcher().a().parse(stringreader, this.player.getCommandListener());
+        ParseResults<CommandListenerWrapper> parseresults = this.minecraftServer.getCommandDispatcher().a().parse(stringreader, this.player.getCommandListener());
 
         this.minecraftServer.getCommandDispatcher().a().getCompletionSuggestions(parseresults).thenAccept((suggestions) -> {
             this.networkManager.sendPacket(new PacketPlayOutTabComplete(packetplayintabcomplete.b(), suggestions));
@@ -1061,7 +1060,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
         this.player.resetIdleTimer();
         if (this.player.activeContainer.windowId == packetplayinwindowclick.b() && this.player.activeContainer.c(this.player)) {
             if (this.player.isSpectator()) {
-                NonNullList nonnulllist = NonNullList.a();
+                NonNullList<ItemStack> nonnulllist = NonNullList.a();
 
                 for (int i = 0; i < this.player.activeContainer.slots.size(); ++i) {
                     nonnulllist.add(((Slot) this.player.activeContainer.slots.get(i)).getItem());
@@ -1081,7 +1080,7 @@ public class PlayerConnection implements PacketListenerPlayIn, ITickable {
                     this.k.a(this.player.activeContainer.windowId, packetplayinwindowclick.e());
                     this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.b(), packetplayinwindowclick.e(), false));
                     this.player.activeContainer.a(this.player, false);
-                    NonNullList nonnulllist1 = NonNullList.a();
+                    NonNullList<ItemStack> nonnulllist1 = NonNullList.a();
 
                     for (int j = 0; j < this.player.activeContainer.slots.size(); ++j) {
                         ItemStack itemstack1 = ((Slot) this.player.activeContainer.slots.get(j)).getItem();

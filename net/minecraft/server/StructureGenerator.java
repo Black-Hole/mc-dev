@@ -5,11 +5,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.LongFunction;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +41,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                     StructureStart structurestart = this.a(generatoraccess, chunkgenerator, (SeededRandom) random, i2);
 
                     if (structurestart != StructureGenerator.a && structurestart.c().a(l, i1, l + 15, i1 + 15)) {
-                        ((LongSet) chunkgenerator.getStructureCache(this).computeIfAbsent(j1, (i) -> {
+                        ((LongSet) chunkgenerator.getStructureCache(this).computeIfAbsent(j1, (j2) -> {
                             return new LongOpenHashSet();
                         })).add(i2);
                         generatoraccess.getChunkProvider().a(j, k, true).a(this.a(), i2);
@@ -59,7 +57,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
     }
 
     protected StructureStart a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        List list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        List<StructureStart> list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -82,7 +80,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
     }
 
     public boolean b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        List list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        List<StructureStart> list = this.a(generatoraccess, blockposition.getX() >> 4, blockposition.getZ() >> 4);
         Iterator iterator = list.iterator();
 
         StructureStart structurestart;
@@ -159,9 +157,9 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
     }
 
     private List<StructureStart> a(GeneratorAccess generatoraccess, int i, int j) {
-        ArrayList arraylist = Lists.newArrayList();
-        Long2ObjectMap long2objectmap = generatoraccess.getChunkProvider().getChunkGenerator().getStructureStartCache(this);
-        Long2ObjectMap long2objectmap1 = generatoraccess.getChunkProvider().getChunkGenerator().getStructureCache(this);
+        List<StructureStart> list = Lists.newArrayList();
+        Long2ObjectMap<StructureStart> long2objectmap = generatoraccess.getChunkProvider().getChunkGenerator().getStructureStartCache(this);
+        Long2ObjectMap<LongSet> long2objectmap1 = generatoraccess.getChunkProvider().getChunkGenerator().getStructureCache(this);
         long k = ChunkCoordIntPair.a(i, j);
         LongSet longset = (LongSet) long2objectmap1.get(k);
 
@@ -177,7 +175,7 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
             StructureStart structurestart = (StructureStart) long2objectmap.get(olong);
 
             if (structurestart != null) {
-                arraylist.add(structurestart);
+                list.add(structurestart);
             } else {
                 ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(olong);
                 IChunkAccess ichunkaccess = generatoraccess.getChunkProvider().a(chunkcoordintpair.x, chunkcoordintpair.z, true);
@@ -185,19 +183,19 @@ public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration>
                 structurestart = ichunkaccess.a(this.a());
                 if (structurestart != null) {
                     long2objectmap.put(olong, structurestart);
-                    arraylist.add(structurestart);
+                    list.add(structurestart);
                 }
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     private StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, SeededRandom seededrandom, long i) {
         if (!chunkgenerator.getWorldChunkManager().a(this)) {
             return StructureGenerator.a;
         } else {
-            Long2ObjectMap long2objectmap = chunkgenerator.getStructureStartCache(this);
+            Long2ObjectMap<StructureStart> long2objectmap = chunkgenerator.getStructureStartCache(this);
             StructureStart structurestart = (StructureStart) long2objectmap.get(i);
 
             if (structurestart != null) {

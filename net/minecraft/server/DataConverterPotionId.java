@@ -12,8 +12,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class DataConverterPotionId extends DataFix {
 
@@ -153,26 +151,26 @@ public class DataConverterPotionId extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = type.findField("tag");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<?> opticfinder1 = type.findField("tag");
 
         return this.fixTypeEverywhereTyped("ItemPotionFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:potion")) {
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-                Optional optional1 = typed.getOptionalTyped(opticfinder1);
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Optional<? extends Typed<?>> optional1 = typed.getOptionalTyped(opticfinder1);
                 short short0 = ((Number) dynamic.get("Damage").flatMap(Dynamic::getNumberValue).orElse(0)).shortValue();
 
                 if (optional1.isPresent()) {
-                    Typed typed1 = typed;
-                    Dynamic dynamic1 = (Dynamic) ((Typed) optional1.get()).get(DSL.remainderFinder());
-                    Optional optional2 = dynamic1.get("Potion").flatMap(Dynamic::getStringValue);
+                    Typed<?> typed1 = typed;
+                    Dynamic<?> dynamic1 = (Dynamic) ((Typed) optional1.get()).get(DSL.remainderFinder());
+                    Optional<String> optional2 = dynamic1.get("Potion").flatMap(Dynamic::getStringValue);
 
                     if (!optional2.isPresent()) {
                         String s = DataConverterPotionId.a[short0 & 127];
-                        Typed typed2 = ((Typed) optional1.get()).set(DSL.remainderFinder(), dynamic1.set("Potion", dynamic1.createString(s == null ? "minecraft:water" : s)));
+                        Typed<?> typed2 = ((Typed) optional1.get()).set(DSL.remainderFinder(), dynamic1.set("Potion", dynamic1.createString(s == null ? "minecraft:water" : s)));
 
                         typed1 = typed.set(opticfinder1, typed2);
                         if ((short0 & 16384) == 16384) {

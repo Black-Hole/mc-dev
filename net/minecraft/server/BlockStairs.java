@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
 public class BlockStairs extends Block implements IFluidSource, IFluidContainer {
@@ -168,14 +167,14 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         EnumDirection enumdirection = blockactioncontext.getClickedFace();
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
-        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.o, fluid.c() == FluidTypes.c);
+        IBlockData iblockdata = (IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockStairs.FACING, blockactioncontext.f())).set(BlockStairs.HALF, enumdirection != EnumDirection.DOWN && (enumdirection == EnumDirection.UP || (double) blockactioncontext.n() <= 0.5D) ? BlockPropertyHalf.BOTTOM : BlockPropertyHalf.TOP)).set(BlockStairs.o, fluid.c() == FluidTypes.WATER);
 
         return (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, blockactioncontext.getWorld(), blockactioncontext.getClickPosition()));
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockStairs.o)) {
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
         }
 
         return enumdirection.k().c() ? (IBlockData) iblockdata.set(BlockStairs.SHAPE, m(iblockdata, generatoraccess, blockposition)) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
@@ -273,25 +272,25 @@ public class BlockStairs extends Block implements IFluidSource, IFluidContainer 
         blockstatelist_a.a(BlockStairs.FACING, BlockStairs.HALF, BlockStairs.SHAPE, BlockStairs.o);
     }
 
-    public FluidType a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
+    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         if ((Boolean) iblockdata.get(BlockStairs.o)) {
             generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, false), 3);
-            return FluidTypes.c;
+            return FluidTypes.WATER;
         } else {
-            return FluidTypes.a;
+            return FluidTypes.EMPTY;
         }
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockStairs.o) ? FluidTypes.c.a(false) : super.h(iblockdata);
+        return (Boolean) iblockdata.get(BlockStairs.o) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
     }
 
     public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !(Boolean) iblockdata.get(BlockStairs.o) && fluidtype == FluidTypes.c;
+        return !(Boolean) iblockdata.get(BlockStairs.o) && fluidtype == FluidTypes.WATER;
     }
 
     public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!(Boolean) iblockdata.get(BlockStairs.o) && fluid.c() == FluidTypes.c) {
+        if (!(Boolean) iblockdata.get(BlockStairs.o) && fluid.c() == FluidTypes.WATER) {
             if (!generatoraccess.e()) {
                 generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockStairs.o, true), 3);
                 generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));

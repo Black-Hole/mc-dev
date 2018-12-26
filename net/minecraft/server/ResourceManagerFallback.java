@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -69,7 +68,7 @@ public class ResourceManagerFallback implements IResourceManager {
 
     public List<IResource> b(MinecraftKey minecraftkey) throws IOException {
         this.d(minecraftkey);
-        ArrayList arraylist = Lists.newArrayList();
+        List<IResource> list = Lists.newArrayList();
         MinecraftKey minecraftkey1 = c(minecraftkey);
         Iterator iterator = this.a.iterator();
 
@@ -79,29 +78,29 @@ public class ResourceManagerFallback implements IResourceManager {
             if (iresourcepack.b(this.c, minecraftkey)) {
                 InputStream inputstream = iresourcepack.b(this.c, minecraftkey1) ? this.a(minecraftkey1, iresourcepack) : null;
 
-                arraylist.add(new Resource(iresourcepack.a(), minecraftkey, this.a(minecraftkey, iresourcepack), inputstream));
+                list.add(new Resource(iresourcepack.a(), minecraftkey, this.a(minecraftkey, iresourcepack), inputstream));
             }
         }
 
-        if (arraylist.isEmpty()) {
+        if (list.isEmpty()) {
             throw new FileNotFoundException(minecraftkey.toString());
         } else {
-            return arraylist;
+            return list;
         }
     }
 
     public Collection<MinecraftKey> a(String s, Predicate<String> predicate) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<MinecraftKey> list = Lists.newArrayList();
         Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {
             IResourcePack iresourcepack = (IResourcePack) iterator.next();
 
-            arraylist.addAll(iresourcepack.a(this.c, s, Integer.MAX_VALUE, predicate));
+            list.addAll(iresourcepack.a(this.c, s, Integer.MAX_VALUE, predicate));
         }
 
-        Collections.sort(arraylist);
-        return arraylist;
+        Collections.sort(list);
+        return list;
     }
 
     static MinecraftKey c(MinecraftKey minecraftkey) {

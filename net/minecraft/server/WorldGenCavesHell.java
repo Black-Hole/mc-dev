@@ -8,7 +8,7 @@ public class WorldGenCavesHell extends WorldGenCaves {
 
     public WorldGenCavesHell() {
         this.e = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[] { Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.NETHERRACK});
-        this.f = ImmutableSet.of(FluidTypes.e, FluidTypes.c);
+        this.f = ImmutableSet.of(FluidTypes.LAVA, FluidTypes.WATER);
     }
 
     public boolean a(IBlockAccess iblockaccess, Random random, int i, int j, WorldGenFeatureConfigurationChance worldgenfeatureconfigurationchance) {

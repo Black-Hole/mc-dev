@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeDesertHills extends BiomeBase {
 
     public BiomeDesertHills() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeDesertHills.au, BiomeDesertHills.ap)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.45F).b(0.3F).c(2.0F).d(0.0F).a(4159204).b(329011).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeDesertHills.au, BiomeDesertHills.ap)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.DESERT).a(0.45F).b(0.3F).c(2.0F).d(0.0F).a(4159204).b(329011).a((String) null));
         this.a(WorldGenerator.i, (WorldGenFeatureConfiguration) (new WorldGenFeatureDesertPyramidConfiguration()));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
@@ -36,8 +36,8 @@ public final class BiomeDesertHills extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeDesertHills.j, new WorldGenDecoratorFrequencyConfiguration(60)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeDesertHills.p, new WorldGenDecoratorChanceConfiguration(32)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.O, WorldGenFeatureConfiguration.e, BiomeDesertHills.j, new WorldGenDecoratorFrequencyConfiguration(10)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeDesertHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeDesertHills.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeDesertHills.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeDesertHills.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.SURFACE_STRUCTURES, a(WorldGenerator.Q, WorldGenFeatureConfiguration.e, BiomeDesertHills.o, new WorldGenDecoratorChanceConfiguration(1000)));
         this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.R, WorldGenFeatureConfiguration.e, BiomeDesertHills.q, new WorldGenDecoratorChanceConfiguration(64)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeDesertHills.n, WorldGenFeatureDecoratorConfiguration.e));

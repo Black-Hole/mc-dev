@@ -6,8 +6,6 @@ import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class DataConverterIglooMetadataRemoval extends DataFix {
@@ -17,8 +15,8 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.s);
-        Type type1 = this.getOutputSchema().getType(DataConverterTypes.s);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.s);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.s);
 
         return this.writeFixAndRead("IglooMetadataRemovalFix", type, type1, DataConverterIglooMetadataRemoval::a);
     }
@@ -33,8 +31,8 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
 
     private static <T> Dynamic<T> b(Dynamic<T> dynamic) {
         Optional optional = dynamic.getStream().map((stream) -> {
-            return stream.filter((dynamic) -> {
-                return !c(dynamic);
+            return stream.filter((dynamic1) -> {
+                return !c(dynamic1);
             });
         });
 

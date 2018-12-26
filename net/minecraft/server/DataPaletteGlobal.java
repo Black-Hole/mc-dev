@@ -17,9 +17,9 @@ public class DataPaletteGlobal<T> implements DataPalette<T> {
     }
 
     public T a(int i) {
-        Object object = this.a.fromId(i);
+        T t0 = this.a.fromId(i);
 
-        return object == null ? this.b : object;
+        return t0 == null ? this.b : t0;
     }
 
     public void b(PacketDataSerializer packetdataserializer) {}

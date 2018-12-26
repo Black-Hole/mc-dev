@@ -25,7 +25,7 @@ public final class IEntitySelector {
         double d4 = d3 * d3;
 
         return (entity) -> {
-            return entity != null && entity.d(d0, d1, d2) <= d3;
+            return entity != null && entity.d(d0, d1, d2) <= d4;
         };
     }
 
@@ -33,32 +33,32 @@ public final class IEntitySelector {
         ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
         ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
 
-        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity) -> {
-            if (!entity.isCollidable()) {
+        return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity1) -> {
+            if (!entity1.isCollidable()) {
                 return false;
-            } else if (entity1.world.isClientSide && (!(entity instanceof EntityHuman) || !((EntityHuman) entity).dn())) {
+            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).dn())) {
                 return false;
             } else {
-                ScoreboardTeamBase scoreboardteambase = entity.getScoreboardTeam();
-                ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush = scoreboardteambase == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase.getCollisionRule();
+                ScoreboardTeamBase scoreboardteambase1 = entity1.getScoreboardTeam();
+                ScoreboardTeamBase.EnumTeamPush scoreboardteambase_enumteampush1 = scoreboardteambase1 == null ? ScoreboardTeamBase.EnumTeamPush.ALWAYS : scoreboardteambase1.getCollisionRule();
 
-                if (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER) {
+                if (scoreboardteambase_enumteampush1 == ScoreboardTeamBase.EnumTeamPush.NEVER) {
                     return false;
                 } else {
-                    boolean flag = scoreboardteambase1 != null && scoreboardteambase1.isAlly(scoreboardteambase);
+                    boolean flag = scoreboardteambase != null && scoreboardteambase.isAlly(scoreboardteambase1);
 
-                    return (scoreboardteambase_enumteampush1 == ScoreboardTeamBase.EnumTeamPush.PUSH_OWN_TEAM || scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.PUSH_OWN_TEAM) && flag ? false : scoreboardteambase_enumteampush1 != ScoreboardTeamBase.EnumTeamPush.PUSH_OTHER_TEAMS && scoreboardteambase_enumteampush != ScoreboardTeamBase.EnumTeamPush.PUSH_OTHER_TEAMS || flag;
+                    return (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.PUSH_OWN_TEAM || scoreboardteambase_enumteampush1 == ScoreboardTeamBase.EnumTeamPush.PUSH_OWN_TEAM) && flag ? false : scoreboardteambase_enumteampush != ScoreboardTeamBase.EnumTeamPush.PUSH_OTHER_TEAMS && scoreboardteambase_enumteampush1 != ScoreboardTeamBase.EnumTeamPush.PUSH_OTHER_TEAMS || flag;
                 }
             }
         }));
     }
 
     public static Predicate<Entity> b(Entity entity) {
-        return (entity) -> {
+        return (entity1) -> {
             while (true) {
-                if (entity.isPassenger()) {
-                    entity = entity.getVehicle();
-                    if (entity != entity1) {
+                if (entity1.isPassenger()) {
+                    entity1 = entity1.getVehicle();
+                    if (entity1 != entity) {
                         continue;
                     }
 

@@ -18,7 +18,7 @@ public class StreamAccumulator<T> {
     }
 
     public Stream<T> a() {
-        return StreamSupport.stream(new AbstractSpliterator(Long.MAX_VALUE, i) {
+        return StreamSupport.stream(new AbstractSpliterator<T>(Long.MAX_VALUE, 0) {
             private int b = 0;
 
             public boolean tryAdvance(Consumer<? super T> consumer) {

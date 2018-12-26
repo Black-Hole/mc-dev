@@ -22,7 +22,7 @@ public class EntityMagmaCube extends EntitySlime {
         return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
-    protected void setSize(int i, boolean flag) {
+    public void setSize(int i, boolean flag) {
         super.setSize(i, flag);
         this.getAttributeInstance(GenericAttributes.h).setValue((double) (i * 3));
     }

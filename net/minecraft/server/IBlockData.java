@@ -3,24 +3,23 @@ package net.minecraft.server;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import java.util.Random;
-import java.util.function.Supplier;
 
 public interface IBlockData extends IBlockDataHolder<IBlockData> {
 
     ThreadLocal<Object2ByteMap<IBlockData>> a = ThreadLocal.withInitial(() -> {
-        Object2ByteOpenHashMap object2byteopenhashmap = new Object2ByteOpenHashMap();
+        Object2ByteOpenHashMap<IBlockData> object2byteopenhashmap = new Object2ByteOpenHashMap();
 
         object2byteopenhashmap.defaultReturnValue((byte) 127);
         return object2byteopenhashmap;
     });
     ThreadLocal<Object2ByteMap<IBlockData>> b = ThreadLocal.withInitial(() -> {
-        Object2ByteOpenHashMap object2byteopenhashmap = new Object2ByteOpenHashMap();
+        Object2ByteOpenHashMap<IBlockData> object2byteopenhashmap = new Object2ByteOpenHashMap();
 
         object2byteopenhashmap.defaultReturnValue((byte) 127);
         return object2byteopenhashmap;
     });
     ThreadLocal<Object2ByteMap<IBlockData>> c = ThreadLocal.withInitial(() -> {
-        Object2ByteOpenHashMap object2byteopenhashmap = new Object2ByteOpenHashMap();
+        Object2ByteOpenHashMap<IBlockData> object2byteopenhashmap = new Object2ByteOpenHashMap();
 
         object2byteopenhashmap.defaultReturnValue((byte) 127);
         return object2byteopenhashmap;
@@ -38,7 +37,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
 
     default boolean a(IBlockAccess iblockaccess, BlockPosition blockposition) {
         Block block = this.getBlock();
-        Object2ByteMap object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.a.get();
+        Object2ByteMap<IBlockData> object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.a.get();
 
         if (object2bytemap != null) {
             byte b0 = object2bytemap.getByte(this);
@@ -59,7 +58,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
 
     default int b(IBlockAccess iblockaccess, BlockPosition blockposition) {
         Block block = this.getBlock();
-        Object2ByteMap object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.b.get();
+        Object2ByteMap<IBlockData> object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.b.get();
 
         if (object2bytemap != null) {
             byte b0 = object2bytemap.getByte(this);
@@ -152,7 +151,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
 
     default boolean f(IBlockAccess iblockaccess, BlockPosition blockposition) {
         Block block = this.getBlock();
-        Object2ByteMap object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.c.get();
+        Object2ByteMap<IBlockData> object2bytemap = block.s() ? null : (Object2ByteMap) IBlockData.c.get();
 
         if (object2bytemap != null) {
             byte b0 = object2bytemap.getByte(this);
@@ -175,7 +174,7 @@ public interface IBlockData extends IBlockDataHolder<IBlockData> {
         return this.getBlock().f(this);
     }
 
-    default VoxelShape g(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    default VoxelShape getShape(IBlockAccess iblockaccess, BlockPosition blockposition) {
         return this.getBlock().a(this, iblockaccess, blockposition);
     }
 

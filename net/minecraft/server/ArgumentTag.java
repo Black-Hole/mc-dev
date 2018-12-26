@@ -8,11 +8,10 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Function;
 
 public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "foo", "foo:bar", "#foo"});
+    private static final Collection<String> a = Arrays.asList("foo", "foo:bar", "#foo");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("arguments.function.tag.unknown", new Object[] { object});
     });
@@ -29,11 +28,11 @@ public class ArgumentTag implements ArgumentType<ArgumentTag.a> {
     public ArgumentTag.a parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey;
 
-        if (stringreader.canRead() && stringreader.peek() == 35) {
+        if (stringreader.canRead() && stringreader.peek() == '#') {
             stringreader.skip();
             minecraftkey = MinecraftKey.a(stringreader);
             return (commandcontext) -> {
-                Tag tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().g().a(minecraftkey);
+                Tag<CustomFunction> tag = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getFunctionData().g().a(minecraftkey);
 
                 if (tag == null) {
                     throw ArgumentTag.b.create(minecraftkey.toString());

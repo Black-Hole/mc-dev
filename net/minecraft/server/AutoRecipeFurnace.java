@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntListIterator;
+import java.util.Iterator;
 
 public class AutoRecipeFurnace extends AutoRecipe {
 
@@ -41,9 +41,9 @@ public class AutoRecipeFurnace extends AutoRecipe {
     }
 
     protected void a(int i, IntList intlist) {
-        IntListIterator intlistiterator = intlist.iterator();
+        Iterator<Integer> iterator = intlist.iterator();
         Slot slot = this.d.getSlot(0);
-        ItemStack itemstack = AutoRecipeStackManager.b((Integer) intlistiterator.next());
+        ItemStack itemstack = AutoRecipeStackManager.b((Integer) iterator.next());
 
         if (!itemstack.isEmpty()) {
             int j = Math.min(itemstack.getMaxStackSize(), i);

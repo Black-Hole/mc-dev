@@ -112,21 +112,21 @@ public class BlockRedstoneTorch extends BlockTorch {
     }
 
     private static boolean a(World world, BlockPosition blockposition, boolean flag) {
-        Object object = (List) BlockRedstoneTorch.b.get(world);
+        List<BlockRedstoneTorch.RedstoneUpdateInfo> list = (List) BlockRedstoneTorch.b.get(world);
 
-        if (object == null) {
-            object = Lists.newArrayList();
-            BlockRedstoneTorch.b.put(world, object);
+        if (list == null) {
+            list = Lists.newArrayList();
+            BlockRedstoneTorch.b.put(world, list);
         }
 
         if (flag) {
-            ((List) object).add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition.h(), world.getTime()));
+            ((List) list).add(new BlockRedstoneTorch.RedstoneUpdateInfo(blockposition.h(), world.getTime()));
         }
 
         int i = 0;
 
-        for (int j = 0; j < ((List) object).size(); ++j) {
-            BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) ((List) object).get(j);
+        for (int j = 0; j < ((List) list).size(); ++j) {
+            BlockRedstoneTorch.RedstoneUpdateInfo blockredstonetorch_redstoneupdateinfo = (BlockRedstoneTorch.RedstoneUpdateInfo) ((List) list).get(j);
 
             if (blockredstonetorch_redstoneupdateinfo.a.equals(blockposition)) {
                 ++i;

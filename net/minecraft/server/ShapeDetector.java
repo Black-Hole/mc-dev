@@ -61,7 +61,7 @@ public class ShapeDetector {
 
     @Nullable
     public ShapeDetector.ShapeDetectorCollection a(IWorldReader iworldreader, BlockPosition blockposition) {
-        LoadingCache loadingcache = a(iworldreader, false);
+        LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache = a(iworldreader, false);
         int i = Math.max(Math.max(this.d, this.c), this.b);
         Iterator iterator = BlockPosition.a(blockposition, blockposition.a(i - 1, i - 1, i - 1)).iterator();
 

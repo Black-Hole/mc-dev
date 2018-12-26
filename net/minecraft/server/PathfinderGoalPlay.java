@@ -22,7 +22,7 @@ public class PathfinderGoalPlay extends PathfinderGoal {
         } else if (this.a.getRandom().nextInt(400) != 0) {
             return false;
         } else {
-            List list = this.a.world.a(EntityVillager.class, this.a.getBoundingBox().grow(6.0D, 3.0D, 6.0D));
+            List<EntityVillager> list = this.a.world.a(EntityVillager.class, this.a.getBoundingBox().grow(6.0D, 3.0D, 6.0D));
             double d0 = Double.MAX_VALUE;
             Iterator iterator = list.iterator();
 

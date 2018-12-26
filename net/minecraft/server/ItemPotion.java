@@ -21,7 +21,7 @@ public class ItemPotion extends Item {
         }
 
         if (!world.isClientSide) {
-            List list = PotionUtil.getEffects(itemstack);
+            List<MobEffect> list = PotionUtil.getEffects(itemstack);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -62,7 +62,7 @@ public class ItemPotion extends Item {
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         entityhuman.c(enumhand);
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, entityhuman.b(enumhand));
     }
 
     public String h(ItemStack itemstack) {

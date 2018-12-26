@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap.Builder;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
@@ -17,7 +16,7 @@ public class PersistentCollection {
 
     public PersistentCollection(@Nullable IDataManager idatamanager) {
         this.b = idatamanager;
-        Builder builder = ImmutableMap.builder();
+        Builder<DimensionManager, WorldPersistentData> builder = ImmutableMap.builder();
         Iterator iterator = DimensionManager.b().iterator();
 
         while (iterator.hasNext()) {

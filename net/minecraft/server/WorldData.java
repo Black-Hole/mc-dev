@@ -353,7 +353,7 @@ public class WorldData {
         Iterator iterator = this.T.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<DimensionManager, NBTTagCompound> entry = (Entry) iterator.next();
 
             nbttagcompound3.set(String.valueOf(((DimensionManager) entry.getKey()).getDimensionID()), (NBTBase) entry.getValue());
         }
@@ -658,7 +658,7 @@ public class WorldData {
             return String.valueOf(this.getSeed());
         });
         crashreportsystemdetails.a("Level generator", () -> {
-            return String.format("ID %02d - %s, ver %d. Features enabled: %b", new Object[] { this.f.i(), this.f.name(), this.f.getVersion(), this.C});
+            return String.format("ID %02d - %s, ver %d. Features enabled: %b", this.f.i(), this.f.name(), this.f.getVersion(), this.C);
         });
         crashreportsystemdetails.a("Level generator options", () -> {
             return this.g.toString();
@@ -667,7 +667,7 @@ public class WorldData {
             return CrashReportSystemDetails.a(this.i, this.j, this.k);
         });
         crashreportsystemdetails.a("Level time", () -> {
-            return String.format("%d game time, %d day time", new Object[] { this.l, this.m});
+            return String.format("%d game time, %d day time", this.l, this.m);
         });
         crashreportsystemdetails.a("Level dimension", () -> {
             return String.valueOf(this.t);
@@ -687,13 +687,13 @@ public class WorldData {
                 ;
             }
 
-            return String.format("0x%05X - %s", new Object[] { this.v, s});
+            return String.format("0x%05X - %s", this.v, s);
         });
         crashreportsystemdetails.a("Level weather", () -> {
-            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", new Object[] { this.y, this.x, this.A, this.z});
+            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", this.y, this.x, this.A, this.z);
         });
         crashreportsystemdetails.a("Level game mode", () -> {
-            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", new Object[] { this.B.b(), this.B.getId(), this.D, this.E});
+            return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", this.B.b(), this.B.getId(), this.D, this.E);
         });
     }
 

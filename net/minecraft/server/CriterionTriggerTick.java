@@ -85,7 +85,7 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
             Iterator iterator = Lists.newArrayList(this.b).iterator();
 
             while (iterator.hasNext()) {
-                CriterionTrigger.a criteriontrigger_a = (CriterionTrigger.a) iterator.next();
+                CriterionTrigger.a<CriterionTriggerTick.b> criteriontrigger_a = (CriterionTrigger.a) iterator.next();
 
                 criteriontrigger_a.a(this.a);
             }

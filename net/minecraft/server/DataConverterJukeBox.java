@@ -7,7 +7,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class DataConverterJukeBox extends DataConverterNamedEntity {
 
@@ -16,10 +15,10 @@ public class DataConverterJukeBox extends DataConverterNamedEntity {
     }
 
     protected Typed<?> a(Typed<?> typed) {
-        Type type = this.getInputSchema().getChoiceType(DataConverterTypes.j, "minecraft:jukebox");
-        Type type1 = type.findFieldType("RecordItem");
-        OpticFinder opticfinder = DSL.fieldFinder("RecordItem", type1);
-        Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+        Type<?> type = this.getInputSchema().getChoiceType(DataConverterTypes.j, "minecraft:jukebox");
+        Type<?> type1 = type.findFieldType("RecordItem");
+        OpticFinder<?> opticfinder = DSL.fieldFinder("RecordItem", type1);
+        Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
         int i = dynamic.getInt("Record");
 
         if (i > 0) {
@@ -27,7 +26,7 @@ public class DataConverterJukeBox extends DataConverterNamedEntity {
             String s = DataConverterFlatten.a(DataConverterMaterialId.a(i), 0);
 
             if (s != null) {
-                Dynamic dynamic1 = dynamic.emptyMap();
+                Dynamic<?> dynamic1 = dynamic.emptyMap();
 
                 dynamic1 = dynamic1.set("id", dynamic1.createString(s));
                 dynamic1 = dynamic1.set("Count", dynamic1.createByte((byte) 1));

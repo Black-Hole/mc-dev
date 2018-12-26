@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -60,20 +55,20 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
                     }
                 };
             }, (thread, throwable) -> {
-                Scheduler.b.error(String.format("Caught exception in thread %s", new Object[] { thread}), throwable);
+                Scheduler.b.error(String.format("Caught exception in thread %s", thread), throwable);
             }, true);
         }
 
     }
 
     public CompletableFuture<R> a(K k0) {
-        CompletableFuture completablefuture = this.f;
-        Supplier supplier = () -> {
-            return this.b(object).a(completablefuture, this.j);
+        CompletableFuture<R> completablefuture = this.f;
+        Supplier<CompletableFuture<R>> supplier = () -> {
+            return this.b(k0).a(completablefuture, this.j);
         };
-        CompletableFuture completablefuture1 = CompletableFuture.supplyAsync(supplier, this.a);
-        CompletableFuture completablefuture2 = completablefuture1.thenComposeAsync((completablefuture) -> {
-            return completablefuture;
+        CompletableFuture<CompletableFuture<R>> completablefuture1 = CompletableFuture.supplyAsync(supplier, this.a);
+        CompletableFuture<R> completablefuture2 = completablefuture1.thenComposeAsync((completablefuture3) -> {
+            return completablefuture3;
         }, this.c);
 
         this.e.add(completablefuture2);
@@ -81,8 +76,8 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
     }
 
     public CompletableFuture<R> a() {
-        CompletableFuture completablefuture = (CompletableFuture)this.e.remove(this.e.size() - 1);
-        CompletableFuture completablefuture1 = CompletableFuture.allOf((CompletableFuture[])this.e.toArray(new CompletableFuture[0])).thenCompose((void) -> {
+        CompletableFuture<R> completablefuture = (CompletableFuture) this.e.remove(this.e.size() - 1);
+        CompletableFuture<R> completablefuture1 = CompletableFuture.allOf((CompletableFuture[]) this.e.toArray(new CompletableFuture[0])).thenCompose((ovoid) -> {
             return completablefuture;
         });
 
@@ -92,12 +87,12 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
         return completablefuture1;
     }
 
-    protected Scheduler.a b(K k0) {
+    protected Scheduler<K, T, R>.a b(K k0) {
         return this.a(k0, true);
     }
 
     @Nullable
-    protected abstract Scheduler.a a(K k0, boolean flag);
+    protected abstract Scheduler<K, T, R>.a a(K k0, boolean flag);
 
     public void b() throws InterruptedException {
         this.a.shutdown();
@@ -110,22 +105,22 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
 
     @Nullable
     public R b(K k0, boolean flag) {
-        Scheduler.a scheduler_a = this.a(k0, flag);
+        Scheduler<K, T, R>.a scheduler_a = this.a(k0, flag);
 
         return scheduler_a != null ? scheduler_a.a() : null;
     }
 
     public CompletableFuture<R> c() {
-        CompletableFuture completablefuture = this.g;
+        CompletableFuture<R> completablefuture = this.g;
 
         return completablefuture.thenApply((object) -> {
             return object;
         });
     }
 
-    protected abstract void b(K k0, Scheduler.a scheduler_a);
+    protected abstract void b(K k0, Scheduler<K, T, R>.a scheduler_a);
 
-    protected abstract Scheduler.a a(K k0, Scheduler.a scheduler_a);
+    protected abstract Scheduler<K, T, R>.a a(K k0, Scheduler<K, T, R>.a scheduler_a);
 
     public final class a {
 
@@ -148,22 +143,22 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
         }
 
         private CompletableFuture<R> a(CompletableFuture<R> completablefuture, T t0) {
-            ConcurrentHashMap concurrenthashmap = new ConcurrentHashMap();
+            Map<K, CompletableFuture<R>> map = new ConcurrentHashMap();
 
-            return (CompletableFuture)this.b.computeIfAbsent(t0, (schedulertask) -> {
-                if(schedulertask1.a() == null) {
+            return (CompletableFuture) this.b.computeIfAbsent(t0, (schedulertask) -> {
+                if (t0.a() == null) {
                     return CompletableFuture.completedFuture(this.d);
                 } else {
-                    schedulertask1.a(this.c, (object, schedulertaskx) -> {
-                        CompletableFuture completablefuture = (CompletableFuture)map.put(object, Scheduler.this.a(object, Scheduler.this.b(object)).a(completablefuture1, schedulertaskx));
+                    t0.a(this.c, (object, schedulertask1) -> {
+                        CompletableFuture completablefuture1 = (CompletableFuture) map.put(object, Scheduler.this.a(object, Scheduler.this.b(object)).a(completablefuture, schedulertask1));
                     });
-                    CompletableFuture[] acompletablefuture = (CompletableFuture[])Streams.concat(new Stream[]{Stream.of(completablefuture), map.values().stream()}).toArray((i) -> {
+                    CompletableFuture<?>[] acompletablefuture = (CompletableFuture[]) Streams.concat(new Stream[] { Stream.of(completablefuture), map.values().stream()}).toArray((i) -> {
                         return new CompletableFuture[i];
                     });
-                    CompletableFuture completablefuture1 = CompletableFuture.allOf(acompletablefuture).thenApplyAsync((void) -> {
-                        return Scheduler.this.a(this.c, schedulertask, Maps.transformValues(map, (completablefuture) -> {
+                    CompletableFuture<R> completablefuture1 = CompletableFuture.allOf(acompletablefuture).thenApplyAsync((ovoid) -> {
+                        return Scheduler.this.a(this.c, t0, Maps.transformValues(map, (completablefuture2) -> {
                             try {
-                                return completablefuture.get();
+                                return completablefuture2.get();
                             } catch (ExecutionException | InterruptedException interruptedexception) {
                                 throw new RuntimeException(interruptedexception);
                             }
@@ -171,16 +166,16 @@ public abstract class Scheduler<K, T extends SchedulerTask<K, T>, R> {
                     }, Scheduler.this.c).thenApplyAsync((object) -> {
                         Iterator iterator = map.keySet().iterator();
 
-                        while(iterator.hasNext()) {
-                            Object object1 = iterator.next();
+                        while (iterator.hasNext()) {
+                            K k0 = iterator.next();
 
-                            Scheduler.this.b(object1, Scheduler.this.b(object1));
+                            Scheduler.this.b(k0, Scheduler.this.b(k0));
                         }
 
                         return object;
                     }, Scheduler.this.a);
 
-                    this.b.put(schedulertask1, completablefuture1);
+                    this.b.put(t0, completablefuture1);
                     return completablefuture1;
                 }
             });

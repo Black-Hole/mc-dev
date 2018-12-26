@@ -10,13 +10,12 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArgumentDimension implements ArgumentType<DimensionManager> {
 
-    private static final Collection<String> b = (Collection) Stream.of(new DimensionManager[] { DimensionManager.OVERWORLD, DimensionManager.NETHER}).map((dimensionmanager) -> {
+    private static final Collection<String> b = (Collection) Stream.of(DimensionManager.OVERWORLD, DimensionManager.NETHER).map((dimensionmanager) -> {
         return DimensionManager.a(dimensionmanager).toString();
     }).collect(Collectors.toList());
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {

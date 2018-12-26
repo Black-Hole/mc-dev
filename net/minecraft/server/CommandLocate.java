@@ -1,12 +1,9 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class CommandLocate {
 
@@ -55,7 +52,7 @@ public class CommandLocate {
         } else {
             int i = MathHelper.d(a(blockposition.getX(), blockposition.getZ(), blockposition1.getX(), blockposition1.getZ()));
             IChatBaseComponent ichatbasecomponent = ChatComponentUtils.a((IChatBaseComponent) (new ChatMessage("chat.coordinates", new Object[] { blockposition1.getX(), "~", blockposition1.getZ()}))).a((chatmodifier) -> {
-                chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tp @s " + blockposition.getX() + " ~ " + blockposition.getZ())).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.coordinates.tooltip", new Object[0])));
+                chatmodifier.setColor(EnumChatFormat.GREEN).setChatClickable(new ChatClickable(ChatClickable.EnumClickAction.SUGGEST_COMMAND, "/tp @s " + blockposition1.getX() + " ~ " + blockposition1.getZ())).setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, new ChatMessage("chat.coordinates.tooltip", new Object[0])));
             });
 
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.locate.success", new Object[] { s, ichatbasecomponent, i}), false);

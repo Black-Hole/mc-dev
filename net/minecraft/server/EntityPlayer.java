@@ -4,13 +4,10 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -225,7 +222,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         while (!this.removeQueue.isEmpty()) {
             int i = Math.min(this.removeQueue.size(), Integer.MAX_VALUE);
             int[] aint = new int[i];
-            Iterator iterator = this.removeQueue.iterator();
+            Iterator<Integer> iterator = this.removeQueue.iterator();
             int j = 0;
 
             while (iterator.hasNext() && j < i) {
@@ -266,7 +263,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 ItemStack itemstack = this.inventory.getItem(i);
 
                 if (itemstack.getItem().W_()) {
-                    Packet packet = ((ItemWorldMapBase) itemstack.getItem()).a(itemstack, this.world, (EntityHuman) this);
+                    Packet<?> packet = ((ItemWorldMapBase) itemstack.getItem()).a(itemstack, this.world, (EntityHuman) this);
 
                     if (packet != null) {
                         this.playerConnection.sendPacket(packet);
@@ -343,11 +340,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
             this.playerConnection.a((Packet) (new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatbasecomponent)), (future) -> {
                 if (!future.isSuccess()) {
-                    boolean flag = true;
+                    boolean flag1 = true;
                     String s = ichatbasecomponent.a(256);
                     ChatMessage chatmessage = new ChatMessage("death.attack.message_too_long", new Object[] { (new ChatComponentText(s)).a(EnumChatFormat.YELLOW)});
                     IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("death.attack.even_more_magic", new Object[] { this.getScoreboardDisplayName()})).a((chatmodifier) -> {
-                        chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, ichatbasecomponent));
+                        chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_TEXT, chatmessage));
                     });
 
                     this.playerConnection.sendPacket(new PacketPlayOutCombatEvent(this.getCombatTracker(), PacketPlayOutCombatEvent.EnumCombatEventType.ENTITY_DIED, ichatbasecomponent1));
@@ -521,11 +518,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         if (entityhuman_enumbedresult == EntityHuman.EnumBedResult.OK) {
             this.a(StatisticList.SLEEP_IN_BED);
-            PacketPlayOutBed packetplayoutbed = new PacketPlayOutBed(this, blockposition);
+            Packet<?> packet = new PacketPlayOutBed(this, blockposition);
 
-            this.getWorldServer().getTracker().a((Entity) this, (Packet) packetplayoutbed);
+            this.getWorldServer().getTracker().a((Entity) this, (Packet) packet);
             this.playerConnection.a(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
-            this.playerConnection.sendPacket(packetplayoutbed);
+            this.playerConnection.sendPacket(packet);
             CriterionTriggers.q.a(this);
         }
 
@@ -790,7 +787,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     }
 
     public void a(MinecraftKey[] aminecraftkey) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<IRecipe> list = Lists.newArrayList();
         MinecraftKey[] aminecraftkey1 = aminecraftkey;
         int i = aminecraftkey.length;
 
@@ -799,11 +796,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             IRecipe irecipe = this.server.getCraftingManager().a(minecraftkey);
 
             if (irecipe != null) {
-                arraylist.add(irecipe);
+                list.add(irecipe);
             }
         }
 
-        this.discoverRecipes(arraylist);
+        this.discoverRecipes(list);
     }
 
     public int undiscoverRecipes(Collection<IRecipe> collection) {

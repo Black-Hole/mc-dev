@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -68,7 +67,7 @@ public class LootItemConditionEntityScore implements LootItemCondition {
             Iterator iterator = lootitemconditionentityscore.a.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, LootValueBounds> entry = (Entry) iterator.next();
 
                 jsonobject1.add((String) entry.getKey(), jsonserializationcontext.serialize(entry.getValue()));
             }
@@ -78,17 +77,17 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         }
 
         public LootItemConditionEntityScore b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            Set set = ChatDeserializer.t(jsonobject, "scores").entrySet();
-            LinkedHashMap linkedhashmap = Maps.newLinkedHashMap();
+            Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "scores").entrySet();
+            Map<String, LootValueBounds> map = Maps.newLinkedHashMap();
             Iterator iterator = set.iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, JsonElement> entry = (Entry) iterator.next();
 
-                linkedhashmap.put(entry.getKey(), ChatDeserializer.a((JsonElement) entry.getValue(), "score", jsondeserializationcontext, LootValueBounds.class));
+                map.put(entry.getKey(), ChatDeserializer.a((JsonElement) entry.getValue(), "score", jsondeserializationcontext, LootValueBounds.class));
             }
 
-            return new LootItemConditionEntityScore(linkedhashmap, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
+            return new LootItemConditionEntityScore(map, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
         }
     }
 }

@@ -3,7 +3,6 @@ package net.minecraft.server;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Function;
 
 public class StatisticWrapper<T> implements Iterable<Statistic<T>> {
 
@@ -16,7 +15,7 @@ public class StatisticWrapper<T> implements Iterable<Statistic<T>> {
 
     public Statistic<T> a(T t0, Counter counter) {
         return (Statistic) this.b.computeIfAbsent(t0, (object) -> {
-            return new Statistic(this, object, counter);
+            return new Statistic<>(this, object, counter);
         });
     }
 

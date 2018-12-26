@@ -24,7 +24,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (bytebuf.readableBytes() != 0) {
             PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
             int i = packetdataserializer.g();
-            Packet packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
+            Packet<?> packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
 
             if (packet == null) {
                 throw new IOException("Bad packet id " + i);

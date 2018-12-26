@@ -7,7 +7,6 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.DynamicOps;
 import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
-import java.util.function.Function;
 
 public class DataConverterAddChoices extends DataFix {
 
@@ -21,8 +20,8 @@ public class DataConverterAddChoices extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(this.b);
-        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(this.b);
+        TaggedChoiceType<?> taggedchoicetype = this.getInputSchema().findChoiceType(this.b);
+        TaggedChoiceType<?> taggedchoicetype1 = this.getOutputSchema().findChoiceType(this.b);
 
         return this.a(this.a, taggedchoicetype, taggedchoicetype1);
     }
@@ -33,8 +32,8 @@ public class DataConverterAddChoices extends DataFix {
         } else {
             return this.fixTypeEverywhere(s, taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
                 return (pair) -> {
-                    if (!taggedchoicetype.hasType(pair.getFirst())) {
-                        throw new IllegalArgumentException(String.format("Unknown type %s in %s ", new Object[] { pair.getFirst(), this.b}));
+                    if (!taggedchoicetype1.hasType(pair.getFirst())) {
+                        throw new IllegalArgumentException(String.format("Unknown type %s in %s ", pair.getFirst(), this.b));
                     } else {
                         return pair;
                     }

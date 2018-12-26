@@ -42,7 +42,7 @@ public class EntityGuardian extends EntityMonster {
         this.goalSelector.a(9, new PathfinderGoalRandomLookaround(this));
         this.goalRandomStroll.a(3);
         pathfindergoalmovetowardsrestriction.a(3);
-        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
+        this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
     }
 
     public void initAttributes() {

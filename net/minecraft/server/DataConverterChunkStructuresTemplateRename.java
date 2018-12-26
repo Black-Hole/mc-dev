@@ -10,7 +10,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
-import java.util.function.Function;
 
 public class DataConverterChunkStructuresTemplateRename extends DataFix {
 
@@ -21,12 +20,12 @@ public class DataConverterChunkStructuresTemplateRename extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.s);
-        OpticFinder opticfinder = type.findField("Children");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.s);
+        OpticFinder<?> opticfinder = type.findField("Children");
 
         return this.fixTypeEverywhereTyped("ChunkStructuresTemplateRenameFix", type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), (dynamic) -> {
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), (dynamic) -> {
                     return this.a((Dynamic) typed.get(DSL.remainderFinder()), dynamic);
                 });
             });
@@ -37,7 +36,7 @@ public class DataConverterChunkStructuresTemplateRename extends DataFix {
         String s = dynamic.getString("id");
 
         if (DataConverterChunkStructuresTemplateRename.a.containsKey(s)) {
-            Pair pair = (Pair) DataConverterChunkStructuresTemplateRename.a.get(s);
+            Pair<String, ImmutableMap<String, String>> pair = (Pair) DataConverterChunkStructuresTemplateRename.a.get(s);
 
             if (((String) pair.getFirst()).equals(dynamic1.getString("id"))) {
                 String s1 = dynamic1.getString("Template");

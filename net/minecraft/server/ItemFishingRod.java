@@ -52,7 +52,7 @@ public class ItemFishingRod extends Item {
             entityhuman.b(StatisticList.ITEM_USED.b(this));
         }
 
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     public int c() {

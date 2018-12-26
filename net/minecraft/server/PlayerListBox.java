@@ -15,7 +15,7 @@ public class PlayerListBox extends JList<String> implements ITickable {
 
     public void tick() {
         if (this.b++ % 20 == 0) {
-            Vector vector = new Vector();
+            Vector<String> vector = new Vector();
 
             for (int i = 0; i < this.a.getPlayerList().v().size(); ++i) {
                 vector.add(((EntityPlayer) this.a.getPlayerList().v().get(i)).getProfile().getName());

@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.ResultConsumer;
 import com.mojang.brigadier.context.CommandContext;
 import java.text.SimpleDateFormat;
 import java.util.Date;

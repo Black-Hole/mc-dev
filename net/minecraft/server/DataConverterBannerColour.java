@@ -6,7 +6,6 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DataConverterBannerColour extends DataConverterNamedEntity {
@@ -16,20 +15,20 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        dynamic = dynamic.update("Base", (dynamic) -> {
-            return dynamic.createInt(15 - dynamic.getNumberValue(0).intValue());
+        dynamic = dynamic.update("Base", (dynamic1) -> {
+            return dynamic1.createInt(15 - dynamic1.getNumberValue(0).intValue());
         });
-        dynamic = dynamic.update("Patterns", (dynamic) -> {
-            Optional optional = dynamic.getStream().map((stream) -> {
-                return stream.map((dynamic) -> {
-                    return dynamic.update("Color", (dynamicx) -> {
-                        return dynamicx.createInt(15 - dynamicx.getNumberValue(0).intValue());
+        dynamic = dynamic.update("Patterns", (dynamic1) -> {
+            Optional optional = dynamic1.getStream().map((stream) -> {
+                return stream.map((dynamic2) -> {
+                    return dynamic2.update("Color", (dynamic3) -> {
+                        return dynamic3.createInt(15 - dynamic3.getNumberValue(0).intValue());
                     });
                 });
             });
 
-            dynamic.getClass();
-            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createList), dynamic);
+            dynamic1.getClass();
+            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createList), dynamic1);
         });
         return dynamic;
     }

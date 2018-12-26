@@ -49,7 +49,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
     private void a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         boolean flag = (Boolean) iblockdata.get(BlockMinecartDetector.POWERED);
         boolean flag1 = false;
-        List list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
+        List<EntityMinecartAbstract> list = this.a(world, blockposition, EntityMinecartAbstract.class, (Predicate) null);
 
         if (!list.isEmpty()) {
             flag1 = true;
@@ -80,7 +80,7 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     protected void b(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         MinecartTrackLogic minecarttracklogic = new MinecartTrackLogic(world, blockposition, iblockdata);
-        List list = minecarttracklogic.a();
+        List<BlockPosition> list = minecarttracklogic.a();
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -109,13 +109,13 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         if ((Boolean) iblockdata.get(BlockMinecartDetector.POWERED)) {
-            List list = this.a(world, blockposition, EntityMinecartCommandBlock.class, (Predicate) null);
+            List<EntityMinecartCommandBlock> list = this.a(world, blockposition, EntityMinecartCommandBlock.class, (Predicate) null);
 
             if (!list.isEmpty()) {
                 return ((EntityMinecartCommandBlock) list.get(0)).getCommandBlock().i();
             }
 
-            List list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.d);
+            List<EntityMinecartAbstract> list1 = this.a(world, blockposition, EntityMinecartAbstract.class, IEntitySelector.d);
 
             if (!list1.isEmpty()) {
                 return Container.b((IInventory) list1.get(0));

@@ -25,7 +25,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     }
 
     public PathfinderGoalAvoidTarget(EntityCreature entitycreature, Class<T> oclass, Predicate<? super Entity> predicate, float f, double d0, double d1, Predicate<Entity> predicate1) {
-        this.c = new Predicate() {
+        this.c = new Predicate<Entity>() {
             public boolean test(@Nullable Entity entity) {
                 return entity.isAlive() && PathfinderGoalAvoidTarget.this.a.getEntitySenses().a(entity) && !PathfinderGoalAvoidTarget.this.a.r(entity);
             }
@@ -48,7 +48,7 @@ public class PathfinderGoalAvoidTarget<T extends Entity> extends PathfinderGoal 
     }
 
     public boolean a() {
-        List list = this.a.world.a(this.i, this.a.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), (entity) -> {
+        List<T> list = this.a.world.a(this.i, this.a.getBoundingBox().grow((double) this.f, 3.0D, (double) this.f), (entity) -> {
             return this.k.test(entity) && this.c.test(entity) && this.j.test(entity);
         });
 

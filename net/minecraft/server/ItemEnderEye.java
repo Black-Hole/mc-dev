@@ -60,7 +60,7 @@ public class ItemEnderEye extends Item {
         MovingObjectPosition movingobjectposition = this.a(world, entityhuman, false);
 
         if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
             entityhuman.c(enumhand);
             if (!world.isClientSide) {
@@ -82,11 +82,11 @@ public class ItemEnderEye extends Item {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
                 }
             }
 
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         }
     }
 }

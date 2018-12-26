@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class TileEntityConduit extends TileEntity implements ITickable {
@@ -143,7 +142,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         int l = this.position.getY();
         int i1 = this.position.getZ();
         AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) k, (double) l, (double) i1, (double) (k + 1), (double) (l + 1), (double) (i1 + 1))).g((double) j).b(0.0D, (double) this.world.getHeight(), 0.0D);
-        List list = this.world.a(EntityHuman.class, axisalignedbb);
+        List<EntityHuman> list = this.world.a(EntityHuman.class, axisalignedbb);
 
         if (!list.isEmpty()) {
             Iterator iterator = list.iterator();
@@ -169,8 +168,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             this.target = this.l();
             this.k = null;
         } else if (this.target == null) {
-            List list = this.world.a(EntityLiving.class, this.k(), (entityliving) -> {
-                return entityliving instanceof IMonster && entityliving.ao();
+            List<EntityLiving> list = this.world.a(EntityLiving.class, this.k(), (entityliving1) -> {
+                return entityliving1 instanceof IMonster && entityliving1.ao();
             });
 
             if (!list.isEmpty()) {
@@ -215,7 +214,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     @Nullable
     private EntityLiving l() {
-        List list = this.world.a(EntityLiving.class, this.k(), (entityliving) -> {
+        List<EntityLiving> list = this.world.a(EntityLiving.class, this.k(), (entityliving) -> {
             return entityliving.getUniqueID().equals(this.k);
         });
 

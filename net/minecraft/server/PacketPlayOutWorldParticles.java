@@ -31,10 +31,10 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
     }
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        Object object = (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.readInt());
+        Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.readInt());
 
-        if (object == null) {
-            object = Particles.c;
+        if (particle == null) {
+            particle = Particles.c;
         }
 
         this.i = packetdataserializer.readBoolean();
@@ -46,7 +46,7 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
         this.f = packetdataserializer.readFloat();
         this.g = packetdataserializer.readFloat();
         this.h = packetdataserializer.readInt();
-        this.j = this.a(packetdataserializer, (Particle) object);
+        this.j = this.a(packetdataserializer, (Particle) particle);
     }
 
     private <T extends ParticleParam> T a(PacketDataSerializer packetdataserializer, Particle<T> particle) {

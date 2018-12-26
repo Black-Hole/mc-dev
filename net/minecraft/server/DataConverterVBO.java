@@ -6,7 +6,6 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
-import java.util.function.Function;
 
 public class DataConverterVBO extends DataFix {
 

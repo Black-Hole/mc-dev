@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class Block implements IMaterial {
 
     protected static final Logger d = LogManager.getLogger();
-    public static final RegistryBlockID<IBlockData> REGISTRY_ID = new RegistryBlockID();
+    public static final RegistryBlockID<IBlockData> REGISTRY_ID = new RegistryBlockID<>();
     private static final EnumDirection[] a = new EnumDirection[] { EnumDirection.WEST, EnumDirection.EAST, EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.DOWN, EnumDirection.UP};
     protected final int f;
     public final float strength;
@@ -32,7 +31,7 @@ public class Block implements IMaterial {
     @Nullable
     private String name;
     private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> q = ThreadLocal.withInitial(() -> {
-        Object2ByteLinkedOpenHashMap object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap(200) {
+        Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
             protected void rehash(int i) {}
         };
 
@@ -62,7 +61,7 @@ public class Block implements IMaterial {
 
     public static IBlockData a(IBlockData iblockdata, IBlockData iblockdata1, World world, BlockPosition blockposition) {
         VoxelShape voxelshape = VoxelShapes.b(iblockdata.getCollisionShape(world, blockposition), iblockdata1.getCollisionShape(world, blockposition), OperatorBoolean.ONLY_SECOND).a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
-        List list = world.getEntities((Entity) null, voxelshape.a());
+        List<Entity> list = world.getEntities((Entity) null, voxelshape.getBoundingBox());
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -194,7 +193,7 @@ public class Block implements IMaterial {
     }
 
     public Block(Block.Info block_info) {
-        BlockStateList.a blockstatelist_a = new BlockStateList.a(this);
+        BlockStateList.a<Block, IBlockData> blockstatelist_a = new BlockStateList.a<>(this);
 
         this.a(blockstatelist_a);
         this.blockStateList = blockstatelist_a.a(BlockData::new);
@@ -303,12 +302,12 @@ public class Block implements IMaterial {
 
     @Deprecated
     public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.n ? iblockdata.g(iblockaccess, blockposition) : VoxelShapes.a();
+        return this.n ? iblockdata.getShape(iblockaccess, blockposition) : VoxelShapes.a();
     }
 
     @Deprecated
     public VoxelShape g(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.g(iblockaccess, blockposition);
+        return iblockdata.getShape(iblockaccess, blockposition);
     }
 
     @Deprecated
@@ -335,7 +334,7 @@ public class Block implements IMaterial {
     }
 
     public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return !a(iblockdata.g(iblockaccess, blockposition)) && iblockdata.s().e();
+        return !a(iblockdata.getShape(iblockaccess, blockposition)) && iblockdata.s().e();
     }
 
     @Deprecated
@@ -449,7 +448,7 @@ public class Block implements IMaterial {
 
     @Nullable
     public static MovingObjectPosition rayTrace(IBlockData iblockdata, World world, BlockPosition blockposition, Vec3D vec3d, Vec3D vec3d1) {
-        MovingObjectPosition movingobjectposition = iblockdata.g(world, blockposition).rayTrace(vec3d, vec3d1, blockposition);
+        MovingObjectPosition movingobjectposition = iblockdata.getShape(world, blockposition).rayTrace(vec3d, vec3d1, blockposition);
 
         if (movingobjectposition != null) {
             MovingObjectPosition movingobjectposition1 = iblockdata.j(world, blockposition).rayTrace(vec3d, vec3d1, blockposition);
@@ -575,7 +574,7 @@ public class Block implements IMaterial {
 
     @Deprecated
     public Fluid h(IBlockData iblockdata) {
-        return FluidTypes.a.i();
+        return FluidTypes.EMPTY.i();
     }
 
     public float n() {
@@ -704,8 +703,8 @@ public class Block implements IMaterial {
         a("acacia_sapling", (Block) blocksapling4);
         a("dark_oak_sapling", (Block) blocksapling5);
         a("bedrock", (Block) (new BlockNoDrop(Block.Info.a(Material.STONE).a(-1.0F, 3600000.0F))));
-        a("water", (Block) (new BlockFluids(FluidTypes.c, Block.Info.a(Material.WATER).a().b(100.0F))));
-        a("lava", (Block) (new BlockFluids(FluidTypes.e, Block.Info.a(Material.LAVA).a().c().b(100.0F).a(15))));
+        a("water", (Block) (new BlockFluids(FluidTypes.WATER, Block.Info.a(Material.WATER).a().b(100.0F))));
+        a("lava", (Block) (new BlockFluids(FluidTypes.LAVA, Block.Info.a(Material.LAVA).a().c().b(100.0F).a(15))));
         a("sand", (Block) (new BlockSand(14406560, Block.Info.a(Material.SAND, MaterialMapColor.d).b(0.5F).a(SoundEffectType.h))));
         a("red_sand", (Block) (new BlockSand(11098145, Block.Info.a(Material.SAND, MaterialMapColor.q).b(0.5F).a(SoundEffectType.h))));
         a("gravel", (Block) (new BlockGravel(Block.Info.a(Material.SAND, MaterialMapColor.m).b(0.6F).a(SoundEffectType.b))));

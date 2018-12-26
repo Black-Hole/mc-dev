@@ -65,7 +65,7 @@ public class NBTTagLongArray extends NBTList<NBTTagLong> {
     }
 
     public byte getTypeId() {
-        return (byte) 12;
+        return 12;
     }
 
     public String toString() {

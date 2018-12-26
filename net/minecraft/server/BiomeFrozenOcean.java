@@ -8,7 +8,7 @@ public final class BiomeFrozenOcean extends BiomeBase {
     protected static final NoiseGenerator3 aZ = new NoiseGenerator3(new Random(3456L), 3);
 
     public BiomeFrozenOcean() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeFrozenOcean.aD, BiomeFrozenOcean.ai)).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.OCEAN).a(-1.0F).b(0.1F).c(0.0F).d(0.5F).a(3750089).b(329011).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeFrozenOcean.aD, BiomeFrozenOcean.ai)).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.OCEAN).a(-1.0F).b(0.1F).c(0.0F).d(0.5F).a(3750089).b(329011).a((String) null));
         this.a(WorldGenerator.o, (WorldGenFeatureConfiguration) (new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.9F)));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.k, (WorldGenFeatureConfiguration) (new WorldGenFeatureShipwreckConfiguration(false)));
@@ -44,8 +44,8 @@ public final class BiomeFrozenOcean extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeFrozenOcean.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeFrozenOcean.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeFrozenOcean.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeFrozenOcean.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeFrozenOcean.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeFrozenOcean.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeFrozenOcean.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeFrozenOcean.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SQUID, 1, 1, 4));
         this.a(EnumCreatureType.WATER_CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SALMON, 15, 1, 5));
@@ -62,7 +62,7 @@ public final class BiomeFrozenOcean extends BiomeBase {
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.WITCH, 5, 1, 1));
     }
 
-    public float c(BlockPosition blockposition) {
+    public float getAdjustedTemperature(BlockPosition blockposition) {
         float f = this.getTemperature();
         double d0 = BiomeFrozenOcean.aZ.a((double) blockposition.getX() * 0.05D, (double) blockposition.getZ() * 0.05D);
         double d1 = BiomeFrozenOcean.aJ.a((double) blockposition.getX() * 0.2D, (double) blockposition.getZ() * 0.2D);

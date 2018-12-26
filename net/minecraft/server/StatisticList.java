@@ -81,7 +81,7 @@ public class StatisticList {
     }
 
     private static <T> StatisticWrapper<T> a(String s, IRegistry<T> iregistry) {
-        StatisticWrapper statisticwrapper = new StatisticWrapper(iregistry);
+        StatisticWrapper<T> statisticwrapper = new StatisticWrapper<>(iregistry);
 
         IRegistry.STATS.a(new MinecraftKey(s), (Object) statisticwrapper);
         return statisticwrapper;

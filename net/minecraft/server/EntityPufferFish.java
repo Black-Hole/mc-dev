@@ -122,7 +122,7 @@ public class EntityPufferFish extends EntityFish {
     public void movementTick() {
         super.movementTick();
         if (this.getPuffState() > 0) {
-            List list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bC);
+            List<EntityInsentient> list = this.world.a(EntityInsentient.class, this.getBoundingBox().g(0.3D), EntityPufferFish.bC);
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -181,7 +181,7 @@ public class EntityPufferFish extends EntityFish {
         }
 
         public boolean a() {
-            List list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bC);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bC);
 
             return !list.isEmpty();
         }
@@ -196,7 +196,7 @@ public class EntityPufferFish extends EntityFish {
         }
 
         public boolean b() {
-            List list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bC);
+            List<EntityLiving> list = this.a.world.a(EntityLiving.class, this.a.getBoundingBox().g(2.0D), EntityPufferFish.bC);
 
             return !list.isEmpty();
         }

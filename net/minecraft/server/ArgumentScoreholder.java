@@ -9,14 +9,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> {
@@ -33,11 +30,11 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             ;
         }
 
-        return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder) -> {
-            ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).l(), suggestionsbuilder);
+        return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder1) -> {
+            ICompletionProvider.b((Iterable) ((CommandListenerWrapper) commandcontext.getSource()).l(), suggestionsbuilder1);
         });
     };
-    private static final Collection<String> b = Arrays.asList(new String[] { "Player", "0123", "*", "@e"});
+    private static final Collection<String> b = Arrays.asList("Player", "0123", "*", "@e");
     private static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.scoreHolder.empty", new Object[0]));
     private final boolean d;
 
@@ -61,7 +58,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
     }
 
     public static Collection<String> a(CommandContext<CommandListenerWrapper> commandcontext, String s, Supplier<Collection<String>> supplier) throws CommandSyntaxException {
-        Collection collection = ((ArgumentScoreholder.a) commandcontext.getArgument(s, ArgumentScoreholder.a.class)).getNames((CommandListenerWrapper) commandcontext.getSource(), supplier);
+        Collection<String> collection = ((ArgumentScoreholder.a) commandcontext.getArgument(s, ArgumentScoreholder.a.class)).getNames((CommandListenerWrapper) commandcontext.getSource(), supplier);
 
         if (collection.isEmpty()) {
             throw ArgumentEntity.d.create();
@@ -79,7 +76,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
     }
 
     public ArgumentScoreholder.a parse(StringReader stringreader) throws CommandSyntaxException {
-        if (stringreader.canRead() && stringreader.peek() == 64) {
+        if (stringreader.canRead() && stringreader.peek() == '@') {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
             EntitySelector entityselector = argumentparserselector.s();
 
@@ -91,7 +88,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         } else {
             int i = stringreader.getCursor();
 
-            while (stringreader.canRead() && stringreader.peek() != 32) {
+            while (stringreader.canRead() && stringreader.peek() != ' ') {
                 stringreader.skip();
             }
 
@@ -99,7 +96,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
 
             if (s.equals("*")) {
                 return (commandlistenerwrapper, supplier) -> {
-                    Collection collection = (Collection) supplier.get();
+                    Collection<String> collection = (Collection) supplier.get();
 
                     if (collection.isEmpty()) {
                         throw ArgumentScoreholder.c.create();
@@ -108,7 +105,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
                     }
                 };
             } else {
-                Set set = Collections.singleton(s);
+                Collection<String> collection = Collections.singleton(s);
 
                 return (commandlistenerwrapper, supplier) -> {
                     return collection;
@@ -156,21 +153,21 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         }
 
         public Collection<String> getNames(CommandListenerWrapper commandlistenerwrapper, Supplier<Collection<String>> supplier) throws CommandSyntaxException {
-            List list = this.a.b(commandlistenerwrapper);
+            List<? extends Entity> list = this.a.b(commandlistenerwrapper);
 
             if (list.isEmpty()) {
                 throw ArgumentEntity.d.create();
             } else {
-                ArrayList arraylist = Lists.newArrayList();
+                List<String> list1 = Lists.newArrayList();
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     Entity entity = (Entity) iterator.next();
 
-                    arraylist.add(entity.getName());
+                    list1.add(entity.getName());
                 }
 
-                return arraylist;
+                return list1;
             }
         }
     }

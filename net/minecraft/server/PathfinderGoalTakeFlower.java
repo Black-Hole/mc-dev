@@ -21,7 +21,7 @@ public class PathfinderGoalTakeFlower extends PathfinderGoal {
         } else if (!this.a.world.L()) {
             return false;
         } else {
-            List list = this.a.world.a(EntityIronGolem.class, this.a.getBoundingBox().grow(6.0D, 2.0D, 6.0D));
+            List<EntityIronGolem> list = this.a.world.a(EntityIronGolem.class, this.a.getBoundingBox().grow(6.0D, 2.0D, 6.0D));
 
             if (list.isEmpty()) {
                 return false;

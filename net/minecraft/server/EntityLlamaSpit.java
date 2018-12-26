@@ -94,7 +94,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
     @Nullable
     private Entity a(Vec3D vec3d, Vec3D vec3d1) {
         Entity entity = null;
-        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D));
         double d0 = 0.0D;
         Iterator iterator = list.iterator();
 
@@ -176,7 +176,7 @@ public class EntityLlamaSpit extends Entity implements IProjectile {
     private void f() {
         if (this.b != null && this.b.b("OwnerUUID")) {
             UUID uuid = this.b.a("OwnerUUID");
-            List list = this.world.a(EntityLlama.class, this.getBoundingBox().g(15.0D));
+            List<EntityLlama> list = this.world.a(EntityLlama.class, this.getBoundingBox().g(15.0D));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {

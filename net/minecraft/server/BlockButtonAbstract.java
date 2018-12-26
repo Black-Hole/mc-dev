@@ -128,7 +128,7 @@ public abstract class BlockButtonAbstract extends BlockAttachable {
     }
 
     private void b(IBlockData iblockdata, World world, BlockPosition blockposition) {
-        List list = world.a(EntityArrow.class, iblockdata.g(world, blockposition).a().a(blockposition));
+        List<? extends Entity> list = world.a(EntityArrow.class, iblockdata.getShape(world, blockposition).getBoundingBox().a(blockposition));
         boolean flag = !list.isEmpty();
         boolean flag1 = (Boolean) iblockdata.get(BlockButtonAbstract.POWERED);
 

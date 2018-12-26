@@ -136,7 +136,7 @@ public class EntityPolarBear extends EntityAnimal {
                 this.setAgeRaw(-24000);
             }
         } else {
-            EntityPolarBear.b entitypolarbear_b = new EntityPolarBear.b(null);
+            EntityPolarBear.b entitypolarbear_b = new EntityPolarBear.b();
 
             entitypolarbear_b.a = true;
             groupdataentity = entitypolarbear_b;
@@ -207,7 +207,7 @@ public class EntityPolarBear extends EntityAnimal {
                 return false;
             } else {
                 if (super.a()) {
-                    List list = EntityPolarBear.this.world.a(EntityPolarBear.class, EntityPolarBear.this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
+                    List<EntityPolarBear> list = EntityPolarBear.this.world.a(EntityPolarBear.class, EntityPolarBear.this.getBoundingBox().grow(8.0D, 4.0D, 8.0D));
                     Iterator iterator = list.iterator();
 
                     while (iterator.hasNext()) {

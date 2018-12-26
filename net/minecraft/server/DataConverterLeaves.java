@@ -24,16 +24,12 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import javax.annotation.Nullable;
@@ -56,39 +52,39 @@ public class DataConverterLeaves extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.c);
-        OpticFinder opticfinder = type.findField("Level");
-        OpticFinder opticfinder1 = opticfinder.type().findField("Sections");
-        Type type1 = opticfinder1.type();
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        OpticFinder<?> opticfinder = type.findField("Level");
+        OpticFinder<?> opticfinder1 = opticfinder.type().findField("Sections");
+        Type<?> type1 = opticfinder1.type();
 
         if (!(type1 instanceof ListType)) {
             throw new IllegalStateException("Expecting sections to be a list.");
         } else {
-            Type type2 = ((ListType) type1).getElement();
-            OpticFinder opticfinder2 = DSL.typeFinder(type2);
+            Type<?> type2 = ((ListType) type1).getElement();
+            OpticFinder<?> opticfinder2 = DSL.typeFinder(type2);
 
             return this.fixTypeEverywhereTyped("Leaves fix", type, (typed) -> {
-                return typed.updateTyped(opticfinder, (typedx) -> {
+                return typed.updateTyped(opticfinder, (typed1) -> {
                     int[] aint = new int[] { 0};
-                    Typed typed1 = typedx.updateTyped(opticfinder, (typed) -> {
-                        Int2ObjectOpenHashMap int2objectopenhashmap = new Int2ObjectOpenHashMap((Map) typed.getAllTyped(opticfinder).stream().map((typedx) -> {
-                            return new DataConverterLeaves.a(typedx, this.getInputSchema());
+                    Typed<?> typed2 = typed1.updateTyped(opticfinder1, (typed3) -> {
+                        Int2ObjectMap<DataConverterLeaves.a> int2objectmap = new Int2ObjectOpenHashMap((Map) typed3.getAllTyped(opticfinder2).stream().map((typed4) -> {
+                            return new DataConverterLeaves.a(typed4, this.getInputSchema());
                         }).collect(Collectors.toMap(DataConverterLeaves.b::c, (dataconverterleaves_a) -> {
                             return dataconverterleaves_a;
                         })));
 
-                        if (int2objectopenhashmap.values().stream().allMatch(DataConverterLeaves.b::b)) {
-                            return typed;
+                        if (int2objectmap.values().stream().allMatch(DataConverterLeaves.b::b)) {
+                            return typed3;
                         } else {
-                            ArrayList arraylist = Lists.newArrayList();
+                            List<IntSet> list = Lists.newArrayList();
 
                             int i;
 
                             for (i = 0; i < 7; ++i) {
-                                arraylist.add(new IntOpenHashSet());
+                                list.add(new IntOpenHashSet());
                             }
 
-                            ObjectIterator objectiterator = int2objectopenhashmap.values().iterator();
+                            ObjectIterator objectiterator = int2objectmap.values().iterator();
 
                             int j;
                             int k;
@@ -101,7 +97,7 @@ public class DataConverterLeaves extends DataFix {
                                         int i1 = dataconverterleaves_a.c(l);
 
                                         if (dataconverterleaves_a.a(i1)) {
-                                            ((IntSet) arraylist.get(0)).add(dataconverterleaves_a.c() << 12 | l);
+                                            ((IntSet) list.get(0)).add(dataconverterleaves_a.c() << 12 | l);
                                         } else if (dataconverterleaves_a.b(i1)) {
                                             j = this.a(l);
                                             k = this.c(l);
@@ -112,8 +108,8 @@ public class DataConverterLeaves extends DataFix {
                             }
 
                             for (i = 1; i < 7; ++i) {
-                                IntSet intset = (IntSet) arraylist.get(i - 1);
-                                IntSet intset1 = (IntSet) arraylist.get(i);
+                                IntSet intset = (IntSet) list.get(i - 1);
+                                IntSet intset1 = (IntSet) list.get(i);
                                 IntIterator intiterator = intset.iterator();
 
                                 while (intiterator.hasNext()) {
@@ -131,7 +127,7 @@ public class DataConverterLeaves extends DataFix {
                                         int l2 = k1 + aint2[2];
 
                                         if (j2 >= 0 && j2 <= 15 && l2 >= 0 && l2 <= 15 && k2 >= 0 && k2 <= 255) {
-                                            DataConverterLeaves.a dataconverterleaves_a1 = (DataConverterLeaves.a) int2objectopenhashmap.get(k2 >> 4);
+                                            DataConverterLeaves.a dataconverterleaves_a1 = (DataConverterLeaves.a) int2objectmap.get(k2 >> 4);
 
                                             if (dataconverterleaves_a1 != null && !dataconverterleaves_a1.b()) {
                                                 int i3 = a(j2, k2 & 15, l2);
@@ -151,21 +147,21 @@ public class DataConverterLeaves extends DataFix {
                                 }
                             }
 
-                            return typed.updateTyped(opticfinder, (typedx) -> {
-                                return ((DataConverterLeaves.a) int2objectmap.get(((Dynamic) typedx.get(DSL.remainderFinder())).getInt("Y"))).a(typedx);
+                            return typed3.updateTyped(opticfinder2, (typed4) -> {
+                                return ((DataConverterLeaves.a) int2objectmap.get(((Dynamic) typed4.get(DSL.remainderFinder())).getInt("Y"))).a(typed4);
                             });
                         }
                     });
 
                     if (aint[0] != 0) {
-                        typed1 = typed1.update(DSL.remainderFinder(), (dynamic) -> {
-                            Dynamic dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData"), dynamic.emptyMap());
+                        typed2 = typed2.update(DSL.remainderFinder(), (dynamic) -> {
+                            Dynamic<?> dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData"), dynamic.emptyMap());
 
                             return dynamic.set("UpgradeData", dynamic1.set("Sides", dynamic.createByte((byte) (dynamic1.getByte("Sides") | aint[0]))));
                         });
                     }
 
-                    return typed1;
+                    return typed2;
                 });
             });
         }
@@ -234,12 +230,12 @@ public class DataConverterLeaves extends DataFix {
             this.h = new Int2IntOpenHashMap();
 
             for (int i = 0; i < this.c.size(); ++i) {
-                Dynamic dynamic = (Dynamic) this.c.get(i);
+                Dynamic<?> dynamic = (Dynamic) this.c.get(i);
                 String s = dynamic.getString("Name");
 
                 if (DataConverterLeaves.b.containsKey(s)) {
-                    boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic) -> {
-                        return dynamic.get("decayable");
+                    boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic1) -> {
+                        return dynamic1.get("decayable");
                     }).flatMap(Dynamic::getStringValue).orElse(""), "false");
 
                     this.f.add(i);
@@ -256,11 +252,11 @@ public class DataConverterLeaves extends DataFix {
         }
 
         private Dynamic<?> a(Dynamic<?> dynamic, String s, boolean flag, int i) {
-            Dynamic dynamic1 = dynamic.emptyMap();
+            Dynamic<?> dynamic1 = dynamic.emptyMap();
 
             dynamic1 = dynamic1.set("persistent", dynamic1.createString(flag ? "true" : "false"));
             dynamic1 = dynamic1.set("distance", dynamic1.createString(Integer.toString(i)));
-            Dynamic dynamic2 = dynamic.emptyMap();
+            Dynamic<?> dynamic2 = dynamic.emptyMap();
 
             dynamic2 = dynamic2.set("Properties", dynamic1);
             dynamic2 = dynamic2.set("Name", dynamic2.createString(s));
@@ -282,10 +278,10 @@ public class DataConverterLeaves extends DataFix {
         }
 
         private void a(int i, int j, int k) {
-            Dynamic dynamic = (Dynamic) this.c.get(j);
+            Dynamic<?> dynamic = (Dynamic) this.c.get(j);
             String s = dynamic.getString("Name");
-            boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic) -> {
-                return dynamic.get("persistent");
+            boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic1) -> {
+                return dynamic1.get("persistent");
             }).flatMap(Dynamic::getStringValue).orElse(""), "true");
             int l = this.a(s, flag, k);
             int i1;
@@ -327,12 +323,12 @@ public class DataConverterLeaves extends DataFix {
             if (!Objects.equals(schema.getType(DataConverterTypes.l), this.a)) {
                 throw new IllegalStateException("Block state type is not what was expected.");
             } else {
-                Optional optional = typed.getOptional(this.b);
+                Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.b);
 
                 this.c = (List) optional.map((list) -> {
                     return (List) list.stream().map(Pair::getSecond).collect(Collectors.toList());
                 }).orElse(ImmutableList.of());
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
                 this.d = dynamic.getInt("Y");
                 this.a(dynamic);

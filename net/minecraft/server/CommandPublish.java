@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -8,8 +7,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class CommandPublish {
 
@@ -23,7 +20,7 @@ public class CommandPublish {
             return commandlistenerwrapper.getServer().H() && commandlistenerwrapper.hasPermission(4);
         })).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), HttpUtilities.a());
-        })).then(CommandDispatcher.a("port", (ArgumentType) IntegerArgumentType.integer(0, '\uffff')).executes((commandcontext) -> {
+        })).then(CommandDispatcher.a("port", (ArgumentType) IntegerArgumentType.integer(0, 65535)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "port"));
         })));
     }

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +93,7 @@ public class MethodProfiler {
     public List<MethodProfiler.ProfilerInfo> b(String s) {
         long i = this.f.containsKey("root") ? (Long) this.f.get("root") : 0L;
         long j = this.f.containsKey(s) ? (Long) this.f.get(s) : -1L;
-        ArrayList arraylist = Lists.newArrayList();
+        List<MethodProfiler.ProfilerInfo> list = Lists.newArrayList();
 
         if (!s.isEmpty()) {
             s = s + ".";
@@ -133,7 +132,7 @@ public class MethodProfiler {
                 double d1 = (double) l * 100.0D / (double) i;
                 String s3 = s2.substring(s.length());
 
-                arraylist.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
+                list.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
             }
         }
 
@@ -145,12 +144,12 @@ public class MethodProfiler {
         }
 
         if ((float) k > f) {
-            arraylist.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
+            list.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
         }
 
-        Collections.sort(arraylist);
-        arraylist.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
-        return arraylist;
+        Collections.sort(list);
+        list.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
+        return list;
     }
 
     public void exitEnter(String s) {

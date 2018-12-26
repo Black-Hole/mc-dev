@@ -2,8 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ public class EntityTracker {
     private static final Logger a = LogManager.getLogger();
     private final WorldServer world;
     private final Set<EntityTrackerEntry> c = Sets.newHashSet();
-    public final IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap();
+    public final IntHashMap<EntityTrackerEntry> trackedEntities = new IntHashMap<>();
     private int trackingDistance;
 
     public EntityTracker(WorldServer worldserver) {
@@ -121,9 +121,9 @@ public class EntityTracker {
 
             crashreportsystemdetails.a("Tracking range", (Object) (i + " blocks"));
             crashreportsystemdetails.a("Update interval", () -> {
-                String s = "Once per " + i + " ticks";
+                String s = "Once per " + j + " ticks";
 
-                if (i == Integer.MAX_VALUE) {
+                if (j == Integer.MAX_VALUE) {
                     s = "Maximum (" + s + ")";
                 }
 
@@ -163,7 +163,7 @@ public class EntityTracker {
     }
 
     public void updatePlayers() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<EntityPlayer> list = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
@@ -174,13 +174,13 @@ public class EntityTracker {
                 Entity entity = entitytrackerentry.b();
 
                 if (entity instanceof EntityPlayer) {
-                    arraylist.add((EntityPlayer) entity);
+                    list.add((EntityPlayer) entity);
                 }
             }
         }
 
-        for (int i = 0; i < arraylist.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer) arraylist.get(i);
+        for (int i = 0; i < list.size(); ++i) {
+            EntityPlayer entityplayer = (EntityPlayer) list.get(i);
             Iterator iterator1 = this.c.iterator();
 
             while (iterator1.hasNext()) {
@@ -239,8 +239,8 @@ public class EntityTracker {
     }
 
     public void a(EntityPlayer entityplayer, Chunk chunk) {
-        ArrayList arraylist = Lists.newArrayList();
-        ArrayList arraylist1 = Lists.newArrayList();
+        List<Entity> list = Lists.newArrayList();
+        List<Entity> list1 = Lists.newArrayList();
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
@@ -250,19 +250,19 @@ public class EntityTracker {
             if (entity != entityplayer && entity.chunkX == chunk.locX && entity.chunkZ == chunk.locZ) {
                 entitytrackerentry.updatePlayer(entityplayer);
                 if (entity instanceof EntityInsentient && ((EntityInsentient) entity).getLeashHolder() != null) {
-                    arraylist.add(entity);
+                    list.add(entity);
                 }
 
                 if (!entity.bP().isEmpty()) {
-                    arraylist1.add(entity);
+                    list1.add(entity);
                 }
             }
         }
 
         Entity entity1;
 
-        if (!arraylist.isEmpty()) {
-            iterator = arraylist.iterator();
+        if (!list.isEmpty()) {
+            iterator = list.iterator();
 
             while (iterator.hasNext()) {
                 entity1 = (Entity) iterator.next();
@@ -270,8 +270,8 @@ public class EntityTracker {
             }
         }
 
-        if (!arraylist1.isEmpty()) {
-            iterator = arraylist1.iterator();
+        if (!list1.isEmpty()) {
+            iterator = list1.iterator();
 
             while (iterator.hasNext()) {
                 entity1 = (Entity) iterator.next();

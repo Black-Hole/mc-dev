@@ -100,28 +100,28 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
         voxelshapemerger.a((i, j, k) -> {
             boolean[] aboolean = new boolean[] { false};
-            boolean flag = voxelshapemerger.a((ix, jx, kx) -> {
-                boolean[] aboolean = new boolean[] { false};
-                boolean flag = voxelshapemerger.a((ixx, jxx, kxx) -> {
-                    boolean flag = operatorboolean.apply(voxelshapediscrete.c(i, ix, ixx), voxelshapediscrete1.c(j, jx, jxx));
+            boolean flag = voxelshapemerger1.a((l, i1, j1) -> {
+                boolean[] aboolean1 = new boolean[] { false};
+                boolean flag1 = voxelshapemerger2.a((k1, l1, i2) -> {
+                    boolean flag2 = operatorboolean.apply(voxelshapediscrete.c(i, l, k1), voxelshapediscrete1.c(j, i1, l1));
 
-                    if (flag) {
-                        voxelshapebitset.d.set(voxelshapebitset.a(k, kx, kxx));
-                        aint[2] = Math.min(aint[2], kxx);
-                        aint[5] = Math.max(aint[5], kxx);
-                        aboolean[0] = true;
+                    if (flag2) {
+                        voxelshapebitset.d.set(voxelshapebitset.a(k, j1, i2));
+                        aint[2] = Math.min(aint[2], i2);
+                        aint[5] = Math.max(aint[5], i2);
+                        aboolean1[0] = true;
                     }
 
                     return true;
                 });
 
-                if (aboolean[0]) {
-                    aint[1] = Math.min(aint[1], kx);
-                    aint[4] = Math.max(aint[4], kx);
-                    aboolean1[0] = true;
+                if (aboolean1[0]) {
+                    aint[1] = Math.min(aint[1], j1);
+                    aint[4] = Math.max(aint[4], j1);
+                    aboolean[0] = true;
                 }
 
-                return flag;
+                return flag1;
             });
 
             if (aboolean[0]) {

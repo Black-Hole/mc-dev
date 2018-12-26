@@ -6,7 +6,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,11 +62,11 @@ public class CriterionConditionMobEffect {
     public static CriterionConditionMobEffect a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "effects");
-            HashMap hashmap = Maps.newHashMap();
+            Map<MobEffectList, CriterionConditionMobEffect.a> map = Maps.newHashMap();
             Iterator iterator = jsonobject.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, JsonElement> entry = (Entry) iterator.next();
                 MinecraftKey minecraftkey = new MinecraftKey((String) entry.getKey());
                 MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
 
@@ -77,10 +76,10 @@ public class CriterionConditionMobEffect {
 
                 CriterionConditionMobEffect.a criterionconditionmobeffect_a = CriterionConditionMobEffect.a.a(ChatDeserializer.m((JsonElement) entry.getValue(), (String) entry.getKey()));
 
-                hashmap.put(mobeffectlist, criterionconditionmobeffect_a);
+                map.put(mobeffectlist, criterionconditionmobeffect_a);
             }
 
-            return new CriterionConditionMobEffect(hashmap);
+            return new CriterionConditionMobEffect(map);
         } else {
             return CriterionConditionMobEffect.a;
         }
@@ -94,7 +93,7 @@ public class CriterionConditionMobEffect {
             Iterator iterator = this.b.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<MobEffectList, CriterionConditionMobEffect.a> entry = (Entry) iterator.next();
 
                 jsonobject.add(IRegistry.MOB_EFFECT.getKey(entry.getKey()).toString(), ((CriterionConditionMobEffect.a) entry.getValue()).a());
             }

@@ -12,7 +12,7 @@ public class DataConverterSchemaV1510 extends DataConverterSchemaNamed {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerEntities(Schema schema) {
-        Map map = super.registerEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerEntities(schema);
 
         map.put("minecraft:command_block_minecart", map.remove("minecraft:commandblock_minecart"));
         map.put("minecraft:end_crystal", map.remove("minecraft:ender_crystal"));

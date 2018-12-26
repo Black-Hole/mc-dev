@@ -3,13 +3,10 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class DefinedStructure {
@@ -39,9 +36,9 @@ public class DefinedStructure {
     public void a(World world, BlockPosition blockposition, BlockPosition blockposition1, boolean flag, @Nullable Block block) {
         if (blockposition1.getX() >= 1 && blockposition1.getY() >= 1 && blockposition1.getZ() >= 1) {
             BlockPosition blockposition2 = blockposition.a((BaseBlockPosition) blockposition1).a(-1, -1, -1);
-            ArrayList arraylist = Lists.newArrayList();
-            ArrayList arraylist1 = Lists.newArrayList();
-            ArrayList arraylist2 = Lists.newArrayList();
+            List<DefinedStructure.BlockInfo> list = Lists.newArrayList();
+            List<DefinedStructure.BlockInfo> list1 = Lists.newArrayList();
+            List<DefinedStructure.BlockInfo> list2 = Lists.newArrayList();
             BlockPosition blockposition3 = new BlockPosition(Math.min(blockposition.getX(), blockposition2.getX()), Math.min(blockposition.getY(), blockposition2.getY()), Math.min(blockposition.getZ(), blockposition2.getZ()));
             BlockPosition blockposition4 = new BlockPosition(Math.max(blockposition.getX(), blockposition2.getX()), Math.max(blockposition.getY(), blockposition2.getY()), Math.max(blockposition.getZ(), blockposition2.getZ()));
 
@@ -62,22 +59,22 @@ public class DefinedStructure {
                         nbttagcompound.remove("x");
                         nbttagcompound.remove("y");
                         nbttagcompound.remove("z");
-                        arraylist1.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, nbttagcompound));
+                        list1.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, nbttagcompound));
                     } else if (!iblockdata.f(world, blockposition_mutableblockposition) && !iblockdata.g()) {
-                        arraylist2.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
+                        list2.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
                     } else {
-                        arraylist.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
+                        list.add(new DefinedStructure.BlockInfo(blockposition5, iblockdata, (NBTTagCompound) null));
                     }
                 }
             }
 
-            ArrayList arraylist3 = Lists.newArrayList();
+            List<DefinedStructure.BlockInfo> list3 = Lists.newArrayList();
 
-            arraylist3.addAll(arraylist);
-            arraylist3.addAll(arraylist1);
-            arraylist3.addAll(arraylist2);
+            list3.addAll(list);
+            list3.addAll(list1);
+            list3.addAll(list2);
             this.a.clear();
-            this.a.add(arraylist3);
+            this.a.add(list3);
             if (flag) {
                 this.a(world, blockposition3, blockposition4.a(1, 1, 1));
             } else {
@@ -88,7 +85,7 @@ public class DefinedStructure {
     }
 
     private void a(World world, BlockPosition blockposition, BlockPosition blockposition1) {
-        List list = world.a(Entity.class, new AxisAlignedBB(blockposition, blockposition1), (entity) -> {
+        List<Entity> list = world.a(Entity.class, new AxisAlignedBB(blockposition, blockposition1), (entity) -> {
             return !(entity instanceof EntityHuman);
         });
 
@@ -114,7 +111,7 @@ public class DefinedStructure {
     }
 
     public Map<BlockPosition, String> a(BlockPosition blockposition, DefinedStructureInfo definedstructureinfo) {
-        HashMap hashmap = Maps.newHashMap();
+        Map<BlockPosition, String> map = Maps.newHashMap();
         StructureBoundingBox structureboundingbox = definedstructureinfo.j();
         Iterator iterator = definedstructureinfo.a(this.a, blockposition).iterator();
 
@@ -129,13 +126,13 @@ public class DefinedStructure {
                     BlockPropertyStructureMode blockpropertystructuremode = BlockPropertyStructureMode.valueOf(definedstructure_blockinfo.c.getString("mode"));
 
                     if (blockpropertystructuremode == BlockPropertyStructureMode.DATA) {
-                        hashmap.put(blockposition1, definedstructure_blockinfo.c.getString("metadata"));
+                        map.put(blockposition1, definedstructure_blockinfo.c.getString("metadata"));
                     }
                 }
             }
         }
 
-        return hashmap;
+        return map;
     }
 
     public BlockPosition a(DefinedStructureInfo definedstructureinfo, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo1, BlockPosition blockposition1) {
@@ -166,13 +163,13 @@ public class DefinedStructure {
         if (this.a.isEmpty()) {
             return false;
         } else {
-            List list = definedstructureinfo.a(this.a, blockposition);
+            List<DefinedStructure.BlockInfo> list = definedstructureinfo.a(this.a, blockposition);
 
             if ((!list.isEmpty() || !definedstructureinfo.h() && !this.b.isEmpty()) && this.c.getX() >= 1 && this.c.getY() >= 1 && this.c.getZ() >= 1) {
                 Block block = definedstructureinfo.i();
                 StructureBoundingBox structureboundingbox = definedstructureinfo.j();
-                ArrayList arraylist = Lists.newArrayListWithCapacity(definedstructureinfo.m() ? list.size() : 0);
-                ArrayList arraylist1 = Lists.newArrayListWithCapacity(list.size());
+                List<BlockPosition> list1 = Lists.newArrayListWithCapacity(definedstructureinfo.m() ? list.size() : 0);
+                List<Pair<BlockPosition, NBTTagCompound>> list2 = Lists.newArrayListWithCapacity(list.size());
                 int j = Integer.MAX_VALUE;
                 int k = Integer.MAX_VALUE;
                 int l = Integer.MAX_VALUE;
@@ -211,7 +208,7 @@ public class DefinedStructure {
                                 i1 = Math.max(i1, blockposition1.getX());
                                 j1 = Math.max(j1, blockposition1.getY());
                                 k1 = Math.max(k1, blockposition1.getZ());
-                                arraylist1.add(Pair.of(blockposition1, definedstructure_blockinfo.c));
+                                list2.add(Pair.of(blockposition1, definedstructure_blockinfo.c));
                                 if (definedstructure_blockinfo1.c != null) {
                                     tileentity = generatoraccess.getTileEntity(blockposition1);
                                     if (tileentity != null) {
@@ -227,7 +224,7 @@ public class DefinedStructure {
                                 if (fluid != null && iblockdata1.getBlock() instanceof IFluidContainer) {
                                     ((IFluidContainer) iblockdata1.getBlock()).place(generatoraccess, blockposition1, iblockdata1, fluid);
                                     if (!fluid.d()) {
-                                        arraylist.add(blockposition1);
+                                        list1.add(blockposition1);
                                     }
                                 }
                             }
@@ -240,9 +237,9 @@ public class DefinedStructure {
 
                 int l1;
 
-                while (flag && !arraylist.isEmpty()) {
+                while (flag && !list1.isEmpty()) {
                     flag = false;
-                    Iterator iterator1 = arraylist.iterator();
+                    Iterator iterator1 = list1.iterator();
 
                     while (iterator1.hasNext()) {
                         BlockPosition blockposition2 = (BlockPosition) iterator1.next();
@@ -274,7 +271,7 @@ public class DefinedStructure {
                     int j2 = k;
 
                     l1 = l;
-                    Iterator iterator2 = arraylist1.iterator();
+                    Iterator iterator2 = list2.iterator();
 
                     Pair pair;
                     BlockPosition blockposition3;
@@ -285,25 +282,25 @@ public class DefinedStructure {
                         voxelshapebitset.a(blockposition3.getX() - i2, blockposition3.getY() - j2, blockposition3.getZ() - l1, true, true);
                     }
 
-                    voxelshapebitset.a((enumdirection, i, j, k) -> {
-                        BlockPosition blockposition = new BlockPosition(l + i, i1 + j, j1 + k);
-                        BlockPosition blockposition1 = blockposition.shift(enumdirection);
-                        IBlockData iblockdata = generatoraccess.getType(blockposition);
-                        IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
-                        IBlockData iblockdata2 = iblockdata.updateState(enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+                    voxelshapebitset.a((enumdirection, k2, l2, i3) -> {
+                        BlockPosition blockposition4 = new BlockPosition(i2 + k2, j2 + l2, l1 + i3);
+                        BlockPosition blockposition5 = blockposition4.shift(enumdirection);
+                        IBlockData iblockdata3 = generatoraccess.getType(blockposition4);
+                        IBlockData iblockdata4 = generatoraccess.getType(blockposition5);
+                        IBlockData iblockdata5 = iblockdata3.updateState(enumdirection, iblockdata4, generatoraccess, blockposition4, blockposition5);
 
-                        if (iblockdata != iblockdata2) {
-                            generatoraccess.setTypeAndData(blockposition, iblockdata2, k1 & -2 | 16);
+                        if (iblockdata3 != iblockdata5) {
+                            generatoraccess.setTypeAndData(blockposition4, iblockdata5, i & -2 | 16);
                         }
 
-                        IBlockData iblockdata3 = iblockdata1.updateState(enumdirection.opposite(), iblockdata2, generatoraccess, blockposition1, blockposition);
+                        IBlockData iblockdata6 = iblockdata4.updateState(enumdirection.opposite(), iblockdata5, generatoraccess, blockposition5, blockposition4);
 
-                        if (iblockdata1 != iblockdata3) {
-                            generatoraccess.setTypeAndData(blockposition1, iblockdata3, k1 & -2 | 16);
+                        if (iblockdata4 != iblockdata6) {
+                            generatoraccess.setTypeAndData(blockposition5, iblockdata6, i & -2 | 16);
                         }
 
                     });
-                    iterator2 = arraylist1.iterator();
+                    iterator2 = list2.iterator();
 
                     while (iterator2.hasNext()) {
                         pair = (Pair) iterator2.next();
@@ -483,20 +480,20 @@ public class DefinedStructure {
             nbttagcompound.set("blocks", new NBTTagList());
             nbttagcompound.set("palette", new NBTTagList());
         } else {
-            ArrayList arraylist = Lists.newArrayList();
-            DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
+            List<DefinedStructure.a> list = Lists.newArrayList();
+            DefinedStructure.a definedstructure_a = new DefinedStructure.a();
 
-            arraylist.add(definedstructure_a);
+            list.add(definedstructure_a);
 
             for (int i = 1; i < this.a.size(); ++i) {
-                arraylist.add(new DefinedStructure.a(null));
+                list.add(new DefinedStructure.a());
             }
 
             NBTTagList nbttaglist = new NBTTagList();
-            List list = (List) this.a.get(0);
+            List<DefinedStructure.BlockInfo> list1 = (List) this.a.get(0);
 
-            for (int j = 0; j < list.size(); ++j) {
-                DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) list.get(j);
+            for (int j = 0; j < list1.size(); ++j) {
+                DefinedStructure.BlockInfo definedstructure_blockinfo = (DefinedStructure.BlockInfo) list1.get(j);
                 NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
                 nbttagcompound1.set("pos", this.a(definedstructure_blockinfo.a.getX(), definedstructure_blockinfo.a.getY(), definedstructure_blockinfo.a.getZ()));
@@ -510,7 +507,7 @@ public class DefinedStructure {
                 nbttaglist.add((NBTBase) nbttagcompound1);
 
                 for (int l = 1; l < this.a.size(); ++l) {
-                    DefinedStructure.a definedstructure_a1 = (DefinedStructure.a) arraylist.get(l);
+                    DefinedStructure.a definedstructure_a1 = (DefinedStructure.a) list.get(l);
 
                     definedstructure_a1.a(((DefinedStructure.BlockInfo) ((List) this.a.get(j)).get(j)).b, k);
                 }
@@ -520,7 +517,7 @@ public class DefinedStructure {
             NBTTagList nbttaglist1;
             Iterator iterator;
 
-            if (arraylist.size() == 1) {
+            if (list.size() == 1) {
                 nbttaglist1 = new NBTTagList();
                 iterator = definedstructure_a.iterator();
 
@@ -533,7 +530,7 @@ public class DefinedStructure {
                 nbttagcompound.set("palette", nbttaglist1);
             } else {
                 nbttaglist1 = new NBTTagList();
-                iterator = arraylist.iterator();
+                iterator = list.iterator();
 
                 while (iterator.hasNext()) {
                     DefinedStructure.a definedstructure_a2 = (DefinedStructure.a) iterator.next();
@@ -613,8 +610,8 @@ public class DefinedStructure {
     }
 
     private void a(NBTTagList nbttaglist, NBTTagList nbttaglist1) {
-        DefinedStructure.a definedstructure_a = new DefinedStructure.a(null);
-        ArrayList arraylist = Lists.newArrayList();
+        DefinedStructure.a definedstructure_a = new DefinedStructure.a();
+        List<DefinedStructure.BlockInfo> list = Lists.newArrayList();
 
         int i;
 
@@ -635,10 +632,10 @@ public class DefinedStructure {
                 nbttagcompound1 = null;
             }
 
-            arraylist.add(new DefinedStructure.BlockInfo(blockposition, iblockdata, nbttagcompound1));
+            list.add(new DefinedStructure.BlockInfo(blockposition, iblockdata, nbttagcompound1));
         }
 
-        this.a.add(arraylist);
+        this.a.add(list);
     }
 
     private NBTTagList a(int... aint) {
@@ -702,7 +699,7 @@ public class DefinedStructure {
         private int c;
 
         private a() {
-            this.b = new RegistryBlockID(16);
+            this.b = new RegistryBlockID<>(16);
         }
 
         public int a(IBlockData iblockdata) {

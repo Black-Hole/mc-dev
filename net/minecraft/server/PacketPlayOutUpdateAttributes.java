@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -34,16 +33,16 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
         for (int j = 0; j < i; ++j) {
             String s = packetdataserializer.e(64);
             double d0 = packetdataserializer.readDouble();
-            ArrayList arraylist = Lists.newArrayList();
+            List<AttributeModifier> list = Lists.newArrayList();
             int k = packetdataserializer.g();
 
             for (int l = 0; l < k; ++l) {
                 UUID uuid = packetdataserializer.i();
 
-                arraylist.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), packetdataserializer.readByte()));
+                list.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), packetdataserializer.readByte()));
             }
 
-            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(s, d0, arraylist));
+            this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(s, d0, list));
         }
 
     }

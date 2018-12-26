@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -70,7 +69,7 @@ public class TileEntityBeacon extends TileEntityContainer implements IWorldInven
             int k = this.position.getY();
             int l = this.position.getZ();
             AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) j, (double) k, (double) l, (double) (j + 1), (double) (k + 1), (double) (l + 1))).g(d0).b(0.0D, (double) this.world.getHeight(), 0.0D);
-            List list = this.world.a(EntityHuman.class, axisalignedbb);
+            List<EntityHuman> list = this.world.a(EntityHuman.class, axisalignedbb);
             Iterator iterator = list.iterator();
 
             EntityHuman entityhuman;

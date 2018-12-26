@@ -1,12 +1,10 @@
 package net.minecraft.server;
 
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class TagsBlock {
 
-    private static Tags<Block> M = new Tags((minecraftkey) -> {
+    private static Tags<Block> M = new Tags<>((minecraftkey) -> {
         return false;
     }, (minecraftkey) -> {
         return null;

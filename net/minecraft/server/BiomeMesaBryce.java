@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeMesaBryce extends BiomeBase {
 
     public BiomeMesaBryce() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeMesaBryce.aC, BiomeMesaBryce.aq)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.1F).b(0.2F).c(2.0F).d(0.0F).a(4159204).b(329011).a("badlands"));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeMesaBryce.aC, BiomeMesaBryce.aq)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.MESA).a(0.1F).b(0.2F).c(2.0F).d(0.0F).a(4159204).b(329011).a("badlands"));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.MESA)));
         this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeMesaBryce.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -36,8 +36,8 @@ public final class BiomeMesaBryce extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeMesaBryce.j, new WorldGenDecoratorFrequencyConfiguration(13)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeMesaBryce.p, new WorldGenDecoratorChanceConfiguration(32)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.O, WorldGenFeatureConfiguration.e, BiomeMesaBryce.j, new WorldGenDecoratorFrequencyConfiguration(5)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeMesaBryce.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeMesaBryce.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeMesaBryce.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeMesaBryce.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeMesaBryce.n, WorldGenFeatureDecoratorConfiguration.e));
         this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.SPIDER, 100, 4, 4));

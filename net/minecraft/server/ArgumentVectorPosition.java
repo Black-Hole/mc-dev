@@ -55,11 +55,11 @@ public class ArgumentVectorPosition implements IVectorPosition {
         int i = stringreader.getCursor();
         double d0 = a(stringreader, i);
 
-        if (stringreader.canRead() && stringreader.peek() == 32) {
+        if (stringreader.canRead() && stringreader.peek() == ' ') {
             stringreader.skip();
             double d1 = a(stringreader, i);
 
-            if (stringreader.canRead() && stringreader.peek() == 32) {
+            if (stringreader.canRead() && stringreader.peek() == ' ') {
                 stringreader.skip();
                 double d2 = a(stringreader, i);
 
@@ -77,12 +77,12 @@ public class ArgumentVectorPosition implements IVectorPosition {
     private static double a(StringReader stringreader, int i) throws CommandSyntaxException {
         if (!stringreader.canRead()) {
             throw ArgumentParserPosition.a.createWithContext(stringreader);
-        } else if (stringreader.peek() != 94) {
+        } else if (stringreader.peek() != '^') {
             stringreader.setCursor(i);
             throw ArgumentVec3.b.createWithContext(stringreader);
         } else {
             stringreader.skip();
-            return stringreader.canRead() && stringreader.peek() != 32 ? stringreader.readDouble() : 0.0D;
+            return stringreader.canRead() && stringreader.peek() != ' ' ? stringreader.readDouble() : 0.0D;
         }
     }
 

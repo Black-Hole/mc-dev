@@ -12,8 +12,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class DataConverterMaterialId extends DataFix {
 
@@ -345,12 +343,12 @@ public class DataConverterMaterialId extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        Type type1 = DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString());
-        OpticFinder opticfinder = DSL.fieldFinder("id", type);
+        Type<Either<Integer, Pair<String, String>>> type = DSL.or(DSL.intType(), DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        Type<Pair<String, String>> type1 = DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString());
+        OpticFinder<Either<Integer, Pair<String, String>>> opticfinder = DSL.fieldFinder("id", type);
 
         return this.fixTypeEverywhereTyped("ItemIdFix", this.getInputSchema().getType(DataConverterTypes.ITEM_STACK), this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK), (typed) -> {
-            return typed.update(opticfinder, type, (either) -> {
+            return typed.update(opticfinder, type1, (either) -> {
                 return (Pair) either.map((integer) -> {
                     return Pair.of(DataConverterTypes.q.typeName(), a(integer));
                 }, (pair) -> {

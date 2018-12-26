@@ -30,7 +30,7 @@ public class WorldGenNetherPieces {
     }
 
     private static WorldGenNetherPieces.WorldGenNetherPiece b(WorldGenNetherPieces.WorldGenNetherPieceWeight worldgennetherpieces_worldgennetherpieceweight, List<StructurePiece> list, Random random, int i, int j, int k, EnumDirection enumdirection, int l) {
-        Class oclass = worldgennetherpieces_worldgennetherpieceweight.a;
+        Class<? extends WorldGenNetherPieces.WorldGenNetherPiece> oclass = worldgennetherpieces_worldgennetherpieceweight.a;
         Object object = null;
 
         if (oclass == WorldGenNetherPieces.WorldGenNetherPiece3.class) {
@@ -632,7 +632,7 @@ public class WorldGenNetherPieces {
             BlockPosition blockposition = new BlockPosition(this.a(6, 6), this.d(5), this.b(6, 6));
 
             if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
-                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.e, 0);
+                generatoraccess.getFluidTickList().a(blockposition, FluidTypes.LAVA, 0);
             }
 
             return true;
@@ -1129,7 +1129,7 @@ public class WorldGenNetherPieces {
 
         private StructurePiece a(WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15, List<StructurePiece> list, Random random, int i, int j, int k, @Nullable EnumDirection enumdirection, int l, boolean flag) {
             if (Math.abs(i - worldgennetherpieces_worldgennetherpiece15.d().a) <= 112 && Math.abs(k - worldgennetherpieces_worldgennetherpiece15.d().c) <= 112) {
-                List list1 = worldgennetherpieces_worldgennetherpiece15.b;
+                List<WorldGenNetherPieces.WorldGenNetherPieceWeight> list1 = worldgennetherpieces_worldgennetherpiece15.b;
 
                 if (flag) {
                     list1 = worldgennetherpieces_worldgennetherpiece15.c;

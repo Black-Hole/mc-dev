@@ -8,14 +8,14 @@ public abstract class WorldGenCarverAbstract<C extends WorldGenFeatureConfigurat
 
     protected static final IBlockData a = Blocks.AIR.getBlockData();
     protected static final IBlockData b = Blocks.CAVE_AIR.getBlockData();
-    protected static final Fluid c = FluidTypes.c.i();
-    protected static final Fluid d = FluidTypes.e.i();
+    protected static final Fluid c = FluidTypes.WATER.i();
+    protected static final Fluid d = FluidTypes.LAVA.i();
     protected Set<Block> e;
     protected Set<FluidType> f;
 
     public WorldGenCarverAbstract() {
         this.e = ImmutableSet.of(Blocks.STONE, Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.DIRT, Blocks.COARSE_DIRT, new Block[] { Blocks.PODZOL, Blocks.GRASS_BLOCK, Blocks.TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.YELLOW_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.MYCELIUM, Blocks.SNOW, Blocks.PACKED_ICE});
-        this.f = ImmutableSet.of(FluidTypes.c);
+        this.f = ImmutableSet.of(FluidTypes.WATER);
     }
 
     public int a() {

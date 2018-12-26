@@ -54,9 +54,9 @@ public class ItemFood extends Item {
 
         if (entityhuman.q(this.d)) {
             entityhuman.c(enumhand);
-            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         } else {
-            return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         }
     }
 

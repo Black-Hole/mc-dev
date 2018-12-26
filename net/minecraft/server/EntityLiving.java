@@ -539,7 +539,7 @@ public abstract class EntityLiving extends Entity {
             this.cl();
             this.setInvisible(false);
         } else {
-            Collection collection = this.effects.values();
+            Collection<MobEffect> collection = this.effects.values();
 
             this.datawatcher.set(EntityLiving.h, c(collection));
             this.datawatcher.set(EntityLiving.g, PotionUtil.a(collection));
@@ -573,7 +573,7 @@ public abstract class EntityLiving extends Entity {
         if (this.world.isClientSide) {
             return false;
         } else {
-            Iterator iterator = this.effects.values().iterator();
+            Iterator<MobEffect> iterator = this.effects.values().iterator();
 
             boolean flag;
 
@@ -1915,7 +1915,7 @@ public abstract class EntityLiving extends Entity {
     protected void doTick() {}
 
     protected void cN() {
-        List list = this.world.getEntities(this, this.getBoundingBox(), IEntitySelector.a(this));
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox(), IEntitySelector.a(this));
 
         if (!list.isEmpty()) {
             int i = this.world.getGameRules().c("maxEntityCramming");
@@ -1946,7 +1946,7 @@ public abstract class EntityLiving extends Entity {
 
     protected void a(AxisAlignedBB axisalignedbb, AxisAlignedBB axisalignedbb1) {
         AxisAlignedBB axisalignedbb2 = axisalignedbb.b(axisalignedbb1);
-        List list = this.world.getEntities(this, axisalignedbb2);
+        List<Entity> list = this.world.getEntities(this, axisalignedbb2);
 
         if (!list.isEmpty()) {
             for (int i = 0; i < list.size(); ++i) {

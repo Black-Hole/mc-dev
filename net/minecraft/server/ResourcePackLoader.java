@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;

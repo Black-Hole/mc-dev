@@ -62,7 +62,7 @@ public abstract class EntityFish extends EntityWaterAnimal implements IAnimal {
     protected void n() {
         super.n();
         this.goalSelector.a(0, new PathfinderGoalPanic(this, 1.25D));
-        this.goalSelector.a(2, new PathfinderGoalAvoidTarget(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, IEntitySelector.f));
+        this.goalSelector.a(2, new PathfinderGoalAvoidTarget<>(this, EntityHuman.class, 8.0F, 1.6D, 1.4D, IEntitySelector.f));
         this.goalSelector.a(4, new EntityFish.b(this));
     }
 

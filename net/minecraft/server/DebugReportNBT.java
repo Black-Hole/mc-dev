@@ -2,13 +2,8 @@ package net.minecraft.server;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Iterator;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,10 +23,10 @@ public class DebugReportNBT implements DebugReportProvider {
         while (iterator.hasNext()) {
             java.nio.file.Path java_nio_file_path1 = (java.nio.file.Path) iterator.next();
 
-            Files.walk(java_nio_file_path1, new FileVisitOption[0]).filter((java_nio_file_path) -> {
-                return java_nio_file_path.toString().endsWith(".nbt");
-            }).forEach((java_nio_file_path) -> {
-                this.a(java_nio_file_path, this.a(java_nio_file_path1, java_nio_file_path), java_nio_file_path2);
+            Files.walk(java_nio_file_path1).filter((java_nio_file_path2) -> {
+                return java_nio_file_path2.toString().endsWith(".nbt");
+            }).forEach((java_nio_file_path2) -> {
+                this.a(java_nio_file_path2, this.a(java_nio_file_path1, java_nio_file_path2), java_nio_file_path);
             });
         }
 
@@ -49,13 +44,13 @@ public class DebugReportNBT implements DebugReportProvider {
 
     private void a(java.nio.file.Path java_nio_file_path, String s, java.nio.file.Path java_nio_file_path1) {
         try {
-            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(Files.newInputStream(java_nio_file_path, new OpenOption[0]));
+            NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(Files.newInputStream(java_nio_file_path));
             IChatBaseComponent ichatbasecomponent = nbttagcompound.a("    ", 0);
             String s1 = ichatbasecomponent.getString();
             java.nio.file.Path java_nio_file_path2 = java_nio_file_path1.resolve(s + ".snbt");
 
-            Files.createDirectories(java_nio_file_path2.getParent(), new FileAttribute[0]);
-            BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path2, new OpenOption[0]);
+            Files.createDirectories(java_nio_file_path2.getParent());
+            BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path2);
             Throwable throwable = null;
 
             try {

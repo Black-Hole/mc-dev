@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
@@ -433,7 +432,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
         }
 
         if (object == null) {
-            List list = world.getEntities((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.d);
+            List<Entity> list = world.getEntities((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.d);
 
             if (!list.isEmpty()) {
                 object = (IInventory) list.get(world.random.nextInt(list.size()));

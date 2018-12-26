@@ -4,13 +4,13 @@ public interface AreaTransformer3 extends AreaTransformer {
 
     default <R extends Area> AreaFactory<R> a(AreaContextTransformed<R> areacontexttransformed, AreaFactory<R> areafactory, AreaFactory<R> areafactory1) {
         return (areadimension) -> {
-            Area area = areafactory.make(this.a(areadimension));
-            Area area1 = areafactory1.make(this.a(areadimension));
+            R r0 = areafactory.make(this.a(areadimension));
+            R r1 = areafactory1.make(this.a(areadimension));
 
             return areacontexttransformed.a(areadimension, (i, j) -> {
                 areacontexttransformed.a((long) (i + areadimension.a()), (long) (j + areadimension.b()));
-                return this.a((WorldGenContext) areacontexttransformed, areadimension, area, area1, i, j);
-            }, area, area1);
+                return this.a((WorldGenContext) areacontexttransformed, areadimension, r0, r1, i, j);
+            }, r0, r1);
         };
     }
 

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -71,7 +70,7 @@ public class EntitySelector {
 
     public Entity a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         this.e(commandlistenerwrapper);
-        List list = this.b(commandlistenerwrapper);
+        List<? extends Entity> list = this.b(commandlistenerwrapper);
 
         if (list.isEmpty()) {
             throw ArgumentEntity.d.create();
@@ -108,26 +107,26 @@ public class EntitySelector {
             return Lists.newArrayList(new Entity[] { entity});
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
-            Predicate predicate = this.a(vec3d);
+            Predicate<Entity> predicate = this.a(vec3d);
 
             if (this.i) {
                 return (List) (commandlistenerwrapper.getEntity() != null && predicate.test(commandlistenerwrapper.getEntity()) ? Lists.newArrayList(new Entity[] { commandlistenerwrapper.getEntity()}) : Collections.emptyList());
             } else {
-                ArrayList arraylist = Lists.newArrayList();
+                List<Entity> list = Lists.newArrayList();
 
                 if (this.d()) {
-                    this.a(arraylist, commandlistenerwrapper.getWorld(), vec3d, predicate);
+                    this.a(list, commandlistenerwrapper.getWorld(), vec3d, predicate);
                 } else {
                     Iterator iterator1 = commandlistenerwrapper.getServer().getWorlds().iterator();
 
                     while (iterator1.hasNext()) {
                         WorldServer worldserver1 = (WorldServer) iterator1.next();
 
-                        this.a(arraylist, worldserver1, vec3d, predicate);
+                        this.a(list, worldserver1, vec3d, predicate);
                     }
                 }
 
-                return this.a(vec3d, (List) arraylist);
+                return this.a(vec3d, (List) list);
             }
         }
     }
@@ -151,7 +150,7 @@ public class EntitySelector {
 
     public EntityPlayer c(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
         this.e(commandlistenerwrapper);
-        List list = this.d(commandlistenerwrapper);
+        List<EntityPlayer> list = this.d(commandlistenerwrapper);
 
         if (list.size() != 1) {
             throw ArgumentEntity.e.create();
@@ -172,7 +171,7 @@ public class EntitySelector {
             return (List) (entityplayer == null ? Collections.emptyList() : Lists.newArrayList(new EntityPlayer[] { entityplayer}));
         } else {
             Vec3D vec3d = (Vec3D) this.f.apply(commandlistenerwrapper.getPosition());
-            Predicate predicate = this.a(vec3d);
+            Predicate<Entity> predicate = this.a(vec3d);
 
             if (this.i) {
                 if (commandlistenerwrapper.getEntity() instanceof EntityPlayer) {
@@ -211,7 +210,7 @@ public class EntitySelector {
     }
 
     private Predicate<Entity> a(Vec3D vec3d) {
-        Predicate predicate = this.d;
+        Predicate<Entity> predicate = this.d;
 
         if (this.g != null) {
             AxisAlignedBB axisalignedbb = this.g.a(vec3d);

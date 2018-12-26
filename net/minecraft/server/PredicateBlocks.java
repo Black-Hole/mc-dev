@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -11,11 +10,11 @@ import javax.annotation.Nullable;
 public final class PredicateBlocks {
 
     public static <T> PredicateBlock<T> a(PredicateBlock<T> predicateblock) {
-        return new PredicateBlocks.b(predicateblock);
+        return new PredicateBlocks.b<>(predicateblock);
     }
 
     public static <T> PredicateBlock<T> b(PredicateBlock<? super T>... apredicateblock) {
-        return new PredicateBlocks.c(a((Object[]) apredicateblock), null);
+        return new PredicateBlocks.c<>(a((Object[]) apredicateblock));
     }
 
     private static <T> List<T> a(T... at) {
@@ -23,16 +22,16 @@ public final class PredicateBlocks {
     }
 
     private static <T> List<T> c(Iterable<T> iterable) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<T> list = Lists.newArrayList();
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
-            Object object = iterator.next();
+            T t0 = iterator.next();
 
-            arraylist.add(Preconditions.checkNotNull(object));
+            list.add(Preconditions.checkNotNull(t0));
         }
 
-        return arraylist;
+        return list;
     }
 
     static class c<T> implements PredicateBlock<T> {

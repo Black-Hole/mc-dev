@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 public abstract class AttributeMapBase {
 
     protected final Map<IAttribute, AttributeInstance> a = Maps.newHashMap();
-    protected final Map<String, AttributeInstance> b = new InsensitiveStringMap();
+    protected final Map<String, AttributeInstance> b = new InsensitiveStringMap<>();
     protected final Multimap<IAttribute, IAttribute> c = HashMultimap.create();
 
     public AttributeMapBase() {}
@@ -55,7 +55,7 @@ public abstract class AttributeMapBase {
         Iterator iterator = multimap.entries().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, AttributeModifier> entry = (Entry) iterator.next();
             AttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {
@@ -69,7 +69,7 @@ public abstract class AttributeMapBase {
         Iterator iterator = multimap.entries().iterator();
 
         while (iterator.hasNext()) {
-            Entry entry = (Entry) iterator.next();
+            Entry<String, AttributeModifier> entry = (Entry) iterator.next();
             AttributeInstance attributeinstance = this.a((String) entry.getKey());
 
             if (attributeinstance != null) {

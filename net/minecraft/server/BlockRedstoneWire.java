@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -154,10 +154,10 @@ public class BlockRedstoneWire extends Block {
 
     private IBlockData a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         iblockdata = this.b(world, blockposition, iblockdata);
-        ArrayList arraylist = Lists.newArrayList(this.t);
+        List<BlockPosition> list = Lists.newArrayList(this.t);
 
         this.t.clear();
-        Iterator iterator = arraylist.iterator();
+        Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -363,7 +363,7 @@ public class BlockRedstoneWire extends Block {
             } else if (enumdirection == EnumDirection.UP) {
                 return i;
             } else {
-                EnumSet enumset = EnumSet.noneOf(EnumDirection.class);
+                EnumSet<EnumDirection> enumset = EnumSet.noneOf(EnumDirection.class);
                 Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
                 while (iterator.hasNext()) {

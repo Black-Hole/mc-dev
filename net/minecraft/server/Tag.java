@@ -6,10 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
@@ -35,7 +35,7 @@ public class Tag<T> {
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            Tag.b tag_b = (Tag.b) iterator.next();
+            Tag.b<T> tag_b = (Tag.b) iterator.next();
 
             tag_b.a((Collection) this.b);
         }
@@ -48,7 +48,7 @@ public class Tag<T> {
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
-            Tag.b tag_b = (Tag.b) iterator.next();
+            Tag.b<T> tag_b = (Tag.b) iterator.next();
 
             tag_b.a(jsonarray, function);
         }
@@ -71,9 +71,9 @@ public class Tag<T> {
     }
 
     public T a(Random random) {
-        ArrayList arraylist = Lists.newArrayList(this.a());
+        List<T> list = Lists.newArrayList(this.a());
 
-        return arraylist.get(random.nextInt(arraylist.size()));
+        return list.get(random.nextInt(list.size()));
     }
 
     public MinecraftKey c() {
@@ -143,8 +143,8 @@ public class Tag<T> {
             Iterator iterator = this.a.iterator();
 
             while (iterator.hasNext()) {
-                Object object = iterator.next();
-                MinecraftKey minecraftkey = (MinecraftKey) function.apply(object);
+                T t0 = iterator.next();
+                MinecraftKey minecraftkey = (MinecraftKey) function.apply(t0);
 
                 if (minecraftkey == null) {
                     throw new IllegalStateException("Unable to serialize an anonymous value to json!");
@@ -179,7 +179,7 @@ public class Tag<T> {
         public a() {}
 
         public static <T> Tag.a<T> a() {
-            return new Tag.a();
+            return new Tag.a<>();
         }
 
         public Tag.a<T> a(Tag.b<T> tag_b) {
@@ -188,28 +188,28 @@ public class Tag<T> {
         }
 
         public Tag.a<T> a(T t0) {
-            this.a.add(new Tag.d(Collections.singleton(t0)));
+            this.a.add(new Tag.d<>(Collections.singleton(t0)));
             return this;
         }
 
         @SafeVarargs
         public final Tag.a<T> a(T... at) {
-            this.a.add(new Tag.d(Lists.newArrayList(at)));
+            this.a.add(new Tag.d<>(Lists.newArrayList(at)));
             return this;
         }
 
         public Tag.a<T> a(Collection<T> collection) {
-            this.a.add(new Tag.d(collection));
+            this.a.add(new Tag.d<>(collection));
             return this;
         }
 
         public Tag.a<T> a(MinecraftKey minecraftkey) {
-            this.a.add(new Tag.c(minecraftkey));
+            this.a.add(new Tag.c<>(minecraftkey));
             return this;
         }
 
         public Tag.a<T> a(Tag<T> tag) {
-            this.a.add(new Tag.c(tag));
+            this.a.add(new Tag.c<>(tag));
             return this;
         }
 
@@ -235,7 +235,7 @@ public class Tag<T> {
         }
 
         public Tag<T> b(MinecraftKey minecraftkey) {
-            return new Tag(minecraftkey, this.a, this.b);
+            return new Tag<>(minecraftkey, this.a, this.b);
         }
 
         public Tag.a<T> a(Predicate<MinecraftKey> predicate, Function<MinecraftKey, T> function, JsonObject jsonobject) {
@@ -254,13 +254,13 @@ public class Tag<T> {
 
                     if (!s.startsWith("#")) {
                         MinecraftKey minecraftkey = new MinecraftKey(s);
-                        Object object = function.apply(minecraftkey);
+                        T t0 = function.apply(minecraftkey);
 
-                        if (object == null || !predicate.test(minecraftkey)) {
+                        if (t0 == null || !predicate.test(minecraftkey)) {
                             throw new JsonParseException("Unknown value '" + minecraftkey + "'");
                         }
 
-                        this.a(object);
+                        this.a(t0);
                     } else {
                         this.a(new MinecraftKey(s.substring(1)));
                     }

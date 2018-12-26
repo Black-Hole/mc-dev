@@ -370,7 +370,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     @Nullable
     protected Entity a(Vec3D vec3d, Vec3D vec3d1) {
         Entity entity = null;
-        List list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D), EntityArrow.g);
+        List<Entity> list = this.world.getEntities(this, this.getBoundingBox().b(this.motX, this.motY, this.motZ).g(1.0D), EntityArrow.g);
         double d0 = 0.0D;
 
         for (int i = 0; i < list.size(); ++i) {

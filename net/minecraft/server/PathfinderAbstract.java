@@ -4,7 +4,7 @@ public abstract class PathfinderAbstract {
 
     protected IBlockAccess a;
     protected EntityInsentient b;
-    protected final IntHashMap<PathPoint> c = new IntHashMap();
+    protected final IntHashMap<PathPoint> c = new IntHashMap<>();
     protected int d;
     protected int e;
     protected int f;

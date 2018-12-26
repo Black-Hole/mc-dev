@@ -3,7 +3,6 @@ package net.minecraft.server;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Consumer;
 
 public class BlockDispenser extends BlockTileEntity {
 

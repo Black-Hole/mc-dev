@@ -4,7 +4,6 @@ import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.Dynamic;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +25,7 @@ public class DataConverterFlattenData {
 
         for (int k = 0; k < j; ++k) {
             String s1 = astring1[k];
-            Dynamic dynamic = b(s1);
+            Dynamic<?> dynamic = b(s1);
             String s2 = dynamic.getString("Name");
 
             DataConverterFlattenData.d.putIfAbsent(s2, i);
@@ -39,7 +38,7 @@ public class DataConverterFlattenData {
         int i = DataConverterFlattenData.c.getInt(dynamic);
 
         if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic dynamic1 = DataConverterFlattenData.b[i];
+            Dynamic<?> dynamic1 = DataConverterFlattenData.b[i];
 
             return dynamic1 == null ? dynamic : dynamic1;
         } else {
@@ -51,7 +50,7 @@ public class DataConverterFlattenData {
         int i = DataConverterFlattenData.d.getInt(s);
 
         if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic dynamic = DataConverterFlattenData.b[i];
+            Dynamic<?> dynamic = DataConverterFlattenData.b[i];
 
             return dynamic == null ? s : dynamic.getString("Name");
         } else {
@@ -61,7 +60,7 @@ public class DataConverterFlattenData {
 
     public static String a(int i) {
         if (i >= 0 && i < DataConverterFlattenData.b.length) {
-            Dynamic dynamic = DataConverterFlattenData.b[i];
+            Dynamic<?> dynamic = DataConverterFlattenData.b[i];
 
             return dynamic == null ? "minecraft:air" : dynamic.getString("Name");
         } else {
@@ -79,7 +78,7 @@ public class DataConverterFlattenData {
     }
 
     public static Dynamic<?> b(int i) {
-        Dynamic dynamic = null;
+        Dynamic<?> dynamic = null;
 
         if (i > 0 && i < DataConverterFlattenData.b.length) {
             dynamic = DataConverterFlattenData.b[i];

@@ -146,13 +146,13 @@ public class RecipeBannerAdd extends IRecipeComplex {
                                 break;
                             }
 
-                            if (enumbannerpatterntype.c()[k].charAt(i1) == 32) {
+                            if (enumbannerpatterntype.c()[k].charAt(i1) == ' ') {
                                 flag = false;
                                 break;
                             }
 
                             enumcolor = enumcolor1;
-                        } else if (enumbannerpatterntype.c()[k].charAt(i1) != 32) {
+                        } else if (enumbannerpatterntype.c()[k].charAt(i1) != ' ') {
                             flag = false;
                             break;
                         }

@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityShulker extends EntityGolem implements IMonster {
@@ -44,7 +43,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
     protected void n() {
         this.goalSelector.a(1, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(4, new EntityShulker.a());
-        this.goalSelector.a(7, new EntityShulker.e(null));
+        this.goalSelector.a(7, new EntityShulker.e());
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
         this.targetSelector.a(2, new EntityShulker.d(this));
@@ -263,7 +262,7 @@ public class EntityShulker extends EntityGolem implements IMonster {
             }
 
             if (d2 > 0.0D) {
-                List list = this.world.getEntities(this, this.getBoundingBox());
+                List<Entity> list = this.world.getEntities(this, this.getBoundingBox());
 
                 if (!list.isEmpty()) {
                     Iterator iterator = list.iterator();
@@ -293,8 +292,8 @@ public class EntityShulker extends EntityGolem implements IMonster {
     public void setPosition(double d0, double d1, double d2) {
         super.setPosition(d0, d1, d2);
         if (this.datawatcher != null && this.ticksLived != 0) {
-            Optional optional = (Optional) this.datawatcher.get(EntityShulker.b);
-            Optional optional1 = Optional.of(new BlockPosition(d0, d1, d2));
+            Optional<BlockPosition> optional = (Optional) this.datawatcher.get(EntityShulker.b);
+            Optional<BlockPosition> optional1 = Optional.of(new BlockPosition(d0, d1, d2));
 
             if (!optional1.equals(optional)) {
                 this.datawatcher.set(EntityShulker.b, optional1);

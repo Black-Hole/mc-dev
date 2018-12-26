@@ -15,7 +15,7 @@ public class NBTTagEnd implements NBTBase {
     public void write(DataOutput dataoutput) throws IOException {}
 
     public byte getTypeId() {
-        return (byte) 0;
+        return 0;
     }
 
     public String toString() {

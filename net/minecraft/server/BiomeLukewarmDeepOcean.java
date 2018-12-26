@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public class BiomeLukewarmDeepOcean extends BiomeBase {
 
     public BiomeLukewarmDeepOcean() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeLukewarmDeepOcean.au, BiomeLukewarmDeepOcean.ao)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.OCEAN).a(-1.8F).b(0.1F).c(0.5F).d(0.5F).a(4566514).b(267827).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeLukewarmDeepOcean.au, BiomeLukewarmDeepOcean.ao)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.OCEAN).a(-1.8F).b(0.1F).c(0.5F).d(0.5F).a(4566514).b(267827).a((String) null));
         this.a(WorldGenerator.o, (WorldGenFeatureConfiguration) (new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.WARM, 0.3F, 0.9F)));
         this.a(WorldGenerator.n, (WorldGenFeatureConfiguration) (new WorldGenMonumentConfiguration()));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
@@ -39,8 +39,8 @@ public class BiomeLukewarmDeepOcean extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeLukewarmDeepOcean.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeLukewarmDeepOcean.j, new WorldGenDecoratorFrequencyConfiguration(10)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeLukewarmDeepOcean.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeLukewarmDeepOcean.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeLukewarmDeepOcean.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeLukewarmDeepOcean.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeLukewarmDeepOcean.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ay, new WorldGenFeatureSeaGrassConfiguration(80, 0.8D), BiomeLukewarmDeepOcean.B, WorldGenFeatureDecoratorConfiguration.e));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.aE, new WorldGenFeatureBlockConfiguration(Blocks.SEAGRASS.getBlockData(), new IBlockData[] { Blocks.STONE.getBlockData()}, new IBlockData[] { Blocks.WATER.getBlockData()}, new IBlockData[] { Blocks.WATER.getBlockData()}), BiomeLukewarmDeepOcean.E, new WorldGenDecoratorCarveMaskConfiguration(WorldGenStage.Features.LIQUID, 0.1F)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.az, WorldGenFeatureConfiguration.e, BiomeLukewarmDeepOcean.D, new WorldGenDecoratorNoiseConfiguration(80, 80.0D)));

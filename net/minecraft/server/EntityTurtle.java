@@ -130,11 +130,11 @@ public class EntityTurtle extends EntityAnimal {
         this.goalSelector.a(1, new EntityTurtle.a(this, 1.0D));
         this.goalSelector.a(1, new EntityTurtle.d(this, 1.0D));
         this.goalSelector.a(2, new EntityTurtle.i(this, 1.1D, Blocks.SEAGRASS.getItem()));
-        this.goalSelector.a(3, new EntityTurtle.c(this, 1.0D, null));
+        this.goalSelector.a(3, new EntityTurtle.c(this, 1.0D));
         this.goalSelector.a(4, new EntityTurtle.b(this, 1.0D));
         this.goalSelector.a(7, new EntityTurtle.j(this, 1.0D));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
-        this.goalSelector.a(9, new EntityTurtle.h(this, 1.0D, 100, null));
+        this.goalSelector.a(9, new EntityTurtle.h(this, 1.0D, 100));
     }
 
     protected void initAttributes() {
@@ -431,7 +431,7 @@ public class EntityTurtle extends EntityAnimal {
                 }
 
                 if (this.f.dz()) {
-                    EntityTurtle.g(this.f);
+                    this.f.bK++;
                 }
             }
 

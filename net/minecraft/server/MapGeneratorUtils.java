@@ -12,13 +12,13 @@ public class MapGeneratorUtils {
     }
 
     public static <K, V> Map<K, V> a(Iterable<K> iterable, Iterable<V> iterable1, Map<K, V> map) {
-        Iterator iterator = iterable1.iterator();
+        Iterator<V> iterator = iterable1.iterator();
         Iterator iterator1 = iterable.iterator();
 
         while (iterator1.hasNext()) {
-            Object object = iterator1.next();
+            K k0 = iterator1.next();
 
-            map.put(object, iterator.next());
+            map.put(k0, iterator.next());
         }
 
         if (iterator.hasNext()) {

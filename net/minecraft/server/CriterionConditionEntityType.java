@@ -30,7 +30,7 @@ public class CriterionConditionEntityType {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             String s = ChatDeserializer.a(jsonelement, "type");
             MinecraftKey minecraftkey = new MinecraftKey(s);
-            EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
+            EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
             if (entitytypes == null) {
                 throw new JsonSyntaxException("Unknown entity type '" + minecraftkey + "', valid types are: " + CriterionConditionEntityType.b.join(IRegistry.ENTITY_TYPE.keySet()));

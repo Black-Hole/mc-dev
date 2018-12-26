@@ -11,7 +11,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterObjectiveDisplayName extends DataFix {
 
@@ -20,7 +19,7 @@ public class DataConverterObjectiveDisplayName extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
 
         if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.t))) {
             throw new IllegalStateException("Objective type is not what was expected.");
@@ -28,13 +27,13 @@ public class DataConverterObjectiveDisplayName extends DataFix {
             return this.fixTypeEverywhere("ObjectiveDisplayNameFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
-                        return dynamic.update("DisplayName", (dynamicx) -> {
-                            Optional optional = dynamicx.getStringValue().map((s) -> {
+                        return dynamic.update("DisplayName", (dynamic1) -> {
+                            Optional optional = dynamic1.getStringValue().map((s) -> {
                                 return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
                             });
 
                             dynamic.getClass();
-                            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createString), dynamicx);
+                            return (Dynamic) DataFixUtils.orElse(optional.map(dynamic::createString), dynamic1);
                         });
                     });
                 };

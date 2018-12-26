@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -13,7 +12,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.HashMap;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,23 +30,23 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         PacketPlayOutCommands.a[] apacketplayoutcommands_a = new PacketPlayOutCommands.a[packetdataserializer.g()];
-        ArrayDeque arraydeque = new ArrayDeque(apacketplayoutcommands_a.length);
+        Deque<PacketPlayOutCommands.a> deque = new ArrayDeque(apacketplayoutcommands_a.length);
 
         for (int i = 0; i < apacketplayoutcommands_a.length; ++i) {
             apacketplayoutcommands_a[i] = this.c(packetdataserializer);
-            arraydeque.add(apacketplayoutcommands_a[i]);
+            deque.add(apacketplayoutcommands_a[i]);
         }
 
         boolean flag;
 
         do {
-            if (arraydeque.isEmpty()) {
+            if (deque.isEmpty()) {
                 this.a = (RootCommandNode) apacketplayoutcommands_a[packetdataserializer.g()].e;
                 return;
             }
 
             flag = false;
-            Iterator iterator = arraydeque.iterator();
+            Iterator iterator = deque.iterator();
 
             while (iterator.hasNext()) {
                 PacketPlayOutCommands.a packetplayoutcommands_a = (PacketPlayOutCommands.a) iterator.next();
@@ -63,30 +62,30 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        HashMap hashmap = Maps.newHashMap();
-        ArrayDeque arraydeque = new ArrayDeque();
+        Map<CommandNode<ICompletionProvider>, Integer> map = Maps.newHashMap();
+        Deque<CommandNode<ICompletionProvider>> deque = new ArrayDeque();
 
-        arraydeque.add(this.a);
+        deque.add(this.a);
 
-        while (!arraydeque.isEmpty()) {
-            CommandNode commandnode = (CommandNode) arraydeque.pollFirst();
+        while (!deque.isEmpty()) {
+            CommandNode<ICompletionProvider> commandnode = (CommandNode) deque.pollFirst();
 
-            if (!hashmap.containsKey(commandnode)) {
-                int i = hashmap.size();
+            if (!map.containsKey(commandnode)) {
+                int i = map.size();
 
-                hashmap.put(commandnode, i);
-                arraydeque.addAll(commandnode.getChildren());
+                map.put(commandnode, i);
+                deque.addAll(commandnode.getChildren());
                 if (commandnode.getRedirect() != null) {
-                    arraydeque.add(commandnode.getRedirect());
+                    deque.add(commandnode.getRedirect());
                 }
             }
         }
 
-        CommandNode[] acommandnode = (CommandNode[]) (new CommandNode[hashmap.size()]);
+        CommandNode<ICompletionProvider>[] acommandnode = (CommandNode[]) (new CommandNode[map.size()]);
 
         Entry entry;
 
-        for (Iterator iterator = hashmap.entrySet().iterator(); iterator.hasNext(); acommandnode[(Integer) entry.getValue()] = (CommandNode) entry.getKey()) {
+        for (Iterator iterator = map.entrySet().iterator(); iterator.hasNext(); acommandnode[(Integer) entry.getValue()] = (CommandNode) entry.getKey()) {
             entry = (Entry) iterator.next();
         }
 
@@ -95,21 +94,21 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         int j = acommandnode.length;
 
         for (int k = 0; k < j; ++k) {
-            CommandNode commandnode1 = acommandnode1[k];
+            CommandNode<ICompletionProvider> commandnode1 = acommandnode1[k];
 
-            this.a(packetdataserializer, commandnode1, hashmap);
+            this.a(packetdataserializer, commandnode1, map);
         }
 
-        packetdataserializer.d((Integer) hashmap.get(this.a));
+        packetdataserializer.d((Integer) map.get(this.a));
     }
 
     private PacketPlayOutCommands.a c(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         int[] aint = packetdataserializer.b();
         int i = (b0 & 8) != 0 ? packetdataserializer.g() : 0;
-        ArgumentBuilder argumentbuilder = this.a(packetdataserializer, b0);
+        ArgumentBuilder<ICompletionProvider, ?> argumentbuilder = this.a(packetdataserializer, b0);
 
-        return new PacketPlayOutCommands.a(argumentbuilder, b0, i, aint, null);
+        return new PacketPlayOutCommands.a(argumentbuilder, b0, i, aint);
     }
 
     @Nullable
@@ -118,12 +117,12 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
         if (i == 2) {
             String s = packetdataserializer.e(32767);
-            ArgumentType argumenttype = ArgumentRegistry.a(packetdataserializer);
+            ArgumentType<?> argumenttype = ArgumentRegistry.a(packetdataserializer);
 
             if (argumenttype == null) {
                 return null;
             } else {
-                RequiredArgumentBuilder requiredargumentbuilder = RequiredArgumentBuilder.argument(s, argumenttype);
+                RequiredArgumentBuilder<ICompletionProvider, ?> requiredargumentbuilder = RequiredArgumentBuilder.argument(s, argumenttype);
 
                 if ((b0 & 16) != 0) {
                     requiredargumentbuilder.suggests(CompletionProviders.a(packetdataserializer.l()));
@@ -167,7 +166,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         Iterator iterator = commandnode.getChildren().iterator();
 
         while (iterator.hasNext()) {
-            CommandNode commandnode1 = (CommandNode) iterator.next();
+            CommandNode<ICompletionProvider> commandnode1 = (CommandNode) iterator.next();
 
             packetdataserializer.d((Integer) map.get(commandnode1));
         }
@@ -177,7 +176,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         }
 
         if (commandnode instanceof ArgumentCommandNode) {
-            ArgumentCommandNode argumentcommandnode = (ArgumentCommandNode) commandnode;
+            ArgumentCommandNode<ICompletionProvider, ?> argumentcommandnode = (ArgumentCommandNode) commandnode;
 
             packetdataserializer.a(argumentcommandnode.getName());
             ArgumentRegistry.a(packetdataserializer, argumentcommandnode.getType());
@@ -251,7 +250,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
             for (k = 0; k < i; ++k) {
                 j = aint[k];
-                CommandNode commandnode = apacketplayoutcommands_a[j].e;
+                CommandNode<ICompletionProvider> commandnode = apacketplayoutcommands_a[j].e;
 
                 if (!(commandnode instanceof RootCommandNode)) {
                     this.e.addChild(commandnode);

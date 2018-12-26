@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 import javax.annotation.Nullable;
 
 public abstract class EntityMinecartAbstract extends Entity implements INamableTileEntity {
@@ -258,7 +256,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
 
             this.setYawPitch(this.yaw, this.pitch);
             if (this.v() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D) {
-                List list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D), IEntitySelector.a(this));
+                List<Entity> list = this.world.getEntities(this, this.getBoundingBox().grow(0.20000000298023224D, 0.0D, 0.20000000298023224D), IEntitySelector.a(this));
 
                 if (!list.isEmpty()) {
                     for (int l = 0; l < list.size(); ++l) {

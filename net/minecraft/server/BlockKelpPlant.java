@@ -22,7 +22,7 @@ public class BlockKelpPlant extends Block implements IFluidContainer {
     }
 
     public Fluid h(IBlockData iblockdata) {
-        return FluidTypes.c.a(false);
+        return FluidTypes.WATER.a(false);
     }
 
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
@@ -37,7 +37,7 @@ public class BlockKelpPlant extends Block implements IFluidContainer {
                 }
             }
 
-            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.c, FluidTypes.c.a((IWorldReader) generatoraccess));
+            generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
             return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
         }
     }

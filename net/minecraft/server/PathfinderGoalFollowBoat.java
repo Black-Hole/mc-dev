@@ -15,7 +15,7 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
     }
 
     public boolean a() {
-        List list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
+        List<EntityBoat> list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
         boolean flag = false;
         Iterator iterator = list.iterator();
 
@@ -40,7 +40,7 @@ public class PathfinderGoalFollowBoat extends PathfinderGoal {
     }
 
     public void c() {
-        List list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
+        List<EntityBoat> list = this.b.world.a(EntityBoat.class, this.b.getBoundingBox().g(5.0D));
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

@@ -2,11 +2,9 @@ package net.minecraft.server;
 
 import com.google.common.collect.Sets;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class WorldChunkManagerOverworld extends WorldChunkManager {
@@ -46,10 +44,10 @@ public class WorldChunkManagerOverworld extends WorldChunkManager {
         int k1 = j + k >> 2;
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
-        HashSet hashset = Sets.newHashSet();
+        Set<BiomeBase> set = Sets.newHashSet();
 
-        Collections.addAll(hashset, this.d.a(l, i1, l1, i2, (BiomeBase) null));
-        return hashset;
+        Collections.addAll(set, this.d.a(l, i1, l1, i2, (BiomeBase) null));
+        return set;
     }
 
     @Nullable
@@ -81,14 +79,14 @@ public class WorldChunkManagerOverworld extends WorldChunkManager {
     }
 
     public boolean a(StructureGenerator<?> structuregenerator) {
-        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator) -> {
+        return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             BiomeBase[] abiomebase = this.f;
             int i = abiomebase.length;
 
             for (int j = 0; j < i; ++j) {
                 BiomeBase biomebase = abiomebase[j];
 
-                if (biomebase.a(structuregenerator)) {
+                if (biomebase.a(structuregenerator1)) {
                     return true;
                 }
             }

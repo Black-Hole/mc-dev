@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.UUID;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityWolf extends EntityTameableAnimal {
@@ -26,7 +25,7 @@ public class EntityWolf extends EntityTameableAnimal {
         this.goalSit = new PathfinderGoalSit(this);
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, this.goalSit);
-        this.goalSelector.a(3, new EntityWolf.a(this, EntityLlama.class, 24.0F, 1.5D, 1.5D));
+        this.goalSelector.a(3, new EntityWolf.a<>(this, EntityLlama.class, 24.0F, 1.5D, 1.5D));
         this.goalSelector.a(4, new PathfinderGoalLeapAtTarget(this, 0.4F));
         this.goalSelector.a(5, new PathfinderGoalMeleeAttack(this, 1.0D, true));
         this.goalSelector.a(6, new PathfinderGoalFollowOwner(this, 1.0D, 10.0F, 2.0F));
@@ -38,11 +37,11 @@ public class EntityWolf extends EntityTameableAnimal {
         this.targetSelector.a(1, new PathfinderGoalOwnerHurtByTarget(this));
         this.targetSelector.a(2, new PathfinderGoalOwnerHurtTarget(this));
         this.targetSelector.a(3, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
-        this.targetSelector.a(4, new PathfinderGoalRandomTargetNonTamed(this, EntityAnimal.class, false, (entityanimal) -> {
+        this.targetSelector.a(4, new PathfinderGoalRandomTargetNonTamed<>(this, EntityAnimal.class, false, (entityanimal) -> {
             return entityanimal instanceof EntitySheep || entityanimal instanceof EntityRabbit;
         }));
-        this.targetSelector.a(4, new PathfinderGoalRandomTargetNonTamed(this, EntityTurtle.class, false, EntityTurtle.bC));
-        this.targetSelector.a(5, new PathfinderGoalNearestAttackableTarget(this, EntitySkeletonAbstract.class, false));
+        this.targetSelector.a(4, new PathfinderGoalRandomTargetNonTamed<>(this, EntityTurtle.class, false, EntityTurtle.bC));
+        this.targetSelector.a(5, new PathfinderGoalNearestAttackableTarget<>(this, EntitySkeletonAbstract.class, false));
     }
 
     protected void initAttributes() {

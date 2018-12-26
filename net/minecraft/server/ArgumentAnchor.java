@@ -14,13 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 
 public class ArgumentAnchor implements ArgumentType<ArgumentAnchor.Anchor> {
 
-    private static final Collection<String> a = Arrays.asList(new String[] { "eyes", "feet"});
+    private static final Collection<String> a = Arrays.asList("eyes", "feet");
     private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("argument.anchor.invalid", new Object[] { object});
     });

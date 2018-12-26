@@ -46,7 +46,7 @@ public class ItemWrittenBook extends Item {
 
         entityhuman.a(itemstack, enumhand);
         entityhuman.b(StatisticList.ITEM_USED.b(this));
-        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 
     private void a(ItemStack itemstack, EntityHuman entityhuman) {

@@ -10,7 +10,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterObjectiveRenderType extends DataFix {
 
@@ -23,7 +22,7 @@ public class DataConverterObjectiveRenderType extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
 
         if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.t))) {
             throw new IllegalStateException("Objective type is not what was expected.");
@@ -31,7 +30,7 @@ public class DataConverterObjectiveRenderType extends DataFix {
             return this.fixTypeEverywhere("ObjectiveRenderTypeFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
-                        Optional optional = dynamic.get("RenderType").flatMap(Dynamic::getStringValue);
+                        Optional<String> optional = dynamic.get("RenderType").flatMap(Dynamic::getStringValue);
 
                         if (!optional.isPresent()) {
                             String s = dynamic.getString("CriteriaName");

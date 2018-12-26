@@ -29,7 +29,7 @@ public class NBTTagString implements NBTBase {
     }
 
     public byte getTypeId() {
-        return (byte) 8;
+        return 8;
     }
 
     public String toString() {
@@ -68,7 +68,7 @@ public class NBTTagString implements NBTBase {
         for (int i = 0; i < s.length(); ++i) {
             char c0 = s.charAt(i);
 
-            if (c0 == 92 || c0 == 34) {
+            if (c0 == '\\' || c0 == '"') {
                 stringbuilder.append('\\');
             }
 

@@ -2,9 +2,8 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -49,21 +48,21 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
     }
 
     public final boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, T t0) {
-        HashSet hashset = Sets.newHashSet();
-        boolean flag = this.a(hashset, generatoraccess, random, blockposition);
-        ArrayList arraylist = Lists.newArrayList();
+        Set<BlockPosition> set = Sets.newHashSet();
+        boolean flag = this.a(set, generatoraccess, random, blockposition);
+        List<Set<BlockPosition>> list = Lists.newArrayList();
         boolean flag1 = true;
 
         for (int i = 0; i < 6; ++i) {
-            arraylist.add(Sets.newHashSet());
+            list.add(Sets.newHashSet());
         }
 
         BlockPosition.b blockposition_b = BlockPosition.b.r();
         Throwable throwable = null;
 
         try {
-            if (flag && !hashset.isEmpty()) {
-                Iterator iterator = Lists.newArrayList(hashset).iterator();
+            if (flag && !set.isEmpty()) {
+                Iterator iterator = Lists.newArrayList(set).iterator();
 
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -74,11 +73,11 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                         EnumDirection enumdirection = aenumdirection[k];
 
                         blockposition_b.g(blockposition1).c(enumdirection);
-                        if (!hashset.contains(blockposition_b)) {
+                        if (!set.contains(blockposition_b)) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_b);
 
                             if (iblockdata.b(BlockProperties.ab)) {
-                                ((Set) arraylist.get(0)).add(blockposition_b.h());
+                                ((Set) list.get(0)).add(blockposition_b.h());
                                 this.b(generatoraccess, blockposition_b, (IBlockData) iblockdata.set(BlockProperties.ab, 1));
                             }
                         }
@@ -89,9 +88,9 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
             int l = 1;
 
             while (l < 6) {
-                Set set = (Set) arraylist.get(l - 1);
-                Set set1 = (Set) arraylist.get(l);
-                Iterator iterator1 = set.iterator();
+                Set<BlockPosition> set1 = (Set) list.get(l - 1);
+                Set<BlockPosition> set2 = (Set) list.get(l);
+                Iterator iterator1 = set1.iterator();
 
                 label176:
                 while (true) {
@@ -109,7 +108,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                             EnumDirection enumdirection1 = aenumdirection1[j1];
 
                             blockposition_b.g(blockposition2).c(enumdirection1);
-                            if (!set.contains(blockposition_b) && !set1.contains(blockposition_b)) {
+                            if (!set1.contains(blockposition_b) && !set2.contains(blockposition_b)) {
                                 IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
 
                                 if (iblockdata1.b(BlockProperties.ab)) {
@@ -119,7 +118,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                                         IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ab, l + 1);
 
                                         this.b(generatoraccess, blockposition_b, iblockdata2);
-                                        set1.add(blockposition_b.h());
+                                        set2.add(blockposition_b.h());
                                     }
                                 }
                             }

@@ -13,9 +13,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.LinkOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Map;
-import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,10 +46,10 @@ public class DefinedStructureManager implements IResourcePackListener {
 
     @Nullable
     public DefinedStructure b(MinecraftKey minecraftkey) {
-        return (DefinedStructure) this.b.computeIfAbsent(minecraftkey, (minecraftkey) -> {
-            DefinedStructure definedstructure = this.f(minecraftkey);
+        return (DefinedStructure) this.b.computeIfAbsent(minecraftkey, (minecraftkey1) -> {
+            DefinedStructure definedstructure = this.f(minecraftkey1);
 
-            return definedstructure != null ? definedstructure : this.e(minecraftkey);
+            return definedstructure != null ? definedstructure : this.e(minecraftkey1);
         });
     }
 
@@ -167,7 +165,7 @@ public class DefinedStructureManager implements IResourcePackListener {
                 return false;
             } else {
                 try {
-                    Files.createDirectories(Files.exists(java_nio_file_path1, new LinkOption[0]) ? java_nio_file_path1.toRealPath(new LinkOption[0]) : java_nio_file_path1, new FileAttribute[0]);
+                    Files.createDirectories(Files.exists(java_nio_file_path1, new LinkOption[0]) ? java_nio_file_path1.toRealPath() : java_nio_file_path1);
                 } catch (IOException ioexception) {
                     DefinedStructureManager.a.error("Failed to create parent directory: {}", java_nio_file_path1);
                     return false;

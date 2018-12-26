@@ -7,14 +7,14 @@ import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDecoratorEmptyConfiguration> {
 
-    private static final LoadingCache<Long, WorldGenEnder.Spike[]> a = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new WorldGenDecoratorSpike.a(null));
+    private static final LoadingCache<Long, WorldGenEnder.Spike[]> a = CacheBuilder.newBuilder().expireAfterWrite(5L, TimeUnit.MINUTES).build(new WorldGenDecoratorSpike.a());
 
     public WorldGenDecoratorSpike() {}
 
@@ -48,15 +48,15 @@ public class WorldGenDecoratorSpike extends WorldGenDecorator<WorldGenFeatureDec
         private a() {}
 
         public WorldGenEnder.Spike[] load(Long olong) throws Exception {
-            ArrayList arraylist = Lists.newArrayList(ContiguousSet.create(Range.closedOpen(0, 10), DiscreteDomain.integers()));
+            List<Integer> list = Lists.newArrayList(ContiguousSet.create(Range.closedOpen(0, 10), DiscreteDomain.integers()));
 
-            Collections.shuffle(arraylist, new Random(olong));
+            Collections.shuffle(list, new Random(olong));
             WorldGenEnder.Spike[] aworldgenender_spike = new WorldGenEnder.Spike[10];
 
             for (int i = 0; i < 10; ++i) {
                 int j = (int) (42.0D * Math.cos(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
                 int k = (int) (42.0D * Math.sin(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
-                int l = (Integer) arraylist.get(i);
+                int l = (Integer) list.get(i);
                 int i1 = 2 + l / 3;
                 int j1 = 76 + l * 3;
                 boolean flag = l == 1 || l == 2;

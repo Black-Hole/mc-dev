@@ -95,9 +95,9 @@ public class EntityDolphin extends EntityWaterAnimal {
         this.goalSelector.a(5, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 6.0F));
         this.goalSelector.a(5, new PathfinderGoalWaterJump(this, 10));
         this.goalSelector.a(6, new PathfinderGoalMeleeAttack(this, 1.2000000476837158D, true));
-        this.goalSelector.a(8, new EntityDolphin.d(null));
+        this.goalSelector.a(8, new EntityDolphin.d());
         this.goalSelector.a(8, new PathfinderGoalFollowBoat(this));
-        this.goalSelector.a(9, new PathfinderGoalAvoidTarget(this, EntityGuardian.class, 8.0F, 1.0D, 1.0D));
+        this.goalSelector.a(9, new PathfinderGoalAvoidTarget<>(this, EntityGuardian.class, 8.0F, 1.0D, 1.0D));
         this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[] { EntityGuardian.class}));
     }
 
@@ -445,14 +445,14 @@ public class EntityDolphin extends EntityWaterAnimal {
             if (this.b > EntityDolphin.this.ticksLived) {
                 return false;
             } else {
-                List list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
+                List<EntityItem> list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
 
                 return !list.isEmpty() || !EntityDolphin.this.getEquipment(EnumItemSlot.MAINHAND).isEmpty();
             }
         }
 
         public void c() {
-            List list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
+            List<EntityItem> list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
 
             if (!list.isEmpty()) {
                 EntityDolphin.this.getNavigation().a((Entity) list.get(0), 1.2000000476837158D);
@@ -474,7 +474,7 @@ public class EntityDolphin extends EntityWaterAnimal {
         }
 
         public void e() {
-            List list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
+            List<EntityItem> list = EntityDolphin.this.world.a(EntityItem.class, EntityDolphin.this.getBoundingBox().grow(8.0D, 8.0D, 8.0D), EntityDolphin.a);
             ItemStack itemstack = EntityDolphin.this.getEquipment(EnumItemSlot.MAINHAND);
 
             if (!itemstack.isEmpty()) {

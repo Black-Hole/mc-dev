@@ -36,7 +36,7 @@ public class MaterialMapColor {
     public static final MaterialMapColor F = new MaterialMapColor(30, 16445005);
     public static final MaterialMapColor G = new MaterialMapColor(31, 6085589);
     public static final MaterialMapColor H = new MaterialMapColor(32, 4882687);
-    public static final MaterialMapColor I = new MaterialMapColor(33, '\ud93a');
+    public static final MaterialMapColor I = new MaterialMapColor(33, 55610);
     public static final MaterialMapColor J = new MaterialMapColor(34, 8476209);
     public static final MaterialMapColor K = new MaterialMapColor(35, 7340544);
     public static final MaterialMapColor L = new MaterialMapColor(36, 13742497);

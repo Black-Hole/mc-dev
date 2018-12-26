@@ -12,10 +12,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -27,18 +23,18 @@ public class DataConverterProtoChunk extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.c);
-        Type type1 = this.getOutputSchema().getType(DataConverterTypes.c);
-        Type type2 = type.findFieldType("Level");
-        Type type3 = type1.findFieldType("Level");
-        Type type4 = type2.findFieldType("TileTicks");
-        OpticFinder opticfinder = DSL.fieldFinder("Level", type2);
-        OpticFinder opticfinder1 = DSL.fieldFinder("TileTicks", type4);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.c);
+        Type<?> type2 = type.findFieldType("Level");
+        Type<?> type3 = type1.findFieldType("Level");
+        Type<?> type4 = type2.findFieldType("TileTicks");
+        OpticFinder<?> opticfinder = DSL.fieldFinder("Level", type2);
+        OpticFinder<?> opticfinder1 = DSL.fieldFinder("TileTicks", type4);
 
         return TypeRewriteRule.seq(this.fixTypeEverywhereTyped("ChunkToProtoChunkFix", type, this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
-            return typed.updateTyped(opticfinder, type, (typedx) -> {
-                Optional optional = typedx.getOptionalTyped(opticfinder).map(Typed::write).flatMap(Dynamic::getStream);
-                Dynamic dynamic = (Dynamic) typedx.get(DSL.remainderFinder());
+            return typed.updateTyped(opticfinder, type3, (typed1) -> {
+                Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).map(Typed::write).flatMap(Dynamic::getStream);
+                Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
                 boolean flag = dynamic.getBoolean("TerrainPopulated") && (!dynamic.get("LightPopulated").flatMap(Dynamic::getNumberValue).isPresent() || dynamic.getBoolean("LightPopulated"));
 
                 dynamic = dynamic.set("Status", dynamic.createString(flag ? "mobs_spawned" : "empty"));
@@ -46,7 +42,7 @@ public class DataConverterProtoChunk extends DataFix {
                 Dynamic dynamic1;
 
                 if (flag) {
-                    Optional optional1 = dynamic.get("Biomes").flatMap(Dynamic::getByteBuffer);
+                    Optional<ByteBuffer> optional1 = dynamic.get("Biomes").flatMap(Dynamic::getByteBuffer);
 
                     if (optional1.isPresent()) {
                         ByteBuffer bytebuffer = (ByteBuffer) optional1.get();
@@ -61,28 +57,28 @@ public class DataConverterProtoChunk extends DataFix {
                         dynamic = dynamic.set("Biomes", dynamic.createIntList(Arrays.stream(aint)));
                     }
 
-                    List list = (List) IntStream.range(0, 16).mapToObj((i) -> {
+                    List<Dynamic<?>> list = (List) IntStream.range(0, 16).mapToObj((j) -> {
                         return dynamic.createList(Stream.empty());
                     }).collect(Collectors.toList());
 
                     if (optional.isPresent()) {
-                        ((Stream) optional.get()).forEach((dynamic) -> {
-                            int i = dynamic.getInt("x");
-                            int j = dynamic.getInt("y");
-                            int k = dynamic.getInt("z");
-                            short short0 = a(i, j, k);
+                        ((Stream) optional.get()).forEach((dynamic2) -> {
+                            int j = dynamic2.getInt("x");
+                            int k = dynamic2.getInt("y");
+                            int l = dynamic2.getInt("z");
+                            short short0 = a(j, k, l);
 
-                            list.set(j >> 4, ((Dynamic) list.get(j >> 4)).merge(dynamic1.createShort(short0)));
+                            list.set(k >> 4, ((Dynamic) list.get(k >> 4)).merge(dynamic.createShort(short0)));
                         });
                         dynamic = dynamic.set("ToBeTicked", dynamic.createList(list.stream()));
                     }
 
-                    dynamic1 = typedx.set(DSL.remainderFinder(), dynamic).write();
+                    dynamic1 = typed1.set(DSL.remainderFinder(), dynamic).write();
                 } else {
                     dynamic1 = dynamic;
                 }
 
-                return (Typed) ((Optional) type.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                return (Typed) ((Optional) type3.readTyped(dynamic1).getSecond()).orElseThrow(() -> {
                     return new IllegalStateException("Could not read the new chunk");
                 });
             });

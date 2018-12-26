@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -76,7 +74,7 @@ public class CommandDebug {
             float f = (float) k / 1.0E9F;
             float f1 = (float) l / f;
 
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[] { String.format(Locale.ROOT, "%.2f", new Object[] { f}), l, String.format("%.2f", new Object[] { f1})}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.debug.stopped", new Object[] { String.format(Locale.ROOT, "%.2f", f), l, String.format("%.2f", f1)}), true);
             return MathHelper.d(f1);
         }
     }
@@ -90,7 +88,7 @@ public class CommandDebug {
         stringbuilder.append("\n\n");
         stringbuilder.append("Time span: ").append(i).append(" ms\n");
         stringbuilder.append("Tick span: ").append(j).append(" ticks\n");
-        stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", new Object[] { (float) j / ((float) i / 1.0E9F)})).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
+        stringbuilder.append("// This is approximately ").append(String.format(Locale.ROOT, "%.2f", (float) j / ((float) i / 1.0E9F))).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
         stringbuilder.append("--- BEGIN PROFILE DUMP ---\n\n");
         a(0, "root", stringbuilder, methodprofiler);
         stringbuilder.append("--- END PROFILE DUMP ---\n\n");
@@ -98,19 +96,19 @@ public class CommandDebug {
     }
 
     private static void a(int i, String s, StringBuilder stringbuilder, MethodProfiler methodprofiler) {
-        List list = methodprofiler.b(s);
+        List<MethodProfiler.ProfilerInfo> list = methodprofiler.b(s);
 
         if (list != null && list.size() >= 3) {
             for (int j = 1; j < list.size(); ++j) {
                 MethodProfiler.ProfilerInfo methodprofiler_profilerinfo = (MethodProfiler.ProfilerInfo) list.get(j);
 
-                stringbuilder.append(String.format("[%02d] ", new Object[] { i}));
+                stringbuilder.append(String.format("[%02d] ", i));
 
                 for (int k = 0; k < i; ++k) {
                     stringbuilder.append("|   ");
                 }
 
-                stringbuilder.append(methodprofiler_profilerinfo.c).append(" - ").append(String.format(Locale.ROOT, "%.2f", new Object[] { methodprofiler_profilerinfo.a})).append("%/").append(String.format(Locale.ROOT, "%.2f", new Object[] { methodprofiler_profilerinfo.b})).append("%\n");
+                stringbuilder.append(methodprofiler_profilerinfo.c).append(" - ").append(String.format(Locale.ROOT, "%.2f", methodprofiler_profilerinfo.a)).append("%/").append(String.format(Locale.ROOT, "%.2f", methodprofiler_profilerinfo.b)).append("%\n");
                 if (!"unspecified".equals(methodprofiler_profilerinfo.c)) {
                     try {
                         a(i + 1, s + "." + methodprofiler_profilerinfo.c, stringbuilder, methodprofiler);

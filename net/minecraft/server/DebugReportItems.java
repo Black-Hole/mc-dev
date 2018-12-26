@@ -6,8 +6,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Iterator;
 
 public class DebugReportItems implements DebugReportProvider {
@@ -33,8 +31,8 @@ public class DebugReportItems implements DebugReportProvider {
 
         java.nio.file.Path java_nio_file_path = this.b.b().resolve("reports/items.json");
 
-        Files.createDirectories(java_nio_file_path.getParent(), new FileAttribute[0]);
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, StandardCharsets.UTF_8, new OpenOption[0]);
+        Files.createDirectories(java_nio_file_path.getParent());
+        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, StandardCharsets.UTF_8);
         Throwable throwable = null;
 
         try {

@@ -43,7 +43,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                 boolean flag;
 
                 if (((TileEntityShulkerBox) tileentity).r() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
-                    AxisAlignedBB axisalignedbb = VoxelShapes.b().a().b((double) (0.5F * (float) enumdirection1.getAdjacentX()), (double) (0.5F * (float) enumdirection1.getAdjacentY()), (double) (0.5F * (float) enumdirection1.getAdjacentZ())).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
+                    AxisAlignedBB axisalignedbb = VoxelShapes.b().getBoundingBox().b((double) (0.5F * (float) enumdirection1.getAdjacentX()), (double) (0.5F * (float) enumdirection1.getAdjacentY()), (double) (0.5F * (float) enumdirection1.getAdjacentZ())).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
 
                     flag = world.getCubes((Entity) null, axisalignedbb.a(blockposition.shift(enumdirection1)));
                 } else {

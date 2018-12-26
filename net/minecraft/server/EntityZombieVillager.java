@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 
 public class EntityZombieVillager extends EntityZombie {
 
-    private static final DataWatcherObject<Boolean> a = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.i);
+    public static final DataWatcherObject<Boolean> CONVERTING = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityZombieVillager.class, DataWatcherRegistry.b);
-    private int conversionTime;
+    public int conversionTime;
     private UUID bD;
 
     public EntityZombieVillager(World world) {
@@ -16,7 +16,7 @@ public class EntityZombieVillager extends EntityZombie {
 
     protected void x_() {
         super.x_();
-        this.datawatcher.register(EntityZombieVillager.a, false);
+        this.datawatcher.register(EntityZombieVillager.CONVERTING, false);
         this.datawatcher.register(EntityZombieVillager.b, 0);
     }
 
@@ -42,7 +42,7 @@ public class EntityZombieVillager extends EntityZombie {
         super.a(nbttagcompound);
         this.setProfession(nbttagcompound.getInt("Profession"));
         if (nbttagcompound.hasKeyOfType("ConversionTime", 99) && nbttagcompound.getInt("ConversionTime") > -1) {
-            this.a(nbttagcompound.b("ConversionPlayer") ? nbttagcompound.a("ConversionPlayer") : null, nbttagcompound.getInt("ConversionTime"));
+            this.startConversion(nbttagcompound.b("ConversionPlayer") ? nbttagcompound.a("ConversionPlayer") : null, nbttagcompound.getInt("ConversionTime"));
         }
 
     }
@@ -75,7 +75,7 @@ public class EntityZombieVillager extends EntityZombie {
             }
 
             if (!this.world.isClientSide) {
-                this.a(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
+                this.startConversion(entityhuman.getUniqueID(), this.random.nextInt(2401) + 3600);
             }
 
             return true;
@@ -93,13 +93,13 @@ public class EntityZombieVillager extends EntityZombie {
     }
 
     public boolean isConverting() {
-        return (Boolean) this.getDataWatcher().get(EntityZombieVillager.a);
+        return (Boolean) this.getDataWatcher().get(EntityZombieVillager.CONVERTING);
     }
 
-    protected void a(@Nullable UUID uuid, int i) {
+    public void startConversion(@Nullable UUID uuid, int i) {
         this.bD = uuid;
         this.conversionTime = i;
-        this.getDataWatcher().set(EntityZombieVillager.a, true);
+        this.getDataWatcher().set(EntityZombieVillager.CONVERTING, true);
         this.removeEffect(MobEffects.WEAKNESS);
         this.addEffect(new MobEffect(MobEffects.INCREASE_DAMAGE, i, Math.min(this.world.getDifficulty().a() - 1, 0)));
         this.world.broadcastEntityEffect(this, (byte) 16);

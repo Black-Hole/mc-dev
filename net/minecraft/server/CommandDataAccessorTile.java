@@ -59,6 +59,6 @@ public class CommandDataAccessorTile implements CommandDataAccessor {
     }
 
     public IChatBaseComponent a(ArgumentNBTKey.c argumentnbtkey_c, double d0, int i) {
-        return new ChatMessage("commands.data.block.get", new Object[] { argumentnbtkey_c, this.d.getX(), this.d.getY(), this.d.getZ(), String.format(Locale.ROOT, "%.2f", new Object[] { d0}), i});
+        return new ChatMessage("commands.data.block.get", new Object[] { argumentnbtkey_c, this.d.getX(), this.d.getY(), this.d.getZ(), String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

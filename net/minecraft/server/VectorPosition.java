@@ -55,11 +55,11 @@ public class VectorPosition implements IVectorPosition {
         int i = stringreader.getCursor();
         ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader);
 
-        if (stringreader.canRead() && stringreader.peek() == 32) {
+        if (stringreader.canRead() && stringreader.peek() == ' ') {
             stringreader.skip();
             ArgumentParserPosition argumentparserposition1 = ArgumentParserPosition.a(stringreader);
 
-            if (stringreader.canRead() && stringreader.peek() == 32) {
+            if (stringreader.canRead() && stringreader.peek() == ' ') {
                 stringreader.skip();
                 ArgumentParserPosition argumentparserposition2 = ArgumentParserPosition.a(stringreader);
 
@@ -78,11 +78,11 @@ public class VectorPosition implements IVectorPosition {
         int i = stringreader.getCursor();
         ArgumentParserPosition argumentparserposition = ArgumentParserPosition.a(stringreader, flag);
 
-        if (stringreader.canRead() && stringreader.peek() == 32) {
+        if (stringreader.canRead() && stringreader.peek() == ' ') {
             stringreader.skip();
             ArgumentParserPosition argumentparserposition1 = ArgumentParserPosition.a(stringreader, false);
 
-            if (stringreader.canRead() && stringreader.peek() == 32) {
+            if (stringreader.canRead() && stringreader.peek() == ' ') {
                 stringreader.skip();
                 ArgumentParserPosition argumentparserposition2 = ArgumentParserPosition.a(stringreader, flag);
 

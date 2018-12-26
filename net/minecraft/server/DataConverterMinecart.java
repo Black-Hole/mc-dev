@@ -14,8 +14,6 @@ import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class DataConverterMinecart extends DataFix {
 
@@ -26,16 +24,16 @@ public class DataConverterMinecart extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
 
         return this.fixTypeEverywhere("EntityMinecartIdentifiersFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {
                 if (!Objects.equals(pair.getFirst(), "Minecart")) {
                     return pair;
                 } else {
-                    Typed typed = (Typed) taggedchoicetype.point(dynamicops, "Minecart", pair.getSecond()).orElseThrow(IllegalStateException::new);
-                    Dynamic dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
+                    Typed<? extends Pair<String, ?>> typed = (Typed) taggedchoicetype.point(dynamicops, "Minecart", pair.getSecond()).orElseThrow(IllegalStateException::new);
+                    Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
                     int i = dynamic.getInt("Type");
                     String s;
 

@@ -33,10 +33,10 @@ public class ResourcePackSourceFolder implements ResourcePackSource {
             for (int j = 0; j < i; ++j) {
                 File file = afile1[j];
                 String s = "file/" + file.getName();
-                ResourcePackLoader resourcepackloader = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_b, ResourcePackLoader.Position.TOP);
+                T t0 = ResourcePackLoader.a(s, false, this.a(file), resourcepackloader_b, ResourcePackLoader.Position.TOP);
 
-                if (resourcepackloader != null) {
-                    map.put(s, resourcepackloader);
+                if (t0 != null) {
+                    map.put(s, t0);
                 }
             }
 

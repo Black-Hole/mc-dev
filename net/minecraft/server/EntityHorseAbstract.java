@@ -251,7 +251,7 @@ public abstract class EntityHorseAbstract extends EntityAnimal implements IInven
     protected EntityHorseAbstract a(Entity entity, double d0) {
         double d1 = Double.MAX_VALUE;
         Entity entity1 = null;
-        List list = this.world.getEntities(entity, entity.getBoundingBox().b(d0, d0, d0), EntityHorseAbstract.bM);
+        List<Entity> list = this.world.getEntities(entity, entity.getBoundingBox().b(d0, d0, d0), EntityHorseAbstract.bM);
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

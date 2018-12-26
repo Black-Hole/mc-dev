@@ -119,7 +119,7 @@ public class EntityTypes<T extends Entity> {
     private final Type<?> aY;
 
     public static <T extends Entity> EntityTypes<T> a(String s, EntityTypes.a<T> entitytypes_a) {
-        EntityTypes entitytypes = entitytypes_a.a(s);
+        EntityTypes<T> entitytypes = entitytypes_a.a(s);
 
         IRegistry.ENTITY_TYPE.a(new MinecraftKey(s), (Object) entitytypes);
         return entitytypes;
@@ -150,31 +150,31 @@ public class EntityTypes<T extends Entity> {
 
     @Nullable
     public T a(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, boolean flag, boolean flag1) {
-        Entity entity = this.b(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, flag, flag1);
+        T t0 = this.b(world, nbttagcompound, ichatbasecomponent, entityhuman, blockposition, flag, flag1);
 
-        world.addEntity(entity);
-        return entity;
+        world.addEntity(t0);
+        return t0;
     }
 
     @Nullable
     public T b(World world, @Nullable NBTTagCompound nbttagcompound, @Nullable IChatBaseComponent ichatbasecomponent, @Nullable EntityHuman entityhuman, BlockPosition blockposition, boolean flag, boolean flag1) {
-        Entity entity = this.a(world);
+        T t0 = this.a(world);
 
-        if (entity == null) {
+        if (t0 == null) {
             return null;
         } else {
             double d0;
 
             if (flag) {
-                entity.setPosition((double) blockposition.getX() + 0.5D, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D);
-                d0 = a(world, blockposition, flag1, entity.getBoundingBox());
+                t0.setPosition((double) blockposition.getX() + 0.5D, (double) (blockposition.getY() + 1), (double) blockposition.getZ() + 0.5D);
+                d0 = a(world, blockposition, flag1, t0.getBoundingBox());
             } else {
                 d0 = 0.0D;
             }
 
-            entity.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
-            if (entity instanceof EntityInsentient) {
-                EntityInsentient entityinsentient = (EntityInsentient) entity;
+            t0.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + d0, (double) blockposition.getZ() + 0.5D, MathHelper.g(world.random.nextFloat() * 360.0F), 0.0F);
+            if (t0 instanceof EntityInsentient) {
+                EntityInsentient entityinsentient = (EntityInsentient) t0;
 
                 entityinsentient.aS = entityinsentient.yaw;
                 entityinsentient.aQ = entityinsentient.yaw;
@@ -182,12 +182,12 @@ public class EntityTypes<T extends Entity> {
                 entityinsentient.A();
             }
 
-            if (ichatbasecomponent != null && entity instanceof EntityLiving) {
-                entity.setCustomName(ichatbasecomponent);
+            if (ichatbasecomponent != null && t0 instanceof EntityLiving) {
+                t0.setCustomName(ichatbasecomponent);
             }
 
-            a(world, entityhuman, entity, nbttagcompound);
-            return entity;
+            a(world, entityhuman, t0, nbttagcompound);
+            return t0;
         }
     }
 
@@ -198,7 +198,7 @@ public class EntityTypes<T extends Entity> {
             axisalignedbb1 = axisalignedbb1.b(0.0D, -1.0D, 0.0D);
         }
 
-        Stream stream = iworldreader.b((Entity) null, axisalignedbb1);
+        Stream<VoxelShape> stream = iworldreader.b((Entity) null, axisalignedbb1);
 
         return 1.0D + VoxelShapes.a(EnumDirection.EnumAxis.Y, axisalignedbb, stream, flag ? -2.0D : -1.0D);
     }
@@ -290,11 +290,11 @@ public class EntityTypes<T extends Entity> {
         }
 
         public static <T extends Entity> EntityTypes.a<T> a(Class<? extends T> oclass, Function<? super World, ? extends T> function) {
-            return new EntityTypes.a(oclass, function);
+            return new EntityTypes.a<>(oclass, function);
         }
 
         public static <T extends Entity> EntityTypes.a<T> a(Class<? extends T> oclass) {
-            return new EntityTypes.a(oclass, (world) -> {
+            return new EntityTypes.a<>(oclass, (world) -> {
                 return null;
             });
         }
@@ -310,7 +310,7 @@ public class EntityTypes<T extends Entity> {
         }
 
         public EntityTypes<T> a(String s) {
-            Type type = null;
+            Type<?> type = null;
 
             if (this.c) {
                 try {
@@ -324,7 +324,7 @@ public class EntityTypes<T extends Entity> {
                 }
             }
 
-            return new EntityTypes(this.a, this.b, this.c, this.d, type);
+            return new EntityTypes<>(this.a, this.b, this.c, this.d, type);
         }
     }
 }

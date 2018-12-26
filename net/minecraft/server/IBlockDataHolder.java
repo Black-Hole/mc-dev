@@ -15,5 +15,5 @@ public interface IBlockDataHolder<C> {
 
     <T extends Comparable<T>> C a(IBlockState<T> iblockstate);
 
-    ImmutableMap<IBlockState<?>, Comparable<?>> b();
+    ImmutableMap<IBlockState<?>, Comparable<?>> getStateMap();
 }

@@ -13,7 +13,7 @@ public class DataConverterSchemaV1451 extends DataConverterSchemaNamed {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerBlockEntities(Schema schema) {
-        Map map = super.registerBlockEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerBlockEntities(schema);
 
         schema.register(map, "minecraft:trapped_chest", () -> {
             return DSL.optionalFields("Items", DSL.list(DataConverterTypes.ITEM_STACK.in(schema)));

@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -172,9 +171,9 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
 
             int l = blockposition.getY() + j;
             int i1 = i - 5;
-            ArrayList arraylist = Lists.newArrayList();
+            List<WorldGenBigTree.Position> list = Lists.newArrayList();
 
-            arraylist.add(new WorldGenBigTree.Position(blockposition.up(i1), l));
+            list.add(new WorldGenBigTree.Position(blockposition.up(i1), l));
 
             for (; i1 >= 0; --i1) {
                 float f = this.a(i, i1);
@@ -197,16 +196,16 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                             BlockPosition blockposition3 = new BlockPosition(blockposition.getX(), i2, blockposition.getZ());
 
                             if (this.a(set, generatoraccess, blockposition3, blockposition1, false) == -1) {
-                                arraylist.add(new WorldGenBigTree.Position(blockposition1, blockposition3.getY()));
+                                list.add(new WorldGenBigTree.Position(blockposition1, blockposition3.getY()));
                             }
                         }
                     }
                 }
             }
 
-            this.a(generatoraccess, i, blockposition, arraylist);
+            this.a(generatoraccess, i, blockposition, list);
             this.a(set, generatoraccess, blockposition, j);
-            this.a(set, generatoraccess, i, blockposition, arraylist);
+            this.a(set, generatoraccess, i, blockposition, list);
             return true;
         }
     }

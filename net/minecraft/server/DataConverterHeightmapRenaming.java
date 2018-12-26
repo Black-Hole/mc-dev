@@ -9,7 +9,6 @@ import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class DataConverterHeightmapRenaming extends DataFix {
 
@@ -18,31 +17,31 @@ public class DataConverterHeightmapRenaming extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type type = this.getInputSchema().getType(DataConverterTypes.c);
-        OpticFinder opticfinder = type.findField("Level");
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.c);
+        OpticFinder<?> opticfinder = type.findField("Level");
 
         return this.fixTypeEverywhereTyped("HeightmapRenamingFix", type, (typed) -> {
-            return typed.updateTyped(opticfinder, (typedx) -> {
-                return typedx.update(DSL.remainderFinder(), this::a);
+            return typed.updateTyped(opticfinder, (typed1) -> {
+                return typed1.update(DSL.remainderFinder(), this::a);
             });
         });
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("Heightmaps");
+        Optional<? extends Dynamic<?>> optional = dynamic.get("Heightmaps");
 
         if (!optional.isPresent()) {
             return dynamic;
         } else {
-            Dynamic dynamic1 = (Dynamic) optional.get();
-            Optional optional1 = dynamic1.get("LIQUID");
+            Dynamic<?> dynamic1 = (Dynamic) optional.get();
+            Optional<? extends Dynamic<?>> optional1 = dynamic1.get("LIQUID");
 
             if (optional1.isPresent()) {
                 dynamic1 = dynamic1.remove("LIQUID");
                 dynamic1 = dynamic1.set("WORLD_SURFACE_WG", (Dynamic) optional1.get());
             }
 
-            Optional optional2 = dynamic1.get("SOLID");
+            Optional<? extends Dynamic<?>> optional2 = dynamic1.get("SOLID");
 
             if (optional2.isPresent()) {
                 dynamic1 = dynamic1.remove("SOLID");
@@ -50,14 +49,14 @@ public class DataConverterHeightmapRenaming extends DataFix {
                 dynamic1 = dynamic1.set("OCEAN_FLOOR", (Dynamic) optional2.get());
             }
 
-            Optional optional3 = dynamic1.get("LIGHT");
+            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("LIGHT");
 
             if (optional3.isPresent()) {
                 dynamic1 = dynamic1.remove("LIGHT");
                 dynamic1 = dynamic1.set("LIGHT_BLOCKING", (Dynamic) optional3.get());
             }
 
-            Optional optional4 = dynamic1.get("RAIN");
+            Optional<? extends Dynamic<?>> optional4 = dynamic1.get("RAIN");
 
             if (optional4.isPresent()) {
                 dynamic1 = dynamic1.remove("RAIN");

@@ -65,12 +65,12 @@ public class WorldGenVillage extends StructureGenerator<WorldGenFeatureVillageCo
         public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
             super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
             WorldGenFeatureVillageConfiguration worldgenfeaturevillageconfiguration = (WorldGenFeatureVillageConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.e);
-            List list = WorldGenVillagePieces.a(seededrandom, worldgenfeaturevillageconfiguration.a);
+            List<WorldGenVillagePieces.WorldGenVillagePieceWeight> list = WorldGenVillagePieces.a(seededrandom, worldgenfeaturevillageconfiguration.a);
             WorldGenVillagePieces.WorldGenVillageStartPiece worldgenvillagepieces_worldgenvillagestartpiece = new WorldGenVillagePieces.WorldGenVillageStartPiece(0, seededrandom, (i << 4) + 2, (j << 4) + 2, list, worldgenfeaturevillageconfiguration);
 
             this.a.add(worldgenvillagepieces_worldgenvillagestartpiece);
             worldgenvillagepieces_worldgenvillagestartpiece.a((StructurePiece) worldgenvillagepieces_worldgenvillagestartpiece, this.a, (Random) seededrandom);
-            List list1 = worldgenvillagepieces_worldgenvillagestartpiece.e;
+            List<StructurePiece> list1 = worldgenvillagepieces_worldgenvillagestartpiece.e;
             List list2 = worldgenvillagepieces_worldgenvillagestartpiece.d;
 
             int k;

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 public final class BiomeSwamp extends BiomeBase {
 
     protected BiomeSwamp() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite(BiomeSwamp.az, BiomeSwamp.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.SWAMP).a(-0.2F).b(0.1F).c(0.8F).d(0.9F).a(6388580).b(2302743).a((String) null));
+        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeSwamp.az, BiomeSwamp.ai)).a(BiomeBase.Precipitation.RAIN).a(BiomeBase.Geography.SWAMP).a(-0.2F).b(0.1F).c(0.8F).d(0.9F).a(6388580).b(2302743).a((String) null));
         this.a(WorldGenerator.l, (WorldGenFeatureConfiguration) (new WorldGenFeatureSwampHutConfiguration()));
         this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSwamp.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
@@ -37,8 +37,8 @@ public final class BiomeSwamp extends BiomeBase {
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeSwamp.p, new WorldGenDecoratorChanceConfiguration(8)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeSwamp.j, new WorldGenDecoratorFrequencyConfiguration(20)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeSwamp.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.c), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.e), BiomeSwamp.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeSwamp.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeSwamp.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
         this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ay, new WorldGenFeatureSeaGrassConfiguration(64, 0.6D), BiomeSwamp.B, WorldGenFeatureDecoratorConfiguration.e));
         this.a(WorldGenStage.Decoration.UNDERGROUND_DECORATION, a(WorldGenerator.R, WorldGenFeatureConfiguration.e, BiomeSwamp.q, new WorldGenDecoratorChanceConfiguration(64)));
         this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeSwamp.n, WorldGenFeatureDecoratorConfiguration.e));

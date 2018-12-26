@@ -5,8 +5,8 @@ import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
 
@@ -26,16 +26,16 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
         int j = packetdataserializer.g();
         StringRange stringrange = StringRange.between(i, i + j);
         int k = packetdataserializer.g();
-        ArrayList arraylist = Lists.newArrayListWithCapacity(k);
+        List<Suggestion> list = Lists.newArrayListWithCapacity(k);
 
         for (int l = 0; l < k; ++l) {
             String s = packetdataserializer.e(32767);
             IChatBaseComponent ichatbasecomponent = packetdataserializer.readBoolean() ? packetdataserializer.f() : null;
 
-            arraylist.add(new Suggestion(stringrange, s, ichatbasecomponent));
+            list.add(new Suggestion(stringrange, s, ichatbasecomponent));
         }
 
-        this.b = new Suggestions(stringrange, arraylist);
+        this.b = new Suggestions(stringrange, list);
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {

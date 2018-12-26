@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -26,7 +24,7 @@ public class ChatComponentUtils {
             String s;
 
             if (chatcomponentscore.j() != null) {
-                List list = chatcomponentscore.j().b(commandlistenerwrapper);
+                List<? extends Entity> list = chatcomponentscore.j().b(commandlistenerwrapper);
 
                 if (list.isEmpty()) {
                     s = chatcomponentscore.i();
@@ -97,9 +95,9 @@ public class ChatComponentUtils {
         } else if (collection.size() == 1) {
             return (IChatBaseComponent) function.apply(collection.iterator().next());
         } else {
-            ArrayList arraylist = Lists.newArrayList(collection);
+            List<T> list = Lists.newArrayList(collection);
 
-            arraylist.sort(Comparable::compareTo);
+            list.sort(Comparable::compareTo);
             return b(collection, function);
         }
     }
@@ -114,13 +112,13 @@ public class ChatComponentUtils {
             boolean flag = true;
 
             for (Iterator iterator = collection.iterator(); iterator.hasNext(); flag = false) {
-                Object object = iterator.next();
+                T t0 = iterator.next();
 
                 if (!flag) {
                     chatcomponenttext.addSibling((new ChatComponentText(", ")).a(EnumChatFormat.GRAY));
                 }
 
-                chatcomponenttext.addSibling((IChatBaseComponent) function.apply(object));
+                chatcomponenttext.addSibling((IChatBaseComponent) function.apply(t0));
             }
 
             return chatcomponenttext;

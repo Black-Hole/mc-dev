@@ -2,15 +2,12 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class Scoreboard {
@@ -42,7 +39,7 @@ public class Scoreboard {
         } else {
             ScoreboardObjective scoreboardobjective = new ScoreboardObjective(this, s, iscoreboardcriteria, ichatbasecomponent, iscoreboardcriteria_enumscoreboardhealthdisplay);
 
-            ((List) this.objectivesByCriteria.computeIfAbsent(iscoreboardcriteria, (iscoreboardcriteria) -> {
+            ((List) this.objectivesByCriteria.computeIfAbsent(iscoreboardcriteria, (iscoreboardcriteria1) -> {
                 return Lists.newArrayList();
             })).add(scoreboardobjective);
             this.objectivesByName.put(s, scoreboardobjective);
@@ -58,7 +55,7 @@ public class Scoreboard {
     }
 
     public boolean b(String s, ScoreboardObjective scoreboardobjective) {
-        Map map = (Map) this.playerScores.get(s);
+        Map<ScoreboardObjective, ScoreboardScore> map = (Map) this.playerScores.get(s);
 
         if (map == null) {
             return false;
@@ -73,12 +70,12 @@ public class Scoreboard {
         if (s.length() > 40) {
             throw new IllegalArgumentException("The player name '" + s + "' is too long!");
         } else {
-            Map map = (Map) this.playerScores.computeIfAbsent(s, (s) -> {
+            Map<ScoreboardObjective, ScoreboardScore> map = (Map) this.playerScores.computeIfAbsent(s, (s1) -> {
                 return Maps.newHashMap();
             });
 
-            return (ScoreboardScore) map.computeIfAbsent(scoreboardobjective, (scoreboardobjective) -> {
-                ScoreboardScore scoreboardscore = new ScoreboardScore(this, scoreboardobjective, s);
+            return (ScoreboardScore) map.computeIfAbsent(scoreboardobjective, (scoreboardobjective1) -> {
+                ScoreboardScore scoreboardscore = new ScoreboardScore(this, scoreboardobjective1, s);
 
                 scoreboardscore.setScore(0);
                 return scoreboardscore;
@@ -87,20 +84,20 @@ public class Scoreboard {
     }
 
     public Collection<ScoreboardScore> getScoresForObjective(ScoreboardObjective scoreboardobjective) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<ScoreboardScore> list = Lists.newArrayList();
         Iterator iterator = this.playerScores.values().iterator();
 
         while (iterator.hasNext()) {
-            Map map = (Map) iterator.next();
+            Map<ScoreboardObjective, ScoreboardScore> map = (Map) iterator.next();
             ScoreboardScore scoreboardscore = (ScoreboardScore) map.get(scoreboardobjective);
 
             if (scoreboardscore != null) {
-                arraylist.add(scoreboardscore);
+                list.add(scoreboardscore);
             }
         }
 
-        Collections.sort(arraylist, ScoreboardScore.a);
-        return arraylist;
+        Collections.sort(list, ScoreboardScore.a);
+        return list;
     }
 
     public Collection<ScoreboardObjective> getObjectives() {
@@ -129,7 +126,7 @@ public class Scoreboard {
                 ScoreboardScore scoreboardscore = (ScoreboardScore) map.remove(scoreboardobjective);
 
                 if (map.size() < 1) {
-                    Map map1 = (Map) this.playerScores.remove(s);
+                    Map<ScoreboardObjective, ScoreboardScore> map1 = (Map) this.playerScores.remove(s);
 
                     if (map1 != null) {
                         this.handlePlayerRemoved(s);
@@ -143,13 +140,13 @@ public class Scoreboard {
     }
 
     public Map<ScoreboardObjective, ScoreboardScore> getPlayerObjectives(String s) {
-        Object object = (Map) this.playerScores.get(s);
+        Map<ScoreboardObjective, ScoreboardScore> map = (Map) this.playerScores.get(s);
 
-        if (object == null) {
-            object = Maps.newHashMap();
+        if (map == null) {
+            map = Maps.newHashMap();
         }
 
-        return (Map) object;
+        return (Map) map;
     }
 
     public void unregisterObjective(ScoreboardObjective scoreboardobjective) {
@@ -161,7 +158,7 @@ public class Scoreboard {
             }
         }
 
-        List list = (List) this.objectivesByCriteria.get(scoreboardobjective.getCriteria());
+        List<ScoreboardObjective> list = (List) this.objectivesByCriteria.get(scoreboardobjective.getCriteria());
 
         if (list != null) {
             list.remove(scoreboardobjective);
@@ -170,7 +167,7 @@ public class Scoreboard {
         Iterator iterator = this.playerScores.values().iterator();
 
         while (iterator.hasNext()) {
-            Map map = (Map) iterator.next();
+            Map<ScoreboardObjective, ScoreboardScore> map = (Map) iterator.next();
 
             map.remove(scoreboardobjective);
         }

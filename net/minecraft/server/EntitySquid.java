@@ -28,7 +28,7 @@ public class EntitySquid extends EntityWaterAnimal {
 
     protected void n() {
         this.goalSelector.a(0, new EntitySquid.PathfinderGoalSquid(this));
-        this.goalSelector.a(1, new EntitySquid.a(null));
+        this.goalSelector.a(1, new EntitySquid.a());
     }
 
     protected void initAttributes() {

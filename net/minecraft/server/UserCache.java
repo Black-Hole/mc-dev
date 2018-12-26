@@ -28,7 +28,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Deque;
@@ -69,7 +68,7 @@ public class UserCache {
         this.h = file;
         GsonBuilder gsonbuilder = new GsonBuilder();
 
-        gsonbuilder.registerTypeHierarchyAdapter(UserCache.UserCacheEntry.class, new UserCache.BanEntrySerializer(null));
+        gsonbuilder.registerTypeHierarchyAdapter(UserCache.UserCacheEntry.class, new UserCache.BanEntrySerializer());
         this.b = gsonbuilder.create();
         this.b();
     }
@@ -120,7 +119,7 @@ public class UserCache {
             date = calendar.getTime();
         }
 
-        UserCache.UserCacheEntry usercache_usercacheentry = new UserCache.UserCacheEntry(gameprofile, date, null);
+        UserCache.UserCacheEntry usercache_usercacheentry = new UserCache.UserCacheEntry(gameprofile, date);
 
         if (this.e.containsKey(uuid)) {
             UserCache.UserCacheEntry usercache_usercacheentry1 = (UserCache.UserCacheEntry) this.e.get(uuid);
@@ -190,7 +189,7 @@ public class UserCache {
 
         try {
             bufferedreader = Files.newReader(this.h, StandardCharsets.UTF_8);
-            List list = (List) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) UserCache.i);
+            List<UserCache.UserCacheEntry> list = (List) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) UserCache.i);
 
             this.d.clear();
             this.e.clear();
@@ -235,20 +234,20 @@ public class UserCache {
     }
 
     private List<UserCache.UserCacheEntry> a(int i) {
-        ArrayList arraylist = Lists.newArrayList();
-        ArrayList arraylist1 = Lists.newArrayList(Iterators.limit(this.f.iterator(), i));
-        Iterator iterator = arraylist1.iterator();
+        List<UserCache.UserCacheEntry> list = Lists.newArrayList();
+        List<GameProfile> list1 = Lists.newArrayList(Iterators.limit(this.f.iterator(), i));
+        Iterator iterator = list1.iterator();
 
         while (iterator.hasNext()) {
             GameProfile gameprofile = (GameProfile) iterator.next();
             UserCache.UserCacheEntry usercache_usercacheentry = this.b(gameprofile.getId());
 
             if (usercache_usercacheentry != null) {
-                arraylist.add(usercache_usercacheentry);
+                list.add(usercache_usercacheentry);
             }
         }
 
-        return arraylist;
+        return list;
     }
 
     class UserCacheEntry {
@@ -314,7 +313,7 @@ public class UserCache {
                             return null;
                         }
 
-                        return UserCache.this.new UserCacheEntry(new GameProfile(uuid, s1), date, null);
+                        return UserCache.this.new UserCacheEntry(new GameProfile(uuid, s1), date);
                     } else {
                         return null;
                     }

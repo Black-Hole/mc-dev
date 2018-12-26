@@ -4,7 +4,6 @@ import com.mojang.datafixers.DSL;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.templates.TypeTemplate;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DataConverterSchemaV1451_3 extends DataConverterSchemaNamed {
@@ -14,7 +13,7 @@ public class DataConverterSchemaV1451_3 extends DataConverterSchemaNamed {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerEntities(Schema schema) {
-        Map map = super.registerEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerEntities(schema);
 
         schema.registerSimple(map, "minecraft:egg");
         schema.registerSimple(map, "minecraft:ender_pearl");

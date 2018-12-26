@@ -46,7 +46,7 @@ public class BlockGrass extends BlockDirtSnowSpreadable implements IBlockFragile
                             IBlockData iblockdata3;
 
                             if (random.nextInt(8) == 0) {
-                                List list = world.getBiome(blockposition2).f();
+                                List<WorldGenFeatureCompositeFlower<?>> list = world.getBiome(blockposition2).f();
 
                                 if (list.isEmpty()) {
                                     break label38;

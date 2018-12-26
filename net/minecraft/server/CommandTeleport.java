@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -12,13 +11,12 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class CommandTeleport {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralCommandNode literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("teleport").requires((commandlistenerwrapper) -> {
+        LiteralCommandNode<CommandListenerWrapper> literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("teleport").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("location", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, (CommandTeleport.a) null);
@@ -64,30 +62,30 @@ public class CommandTeleport {
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<? extends Entity> collection, WorldServer worldserver, IVectorPosition ivectorposition, @Nullable IVectorPosition ivectorposition1, @Nullable CommandTeleport.a commandteleport_a) throws CommandSyntaxException {
         Vec3D vec3d = ivectorposition.a(commandlistenerwrapper);
         Vec2F vec2f = ivectorposition1 == null ? null : ivectorposition1.b(commandlistenerwrapper);
-        EnumSet enumset = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
+        Set<PacketPlayOutPosition.EnumPlayerTeleportFlags> set = EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class);
 
         if (ivectorposition.a()) {
-            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X);
+            set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X);
         }
 
         if (ivectorposition.b()) {
-            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y);
+            set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y);
         }
 
         if (ivectorposition.c()) {
-            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z);
+            set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Z);
         }
 
         if (ivectorposition1 == null) {
-            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
-            enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
+            set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
+            set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
         } else {
             if (ivectorposition1.a()) {
-                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
+                set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.X_ROT);
             }
 
             if (ivectorposition1.b()) {
-                enumset.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
+                set.add(PacketPlayOutPosition.EnumPlayerTeleportFlags.Y_ROT);
             }
         }
 
@@ -97,9 +95,9 @@ public class CommandTeleport {
             Entity entity = (Entity) iterator.next();
 
             if (ivectorposition1 == null) {
-                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, enumset, entity.yaw, entity.pitch, commandteleport_a);
+                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, set, entity.yaw, entity.pitch, commandteleport_a);
             } else {
-                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, enumset, vec2f.j, vec2f.i, commandteleport_a);
+                a(commandlistenerwrapper, entity, worldserver, vec3d.x, vec3d.y, vec3d.z, set, vec2f.j, vec2f.i, commandteleport_a);
             }
         }
 

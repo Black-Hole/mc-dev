@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -11,17 +10,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType.Function;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Predicate;
 
 public class CommandScoreboard {
 
@@ -77,7 +73,7 @@ public class CommandScoreboard {
     }
 
     private static LiteralArgumentBuilder<CommandListenerWrapper> a() {
-        LiteralArgumentBuilder literalargumentbuilder = CommandDispatcher.a("rendertype");
+        LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = CommandDispatcher.a("rendertype");
         IScoreboardCriteria.EnumScoreboardHealthDisplay[] aiscoreboardcriteria_enumscoreboardhealthdisplay = IScoreboardCriteria.EnumScoreboardHealthDisplay.values();
         int i = aiscoreboardcriteria_enumscoreboardhealthdisplay.length;
 
@@ -93,7 +89,7 @@ public class CommandScoreboard {
     }
 
     private static CompletableFuture<Suggestions> a(CommandListenerWrapper commandlistenerwrapper, Collection<String> collection, SuggestionsBuilder suggestionsbuilder) {
-        ArrayList arraylist = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         ScoreboardServer scoreboardserver = commandlistenerwrapper.getServer().getScoreboard();
         Iterator iterator = scoreboardserver.getObjectives().iterator();
 
@@ -116,14 +112,14 @@ public class CommandScoreboard {
                     }
 
                     if (flag) {
-                        arraylist.add(scoreboardobjective.getName());
+                        list.add(scoreboardobjective.getName());
                     }
                     break;
                 }
             }
         }
 
-        return ICompletionProvider.b((Iterable) arraylist, suggestionsbuilder);
+        return ICompletionProvider.b((Iterable) list, suggestionsbuilder);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s, ScoreboardObjective scoreboardobjective) throws CommandSyntaxException {
@@ -303,7 +299,7 @@ public class CommandScoreboard {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        Collection collection = commandlistenerwrapper.getServer().getScoreboard().getPlayers();
+        Collection<String> collection = commandlistenerwrapper.getServer().getScoreboard().getPlayers();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.empty", new Object[0]), false);
@@ -315,7 +311,7 @@ public class CommandScoreboard {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, String s) {
-        Map map = commandlistenerwrapper.getServer().getScoreboard().getPlayerObjectives(s);
+        Map<ScoreboardObjective, ScoreboardScore> map = commandlistenerwrapper.getServer().getScoreboard().getPlayerObjectives(s);
 
         if (map.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.empty", new Object[] { s}), false);
@@ -324,7 +320,7 @@ public class CommandScoreboard {
             Iterator iterator = map.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<ScoreboardObjective, ScoreboardScore> entry = (Entry) iterator.next();
 
                 commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.players.list.entity.entry", new Object[] { ((ScoreboardObjective) entry.getKey()).e(), ((ScoreboardScore) entry.getValue()).getScore()}), false);
             }
@@ -400,7 +396,7 @@ public class CommandScoreboard {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        Collection collection = commandlistenerwrapper.getServer().getScoreboard().getObjectives();
+        Collection<ScoreboardObjective> collection = commandlistenerwrapper.getServer().getScoreboard().getObjectives();
 
         if (collection.isEmpty()) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.scoreboard.objectives.list.empty", new Object[0]), false);

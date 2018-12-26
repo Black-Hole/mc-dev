@@ -5,12 +5,11 @@ import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -109,7 +108,7 @@ public class EnderDragonBattle {
             this.j = 0;
         }
 
-        EnderDragonBattle.b enderdragonbattle_b = new EnderDragonBattle.b(null);
+        EnderDragonBattle.b enderdragonbattle_b = new EnderDragonBattle.b();
 
         if (!this.bossBattle.getPlayers().isEmpty()) {
             if (this.n && enderdragonbattle_b.a()) {
@@ -154,7 +153,7 @@ public class EnderDragonBattle {
             this.a(false);
         }
 
-        List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
+        List<EntityEnderDragon> list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
 
         if (list.isEmpty()) {
             this.k = true;
@@ -178,7 +177,7 @@ public class EnderDragonBattle {
     }
 
     private void h() {
-        List list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
+        List<EntityEnderDragon> list = this.d.a(EntityEnderDragon.class, IEntitySelector.a);
 
         if (list.isEmpty()) {
             EnderDragonBattle.a.debug("Haven't seen the dragon, respawning it");
@@ -326,20 +325,20 @@ public class EnderDragonBattle {
     }
 
     private void k() {
-        HashSet hashset = Sets.newHashSet();
+        Set<EntityPlayer> set = Sets.newHashSet();
         Iterator iterator = this.d.b(EntityPlayer.class, EnderDragonBattle.b).iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
             this.bossBattle.addPlayer(entityplayer);
-            hashset.add(entityplayer);
+            set.add(entityplayer);
         }
 
-        HashSet hashset1 = Sets.newHashSet(this.bossBattle.getPlayers());
+        Set<EntityPlayer> set1 = Sets.newHashSet(this.bossBattle.getPlayers());
 
-        hashset1.removeAll(hashset);
-        Iterator iterator1 = hashset1.iterator();
+        set1.removeAll(set);
+        Iterator iterator1 = set1.iterator();
 
         while (iterator1.hasNext()) {
             EntityPlayer entityplayer1 = (EntityPlayer) iterator1.next();
@@ -473,23 +472,23 @@ public class EnderDragonBattle {
                 blockposition = this.o;
             }
 
-            ArrayList arraylist = Lists.newArrayList();
+            List<EntityEnderCrystal> list = Lists.newArrayList();
             BlockPosition blockposition1 = blockposition.up(1);
             Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
             while (iterator.hasNext()) {
                 EnumDirection enumdirection = (EnumDirection) iterator.next();
-                List list = this.d.a(EntityEnderCrystal.class, new AxisAlignedBB(blockposition1.shift(enumdirection, 2)));
+                List<EntityEnderCrystal> list1 = this.d.a(EntityEnderCrystal.class, new AxisAlignedBB(blockposition1.shift(enumdirection, 2)));
 
-                if (list.isEmpty()) {
+                if (list1.isEmpty()) {
                     return;
                 }
 
-                arraylist.addAll(list);
+                list.addAll(list1);
             }
 
             EnderDragonBattle.a.debug("Found all crystals, respawning dragon.");
-            this.a((List) arraylist);
+            this.a((List) list);
         }
 
     }
@@ -524,7 +523,7 @@ public class EnderDragonBattle {
 
         for (int j = 0; j < i; ++j) {
             WorldGenEnder.Spike worldgenender_spike = aworldgenender_spike[j];
-            List list = this.d.a(EntityEnderCrystal.class, worldgenender_spike.f());
+            List<EntityEnderCrystal> list = this.d.a(EntityEnderCrystal.class, worldgenender_spike.f());
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {

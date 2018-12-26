@@ -1,18 +1,16 @@
 package net.minecraft.server;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 public class CommandGamemode {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        LiteralArgumentBuilder literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("gamemode").requires((commandlistenerwrapper) -> {
+        LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder = (LiteralArgumentBuilder) CommandDispatcher.a("gamemode").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
         });
         EnumGamemode[] aenumgamemode = EnumGamemode.values();

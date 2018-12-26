@@ -15,9 +15,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.LongSupplier;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
@@ -95,7 +93,7 @@ public class SystemUtils {
 
     public static java.nio.file.Path a(java.nio.file.Path java_nio_file_path, String s, String s1) {
         String s2 = s + s1;
-        java.nio.file.Path java_nio_file_path1 = Paths.get(s2, new String[0]);
+        java.nio.file.Path java_nio_file_path1 = Paths.get(s2);
 
         if (java_nio_file_path1.endsWith(s1)) {
             throw new InvalidPathException(s2, "empty resource name");
@@ -123,15 +121,15 @@ public class SystemUtils {
     }
 
     public static <T> T a(Iterable<T> iterable, @Nullable T t0) {
-        Iterator iterator = iterable.iterator();
-        Object object = iterator.next();
+        Iterator<T> iterator = iterable.iterator();
+        T t1 = iterator.next();
 
         if (t0 != null) {
-            Object object1 = object;
+            Object object = t1;
 
-            while (object1 != t0) {
+            while (object != t0) {
                 if (iterator.hasNext()) {
-                    object1 = iterator.next();
+                    object = iterator.next();
                 }
             }
 
@@ -140,11 +138,11 @@ public class SystemUtils {
             }
         }
 
-        return object;
+        return t1;
     }
 
     public static <T> T b(Iterable<T> iterable, @Nullable T t0) {
-        Iterator iterator = iterable.iterator();
+        Iterator<T> iterator = iterable.iterator();
 
         Object object;
         Object object1;

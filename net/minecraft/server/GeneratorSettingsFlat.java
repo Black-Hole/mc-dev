@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -180,14 +177,14 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
             Iterator iterator = this.N.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                Entry entry = (Entry) iterator.next();
+                Entry<String, Map<String, String>> entry = (Entry) iterator.next();
 
                 if (i++ > 0) {
                     stringbuilder.append(",");
                 }
 
                 stringbuilder.append(((String) entry.getKey()).toLowerCase(Locale.ROOT));
-                Map map = (Map) entry.getValue();
+                Map<String, String> map = (Map) entry.getValue();
 
                 if (!map.isEmpty()) {
                     stringbuilder.append("(");
@@ -195,7 +192,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
                     Iterator iterator1 = map.entrySet().iterator();
 
                     while (iterator1.hasNext()) {
-                        Entry entry1 = (Entry) iterator1.next();
+                        Entry<String, String> entry1 = (Entry) iterator1.next();
 
                         if (j++ > 0) {
                             stringbuilder.append(" ");
@@ -216,8 +213,8 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
     public static GeneratorSettingsFlat a(Dynamic<?> dynamic) {
         GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
-        List list = (List) ((Stream) dynamic.get("layers").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic) -> {
-            return Pair.of(dynamic.getInt("height", 1), a(dynamic.getString("block")));
+        List<Pair<Integer, Block>> list = (List) ((Stream) dynamic.get("layers").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic1) -> {
+            return Pair.of(dynamic1.getInt("height", 1), a(dynamic1.getString("block")));
         }).collect(Collectors.toList());
 
         if (list.stream().anyMatch((pair) -> {
@@ -225,7 +222,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         })) {
             return x();
         } else {
-            List list1 = (List) list.stream().map((pair) -> {
+            List<WorldGenFlatLayerInfo> list1 = (List) list.stream().map((pair) -> {
                 return new WorldGenFlatLayerInfo((Integer) pair.getFirst(), (Block) pair.getSecond());
             }).collect(Collectors.toList());
 
@@ -236,8 +233,8 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
                 generatorsettingsflat.w();
                 generatorsettingsflat.a((BiomeBase) IRegistry.BIOME.get(new MinecraftKey(dynamic.getString("biome"))));
                 dynamic.get("structures").flatMap(Dynamic::getMapValues).ifPresent((map) -> {
-                    map.keySet().forEach((dynamic) -> {
-                        dynamic.getStringValue().map((s) -> {
+                    map.keySet().forEach((dynamic1) -> {
+                        dynamic1.getStringValue().map((s) -> {
                             return (Map) generatorsettingsflat.u().put(s, Maps.newHashMap());
                         });
                     });

@@ -11,7 +11,6 @@ import it.unimi.dsi.fastutil.ints.IntListIterator;
 import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class AutoRecipeStackManager {
@@ -144,10 +143,10 @@ public class AutoRecipeStackManager {
 
                 this.g.clear(0, this.d + this.f + this.d);
                 int i1 = 0;
-                NonNullList nonnulllist = this.b.e();
+                List<RecipeItemStack> list = this.b.e();
 
-                for (int j1 = 0; j1 < nonnulllist.size(); ++j1) {
-                    if (flag1 && ((RecipeItemStack) nonnulllist.get(j1)).d()) {
+                for (int j1 = 0; j1 < list.size(); ++j1) {
+                    if (flag1 && ((RecipeItemStack) list.get(j1)).d()) {
                         intlist.add(0);
                     } else {
                         for (int k1 = 0; k1 < this.f; ++k1) {

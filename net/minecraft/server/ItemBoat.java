@@ -31,11 +31,11 @@ public class ItemBoat extends Item {
         MovingObjectPosition movingobjectposition = world.rayTrace(vec3d, vec3d1, FluidCollisionOption.ALWAYS);
 
         if (movingobjectposition == null) {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
             Vec3D vec3d2 = entityhuman.f(1.0F);
             boolean flag = false;
-            List list = world.getEntities(entityhuman, entityhuman.getBoundingBox().b(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
+            List<Entity> list = world.getEntities(entityhuman, entityhuman.getBoundingBox().b(vec3d2.x * 5.0D, vec3d2.y * 5.0D, vec3d2.z * 5.0D).g(1.0D));
 
             for (int i = 0; i < list.size(); ++i) {
                 Entity entity = (Entity) list.get(i);
@@ -50,7 +50,7 @@ public class ItemBoat extends Item {
             }
 
             if (flag) {
-                return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
             } else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
                 BlockPosition blockposition = movingobjectposition.getBlockPosition();
                 Block block = world.getType(blockposition).getBlock();
@@ -59,7 +59,7 @@ public class ItemBoat extends Item {
                 entityboat.setType(this.a);
                 entityboat.yaw = entityhuman.yaw;
                 if (!world.getCubes(entityboat, entityboat.getBoundingBox().g(-0.1D))) {
-                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 } else {
                     if (!world.isClientSide) {
                         world.addEntity(entityboat);
@@ -70,10 +70,10 @@ public class ItemBoat extends Item {
                     }
 
                     entityhuman.b(StatisticList.ITEM_USED.b(this));
-                    return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
                 }
             } else {
-                return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
             }
         }
     }

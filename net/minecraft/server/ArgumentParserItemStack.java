@@ -77,14 +77,14 @@ public class ArgumentParserItemStack {
 
     public ArgumentParserItemStack h() throws CommandSyntaxException {
         this.k = this::d;
-        if (this.d.canRead() && this.d.peek() == 35) {
+        if (this.d.canRead() && this.d.peek() == '#') {
             this.f();
         } else {
             this.e();
             this.k = this::b;
         }
 
-        if (this.d.canRead() && this.d.peek() == 123) {
+        if (this.d.canRead() && this.d.peek() == '{') {
             this.k = ArgumentParserItemStack.c;
             this.g();
         }

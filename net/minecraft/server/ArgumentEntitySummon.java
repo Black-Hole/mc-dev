@@ -7,11 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Function;
 
 public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
 
-    private static final Collection<String> b = Arrays.asList(new String[] { "minecraft:pig", "cow"});
+    private static final Collection<String> b = Arrays.asList("minecraft:pig", "cow");
     public static final DynamicCommandExceptionType a = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("entity.notFound", new Object[] { object});
     });
@@ -27,7 +26,7 @@ public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
     }
 
     private static final MinecraftKey a(MinecraftKey minecraftkey) throws CommandSyntaxException {
-        EntityTypes entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
+        EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
 
         if (entitytypes != null && entitytypes.b()) {
             return minecraftkey;

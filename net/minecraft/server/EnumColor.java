@@ -4,9 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public enum EnumColor implements INamable {

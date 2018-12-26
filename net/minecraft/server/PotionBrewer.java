@@ -63,7 +63,7 @@ public class PotionBrewer {
         int i = 0;
 
         for (int j = PotionBrewer.b.size(); i < j; ++i) {
-            PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
+            PotionBrewer.PredicatedCombination<Item> potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.b.get(i);
 
             if (potionbrewer_predicatedcombination.a == item && potionbrewer_predicatedcombination.b.test(itemstack1)) {
                 return true;
@@ -78,7 +78,7 @@ public class PotionBrewer {
         int i = 0;
 
         for (int j = PotionBrewer.a.size(); i < j; ++i) {
-            PotionBrewer.PredicatedCombination potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
+            PotionBrewer.PredicatedCombination<PotionRegistry> potionbrewer_predicatedcombination = (PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i);
 
             if (potionbrewer_predicatedcombination.a == potionregistry && potionbrewer_predicatedcombination.b.test(itemstack1)) {
                 return true;
@@ -186,7 +186,7 @@ public class PotionBrewer {
         } else if (!(item2 instanceof ItemPotion)) {
             throw new IllegalArgumentException("Expected a potion, got: " + IRegistry.ITEM.getKey(item2));
         } else {
-            PotionBrewer.b.add(new PotionBrewer.PredicatedCombination(item, RecipeItemStack.a(item1), item2));
+            PotionBrewer.b.add(new PotionBrewer.PredicatedCombination<>(item, RecipeItemStack.a(item1), item2));
         }
     }
 
@@ -199,7 +199,7 @@ public class PotionBrewer {
     }
 
     private static void a(PotionRegistry potionregistry, Item item, PotionRegistry potionregistry1) {
-        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination(potionregistry, RecipeItemStack.a(item), potionregistry1));
+        PotionBrewer.a.add(new PotionBrewer.PredicatedCombination<>(potionregistry, RecipeItemStack.a(item), potionregistry1));
     }
 
     static class PredicatedCombination<T> {

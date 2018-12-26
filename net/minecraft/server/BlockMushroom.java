@@ -63,7 +63,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         generatoraccess.setAir(blockposition);
-        WorldGenerator worldgenerator = null;
+        WorldGenerator<WorldGenFeatureEmptyConfiguration> worldgenerator = null;
 
         if (this == Blocks.BROWN_MUSHROOM) {
             worldgenerator = WorldGenerator.U;

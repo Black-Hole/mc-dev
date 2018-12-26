@@ -6,12 +6,11 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,29 +39,29 @@ public class WorldLoaderServer extends WorldLoader {
 
     public boolean convert(String s, IProgressUpdate iprogressupdate) {
         iprogressupdate.a(0);
-        ArrayList arraylist = Lists.newArrayList();
-        ArrayList arraylist1 = Lists.newArrayList();
-        ArrayList arraylist2 = Lists.newArrayList();
+        List<File> list = Lists.newArrayList();
+        List<File> list1 = Lists.newArrayList();
+        List<File> list2 = Lists.newArrayList();
         File file = new File(this.a.toFile(), s);
         File file1 = DimensionManager.NETHER.a(file);
         File file2 = DimensionManager.THE_END.a(file);
 
         WorldLoaderServer.e.info("Scanning folders...");
-        this.a(file, (Collection) arraylist);
+        this.a(file, (Collection) list);
         if (file1.exists()) {
-            this.a(file1, (Collection) arraylist1);
+            this.a(file1, (Collection) list1);
         }
 
         if (file2.exists()) {
-            this.a(file2, (Collection) arraylist2);
+            this.a(file2, (Collection) list2);
         }
 
-        int i = arraylist.size() + arraylist1.size() + arraylist2.size();
+        int i = list.size() + list1.size() + list2.size();
 
         WorldLoaderServer.e.info("Total conversion count is {}", i);
         WorldData worlddata = this.c(s);
-        BiomeLayout biomelayout = BiomeLayout.b;
-        BiomeLayout biomelayout1 = BiomeLayout.c;
+        BiomeLayout<BiomeLayoutFixedConfiguration, WorldChunkManagerHell> biomelayout = BiomeLayout.b;
+        BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> biomelayout1 = BiomeLayout.c;
         WorldChunkManager worldchunkmanager;
 
         if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
@@ -71,9 +70,9 @@ public class WorldLoaderServer extends WorldLoader {
             worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.a.b()));
         }
 
-        this.a(new File(file, "region"), (Iterable) arraylist, worldchunkmanager, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.NETHER)), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.THE_END)), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        this.a(new File(file, "region"), (Iterable) list, worldchunkmanager, 0, i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) list1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.NETHER)), list.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) list2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
         worlddata.d(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);
@@ -174,7 +173,7 @@ public class WorldLoaderServer extends WorldLoader {
 
     private void a(File file, Collection<File> collection) {
         File file1 = new File(file, "region");
-        File[] afile = file1.listFiles((file, s) -> {
+        File[] afile = file1.listFiles((file2, s) -> {
             return s.endsWith(".mcr");
         });
 

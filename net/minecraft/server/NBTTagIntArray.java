@@ -60,7 +60,7 @@ public class NBTTagIntArray extends NBTList<NBTTagInt> {
     }
 
     public byte getTypeId() {
-        return (byte) 11;
+        return 11;
     }
 
     public String toString() {

@@ -13,7 +13,7 @@ public class DataConverterSchemaV1125 extends DataConverterSchemaNamed {
     }
 
     public Map<String, Supplier<TypeTemplate>> registerBlockEntities(Schema schema) {
-        Map map = super.registerBlockEntities(schema);
+        Map<String, Supplier<TypeTemplate>> map = super.registerBlockEntities(schema);
 
         schema.registerSimple(map, "minecraft:bed");
         return map;

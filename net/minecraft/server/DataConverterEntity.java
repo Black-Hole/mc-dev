@@ -11,8 +11,6 @@ import com.mojang.datafixers.types.templates.TaggedChoice.TaggedChoiceType;
 import com.mojang.datafixers.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class DataConverterEntity extends DataFix {
 
@@ -99,10 +97,10 @@ public class DataConverterEntity extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        TaggedChoiceType taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        TaggedChoiceType taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
-        Type type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        Type type1 = this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK);
+        TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        TaggedChoiceType<String> taggedchoicetype1 = this.getOutputSchema().findChoiceType(DataConverterTypes.ENTITY);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.ITEM_STACK);
 
         return TypeRewriteRule.seq(this.convertUnchecked("item stack entity name hook converter", type, type1), this.fixTypeEverywhere("EntityIdFix", taggedchoicetype, taggedchoicetype1, (dynamicops) -> {
             return (pair) -> {

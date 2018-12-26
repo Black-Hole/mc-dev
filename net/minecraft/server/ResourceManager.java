@@ -6,16 +6,13 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
@@ -70,19 +67,19 @@ public class ResourceManager implements IReloadableResourceManager {
     }
 
     public Collection<MinecraftKey> a(String s, Predicate<String> predicate) {
-        HashSet hashset = Sets.newHashSet();
+        Set<MinecraftKey> set = Sets.newHashSet();
         Iterator iterator = this.b.values().iterator();
 
         while (iterator.hasNext()) {
             ResourceManagerFallback resourcemanagerfallback = (ResourceManagerFallback) iterator.next();
 
-            hashset.addAll(resourcemanagerfallback.a(s, predicate));
+            set.addAll(resourcemanagerfallback.a(s, predicate));
         }
 
-        ArrayList arraylist = Lists.newArrayList(hashset);
+        List<MinecraftKey> list = Lists.newArrayList(set);
 
-        Collections.sort(arraylist);
-        return arraylist;
+        Collections.sort(list);
+        return list;
     }
 
     private void b() {
@@ -132,20 +129,20 @@ public class ResourceManager implements IReloadableResourceManager {
 
     private void d() {
         ResourceManager.a.info("Reloading all resources! {} listeners to update.", this.c.size());
-        ArrayList arraylist = Lists.newArrayList();
+        List<String> list = Lists.newArrayList();
         Stopwatch stopwatch = Stopwatch.createStarted();
         Iterator iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             IResourcePackListener iresourcepacklistener = (IResourcePackListener) iterator.next();
 
-            arraylist.add(this.b(iresourcepacklistener));
+            list.add(this.b(iresourcepacklistener));
         }
 
         stopwatch.stop();
         ResourceManager.a.info("----");
         ResourceManager.a.info("Complete resource reload took {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
-        iterator = arraylist.iterator();
+        iterator = list.iterator();
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();

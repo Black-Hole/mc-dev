@@ -11,12 +11,10 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import java.util.ArrayList;
+import com.mojang.datafixers.util.Unit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class DataConverterEquipment extends DataFix {
@@ -30,42 +28,42 @@ public class DataConverterEquipment extends DataFix {
     }
 
     private <IS> TypeRewriteRule a(Type<IS> type) {
-        Type type1 = DSL.and(DSL.optional(DSL.field("Equipment", DSL.list(type))), DSL.remainderType());
-        Type type2 = DSL.and(DSL.optional(DSL.field("ArmorItems", DSL.list(type))), DSL.optional(DSL.field("HandItems", DSL.list(type))), DSL.remainderType());
-        OpticFinder opticfinder = DSL.typeFinder(type1);
-        OpticFinder opticfinder1 = DSL.fieldFinder("Equipment", DSL.list(type));
+        Type<Pair<Either<List<IS>, Unit>, Dynamic<?>>> type1 = DSL.and(DSL.optional(DSL.field("Equipment", DSL.list(type))), DSL.remainderType());
+        Type<Pair<Either<List<IS>, Unit>, Pair<Either<List<IS>, Unit>, Dynamic<?>>>> type2 = DSL.and(DSL.optional(DSL.field("ArmorItems", DSL.list(type))), DSL.optional(DSL.field("HandItems", DSL.list(type))), DSL.remainderType());
+        OpticFinder<Pair<Either<List<IS>, Unit>, Dynamic<?>>> opticfinder = DSL.typeFinder(type1);
+        OpticFinder<List<IS>> opticfinder1 = DSL.fieldFinder("Equipment", DSL.list(type));
 
         return this.fixTypeEverywhereTyped("EntityEquipmentToArmorAndHandFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), this.getOutputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
-            Either either = Either.right(DSL.unit());
-            Either either1 = Either.right(DSL.unit());
-            Dynamic dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
-            Optional optional = typed.getOptional(opticfinder);
+            Either<List<IS>, Unit> either = Either.right(DSL.unit());
+            Either<List<IS>, Unit> either1 = Either.right(DSL.unit());
+            Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
+            Optional<List<IS>> optional = typed.getOptional(opticfinder1);
 
             if (optional.isPresent()) {
-                List list = (List) optional.get();
-                Object object = ((Optional) type.read(dynamic.emptyMap()).getSecond()).orElseThrow(() -> {
+                List<IS> list = (List) optional.get();
+                IS is = ((Optional) type.read(dynamic.emptyMap()).getSecond()).orElseThrow(() -> {
                     return new IllegalStateException("Could not parse newly created empty itemstack.");
                 });
 
                 if (!list.isEmpty()) {
-                    either = Either.left(Lists.newArrayList(new Object[] { list.get(0), object}));
+                    either = Either.left(Lists.newArrayList(new Object[] { list.get(0), is}));
                 }
 
                 if (list.size() > 1) {
-                    ArrayList arraylist = Lists.newArrayList(new Object[] { object, object, object, object});
+                    List<IS> list1 = Lists.newArrayList(new Object[] { is, is, is, is});
 
                     for (int i = 1; i < Math.min(list.size(), 5); ++i) {
-                        arraylist.set(i - 1, list.get(i));
+                        list1.set(i - 1, list.get(i));
                     }
 
-                    either1 = Either.left(arraylist);
+                    either1 = Either.left(list1);
                 }
             }
 
-            Optional optional1 = dynamic.get("DropChances").flatMap(Dynamic::getStream);
+            Optional<? extends Stream<? extends Dynamic<?>>> optional1 = dynamic.get("DropChances").flatMap(Dynamic::getStream);
 
             if (optional1.isPresent()) {
-                Iterator iterator = Stream.concat((Stream) optional1.get(), Stream.generate(() -> {
+                Iterator<? extends Dynamic<?>> iterator = Stream.concat((Stream) optional1.get(), Stream.generate(() -> {
                     return dynamic.createInt(0);
                 })).iterator();
                 float f = ((Dynamic) iterator.next()).getNumberValue(0).floatValue();
@@ -84,7 +82,7 @@ public class DataConverterEquipment extends DataFix {
                 dynamic = dynamic.remove("DropChances");
             }
 
-            return typed.set(opticfinder1, type1, Pair.of(either, Pair.of(either1, dynamic)));
+            return typed.set(opticfinder, type2, Pair.of(either, Pair.of(either1, dynamic)));
         });
     }
 }

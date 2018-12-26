@@ -10,8 +10,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class DataConverterPainting extends DataConverterNamedEntity {
 
@@ -26,7 +24,7 @@ public class DataConverterPainting extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("Motive").flatMap(Dynamic::getStringValue);
+        Optional<String> optional = dynamic.get("Motive").flatMap(Dynamic::getStringValue);
 
         if (optional.isPresent()) {
             String s = ((String) optional.get()).toLowerCase(Locale.ROOT);

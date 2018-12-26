@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public final class VoxelShapes {
@@ -159,9 +158,9 @@ public final class VoxelShapes {
 
     private static boolean a(VoxelShapeMerger voxelshapemerger, VoxelShapeMerger voxelshapemerger1, VoxelShapeMerger voxelshapemerger2, VoxelShapeDiscrete voxelshapediscrete, VoxelShapeDiscrete voxelshapediscrete1, OperatorBoolean operatorboolean) {
         return !voxelshapemerger.a((i, j, k) -> {
-            return voxelshapemerger.a((ix, jx, kx) -> {
-                return voxelshapemerger.a((ixx, jxx, k) -> {
-                    return !operatorboolean.apply(voxelshapediscrete.c(i, ix, ixx), voxelshapediscrete1.c(j, jx, jxx));
+            return voxelshapemerger1.a((l, i1, j1) -> {
+                return voxelshapemerger2.a((k1, l1, i2) -> {
+                    return !operatorboolean.apply(voxelshapediscrete.c(i, l, k1), voxelshapediscrete1.c(j, i1, l1));
                 });
             });
         });

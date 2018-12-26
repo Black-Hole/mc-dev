@@ -5,17 +5,12 @@ import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +27,7 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     private final Map<MinecraftKey, CustomFunction> g = Maps.newHashMap();
     private final ArrayDeque<CustomFunctionData.a> h = new ArrayDeque();
     private boolean i;
-    private final Tags<CustomFunction> j = new Tags((minecraftkey) -> {
+    private final Tags<CustomFunction> j = new Tags<>((minecraftkey) -> {
         return this.a(minecraftkey) != null;
     }, this::a, "tags/functions", true, "function");
     private final List<CustomFunction> k = Lists.newArrayList();
@@ -64,11 +59,9 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
     }
 
     public void tick() {
-        MethodProfiler methodprofiler = this.server.methodProfiler;
         MinecraftKey minecraftkey = CustomFunctionData.d;
 
-        CustomFunctionData.d.getClass();
-        methodprofiler.a(minecraftkey::toString);
+        this.server.methodProfiler.a(minecraftkey::toString);
         Iterator iterator = this.k.iterator();
 
         while (iterator.hasNext()) {
@@ -80,12 +73,10 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
         this.server.methodProfiler.exit();
         if (this.l) {
             this.l = false;
-            Collection collection = this.g().b(CustomFunctionData.e).a();
+            Collection<CustomFunction> collection = this.g().b(CustomFunctionData.e).a();
 
-            methodprofiler = this.server.methodProfiler;
             minecraftkey = CustomFunctionData.e;
-            CustomFunctionData.e.getClass();
-            methodprofiler.a(minecraftkey::toString);
+            this.server.methodProfiler.a(minecraftkey::toString);
             Iterator iterator1 = collection.iterator();
 
             while (iterator1.hasNext()) {
@@ -150,10 +141,10 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
         this.g.clear();
         this.k.clear();
         this.j.b();
-        Collection collection = iresourcemanager.a("functions", (s) -> {
+        Collection<MinecraftKey> collection = iresourcemanager.a("functions", (s) -> {
             return s.endsWith(".mcfunction");
         });
-        ArrayList arraylist = Lists.newArrayList();
+        List<CompletableFuture<CustomFunction>> list = Lists.newArrayList();
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
@@ -161,16 +152,16 @@ public class CustomFunctionData implements ITickable, IResourcePackListener {
             String s = minecraftkey.getKey();
             MinecraftKey minecraftkey1 = new MinecraftKey(minecraftkey.b(), s.substring(CustomFunctionData.a, s.length() - CustomFunctionData.b));
 
-            arraylist.add(CompletableFuture.supplyAsync(() -> {
+            list.add(CompletableFuture.supplyAsync(() -> {
                 return a(iresourcemanager, minecraftkey);
-            }, Resource.a).thenApplyAsync((list) -> {
-                return CustomFunction.a(minecraftkey, this, list);
+            }, Resource.a).thenApplyAsync((list1) -> {
+                return CustomFunction.a(minecraftkey1, this, list1);
             }).handle((customfunction, throwable) -> {
                 return this.a(customfunction, throwable, minecraftkey);
             }));
         }
 
-        CompletableFuture.allOf((CompletableFuture[]) arraylist.toArray(new CompletableFuture[0])).join();
+        CompletableFuture.allOf((CompletableFuture[]) list.toArray(new CompletableFuture[0])).join();
         if (!this.g.isEmpty()) {
             CustomFunctionData.c.info("Loaded {} custom command functions", this.g.size());
         }

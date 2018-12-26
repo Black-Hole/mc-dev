@@ -24,7 +24,7 @@ public class NBTTagShort extends NBTNumber {
     }
 
     public byte getTypeId() {
-        return (byte) 2;
+        return 2;
     }
 
     public String toString() {

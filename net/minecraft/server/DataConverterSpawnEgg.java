@@ -12,9 +12,6 @@ import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Pair;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class DataConverterSpawnEgg extends DataFix {
 
@@ -94,42 +91,42 @@ public class DataConverterSpawnEgg extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Schema schema = this.getInputSchema();
-        Type type = schema.getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
-        OpticFinder opticfinder1 = DSL.fieldFinder("id", DSL.string());
-        OpticFinder opticfinder2 = type.findField("tag");
-        OpticFinder opticfinder3 = opticfinder2.type().findField("EntityTag");
-        OpticFinder opticfinder4 = DSL.typeFinder(schema.getTypeRaw(DataConverterTypes.ENTITY));
+        Type<?> type = schema.getType(DataConverterTypes.ITEM_STACK);
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.string());
+        OpticFinder<?> opticfinder2 = type.findField("tag");
+        OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");
+        OpticFinder<?> opticfinder4 = DSL.typeFinder(schema.getTypeRaw(DataConverterTypes.ENTITY));
 
         return this.fixTypeEverywhereTyped("ItemSpawnEggFix", type, (typed) -> {
-            Optional optional = typed.getOptional(opticfinder);
+            Optional<Pair<String, String>> optional = typed.getOptional(opticfinder);
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:spawn_egg")) {
-                Dynamic dynamic = (Dynamic) typed.get(DSL.remainderFinder());
+                Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
                 short short0 = dynamic.getShort("Damage");
-                Optional optional1 = typed.getOptionalTyped(opticfinder1);
-                Optional optional2 = optional1.flatMap((typedx) -> {
-                    return typedx.getOptionalTyped(opticfinder);
+                Optional<? extends Typed<?>> optional1 = typed.getOptionalTyped(opticfinder2);
+                Optional<? extends Typed<?>> optional2 = optional1.flatMap((typed1) -> {
+                    return typed1.getOptionalTyped(opticfinder3);
                 });
-                Optional optional3 = optional2.flatMap((typedx) -> {
-                    return typedx.getOptionalTyped(opticfinder);
+                Optional<? extends Typed<?>> optional3 = optional2.flatMap((typed1) -> {
+                    return typed1.getOptionalTyped(opticfinder4);
                 });
-                Optional optional4 = optional3.flatMap((typedx) -> {
-                    return typedx.getOptional(opticfinder);
+                Optional<String> optional4 = optional3.flatMap((typed1) -> {
+                    return typed1.getOptional(opticfinder1);
                 });
-                Typed typed1 = typed;
+                Typed<?> typed1 = typed;
                 String s = DataConverterSpawnEgg.ID_MAPPING[short0 & 255];
 
                 if (s != null && (!optional4.isPresent() || !Objects.equals(optional4.get(), s))) {
-                    Typed typed2 = typed.getOrCreateTyped(opticfinder1);
-                    Typed typed3 = typed2.getOrCreateTyped(opticfinder2);
-                    Typed typed4 = typed3.getOrCreateTyped(opticfinder3);
-                    Dynamic dynamic1 = typed4.write().set("id", dynamic.createString(s));
-                    Typed typed5 = (Typed) ((Optional) this.getOutputSchema().getTypeRaw(DataConverterTypes.ENTITY).readTyped(dynamic1).getSecond()).orElseThrow(() -> {
+                    Typed<?> typed2 = typed.getOrCreateTyped(opticfinder2);
+                    Typed<?> typed3 = typed2.getOrCreateTyped(opticfinder3);
+                    Typed<?> typed4 = typed3.getOrCreateTyped(opticfinder4);
+                    Dynamic<?> dynamic1 = typed4.write().set("id", dynamic.createString(s));
+                    Typed<?> typed5 = (Typed) ((Optional) this.getOutputSchema().getTypeRaw(DataConverterTypes.ENTITY).readTyped(dynamic1).getSecond()).orElseThrow(() -> {
                         return new IllegalStateException("Could not parse new entity");
                     });
 
-                    typed1 = typed.set(opticfinder1, typed2.set(opticfinder2, typed3.set(opticfinder3, typed5)));
+                    typed1 = typed.set(opticfinder2, typed2.set(opticfinder3, typed3.set(opticfinder4, typed5)));
                 }
 
                 if (short0 != 0) {

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -412,8 +413,8 @@ public abstract class EntityInsentient extends EntityLiving {
                 loottableinfo_builder = loottableinfo_builder.killer(this.killer).luck(this.killer.dJ());
             }
 
-            List list = loottable.populateLoot(this.lootTableSeed == 0L ? this.random : new Random(this.lootTableSeed), loottableinfo_builder.build());
-            Iterator iterator = list.iterator();
+            Collection<ItemStack> collection = loottable.populateLoot(this.lootTableSeed == 0L ? this.random : new Random(this.lootTableSeed), loottableinfo_builder.build());
+            Iterator iterator = collection.iterator();
 
             while (iterator.hasNext()) {
                 ItemStack itemstack = (ItemStack) iterator.next();
@@ -449,7 +450,7 @@ public abstract class EntityInsentient extends EntityLiving {
         super.movementTick();
         this.world.methodProfiler.enter("looting");
         if (!this.world.isClientSide && this.dj() && !this.killed && this.world.getGameRules().getBoolean("mobGriefing")) {
-            List list = this.world.a(EntityItem.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
+            List<EntityItem> list = this.world.a(EntityItem.class, this.getBoundingBox().grow(1.0D, 0.0D, 1.0D));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {
@@ -1020,7 +1021,7 @@ public abstract class EntityInsentient extends EntityLiving {
         if (this.bK && this.bM != null) {
             if (this.bM.b("UUID")) {
                 UUID uuid = this.bM.a("UUID");
-                List list = this.world.a(EntityLiving.class, this.getBoundingBox().g(10.0D));
+                List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().g(10.0D));
                 Iterator iterator = list.iterator();
 
                 while (iterator.hasNext()) {

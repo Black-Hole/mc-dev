@@ -18,7 +18,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         this.c = datapaletteexpandable;
         this.d = function;
         this.e = function1;
-        this.b = new RegistryID(1 << i);
+        this.b = new RegistryID<>(1 << i);
     }
 
     public int a(T t0) {

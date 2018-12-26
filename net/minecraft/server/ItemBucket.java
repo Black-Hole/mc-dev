@@ -13,22 +13,22 @@ public class ItemBucket extends Item {
 
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = this.a(world, entityhuman, this.fluidType == FluidTypes.a);
+        MovingObjectPosition movingobjectposition = this.a(world, entityhuman, this.fluidType == FluidTypes.EMPTY);
 
         if (movingobjectposition == null) {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
             BlockPosition blockposition = movingobjectposition.getBlockPosition();
 
             if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectposition.direction, itemstack)) {
                 IBlockData iblockdata;
 
-                if (this.fluidType == FluidTypes.a) {
+                if (this.fluidType == FluidTypes.EMPTY) {
                     iblockdata = world.getType(blockposition);
                     if (iblockdata.getBlock() instanceof IFluidSource) {
-                        FluidType fluidtype = ((IFluidSource) iblockdata.getBlock()).a(world, blockposition, iblockdata);
+                        FluidType fluidtype = ((IFluidSource) iblockdata.getBlock()).removeFluid(world, blockposition, iblockdata);
 
-                        if (fluidtype != FluidTypes.a) {
+                        if (fluidtype != FluidTypes.EMPTY) {
                             entityhuman.b(StatisticList.ITEM_USED.b(this));
                             entityhuman.a(fluidtype.a(TagsFluid.LAVA) ? SoundEffects.ITEM_BUCKET_FILL_LAVA : SoundEffects.ITEM_BUCKET_FILL, 1.0F, 1.0F);
                             ItemStack itemstack1 = this.a(itemstack, entityhuman, fluidtype.b());
@@ -37,11 +37,11 @@ public class ItemBucket extends Item {
                                 CriterionTriggers.j.a((EntityPlayer) entityhuman, new ItemStack(fluidtype.b()));
                             }
 
-                            return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, itemstack1);
+                            return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack1);
                         }
                     }
 
-                    return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                    return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 } else {
                     iblockdata = world.getType(blockposition);
                     BlockPosition blockposition1 = this.a(iblockdata, blockposition, movingobjectposition);
@@ -53,16 +53,16 @@ public class ItemBucket extends Item {
                         }
 
                         entityhuman.b(StatisticList.ITEM_USED.b(this));
-                        return new InteractionResultWrapper(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman));
+                        return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman));
                     } else {
-                        return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                        return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                     }
                 }
             } else {
-                return new InteractionResultWrapper(EnumInteractionResult.FAIL, itemstack);
+                return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
             }
         } else {
-            return new InteractionResultWrapper(EnumInteractionResult.PASS, itemstack);
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         }
     }
 

@@ -2,7 +2,6 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityGuardianElder extends EntityGuardian {
@@ -55,7 +54,7 @@ public class EntityGuardianElder extends EntityGuardian {
 
         if ((this.ticksLived + this.getId()) % 1200 == 0) {
             MobEffectList mobeffectlist = MobEffects.SLOWER_DIG;
-            List list = this.world.b(EntityPlayer.class, (entityplayer) -> {
+            List<EntityPlayer> list = this.world.b(EntityPlayer.class, (entityplayer) -> {
                 return this.h(entityplayer) < 2500.0D && entityplayer.playerInteractManager.c();
             });
             boolean flag1 = true;

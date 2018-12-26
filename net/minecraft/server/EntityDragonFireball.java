@@ -16,7 +16,7 @@ public class EntityDragonFireball extends EntityFireball {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity == null || !movingobjectposition.entity.s(this.shooter)) {
             if (!this.world.isClientSide) {
-                List list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
+                List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().grow(4.0D, 2.0D, 4.0D));
                 EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.locX, this.locY, this.locZ);
 
                 entityareaeffectcloud.setSource(this.shooter);

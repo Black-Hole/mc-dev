@@ -21,7 +21,6 @@ import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +55,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         this.c = file;
         GsonBuilder gsonbuilder = (new GsonBuilder()).setPrettyPrinting();
 
-        gsonbuilder.registerTypeHierarchyAdapter(JsonListEntry.class, new JsonList.JsonListEntrySerializer(null));
+        gsonbuilder.registerTypeHierarchyAdapter(JsonListEntry.class, new JsonList.JsonListEntrySerializer());
         this.b = gsonbuilder.create();
     }
 
@@ -121,29 +120,29 @@ public class JsonList<K, V extends JsonListEntry<K>> {
     }
 
     private void h() {
-        ArrayList arraylist = Lists.newArrayList();
+        List<K> list = Lists.newArrayList();
         Iterator iterator = this.d.values().iterator();
 
         while (iterator.hasNext()) {
-            JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
+            V v0 = (JsonListEntry) iterator.next();
 
-            if (jsonlistentry.hasExpired()) {
-                arraylist.add(jsonlistentry.getKey());
+            if (v0.hasExpired()) {
+                list.add(v0.getKey());
             }
         }
 
-        iterator = arraylist.iterator();
+        iterator = list.iterator();
 
         while (iterator.hasNext()) {
-            Object object = iterator.next();
+            K k0 = iterator.next();
 
-            this.d.remove(this.a(object));
+            this.d.remove(this.a(k0));
         }
 
     }
 
     protected JsonListEntry<K> a(JsonObject jsonobject) {
-        return new JsonListEntry((Object) null, jsonobject);
+        return new JsonListEntry<>((Object) null, jsonobject);
     }
 
     public Collection<V> e() {
@@ -151,7 +150,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
     }
 
     public void save() throws IOException {
-        Collection collection = this.d.values();
+        Collection<V> collection = this.d.values();
         String s = this.b.toJson(collection);
         BufferedWriter bufferedwriter = null;
 
@@ -170,14 +169,14 @@ public class JsonList<K, V extends JsonListEntry<K>> {
 
             try {
                 bufferedreader = Files.newReader(this.c, StandardCharsets.UTF_8);
-                Collection collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
+                Collection<JsonListEntry<K>> collection = (Collection) ChatDeserializer.a(this.b, (Reader) bufferedreader, (Type) JsonList.f);
 
                 if (collection != null) {
                     this.d.clear();
                     Iterator iterator = collection.iterator();
 
                     while (iterator.hasNext()) {
-                        JsonListEntry jsonlistentry = (JsonListEntry) iterator.next();
+                        JsonListEntry<K> jsonlistentry = (JsonListEntry) iterator.next();
 
                         if (jsonlistentry.getKey() != null) {
                             this.d.put(this.a(jsonlistentry.getKey()), jsonlistentry);

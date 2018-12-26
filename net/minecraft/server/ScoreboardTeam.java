@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Set;
-import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class ScoreboardTeam extends ScoreboardTeamBase {

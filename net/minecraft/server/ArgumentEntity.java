@@ -13,11 +13,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class ArgumentEntity implements ArgumentType<EntitySelector> {
 
-    private static final Collection<String> g = Arrays.asList(new String[] { "Player", "0123", "@e", "@e[type=foo]", "dd12be42-52a9-4a91-a8a1-11c01849e498"});
+    private static final Collection<String> g = Arrays.asList("Player", "0123", "@e", "@e[type=foo]", "dd12be42-52a9-4a91-a8a1-11c01849e498");
     public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("argument.entity.toomany", new Object[0]));
     public static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("argument.player.toomany", new Object[0]));
     public static final SimpleCommandExceptionType c = new SimpleCommandExceptionType(new ChatMessage("argument.player.entities", new Object[0]));
@@ -45,7 +44,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
     }
 
     public static Collection<? extends Entity> b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
-        Collection collection = c(commandcontext, s);
+        Collection<? extends Entity> collection = c(commandcontext, s);
 
         if (collection.isEmpty()) {
             throw ArgumentEntity.d.create();
@@ -75,7 +74,7 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
     }
 
     public static Collection<EntityPlayer> f(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
-        List list = ((EntitySelector) commandcontext.getArgument(s, EntitySelector.class)).d((CommandListenerWrapper) commandcontext.getSource());
+        List<EntityPlayer> list = ((EntitySelector) commandcontext.getArgument(s, EntitySelector.class)).d((CommandListenerWrapper) commandcontext.getSource());
 
         if (list.isEmpty()) {
             throw ArgumentEntity.e.create();
@@ -119,11 +118,11 @@ public class ArgumentEntity implements ArgumentType<EntitySelector> {
                 ;
             }
 
-            return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder) -> {
-                Collection collection = icompletionprovider.l();
-                Object object = this.i ? collection : Iterables.concat(collection, icompletionprovider.p());
+            return argumentparserselector.a(suggestionsbuilder, (suggestionsbuilder1) -> {
+                Collection<String> collection = icompletionprovider.l();
+                Iterable<String> iterable = this.i ? collection : Iterables.concat(collection, icompletionprovider.p());
 
-                ICompletionProvider.b((Iterable) object, suggestionsbuilder);
+                ICompletionProvider.b((Iterable) iterable, suggestionsbuilder1);
             });
         } else {
             return Suggestions.empty();

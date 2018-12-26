@@ -5,10 +5,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
@@ -49,7 +49,7 @@ public class DebugReportRecipeShaped {
     public DebugReportRecipeShaped a(Character character, RecipeItemStack recipeitemstack) {
         if (this.e.containsKey(character)) {
             throw new IllegalArgumentException("Symbol '" + character + "' is already defined!");
-        } else if (character == 32) {
+        } else if (character == ' ') {
             throw new IllegalArgumentException("Symbol ' ' (whitespace) is reserved and cannot be defined");
         } else {
             this.e.put(character, recipeitemstack);
@@ -100,9 +100,9 @@ public class DebugReportRecipeShaped {
         if (this.d.isEmpty()) {
             throw new IllegalStateException("No pattern is defined for shaped recipe " + minecraftkey + "!");
         } else {
-            HashSet hashset = Sets.newHashSet(this.e.keySet());
+            Set<Character> set = Sets.newHashSet(this.e.keySet());
 
-            hashset.remove(' ');
+            set.remove(' ');
             Iterator iterator = this.d.iterator();
 
             while (iterator.hasNext()) {
@@ -111,15 +111,15 @@ public class DebugReportRecipeShaped {
                 for (int i = 0; i < s.length(); ++i) {
                     char c0 = s.charAt(i);
 
-                    if (!this.e.containsKey(c0) && c0 != 32) {
+                    if (!this.e.containsKey(c0) && c0 != ' ') {
                         throw new IllegalStateException("Pattern in recipe " + minecraftkey + " uses undefined symbol '" + c0 + "'");
                     }
 
-                    hashset.remove(c0);
+                    set.remove(c0);
                 }
             }
 
-            if (!hashset.isEmpty()) {
+            if (!set.isEmpty()) {
                 throw new IllegalStateException("Ingredients are defined but not used in pattern for recipe " + minecraftkey);
             } else if (this.d.size() == 1 && ((String) this.d.get(0)).length() == 1) {
                 throw new IllegalStateException("Shaped recipe " + minecraftkey + " only takes in a single item - should it be a shapeless recipe instead?");
@@ -173,7 +173,7 @@ public class DebugReportRecipeShaped {
             Iterator iterator1 = this.g.entrySet().iterator();
 
             while (iterator1.hasNext()) {
-                Entry entry = (Entry) iterator1.next();
+                Entry<Character, RecipeItemStack> entry = (Entry) iterator1.next();
 
                 jsonobject1.add(String.valueOf(entry.getKey()), ((RecipeItemStack) entry.getValue()).c());
             }

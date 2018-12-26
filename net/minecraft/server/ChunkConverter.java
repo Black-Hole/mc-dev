@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,7 +79,7 @@ public class ChunkConverter {
         World world = chunk.getWorld();
 
         if (chunk.F().d.remove(enumdirection8)) {
-            Set set = enumdirection8.a();
+            Set<EnumDirection> set = enumdirection8.a();
             boolean flag = false;
             boolean flag1 = true;
             boolean flag2 = set.contains(EnumDirection.EAST);
@@ -141,7 +139,7 @@ public class ChunkConverter {
                     this.e[i] = null;
                     if (chunksection != null && aint != null && aint.length > 0) {
                         EnumDirection[] aenumdirection = EnumDirection.values();
-                        DataPaletteBlock datapaletteblock = chunksection.getBlocks();
+                        DataPaletteBlock<IBlockData> datapaletteblock = chunksection.getBlocks();
                         int[] aint1 = aint;
                         int j = aint.length;
 
@@ -307,7 +305,7 @@ public class ChunkConverter {
 
                 if (iblockdata != iblockdata2) {
                     int i = (Integer) iblockdata2.get(BlockProperties.ab);
-                    List list = (List) this.g.get();
+                    List<ObjectSet<BlockPosition>> list = (List) this.g.get();
 
                     if (list.isEmpty()) {
                         for (int j = 0; j < 7; ++j) {
@@ -323,12 +321,12 @@ public class ChunkConverter {
 
             public void a(GeneratorAccess generatoraccess) {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-                List list = (List) this.g.get();
+                List<ObjectSet<BlockPosition>> list = (List) this.g.get();
 
                 for (int i = 2; i < list.size(); ++i) {
                     int j = i - 1;
-                    ObjectSet objectset = (ObjectSet) list.get(j);
-                    ObjectSet objectset1 = (ObjectSet) list.get(i);
+                    ObjectSet<BlockPosition> objectset = (ObjectSet) list.get(j);
+                    ObjectSet<BlockPosition> objectset1 = (ObjectSet) list.get(i);
                     ObjectIterator objectiterator = objectset.iterator();
 
                     while (objectiterator.hasNext()) {

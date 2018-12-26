@@ -36,7 +36,7 @@ public class PathfinderGoalNearestAttackableTargetInsentient extends PathfinderG
 
     public boolean a() {
         double d0 = this.g();
-        List list = this.b.world.a(this.f, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
+        List<EntityLiving> list = this.b.world.a(this.f, this.b.getBoundingBox().grow(d0, 4.0D, d0), this.c);
 
         Collections.sort(list, this.d);
         if (list.isEmpty()) {

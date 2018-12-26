@@ -17,7 +17,7 @@ public class PathfinderGoalLlamaFollow extends PathfinderGoal {
 
     public boolean a() {
         if (!this.a.isLeashed() && !this.a.em()) {
-            List list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(9.0D, 4.0D, 9.0D));
+            List<EntityLlama> list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(9.0D, 4.0D, 9.0D));
             EntityLlama entityllama = null;
             double d0 = Double.MAX_VALUE;
             Iterator iterator = list.iterator();

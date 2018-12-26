@@ -204,7 +204,7 @@ public class PlayerInventory implements IInventory {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
-            NonNullList nonnulllist = (NonNullList) iterator.next();
+            NonNullList<ItemStack> nonnulllist = (NonNullList) iterator.next();
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 if (!((ItemStack) nonnulllist.get(i)).isEmpty()) {
@@ -298,26 +298,26 @@ public class PlayerInventory implements IInventory {
     }
 
     public ItemStack splitStack(int i, int j) {
-        NonNullList nonnulllist = null;
+        List<ItemStack> list = null;
 
-        NonNullList nonnulllist1;
+        NonNullList nonnulllist;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
-            nonnulllist1 = (NonNullList) iterator.next();
-            if (i < nonnulllist1.size()) {
-                nonnulllist = nonnulllist1;
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
+            nonnulllist = (NonNullList) iterator.next();
+            if (i < nonnulllist.size()) {
+                list = nonnulllist;
                 break;
             }
         }
 
-        return nonnulllist != null && !((ItemStack) nonnulllist.get(i)).isEmpty() ? ContainerUtil.a(nonnulllist, i, j) : ItemStack.a;
+        return list != null && !((ItemStack) list.get(i)).isEmpty() ? ContainerUtil.a(list, i, j) : ItemStack.a;
     }
 
     public void f(ItemStack itemstack) {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
-            NonNullList nonnulllist = (NonNullList) iterator.next();
+            NonNullList<ItemStack> nonnulllist = (NonNullList) iterator.next();
 
             for (int i = 0; i < nonnulllist.size(); ++i) {
                 if (nonnulllist.get(i) == itemstack) {
@@ -330,7 +330,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public ItemStack splitWithoutUpdate(int i) {
-        NonNullList nonnulllist = null;
+        NonNullList<ItemStack> nonnulllist = null;
 
         NonNullList nonnulllist1;
 
@@ -353,7 +353,7 @@ public class PlayerInventory implements IInventory {
     }
 
     public void setItem(int i, ItemStack itemstack) {
-        NonNullList nonnulllist = null;
+        NonNullList<ItemStack> nonnulllist = null;
 
         NonNullList nonnulllist1;
 
@@ -473,19 +473,19 @@ public class PlayerInventory implements IInventory {
     }
 
     public ItemStack getItem(int i) {
-        NonNullList nonnulllist = null;
+        List<ItemStack> list = null;
 
-        NonNullList nonnulllist1;
+        NonNullList nonnulllist;
 
-        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist1.size()) {
-            nonnulllist1 = (NonNullList) iterator.next();
-            if (i < nonnulllist1.size()) {
-                nonnulllist = nonnulllist1;
+        for (Iterator iterator = this.f.iterator(); iterator.hasNext(); i -= nonnulllist.size()) {
+            nonnulllist = (NonNullList) iterator.next();
+            if (i < nonnulllist.size()) {
+                list = nonnulllist;
                 break;
             }
         }
 
-        return nonnulllist == null ? ItemStack.a : (ItemStack) nonnulllist.get(i);
+        return list == null ? ItemStack.a : (ItemStack) list.get(i);
     }
 
     public IChatBaseComponent getDisplayName() {
@@ -531,7 +531,7 @@ public class PlayerInventory implements IInventory {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
-            List list = (List) iterator.next();
+            List<ItemStack> list = (List) iterator.next();
 
             for (int i = 0; i < list.size(); ++i) {
                 ItemStack itemstack = (ItemStack) list.get(i);
@@ -565,7 +565,7 @@ public class PlayerInventory implements IInventory {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
-            List list = (List) iterator.next();
+            List<ItemStack> list = (List) iterator.next();
             Iterator iterator1 = list.iterator();
 
             while (iterator1.hasNext()) {
@@ -610,7 +610,7 @@ public class PlayerInventory implements IInventory {
         Iterator iterator = this.f.iterator();
 
         while (iterator.hasNext()) {
-            List list = (List) iterator.next();
+            List<ItemStack> list = (List) iterator.next();
 
             list.clear();
         }

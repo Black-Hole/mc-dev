@@ -138,7 +138,7 @@ public class EntityFireworks extends Entity {
 
             double d0 = 5.0D;
             Vec3D vec3d = new Vec3D(this.locX, this.locY, this.locZ);
-            List list = this.world.a(EntityLiving.class, this.getBoundingBox().g(5.0D));
+            List<EntityLiving> list = this.world.a(EntityLiving.class, this.getBoundingBox().g(5.0D));
             Iterator iterator = list.iterator();
 
             while (iterator.hasNext()) {

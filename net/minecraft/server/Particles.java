@@ -54,12 +54,12 @@ public class Particles {
     public static final ParticleType X;
 
     private static <T extends Particle<?>> T a(String s) {
-        Particle particle = (Particle) IRegistry.PARTICLE_TYPE.get(new MinecraftKey(s));
+        T t0 = (Particle) IRegistry.PARTICLE_TYPE.get(new MinecraftKey(s));
 
-        if (particle == null) {
+        if (t0 == null) {
             throw new IllegalStateException("Invalid or unknown particle type: " + s);
         } else {
-            return particle;
+            return t0;
         }
     }
 

@@ -31,7 +31,7 @@ public class ArgumentTileLocation implements Predicate<ShapeDetectorBlock> {
             Iterator iterator = this.b.iterator();
 
             while (iterator.hasNext()) {
-                IBlockState iblockstate = (IBlockState) iterator.next();
+                IBlockState<?> iblockstate = (IBlockState) iterator.next();
 
                 if (iblockdata.get(iblockstate) != this.a.get(iblockstate)) {
                     return false;
