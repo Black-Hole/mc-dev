@@ -52,9 +52,9 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
 
     public CriterionTriggerEnchantedItem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
-        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("levels"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("levels"));
 
-        return new CriterionTriggerEnchantedItem.b(criterionconditionitem, criterionconditionvalue_d);
+        return new CriterionTriggerEnchantedItem.b(criterionconditionitem, criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
@@ -119,16 +119,16 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionItem a;
-        private final CriterionConditionValue.d b;
+        private final CriterionConditionValue.IntegerRange b;
 
-        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d) {
+        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
             super(CriterionTriggerEnchantedItem.a);
             this.a = criterionconditionitem;
-            this.b = criterionconditionvalue_d;
+            this.b = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerEnchantedItem.b c() {
-            return new CriterionTriggerEnchantedItem.b(CriterionConditionItem.a, CriterionConditionValue.d.e);
+            return new CriterionTriggerEnchantedItem.b(CriterionConditionItem.a, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {

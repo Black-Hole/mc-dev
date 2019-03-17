@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 
 public class CriterionConditionLocation {
 
-    public static final CriterionConditionLocation a = new CriterionConditionLocation(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, (BiomeBase) null, (String) null, (DimensionManager) null);
-    private final CriterionConditionValue.c b;
-    private final CriterionConditionValue.c c;
-    private final CriterionConditionValue.c d;
+    public static final CriterionConditionLocation a = new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, (String) null, (DimensionManager) null);
+    private final CriterionConditionValue.FloatRange b;
+    private final CriterionConditionValue.FloatRange c;
+    private final CriterionConditionValue.FloatRange d;
     @Nullable
     private final BiomeBase e;
     @Nullable
@@ -19,25 +19,25 @@ public class CriterionConditionLocation {
     @Nullable
     private final DimensionManager g;
 
-    public CriterionConditionLocation(CriterionConditionValue.c criterionconditionvalue_c, CriterionConditionValue.c criterionconditionvalue_c1, CriterionConditionValue.c criterionconditionvalue_c2, @Nullable BiomeBase biomebase, @Nullable String s, @Nullable DimensionManager dimensionmanager) {
-        this.b = criterionconditionvalue_c;
-        this.c = criterionconditionvalue_c1;
-        this.d = criterionconditionvalue_c2;
+    public CriterionConditionLocation(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, @Nullable BiomeBase biomebase, @Nullable String s, @Nullable DimensionManager dimensionmanager) {
+        this.b = criterionconditionvalue_floatrange;
+        this.c = criterionconditionvalue_floatrange1;
+        this.d = criterionconditionvalue_floatrange2;
         this.e = biomebase;
         this.f = s;
         this.g = dimensionmanager;
     }
 
     public static CriterionConditionLocation a(BiomeBase biomebase) {
-        return new CriterionConditionLocation(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, biomebase, (String) null, (DimensionManager) null);
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, biomebase, (String) null, (DimensionManager) null);
     }
 
     public static CriterionConditionLocation a(DimensionManager dimensionmanager) {
-        return new CriterionConditionLocation(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, (BiomeBase) null, (String) null, dimensionmanager);
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, (String) null, dimensionmanager);
     }
 
     public static CriterionConditionLocation a(String s) {
-        return new CriterionConditionLocation(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, (BiomeBase) null, s, (DimensionManager) null);
+        return new CriterionConditionLocation(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, (BiomeBase) null, s, (DimensionManager) null);
     }
 
     public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
@@ -95,9 +95,9 @@ public class CriterionConditionLocation {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "location");
             JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "position", new JsonObject());
-            CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject1.get("x"));
-            CriterionConditionValue.c criterionconditionvalue_c1 = CriterionConditionValue.c.a(jsonobject1.get("y"));
-            CriterionConditionValue.c criterionconditionvalue_c2 = CriterionConditionValue.c.a(jsonobject1.get("z"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject1.get("x"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1 = CriterionConditionValue.FloatRange.a(jsonobject1.get("y"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2 = CriterionConditionValue.FloatRange.a(jsonobject1.get("z"));
             DimensionManager dimensionmanager = jsonobject.has("dimension") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "dimension"))) : null;
             String s = jsonobject.has("feature") ? ChatDeserializer.h(jsonobject, "feature") : null;
             BiomeBase biomebase = null;
@@ -111,7 +111,7 @@ public class CriterionConditionLocation {
                 }
             }
 
-            return new CriterionConditionLocation(criterionconditionvalue_c, criterionconditionvalue_c1, criterionconditionvalue_c2, biomebase, s, dimensionmanager);
+            return new CriterionConditionLocation(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, biomebase, s, dimensionmanager);
         } else {
             return CriterionConditionLocation.a;
         }

@@ -69,10 +69,10 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.name.description", new Object[0]));
             a("distance", (argumentparserselector) -> {
                 int i = argumentparserselector.f().getCursor();
-                CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(argumentparserselector.f());
+                CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(argumentparserselector.f());
 
-                if ((criterionconditionvalue_c.a() == null || (Float) criterionconditionvalue_c.a() >= 0.0F) && (criterionconditionvalue_c.b() == null || (Float) criterionconditionvalue_c.b() >= 0.0F)) {
-                    argumentparserselector.a(criterionconditionvalue_c);
+                if ((criterionconditionvalue_floatrange.a() == null || (Float) criterionconditionvalue_floatrange.a() >= 0.0F) && (criterionconditionvalue_floatrange.b() == null || (Float) criterionconditionvalue_floatrange.b() >= 0.0F)) {
+                    argumentparserselector.a(criterionconditionvalue_floatrange);
                     argumentparserselector.g();
                 } else {
                     argumentparserselector.f().setCursor(i);
@@ -83,10 +83,10 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.distance.description", new Object[0]));
             a("level", (argumentparserselector) -> {
                 int i = argumentparserselector.f().getCursor();
-                CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(argumentparserselector.f());
+                CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(argumentparserselector.f());
 
-                if ((criterionconditionvalue_d.a() == null || (Integer) criterionconditionvalue_d.a() >= 0) && (criterionconditionvalue_d.b() == null || (Integer) criterionconditionvalue_d.b() >= 0)) {
-                    argumentparserselector.a(criterionconditionvalue_d);
+                if ((criterionconditionvalue_integerrange.a() == null || (Integer) criterionconditionvalue_integerrange.a() >= 0) && (criterionconditionvalue_integerrange.b() == null || (Integer) criterionconditionvalue_integerrange.b() >= 0)) {
+                    argumentparserselector.a(criterionconditionvalue_integerrange);
                     argumentparserselector.a(false);
                 } else {
                     argumentparserselector.f().setCursor(i);
@@ -376,7 +376,7 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.nbt.description", new Object[0]));
             a("scores", (argumentparserselector) -> {
                 StringReader stringreader = argumentparserselector.f();
-                Map<String, CriterionConditionValue.d> map = Maps.newHashMap();
+                Map<String, CriterionConditionValue.IntegerRange> map = Maps.newHashMap();
 
                 stringreader.expect('{');
                 stringreader.skipWhitespace();
@@ -388,9 +388,9 @@ public class PlayerSelector {
                     stringreader.skipWhitespace();
                     stringreader.expect('=');
                     stringreader.skipWhitespace();
-                    CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(stringreader);
+                    CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(stringreader);
 
-                    map.put(s, criterionconditionvalue_d);
+                    map.put(s, criterionconditionvalue_integerrange);
                     stringreader.skipWhitespace();
                     if (stringreader.canRead() && stringreader.peek() == ',') {
                         stringreader.skip();
@@ -426,7 +426,7 @@ public class PlayerSelector {
                             ScoreboardScore scoreboardscore = scoreboardserver.getPlayerScoreForObjective(s1, scoreboardobjective);
 
                             i = scoreboardscore.getScore();
-                        } while (((CriterionConditionValue.d) entry.getValue()).d(i));
+                        } while (((CriterionConditionValue.IntegerRange) entry.getValue()).d(i));
 
                         return false;
                     });

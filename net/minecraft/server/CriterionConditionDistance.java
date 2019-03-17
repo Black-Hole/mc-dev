@@ -7,27 +7,27 @@ import javax.annotation.Nullable;
 
 public class CriterionConditionDistance {
 
-    public static final CriterionConditionDistance a = new CriterionConditionDistance(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e);
-    private final CriterionConditionValue.c b;
-    private final CriterionConditionValue.c c;
-    private final CriterionConditionValue.c d;
-    private final CriterionConditionValue.c e;
-    private final CriterionConditionValue.c f;
+    public static final CriterionConditionDistance a = new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e);
+    private final CriterionConditionValue.FloatRange b;
+    private final CriterionConditionValue.FloatRange c;
+    private final CriterionConditionValue.FloatRange d;
+    private final CriterionConditionValue.FloatRange e;
+    private final CriterionConditionValue.FloatRange f;
 
-    public CriterionConditionDistance(CriterionConditionValue.c criterionconditionvalue_c, CriterionConditionValue.c criterionconditionvalue_c1, CriterionConditionValue.c criterionconditionvalue_c2, CriterionConditionValue.c criterionconditionvalue_c3, CriterionConditionValue.c criterionconditionvalue_c4) {
-        this.b = criterionconditionvalue_c;
-        this.c = criterionconditionvalue_c1;
-        this.d = criterionconditionvalue_c2;
-        this.e = criterionconditionvalue_c3;
-        this.f = criterionconditionvalue_c4;
+    public CriterionConditionDistance(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange3, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange4) {
+        this.b = criterionconditionvalue_floatrange;
+        this.c = criterionconditionvalue_floatrange1;
+        this.d = criterionconditionvalue_floatrange2;
+        this.e = criterionconditionvalue_floatrange3;
+        this.f = criterionconditionvalue_floatrange4;
     }
 
-    public static CriterionConditionDistance a(CriterionConditionValue.c criterionconditionvalue_c) {
-        return new CriterionConditionDistance(CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e, criterionconditionvalue_c, CriterionConditionValue.c.e);
+    public static CriterionConditionDistance a(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
+        return new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange.e);
     }
 
-    public static CriterionConditionDistance b(CriterionConditionValue.c criterionconditionvalue_c) {
-        return new CriterionConditionDistance(CriterionConditionValue.c.e, criterionconditionvalue_c, CriterionConditionValue.c.e, CriterionConditionValue.c.e, CriterionConditionValue.c.e);
+    public static CriterionConditionDistance b(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange) {
+        return new CriterionConditionDistance(CriterionConditionValue.FloatRange.e, criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e, CriterionConditionValue.FloatRange.e);
     }
 
     public boolean a(double d0, double d1, double d2, double d3, double d4, double d5) {
@@ -41,13 +41,13 @@ public class CriterionConditionDistance {
     public static CriterionConditionDistance a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "distance");
-            CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject.get("x"));
-            CriterionConditionValue.c criterionconditionvalue_c1 = CriterionConditionValue.c.a(jsonobject.get("y"));
-            CriterionConditionValue.c criterionconditionvalue_c2 = CriterionConditionValue.c.a(jsonobject.get("z"));
-            CriterionConditionValue.c criterionconditionvalue_c3 = CriterionConditionValue.c.a(jsonobject.get("horizontal"));
-            CriterionConditionValue.c criterionconditionvalue_c4 = CriterionConditionValue.c.a(jsonobject.get("absolute"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("x"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1 = CriterionConditionValue.FloatRange.a(jsonobject.get("y"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange2 = CriterionConditionValue.FloatRange.a(jsonobject.get("z"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange3 = CriterionConditionValue.FloatRange.a(jsonobject.get("horizontal"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange4 = CriterionConditionValue.FloatRange.a(jsonobject.get("absolute"));
 
-            return new CriterionConditionDistance(criterionconditionvalue_c, criterionconditionvalue_c1, criterionconditionvalue_c2, criterionconditionvalue_c3, criterionconditionvalue_c4);
+            return new CriterionConditionDistance(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionvalue_floatrange2, criterionconditionvalue_floatrange3, criterionconditionvalue_floatrange4);
         } else {
             return CriterionConditionDistance.a;
         }

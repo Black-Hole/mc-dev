@@ -52,10 +52,10 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
 
     public CriterionTriggerItemDurabilityChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
-        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("durability"));
-        CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("delta"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("durability"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject.get("delta"));
 
-        return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_d, criterionconditionvalue_d1);
+        return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1);
     }
 
     public void a(EntityPlayer entityplayer, ItemStack itemstack, int i) {
@@ -120,18 +120,18 @@ public class CriterionTriggerItemDurabilityChanged implements CriterionTrigger<C
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionItem a;
-        private final CriterionConditionValue.d b;
-        private final CriterionConditionValue.d c;
+        private final CriterionConditionValue.IntegerRange b;
+        private final CriterionConditionValue.IntegerRange c;
 
-        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1) {
+        public b(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1) {
             super(CriterionTriggerItemDurabilityChanged.a);
             this.a = criterionconditionitem;
-            this.b = criterionconditionvalue_d;
-            this.c = criterionconditionvalue_d1;
+            this.b = criterionconditionvalue_integerrange;
+            this.c = criterionconditionvalue_integerrange1;
         }
 
-        public static CriterionTriggerItemDurabilityChanged.b a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.d criterionconditionvalue_d) {
-            return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_d, CriterionConditionValue.d.e);
+        public static CriterionTriggerItemDurabilityChanged.b a(CriterionConditionItem criterionconditionitem, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            return new CriterionTriggerItemDurabilityChanged.b(criterionconditionitem, criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(ItemStack itemstack, int i) {

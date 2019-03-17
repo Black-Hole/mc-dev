@@ -8,23 +8,23 @@ import javax.annotation.Nullable;
 public class CriterionConditionDamage {
 
     public static final CriterionConditionDamage a = CriterionConditionDamage.a.a().b();
-    private final CriterionConditionValue.c b;
-    private final CriterionConditionValue.c c;
+    private final CriterionConditionValue.FloatRange b;
+    private final CriterionConditionValue.FloatRange c;
     private final CriterionConditionEntity d;
     private final Boolean e;
     private final CriterionConditionDamageSource f;
 
     public CriterionConditionDamage() {
-        this.b = CriterionConditionValue.c.e;
-        this.c = CriterionConditionValue.c.e;
+        this.b = CriterionConditionValue.FloatRange.e;
+        this.c = CriterionConditionValue.FloatRange.e;
         this.d = CriterionConditionEntity.a;
         this.e = null;
         this.f = CriterionConditionDamageSource.a;
     }
 
-    public CriterionConditionDamage(CriterionConditionValue.c criterionconditionvalue_c, CriterionConditionValue.c criterionconditionvalue_c1, CriterionConditionEntity criterionconditionentity, @Nullable Boolean obool, CriterionConditionDamageSource criterionconditiondamagesource) {
-        this.b = criterionconditionvalue_c;
-        this.c = criterionconditionvalue_c1;
+    public CriterionConditionDamage(CriterionConditionValue.FloatRange criterionconditionvalue_floatrange, CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1, CriterionConditionEntity criterionconditionentity, @Nullable Boolean obool, CriterionConditionDamageSource criterionconditiondamagesource) {
+        this.b = criterionconditionvalue_floatrange;
+        this.c = criterionconditionvalue_floatrange1;
         this.d = criterionconditionentity;
         this.e = obool;
         this.f = criterionconditiondamagesource;
@@ -37,13 +37,13 @@ public class CriterionConditionDamage {
     public static CriterionConditionDamage a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "damage");
-            CriterionConditionValue.c criterionconditionvalue_c = CriterionConditionValue.c.a(jsonobject.get("dealt"));
-            CriterionConditionValue.c criterionconditionvalue_c1 = CriterionConditionValue.c.a(jsonobject.get("taken"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("dealt"));
+            CriterionConditionValue.FloatRange criterionconditionvalue_floatrange1 = CriterionConditionValue.FloatRange.a(jsonobject.get("taken"));
             Boolean obool = jsonobject.has("blocked") ? ChatDeserializer.j(jsonobject, "blocked") : null;
             CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("source_entity"));
             CriterionConditionDamageSource criterionconditiondamagesource = CriterionConditionDamageSource.a(jsonobject.get("type"));
 
-            return new CriterionConditionDamage(criterionconditionvalue_c, criterionconditionvalue_c1, criterionconditionentity, obool, criterionconditiondamagesource);
+            return new CriterionConditionDamage(criterionconditionvalue_floatrange, criterionconditionvalue_floatrange1, criterionconditionentity, obool, criterionconditiondamagesource);
         } else {
             return CriterionConditionDamage.a;
         }
@@ -69,15 +69,15 @@ public class CriterionConditionDamage {
 
     public static class a {
 
-        private CriterionConditionValue.c a;
-        private CriterionConditionValue.c b;
+        private CriterionConditionValue.FloatRange a;
+        private CriterionConditionValue.FloatRange b;
         private CriterionConditionEntity c;
         private Boolean d;
         private CriterionConditionDamageSource e;
 
         public a() {
-            this.a = CriterionConditionValue.c.e;
-            this.b = CriterionConditionValue.c.e;
+            this.a = CriterionConditionValue.FloatRange.e;
+            this.b = CriterionConditionValue.FloatRange.e;
             this.c = CriterionConditionEntity.a;
             this.e = CriterionConditionDamageSource.a;
         }

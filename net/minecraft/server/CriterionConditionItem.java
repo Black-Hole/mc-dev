@@ -18,8 +18,8 @@ public class CriterionConditionItem {
     private final Tag<Item> b;
     @Nullable
     private final Item c;
-    private final CriterionConditionValue.d d;
-    private final CriterionConditionValue.d e;
+    private final CriterionConditionValue.IntegerRange d;
+    private final CriterionConditionValue.IntegerRange e;
     private final CriterionConditionEnchantments[] f;
     @Nullable
     private final PotionRegistry g;
@@ -29,17 +29,17 @@ public class CriterionConditionItem {
         this.b = null;
         this.c = null;
         this.g = null;
-        this.d = CriterionConditionValue.d.e;
-        this.e = CriterionConditionValue.d.e;
+        this.d = CriterionConditionValue.IntegerRange.e;
+        this.e = CriterionConditionValue.IntegerRange.e;
         this.f = new CriterionConditionEnchantments[0];
         this.h = CriterionConditionNBT.a;
     }
 
-    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Item item, CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1, CriterionConditionEnchantments[] acriterionconditionenchantments, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
+    public CriterionConditionItem(@Nullable Tag<Item> tag, @Nullable Item item, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionEnchantments[] acriterionconditionenchantments, @Nullable PotionRegistry potionregistry, CriterionConditionNBT criterionconditionnbt) {
         this.b = tag;
         this.c = item;
-        this.d = criterionconditionvalue_d;
-        this.e = criterionconditionvalue_d1;
+        this.d = criterionconditionvalue_integerrange;
+        this.e = criterionconditionvalue_integerrange1;
         this.f = acriterionconditionenchantments;
         this.g = potionregistry;
         this.h = criterionconditionnbt;
@@ -80,8 +80,8 @@ public class CriterionConditionItem {
     public static CriterionConditionItem a(@Nullable JsonElement jsonelement) {
         if (jsonelement != null && !jsonelement.isJsonNull()) {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "item");
-            CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("count"));
-            CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("durability"));
+            CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("count"));
+            CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject.get("durability"));
 
             if (jsonobject.has("data")) {
                 throw new JsonParseException("Disallowed data tag found");
@@ -122,7 +122,7 @@ public class CriterionConditionItem {
                     potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey2);
                 }
 
-                return new CriterionConditionItem(tag, item, criterionconditionvalue_d, criterionconditionvalue_d1, acriterionconditionenchantments, potionregistry, criterionconditionnbt);
+                return new CriterionConditionItem(tag, item, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, potionregistry, criterionconditionnbt);
             }
         } else {
             return CriterionConditionItem.a;
@@ -190,15 +190,15 @@ public class CriterionConditionItem {
         private Item b;
         @Nullable
         private Tag<Item> c;
-        private CriterionConditionValue.d d;
-        private CriterionConditionValue.d e;
+        private CriterionConditionValue.IntegerRange d;
+        private CriterionConditionValue.IntegerRange e;
         @Nullable
         private PotionRegistry f;
         private CriterionConditionNBT g;
 
         private a() {
-            this.d = CriterionConditionValue.d.e;
-            this.e = CriterionConditionValue.d.e;
+            this.d = CriterionConditionValue.IntegerRange.e;
+            this.e = CriterionConditionValue.IntegerRange.e;
             this.g = CriterionConditionNBT.a;
         }
 
@@ -216,8 +216,8 @@ public class CriterionConditionItem {
             return this;
         }
 
-        public CriterionConditionItem.a a(CriterionConditionValue.d criterionconditionvalue_d) {
-            this.d = criterionconditionvalue_d;
+        public CriterionConditionItem.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            this.d = criterionconditionvalue_integerrange;
             return this;
         }
 

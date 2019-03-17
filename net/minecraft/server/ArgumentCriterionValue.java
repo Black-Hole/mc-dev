@@ -23,14 +23,14 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
         public void a(T t0, JsonObject jsonobject) {}
     }
 
-    public static class a implements ArgumentCriterionValue<CriterionConditionValue.c> {
+    public static class a implements ArgumentCriterionValue<CriterionConditionValue.FloatRange> {
 
         private static final Collection<String> a = Arrays.asList("0..5.2", "0", "-5.4", "-100.76..", "..100");
 
         public a() {}
 
-        public CriterionConditionValue.c parse(StringReader stringreader) throws CommandSyntaxException {
-            return CriterionConditionValue.c.a(stringreader);
+        public CriterionConditionValue.FloatRange parse(StringReader stringreader) throws CommandSyntaxException {
+            return CriterionConditionValue.FloatRange.a(stringreader);
         }
 
         public Collection<String> getExamples() {
@@ -47,18 +47,18 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
         }
     }
 
-    public static class b implements ArgumentCriterionValue<CriterionConditionValue.d> {
+    public static class b implements ArgumentCriterionValue<CriterionConditionValue.IntegerRange> {
 
         private static final Collection<String> a = Arrays.asList("0..5", "0", "-5", "-100..", "..100");
 
         public b() {}
 
-        public static CriterionConditionValue.d a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
-            return (CriterionConditionValue.d) commandcontext.getArgument(s, CriterionConditionValue.d.class);
+        public static CriterionConditionValue.IntegerRange a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
+            return (CriterionConditionValue.IntegerRange) commandcontext.getArgument(s, CriterionConditionValue.IntegerRange.class);
         }
 
-        public CriterionConditionValue.d parse(StringReader stringreader) throws CommandSyntaxException {
-            return CriterionConditionValue.d.a(stringreader);
+        public CriterionConditionValue.IntegerRange parse(StringReader stringreader) throws CommandSyntaxException {
+            return CriterionConditionValue.IntegerRange.a(stringreader);
         }
 
         public Collection<String> getExamples() {

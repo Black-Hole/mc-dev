@@ -57,7 +57,7 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
             list.add(Sets.newHashSet());
         }
 
-        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
         Throwable throwable = null;
 
         try {
@@ -72,13 +72,13 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                     for (int k = 0; k < j; ++k) {
                         EnumDirection enumdirection = aenumdirection[k];
 
-                        blockposition_b.g(blockposition1).c(enumdirection);
-                        if (!set.contains(blockposition_b)) {
-                            IBlockData iblockdata = generatoraccess.getType(blockposition_b);
+                        blockposition_pooledblockposition.g(blockposition1).c(enumdirection);
+                        if (!set.contains(blockposition_pooledblockposition)) {
+                            IBlockData iblockdata = generatoraccess.getType(blockposition_pooledblockposition);
 
                             if (iblockdata.b(BlockProperties.ab)) {
-                                ((Set) list.get(0)).add(blockposition_b.h());
-                                this.b(generatoraccess, blockposition_b, (IBlockData) iblockdata.set(BlockProperties.ab, 1));
+                                ((Set) list.get(0)).add(blockposition_pooledblockposition.h());
+                                this.b(generatoraccess, blockposition_pooledblockposition, (IBlockData) iblockdata.set(BlockProperties.ab, 1));
                             }
                         }
                     }
@@ -107,9 +107,9 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
 
                             EnumDirection enumdirection1 = aenumdirection1[j1];
 
-                            blockposition_b.g(blockposition2).c(enumdirection1);
-                            if (!set1.contains(blockposition_b) && !set2.contains(blockposition_b)) {
-                                IBlockData iblockdata1 = generatoraccess.getType(blockposition_b);
+                            blockposition_pooledblockposition.g(blockposition2).c(enumdirection1);
+                            if (!set1.contains(blockposition_pooledblockposition) && !set2.contains(blockposition_pooledblockposition)) {
+                                IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
 
                                 if (iblockdata1.b(BlockProperties.ab)) {
                                     int k1 = (Integer) iblockdata1.get(BlockProperties.ab);
@@ -117,8 +117,8 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                                     if (k1 > l + 1) {
                                         IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ab, l + 1);
 
-                                        this.b(generatoraccess, blockposition_b, iblockdata2);
-                                        set2.add(blockposition_b.h());
+                                        this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
+                                        set2.add(blockposition_pooledblockposition.h());
                                     }
                                 }
                             }
@@ -135,15 +135,15 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
             throwable = throwable1;
             throw throwable1;
         } finally {
-            if (blockposition_b != null) {
+            if (blockposition_pooledblockposition != null) {
                 if (throwable != null) {
                     try {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     } catch (Throwable throwable2) {
                         throwable.addSuppressed(throwable2);
                     }
                 } else {
-                    blockposition_b.close();
+                    blockposition_pooledblockposition.close();
                 }
             }
 

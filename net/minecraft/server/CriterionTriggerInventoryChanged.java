@@ -53,12 +53,12 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     public CriterionTriggerInventoryChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "slots", new JsonObject());
-        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject1.get("occupied"));
-        CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject1.get("full"));
-        CriterionConditionValue.d criterionconditionvalue_d2 = CriterionConditionValue.d.a(jsonobject1.get("empty"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject1.get("occupied"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject1.get("full"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange2 = CriterionConditionValue.IntegerRange.a(jsonobject1.get("empty"));
         CriterionConditionItem[] acriterionconditionitem = CriterionConditionItem.b(jsonobject.get("items"));
 
-        return new CriterionTriggerInventoryChanged.b(criterionconditionvalue_d, criterionconditionvalue_d1, criterionconditionvalue_d2, acriterionconditionitem);
+        return new CriterionTriggerInventoryChanged.b(criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, criterionconditionvalue_integerrange2, acriterionconditionitem);
     }
 
     public void a(EntityPlayer entityplayer, PlayerInventory playerinventory) {
@@ -122,28 +122,28 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue.d a;
-        private final CriterionConditionValue.d b;
-        private final CriterionConditionValue.d c;
+        private final CriterionConditionValue.IntegerRange a;
+        private final CriterionConditionValue.IntegerRange b;
+        private final CriterionConditionValue.IntegerRange c;
         private final CriterionConditionItem[] d;
 
-        public b(CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1, CriterionConditionValue.d criterionconditionvalue_d2, CriterionConditionItem[] acriterionconditionitem) {
+        public b(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange2, CriterionConditionItem[] acriterionconditionitem) {
             super(CriterionTriggerInventoryChanged.a);
-            this.a = criterionconditionvalue_d;
-            this.b = criterionconditionvalue_d1;
-            this.c = criterionconditionvalue_d2;
+            this.a = criterionconditionvalue_integerrange;
+            this.b = criterionconditionvalue_integerrange1;
+            this.c = criterionconditionvalue_integerrange2;
             this.d = acriterionconditionitem;
         }
 
         public static CriterionTriggerInventoryChanged.b a(CriterionConditionItem... acriterionconditionitem) {
-            return new CriterionTriggerInventoryChanged.b(CriterionConditionValue.d.e, CriterionConditionValue.d.e, CriterionConditionValue.d.e, acriterionconditionitem);
+            return new CriterionTriggerInventoryChanged.b(CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, acriterionconditionitem);
         }
 
         public static CriterionTriggerInventoryChanged.b a(IMaterial... aimaterial) {
             CriterionConditionItem[] acriterionconditionitem = new CriterionConditionItem[aimaterial.length];
 
             for (int i = 0; i < aimaterial.length; ++i) {
-                acriterionconditionitem[i] = new CriterionConditionItem((Tag) null, aimaterial[i].getItem(), CriterionConditionValue.d.e, CriterionConditionValue.d.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a);
+                acriterionconditionitem[i] = new CriterionConditionItem((Tag) null, aimaterial[i].getItem(), CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a);
             }
 
             return a(acriterionconditionitem);

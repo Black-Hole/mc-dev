@@ -104,22 +104,22 @@ public class CriterionConditionMobEffect {
 
     public static class a {
 
-        private final CriterionConditionValue.d a;
-        private final CriterionConditionValue.d b;
+        private final CriterionConditionValue.IntegerRange a;
+        private final CriterionConditionValue.IntegerRange b;
         @Nullable
         private final Boolean c;
         @Nullable
         private final Boolean d;
 
-        public a(CriterionConditionValue.d criterionconditionvalue_d, CriterionConditionValue.d criterionconditionvalue_d1, @Nullable Boolean obool, @Nullable Boolean obool1) {
-            this.a = criterionconditionvalue_d;
-            this.b = criterionconditionvalue_d1;
+        public a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1, @Nullable Boolean obool, @Nullable Boolean obool1) {
+            this.a = criterionconditionvalue_integerrange;
+            this.b = criterionconditionvalue_integerrange1;
             this.c = obool;
             this.d = obool1;
         }
 
         public a() {
-            this(CriterionConditionValue.d.e, CriterionConditionValue.d.e, (Boolean) null, (Boolean) null);
+            this(CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, (Boolean) null, (Boolean) null);
         }
 
         public boolean a(@Nullable MobEffect mobeffect) {
@@ -137,12 +137,12 @@ public class CriterionConditionMobEffect {
         }
 
         public static CriterionConditionMobEffect.a a(JsonObject jsonobject) {
-            CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("amplifier"));
-            CriterionConditionValue.d criterionconditionvalue_d1 = CriterionConditionValue.d.a(jsonobject.get("duration"));
+            CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("amplifier"));
+            CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange1 = CriterionConditionValue.IntegerRange.a(jsonobject.get("duration"));
             Boolean obool = jsonobject.has("ambient") ? ChatDeserializer.j(jsonobject, "ambient") : null;
             Boolean obool1 = jsonobject.has("visible") ? ChatDeserializer.j(jsonobject, "visible") : null;
 
-            return new CriterionConditionMobEffect.a(criterionconditionvalue_d, criterionconditionvalue_d1, obool, obool1);
+            return new CriterionConditionMobEffect.a(criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, obool, obool1);
         }
     }
 }

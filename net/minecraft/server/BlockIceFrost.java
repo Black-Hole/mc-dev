@@ -13,7 +13,7 @@ public class BlockIceFrost extends BlockIce {
 
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b(world, blockposition) && this.c(iblockdata, world, blockposition)) {
-            BlockPosition.b blockposition_b = BlockPosition.b.r();
+            BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
             Throwable throwable = null;
 
             try {
@@ -23,26 +23,26 @@ public class BlockIceFrost extends BlockIce {
                 for (int j = 0; j < i; ++j) {
                     EnumDirection enumdirection = aenumdirection[j];
 
-                    blockposition_b.g(blockposition).c(enumdirection);
-                    IBlockData iblockdata1 = world.getType(blockposition_b);
+                    blockposition_pooledblockposition.g(blockposition).c(enumdirection);
+                    IBlockData iblockdata1 = world.getType(blockposition_pooledblockposition);
 
-                    if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_b)) {
-                        world.getBlockTickList().a(blockposition_b, this, MathHelper.nextInt(random, 20, 40));
+                    if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_pooledblockposition)) {
+                        world.getBlockTickList().a(blockposition_pooledblockposition, this, MathHelper.nextInt(random, 20, 40));
                     }
                 }
             } catch (Throwable throwable1) {
                 throwable = throwable1;
                 throw throwable1;
             } finally {
-                if (blockposition_b != null) {
+                if (blockposition_pooledblockposition != null) {
                     if (throwable != null) {
                         try {
-                            blockposition_b.close();
+                            blockposition_pooledblockposition.close();
                         } catch (Throwable throwable2) {
                             throwable.addSuppressed(throwable2);
                         }
                     } else {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     }
                 }
 
@@ -75,7 +75,7 @@ public class BlockIceFrost extends BlockIce {
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
         int j = 0;
-        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
         Throwable throwable = null;
 
         try {
@@ -85,8 +85,8 @@ public class BlockIceFrost extends BlockIce {
             for (int l = 0; l < k; ++l) {
                 EnumDirection enumdirection = aenumdirection[l];
 
-                blockposition_b.g(blockposition).c(enumdirection);
-                if (iblockaccess.getType(blockposition_b).getBlock() == this) {
+                blockposition_pooledblockposition.g(blockposition).c(enumdirection);
+                if (iblockaccess.getType(blockposition_pooledblockposition).getBlock() == this) {
                     ++j;
                     if (j >= i) {
                         boolean flag = false;
@@ -101,15 +101,15 @@ public class BlockIceFrost extends BlockIce {
             throwable = throwable1;
             throw throwable1;
         } finally {
-            if (blockposition_b != null) {
+            if (blockposition_pooledblockposition != null) {
                 if (throwable != null) {
                     try {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     } catch (Throwable throwable2) {
                         throwable.addSuppressed(throwable2);
                     }
                 } else {
-                    blockposition_b.close();
+                    blockposition_pooledblockposition.close();
                 }
             }
 

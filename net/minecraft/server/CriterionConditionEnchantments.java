@@ -13,16 +13,16 @@ public class CriterionConditionEnchantments {
 
     public static final CriterionConditionEnchantments a = new CriterionConditionEnchantments();
     private final Enchantment b;
-    private final CriterionConditionValue.d c;
+    private final CriterionConditionValue.IntegerRange c;
 
     public CriterionConditionEnchantments() {
         this.b = null;
-        this.c = CriterionConditionValue.d.e;
+        this.c = CriterionConditionValue.IntegerRange.e;
     }
 
-    public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue.d criterionconditionvalue_d) {
+    public CriterionConditionEnchantments(@Nullable Enchantment enchantment, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
         this.b = enchantment;
-        this.c = criterionconditionvalue_d;
+        this.c = criterionconditionvalue_integerrange;
     }
 
     public boolean a(Map<Enchantment, Integer> map) {
@@ -84,9 +84,9 @@ public class CriterionConditionEnchantments {
                 }
             }
 
-            CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("levels"));
+            CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("levels"));
 
-            return new CriterionConditionEnchantments(enchantment, criterionconditionvalue_d);
+            return new CriterionConditionEnchantments(enchantment, criterionconditionvalue_integerrange);
         } else {
             return CriterionConditionEnchantments.a;
         }

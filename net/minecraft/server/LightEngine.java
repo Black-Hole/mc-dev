@@ -64,7 +64,7 @@ public abstract class LightEngine implements ILightEngine {
     }
 
     protected void a(GeneratorAccess generatoraccess, ChunkCoordIntPair chunkcoordintpair) {
-        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
         Throwable throwable = null;
 
         try {
@@ -87,13 +87,13 @@ public abstract class LightEngine implements ILightEngine {
                         int j2 = i1 + enumdirection1.getAdjacentZ();
 
                         if (i2 <= 255 && i2 >= 0) {
-                            blockposition_b.c(l1 + chunkcoordintpair.d(), i2, j2 + chunkcoordintpair.e());
-                            int k2 = this.a((IBlockAccess) generatoraccess, (BlockPosition) blockposition_b);
+                            blockposition_pooledblockposition.c(l1 + chunkcoordintpair.d(), i2, j2 + chunkcoordintpair.e());
+                            int k2 = this.a((IBlockAccess) generatoraccess, (BlockPosition) blockposition_pooledblockposition);
                             int l2 = j - Math.max(k2, 1);
 
-                            if (l2 > 0 && l2 > this.a((IWorldReader) generatoraccess, (BlockPosition) blockposition_b)) {
-                                this.a((IWorldWriter) generatoraccess, blockposition_b, l2);
-                                this.a(chunkcoordintpair, blockposition_b, l2);
+                            if (l2 > 0 && l2 > this.a((IWorldReader) generatoraccess, (BlockPosition) blockposition_pooledblockposition)) {
+                                this.a((IWorldWriter) generatoraccess, blockposition_pooledblockposition, l2);
+                                this.a(chunkcoordintpair, blockposition_pooledblockposition, l2);
                             }
                         }
                     }
@@ -103,15 +103,15 @@ public abstract class LightEngine implements ILightEngine {
             throwable = throwable1;
             throw throwable1;
         } finally {
-            if (blockposition_b != null) {
+            if (blockposition_pooledblockposition != null) {
                 if (throwable != null) {
                     try {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     } catch (Throwable throwable2) {
                         throwable.addSuppressed(throwable2);
                     }
                 } else {
-                    blockposition_b.close();
+                    blockposition_pooledblockposition.close();
                 }
             }
 

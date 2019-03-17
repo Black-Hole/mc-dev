@@ -52,9 +52,9 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
 
     public CriterionTriggerLevitation.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
-        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("duration"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("duration"));
 
-        return new CriterionTriggerLevitation.b(criterionconditiondistance, criterionconditionvalue_d);
+        return new CriterionTriggerLevitation.b(criterionconditiondistance, criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, Vec3D vec3d, int i) {
@@ -119,16 +119,16 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
     public static class b extends CriterionInstanceAbstract {
 
         private final CriterionConditionDistance a;
-        private final CriterionConditionValue.d b;
+        private final CriterionConditionValue.IntegerRange b;
 
-        public b(CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.d criterionconditionvalue_d) {
+        public b(CriterionConditionDistance criterionconditiondistance, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
             super(CriterionTriggerLevitation.a);
             this.a = criterionconditiondistance;
-            this.b = criterionconditionvalue_d;
+            this.b = criterionconditionvalue_integerrange;
         }
 
         public static CriterionTriggerLevitation.b a(CriterionConditionDistance criterionconditiondistance) {
-            return new CriterionTriggerLevitation.b(criterionconditiondistance, CriterionConditionValue.d.e);
+            return new CriterionTriggerLevitation.b(criterionconditiondistance, CriterionConditionValue.IntegerRange.e);
         }
 
         public boolean a(EntityPlayer entityplayer, Vec3D vec3d, int i) {

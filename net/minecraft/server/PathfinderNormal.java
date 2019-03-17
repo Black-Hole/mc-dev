@@ -346,14 +346,14 @@ public class PathfinderNormal extends PathfinderAbstract {
 
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, PathType pathtype) {
         if (pathtype == PathType.WALKABLE) {
-            BlockPosition.b blockposition_b = BlockPosition.b.r();
+            BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
             Throwable throwable = null;
 
             try {
                 for (int l = -1; l <= 1; ++l) {
                     for (int i1 = -1; i1 <= 1; ++i1) {
                         if (l != 0 || i1 != 0) {
-                            Block block = iblockaccess.getType(blockposition_b.c(l + i, j, i1 + k)).getBlock();
+                            Block block = iblockaccess.getType(blockposition_pooledblockposition.c(l + i, j, i1 + k)).getBlock();
 
                             if (block == Blocks.CACTUS) {
                                 pathtype = PathType.DANGER_CACTUS;
@@ -367,15 +367,15 @@ public class PathfinderNormal extends PathfinderAbstract {
                 throwable = throwable1;
                 throw throwable1;
             } finally {
-                if (blockposition_b != null) {
+                if (blockposition_pooledblockposition != null) {
                     if (throwable != null) {
                         try {
-                            blockposition_b.close();
+                            blockposition_pooledblockposition.close();
                         } catch (Throwable throwable2) {
                             throwable.addSuppressed(throwable2);
                         }
                     } else {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     }
                 }
 

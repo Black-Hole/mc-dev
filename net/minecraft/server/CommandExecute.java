@@ -271,12 +271,12 @@ public class CommandExecute {
         }
     }
 
-    private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, CriterionConditionValue.d criterionconditionvalue_d) throws CommandSyntaxException {
+    private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) throws CommandSyntaxException {
         String s = ArgumentScoreholder.a(commandcontext, "target");
         ScoreboardObjective scoreboardobjective = ArgumentScoreboardObjective.a(commandcontext, "targetObjective");
         ScoreboardServer scoreboardserver = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getScoreboard();
 
-        return !scoreboardserver.b(s, scoreboardobjective) ? false : criterionconditionvalue_d.d(scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective).getScore());
+        return !scoreboardserver.b(s, scoreboardobjective) ? false : criterionconditionvalue_integerrange.d(scoreboardserver.getPlayerScoreForObjective(s, scoreboardobjective).getScore());
     }
 
     private static Collection<CommandListenerWrapper> a(CommandContext<CommandListenerWrapper> commandcontext, boolean flag, boolean flag1) {

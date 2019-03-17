@@ -120,11 +120,11 @@ public class ChunkConverter {
     }
 
     private void b(Chunk chunk) {
-        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
         Throwable throwable = null;
 
         try {
-            BlockPosition.b blockposition_b1 = BlockPosition.b.r();
+            BlockPosition.PooledBlockPosition blockposition_pooledblockposition1 = BlockPosition.PooledBlockPosition.r();
             Throwable throwable1 = null;
 
             try {
@@ -149,7 +149,7 @@ public class ChunkConverter {
                             int j1 = l >> 8 & 15;
                             int k1 = l >> 4 & 15;
 
-                            blockposition_b.c(i1 + (chunk.locX << 4), j1 + (i << 4), k1 + (chunk.locZ << 4));
+                            blockposition_pooledblockposition.c(i1 + (chunk.locX << 4), j1 + (i << 4), k1 + (chunk.locZ << 4));
                             IBlockData iblockdata = (IBlockData) datapaletteblock.a(l);
                             IBlockData iblockdata1 = iblockdata;
                             EnumDirection[] aenumdirection1 = aenumdirection;
@@ -158,13 +158,13 @@ public class ChunkConverter {
                             for (int i2 = 0; i2 < l1; ++i2) {
                                 EnumDirection enumdirection = aenumdirection1[i2];
 
-                                blockposition_b1.g(blockposition_b).c(enumdirection);
-                                if (blockposition_b.getX() >> 4 == chunk.locX && blockposition_b.getZ() >> 4 == chunk.locZ) {
-                                    iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_b, blockposition_b1);
+                                blockposition_pooledblockposition1.g(blockposition_pooledblockposition).c(enumdirection);
+                                if (blockposition_pooledblockposition.getX() >> 4 == chunk.locX && blockposition_pooledblockposition.getZ() >> 4 == chunk.locZ) {
+                                    iblockdata1 = a(iblockdata1, enumdirection, world, blockposition_pooledblockposition, blockposition_pooledblockposition1);
                                 }
                             }
 
-                            Block.a(iblockdata, iblockdata1, world, blockposition_b, 18);
+                            Block.a(iblockdata, iblockdata1, world, blockposition_pooledblockposition, 18);
                         }
                     }
                 }
@@ -180,15 +180,15 @@ public class ChunkConverter {
                 throwable1 = throwable2;
                 throw throwable2;
             } finally {
-                if (blockposition_b1 != null) {
+                if (blockposition_pooledblockposition1 != null) {
                     if (throwable1 != null) {
                         try {
-                            blockposition_b1.close();
+                            blockposition_pooledblockposition1.close();
                         } catch (Throwable throwable3) {
                             throwable1.addSuppressed(throwable3);
                         }
                     } else {
-                        blockposition_b1.close();
+                        blockposition_pooledblockposition1.close();
                     }
                 }
 
@@ -197,15 +197,15 @@ public class ChunkConverter {
             throwable = throwable4;
             throw throwable4;
         } finally {
-            if (blockposition_b != null) {
+            if (blockposition_pooledblockposition != null) {
                 if (throwable != null) {
                     try {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     } catch (Throwable throwable5) {
                         throwable.addSuppressed(throwable5);
                     }
                 } else {
-                    blockposition_b.close();
+                    blockposition_pooledblockposition.close();
                 }
             }
 

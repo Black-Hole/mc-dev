@@ -51,9 +51,9 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
     }
 
     public CriterionTriggerConstructBeacon.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-        CriterionConditionValue.d criterionconditionvalue_d = CriterionConditionValue.d.a(jsonobject.get("level"));
+        CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("level"));
 
-        return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_d);
+        return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_integerrange);
     }
 
     public void a(EntityPlayer entityplayer, TileEntityBeacon tileentitybeacon) {
@@ -117,15 +117,15 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
 
     public static class b extends CriterionInstanceAbstract {
 
-        private final CriterionConditionValue.d a;
+        private final CriterionConditionValue.IntegerRange a;
 
-        public b(CriterionConditionValue.d criterionconditionvalue_d) {
+        public b(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
             super(CriterionTriggerConstructBeacon.a);
-            this.a = criterionconditionvalue_d;
+            this.a = criterionconditionvalue_integerrange;
         }
 
-        public static CriterionTriggerConstructBeacon.b a(CriterionConditionValue.d criterionconditionvalue_d) {
-            return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_d);
+        public static CriterionTriggerConstructBeacon.b a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
+            return new CriterionTriggerConstructBeacon.b(criterionconditionvalue_integerrange);
         }
 
         public boolean a(TileEntityBeacon tileentitybeacon) {

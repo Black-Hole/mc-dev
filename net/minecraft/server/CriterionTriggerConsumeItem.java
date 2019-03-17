@@ -127,7 +127,7 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
         }
 
         public static CriterionTriggerConsumeItem.b a(IMaterial imaterial) {
-            return new CriterionTriggerConsumeItem.b(new CriterionConditionItem((Tag) null, imaterial.getItem(), CriterionConditionValue.d.e, CriterionConditionValue.d.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a));
+            return new CriterionTriggerConsumeItem.b(new CriterionConditionItem((Tag) null, imaterial.getItem(), CriterionConditionValue.IntegerRange.e, CriterionConditionValue.IntegerRange.e, new CriterionConditionEnchantments[0], (PotionRegistry) null, CriterionConditionNBT.a));
         }
 
         public boolean a(ItemStack itemstack) {

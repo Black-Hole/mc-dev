@@ -18,28 +18,28 @@ public class HeightMap {
 
     public void a() {
         int i = this.c.b() + 16;
-        BlockPosition.b blockposition_b = BlockPosition.b.r();
+        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
         Throwable throwable = null;
 
         try {
             for (int j = 0; j < 16; ++j) {
                 for (int k = 0; k < 16; ++k) {
-                    this.a(j, k, this.a(blockposition_b, j, k, this.b, i));
+                    this.a(j, k, this.a(blockposition_pooledblockposition, j, k, this.b, i));
                 }
             }
         } catch (Throwable throwable1) {
             throwable = throwable1;
             throw throwable1;
         } finally {
-            if (blockposition_b != null) {
+            if (blockposition_pooledblockposition != null) {
                 if (throwable != null) {
                     try {
-                        blockposition_b.close();
+                        blockposition_pooledblockposition.close();
                     } catch (Throwable throwable2) {
                         throwable.addSuppressed(throwable2);
                     }
                 } else {
-                    blockposition_b.close();
+                    blockposition_pooledblockposition.close();
                 }
             }
 
