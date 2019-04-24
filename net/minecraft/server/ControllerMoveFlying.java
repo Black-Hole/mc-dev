@@ -6,6 +6,7 @@ public class ControllerMoveFlying extends ControllerMove {
         super(entityinsentient);
     }
 
+    @Override
     public void a() {
         if (this.h == ControllerMove.Operation.MOVE_TO) {
             this.h = ControllerMove.Operation.WAIT;
@@ -21,7 +22,7 @@ public class ControllerMoveFlying extends ControllerMove {
                 return;
             }
 
-            float f = (float) (MathHelper.c(d2, d0) * 57.2957763671875D) - 90.0F;
+            float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
             this.a.yaw = this.a(this.a.yaw, f, 10.0F);
             float f1;
@@ -29,12 +30,12 @@ public class ControllerMoveFlying extends ControllerMove {
             if (this.a.onGround) {
                 f1 = (float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             } else {
-                f1 = (float) (this.e * this.a.getAttributeInstance(GenericAttributes.e).getValue());
+                f1 = (float) (this.e * this.a.getAttributeInstance(GenericAttributes.FLYING_SPEED).getValue());
             }
 
             this.a.o(f1);
             double d4 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-            float f2 = (float) (-(MathHelper.c(d1, d4) * 57.2957763671875D));
+            float f2 = (float) (-(MathHelper.d(d1, d4) * 57.2957763671875D));
 
             this.a.pitch = this.a(this.a.pitch, f2, 10.0F);
             this.a.s(d1 > 0.0D ? f1 : -f1);

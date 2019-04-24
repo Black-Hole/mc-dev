@@ -6,6 +6,7 @@ public class BlockWoodButton extends BlockButtonAbstract {
         super(true, block_info);
     }
 
+    @Override
     protected SoundEffect a(boolean flag) {
         return flag ? SoundEffects.BLOCK_WOODEN_BUTTON_CLICK_ON : SoundEffects.BLOCK_WOODEN_BUTTON_CLICK_OFF;
     }

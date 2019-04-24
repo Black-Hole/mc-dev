@@ -9,6 +9,6 @@ public class RunnableSaveScoreboard implements Runnable {
     }
 
     public void run() {
-        this.a.c();
+        this.a.b();
     }
 }

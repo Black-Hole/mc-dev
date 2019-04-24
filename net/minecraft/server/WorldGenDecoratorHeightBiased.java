@@ -1,20 +1,24 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class WorldGenDecoratorHeightBiased extends WorldGenDecorator<WorldGenFeatureChanceDecoratorCountConfiguration> {
+public class WorldGenDecoratorHeightBiased extends WorldGenDecoratorFeatureSimple<WorldGenFeatureChanceDecoratorCountConfiguration> {
 
-    public WorldGenDecoratorHeightBiased() {}
+    public WorldGenDecoratorHeightBiased(Function<Dynamic<?>, ? extends WorldGenFeatureChanceDecoratorCountConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        for (int i = 0; i < worldgenfeaturechancedecoratorcountconfiguration.a; ++i) {
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorCountConfiguration worldgenfeaturechancedecoratorcountconfiguration, BlockPosition blockposition) {
+        return IntStream.range(0, worldgenfeaturechancedecoratorcountconfiguration.a).mapToObj((i) -> {
             int j = random.nextInt(16);
             int k = random.nextInt(random.nextInt(worldgenfeaturechancedecoratorcountconfiguration.d - worldgenfeaturechancedecoratorcountconfiguration.c) + worldgenfeaturechancedecoratorcountconfiguration.b);
             int l = random.nextInt(16);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(j, k, l), c0);
-        }
-
-        return true;
+            return blockposition.b(j, k, l);
+        });
     }
 }

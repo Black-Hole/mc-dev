@@ -33,8 +33,8 @@ public class GameRules {
         treemap.put("randomTickSpeed", new GameRules.GameRuleDefinition("3", GameRules.EnumGameRuleType.NUMERICAL_VALUE));
         treemap.put("sendCommandFeedback", new GameRules.GameRuleDefinition("true", GameRules.EnumGameRuleType.BOOLEAN_VALUE));
         treemap.put("reducedDebugInfo", new GameRules.GameRuleDefinition("false", GameRules.EnumGameRuleType.BOOLEAN_VALUE, (minecraftserver, gamerules_gamerulevalue) -> {
-            int i = gamerules_gamerulevalue.b() ? 22 : 23;
-            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
+            int i = gamerules_gamerulevalue.getBooleanValue() ? 22 : 23;
+            Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -69,7 +69,7 @@ public class GameRules {
         GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
         if (gamerules_gamerulevalue != null) {
-            gamerules_gamerulevalue.a(s1, minecraftserver);
+            gamerules_gamerulevalue.setValue(s1, minecraftserver);
         }
 
     }
@@ -77,13 +77,13 @@ public class GameRules {
     public boolean getBoolean(String s) {
         GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
-        return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.b() : false;
+        return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.getBooleanValue() : false;
     }
 
     public int c(String s) {
         GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
-        return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.c() : 0;
+        return gamerules_gamerulevalue != null ? gamerules_gamerulevalue.getIntValue() : 0;
     }
 
     public NBTTagCompound a() {
@@ -94,7 +94,7 @@ public class GameRules {
             String s = (String) iterator.next();
             GameRules.GameRuleValue gamerules_gamerulevalue = (GameRules.GameRuleValue) this.b.get(s);
 
-            nbttagcompound.setString(s, gamerules_gamerulevalue.a());
+            nbttagcompound.setString(s, gamerules_gamerulevalue.getValue());
         }
 
         return nbttagcompound;
@@ -143,7 +143,7 @@ public class GameRules {
         }
 
         public void a(CommandContext<CommandListenerWrapper> commandcontext, String s, GameRules.GameRuleValue gamerules_gamerulevalue) {
-            gamerules_gamerulevalue.a((String) this.e.apply(commandcontext, s), ((CommandListenerWrapper) commandcontext.getSource()).getServer());
+            gamerules_gamerulevalue.setValue((String) this.e.apply(commandcontext, s), ((CommandListenerWrapper) commandcontext.getSource()).getServer());
         }
     }
 
@@ -159,10 +159,10 @@ public class GameRules {
         public GameRuleValue(String s, GameRules.EnumGameRuleType gamerules_enumgameruletype, BiConsumer<MinecraftServer, GameRules.GameRuleValue> biconsumer) {
             this.e = gamerules_enumgameruletype;
             this.f = biconsumer;
-            this.a(s, (MinecraftServer) null);
+            this.setValue(s, (MinecraftServer) null);
         }
 
-        public void a(String s, @Nullable MinecraftServer minecraftserver) {
+        public void setValue(String s, @Nullable MinecraftServer minecraftserver) {
             this.a = s;
             this.b = Boolean.parseBoolean(s);
             this.c = this.b ? 1 : 0;
@@ -185,15 +185,15 @@ public class GameRules {
 
         }
 
-        public String a() {
+        public String getValue() {
             return this.a;
         }
 
-        public boolean b() {
+        public boolean getBooleanValue() {
             return this.b;
         }
 
-        public int c() {
+        public int getIntValue() {
             return this.c;
         }
 

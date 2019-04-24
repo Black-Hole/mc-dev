@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.mojang.util.QueueLogAppender;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -10,6 +11,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -34,63 +37,69 @@ public class ServerGUI extends JComponent {
     private static final Logger b = LogManager.getLogger();
     private final DedicatedServer c;
     private Thread d;
+    private final Collection<Runnable> e = Lists.newArrayList();
+    private final AtomicBoolean f = new AtomicBoolean();
 
-    public static void a(final DedicatedServer dedicatedserver) {
+    public static ServerGUI a(final DedicatedServer dedicatedserver) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception exception) {
             ;
         }
 
-        ServerGUI servergui = new ServerGUI(dedicatedserver);
-        JFrame jframe = new JFrame("Minecraft server");
+        final JFrame jframe = new JFrame("Minecraft server");
+        final ServerGUI servergui = new ServerGUI(dedicatedserver);
 
+        jframe.setDefaultCloseOperation(2);
         jframe.add(servergui);
         jframe.pack();
         jframe.setLocationRelativeTo((Component) null);
         jframe.setVisible(true);
         jframe.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowevent) {
-                dedicatedserver.safeShutdown();
-
-                while (!dedicatedserver.isStopped()) {
-                    try {
-                        Thread.sleep(100L);
-                    } catch (InterruptedException interruptedexception) {
-                        interruptedexception.printStackTrace();
-                    }
+                if (!servergui.f.getAndSet(true)) {
+                    jframe.setTitle("Minecraft server - shutting down!");
+                    dedicatedserver.safeShutdown(true);
+                    servergui.f();
                 }
 
-                System.exit(0);
             }
         });
+        servergui.a(jframe::dispose);
         servergui.a();
+        return servergui;
     }
 
-    public ServerGUI(DedicatedServer dedicatedserver) {
+    private ServerGUI(DedicatedServer dedicatedserver) {
         this.c = dedicatedserver;
         this.setPreferredSize(new Dimension(854, 480));
         this.setLayout(new BorderLayout());
 
         try {
-            this.add(this.d(), "Center");
-            this.add(this.b(), "West");
+            this.add(this.e(), "Center");
+            this.add(this.c(), "West");
         } catch (Exception exception) {
             ServerGUI.b.error("Couldn't build server GUI", exception);
         }
 
     }
 
-    private JComponent b() throws Exception {
-        JPanel jpanel = new JPanel(new BorderLayout());
+    public void a(Runnable runnable) {
+        this.e.add(runnable);
+    }
 
-        jpanel.add(new GuiStatsComponent(this.c), "North");
-        jpanel.add(this.c(), "Center");
+    private JComponent c() {
+        JPanel jpanel = new JPanel(new BorderLayout());
+        GuiStatsComponent guistatscomponent = new GuiStatsComponent(this.c);
+
+        this.e.add(guistatscomponent::a);
+        jpanel.add(guistatscomponent, "North");
+        jpanel.add(this.d(), "Center");
         jpanel.setBorder(new TitledBorder(new EtchedBorder(), "Stats"));
         return jpanel;
     }
 
-    private JComponent c() throws Exception {
+    private JComponent d() {
         JList<?> jlist = new PlayerListBox(this.c);
         JScrollPane jscrollpane = new JScrollPane(jlist, 22, 30);
 
@@ -98,7 +107,7 @@ public class ServerGUI extends JComponent {
         return jscrollpane;
     }
 
-    private JComponent d() throws Exception {
+    private JComponent e() {
         JPanel jpanel = new JPanel(new BorderLayout());
         JTextArea jtextarea = new JTextArea();
         JScrollPane jscrollpane = new JScrollPane(jtextarea, 22, 30);
@@ -137,6 +146,17 @@ public class ServerGUI extends JComponent {
 
     public void a() {
         this.d.start();
+    }
+
+    public void b() {
+        if (!this.f.getAndSet(true)) {
+            this.f();
+        }
+
+    }
+
+    private void f() {
+        this.e.forEach(Runnable::run);
     }
 
     public void a(JTextArea jtextarea, JScrollPane jscrollpane, String s) {

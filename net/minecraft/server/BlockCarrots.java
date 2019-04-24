@@ -8,15 +8,8 @@ public class BlockCarrots extends BlockCrops {
         super(block_info);
     }
 
-    protected IMaterial f() {
-        return Items.CARROT;
-    }
-
-    protected IMaterial g() {
-        return Items.CARROT;
-    }
-
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCarrots.a[(Integer) iblockdata.get(this.d())];
     }
 }

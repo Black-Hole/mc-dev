@@ -24,7 +24,7 @@ public class DataConverterPainting extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<String> optional = dynamic.get("Motive").flatMap(Dynamic::getStringValue);
+        Optional<String> optional = dynamic.get("Motive").asString();
 
         if (optional.isPresent()) {
             String s = ((String) optional.get()).toLowerCase(Locale.ROOT);
@@ -35,6 +35,7 @@ public class DataConverterPainting extends DataConverterNamedEntity {
         }
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

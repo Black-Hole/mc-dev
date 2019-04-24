@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
+public class NextTickListEntry<T> implements Comparable<NextTickListEntry<?>> {
 
     private static long d;
     private final T e;
@@ -15,7 +15,7 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
 
     public NextTickListEntry(BlockPosition blockposition, T t0, long i, TickListPriority ticklistpriority) {
         this.f = (long) (NextTickListEntry.d++);
-        this.a = blockposition.h();
+        this.a = blockposition.immutableCopy();
         this.e = t0;
         this.b = i;
         this.c = ticklistpriority;
@@ -25,7 +25,7 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
         if (!(object instanceof NextTickListEntry)) {
             return false;
         } else {
-            NextTickListEntry nextticklistentry = (NextTickListEntry) object;
+            NextTickListEntry<?> nextticklistentry = (NextTickListEntry) object;
 
             return this.a.equals(nextticklistentry.a) && this.e == nextticklistentry.e;
         }
@@ -35,8 +35,15 @@ public class NextTickListEntry<T> implements Comparable<NextTickListEntry<T>> {
         return this.a.hashCode();
     }
 
-    public int compareTo(NextTickListEntry nextticklistentry) {
-        return this.b < nextticklistentry.b ? -1 : (this.b > nextticklistentry.b ? 1 : (this.c.ordinal() < nextticklistentry.c.ordinal() ? -1 : (this.c.ordinal() > nextticklistentry.c.ordinal() ? 1 : (this.f < nextticklistentry.f ? -1 : (this.f > nextticklistentry.f ? 1 : 0)))));
+    public int compareTo(NextTickListEntry<?> nextticklistentry) {
+        int i = Long.compare(this.b, nextticklistentry.b);
+
+        if (i != 0) {
+            return i;
+        } else {
+            i = Integer.compare(this.c.ordinal(), nextticklistentry.c.ordinal());
+            return i != 0 ? i : Long.compare(this.f, nextticklistentry.f);
+        }
     }
 
     public String toString() {

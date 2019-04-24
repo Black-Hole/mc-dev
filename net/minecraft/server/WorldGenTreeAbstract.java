@@ -2,54 +2,112 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguration> extends WorldGenerator<T> {
 
-    public WorldGenTreeAbstract(boolean flag) {
-        super(flag);
+    public WorldGenTreeAbstract(Function<Dynamic<?>, ? extends T> function, boolean flag) {
+        super(function, flag);
     }
 
-    protected boolean a(Block block) {
-        IBlockData iblockdata = block.getBlockData();
+    protected static boolean a(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            Block block = iblockdata.getBlock();
 
-        return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || Block.d(block) || block.a(TagsBlock.LOGS) || block.a(TagsBlock.SAPLINGS) || block == Blocks.VINE;
+            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES) || block == Blocks.GRASS_BLOCK || Block.c(block) || block.a(TagsBlock.LOGS) || block.a(TagsBlock.SAPLINGS) || block == Blocks.VINE;
+        });
     }
 
-    protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        if (!Block.d(generatoraccess.getType(blockposition).getBlock())) {
-            this.a(generatoraccess, blockposition, Blocks.DIRT.getBlockData());
+    protected static boolean b(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, IBlockData::isAir);
+    }
+
+    protected static boolean c(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            return Block.c(iblockdata.getBlock());
+        });
+    }
+
+    protected static boolean e(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            return iblockdata.getBlock() == Blocks.WATER;
+        });
+    }
+
+    protected static boolean f(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            return iblockdata.a(TagsBlock.LEAVES);
+        });
+    }
+
+    protected static boolean g(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            return iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES);
+        });
+    }
+
+    protected static boolean h(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            Block block = iblockdata.getBlock();
+
+            return Block.c(block) || block == Blocks.GRASS_BLOCK;
+        });
+    }
+
+    protected static boolean i(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            Block block = iblockdata.getBlock();
+
+            return Block.c(block) || block == Blocks.GRASS_BLOCK || block == Blocks.FARMLAND;
+        });
+    }
+
+    protected static boolean j(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition) {
+        return virtuallevelreadable.a(blockposition, (iblockdata) -> {
+            Material material = iblockdata.getMaterial();
+
+            return material == Material.REPLACEABLE_PLANT;
+        });
+    }
+
+    protected void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
+        if (!c(virtuallevelwritable, blockposition)) {
+            this.a(virtuallevelwritable, blockposition, Blocks.DIRT.getBlockData());
         }
 
     }
 
-    protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        this.b(generatoraccess, blockposition, iblockdata);
+    @Override
+    protected void a(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
+        this.b(iworldwriter, blockposition, iblockdata);
     }
 
-    protected final void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        this.b(generatoraccess, blockposition, iblockdata);
+    protected final void a(Set<BlockPosition> set, IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
+        this.b(iworldwriter, blockposition, iblockdata);
         if (TagsBlock.LOGS.isTagged(iblockdata.getBlock())) {
-            set.add(blockposition.h());
+            set.add(blockposition.immutableCopy());
         }
 
     }
 
-    private void b(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if (this.aG) {
-            generatoraccess.setTypeAndData(blockposition, iblockdata, 19);
+    private void b(IWorldWriter iworldwriter, BlockPosition blockposition, IBlockData iblockdata) {
+        if (this.aR) {
+            iworldwriter.setTypeAndData(blockposition, iblockdata, 19);
         } else {
-            generatoraccess.setTypeAndData(blockposition, iblockdata, 18);
+            iworldwriter.setTypeAndData(blockposition, iblockdata, 18);
         }
 
     }
 
-    public final boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, T t0) {
+    @Override
+    public final boolean generate(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, T t0) {
         Set<BlockPosition> set = Sets.newHashSet();
-        boolean flag = this.a(set, generatoraccess, random, blockposition);
+        boolean flag = this.a(set, (VirtualLevelWritable) generatoraccess, random, blockposition);
         List<Set<BlockPosition>> list = Lists.newArrayList();
         boolean flag1 = true;
 
@@ -76,9 +134,9 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                         if (!set.contains(blockposition_pooledblockposition)) {
                             IBlockData iblockdata = generatoraccess.getType(blockposition_pooledblockposition);
 
-                            if (iblockdata.b(BlockProperties.ab)) {
-                                ((Set) list.get(0)).add(blockposition_pooledblockposition.h());
-                                this.b(generatoraccess, blockposition_pooledblockposition, (IBlockData) iblockdata.set(BlockProperties.ab, 1));
+                            if (iblockdata.b((IBlockState) BlockProperties.ah)) {
+                                ((Set) list.get(0)).add(blockposition_pooledblockposition.immutableCopy());
+                                this.b(generatoraccess, blockposition_pooledblockposition, (IBlockData) iblockdata.set(BlockProperties.ah, 1));
                             }
                         }
                     }
@@ -111,14 +169,14 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
                             if (!set1.contains(blockposition_pooledblockposition) && !set2.contains(blockposition_pooledblockposition)) {
                                 IBlockData iblockdata1 = generatoraccess.getType(blockposition_pooledblockposition);
 
-                                if (iblockdata1.b(BlockProperties.ab)) {
-                                    int k1 = (Integer) iblockdata1.get(BlockProperties.ab);
+                                if (iblockdata1.b((IBlockState) BlockProperties.ah)) {
+                                    int k1 = (Integer) iblockdata1.get(BlockProperties.ah);
 
                                     if (k1 > l + 1) {
-                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ab, l + 1);
+                                        IBlockData iblockdata2 = (IBlockData) iblockdata1.set(BlockProperties.ah, l + 1);
 
                                         this.b(generatoraccess, blockposition_pooledblockposition, iblockdata2);
-                                        set2.add(blockposition_pooledblockposition.h());
+                                        set2.add(blockposition_pooledblockposition.immutableCopy());
                                     }
                                 }
                             }
@@ -152,5 +210,5 @@ public abstract class WorldGenTreeAbstract<T extends WorldGenFeatureConfiguratio
         return flag;
     }
 
-    protected abstract boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition);
+    protected abstract boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition);
 }

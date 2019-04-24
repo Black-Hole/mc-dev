@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.DataFixer;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +29,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         this.d = minecraftserver;
         this.c = datafixer;
         this.e = file.toPath().resolve("generated").normalize();
-        minecraftserver.getResourceManager().a((IResourcePackListener) this);
+        minecraftserver.getResourceManager().a((IReloadListener) this);
     }
 
     public DefinedStructure a(MinecraftKey minecraftkey) {
@@ -53,6 +52,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         });
     }
 
+    @Override
     public void a(IResourceManager iresourcemanager) {
         this.b.clear();
     }
@@ -210,7 +210,7 @@ public class DefinedStructureManager implements IResourcePackListener {
             java.nio.file.Path java_nio_file_path = this.e.resolve(minecraftkey.b());
             java.nio.file.Path java_nio_file_path1 = java_nio_file_path.resolve("structures");
 
-            return SystemUtils.a(java_nio_file_path1, minecraftkey.getKey(), s);
+            return FileUtils.b(java_nio_file_path1, minecraftkey.getKey(), s);
         } catch (InvalidPathException invalidpathexception) {
             throw new ResourceKeyInvalidException("Invalid resource path: " + minecraftkey, invalidpathexception);
         }
@@ -222,7 +222,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         } else {
             java.nio.file.Path java_nio_file_path = this.a(minecraftkey, s);
 
-            if (java_nio_file_path.startsWith(this.e) && SystemUtils.a(java_nio_file_path) && SystemUtils.b(java_nio_file_path)) {
+            if (java_nio_file_path.startsWith(this.e) && FileUtils.a(java_nio_file_path) && FileUtils.b(java_nio_file_path)) {
                 return java_nio_file_path;
             } else {
                 throw new ResourceKeyInvalidException("Invalid resource path: " + java_nio_file_path);

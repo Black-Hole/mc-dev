@@ -1,43 +1,25 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-
 public final class BiomeSavannaMutated extends BiomeBase {
 
     public BiomeSavannaMutated() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeSavannaMutated.aw, BiomeSavannaMutated.ai)).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.SAVANNA).a(0.3625F).b(1.225F).c(1.1F).d(0.0F).a(4159204).b(329011).a("savanna"));
-        this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
-        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSavannaMutated.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
-        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeSavannaMutated.d, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.02F))));
-        this.a();
-        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeSavannaMutated.K, new WorldGenDecoratorLakeChanceConfiguration(4)));
-        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeSavannaMutated.J, new WorldGenDecoratorLakeChanceConfiguration(80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES, a(WorldGenerator.ad, WorldGenFeatureConfiguration.e, BiomeSavannaMutated.L, new WorldGenDecoratorDungeonConfiguration(8)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIRT.getBlockData(), 33), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 256)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRAVEL.getBlockData(), 33), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 256)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRANITE.getBlockData(), 33), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIORITE.getBlockData(), 33), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.ANDESITE.getBlockData(), 33), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.COAL_ORE.getBlockData(), 17), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 128)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.IRON_ORE.getBlockData(), 9), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 64)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(2, 0, 0, 32)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.REDSTONE_ORE.getBlockData(), 8), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIAMOND_ORE.getBlockData(), 8), BiomeSavannaMutated.t, new WorldGenFeatureChanceDecoratorCountConfiguration(1, 0, 0, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.LAPIS_ORE.getBlockData(), 7), BiomeSavannaMutated.A, new WorldGenDecoratorHeightAverageConfiguration(1, 16, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.SAND, 7, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeSavannaMutated.h, new WorldGenDecoratorFrequencyConfiguration(3)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.CLAY, 4, 1, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.CLAY})), BiomeSavannaMutated.h, new WorldGenDecoratorFrequencyConfiguration(1)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL, 6, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeSavannaMutated.h, new WorldGenDecoratorFrequencyConfiguration(1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ap, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.z}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e}, new float[] { 0.8F}, WorldGenerator.C, WorldGenFeatureConfiguration.e), BiomeSavannaMutated.s, new WorldGenDecoratorFrequencyExtraChanceConfiguration(2, 0.1F, 1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, (WorldGenFeatureComposite) a(WorldGenerator.G, BiomeSavannaMutated.i, new WorldGenDecoratorFrequencyConfiguration(2)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.M, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), BiomeSavannaMutated.j, new WorldGenDecoratorFrequencyConfiguration(5)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeSavannaMutated.p, new WorldGenDecoratorChanceConfiguration(4)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeSavannaMutated.p, new WorldGenDecoratorChanceConfiguration(8)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeSavannaMutated.j, new WorldGenDecoratorFrequencyConfiguration(10)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeSavannaMutated.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeSavannaMutated.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeSavannaMutated.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
-        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeSavannaMutated.n, WorldGenFeatureDecoratorConfiguration.e));
+        super((new BiomeBase.a()).a(WorldGenSurface.I, WorldGenSurface.v).a(BiomeBase.Precipitation.NONE).a(BiomeBase.Geography.SAVANNA).a(0.3625F).b(1.225F).c(1.1F).d(0.0F).a(4159204).b(329011).a("savanna"));
+        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        BiomeDecoratorGroups.a(this);
+        BiomeDecoratorGroups.c(this);
+        BiomeDecoratorGroups.d(this);
+        BiomeDecoratorGroups.f(this);
+        BiomeDecoratorGroups.g(this);
+        BiomeDecoratorGroups.h(this);
+        BiomeDecoratorGroups.l(this);
+        BiomeDecoratorGroups.z(this);
+        BiomeDecoratorGroups.U(this);
+        BiomeDecoratorGroups.K(this);
+        BiomeDecoratorGroups.Z(this);
+        BiomeDecoratorGroups.aa(this);
+        BiomeDecoratorGroups.am(this);
+        BiomeDecoratorGroups.ap(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.SHEEP, 12, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.PIG, 10, 4, 4));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.CHICKEN, 10, 4, 4));

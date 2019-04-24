@@ -8,7 +8,12 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
     public MerchantRecipeList() {}
 
     public MerchantRecipeList(NBTTagCompound nbttagcompound) {
-        this.a(nbttagcompound);
+        NBTTagList nbttaglist = nbttagcompound.getList("Recipes", 10);
+
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            this.add(new MerchantRecipe(nbttaglist.getCompound(i)));
+        }
+
     }
 
     @Nullable
@@ -16,28 +21,18 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
         if (i > 0 && i < this.size()) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            return this.a(itemstack, merchantrecipe.getBuyItem1()) && (itemstack1.isEmpty() && !merchantrecipe.hasSecondItem() || merchantrecipe.hasSecondItem() && this.a(itemstack1, merchantrecipe.getBuyItem2())) && itemstack.getCount() >= merchantrecipe.getBuyItem1().getCount() && (!merchantrecipe.hasSecondItem() || itemstack1.getCount() >= merchantrecipe.getBuyItem2().getCount()) ? merchantrecipe : null;
+            return merchantrecipe.a(itemstack, itemstack1) ? merchantrecipe : null;
         } else {
             for (int j = 0; j < this.size(); ++j) {
                 MerchantRecipe merchantrecipe1 = (MerchantRecipe) this.get(j);
 
-                if (this.a(itemstack, merchantrecipe1.getBuyItem1()) && itemstack.getCount() >= merchantrecipe1.getBuyItem1().getCount() && (!merchantrecipe1.hasSecondItem() && itemstack1.isEmpty() || merchantrecipe1.hasSecondItem() && this.a(itemstack1, merchantrecipe1.getBuyItem2()) && itemstack1.getCount() >= merchantrecipe1.getBuyItem2().getCount())) {
+                if (merchantrecipe1.a(itemstack, itemstack1)) {
                     return merchantrecipe1;
                 }
             }
 
             return null;
         }
-    }
-
-    private boolean a(ItemStack itemstack, ItemStack itemstack1) {
-        ItemStack itemstack2 = itemstack.cloneItemStack();
-
-        if (itemstack2.getItem().usesDurability()) {
-            itemstack2.setDamage(itemstack2.getDamage());
-        }
-
-        return ItemStack.c(itemstack2, itemstack1) && (!itemstack1.hasTag() || itemstack2.hasTag() && GameProfileSerializer.a(itemstack1.getTag(), itemstack2.getTag(), false));
     }
 
     public void a(PacketDataSerializer packetdataserializer) {
@@ -47,7 +42,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
             packetdataserializer.a(merchantrecipe.getBuyItem1());
-            packetdataserializer.a(merchantrecipe.getBuyItem3());
+            packetdataserializer.a(merchantrecipe.getSellingItem());
             ItemStack itemstack = merchantrecipe.getBuyItem2();
 
             packetdataserializer.writeBoolean(!itemstack.isEmpty());
@@ -55,22 +50,46 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
                 packetdataserializer.a(itemstack);
             }
 
-            packetdataserializer.writeBoolean(merchantrecipe.h());
-            packetdataserializer.writeInt(merchantrecipe.e());
-            packetdataserializer.writeInt(merchantrecipe.f());
+            packetdataserializer.writeBoolean(merchantrecipe.isFullyUsed());
+            packetdataserializer.writeInt(merchantrecipe.g());
+            packetdataserializer.writeInt(merchantrecipe.i());
+            packetdataserializer.writeInt(merchantrecipe.n());
+            packetdataserializer.writeInt(merchantrecipe.l());
+            packetdataserializer.writeFloat(merchantrecipe.m());
         }
 
     }
 
-    public void a(NBTTagCompound nbttagcompound) {
-        NBTTagList nbttaglist = nbttagcompound.getList("Recipes", 10);
+    public static MerchantRecipeList b(PacketDataSerializer packetdataserializer) {
+        MerchantRecipeList merchantrecipelist = new MerchantRecipeList();
+        int i = packetdataserializer.readByte() & 255;
 
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
+        for (int j = 0; j < i; ++j) {
+            ItemStack itemstack = packetdataserializer.m();
+            ItemStack itemstack1 = packetdataserializer.m();
+            ItemStack itemstack2 = ItemStack.a;
 
-            this.add(new MerchantRecipe(nbttagcompound1));
+            if (packetdataserializer.readBoolean()) {
+                itemstack2 = packetdataserializer.m();
+            }
+
+            boolean flag = packetdataserializer.readBoolean();
+            int k = packetdataserializer.readInt();
+            int l = packetdataserializer.readInt();
+            int i1 = packetdataserializer.readInt();
+            int j1 = packetdataserializer.readInt();
+            float f = packetdataserializer.readFloat();
+            MerchantRecipe merchantrecipe = new MerchantRecipe(itemstack, itemstack2, itemstack1, k, l, i1, f);
+
+            if (flag) {
+                merchantrecipe.p();
+            }
+
+            merchantrecipe.b(j1);
+            merchantrecipelist.add(merchantrecipe);
         }
 
+        return merchantrecipelist;
     }
 
     public NBTTagCompound a() {
@@ -80,7 +99,7 @@ public class MerchantRecipeList extends ArrayList<MerchantRecipe> {
         for (int i = 0; i < this.size(); ++i) {
             MerchantRecipe merchantrecipe = (MerchantRecipe) this.get(i);
 
-            nbttaglist.add((NBTBase) merchantrecipe.k());
+            nbttaglist.add(merchantrecipe.r());
         }
 
         nbttagcompound.set("Recipes", nbttaglist);

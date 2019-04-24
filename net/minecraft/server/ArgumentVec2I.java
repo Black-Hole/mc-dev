@@ -23,10 +23,10 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
         return new ArgumentVec2I();
     }
 
-    public static ArgumentVec2I.a a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
+    public static BlockPosition2D a(CommandContext<CommandListenerWrapper> commandcontext, String s) {
         BlockPosition blockposition = ((IVectorPosition) commandcontext.getArgument(s, IVectorPosition.class)).c((CommandListenerWrapper) commandcontext.getSource());
 
-        return new ArgumentVec2I.a(blockposition.getX(), blockposition.getZ());
+        return new BlockPosition2D(blockposition.getX(), blockposition.getZ());
     }
 
     public IVectorPosition parse(StringReader stringreader) throws CommandSyntaxException {
@@ -59,7 +59,7 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
             if (!s.isEmpty() && s.charAt(0) == '^') {
                 object = Collections.singleton(ICompletionProvider.a.a);
             } else {
-                object = ((ICompletionProvider) commandcontext.getSource()).a(false);
+                object = ((ICompletionProvider) commandcontext.getSource()).q();
             }
 
             return ICompletionProvider.b(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));
@@ -68,20 +68,5 @@ public class ArgumentVec2I implements ArgumentType<IVectorPosition> {
 
     public Collection<String> getExamples() {
         return ArgumentVec2I.b;
-    }
-
-    public static class a {
-
-        public final int a;
-        public final int b;
-
-        public a(int i, int j) {
-            this.a = i;
-            this.b = j;
-        }
-
-        public String toString() {
-            return "[" + this.a + ", " + this.b + "]";
-        }
     }
 }

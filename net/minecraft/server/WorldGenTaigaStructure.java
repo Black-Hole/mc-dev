@@ -1,13 +1,17 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockOffsetConfiguration> {
 
-    public WorldGenTaigaStructure() {}
+    public WorldGenTaigaStructure(Function<Dynamic<?>, ? extends WorldGenFeatureBlockOffsetConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureBlockOffsetConfiguration worldgenfeatureblockoffsetconfiguration) {
         while (true) {
             if (blockposition.getY() > 3) {
                 label47:
@@ -15,7 +19,7 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
                     if (!generatoraccess.isEmpty(blockposition.down())) {
                         Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-                        if (block == Blocks.GRASS_BLOCK || Block.d(block) || Block.c(block)) {
+                        if (block == Blocks.GRASS_BLOCK || Block.c(block) || Block.b(block)) {
                             break label47;
                         }
                     }
@@ -36,17 +40,17 @@ public class WorldGenTaigaStructure extends WorldGenerator<WorldGenFeatureBlockO
                 int l = i + random.nextInt(2);
                 int i1 = i + random.nextInt(2);
                 float f = (float) (k + l + i1) * 0.333F + 0.5F;
-                Iterator iterator = BlockPosition.a(blockposition.a(-k, -l, -i1), blockposition.a(k, l, i1)).iterator();
+                Iterator iterator = BlockPosition.a(blockposition.b(-k, -l, -i1), blockposition.b(k, l, i1)).iterator();
 
                 while (iterator.hasNext()) {
                     BlockPosition blockposition1 = (BlockPosition) iterator.next();
 
-                    if (blockposition1.n(blockposition) <= (double) (f * f)) {
-                        generatoraccess.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.a.getBlockData(), 4);
+                    if (blockposition1.m(blockposition) <= (double) (f * f)) {
+                        generatoraccess.setTypeAndData(blockposition1, worldgenfeatureblockoffsetconfiguration.a, 4);
                     }
                 }
 
-                blockposition = blockposition.a(-(i + 1) + random.nextInt(2 + i * 2), 0 - random.nextInt(2), -(i + 1) + random.nextInt(2 + i * 2));
+                blockposition = blockposition.b(-(i + 1) + random.nextInt(2 + i * 2), 0 - random.nextInt(2), -(i + 1) + random.nextInt(2 + i * 2));
             }
 
             return true;

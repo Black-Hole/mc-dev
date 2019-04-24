@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
 
     private final EntityInsentient a;
@@ -9,34 +11,39 @@ public class PathfinderGoalLeapAtTarget extends PathfinderGoal {
     public PathfinderGoalLeapAtTarget(EntityInsentient entityinsentient, float f) {
         this.a = entityinsentient;
         this.c = f;
-        this.a(5);
+        this.a(EnumSet.of(PathfinderGoal.Type.JUMP, PathfinderGoal.Type.MOVE));
     }
 
+    @Override
     public boolean a() {
-        this.b = this.a.getGoalTarget();
-        if (this.b == null) {
+        if (this.a.isVehicle()) {
             return false;
         } else {
-            double d0 = this.a.h(this.b);
+            this.b = this.a.getGoalTarget();
+            if (this.b == null) {
+                return false;
+            } else {
+                double d0 = this.a.h((Entity) this.b);
 
-            return d0 >= 4.0D && d0 <= 16.0D ? (!this.a.onGround ? false : this.a.getRandom().nextInt(5) == 0) : false;
+                return d0 >= 4.0D && d0 <= 16.0D ? (!this.a.onGround ? false : this.a.getRandom().nextInt(5) == 0) : false;
+            }
         }
     }
 
+    @Override
     public boolean b() {
         return !this.a.onGround;
     }
 
+    @Override
     public void c() {
-        double d0 = this.b.locX - this.a.locX;
-        double d1 = this.b.locZ - this.a.locZ;
-        float f = MathHelper.sqrt(d0 * d0 + d1 * d1);
+        Vec3D vec3d = this.a.getMot();
+        Vec3D vec3d1 = new Vec3D(this.b.locX - this.a.locX, 0.0D, this.b.locZ - this.a.locZ);
 
-        if ((double) f >= 1.0E-4D) {
-            this.a.motX += d0 / (double) f * 0.5D * 0.800000011920929D + this.a.motX * 0.20000000298023224D;
-            this.a.motZ += d1 / (double) f * 0.5D * 0.800000011920929D + this.a.motZ * 0.20000000298023224D;
+        if (vec3d1.g() > 1.0E-7D) {
+            vec3d1 = vec3d1.d().a(0.4D).e(vec3d.a(0.2D));
         }
 
-        this.a.motY = (double) this.c;
+        this.a.setMot(vec3d1.x, (double) this.c, vec3d1.y);
     }
 }

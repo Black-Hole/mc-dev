@@ -6,6 +6,8 @@ public interface DataPalette<T> {
 
     int a(T t0);
 
+    boolean b(T t0);
+
     @Nullable
     T a(int i);
 

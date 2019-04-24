@@ -12,9 +12,10 @@ public class DataConverterShulker extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        return !dynamic.get("Color").map(Dynamic::getNumberValue).isPresent() ? dynamic.set("Color", dynamic.createByte((byte) 10)) : dynamic;
+        return !dynamic.get("Color").map(Dynamic::asNumber).isPresent() ? dynamic.set("Color", dynamic.createByte((byte) 10)) : dynamic;
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

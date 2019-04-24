@@ -17,66 +17,16 @@ public class ChatComponentUtils {
     }
 
     public static IChatBaseComponent filterForDisplay(@Nullable CommandListenerWrapper commandlistenerwrapper, IChatBaseComponent ichatbasecomponent, @Nullable Entity entity) throws CommandSyntaxException {
-        Object object;
-
-        if (ichatbasecomponent instanceof ChatComponentScore && commandlistenerwrapper != null) {
-            ChatComponentScore chatcomponentscore = (ChatComponentScore) ichatbasecomponent;
-            String s;
-
-            if (chatcomponentscore.j() != null) {
-                List<? extends Entity> list = chatcomponentscore.j().b(commandlistenerwrapper);
-
-                if (list.isEmpty()) {
-                    s = chatcomponentscore.i();
-                } else {
-                    if (list.size() != 1) {
-                        throw ArgumentEntity.a.create();
-                    }
-
-                    s = ((Entity) list.get(0)).getName();
-                }
-            } else {
-                s = chatcomponentscore.i();
-            }
-
-            String s1 = entity != null && s.equals("*") ? entity.getName() : s;
-
-            object = new ChatComponentScore(s1, chatcomponentscore.k());
-            ((ChatComponentScore) object).b(chatcomponentscore.getText());
-            ((ChatComponentScore) object).b(commandlistenerwrapper);
-        } else if (ichatbasecomponent instanceof ChatComponentSelector && commandlistenerwrapper != null) {
-            object = ((ChatComponentSelector) ichatbasecomponent).a(commandlistenerwrapper);
-        } else if (ichatbasecomponent instanceof ChatComponentText) {
-            object = new ChatComponentText(((ChatComponentText) ichatbasecomponent).i());
-        } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
-            object = new ChatComponentKeybind(((ChatComponentKeybind) ichatbasecomponent).j());
-        } else {
-            if (!(ichatbasecomponent instanceof ChatMessage)) {
-                return ichatbasecomponent;
-            }
-
-            Object[] aobject = ((ChatMessage) ichatbasecomponent).l();
-
-            for (int i = 0; i < aobject.length; ++i) {
-                Object object1 = aobject[i];
-
-                if (object1 instanceof IChatBaseComponent) {
-                    aobject[i] = filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object1, entity);
-                }
-            }
-
-            object = new ChatMessage(((ChatMessage) ichatbasecomponent).k(), aobject);
-        }
-
+        IChatBaseComponent ichatbasecomponent1 = ichatbasecomponent instanceof ChatComponentContextual ? ((ChatComponentContextual) ichatbasecomponent).a(commandlistenerwrapper, entity) : ichatbasecomponent.g();
         Iterator iterator = ichatbasecomponent.a().iterator();
 
         while (iterator.hasNext()) {
-            IChatBaseComponent ichatbasecomponent1 = (IChatBaseComponent) iterator.next();
+            IChatBaseComponent ichatbasecomponent2 = (IChatBaseComponent) iterator.next();
 
-            ((IChatBaseComponent) object).addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent1, entity));
+            ichatbasecomponent1.addSibling(filterForDisplay(commandlistenerwrapper, ichatbasecomponent2, entity));
         }
 
-        return a((IChatBaseComponent) object, ichatbasecomponent.getChatModifier());
+        return a(ichatbasecomponent1, ichatbasecomponent.getChatModifier());
     }
 
     public static IChatBaseComponent a(GameProfile gameprofile) {

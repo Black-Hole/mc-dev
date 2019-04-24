@@ -21,13 +21,14 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
         this.c = worldborder.getCenterX();
         this.d = worldborder.getCenterZ();
         this.f = worldborder.getSize();
-        this.e = worldborder.j();
-        this.g = worldborder.i();
-        this.b = worldborder.l();
+        this.e = worldborder.k();
+        this.g = worldborder.j();
+        this.b = worldborder.m();
         this.i = worldborder.getWarningDistance();
         this.h = worldborder.getWarningTime();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutWorldBorder.EnumWorldBorderAction) packetdataserializer.a(PacketPlayOutWorldBorder.EnumWorldBorderAction.class);
         switch (this.a) {
@@ -37,31 +38,32 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
         case LERP_SIZE:
             this.f = packetdataserializer.readDouble();
             this.e = packetdataserializer.readDouble();
-            this.g = packetdataserializer.h();
+            this.g = packetdataserializer.j();
             break;
         case SET_CENTER:
             this.c = packetdataserializer.readDouble();
             this.d = packetdataserializer.readDouble();
             break;
         case SET_WARNING_BLOCKS:
-            this.i = packetdataserializer.g();
+            this.i = packetdataserializer.i();
             break;
         case SET_WARNING_TIME:
-            this.h = packetdataserializer.g();
+            this.h = packetdataserializer.i();
             break;
         case INITIALIZE:
             this.c = packetdataserializer.readDouble();
             this.d = packetdataserializer.readDouble();
             this.f = packetdataserializer.readDouble();
             this.e = packetdataserializer.readDouble();
-            this.g = packetdataserializer.h();
-            this.b = packetdataserializer.g();
-            this.i = packetdataserializer.g();
-            this.h = packetdataserializer.g();
+            this.g = packetdataserializer.j();
+            this.b = packetdataserializer.i();
+            this.i = packetdataserializer.i();
+            this.h = packetdataserializer.i();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         switch (this.a) {

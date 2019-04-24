@@ -1,34 +1,31 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityHorseMule extends EntityHorseChestedAbstract {
 
-    public EntityHorseMule(World world) {
-        super(EntityTypes.MULE, world);
+    public EntityHorseMule(EntityTypes<? extends EntityHorseMule> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.P;
-    }
-
-    protected SoundEffect D() {
-        super.D();
+    @Override
+    protected SoundEffect getSoundAmbient() {
+        super.getSoundAmbient();
         return SoundEffects.ENTITY_MULE_AMBIENT;
     }
 
-    protected SoundEffect cs() {
-        super.cs();
+    @Override
+    protected SoundEffect getSoundDeath() {
+        super.getSoundDeath();
         return SoundEffects.ENTITY_MULE_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
-        super.d(damagesource);
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
+        super.getSoundHurt(damagesource);
         return SoundEffects.ENTITY_MULE_HURT;
     }
 
-    protected void dC() {
+    @Override
+    protected void dY() {
         this.a(SoundEffects.ENTITY_MULE_CHEST, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
     }
 }

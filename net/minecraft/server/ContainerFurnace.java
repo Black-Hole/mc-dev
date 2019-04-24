@@ -1,42 +1,44 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
-
-public class ContainerFurnace extends ContainerRecipeBook {
+public abstract class ContainerFurnace extends ContainerRecipeBook<IInventory> {
 
     private final IInventory furnace;
-    private final World f;
-    private int g;
-    private int h;
-    private int i;
-    private int j;
+    private final IContainerProperties e;
+    protected final World c;
+    private final Recipes<? extends RecipeCooking> f;
 
-    public ContainerFurnace(PlayerInventory playerinventory, IInventory iinventory) {
+    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, int i, PlayerInventory playerinventory) {
+        this(containers, recipes, i, playerinventory, new InventorySubcontainer(3), new ContainerProperties(4));
+    }
+
+    protected ContainerFurnace(Containers<?> containers, Recipes<? extends RecipeCooking> recipes, int i, PlayerInventory playerinventory, IInventory iinventory, IContainerProperties icontainerproperties) {
+        super(containers, i);
+        this.f = recipes;
+        a(iinventory, 3);
+        a(icontainerproperties, 4);
         this.furnace = iinventory;
-        this.f = playerinventory.player.world;
+        this.e = icontainerproperties;
+        this.c = playerinventory.player.world;
         this.a(new Slot(iinventory, 0, 56, 17));
-        this.a((Slot) (new SlotFurnaceFuel(iinventory, 1, 56, 53)));
+        this.a((Slot) (new SlotFurnaceFuel(this, iinventory, 1, 56, 53)));
         this.a((Slot) (new SlotFurnaceResult(playerinventory.player, iinventory, 2, 116, 35)));
 
-        int i;
+        int j;
 
-        for (i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.a(new Slot(playerinventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        for (j = 0; j < 3; ++j) {
+            for (int k = 0; k < 9; ++k) {
+                this.a(new Slot(playerinventory, k + j * 9 + 9, 8 + k * 18, 84 + j * 18));
             }
         }
 
-        for (i = 0; i < 9; ++i) {
-            this.a(new Slot(playerinventory, i, 8 + i * 18, 142));
+        for (j = 0; j < 9; ++j) {
+            this.a(new Slot(playerinventory, j, 8 + j * 18, 142));
         }
 
+        this.a(icontainerproperties);
     }
 
-    public void addSlotListener(ICrafting icrafting) {
-        super.addSlotListener(icrafting);
-        icrafting.setContainerData(this, this.furnace);
-    }
-
+    @Override
     public void a(AutoRecipeStackManager autorecipestackmanager) {
         if (this.furnace instanceof AutoRecipeOutput) {
             ((AutoRecipeOutput) this.furnace).a(autorecipestackmanager);
@@ -44,60 +46,42 @@ public class ContainerFurnace extends ContainerRecipeBook {
 
     }
 
-    public void d() {
+    @Override
+    public void e() {
         this.furnace.clear();
     }
 
-    public boolean a(IRecipe irecipe) {
-        return irecipe.a(this.furnace, this.f);
+    @Override
+    public void a(boolean flag, IRecipe<?> irecipe, EntityPlayer entityplayer) {
+        (new AutoRecipeFurnace<>(this)).a(entityplayer, irecipe, flag);
     }
 
-    public int e() {
+    @Override
+    public boolean a(IRecipe<? super IInventory> irecipe) {
+        return irecipe.a(this.furnace, this.c);
+    }
+
+    @Override
+    public int f() {
         return 2;
     }
 
-    public int f() {
-        return 1;
-    }
-
+    @Override
     public int g() {
         return 1;
     }
 
-    public void b() {
-        super.b();
-        Iterator iterator = this.listeners.iterator();
-
-        while (iterator.hasNext()) {
-            ICrafting icrafting = (ICrafting) iterator.next();
-
-            if (this.g != this.furnace.getProperty(2)) {
-                icrafting.setContainerData(this, 2, this.furnace.getProperty(2));
-            }
-
-            if (this.i != this.furnace.getProperty(0)) {
-                icrafting.setContainerData(this, 0, this.furnace.getProperty(0));
-            }
-
-            if (this.j != this.furnace.getProperty(1)) {
-                icrafting.setContainerData(this, 1, this.furnace.getProperty(1));
-            }
-
-            if (this.h != this.furnace.getProperty(3)) {
-                icrafting.setContainerData(this, 3, this.furnace.getProperty(3));
-            }
-        }
-
-        this.g = this.furnace.getProperty(2);
-        this.i = this.furnace.getProperty(0);
-        this.j = this.furnace.getProperty(1);
-        this.h = this.furnace.getProperty(3);
+    @Override
+    public int h() {
+        return 1;
     }
 
+    @Override
     public boolean canUse(EntityHuman entityhuman) {
         return this.furnace.a(entityhuman);
     }
 
+    @Override
     public ItemStack shiftClick(EntityHuman entityhuman, int i) {
         ItemStack itemstack = ItemStack.a;
         Slot slot = (Slot) this.slots.get(i);
@@ -117,7 +101,7 @@ public class ContainerFurnace extends ContainerRecipeBook {
                     if (!this.a(itemstack1, 0, 1, false)) {
                         return ItemStack.a;
                     }
-                } else if (TileEntityFurnace.isFuel(itemstack1)) {
+                } else if (this.b(itemstack1)) {
                     if (!this.a(itemstack1, 1, 2, false)) {
                         return ItemStack.a;
                     }
@@ -135,7 +119,7 @@ public class ContainerFurnace extends ContainerRecipeBook {
             if (itemstack1.isEmpty()) {
                 slot.set(ItemStack.a);
             } else {
-                slot.f();
+                slot.d();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -148,19 +132,11 @@ public class ContainerFurnace extends ContainerRecipeBook {
         return itemstack;
     }
 
-    private boolean a(ItemStack itemstack) {
-        Iterator iterator = this.f.getCraftingManager().b().iterator();
+    protected boolean a(ItemStack itemstack) {
+        return this.c.getCraftingManager().craft(this.f, new InventorySubcontainer(new ItemStack[] { itemstack}), this.c).isPresent();
+    }
 
-        IRecipe irecipe;
-
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            irecipe = (IRecipe) iterator.next();
-        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).test(itemstack));
-
-        return true;
+    protected boolean b(ItemStack itemstack) {
+        return TileEntityFurnace.isFuel(itemstack);
     }
 }

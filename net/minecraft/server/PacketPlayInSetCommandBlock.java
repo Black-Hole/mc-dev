@@ -13,6 +13,7 @@ public class PacketPlayInSetCommandBlock implements Packet<PacketListenerPlayIn>
 
     public PacketPlayInSetCommandBlock() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.e(32767);
@@ -24,6 +25,7 @@ public class PacketPlayInSetCommandBlock implements Packet<PacketListenerPlayIn>
         this.e = (b0 & 4) != 0;
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a(this.b);

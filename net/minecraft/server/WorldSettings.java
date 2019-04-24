@@ -65,10 +65,6 @@ public final class WorldSettings {
         return this.f;
     }
 
-    public static EnumGamemode a(int i) {
-        return EnumGamemode.getById(i);
-    }
-
     public JsonElement j() {
         return this.h;
     }

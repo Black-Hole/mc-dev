@@ -38,15 +38,12 @@ public class CommandSetBlock {
             boolean flag;
 
             if (commandsetblock_mode == CommandSetBlock.Mode.DESTROY) {
-                worldserver.setAir(blockposition, true);
+                worldserver.b(blockposition, true);
                 flag = !argumenttilelocation.a().isAir();
             } else {
                 TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-                if (tileentity instanceof IInventory) {
-                    ((IInventory) tileentity).clear();
-                }
-
+                Clearable.a(tileentity);
                 flag = true;
             }
 
@@ -68,7 +65,7 @@ public class CommandSetBlock {
 
     public static enum Mode {
 
-        REPLACE, OUTLINE, HOLLOW, DESTROY;
+        REPLACE, DESTROY;
 
         private Mode() {}
     }

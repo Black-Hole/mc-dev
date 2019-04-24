@@ -6,22 +6,24 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
 
     private String a;
     public int viewDistance;
-    private EntityHuman.EnumChatVisibility c;
+    private EnumChatVisibility c;
     private boolean d;
     private int e;
     private EnumMainHand f;
 
     public PacketPlayInSettings() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(16);
         this.viewDistance = packetdataserializer.readByte();
-        this.c = (EntityHuman.EnumChatVisibility) packetdataserializer.a(EntityHuman.EnumChatVisibility.class);
+        this.c = (EnumChatVisibility) packetdataserializer.a(EnumChatVisibility.class);
         this.d = packetdataserializer.readBoolean();
         this.e = packetdataserializer.readUnsignedByte();
         this.f = (EnumMainHand) packetdataserializer.a(EnumMainHand.class);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.viewDistance);
@@ -39,7 +41,7 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
         return this.a;
     }
 
-    public EntityHuman.EnumChatVisibility d() {
+    public EnumChatVisibility d() {
         return this.c;
     }
 

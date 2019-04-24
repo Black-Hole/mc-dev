@@ -7,7 +7,7 @@ public class PlayerAbilities {
     public boolean canFly;
     public boolean canInstantlyBuild;
     public boolean mayBuild = true;
-    public double flySpeed = 0.05000000074505806D;
+    public float flySpeed = 0.05F;
     public float walkSpeed = 0.1F;
 
     public PlayerAbilities() {}
@@ -20,7 +20,7 @@ public class PlayerAbilities {
         nbttagcompound1.setBoolean("mayfly", this.canFly);
         nbttagcompound1.setBoolean("instabuild", this.canInstantlyBuild);
         nbttagcompound1.setBoolean("mayBuild", this.mayBuild);
-        nbttagcompound1.setFloat("flySpeed", (float) this.flySpeed);
+        nbttagcompound1.setFloat("flySpeed", this.flySpeed);
         nbttagcompound1.setFloat("walkSpeed", this.walkSpeed);
         nbttagcompound.set("abilities", nbttagcompound1);
     }
@@ -34,7 +34,7 @@ public class PlayerAbilities {
             this.canFly = nbttagcompound1.getBoolean("mayfly");
             this.canInstantlyBuild = nbttagcompound1.getBoolean("instabuild");
             if (nbttagcompound1.hasKeyOfType("flySpeed", 99)) {
-                this.flySpeed = (double) nbttagcompound1.getFloat("flySpeed");
+                this.flySpeed = nbttagcompound1.getFloat("flySpeed");
                 this.walkSpeed = nbttagcompound1.getFloat("walkSpeed");
             }
 
@@ -46,7 +46,7 @@ public class PlayerAbilities {
     }
 
     public float a() {
-        return (float) this.flySpeed;
+        return this.flySpeed;
     }
 
     public float b() {

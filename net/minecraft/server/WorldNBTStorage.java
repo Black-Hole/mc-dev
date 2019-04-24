@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.DataFixer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,7 +13,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class WorldNBTStorage implements IDataManager, IPlayerFileData {
+public class WorldNBTStorage implements IPlayerFileData {
 
     private static final Logger b = LogManager.getLogger();
     private final File baseDir;
@@ -37,10 +36,42 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
             this.g = null;
         }
 
-        this.j();
+        this.h();
     }
 
-    private void j() {
+    public void saveWorldData(WorldData worlddata, @Nullable NBTTagCompound nbttagcompound) {
+        worlddata.d(19133);
+        NBTTagCompound nbttagcompound1 = worlddata.a(nbttagcompound);
+        NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+
+        nbttagcompound2.set("Data", nbttagcompound1);
+
+        try {
+            File file = new File(this.baseDir, "level.dat_new");
+            File file1 = new File(this.baseDir, "level.dat_old");
+            File file2 = new File(this.baseDir, "level.dat");
+
+            NBTCompressedStreamTools.a(nbttagcompound2, (OutputStream) (new FileOutputStream(file)));
+            if (file1.exists()) {
+                file1.delete();
+            }
+
+            file2.renameTo(file1);
+            if (file2.exists()) {
+                file2.delete();
+            }
+
+            file.renameTo(file2);
+            if (file.exists()) {
+                file.delete();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    private void h() {
         try {
             File file = new File(this.baseDir, "session.lock");
             DataOutputStream dataoutputstream = new DataOutputStream(new FileOutputStream(file));
@@ -79,16 +110,12 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         }
     }
 
-    public IChunkLoader createChunkLoader(WorldProvider worldprovider) {
-        throw new RuntimeException("Old Chunk Storage is no longer supported.");
-    }
-
     @Nullable
     public WorldData getWorldData() {
         File file = new File(this.baseDir, "level.dat");
 
         if (file.exists()) {
-            WorldData worlddata = WorldLoader.a(file, this.a);
+            WorldData worlddata = Convertable.a(file, this.a);
 
             if (worlddata != null) {
                 return worlddata;
@@ -96,49 +123,19 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         }
 
         file = new File(this.baseDir, "level.dat_old");
-        return file.exists() ? WorldLoader.a(file, this.a) : null;
-    }
-
-    public void saveWorldData(WorldData worlddata, @Nullable NBTTagCompound nbttagcompound) {
-        NBTTagCompound nbttagcompound1 = worlddata.a(nbttagcompound);
-        NBTTagCompound nbttagcompound2 = new NBTTagCompound();
-
-        nbttagcompound2.set("Data", nbttagcompound1);
-
-        try {
-            File file = new File(this.baseDir, "level.dat_new");
-            File file1 = new File(this.baseDir, "level.dat_old");
-            File file2 = new File(this.baseDir, "level.dat");
-
-            NBTCompressedStreamTools.a(nbttagcompound2, (OutputStream) (new FileOutputStream(file)));
-            if (file1.exists()) {
-                file1.delete();
-            }
-
-            file2.renameTo(file1);
-            if (file2.exists()) {
-                file2.delete();
-            }
-
-            file.renameTo(file2);
-            if (file.exists()) {
-                file.delete();
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
+        return file.exists() ? Convertable.a(file, this.a) : null;
     }
 
     public void saveWorldData(WorldData worlddata) {
         this.saveWorldData(worlddata, (NBTTagCompound) null);
     }
 
+    @Override
     public void save(EntityHuman entityhuman) {
         try {
             NBTTagCompound nbttagcompound = entityhuman.save(new NBTTagCompound());
-            File file = new File(this.playerDir, entityhuman.bu() + ".dat.tmp");
-            File file1 = new File(this.playerDir, entityhuman.bu() + ".dat");
+            File file = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat.tmp");
+            File file1 = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat");
 
             NBTCompressedStreamTools.a(nbttagcompound, (OutputStream) (new FileOutputStream(file)));
             if (file1.exists()) {
@@ -153,11 +150,12 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
     }
 
     @Nullable
+    @Override
     public NBTTagCompound load(EntityHuman entityhuman) {
         NBTTagCompound nbttagcompound = null;
 
         try {
-            File file = new File(this.playerDir, entityhuman.bu() + ".dat");
+            File file = new File(this.playerDir, entityhuman.getUniqueIDString() + ".dat");
 
             if (file.exists() && file.isFile()) {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
@@ -173,10 +171,6 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         }
 
         return nbttagcompound;
-    }
-
-    public IPlayerFileData getPlayerFileData() {
-        return this;
     }
 
     public String[] getSeenPlayers() {
@@ -195,20 +189,11 @@ public class WorldNBTStorage implements IDataManager, IPlayerFileData {
         return astring;
     }
 
-    public void a() {}
-
-    public File getDataFile(DimensionManager dimensionmanager, String s) {
-        File file = new File(dimensionmanager.a(this.baseDir), "data");
-
-        file.mkdirs();
-        return new File(file, s + ".dat");
-    }
-
-    public DefinedStructureManager h() {
+    public DefinedStructureManager f() {
         return this.g;
     }
 
-    public DataFixer i() {
+    public DataFixer getDataFixer() {
         return this.a;
     }
 }

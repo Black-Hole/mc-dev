@@ -9,10 +9,9 @@ import javax.annotation.Nullable;
 
 public class TileEntitySkull extends TileEntity implements ITickable {
 
-    private GameProfile a;
-    private int e;
-    private boolean f;
-    public boolean drop = true;
+    public GameProfile gameProfile;
+    private int b;
+    private boolean c;
     private static UserCache userCache;
     private static MinecraftSessionService sessionService;
 
@@ -28,18 +27,20 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         TileEntitySkull.sessionService = minecraftsessionservice;
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
-        if (this.a != null) {
+        if (this.gameProfile != null) {
             NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 
-            GameProfileSerializer.serialize(nbttagcompound1, this.a);
+            GameProfileSerializer.serialize(nbttagcompound1, this.gameProfile);
             nbttagcompound.set("Owner", nbttagcompound1);
         }
 
         return nbttagcompound;
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("Owner", 10)) {
@@ -54,41 +55,39 @@ public class TileEntitySkull extends TileEntity implements ITickable {
 
     }
 
+    @Override
     public void tick() {
         Block block = this.getBlock().getBlock();
 
         if (block == Blocks.DRAGON_HEAD || block == Blocks.DRAGON_WALL_HEAD) {
             if (this.world.isBlockIndirectlyPowered(this.position)) {
-                this.f = true;
-                ++this.e;
+                this.c = true;
+                ++this.b;
             } else {
-                this.f = false;
+                this.c = false;
             }
         }
 
     }
 
     @Nullable
-    public GameProfile getGameProfile() {
-        return this.a;
-    }
-
-    @Nullable
+    @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 4, this.aa_());
+        return new PacketPlayOutTileEntityData(this.position, 4, this.b());
     }
 
-    public NBTTagCompound aa_() {
+    @Override
+    public NBTTagCompound b() {
         return this.save(new NBTTagCompound());
     }
 
     public void setGameProfile(@Nullable GameProfile gameprofile) {
-        this.a = gameprofile;
-        this.f();
+        this.gameProfile = gameprofile;
+        this.d();
     }
 
-    private void f() {
-        this.a = b(this.a);
+    private void d() {
+        this.gameProfile = b(this.gameProfile);
         this.update();
     }
 
@@ -116,20 +115,5 @@ public class TileEntitySkull extends TileEntity implements ITickable {
         } else {
             return gameprofile;
         }
-    }
-
-    public static void a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        TileEntity tileentity = iblockaccess.getTileEntity(blockposition);
-
-        if (tileentity instanceof TileEntitySkull) {
-            TileEntitySkull tileentityskull = (TileEntitySkull) tileentity;
-
-            tileentityskull.drop = false;
-        }
-
-    }
-
-    public boolean shouldDrop() {
-        return this.drop;
     }
 }

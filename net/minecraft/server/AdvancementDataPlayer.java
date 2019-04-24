@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -11,11 +12,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.internal.Streams;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.JsonOps;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
@@ -138,11 +140,11 @@ public class AdvancementDataPlayer {
                     jsonreader.setLenient(false);
                     Dynamic<JsonElement> dynamic = new Dynamic(JsonOps.INSTANCE, Streams.parse(jsonreader));
 
-                    if (!dynamic.get("DataVersion").flatMap(Dynamic::getNumberValue).isPresent()) {
+                    if (!dynamic.get("DataVersion").asNumber().isPresent()) {
                         dynamic = dynamic.set("DataVersion", dynamic.createInt(1343));
                     }
 
-                    dynamic = this.d.az().update(DataFixTypes.ADVANCEMENTS, dynamic, dynamic.getInt("DataVersion"), 1631);
+                    dynamic = this.d.aA().update(DataFixTypes.ADVANCEMENTS.a(), dynamic, dynamic.get("DataVersion").asInt(0), SharedConstants.a().getWorldVersion());
                     dynamic = dynamic.remove("DataVersion");
                     Map<MinecraftKey, AdvancementProgress> map = (Map) AdvancementDataPlayer.b.getAdapter(AdvancementDataPlayer.c).fromJsonTree((JsonElement) dynamic.getValue());
 
@@ -209,8 +211,54 @@ public class AdvancementDataPlayer {
             this.e.getParentFile().mkdirs();
         }
 
+        JsonElement jsonelement = AdvancementDataPlayer.b.toJsonTree(map);
+
+        jsonelement.getAsJsonObject().addProperty("DataVersion", SharedConstants.a().getWorldVersion());
+
         try {
-            Files.write(AdvancementDataPlayer.b.toJson(map), this.e, StandardCharsets.UTF_8);
+            FileOutputStream fileoutputstream = new FileOutputStream(this.e);
+            Throwable throwable = null;
+
+            try {
+                OutputStreamWriter outputstreamwriter = new OutputStreamWriter(fileoutputstream, Charsets.UTF_8.newEncoder());
+                Throwable throwable1 = null;
+
+                try {
+                    AdvancementDataPlayer.b.toJson(jsonelement, outputstreamwriter);
+                } catch (Throwable throwable2) {
+                    throwable1 = throwable2;
+                    throw throwable2;
+                } finally {
+                    if (outputstreamwriter != null) {
+                        if (throwable1 != null) {
+                            try {
+                                outputstreamwriter.close();
+                            } catch (Throwable throwable3) {
+                                throwable1.addSuppressed(throwable3);
+                            }
+                        } else {
+                            outputstreamwriter.close();
+                        }
+                    }
+
+                }
+            } catch (Throwable throwable4) {
+                throwable = throwable4;
+                throw throwable4;
+            } finally {
+                if (fileoutputstream != null) {
+                    if (throwable != null) {
+                        try {
+                            fileoutputstream.close();
+                        } catch (Throwable throwable5) {
+                            throwable.addSuppressed(throwable5);
+                        }
+                    } else {
+                        fileoutputstream.close();
+                    }
+                }
+
+            }
         } catch (IOException ioexception) {
             AdvancementDataPlayer.a.error("Couldn't save player advancements to {}", this.e, ioexception);
         }

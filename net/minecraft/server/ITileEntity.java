@@ -5,5 +5,5 @@ import javax.annotation.Nullable;
 public interface ITileEntity {
 
     @Nullable
-    TileEntity a(IBlockAccess iblockaccess);
+    TileEntity createTile(IBlockAccess iblockaccess);
 }

@@ -12,42 +12,36 @@ public class BlockStemAttached extends BlockPlant {
 
     protected BlockStemAttached(BlockStemmed blockstemmed, Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStemAttached.a, EnumDirection.NORTH));
         this.b = blockstemmed;
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockStemAttached.c.get(iblockdata.get(BlockStemAttached.a));
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return iblockdata1.getBlock() != this.b && enumdirection == iblockdata.get(BlockStemAttached.a) ? (IBlockData) this.b.d().getBlockData().set(BlockStem.AGE, 7) : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    protected Item b() {
-        return this.b == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.b == Blocks.MELON ? Items.MELON_SEEDS : Items.AIR);
-    }
-
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.AIR;
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(this.b());
-    }
-
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockStemAttached.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockStemAttached.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockStemAttached.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockStemAttached.a);
     }

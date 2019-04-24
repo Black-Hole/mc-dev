@@ -16,41 +16,49 @@ public class SoundEffectType {
     public static final SoundEffectType l = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SLIME_BLOCK_BREAK, SoundEffects.BLOCK_SLIME_BLOCK_STEP, SoundEffects.BLOCK_SLIME_BLOCK_PLACE, SoundEffects.BLOCK_SLIME_BLOCK_HIT, SoundEffects.BLOCK_SLIME_BLOCK_FALL);
     public static final SoundEffectType m = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WET_GRASS_BREAK, SoundEffects.BLOCK_WET_GRASS_STEP, SoundEffects.BLOCK_WET_GRASS_PLACE, SoundEffects.BLOCK_WET_GRASS_HIT, SoundEffects.BLOCK_WET_GRASS_FALL);
     public static final SoundEffectType n = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CORAL_BLOCK_BREAK, SoundEffects.BLOCK_CORAL_BLOCK_STEP, SoundEffects.BLOCK_CORAL_BLOCK_PLACE, SoundEffects.BLOCK_CORAL_BLOCK_HIT, SoundEffects.BLOCK_CORAL_BLOCK_FALL);
-    public final float o;
-    public final float p;
-    private final SoundEffect q;
-    private final SoundEffect r;
-    private final SoundEffect s;
-    private final SoundEffect t;
-    private final SoundEffect u;
+    public static final SoundEffectType o = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_PLACE, SoundEffects.BLOCK_BAMBOO_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
+    public static final SoundEffectType p = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_BAMBOO_SAPLING_BREAK, SoundEffects.BLOCK_BAMBOO_STEP, SoundEffects.BLOCK_BAMBOO_SAPLING_PLACE, SoundEffects.BLOCK_BAMBOO_SAPLING_HIT, SoundEffects.BLOCK_BAMBOO_FALL);
+    public static final SoundEffectType q = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SCAFFOLDING_BREAK, SoundEffects.BLOCK_SCAFFOLDING_STEP, SoundEffects.BLOCK_SCAFFOLDING_PLACE, SoundEffects.BLOCK_SCAFFOLDING_HIT, SoundEffects.BLOCK_SCAFFOLDING_FALL);
+    public static final SoundEffectType r = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_SWEET_BERRY_BUSH_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.BLOCK_SWEET_BERRY_BUSH_PLACE, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
+    public static final SoundEffectType s = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_CROP_BREAK, SoundEffects.BLOCK_GRASS_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_GRASS_HIT, SoundEffects.BLOCK_GRASS_FALL);
+    public static final SoundEffectType t = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_WOOD_BREAK, SoundEffects.BLOCK_WOOD_STEP, SoundEffects.ITEM_CROP_PLANT, SoundEffects.BLOCK_WOOD_HIT, SoundEffects.BLOCK_WOOD_FALL);
+    public static final SoundEffectType u = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_NETHER_WART_BREAK, SoundEffects.BLOCK_STONE_STEP, SoundEffects.ITEM_NETHER_WART_PLANT, SoundEffects.BLOCK_STONE_HIT, SoundEffects.BLOCK_STONE_FALL);
+    public static final SoundEffectType v = new SoundEffectType(1.0F, 1.0F, SoundEffects.BLOCK_LANTERN_BREAK, SoundEffects.BLOCK_LANTERN_STEP, SoundEffects.BLOCK_LANTERN_PLACE, SoundEffects.BLOCK_LANTERN_HIT, SoundEffects.BLOCK_LANTERN_FALL);
+    public final float w;
+    public final float x;
+    private final SoundEffect y;
+    private final SoundEffect z;
+    private final SoundEffect A;
+    private final SoundEffect B;
+    private final SoundEffect C;
 
     public SoundEffectType(float f, float f1, SoundEffect soundeffect, SoundEffect soundeffect1, SoundEffect soundeffect2, SoundEffect soundeffect3, SoundEffect soundeffect4) {
-        this.o = f;
-        this.p = f1;
-        this.q = soundeffect;
-        this.r = soundeffect1;
-        this.s = soundeffect2;
-        this.t = soundeffect3;
-        this.u = soundeffect4;
+        this.w = f;
+        this.x = f1;
+        this.y = soundeffect;
+        this.z = soundeffect1;
+        this.A = soundeffect2;
+        this.B = soundeffect3;
+        this.C = soundeffect4;
     }
 
     public float a() {
-        return this.o;
+        return this.w;
     }
 
     public float b() {
-        return this.p;
+        return this.x;
     }
 
     public SoundEffect d() {
-        return this.r;
+        return this.z;
     }
 
     public SoundEffect e() {
-        return this.s;
+        return this.A;
     }
 
     public SoundEffect g() {
-        return this.u;
+        return this.C;
     }
 }

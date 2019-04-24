@@ -17,7 +17,7 @@ public class CommandPublish {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("publish").requires((commandlistenerwrapper) -> {
-            return commandlistenerwrapper.getServer().H() && commandlistenerwrapper.hasPermission(4);
+            return commandlistenerwrapper.getServer().isEmbeddedServer() && commandlistenerwrapper.hasPermission(4);
         })).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), HttpUtilities.a());
         })).then(CommandDispatcher.a("port", (ArgumentType) IntegerArgumentType.integer(0, 65535)).executes((commandcontext) -> {
@@ -26,7 +26,7 @@ public class CommandPublish {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, int i) throws CommandSyntaxException {
-        if (commandlistenerwrapper.getServer().ad()) {
+        if (commandlistenerwrapper.getServer().ae()) {
             throw CommandPublish.b.create(commandlistenerwrapper.getServer().getPort());
         } else if (!commandlistenerwrapper.getServer().a(commandlistenerwrapper.getServer().getGamemode(), false, i)) {
             throw CommandPublish.a.create();

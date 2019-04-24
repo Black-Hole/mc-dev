@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import com.google.common.io.Files;
-import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
@@ -12,9 +10,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.RootCommandNode;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -43,6 +38,7 @@ public class CommandDispatcher {
         CommandEnchant.a(this.b);
         CommandXp.a(this.b);
         CommandFill.a(this.b);
+        CommandForceload.a(this.b);
         CommandFunction.a(this.b);
         CommandGamemode.a(this.b);
         CommandGamerule.a(this.b);
@@ -52,6 +48,7 @@ public class CommandDispatcher {
         CommandKill.a(this.b);
         CommandList.a(this.b);
         CommandLocate.a(this.b);
+        CommandLoot.a(this.b);
         CommandTell.a(this.b);
         CommandParticle.a(this.b);
         CommandPlaySound.a(this.b);
@@ -60,6 +57,7 @@ public class CommandDispatcher {
         CommandRecipe.a(this.b);
         CommandReplaceItem.a(this.b);
         CommandSay.a(this.b);
+        CommandSchedule.a(this.b);
         CommandScoreboard.a(this.b);
         CommandSeed.a(this.b);
         CommandSetBlock.a(this.b);
@@ -70,9 +68,9 @@ public class CommandDispatcher {
         CommandSummon.a(this.b);
         CommandTag.a(this.b);
         CommandTeam.a(this.b);
+        CommandTeamMsg.a(this.b);
         CommandTeleport.a(this.b);
         CommandTellRaw.a(this.b);
-        CommandForceload.a(this.b);
         CommandTime.a(this.b);
         CommandTitle.a(this.b);
         CommandTrigger.a(this.b);
@@ -102,15 +100,6 @@ public class CommandDispatcher {
         });
     }
 
-    public void a(File file) {
-        try {
-            Files.write((new GsonBuilder()).setPrettyPrinting().create().toJson(ArgumentRegistry.a(this.b, (CommandNode) this.b.getRoot())), file, StandardCharsets.UTF_8);
-        } catch (IOException ioexception) {
-            CommandDispatcher.a.error("Couldn't write out command tree!", ioexception);
-        }
-
-    }
-
     public int a(CommandListenerWrapper commandlistenerwrapper, String s) {
         StringReader stringreader = new StringReader(s);
 
@@ -118,7 +107,7 @@ public class CommandDispatcher {
             stringreader.skip();
         }
 
-        commandlistenerwrapper.getServer().methodProfiler.enter(s);
+        commandlistenerwrapper.getServer().getMethodProfiler().enter(s);
 
         byte b0;
 
@@ -179,7 +168,7 @@ public class CommandDispatcher {
             }));
             b0 = 0;
         } finally {
-            commandlistenerwrapper.getServer().methodProfiler.exit();
+            commandlistenerwrapper.getServer().getMethodProfiler().exit();
         }
 
         return b0;

@@ -5,18 +5,22 @@ import javax.annotation.Nullable;
 public class TileEntityMobSpawner extends TileEntity implements ITickable {
 
     private final MobSpawnerAbstract a = new MobSpawnerAbstract() {
+        @Override
         public void a(int i) {
             TileEntityMobSpawner.this.world.playBlockAction(TileEntityMobSpawner.this.position, Blocks.SPAWNER, i, 0);
         }
 
+        @Override
         public World a() {
             return TileEntityMobSpawner.this.world;
         }
 
+        @Override
         public BlockPosition b() {
             return TileEntityMobSpawner.this.position;
         }
 
+        @Override
         public void a(MobSpawnerData mobspawnerdata) {
             super.a(mobspawnerdata);
             if (this.a() != null) {
@@ -32,37 +36,44 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         super(TileEntityTypes.MOB_SPAWNER);
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.a.a(nbttagcompound);
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         this.a.b(nbttagcompound);
         return nbttagcompound;
     }
 
+    @Override
     public void tick() {
         this.a.c();
     }
 
     @Nullable
+    @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 1, this.aa_());
+        return new PacketPlayOutTileEntityData(this.position, 1, this.b());
     }
 
-    public NBTTagCompound aa_() {
+    @Override
+    public NBTTagCompound b() {
         NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
         nbttagcompound.remove("SpawnPotentials");
         return nbttagcompound;
     }
 
-    public boolean c(int i, int j) {
-        return this.a.b(i) ? true : super.c(i, j);
+    @Override
+    public boolean setProperty(int i, int j) {
+        return this.a.b(i) ? true : super.setProperty(i, j);
     }
 
+    @Override
     public boolean isFilteredNBT() {
         return true;
     }

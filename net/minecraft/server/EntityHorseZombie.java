@@ -4,46 +4,48 @@ import javax.annotation.Nullable;
 
 public class EntityHorseZombie extends EntityHorseAbstract {
 
-    public EntityHorseZombie(World world) {
-        super(EntityTypes.ZOMBIE_HORSE, world);
+    public EntityHorseZombie(EntityTypes<? extends EntityHorseZombie> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(15.0D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(15.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
-        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ed());
+        this.getAttributeInstance(EntityHorseZombie.attributeJumpStrength).setValue(this.ey());
     }
 
+    @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.UNDEAD;
     }
 
-    protected SoundEffect D() {
-        super.D();
+    @Override
+    protected SoundEffect getSoundAmbient() {
+        super.getSoundAmbient();
         return SoundEffects.ENTITY_ZOMBIE_HORSE_AMBIENT;
     }
 
-    protected SoundEffect cs() {
-        super.cs();
+    @Override
+    protected SoundEffect getSoundDeath() {
+        super.getSoundDeath();
         return SoundEffects.ENTITY_ZOMBIE_HORSE_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
-        super.d(damagesource);
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
+        super.getSoundHurt(damagesource);
         return SoundEffects.ENTITY_ZOMBIE_HORSE_HURT;
     }
 
     @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.Q;
-    }
-
-    @Nullable
+    @Override
     public EntityAgeable createChild(EntityAgeable entityageable) {
-        return new EntityHorseZombie(this.world);
+        return (EntityAgeable) EntityTypes.ZOMBIE_HORSE.a(this.world);
     }
 
+    @Override
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -54,14 +56,14 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         } else if (this.isBaby()) {
             return super.a(entityhuman, enumhand);
         } else if (entityhuman.isSneaking()) {
-            this.c(entityhuman);
+            this.e(entityhuman);
             return true;
         } else if (this.isVehicle()) {
             return super.a(entityhuman, enumhand);
         } else {
             if (!itemstack.isEmpty()) {
-                if (!this.dV() && itemstack.getItem() == Items.SADDLE) {
-                    this.c(entityhuman);
+                if (!this.eq() && itemstack.getItem() == Items.SADDLE) {
+                    this.e(entityhuman);
                     return true;
                 }
 
@@ -75,5 +77,6 @@ public class EntityHorseZombie extends EntityHorseAbstract {
         }
     }
 
-    protected void dI() {}
+    @Override
+    protected void ee() {}
 }

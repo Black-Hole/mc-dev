@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 public class TileEntityTypes<T extends TileEntity> {
 
-    private static final Logger z = LogManager.getLogger();
-    public static final TileEntityTypes<TileEntityFurnace> FURNACE = a("furnace", TileEntityTypes.a.a(TileEntityFurnace::new));
+    private static final Logger G = LogManager.getLogger();
+    public static final TileEntityTypes<TileEntityFurnaceFurnace> FURNACE = a("furnace", TileEntityTypes.a.a(TileEntityFurnaceFurnace::new));
     public static final TileEntityTypes<TileEntityChest> CHEST = a("chest", TileEntityTypes.a.a(TileEntityChest::new));
     public static final TileEntityTypes<TileEntityChestTrapped> TRAPPED_CHEST = a("trapped_chest", TileEntityTypes.a.a(TileEntityChestTrapped::new));
     public static final TileEntityTypes<TileEntityEnderChest> ENDER_CHEST = a("ender_chest", TileEntityTypes.a.a(TileEntityEnderChest::new));
@@ -35,50 +35,45 @@ public class TileEntityTypes<T extends TileEntity> {
     public static final TileEntityTypes<TileEntityShulkerBox> SHULKER_BOX = a("shulker_box", TileEntityTypes.a.a(TileEntityShulkerBox::new));
     public static final TileEntityTypes<TileEntityBed> BED = a("bed", TileEntityTypes.a.a(TileEntityBed::new));
     public static final TileEntityTypes<TileEntityConduit> CONDUIT = a("conduit", TileEntityTypes.a.a(TileEntityConduit::new));
-    private final Supplier<? extends T> A;
-    private final Type<?> B;
+    public static final TileEntityTypes<TileEntityBarrel> BARREL = a("barrel", TileEntityTypes.a.a(TileEntityBarrel::new));
+    public static final TileEntityTypes<TileEntitySmoker> SMOKER = a("smoker", TileEntityTypes.a.a(TileEntitySmoker::new));
+    public static final TileEntityTypes<TileEntityBlastFurnace> BLAST_FURNACE = a("blast_furnace", TileEntityTypes.a.a(TileEntityBlastFurnace::new));
+    public static final TileEntityTypes<TileEntityLectern> LECTERN = a("lectern", TileEntityTypes.a.a(TileEntityLectern::new));
+    public static final TileEntityTypes<TileEntityBell> BELL = a("bell", TileEntityTypes.a.a(TileEntityBell::new));
+    public static final TileEntityTypes<TileEntityJigsaw> JIGSAW = a("jigsaw", TileEntityTypes.a.a(TileEntityJigsaw::new));
+    public static final TileEntityTypes<TileEntityCampfire> CAMPFIRE = a("campfire", TileEntityTypes.a.a(TileEntityCampfire::new));
+    private final Supplier<? extends T> H;
+    private final Type<?> I;
 
     @Nullable
     public static MinecraftKey a(TileEntityTypes<?> tileentitytypes) {
         return IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentitytypes);
     }
 
-    public static <T extends TileEntity> TileEntityTypes<T> a(String s, TileEntityTypes.a<T> tileentitytypes_a) {
+    private static <T extends TileEntity> TileEntityTypes<T> a(String s, TileEntityTypes.a<T> tileentitytypes_a) {
         Type type = null;
 
         try {
-            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(1631)).getChoiceType(DataConverterTypes.j, s);
+            type = DataConverterRegistry.a().getSchema(DataFixUtils.makeKey(SharedConstants.a().getWorldVersion())).getChoiceType(DataConverterTypes.k, s);
         } catch (IllegalStateException illegalstateexception) {
             if (SharedConstants.b) {
                 throw illegalstateexception;
             }
 
-            TileEntityTypes.z.warn("No data fixer registered for block entity {}", s);
+            TileEntityTypes.G.warn("No data fixer registered for block entity {}", s);
         }
 
-        TileEntityTypes<T> tileentitytypes = tileentitytypes_a.a(type);
-
-        IRegistry.BLOCK_ENTITY_TYPE.a(new MinecraftKey(s), (Object) tileentitytypes);
-        return tileentitytypes;
+        return (TileEntityTypes) IRegistry.a(IRegistry.BLOCK_ENTITY_TYPE, s, (Object) tileentitytypes_a.a(type));
     }
-
-    public static void a() {}
 
     public TileEntityTypes(Supplier<? extends T> supplier, Type<?> type) {
-        this.A = supplier;
-        this.B = type;
+        this.H = supplier;
+        this.I = type;
     }
 
     @Nullable
-    public T b() {
-        return (TileEntity) this.A.get();
-    }
-
-    @Nullable
-    static TileEntity a(String s) {
-        TileEntityTypes<?> tileentitytypes = (TileEntityTypes) IRegistry.BLOCK_ENTITY_TYPE.get(new MinecraftKey(s));
-
-        return tileentitytypes == null ? null : tileentitytypes.b();
+    public T a() {
+        return (TileEntity) this.H.get();
     }
 
     public static final class a<T extends TileEntity> {

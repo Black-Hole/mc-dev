@@ -12,5 +12,5 @@ public interface CommandDataAccessor {
 
     IChatBaseComponent a(NBTBase nbtbase);
 
-    IChatBaseComponent a(ArgumentNBTKey.c argumentnbtkey_c, double d0, int i);
+    IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i);
 }

@@ -22,8 +22,8 @@ public class DataConverterKeybind2 extends DataFix {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return (Dynamic) dynamic.getMapValues().map((map) -> {
                     return dynamic.createMap((Map) map.entrySet().stream().map((entry) -> {
-                        if (((String) ((Dynamic) entry.getKey()).getStringValue().orElse("")).startsWith("key_")) {
-                            String s = (String) ((Dynamic) entry.getValue()).getStringValue().orElse("");
+                        if (((Dynamic) entry.getKey()).asString("").startsWith("key_")) {
+                            String s = ((Dynamic) entry.getValue()).asString("");
 
                             if (!s.startsWith("key.mouse") && !s.startsWith("scancode.")) {
                                 return Pair.of(entry.getKey(), dynamic.createString("key.keyboard." + s.substring("key.".length())));

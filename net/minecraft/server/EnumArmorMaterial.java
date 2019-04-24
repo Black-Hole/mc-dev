@@ -37,26 +37,32 @@ public enum EnumArmorMaterial implements ArmorMaterial {
         this.n = new LazyInitVar<>(supplier);
     }
 
+    @Override
     public int a(EnumItemSlot enumitemslot) {
         return EnumArmorMaterial.g[enumitemslot.b()] * this.i;
     }
 
+    @Override
     public int b(EnumItemSlot enumitemslot) {
         return this.j[enumitemslot.b()];
     }
 
+    @Override
     public int a() {
         return this.k;
     }
 
+    @Override
     public SoundEffect b() {
         return this.l;
     }
 
+    @Override
     public RecipeItemStack c() {
         return (RecipeItemStack) this.n.a();
     }
 
+    @Override
     public float e() {
         return this.m;
     }

@@ -26,93 +26,115 @@ public class ChatModifier {
     private String j;
     private static final ChatModifier k = new ChatModifier() {
         @Nullable
+        @Override
         public EnumChatFormat getColor() {
             return null;
         }
 
+        @Override
         public boolean isBold() {
             return false;
         }
 
+        @Override
         public boolean isItalic() {
             return false;
         }
 
+        @Override
         public boolean isStrikethrough() {
             return false;
         }
 
+        @Override
         public boolean isUnderlined() {
             return false;
         }
 
+        @Override
         public boolean isRandom() {
             return false;
         }
 
         @Nullable
+        @Override
         public ChatClickable h() {
             return null;
         }
 
         @Nullable
+        @Override
         public ChatHoverable i() {
             return null;
         }
 
         @Nullable
+        @Override
         public String j() {
             return null;
         }
 
+        @Override
         public ChatModifier setColor(EnumChatFormat enumchatformat) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setBold(Boolean obool) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setItalic(Boolean obool) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setStrikethrough(Boolean obool) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setUnderline(Boolean obool) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setRandom(Boolean obool) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setChatClickable(ChatClickable chatclickable) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setChatHoverable(ChatHoverable chathoverable) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public ChatModifier setChatModifier(ChatModifier chatmodifier) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public String toString() {
             return "Style.ROOT";
         }
 
+        @Override
         public ChatModifier clone() {
             return this;
         }
 
+        @Override
         public ChatModifier n() {
             return this;
         }
 
+        @Override
         public String k() {
             return "";
         }

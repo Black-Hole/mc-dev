@@ -23,14 +23,16 @@ public class PacketPlayOutSpawnEntityWeather implements Packet<PacketListenerPla
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.e = packetdataserializer.readByte();
         this.b = packetdataserializer.readDouble();
         this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readDouble();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeByte(this.e);

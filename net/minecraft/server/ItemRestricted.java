@@ -9,9 +9,10 @@ public class ItemRestricted extends ItemBlock {
     }
 
     @Nullable
-    protected IBlockData b(BlockActionContext blockactioncontext) {
+    @Override
+    protected IBlockData c(BlockActionContext blockactioncontext) {
         EntityHuman entityhuman = blockactioncontext.getEntity();
 
-        return entityhuman != null && !entityhuman.isCreativeAndOp() ? null : super.b(blockactioncontext);
+        return entityhuman != null && !entityhuman.isCreativeAndOp() ? null : super.c(blockactioncontext);
     }
 }

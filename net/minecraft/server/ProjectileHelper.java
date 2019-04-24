@@ -1,61 +1,84 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
-import java.util.List;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public final class ProjectileHelper {
 
-    public static MovingObjectPosition a(Entity entity, boolean flag, boolean flag1, @Nullable Entity entity1) {
+    public static MovingObjectPosition a(Entity entity, boolean flag, boolean flag1, @Nullable Entity entity1, RayTrace.BlockCollisionOption raytrace_blockcollisionoption) {
+        return a(entity, flag, flag1, entity1, raytrace_blockcollisionoption, true, (entity2) -> {
+            return !entity2.t() && entity2.isInteractable() && (flag1 || !entity2.s(entity1)) && !entity2.noclip;
+        }, entity.getBoundingBox().a(entity.getMot()).g(1.0D));
+    }
+
+    public static MovingObjectPosition a(Entity entity, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate, RayTrace.BlockCollisionOption raytrace_blockcollisionoption, boolean flag) {
+        return a(entity, flag, false, (Entity) null, raytrace_blockcollisionoption, false, predicate, axisalignedbb);
+    }
+
+    @Nullable
+    public static MovingObjectPositionEntity a(World world, Entity entity, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate) {
+        return a(world, entity, vec3d, vec3d1, axisalignedbb, predicate, Double.MAX_VALUE);
+    }
+
+    private static MovingObjectPosition a(Entity entity, boolean flag, boolean flag1, @Nullable Entity entity1, RayTrace.BlockCollisionOption raytrace_blockcollisionoption, boolean flag2, Predicate<Entity> predicate, AxisAlignedBB axisalignedbb) {
         double d0 = entity.locX;
         double d1 = entity.locY;
         double d2 = entity.locZ;
-        double d3 = entity.motX;
-        double d4 = entity.motY;
-        double d5 = entity.motZ;
+        Vec3D vec3d = entity.getMot();
         World world = entity.world;
-        Vec3D vec3d = new Vec3D(d0, d1, d2);
+        Vec3D vec3d1 = new Vec3D(d0, d1, d2);
 
-        if (!world.a(entity, entity.getBoundingBox(), (Set) (!flag1 && entity1 != null ? a(entity1) : ImmutableSet.of()))) {
-            return new MovingObjectPosition(MovingObjectPosition.EnumMovingObjectType.BLOCK, vec3d, EnumDirection.a(d3, d4, d5), new BlockPosition(entity));
+        if (flag2 && !world.a(entity, entity.getBoundingBox(), (Set) (!flag1 && entity1 != null ? a(entity1) : ImmutableSet.of()))) {
+            return new MovingObjectPositionBlock(vec3d1, EnumDirection.a(vec3d.x, vec3d.y, vec3d.z), new BlockPosition(entity), false);
         } else {
-            Vec3D vec3d1 = new Vec3D(d0 + d3, d1 + d4, d2 + d5);
-            MovingObjectPosition movingobjectposition = world.rayTrace(vec3d, vec3d1, FluidCollisionOption.NEVER, true, false);
+            Vec3D vec3d2 = vec3d1.e(vec3d);
+            Object object = world.rayTrace(new RayTrace(vec3d1, vec3d2, raytrace_blockcollisionoption, RayTrace.FluidCollisionOption.NONE, entity));
 
             if (flag) {
-                if (movingobjectposition != null) {
-                    vec3d1 = new Vec3D(movingobjectposition.pos.x, movingobjectposition.pos.y, movingobjectposition.pos.z);
+                if (((MovingObjectPosition) object).getType() != MovingObjectPosition.EnumMovingObjectType.MISS) {
+                    vec3d2 = ((MovingObjectPosition) object).getPos();
                 }
 
-                Entity entity2 = null;
-                List<Entity> list = world.getEntities(entity, entity.getBoundingBox().b(d3, d4, d5).g(1.0D));
-                double d6 = 0.0D;
+                MovingObjectPositionEntity movingobjectpositionentity = a(world, entity, vec3d1, vec3d2, axisalignedbb, predicate);
 
-                for (int i = 0; i < list.size(); ++i) {
-                    Entity entity3 = (Entity) list.get(i);
-
-                    if (entity3.isInteractable() && (flag1 || !entity3.s(entity1)) && !entity3.noclip) {
-                        AxisAlignedBB axisalignedbb = entity3.getBoundingBox().g(0.30000001192092896D);
-                        MovingObjectPosition movingobjectposition1 = axisalignedbb.b(vec3d, vec3d1);
-
-                        if (movingobjectposition1 != null) {
-                            double d7 = vec3d.distanceSquared(movingobjectposition1.pos);
-
-                            if (d7 < d6 || d6 == 0.0D) {
-                                entity2 = entity3;
-                                d6 = d7;
-                            }
-                        }
-                    }
-                }
-
-                if (entity2 != null) {
-                    movingobjectposition = new MovingObjectPosition(entity2);
+                if (movingobjectpositionentity != null) {
+                    object = movingobjectpositionentity;
                 }
             }
 
-            return movingobjectposition;
+            return (MovingObjectPosition) object;
+        }
+    }
+
+    @Nullable
+    public static MovingObjectPositionEntity a(World world, Entity entity, Vec3D vec3d, Vec3D vec3d1, AxisAlignedBB axisalignedbb, Predicate<Entity> predicate, double d0) {
+        double d1 = d0;
+        Entity entity1 = null;
+        Iterator iterator = world.getEntities(entity, axisalignedbb, predicate).iterator();
+
+        while (iterator.hasNext()) {
+            Entity entity2 = (Entity) iterator.next();
+            AxisAlignedBB axisalignedbb1 = entity2.getBoundingBox().g(0.30000001192092896D);
+            Optional<Vec3D> optional = axisalignedbb1.b(vec3d, vec3d1);
+
+            if (optional.isPresent()) {
+                double d2 = vec3d.distanceSquared((Vec3D) optional.get());
+
+                if (d2 < d1) {
+                    entity1 = entity2;
+                    d1 = d2;
+                }
+            }
+        }
+
+        if (entity1 == null) {
+            return null;
+        } else {
+            return new MovingObjectPositionEntity(entity1);
         }
     }
 
@@ -66,14 +89,12 @@ public final class ProjectileHelper {
     }
 
     public static final void a(Entity entity, float f) {
-        double d0 = entity.motX;
-        double d1 = entity.motY;
-        double d2 = entity.motZ;
-        float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        Vec3D vec3d = entity.getMot();
+        float f1 = MathHelper.sqrt(Entity.b(vec3d));
 
-        entity.yaw = (float) (MathHelper.c(d2, d0) * 57.2957763671875D) + 90.0F;
+        entity.yaw = (float) (MathHelper.d(vec3d.z, vec3d.x) * 57.2957763671875D) + 90.0F;
 
-        for (entity.pitch = (float) (MathHelper.c((double) f1, d1) * 57.2957763671875D) - 90.0F; entity.pitch - entity.lastPitch < -180.0F; entity.lastPitch -= 360.0F) {
+        for (entity.pitch = (float) (MathHelper.d((double) f1, vec3d.y) * 57.2957763671875D) - 90.0F; entity.pitch - entity.lastPitch < -180.0F; entity.lastPitch -= 360.0F) {
             ;
         }
 
@@ -89,7 +110,23 @@ public final class ProjectileHelper {
             entity.lastYaw += 360.0F;
         }
 
-        entity.pitch = entity.lastPitch + (entity.pitch - entity.lastPitch) * f;
-        entity.yaw = entity.lastYaw + (entity.yaw - entity.lastYaw) * f;
+        entity.pitch = MathHelper.g(f, entity.lastPitch, entity.pitch);
+        entity.yaw = MathHelper.g(f, entity.lastYaw, entity.yaw);
+    }
+
+    public static EnumHand a(EntityLiving entityliving, Item item) {
+        return entityliving.getItemInMainHand().getItem() == item ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+    }
+
+    public static EntityArrow a(EntityLiving entityliving, ItemStack itemstack, float f) {
+        ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
+        EntityArrow entityarrow = itemarrow.a(entityliving.world, itemstack, entityliving);
+
+        entityarrow.a(entityliving, f);
+        if (itemstack.getItem() == Items.TIPPED_ARROW && entityarrow instanceof EntityTippedArrow) {
+            ((EntityTippedArrow) entityarrow).b(itemstack);
+        }
+
+        return entityarrow;
     }
 }

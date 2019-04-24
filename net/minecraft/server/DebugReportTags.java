@@ -11,6 +11,7 @@ import java.nio.file.LinkOption;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,13 +31,12 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
 
     protected abstract void b();
 
+    @Override
     public void a(HashCache hashcache) throws IOException {
         this.d.clear();
         this.b();
         Tags<T> tags = new Tags<>((minecraftkey) -> {
-            return false;
-        }, (minecraftkey) -> {
-            return null;
+            return Optional.empty();
         }, "", false, "generated");
         Iterator iterator = this.d.entrySet().iterator();
 

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,7 +37,7 @@ public class CrashReport {
 
     private void h() {
         this.d.a("Minecraft Version", () -> {
-            return "1.13.2";
+            return SharedConstants.a().getName();
         });
         this.d.a("Operating System", () -> {
             return System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") version " + System.getProperty("os.version");
@@ -59,7 +60,7 @@ public class CrashReport {
             return k + " bytes (" + j1 + " MB) / " + j + " bytes (" + i1 + " MB) up to " + i + " bytes (" + l + " MB)";
         });
         this.d.a("JVM Flags", () -> {
-            List<String> list = (List) SystemUtils.f().collect(Collectors.toList());
+            List<String> list = (List) SystemUtils.h().collect(Collectors.toList());
 
             return String.format("%d total; %s", list.size(), list.stream().collect(Collectors.joining(" ")));
         });
@@ -251,6 +252,10 @@ public class CrashReport {
     }
 
     public static CrashReport a(Throwable throwable, String s) {
+        while (throwable instanceof CompletionException && throwable.getCause() != null) {
+            throwable = throwable.getCause();
+        }
+
         CrashReport crashreport;
 
         if (throwable instanceof ReportedException) {

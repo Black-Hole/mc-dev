@@ -8,7 +8,8 @@ public class WorldGenTreeProviderOak extends WorldGenTreeProvider {
     public WorldGenTreeProviderOak() {}
 
     @Nullable
+    @Override
     protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? new WorldGenBigTree(true) : new WorldGenTrees(true));
+        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? new WorldGenBigTree(WorldGenFeatureEmptyConfiguration::a, true) : new WorldGenTrees(WorldGenFeatureEmptyConfiguration::a, true));
     }
 }

@@ -51,7 +51,7 @@ public class CriterionProgress {
         CriterionProgress criterionprogress = new CriterionProgress();
 
         if (packetdataserializer.readBoolean()) {
-            criterionprogress.b = packetdataserializer.m();
+            criterionprogress.b = packetdataserializer.p();
         }
 
         return criterionprogress;

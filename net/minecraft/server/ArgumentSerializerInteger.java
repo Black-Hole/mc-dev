@@ -22,6 +22,7 @@ public class ArgumentSerializerInteger implements ArgumentSerializer<IntegerArgu
 
     }
 
+    @Override
     public IntegerArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         int i = ArgumentSerializers.a(b0) ? packetdataserializer.readInt() : Integer.MIN_VALUE;

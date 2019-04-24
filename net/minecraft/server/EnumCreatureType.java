@@ -1,34 +1,41 @@
 package net.minecraft.server;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public enum EnumCreatureType {
 
-    MONSTER(IMonster.class, 70, false, false), CREATURE(EntityAnimal.class, 10, true, true), AMBIENT(EntityAmbient.class, 15, true, false), WATER_CREATURE(EntityWaterAnimal.class, 15, true, false);
+    MONSTER("monster", 70, false, false), CREATURE("creature", 10, true, true), AMBIENT("ambient", 15, true, false), WATER_CREATURE("water_creature", 15, true, false), MISC("misc", 15, true, false);
 
-    private final Class<? extends IAnimal> e;
-    private final int f;
-    private final boolean g;
+    private static final Map<String, EnumCreatureType> f = (Map) Arrays.stream(values()).collect(Collectors.toMap(EnumCreatureType::a, (enumcreaturetype) -> {
+        return enumcreaturetype;
+    }));
+    private final int g;
     private final boolean h;
+    private final boolean i;
+    private final String j;
 
-    private EnumCreatureType(Class oclass, int i, boolean flag, boolean flag1) {
-        this.e = oclass;
-        this.f = i;
-        this.g = flag;
-        this.h = flag1;
+    private EnumCreatureType(String s, int i, boolean flag, boolean flag1) {
+        this.j = s;
+        this.g = i;
+        this.h = flag;
+        this.i = flag1;
     }
 
-    public Class<? extends IAnimal> a() {
-        return this.e;
+    public String a() {
+        return this.j;
     }
 
     public int b() {
-        return this.f;
-    }
-
-    public boolean c() {
         return this.g;
     }
 
-    public boolean d() {
+    public boolean c() {
         return this.h;
+    }
+
+    public boolean d() {
+        return this.i;
     }
 }

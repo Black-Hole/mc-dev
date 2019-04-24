@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalOcelotAttack extends PathfinderGoal {
 
     private final IBlockAccess a;
@@ -10,9 +12,10 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
     public PathfinderGoalOcelotAttack(EntityInsentient entityinsentient) {
         this.b = entityinsentient;
         this.a = entityinsentient.world;
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
+    @Override
     public boolean a() {
         EntityLiving entityliving = this.b.getGoalTarget();
 
@@ -24,19 +27,22 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
         }
     }
 
+    @Override
     public boolean b() {
-        return !this.c.isAlive() ? false : (this.b.h(this.c) > 225.0D ? false : !this.b.getNavigation().p() || this.a());
+        return !this.c.isAlive() ? false : (this.b.h((Entity) this.c) > 225.0D ? false : !this.b.getNavigation().n() || this.a());
     }
 
+    @Override
     public void d() {
         this.c = null;
-        this.b.getNavigation().q();
+        this.b.getNavigation().o();
     }
 
+    @Override
     public void e() {
         this.b.getControllerLook().a(this.c, 30.0F, 30.0F);
-        double d0 = (double) (this.b.width * 2.0F * this.b.width * 2.0F);
-        double d1 = this.b.d(this.c.locX, this.c.getBoundingBox().minY, this.c.locZ);
+        double d0 = (double) (this.b.getWidth() * 2.0F * this.b.getWidth() * 2.0F);
+        double d1 = this.b.e(this.c.locX, this.c.getBoundingBox().minY, this.c.locZ);
         double d2 = 0.8D;
 
         if (d1 > d0 && d1 < 16.0D) {
@@ -50,7 +56,7 @@ public class PathfinderGoalOcelotAttack extends PathfinderGoal {
         if (d1 <= d0) {
             if (this.d <= 0) {
                 this.d = 20;
-                this.b.B(this.c);
+                this.b.C(this.c);
             }
         }
     }

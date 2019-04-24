@@ -16,225 +16,200 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 import javax.annotation.Nullable;
 
-public class RegionFile {
+public class RegionFile implements AutoCloseable {
 
     private static final byte[] a = new byte[4096];
-    private final File b;
-    private RandomAccessFile c;
+    private final RandomAccessFile b;
+    private final int[] c = new int[1024];
     private final int[] d = new int[1024];
-    private final int[] e = new int[1024];
-    private List<Boolean> f;
-    private int g;
-    private long h;
+    private final List<Boolean> e;
 
-    public RegionFile(File file) {
-        this.b = file;
-        this.g = 0;
+    public RegionFile(File file) throws IOException {
+        this.b = new RandomAccessFile(file, "rw");
+        if (this.b.length() < 4096L) {
+            this.b.write(RegionFile.a);
+            this.b.write(RegionFile.a);
+        }
 
-        try {
-            if (file.exists()) {
-                this.h = file.lastModified();
+        int i;
+
+        if ((this.b.length() & 4095L) != 0L) {
+            for (i = 0; (long) i < (this.b.length() & 4095L); ++i) {
+                this.b.write(0);
             }
+        }
 
-            this.c = new RandomAccessFile(file, "rw");
-            if (this.c.length() < 4096L) {
-                this.c.write(RegionFile.a);
-                this.c.write(RegionFile.a);
-                this.g += 8192;
-            }
+        i = (int) this.b.length() / 4096;
+        this.e = Lists.newArrayListWithCapacity(i);
 
-            int i;
+        int j;
 
-            if ((this.c.length() & 4095L) != 0L) {
-                for (i = 0; (long) i < (this.c.length() & 4095L); ++i) {
-                    this.c.write(0);
+        for (j = 0; j < i; ++j) {
+            this.e.add(true);
+        }
+
+        this.e.set(0, false);
+        this.e.set(1, false);
+        this.b.seek(0L);
+
+        int k;
+
+        for (j = 0; j < 1024; ++j) {
+            k = this.b.readInt();
+            this.c[j] = k;
+            if (k != 0 && (k >> 8) + (k & 255) <= this.e.size()) {
+                for (int l = 0; l < (k & 255); ++l) {
+                    this.e.set((k >> 8) + l, false);
                 }
             }
+        }
 
-            i = (int) this.c.length() / 4096;
-            this.f = Lists.newArrayListWithCapacity(i);
-
-            int j;
-
-            for (j = 0; j < i; ++j) {
-                this.f.add(true);
-            }
-
-            this.f.set(0, false);
-            this.f.set(1, false);
-            this.c.seek(0L);
-
-            int k;
-
-            for (j = 0; j < 1024; ++j) {
-                k = this.c.readInt();
-                this.d[j] = k;
-                if (k != 0 && (k >> 8) + (k & 255) <= this.f.size()) {
-                    for (int l = 0; l < (k & 255); ++l) {
-                        this.f.set((k >> 8) + l, false);
-                    }
-                }
-            }
-
-            for (j = 0; j < 1024; ++j) {
-                k = this.c.readInt();
-                this.e[j] = k;
-            }
-        } catch (IOException ioexception) {
-            ioexception.printStackTrace();
+        for (j = 0; j < 1024; ++j) {
+            k = this.b.readInt();
+            this.d[j] = k;
         }
 
     }
 
     @Nullable
-    public synchronized DataInputStream a(int i, int j) {
-        if (this.e(i, j)) {
-            return null;
-        } else {
-            try {
-                int k = this.getOffset(i, j);
+    public synchronized DataInputStream a(ChunkCoordIntPair chunkcoordintpair) {
+        try {
+            int i = this.getOffset(chunkcoordintpair);
 
-                if (k == 0) {
+            if (i == 0) {
+                return null;
+            } else {
+                int j = i >> 8;
+                int k = i & 255;
+
+                if (j + k > this.e.size()) {
                     return null;
                 } else {
-                    int l = k >> 8;
-                    int i1 = k & 255;
+                    this.b.seek((long) (j * 4096));
+                    int l = this.b.readInt();
 
-                    if (l + i1 > this.f.size()) {
+                    if (l > 4096 * k) {
+                        return null;
+                    } else if (l <= 0) {
                         return null;
                     } else {
-                        this.c.seek((long) (l * 4096));
-                        int j1 = this.c.readInt();
+                        byte b0 = this.b.readByte();
+                        byte[] abyte;
 
-                        if (j1 > 4096 * i1) {
-                            return null;
-                        } else if (j1 <= 0) {
-                            return null;
+                        if (b0 == 1) {
+                            abyte = new byte[l - 1];
+                            this.b.read(abyte);
+                            return new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte))));
+                        } else if (b0 == 2) {
+                            abyte = new byte[l - 1];
+                            this.b.read(abyte);
+                            return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte))));
                         } else {
-                            byte b0 = this.c.readByte();
-                            byte[] abyte;
-
-                            if (b0 == 1) {
-                                abyte = new byte[j1 - 1];
-                                this.c.read(abyte);
-                                return new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(abyte))));
-                            } else if (b0 == 2) {
-                                abyte = new byte[j1 - 1];
-                                this.c.read(abyte);
-                                return new DataInputStream(new BufferedInputStream(new InflaterInputStream(new ByteArrayInputStream(abyte))));
-                            } else {
-                                return null;
-                            }
+                            return null;
                         }
                     }
                 }
-            } catch (IOException ioexception) {
-                return null;
             }
+        } catch (IOException ioexception) {
+            return null;
         }
     }
 
-    public boolean b(int i, int j) {
-        if (this.e(i, j)) {
+    public boolean b(ChunkCoordIntPair chunkcoordintpair) {
+        int i = this.getOffset(chunkcoordintpair);
+
+        if (i == 0) {
             return false;
         } else {
-            int k = this.getOffset(i, j);
+            int j = i >> 8;
+            int k = i & 255;
 
-            if (k == 0) {
+            if (j + k > this.e.size()) {
                 return false;
             } else {
-                int l = k >> 8;
-                int i1 = k & 255;
+                try {
+                    this.b.seek((long) (j * 4096));
+                    int l = this.b.readInt();
 
-                if (l + i1 > this.f.size()) {
+                    return l > 4096 * k ? false : l > 0;
+                } catch (IOException ioexception) {
                     return false;
-                } else {
-                    try {
-                        this.c.seek((long) (l * 4096));
-                        int j1 = this.c.readInt();
-
-                        return j1 > 4096 * i1 ? false : j1 > 0;
-                    } catch (IOException ioexception) {
-                        return false;
-                    }
                 }
             }
         }
     }
 
-    @Nullable
-    public DataOutputStream c(int i, int j) {
-        return this.e(i, j) ? null : new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(i, j))));
+    public DataOutputStream c(ChunkCoordIntPair chunkcoordintpair) {
+        return new DataOutputStream(new BufferedOutputStream(new DeflaterOutputStream(new RegionFile.ChunkBuffer(chunkcoordintpair))));
     }
 
-    protected synchronized void a(int i, int j, byte[] abyte, int k) {
+    protected synchronized void a(ChunkCoordIntPair chunkcoordintpair, byte[] abyte, int i) {
         try {
-            int l = this.getOffset(i, j);
-            int i1 = l >> 8;
-            int j1 = l & 255;
-            int k1 = (k + 5) / 4096 + 1;
+            int j = this.getOffset(chunkcoordintpair);
+            int k = j >> 8;
+            int l = j & 255;
+            int i1 = (i + 5) / 4096 + 1;
 
-            if (k1 >= 256) {
-                return;
+            if (i1 >= 256) {
+                throw new RuntimeException(String.format("Too big to save, %d > 1048576", i));
             }
 
-            if (i1 != 0 && j1 == k1) {
-                this.a(i1, abyte, k);
+            if (k != 0 && l == i1) {
+                this.a(k, abyte, i);
             } else {
-                int l1;
+                int j1;
 
-                for (l1 = 0; l1 < j1; ++l1) {
-                    this.f.set(i1 + l1, true);
+                for (j1 = 0; j1 < l; ++j1) {
+                    this.e.set(k + j1, true);
                 }
 
-                l1 = this.f.indexOf(true);
-                int i2 = 0;
-                int j2;
+                j1 = this.e.indexOf(true);
+                int k1 = 0;
+                int l1;
 
-                if (l1 != -1) {
-                    for (j2 = l1; j2 < this.f.size(); ++j2) {
-                        if (i2 != 0) {
-                            if ((Boolean) this.f.get(j2)) {
-                                ++i2;
+                if (j1 != -1) {
+                    for (l1 = j1; l1 < this.e.size(); ++l1) {
+                        if (k1 != 0) {
+                            if ((Boolean) this.e.get(l1)) {
+                                ++k1;
                             } else {
-                                i2 = 0;
+                                k1 = 0;
                             }
-                        } else if ((Boolean) this.f.get(j2)) {
-                            l1 = j2;
-                            i2 = 1;
+                        } else if ((Boolean) this.e.get(l1)) {
+                            j1 = l1;
+                            k1 = 1;
                         }
 
-                        if (i2 >= k1) {
+                        if (k1 >= i1) {
                             break;
                         }
                     }
                 }
 
-                if (i2 >= k1) {
-                    i1 = l1;
-                    this.a(i, j, l1 << 8 | k1);
+                if (k1 >= i1) {
+                    k = j1;
+                    this.a(chunkcoordintpair, j1 << 8 | i1);
 
-                    for (j2 = 0; j2 < k1; ++j2) {
-                        this.f.set(i1 + j2, false);
+                    for (l1 = 0; l1 < i1; ++l1) {
+                        this.e.set(k + l1, false);
                     }
 
-                    this.a(i1, abyte, k);
+                    this.a(k, abyte, i);
                 } else {
-                    this.c.seek(this.c.length());
-                    i1 = this.f.size();
+                    this.b.seek(this.b.length());
+                    k = this.e.size();
 
-                    for (j2 = 0; j2 < k1; ++j2) {
-                        this.c.write(RegionFile.a);
-                        this.f.add(false);
+                    for (l1 = 0; l1 < i1; ++l1) {
+                        this.b.write(RegionFile.a);
+                        this.e.add(false);
                     }
 
-                    this.g += 4096 * k1;
-                    this.a(i1, abyte, k);
-                    this.a(i, j, i1 << 8 | k1);
+                    this.a(k, abyte, i);
+                    this.a(chunkcoordintpair, k << 8 | i1);
                 }
             }
 
-            this.b(i, j, (int) (SystemUtils.getTimeMillis() / 1000L));
+            this.b(chunkcoordintpair, (int) (SystemUtils.getTimeMillis() / 1000L));
         } catch (IOException ioexception) {
             ioexception.printStackTrace();
         }
@@ -242,56 +217,55 @@ public class RegionFile {
     }
 
     private void a(int i, byte[] abyte, int j) throws IOException {
-        this.c.seek((long) (i * 4096));
-        this.c.writeInt(j + 1);
-        this.c.writeByte(2);
-        this.c.write(abyte, 0, j);
+        this.b.seek((long) (i * 4096));
+        this.b.writeInt(j + 1);
+        this.b.writeByte(2);
+        this.b.write(abyte, 0, j);
     }
 
-    private boolean e(int i, int j) {
-        return i < 0 || i >= 32 || j < 0 || j >= 32;
+    private int getOffset(ChunkCoordIntPair chunkcoordintpair) {
+        return this.c[this.f(chunkcoordintpair)];
     }
 
-    private synchronized int getOffset(int i, int j) {
-        return this.d[i + j * 32];
+    public boolean d(ChunkCoordIntPair chunkcoordintpair) {
+        return this.getOffset(chunkcoordintpair) != 0;
     }
 
-    public boolean d(int i, int j) {
-        return this.getOffset(i, j) != 0;
+    private void a(ChunkCoordIntPair chunkcoordintpair, int i) throws IOException {
+        int j = this.f(chunkcoordintpair);
+
+        this.c[j] = i;
+        this.b.seek((long) (j * 4));
+        this.b.writeInt(i);
     }
 
-    private void a(int i, int j, int k) throws IOException {
-        this.d[i + j * 32] = k;
-        this.c.seek((long) ((i + j * 32) * 4));
-        this.c.writeInt(k);
+    private int f(ChunkCoordIntPair chunkcoordintpair) {
+        return chunkcoordintpair.j() + chunkcoordintpair.k() * 32;
     }
 
-    private void b(int i, int j, int k) throws IOException {
-        this.e[i + j * 32] = k;
-        this.c.seek((long) (4096 + (i + j * 32) * 4));
-        this.c.writeInt(k);
+    private void b(ChunkCoordIntPair chunkcoordintpair, int i) throws IOException {
+        int j = this.f(chunkcoordintpair);
+
+        this.d[j] = i;
+        this.b.seek((long) (4096 + j * 4));
+        this.b.writeInt(i);
     }
 
     public void close() throws IOException {
-        if (this.c != null) {
-            this.c.close();
-        }
-
+        this.b.close();
     }
 
     class ChunkBuffer extends ByteArrayOutputStream {
 
-        private final int b;
-        private final int c;
+        private final ChunkCoordIntPair b;
 
-        public ChunkBuffer(int i, int j) {
+        public ChunkBuffer(ChunkCoordIntPair chunkcoordintpair) {
             super(8096);
-            this.b = i;
-            this.c = j;
+            this.b = chunkcoordintpair;
         }
 
         public void close() {
-            RegionFile.this.a(this.b, this.c, this.buf, this.count);
+            RegionFile.this.a(this.b, this.buf, this.count);
         }
     }
 }

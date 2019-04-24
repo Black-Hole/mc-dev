@@ -20,10 +20,12 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
 
     public CriterionTriggerBredAnimals() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerBredAnimals.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerBredAnimals.b> criteriontrigger_a) {
         CriterionTriggerBredAnimals.a criteriontriggerbredanimals_a = (CriterionTriggerBredAnimals.a) this.b.get(advancementdataplayer);
 
@@ -35,6 +37,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
         criteriontriggerbredanimals_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerBredAnimals.b> criteriontrigger_a) {
         CriterionTriggerBredAnimals.a criteriontriggerbredanimals_a = (CriterionTriggerBredAnimals.a) this.b.get(advancementdataplayer);
 
@@ -47,10 +50,12 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerBredAnimals.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("parent"));
         CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("partner"));
@@ -59,7 +64,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
         return new CriterionTriggerBredAnimals.b(criterionconditionentity, criterionconditionentity1, criterionconditionentity2);
     }
 
-    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
+    public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, @Nullable EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
         CriterionTriggerBredAnimals.a criteriontriggerbredanimals_a = (CriterionTriggerBredAnimals.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggerbredanimals_a != null) {
@@ -89,7 +94,7 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
             this.b.remove(criteriontrigger_a);
         }
 
-        public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
+        public void a(EntityPlayer entityplayer, EntityAnimal entityanimal, @Nullable EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
             List<CriterionTrigger.a<CriterionTriggerBredAnimals.b>> list = null;
             Iterator iterator = this.b.iterator();
 
@@ -139,10 +144,11 @@ public class CriterionTriggerBredAnimals implements CriterionTrigger<CriterionTr
             return new CriterionTriggerBredAnimals.b(criterionconditionentity_a.b(), CriterionConditionEntity.a, CriterionConditionEntity.a);
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal, EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
+        public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal, @Nullable EntityAnimal entityanimal1, @Nullable EntityAgeable entityageable) {
             return !this.c.a(entityplayer, entityageable) ? false : this.a.a(entityplayer, entityanimal) && this.b.a(entityplayer, entityanimal1) || this.a.a(entityplayer, entityanimal1) && this.b.a(entityplayer, entityanimal);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

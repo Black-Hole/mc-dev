@@ -3,34 +3,44 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Random;
 
-public class LootItemFunctionSetCount extends LootItemFunction {
+public class LootItemFunctionSetCount extends LootItemFunctionConditional {
 
-    private final LootValueBounds a;
+    private final LootValue a;
 
-    public LootItemFunctionSetCount(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds) {
+    private LootItemFunctionSetCount(LootItemCondition[] alootitemcondition, LootValue lootvalue) {
         super(alootitemcondition);
-        this.a = lootvaluebounds;
+        this.a = lootvalue;
     }
 
-    public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        itemstack.setCount(this.a.a(random));
+    @Override
+    public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
+        itemstack.setCount(this.a.a(loottableinfo.b()));
         return itemstack;
     }
 
-    public static class a extends LootItemFunction.a<LootItemFunctionSetCount> {
+    public static LootItemFunctionConditional.a<?> a(LootValue lootvalue) {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionSetCount(alootitemcondition, lootvalue);
+        });
+    }
+
+    public static class a extends LootItemFunctionConditional.c<LootItemFunctionSetCount> {
 
         protected a() {
             super(new MinecraftKey("set_count"), LootItemFunctionSetCount.class);
         }
 
         public void a(JsonObject jsonobject, LootItemFunctionSetCount lootitemfunctionsetcount, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("count", jsonserializationcontext.serialize(lootitemfunctionsetcount.a));
+            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionsetcount, jsonserializationcontext);
+            jsonobject.add("count", LootValueGenerators.a(lootitemfunctionsetcount.a, jsonserializationcontext));
         }
 
+        @Override
         public LootItemFunctionSetCount b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            return new LootItemFunctionSetCount(alootitemcondition, (LootValueBounds) ChatDeserializer.a(jsonobject, "count", jsondeserializationcontext, LootValueBounds.class));
+            LootValue lootvalue = LootValueGenerators.a(jsonobject.get("count"), jsondeserializationcontext);
+
+            return new LootItemFunctionSetCount(alootitemcondition, lootvalue);
         }
     }
 }

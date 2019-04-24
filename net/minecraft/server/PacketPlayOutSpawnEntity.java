@@ -15,43 +15,43 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
     private int h;
     private int i;
     private int j;
-    private int k;
+    private EntityTypes<?> k;
     private int l;
 
     public PacketPlayOutSpawnEntity() {}
 
-    public PacketPlayOutSpawnEntity(Entity entity, int i) {
-        this(entity, i, 0);
-    }
-
-    public PacketPlayOutSpawnEntity(Entity entity, int i, int j) {
-        this.a = entity.getId();
-        this.b = entity.getUniqueID();
-        this.c = entity.locX;
-        this.d = entity.locY;
-        this.e = entity.locZ;
-        this.i = MathHelper.d(entity.pitch * 256.0F / 360.0F);
-        this.j = MathHelper.d(entity.yaw * 256.0F / 360.0F);
-        this.k = i;
+    public PacketPlayOutSpawnEntity(int i, UUID uuid, double d0, double d1, double d2, float f, float f1, EntityTypes<?> entitytypes, int j, Vec3D vec3d) {
+        this.a = i;
+        this.b = uuid;
+        this.c = d0;
+        this.d = d1;
+        this.e = d2;
+        this.i = MathHelper.d(f * 256.0F / 360.0F);
+        this.j = MathHelper.d(f1 * 256.0F / 360.0F);
+        this.k = entitytypes;
         this.l = j;
-        double d0 = 3.9D;
-
-        this.f = (int) (MathHelper.a(entity.motX, -3.9D, 3.9D) * 8000.0D);
-        this.g = (int) (MathHelper.a(entity.motY, -3.9D, 3.9D) * 8000.0D);
-        this.h = (int) (MathHelper.a(entity.motZ, -3.9D, 3.9D) * 8000.0D);
+        this.f = (int) (MathHelper.a(vec3d.x, -3.9D, 3.9D) * 8000.0D);
+        this.g = (int) (MathHelper.a(vec3d.y, -3.9D, 3.9D) * 8000.0D);
+        this.h = (int) (MathHelper.a(vec3d.z, -3.9D, 3.9D) * 8000.0D);
     }
 
-    public PacketPlayOutSpawnEntity(Entity entity, int i, int j, BlockPosition blockposition) {
-        this(entity, i, j);
-        this.c = (double) blockposition.getX();
-        this.d = (double) blockposition.getY();
-        this.e = (double) blockposition.getZ();
+    public PacketPlayOutSpawnEntity(Entity entity) {
+        this(entity, 0);
     }
 
+    public PacketPlayOutSpawnEntity(Entity entity, int i) {
+        this(entity.getId(), entity.getUniqueID(), entity.locX, entity.locY, entity.locZ, entity.pitch, entity.yaw, entity.getEntityType(), i, entity.getMot());
+    }
+
+    public PacketPlayOutSpawnEntity(Entity entity, EntityTypes<?> entitytypes, int i, BlockPosition blockposition) {
+        this(entity.getId(), entity.getUniqueID(), (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), entity.pitch, entity.yaw, entitytypes, i, entity.getMot());
+    }
+
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.i();
-        this.k = packetdataserializer.readByte();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.k();
+        this.k = (EntityTypes) IRegistry.ENTITY_TYPE.fromId(packetdataserializer.i());
         this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readDouble();
@@ -63,10 +63,11 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
         this.h = packetdataserializer.readShort();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
-        packetdataserializer.writeByte(this.k);
+        packetdataserializer.d(IRegistry.ENTITY_TYPE.a((Object) this.k));
         packetdataserializer.writeDouble(this.c);
         packetdataserializer.writeDouble(this.d);
         packetdataserializer.writeDouble(this.e);
@@ -80,17 +81,5 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(int i) {
-        this.f = i;
-    }
-
-    public void b(int i) {
-        this.g = i;
-    }
-
-    public void c(int i) {
-        this.h = i;
     }
 }

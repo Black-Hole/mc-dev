@@ -12,10 +12,12 @@ public class PacketPlayOutKickDisconnect implements Packet<PacketListenerPlayOut
         this.a = ichatbasecomponent;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.f();
+        this.a = packetdataserializer.h();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }

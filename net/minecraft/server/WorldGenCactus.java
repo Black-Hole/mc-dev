@@ -1,14 +1,18 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenCactus extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenCactus() {}
+    public WorldGenCactus(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
+            BlockPosition blockposition1 = blockposition.b(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
             if (generatoraccess.isEmpty(blockposition1)) {
                 int j = 1 + random.nextInt(random.nextInt(3) + 1);

@@ -10,13 +10,15 @@ public class PathfinderGoalWater extends PathfinderGoal {
         this.a = entitycreature;
     }
 
+    @Override
     public boolean a() {
         return this.a.onGround && !this.a.world.getFluid(new BlockPosition(this.a)).a(TagsFluid.WATER);
     }
 
+    @Override
     public void c() {
         BlockPosition blockposition = null;
-        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 2.0D), MathHelper.floor(this.a.locY - 2.0D), MathHelper.floor(this.a.locZ - 2.0D), MathHelper.floor(this.a.locX + 2.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + 2.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX - 2.0D), MathHelper.floor(this.a.locY - 2.0D), MathHelper.floor(this.a.locZ - 2.0D), MathHelper.floor(this.a.locX + 2.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + 2.0D));
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {

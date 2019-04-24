@@ -40,7 +40,7 @@ public class CommandDifficulty {
         if (minecraftserver.getWorldServer(DimensionManager.OVERWORLD).getDifficulty() == enumdifficulty) {
             throw CommandDifficulty.a.create(enumdifficulty.c());
         } else {
-            minecraftserver.a(enumdifficulty);
+            minecraftserver.a(enumdifficulty, true);
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.difficulty.success", new Object[] { enumdifficulty.b()}), true);
             return 0;
         }

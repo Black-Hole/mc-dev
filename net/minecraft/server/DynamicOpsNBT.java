@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -231,7 +232,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public Optional<ByteBuffer> getByteBuffer(NBTBase nbtbase) {
-        return nbtbase instanceof NBTTagByteArray ? Optional.of(ByteBuffer.wrap(((NBTTagByteArray) nbtbase).c())) : super.getByteBuffer(nbtbase);
+        return nbtbase instanceof NBTTagByteArray ? Optional.of(ByteBuffer.wrap(((NBTTagByteArray) nbtbase).getBytes())) : super.getByteBuffer(nbtbase);
     }
 
     public NBTBase createByteList(ByteBuffer bytebuffer) {
@@ -239,7 +240,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public Optional<IntStream> getIntStream(NBTBase nbtbase) {
-        return nbtbase instanceof NBTTagIntArray ? Optional.of(Arrays.stream(((NBTTagIntArray) nbtbase).d())) : super.getIntStream(nbtbase);
+        return nbtbase instanceof NBTTagIntArray ? Optional.of(Arrays.stream(((NBTTagIntArray) nbtbase).getInts())) : super.getIntStream(nbtbase);
     }
 
     public NBTBase createIntList(IntStream intstream) {
@@ -247,7 +248,7 @@ public class DynamicOpsNBT implements DynamicOps<NBTBase> {
     }
 
     public Optional<LongStream> getLongStream(NBTBase nbtbase) {
-        return nbtbase instanceof NBTTagLongArray ? Optional.of(Arrays.stream(((NBTTagLongArray) nbtbase).d())) : super.getLongStream(nbtbase);
+        return nbtbase instanceof NBTTagLongArray ? Optional.of(Arrays.stream(((NBTTagLongArray) nbtbase).getLongs())) : super.getLongStream(nbtbase);
     }
 
     public NBTBase createLongList(LongStream longstream) {

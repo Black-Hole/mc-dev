@@ -1,20 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorSkyVisibleBiased extends WorldGenDecorator<WorldGenDecoratorChanceConfiguration> {
 
-    public WorldGenDecoratorSkyVisibleBiased() {}
+    public WorldGenDecoratorSkyVisibleBiased(Function<Dynamic<?>, ? extends WorldGenDecoratorChanceConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorChanceConfiguration worldgendecoratorchanceconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorChanceConfiguration worldgendecoratorchanceconfiguration, BlockPosition blockposition) {
         if (random.nextFloat() < 1.0F / (float) worldgendecoratorchanceconfiguration.a) {
             int i = random.nextInt(16);
             int j = random.nextInt(16);
             int k = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, blockposition.getX() + i, blockposition.getZ() + j);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, new BlockPosition(blockposition.getX() + i, k, blockposition.getZ() + j), c0);
+            return Stream.of(new BlockPosition(blockposition.getX() + i, k, blockposition.getZ() + j));
+        } else {
+            return Stream.empty();
         }
-
-        return true;
     }
 }

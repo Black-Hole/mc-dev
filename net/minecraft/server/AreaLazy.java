@@ -7,17 +7,16 @@ public final class AreaLazy implements Area {
     private final AreaTransformer8 a;
     private final Long2IntLinkedOpenHashMap b;
     private final int c;
-    private final AreaDimension d;
 
-    public AreaLazy(Long2IntLinkedOpenHashMap long2intlinkedopenhashmap, int i, AreaDimension areadimension, AreaTransformer8 areatransformer8) {
+    public AreaLazy(Long2IntLinkedOpenHashMap long2intlinkedopenhashmap, int i, AreaTransformer8 areatransformer8) {
         this.b = long2intlinkedopenhashmap;
         this.c = i;
-        this.d = areadimension;
         this.a = areatransformer8;
     }
 
+    @Override
     public int a(int i, int j) {
-        long k = this.b(i, j);
+        long k = ChunkCoordIntPair.pair(i, j);
         Long2IntLinkedOpenHashMap long2intlinkedopenhashmap = this.b;
 
         synchronized (this.b) {
@@ -38,16 +37,6 @@ public final class AreaLazy implements Area {
                 return i1;
             }
         }
-    }
-
-    private long b(int i, int j) {
-        long k = 1L;
-
-        k <<= 26;
-        k |= (long) (i + this.d.a()) & 67108863L;
-        k <<= 26;
-        k |= (long) (j + this.d.b()) & 67108863L;
-        return k;
     }
 
     public int a() {

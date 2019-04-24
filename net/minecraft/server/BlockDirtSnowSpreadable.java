@@ -8,33 +8,39 @@ public abstract class BlockDirtSnowSpreadable extends BlockDirtSnow {
         super(block_info);
     }
 
-    private static boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
+    private static boolean b(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
+        IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iworldreader.getLightLevel(blockposition1) >= 4 || iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.K();
+        if (iblockdata1.getBlock() == Blocks.SNOW && (Integer) iblockdata1.get(BlockSnow.LAYERS) == 1) {
+            return true;
+        } else {
+            int i = LightEngineLayer.a(iworldreader, iblockdata, blockposition, iblockdata1, blockposition1, EnumDirection.UP, iblockdata1.b((IBlockAccess) iworldreader, blockposition1));
+
+            return i < iworldreader.H();
+        }
     }
 
-    private static boolean b(IWorldReader iworldreader, BlockPosition blockposition) {
+    private static boolean c(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.up();
 
-        return iworldreader.getLightLevel(blockposition1) >= 4 && iworldreader.getType(blockposition1).b(iworldreader, blockposition1) < iworldreader.K() && !iworldreader.getFluid(blockposition1).a(TagsFluid.WATER);
+        return b(iblockdata, iworldreader, blockposition) && !iworldreader.getFluid(blockposition1).a(TagsFluid.WATER);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
-            if (!a((IWorldReader) world, blockposition)) {
+            if (!b(iblockdata, (IWorldReader) world, blockposition)) {
                 world.setTypeUpdate(blockposition, Blocks.DIRT.getBlockData());
-            } else {
+            } else if (world.getLightLevel(blockposition.up()) >= 4) {
                 if (world.getLightLevel(blockposition.up()) >= 9) {
+                    IBlockData iblockdata1 = this.getBlockData();
+
                     for (int i = 0; i < 4; ++i) {
-                        BlockPosition blockposition1 = blockposition.a(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+                        BlockPosition blockposition1 = blockposition.b(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
 
-                        if (!world.p(blockposition1)) {
-                            return;
-                        }
-
-                        if (world.getType(blockposition1).getBlock() == Blocks.DIRT && b(world, blockposition1)) {
-                            world.setTypeUpdate(blockposition1, this.getBlockData());
+                        if (world.getType(blockposition1).getBlock() == Blocks.DIRT && c(iblockdata1, (IWorldReader) world, blockposition1)) {
+                            world.setTypeUpdate(blockposition1, (IBlockData) iblockdata1.set(BlockDirtSnowSpreadable.a, world.getType(blockposition1.up()).getBlock() == Blocks.SNOW));
                         }
                     }
                 }

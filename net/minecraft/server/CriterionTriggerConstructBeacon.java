@@ -19,10 +19,12 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
 
     public CriterionTriggerConstructBeacon() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerConstructBeacon.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerConstructBeacon.b> criteriontrigger_a) {
         CriterionTriggerConstructBeacon.a criteriontriggerconstructbeacon_a = (CriterionTriggerConstructBeacon.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
         criteriontriggerconstructbeacon_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerConstructBeacon.b> criteriontrigger_a) {
         CriterionTriggerConstructBeacon.a criteriontriggerconstructbeacon_a = (CriterionTriggerConstructBeacon.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerConstructBeacon.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("level"));
 
@@ -129,9 +134,10 @@ public class CriterionTriggerConstructBeacon implements CriterionTrigger<Criteri
         }
 
         public boolean a(TileEntityBeacon tileentitybeacon) {
-            return this.a.d(tileentitybeacon.s());
+            return this.a.d(tileentitybeacon.f());
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

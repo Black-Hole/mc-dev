@@ -18,6 +18,7 @@ public class VoxelShapeSlice extends VoxelShape {
         return new VoxelShapeDiscreteSlice(voxelshapediscrete, enumdirection_enumaxis.a(i, 0, 0), enumdirection_enumaxis.a(0, i, 0), enumdirection_enumaxis.a(0, 0, i), enumdirection_enumaxis.a(i + 1, voxelshapediscrete.a, voxelshapediscrete.a), enumdirection_enumaxis.a(voxelshapediscrete.b, i + 1, voxelshapediscrete.b), enumdirection_enumaxis.a(voxelshapediscrete.c, voxelshapediscrete.c, i + 1));
     }
 
+    @Override
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         return enumdirection_enumaxis == this.c ? this.d : this.b.a(enumdirection_enumaxis);
     }

@@ -1,18 +1,18 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureChoice extends WorldGenerator<WorldGenFeatureChoiceConfiguration> {
 
-    public WorldGenFeatureChoice() {}
-
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
-        boolean flag = random.nextBoolean();
-
-        return flag ? this.a(worldgenfeaturechoiceconfiguration.a, worldgenfeaturechoiceconfiguration.b, generatoraccess, chunkgenerator, random, blockposition) : this.a(worldgenfeaturechoiceconfiguration.c, worldgenfeaturechoiceconfiguration.d, generatoraccess, chunkgenerator, random, blockposition);
+    public WorldGenFeatureChoice(Function<Dynamic<?>, ? extends WorldGenFeatureChoiceConfiguration> function) {
+        super(function);
     }
 
-    <FC extends WorldGenFeatureConfiguration> boolean a(WorldGenerator<FC> worldgenerator, WorldGenFeatureConfiguration worldgenfeatureconfiguration, GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition) {
-        return worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition, worldgenfeatureconfiguration);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChoiceConfiguration worldgenfeaturechoiceconfiguration) {
+        boolean flag = random.nextBoolean();
+
+        return flag ? worldgenfeaturechoiceconfiguration.a.a(generatoraccess, chunkgenerator, random, blockposition) : worldgenfeaturechoiceconfiguration.b.a(generatoraccess, chunkgenerator, random, blockposition);
     }
 }

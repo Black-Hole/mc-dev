@@ -1,22 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenFeatureChanceDecorator extends WorldGenDecorator<WorldGenDecoratorFrequencyChanceConfiguration> {
 
-    public WorldGenFeatureChanceDecorator() {}
+    public WorldGenFeatureChanceDecorator(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyChanceConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyChanceConfiguration worldgendecoratorfrequencychanceconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        for (int i = 0; i < worldgendecoratorfrequencychanceconfiguration.a; ++i) {
-            if (random.nextFloat() < worldgendecoratorfrequencychanceconfiguration.b) {
-                int j = random.nextInt(16);
-                int k = random.nextInt(16);
-                BlockPosition blockposition1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.a(j, 0, k));
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyChanceConfiguration worldgendecoratorfrequencychanceconfiguration, BlockPosition blockposition) {
+        return IntStream.range(0, worldgendecoratorfrequencychanceconfiguration.a).filter((i) -> {
+            return random.nextFloat() < worldgendecoratorfrequencychanceconfiguration.b;
+        }).mapToObj((i) -> {
+            int j = random.nextInt(16);
+            int k = random.nextInt(16);
 
-                worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition1, c0);
-            }
-        }
-
-        return true;
+            return generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(j, 0, k));
+        });
     }
 }

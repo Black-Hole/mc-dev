@@ -18,11 +18,15 @@ public class PacketPlayOutServerDifficulty implements Packet<PacketListenerPlayO
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
+        this.b = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a.a());
+        packetdataserializer.writeBoolean(this.b);
     }
 }

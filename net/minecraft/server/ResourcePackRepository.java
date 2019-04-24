@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-public class ResourcePackRepository<T extends ResourcePackLoader> {
+public class ResourcePackRepository<T extends ResourcePackLoader> implements AutoCloseable {
 
     private final Set<ResourcePackSource> a = Sets.newHashSet();
     private final Map<String, T> b = Maps.newLinkedHashMap();
@@ -28,6 +28,7 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
     }
 
     public void a() {
+        this.close();
         Set<String> set = (Set) this.c.stream().map(ResourcePackLoader::e).collect(Collectors.toCollection(LinkedHashSet::new));
 
         this.b.clear();
@@ -105,5 +106,9 @@ public class ResourcePackRepository<T extends ResourcePackLoader> {
 
     public void a(ResourcePackSource resourcepacksource) {
         this.a.add(resourcepacksource);
+    }
+
+    public void close() {
+        this.b.values().forEach(ResourcePackLoader::close);
     }
 }

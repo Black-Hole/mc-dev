@@ -20,10 +20,12 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
 
     public CriterionTriggerChanneledLightning() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerChanneledLightning.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerChanneledLightning.b> criteriontrigger_a) {
         CriterionTriggerChanneledLightning.a criteriontriggerchanneledlightning_a = (CriterionTriggerChanneledLightning.a) this.b.get(advancementdataplayer);
 
@@ -35,6 +37,7 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
         criteriontriggerchanneledlightning_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerChanneledLightning.b> criteriontrigger_a) {
         CriterionTriggerChanneledLightning.a criteriontriggerchanneledlightning_a = (CriterionTriggerChanneledLightning.a) this.b.get(advancementdataplayer);
 
@@ -47,10 +50,12 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerChanneledLightning.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity[] acriterionconditionentity = CriterionConditionEntity.b(jsonobject.get("victims"));
 
@@ -162,6 +167,7 @@ public class CriterionTriggerChanneledLightning implements CriterionTrigger<Crit
             return true;
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

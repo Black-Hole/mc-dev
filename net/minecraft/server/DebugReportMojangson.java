@@ -21,6 +21,7 @@ public class DebugReportMojangson implements DebugReportProvider {
         this.c = debugreportgenerator;
     }
 
+    @Override
     public void a(HashCache hashcache) throws IOException {
         java.nio.file.Path java_nio_file_path = this.c.b();
         Iterator iterator = this.c.a().iterator();
@@ -37,6 +38,7 @@ public class DebugReportMojangson implements DebugReportProvider {
 
     }
 
+    @Override
     public String a() {
         return "SNBT -> NBT";
     }

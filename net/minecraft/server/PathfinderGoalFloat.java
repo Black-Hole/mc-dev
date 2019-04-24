@@ -1,22 +1,28 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalFloat extends PathfinderGoal {
 
     private final EntityInsentient a;
 
     public PathfinderGoalFloat(EntityInsentient entityinsentient) {
         this.a = entityinsentient;
-        this.a(4);
+        this.a(EnumSet.of(PathfinderGoal.Type.JUMP));
         entityinsentient.getNavigation().d(true);
     }
 
+    @Override
     public boolean a() {
-        return this.a.isInWater() && this.a.bY() > 0.4D || this.a.ax();
+        double d0 = (double) this.a.getHeadHeight() < 0.4D ? 0.2D : 0.4D;
+
+        return this.a.isInWater() && this.a.ce() > d0 || this.a.aC();
     }
 
+    @Override
     public void e() {
         if (this.a.getRandom().nextFloat() < 0.8F) {
-            this.a.getControllerJump().a();
+            this.a.getControllerJump().jump();
         }
 
     }

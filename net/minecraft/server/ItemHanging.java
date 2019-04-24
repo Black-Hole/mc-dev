@@ -1,35 +1,51 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class ItemHanging extends Item {
 
-    private final Class<? extends EntityHanging> a;
+    private final EntityTypes<? extends EntityHanging> a;
 
-    public ItemHanging(Class<? extends EntityHanging> oclass, Item.Info item_info) {
+    public ItemHanging(EntityTypes<? extends EntityHanging> entitytypes, Item.Info item_info) {
         super(item_info);
-        this.a = oclass;
+        this.a = entitytypes;
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         EnumDirection enumdirection = itemactioncontext.getClickedFace();
         BlockPosition blockposition1 = blockposition.shift(enumdirection);
         EntityHuman entityhuman = itemactioncontext.getEntity();
+        ItemStack itemstack = itemactioncontext.getItemStack();
 
-        if (entityhuman != null && !this.a(entityhuman, enumdirection, itemactioncontext.getItemStack(), blockposition1)) {
+        if (entityhuman != null && !this.a(entityhuman, enumdirection, itemstack, blockposition1)) {
             return EnumInteractionResult.FAIL;
         } else {
             World world = itemactioncontext.getWorld();
-            EntityHanging entityhanging = this.a(world, blockposition1, enumdirection);
+            Object object;
 
-            if (entityhanging != null && entityhanging.survives()) {
-                if (!world.isClientSide) {
-                    entityhanging.m();
-                    world.addEntity(entityhanging);
+            if (this.a == EntityTypes.PAINTING) {
+                object = new EntityPainting(world, blockposition1, enumdirection);
+            } else {
+                if (this.a != EntityTypes.ITEM_FRAME) {
+                    return EnumInteractionResult.SUCCESS;
                 }
 
-                itemactioncontext.getItemStack().subtract(1);
+                object = new EntityItemFrame(world, blockposition1, enumdirection);
+            }
+
+            NBTTagCompound nbttagcompound = itemstack.getTag();
+
+            if (nbttagcompound != null) {
+                EntityTypes.a(world, entityhuman, (Entity) object, nbttagcompound);
+            }
+
+            if (((EntityHanging) object).survives()) {
+                if (!world.isClientSide) {
+                    ((EntityHanging) object).playPlaceSound();
+                    world.addEntity((Entity) object);
+                }
+
+                itemstack.subtract(1);
             }
 
             return EnumInteractionResult.SUCCESS;
@@ -38,10 +54,5 @@ public class ItemHanging extends Item {
 
     protected boolean a(EntityHuman entityhuman, EnumDirection enumdirection, ItemStack itemstack, BlockPosition blockposition) {
         return !enumdirection.k().b() && entityhuman.a(blockposition, enumdirection, itemstack);
-    }
-
-    @Nullable
-    private EntityHanging a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        return (EntityHanging) (this.a == EntityPainting.class ? new EntityPainting(world, blockposition, enumdirection) : (this.a == EntityItemFrame.class ? new EntityItemFrame(world, blockposition, enumdirection) : null));
     }
 }

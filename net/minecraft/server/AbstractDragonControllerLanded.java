@@ -6,16 +6,18 @@ public abstract class AbstractDragonControllerLanded extends AbstractDragonContr
         super(entityenderdragon);
     }
 
+    @Override
     public boolean a() {
         return true;
     }
 
-    public float a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
+    @Override
+    public float a(DamageSource damagesource, float f) {
         if (damagesource.j() instanceof EntityArrow) {
             damagesource.j().setOnFire(1);
             return 0.0F;
         } else {
-            return super.a(entitycomplexpart, damagesource, f);
+            return super.a(damagesource, f);
         }
     }
 }

@@ -1,31 +1,31 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
+import java.util.Collections;
 import javax.annotation.Nullable;
 
 public interface RecipeHolder {
 
-    void a(@Nullable IRecipe irecipe);
+    void a(@Nullable IRecipe<?> irecipe);
 
     @Nullable
-    IRecipe i();
+    IRecipe<?> V_();
 
-    default void d(EntityHuman entityhuman) {
-        IRecipe irecipe = this.i();
+    default void b(EntityHuman entityhuman) {
+        IRecipe<?> irecipe = this.V_();
 
-        if (irecipe != null && !irecipe.c()) {
-            entityhuman.discoverRecipes(Lists.newArrayList(new IRecipe[] { irecipe}));
+        if (irecipe != null && !irecipe.isComplex()) {
+            entityhuman.discoverRecipes(Collections.singleton(irecipe));
             this.a((IRecipe) null);
         }
 
     }
 
-    default boolean a(World world, EntityPlayer entityplayer, @Nullable IRecipe irecipe) {
-        if (irecipe != null && (irecipe.c() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayer.B().b(irecipe))) {
+    default boolean a(World world, EntityPlayer entityplayer, IRecipe<?> irecipe) {
+        if (!irecipe.isComplex() && world.getGameRules().getBoolean("doLimitedCrafting") && !entityplayer.B().b(irecipe)) {
+            return false;
+        } else {
             this.a(irecipe);
             return true;
-        } else {
-            return false;
         }
     }
 }

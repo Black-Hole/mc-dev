@@ -14,11 +14,13 @@ public class PacketPlayOutUnloadChunk implements Packet<PacketListenerPlayOut> {
         this.b = j;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readInt();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);

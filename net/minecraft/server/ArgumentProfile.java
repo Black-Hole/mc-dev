@@ -34,7 +34,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
     public ArgumentProfile.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == '@') {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
-            EntitySelector entityselector = argumentparserselector.s();
+            EntitySelector entityselector = argumentparserselector.parse();
 
             if (entityselector.b()) {
                 throw ArgumentEntity.c.create();
@@ -70,7 +70,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
 
             try {
-                argumentparserselector.s();
+                argumentparserselector.parse();
             } catch (CommandSyntaxException commandsyntaxexception) {
                 ;
             }
@@ -95,6 +95,7 @@ public class ArgumentProfile implements ArgumentType<ArgumentProfile.a> {
             this.a = entityselector;
         }
 
+        @Override
         public Collection<GameProfile> getNames(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
             List<EntityPlayer> list = this.a.d(commandlistenerwrapper);
 

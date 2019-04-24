@@ -54,8 +54,8 @@ public class GenLayers {
         int j = i;
 
         if (generatorsettingsoverworld != null) {
-            i = generatorsettingsoverworld.t();
-            j = generatorsettingsoverworld.u();
+            i = generatorsettingsoverworld.v();
+            j = generatorsettingsoverworld.w();
         }
 
         if (worldtype == WorldType.LARGE_BIOMES) {
@@ -67,6 +67,7 @@ public class GenLayers {
         areafactory2 = GenLayerCleaner.INSTANCE.a((AreaContextTransformed) longfunction.apply(100L), areafactory2);
         AreaFactory<T> areafactory3 = (new GenLayerBiome(worldtype, generatorsettingsoverworld)).a((AreaContextTransformed) longfunction.apply(200L), areafactory);
 
+        areafactory3 = GenLayerJungle.INSTANCE.a((AreaContextTransformed) longfunction.apply(1001L), areafactory3);
         areafactory3 = a(1000L, GenLayerZoom.NORMAL, areafactory3, 2, longfunction);
         areafactory3 = GenLayerDesert.INSTANCE.a((AreaContextTransformed) longfunction.apply(1000L), areafactory3);
         AreaFactory<T> areafactory4 = a(1000L, GenLayerZoom.NORMAL, areafactory2, 2, longfunction);
@@ -99,11 +100,8 @@ public class GenLayers {
 
     public static GenLayer[] a(long i, WorldType worldtype, GeneratorSettingsOverworld generatorsettingsoverworld) {
         boolean flag = true;
-        int[] aint = new int[1];
         ImmutableList<AreaFactory<AreaLazy>> immutablelist = a(worldtype, generatorsettingsoverworld, (j) -> {
-            int k = aint[0]++;
-
-            return new WorldGenContextArea(1, aint[0], i, j);
+            return new WorldGenContextArea(25, i, j);
         });
         GenLayer genlayer = new GenLayer((AreaFactory) immutablelist.get(0));
         GenLayer genlayer1 = new GenLayer((AreaFactory) immutablelist.get(1));
@@ -119,7 +117,7 @@ public class GenLayers {
             BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.fromId(i);
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
-            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.p() != BiomeBase.Geography.NONE && biomebase1.p() != BiomeBase.Geography.NONE && biomebase.p() == biomebase1.p() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
+            return biomebase != null && biomebase1 != null ? (biomebase != Biomes.WOODED_BADLANDS_PLATEAU && biomebase != Biomes.BADLANDS_PLATEAU ? (biomebase.o() != BiomeBase.Geography.NONE && biomebase1.o() != BiomeBase.Geography.NONE && biomebase.o() == biomebase1.o() ? true : biomebase == biomebase1) : biomebase1 == Biomes.WOODED_BADLANDS_PLATEAU || biomebase1 == Biomes.BADLANDS_PLATEAU) : false;
         }
     }
 

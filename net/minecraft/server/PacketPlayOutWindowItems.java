@@ -21,6 +21,7 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readUnsignedByte();
         short short0 = packetdataserializer.readShort();
@@ -28,11 +29,12 @@ public class PacketPlayOutWindowItems implements Packet<PacketListenerPlayOut> {
         this.b = NonNullList.a(short0, ItemStack.a);
 
         for (int i = 0; i < short0; ++i) {
-            this.b.set(i, packetdataserializer.k());
+            this.b.set(i, packetdataserializer.m());
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeShort(this.b.size());

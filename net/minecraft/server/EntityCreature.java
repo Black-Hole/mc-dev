@@ -2,16 +2,11 @@ package net.minecraft.server;
 
 public abstract class EntityCreature extends EntityInsentient {
 
-    private BlockPosition a;
-    private float b;
-
-    protected EntityCreature(EntityTypes<?> entitytypes, World world) {
+    protected EntityCreature(EntityTypes<? extends EntityCreature> entitytypes, World world) {
         super(entitytypes, world);
-        this.a = BlockPosition.ZERO;
-        this.b = -1.0F;
     }
 
-    public float a(BlockPosition blockposition) {
+    public float f(BlockPosition blockposition) {
         return this.a(blockposition, (IWorldReader) this.world);
     }
 
@@ -19,48 +14,21 @@ public abstract class EntityCreature extends EntityInsentient {
         return 0.0F;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return super.a(generatoraccess, flag) && this.a(new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
+        return super.a(generatoraccess, enummobspawn) && this.a(new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ), (IWorldReader) generatoraccess) >= 0.0F;
     }
 
-    public boolean dr() {
-        return !this.navigation.p();
+    public boolean dT() {
+        return !this.getNavigation().n();
     }
 
-    public boolean ds() {
-        return this.f(new BlockPosition(this));
-    }
+    @Override
+    protected void dM() {
+        super.dM();
+        Entity entity = this.getLeashHolder();
 
-    public boolean f(BlockPosition blockposition) {
-        return this.b == -1.0F ? true : this.a.n(blockposition) < (double) (this.b * this.b);
-    }
-
-    public void a(BlockPosition blockposition, int i) {
-        this.a = blockposition;
-        this.b = (float) i;
-    }
-
-    public BlockPosition dt() {
-        return this.a;
-    }
-
-    public float du() {
-        return this.b;
-    }
-
-    public void dv() {
-        this.b = -1.0F;
-    }
-
-    public boolean dw() {
-        return this.b != -1.0F;
-    }
-
-    protected void dl() {
-        super.dl();
-        if (this.isLeashed() && this.getLeashHolder() != null && this.getLeashHolder().world == this.world) {
-            Entity entity = this.getLeashHolder();
-
+        if (entity != null && entity.world == this.world) {
             this.a(new BlockPosition((int) entity.locX, (int) entity.locY, (int) entity.locZ), 5);
             float f = this.g(entity);
 
@@ -75,27 +43,25 @@ public abstract class EntityCreature extends EntityInsentient {
             this.u(f);
             if (f > 10.0F) {
                 this.unleash(true, true);
-                this.goalSelector.c(1);
+                this.goalSelector.a(PathfinderGoal.Type.MOVE);
             } else if (f > 6.0F) {
                 double d0 = (entity.locX - this.locX) / (double) f;
                 double d1 = (entity.locY - this.locY) / (double) f;
                 double d2 = (entity.locZ - this.locZ) / (double) f;
 
-                this.motX += d0 * Math.abs(d0) * 0.4D;
-                this.motY += d1 * Math.abs(d1) * 0.4D;
-                this.motZ += d2 * Math.abs(d2) * 0.4D;
+                this.setMot(this.getMot().add(Math.copySign(d0 * d0 * 0.4D, d0), Math.copySign(d1 * d1 * 0.4D, d1), Math.copySign(d2 * d2 * 0.4D, d2)));
             } else {
-                this.goalSelector.d(1);
+                this.goalSelector.b(PathfinderGoal.Type.MOVE);
                 float f1 = 2.0F;
-                Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).a().a((double) Math.max(f - 2.0F, 0.0F));
+                Vec3D vec3d = (new Vec3D(entity.locX - this.locX, entity.locY - this.locY, entity.locZ - this.locZ)).d().a((double) Math.max(f - 2.0F, 0.0F));
 
-                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dx());
+                this.getNavigation().a(this.locX + vec3d.x, this.locY + vec3d.y, this.locZ + vec3d.z, this.dU());
             }
         }
 
     }
 
-    protected double dx() {
+    protected double dU() {
         return 1.0D;
     }
 

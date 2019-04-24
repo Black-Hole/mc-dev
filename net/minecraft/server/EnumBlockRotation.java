@@ -1,5 +1,10 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 public enum EnumBlockRotation {
 
     NONE, CLOCKWISE_90, CLOCKWISE_180, COUNTERCLOCKWISE_90;
@@ -74,5 +79,18 @@ public enum EnumBlockRotation {
         default:
             return i;
         }
+    }
+
+    public static EnumBlockRotation a(Random random) {
+        EnumBlockRotation[] aenumblockrotation = values();
+
+        return aenumblockrotation[random.nextInt(aenumblockrotation.length)];
+    }
+
+    public static List<EnumBlockRotation> b(Random random) {
+        List<EnumBlockRotation> list = Lists.newArrayList(values());
+
+        Collections.shuffle(list, random);
+        return list;
     }
 }

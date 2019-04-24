@@ -21,7 +21,9 @@ public class ArgumentRegistry {
     private static final Map<Class<?>, ArgumentRegistry.a<?>> b = Maps.newHashMap();
     private static final Map<MinecraftKey, ArgumentRegistry.a<?>> c = Maps.newHashMap();
 
-    public static <T extends ArgumentType<?>> void a(MinecraftKey minecraftkey, Class<T> oclass, ArgumentSerializer<T> argumentserializer) {
+    public static <T extends ArgumentType<?>> void a(String s, Class<T> oclass, ArgumentSerializer<T> argumentserializer) {
+        MinecraftKey minecraftkey = new MinecraftKey(s);
+
         if (ArgumentRegistry.b.containsKey(oclass)) {
             throw new IllegalArgumentException("Class " + oclass.getName() + " already has a serializer!");
         } else if (ArgumentRegistry.c.containsKey(minecraftkey)) {
@@ -36,40 +38,42 @@ public class ArgumentRegistry {
 
     public static void a() {
         ArgumentSerializers.a();
-        a(new MinecraftKey("minecraft:entity"), ArgumentEntity.class, new ArgumentEntity.a());
-        a(new MinecraftKey("minecraft:game_profile"), ArgumentProfile.class, new ArgumentSerializerVoid<>(ArgumentProfile::a));
-        a(new MinecraftKey("minecraft:block_pos"), ArgumentPosition.class, new ArgumentSerializerVoid<>(ArgumentPosition::a));
-        a(new MinecraftKey("minecraft:column_pos"), ArgumentVec2I.class, new ArgumentSerializerVoid<>(ArgumentVec2I::a));
-        a(new MinecraftKey("minecraft:vec3"), ArgumentVec3.class, new ArgumentSerializerVoid<>(ArgumentVec3::a));
-        a(new MinecraftKey("minecraft:vec2"), ArgumentVec2.class, new ArgumentSerializerVoid<>(ArgumentVec2::a));
-        a(new MinecraftKey("minecraft:block_state"), ArgumentTile.class, new ArgumentSerializerVoid<>(ArgumentTile::a));
-        a(new MinecraftKey("minecraft:block_predicate"), ArgumentBlockPredicate.class, new ArgumentSerializerVoid<>(ArgumentBlockPredicate::a));
-        a(new MinecraftKey("minecraft:item_stack"), ArgumentItemStack.class, new ArgumentSerializerVoid<>(ArgumentItemStack::a));
-        a(new MinecraftKey("minecraft:item_predicate"), ArgumentItemPredicate.class, new ArgumentSerializerVoid<>(ArgumentItemPredicate::a));
-        a(new MinecraftKey("minecraft:color"), ArgumentChatFormat.class, new ArgumentSerializerVoid<>(ArgumentChatFormat::a));
-        a(new MinecraftKey("minecraft:component"), ArgumentChatComponent.class, new ArgumentSerializerVoid<>(ArgumentChatComponent::a));
-        a(new MinecraftKey("minecraft:message"), ArgumentChat.class, new ArgumentSerializerVoid<>(ArgumentChat::a));
-        a(new MinecraftKey("minecraft:nbt"), ArgumentNBTTag.class, new ArgumentSerializerVoid<>(ArgumentNBTTag::a));
-        a(new MinecraftKey("minecraft:nbt_path"), ArgumentNBTKey.class, new ArgumentSerializerVoid<>(ArgumentNBTKey::a));
-        a(new MinecraftKey("minecraft:objective"), ArgumentScoreboardObjective.class, new ArgumentSerializerVoid<>(ArgumentScoreboardObjective::a));
-        a(new MinecraftKey("minecraft:objective_criteria"), ArgumentScoreboardCriteria.class, new ArgumentSerializerVoid<>(ArgumentScoreboardCriteria::a));
-        a(new MinecraftKey("minecraft:operation"), ArgumentMathOperation.class, new ArgumentSerializerVoid<>(ArgumentMathOperation::a));
-        a(new MinecraftKey("minecraft:particle"), ArgumentParticle.class, new ArgumentSerializerVoid<>(ArgumentParticle::a));
-        a(new MinecraftKey("minecraft:rotation"), ArgumentRotation.class, new ArgumentSerializerVoid<>(ArgumentRotation::a));
-        a(new MinecraftKey("minecraft:scoreboard_slot"), ArgumentScoreboardSlot.class, new ArgumentSerializerVoid<>(ArgumentScoreboardSlot::a));
-        a(new MinecraftKey("minecraft:score_holder"), ArgumentScoreholder.class, new ArgumentScoreholder.c());
-        a(new MinecraftKey("minecraft:swizzle"), ArgumentRotationAxis.class, new ArgumentSerializerVoid<>(ArgumentRotationAxis::a));
-        a(new MinecraftKey("minecraft:team"), ArgumentScoreboardTeam.class, new ArgumentSerializerVoid<>(ArgumentScoreboardTeam::a));
-        a(new MinecraftKey("minecraft:item_slot"), ArgumentInventorySlot.class, new ArgumentSerializerVoid<>(ArgumentInventorySlot::a));
-        a(new MinecraftKey("minecraft:resource_location"), ArgumentMinecraftKeyRegistered.class, new ArgumentSerializerVoid<>(ArgumentMinecraftKeyRegistered::a));
-        a(new MinecraftKey("minecraft:mob_effect"), ArgumentMobEffect.class, new ArgumentSerializerVoid<>(ArgumentMobEffect::a));
-        a(new MinecraftKey("minecraft:function"), ArgumentTag.class, new ArgumentSerializerVoid<>(ArgumentTag::a));
-        a(new MinecraftKey("minecraft:entity_anchor"), ArgumentAnchor.class, new ArgumentSerializerVoid<>(ArgumentAnchor::a));
-        a(new MinecraftKey("minecraft:int_range"), ArgumentCriterionValue.b.class, new ArgumentCriterionValue.b.a());
-        a(new MinecraftKey("minecraft:float_range"), ArgumentCriterionValue.a.class, new ArgumentCriterionValue.a.a());
-        a(new MinecraftKey("minecraft:item_enchantment"), ArgumentEnchantment.class, new ArgumentSerializerVoid<>(ArgumentEnchantment::a));
-        a(new MinecraftKey("minecraft:entity_summon"), ArgumentEntitySummon.class, new ArgumentSerializerVoid<>(ArgumentEntitySummon::a));
-        a(new MinecraftKey("minecraft:dimension"), ArgumentDimension.class, new ArgumentSerializerVoid<>(ArgumentDimension::a));
+        a("entity", ArgumentEntity.class, new ArgumentEntity.a());
+        a("game_profile", ArgumentProfile.class, new ArgumentSerializerVoid<>(ArgumentProfile::a));
+        a("block_pos", ArgumentPosition.class, new ArgumentSerializerVoid<>(ArgumentPosition::a));
+        a("column_pos", ArgumentVec2I.class, new ArgumentSerializerVoid<>(ArgumentVec2I::a));
+        a("vec3", ArgumentVec3.class, new ArgumentSerializerVoid<>(ArgumentVec3::a));
+        a("vec2", ArgumentVec2.class, new ArgumentSerializerVoid<>(ArgumentVec2::a));
+        a("block_state", ArgumentTile.class, new ArgumentSerializerVoid<>(ArgumentTile::a));
+        a("block_predicate", ArgumentBlockPredicate.class, new ArgumentSerializerVoid<>(ArgumentBlockPredicate::a));
+        a("item_stack", ArgumentItemStack.class, new ArgumentSerializerVoid<>(ArgumentItemStack::a));
+        a("item_predicate", ArgumentItemPredicate.class, new ArgumentSerializerVoid<>(ArgumentItemPredicate::a));
+        a("color", ArgumentChatFormat.class, new ArgumentSerializerVoid<>(ArgumentChatFormat::a));
+        a("component", ArgumentChatComponent.class, new ArgumentSerializerVoid<>(ArgumentChatComponent::a));
+        a("message", ArgumentChat.class, new ArgumentSerializerVoid<>(ArgumentChat::a));
+        a("nbt_compound_tag", ArgumentNBTTag.class, new ArgumentSerializerVoid<>(ArgumentNBTTag::a));
+        a("nbt_tag", ArgumentNBTBase.class, new ArgumentSerializerVoid<>(ArgumentNBTBase::a));
+        a("nbt_path", ArgumentNBTKey.class, new ArgumentSerializerVoid<>(ArgumentNBTKey::a));
+        a("objective", ArgumentScoreboardObjective.class, new ArgumentSerializerVoid<>(ArgumentScoreboardObjective::a));
+        a("objective_criteria", ArgumentScoreboardCriteria.class, new ArgumentSerializerVoid<>(ArgumentScoreboardCriteria::a));
+        a("operation", ArgumentMathOperation.class, new ArgumentSerializerVoid<>(ArgumentMathOperation::a));
+        a("particle", ArgumentParticle.class, new ArgumentSerializerVoid<>(ArgumentParticle::a));
+        a("rotation", ArgumentRotation.class, new ArgumentSerializerVoid<>(ArgumentRotation::a));
+        a("scoreboard_slot", ArgumentScoreboardSlot.class, new ArgumentSerializerVoid<>(ArgumentScoreboardSlot::a));
+        a("score_holder", ArgumentScoreholder.class, new ArgumentScoreholder.c());
+        a("swizzle", ArgumentRotationAxis.class, new ArgumentSerializerVoid<>(ArgumentRotationAxis::a));
+        a("team", ArgumentScoreboardTeam.class, new ArgumentSerializerVoid<>(ArgumentScoreboardTeam::a));
+        a("item_slot", ArgumentInventorySlot.class, new ArgumentSerializerVoid<>(ArgumentInventorySlot::a));
+        a("resource_location", ArgumentMinecraftKeyRegistered.class, new ArgumentSerializerVoid<>(ArgumentMinecraftKeyRegistered::a));
+        a("mob_effect", ArgumentMobEffect.class, new ArgumentSerializerVoid<>(ArgumentMobEffect::a));
+        a("function", ArgumentTag.class, new ArgumentSerializerVoid<>(ArgumentTag::a));
+        a("entity_anchor", ArgumentAnchor.class, new ArgumentSerializerVoid<>(ArgumentAnchor::a));
+        a("int_range", ArgumentCriterionValue.b.class, new ArgumentCriterionValue.b.a());
+        a("float_range", ArgumentCriterionValue.a.class, new ArgumentCriterionValue.a.a());
+        a("item_enchantment", ArgumentEnchantment.class, new ArgumentSerializerVoid<>(ArgumentEnchantment::a));
+        a("entity_summon", ArgumentEntitySummon.class, new ArgumentSerializerVoid<>(ArgumentEntitySummon::a));
+        a("dimension", ArgumentDimension.class, new ArgumentSerializerVoid<>(ArgumentDimension::a));
+        a("time", ArgumentTime.class, new ArgumentSerializerVoid<>(ArgumentTime::a));
     }
 
     @Nullable
@@ -96,7 +100,7 @@ public class ArgumentRegistry {
 
     @Nullable
     public static ArgumentType<?> a(PacketDataSerializer packetdataserializer) {
-        MinecraftKey minecraftkey = packetdataserializer.l();
+        MinecraftKey minecraftkey = packetdataserializer.o();
         ArgumentRegistry.a<?> argumentregistry_a = a(minecraftkey);
 
         if (argumentregistry_a == null) {

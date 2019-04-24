@@ -2,38 +2,43 @@ package net.minecraft.server;
 
 public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
 
-    private final EntityOcelot f;
+    private final EntityCat g;
 
-    public PathfinderGoalJumpOnBlock(EntityOcelot entityocelot, double d0) {
-        super(entityocelot, d0, 8);
-        this.f = entityocelot;
+    public PathfinderGoalJumpOnBlock(EntityCat entitycat, double d0) {
+        super(entitycat, d0, 8);
+        this.g = entitycat;
     }
 
+    @Override
     public boolean a() {
-        return this.f.isTamed() && !this.f.isSitting() && super.a();
+        return this.g.isTamed() && !this.g.isSitting() && super.a();
     }
 
+    @Override
     public void c() {
         super.c();
-        this.f.getGoalSit().setSitting(false);
+        this.g.getGoalSit().setSitting(false);
     }
 
+    @Override
     public void d() {
         super.d();
-        this.f.setSitting(false);
+        this.g.setSitting(false);
     }
 
+    @Override
     public void e() {
         super.e();
-        this.f.getGoalSit().setSitting(false);
+        this.g.getGoalSit().setSitting(false);
         if (!this.k()) {
-            this.f.setSitting(false);
-        } else if (!this.f.isSitting()) {
-            this.f.setSitting(true);
+            this.g.setSitting(false);
+        } else if (!this.g.isSitting()) {
+            this.g.setSitting(true);
         }
 
     }
 
+    @Override
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         if (!iworldreader.isEmpty(blockposition.up())) {
             return false;
@@ -41,7 +46,7 @@ public class PathfinderGoalJumpOnBlock extends PathfinderGoalGotoTarget {
             IBlockData iblockdata = iworldreader.getType(blockposition);
             Block block = iblockdata.getBlock();
 
-            return block == Blocks.CHEST ? TileEntityChest.a((IBlockAccess) iworldreader, blockposition) < 1 : (block == Blocks.FURNACE && (Boolean) iblockdata.get(BlockFurnace.LIT) ? true : block instanceof BlockBed && iblockdata.get(BlockBed.PART) != BlockPropertyBedPart.HEAD);
+            return block == Blocks.CHEST ? TileEntityChest.a((IBlockAccess) iworldreader, blockposition) < 1 : (block == Blocks.FURNACE && (Boolean) iblockdata.get(BlockFurnaceFurace.LIT) ? true : block.a(TagsBlock.BEDS) && iblockdata.get(BlockBed.PART) != BlockPropertyBedPart.HEAD);
         }
     }
 }

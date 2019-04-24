@@ -1,10 +1,13 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+
 public abstract class PathfinderAbstract {
 
     protected IBlockAccess a;
     protected EntityInsentient b;
-    protected final IntHashMap<PathPoint> c = new IntHashMap<>();
+    protected final Int2ObjectMap<PathPoint> c = new Int2ObjectOpenHashMap();
     protected int d;
     protected int e;
     protected int f;
@@ -17,10 +20,10 @@ public abstract class PathfinderAbstract {
     public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
         this.a = iblockaccess;
         this.b = entityinsentient;
-        this.c.c();
-        this.d = MathHelper.d(entityinsentient.width + 1.0F);
-        this.e = MathHelper.d(entityinsentient.length + 1.0F);
-        this.f = MathHelper.d(entityinsentient.width + 1.0F);
+        this.c.clear();
+        this.d = MathHelper.d(entityinsentient.getWidth() + 1.0F);
+        this.e = MathHelper.d(entityinsentient.getHeight() + 1.0F);
+        this.f = MathHelper.d(entityinsentient.getWidth() + 1.0F);
     }
 
     public void a() {
@@ -29,15 +32,9 @@ public abstract class PathfinderAbstract {
     }
 
     protected PathPoint a(int i, int j, int k) {
-        int l = PathPoint.b(i, j, k);
-        PathPoint pathpoint = (PathPoint) this.c.get(l);
-
-        if (pathpoint == null) {
-            pathpoint = new PathPoint(i, j, k);
-            this.c.a(l, pathpoint);
-        }
-
-        return pathpoint;
+        return (PathPoint) this.c.computeIfAbsent(PathPoint.b(i, j, k), (l) -> {
+            return new PathPoint(i, j, k);
+        });
     }
 
     public abstract PathPoint b();

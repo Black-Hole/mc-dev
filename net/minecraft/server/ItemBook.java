@@ -6,10 +6,12 @@ public class ItemBook extends Item {
         super(item_info);
     }
 
-    public boolean a(ItemStack itemstack) {
+    @Override
+    public boolean g_(ItemStack itemstack) {
         return itemstack.getCount() == 1;
     }
 
+    @Override
     public int c() {
         return 1;
     }

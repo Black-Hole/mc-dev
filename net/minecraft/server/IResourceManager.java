@@ -9,7 +9,7 @@ public interface IResourceManager {
 
     IResource a(MinecraftKey minecraftkey) throws IOException;
 
-    List<IResource> b(MinecraftKey minecraftkey) throws IOException;
+    List<IResource> c(MinecraftKey minecraftkey) throws IOException;
 
     Collection<MinecraftKey> a(String s, Predicate<String> predicate);
 }

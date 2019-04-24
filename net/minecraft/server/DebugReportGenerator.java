@@ -32,20 +32,24 @@ public class DebugReportGenerator {
 
     public void c() throws IOException {
         HashCache hashcache = new HashCache(this.c, "cache");
-        Stopwatch stopwatch = Stopwatch.createUnstarted();
+
+        hashcache.c(this.b().resolve("version.json"));
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        Stopwatch stopwatch1 = Stopwatch.createUnstarted();
         Iterator iterator = this.d.iterator();
 
         while (iterator.hasNext()) {
             DebugReportProvider debugreportprovider = (DebugReportProvider) iterator.next();
 
             DebugReportGenerator.a.info("Starting provider: {}", debugreportprovider.a());
-            stopwatch.start();
+            stopwatch1.start();
             debugreportprovider.a(hashcache);
-            stopwatch.stop();
-            DebugReportGenerator.a.info("{} finished after {} ms", debugreportprovider.a(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
-            stopwatch.reset();
+            stopwatch1.stop();
+            DebugReportGenerator.a.info("{} finished after {} ms", debugreportprovider.a(), stopwatch1.elapsed(TimeUnit.MILLISECONDS));
+            stopwatch1.reset();
         }
 
+        DebugReportGenerator.a.info("All providers took: {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         hashcache.a();
     }
 
@@ -54,6 +58,6 @@ public class DebugReportGenerator {
     }
 
     static {
-        DispenserRegistry.c();
+        DispenserRegistry.init();
     }
 }

@@ -16,14 +16,12 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
         this.d = biomelayoutcheckerboardconfiguration.b() + 4;
     }
 
-    public BiomeBase getBiome(BlockPosition blockposition, @Nullable BiomeBase biomebase) {
-        return this.c[Math.abs(((blockposition.getX() >> this.d) + (blockposition.getZ() >> this.d)) % this.c.length)];
+    @Override
+    public BiomeBase getBiome(int i, int j) {
+        return this.c[Math.abs(((i >> this.d) + (j >> this.d)) % this.c.length)];
     }
 
-    public BiomeBase[] getBiomes(int i, int j, int k, int l) {
-        return this.getBiomeBlock(i, j, k, l);
-    }
-
+    @Override
     public BiomeBase[] a(int i, int j, int k, int l, boolean flag) {
         BiomeBase[] abiomebase = new BiomeBase[k * l];
 
@@ -40,10 +38,12 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
     }
 
     @Nullable
+    @Override
     public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         return null;
     }
 
+    @Override
     public boolean a(StructureGenerator<?> structuregenerator) {
         return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             BiomeBase[] abiomebase = this.c;
@@ -61,6 +61,7 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
         });
     }
 
+    @Override
     public Set<IBlockData> b() {
         if (this.b.isEmpty()) {
             BiomeBase[] abiomebase = this.c;
@@ -69,13 +70,14 @@ public class WorldChunkManagerCheckerBoard extends WorldChunkManager {
             for (int j = 0; j < i; ++j) {
                 BiomeBase biomebase = abiomebase[j];
 
-                this.b.add(biomebase.r().a());
+                this.b.add(biomebase.q().a());
             }
         }
 
         return this.b;
     }
 
+    @Override
     public Set<BiomeBase> a(int i, int j, int k) {
         return Sets.newHashSet(this.c);
     }

@@ -14,7 +14,7 @@ public class ShapeDetectorBlock {
 
     public ShapeDetectorBlock(IWorldReader iworldreader, BlockPosition blockposition, boolean flag) {
         this.a = iworldreader;
-        this.b = blockposition;
+        this.b = blockposition.immutableCopy();
         this.c = flag;
     }
 

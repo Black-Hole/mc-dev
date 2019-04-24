@@ -14,11 +14,13 @@ public class PacketPlayOutBlockChange implements Packet<PacketListenerPlayOut> {
         this.block = iblockaccess.getType(blockposition);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
-        this.block = (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.g());
+        this.block = (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i());
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.d(Block.getCombinedId(this.block));

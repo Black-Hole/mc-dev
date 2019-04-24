@@ -8,6 +8,7 @@ public class ItemArmor extends Item {
 
     private static final UUID[] k = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     public static final IDispenseBehavior a = new DispenseBehaviorItem() {
+        @Override
         protected ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
             ItemStack itemstack1 = ItemArmor.a(isourceblock, itemstack);
 
@@ -27,13 +28,13 @@ public class ItemArmor extends Item {
             return ItemStack.a;
         } else {
             EntityLiving entityliving = (EntityLiving) list.get(0);
-            EnumItemSlot enumitemslot = EntityInsentient.e(itemstack);
+            EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
             ItemStack itemstack1 = itemstack.cloneAndSubtract(1);
 
             entityliving.setSlot(enumitemslot, itemstack1);
             if (entityliving instanceof EntityInsentient) {
                 ((EntityInsentient) entityliving).a(enumitemslot, 2.0F);
-                ((EntityInsentient) entityliving).di();
+                ((EntityInsentient) entityliving).setPersistent();
             }
 
             return itemstack;
@@ -53,6 +54,7 @@ public class ItemArmor extends Item {
         return this.b;
     }
 
+    @Override
     public int c() {
         return this.e.a();
     }
@@ -61,13 +63,15 @@ public class ItemArmor extends Item {
         return this.e;
     }
 
+    @Override
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return this.e.c().test(itemstack1) || super.a(itemstack, itemstack1);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        EnumItemSlot enumitemslot = EntityInsentient.e(itemstack);
+        EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
         if (itemstack1.isEmpty()) {
@@ -79,12 +83,13 @@ public class ItemArmor extends Item {
         }
     }
 
+    @Override
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
         Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == this.b) {
-            multimap.put(GenericAttributes.h.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor modifier", (double) this.c, 0));
-            multimap.put(GenericAttributes.i.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor toughness", (double) this.d, 0));
+            multimap.put(GenericAttributes.ARMOR.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor modifier", (double) this.c, AttributeModifier.Operation.ADDITION));
+            multimap.put(GenericAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ItemArmor.k[enumitemslot.b()], "Armor toughness", (double) this.d, AttributeModifier.Operation.ADDITION));
         }
 
         return multimap;

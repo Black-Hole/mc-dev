@@ -37,9 +37,10 @@ public class GenLayerBiome implements AreaTransformer5 {
 
     }
 
+    @Override
     public int a(WorldGenContext worldgencontext, int i) {
-        if (this.v != null && this.v.v() >= 0) {
-            return this.v.v();
+        if (this.v != null && this.v.x() >= 0) {
+            return this.v.x();
         } else {
             int j = (i & 3840) >> 8;
 

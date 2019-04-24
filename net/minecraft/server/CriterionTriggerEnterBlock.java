@@ -24,10 +24,12 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
 
     public CriterionTriggerEnterBlock() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerEnterBlock.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEnterBlock.b> criteriontrigger_a) {
         CriterionTriggerEnterBlock.a criteriontriggerenterblock_a = (CriterionTriggerEnterBlock.a) this.b.get(advancementdataplayer);
 
@@ -39,6 +41,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
         criteriontriggerenterblock_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEnterBlock.b> criteriontrigger_a) {
         CriterionTriggerEnterBlock.a criteriontriggerenterblock_a = (CriterionTriggerEnterBlock.a) this.b.get(advancementdataplayer);
 
@@ -51,21 +54,21 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerEnterBlock.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         Block block = null;
 
         if (jsonobject.has("block")) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
 
-            if (!IRegistry.BLOCK.c(minecraftkey)) {
-                throw new JsonSyntaxException("Unknown block type '" + minecraftkey + "'");
-            }
-
-            block = (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
+            block = (Block) IRegistry.BLOCK.getOptional(minecraftkey).orElseThrow(() -> {
+                return new JsonSyntaxException("Unknown block type '" + minecraftkey + "'");
+            });
         }
 
         Map<IBlockState<?>, Object> map = null;
@@ -178,6 +181,7 @@ public class CriterionTriggerEnterBlock implements CriterionTrigger<CriterionTri
             return new CriterionTriggerEnterBlock.b(block, (Map) null);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

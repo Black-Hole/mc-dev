@@ -14,6 +14,7 @@ public enum BlockPropertySlabType implements INamable {
         return this.d;
     }
 
+    @Override
     public String getName() {
         return this.d;
     }

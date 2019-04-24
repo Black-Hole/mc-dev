@@ -1,22 +1,27 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorLakeLava extends WorldGenDecorator<WorldGenDecoratorLakeChanceConfiguration> {
 
-    public WorldGenDecoratorLakeLava() {}
+    public WorldGenDecoratorLakeLava(Function<Dynamic<?>, ? extends WorldGenDecoratorLakeChanceConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorLakeChanceConfiguration worldgendecoratorlakechanceconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorLakeChanceConfiguration worldgendecoratorlakechanceconfiguration, BlockPosition blockposition) {
         if (random.nextInt(worldgendecoratorlakechanceconfiguration.a / 10) == 0) {
             int i = random.nextInt(16);
             int j = random.nextInt(random.nextInt(chunkgenerator.getGenerationDepth() - 8) + 8);
             int k = random.nextInt(16);
 
             if (j < generatoraccess.getSeaLevel() || random.nextInt(worldgendecoratorlakechanceconfiguration.a / 8) == 0) {
-                worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(i, j, k), c0);
+                return Stream.of(blockposition.b(i, j, k));
             }
         }
 
-        return true;
+        return Stream.empty();
     }
 }

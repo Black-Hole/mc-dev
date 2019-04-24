@@ -4,56 +4,64 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RegistryBlocks<V> extends RegistryMaterials<V> {
+public class RegistryBlocks<T> extends RegistryMaterials<T> {
 
-    private final MinecraftKey x;
-    private V y;
+    private final MinecraftKey R;
+    private T S;
 
-    public RegistryBlocks(MinecraftKey minecraftkey) {
-        this.x = minecraftkey;
+    public RegistryBlocks(String s) {
+        this.R = new MinecraftKey(s);
     }
 
-    public void a(int i, MinecraftKey minecraftkey, V v0) {
-        if (this.x.equals(minecraftkey)) {
-            this.y = v0;
+    @Override
+    public <V extends T> V a(int i, MinecraftKey minecraftkey, V v0) {
+        if (this.R.equals(minecraftkey)) {
+            this.S = v0;
         }
 
-        super.a(i, minecraftkey, v0);
+        return super.a(i, minecraftkey, v0);
     }
 
-    public int a(@Nullable V v0) {
-        int i = super.a(v0);
+    @Override
+    public int a(@Nullable T t0) {
+        int i = super.a(t0);
 
-        return i == -1 ? super.a(this.y) : i;
-    }
-
-    public MinecraftKey getKey(V v0) {
-        MinecraftKey minecraftkey = super.getKey(v0);
-
-        return minecraftkey == null ? this.x : minecraftkey;
-    }
-
-    public V getOrDefault(@Nullable MinecraftKey minecraftkey) {
-        V v0 = this.get(minecraftkey);
-
-        return v0 == null ? this.y : v0;
+        return i == -1 ? super.a(this.S) : i;
     }
 
     @Nonnull
-    public V fromId(int i) {
-        V v0 = super.fromId(i);
+    @Override
+    public MinecraftKey getKey(T t0) {
+        MinecraftKey minecraftkey = super.getKey(t0);
 
-        return v0 == null ? this.y : v0;
+        return minecraftkey == null ? this.R : minecraftkey;
     }
 
     @Nonnull
-    public V a(Random random) {
-        V v0 = super.a(random);
+    @Override
+    public T get(@Nullable MinecraftKey minecraftkey) {
+        T t0 = super.get(minecraftkey);
 
-        return v0 == null ? this.y : v0;
+        return t0 == null ? this.S : t0;
     }
 
-    public MinecraftKey b() {
-        return this.x;
+    @Nonnull
+    @Override
+    public T fromId(int i) {
+        T t0 = super.fromId(i);
+
+        return t0 == null ? this.S : t0;
+    }
+
+    @Nonnull
+    @Override
+    public T a(Random random) {
+        T t0 = super.a(random);
+
+        return t0 == null ? this.S : t0;
+    }
+
+    public MinecraftKey a() {
+        return this.R;
     }
 }

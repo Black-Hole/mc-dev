@@ -5,13 +5,23 @@ import javax.annotation.Nullable;
 
 public interface DebugReportRecipeData {
 
-    JsonObject a();
+    void a(JsonObject jsonobject);
+
+    default JsonObject a() {
+        JsonObject jsonobject = new JsonObject();
+
+        jsonobject.addProperty("type", IRegistry.RECIPE_SERIALIZER.getKey(this.c()).toString());
+        this.a(jsonobject);
+        return jsonobject;
+    }
 
     MinecraftKey b();
 
-    @Nullable
-    JsonObject c();
+    RecipeSerializer<?> c();
 
     @Nullable
-    MinecraftKey d();
+    JsonObject d();
+
+    @Nullable
+    MinecraftKey e();
 }

@@ -1,12 +1,17 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
+import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenBonusChest() {}
+    public WorldGenBonusChest(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         for (IBlockData iblockdata = generatoraccess.getType(blockposition); (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) && blockposition.getY() > 1; iblockdata = generatoraccess.getType(blockposition)) {
             blockposition = blockposition.down();
         }
@@ -17,30 +22,21 @@ public class WorldGenBonusChest extends WorldGenerator<WorldGenFeatureEmptyConfi
             blockposition = blockposition.up();
 
             for (int i = 0; i < 4; ++i) {
-                BlockPosition blockposition1 = blockposition.a(random.nextInt(4) - random.nextInt(4), random.nextInt(3) - random.nextInt(3), random.nextInt(4) - random.nextInt(4));
+                BlockPosition blockposition1 = blockposition.b(random.nextInt(4) - random.nextInt(4), random.nextInt(3) - random.nextInt(3), random.nextInt(4) - random.nextInt(4));
 
-                if (generatoraccess.isEmpty(blockposition1) && generatoraccess.getType(blockposition1.down()).q()) {
+                if (generatoraccess.isEmpty(blockposition1)) {
                     generatoraccess.setTypeAndData(blockposition1, Blocks.CHEST.getBlockData(), 2);
                     TileEntityLootable.a(generatoraccess, random, blockposition1, LootTables.b);
-                    BlockPosition blockposition2 = blockposition1.east();
-                    BlockPosition blockposition3 = blockposition1.west();
-                    BlockPosition blockposition4 = blockposition1.north();
-                    BlockPosition blockposition5 = blockposition1.south();
+                    IBlockData iblockdata1 = Blocks.TORCH.getBlockData();
+                    Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
 
-                    if (generatoraccess.isEmpty(blockposition3) && generatoraccess.getType(blockposition3.down()).q()) {
-                        generatoraccess.setTypeAndData(blockposition3, Blocks.TORCH.getBlockData(), 2);
-                    }
+                    while (iterator.hasNext()) {
+                        EnumDirection enumdirection = (EnumDirection) iterator.next();
+                        BlockPosition blockposition2 = blockposition1.shift(enumdirection);
 
-                    if (generatoraccess.isEmpty(blockposition2) && generatoraccess.getType(blockposition2.down()).q()) {
-                        generatoraccess.setTypeAndData(blockposition2, Blocks.TORCH.getBlockData(), 2);
-                    }
-
-                    if (generatoraccess.isEmpty(blockposition4) && generatoraccess.getType(blockposition4.down()).q()) {
-                        generatoraccess.setTypeAndData(blockposition4, Blocks.TORCH.getBlockData(), 2);
-                    }
-
-                    if (generatoraccess.isEmpty(blockposition5) && generatoraccess.getType(blockposition5.down()).q()) {
-                        generatoraccess.setTypeAndData(blockposition5, Blocks.TORCH.getBlockData(), 2);
+                        if (iblockdata1.canPlace(generatoraccess, blockposition2)) {
+                            generatoraccess.setTypeAndData(blockposition2, iblockdata1, 2);
+                        }
                     }
 
                     return true;

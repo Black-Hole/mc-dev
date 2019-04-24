@@ -17,7 +17,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
     private final byte[] k = new byte[1460];
     private final String l;
 
-    RemoteControlSession(IMinecraftServer iminecraftserver, Socket socket) {
+    RemoteControlSession(IMinecraftServer iminecraftserver, String s, Socket socket) {
         super(iminecraftserver, "RCON Client");
         this.j = socket;
 
@@ -27,7 +27,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
             this.a = false;
         }
 
-        this.l = iminecraftserver.a("rcon.password", "");
+        this.l = s;
         this.b("Rcon connection from: " + socket.getInetAddress());
     }
 
@@ -133,6 +133,12 @@ public class RemoteControlSession extends RemoteConnectionThread {
             j = s.length();
         } while (0 != j);
 
+    }
+
+    @Override
+    public void b() {
+        super.b();
+        this.g();
     }
 
     private void g() {

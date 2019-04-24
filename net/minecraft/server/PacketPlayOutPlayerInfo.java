@@ -41,9 +41,10 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutPlayerInfo.EnumPlayerInfoAction) packetdataserializer.a(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.class);
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         for (int j = 0; j < i; ++j) {
             GameProfile gameprofile = null;
@@ -53,8 +54,8 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
             switch (this.a) {
             case ADD_PLAYER:
-                gameprofile = new GameProfile(packetdataserializer.i(), packetdataserializer.e(16));
-                int l = packetdataserializer.g();
+                gameprofile = new GameProfile(packetdataserializer.k(), packetdataserializer.e(16));
+                int l = packetdataserializer.i();
 
                 for (int i1 = 0; i1 < l; ++i1) {
                     String s = packetdataserializer.e(32767);
@@ -67,28 +68,28 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
                     }
                 }
 
-                enumgamemode = EnumGamemode.getById(packetdataserializer.g());
-                k = packetdataserializer.g();
+                enumgamemode = EnumGamemode.getById(packetdataserializer.i());
+                k = packetdataserializer.i();
                 if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.f();
+                    ichatbasecomponent = packetdataserializer.h();
                 }
                 break;
             case UPDATE_GAME_MODE:
-                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
-                enumgamemode = EnumGamemode.getById(packetdataserializer.g());
+                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                enumgamemode = EnumGamemode.getById(packetdataserializer.i());
                 break;
             case UPDATE_LATENCY:
-                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
-                k = packetdataserializer.g();
+                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
+                k = packetdataserializer.i();
                 break;
             case UPDATE_DISPLAY_NAME:
-                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
+                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
                 if (packetdataserializer.readBoolean()) {
-                    ichatbasecomponent = packetdataserializer.f();
+                    ichatbasecomponent = packetdataserializer.h();
                 }
                 break;
             case REMOVE_PLAYER:
-                gameprofile = new GameProfile(packetdataserializer.i(), (String) null);
+                gameprofile = new GameProfile(packetdataserializer.k(), (String) null);
             }
 
             this.b.add(new PacketPlayOutPlayerInfo.PlayerInfoData(gameprofile, k, enumgamemode, ichatbasecomponent));
@@ -96,6 +97,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         packetdataserializer.d(this.b.size());

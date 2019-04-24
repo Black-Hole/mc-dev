@@ -10,9 +10,10 @@ public class PacketLoginOutCustomPayload implements Packet<PacketLoginOutListene
 
     public PacketLoginOutCustomPayload() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.l();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.o();
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 1048576) {
@@ -22,6 +23,7 @@ public class PacketLoginOutCustomPayload implements Packet<PacketLoginOutListene
         }
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);

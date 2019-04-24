@@ -6,43 +6,63 @@ import javax.annotation.Nullable;
 
 public class TileEntityBrewingStand extends TileEntityContainer implements IWorldInventory, ITickable {
 
-    private static final int[] a = new int[] { 3};
-    private static final int[] e = new int[] { 0, 1, 2, 3};
-    private static final int[] f = new int[] { 0, 1, 2, 4};
+    private static final int[] b = new int[] { 3};
+    private static final int[] c = new int[] { 0, 1, 2, 3};
+    private static final int[] g = new int[] { 0, 1, 2, 4};
     private NonNullList<ItemStack> items;
-    private int brewTime;
-    private boolean[] i;
-    private Item j;
-    private IChatBaseComponent k;
-    private int fuelLevel;
+    public int brewTime;
+    private boolean[] j;
+    private Item k;
+    public int fuelLevel;
+    protected final IContainerProperties a;
 
     public TileEntityBrewingStand() {
         super(TileEntityTypes.BREWING_STAND);
         this.items = NonNullList.a(5, ItemStack.a);
+        this.a = new IContainerProperties() {
+            @Override
+            public int getProperty(int i) {
+                switch (i) {
+                case 0:
+                    return TileEntityBrewingStand.this.brewTime;
+                case 1:
+                    return TileEntityBrewingStand.this.fuelLevel;
+                default:
+                    return 0;
+                }
+            }
+
+            @Override
+            public void setProperty(int i, int j) {
+                switch (i) {
+                case 0:
+                    TileEntityBrewingStand.this.brewTime = j;
+                    break;
+                case 1:
+                    TileEntityBrewingStand.this.fuelLevel = j;
+                }
+
+            }
+
+            @Override
+            public int a() {
+                return 2;
+            }
+        };
     }
 
-    public IChatBaseComponent getDisplayName() {
-        return (IChatBaseComponent) (this.k != null ? this.k : new ChatMessage("container.brewing", new Object[0]));
+    @Override
+    protected IChatBaseComponent getContainerName() {
+        return new ChatMessage("container.brewing", new Object[0]);
     }
 
-    public boolean hasCustomName() {
-        return this.k != null;
-    }
-
-    @Nullable
-    public IChatBaseComponent getCustomName() {
-        return this.k;
-    }
-
-    public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.k = ichatbasecomponent;
-    }
-
+    @Override
     public int getSize() {
         return this.items.size();
     }
 
-    public boolean P_() {
+    @Override
+    public boolean isNotEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -58,6 +78,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return false;
     }
 
+    @Override
     public void tick() {
         ItemStack itemstack = (ItemStack) this.items.get(4);
 
@@ -67,7 +88,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             this.update();
         }
 
-        boolean flag = this.q();
+        boolean flag = this.r();
         boolean flag1 = this.brewTime > 0;
         ItemStack itemstack1 = (ItemStack) this.items.get(3);
 
@@ -76,27 +97,27 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             boolean flag2 = this.brewTime == 0;
 
             if (flag2 && flag) {
-                this.r();
+                this.s();
                 this.update();
             } else if (!flag) {
                 this.brewTime = 0;
                 this.update();
-            } else if (this.j != itemstack1.getItem()) {
+            } else if (this.k != itemstack1.getItem()) {
                 this.brewTime = 0;
                 this.update();
             }
         } else if (flag && this.fuelLevel > 0) {
             --this.fuelLevel;
             this.brewTime = 400;
-            this.j = itemstack1.getItem();
+            this.k = itemstack1.getItem();
             this.update();
         }
 
         if (!this.world.isClientSide) {
-            boolean[] aboolean = this.p();
+            boolean[] aboolean = this.f();
 
-            if (!Arrays.equals(aboolean, this.i)) {
-                this.i = aboolean;
+            if (!Arrays.equals(aboolean, this.j)) {
+                this.j = aboolean;
                 IBlockData iblockdata = this.world.getType(this.getPosition());
 
                 if (!(iblockdata.getBlock() instanceof BlockBrewingStand)) {
@@ -113,7 +134,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     }
 
-    public boolean[] p() {
+    public boolean[] f() {
         boolean[] aboolean = new boolean[3];
 
         for (int i = 0; i < 3; ++i) {
@@ -125,7 +146,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return aboolean;
     }
 
-    private boolean q() {
+    private boolean r() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         if (itemstack.isEmpty()) {
@@ -145,7 +166,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         }
     }
 
-    private void r() {
+    private void s() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         for (int i = 0; i < 3; ++i) {
@@ -155,12 +176,12 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         itemstack.subtract(1);
         BlockPosition blockposition = this.getPosition();
 
-        if (itemstack.getItem().p()) {
-            ItemStack itemstack1 = new ItemStack(itemstack.getItem().o());
+        if (itemstack.getItem().o()) {
+            ItemStack itemstack1 = new ItemStack(itemstack.getItem().n());
 
             if (itemstack.isEmpty()) {
                 itemstack = itemstack1;
-            } else {
+            } else if (!this.world.isClientSide) {
                 InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
             }
         }
@@ -169,42 +190,40 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         this.world.triggerEffect(1035, blockposition, 0);
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
         ContainerUtil.b(nbttagcompound, this.items);
         this.brewTime = nbttagcompound.getShort("BrewTime");
-        if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.k = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
-        }
-
         this.fuelLevel = nbttagcompound.getByte("Fuel");
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setShort("BrewTime", (short) this.brewTime);
         ContainerUtil.a(nbttagcompound, this.items);
-        if (this.k != null) {
-            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.k));
-        }
-
         nbttagcompound.setByte("Fuel", (byte) this.fuelLevel);
         return nbttagcompound;
     }
 
+    @Override
     public ItemStack getItem(int i) {
         return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.a;
     }
 
+    @Override
     public ItemStack splitStack(int i, int j) {
         return ContainerUtil.a(this.items, i, j);
     }
 
+    @Override
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
+    @Override
     public void setItem(int i, ItemStack itemstack) {
         if (i >= 0 && i < this.items.size()) {
             this.items.set(i, itemstack);
@@ -212,18 +231,12 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
 
     }
 
-    public int getMaxStackSize() {
-        return 64;
-    }
-
+    @Override
     public boolean a(EntityHuman entityhuman) {
-        return this.world.getTileEntity(this.position) != this ? false : entityhuman.d((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.position) != this ? false : entityhuman.e((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D) <= 64.0D;
     }
 
-    public void startOpen(EntityHuman entityhuman) {}
-
-    public void closeContainer(EntityHuman entityhuman) {}
-
+    @Override
     public boolean b(int i, ItemStack itemstack) {
         if (i == 3) {
             return PotionBrewer.a(itemstack);
@@ -234,53 +247,28 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         }
     }
 
+    @Override
     public int[] getSlotsForFace(EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.a : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.e : TileEntityBrewingStand.f);
+        return enumdirection == EnumDirection.UP ? TileEntityBrewingStand.b : (enumdirection == EnumDirection.DOWN ? TileEntityBrewingStand.c : TileEntityBrewingStand.g);
     }
 
+    @Override
     public boolean canPlaceItemThroughFace(int i, ItemStack itemstack, @Nullable EnumDirection enumdirection) {
         return this.b(i, itemstack);
     }
 
+    @Override
     public boolean canTakeItemThroughFace(int i, ItemStack itemstack, EnumDirection enumdirection) {
         return i == 3 ? itemstack.getItem() == Items.GLASS_BOTTLE : true;
     }
 
-    public String getContainerName() {
-        return "minecraft:brewing_stand";
-    }
-
-    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
-        return new ContainerBrewingStand(playerinventory, this);
-    }
-
-    public int getProperty(int i) {
-        switch (i) {
-        case 0:
-            return this.brewTime;
-        case 1:
-            return this.fuelLevel;
-        default:
-            return 0;
-        }
-    }
-
-    public void setProperty(int i, int j) {
-        switch (i) {
-        case 0:
-            this.brewTime = j;
-            break;
-        case 1:
-            this.fuelLevel = j;
-        }
-
-    }
-
-    public int h() {
-        return 2;
-    }
-
+    @Override
     public void clear() {
         this.items.clear();
+    }
+
+    @Override
+    protected Container createContainer(int i, PlayerInventory playerinventory) {
+        return new ContainerBrewingStand(i, playerinventory, this, this.a);
     }
 }

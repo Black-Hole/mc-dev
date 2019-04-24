@@ -9,16 +9,21 @@ public class CriterionTriggerImpossible implements CriterionTrigger<CriterionTri
 
     public CriterionTriggerImpossible() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerImpossible.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerImpossible.a> criteriontrigger_a) {}
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerImpossible.a> criteriontrigger_a) {}
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {}
 
+    @Override
     public CriterionTriggerImpossible.a a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerImpossible.a();
     }

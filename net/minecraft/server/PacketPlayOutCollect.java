@@ -16,12 +16,14 @@ public class PacketPlayOutCollect implements Packet<PacketListenerPlayOut> {
         this.c = k;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.g();
-        this.c = packetdataserializer.g();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.i();
+        this.c = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.d(this.b);

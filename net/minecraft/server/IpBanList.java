@@ -10,6 +10,7 @@ public class IpBanList extends JsonList<String, IpBanEntry> {
         super(file);
     }
 
+    @Override
     protected JsonListEntry<String> a(JsonObject jsonobject) {
         return new IpBanEntry(jsonobject);
     }

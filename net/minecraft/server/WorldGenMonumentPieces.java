@@ -9,25 +9,11 @@ import java.util.Random;
 import java.util.Set;
 
 public class WorldGenMonumentPieces {
-
-    public static void a() {
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece1.class, "OMB");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece2.class, "OMCR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece3.class, "OMDXR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece4.class, "OMDXYR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece5.class, "OMDYR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece6.class, "OMDYZR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiece7.class, "OMDZR");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPieceEntry.class, "OMEntry");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse.class, "OMPenthouse");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPieceSimple.class, "OMSimple");
-        WorldGenFactory.a(WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT.class, "OMSimpleT");
-    }
-
     static class WorldGenMonumentPieceSelector4 implements WorldGenMonumentPieces.IWorldGenMonumentPieceSelector {
 
         private WorldGenMonumentPieceSelector4() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             if (worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.NORTH.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()].d && worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.UP.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d) {
                 WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()];
@@ -38,12 +24,13 @@ public class WorldGenMonumentPieces {
             }
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()].d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()].b[EnumDirection.UP.a()].d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPiece6(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPiece6(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker);
         }
     }
 
@@ -51,6 +38,7 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector6() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             if (worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.EAST.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].d && worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.UP.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d) {
                 WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()];
@@ -61,12 +49,13 @@ public class WorldGenMonumentPieces {
             }
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].b[EnumDirection.UP.a()].d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPiece4(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPiece4(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker);
         }
     }
 
@@ -74,10 +63,12 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector3() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             return worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.NORTH.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.NORTH.a()].d;
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = worldgenmonumentpieces_worldgenmonumentstatetracker;
 
@@ -87,7 +78,7 @@ public class WorldGenMonumentPieces {
 
             worldgenmonumentpieces_worldgenmonumentstatetracker1.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker1.b[EnumDirection.NORTH.a()].d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPiece7(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker1, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPiece7(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker1);
         }
     }
 
@@ -95,14 +86,16 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector7() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             return worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.EAST.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].d;
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.EAST.a()].d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPiece3(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPiece3(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker);
         }
     }
 
@@ -110,14 +103,16 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector5() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             return worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.UP.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d;
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             worldgenmonumentpieces_worldgenmonumentstatetracker.b[EnumDirection.UP.a()].d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPiece5(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPiece5(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker);
         }
     }
 
@@ -125,13 +120,15 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector1() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             return !worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.WEST.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.EAST.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.NORTH.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.SOUTH.a()] && !worldgenmonumentpieces_worldgenmonumentstatetracker.c[EnumDirection.UP.a()];
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
-            return new WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
+            return new WorldGenMonumentPieces.WorldGenMonumentPieceSimpleT(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker);
         }
     }
 
@@ -139,10 +136,12 @@ public class WorldGenMonumentPieces {
 
         private WorldGenMonumentPieceSelector2() {}
 
+        @Override
         public boolean a(WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
             return true;
         }
 
+        @Override
         public WorldGenMonumentPieces.WorldGenMonumentPiece a(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
             worldgenmonumentpieces_worldgenmonumentstatetracker.d = true;
             return new WorldGenMonumentPieces.WorldGenMonumentPieceSimple(enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, random);
@@ -216,12 +215,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiecePenthouse extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiecePenthouse() {}
-
         public WorldGenMonumentPiecePenthouse(EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
-            super(enumdirection, structureboundingbox);
+            super(WorldGenFeatureStructurePieceType.V, enumdirection, structureboundingbox);
         }
 
+        public WorldGenMonumentPiecePenthouse(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.V, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 2, -1, 2, 11, -1, 11, WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse.b, WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse.b, false);
             this.a(generatoraccess, structureboundingbox, 0, -1, 0, 1, -1, 11, WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse.a, WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse.a, false);
@@ -272,13 +274,16 @@ public class WorldGenMonumentPieces {
 
         private int p;
 
-        public WorldGenMonumentPiece8() {}
-
         public WorldGenMonumentPiece8(EnumDirection enumdirection, StructureBoundingBox structureboundingbox, int i) {
-            super(enumdirection, structureboundingbox);
+            super(WorldGenFeatureStructurePieceType.Y, enumdirection, structureboundingbox);
             this.p = i & 1;
         }
 
+        public WorldGenMonumentPiece8(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.Y, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.p == 0) {
                 int i;
@@ -378,12 +383,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece2 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece2() {}
-
-        public WorldGenMonumentPiece2(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 2);
+        public WorldGenMonumentPiece2(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.O, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 2);
         }
 
+        public WorldGenMonumentPiece2(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.O, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 1, 8, 0, 14, 8, 14, WorldGenMonumentPieces.WorldGenMonumentPiece2.a);
             boolean flag = true;
@@ -458,12 +466,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece6 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece6() {}
-
-        public WorldGenMonumentPiece6(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 2);
+        public WorldGenMonumentPiece6(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.S, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 2);
         }
 
+        public WorldGenMonumentPiece6(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.S, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.NORTH.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
@@ -573,12 +584,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece4 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece4() {}
-
-        public WorldGenMonumentPiece4(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 1);
+        public WorldGenMonumentPiece4(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.Q, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 2, 1);
         }
 
+        public WorldGenMonumentPiece4(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.Q, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.EAST.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
@@ -688,12 +702,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece7 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece7() {}
-
-        public WorldGenMonumentPiece7(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 2);
+        public WorldGenMonumentPiece7(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.T, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 2);
         }
 
+        public WorldGenMonumentPiece7(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.T, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.NORTH.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
@@ -777,12 +794,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece3 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece3() {}
-
-        public WorldGenMonumentPiece3(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 1, 1);
+        public WorldGenMonumentPiece3(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.P, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 2, 1, 1);
         }
 
+        public WorldGenMonumentPiece3(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.P, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker = this.l.b[EnumDirection.EAST.a()];
             WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker1 = this.l;
@@ -847,12 +867,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPiece5 extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPiece5() {}
-
-        public WorldGenMonumentPiece5(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 1);
+        public WorldGenMonumentPiece5(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.R, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 2, 1);
         }
 
+        public WorldGenMonumentPiece5(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.R, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
@@ -930,12 +953,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPieceSimpleT extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPieceSimpleT() {}
-
-        public WorldGenMonumentPieceSimpleT(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+        public WorldGenMonumentPieceSimpleT(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
+            super(WorldGenFeatureStructurePieceType.X, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
         }
 
+        public WorldGenMonumentPieceSimpleT(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.X, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
@@ -984,13 +1010,16 @@ public class WorldGenMonumentPieces {
 
         private int p;
 
-        public WorldGenMonumentPieceSimple() {}
-
         public WorldGenMonumentPieceSimple(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, Random random) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+            super(WorldGenFeatureStructurePieceType.W, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
             this.p = random.nextInt(3);
         }
 
+        public WorldGenMonumentPieceSimple(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.W, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             if (this.l.a / 25 > 0) {
                 this.a(generatoraccess, structureboundingbox, 0, 0, this.l.c[EnumDirection.DOWN.a()]);
@@ -1148,12 +1177,15 @@ public class WorldGenMonumentPieces {
 
     public static class WorldGenMonumentPieceEntry extends WorldGenMonumentPieces.WorldGenMonumentPiece {
 
-        public WorldGenMonumentPieceEntry() {}
-
         public WorldGenMonumentPieceEntry(EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker) {
-            super(1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
+            super(WorldGenFeatureStructurePieceType.U, 1, enumdirection, worldgenmonumentpieces_worldgenmonumentstatetracker, 1, 1, 1);
         }
 
+        public WorldGenMonumentPieceEntry(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.U, nbttagcompound);
+        }
+
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             this.a(generatoraccess, structureboundingbox, 0, 3, 0, 2, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, false);
             this.a(generatoraccess, structureboundingbox, 5, 3, 0, 7, 3, 7, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, WorldGenMonumentPieces.WorldGenMonumentPieceEntry.b, false);
@@ -1186,12 +1218,10 @@ public class WorldGenMonumentPieces {
         private WorldGenMonumentPieces.WorldGenMonumentStateTracker q;
         private final List<WorldGenMonumentPieces.WorldGenMonumentPiece> r = Lists.newArrayList();
 
-        public WorldGenMonumentPiece1() {}
-
         public WorldGenMonumentPiece1(Random random, int i, int j, EnumDirection enumdirection) {
-            super(0);
+            super(WorldGenFeatureStructurePieceType.N, 0);
             this.a(enumdirection);
-            EnumDirection enumdirection1 = this.f();
+            EnumDirection enumdirection1 = this.i();
 
             if (enumdirection1.k() == EnumDirection.EnumAxis.Z) {
                 this.n = new StructureBoundingBox(i, 39, j, i + 58 - 1, 61, j + 58 - 1);
@@ -1203,7 +1233,7 @@ public class WorldGenMonumentPieces {
 
             this.p.d = true;
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPieceEntry(enumdirection1, this.p));
-            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.q, random));
+            this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece2(enumdirection1, this.q));
             List<WorldGenMonumentPieces.IWorldGenMonumentPieceSelector> list1 = Lists.newArrayList();
 
             list1.add(new WorldGenMonumentPieces.WorldGenMonumentPieceSelector6());
@@ -1240,7 +1270,7 @@ public class WorldGenMonumentPieces {
             while (iterator2.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator2.next();
 
-                worldgenmonumentpieces_worldgenmonumentpiece.d().a(l, k, i1);
+                worldgenmonumentpieces_worldgenmonumentpiece.g().a(l, k, i1);
             }
 
             StructureBoundingBox structureboundingbox = StructureBoundingBox.a(this.a(1, 1), this.d(1), this.b(1, 1), this.a(23, 21), this.d(8), this.b(23, 21));
@@ -1251,6 +1281,10 @@ public class WorldGenMonumentPieces {
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox, j1++));
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiece8(enumdirection1, structureboundingbox1, j1++));
             this.r.add(new WorldGenMonumentPieces.WorldGenMonumentPiecePenthouse(enumdirection1, structureboundingbox2));
+        }
+
+        public WorldGenMonumentPiece1(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.N, nbttagcompound);
         }
 
         private List<WorldGenMonumentPieces.WorldGenMonumentStateTracker> a(Random random) {
@@ -1393,6 +1427,7 @@ public class WorldGenMonumentPieces {
             return list;
         }
 
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             int i = Math.max(generatoraccess.getSeaLevel(), 64) - this.n.b;
 
@@ -1446,7 +1481,7 @@ public class WorldGenMonumentPieces {
             while (iterator.hasNext()) {
                 WorldGenMonumentPieces.WorldGenMonumentPiece worldgenmonumentpieces_worldgenmonumentpiece = (WorldGenMonumentPieces.WorldGenMonumentPiece) iterator.next();
 
-                if (worldgenmonumentpieces_worldgenmonumentpiece.d().a(structureboundingbox)) {
+                if (worldgenmonumentpieces_worldgenmonumentpiece.g().b(structureboundingbox)) {
                     worldgenmonumentpieces_worldgenmonumentpiece.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
                 }
             }
@@ -1811,22 +1846,18 @@ public class WorldGenMonumentPieces {
             return j * 25 + k * 5 + i;
         }
 
-        public WorldGenMonumentPiece() {
-            super(0);
+        public WorldGenMonumentPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, int i) {
+            super(worldgenfeaturestructurepiecetype, i);
         }
 
-        public WorldGenMonumentPiece(int i) {
-            super(i);
-        }
-
-        public WorldGenMonumentPiece(EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
-            super(1);
+        public WorldGenMonumentPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, EnumDirection enumdirection, StructureBoundingBox structureboundingbox) {
+            super(worldgenfeaturestructurepiecetype, 1);
             this.a(enumdirection);
             this.n = structureboundingbox;
         }
 
-        protected WorldGenMonumentPiece(int i, EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, int j, int k, int l) {
-            super(i);
+        protected WorldGenMonumentPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, int i, EnumDirection enumdirection, WorldGenMonumentPieces.WorldGenMonumentStateTracker worldgenmonumentpieces_worldgenmonumentstatetracker, int j, int k, int l) {
+            super(worldgenfeaturestructurepiecetype, i);
             this.a(enumdirection);
             this.l = worldgenmonumentpieces_worldgenmonumentstatetracker;
             int i1 = worldgenmonumentpieces_worldgenmonumentstatetracker.a;
@@ -1856,9 +1887,12 @@ public class WorldGenMonumentPieces {
 
         }
 
-        protected void a(NBTTagCompound nbttagcompound) {}
+        public WorldGenMonumentPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, NBTTagCompound nbttagcompound) {
+            super(worldgenfeaturestructurepiecetype, nbttagcompound);
+        }
 
-        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {}
+        @Override
+        protected void a(NBTTagCompound nbttagcompound) {}
 
         protected void a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i, int j, int k, int l, int i1, int j1) {
             for (int k1 = j; k1 <= i1; ++k1) {
@@ -1923,11 +1957,11 @@ public class WorldGenMonumentPieces {
             int j1 = this.b(i, k);
 
             if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-                EntityGuardianElder entityguardianelder = new EntityGuardianElder(generatoraccess.getMinecraftWorld());
+                EntityGuardianElder entityguardianelder = (EntityGuardianElder) EntityTypes.ELDER_GUARDIAN.a(generatoraccess.getMinecraftWorld());
 
                 entityguardianelder.heal(entityguardianelder.getMaxHealth());
                 entityguardianelder.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
-                entityguardianelder.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityguardianelder)), (GroupDataEntity) null, (NBTTagCompound) null);
+                entityguardianelder.prepare(generatoraccess, generatoraccess.getDamageScaler(new BlockPosition(entityguardianelder)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
                 generatoraccess.addEntity(entityguardianelder);
                 return true;
             } else {

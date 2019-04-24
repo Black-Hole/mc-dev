@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 public class StatisticList {
 
-    public static final StatisticWrapper<Block> BLOCK_MINED = a("mined", IRegistry.BLOCK);
-    public static final StatisticWrapper<Item> ITEM_CRAFTED = a("crafted", IRegistry.ITEM);
-    public static final StatisticWrapper<Item> ITEM_USED = a("used", IRegistry.ITEM);
-    public static final StatisticWrapper<Item> ITEM_BROKEN = a("broken", IRegistry.ITEM);
-    public static final StatisticWrapper<Item> ITEM_PICKED_UP = a("picked_up", IRegistry.ITEM);
-    public static final StatisticWrapper<Item> ITEM_DROPPED = a("dropped", IRegistry.ITEM);
-    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED = a("killed", IRegistry.ENTITY_TYPE);
-    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED_BY = a("killed_by", IRegistry.ENTITY_TYPE);
+    public static final StatisticWrapper<Block> BLOCK_MINED = a("mined", (IRegistry) IRegistry.BLOCK);
+    public static final StatisticWrapper<Item> ITEM_CRAFTED = a("crafted", (IRegistry) IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_USED = a("used", (IRegistry) IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_BROKEN = a("broken", (IRegistry) IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_PICKED_UP = a("picked_up", (IRegistry) IRegistry.ITEM);
+    public static final StatisticWrapper<Item> ITEM_DROPPED = a("dropped", (IRegistry) IRegistry.ITEM);
+    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED = a("killed", (IRegistry) IRegistry.ENTITY_TYPE);
+    public static final StatisticWrapper<EntityTypes<?>> ENTITY_KILLED_BY = a("killed_by", (IRegistry) IRegistry.ENTITY_TYPE);
     public static final StatisticWrapper<MinecraftKey> CUSTOM = a("custom", IRegistry.CUSTOM_STAT);
     public static final MinecraftKey LEAVE_GAME = a("leave_game", Counter.DEFAULT);
     public static final MinecraftKey PLAY_ONE_MINUTE = a("play_one_minute", Counter.TIME);
@@ -69,21 +69,27 @@ public class StatisticList {
     public static final MinecraftKey OPEN_CHEST = a("open_chest", Counter.DEFAULT);
     public static final MinecraftKey SLEEP_IN_BED = a("sleep_in_bed", Counter.DEFAULT);
     public static final MinecraftKey OPEN_SHULKER_BOX = a("open_shulker_box", Counter.DEFAULT);
-
-    public static void a() {}
+    public static final MinecraftKey OPEN_BARREL = a("open_barrel", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_BLAST_FURNACE = a("interact_with_blast_furnace", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_SMOKER = a("interact_with_smoker", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_LECTERN = a("interact_with_lectern", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_CAMPFIRE = a("interact_with_campfire", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_CARTOGRAPHY_TABLE = a("interact_with_cartography_table", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_LOOM = a("interact_with_loom", Counter.DEFAULT);
+    public static final MinecraftKey INTERACT_WITH_STONECUTTER = a("interact_with_stonecutter", Counter.DEFAULT);
+    public static final MinecraftKey BELL_RING = a("bell_ring", Counter.DEFAULT);
+    public static final MinecraftKey RAID_TRIGGER = a("raid_trigger", Counter.DEFAULT);
+    public static final MinecraftKey RAID_WIN = a("raid_win", Counter.DEFAULT);
 
     private static MinecraftKey a(String s, Counter counter) {
         MinecraftKey minecraftkey = new MinecraftKey(s);
 
-        IRegistry.CUSTOM_STAT.a(minecraftkey, (Object) minecraftkey);
+        IRegistry.a(IRegistry.CUSTOM_STAT, s, (Object) minecraftkey);
         StatisticList.CUSTOM.a((Object) minecraftkey, counter);
         return minecraftkey;
     }
 
     private static <T> StatisticWrapper<T> a(String s, IRegistry<T> iregistry) {
-        StatisticWrapper<T> statisticwrapper = new StatisticWrapper<>(iregistry);
-
-        IRegistry.STATS.a(new MinecraftKey(s), (Object) statisticwrapper);
-        return statisticwrapper;
+        return (StatisticWrapper) IRegistry.a(IRegistry.STATS, s, (Object) (new StatisticWrapper<>(iregistry)));
     }
 }

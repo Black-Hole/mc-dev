@@ -2,19 +2,24 @@ package net.minecraft.server;
 
 public class SlotFurnaceFuel extends Slot {
 
-    public SlotFurnaceFuel(IInventory iinventory, int i, int j, int k) {
+    private final ContainerFurnace a;
+
+    public SlotFurnaceFuel(ContainerFurnace containerfurnace, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
+        this.a = containerfurnace;
     }
 
+    @Override
     public boolean isAllowed(ItemStack itemstack) {
-        return TileEntityFurnace.isFuel(itemstack) || d_(itemstack);
+        return this.a.b(itemstack) || c_(itemstack);
     }
 
+    @Override
     public int getMaxStackSize(ItemStack itemstack) {
-        return d_(itemstack) ? 1 : super.getMaxStackSize(itemstack);
+        return c_(itemstack) ? 1 : super.getMaxStackSize(itemstack);
     }
 
-    public static boolean d_(ItemStack itemstack) {
+    public static boolean c_(ItemStack itemstack) {
         return itemstack.getItem() == Items.BUCKET;
     }
 }

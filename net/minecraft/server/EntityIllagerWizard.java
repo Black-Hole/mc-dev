@@ -1,46 +1,51 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import javax.annotation.Nullable;
 
 public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
-    private static final DataWatcherObject<Byte> c = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
+    private static final DataWatcherObject<Byte> bz = DataWatcher.a(EntityIllagerWizard.class, DataWatcherRegistry.a);
     protected int b;
-    private EntityIllagerWizard.Spell bC;
+    private EntityIllagerWizard.Spell bA;
 
-    protected EntityIllagerWizard(EntityTypes<?> entitytypes, World world) {
+    protected EntityIllagerWizard(EntityTypes<? extends EntityIllagerWizard> entitytypes, World world) {
         super(entitytypes, world);
-        this.bC = EntityIllagerWizard.Spell.NONE;
+        this.bA = EntityIllagerWizard.Spell.NONE;
     }
 
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityIllagerWizard.c, (byte) 0);
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityIllagerWizard.bz, (byte) 0);
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.b = nbttagcompound.getInt("SpellTicks");
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("SpellTicks", this.b);
     }
 
-    public boolean dA() {
-        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.c) > 0 : this.b > 0;
+    public boolean eg() {
+        return this.world.isClientSide ? (Byte) this.datawatcher.get(EntityIllagerWizard.bz) > 0 : this.b > 0;
     }
 
     public void setSpell(EntityIllagerWizard.Spell entityillagerwizard_spell) {
-        this.bC = entityillagerwizard_spell;
-        this.datawatcher.set(EntityIllagerWizard.c, (byte) entityillagerwizard_spell.g);
+        this.bA = entityillagerwizard_spell;
+        this.datawatcher.set(EntityIllagerWizard.bz, (byte) entityillagerwizard_spell.g);
     }
 
     public EntityIllagerWizard.Spell getSpell() {
-        return !this.world.isClientSide ? this.bC : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.c));
+        return !this.world.isClientSide ? this.bA : EntityIllagerWizard.Spell.a((Byte) this.datawatcher.get(EntityIllagerWizard.bz));
     }
 
+    @Override
     protected void mobTick() {
         super.mobTick();
         if (this.b > 0) {
@@ -49,28 +54,29 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
     }
 
+    @Override
     public void tick() {
         super.tick();
-        if (this.world.isClientSide && this.dA()) {
+        if (this.world.isClientSide && this.eg()) {
             EntityIllagerWizard.Spell entityillagerwizard_spell = this.getSpell();
             double d0 = entityillagerwizard_spell.h[0];
             double d1 = entityillagerwizard_spell.h[1];
             double d2 = entityillagerwizard_spell.h[2];
-            float f = this.aQ * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
+            float f = this.aK * 0.017453292F + MathHelper.cos((float) this.ticksLived * 0.6662F) * 0.25F;
             float f1 = MathHelper.cos(f);
             float f2 = MathHelper.sin(f);
 
-            this.world.addParticle(Particles.s, this.locX + (double) f1 * 0.6D, this.locY + 1.8D, this.locZ + (double) f2 * 0.6D, d0, d1, d2);
-            this.world.addParticle(Particles.s, this.locX - (double) f1 * 0.6D, this.locY + 1.8D, this.locZ - (double) f2 * 0.6D, d0, d1, d2);
+            this.world.addParticle(Particles.ENTITY_EFFECT, this.locX + (double) f1 * 0.6D, this.locY + 1.8D, this.locZ + (double) f2 * 0.6D, d0, d1, d2);
+            this.world.addParticle(Particles.ENTITY_EFFECT, this.locX - (double) f1 * 0.6D, this.locY + 1.8D, this.locZ - (double) f2 * 0.6D, d0, d1, d2);
         }
 
     }
 
-    protected int dC() {
+    protected int ei() {
         return this.b;
     }
 
-    protected abstract SoundEffect dz();
+    protected abstract SoundEffect getSoundCastSpell();
 
     public static enum Spell {
 
@@ -107,18 +113,25 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         protected c() {}
 
+        @Override
         public boolean a() {
-            return EntityIllagerWizard.this.getGoalTarget() == null ? false : (EntityIllagerWizard.this.dA() ? false : EntityIllagerWizard.this.ticksLived >= this.c);
+            EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
+
+            return entityliving != null && entityliving.isAlive() ? (EntityIllagerWizard.this.eg() ? false : EntityIllagerWizard.this.ticksLived >= this.c) : false;
         }
 
+        @Override
         public boolean b() {
-            return EntityIllagerWizard.this.getGoalTarget() != null && this.b > 0;
+            EntityLiving entityliving = EntityIllagerWizard.this.getGoalTarget();
+
+            return entityliving != null && entityliving.isAlive() && this.b > 0;
         }
 
+        @Override
         public void c() {
             this.b = this.m();
             EntityIllagerWizard.this.b = this.g();
-            this.c = EntityIllagerWizard.this.ticksLived + this.i();
+            this.c = EntityIllagerWizard.this.ticksLived + this.h();
             SoundEffect soundeffect = this.k();
 
             if (soundeffect != null) {
@@ -128,11 +141,12 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
             EntityIllagerWizard.this.setSpell(this.l());
         }
 
+        @Override
         public void e() {
             --this.b;
             if (this.b == 0) {
                 this.j();
-                EntityIllagerWizard.this.a(EntityIllagerWizard.this.dz(), 1.0F, 1.0F);
+                EntityIllagerWizard.this.a(EntityIllagerWizard.this.getSoundCastSpell(), 1.0F, 1.0F);
             }
 
         }
@@ -145,7 +159,7 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
 
         protected abstract int g();
 
-        protected abstract int i();
+        protected abstract int h();
 
         @Nullable
         protected abstract SoundEffect k();
@@ -156,26 +170,30 @@ public abstract class EntityIllagerWizard extends EntityIllagerAbstract {
     public class b extends PathfinderGoal {
 
         public b() {
-            this.a(3);
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
 
+        @Override
         public boolean a() {
-            return EntityIllagerWizard.this.dC() > 0;
+            return EntityIllagerWizard.this.ei() > 0;
         }
 
+        @Override
         public void c() {
             super.c();
-            EntityIllagerWizard.this.navigation.q();
+            EntityIllagerWizard.this.navigation.o();
         }
 
+        @Override
         public void d() {
             super.d();
             EntityIllagerWizard.this.setSpell(EntityIllagerWizard.Spell.NONE);
         }
 
+        @Override
         public void e() {
             if (EntityIllagerWizard.this.getGoalTarget() != null) {
-                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.L(), (float) EntityIllagerWizard.this.K());
+                EntityIllagerWizard.this.getControllerLook().a(EntityIllagerWizard.this.getGoalTarget(), (float) EntityIllagerWizard.this.dA(), (float) EntityIllagerWizard.this.M());
             }
 
         }

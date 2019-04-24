@@ -1,94 +1,194 @@
 package net.minecraft.server;
 
-public class LightEngineSky extends LightEngine {
+public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky.a, LightEngineStorageSky> {
 
-    public static final EnumDirection[] a = new EnumDirection[] { EnumDirection.WEST, EnumDirection.NORTH, EnumDirection.EAST, EnumDirection.SOUTH};
+    private static final EnumDirection[] d = EnumDirection.values();
+    private static final EnumDirection[] e = new EnumDirection[] { EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.WEST, EnumDirection.EAST};
 
-    public LightEngineSky() {}
-
-    public EnumSkyBlock a() {
-        return EnumSkyBlock.SKY;
+    public LightEngineSky(ILightAccess ilightaccess) {
+        super(ilightaccess, EnumSkyBlock.SKY, new LightEngineStorageSky(ilightaccess));
     }
 
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
-        int i = ichunkaccess.getPos().d();
-        int j = ichunkaccess.getPos().e();
-        BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
-        Throwable throwable = null;
-
-        try {
-            BlockPosition.PooledBlockPosition blockposition_pooledblockposition1 = BlockPosition.PooledBlockPosition.r();
-            Throwable throwable1 = null;
-
-            try {
-                for (int k = 0; k < 16; ++k) {
-                    for (int l = 0; l < 16; ++l) {
-                        int i1 = ichunkaccess.a(HeightMap.Type.LIGHT_BLOCKING, k, l) + 1;
-                        int j1 = k + i;
-                        int k1 = l + j;
-
-                        for (int l1 = i1; l1 < ichunkaccess.getSections().length * 16 - 1; ++l1) {
-                            blockposition_pooledblockposition.c(j1, l1, k1);
-                            this.a((IWorldWriter) regionlimitedworldaccess, blockposition_pooledblockposition, 15);
-                        }
-
-                        this.a(ichunkaccess.getPos(), j1, i1, k1, 15);
-                        EnumDirection[] aenumdirection = LightEngineSky.a;
-                        int i2 = aenumdirection.length;
-
-                        for (int j2 = 0; j2 < i2; ++j2) {
-                            EnumDirection enumdirection = aenumdirection[j2];
-                            int k2 = regionlimitedworldaccess.a(HeightMap.Type.LIGHT_BLOCKING, j1 + enumdirection.getAdjacentX(), k1 + enumdirection.getAdjacentZ());
-
-                            if (k2 - i1 >= 2) {
-                                for (int l2 = i1; l2 <= k2; ++l2) {
-                                    blockposition_pooledblockposition1.c(j1 + enumdirection.getAdjacentX(), l2, k1 + enumdirection.getAdjacentZ());
-                                    int i3 = regionlimitedworldaccess.getType(blockposition_pooledblockposition1).b(regionlimitedworldaccess, blockposition_pooledblockposition1);
-
-                                    if (i3 != regionlimitedworldaccess.K()) {
-                                        this.a((IWorldWriter) regionlimitedworldaccess, blockposition_pooledblockposition1, 15 - i3 - 1);
-                                        this.a(ichunkaccess.getPos(), blockposition_pooledblockposition1, 15 - i3 - 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
+    @Override
+    protected int b(long i, long j, int k) {
+        if (j == Long.MAX_VALUE) {
+            return 15;
+        } else {
+            if (i == Long.MAX_VALUE) {
+                if (!((LightEngineStorageSky) this.c).l(j)) {
+                    return 15;
                 }
 
-                this.a((GeneratorAccess) regionlimitedworldaccess, ichunkaccess.getPos());
-            } catch (Throwable throwable2) {
-                throwable1 = throwable2;
-                throw throwable2;
-            } finally {
-                if (blockposition_pooledblockposition1 != null) {
-                    if (throwable1 != null) {
-                        try {
-                            blockposition_pooledblockposition1.close();
-                        } catch (Throwable throwable3) {
-                            throwable1.addSuppressed(throwable3);
-                        }
-                    } else {
-                        blockposition_pooledblockposition1.close();
-                    }
-                }
-
+                k = 0;
             }
-        } catch (Throwable throwable4) {
-            throwable = throwable4;
-            throw throwable4;
-        } finally {
-            if (blockposition_pooledblockposition != null) {
-                if (throwable != null) {
-                    try {
-                        blockposition_pooledblockposition.close();
-                    } catch (Throwable throwable5) {
-                        throwable.addSuppressed(throwable5);
-                    }
+
+            if (k >= 15) {
+                return k;
+            } else {
+                int l = this.a(i, j);
+                boolean flag = i == Long.MAX_VALUE || BlockPosition.b(i) == BlockPosition.b(j) && BlockPosition.d(i) == BlockPosition.d(j) && BlockPosition.c(i) > BlockPosition.c(j);
+
+                return flag && k == 0 && l == 0 ? 0 : k + Math.max(1, l);
+            }
+        }
+    }
+
+    @Override
+    protected void a(long i, int j, boolean flag) {
+        long k = SectionPosition.e(i);
+        int l = BlockPosition.c(i);
+        int i1 = SectionPosition.b(l);
+        int j1 = SectionPosition.a(l);
+        int k1;
+
+        if (i1 != 0) {
+            k1 = 0;
+        } else {
+            int l1;
+
+            for (l1 = 0; !((LightEngineStorageSky) this.c).g(SectionPosition.a(k, 0, -l1 - 1, 0)) && ((LightEngineStorageSky) this.c).a(j1 - l1 - 1); ++l1) {
+                ;
+            }
+
+            k1 = l1;
+        }
+
+        long i2 = BlockPosition.a(i, 0, -1 - k1 * 16, 0);
+        long j2 = SectionPosition.e(i2);
+
+        if (k == j2 || ((LightEngineStorageSky) this.c).g(j2)) {
+            this.b(i, i2, j, flag);
+        }
+
+        long k2 = BlockPosition.a(i, EnumDirection.UP);
+        long l2 = SectionPosition.e(k2);
+
+        if (k == l2 || ((LightEngineStorageSky) this.c).g(l2)) {
+            this.b(i, k2, j, flag);
+        }
+
+        EnumDirection[] aenumdirection = LightEngineSky.e;
+        int i3 = aenumdirection.length;
+        int j3 = 0;
+
+        while (j3 < i3) {
+            EnumDirection enumdirection = aenumdirection[j3];
+            int k3 = 0;
+
+            while (true) {
+                long l3 = BlockPosition.a(i, enumdirection.getAdjacentX(), -k3, enumdirection.getAdjacentZ());
+                long i4 = SectionPosition.e(l3);
+
+                if (k == i4) {
+                    this.b(i, l3, j, flag);
                 } else {
-                    blockposition_pooledblockposition.close();
+                    if (((LightEngineStorageSky) this.c).g(i4)) {
+                        this.b(i, l3, j, flag);
+                    }
+
+                    ++k3;
+                    if (k3 < k1 * 16) {
+                        continue;
+                    }
                 }
+
+                ++j3;
+                break;
+            }
+        }
+
+    }
+
+    @Override
+    protected int a(long i, long j, int k) {
+        int l = k;
+
+        if (Long.MAX_VALUE != j) {
+            int i1 = this.b(Long.MAX_VALUE, i, 0);
+
+            if (k > i1) {
+                l = i1;
             }
 
+            if (l == 0) {
+                return l;
+            }
+        }
+
+        long j1 = SectionPosition.e(i);
+        NibbleArray nibblearray = ((LightEngineStorageSky) this.c).a(j1, true);
+        EnumDirection[] aenumdirection = LightEngineSky.d;
+        int k1 = aenumdirection.length;
+
+        for (int l1 = 0; l1 < k1; ++l1) {
+            EnumDirection enumdirection = aenumdirection[l1];
+            long i2 = BlockPosition.a(i, enumdirection);
+            long j2 = SectionPosition.e(i2);
+            NibbleArray nibblearray1;
+
+            if (j1 == j2) {
+                nibblearray1 = nibblearray;
+            } else {
+                nibblearray1 = ((LightEngineStorageSky) this.c).a(j2, true);
+            }
+
+            if (nibblearray1 != null) {
+                if (i2 != j) {
+                    int k2 = this.b(i2, i, this.a(nibblearray1, i2));
+
+                    if (l > k2) {
+                        l = k2;
+                    }
+
+                    if (l == 0) {
+                        return l;
+                    }
+                }
+            } else if (enumdirection != EnumDirection.DOWN) {
+                for (i2 = BlockPosition.f(i2); !((LightEngineStorageSky) this.c).g(j2) && !((LightEngineStorageSky) this.c).m(j2); i2 = BlockPosition.a(i2, 0, 16, 0)) {
+                    j2 = SectionPosition.a(j2, EnumDirection.UP);
+                }
+
+                NibbleArray nibblearray2 = ((LightEngineStorageSky) this.c).a(j2, true);
+
+                if (i2 != j) {
+                    int l2;
+
+                    if (nibblearray2 != null) {
+                        l2 = this.b(i2, i, this.a(nibblearray2, i2));
+                    } else {
+                        l2 = ((LightEngineStorageSky) this.c).n(j2) ? 0 : 15;
+                    }
+
+                    if (l > l2) {
+                        l = l2;
+                    }
+
+                    if (l == 0) {
+                        return l;
+                    }
+                }
+            }
+        }
+
+        return l;
+    }
+
+    @Override
+    protected void f(long i) {
+        ((LightEngineStorageSky) this.c).c();
+        long j = SectionPosition.e(i);
+
+        if (((LightEngineStorageSky) this.c).g(j)) {
+            super.f(i);
+        } else {
+            for (i = BlockPosition.f(i); !((LightEngineStorageSky) this.c).g(j) && !((LightEngineStorageSky) this.c).m(j); i = BlockPosition.a(i, 0, 16, 0)) {
+                j = SectionPosition.a(j, EnumDirection.UP);
+            }
+
+            if (((LightEngineStorageSky) this.c).g(j)) {
+                super.f(i);
+            }
         }
 
     }

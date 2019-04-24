@@ -1,30 +1,20 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenFeatureComposite<F extends WorldGenFeatureConfiguration, D extends WorldGenFeatureDecoratorConfiguration> extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenFeatureComposite extends WorldGenerator<WorldGenFeatureCompositeConfiguration> {
 
-    protected final WorldGenerator<F> a;
-    protected final F b;
-    protected final WorldGenDecorator<D> c;
-    protected final D d;
-
-    public WorldGenFeatureComposite(WorldGenerator<F> worldgenerator, F f0, WorldGenDecorator<D> worldgendecorator, D d0) {
-        this.b = f0;
-        this.d = d0;
-        this.c = worldgendecorator;
-        this.a = worldgenerator;
+    public WorldGenFeatureComposite(Function<Dynamic<?>, ? extends WorldGenFeatureCompositeConfiguration> function) {
+        super(function);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return this.c.a(generatoraccess, chunkgenerator, random, blockposition, this.d, this.a, this.b);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureCompositeConfiguration worldgenfeaturecompositeconfiguration) {
+        return worldgenfeaturecompositeconfiguration.b.a(generatoraccess, chunkgenerator, random, blockposition, worldgenfeaturecompositeconfiguration.a);
     }
 
     public String toString() {
-        return String.format("< %s [%s | %s] >", this.getClass().getSimpleName(), this.c, this.a);
-    }
-
-    public WorldGenerator<F> a() {
-        return this.a;
+        return String.format("< %s [%s] >", this.getClass().getSimpleName(), IRegistry.FEATURE.getKey(this));
     }
 }

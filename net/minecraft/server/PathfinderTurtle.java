@@ -1,6 +1,5 @@
 package net.minecraft.server;
 
-import java.util.EnumSet;
 import javax.annotation.Nullable;
 
 public class PathfinderTurtle extends PathfinderNormal {
@@ -10,6 +9,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
     public PathfinderTurtle() {}
 
+    @Override
     public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
         super.a(iblockaccess, entityinsentient);
         entityinsentient.a(PathType.WATER, 0.0F);
@@ -19,20 +19,24 @@ public class PathfinderTurtle extends PathfinderNormal {
         entityinsentient.a(PathType.WATER_BORDER, 4.0F);
     }
 
+    @Override
     public void a() {
         this.b.a(PathType.WALKABLE, this.k);
         this.b.a(PathType.WATER_BORDER, this.l);
         super.a();
     }
 
+    @Override
     public PathPoint b() {
         return this.a(MathHelper.floor(this.b.getBoundingBox().minX), MathHelper.floor(this.b.getBoundingBox().minY + 0.5D), MathHelper.floor(this.b.getBoundingBox().minZ));
     }
 
+    @Override
     public PathPoint a(double d0, double d1, double d2) {
         return this.a(MathHelper.floor(d0), MathHelper.floor(d1 + 0.5D), MathHelper.floor(d2));
     }
 
+    @Override
     public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
         int i = 0;
         boolean flag = true;
@@ -128,7 +132,7 @@ public class PathfinderTurtle extends PathfinderNormal {
         } else {
             PathType pathtype = this.a(this.a, i, j, k, this.b, this.d, this.e, this.f, false, false);
             float f = this.b.a(pathtype);
-            double d2 = (double) this.b.width / 2.0D;
+            double d2 = (double) this.b.getWidth() / 2.0D;
 
             if (f >= 0.0F) {
                 pathpoint = this.a(i, j, k);
@@ -142,9 +146,9 @@ public class PathfinderTurtle extends PathfinderNormal {
                 }
 
                 if (pathtype == PathType.OPEN) {
-                    AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) i - d2 + 0.5D, (double) j + 0.001D, (double) k - d2 + 0.5D, (double) i + d2 + 0.5D, (double) ((float) j + this.b.length), (double) k + d2 + 0.5D);
+                    AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) i - d2 + 0.5D, (double) j + 0.001D, (double) k - d2 + 0.5D, (double) i + d2 + 0.5D, (double) ((float) j + this.b.getHeight()), (double) k + d2 + 0.5D);
 
-                    if (!this.b.world.getCubes((Entity) null, axisalignedbb)) {
+                    if (!this.b.world.getCubes(this.b, axisalignedbb)) {
                         return null;
                     }
 
@@ -168,7 +172,7 @@ public class PathfinderTurtle extends PathfinderNormal {
 
                     while (j > 0 && pathtype == PathType.OPEN) {
                         --j;
-                        if (i1++ >= this.b.bn()) {
+                        if (i1++ >= this.b.bu()) {
                             return null;
                         }
 
@@ -198,35 +202,24 @@ public class PathfinderTurtle extends PathfinderNormal {
         }
     }
 
-    public PathType a(IBlockAccess iblockaccess, int i, int j, int k, int l, int i1, int j1, boolean flag, boolean flag1, EnumSet<PathType> enumset, PathType pathtype, BlockPosition blockposition) {
-        for (int k1 = 0; k1 < l; ++k1) {
-            for (int l1 = 0; l1 < i1; ++l1) {
-                for (int i2 = 0; i2 < j1; ++i2) {
-                    int j2 = k1 + i;
-                    int k2 = l1 + j;
-                    int l2 = i2 + k;
-                    PathType pathtype1 = this.a(iblockaccess, j2, k2, l2);
+    @Override
+    protected PathType a(IBlockAccess iblockaccess, boolean flag, boolean flag1, BlockPosition blockposition, PathType pathtype) {
+        if (pathtype == PathType.RAIL && !(iblockaccess.getType(blockposition).getBlock() instanceof BlockMinecartTrackAbstract) && !(iblockaccess.getType(blockposition.down()).getBlock() instanceof BlockMinecartTrackAbstract)) {
+            pathtype = PathType.FENCE;
+        }
 
-                    if (pathtype1 == PathType.RAIL && !(iblockaccess.getType(blockposition).getBlock() instanceof BlockMinecartTrackAbstract) && !(iblockaccess.getType(blockposition.down()).getBlock() instanceof BlockMinecartTrackAbstract)) {
-                        pathtype1 = PathType.FENCE;
-                    }
+        if (pathtype == PathType.DOOR_OPEN || pathtype == PathType.DOOR_WOOD_CLOSED || pathtype == PathType.DOOR_IRON_CLOSED) {
+            pathtype = PathType.BLOCKED;
+        }
 
-                    if (pathtype1 == PathType.DOOR_OPEN || pathtype1 == PathType.DOOR_WOOD_CLOSED || pathtype1 == PathType.DOOR_IRON_CLOSED) {
-                        pathtype1 = PathType.BLOCKED;
-                    }
-
-                    if (k1 == 0 && l1 == 0 && i2 == 0) {
-                        pathtype = pathtype1;
-                    }
-
-                    enumset.add(pathtype1);
-                }
-            }
+        if (pathtype == PathType.LEAVES) {
+            pathtype = PathType.BLOCKED;
         }
 
         return pathtype;
     }
 
+    @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
         PathType pathtype = this.b(iblockaccess, i, j, k);
 
@@ -255,12 +248,16 @@ public class PathfinderTurtle extends PathfinderNormal {
                     pathtype = PathType.OPEN;
                 }
 
-                if (pathtype2 == PathType.DAMAGE_FIRE || block == Blocks.MAGMA_BLOCK) {
+                if (pathtype2 == PathType.DAMAGE_FIRE || block == Blocks.MAGMA_BLOCK || block == Blocks.CAMPFIRE) {
                     pathtype = PathType.DAMAGE_FIRE;
                 }
 
                 if (pathtype2 == PathType.DAMAGE_CACTUS) {
                     pathtype = PathType.DAMAGE_CACTUS;
+                }
+
+                if (pathtype2 == PathType.DAMAGE_OTHER) {
+                    pathtype = PathType.DAMAGE_OTHER;
                 }
             }
 

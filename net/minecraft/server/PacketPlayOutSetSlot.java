@@ -23,12 +23,14 @@ public class PacketPlayOutSetSlot implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.b = packetdataserializer.readShort();
-        this.c = packetdataserializer.k();
+        this.c = packetdataserializer.m();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeShort(this.b);

@@ -10,12 +10,14 @@ public class PacketPlayInAutoRecipe implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInAutoRecipe() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
-        this.b = packetdataserializer.l();
+        this.b = packetdataserializer.o();
         this.c = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.a(this.b);

@@ -3,8 +3,8 @@ package net.minecraft.server;
 public class WorldMapFrame {
 
     private final BlockPosition a;
-    private int b;
-    private int c;
+    private final int b;
+    private final int c;
 
     public WorldMapFrame(BlockPosition blockposition, int i, int j) {
         this.a = blockposition;

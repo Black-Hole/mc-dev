@@ -19,10 +19,12 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
 
     public CriterionTriggerRecipeUnlocked() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerRecipeUnlocked.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerRecipeUnlocked.b> criteriontrigger_a) {
         CriterionTriggerRecipeUnlocked.a criteriontriggerrecipeunlocked_a = (CriterionTriggerRecipeUnlocked.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
         criteriontriggerrecipeunlocked_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerRecipeUnlocked.b> criteriontrigger_a) {
         CriterionTriggerRecipeUnlocked.a criteriontriggerrecipeunlocked_a = (CriterionTriggerRecipeUnlocked.a) this.b.get(advancementdataplayer);
 
@@ -46,17 +49,19 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerRecipeUnlocked.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "recipe"));
 
         return new CriterionTriggerRecipeUnlocked.b(minecraftkey);
     }
 
-    public void a(EntityPlayer entityplayer, IRecipe irecipe) {
+    public void a(EntityPlayer entityplayer, IRecipe<?> irecipe) {
         CriterionTriggerRecipeUnlocked.a criteriontriggerrecipeunlocked_a = (CriterionTriggerRecipeUnlocked.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggerrecipeunlocked_a != null) {
@@ -86,7 +91,7 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
             this.b.remove(criteriontrigger_a);
         }
 
-        public void a(IRecipe irecipe) {
+        public void a(IRecipe<?> irecipe) {
             List<CriterionTrigger.a<CriterionTriggerRecipeUnlocked.b>> list = null;
             Iterator iterator = this.b.iterator();
 
@@ -124,6 +129,7 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
             this.a = minecraftkey;
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 
@@ -131,7 +137,7 @@ public class CriterionTriggerRecipeUnlocked implements CriterionTrigger<Criterio
             return jsonobject;
         }
 
-        public boolean a(IRecipe irecipe) {
+        public boolean a(IRecipe<?> irecipe) {
             return this.a.equals(irecipe.getKey());
         }
     }

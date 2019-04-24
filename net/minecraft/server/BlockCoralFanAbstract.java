@@ -8,7 +8,8 @@ public class BlockCoralFanAbstract extends BlockCoralBase {
         super(block_info);
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockCoralFanAbstract.a;
     }
 }

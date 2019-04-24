@@ -15,6 +15,7 @@ public class PacketPlayOutStopSound implements Packet<PacketListenerPlayOut> {
         this.b = soundcategory;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         byte b0 = packetdataserializer.readByte();
 
@@ -23,11 +24,12 @@ public class PacketPlayOutStopSound implements Packet<PacketListenerPlayOut> {
         }
 
         if ((b0 & 2) > 0) {
-            this.a = packetdataserializer.l();
+            this.a = packetdataserializer.o();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         if (this.b != null) {
             if (this.a != null) {

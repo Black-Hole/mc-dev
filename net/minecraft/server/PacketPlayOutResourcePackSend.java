@@ -17,11 +17,13 @@ public class PacketPlayOutResourcePackSend implements Packet<PacketListenerPlayO
         }
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(32767);
         this.b = packetdataserializer.e(40);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a(this.b);

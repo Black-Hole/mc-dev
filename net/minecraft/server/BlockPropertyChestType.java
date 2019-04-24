@@ -13,6 +13,7 @@ public enum BlockPropertyChestType implements INamable {
         this.f = i;
     }
 
+    @Override
     public String getName() {
         return this.e;
     }

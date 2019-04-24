@@ -4,50 +4,64 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
 
     public FluidTypeWater() {}
 
+    @Override
     public FluidType e() {
         return FluidTypes.FLOWING_WATER;
     }
 
+    @Override
     public FluidType f() {
         return FluidTypes.WATER;
     }
 
+    @Override
     public Item b() {
         return Items.WATER_BUCKET;
     }
 
+    @Override
     protected boolean g() {
         return true;
     }
 
+    @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        iblockdata.a(generatoraccess.getMinecraftWorld(), blockposition, 0);
+        TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? generatoraccess.getTileEntity(blockposition) : null;
+
+        Block.a(iblockdata, generatoraccess.getMinecraftWorld(), blockposition, tileentity);
     }
 
+    @Override
     public int b(IWorldReader iworldreader) {
         return 4;
     }
 
-    public IBlockData b(Fluid fluid) {
-        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, e(fluid));
+    @Override
+    public IBlockData a(Fluid fluid) {
+        return (IBlockData) Blocks.WATER.getBlockData().set(BlockFluids.LEVEL, d(fluid));
     }
 
+    @Override
     public boolean a(FluidType fluidtype) {
         return fluidtype == FluidTypes.WATER || fluidtype == FluidTypes.FLOWING_WATER;
     }
 
+    @Override
     public int c(IWorldReader iworldreader) {
         return 1;
     }
 
+    @Override
     public int a(IWorldReader iworldreader) {
         return 5;
     }
 
-    public boolean a(Fluid fluid, FluidType fluidtype, EnumDirection enumdirection) {
+    @Override
+    public boolean a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition, FluidType fluidtype, EnumDirection enumdirection) {
         return enumdirection == EnumDirection.DOWN && !fluidtype.a(TagsFluid.WATER);
     }
 
+    @Override
     protected float d() {
         return 100.0F;
     }
@@ -56,16 +70,19 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
 
         public a() {}
 
+        @Override
         protected void a(BlockStateList.a<FluidType, Fluid> blockstatelist_a) {
             super.a(blockstatelist_a);
             blockstatelist_a.a(FluidTypeWater.a.LEVEL);
         }
 
-        public int d(Fluid fluid) {
+        @Override
+        public int c(Fluid fluid) {
             return (Integer) fluid.get(FluidTypeWater.a.LEVEL);
         }
 
-        public boolean c(Fluid fluid) {
+        @Override
+        public boolean b(Fluid fluid) {
             return false;
         }
     }
@@ -74,11 +91,13 @@ public abstract class FluidTypeWater extends FluidTypeFlowing {
 
         public b() {}
 
-        public int d(Fluid fluid) {
+        @Override
+        public int c(Fluid fluid) {
             return 8;
         }
 
-        public boolean c(Fluid fluid) {
+        @Override
+        public boolean b(Fluid fluid) {
             return true;
         }
     }

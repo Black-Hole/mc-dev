@@ -15,26 +15,31 @@ public class VectorPosition implements IVectorPosition {
         this.c = argumentparserposition2;
     }
 
+    @Override
     public Vec3D a(CommandListenerWrapper commandlistenerwrapper) {
         Vec3D vec3d = commandlistenerwrapper.getPosition();
 
         return new Vec3D(this.a.a(vec3d.x), this.b.a(vec3d.y), this.c.a(vec3d.z));
     }
 
+    @Override
     public Vec2F b(CommandListenerWrapper commandlistenerwrapper) {
         Vec2F vec2f = commandlistenerwrapper.i();
 
         return new Vec2F((float) this.a.a((double) vec2f.i), (float) this.b.a((double) vec2f.j));
     }
 
+    @Override
     public boolean a() {
         return this.a.a();
     }
 
+    @Override
     public boolean b() {
         return this.b.a();
     }
 
+    @Override
     public boolean c() {
         return this.c.a();
     }

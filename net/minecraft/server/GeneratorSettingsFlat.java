@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,22 +18,23 @@ import org.apache.logging.log4j.Logger;
 public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
     private static final Logger w = LogManager.getLogger();
-    private static final WorldGenFeatureComposite<WorldGenMineshaftConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> x = BiomeBase.a(WorldGenerator.f, new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureVillageConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> y = BiomeBase.a(WorldGenerator.e, new WorldGenFeatureVillageConfiguration(0, WorldGenVillagePieces.Material.OAK), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureStrongholdConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> z = BiomeBase.a(WorldGenerator.m, new WorldGenFeatureStrongholdConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureSwampHutConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> A = BiomeBase.a(WorldGenerator.l, new WorldGenFeatureSwampHutConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureDesertPyramidConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> B = BiomeBase.a(WorldGenerator.i, new WorldGenFeatureDesertPyramidConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureJunglePyramidConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> C = BiomeBase.a(WorldGenerator.h, new WorldGenFeatureJunglePyramidConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureIglooConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> D = BiomeBase.a(WorldGenerator.j, new WorldGenFeatureIglooConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureShipwreckConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> E = BiomeBase.a(WorldGenerator.k, new WorldGenFeatureShipwreckConfiguration(false), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenMonumentConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> F = BiomeBase.a(WorldGenerator.n, new WorldGenMonumentConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureLakeConfiguration, WorldGenDecoratorLakeChanceConfiguration> G = BiomeBase.a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeBase.K, new WorldGenDecoratorLakeChanceConfiguration(4));
-    private static final WorldGenFeatureComposite<WorldGenFeatureLakeConfiguration, WorldGenDecoratorLakeChanceConfiguration> H = BiomeBase.a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeBase.J, new WorldGenDecoratorLakeChanceConfiguration(80));
-    private static final WorldGenFeatureComposite<WorldGenEndCityConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> I = BiomeBase.a(WorldGenerator.q, new WorldGenEndCityConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenMansionConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> J = BiomeBase.a(WorldGenerator.g, new WorldGenMansionConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenNetherConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> K = BiomeBase.a(WorldGenerator.p, new WorldGenNetherConfiguration(), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    private static final WorldGenFeatureComposite<WorldGenFeatureOceanRuinConfiguration, WorldGenFeatureDecoratorEmptyConfiguration> L = BiomeBase.a(WorldGenerator.o, new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.1F), BiomeBase.n, WorldGenFeatureDecoratorConfiguration.e);
-    public static final Map<WorldGenFeatureComposite<?, ?>, WorldGenStage.Decoration> t = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    private static final WorldGenFeatureConfigured<?> x = BiomeBase.a(WorldGenerator.MINESHAFT, new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> y = BiomeBase.a(WorldGenerator.VILLAGE, new WorldGenFeatureVillageConfiguration("village/plains/town_centers", 6), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> z = BiomeBase.a(WorldGenerator.STRONGHOLD, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> A = BiomeBase.a(WorldGenerator.SWAMP_HUT, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> B = BiomeBase.a(WorldGenerator.DESERT_PYRAMID, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> C = BiomeBase.a(WorldGenerator.JUNGLE_TEMPLE, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> D = BiomeBase.a(WorldGenerator.IGLOO, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> E = BiomeBase.a(WorldGenerator.SHIPWRECK, new WorldGenFeatureShipwreckConfiguration(false), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> F = BiomeBase.a(WorldGenerator.OCEAN_MONUMENT, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> G = BiomeBase.a(WorldGenerator.LAKE, new WorldGenFeatureLakeConfiguration(Blocks.WATER.getBlockData()), WorldGenDecorator.E, new WorldGenDecoratorLakeChanceConfiguration(4));
+    private static final WorldGenFeatureConfigured<?> H = BiomeBase.a(WorldGenerator.LAKE, new WorldGenFeatureLakeConfiguration(Blocks.LAVA.getBlockData()), WorldGenDecorator.D, new WorldGenDecoratorLakeChanceConfiguration(80));
+    private static final WorldGenFeatureConfigured<?> I = BiomeBase.a(WorldGenerator.END_CITY, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> J = BiomeBase.a(WorldGenerator.WOODLAND_MANSION, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> K = BiomeBase.a(WorldGenerator.NETHER_BRIDGE, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> L = BiomeBase.a(WorldGenerator.OCEAN_RUIN, new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.1F), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    private static final WorldGenFeatureConfigured<?> M = BiomeBase.a(WorldGenerator.PILLAGER_OUTPOST, new WorldGenFeaturePillagerOutpostConfiguration(0.004D), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
+    public static final Map<WorldGenFeatureConfigured<?>, WorldGenStage.Decoration> t = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(GeneratorSettingsFlat.x, WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
         hashmap.put(GeneratorSettingsFlat.y, WorldGenStage.Decoration.SURFACE_STRUCTURES);
         hashmap.put(GeneratorSettingsFlat.z, WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
@@ -50,40 +50,43 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         hashmap.put(GeneratorSettingsFlat.J, WorldGenStage.Decoration.SURFACE_STRUCTURES);
         hashmap.put(GeneratorSettingsFlat.K, WorldGenStage.Decoration.UNDERGROUND_STRUCTURES);
         hashmap.put(GeneratorSettingsFlat.F, WorldGenStage.Decoration.SURFACE_STRUCTURES);
+        hashmap.put(GeneratorSettingsFlat.M, WorldGenStage.Decoration.SURFACE_STRUCTURES);
     });
-    public static final Map<String, WorldGenFeatureComposite<?, ?>[]> u = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put("mineshaft", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.x});
-        hashmap.put("village", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.y});
-        hashmap.put("stronghold", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.z});
-        hashmap.put("biome_1", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.A, GeneratorSettingsFlat.B, GeneratorSettingsFlat.C, GeneratorSettingsFlat.D, GeneratorSettingsFlat.L, GeneratorSettingsFlat.E});
-        hashmap.put("oceanmonument", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.F});
-        hashmap.put("lake", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.G});
-        hashmap.put("lava_lake", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.H});
-        hashmap.put("endcity", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.I});
-        hashmap.put("mansion", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.J});
-        hashmap.put("fortress", new WorldGenFeatureComposite[] { GeneratorSettingsFlat.K});
+    public static final Map<String, WorldGenFeatureConfigured<?>[]> u = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        hashmap.put("mineshaft", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.x});
+        hashmap.put("village", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.y});
+        hashmap.put("stronghold", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.z});
+        hashmap.put("biome_1", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.A, GeneratorSettingsFlat.B, GeneratorSettingsFlat.C, GeneratorSettingsFlat.D, GeneratorSettingsFlat.L, GeneratorSettingsFlat.E});
+        hashmap.put("oceanmonument", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.F});
+        hashmap.put("lake", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.G});
+        hashmap.put("lava_lake", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.H});
+        hashmap.put("endcity", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.I});
+        hashmap.put("mansion", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.J});
+        hashmap.put("fortress", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.K});
+        hashmap.put("pillager_outpost", new WorldGenFeatureConfigured[] { GeneratorSettingsFlat.M});
     });
-    public static final Map<WorldGenFeatureComposite<?, ?>, WorldGenFeatureConfiguration> v = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+    public static final Map<WorldGenFeatureConfigured<?>, WorldGenFeatureConfiguration> v = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         hashmap.put(GeneratorSettingsFlat.x, new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL));
-        hashmap.put(GeneratorSettingsFlat.y, new WorldGenFeatureVillageConfiguration(0, WorldGenVillagePieces.Material.OAK));
-        hashmap.put(GeneratorSettingsFlat.z, new WorldGenFeatureStrongholdConfiguration());
-        hashmap.put(GeneratorSettingsFlat.A, new WorldGenFeatureSwampHutConfiguration());
-        hashmap.put(GeneratorSettingsFlat.B, new WorldGenFeatureDesertPyramidConfiguration());
-        hashmap.put(GeneratorSettingsFlat.C, new WorldGenFeatureJunglePyramidConfiguration());
-        hashmap.put(GeneratorSettingsFlat.D, new WorldGenFeatureIglooConfiguration());
+        hashmap.put(GeneratorSettingsFlat.y, new WorldGenFeatureVillageConfiguration("village/plains/town_centers", 6));
+        hashmap.put(GeneratorSettingsFlat.z, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.A, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.B, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.C, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.D, WorldGenFeatureConfiguration.e);
         hashmap.put(GeneratorSettingsFlat.L, new WorldGenFeatureOceanRuinConfiguration(WorldGenFeatureOceanRuin.Temperature.COLD, 0.3F, 0.9F));
         hashmap.put(GeneratorSettingsFlat.E, new WorldGenFeatureShipwreckConfiguration(false));
-        hashmap.put(GeneratorSettingsFlat.F, new WorldGenMonumentConfiguration());
-        hashmap.put(GeneratorSettingsFlat.I, new WorldGenEndCityConfiguration());
-        hashmap.put(GeneratorSettingsFlat.J, new WorldGenMansionConfiguration());
-        hashmap.put(GeneratorSettingsFlat.K, new WorldGenNetherConfiguration());
+        hashmap.put(GeneratorSettingsFlat.F, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.I, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.J, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.K, WorldGenFeatureConfiguration.e);
+        hashmap.put(GeneratorSettingsFlat.M, new WorldGenFeaturePillagerOutpostConfiguration(0.004D));
     });
-    private final List<WorldGenFlatLayerInfo> M = Lists.newArrayList();
-    private final Map<String, Map<String, String>> N = Maps.newHashMap();
-    private BiomeBase O;
-    private final IBlockData[] P = new IBlockData[256];
-    private boolean Q;
-    private int R;
+    private final List<WorldGenFlatLayerInfo> N = Lists.newArrayList();
+    private final Map<String, Map<String, String>> O = Maps.newHashMap();
+    private BiomeBase P;
+    private final IBlockData[] Q = new IBlockData[256];
+    private boolean R;
+    private int S;
 
     public GeneratorSettingsFlat() {}
 
@@ -92,47 +95,44 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         try {
             MinecraftKey minecraftkey = new MinecraftKey(s);
 
-            if (IRegistry.BLOCK.c(minecraftkey)) {
-                return (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
-            }
+            return (Block) IRegistry.BLOCK.getOptional(minecraftkey).orElse((Object) null);
         } catch (IllegalArgumentException illegalargumentexception) {
             GeneratorSettingsFlat.w.warn("Invalid blockstate: {}", s, illegalargumentexception);
+            return null;
         }
-
-        return null;
     }
 
-    public BiomeBase t() {
-        return this.O;
+    public BiomeBase v() {
+        return this.P;
     }
 
     public void a(BiomeBase biomebase) {
-        this.O = biomebase;
+        this.P = biomebase;
     }
 
-    public Map<String, Map<String, String>> u() {
+    public Map<String, Map<String, String>> w() {
+        return this.O;
+    }
+
+    public List<WorldGenFlatLayerInfo> x() {
         return this.N;
     }
 
-    public List<WorldGenFlatLayerInfo> v() {
-        return this.M;
-    }
-
-    public void w() {
+    public void y() {
         int i = 0;
 
         WorldGenFlatLayerInfo worldgenflatlayerinfo;
         Iterator iterator;
 
-        for (iterator = this.M.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
+        for (iterator = this.N.iterator(); iterator.hasNext(); i += worldgenflatlayerinfo.a()) {
             worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
             worldgenflatlayerinfo.a(i);
         }
 
-        this.R = 0;
-        this.Q = true;
+        this.S = 0;
+        this.R = true;
         i = 0;
-        iterator = this.M.iterator();
+        iterator = this.N.iterator();
 
         while (iterator.hasNext()) {
             worldgenflatlayerinfo = (WorldGenFlatLayerInfo) iterator.next();
@@ -141,15 +141,15 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
                 IBlockData iblockdata = worldgenflatlayerinfo.b();
 
                 if (iblockdata.getBlock() != Blocks.AIR) {
-                    this.Q = false;
-                    this.P[j] = iblockdata;
+                    this.R = false;
+                    this.Q[j] = iblockdata;
                 }
             }
 
             if (worldgenflatlayerinfo.b().getBlock() == Blocks.AIR) {
                 i += worldgenflatlayerinfo.a();
             } else {
-                this.R += worldgenflatlayerinfo.a() + i;
+                this.S += worldgenflatlayerinfo.a() + i;
                 i = 0;
             }
         }
@@ -161,20 +161,20 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
         int i;
 
-        for (i = 0; i < this.M.size(); ++i) {
+        for (i = 0; i < this.N.size(); ++i) {
             if (i > 0) {
                 stringbuilder.append(",");
             }
 
-            stringbuilder.append(this.M.get(i));
+            stringbuilder.append(this.N.get(i));
         }
 
         stringbuilder.append(";");
-        stringbuilder.append(IRegistry.BIOME.getKey(this.O));
+        stringbuilder.append(IRegistry.BIOME.getKey(this.P));
         stringbuilder.append(";");
-        if (!this.N.isEmpty()) {
+        if (!this.O.isEmpty()) {
             i = 0;
-            Iterator iterator = this.N.entrySet().iterator();
+            Iterator iterator = this.O.entrySet().iterator();
 
             while (iterator.hasNext()) {
                 Entry<String, Map<String, String>> entry = (Entry) iterator.next();
@@ -212,30 +212,30 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
     }
 
     public static GeneratorSettingsFlat a(Dynamic<?> dynamic) {
-        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
-        List<Pair<Integer, Block>> list = (List) ((Stream) dynamic.get("layers").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic1) -> {
-            return Pair.of(dynamic1.getInt("height", 1), a(dynamic1.getString("block")));
-        }).collect(Collectors.toList());
+        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.a();
+        List<Pair<Integer, Block>> list = dynamic.get("layers").asList((dynamic1) -> {
+            return Pair.of(dynamic1.get("height").asInt(1), a(dynamic1.get("block").asString("")));
+        });
 
         if (list.stream().anyMatch((pair) -> {
             return pair.getSecond() == null;
         })) {
-            return x();
+            return z();
         } else {
             List<WorldGenFlatLayerInfo> list1 = (List) list.stream().map((pair) -> {
                 return new WorldGenFlatLayerInfo((Integer) pair.getFirst(), (Block) pair.getSecond());
             }).collect(Collectors.toList());
 
             if (list1.isEmpty()) {
-                return x();
+                return z();
             } else {
-                generatorsettingsflat.v().addAll(list1);
-                generatorsettingsflat.w();
-                generatorsettingsflat.a((BiomeBase) IRegistry.BIOME.get(new MinecraftKey(dynamic.getString("biome"))));
+                generatorsettingsflat.x().addAll(list1);
+                generatorsettingsflat.y();
+                generatorsettingsflat.a((BiomeBase) IRegistry.BIOME.get(new MinecraftKey(dynamic.get("biome").asString(""))));
                 dynamic.get("structures").flatMap(Dynamic::getMapValues).ifPresent((map) -> {
                     map.keySet().forEach((dynamic1) -> {
-                        dynamic1.getStringValue().map((s) -> {
-                            return (Map) generatorsettingsflat.u().put(s, Maps.newHashMap());
+                        dynamic1.asString().map((s) -> {
+                            return (Map) generatorsettingsflat.w().put(s, Maps.newHashMap());
                         });
                     });
                 });
@@ -244,23 +244,27 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
         }
     }
 
-    public static GeneratorSettingsFlat x() {
-        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.b();
+    public static GeneratorSettingsFlat z() {
+        GeneratorSettingsFlat generatorsettingsflat = (GeneratorSettingsFlat) ChunkGeneratorType.e.a();
 
         generatorsettingsflat.a(Biomes.PLAINS);
-        generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));
-        generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
-        generatorsettingsflat.v().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS_BLOCK));
-        generatorsettingsflat.w();
-        generatorsettingsflat.u().put("village", Maps.newHashMap());
+        generatorsettingsflat.x().add(new WorldGenFlatLayerInfo(1, Blocks.BEDROCK));
+        generatorsettingsflat.x().add(new WorldGenFlatLayerInfo(2, Blocks.DIRT));
+        generatorsettingsflat.x().add(new WorldGenFlatLayerInfo(1, Blocks.GRASS_BLOCK));
+        generatorsettingsflat.y();
+        generatorsettingsflat.w().put("village", Maps.newHashMap());
         return generatorsettingsflat;
     }
 
-    public boolean y() {
+    public boolean A() {
+        return this.R;
+    }
+
+    public IBlockData[] C() {
         return this.Q;
     }
 
-    public IBlockData[] A() {
-        return this.P;
+    public void a(int i) {
+        this.Q[i] = null;
     }
 }

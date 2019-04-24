@@ -10,6 +10,7 @@ public class VoxelShapeMergerIdentical implements VoxelShapeMerger {
         this.a = doublelist;
     }
 
+    @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
         for (int i = 0; i <= this.a.size(); ++i) {
             if (!voxelshapemerger_a.merge(i, i, i)) {
@@ -20,6 +21,7 @@ public class VoxelShapeMergerIdentical implements VoxelShapeMerger {
         return true;
     }
 
+    @Override
     public DoubleList a() {
         return this.a;
     }

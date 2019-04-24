@@ -9,6 +9,7 @@ public class DataConverterEntityTippedArrow extends DataConverterEntityRenameAbs
         super("EntityTippedArrowFix", schema, flag);
     }
 
+    @Override
     protected String a(String s) {
         return Objects.equals(s, "TippedArrow") ? "Arrow" : s;
     }

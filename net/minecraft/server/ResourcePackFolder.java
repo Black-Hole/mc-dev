@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackFolder extends ResourcePackAbstract {
 
     private static final Logger b = LogManager.getLogger();
-    private static final boolean c = SystemUtils.e() == SystemUtils.OS.WINDOWS;
+    private static final boolean c = SystemUtils.g() == SystemUtils.OS.WINDOWS;
     private static final CharMatcher d = CharMatcher.is('\\');
 
     public ResourcePackFolder(File file) {
@@ -38,6 +38,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
         return s1.endsWith(s);
     }
 
+    @Override
     protected InputStream a(String s) throws IOException {
         File file = this.e(s);
 
@@ -48,6 +49,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
         }
     }
 
+    @Override
     protected boolean c(String s) {
         return this.e(s) != null;
     }
@@ -67,6 +69,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
         return null;
     }
 
+    @Override
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
         Set<String> set = Sets.newHashSet();
         File file = new File(this.a, enumresourcepacktype.a());
@@ -93,6 +96,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
 
     public void close() throws IOException {}
 
+    @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
         File file = new File(this.a, enumresourcepacktype.a());
         List<MinecraftKey> list = Lists.newArrayList();

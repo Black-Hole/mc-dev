@@ -24,10 +24,12 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
     public CriterionTriggerPlacedBlock() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerPlacedBlock.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerPlacedBlock.b> criteriontrigger_a) {
         CriterionTriggerPlacedBlock.a criteriontriggerplacedblock_a = (CriterionTriggerPlacedBlock.a) this.b.get(advancementdataplayer);
 
@@ -39,6 +41,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
         criteriontriggerplacedblock_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerPlacedBlock.b> criteriontrigger_a) {
         CriterionTriggerPlacedBlock.a criteriontriggerplacedblock_a = (CriterionTriggerPlacedBlock.a) this.b.get(advancementdataplayer);
 
@@ -51,21 +54,21 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerPlacedBlock.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         Block block = null;
 
         if (jsonobject.has("block")) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "block"));
 
-            if (!IRegistry.BLOCK.c(minecraftkey)) {
-                throw new JsonSyntaxException("Unknown block type '" + minecraftkey + "'");
-            }
-
-            block = (Block) IRegistry.BLOCK.getOrDefault(minecraftkey);
+            block = (Block) IRegistry.BLOCK.getOptional(minecraftkey).orElseThrow(() -> {
+                return new JsonSyntaxException("Unknown block type '" + minecraftkey + "'");
+            });
         }
 
         Map<IBlockState<?>, Object> map = null;
@@ -206,6 +209,7 @@ public class CriterionTriggerPlacedBlock implements CriterionTrigger<CriterionTr
             }
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

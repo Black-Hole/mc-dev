@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Arrays;
 import java.util.function.Function;
 import javax.annotation.Nullable;
 
@@ -20,6 +21,7 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
         this.d = function;
     }
 
+    @Override
     public int a(T t0) {
         int i;
 
@@ -39,11 +41,20 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
         }
     }
 
+    @Override
+    public boolean b(T t0) {
+        return Arrays.stream(this.b).anyMatch((object) -> {
+            return object == t0;
+        });
+    }
+
     @Nullable
+    @Override
     public T a(int i) {
         return i >= 0 && i < this.f ? this.b[i] : null;
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) {
         packetdataserializer.d(this.f);
 
@@ -53,6 +64,7 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
 
     }
 
+    @Override
     public int a() {
         int i = PacketDataSerializer.a(this.b());
 
@@ -67,6 +79,7 @@ public class DataPaletteLinear<T> implements DataPalette<T> {
         return this.f;
     }
 
+    @Override
     public void a(NBTTagList nbttaglist) {
         for (int i = 0; i < nbttaglist.size(); ++i) {
             this.b[i] = this.d.apply(nbttaglist.getCompound(i));

@@ -52,7 +52,7 @@ public abstract class CriterionConditionValue<T extends Number> {
             }
 
             if (this.d != null) {
-                jsonobject.addProperty("max", this.c);
+                jsonobject.addProperty("max", this.d);
             }
 
             return jsonobject;

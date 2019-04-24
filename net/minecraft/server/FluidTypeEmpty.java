@@ -4,43 +4,58 @@ public class FluidTypeEmpty extends FluidType {
 
     public FluidTypeEmpty() {}
 
+    @Override
     public Item b() {
         return Items.AIR;
     }
 
-    public boolean a(Fluid fluid, FluidType fluidtype, EnumDirection enumdirection) {
+    @Override
+    public boolean a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition, FluidType fluidtype, EnumDirection enumdirection) {
         return true;
     }
 
-    public Vec3D a(IWorldReader iworldreader, BlockPosition blockposition, Fluid fluid) {
+    @Override
+    public Vec3D a(IBlockAccess iblockaccess, BlockPosition blockposition, Fluid fluid) {
         return Vec3D.a;
     }
 
+    @Override
     public int a(IWorldReader iworldreader) {
         return 0;
     }
 
+    @Override
     protected boolean c() {
         return true;
     }
 
+    @Override
     protected float d() {
         return 0.0F;
     }
 
-    public float a(Fluid fluid) {
+    @Override
+    public float a(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return 0.0F;
     }
 
-    protected IBlockData b(Fluid fluid) {
+    @Override
+    protected IBlockData a(Fluid fluid) {
         return Blocks.AIR.getBlockData();
     }
 
-    public boolean c(Fluid fluid) {
+    @Override
+    public boolean b(Fluid fluid) {
         return false;
     }
 
-    public int d(Fluid fluid) {
+    @Override
+    public int c(Fluid fluid) {
         return 0;
+    }
+
+    @Override
+    public VoxelShape b(Fluid fluid, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return VoxelShapes.a();
     }
 }

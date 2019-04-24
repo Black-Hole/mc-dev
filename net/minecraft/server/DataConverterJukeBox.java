@@ -11,15 +11,16 @@ import java.util.Optional;
 public class DataConverterJukeBox extends DataConverterNamedEntity {
 
     public DataConverterJukeBox(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityJukeboxFix", DataConverterTypes.j, "minecraft:jukebox");
+        super(schema, flag, "BlockEntityJukeboxFix", DataConverterTypes.k, "minecraft:jukebox");
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
-        Type<?> type = this.getInputSchema().getChoiceType(DataConverterTypes.j, "minecraft:jukebox");
+        Type<?> type = this.getInputSchema().getChoiceType(DataConverterTypes.k, "minecraft:jukebox");
         Type<?> type1 = type.findFieldType("RecordItem");
         OpticFinder<?> opticfinder = DSL.fieldFinder("RecordItem", type1);
         Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-        int i = dynamic.getInt("Record");
+        int i = dynamic.get("Record").asInt(0);
 
         if (i > 0) {
             dynamic.remove("Record");

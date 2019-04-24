@@ -11,18 +11,19 @@ import java.util.Optional;
 public class DataConverterPiston extends DataConverterNamedEntity {
 
     public DataConverterPiston(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityBlockStateFix", DataConverterTypes.j, "minecraft:piston");
+        super(schema, flag, "BlockEntityBlockStateFix", DataConverterTypes.k, "minecraft:piston");
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
-        Type<?> type = this.getOutputSchema().getChoiceType(DataConverterTypes.j, "minecraft:piston");
+        Type<?> type = this.getOutputSchema().getChoiceType(DataConverterTypes.k, "minecraft:piston");
         Type<?> type1 = type.findFieldType("blockState");
         OpticFinder<?> opticfinder = DSL.fieldFinder("blockState", type1);
         Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-        int i = dynamic.getInt("blockId");
+        int i = dynamic.get("blockId").asInt(0);
 
         dynamic = dynamic.remove("blockId");
-        int j = dynamic.getInt("blockData") & 15;
+        int j = dynamic.get("blockData").asInt(0) & 15;
 
         dynamic = dynamic.remove("blockData");
         Dynamic<?> dynamic1 = DataConverterFlattenData.b(i << 4 | j);

@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -7,7 +9,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -16,13 +17,18 @@ public class LootItemConditionEntityScore implements LootItemCondition {
     private final Map<String, LootValueBounds> a;
     private final LootTableInfo.EntityTarget b;
 
-    public LootItemConditionEntityScore(Map<String, LootValueBounds> map, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        this.a = map;
+    private LootItemConditionEntityScore(Map<String, LootValueBounds> map, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        this.a = ImmutableMap.copyOf(map);
         this.b = loottableinfo_entitytarget;
     }
 
-    public boolean a(Random random, LootTableInfo loottableinfo) {
-        Entity entity = loottableinfo.a(this.b);
+    @Override
+    public Set<LootContextParameter<?>> a() {
+        return ImmutableSet.of(this.b.a());
+    }
+
+    public boolean test(LootTableInfo loottableinfo) {
+        Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
 
         if (entity == null) {
             return false;
@@ -56,9 +62,9 @@ public class LootItemConditionEntityScore implements LootItemCondition {
         }
     }
 
-    public static class a extends LootItemCondition.a<LootItemConditionEntityScore> {
+    public static class b extends LootItemCondition.b<LootItemConditionEntityScore> {
 
-        protected a() {
+        protected b() {
             super(new MinecraftKey("entity_scores"), LootItemConditionEntityScore.class);
         }
 
@@ -76,6 +82,7 @@ public class LootItemConditionEntityScore implements LootItemCondition {
             jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityscore.b));
         }
 
+        @Override
         public LootItemConditionEntityScore b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "scores").entrySet();
             Map<String, LootValueBounds> map = Maps.newLinkedHashMap();

@@ -1,13 +1,18 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureFlowerPlain extends WorldGenFlowers {
 
-    public WorldGenFeatureFlowerPlain() {}
+    public WorldGenFeatureFlowerPlain(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
+    @Override
     public IBlockData a(Random random, BlockPosition blockposition) {
-        double d0 = BiomeBase.aJ.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
+        double d0 = BiomeBase.e.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
         int i;
 
         if (d0 < -0.8D) {
@@ -24,8 +29,18 @@ public class WorldGenFeatureFlowerPlain extends WorldGenFlowers {
                 return Blocks.WHITE_TULIP.getBlockData();
             }
         } else if (random.nextInt(3) > 0) {
-            i = random.nextInt(3);
-            return i == 0 ? Blocks.POPPY.getBlockData() : (i == 1 ? Blocks.AZURE_BLUET.getBlockData() : Blocks.OXEYE_DAISY.getBlockData());
+            i = random.nextInt(4);
+            switch (i) {
+            case 0:
+                return Blocks.POPPY.getBlockData();
+            case 1:
+                return Blocks.AZURE_BLUET.getBlockData();
+            case 2:
+                return Blocks.OXEYE_DAISY.getBlockData();
+            case 3:
+            default:
+                return Blocks.CORNFLOWER.getBlockData();
+            }
         } else {
             return Blocks.DANDELION.getBlockData();
         }

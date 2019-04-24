@@ -4,7 +4,7 @@ public class SlotResult extends Slot {
 
     private final InventoryCrafting a;
     private final EntityHuman b;
-    private int c;
+    private int g;
 
     public SlotResult(EntityHuman entityhuman, InventoryCrafting inventorycrafting, IInventory iinventory, int i, int j, int k) {
         super(iinventory, i, j, k);
@@ -12,39 +12,48 @@ public class SlotResult extends Slot {
         this.a = inventorycrafting;
     }
 
+    @Override
     public boolean isAllowed(ItemStack itemstack) {
         return false;
     }
 
+    @Override
     public ItemStack a(int i) {
         if (this.hasItem()) {
-            this.c += Math.min(i, this.getItem().getCount());
+            this.g += Math.min(i, this.getItem().getCount());
         }
 
         return super.a(i);
     }
 
+    @Override
     protected void a(ItemStack itemstack, int i) {
-        this.c += i;
+        this.g += i;
         this.c(itemstack);
     }
 
+    @Override
     protected void b(int i) {
-        this.c += i;
+        this.g += i;
     }
 
+    @Override
     protected void c(ItemStack itemstack) {
-        if (this.c > 0) {
-            itemstack.a(this.b.world, this.b, this.c);
+        if (this.g > 0) {
+            itemstack.a(this.b.world, this.b, this.g);
         }
 
-        ((RecipeHolder) this.inventory).d(this.b);
-        this.c = 0;
+        if (this.inventory instanceof RecipeHolder) {
+            ((RecipeHolder) this.inventory).b(this.b);
+        }
+
+        this.g = 0;
     }
 
+    @Override
     public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
         this.c(itemstack);
-        NonNullList<ItemStack> nonnulllist = entityhuman.world.getCraftingManager().c(this.a, entityhuman.world);
+        NonNullList<ItemStack> nonnulllist = entityhuman.world.getCraftingManager().c(Recipes.CRAFTING, this.a, entityhuman.world);
 
         for (int i = 0; i < nonnulllist.size(); ++i) {
             ItemStack itemstack1 = this.a.getItem(i);

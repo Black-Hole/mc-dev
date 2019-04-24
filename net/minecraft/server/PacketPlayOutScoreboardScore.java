@@ -25,6 +25,7 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
         }
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(40);
         this.d = (ScoreboardServer.Action) packetdataserializer.a(ScoreboardServer.Action.class);
@@ -32,11 +33,12 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
 
         this.b = Objects.equals(s, "") ? null : s;
         if (this.d != ScoreboardServer.Action.REMOVE) {
-            this.c = packetdataserializer.g();
+            this.c = packetdataserializer.i();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.d);

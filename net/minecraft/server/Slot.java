@@ -5,14 +5,14 @@ public class Slot {
     public final int index;
     public final IInventory inventory;
     public int rawSlotIndex;
+    public int e;
     public int f;
-    public int g;
 
     public Slot(IInventory iinventory, int i, int j, int k) {
         this.inventory = iinventory;
         this.index = i;
-        this.f = j;
-        this.g = k;
+        this.e = j;
+        this.f = k;
     }
 
     public void a(ItemStack itemstack, ItemStack itemstack1) {
@@ -31,7 +31,7 @@ public class Slot {
     protected void c(ItemStack itemstack) {}
 
     public ItemStack a(EntityHuman entityhuman, ItemStack itemstack) {
-        this.f();
+        this.d();
         return itemstack;
     }
 
@@ -49,10 +49,10 @@ public class Slot {
 
     public void set(ItemStack itemstack) {
         this.inventory.setItem(this.index, itemstack);
-        this.f();
+        this.d();
     }
 
-    public void f() {
+    public void d() {
         this.inventory.update();
     }
 
@@ -66,10 +66,6 @@ public class Slot {
 
     public ItemStack a(int i) {
         return this.inventory.splitStack(this.index, i);
-    }
-
-    public boolean a(IInventory iinventory, int i) {
-        return iinventory == this.inventory && i == this.index;
     }
 
     public boolean isAllowed(EntityHuman entityhuman) {

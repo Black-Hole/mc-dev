@@ -1,18 +1,19 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureRandom2Configuration extends WorldGenerator<WorldGenFeatureRandom2> {
 
-    public WorldGenFeatureRandom2Configuration() {}
-
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandom2 worldgenfeaturerandom2) {
-        int i = random.nextInt(worldgenfeaturerandom2.a.length);
-
-        return this.a(worldgenfeaturerandom2.a[i], worldgenfeaturerandom2.b[i], generatoraccess, chunkgenerator, random, blockposition);
+    public WorldGenFeatureRandom2Configuration(Function<Dynamic<?>, ? extends WorldGenFeatureRandom2> function) {
+        super(function);
     }
 
-    <FC extends WorldGenFeatureConfiguration> boolean a(WorldGenerator<FC> worldgenerator, WorldGenFeatureConfiguration worldgenfeatureconfiguration, GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition) {
-        return worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition, worldgenfeatureconfiguration);
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandom2 worldgenfeaturerandom2) {
+        int i = random.nextInt(worldgenfeaturerandom2.a.size());
+        WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandom2.a.get(i);
+
+        return worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition);
     }
 }

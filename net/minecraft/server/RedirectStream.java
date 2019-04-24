@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +16,7 @@ public class RedirectStream extends PrintStream {
         this.b = s;
     }
 
-    public void println(String s) {
+    public void println(@Nullable String s) {
         this.a(s);
     }
 
@@ -23,7 +24,7 @@ public class RedirectStream extends PrintStream {
         this.a(String.valueOf(object));
     }
 
-    protected void a(String s) {
+    protected void a(@Nullable String s) {
         RedirectStream.a.info("[{}]: {}", this.b, s);
     }
 }

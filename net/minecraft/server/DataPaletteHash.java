@@ -21,6 +21,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         this.b = new RegistryID<>(1 << i);
     }
 
+    @Override
     public int a(T t0) {
         int i = this.b.getId(t0);
 
@@ -34,11 +35,18 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         return i;
     }
 
+    @Override
+    public boolean b(T t0) {
+        return this.b.getId(t0) != -1;
+    }
+
     @Nullable
+    @Override
     public T a(int i) {
         return this.b.fromId(i);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) {
         int i = this.b();
 
@@ -50,6 +58,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
 
     }
 
+    @Override
     public int a() {
         int i = PacketDataSerializer.a(this.b());
 
@@ -64,6 +73,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
         return this.b.b();
     }
 
+    @Override
     public void a(NBTTagList nbttaglist) {
         this.b.a();
 
@@ -75,7 +85,7 @@ public class DataPaletteHash<T> implements DataPalette<T> {
 
     public void b(NBTTagList nbttaglist) {
         for (int i = 0; i < this.b(); ++i) {
-            nbttaglist.add((NBTBase) this.e.apply(this.b.fromId(i)));
+            nbttaglist.add(this.e.apply(this.b.fromId(i)));
         }
 
     }

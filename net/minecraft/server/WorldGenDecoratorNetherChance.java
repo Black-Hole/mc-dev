@@ -1,20 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-public class WorldGenDecoratorNetherChance extends WorldGenDecorator<WorldGenFeatureChanceDecoratorRangeConfiguration> {
+public class WorldGenDecoratorNetherChance extends WorldGenDecoratorFeatureSimple<WorldGenFeatureChanceDecoratorRangeConfiguration> {
 
-    public WorldGenDecoratorNetherChance() {}
+    public WorldGenDecoratorNetherChance(Function<Dynamic<?>, ? extends WorldGenFeatureChanceDecoratorRangeConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureChanceDecoratorRangeConfiguration worldgenfeaturechancedecoratorrangeconfiguration, BlockPosition blockposition) {
         if (random.nextFloat() < worldgenfeaturechancedecoratorrangeconfiguration.a) {
             int i = random.nextInt(16);
-            int j = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.d - worldgenfeaturechancedecoratorrangeconfiguration.b) + worldgenfeaturechancedecoratorrangeconfiguration.c;
+            int j = random.nextInt(worldgenfeaturechancedecoratorrangeconfiguration.d - worldgenfeaturechancedecoratorrangeconfiguration.c) + worldgenfeaturechancedecoratorrangeconfiguration.b;
             int k = random.nextInt(16);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(i, j, k), c0);
+            return Stream.of(blockposition.b(i, j, k));
+        } else {
+            return Stream.empty();
         }
-
-        return true;
     }
 }

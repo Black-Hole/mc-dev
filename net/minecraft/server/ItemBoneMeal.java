@@ -2,12 +2,13 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class ItemBoneMeal extends ItemDye {
+public class ItemBoneMeal extends Item {
 
-    public ItemBoneMeal(EnumColor enumcolor, Item.Info item_info) {
-        super(enumcolor, item_info);
+    public ItemBoneMeal(Item.Info item_info) {
+        super(item_info);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
@@ -21,7 +22,7 @@ public class ItemBoneMeal extends ItemDye {
             return EnumInteractionResult.SUCCESS;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
-            boolean flag = iblockdata.c(world, blockposition, itemactioncontext.getClickedFace()) == EnumBlockFaceShape.SOLID;
+            boolean flag = Block.d(iblockdata, world, blockposition, itemactioncontext.getClickedFace());
 
             if (flag && a(itemactioncontext.getItemStack(), world, blockposition1, itemactioncontext.getClickedFace())) {
                 if (!world.isClientSide) {
@@ -58,7 +59,7 @@ public class ItemBoneMeal extends ItemDye {
     }
 
     public static boolean a(ItemStack itemstack, World world, BlockPosition blockposition, @Nullable EnumDirection enumdirection) {
-        if (world.getType(blockposition).getBlock() == Blocks.WATER && world.getFluid(blockposition).g() == 8) {
+        if (world.getType(blockposition).getBlock() == Blocks.WATER && world.getFluid(blockposition).f() == 8) {
             if (!world.isClientSide) {
                 label77:
                 for (int i = 0; i < 128; ++i) {
@@ -69,9 +70,9 @@ public class ItemBoneMeal extends ItemDye {
                     int j;
 
                     for (j = 0; j < i / 16; ++j) {
-                        blockposition1 = blockposition1.a(ItemBoneMeal.i.nextInt(3) - 1, (ItemBoneMeal.i.nextInt(3) - 1) * ItemBoneMeal.i.nextInt(3) / 2, ItemBoneMeal.i.nextInt(3) - 1);
+                        blockposition1 = blockposition1.b(ItemBoneMeal.i.nextInt(3) - 1, (ItemBoneMeal.i.nextInt(3) - 1) * ItemBoneMeal.i.nextInt(3) / 2, ItemBoneMeal.i.nextInt(3) - 1);
                         biomebase = world.getBiome(blockposition1);
-                        if (world.getType(blockposition1).k()) {
+                        if (Block.a(world.getType(blockposition1).getCollisionShape(world, blockposition1))) {
                             continue label77;
                         }
                     }
@@ -93,7 +94,7 @@ public class ItemBoneMeal extends ItemDye {
                     if (iblockdata.canPlace(world, blockposition1)) {
                         IBlockData iblockdata1 = world.getType(blockposition1);
 
-                        if (iblockdata1.getBlock() == Blocks.WATER && world.getFluid(blockposition1).g() == 8) {
+                        if (iblockdata1.getBlock() == Blocks.WATER && world.getFluid(blockposition1).f() == 8) {
                             world.setTypeAndData(blockposition1, iblockdata, 3);
                         } else if (iblockdata1.getBlock() == Blocks.SEAGRASS && ItemBoneMeal.i.nextInt(10) == 0) {
                             ((IBlockFragilePlantElement) Blocks.SEAGRASS).b(world, ItemBoneMeal.i, blockposition1, iblockdata1);

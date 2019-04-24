@@ -11,9 +11,10 @@ public class DataConverterSkeleton extends DataConverterEntityNameAbstract {
         super("EntitySkeletonSplitFix", schema, flag);
     }
 
+    @Override
     protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
         if (Objects.equals(s, "Skeleton")) {
-            int i = dynamic.getInt("SkeletonType");
+            int i = dynamic.get("SkeletonType").asInt(0);
 
             if (i == 1) {
                 s = "WitherSkeleton";

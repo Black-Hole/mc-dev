@@ -5,13 +5,21 @@ import java.io.IOException;
 public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
     protected int a;
-    protected int b;
-    protected int c;
-    protected int d;
+    protected short b;
+    protected short c;
+    protected short d;
     protected byte e;
     protected byte f;
     protected boolean g;
     protected boolean h;
+
+    public static long a(double d0) {
+        return MathHelper.d(d0 * 4096.0D);
+    }
+
+    public static Vec3D a(long i, long j, long k) {
+        return (new Vec3D((double) i, (double) j, (double) k)).a(2.44140625E-4D);
+    }
 
     public PacketPlayOutEntity() {}
 
@@ -19,10 +27,12 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
         this.a = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
     }
@@ -49,6 +59,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.g = flag;
         }
 
+        @Override
         public void a(PacketDataSerializer packetdataserializer) throws IOException {
             super.a(packetdataserializer);
             this.e = packetdataserializer.readByte();
@@ -56,6 +67,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.g = packetdataserializer.readBoolean();
         }
 
+        @Override
         public void b(PacketDataSerializer packetdataserializer) throws IOException {
             super.b(packetdataserializer);
             packetdataserializer.writeByte(this.e);
@@ -68,14 +80,15 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
 
         public PacketPlayOutRelEntityMove() {}
 
-        public PacketPlayOutRelEntityMove(int i, long j, long k, long l, boolean flag) {
+        public PacketPlayOutRelEntityMove(int i, short short0, short short1, short short2, boolean flag) {
             super(i);
-            this.b = (int) j;
-            this.c = (int) k;
-            this.d = (int) l;
+            this.b = short0;
+            this.c = short1;
+            this.d = short2;
             this.g = flag;
         }
 
+        @Override
         public void a(PacketDataSerializer packetdataserializer) throws IOException {
             super.a(packetdataserializer);
             this.b = packetdataserializer.readShort();
@@ -84,6 +97,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.g = packetdataserializer.readBoolean();
         }
 
+        @Override
         public void b(PacketDataSerializer packetdataserializer) throws IOException {
             super.b(packetdataserializer);
             packetdataserializer.writeShort(this.b);
@@ -99,17 +113,18 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.h = true;
         }
 
-        public PacketPlayOutRelEntityMoveLook(int i, long j, long k, long l, byte b0, byte b1, boolean flag) {
+        public PacketPlayOutRelEntityMoveLook(int i, short short0, short short1, short short2, byte b0, byte b1, boolean flag) {
             super(i);
-            this.b = (int) j;
-            this.c = (int) k;
-            this.d = (int) l;
+            this.b = short0;
+            this.c = short1;
+            this.d = short2;
             this.e = b0;
             this.f = b1;
             this.g = flag;
             this.h = true;
         }
 
+        @Override
         public void a(PacketDataSerializer packetdataserializer) throws IOException {
             super.a(packetdataserializer);
             this.b = packetdataserializer.readShort();
@@ -120,6 +135,7 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
             this.g = packetdataserializer.readBoolean();
         }
 
+        @Override
         public void b(PacketDataSerializer packetdataserializer) throws IOException {
             super.b(packetdataserializer);
             packetdataserializer.writeShort(this.b);

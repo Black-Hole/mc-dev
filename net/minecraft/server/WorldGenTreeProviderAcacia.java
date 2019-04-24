@@ -8,7 +8,8 @@ public class WorldGenTreeProviderAcacia extends WorldGenTreeProvider {
     public WorldGenTreeProviderAcacia() {}
 
     @Nullable
+    @Override
     protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return new WorldGenAcaciaTree(true);
+        return new WorldGenAcaciaTree(WorldGenFeatureEmptyConfiguration::a, true);
     }
 }

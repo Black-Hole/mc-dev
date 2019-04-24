@@ -18,13 +18,15 @@ public class PacketPlayOutSelectAdvancementTab implements Packet<PacketListenerP
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         if (packetdataserializer.readBoolean()) {
-            this.a = packetdataserializer.l();
+            this.a = packetdataserializer.o();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeBoolean(this.a != null);
         if (this.a != null) {

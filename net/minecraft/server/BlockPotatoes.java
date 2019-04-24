@@ -8,25 +8,8 @@ public class BlockPotatoes extends BlockCrops {
         super(block_info);
     }
 
-    protected IMaterial f() {
-        return Items.POTATO;
-    }
-
-    protected IMaterial g() {
-        return Items.POTATO;
-    }
-
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        super.dropNaturally(iblockdata, world, blockposition, f, i);
-        if (!world.isClientSide) {
-            if (this.w(iblockdata) && world.random.nextInt(50) == 0) {
-                a(world, blockposition, new ItemStack(Items.POISONOUS_POTATO));
-            }
-
-        }
-    }
-
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockPotatoes.a[(Integer) iblockdata.get(this.d())];
     }
 }

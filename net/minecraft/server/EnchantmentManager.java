@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
+import javax.annotation.Nullable;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -39,11 +40,10 @@ public class EnchantmentManager {
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagCompound nbttagcompound = nbttaglist.getCompound(i);
-            Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(nbttagcompound.getString("id")));
 
-            if (enchantment != null) {
-                map.put(enchantment, nbttagcompound.getInt("lvl"));
-            }
+            IRegistry.ENCHANTMENT.getOptional(MinecraftKey.a(nbttagcompound.getString("id"))).ifPresent((enchantment) -> {
+                Integer integer = (Integer) map.put(enchantment, nbttagcompound.getInt("lvl"));
+            });
         }
 
         return map;
@@ -63,7 +63,7 @@ public class EnchantmentManager {
 
                 nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
                 nbttagcompound.setShort("lvl", (short) i);
-                nbttaglist.add((NBTBase) nbttagcompound);
+                nbttaglist.add(nbttagcompound);
                 if (itemstack.getItem() == Items.ENCHANTED_BOOK) {
                     ItemEnchantedBook.a(itemstack, new WeightedRandomEnchant(enchantment, i));
                 }
@@ -71,7 +71,7 @@ public class EnchantmentManager {
         }
 
         if (nbttaglist.isEmpty()) {
-            itemstack.c("Enchantments");
+            itemstack.removeTag("Enchantments");
         } else if (itemstack.getItem() != Items.ENCHANTED_BOOK) {
             itemstack.a("Enchantments", (NBTBase) nbttaglist);
         }
@@ -85,11 +85,10 @@ public class EnchantmentManager {
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 String s = nbttaglist.getCompound(i).getString("id");
                 int j = nbttaglist.getCompound(i).getInt("lvl");
-                Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(MinecraftKey.a(s));
 
-                if (enchantment != null) {
+                IRegistry.ENCHANTMENT.getOptional(MinecraftKey.a(s)).ifPresent((enchantment) -> {
                     enchantmentmanager_a.accept(enchantment, j);
-                }
+                });
             }
 
         }
@@ -136,7 +135,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.aU());
+            a(enchantmentmanager_a, entityliving.ba());
         }
 
         if (entity instanceof EntityHuman) {
@@ -151,7 +150,7 @@ public class EnchantmentManager {
         };
 
         if (entityliving != null) {
-            a(enchantmentmanager_a, entityliving.aU());
+            a(enchantmentmanager_a, entityliving.ba());
         }
 
         if (entityliving instanceof EntityHuman) {
@@ -161,7 +160,7 @@ public class EnchantmentManager {
     }
 
     public static int a(Enchantment enchantment, EntityLiving entityliving) {
-        Iterable<ItemStack> iterable = enchantment.a(entityliving);
+        Iterable<ItemStack> iterable = enchantment.a(entityliving).values();
 
         if (iterable == null) {
             return 0;
@@ -242,24 +241,26 @@ public class EnchantmentManager {
         return getEnchantmentLevel(Enchantments.CHANNELING, itemstack) > 0;
     }
 
-    public static ItemStack b(Enchantment enchantment, EntityLiving entityliving) {
-        List<ItemStack> list = enchantment.a(entityliving);
+    @Nullable
+    public static Entry<EnumItemSlot, ItemStack> b(Enchantment enchantment, EntityLiving entityliving) {
+        Map<EnumItemSlot, ItemStack> map = enchantment.a(entityliving);
 
-        if (list.isEmpty()) {
-            return ItemStack.a;
+        if (map.isEmpty()) {
+            return null;
         } else {
-            List<ItemStack> list1 = Lists.newArrayList();
-            Iterator iterator = list.iterator();
+            List<Entry<EnumItemSlot, ItemStack>> list = Lists.newArrayList();
+            Iterator iterator = map.entrySet().iterator();
 
             while (iterator.hasNext()) {
-                ItemStack itemstack = (ItemStack) iterator.next();
+                Entry<EnumItemSlot, ItemStack> entry = (Entry) iterator.next();
+                ItemStack itemstack = (ItemStack) entry.getValue();
 
                 if (!itemstack.isEmpty() && getEnchantmentLevel(enchantment, itemstack) > 0) {
-                    list1.add(itemstack);
+                    list.add(entry);
                 }
             }
 
-            return list1.isEmpty() ? ItemStack.a : (ItemStack) list1.get(entityliving.getRandom().nextInt(list1.size()));
+            return list.isEmpty() ? null : (Entry) list.get(entityliving.getRandom().nextInt(list.size()));
         }
     }
 
@@ -321,7 +322,16 @@ public class EnchantmentManager {
                 list.add(WeightedRandom.a(random, list1));
 
                 while (random.nextInt(50) <= i) {
-                    a(list1, (WeightedRandomEnchant) SystemUtils.a((List) list));
+                    i = i * 4 / 5 + 1;
+                    list1 = a(i, itemstack, flag);
+                    Iterator iterator = list.iterator();
+
+                    while (iterator.hasNext()) {
+                        WeightedRandomEnchant weightedrandomenchant = (WeightedRandomEnchant) iterator.next();
+
+                        a(list1, weightedrandomenchant);
+                    }
+
                     if (list1.isEmpty()) {
                         break;
                     }
@@ -373,7 +383,7 @@ public class EnchantmentManager {
 
             if ((!enchantment.isTreasure() || flag) && (enchantment.itemTarget.canEnchant(item) || flag1)) {
                 for (int j = enchantment.getMaxLevel(); j > enchantment.getStartLevel() - 1; --j) {
-                    if (i >= enchantment.a(j) && i <= enchantment.b(j)) {
+                    if (i >= enchantment.a(j)) {
                         list.add(new WeightedRandomEnchant(enchantment, j));
                         break;
                     }

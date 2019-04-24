@@ -8,6 +8,7 @@ public class ParticleParamRedstone implements ParticleParam {
 
     public static final ParticleParamRedstone a = new ParticleParamRedstone(1.0F, 0.0F, 0.0F, 1.0F);
     public static final ParticleParam.a<ParticleParamRedstone> b = new ParticleParam.a<ParticleParamRedstone>() {
+        @Override
         public ParticleParamRedstone b(Particle<ParticleParamRedstone> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
             float f = (float) stringreader.readDouble();
@@ -24,6 +25,7 @@ public class ParticleParamRedstone implements ParticleParam {
             return new ParticleParamRedstone(f, f1, f2, f3);
         }
 
+        @Override
         public ParticleParamRedstone b(Particle<ParticleParamRedstone> particle, PacketDataSerializer packetdataserializer) {
             return new ParticleParamRedstone(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
         }
@@ -40,6 +42,7 @@ public class ParticleParamRedstone implements ParticleParam {
         this.f = MathHelper.a(f3, 0.01F, 4.0F);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) {
         packetdataserializer.writeFloat(this.c);
         packetdataserializer.writeFloat(this.d);
@@ -47,11 +50,13 @@ public class ParticleParamRedstone implements ParticleParam {
         packetdataserializer.writeFloat(this.f);
     }
 
+    @Override
     public String a() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", this.b().d(), this.c, this.d, this.e, this.f);
+        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", IRegistry.PARTICLE_TYPE.getKey(this.b()), this.c, this.d, this.e, this.f);
     }
 
+    @Override
     public Particle<ParticleParamRedstone> b() {
-        return Particles.m;
+        return Particles.DUST;
     }
 }

@@ -9,16 +9,18 @@ public class PacketPlayOutAutoRecipe implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutAutoRecipe() {}
 
-    public PacketPlayOutAutoRecipe(int i, IRecipe irecipe) {
+    public PacketPlayOutAutoRecipe(int i, IRecipe<?> irecipe) {
         this.a = i;
         this.b = irecipe.getKey();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
-        this.b = packetdataserializer.l();
+        this.b = packetdataserializer.o();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.a(this.b);

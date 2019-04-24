@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class EntityEnderPearl extends EntityProjectile {
+public class EntityEnderPearl extends EntityProjectileThrowable {
 
     private EntityLiving e;
 
-    public EntityEnderPearl(World world) {
-        super(EntityTypes.ENDER_PEARL, world);
+    public EntityEnderPearl(EntityTypes<? extends EntityEnderPearl> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public EntityEnderPearl(World world, EntityLiving entityliving) {
@@ -15,19 +15,27 @@ public class EntityEnderPearl extends EntityProjectile {
         this.e = entityliving;
     }
 
+    @Override
+    protected Item i() {
+        return Items.ENDER_PEARL;
+    }
+
+    @Override
     protected void a(MovingObjectPosition movingobjectposition) {
         EntityLiving entityliving = this.getShooter();
 
-        if (movingobjectposition.entity != null) {
-            if (movingobjectposition.entity == this.e) {
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+            Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
+
+            if (entity == this.e) {
                 return;
             }
 
-            movingobjectposition.entity.damageEntity(DamageSource.projectile(this, entityliving), 0.0F);
+            entity.damageEntity(DamageSource.projectile(this, entityliving), 0.0F);
         }
 
-        if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            BlockPosition blockposition = movingobjectposition.getBlockPosition();
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+            BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectposition).getBlockPosition();
             TileEntity tileentity = this.world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityEndGateway) {
@@ -49,7 +57,7 @@ public class EntityEnderPearl extends EntityProjectile {
         }
 
         for (int i = 0; i < 32; ++i) {
-            this.world.addParticle(Particles.K, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
+            this.world.addParticle(Particles.PORTAL, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
         }
 
         if (!this.world.isClientSide) {
@@ -58,7 +66,7 @@ public class EntityEnderPearl extends EntityProjectile {
 
                 if (entityplayer.playerConnection.a().isConnected() && entityplayer.world == this.world && !entityplayer.isSleeping()) {
                     if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
-                        EntityEndermite entityendermite = new EntityEndermite(this.world);
+                        EntityEndermite entityendermite = (EntityEndermite) EntityTypes.ENDERMITE.a(this.world);
 
                         entityendermite.setPlayerSpawned(true);
                         entityendermite.setPositionRotation(entityliving.locX, entityliving.locY, entityliving.locZ, entityliving.yaw, entityliving.pitch);
@@ -83,6 +91,7 @@ public class EntityEnderPearl extends EntityProjectile {
 
     }
 
+    @Override
     public void tick() {
         EntityLiving entityliving = this.getShooter();
 
@@ -95,6 +104,7 @@ public class EntityEnderPearl extends EntityProjectile {
     }
 
     @Nullable
+    @Override
     public Entity a(DimensionManager dimensionmanager) {
         if (this.shooter.dimension != dimensionmanager) {
             this.shooter = null;

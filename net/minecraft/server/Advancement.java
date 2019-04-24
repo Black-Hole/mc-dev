@@ -157,6 +157,10 @@ public class Advancement {
             return this;
         }
 
+        public Advancement.SerializedAdvancement a(ItemStack itemstack, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, @Nullable MinecraftKey minecraftkey, AdvancementFrameType advancementframetype, boolean flag, boolean flag1, boolean flag2) {
+            return this.a(new AdvancementDisplay(itemstack, ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, flag1, flag2));
+        }
+
         public Advancement.SerializedAdvancement a(IMaterial imaterial, IChatBaseComponent ichatbasecomponent, IChatBaseComponent ichatbasecomponent1, @Nullable MinecraftKey minecraftkey, AdvancementFrameType advancementframetype, boolean flag, boolean flag1, boolean flag2) {
             return this.a(new AdvancementDisplay(new ItemStack(imaterial.getItem()), ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, flag1, flag2));
         }
@@ -412,13 +416,13 @@ public class Advancement {
         }
 
         public static Advancement.SerializedAdvancement b(PacketDataSerializer packetdataserializer) {
-            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.l() : null;
+            MinecraftKey minecraftkey = packetdataserializer.readBoolean() ? packetdataserializer.o() : null;
             AdvancementDisplay advancementdisplay = packetdataserializer.readBoolean() ? AdvancementDisplay.b(packetdataserializer) : null;
             Map<String, Criterion> map = Criterion.c(packetdataserializer);
-            String[][] astring = new String[packetdataserializer.g()][];
+            String[][] astring = new String[packetdataserializer.i()][];
 
             for (int i = 0; i < astring.length; ++i) {
-                astring[i] = new String[packetdataserializer.g()];
+                astring[i] = new String[packetdataserializer.i()];
 
                 for (int j = 0; j < astring[i].length; ++j) {
                     astring[i][j] = packetdataserializer.e(32767);

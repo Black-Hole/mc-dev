@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.CommandNode;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class CommandHelp {
             if (parseresults.getContext().getNodes().isEmpty()) {
                 throw CommandHelp.a.create();
             } else {
-                Map<CommandNode<CommandListenerWrapper>, String> map = com_mojang_brigadier_commanddispatcher.getSmartUsage((CommandNode) Iterables.getLast(parseresults.getContext().getNodes().keySet()), commandcontext.getSource());
+                Map<CommandNode<CommandListenerWrapper>, String> map = com_mojang_brigadier_commanddispatcher.getSmartUsage(((ParsedCommandNode) Iterables.getLast(parseresults.getContext().getNodes())).getNode(), commandcontext.getSource());
                 Iterator iterator = map.values().iterator();
 
                 while (iterator.hasNext()) {

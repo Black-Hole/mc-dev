@@ -1,10 +1,14 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenSurfaceDefaultBlock implements WorldGenSurface<WorldGenSurfaceConfigurationBase> {
+public class WorldGenSurfaceDefaultBlock extends WorldGenSurface<WorldGenSurfaceConfigurationBase> {
 
-    public WorldGenSurfaceDefaultBlock() {}
+    public WorldGenSurfaceDefaultBlock(Function<Dynamic<?>, ? extends WorldGenSurfaceConfigurationBase> function) {
+        super(function);
+    }
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
         this.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, worldgensurfaceconfigurationbase.a(), worldgensurfaceconfigurationbase.b(), worldgensurfaceconfigurationbase.c(), l);
@@ -20,7 +24,7 @@ public class WorldGenSurfaceDefaultBlock implements WorldGenSurface<WorldGenSurf
         int l1 = j & 15;
 
         for (int i2 = k; i2 >= 0; --i2) {
-            blockposition_mutableblockposition.c(k1, i2, l1);
+            blockposition_mutableblockposition.d(k1, i2, l1);
             IBlockData iblockdata7 = ichunkaccess.getType(blockposition_mutableblockposition);
 
             if (iblockdata7.isAir()) {
@@ -36,13 +40,13 @@ public class WorldGenSurfaceDefaultBlock implements WorldGenSurface<WorldGenSurf
                     }
 
                     if (i2 < l && (iblockdata5 == null || iblockdata5.isAir())) {
-                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, i2, j)) < 0.15F) {
+                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.d(i, i2, j)) < 0.15F) {
                             iblockdata5 = Blocks.ICE.getBlockData();
                         } else {
                             iblockdata5 = iblockdata1;
                         }
 
-                        blockposition_mutableblockposition.c(k1, i2, l1);
+                        blockposition_mutableblockposition.d(k1, i2, l1);
                     }
 
                     i1 = j1;

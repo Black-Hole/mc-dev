@@ -1,24 +1,24 @@
 package net.minecraft.server;
 
-public class GeneratorSettingsDefault implements GeneratorSettings {
+public class GeneratorSettingsDefault {
 
     protected int a = 32;
-    protected int b = 8;
+    protected final int b = 8;
     protected int c = 32;
     protected int d = 5;
     protected int e = 32;
     protected int f = 128;
     protected int g = 3;
     protected int h = 32;
-    protected int i = 8;
-    protected int j = 16;
-    protected int k = 8;
+    protected final int i = 8;
+    protected final int j = 16;
+    protected final int k = 8;
     protected int l = 20;
-    protected int m = 11;
-    protected int n = 16;
-    protected int o = 8;
+    protected final int m = 11;
+    protected final int n = 16;
+    protected final int o = 8;
     protected int p = 80;
-    protected int q = 20;
+    protected final int q = 20;
     protected IBlockData r;
     protected IBlockData s;
 
@@ -32,7 +32,7 @@ public class GeneratorSettingsDefault implements GeneratorSettings {
     }
 
     public int b() {
-        return this.b;
+        return 8;
     }
 
     public int c() {
@@ -60,23 +60,23 @@ public class GeneratorSettingsDefault implements GeneratorSettings {
     }
 
     public int i() {
-        return this.i;
+        return 8;
     }
 
     public int j() {
-        return this.n;
+        return 16;
     }
 
     public int k() {
-        return this.o;
+        return 8;
     }
 
     public int l() {
-        return this.j;
+        return 16;
     }
 
     public int m() {
-        return this.k;
+        return 8;
     }
 
     public int n() {
@@ -84,7 +84,7 @@ public class GeneratorSettingsDefault implements GeneratorSettings {
     }
 
     public int o() {
-        return this.m;
+        return 11;
     }
 
     public int p() {
@@ -92,7 +92,7 @@ public class GeneratorSettingsDefault implements GeneratorSettings {
     }
 
     public int q() {
-        return this.q;
+        return 20;
     }
 
     public IBlockData r() {
@@ -109,5 +109,13 @@ public class GeneratorSettingsDefault implements GeneratorSettings {
 
     public void b(IBlockData iblockdata) {
         this.s = iblockdata;
+    }
+
+    public int t() {
+        return 0;
+    }
+
+    public int u() {
+        return 256;
     }
 }

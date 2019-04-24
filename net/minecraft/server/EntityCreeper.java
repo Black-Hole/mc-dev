@@ -2,47 +2,50 @@ package net.minecraft.server;
 
 import java.util.Collection;
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 public class EntityCreeper extends EntityMonster {
 
-    private static final DataWatcherObject<Integer> a = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
-    private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> c = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
-    private int bC;
+    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<Boolean> POWERED = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityCreeper.class, DataWatcherRegistry.i);
+    private int bz;
     private int fuseTicks;
     public int maxFuseTicks = 30;
     public int explosionRadius = 3;
-    private int bG;
+    private int bD;
 
-    public EntityCreeper(World world) {
-        super(EntityTypes.CREEPER, world);
-        this.setSize(0.6F, 1.7F);
+    public EntityCreeper(EntityTypes<? extends EntityCreeper> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    protected void n() {
+    @Override
+    protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalSwell(this));
         this.goalSelector.a(3, new PathfinderGoalAvoidTarget<>(this, EntityOcelot.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.a(3, new PathfinderGoalAvoidTarget<>(this, EntityCat.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.a(4, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(5, new PathfinderGoalRandomStrollLand(this, 0.8D));
         this.goalSelector.a(6, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(6, new PathfinderGoalRandomLookaround(this));
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
-        this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, false, new Class[0]));
+        this.targetSelector.a(2, new PathfinderGoalHurtByTarget(this, new Class[0]));
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
-    public int bn() {
+    @Override
+    public int bu() {
         return this.getGoalTarget() == null ? 3 : 3 + (int) (this.getHealth() - 1.0F);
     }
 
-    public void c(float f, float f1) {
-        super.c(f, f1);
+    @Override
+    public void b(float f, float f1) {
+        super.b(f, f1);
         this.fuseTicks = (int) ((float) this.fuseTicks + f * 1.5F);
         if (this.fuseTicks > this.maxFuseTicks - 5) {
             this.fuseTicks = this.maxFuseTicks - 5;
@@ -50,16 +53,18 @@ public class EntityCreeper extends EntityMonster {
 
     }
 
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityCreeper.a, -1);
-        this.datawatcher.register(EntityCreeper.b, false);
-        this.datawatcher.register(EntityCreeper.c, false);
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityCreeper.b, -1);
+        this.datawatcher.register(EntityCreeper.POWERED, false);
+        this.datawatcher.register(EntityCreeper.d, false);
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        if ((Boolean) this.datawatcher.get(EntityCreeper.b)) {
+        if ((Boolean) this.datawatcher.get(EntityCreeper.POWERED)) {
             nbttagcompound.setBoolean("powered", true);
         }
 
@@ -68,9 +73,10 @@ public class EntityCreeper extends EntityMonster {
         nbttagcompound.setBoolean("ignited", this.isIgnited());
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.datawatcher.set(EntityCreeper.b, nbttagcompound.getBoolean("powered"));
+        this.datawatcher.set(EntityCreeper.POWERED, nbttagcompound.getBoolean("powered"));
         if (nbttagcompound.hasKeyOfType("Fuse", 99)) {
             this.maxFuseTicks = nbttagcompound.getShort("Fuse");
         }
@@ -80,19 +86,20 @@ public class EntityCreeper extends EntityMonster {
         }
 
         if (nbttagcompound.getBoolean("ignited")) {
-            this.dB();
+            this.dY();
         }
 
     }
 
+    @Override
     public void tick() {
         if (this.isAlive()) {
-            this.bC = this.fuseTicks;
+            this.bz = this.fuseTicks;
             if (this.isIgnited()) {
                 this.a(1);
             }
 
-            int i = this.dz();
+            int i = this.dW();
 
             if (i > 0 && this.fuseTicks == 0) {
                 this.a(SoundEffects.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
@@ -105,69 +112,74 @@ public class EntityCreeper extends EntityMonster {
 
             if (this.fuseTicks >= this.maxFuseTicks) {
                 this.fuseTicks = this.maxFuseTicks;
-                this.dE();
+                this.eb();
             }
         }
 
         super.tick();
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_CREEPER_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_CREEPER_DEATH;
     }
 
-    public void die(DamageSource damagesource) {
-        super.die(damagesource);
-        if (this.world.getGameRules().getBoolean("doMobLoot")) {
-            if (damagesource.getEntity() instanceof EntitySkeleton) {
-                this.a((IMaterial) ItemRecord.a(this.random));
-            } else if (damagesource.getEntity() instanceof EntityCreeper && damagesource.getEntity() != this && ((EntityCreeper) damagesource.getEntity()).isPowered() && ((EntityCreeper) damagesource.getEntity()).canCauseHeadDrop()) {
-                ((EntityCreeper) damagesource.getEntity()).setCausedHeadDrop();
+    @Override
+    protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {
+        super.dropDeathLoot(damagesource, i, flag);
+        Entity entity = damagesource.getEntity();
+
+        if (entity != this && entity instanceof EntityCreeper) {
+            EntityCreeper entitycreeper = (EntityCreeper) entity;
+
+            if (entitycreeper.canCauseHeadDrop()) {
+                entitycreeper.setCausedHeadDrop();
                 this.a((IMaterial) Items.CREEPER_HEAD);
             }
         }
 
     }
 
-    public boolean B(Entity entity) {
+    @Override
+    public boolean C(Entity entity) {
         return true;
     }
 
     public boolean isPowered() {
-        return (Boolean) this.datawatcher.get(EntityCreeper.b);
+        return (Boolean) this.datawatcher.get(EntityCreeper.POWERED);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.x;
-    }
-
-    public int dz() {
-        return (Integer) this.datawatcher.get(EntityCreeper.a);
+    public int dW() {
+        return (Integer) this.datawatcher.get(EntityCreeper.b);
     }
 
     public void a(int i) {
-        this.datawatcher.set(EntityCreeper.a, i);
+        this.datawatcher.set(EntityCreeper.b, i);
     }
 
+    @Override
     public void onLightningStrike(EntityLightning entitylightning) {
         super.onLightningStrike(entitylightning);
-        this.datawatcher.set(EntityCreeper.b, true);
+        this.datawatcher.set(EntityCreeper.POWERED, true);
     }
 
+    @Override
     protected boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.bV(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            this.world.a(entityhuman, this.locX, this.locY, this.locZ, SoundEffects.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             entityhuman.a(enumhand);
             if (!this.world.isClientSide) {
-                this.dB();
-                itemstack.damage(1, entityhuman);
+                this.dY();
+                itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                    entityhuman1.d(enumhand);
+                });
                 return true;
             }
         }
@@ -175,13 +187,13 @@ public class EntityCreeper extends EntityMonster {
         return super.a(entityhuman, enumhand);
     }
 
-    private void dE() {
+    private void eb() {
         if (!this.world.isClientSide) {
-            boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
+            Explosion.Effect explosion_effect = this.world.getGameRules().getBoolean("mobGriefing") ? Explosion.Effect.DESTROY : Explosion.Effect.NONE;
             float f = this.isPowered() ? 2.0F : 1.0F;
 
             this.killed = true;
-            this.world.explode(this, this.locX, this.locY, this.locZ, (float) this.explosionRadius * f, flag);
+            this.world.explode(this, this.locX, this.locY, this.locZ, (float) this.explosionRadius * f, explosion_effect);
             this.die();
             this.createEffectCloud();
         }
@@ -213,18 +225,18 @@ public class EntityCreeper extends EntityMonster {
     }
 
     public boolean isIgnited() {
-        return (Boolean) this.datawatcher.get(EntityCreeper.c);
+        return (Boolean) this.datawatcher.get(EntityCreeper.d);
     }
 
-    public void dB() {
-        this.datawatcher.set(EntityCreeper.c, true);
+    public void dY() {
+        this.datawatcher.set(EntityCreeper.d, true);
     }
 
     public boolean canCauseHeadDrop() {
-        return this.bG < 1 && this.world.getGameRules().getBoolean("doMobLoot");
+        return this.isPowered() && this.bD < 1;
     }
 
     public void setCausedHeadDrop() {
-        ++this.bG;
+        ++this.bD;
     }
 }

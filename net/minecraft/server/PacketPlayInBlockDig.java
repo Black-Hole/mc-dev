@@ -10,12 +10,14 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInBlockDig() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.c = (PacketPlayInBlockDig.EnumPlayerDigType) packetdataserializer.a(PacketPlayInBlockDig.EnumPlayerDigType.class);
         this.a = packetdataserializer.e();
         this.b = EnumDirection.fromType1(packetdataserializer.readUnsignedByte());
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.c);
         packetdataserializer.a(this.a);

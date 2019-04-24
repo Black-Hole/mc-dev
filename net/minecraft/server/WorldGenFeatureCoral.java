@@ -1,13 +1,17 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Function;
 
 public abstract class WorldGenFeatureCoral extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureCoral() {}
+    public WorldGenFeatureCoral(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         IBlockData iblockdata = ((Block) TagsBlock.CORAL_BLOCKS.a(random)).getBlockData();
 
         return this.a(generatoraccess, random, blockposition, iblockdata);

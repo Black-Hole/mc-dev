@@ -73,11 +73,11 @@ public class CommandDatapack {
         resourcepackrepository.a((Collection) list);
         WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
-        worlddata.O().clear();
+        worlddata.P().clear();
         resourcepackrepository.d().forEach((resourcepackloader1) -> {
-            worlddata.O().add(resourcepackloader1.e());
+            worlddata.P().add(resourcepackloader1.e());
         });
-        worlddata.N().remove(resourcepackloader.e());
+        worlddata.O().remove(resourcepackloader.e());
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.enable.success", new Object[] { resourcepackloader.a(true)}), true);
         commandlistenerwrapper.getServer().reload();
         return resourcepackrepository.d().size();
@@ -91,11 +91,11 @@ public class CommandDatapack {
         resourcepackrepository.a((Collection) list);
         WorldData worlddata = commandlistenerwrapper.getServer().getWorldServer(DimensionManager.OVERWORLD).getWorldData();
 
-        worlddata.O().clear();
+        worlddata.P().clear();
         resourcepackrepository.d().forEach((resourcepackloader1) -> {
-            worlddata.O().add(resourcepackloader1.e());
+            worlddata.P().add(resourcepackloader1.e());
         });
-        worlddata.N().add(resourcepackloader.e());
+        worlddata.O().add(resourcepackloader.e());
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.datapack.disable.success", new Object[] { resourcepackloader.a(true)}), true);
         commandlistenerwrapper.getServer().reload();
         return resourcepackrepository.d().size();

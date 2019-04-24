@@ -15,11 +15,12 @@ public class DataConverterHorse extends DataConverterEntityName {
         super("EntityHorseSplitFix", schema, flag);
     }
 
+    @Override
     protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
         Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
         if (Objects.equals("EntityHorse", s)) {
-            int i = dynamic.getInt("Type");
+            int i = dynamic.get("Type").asInt(0);
             String s1;
 
             switch (i) {

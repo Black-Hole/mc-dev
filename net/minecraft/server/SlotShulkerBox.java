@@ -6,6 +6,7 @@ public class SlotShulkerBox extends Slot {
         super(iinventory, i, j, k);
     }
 
+    @Override
     public boolean isAllowed(ItemStack itemstack) {
         return !(Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox);
     }

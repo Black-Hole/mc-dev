@@ -16,10 +16,12 @@ public class PacketPlayOutCloseWindow implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readUnsignedByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
     }

@@ -20,10 +20,12 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
 
     public CriterionTriggerFishingRodHooked() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerFishingRodHooked.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerFishingRodHooked.b> criteriontrigger_a) {
         CriterionTriggerFishingRodHooked.a criteriontriggerfishingrodhooked_a = (CriterionTriggerFishingRodHooked.a) this.b.get(advancementdataplayer);
 
@@ -35,6 +37,7 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
         criteriontriggerfishingrodhooked_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerFishingRodHooked.b> criteriontrigger_a) {
         CriterionTriggerFishingRodHooked.a criteriontriggerfishingrodhooked_a = (CriterionTriggerFishingRodHooked.a) this.b.get(advancementdataplayer);
 
@@ -47,10 +50,12 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerFishingRodHooked.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("rod"));
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
@@ -172,6 +177,7 @@ public class CriterionTriggerFishingRodHooked implements CriterionTrigger<Criter
             }
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

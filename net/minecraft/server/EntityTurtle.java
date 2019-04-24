@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
+import java.util.EnumSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -8,95 +9,97 @@ import javax.annotation.Nullable;
 
 public class EntityTurtle extends EntityAnimal {
 
-    private static final DataWatcherObject<BlockPosition> bD = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.l);
-    private static final DataWatcherObject<Boolean> bE = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<BlockPosition> bA = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.l);
+    private static final DataWatcherObject<Boolean> bB = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Boolean> bD = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<BlockPosition> bE = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.l);
+    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> bG = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<BlockPosition> bH = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.l);
-    private static final DataWatcherObject<Boolean> bI = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Boolean> bJ = DataWatcher.a(EntityTurtle.class, DataWatcherRegistry.i);
-    private int bK;
-    public static final Predicate<Entity> bC = (entity) -> {
-        return !(entity instanceof EntityLiving) ? false : ((EntityLiving) entity).isBaby() && !entity.isInWater();
+    private int bH;
+    public static final Predicate<EntityLiving> bz = (entityliving) -> {
+        return entityliving.isBaby() && !entityliving.isInWater();
     };
 
-    public EntityTurtle(World world) {
-        super(EntityTypes.TURTLE, world);
-        this.setSize(1.2F, 0.4F);
+    public EntityTurtle(EntityTypes<? extends EntityTurtle> entitytypes, World world) {
+        super(entitytypes, world);
         this.moveController = new EntityTurtle.e(this);
-        this.bF = Blocks.SAND;
-        this.Q = 1.0F;
+        this.bC = Blocks.SAND;
+        this.K = 1.0F;
     }
 
     public void g(BlockPosition blockposition) {
-        this.datawatcher.set(EntityTurtle.bD, blockposition);
+        this.datawatcher.set(EntityTurtle.bA, blockposition);
     }
 
-    private BlockPosition dA() {
-        return (BlockPosition) this.datawatcher.get(EntityTurtle.bD);
+    private BlockPosition dX() {
+        return (BlockPosition) this.datawatcher.get(EntityTurtle.bA);
     }
 
     private void h(BlockPosition blockposition) {
-        this.datawatcher.set(EntityTurtle.bH, blockposition);
+        this.datawatcher.set(EntityTurtle.bE, blockposition);
     }
 
-    private BlockPosition dB() {
-        return (BlockPosition) this.datawatcher.get(EntityTurtle.bH);
+    private BlockPosition dY() {
+        return (BlockPosition) this.datawatcher.get(EntityTurtle.bE);
     }
 
-    public boolean dy() {
-        return (Boolean) this.datawatcher.get(EntityTurtle.bE);
+    public boolean dV() {
+        return (Boolean) this.datawatcher.get(EntityTurtle.bB);
+    }
+
+    private void r(boolean flag) {
+        this.datawatcher.set(EntityTurtle.bB, flag);
+    }
+
+    public boolean dW() {
+        return (Boolean) this.datawatcher.get(EntityTurtle.bD);
     }
 
     private void s(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bE, flag);
+        this.bH = flag ? 1 : 0;
+        this.datawatcher.set(EntityTurtle.bD, flag);
     }
 
-    public boolean dz() {
-        return (Boolean) this.datawatcher.get(EntityTurtle.bG);
+    private boolean dZ() {
+        return (Boolean) this.datawatcher.get(EntityTurtle.bF);
     }
 
     private void t(boolean flag) {
-        this.bK = flag ? 1 : 0;
-        this.datawatcher.set(EntityTurtle.bG, flag);
+        this.datawatcher.set(EntityTurtle.bF, flag);
     }
 
-    private boolean dC() {
-        return (Boolean) this.datawatcher.get(EntityTurtle.bI);
+    private boolean ee() {
+        return (Boolean) this.datawatcher.get(EntityTurtle.bG);
     }
 
     private void u(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bI, flag);
+        this.datawatcher.set(EntityTurtle.bG, flag);
     }
 
-    private boolean dH() {
-        return (Boolean) this.datawatcher.get(EntityTurtle.bJ);
-    }
-
-    private void v(boolean flag) {
-        this.datawatcher.set(EntityTurtle.bJ, flag);
-    }
-
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityTurtle.bD, BlockPosition.ZERO);
-        this.datawatcher.register(EntityTurtle.bE, false);
-        this.datawatcher.register(EntityTurtle.bH, BlockPosition.ZERO);
-        this.datawatcher.register(EntityTurtle.bI, false);
-        this.datawatcher.register(EntityTurtle.bJ, false);
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityTurtle.bA, BlockPosition.ZERO);
+        this.datawatcher.register(EntityTurtle.bB, false);
+        this.datawatcher.register(EntityTurtle.bE, BlockPosition.ZERO);
+        this.datawatcher.register(EntityTurtle.bF, false);
         this.datawatcher.register(EntityTurtle.bG, false);
+        this.datawatcher.register(EntityTurtle.bD, false);
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("HomePosX", this.dA().getX());
-        nbttagcompound.setInt("HomePosY", this.dA().getY());
-        nbttagcompound.setInt("HomePosZ", this.dA().getZ());
-        nbttagcompound.setBoolean("HasEgg", this.dy());
-        nbttagcompound.setInt("TravelPosX", this.dB().getX());
-        nbttagcompound.setInt("TravelPosY", this.dB().getY());
-        nbttagcompound.setInt("TravelPosZ", this.dB().getZ());
+        nbttagcompound.setInt("HomePosX", this.dX().getX());
+        nbttagcompound.setInt("HomePosY", this.dX().getY());
+        nbttagcompound.setInt("HomePosZ", this.dX().getZ());
+        nbttagcompound.setBoolean("HasEgg", this.dV());
+        nbttagcompound.setInt("TravelPosX", this.dY().getX());
+        nbttagcompound.setInt("TravelPosY", this.dY().getY());
+        nbttagcompound.setInt("TravelPosZ", this.dY().getZ());
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         int i = nbttagcompound.getInt("HomePosX");
         int j = nbttagcompound.getInt("HomePosY");
@@ -104,7 +107,7 @@ public class EntityTurtle extends EntityAnimal {
 
         this.g(new BlockPosition(i, j, k));
         super.a(nbttagcompound);
-        this.s(nbttagcompound.getBoolean("HasEgg"));
+        this.r(nbttagcompound.getBoolean("HasEgg"));
         int l = nbttagcompound.getInt("TravelPosX");
         int i1 = nbttagcompound.getInt("TravelPosY");
         int j1 = nbttagcompound.getInt("TravelPosZ");
@@ -113,19 +116,22 @@ public class EntityTurtle extends EntityAnimal {
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        this.g(new BlockPosition(this.locX, this.locY, this.locZ));
+    @Override
+    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        this.g(new BlockPosition(this));
         this.h(BlockPosition.ZERO);
-        return super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
+        return super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().minY, this.locZ);
 
-        return blockposition.getY() < generatoraccess.getSeaLevel() + 4 && super.a(generatoraccess, flag);
+        return blockposition.getY() < generatoraccess.getSeaLevel() + 4 && super.a(generatoraccess, enummobspawn);
     }
 
-    protected void n() {
+    @Override
+    protected void initPathfinder() {
         this.goalSelector.a(0, new EntityTurtle.f(this, 1.2D));
         this.goalSelector.a(1, new EntityTurtle.a(this, 1.0D));
         this.goalSelector.a(1, new EntityTurtle.d(this, 1.0D));
@@ -137,89 +143,108 @@ public class EntityTurtle extends EntityAnimal {
         this.goalSelector.a(9, new EntityTurtle.h(this, 1.0D, 100));
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(30.0D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(30.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
     }
 
-    public boolean bw() {
+    @Override
+    public boolean bD() {
         return false;
     }
 
-    public boolean ca() {
+    @Override
+    public boolean cl() {
         return true;
     }
 
+    @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.e;
     }
 
-    public int z() {
+    @Override
+    public int A() {
         return 200;
     }
 
     @Nullable
-    protected SoundEffect D() {
-        return !this.isInWater() && this.onGround && !this.isBaby() ? SoundEffects.ENTITY_TURTLE_AMBIENT_LAND : super.D();
+    @Override
+    protected SoundEffect getSoundAmbient() {
+        return !this.isInWater() && this.onGround && !this.isBaby() ? SoundEffects.ENTITY_TURTLE_AMBIENT_LAND : super.getSoundAmbient();
     }
 
+    @Override
     protected void d(float f) {
         super.d(f * 1.5F);
     }
 
-    protected SoundEffect ad() {
+    @Override
+    protected SoundEffect getSoundSwim() {
         return SoundEffects.ENTITY_TURTLE_SWIM;
     }
 
     @Nullable
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return this.isBaby() ? SoundEffects.ENTITY_TURTLE_HURT_BABY : SoundEffects.ENTITY_TURTLE_HURT;
     }
 
     @Nullable
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return this.isBaby() ? SoundEffects.ENTITY_TURTLE_DEATH_BABY : SoundEffects.ENTITY_TURTLE_DEATH;
     }
 
+    @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
         SoundEffect soundeffect = this.isBaby() ? SoundEffects.ENTITY_TURTLE_SHAMBLE_BABY : SoundEffects.ENTITY_TURTLE_SHAMBLE;
 
         this.a(soundeffect, 0.15F, 1.0F);
     }
 
-    public boolean dD() {
-        return super.dD() && !this.dy();
+    @Override
+    public boolean ea() {
+        return super.ea() && !this.dV();
     }
 
-    protected float ab() {
-        return this.L + 0.15F;
+    @Override
+    protected float af() {
+        return this.F + 0.15F;
     }
 
-    public void a(boolean flag) {
-        this.a(flag ? 0.3F : 1.0F);
+    @Override
+    public float cm() {
+        return this.isBaby() ? 0.3F : 1.0F;
     }
 
+    @Override
     protected NavigationAbstract b(World world) {
         return new EntityTurtle.g(this, world);
     }
 
     @Nullable
+    @Override
     public EntityAgeable createChild(EntityAgeable entityageable) {
-        return new EntityTurtle(this.world);
+        return (EntityAgeable) EntityTypes.TURTLE.a(this.world);
     }
 
-    public boolean f(ItemStack itemstack) {
+    @Override
+    public boolean i(ItemStack itemstack) {
         return itemstack.getItem() == Blocks.SEAGRASS.getItem();
     }
 
+    @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return !this.dC() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : super.a(blockposition, iworldreader);
+        return !this.dZ() && iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F : super.a(blockposition, iworldreader);
     }
 
+    @Override
     public void movementTick() {
         super.movementTick();
-        if (this.dz() && this.bK >= 1 && this.bK % 5 == 0) {
+        if (this.isAlive() && this.dW() && this.bH >= 1 && this.bH % 5 == 0) {
             BlockPosition blockposition = new BlockPosition(this);
 
             if (this.world.getType(blockposition.down()).getBlock() == Blocks.SAND) {
@@ -229,49 +254,38 @@ public class EntityTurtle extends EntityAnimal {
 
     }
 
+    @Override
     protected void l() {
         super.l();
-        if (this.world.getGameRules().getBoolean("doMobLoot")) {
+        if (!this.isBaby() && this.world.getGameRules().getBoolean("doMobLoot")) {
             this.a((IMaterial) Items.SCUTE, 1);
         }
 
     }
 
-    public void a(float f, float f1, float f2) {
-        if (this.cP() && this.isInWater()) {
-            this.a(f, f1, f2, 0.1F);
-            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
-            this.motX *= 0.8999999761581421D;
-            this.motY *= 0.8999999761581421D;
-            this.motZ *= 0.8999999761581421D;
-            if (this.getGoalTarget() == null && (!this.dC() || this.c(this.dA()) >= 400.0D)) {
-                this.motY -= 0.005D;
+    @Override
+    public void e(Vec3D vec3d) {
+        if (this.de() && this.isInWater()) {
+            this.a(0.1F, vec3d);
+            this.move(EnumMoveType.SELF, this.getMot());
+            this.setMot(this.getMot().a(0.9D));
+            if (this.getGoalTarget() == null && (!this.dZ() || !this.dX().a((IPosition) this.ch(), 20.0D))) {
+                this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
-            super.a(f, f1, f2);
+            super.e(vec3d);
         }
 
     }
 
+    @Override
     public boolean a(EntityHuman entityhuman) {
         return false;
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.aI;
-    }
-
+    @Override
     public void onLightningStrike(EntityLightning entitylightning) {
         this.damageEntity(DamageSource.LIGHTNING, Float.MAX_VALUE);
-    }
-
-    public void die(DamageSource damagesource) {
-        super.die(damagesource);
-        if (damagesource == DamageSource.LIGHTNING) {
-            this.a(new ItemStack(Items.BOWL, 1), 0.0F);
-        }
-
     }
 
     static class g extends NavigationGuardian {
@@ -280,19 +294,22 @@ public class EntityTurtle extends EntityAnimal {
             super(entityturtle, world);
         }
 
-        protected boolean b() {
+        @Override
+        protected boolean a() {
             return true;
         }
 
-        protected Pathfinder a() {
-            return new Pathfinder(new PathfinderTurtle());
+        @Override
+        protected Pathfinder a(int i) {
+            return new Pathfinder(new PathfinderTurtle(), i);
         }
 
+        @Override
         public boolean a(BlockPosition blockposition) {
             if (this.a instanceof EntityTurtle) {
                 EntityTurtle entityturtle = (EntityTurtle) this.a;
 
-                if (entityturtle.dH()) {
+                if (entityturtle.ee()) {
                     return this.b.getType(blockposition).getBlock() == Blocks.WATER;
                 }
             }
@@ -312,37 +329,38 @@ public class EntityTurtle extends EntityAnimal {
 
         private void g() {
             if (this.i.isInWater()) {
-                this.i.motY += 0.005D;
-                if (this.i.c(this.i.dA()) > 256.0D) {
-                    this.i.o(Math.max(this.i.cK() / 2.0F, 0.08F));
+                this.i.setMot(this.i.getMot().add(0.0D, 0.005D, 0.0D));
+                if (!this.i.dX().a((IPosition) this.i.ch(), 16.0D)) {
+                    this.i.o(Math.max(this.i.da() / 2.0F, 0.08F));
                 }
 
                 if (this.i.isBaby()) {
-                    this.i.o(Math.max(this.i.cK() / 3.0F, 0.06F));
+                    this.i.o(Math.max(this.i.da() / 3.0F, 0.06F));
                 }
             } else if (this.i.onGround) {
-                this.i.o(Math.max(this.i.cK() / 2.0F, 0.06F));
+                this.i.o(Math.max(this.i.da() / 2.0F, 0.06F));
             }
 
         }
 
+        @Override
         public void a() {
             this.g();
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().p()) {
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().n()) {
                 double d0 = this.b - this.i.locX;
                 double d1 = this.c - this.i.locY;
                 double d2 = this.d - this.i.locZ;
                 double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
                 d1 /= d3;
-                float f = (float) (MathHelper.c(d2, d0) * 57.2957763671875D) - 90.0F;
+                float f = (float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F;
 
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
-                this.i.aQ = this.i.yaw;
+                this.i.aK = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
-                this.i.o(this.i.cK() + (f1 - this.i.cK()) * 0.125F);
-                this.i.motY += (double) this.i.cK() * d1 * 0.1D;
+                this.i.o(MathHelper.g(0.125F, this.i.da(), f1));
+                this.i.setMot(this.i.getMot().add(0.0D, (double) this.i.da() * d1 * 0.1D, 0.0D));
             } else {
                 this.i.o(0.0F);
             }
@@ -351,30 +369,30 @@ public class EntityTurtle extends EntityAnimal {
 
     static class c extends PathfinderGoalGotoTarget {
 
-        private final EntityTurtle f;
+        private final EntityTurtle g;
 
         private c(EntityTurtle entityturtle, double d0) {
             super(entityturtle, entityturtle.isBaby() ? 2.0D : d0, 24);
-            this.f = entityturtle;
-            this.e = -1;
+            this.g = entityturtle;
+            this.f = -1;
         }
 
+        @Override
         public boolean b() {
-            return !this.f.isInWater() && this.c <= 1200 && this.a(this.f.world, this.d);
+            return !this.g.isInWater() && this.d <= 1200 && this.a(this.g.world, this.e);
         }
 
+        @Override
         public boolean a() {
-            return this.f.isBaby() && !this.f.isInWater() ? super.a() : (!this.f.dC() && !this.f.isInWater() && !this.f.dy() ? super.a() : false);
+            return this.g.isBaby() && !this.g.isInWater() ? super.a() : (!this.g.dZ() && !this.g.isInWater() && !this.g.dV() ? super.a() : false);
         }
 
-        public int j() {
-            return 1;
+        @Override
+        public boolean j() {
+            return this.d % 160 == 0;
         }
 
-        public boolean i() {
-            return this.c % 160 == 0;
-        }
-
+        @Override
         protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
             Block block = iworldreader.getType(blockposition).getBlock();
 
@@ -391,52 +409,57 @@ public class EntityTurtle extends EntityAnimal {
             this.h = entityturtle;
         }
 
+        @Override
         public boolean a() {
-            return !this.a.isInWater() && !this.h.dC() && !this.h.dy() ? super.a() : false;
+            return !this.a.isInWater() && !this.h.dZ() && !this.h.dV() ? super.a() : false;
         }
     }
 
     static class d extends PathfinderGoalGotoTarget {
 
-        private final EntityTurtle f;
+        private final EntityTurtle g;
 
         d(EntityTurtle entityturtle, double d0) {
             super(entityturtle, d0, 16);
-            this.f = entityturtle;
+            this.g = entityturtle;
         }
 
+        @Override
         public boolean a() {
-            return this.f.dy() && this.f.c(this.f.dA()) < 81.0D ? super.a() : false;
+            return this.g.dV() && this.g.dX().a((IPosition) this.g.ch(), 9.0D) ? super.a() : false;
         }
 
+        @Override
         public boolean b() {
-            return super.b() && this.f.dy() && this.f.c(this.f.dA()) < 81.0D;
+            return super.b() && this.g.dV() && this.g.dX().a((IPosition) this.g.ch(), 9.0D);
         }
 
+        @Override
         public void e() {
             super.e();
-            BlockPosition blockposition = new BlockPosition(this.f);
+            BlockPosition blockposition = new BlockPosition(this.g);
 
-            if (!this.f.isInWater() && this.k()) {
-                if (this.f.bK < 1) {
-                    this.f.t(true);
-                } else if (this.f.bK > 200) {
-                    World world = this.f.world;
+            if (!this.g.isInWater() && this.k()) {
+                if (this.g.bH < 1) {
+                    this.g.s(true);
+                } else if (this.g.bH > 200) {
+                    World world = this.g.world;
 
                     world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_LAY_EGG, SoundCategory.BLOCKS, 0.3F, 0.9F + world.random.nextFloat() * 0.2F);
-                    world.setTypeAndData(this.d.up(), (IBlockData) Blocks.TURTLE_EGG.getBlockData().set(BlockTurtleEgg.b, this.f.random.nextInt(4) + 1), 3);
-                    this.f.s(false);
-                    this.f.t(false);
-                    this.f.d(600);
+                    world.setTypeAndData(this.e.up(), (IBlockData) Blocks.TURTLE_EGG.getBlockData().set(BlockTurtleEgg.b, this.g.random.nextInt(4) + 1), 3);
+                    this.g.r(false);
+                    this.g.s(false);
+                    this.g.setLoveTicks(600);
                 }
 
-                if (this.f.dz()) {
-                    this.f.bK++;
+                if (this.g.dW()) {
+                    this.g.bH++;
                 }
             }
 
         }
 
+        @Override
         protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
             if (!iworldreader.isEmpty(blockposition.up())) {
                 return false;
@@ -457,10 +480,12 @@ public class EntityTurtle extends EntityAnimal {
             this.d = entityturtle;
         }
 
+        @Override
         public boolean a() {
-            return super.a() && !this.d.dy();
+            return super.a() && !this.d.dV();
         }
 
+        @Override
         protected void g() {
             EntityPlayer entityplayer = this.animal.getBreedCause();
 
@@ -473,7 +498,7 @@ public class EntityTurtle extends EntityAnimal {
                 CriterionTriggers.o.a(entityplayer, this.animal, this.partner, (EntityAgeable) null);
             }
 
-            this.d.s(true);
+            this.d.r(true);
             this.animal.resetLove();
             this.partner.resetLove();
             Random random = this.animal.getRandom();
@@ -487,49 +512,54 @@ public class EntityTurtle extends EntityAnimal {
 
     static class i extends PathfinderGoal {
 
-        private final EntityTurtle a;
-        private final double b;
-        private EntityHuman c;
-        private int d;
-        private final Set<Item> e;
+        private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(10.0D).b().a();
+        private final EntityTurtle b;
+        private final double c;
+        private EntityHuman d;
+        private int e;
+        private final Set<Item> f;
 
         i(EntityTurtle entityturtle, double d0, Item item) {
-            this.a = entityturtle;
-            this.b = d0;
-            this.e = Sets.newHashSet(new Item[] { item});
-            this.a(3);
+            this.b = entityturtle;
+            this.c = d0;
+            this.f = Sets.newHashSet(new Item[] { item});
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
 
+        @Override
         public boolean a() {
-            if (this.d > 0) {
-                --this.d;
+            if (this.e > 0) {
+                --this.e;
                 return false;
             } else {
-                this.c = this.a.world.findNearbyPlayer(this.a, 10.0D);
-                return this.c == null ? false : this.a(this.c.getItemInMainHand()) || this.a(this.c.getItemInOffHand());
+                this.d = this.b.world.a(EntityTurtle.i.a, (EntityLiving) this.b);
+                return this.d == null ? false : this.a(this.d.getItemInMainHand()) || this.a(this.d.getItemInOffHand());
             }
         }
 
         private boolean a(ItemStack itemstack) {
-            return this.e.contains(itemstack.getItem());
+            return this.f.contains(itemstack.getItem());
         }
 
+        @Override
         public boolean b() {
             return this.a();
         }
 
+        @Override
         public void d() {
-            this.c = null;
-            this.a.getNavigation().q();
-            this.d = 100;
+            this.d = null;
+            this.b.getNavigation().o();
+            this.e = 100;
         }
 
+        @Override
         public void e() {
-            this.a.getControllerLook().a(this.c, (float) (this.a.L() + 20), (float) this.a.K());
-            if (this.a.h((Entity) this.c) < 6.25D) {
-                this.a.getNavigation().q();
+            this.b.getControllerLook().a(this.d, (float) (this.b.dA() + 20), (float) this.b.M());
+            if (this.b.h((Entity) this.d) < 6.25D) {
+                this.b.getNavigation().o();
             } else {
-                this.a.getNavigation().a((Entity) this.c, this.b);
+                this.b.getNavigation().a((Entity) this.d, this.c);
             }
 
         }
@@ -547,33 +577,38 @@ public class EntityTurtle extends EntityAnimal {
             this.b = d0;
         }
 
+        @Override
         public boolean a() {
-            return this.a.isBaby() ? false : (this.a.dy() ? true : (this.a.getRandom().nextInt(700) != 0 ? false : this.a.c(this.a.dA()) >= 4096.0D));
+            return this.a.isBaby() ? false : (this.a.dV() ? true : (this.a.getRandom().nextInt(700) != 0 ? false : !this.a.dX().a((IPosition) this.a.ch(), 64.0D)));
         }
 
+        @Override
         public void c() {
-            this.a.u(true);
+            this.a.t(true);
             this.c = false;
             this.d = 0;
         }
 
+        @Override
         public void d() {
-            this.a.u(false);
+            this.a.t(false);
         }
 
+        @Override
         public boolean b() {
-            return this.a.c(this.a.dA()) >= 49.0D && !this.c && this.d <= 600;
+            return !this.a.dX().a((IPosition) this.a.ch(), 7.0D) && !this.c && this.d <= 600;
         }
 
+        @Override
         public void e() {
-            BlockPosition blockposition = this.a.dA();
-            boolean flag = this.a.c(blockposition) <= 256.0D;
+            BlockPosition blockposition = this.a.dX();
+            boolean flag = blockposition.a((IPosition) this.a.ch(), 16.0D);
 
             if (flag) {
                 ++this.d;
             }
 
-            if (this.a.getNavigation().p()) {
+            if (this.a.getNavigation().n()) {
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 3, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.3141592741012573D);
 
                 if (vec3d == null) {
@@ -606,10 +641,12 @@ public class EntityTurtle extends EntityAnimal {
             this.b = d0;
         }
 
+        @Override
         public boolean a() {
-            return !this.a.dC() && !this.a.dy() && this.a.isInWater();
+            return !this.a.dZ() && !this.a.dV() && this.a.isInWater();
         }
 
+        @Override
         public void c() {
             boolean flag = true;
             boolean flag1 = true;
@@ -625,13 +662,14 @@ public class EntityTurtle extends EntityAnimal {
             BlockPosition blockposition = new BlockPosition((double) i + this.a.locX, (double) j + this.a.locY, (double) k + this.a.locZ);
 
             this.a.h(blockposition);
-            this.a.v(true);
+            this.a.u(true);
             this.c = false;
         }
 
+        @Override
         public void e() {
-            if (this.a.getNavigation().p()) {
-                BlockPosition blockposition = this.a.dB();
+            if (this.a.getNavigation().n()) {
+                BlockPosition blockposition = this.a.dY();
                 Vec3D vec3d = RandomPositionGenerator.a((EntityCreature) this.a, 16, 3, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()), 0.3141592741012573D);
 
                 if (vec3d == null) {
@@ -642,9 +680,8 @@ public class EntityTurtle extends EntityAnimal {
                     int i = MathHelper.floor(vec3d.x);
                     int j = MathHelper.floor(vec3d.z);
                     boolean flag = true;
-                    StructureBoundingBox structureboundingbox = new StructureBoundingBox(i - 34, 0, j - 34, i + 34, 0, j + 34);
 
-                    if (!this.a.world.a(structureboundingbox)) {
+                    if (!this.a.world.isAreaLoaded(i - 34, 0, j - 34, i + 34, 0, j + 34)) {
                         vec3d = null;
                     }
                 }
@@ -659,12 +696,14 @@ public class EntityTurtle extends EntityAnimal {
 
         }
 
+        @Override
         public boolean b() {
-            return !this.a.getNavigation().p() && !this.c && !this.a.dC() && !this.a.isInLove() && !this.a.dy();
+            return !this.a.getNavigation().n() && !this.c && !this.a.dZ() && !this.a.isInLove() && !this.a.dV();
         }
 
+        @Override
         public void d() {
-            this.a.v(false);
+            this.a.u(false);
             super.d();
         }
     }
@@ -675,6 +714,7 @@ public class EntityTurtle extends EntityAnimal {
             super(entityturtle, d0);
         }
 
+        @Override
         public boolean a() {
             if (this.a.getLastDamager() == null && !this.a.isBurning()) {
                 return false;

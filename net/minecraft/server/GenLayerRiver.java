@@ -8,13 +8,14 @@ public enum GenLayerRiver implements AreaTransformer7 {
 
     private GenLayerRiver() {}
 
+    @Override
     public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
-        int j1 = a(i1);
+        int j1 = c(i1);
 
-        return j1 == a(l) && j1 == a(i) && j1 == a(j) && j1 == a(k) ? -1 : GenLayerRiver.b;
+        return j1 == c(l) && j1 == c(i) && j1 == c(j) && j1 == c(k) ? -1 : GenLayerRiver.b;
     }
 
-    private static int a(int i) {
+    private static int c(int i) {
         return i >= 2 ? 2 + (i & 1) : i;
     }
 }

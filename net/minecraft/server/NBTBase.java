@@ -53,7 +53,7 @@ public interface NBTBase {
         }
     }
 
-    static String n(int i) {
+    static String l(int i) {
         switch (i) {
         case 0:
             return "TAG_End";

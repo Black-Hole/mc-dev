@@ -20,32 +20,28 @@ public class ItemFishingRod extends Item {
         });
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
+        int i;
 
         if (entityhuman.hookedFish != null) {
-            int i = entityhuman.hookedFish.b(itemstack);
+            if (!world.isClientSide) {
+                i = entityhuman.hookedFish.b(itemstack);
+                itemstack.damage(i, entityhuman, (entityhuman1) -> {
+                    entityhuman1.d(enumhand);
+                });
+            }
 
-            itemstack.damage(i, entityhuman);
             entityhuman.a(enumhand);
             world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_FISHING_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
         } else {
             world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ENTITY_FISHING_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (ItemFishingRod.i.nextFloat() * 0.4F + 0.8F));
             if (!world.isClientSide) {
-                EntityFishingHook entityfishinghook = new EntityFishingHook(world, entityhuman);
-                int j = EnchantmentManager.c(itemstack);
+                i = EnchantmentManager.c(itemstack);
+                int j = EnchantmentManager.b(itemstack);
 
-                if (j > 0) {
-                    entityfishinghook.a(j);
-                }
-
-                int k = EnchantmentManager.b(itemstack);
-
-                if (k > 0) {
-                    entityfishinghook.b(k);
-                }
-
-                world.addEntity(entityfishinghook);
+                world.addEntity(new EntityFishingHook(entityhuman, world, j, i));
             }
 
             entityhuman.a(enumhand);
@@ -55,6 +51,7 @@ public class ItemFishingRod extends Item {
         return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
     }
 
+    @Override
     public int c() {
         return 1;
     }

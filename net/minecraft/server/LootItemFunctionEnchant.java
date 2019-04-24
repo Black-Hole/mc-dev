@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -8,28 +9,29 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LootItemFunctionEnchant extends LootItemFunction {
+public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
     private static final Logger a = LogManager.getLogger();
-    private final List<Enchantment> b;
+    private final List<Enchantment> c;
 
-    public LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, @Nullable List<Enchantment> list) {
+    private LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, Collection<Enchantment> collection) {
         super(alootitemcondition);
-        this.b = list == null ? Collections.emptyList() : list;
+        this.c = ImmutableList.copyOf(collection);
     }
 
-    public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
+    @Override
+    public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
+        Random random = loottableinfo.b();
         Enchantment enchantment;
 
-        if (this.b.isEmpty()) {
+        if (this.c.isEmpty()) {
             List<Enchantment> list = Lists.newArrayList();
             Iterator iterator = IRegistry.ENCHANTMENT.iterator();
 
@@ -48,7 +50,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
             enchantment = (Enchantment) list.get(random.nextInt(list.size()));
         } else {
-            enchantment = (Enchantment) this.b.get(random.nextInt(this.b.size()));
+            enchantment = (Enchantment) this.c.get(random.nextInt(this.c.size()));
         }
 
         int i = MathHelper.nextInt(random, enchantment.getStartLevel(), enchantment.getMaxLevel());
@@ -63,16 +65,23 @@ public class LootItemFunctionEnchant extends LootItemFunction {
         return itemstack;
     }
 
-    public static class a extends LootItemFunction.a<LootItemFunctionEnchant> {
+    public static LootItemFunctionConditional.a<?> c() {
+        return a((alootitemcondition) -> {
+            return new LootItemFunctionEnchant(alootitemcondition, ImmutableList.of());
+        });
+    }
 
-        public a() {
+    public static class b extends LootItemFunctionConditional.c<LootItemFunctionEnchant> {
+
+        public b() {
             super(new MinecraftKey("enchant_randomly"), LootItemFunctionEnchant.class);
         }
 
         public void a(JsonObject jsonobject, LootItemFunctionEnchant lootitemfunctionenchant, JsonSerializationContext jsonserializationcontext) {
-            if (!lootitemfunctionenchant.b.isEmpty()) {
+            super.a(jsonobject, (LootItemFunctionConditional) lootitemfunctionenchant, jsonserializationcontext);
+            if (!lootitemfunctionenchant.c.isEmpty()) {
                 JsonArray jsonarray = new JsonArray();
-                Iterator iterator = lootitemfunctionenchant.b.iterator();
+                Iterator iterator = lootitemfunctionenchant.c.iterator();
 
                 while (iterator.hasNext()) {
                     Enchantment enchantment = (Enchantment) iterator.next();
@@ -90,6 +99,7 @@ public class LootItemFunctionEnchant extends LootItemFunction {
 
         }
 
+        @Override
         public LootItemFunctionEnchant b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             List<Enchantment> list = Lists.newArrayList();
 
@@ -100,11 +110,9 @@ public class LootItemFunctionEnchant extends LootItemFunction {
                 while (iterator.hasNext()) {
                     JsonElement jsonelement = (JsonElement) iterator.next();
                     String s = ChatDeserializer.a(jsonelement, "enchantment");
-                    Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(new MinecraftKey(s));
-
-                    if (enchantment == null) {
-                        throw new JsonSyntaxException("Unknown enchantment '" + s + "'");
-                    }
+                    Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.getOptional(new MinecraftKey(s)).orElseThrow(() -> {
+                        return new JsonSyntaxException("Unknown enchantment '" + s + "'");
+                    });
 
                     list.add(enchantment);
                 }

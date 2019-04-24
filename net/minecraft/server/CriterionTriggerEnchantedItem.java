@@ -19,10 +19,12 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
 
     public CriterionTriggerEnchantedItem() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerEnchantedItem.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEnchantedItem.b> criteriontrigger_a) {
         CriterionTriggerEnchantedItem.a criteriontriggerenchanteditem_a = (CriterionTriggerEnchantedItem.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
         criteriontriggerenchanteditem_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEnchantedItem.b> criteriontrigger_a) {
         CriterionTriggerEnchantedItem.a criteriontriggerenchanteditem_a = (CriterionTriggerEnchantedItem.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerEnchantedItem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("levels"));
@@ -135,6 +140,7 @@ public class CriterionTriggerEnchantedItem implements CriterionTrigger<Criterion
             return !this.a.a(itemstack) ? false : this.b.d(i);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

@@ -38,7 +38,7 @@ final class VoxelShapeMergerList implements VoxelShapeMerger {
             double d1 = flag4 ? doublelist.getDouble(i++) : doublelist1.getDouble(j++);
 
             if ((i != 0 && flag2 || flag4 || flag1) && (j != 0 && flag3 || !flag4 || flag)) {
-                if (d0 <= d1 - 1.0E-7D) {
+                if (d0 < d1 - 1.0E-7D) {
                     this.b.add(i - 1);
                     this.c.add(j - 1);
                     this.a.add(d1);
@@ -51,6 +51,7 @@ final class VoxelShapeMergerList implements VoxelShapeMerger {
         }
     }
 
+    @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
         for (int i = 0; i < this.a.size() - 1; ++i) {
             if (!voxelshapemerger_a.merge(this.b.getInt(i), this.c.getInt(i), i)) {
@@ -61,6 +62,7 @@ final class VoxelShapeMergerList implements VoxelShapeMerger {
         return true;
     }
 
+    @Override
     public DoubleList a() {
         return this.a;
     }

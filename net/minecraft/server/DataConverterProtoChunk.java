@@ -33,16 +33,16 @@ public class DataConverterProtoChunk extends DataFix {
 
         return TypeRewriteRule.seq(this.fixTypeEverywhereTyped("ChunkToProtoChunkFix", type, this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
             return typed.updateTyped(opticfinder, type3, (typed1) -> {
-                Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).map(Typed::write).flatMap(Dynamic::getStream);
+                Optional<? extends Stream<? extends Dynamic<?>>> optional = typed1.getOptionalTyped(opticfinder1).map(Typed::write).flatMap(Dynamic::asStreamOpt);
                 Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
-                boolean flag = dynamic.getBoolean("TerrainPopulated") && (!dynamic.get("LightPopulated").flatMap(Dynamic::getNumberValue).isPresent() || dynamic.getBoolean("LightPopulated"));
+                boolean flag = dynamic.get("TerrainPopulated").asBoolean(false) && (!dynamic.get("LightPopulated").asNumber().isPresent() || dynamic.get("LightPopulated").asBoolean(false));
 
                 dynamic = dynamic.set("Status", dynamic.createString(flag ? "mobs_spawned" : "empty"));
                 dynamic = dynamic.set("hasLegacyStructureData", dynamic.createBoolean(true));
                 Dynamic dynamic1;
 
                 if (flag) {
-                    Optional<ByteBuffer> optional1 = dynamic.get("Biomes").flatMap(Dynamic::getByteBuffer);
+                    Optional<ByteBuffer> optional1 = dynamic.get("Biomes").asByteBufferOpt();
 
                     if (optional1.isPresent()) {
                         ByteBuffer bytebuffer = (ByteBuffer) optional1.get();
@@ -63,9 +63,9 @@ public class DataConverterProtoChunk extends DataFix {
 
                     if (optional.isPresent()) {
                         ((Stream) optional.get()).forEach((dynamic2) -> {
-                            int j = dynamic2.getInt("x");
-                            int k = dynamic2.getInt("y");
-                            int l = dynamic2.getInt("z");
+                            int j = dynamic2.get("x").asInt(0);
+                            int k = dynamic2.get("y").asInt(0);
+                            int l = dynamic2.get("z").asInt(0);
                             short short0 = a(j, k, l);
 
                             list.set(k >> 4, ((Dynamic) list.get(k >> 4)).merge(dynamic.createShort(short0)));
@@ -82,7 +82,7 @@ public class DataConverterProtoChunk extends DataFix {
                     return new IllegalStateException("Could not read the new chunk");
                 });
             });
-        }), this.writeAndRead("Structure biome inject", this.getInputSchema().getType(DataConverterTypes.s), this.getOutputSchema().getType(DataConverterTypes.s)));
+        }), this.writeAndRead("Structure biome inject", this.getInputSchema().getType(DataConverterTypes.t), this.getOutputSchema().getType(DataConverterTypes.t)));
     }
 
     private static short a(int i, int j, int k) {

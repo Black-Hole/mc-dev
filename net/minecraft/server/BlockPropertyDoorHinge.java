@@ -10,6 +10,7 @@ public enum BlockPropertyDoorHinge implements INamable {
         return this.getName();
     }
 
+    @Override
     public String getName() {
         return this == BlockPropertyDoorHinge.LEFT ? "left" : "right";
     }

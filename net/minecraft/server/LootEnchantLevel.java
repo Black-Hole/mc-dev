@@ -5,37 +5,71 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import java.util.Random;
 
-public class LootEnchantLevel extends LootItemFunction {
+public class LootEnchantLevel extends LootItemFunctionConditional {
 
-    private final LootValueBounds a;
-    private final boolean b;
+    private final LootValue a;
+    private final boolean c;
 
-    public LootEnchantLevel(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds, boolean flag) {
+    private LootEnchantLevel(LootItemCondition[] alootitemcondition, LootValue lootvalue, boolean flag) {
         super(alootitemcondition);
-        this.a = lootvaluebounds;
-        this.b = flag;
+        this.a = lootvalue;
+        this.c = flag;
     }
 
-    public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
-        return EnchantmentManager.a(random, itemstack, this.a.a(random), this.b);
+    @Override
+    public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
+        Random random = loottableinfo.b();
+
+        return EnchantmentManager.a(random, itemstack, this.a.a(random), this.c);
     }
 
-    public static class a extends LootItemFunction.a<LootEnchantLevel> {
+    public static LootEnchantLevel.a a(LootValue lootvalue) {
+        return new LootEnchantLevel.a(lootvalue);
+    }
 
-        public a() {
+    public static class b extends LootItemFunctionConditional.c<LootEnchantLevel> {
+
+        public b() {
             super(new MinecraftKey("enchant_with_levels"), LootEnchantLevel.class);
         }
 
         public void a(JsonObject jsonobject, LootEnchantLevel lootenchantlevel, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.add("levels", jsonserializationcontext.serialize(lootenchantlevel.a));
-            jsonobject.addProperty("treasure", lootenchantlevel.b);
+            super.a(jsonobject, (LootItemFunctionConditional) lootenchantlevel, jsonserializationcontext);
+            jsonobject.add("levels", LootValueGenerators.a(lootenchantlevel.a, jsonserializationcontext));
+            jsonobject.addProperty("treasure", lootenchantlevel.c);
         }
 
+        @Override
         public LootEnchantLevel b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
-            LootValueBounds lootvaluebounds = (LootValueBounds) ChatDeserializer.a(jsonobject, "levels", jsondeserializationcontext, LootValueBounds.class);
+            LootValue lootvalue = LootValueGenerators.a(jsonobject.get("levels"), jsondeserializationcontext);
             boolean flag = ChatDeserializer.a(jsonobject, "treasure", false);
 
-            return new LootEnchantLevel(alootitemcondition, lootvaluebounds, flag);
+            return new LootEnchantLevel(alootitemcondition, lootvalue, flag);
+        }
+    }
+
+    public static class a extends LootItemFunctionConditional.a<LootEnchantLevel.a> {
+
+        private final LootValue a;
+        private boolean b;
+
+        public a(LootValue lootvalue) {
+            this.a = lootvalue;
+        }
+
+        @Override
+        protected LootEnchantLevel.a d() {
+            return this;
+        }
+
+        public LootEnchantLevel.a e() {
+            this.b = true;
+            return this;
+        }
+
+        @Override
+        public LootItemFunction b() {
+            return new LootEnchantLevel(this.g(), this.a, this.b);
         }
     }
 }

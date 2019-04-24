@@ -69,6 +69,10 @@ public class PathPoint {
         return f + f1 + f2;
     }
 
+    public Vec3D b() {
+        return new Vec3D((double) this.a, (double) this.b, (double) this.c);
+    }
+
     public boolean equals(Object object) {
         if (!(object instanceof PathPoint)) {
             return false;
@@ -83,7 +87,7 @@ public class PathPoint {
         return this.n;
     }
 
-    public boolean a() {
+    public boolean c() {
         return this.d >= 0;
     }
 

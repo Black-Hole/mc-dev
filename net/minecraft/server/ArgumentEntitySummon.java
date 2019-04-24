@@ -25,14 +25,11 @@ public class ArgumentEntitySummon implements ArgumentType<MinecraftKey> {
         return a((MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class));
     }
 
-    private static final MinecraftKey a(MinecraftKey minecraftkey) throws CommandSyntaxException {
-        EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
-
-        if (entitytypes != null && entitytypes.b()) {
-            return minecraftkey;
-        } else {
-            throw ArgumentEntitySummon.a.create(minecraftkey);
-        }
+    private static MinecraftKey a(MinecraftKey minecraftkey) throws CommandSyntaxException {
+        IRegistry.ENTITY_TYPE.getOptional(minecraftkey).filter(EntityTypes::b).orElseThrow(() -> {
+            return ArgumentEntitySummon.a.create(minecraftkey);
+        });
+        return minecraftkey;
     }
 
     public MinecraftKey parse(StringReader stringreader) throws CommandSyntaxException {

@@ -12,15 +12,17 @@ public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut>
         this.a = aint;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = new int[packetdataserializer.g()];
+        this.a = new int[packetdataserializer.i()];
 
         for (int i = 0; i < this.a.length; ++i) {
-            this.a[i] = packetdataserializer.g();
+            this.a[i] = packetdataserializer.i();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a.length);
         int[] aint = this.a;

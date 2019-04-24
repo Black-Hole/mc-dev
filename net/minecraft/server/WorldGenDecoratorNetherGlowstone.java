@@ -1,20 +1,24 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class WorldGenDecoratorNetherGlowstone extends WorldGenDecorator<WorldGenDecoratorFrequencyConfiguration> {
+public class WorldGenDecoratorNetherGlowstone extends WorldGenDecoratorFeatureSimple<WorldGenDecoratorFrequencyConfiguration> {
 
-    public WorldGenDecoratorNetherGlowstone() {}
+    public WorldGenDecoratorNetherGlowstone(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        for (int i = 0; i < random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a) + 1); ++i) {
+    public Stream<BlockPosition> a(Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
+        return IntStream.range(0, random.nextInt(random.nextInt(worldgendecoratorfrequencyconfiguration.a) + 1)).mapToObj((i) -> {
             int j = random.nextInt(16);
             int k = random.nextInt(120) + 4;
             int l = random.nextInt(16);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(j, k, l), c0);
-        }
-
-        return true;
+            return blockposition.b(j, k, l);
+        });
     }
 }

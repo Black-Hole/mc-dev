@@ -1,38 +1,37 @@
 package net.minecraft.server;
 
 import io.netty.util.internal.ThreadLocalRandom;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
-import org.apache.commons.lang3.Validate;
 
 public class AttributeModifier {
 
     private final double a;
-    private final int b;
+    private final AttributeModifier.Operation b;
     private final Supplier<String> c;
     private final UUID d;
     private boolean e;
 
-    public AttributeModifier(String s, double d0, int i) {
+    public AttributeModifier(String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
         this(MathHelper.a((Random) ThreadLocalRandom.current()), () -> {
             return s;
-        }, d0, i);
+        }, d0, attributemodifier_operation);
     }
 
-    public AttributeModifier(UUID uuid, String s, double d0, int i) {
+    public AttributeModifier(UUID uuid, String s, double d0, AttributeModifier.Operation attributemodifier_operation) {
         this(uuid, () -> {
             return s;
-        }, d0, i);
+        }, d0, attributemodifier_operation);
     }
 
-    public AttributeModifier(UUID uuid, Supplier<String> supplier, double d0, int i) {
+    public AttributeModifier(UUID uuid, Supplier<String> supplier, double d0, AttributeModifier.Operation attributemodifier_operation) {
         this.e = true;
         this.d = uuid;
         this.c = supplier;
         this.a = d0;
-        this.b = i;
-        Validate.inclusiveBetween(0L, 2L, (long) i, "Invalid operation");
+        this.b = attributemodifier_operation;
     }
 
     public UUID a() {
@@ -43,7 +42,7 @@ public class AttributeModifier {
         return (String) this.c.get();
     }
 
-    public int c() {
+    public AttributeModifier.Operation c() {
         return this.b;
     }
 
@@ -66,15 +65,7 @@ public class AttributeModifier {
         } else if (object != null && this.getClass() == object.getClass()) {
             AttributeModifier attributemodifier = (AttributeModifier) object;
 
-            if (this.d != null) {
-                if (this.d.equals(attributemodifier.d)) {
-                    return true;
-                }
-            } else if (attributemodifier.d == null) {
-                return true;
-            }
-
-            return false;
+            return Objects.equals(this.d, attributemodifier.d);
         } else {
             return false;
         }
@@ -86,5 +77,29 @@ public class AttributeModifier {
 
     public String toString() {
         return "AttributeModifier{amount=" + this.a + ", operation=" + this.b + ", name='" + (String) this.c.get() + '\'' + ", id=" + this.d + ", serialize=" + this.e + '}';
+    }
+
+    public static enum Operation {
+
+        ADDITION(0), MULTIPLY_BASE(1), MULTIPLY_TOTAL(2);
+
+        private static final AttributeModifier.Operation[] d = new AttributeModifier.Operation[] { AttributeModifier.Operation.ADDITION, AttributeModifier.Operation.MULTIPLY_BASE, AttributeModifier.Operation.MULTIPLY_TOTAL};
+        private final int e;
+
+        private Operation(int i) {
+            this.e = i;
+        }
+
+        public int a() {
+            return this.e;
+        }
+
+        public static AttributeModifier.Operation a(int i) {
+            if (i >= 0 && i < AttributeModifier.Operation.d.length) {
+                return AttributeModifier.Operation.d[i];
+            } else {
+                throw new IllegalArgumentException("No operation with value " + i);
+            }
+        }
     }
 }

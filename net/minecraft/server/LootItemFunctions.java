@@ -11,57 +11,100 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 public class LootItemFunctions {
 
-    private static final Map<MinecraftKey, LootItemFunction.a<?>> a = Maps.newHashMap();
-    private static final Map<Class<? extends LootItemFunction>, LootItemFunction.a<?>> b = Maps.newHashMap();
+    private static final Map<MinecraftKey, LootItemFunction.b<?>> b = Maps.newHashMap();
+    private static final Map<Class<? extends LootItemFunction>, LootItemFunction.b<?>> c = Maps.newHashMap();
+    public static final BiFunction<ItemStack, LootTableInfo, ItemStack> a = (itemstack, loottableinfo) -> {
+        return itemstack;
+    };
 
-    public static <T extends LootItemFunction> void a(LootItemFunction.a<? extends T> lootitemfunction_a) {
-        MinecraftKey minecraftkey = lootitemfunction_a.a();
-        Class<T> oclass = lootitemfunction_a.b();
+    public static <T extends LootItemFunction> void a(LootItemFunction.b<? extends T> lootitemfunction_b) {
+        MinecraftKey minecraftkey = lootitemfunction_b.a();
+        Class<T> oclass = lootitemfunction_b.b();
 
-        if (LootItemFunctions.a.containsKey(minecraftkey)) {
+        if (LootItemFunctions.b.containsKey(minecraftkey)) {
             throw new IllegalArgumentException("Can't re-register item function name " + minecraftkey);
-        } else if (LootItemFunctions.b.containsKey(oclass)) {
+        } else if (LootItemFunctions.c.containsKey(oclass)) {
             throw new IllegalArgumentException("Can't re-register item function class " + oclass.getName());
         } else {
-            LootItemFunctions.a.put(minecraftkey, lootitemfunction_a);
-            LootItemFunctions.b.put(oclass, lootitemfunction_a);
+            LootItemFunctions.b.put(minecraftkey, lootitemfunction_b);
+            LootItemFunctions.c.put(oclass, lootitemfunction_b);
         }
     }
 
-    public static LootItemFunction.a<?> a(MinecraftKey minecraftkey) {
-        LootItemFunction.a<?> lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.a.get(minecraftkey);
+    public static LootItemFunction.b<?> a(MinecraftKey minecraftkey) {
+        LootItemFunction.b<?> lootitemfunction_b = (LootItemFunction.b) LootItemFunctions.b.get(minecraftkey);
 
-        if (lootitemfunction_a == null) {
+        if (lootitemfunction_b == null) {
             throw new IllegalArgumentException("Unknown loot item function '" + minecraftkey + "'");
         } else {
-            return lootitemfunction_a;
+            return lootitemfunction_b;
         }
     }
 
-    public static <T extends LootItemFunction> LootItemFunction.a<T> a(T t0) {
-        LootItemFunction.a<T> lootitemfunction_a = (LootItemFunction.a) LootItemFunctions.b.get(t0.getClass());
+    public static <T extends LootItemFunction> LootItemFunction.b<T> a(T t0) {
+        LootItemFunction.b<T> lootitemfunction_b = (LootItemFunction.b) LootItemFunctions.c.get(t0.getClass());
 
-        if (lootitemfunction_a == null) {
+        if (lootitemfunction_b == null) {
             throw new IllegalArgumentException("Unknown loot item function " + t0);
         } else {
-            return lootitemfunction_a;
+            return lootitemfunction_b;
+        }
+    }
+
+    public static BiFunction<ItemStack, LootTableInfo, ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack>[] abifunction) {
+        switch (abifunction.length) {
+        case 0:
+            return LootItemFunctions.a;
+        case 1:
+            return abifunction[0];
+        case 2:
+            BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction = abifunction[0];
+            BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction1 = abifunction[1];
+
+            return (itemstack, loottableinfo) -> {
+                return (ItemStack) bifunction1.apply(bifunction.apply(itemstack, loottableinfo), loottableinfo);
+            };
+        default:
+            return (itemstack, loottableinfo) -> {
+                BiFunction[] abifunction1 = abifunction;
+                int i = abifunction.length;
+
+                for (int j = 0; j < i; ++j) {
+                    BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction2 = abifunction1[j];
+
+                    itemstack = (ItemStack) bifunction2.apply(itemstack, loottableinfo);
+                }
+
+                return itemstack;
+            };
         }
     }
 
     static {
-        a((LootItemFunction.a) (new LootItemFunctionSetCount.a()));
-        a((LootItemFunction.a) (new LootEnchantLevel.a()));
-        a((LootItemFunction.a) (new LootItemFunctionEnchant.a()));
-        a((LootItemFunction.a) (new LootItemFunctionSetTag.a()));
-        a((LootItemFunction.a) (new LootItemFunctionSmelt.a()));
-        a((LootItemFunction.a) (new LootEnchantFunction.a()));
-        a((LootItemFunction.a) (new LootItemFunctionSetDamage.a()));
-        a((LootItemFunction.a) (new LootItemFunctionSetAttribute.b()));
-        a((LootItemFunction.a) (new LootItemFunctionSetName.a()));
-        a((LootItemFunction.a) (new LootItemFunctionExplorationMap.a()));
+        a((LootItemFunction.b) (new LootItemFunctionSetCount.a()));
+        a((LootItemFunction.b) (new LootEnchantLevel.b()));
+        a((LootItemFunction.b) (new LootItemFunctionEnchant.b()));
+        a((LootItemFunction.b) (new LootItemFunctionSetTag.a()));
+        a((LootItemFunction.b) (new LootItemFunctionSmelt.a()));
+        a((LootItemFunction.b) (new LootEnchantFunction.b()));
+        a((LootItemFunction.b) (new LootItemFunctionSetDamage.a()));
+        a((LootItemFunction.b) (new LootItemFunctionSetAttribute.d()));
+        a((LootItemFunction.b) (new LootItemFunctionSetName.a()));
+        a((LootItemFunction.b) (new LootItemFunctionExplorationMap.b()));
+        a((LootItemFunction.b) (new LootItemFunctionSetStewEffect.b()));
+        a((LootItemFunction.b) (new LootItemFunctionCopyName.b()));
+        a((LootItemFunction.b) (new LootItemFunctionSetContents.b()));
+        a((LootItemFunction.b) (new LootItemFunctionLimitCount.a()));
+        a((LootItemFunction.b) (new LootItemFunctionApplyBonus.e()));
+        a((LootItemFunction.b) (new LootItemFunctionSetTable.a()));
+        a((LootItemFunction.b) (new LootItemFunctionExplosionDecay.a()));
+        a((LootItemFunction.b) (new LootItemFunctionSetLore.b()));
+        a((LootItemFunction.b) (new LootItemFunctionFillPlayerHead.a()));
+        a((LootItemFunction.b) (new LootItemFunctionCopyNBT.e()));
     }
 
     public static class a implements JsonDeserializer<LootItemFunction>, JsonSerializer<LootItemFunction> {
@@ -72,27 +115,23 @@ public class LootItemFunctions {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "function");
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "function"));
 
-            LootItemFunction.a lootitemfunction_a;
+            LootItemFunction.b lootitemfunction_b;
 
             try {
-                lootitemfunction_a = LootItemFunctions.a(minecraftkey);
+                lootitemfunction_b = LootItemFunctions.a(minecraftkey);
             } catch (IllegalArgumentException illegalargumentexception) {
                 throw new JsonSyntaxException("Unknown function '" + minecraftkey + "'");
             }
 
-            return lootitemfunction_a.b(jsonobject, jsondeserializationcontext, (LootItemCondition[]) ChatDeserializer.a(jsonobject, "conditions", new LootItemCondition[0], jsondeserializationcontext, LootItemCondition[].class));
+            return lootitemfunction_b.b(jsonobject, jsondeserializationcontext);
         }
 
         public JsonElement serialize(LootItemFunction lootitemfunction, Type type, JsonSerializationContext jsonserializationcontext) {
-            LootItemFunction.a<LootItemFunction> lootitemfunction_a = LootItemFunctions.a(lootitemfunction);
+            LootItemFunction.b<LootItemFunction> lootitemfunction_b = LootItemFunctions.a(lootitemfunction);
             JsonObject jsonobject = new JsonObject();
 
-            lootitemfunction_a.a(jsonobject, lootitemfunction, jsonserializationcontext);
-            jsonobject.addProperty("function", lootitemfunction_a.a().toString());
-            if (lootitemfunction.b() != null && lootitemfunction.b().length > 0) {
-                jsonobject.add("conditions", jsonserializationcontext.serialize(lootitemfunction.b()));
-            }
-
+            jsonobject.addProperty("function", lootitemfunction_b.a().toString());
+            lootitemfunction_b.a(jsonobject, lootitemfunction, jsonserializationcontext);
             return jsonobject;
         }
     }

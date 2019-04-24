@@ -11,6 +11,7 @@ public class BlockSkullPlayer extends BlockSkull {
         super(BlockSkull.Type.PLAYER, block_info);
     }
 
+    @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {
         super.postPlace(world, blockposition, iblockdata, entityliving, itemstack);
         TileEntity tileentity = world.getTileEntity(blockposition);

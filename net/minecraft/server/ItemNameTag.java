@@ -6,14 +6,18 @@ public class ItemNameTag extends Item {
         super(item_info);
     }
 
+    @Override
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (itemstack.hasName() && !(entityliving instanceof EntityHuman)) {
-            entityliving.setCustomName(itemstack.getName());
-            if (entityliving instanceof EntityInsentient) {
-                ((EntityInsentient) entityliving).di();
+            if (entityliving.isAlive()) {
+                entityliving.setCustomName(itemstack.getName());
+                if (entityliving instanceof EntityInsentient) {
+                    ((EntityInsentient) entityliving).setPersistent();
+                }
+
+                itemstack.subtract(1);
             }
 
-            itemstack.subtract(1);
             return true;
         } else {
             return false;

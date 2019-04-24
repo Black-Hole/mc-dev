@@ -6,6 +6,7 @@ public class ItemBed extends ItemBlock {
         super(block, item_info);
     }
 
+    @Override
     protected boolean a(BlockActionContext blockactioncontext, IBlockData iblockdata) {
         return blockactioncontext.getWorld().setTypeAndData(blockactioncontext.getClickPosition(), iblockdata, 26);
     }

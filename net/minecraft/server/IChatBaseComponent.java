@@ -186,6 +186,7 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
         private static final Gson a = (Gson) SystemUtils.a(() -> {
             GsonBuilder gsonbuilder = new GsonBuilder();
 
+            gsonbuilder.disableHtmlEscaping();
             gsonbuilder.registerTypeHierarchyAdapter(IChatBaseComponent.class, new IChatBaseComponent.ChatSerializer());
             gsonbuilder.registerTypeHierarchyAdapter(ChatModifier.class, new ChatModifier.ChatModifierSerializer());
             gsonbuilder.registerTypeAdapterFactory(new ChatTypeAdapterFactory());
@@ -246,47 +247,63 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
 
                 if (jsonobject.has("text")) {
                     object = new ChatComponentText(jsonobject.get("text").getAsString());
-                } else if (jsonobject.has("translate")) {
-                    String s = jsonobject.get("translate").getAsString();
+                } else {
+                    String s;
 
-                    if (jsonobject.has("with")) {
-                        JsonArray jsonarray1 = jsonobject.getAsJsonArray("with");
-                        Object[] aobject = new Object[jsonarray1.size()];
+                    if (jsonobject.has("translate")) {
+                        s = jsonobject.get("translate").getAsString();
+                        if (jsonobject.has("with")) {
+                            JsonArray jsonarray1 = jsonobject.getAsJsonArray("with");
+                            Object[] aobject = new Object[jsonarray1.size()];
 
-                        for (int i = 0; i < aobject.length; ++i) {
-                            aobject[i] = this.deserialize(jsonarray1.get(i), type, jsondeserializationcontext);
-                            if (aobject[i] instanceof ChatComponentText) {
-                                ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
+                            for (int i = 0; i < aobject.length; ++i) {
+                                aobject[i] = this.deserialize(jsonarray1.get(i), type, jsondeserializationcontext);
+                                if (aobject[i] instanceof ChatComponentText) {
+                                    ChatComponentText chatcomponenttext = (ChatComponentText) aobject[i];
 
-                                if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.a().isEmpty()) {
-                                    aobject[i] = chatcomponenttext.i();
+                                    if (chatcomponenttext.getChatModifier().g() && chatcomponenttext.a().isEmpty()) {
+                                        aobject[i] = chatcomponenttext.i();
+                                    }
                                 }
                             }
+
+                            object = new ChatMessage(s, aobject);
+                        } else {
+                            object = new ChatMessage(s, new Object[0]);
+                        }
+                    } else if (jsonobject.has("score")) {
+                        JsonObject jsonobject1 = jsonobject.getAsJsonObject("score");
+
+                        if (!jsonobject1.has("name") || !jsonobject1.has("objective")) {
+                            throw new JsonParseException("A score component needs a least a name and an objective");
                         }
 
-                        object = new ChatMessage(s, aobject);
+                        object = new ChatComponentScore(ChatDeserializer.h(jsonobject1, "name"), ChatDeserializer.h(jsonobject1, "objective"));
+                        if (jsonobject1.has("value")) {
+                            ((ChatComponentScore) object).b(ChatDeserializer.h(jsonobject1, "value"));
+                        }
+                    } else if (jsonobject.has("selector")) {
+                        object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
+                    } else if (jsonobject.has("keybind")) {
+                        object = new ChatComponentKeybind(ChatDeserializer.h(jsonobject, "keybind"));
                     } else {
-                        object = new ChatMessage(s, new Object[0]);
-                    }
-                } else if (jsonobject.has("score")) {
-                    JsonObject jsonobject1 = jsonobject.getAsJsonObject("score");
+                        if (!jsonobject.has("nbt")) {
+                            throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
+                        }
 
-                    if (!jsonobject1.has("name") || !jsonobject1.has("objective")) {
-                        throw new JsonParseException("A score component needs a least a name and an objective");
-                    }
+                        s = ChatDeserializer.h(jsonobject, "nbt");
+                        boolean flag = ChatDeserializer.a(jsonobject, "interpret", false);
 
-                    object = new ChatComponentScore(ChatDeserializer.h(jsonobject1, "name"), ChatDeserializer.h(jsonobject1, "objective"));
-                    if (jsonobject1.has("value")) {
-                        ((ChatComponentScore) object).b(ChatDeserializer.h(jsonobject1, "value"));
-                    }
-                } else if (jsonobject.has("selector")) {
-                    object = new ChatComponentSelector(ChatDeserializer.h(jsonobject, "selector"));
-                } else {
-                    if (!jsonobject.has("keybind")) {
-                        throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
-                    }
+                        if (jsonobject.has("block")) {
+                            object = new ChatComponentNBT.a(s, flag, ChatDeserializer.h(jsonobject, "block"));
+                        } else {
+                            if (!jsonobject.has("entity")) {
+                                throw new JsonParseException("Don't know how to turn " + jsonelement + " into a Component");
+                            }
 
-                    object = new ChatComponentKeybind(ChatDeserializer.h(jsonobject, "keybind"));
+                            object = new ChatComponentNBT.b(s, flag, ChatDeserializer.h(jsonobject, "entity"));
+                        }
+                    }
                 }
 
                 if (jsonobject.has("extra")) {
@@ -377,14 +394,32 @@ public interface IChatBaseComponent extends Message, Iterable<IChatBaseComponent
                 ChatComponentSelector chatcomponentselector = (ChatComponentSelector) ichatbasecomponent;
 
                 jsonobject.addProperty("selector", chatcomponentselector.i());
-            } else {
-                if (!(ichatbasecomponent instanceof ChatComponentKeybind)) {
-                    throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
-                }
-
+            } else if (ichatbasecomponent instanceof ChatComponentKeybind) {
                 ChatComponentKeybind chatcomponentkeybind = (ChatComponentKeybind) ichatbasecomponent;
 
                 jsonobject.addProperty("keybind", chatcomponentkeybind.j());
+            } else {
+                if (!(ichatbasecomponent instanceof ChatComponentNBT)) {
+                    throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
+                }
+
+                ChatComponentNBT chatcomponentnbt = (ChatComponentNBT) ichatbasecomponent;
+
+                jsonobject.addProperty("nbt", chatcomponentnbt.i());
+                jsonobject.addProperty("interpret", chatcomponentnbt.j());
+                if (ichatbasecomponent instanceof ChatComponentNBT.a) {
+                    ChatComponentNBT.a chatcomponentnbt_a = (ChatComponentNBT.a) ichatbasecomponent;
+
+                    jsonobject.addProperty("block", chatcomponentnbt_a.k());
+                } else {
+                    if (!(ichatbasecomponent instanceof ChatComponentNBT.b)) {
+                        throw new IllegalArgumentException("Don't know how to serialize " + ichatbasecomponent + " as a Component");
+                    }
+
+                    ChatComponentNBT.b chatcomponentnbt_b = (ChatComponentNBT.b) ichatbasecomponent;
+
+                    jsonobject.addProperty("entity", chatcomponentnbt_b.k());
+                }
             }
 
             return jsonobject;

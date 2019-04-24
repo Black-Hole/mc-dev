@@ -28,7 +28,7 @@ public class CommandSpreadPlayers {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("spreadplayers").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("center", (ArgumentType) ArgumentVec2.a()).then(CommandDispatcher.a("spreadDistance", (ArgumentType) FloatArgumentType.floatArg(0.0F)).then(CommandDispatcher.a("maxRange", (ArgumentType) FloatArgumentType.floatArg(1.0F)).then(CommandDispatcher.a("respectTeams", (ArgumentType) BoolArgumentType.bool()).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).executes((commandcontext) -> {
+        })).then(CommandDispatcher.a("center", (ArgumentType) ArgumentVec2.a()).then(CommandDispatcher.a("spreadDistance", (ArgumentType) FloatArgumentType.floatArg(0.0F)).then(CommandDispatcher.a("maxRange", (ArgumentType) FloatArgumentType.floatArg(1.0F)).then(CommandDispatcher.a("respectTeams", (ArgumentType) BoolArgumentType.bool()).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2.a(commandcontext, "center"), FloatArgumentType.getFloat(commandcontext, "spreadDistance"), FloatArgumentType.getFloat(commandcontext, "maxRange"), BoolArgumentType.getBool(commandcontext, "respectTeams"), ArgumentEntity.b(commandcontext, "targets"));
         })))))));
     }

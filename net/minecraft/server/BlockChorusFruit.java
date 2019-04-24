@@ -7,9 +7,10 @@ public class BlockChorusFruit extends BlockSprawling {
 
     protected BlockChorusFruit(Block.Info block_info) {
         super(0.3125F, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.o, false)).set(BlockChorusFruit.p, false)).set(BlockChorusFruit.q, false));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockChorusFruit.a, false)).set(BlockChorusFruit.b, false)).set(BlockChorusFruit.c, false)).set(BlockChorusFruit.d, false)).set(BlockChorusFruit.e, false)).set(BlockChorusFruit.f, false));
     }
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         return this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
     }
@@ -22,9 +23,10 @@ public class BlockChorusFruit extends BlockSprawling {
         Block block4 = iblockaccess.getType(blockposition.south()).getBlock();
         Block block5 = iblockaccess.getType(blockposition.west()).getBlock();
 
-        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.q, block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE)).set(BlockChorusFruit.p, block1 == this || block1 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.a, block2 == this || block2 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.b, block3 == this || block3 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.c, block4 == this || block4 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.o, block5 == this || block5 == Blocks.CHORUS_FLOWER);
+        return (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.getBlockData().set(BlockChorusFruit.f, block == this || block == Blocks.CHORUS_FLOWER || block == Blocks.END_STONE)).set(BlockChorusFruit.e, block1 == this || block1 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.a, block2 == this || block2 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.b, block3 == this || block3 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.c, block4 == this || block4 == Blocks.CHORUS_FLOWER)).set(BlockChorusFruit.d, block5 == this || block5 == Blocks.CHORUS_FLOWER);
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (!iblockdata.canPlace(generatoraccess, blockposition)) {
             generatoraccess.getBlockTickList().a(blockposition, this, 1);
@@ -33,29 +35,19 @@ public class BlockChorusFruit extends BlockSprawling {
             Block block = iblockdata1.getBlock();
             boolean flag = block == this || block == Blocks.CHORUS_FLOWER || enumdirection == EnumDirection.DOWN && block == Blocks.END_STONE;
 
-            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.r.get(enumdirection), flag);
+            return (IBlockData) iblockdata.set((IBlockState) BlockChorusFruit.g.get(enumdirection), flag);
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!iblockdata.canPlace(world, blockposition)) {
-            world.setAir(blockposition, true);
+            world.b(blockposition, true);
         }
 
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.CHORUS_FRUIT;
-    }
-
-    public int a(IBlockData iblockdata, Random random) {
-        return random.nextInt(2);
-    }
-
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
         boolean flag = !iworldreader.getType(blockposition.up()).isAir() && !iblockdata1.isAir();
@@ -90,18 +82,17 @@ public class BlockChorusFruit extends BlockSprawling {
         return true;
     }
 
+    @Override
     public TextureType c() {
         return TextureType.CUTOUT;
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
-        blockstatelist_a.a(BlockChorusFruit.a, BlockChorusFruit.b, BlockChorusFruit.c, BlockChorusFruit.o, BlockChorusFruit.p, BlockChorusFruit.q);
+        blockstatelist_a.a(BlockChorusFruit.a, BlockChorusFruit.b, BlockChorusFruit.c, BlockChorusFruit.d, BlockChorusFruit.e, BlockChorusFruit.f);
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
-
+    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }

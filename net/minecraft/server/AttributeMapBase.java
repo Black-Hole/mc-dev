@@ -17,6 +17,7 @@ public abstract class AttributeMapBase {
 
     public AttributeMapBase() {}
 
+    @Nullable
     public AttributeInstance a(IAttribute iattribute) {
         return (AttributeInstance) this.a.get(iattribute);
     }

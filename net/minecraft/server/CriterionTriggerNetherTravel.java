@@ -19,10 +19,12 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
 
     public CriterionTriggerNetherTravel() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerNetherTravel.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerNetherTravel.b> criteriontrigger_a) {
         CriterionTriggerNetherTravel.a criteriontriggernethertravel_a = (CriterionTriggerNetherTravel.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
         criteriontriggernethertravel_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerNetherTravel.b> criteriontrigger_a) {
         CriterionTriggerNetherTravel.a criteriontriggernethertravel_a = (CriterionTriggerNetherTravel.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerNetherTravel.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a(jsonobject.get("entered"));
         CriterionConditionLocation criterionconditionlocation1 = CriterionConditionLocation.a(jsonobject.get("exited"));
@@ -138,6 +143,7 @@ public class CriterionTriggerNetherTravel implements CriterionTrigger<CriterionT
             return !this.a.a(worldserver, vec3d.x, vec3d.y, vec3d.z) ? false : (!this.b.a(worldserver, d0, d1, d2) ? false : this.c.a(vec3d.x, vec3d.y, vec3d.z, d0, d1, d2));
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

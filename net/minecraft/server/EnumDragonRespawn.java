@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -7,6 +8,7 @@ import java.util.Random;
 public enum EnumDragonRespawn {
 
     START {
+        @Override
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             BlockPosition blockposition1 = new BlockPosition(0, 128, 0);
             Iterator iterator = list.iterator();
@@ -21,6 +23,7 @@ public enum EnumDragonRespawn {
         }
     },
     PREPARING_TO_SUMMON_PILLARS {
+        @Override
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             if (i < 100) {
                 if (i == 0 || i == 50 || i == 51 || i == 52 || i >= 95) {
@@ -33,17 +36,18 @@ public enum EnumDragonRespawn {
         }
     },
     SUMMONING_PILLARS {
+        @Override
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             boolean flag = true;
             boolean flag1 = i % 40 == 0;
             boolean flag2 = i % 40 == 39;
 
             if (flag1 || flag2) {
-                WorldGenEnder.Spike[] aworldgenender_spike = WorldGenDecoratorSpike.a(worldserver);
+                List<WorldGenEnder.Spike> list1 = WorldGenEnder.a((GeneratorAccess) worldserver);
                 int j = i / 40;
 
-                if (j < aworldgenender_spike.length) {
-                    WorldGenEnder.Spike worldgenender_spike = aworldgenender_spike[j];
+                if (j < list1.size()) {
+                    WorldGenEnder.Spike worldgenender_spike = (WorldGenEnder.Spike) list1.get(j);
 
                     if (flag1) {
                         Iterator iterator = list.iterator();
@@ -55,21 +59,18 @@ public enum EnumDragonRespawn {
                         }
                     } else {
                         boolean flag3 = true;
-                        Iterator iterator1 = BlockPosition.b(new BlockPosition(worldgenender_spike.a() - 10, worldgenender_spike.d() - 10, worldgenender_spike.b() - 10), new BlockPosition(worldgenender_spike.a() + 10, worldgenender_spike.d() + 10, worldgenender_spike.b() + 10)).iterator();
+                        Iterator iterator1 = BlockPosition.a(new BlockPosition(worldgenender_spike.a() - 10, worldgenender_spike.d() - 10, worldgenender_spike.b() - 10), new BlockPosition(worldgenender_spike.a() + 10, worldgenender_spike.d() + 10, worldgenender_spike.b() + 10)).iterator();
 
                         while (iterator1.hasNext()) {
-                            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = (BlockPosition.MutableBlockPosition) iterator1.next();
+                            BlockPosition blockposition1 = (BlockPosition) iterator1.next();
 
-                            worldserver.setAir(blockposition_mutableblockposition);
+                            worldserver.a(blockposition1, false);
                         }
 
-                        worldserver.explode((Entity) null, (double) ((float) worldgenender_spike.a() + 0.5F), (double) worldgenender_spike.d(), (double) ((float) worldgenender_spike.b() + 0.5F), 5.0F, true);
-                        WorldGenEnder worldgenender = new WorldGenEnder();
+                        worldserver.explode((Entity) null, (double) ((float) worldgenender_spike.a() + 0.5F), (double) worldgenender_spike.d(), (double) ((float) worldgenender_spike.b() + 0.5F), 5.0F, Explosion.Effect.DESTROY);
+                        WorldGenFeatureEndSpikeConfiguration worldgenfeatureendspikeconfiguration = new WorldGenFeatureEndSpikeConfiguration(true, ImmutableList.of(worldgenender_spike), new BlockPosition(0, 128, 0));
 
-                        worldgenender.a(worldgenender_spike);
-                        worldgenender.a(true);
-                        worldgenender.a(new BlockPosition(0, 128, 0));
-                        worldgenender.a(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()), WorldGenFeatureConfiguration.e);
+                        WorldGenerator.END_SPIKE.generate(worldserver, worldserver.getChunkProvider().getChunkGenerator(), new Random(), new BlockPosition(worldgenender_spike.a(), 45, worldgenender_spike.b()), worldgenfeatureendspikeconfiguration);
                     }
                 } else if (flag1) {
                     enderdragonbattle.a(null.SUMMONING_DRAGON);
@@ -79,6 +80,7 @@ public enum EnumDragonRespawn {
         }
     },
     SUMMONING_DRAGON {
+        @Override
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {
             Iterator iterator;
             EntityEnderCrystal entityendercrystal;
@@ -91,7 +93,7 @@ public enum EnumDragonRespawn {
                 while (iterator.hasNext()) {
                     entityendercrystal = (EntityEnderCrystal) iterator.next();
                     entityendercrystal.setBeamTarget((BlockPosition) null);
-                    worldserver.explode(entityendercrystal, entityendercrystal.locX, entityendercrystal.locY, entityendercrystal.locZ, 6.0F, false);
+                    worldserver.explode(entityendercrystal, entityendercrystal.locX, entityendercrystal.locY, entityendercrystal.locZ, 6.0F, Explosion.Effect.NONE);
                     entityendercrystal.die();
                 }
             } else if (i >= 80) {
@@ -110,6 +112,7 @@ public enum EnumDragonRespawn {
         }
     },
     END {
+        @Override
         public void a(WorldServer worldserver, EnderDragonBattle enderdragonbattle, List<EntityEnderCrystal> list, int i, BlockPosition blockposition) {}
     };
 

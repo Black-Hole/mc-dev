@@ -10,16 +10,19 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
     private boolean h;
     private static final WorldGenJunglePyramidPiece.a i = new WorldGenJunglePyramidPiece.a();
 
-    public static void ad_() {
-        WorldGenFactory.a(WorldGenJunglePyramidPiece.class, "TeJP");
-    }
-
-    public WorldGenJunglePyramidPiece() {}
-
     public WorldGenJunglePyramidPiece(Random random, int i, int j) {
-        super(random, i, 64, j, 12, 10, 15);
+        super(WorldGenFeatureStructurePieceType.I, random, i, 64, j, 12, 10, 15);
     }
 
+    public WorldGenJunglePyramidPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+        super(WorldGenFeatureStructurePieceType.I, nbttagcompound);
+        this.e = nbttagcompound.getBoolean("placedMainChest");
+        this.f = nbttagcompound.getBoolean("placedHiddenChest");
+        this.g = nbttagcompound.getBoolean("placedTrap1");
+        this.h = nbttagcompound.getBoolean("placedTrap2");
+    }
+
+    @Override
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         nbttagcompound.setBoolean("placedMainChest", this.e);
@@ -28,14 +31,7 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
         nbttagcompound.setBoolean("placedTrap2", this.h);
     }
 
-    protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-        super.a(nbttagcompound, definedstructuremanager);
-        this.e = nbttagcompound.getBoolean("placedMainChest");
-        this.f = nbttagcompound.getBoolean("placedHiddenChest");
-        this.g = nbttagcompound.getBoolean("placedTrap1");
-        this.h = nbttagcompound.getBoolean("placedTrap2");
-    }
-
+    @Override
     public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         if (!this.a(generatoraccess, structureboundingbox, 0)) {
             return false;
@@ -162,7 +158,7 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
             this.a(generatoraccess, (IBlockData) Blocks.REDSTONE_WIRE.getBlockData().set(BlockRedstoneWire.EAST, BlockPropertyRedstoneSide.SIDE), 4, -3, 1, structureboundingbox);
             this.a(generatoraccess, Blocks.MOSSY_COBBLESTONE.getBlockData(), 3, -3, 1, structureboundingbox);
             if (!this.g) {
-                this.g = this.a(generatoraccess, structureboundingbox, random, 3, -2, 1, EnumDirection.NORTH, LootTables.m);
+                this.g = this.a(generatoraccess, structureboundingbox, random, 3, -2, 1, EnumDirection.NORTH, LootTables.B);
             }
 
             this.a(generatoraccess, (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.SOUTH, true), 3, -2, 2, structureboundingbox);
@@ -177,13 +173,13 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
             this.a(generatoraccess, Blocks.MOSSY_COBBLESTONE.getBlockData(), 9, -3, 4, structureboundingbox);
             this.a(generatoraccess, (IBlockData) Blocks.REDSTONE_WIRE.getBlockData().set(BlockRedstoneWire.NORTH, BlockPropertyRedstoneSide.SIDE), 9, -2, 4, structureboundingbox);
             if (!this.h) {
-                this.h = this.a(generatoraccess, structureboundingbox, random, 9, -2, 3, EnumDirection.WEST, LootTables.m);
+                this.h = this.a(generatoraccess, structureboundingbox, random, 9, -2, 3, EnumDirection.WEST, LootTables.B);
             }
 
             this.a(generatoraccess, (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.EAST, true), 8, -1, 3, structureboundingbox);
             this.a(generatoraccess, (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.EAST, true), 8, -2, 3, structureboundingbox);
             if (!this.e) {
-                this.e = this.a(generatoraccess, structureboundingbox, random, 8, -3, 3, LootTables.l);
+                this.e = this.a(generatoraccess, structureboundingbox, random, 8, -3, 3, LootTables.A);
             }
 
             this.a(generatoraccess, Blocks.MOSSY_COBBLESTONE.getBlockData(), 9, -3, 2, structureboundingbox);
@@ -216,7 +212,7 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
             this.a(generatoraccess, (IBlockData) Blocks.STICKY_PISTON.getBlockData().set(BlockPiston.FACING, EnumDirection.WEST), 10, -1, 8, structureboundingbox);
             this.a(generatoraccess, (IBlockData) Blocks.REPEATER.getBlockData().set(BlockRepeater.FACING, EnumDirection.NORTH), 10, -2, 10, structureboundingbox);
             if (!this.f) {
-                this.f = this.a(generatoraccess, structureboundingbox, random, 9, -3, 10, LootTables.l);
+                this.f = this.a(generatoraccess, structureboundingbox, random, 9, -3, 10, LootTables.A);
             }
 
             return true;
@@ -227,6 +223,7 @@ public class WorldGenJunglePyramidPiece extends WorldGenScatteredPiece {
 
         private a() {}
 
+        @Override
         public void a(Random random, int i, int j, int k, boolean flag) {
             if (random.nextFloat() < 0.4F) {
                 this.a = Blocks.COBBLESTONE.getBlockData();

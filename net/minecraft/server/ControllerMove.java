@@ -42,16 +42,6 @@ public class ControllerMove {
         this.e = 0.25D;
     }
 
-    public void a(ControllerMove controllermove) {
-        this.h = controllermove.h;
-        this.b = controllermove.b;
-        this.c = controllermove.c;
-        this.d = controllermove.d;
-        this.e = Math.max(controllermove.e, 1.0D);
-        this.f = controllermove.f;
-        this.g = controllermove.g;
-    }
-
     public void a() {
         float f;
 
@@ -77,7 +67,7 @@ public class ControllerMove {
             NavigationAbstract navigationabstract = this.a.getNavigation();
 
             if (navigationabstract != null) {
-                PathfinderAbstract pathfinderabstract = navigationabstract.s();
+                PathfinderAbstract pathfinderabstract = navigationabstract.q();
 
                 if (pathfinderabstract != null && pathfinderabstract.a(this.a.world, MathHelper.floor(this.a.locX + (double) f8), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ + (double) f)) != PathType.WALKABLE) {
                     this.f = 1.0F;
@@ -102,11 +92,15 @@ public class ControllerMove {
                 return;
             }
 
-            f = (float) (MathHelper.c(d1, d0) * 57.2957763671875D) - 90.0F;
+            f = (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
             this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
-            if (d2 > (double) this.a.Q && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.width)) {
-                this.a.getControllerJump().a();
+            BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.locY, this.a.locZ);
+            IBlockData iblockdata = this.a.world.getType(blockposition);
+            VoxelShape voxelshape = iblockdata.getCollisionShape(this.a.world, blockposition);
+
+            if (d2 > (double) this.a.K && d0 * d0 + d1 * d1 < (double) Math.max(1.0F, this.a.getWidth()) || !voxelshape.isEmpty() && this.a.locY < voxelshape.c(EnumDirection.EnumAxis.Y) + (double) blockposition.getY()) {
+                this.a.getControllerJump().jump();
                 this.h = ControllerMove.Operation.JUMPING;
             }
         } else if (this.h == ControllerMove.Operation.JUMPING) {

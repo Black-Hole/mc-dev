@@ -1,38 +1,41 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
 
-    private final EntityCreature f;
-    public double a;
-    protected int b;
+    protected final EntityCreature a;
+    public final double b;
     protected int c;
+    protected int d;
     private int g;
-    protected BlockPosition d;
+    protected BlockPosition e;
     private boolean h;
     private final int i;
     private final int j;
-    public int e;
+    protected int f;
 
     public PathfinderGoalGotoTarget(EntityCreature entitycreature, double d0, int i) {
         this(entitycreature, d0, i, 1);
     }
 
     public PathfinderGoalGotoTarget(EntityCreature entitycreature, double d0, int i, int j) {
-        this.d = BlockPosition.ZERO;
-        this.f = entitycreature;
-        this.a = d0;
+        this.e = BlockPosition.ZERO;
+        this.a = entitycreature;
+        this.b = d0;
         this.i = i;
-        this.e = 0;
+        this.f = 0;
         this.j = j;
-        this.a(5);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.JUMP));
     }
 
+    @Override
     public boolean a() {
-        if (this.b > 0) {
-            --this.b;
+        if (this.c > 0) {
+            --this.c;
             return false;
         } else {
-            this.b = this.a(this.f);
+            this.c = this.a(this.a);
             return this.l();
         }
     }
@@ -41,59 +44,62 @@ public abstract class PathfinderGoalGotoTarget extends PathfinderGoal {
         return 200 + entitycreature.getRandom().nextInt(200);
     }
 
+    @Override
     public boolean b() {
-        return this.c >= -this.g && this.c <= 1200 && this.a(this.f.world, this.d);
+        return this.d >= -this.g && this.d <= 1200 && this.a(this.a.world, this.e);
     }
 
+    @Override
     public void c() {
-        this.f.getNavigation().a((double) ((float) this.d.getX()) + 0.5D, (double) (this.d.getY() + 1), (double) ((float) this.d.getZ()) + 0.5D, this.a);
-        this.c = 0;
-        this.g = this.f.getRandom().nextInt(this.f.getRandom().nextInt(1200) + 1200) + 1200;
+        this.g();
+        this.d = 0;
+        this.g = this.a.getRandom().nextInt(this.a.getRandom().nextInt(1200) + 1200) + 1200;
     }
 
-    public double g() {
+    protected void g() {
+        this.a.getNavigation().a((double) ((float) this.e.getX()) + 0.5D, (double) (this.e.getY() + 1), (double) ((float) this.e.getZ()) + 0.5D, this.b);
+    }
+
+    public double h() {
         return 1.0D;
     }
 
+    @Override
     public void e() {
-        if (this.f.d(this.d.up()) > this.g()) {
+        if (!this.e.up().a((IPosition) this.a.ch(), this.h())) {
             this.h = false;
-            ++this.c;
-            if (this.i()) {
-                this.f.getNavigation().a((double) ((float) this.d.getX()) + 0.5D, (double) (this.d.getY() + this.j()), (double) ((float) this.d.getZ()) + 0.5D, this.a);
+            ++this.d;
+            if (this.j()) {
+                this.a.getNavigation().a((double) ((float) this.e.getX()) + 0.5D, (double) (this.e.getY() + 1), (double) ((float) this.e.getZ()) + 0.5D, this.b);
             }
         } else {
             this.h = true;
-            --this.c;
+            --this.d;
         }
 
     }
 
-    public boolean i() {
-        return this.c % 40 == 0;
-    }
-
-    public int j() {
-        return 1;
+    public boolean j() {
+        return this.d % 40 == 0;
     }
 
     protected boolean k() {
         return this.h;
     }
 
-    private boolean l() {
+    protected boolean l() {
         int i = this.i;
         int j = this.j;
-        BlockPosition blockposition = new BlockPosition(this.f);
+        BlockPosition blockposition = new BlockPosition(this.a);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        for (int k = this.e; k <= j; k = k > 0 ? -k : 1 - k) {
+        for (int k = this.f; k <= j; k = k > 0 ? -k : 1 - k) {
             for (int l = 0; l < i; ++l) {
                 for (int i1 = 0; i1 <= l; i1 = i1 > 0 ? -i1 : 1 - i1) {
                     for (int j1 = i1 < l && i1 > -l ? l : 0; j1 <= l; j1 = j1 > 0 ? -j1 : 1 - j1) {
-                        blockposition_mutableblockposition.g(blockposition).d(i1, k - 1, j1);
-                        if (this.f.f((BlockPosition) blockposition_mutableblockposition) && this.a(this.f.world, blockposition_mutableblockposition)) {
-                            this.d = blockposition_mutableblockposition;
+                        blockposition_mutableblockposition.g(blockposition).e(i1, k - 1, j1);
+                        if (this.a.a((BlockPosition) blockposition_mutableblockposition) && this.a(this.a.world, blockposition_mutableblockposition)) {
+                            this.e = blockposition_mutableblockposition;
                             return true;
                         }
                     }

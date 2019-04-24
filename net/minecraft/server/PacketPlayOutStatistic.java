@@ -20,24 +20,26 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         this.a = new Object2IntOpenHashMap(i);
 
         for (int j = 0; j < i; ++j) {
-            this.a((StatisticWrapper) IRegistry.STATS.fromId(packetdataserializer.g()), packetdataserializer);
+            this.a((StatisticWrapper) IRegistry.STATS.fromId(packetdataserializer.i()), packetdataserializer);
         }
 
     }
 
     private <T> void a(StatisticWrapper<T> statisticwrapper, PacketDataSerializer packetdataserializer) {
-        int i = packetdataserializer.g();
-        int j = packetdataserializer.g();
+        int i = packetdataserializer.i();
+        int j = packetdataserializer.i();
 
         this.a.put(statisticwrapper.b(statisticwrapper.a().fromId(i)), j);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a.size());
         ObjectIterator objectiterator = this.a.object2IntEntrySet().iterator();

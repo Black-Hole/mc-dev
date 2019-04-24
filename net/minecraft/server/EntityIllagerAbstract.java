@@ -1,32 +1,30 @@
 package net.minecraft.server;
 
-public abstract class EntityIllagerAbstract extends EntityMonster {
+public abstract class EntityIllagerAbstract extends EntityRaider {
 
-    protected static final DataWatcherObject<Byte> a = DataWatcher.a(EntityIllagerAbstract.class, DataWatcherRegistry.a);
-
-    protected EntityIllagerAbstract(EntityTypes<?> entitytypes, World world) {
+    protected EntityIllagerAbstract(EntityTypes<? extends EntityIllagerAbstract> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityIllagerAbstract.a, (byte) 0);
+    @Override
+    protected void initPathfinder() {
+        super.initPathfinder();
     }
 
-    protected void a(int i, boolean flag) {
-        byte b0 = (Byte) this.datawatcher.get(EntityIllagerAbstract.a);
-        int j;
-
-        if (flag) {
-            j = b0 | i;
-        } else {
-            j = b0 & ~i;
-        }
-
-        this.datawatcher.set(EntityIllagerAbstract.a, (byte) (j & 255));
-    }
-
+    @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ILLAGER;
+    }
+
+    public class b extends PathfinderGoalDoorOpen {
+
+        public b(EntityRaider entityraider) {
+            super(entityraider, false);
+        }
+
+        @Override
+        public boolean a() {
+            return super.a() && EntityIllagerAbstract.this.el();
+        }
     }
 }

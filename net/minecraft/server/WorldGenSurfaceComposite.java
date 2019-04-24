@@ -2,17 +2,17 @@ package net.minecraft.server;
 
 import java.util.Random;
 
-public class WorldGenSurfaceComposite<C extends WorldGenSurfaceConfiguration> implements WorldGenSurface<WorldGenSurfaceConfigurationBase> {
+public class WorldGenSurfaceComposite<SC extends WorldGenSurfaceConfiguration> {
 
-    private final WorldGenSurface<C> a;
-    private final C b;
+    public final WorldGenSurface<SC> a;
+    public final SC b;
 
-    public WorldGenSurfaceComposite(WorldGenSurface<C> worldgensurface, C c0) {
+    public WorldGenSurfaceComposite(WorldGenSurface<SC> worldgensurface, SC sc) {
         this.a = worldgensurface;
-        this.b = c0;
+        this.b = sc;
     }
 
-    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
+    public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1) {
         this.a.a(random, ichunkaccess, biomebase, i, j, k, d0, iblockdata, iblockdata1, l, i1, this.b);
     }
 
@@ -20,7 +20,7 @@ public class WorldGenSurfaceComposite<C extends WorldGenSurfaceConfiguration> im
         this.a.a(i);
     }
 
-    public C a() {
+    public SC a() {
         return this.b;
     }
 }

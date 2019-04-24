@@ -8,6 +8,7 @@ public class ItemGlassBottle extends Item {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         List<EntityAreaEffectCloud> list = world.a(EntityAreaEffectCloud.class, entityhuman.getBoundingBox().g(2.0D), (entityareaeffectcloud) -> {
             return entityareaeffectcloud != null && entityareaeffectcloud.isAlive() && entityareaeffectcloud.getSource() instanceof EntityEnderDragon;
@@ -21,13 +22,13 @@ public class ItemGlassBottle extends Item {
             world.a((EntityHuman) null, entityhuman.locX, entityhuman.locY, entityhuman.locZ, SoundEffects.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, this.a(itemstack, entityhuman, new ItemStack(Items.DRAGON_BREATH)));
         } else {
-            MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
+            MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
-            if (movingobjectposition == null) {
+            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
                 return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
             } else {
-                if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                    BlockPosition blockposition = movingobjectposition.getBlockPosition();
+                if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                    BlockPosition blockposition = ((MovingObjectPositionBlock) movingobjectposition).getBlockPosition();
 
                     if (!world.a(entityhuman, blockposition)) {
                         return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);

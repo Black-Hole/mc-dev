@@ -10,7 +10,7 @@ public class CommandStop {
             return commandlistenerwrapper.hasPermission(4);
         })).executes((commandcontext) -> {
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.stop.stopping", new Object[0]), true);
-            ((CommandListenerWrapper) commandcontext.getSource()).getServer().safeShutdown();
+            ((CommandListenerWrapper) commandcontext.getSource()).getServer().safeShutdown(false);
             return 1;
         }));
     }

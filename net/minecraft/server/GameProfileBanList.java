@@ -11,6 +11,7 @@ public class GameProfileBanList extends JsonList<GameProfile, GameProfileBanEntr
         super(file);
     }
 
+    @Override
     protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new GameProfileBanEntry(jsonobject);
     }
@@ -19,6 +20,7 @@ public class GameProfileBanList extends JsonList<GameProfile, GameProfileBanEntr
         return this.d(gameprofile);
     }
 
+    @Override
     public String[] getEntries() {
         String[] astring = new String[this.e().size()];
         int i = 0;

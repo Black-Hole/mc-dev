@@ -21,10 +21,12 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
         this.a = minecraftkey;
     }
 
+    @Override
     public MinecraftKey a() {
         return this.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerLocation.b> criteriontrigger_a) {
         CriterionTriggerLocation.a criteriontriggerlocation_a = (CriterionTriggerLocation.a) this.b.get(advancementdataplayer);
 
@@ -36,6 +38,7 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
         criteriontriggerlocation_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerLocation.b> criteriontrigger_a) {
         CriterionTriggerLocation.a criteriontriggerlocation_a = (CriterionTriggerLocation.a) this.b.get(advancementdataplayer);
 
@@ -48,10 +51,12 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerLocation.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionLocation criterionconditionlocation = CriterionConditionLocation.a((JsonElement) jsonobject);
 
@@ -134,10 +139,15 @@ public class CriterionTriggerLocation implements CriterionTrigger<CriterionTrigg
             return new CriterionTriggerLocation.b(CriterionTriggers.q.a, CriterionConditionLocation.a);
         }
 
+        public static CriterionTriggerLocation.b d() {
+            return new CriterionTriggerLocation.b(CriterionTriggers.H.a, CriterionConditionLocation.a);
+        }
+
         public boolean a(WorldServer worldserver, double d0, double d1, double d2) {
             return this.a.a(worldserver, d0, d1, d2);
         }
 
+        @Override
         public JsonElement b() {
             return this.a.a();
         }

@@ -20,7 +20,7 @@ public class DataConverterChunkStructuresTemplateRename extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.s);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.t);
         OpticFinder<?> opticfinder = type.findField("Children");
 
         return this.fixTypeEverywhereTyped("ChunkStructuresTemplateRenameFix", type, (typed) -> {
@@ -33,13 +33,13 @@ public class DataConverterChunkStructuresTemplateRename extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic, Dynamic<?> dynamic1) {
-        String s = dynamic.getString("id");
+        String s = dynamic.get("id").asString("");
 
         if (DataConverterChunkStructuresTemplateRename.a.containsKey(s)) {
             Pair<String, ImmutableMap<String, String>> pair = (Pair) DataConverterChunkStructuresTemplateRename.a.get(s);
 
-            if (((String) pair.getFirst()).equals(dynamic1.getString("id"))) {
-                String s1 = dynamic1.getString("Template");
+            if (((String) pair.getFirst()).equals(dynamic1.get("id").asString(""))) {
+                String s1 = dynamic1.get("Template").asString("");
 
                 dynamic1 = dynamic1.set("Template", dynamic1.createString((String) ((ImmutableMap) pair.getSecond()).getOrDefault(s1, s1)));
             }

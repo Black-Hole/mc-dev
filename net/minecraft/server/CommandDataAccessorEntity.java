@@ -12,14 +12,18 @@ import java.util.function.Function;
 public class CommandDataAccessorEntity implements CommandDataAccessor {
 
     private static final SimpleCommandExceptionType b = new SimpleCommandExceptionType(new ChatMessage("commands.data.entity.invalid", new Object[0]));
-    public static final CommandData.a a = new CommandData.a() {
-        public CommandDataAccessor a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
-            return new CommandDataAccessorEntity(ArgumentEntity.a(commandcontext, "target"));
-        }
+    public static final Function<String, CommandData.c> a = (s) -> {
+        return new CommandData.c() {
+            @Override
+            public CommandDataAccessor a(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException {
+                return new CommandDataAccessorEntity(ArgumentEntity.a(commandcontext, s));
+            }
 
-        public ArgumentBuilder<CommandListenerWrapper, ?> a(ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, Function<ArgumentBuilder<CommandListenerWrapper, ?>, ArgumentBuilder<CommandListenerWrapper, ?>> function) {
-            return argumentbuilder.then(CommandDispatcher.a("entity").then((ArgumentBuilder) function.apply(CommandDispatcher.a("target", (ArgumentType) ArgumentEntity.a()))));
-        }
+            @Override
+            public ArgumentBuilder<CommandListenerWrapper, ?> a(ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, Function<ArgumentBuilder<CommandListenerWrapper, ?>, ArgumentBuilder<CommandListenerWrapper, ?>> function) {
+                return argumentbuilder.then(CommandDispatcher.a("entity").then((ArgumentBuilder) function.apply(CommandDispatcher.a(s, (ArgumentType) ArgumentEntity.a()))));
+            }
+        };
     };
     private final Entity c;
 
@@ -27,6 +31,7 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
         this.c = entity;
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) throws CommandSyntaxException {
         if (this.c instanceof EntityHuman) {
             throw CommandDataAccessorEntity.b.create();
@@ -38,19 +43,23 @@ public class CommandDataAccessorEntity implements CommandDataAccessor {
         }
     }
 
+    @Override
     public NBTTagCompound a() {
         return CriterionConditionNBT.b(this.c);
     }
 
+    @Override
     public IChatBaseComponent b() {
         return new ChatMessage("commands.data.entity.modified", new Object[] { this.c.getScoreboardDisplayName()});
     }
 
+    @Override
     public IChatBaseComponent a(NBTBase nbtbase) {
         return new ChatMessage("commands.data.entity.query", new Object[] { this.c.getScoreboardDisplayName(), nbtbase.k()});
     }
 
-    public IChatBaseComponent a(ArgumentNBTKey.c argumentnbtkey_c, double d0, int i) {
-        return new ChatMessage("commands.data.entity.get", new Object[] { argumentnbtkey_c, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
+    @Override
+    public IChatBaseComponent a(ArgumentNBTKey.h argumentnbtkey_h, double d0, int i) {
+        return new ChatMessage("commands.data.entity.get", new Object[] { argumentnbtkey_h, this.c.getScoreboardDisplayName(), String.format(Locale.ROOT, "%.2f", d0), i});
     }
 }

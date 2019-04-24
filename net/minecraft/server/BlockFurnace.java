@@ -1,42 +1,37 @@
 package net.minecraft.server;
 
-public class BlockFurnace extends BlockTileEntity {
+public abstract class BlockFurnace extends BlockTileEntity {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
     public static final BlockStateBoolean LIT = BlockRedstoneTorch.LIT;
 
     protected BlockFurnace(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFurnace.FACING, EnumDirection.NORTH)).set(BlockFurnace.LIT, false));
     }
 
-    public int m(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockFurnace.LIT) ? super.m(iblockdata) : 0;
+    @Override
+    public int a(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockFurnace.LIT) ? super.a(iblockdata) : 0;
     }
 
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
-        if (world.isClientSide) {
-            return true;
-        } else {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-
-            if (tileentity instanceof TileEntityFurnace) {
-                entityhuman.openContainer((TileEntityFurnace) tileentity);
-                entityhuman.a(StatisticList.INTERACT_WITH_FURNACE);
-            }
-
-            return true;
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        if (!world.isClientSide) {
+            this.a(world, blockposition, entityhuman);
         }
+
+        return true;
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
-        return new TileEntityFurnace();
-    }
+    protected abstract void a(World world, BlockPosition blockposition, EntityHuman entityhuman);
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         return (IBlockData) this.getBlockData().set(BlockFurnace.FACING, blockactioncontext.f().opposite());
     }
 
+    @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         if (itemstack.hasName()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
@@ -48,6 +43,7 @@ public class BlockFurnace extends BlockTileEntity {
 
     }
 
+    @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
@@ -61,26 +57,32 @@ public class BlockFurnace extends BlockTileEntity {
         }
     }
 
+    @Override
     public boolean isComplexRedstone(IBlockData iblockdata) {
         return true;
     }
 
+    @Override
     public int a(IBlockData iblockdata, World world, BlockPosition blockposition) {
         return Container.a(world.getTileEntity(blockposition));
     }
 
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockFurnace.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockFurnace.FACING)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockFurnace.FACING)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockFurnace.FACING, BlockFurnace.LIT);
     }

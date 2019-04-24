@@ -16,11 +16,11 @@ import java.util.List;
 
 public class CommandReplaceItem {
 
-    private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.replaceitem.block.failed", new Object[0]));
-    private static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
+    public static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.replaceitem.block.failed", new Object[0]));
+    public static final DynamicCommandExceptionType b = new DynamicCommandExceptionType((object) -> {
         return new ChatMessage("commands.replaceitem.slot.inapplicable", new Object[] { object});
     });
-    private static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
+    public static final Dynamic2CommandExceptionType c = new Dynamic2CommandExceptionType((object, object1) -> {
         return new ChatMessage("commands.replaceitem.entity.failed", new Object[] { object, object1});
     });
 
@@ -31,7 +31,7 @@ public class CommandReplaceItem {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(1, false));
         })).then(CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(1, 64)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentPosition.a(commandcontext, "pos"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(IntegerArgumentType.getInteger(commandcontext, "count"), true));
-        }))))))).then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("slot", (ArgumentType) ArgumentInventorySlot.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("item", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
+        }))))))).then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(CommandDispatcher.a("slot", (ArgumentType) ArgumentInventorySlot.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("item", (ArgumentType) ArgumentItemStack.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(1, false));
         })).then(CommandDispatcher.a("count", (ArgumentType) IntegerArgumentType.integer(1, 64)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentInventorySlot.a(commandcontext, "slot"), ArgumentItemStack.a(commandcontext, "item").a(IntegerArgumentType.getInteger(commandcontext, "count"), true));
@@ -48,7 +48,7 @@ public class CommandReplaceItem {
 
             if (i >= 0 && i < iinventory.getSize()) {
                 iinventory.setItem(i, itemstack);
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ(), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.block.success", new Object[] { blockposition.getX(), blockposition.getY(), blockposition.getZ(), itemstack.B()}), true);
                 return 1;
             } else {
                 throw CommandReplaceItem.b.create(i);
@@ -64,24 +64,24 @@ public class CommandReplaceItem {
             Entity entity = (Entity) iterator.next();
 
             if (entity instanceof EntityPlayer) {
-                ((EntityPlayer) entity).defaultContainer.b();
+                ((EntityPlayer) entity).defaultContainer.c();
             }
 
-            if (entity.c(i, itemstack.cloneItemStack())) {
+            if (entity.a_(i, itemstack.cloneItemStack())) {
                 list.add(entity);
                 if (entity instanceof EntityPlayer) {
-                    ((EntityPlayer) entity).defaultContainer.b();
+                    ((EntityPlayer) entity).defaultContainer.c();
                 }
             }
         }
 
         if (list.isEmpty()) {
-            throw CommandReplaceItem.c.create(itemstack.A(), i);
+            throw CommandReplaceItem.c.create(itemstack.B(), i);
         } else {
             if (list.size() == 1) {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) list.iterator().next()).getScoreboardDisplayName(), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.single", new Object[] { ((Entity) list.iterator().next()).getScoreboardDisplayName(), itemstack.B()}), true);
             } else {
-                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { list.size(), itemstack.A()}), true);
+                commandlistenerwrapper.sendMessage(new ChatMessage("commands.replaceitem.entity.success.multiple", new Object[] { list.size(), itemstack.B()}), true);
             }
 
             return list.size();

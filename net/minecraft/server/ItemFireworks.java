@@ -9,13 +9,14 @@ public class ItemFireworks extends Item {
         super(item_info);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
 
         if (!world.isClientSide) {
-            BlockPosition blockposition = itemactioncontext.getClickPosition();
             ItemStack itemstack = itemactioncontext.getItemStack();
-            EntityFireworks entityfireworks = new EntityFireworks(world, (double) ((float) blockposition.getX() + itemactioncontext.m()), (double) ((float) blockposition.getY() + itemactioncontext.n()), (double) ((float) blockposition.getZ() + itemactioncontext.o()), itemstack);
+            Vec3D vec3d = itemactioncontext.j();
+            EntityFireworks entityfireworks = new EntityFireworks(world, vec3d.x, vec3d.y, vec3d.z, itemstack);
 
             world.addEntity(entityfireworks);
             itemstack.subtract(1);
@@ -24,14 +25,13 @@ public class ItemFireworks extends Item {
         return EnumInteractionResult.SUCCESS;
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
-        if (entityhuman.dc()) {
+        if (entityhuman.isGliding()) {
             ItemStack itemstack = entityhuman.b(enumhand);
 
             if (!world.isClientSide) {
-                EntityFireworks entityfireworks = new EntityFireworks(world, itemstack, entityhuman);
-
-                world.addEntity(entityfireworks);
+                world.addEntity(new EntityFireworks(world, itemstack, entityhuman));
                 if (!entityhuman.abilities.canInstantlyBuild) {
                     itemstack.subtract(1);
                 }

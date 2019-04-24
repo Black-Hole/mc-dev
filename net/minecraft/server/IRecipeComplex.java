@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public abstract class IRecipeComplex implements IRecipe {
+public abstract class IRecipeComplex implements RecipeCrafting {
 
     private final MinecraftKey a;
 
@@ -8,15 +8,18 @@ public abstract class IRecipeComplex implements IRecipe {
         this.a = minecraftkey;
     }
 
+    @Override
     public MinecraftKey getKey() {
         return this.a;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isComplex() {
         return true;
     }
 
-    public ItemStack d() {
+    @Override
+    public ItemStack c() {
         return ItemStack.a;
     }
 }

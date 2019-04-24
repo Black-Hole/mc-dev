@@ -25,10 +25,12 @@ public class Resource implements IResource {
         this.f = inputstream1;
     }
 
+    @Override
     public InputStream b() {
         return this.e;
     }
 
+    @Override
     public String d() {
         return this.c;
     }

@@ -1,22 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorForestRock extends WorldGenDecorator<WorldGenDecoratorFrequencyConfiguration> {
 
-    public WorldGenDecoratorForestRock() {}
+    public WorldGenDecoratorForestRock(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyConfiguration worldgendecoratorfrequencyconfiguration, BlockPosition blockposition) {
         int i = random.nextInt(worldgendecoratorfrequencyconfiguration.a);
 
-        for (int j = 0; j < i; ++j) {
+        return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = random.nextInt(16);
-            BlockPosition blockposition1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.a(k, 0, l));
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition1, c0);
-        }
-
-        return true;
+            return generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(k, 0, l));
+        });
     }
 }

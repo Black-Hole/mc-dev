@@ -14,6 +14,7 @@ public enum BlockPropertyStairsShape implements INamable {
         return this.f;
     }
 
+    @Override
     public String getName() {
         return this.f;
     }

@@ -16,29 +16,30 @@ public class InventoryUtils {
 
     private static void dropInventory(World world, double d0, double d1, double d2, IInventory iinventory) {
         for (int i = 0; i < iinventory.getSize(); ++i) {
-            ItemStack itemstack = iinventory.getItem(i);
-
-            if (!itemstack.isEmpty()) {
-                dropItem(world, d0, d1, d2, itemstack);
-            }
+            dropItem(world, d0, d1, d2, iinventory.getItem(i));
         }
 
     }
 
+    public static void a(World world, BlockPosition blockposition, NonNullList<ItemStack> nonnulllist) {
+        nonnulllist.forEach((itemstack) -> {
+            dropItem(world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack);
+        });
+    }
+
     public static void dropItem(World world, double d0, double d1, double d2, ItemStack itemstack) {
-        float f = 0.75F;
-        float f1 = 0.125F;
-        float f2 = InventoryUtils.a.nextFloat() * 0.75F + 0.125F;
-        float f3 = InventoryUtils.a.nextFloat() * 0.75F;
-        float f4 = InventoryUtils.a.nextFloat() * 0.75F + 0.125F;
+        double d3 = (double) EntityTypes.ITEM.h();
+        double d4 = 1.0D - d3;
+        double d5 = d3 / 2.0D;
+        double d6 = Math.floor(d0) + InventoryUtils.a.nextDouble() * d4 + d5;
+        double d7 = Math.floor(d1) + InventoryUtils.a.nextDouble() * d4;
+        double d8 = Math.floor(d2) + InventoryUtils.a.nextDouble() * d4 + d5;
 
         while (!itemstack.isEmpty()) {
-            EntityItem entityitem = new EntityItem(world, d0 + (double) f2, d1 + (double) f3, d2 + (double) f4, itemstack.cloneAndSubtract(InventoryUtils.a.nextInt(21) + 10));
-            float f5 = 0.05F;
+            EntityItem entityitem = new EntityItem(world, d6, d7, d8, itemstack.cloneAndSubtract(InventoryUtils.a.nextInt(21) + 10));
+            float f = 0.05F;
 
-            entityitem.motX = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;
-            entityitem.motY = InventoryUtils.a.nextGaussian() * 0.05000000074505806D + 0.20000000298023224D;
-            entityitem.motZ = InventoryUtils.a.nextGaussian() * 0.05000000074505806D;
+            entityitem.setMot(InventoryUtils.a.nextGaussian() * 0.05000000074505806D, InventoryUtils.a.nextGaussian() * 0.05000000074505806D + 0.20000000298023224D, InventoryUtils.a.nextGaussian() * 0.05000000074505806D);
             world.addEntity(entityitem);
         }
 

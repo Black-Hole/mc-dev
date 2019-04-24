@@ -1,19 +1,23 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Function;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
     private static final Logger a = LogManager.getLogger();
-    private static final EntityTypes<?>[] b = new EntityTypes[] { EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
-    private static final IBlockData c = Blocks.CAVE_AIR.getBlockData();
+    private static final EntityTypes<?>[] aS = new EntityTypes[] { EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
+    private static final IBlockData aT = Blocks.CAVE_AIR.getBlockData();
 
-    public WorldGenDungeons() {}
+    public WorldGenDungeons(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         boolean flag = true;
         int i = random.nextInt(2) + 2;
         int j = -i - 1;
@@ -33,7 +37,7 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
         for (l1 = j; l1 <= k; ++l1) {
             for (i2 = -1; i2 <= 4; ++i2) {
                 for (j2 = i1; j2 <= j1; ++j2) {
-                    blockposition1 = blockposition.a(l1, i2, j2);
+                    blockposition1 = blockposition.b(l1, i2, j2);
                     Material material = generatoraccess.getType(blockposition1).getMaterial();
                     boolean flag3 = material.isBuildable();
 
@@ -56,13 +60,13 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
             for (l1 = j; l1 <= k; ++l1) {
                 for (i2 = 3; i2 >= -1; --i2) {
                     for (j2 = i1; j2 <= j1; ++j2) {
-                        blockposition1 = blockposition.a(l1, i2, j2);
+                        blockposition1 = blockposition.b(l1, i2, j2);
                         if (l1 != j && i2 != -1 && j2 != i1 && l1 != k && i2 != 4 && j2 != j1) {
                             if (generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
-                                generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.c, 2);
+                                generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.aT, 2);
                             }
                         } else if (blockposition1.getY() >= 0 && !generatoraccess.getType(blockposition1.down()).getMaterial().isBuildable()) {
-                            generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.c, 2);
+                            generatoraccess.setTypeAndData(blockposition1, WorldGenDungeons.aT, 2);
                         } else if (generatoraccess.getType(blockposition1).getMaterial().isBuildable() && generatoraccess.getType(blockposition1).getBlock() != Blocks.CHEST) {
                             if (i2 == -1 && random.nextInt(4) != 0) {
                                 generatoraccess.setTypeAndData(blockposition1, Blocks.MOSSY_COBBLESTONE.getBlockData(), 2);
@@ -133,6 +137,6 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
     }
 
     private EntityTypes<?> a(Random random) {
-        return WorldGenDungeons.b[random.nextInt(WorldGenDungeons.b.length)];
+        return WorldGenDungeons.aS[random.nextInt(WorldGenDungeons.aS.length)];
     }
 }

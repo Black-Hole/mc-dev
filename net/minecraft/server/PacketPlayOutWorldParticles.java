@@ -30,11 +30,12 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
         this.h = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.readInt());
 
         if (particle == null) {
-            particle = Particles.c;
+            particle = Particles.BARRIER;
         }
 
         this.i = packetdataserializer.readBoolean();
@@ -50,9 +51,10 @@ public class PacketPlayOutWorldParticles implements Packet<PacketListenerPlayOut
     }
 
     private <T extends ParticleParam> T a(PacketDataSerializer packetdataserializer, Particle<T> particle) {
-        return particle.f().b(particle, packetdataserializer);
+        return particle.d().b(particle, packetdataserializer);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(IRegistry.PARTICLE_TYPE.a((Object) this.j.b()));
         packetdataserializer.writeBoolean(this.i);

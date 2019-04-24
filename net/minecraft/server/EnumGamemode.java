@@ -75,6 +75,10 @@ public enum EnumGamemode {
         return enumgamemode;
     }
 
+    public static EnumGamemode a(String s) {
+        return a(s, EnumGamemode.SURVIVAL);
+    }
+
     public static EnumGamemode a(String s, EnumGamemode enumgamemode) {
         EnumGamemode[] aenumgamemode = values();
         int i = aenumgamemode.length;

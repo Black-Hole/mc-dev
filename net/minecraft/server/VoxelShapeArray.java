@@ -29,6 +29,7 @@ final class VoxelShapeArray extends VoxelShape {
         }
     }
 
+    @Override
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         switch (enumdirection_enumaxis) {
         case X:

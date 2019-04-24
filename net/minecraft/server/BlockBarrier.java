@@ -6,17 +6,23 @@ public class BlockBarrier extends Block {
         super(block_info);
     }
 
-    public boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return true;
     }
 
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
+    @Override
     public boolean f(IBlockData iblockdata) {
         return false;
     }
 
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
+    @Override
+    public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EntityTypes<?> entitytypes) {
+        return false;
+    }
 }

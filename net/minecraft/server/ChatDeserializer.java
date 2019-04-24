@@ -65,13 +65,10 @@ public class ChatDeserializer {
     public static Item b(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive()) {
             String s1 = jsonelement.getAsString();
-            Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(s1));
 
-            if (item == null) {
-                throw new JsonSyntaxException("Expected " + s + " to be an item, was unknown string '" + s1 + "'");
-            } else {
-                return item;
-            }
+            return (Item) IRegistry.ITEM.getOptional(new MinecraftKey(s1)).orElseThrow(() -> {
+                return new JsonSyntaxException("Expected " + s + " to be an item, was unknown string '" + s1 + "'");
+            });
         } else {
             throw new JsonSyntaxException("Expected " + s + " to be an item, was " + d(jsonelement));
         }
@@ -125,6 +122,18 @@ public class ChatDeserializer {
         return jsonobject.has(s) ? e(jsonobject.get(s), s) : f;
     }
 
+    public static long f(JsonElement jsonelement, String s) {
+        if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
+            return jsonelement.getAsLong();
+        } else {
+            throw new JsonSyntaxException("Expected " + s + " to be a Long, was " + d(jsonelement));
+        }
+    }
+
+    public static long a(JsonObject jsonobject, String s, long i) {
+        return jsonobject.has(s) ? f(jsonobject.get(s), s) : i;
+    }
+
     public static int g(JsonElement jsonelement, String s) {
         if (jsonelement.isJsonPrimitive() && jsonelement.getAsJsonPrimitive().isNumber()) {
             return jsonelement.getAsInt();
@@ -153,12 +162,8 @@ public class ChatDeserializer {
         }
     }
 
-    public static byte o(JsonObject jsonobject, String s) {
-        if (jsonobject.has(s)) {
-            return h(jsonobject.get(s), s);
-        } else {
-            throw new JsonSyntaxException("Missing " + s + ", expected to find a Byte");
-        }
+    public static byte a(JsonObject jsonobject, String s, byte b0) {
+        return jsonobject.has(s) ? h(jsonobject.get(s), s) : b0;
     }
 
     public static JsonObject m(JsonElement jsonelement, String s) {

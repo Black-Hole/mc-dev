@@ -12,18 +12,18 @@ import java.util.concurrent.CompletableFuture;
 public class CompletionProviders {
 
     private static final Map<MinecraftKey, SuggestionProvider<ICompletionProvider>> e = Maps.newHashMap();
-    private static final MinecraftKey f = new MinecraftKey("minecraft:ask_server");
+    private static final MinecraftKey f = new MinecraftKey("ask_server");
     public static final SuggestionProvider<ICompletionProvider> a = a(CompletionProviders.f, (commandcontext, suggestionsbuilder) -> {
         return ((ICompletionProvider) commandcontext.getSource()).a(commandcontext, suggestionsbuilder);
     });
-    public static final SuggestionProvider<CommandListenerWrapper> b = a(new MinecraftKey("minecraft:all_recipes"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).o(), suggestionsbuilder);
+    public static final SuggestionProvider<CommandListenerWrapper> b = a(new MinecraftKey("all_recipes"), (commandcontext, suggestionsbuilder) -> {
+        return ICompletionProvider.a(((ICompletionProvider) commandcontext.getSource()).o(), suggestionsbuilder);
     });
-    public static final SuggestionProvider<CommandListenerWrapper> c = a(new MinecraftKey("minecraft:available_sounds"), (commandcontext, suggestionsbuilder) -> {
+    public static final SuggestionProvider<CommandListenerWrapper> c = a(new MinecraftKey("available_sounds"), (commandcontext, suggestionsbuilder) -> {
         return ICompletionProvider.a((Iterable) ((ICompletionProvider) commandcontext.getSource()).n(), suggestionsbuilder);
     });
-    public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("minecraft:summonable_entities"), (commandcontext, suggestionsbuilder) -> {
-        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.f().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
+    public static final SuggestionProvider<CommandListenerWrapper> d = a(new MinecraftKey("summonable_entities"), (commandcontext, suggestionsbuilder) -> {
+        return ICompletionProvider.a(IRegistry.ENTITY_TYPE.d().filter(EntityTypes::b), suggestionsbuilder, EntityTypes::getName, (entitytypes) -> {
             return new ChatMessage(SystemUtils.a("entity", EntityTypes.getName(entitytypes)), new Object[0]);
         });
     });

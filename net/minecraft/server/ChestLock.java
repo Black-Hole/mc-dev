@@ -6,31 +6,24 @@ import javax.annotation.concurrent.Immutable;
 public class ChestLock {
 
     public static final ChestLock a = new ChestLock("");
-    private final String b;
+    public final String key;
 
     public ChestLock(String s) {
-        this.b = s;
+        this.key = s;
     }
 
-    public boolean a() {
-        return this.b == null || this.b.isEmpty();
-    }
-
-    public String getKey() {
-        return this.b;
+    public boolean a(ItemStack itemstack) {
+        return this.key.isEmpty() || !itemstack.isEmpty() && itemstack.hasName() && this.key.equals(itemstack.getName().getString());
     }
 
     public void a(NBTTagCompound nbttagcompound) {
-        nbttagcompound.setString("Lock", this.b);
+        if (!this.key.isEmpty()) {
+            nbttagcompound.setString("Lock", this.key);
+        }
+
     }
 
     public static ChestLock b(NBTTagCompound nbttagcompound) {
-        if (nbttagcompound.hasKeyOfType("Lock", 8)) {
-            String s = nbttagcompound.getString("Lock");
-
-            return new ChestLock(s);
-        } else {
-            return ChestLock.a;
-        }
+        return nbttagcompound.hasKeyOfType("Lock", 8) ? new ChestLock(nbttagcompound.getString("Lock")) : ChestLock.a;
     }
 }

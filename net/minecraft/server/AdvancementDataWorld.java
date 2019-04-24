@@ -73,7 +73,7 @@ public class AdvancementDataWorld implements IResourcePackListener {
                     }
 
                 }
-            } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
+            } catch (IllegalArgumentException | ResourceKeyInvalidException | JsonParseException jsonparseexception) {
                 AdvancementDataWorld.c.error("Parsing error loading custom advancement {}: {}", minecraftkey1, jsonparseexception.getMessage());
                 this.f = true;
             } catch (IOException ioexception) {
@@ -94,6 +94,7 @@ public class AdvancementDataWorld implements IResourcePackListener {
         return AdvancementDataWorld.REGISTRY.c();
     }
 
+    @Override
     public void a(IResourceManager iresourcemanager) {
         this.f = false;
         AdvancementDataWorld.REGISTRY.a();

@@ -15,9 +15,9 @@ public class DataConverterZombie extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        if (dynamic.getBoolean("IsVillager")) {
-            if (!dynamic.get("ZombieType").isPresent()) {
-                int i = this.a(dynamic.getInt("VillagerProfession", -1));
+        if (dynamic.get("IsVillager").asBoolean(false)) {
+            if (!dynamic.get("ZombieType").get().isPresent()) {
+                int i = this.a(dynamic.get("VillagerProfession").asInt(-1));
 
                 if (i == -1) {
                     i = this.a(DataConverterZombie.a.nextInt(6));
@@ -36,6 +36,7 @@ public class DataConverterZombie extends DataConverterNamedEntity {
         return i >= 0 && i < 6 ? i : -1;
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

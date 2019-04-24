@@ -14,6 +14,7 @@ public class IpBanEntry extends ExpirableListEntry<String> {
         super(s, date, s1, date1, s2);
     }
 
+    @Override
     public IChatBaseComponent e() {
         return new ChatComponentText((String) this.getKey());
     }
@@ -26,6 +27,7 @@ public class IpBanEntry extends ExpirableListEntry<String> {
         return jsonobject.has("ip") ? jsonobject.get("ip").getAsString() : null;
     }
 
+    @Override
     protected void a(JsonObject jsonobject) {
         if (this.getKey() != null) {
             jsonobject.addProperty("ip", (String) this.getKey());

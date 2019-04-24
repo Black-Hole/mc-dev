@@ -21,6 +21,7 @@ public class ItemMonsterEgg extends Item {
         ItemMonsterEgg.a.put(entitytypes, this);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
 
@@ -40,12 +41,9 @@ public class ItemMonsterEgg extends Item {
                     MobSpawnerAbstract mobspawnerabstract = ((TileEntityMobSpawner) tileentity).getSpawner();
                     EntityTypes<?> entitytypes = this.b(itemstack.getTag());
 
-                    if (entitytypes != null) {
-                        mobspawnerabstract.setMobName(entitytypes);
-                        tileentity.update();
-                        world.notify(blockposition, iblockdata, iblockdata, 3);
-                    }
-
+                    mobspawnerabstract.setMobName(entitytypes);
+                    tileentity.update();
+                    world.notify(blockposition, iblockdata, iblockdata, 3);
                     itemstack.subtract(1);
                     return EnumInteractionResult.SUCCESS;
                 }
@@ -61,7 +59,7 @@ public class ItemMonsterEgg extends Item {
 
             EntityTypes<?> entitytypes1 = this.b(itemstack.getTag());
 
-            if (entitytypes1 == null || entitytypes1.a(world, itemstack, itemactioncontext.getEntity(), blockposition1, true, !Objects.equals(blockposition, blockposition1) && enumdirection == EnumDirection.UP) != null) {
+            if (entitytypes1.spawnCreature(world, itemstack, itemactioncontext.getEntity(), blockposition1, EnumMobSpawn.SPAWN_EGG, true, !Objects.equals(blockposition, blockposition1) && enumdirection == EnumDirection.UP) != null) {
                 itemstack.subtract(1);
             }
 
@@ -69,37 +67,39 @@ public class ItemMonsterEgg extends Item {
         }
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
         if (world.isClientSide) {
             return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
-            MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
+            MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
-            if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.getBlockPosition();
+            if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+            } else {
+                MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
                 if (!(world.getType(blockposition).getBlock() instanceof BlockFluids)) {
                     return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
-                } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectposition.direction, itemstack)) {
+                } else if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectpositionblock.getDirection(), itemstack)) {
                     EntityTypes<?> entitytypes = this.b(itemstack.getTag());
 
-                    if (entitytypes != null && entitytypes.a(world, itemstack, entityhuman, blockposition, false, false) != null) {
+                    if (entitytypes.spawnCreature(world, itemstack, entityhuman, blockposition, EnumMobSpawn.SPAWN_EGG, false, false) == null) {
+                        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+                    } else {
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack.subtract(1);
                         }
 
                         entityhuman.b(StatisticList.ITEM_USED.b(this));
                         return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
-                    } else {
-                        return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
                     }
                 } else {
                     return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 }
-            } else {
-                return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
             }
         }
     }
@@ -112,13 +112,12 @@ public class ItemMonsterEgg extends Item {
         return Iterables.unmodifiableIterable(ItemMonsterEgg.a.values());
     }
 
-    @Nullable
     public EntityTypes<?> b(@Nullable NBTTagCompound nbttagcompound) {
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
             NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("EntityTag");
 
             if (nbttagcompound1.hasKeyOfType("id", 8)) {
-                return EntityTypes.a(nbttagcompound1.getString("id"));
+                return (EntityTypes) EntityTypes.a(nbttagcompound1.getString("id")).orElse(this.d);
             }
         }
 

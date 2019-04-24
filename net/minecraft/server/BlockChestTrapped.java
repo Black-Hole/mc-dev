@@ -6,23 +6,28 @@ public class BlockChestTrapped extends BlockChest {
         super(block_info);
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityChestTrapped();
     }
 
+    @Override
     protected Statistic<MinecraftKey> d() {
         return StatisticList.CUSTOM.b(StatisticList.TRIGGER_TRAPPED_CHEST);
     }
 
+    @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
     }
 
+    @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return MathHelper.clamp(TileEntityChest.a(iblockaccess, blockposition), 0, 15);
     }
 
+    @Override
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.UP ? iblockdata.a(iblockaccess, blockposition, enumdirection) : 0;
+        return enumdirection == EnumDirection.UP ? iblockdata.b(iblockaccess, blockposition, enumdirection) : 0;
     }
 }

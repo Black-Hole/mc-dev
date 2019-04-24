@@ -69,9 +69,9 @@ public class DataConverterItemStackEnchantment extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional optional = dynamic.get("ench").flatMap(Dynamic::getStream).map((stream) -> {
+        Optional optional = dynamic.get("ench").asStreamOpt().map((stream) -> {
             return stream.map((dynamic1) -> {
-                return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic1.getInt("id"), "null")));
+                return dynamic1.set("id", dynamic1.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic1.get("id").asInt(0), "null")));
             });
         });
 
@@ -83,9 +83,9 @@ public class DataConverterItemStackEnchantment extends DataFix {
         }
 
         return dynamic.update("StoredEnchantments", (dynamic1) -> {
-            Optional optional2 = dynamic1.getStream().map((stream) -> {
+            Optional optional2 = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
-                    return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic2.getInt("id"), "null")));
+                    return dynamic2.set("id", dynamic2.createString((String) DataConverterItemStackEnchantment.a.getOrDefault(dynamic2.get("id").asInt(0), "null")));
                 });
             });
 

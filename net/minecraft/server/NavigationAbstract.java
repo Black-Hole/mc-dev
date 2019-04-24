@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 public abstract class NavigationAbstract {
 
-    protected EntityInsentient a;
-    protected World b;
+    protected final EntityInsentient a;
+    protected final World b;
     @Nullable
     protected PathEntity c;
     protected double d;
@@ -31,28 +31,28 @@ public abstract class NavigationAbstract {
         this.a = entityinsentient;
         this.b = world;
         this.p = entityinsentient.getAttributeInstance(GenericAttributes.FOLLOW_RANGE);
-        this.r = this.a();
+        this.r = this.a(MathHelper.floor(this.p.getValue() * 16.0D));
     }
 
-    public BlockPosition i() {
+    public BlockPosition h() {
         return this.q;
     }
 
-    protected abstract Pathfinder a();
+    protected abstract Pathfinder a(int i);
 
     public void a(double d0) {
         this.d = d0;
     }
 
-    public float j() {
+    public float i() {
         return (float) this.p.getValue();
     }
 
-    public boolean k() {
+    public boolean j() {
         return this.m;
     }
 
-    public void l() {
+    public void k() {
         if (this.b.getTime() - this.n > 20L) {
             if (this.q != null) {
                 this.c = null;
@@ -73,47 +73,41 @@ public abstract class NavigationAbstract {
 
     @Nullable
     public PathEntity b(BlockPosition blockposition) {
-        if (!this.b()) {
+        float f = (float) blockposition.getX() + 0.5F;
+        float f1 = (float) blockposition.getY() + 0.5F;
+        float f2 = (float) blockposition.getZ() + 0.5F;
+
+        return this.a(blockposition, (double) f, (double) f1, (double) f2, 8, false);
+    }
+
+    @Nullable
+    public PathEntity a(Entity entity) {
+        BlockPosition blockposition = new BlockPosition(entity);
+        double d0 = entity.locX;
+        double d1 = entity.getBoundingBox().minY;
+        double d2 = entity.locZ;
+
+        return this.a(blockposition, d0, d1, d2, 16, true);
+    }
+
+    @Nullable
+    protected PathEntity a(BlockPosition blockposition, double d0, double d1, double d2, int i, boolean flag) {
+        if (!this.a()) {
             return null;
         } else if (this.c != null && !this.c.b() && blockposition.equals(this.q)) {
             return this.c;
         } else {
             this.q = blockposition;
-            float f = this.j();
+            float f = this.i();
 
-            this.b.methodProfiler.enter("pathfind");
-            BlockPosition blockposition1 = new BlockPosition(this.a);
-            int i = (int) (f + 8.0F);
-            ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
-            PathEntity pathentity = this.r.a(chunkcache, this.a, this.q, f);
+            this.b.getMethodProfiler().enter("pathfind");
+            BlockPosition blockposition1 = flag ? (new BlockPosition(this.a)).up() : new BlockPosition(this.a);
+            int j = (int) (f + (float) i);
+            ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.b(-j, -j, -j), blockposition1.b(j, j, j));
+            PathEntity pathentity = this.r.a(chunkcache, this.a, d0, d1, d2, f);
 
-            this.b.methodProfiler.exit();
+            this.b.getMethodProfiler().exit();
             return pathentity;
-        }
-    }
-
-    @Nullable
-    public PathEntity a(Entity entity) {
-        if (!this.b()) {
-            return null;
-        } else {
-            BlockPosition blockposition = new BlockPosition(entity);
-
-            if (this.c != null && !this.c.b() && blockposition.equals(this.q)) {
-                return this.c;
-            } else {
-                this.q = blockposition;
-                float f = this.j();
-
-                this.b.methodProfiler.enter("pathfind");
-                BlockPosition blockposition1 = (new BlockPosition(this.a)).up();
-                int i = (int) (f + 16.0F);
-                ChunkCache chunkcache = new ChunkCache(this.b, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
-                PathEntity pathentity = this.r.a(chunkcache, this.a, entity, f);
-
-                this.b.methodProfiler.exit();
-                return pathentity;
-            }
         }
     }
 
@@ -136,12 +130,12 @@ public abstract class NavigationAbstract {
                 this.c = pathentity;
             }
 
-            this.E_();
-            if (this.c.d() <= 0) {
+            this.D_();
+            if (this.c.e() <= 0) {
                 return false;
             } else {
                 this.d = d0;
-                Vec3D vec3d = this.c();
+                Vec3D vec3d = this.b();
 
                 this.f = this.e;
                 this.g = vec3d;
@@ -151,32 +145,32 @@ public abstract class NavigationAbstract {
     }
 
     @Nullable
-    public PathEntity m() {
+    public PathEntity l() {
         return this.c;
     }
 
-    public void d() {
+    public void c() {
         ++this.e;
         if (this.m) {
-            this.l();
+            this.k();
         }
 
-        if (!this.p()) {
+        if (!this.n()) {
             Vec3D vec3d;
 
-            if (this.b()) {
-                this.o();
-            } else if (this.c != null && this.c.e() < this.c.d()) {
-                vec3d = this.c();
-                Vec3D vec3d1 = this.c.a(this.a, this.c.e());
+            if (this.a()) {
+                this.m();
+            } else if (this.c != null && this.c.f() < this.c.e()) {
+                vec3d = this.b();
+                Vec3D vec3d1 = this.c.a(this.a, this.c.f());
 
                 if (vec3d.y > vec3d1.y && !this.a.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
-                    this.c.c(this.c.e() + 1);
+                    this.c.c(this.c.f() + 1);
                 }
             }
 
-            this.n();
-            if (!this.p()) {
+            PacketDebug.a(this.b, this.a, this.c, this.l);
+            if (!this.n()) {
                 vec3d = this.c.a((Entity) this.a);
                 BlockPosition blockposition = new BlockPosition(vec3d);
 
@@ -185,34 +179,34 @@ public abstract class NavigationAbstract {
         }
     }
 
-    protected void n() {}
+    protected void m() {
+        Vec3D vec3d = this.b();
+        int i = this.c.e();
 
-    protected void o() {
-        Vec3D vec3d = this.c();
-        int i = this.c.d();
-
-        for (int j = this.c.e(); j < this.c.d(); ++j) {
+        for (int j = this.c.f(); j < this.c.e(); ++j) {
             if ((double) this.c.a(j).b != Math.floor(vec3d.y)) {
                 i = j;
                 break;
             }
         }
 
-        this.l = this.a.width > 0.75F ? this.a.width / 2.0F : 0.75F - this.a.width / 2.0F;
-        Vec3D vec3d1 = this.c.f();
+        this.l = this.a.getWidth() > 0.75F ? this.a.getWidth() / 2.0F : 0.75F - this.a.getWidth() / 2.0F;
+        Vec3D vec3d1 = this.c.g();
 
-        if (MathHelper.e((float) (this.a.locX - (vec3d1.x + 0.5D))) < this.l && MathHelper.e((float) (this.a.locZ - (vec3d1.z + 0.5D))) < this.l && Math.abs(this.a.locY - vec3d1.y) < 1.0D) {
-            this.c.c(this.c.e() + 1);
+        if (Math.abs(this.a.locX - (vec3d1.x + 0.5D)) < (double) this.l && Math.abs(this.a.locZ - (vec3d1.z + 0.5D)) < (double) this.l && Math.abs(this.a.locY - vec3d1.y) < 1.0D) {
+            this.c.c(this.c.f() + 1);
         }
 
-        int k = MathHelper.f(this.a.width);
-        int l = MathHelper.f(this.a.length);
-        int i1 = k;
+        if (this.a.world.getTime() % 5L == 0L) {
+            int k = MathHelper.f(this.a.getWidth());
+            int l = MathHelper.f(this.a.getHeight());
+            int i1 = k;
 
-        for (int j1 = i - 1; j1 >= this.c.e(); --j1) {
-            if (this.a(vec3d, this.c.a(this.a, j1), k, l, i1)) {
-                this.c.c(j1);
-                break;
+            for (int j1 = i - 1; j1 >= this.c.f(); --j1) {
+                if (this.a(vec3d, this.c.a(this.a, j1), k, l, i1)) {
+                    this.c.c(j1);
+                    break;
+                }
             }
         }
 
@@ -222,7 +216,7 @@ public abstract class NavigationAbstract {
     protected void a(Vec3D vec3d) {
         if (this.e - this.f > 100) {
             if (vec3d.distanceSquared(this.g) < 2.25D) {
-                this.q();
+                this.o();
             }
 
             this.f = this.e;
@@ -230,7 +224,7 @@ public abstract class NavigationAbstract {
         }
 
         if (this.c != null && !this.c.b()) {
-            Vec3D vec3d1 = this.c.f();
+            Vec3D vec3d1 = this.c.g();
 
             if (vec3d1.equals(this.h)) {
                 this.i += SystemUtils.getMonotonicMillis() - this.j;
@@ -238,14 +232,14 @@ public abstract class NavigationAbstract {
                 this.h = vec3d1;
                 double d0 = vec3d.f(this.h);
 
-                this.k = this.a.cK() > 0.0F ? d0 / (double) this.a.cK() * 1000.0D : 0.0D;
+                this.k = this.a.da() > 0.0F ? d0 / (double) this.a.da() * 1000.0D : 0.0D;
             }
 
             if (this.k > 0.0D && (double) this.i > this.k * 3.0D) {
                 this.h = Vec3D.a;
                 this.i = 0L;
                 this.k = 0.0D;
-                this.q();
+                this.o();
             }
 
             this.j = SystemUtils.getMonotonicMillis();
@@ -253,27 +247,27 @@ public abstract class NavigationAbstract {
 
     }
 
-    public boolean p() {
+    public boolean n() {
         return this.c == null || this.c.b();
     }
 
-    public void q() {
+    public void o() {
         this.c = null;
     }
 
-    protected abstract Vec3D c();
+    protected abstract Vec3D b();
 
-    protected abstract boolean b();
+    protected abstract boolean a();
 
-    protected boolean r() {
-        return this.a.aq() || this.a.ax();
+    protected boolean p() {
+        return this.a.au() || this.a.aC();
     }
 
-    protected void E_() {
+    protected void D_() {
         if (this.c != null) {
-            for (int i = 0; i < this.c.d(); ++i) {
+            for (int i = 0; i < this.c.e(); ++i) {
                 PathPoint pathpoint = this.c.a(i);
-                PathPoint pathpoint1 = i + 1 < this.c.d() ? this.c.a(i + 1) : null;
+                PathPoint pathpoint1 = i + 1 < this.c.e() ? this.c.a(i + 1) : null;
                 IBlockData iblockdata = this.b.getType(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c));
                 Block block = iblockdata.getBlock();
 
@@ -293,10 +287,10 @@ public abstract class NavigationAbstract {
     public boolean a(BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
 
-        return this.b.getType(blockposition1).f(this.b, blockposition1);
+        return this.b.getType(blockposition1).g(this.b, blockposition1);
     }
 
-    public PathfinderAbstract s() {
+    public PathfinderAbstract q() {
         return this.o;
     }
 
@@ -304,7 +298,19 @@ public abstract class NavigationAbstract {
         this.o.c(flag);
     }
 
-    public boolean t() {
+    public boolean r() {
         return this.o.e();
+    }
+
+    public void c(BlockPosition blockposition) {
+        if (this.c != null && !this.c.b() && this.c.e() != 0) {
+            PathPoint pathpoint = this.c.c();
+            Vec3D vec3d = new Vec3D(((double) pathpoint.a + this.a.locX) / 2.0D, ((double) pathpoint.b + this.a.locY) / 2.0D, ((double) pathpoint.c + this.a.locZ) / 2.0D);
+
+            if (blockposition.a((IPosition) vec3d, (double) (this.c.e() - this.c.f()))) {
+                this.k();
+            }
+
+        }
     }
 }

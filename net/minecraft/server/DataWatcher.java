@@ -106,9 +106,10 @@ public class DataWatcher {
 
             crashreportsystemdetails.a("Data ID", (Object) datawatcherobject);
             throw new ReportedException(crashreport);
+        } finally {
+            this.e.readLock().unlock();
         }
 
-        this.e.readLock().unlock();
         return datawatcher_item;
     }
 
@@ -229,7 +230,7 @@ public class DataWatcher {
                 arraylist = Lists.newArrayList();
             }
 
-            int i = packetdataserializer.g();
+            int i = packetdataserializer.i();
             DataWatcherSerializer<?> datawatcherserializer = DataWatcherRegistry.a(i);
 
             if (datawatcherserializer == null) {

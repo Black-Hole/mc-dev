@@ -16,6 +16,7 @@ public class DebugReportNBT implements DebugReportProvider {
         this.c = debugreportgenerator;
     }
 
+    @Override
     public void a(HashCache hashcache) throws IOException {
         java.nio.file.Path java_nio_file_path = this.c.b();
         Iterator iterator = this.c.a().iterator();
@@ -32,6 +33,7 @@ public class DebugReportNBT implements DebugReportProvider {
 
     }
 
+    @Override
     public String a() {
         return "NBT to SNBT";
     }
@@ -46,7 +48,7 @@ public class DebugReportNBT implements DebugReportProvider {
         try {
             NBTTagCompound nbttagcompound = NBTCompressedStreamTools.a(Files.newInputStream(java_nio_file_path));
             IChatBaseComponent ichatbasecomponent = nbttagcompound.a("    ", 0);
-            String s1 = ichatbasecomponent.getString();
+            String s1 = ichatbasecomponent.getString() + "\n";
             java.nio.file.Path java_nio_file_path2 = java_nio_file_path1.resolve(s + ".snbt");
 
             Files.createDirectories(java_nio_file_path2.getParent());

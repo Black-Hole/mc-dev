@@ -2,13 +2,14 @@ package net.minecraft.server;
 
 public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.R;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.W;
 
     protected BlockMinecartTrack(Block.Info block_info) {
         super(false, block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockMinecartTrack.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH));
     }
 
+    @Override
     protected void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         if (block.getBlockData().isPowerSource() && (new MinecartTrackLogic(world, blockposition, iblockdata)).b() == 3) {
             this.a(world, blockposition, iblockdata, false);
@@ -16,10 +17,12 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
 
     }
 
+    @Override
     public IBlockState<BlockPropertyTrackPosition> e() {
         return BlockMinecartTrack.SHAPE;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
@@ -92,6 +95,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
         }
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(BlockMinecartTrack.SHAPE);
 
@@ -137,6 +141,7 @@ public class BlockMinecartTrack extends BlockMinecartTrackAbstract {
         return super.a(iblockdata, enumblockmirror);
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockMinecartTrack.SHAPE);
     }

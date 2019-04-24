@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.mojang.bridge.game.GameVersion;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.types.constant.NamespacedStringType;
 import io.netty.util.ResourceLeakDetector;
@@ -10,6 +11,7 @@ public class SharedConstants {
     public static final Level a = Level.DISABLED;
     public static boolean b;
     public static final char[] allowedCharacters = new char[] { '/', '\n', '\r', '\t', '\u0000', '\f', '`', '?', '*', '\\', '<', '>', '|', '"', ':'};
+    private static GameVersion d;
 
     public static boolean isAllowedChatCharacter(char c0) {
         return c0 != 167 && c0 >= ' ' && c0 != 127;
@@ -29,6 +31,14 @@ public class SharedConstants {
         }
 
         return stringbuilder.toString();
+    }
+
+    public static GameVersion a() {
+        if (SharedConstants.d == null) {
+            SharedConstants.d = MinecraftVersion.a();
+        }
+
+        return SharedConstants.d;
     }
 
     static {

@@ -15,12 +15,12 @@ public abstract class RemoteConnectionThread implements Runnable {
     private static final Logger h = LogManager.getLogger();
     private static final AtomicInteger i = new AtomicInteger(0);
     protected boolean a;
-    protected IMinecraftServer b;
+    protected final IMinecraftServer b;
     protected final String c;
     protected Thread d;
-    protected int e = 5;
-    protected List<DatagramSocket> f = Lists.newArrayList();
-    protected List<ServerSocket> g = Lists.newArrayList();
+    protected final int e = 5;
+    protected final List<DatagramSocket> f = Lists.newArrayList();
+    protected final List<ServerSocket> g = Lists.newArrayList();
 
     protected RemoteConnectionThread(IMinecraftServer iminecraftserver, String s) {
         this.b = iminecraftserver;
@@ -38,12 +38,48 @@ public abstract class RemoteConnectionThread implements Runnable {
         this.a = true;
     }
 
+    public synchronized void b() {
+        this.a = false;
+        if (null != this.d) {
+            int i = 0;
+
+            while (this.d.isAlive()) {
+                try {
+                    this.d.join(1000L);
+                    ++i;
+                    if (5 <= i) {
+                        this.c("Waited " + i + " seconds attempting force stop!");
+                        this.a(true);
+                    } else if (this.d.isAlive()) {
+                        this.c("Thread " + this + " (" + this.d.getState() + ") failed to exit after " + i + " second(s)");
+                        this.c("Stack:");
+                        StackTraceElement[] astacktraceelement = this.d.getStackTrace();
+                        int j = astacktraceelement.length;
+
+                        for (int k = 0; k < j; ++k) {
+                            StackTraceElement stacktraceelement = astacktraceelement[k];
+
+                            this.c(stacktraceelement.toString());
+                        }
+
+                        this.d.interrupt();
+                    }
+                } catch (InterruptedException interruptedexception) {
+                    ;
+                }
+            }
+
+            this.a(true);
+            this.d = null;
+        }
+    }
+
     public boolean c() {
         return this.a;
     }
 
     protected void a(String s) {
-        this.b.g(s);
+        this.b.h(s);
     }
 
     protected void b(String s) {
@@ -55,7 +91,7 @@ public abstract class RemoteConnectionThread implements Runnable {
     }
 
     protected void d(String s) {
-        this.b.f(s);
+        this.b.g(s);
     }
 
     protected int d() {

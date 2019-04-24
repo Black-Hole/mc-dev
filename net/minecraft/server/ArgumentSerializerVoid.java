@@ -12,11 +12,14 @@ public class ArgumentSerializerVoid<T extends ArgumentType<?>> implements Argume
         this.a = supplier;
     }
 
+    @Override
     public void a(T t0, PacketDataSerializer packetdataserializer) {}
 
+    @Override
     public T b(PacketDataSerializer packetdataserializer) {
         return (ArgumentType) this.a.get();
     }
 
+    @Override
     public void a(T t0, JsonObject jsonobject) {}
 }

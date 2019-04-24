@@ -13,10 +13,12 @@ public class ItemToolMaterial extends Item {
         return this.a;
     }
 
+    @Override
     public int c() {
         return this.a.e();
     }
 
+    @Override
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return this.a.f().test(itemstack1) || super.a(itemstack, itemstack1);
     }

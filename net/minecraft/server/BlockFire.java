@@ -9,50 +9,54 @@ import javax.annotation.Nullable;
 
 public class BlockFire extends Block {
 
-    public static final BlockStateInteger AGE = BlockProperties.X;
+    public static final BlockStateInteger AGE = BlockProperties.ad;
     public static final BlockStateBoolean NORTH = BlockSprawling.a;
     public static final BlockStateBoolean EAST = BlockSprawling.b;
     public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.o;
-    public static final BlockStateBoolean UPPER = BlockSprawling.p;
-    private static final Map<EnumDirection, BlockStateBoolean> r = (Map) BlockSprawling.r.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean WEST = BlockSprawling.d;
+    public static final BlockStateBoolean UPPER = BlockSprawling.e;
+    private static final Map<EnumDirection, BlockStateBoolean> g = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
         return entry.getKey() != EnumDirection.DOWN;
     }).collect(SystemUtils.a());
     private final Object2IntMap<Block> flameChances = new Object2IntOpenHashMap();
-    private final Object2IntMap<Block> t = new Object2IntOpenHashMap();
+    private final Object2IntMap<Block> i = new Object2IntOpenHashMap();
 
     protected BlockFire(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFire.AGE, 0)).set(BlockFire.NORTH, false)).set(BlockFire.EAST, false)).set(BlockFire.SOUTH, false)).set(BlockFire.WEST, false)).set(BlockFire.UPPER, false));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockFire.AGE, 0)).set(BlockFire.NORTH, false)).set(BlockFire.EAST, false)).set(BlockFire.SOUTH, false)).set(BlockFire.WEST, false)).set(BlockFire.UPPER, false));
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return this.canPlace(iblockdata, generatoraccess, blockposition) ? (IBlockData) this.a((IBlockAccess) generatoraccess, blockposition).set(BlockFire.AGE, iblockdata.get(BlockFire.AGE)) : Blocks.AIR.getBlockData();
     }
 
     @Nullable
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         return this.a((IBlockAccess) blockactioncontext.getWorld(), blockactioncontext.getClickPosition());
     }
 
     public IBlockData a(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        IBlockData iblockdata = iblockaccess.getType(blockposition.down());
+        BlockPosition blockposition1 = blockposition.down();
+        IBlockData iblockdata = iblockaccess.getType(blockposition1);
 
-        if (!iblockdata.q() && !this.k(iblockdata)) {
+        if (!this.j(iblockdata) && !Block.d(iblockdata, iblockaccess, blockposition1, EnumDirection.UP)) {
             IBlockData iblockdata1 = this.getBlockData();
             EnumDirection[] aenumdirection = EnumDirection.values();
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
                 EnumDirection enumdirection = aenumdirection[j];
-                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.r.get(enumdirection);
+                BlockStateBoolean blockstateboolean = (BlockStateBoolean) BlockFire.g.get(enumdirection);
 
                 if (blockstateboolean != null) {
-                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, this.k(iblockaccess.getType(blockposition.shift(enumdirection))));
+                    iblockdata1 = (IBlockData) iblockdata1.set(blockstateboolean, this.j(iblockaccess.getType(blockposition.shift(enumdirection))));
                 }
             }
 
@@ -62,26 +66,23 @@ public class BlockFire extends Block {
         }
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        return iworldreader.getType(blockposition.down()).q() || this.d(iworldreader, blockposition);
+        BlockPosition blockposition1 = blockposition.down();
+
+        return Block.d(iworldreader.getType(blockposition1), iworldreader, blockposition1, EnumDirection.UP) || this.canBurn(iworldreader, blockposition);
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
-    public int a(IBlockData iblockdata, Random random) {
-        return 0;
-    }
-
+    @Override
     public int a(IWorldReader iworldreader) {
         return 30;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (world.getGameRules().getBoolean("doFireTick")) {
             if (!iblockdata.canPlace(world, blockposition)) {
-                world.setAir(blockposition);
+                world.a(blockposition, false);
             }
 
             Block block = world.getType(blockposition.down()).getBlock();
@@ -89,7 +90,7 @@ public class BlockFire extends Block {
             int i = (Integer) iblockdata.get(BlockFire.AGE);
 
             if (!flag && world.isRaining() && this.a(world, blockposition) && random.nextFloat() < 0.2F + (float) i * 0.03F) {
-                world.setAir(blockposition);
+                world.a(blockposition, false);
             } else {
                 int j = Math.min(15, i + random.nextInt(3) / 2);
 
@@ -100,21 +101,23 @@ public class BlockFire extends Block {
 
                 if (!flag) {
                     world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world) + random.nextInt(10));
-                    if (!this.d(world, blockposition)) {
-                        if (!world.getType(blockposition.down()).q() || i > 3) {
-                            world.setAir(blockposition);
+                    if (!this.canBurn(world, blockposition)) {
+                        BlockPosition blockposition1 = blockposition.down();
+
+                        if (!Block.d(world.getType(blockposition1), world, blockposition1, EnumDirection.UP) || i > 3) {
+                            world.a(blockposition, false);
                         }
 
                         return;
                     }
 
-                    if (i == 15 && random.nextInt(4) == 0 && !this.k(world.getType(blockposition.down()))) {
-                        world.setAir(blockposition);
+                    if (i == 15 && random.nextInt(4) == 0 && !this.j(world.getType(blockposition.down()))) {
+                        world.a(blockposition, false);
                         return;
                     }
                 }
 
-                boolean flag1 = world.x(blockposition);
+                boolean flag1 = world.t(blockposition);
                 int k = flag1 ? -50 : 0;
 
                 this.a(world, blockposition.east(), 300 + k, random, i);
@@ -135,7 +138,7 @@ public class BlockFire extends Block {
                                     k1 += (j1 - 1) * 100;
                                 }
 
-                                blockposition_mutableblockposition.g(blockposition).d(l, j1, i1);
+                                blockposition_mutableblockposition.g(blockposition).e(l, j1, i1);
                                 int l1 = this.a((IWorldReader) world, (BlockPosition) blockposition_mutableblockposition);
 
                                 if (l1 > 0) {
@@ -164,16 +167,16 @@ public class BlockFire extends Block {
         return world.isRainingAt(blockposition) || world.isRainingAt(blockposition.west()) || world.isRainingAt(blockposition.east()) || world.isRainingAt(blockposition.north()) || world.isRainingAt(blockposition.south());
     }
 
-    private int f(Block block) {
-        return this.t.getInt(block);
+    private int q(IBlockData iblockdata) {
+        return iblockdata.b((IBlockState) BlockProperties.C) && (Boolean) iblockdata.get(BlockProperties.C) ? 0 : this.i.getInt(iblockdata.getBlock());
     }
 
-    private int g(Block block) {
-        return this.flameChances.getInt(block);
+    private int r(IBlockData iblockdata) {
+        return iblockdata.b((IBlockState) BlockProperties.C) && (Boolean) iblockdata.get(BlockProperties.C) ? 0 : this.flameChances.getInt(iblockdata.getBlock());
     }
 
     private void a(World world, BlockPosition blockposition, int i, Random random, int j) {
-        int k = this.f(world.getType(blockposition).getBlock());
+        int k = this.q(world.getType(blockposition));
 
         if (random.nextInt(i) < k) {
             IBlockData iblockdata = world.getType(blockposition);
@@ -183,26 +186,28 @@ public class BlockFire extends Block {
 
                 world.setTypeAndData(blockposition, (IBlockData) this.a((IBlockAccess) world, blockposition).set(BlockFire.AGE, l), 3);
             } else {
-                world.setAir(blockposition);
+                world.a(blockposition, false);
             }
 
             Block block = iblockdata.getBlock();
 
             if (block instanceof BlockTNT) {
-                ((BlockTNT) block).a(world, blockposition);
+                BlockTNT blocktnt = (BlockTNT) block;
+
+                BlockTNT.a(world, blockposition);
             }
         }
 
     }
 
-    private boolean d(IBlockAccess iblockaccess, BlockPosition blockposition) {
+    private boolean canBurn(IBlockAccess iblockaccess, BlockPosition blockposition) {
         EnumDirection[] aenumdirection = EnumDirection.values();
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
             EnumDirection enumdirection = aenumdirection[j];
 
-            if (this.k(iblockaccess.getType(blockposition.shift(enumdirection)))) {
+            if (this.j(iblockaccess.getType(blockposition.shift(enumdirection)))) {
                 return true;
             }
         }
@@ -220,27 +225,25 @@ public class BlockFire extends Block {
 
             for (int k = 0; k < j; ++k) {
                 EnumDirection enumdirection = aenumdirection[k];
+                IBlockData iblockdata = iworldreader.getType(blockposition.shift(enumdirection));
 
-                i = Math.max(this.g(iworldreader.getType(blockposition.shift(enumdirection)).getBlock()), i);
+                i = Math.max(this.r(iblockdata), i);
             }
 
             return i;
         }
     }
 
-    public boolean j() {
-        return false;
+    public boolean j(IBlockData iblockdata) {
+        return this.r(iblockdata) > 0;
     }
 
-    public boolean k(IBlockData iblockdata) {
-        return this.g(iblockdata.getBlock()) > 0;
-    }
-
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata1.getBlock() != iblockdata.getBlock()) {
             if (world.worldProvider.getDimensionManager() != DimensionManager.OVERWORLD && world.worldProvider.getDimensionManager() != DimensionManager.NETHER || !((BlockPortal) Blocks.NETHER_PORTAL).a((GeneratorAccess) world, blockposition)) {
                 if (!iblockdata.canPlace(world, blockposition)) {
-                    world.setAir(blockposition);
+                    world.a(blockposition, false);
                 } else {
                     world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world) + world.random.nextInt(10));
                 }
@@ -248,21 +251,19 @@ public class BlockFire extends Block {
         }
     }
 
+    @Override
     public TextureType c() {
         return TextureType.CUTOUT;
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockFire.AGE, BlockFire.NORTH, BlockFire.EAST, BlockFire.SOUTH, BlockFire.WEST, BlockFire.UPPER);
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
-
     public void a(Block block, int i, int j) {
         this.flameChances.put(block, i);
-        this.t.put(block, j);
+        this.i.put(block, j);
     }
 
     public static void d() {
@@ -349,6 +350,9 @@ public class BlockFire extends Block {
         blockfire.a(Blocks.WHITE_TULIP, 60, 100);
         blockfire.a(Blocks.PINK_TULIP, 60, 100);
         blockfire.a(Blocks.OXEYE_DAISY, 60, 100);
+        blockfire.a(Blocks.CORNFLOWER, 60, 100);
+        blockfire.a(Blocks.LILY_OF_THE_VALLEY, 60, 100);
+        blockfire.a(Blocks.WITHER_ROSE, 60, 100);
         blockfire.a(Blocks.WHITE_WOOL, 30, 60);
         blockfire.a(Blocks.ORANGE_WOOL, 30, 60);
         blockfire.a(Blocks.MAGENTA_WOOL, 30, 60);
@@ -385,5 +389,10 @@ public class BlockFire extends Block {
         blockfire.a(Blocks.RED_CARPET, 60, 20);
         blockfire.a(Blocks.BLACK_CARPET, 60, 20);
         blockfire.a(Blocks.DRIED_KELP_BLOCK, 30, 60);
+        blockfire.a(Blocks.BAMBOO, 60, 60);
+        blockfire.a(Blocks.SCAFFOLDING, 60, 60);
+        blockfire.a(Blocks.LECTERN, 30, 20);
+        blockfire.a(Blocks.COMPOSTER, 5, 20);
+        blockfire.a(Blocks.SWEET_BERRY_BUSH, 60, 100);
     }
 }

@@ -6,30 +6,26 @@ public class BlockMobSpawner extends BlockTileEntity {
         super(block_info);
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityMobSpawner();
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.AIR;
+    @Override
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, world, blockposition, itemstack);
+        int i = 15 + world.random.nextInt(15) + world.random.nextInt(15);
+
+        this.dropExperience(world, blockposition, i);
     }
 
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        super.dropNaturally(iblockdata, world, blockposition, f, i);
-        int j = 15 + world.random.nextInt(15) + world.random.nextInt(15);
-
-        this.dropExperience(world, blockposition, j);
-    }
-
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
+    @Override
     public TextureType c() {
         return TextureType.CUTOUT;
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return ItemStack.a;
     }
 }

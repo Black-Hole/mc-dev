@@ -20,11 +20,13 @@ public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketLis
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.b = packetdataserializer.e(16);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.a(this.b);

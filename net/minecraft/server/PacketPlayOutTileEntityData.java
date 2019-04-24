@@ -16,12 +16,14 @@ public class PacketPlayOutTileEntityData implements Packet<PacketListenerPlayOut
         this.c = nbttagcompound;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
-        this.c = packetdataserializer.j();
+        this.c = packetdataserializer.l();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte((byte) this.b);

@@ -10,12 +10,14 @@ public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInEntityAction() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.animation = (PacketPlayInEntityAction.EnumPlayerAction) packetdataserializer.a(PacketPlayInEntityAction.EnumPlayerAction.class);
-        this.c = packetdataserializer.g();
+        this.c = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a((Enum) this.animation);

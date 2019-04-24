@@ -44,8 +44,8 @@ public class DataConverterStatistic extends DataFix {
                 while (iterator.hasNext()) {
                     Entry<? extends Dynamic<?>, ? extends Dynamic<?>> entry = (Entry) iterator.next();
 
-                    if (((Dynamic) entry.getValue()).getNumberValue().isPresent()) {
-                        String s = (String) ((Dynamic) entry.getKey()).getStringValue().orElse("");
+                    if (((Dynamic) entry.getValue()).asNumber().isPresent()) {
+                        String s = ((Dynamic) entry.getKey()).asString("");
 
                         if (!DataConverterStatistic.a.contains(s)) {
                             String s1;

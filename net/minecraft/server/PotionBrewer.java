@@ -54,6 +54,18 @@ public class PotionBrewer {
         return false;
     }
 
+    public static boolean a(PotionRegistry potionregistry) {
+        int i = 0;
+
+        for (int j = PotionBrewer.a.size(); i < j; ++i) {
+            if (((PotionBrewer.PredicatedCombination) PotionBrewer.a.get(i)).c == potionregistry) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return !PotionBrewer.d.test(itemstack) ? false : b(itemstack, itemstack1) || c(itemstack, itemstack1);
     }
@@ -176,8 +188,8 @@ public class PotionBrewer {
         a(Potions.J, Items.GLOWSTONE_DUST, Potions.L);
         a(Potions.b, Items.FERMENTED_SPIDER_EYE, Potions.M);
         a(Potions.M, Items.REDSTONE, Potions.N);
-        a(Potions.e, Items.PHANTOM_MEMBRANE, Potions.O);
-        a(Potions.O, Items.REDSTONE, Potions.P);
+        a(Potions.e, Items.PHANTOM_MEMBRANE, Potions.P);
+        a(Potions.P, Items.REDSTONE, Potions.Q);
     }
 
     private static void a(Item item, Item item1, Item item2) {

@@ -11,7 +11,6 @@ import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.Type;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.datafixers.util.Unit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +27,14 @@ public class DataConverterEquipment extends DataFix {
     }
 
     private <IS> TypeRewriteRule a(Type<IS> type) {
-        Type<Pair<Either<List<IS>, Unit>, Dynamic<?>>> type1 = DSL.and(DSL.optional(DSL.field("Equipment", DSL.list(type))), DSL.remainderType());
-        Type<Pair<Either<List<IS>, Unit>, Pair<Either<List<IS>, Unit>, Dynamic<?>>>> type2 = DSL.and(DSL.optional(DSL.field("ArmorItems", DSL.list(type))), DSL.optional(DSL.field("HandItems", DSL.list(type))), DSL.remainderType());
-        OpticFinder<Pair<Either<List<IS>, Unit>, Dynamic<?>>> opticfinder = DSL.typeFinder(type1);
+        Type<Pair<Either<List<IS>, com.mojang.datafixers.util.Unit>, Dynamic<?>>> type1 = DSL.and(DSL.optional(DSL.field("Equipment", DSL.list(type))), DSL.remainderType());
+        Type<Pair<Either<List<IS>, com.mojang.datafixers.util.Unit>, Pair<Either<List<IS>, com.mojang.datafixers.util.Unit>, Dynamic<?>>>> type2 = DSL.and(DSL.optional(DSL.field("ArmorItems", DSL.list(type))), DSL.optional(DSL.field("HandItems", DSL.list(type))), DSL.remainderType());
+        OpticFinder<Pair<Either<List<IS>, com.mojang.datafixers.util.Unit>, Dynamic<?>>> opticfinder = DSL.typeFinder(type1);
         OpticFinder<List<IS>> opticfinder1 = DSL.fieldFinder("Equipment", DSL.list(type));
 
         return this.fixTypeEverywhereTyped("EntityEquipmentToArmorAndHandFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), this.getOutputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
-            Either<List<IS>, Unit> either = Either.right(DSL.unit());
-            Either<List<IS>, Unit> either1 = Either.right(DSL.unit());
+            Either<List<IS>, com.mojang.datafixers.util.Unit> either = Either.right(DSL.unit());
+            Either<List<IS>, com.mojang.datafixers.util.Unit> either1 = Either.right(DSL.unit());
             Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
             Optional<List<IS>> optional = typed.getOptional(opticfinder1);
 
@@ -60,22 +59,22 @@ public class DataConverterEquipment extends DataFix {
                 }
             }
 
-            Optional<? extends Stream<? extends Dynamic<?>>> optional1 = dynamic.get("DropChances").flatMap(Dynamic::getStream);
+            Optional<? extends Stream<? extends Dynamic<?>>> optional1 = dynamic.get("DropChances").asStreamOpt();
 
             if (optional1.isPresent()) {
                 Iterator<? extends Dynamic<?>> iterator = Stream.concat((Stream) optional1.get(), Stream.generate(() -> {
                     return dynamic.createInt(0);
                 })).iterator();
-                float f = ((Dynamic) iterator.next()).getNumberValue(0).floatValue();
+                float f = ((Dynamic) iterator.next()).asFloat(0.0F);
                 Dynamic dynamic1;
 
-                if (!dynamic.get("HandDropChances").isPresent()) {
+                if (!dynamic.get("HandDropChances").get().isPresent()) {
                     dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(f)).merge(dynamic.createFloat(0.0F));
                     dynamic = dynamic.set("HandDropChances", dynamic1);
                 }
 
-                if (!dynamic.get("ArmorDropChances").isPresent()) {
-                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue())).merge(dynamic.createFloat(((Dynamic) iterator.next()).getNumberValue(0).floatValue()));
+                if (!dynamic.get("ArmorDropChances").get().isPresent()) {
+                    dynamic1 = dynamic.emptyMap().merge(dynamic.createFloat(((Dynamic) iterator.next()).asFloat(0.0F))).merge(dynamic.createFloat(((Dynamic) iterator.next()).asFloat(0.0F))).merge(dynamic.createFloat(((Dynamic) iterator.next()).asFloat(0.0F))).merge(dynamic.createFloat(((Dynamic) iterator.next()).asFloat(0.0F)));
                     dynamic = dynamic.set("ArmorDropChances", dynamic1);
                 }
 

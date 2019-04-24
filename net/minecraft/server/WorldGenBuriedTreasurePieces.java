@@ -3,24 +3,21 @@ package net.minecraft.server;
 import java.util.Random;
 
 public class WorldGenBuriedTreasurePieces {
-
-    public static void a() {
-        WorldGenFactory.a(WorldGenBuriedTreasurePieces.a.class, "BTP");
-    }
-
     public static class a extends StructurePiece {
 
-        public a() {}
-
         public a(BlockPosition blockposition) {
-            super(0);
+            super(WorldGenFeatureStructurePieceType.ab, 0);
             this.n = new StructureBoundingBox(blockposition.getX(), blockposition.getY(), blockposition.getZ(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
         }
 
+        public a(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.ab, nbttagcompound);
+        }
+
+        @Override
         protected void a(NBTTagCompound nbttagcompound) {}
 
-        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {}
-
+        @Override
         public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             int i = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, this.n.a, this.n.c);
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.n.a, i, this.n.c);
@@ -51,10 +48,10 @@ public class WorldGenBuriedTreasurePieces {
                         }
                     }
 
-                    return this.a(generatoraccess, structureboundingbox, random, new BlockPosition(this.n.a, blockposition_mutableblockposition.getY(), this.n.c), LootTables.r, (IBlockData) null);
+                    return this.a(generatoraccess, structureboundingbox, random, new BlockPosition(this.n.a, blockposition_mutableblockposition.getY(), this.n.c), LootTables.G, (IBlockData) null);
                 }
 
-                blockposition_mutableblockposition.d(0, -1, 0);
+                blockposition_mutableblockposition.e(0, -1, 0);
             }
 
             return false;

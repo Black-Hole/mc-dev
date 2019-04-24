@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalRandomLookaround extends PathfinderGoal {
 
     private final EntityInsentient a;
@@ -9,17 +11,20 @@ public class PathfinderGoalRandomLookaround extends PathfinderGoal {
 
     public PathfinderGoalRandomLookaround(EntityInsentient entityinsentient) {
         this.a = entityinsentient;
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
+    @Override
     public boolean a() {
         return this.a.getRandom().nextFloat() < 0.02F;
     }
 
+    @Override
     public boolean b() {
         return this.d >= 0;
     }
 
+    @Override
     public void c() {
         double d0 = 6.283185307179586D * this.a.getRandom().nextDouble();
 
@@ -28,8 +33,9 @@ public class PathfinderGoalRandomLookaround extends PathfinderGoal {
         this.d = 20 + this.a.getRandom().nextInt(20);
     }
 
+    @Override
     public void e() {
         --this.d;
-        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c, (float) this.a.L(), (float) this.a.K());
+        this.a.getControllerLook().a(this.a.locX + this.b, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ + this.c);
     }
 }

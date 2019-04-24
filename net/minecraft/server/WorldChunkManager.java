@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-public abstract class WorldChunkManager implements ITickable {
+public abstract class WorldChunkManager {
 
     private static final List<BiomeBase> c = Lists.newArrayList(new BiomeBase[] { Biomes.FOREST, Biomes.PLAINS, Biomes.TAIGA, Biomes.TAIGA_HILLS, Biomes.WOODED_HILLS, Biomes.JUNGLE, Biomes.JUNGLE_HILLS});
     protected final Map<StructureGenerator<?>, Boolean> a = Maps.newHashMap();
@@ -21,12 +21,15 @@ public abstract class WorldChunkManager implements ITickable {
         return WorldChunkManager.c;
     }
 
-    public void tick() {}
+    public BiomeBase getBiome(BlockPosition blockposition) {
+        return this.getBiome(blockposition.getX(), blockposition.getZ());
+    }
 
-    @Nullable
-    public abstract BiomeBase getBiome(BlockPosition blockposition, @Nullable BiomeBase biomebase);
+    public abstract BiomeBase getBiome(int i, int j);
 
-    public abstract BiomeBase[] getBiomes(int i, int j, int k, int l);
+    public BiomeBase b(int i, int j) {
+        return this.getBiome(i << 2, j << 2);
+    }
 
     public BiomeBase[] getBiomeBlock(int i, int j, int k, int l) {
         return this.a(i, j, k, l, true);
@@ -39,7 +42,7 @@ public abstract class WorldChunkManager implements ITickable {
     @Nullable
     public abstract BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random);
 
-    public float c(int i, int j, int k, int l) {
+    public float c(int i, int j) {
         return 0.0F;
     }
 

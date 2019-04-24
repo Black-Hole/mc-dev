@@ -11,39 +11,49 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.util.Random;
 
-public class LootValueBounds {
+public class LootValueBounds implements LootValue {
 
-    private final float a;
-    private final float b;
+    private final float d;
+    private final float e;
 
     public LootValueBounds(float f, float f1) {
-        this.a = f;
-        this.b = f1;
+        this.d = f;
+        this.e = f1;
     }
 
     public LootValueBounds(float f) {
-        this.a = f;
-        this.b = f;
+        this.d = f;
+        this.e = f;
     }
 
-    public float a() {
-        return this.a;
+    public static LootValueBounds a(float f, float f1) {
+        return new LootValueBounds(f, f1);
     }
 
     public float b() {
-        return this.b;
+        return this.d;
     }
 
+    public float c() {
+        return this.e;
+    }
+
+    @Override
     public int a(Random random) {
-        return MathHelper.nextInt(random, MathHelper.d(this.a), MathHelper.d(this.b));
+        return MathHelper.nextInt(random, MathHelper.d(this.d), MathHelper.d(this.e));
     }
 
     public float b(Random random) {
-        return MathHelper.a(random, this.a, this.b);
+        return MathHelper.a(random, this.d, this.e);
     }
 
     public boolean a(int i) {
-        return (float) i <= this.b && (float) i >= this.a;
+        return (float) i <= this.e && (float) i >= this.d;
+    }
+
+    @Override
+    public MinecraftKey a() {
+        return LootValueBounds.b;
     }
 
     public static class a implements JsonDeserializer<LootValueBounds>, JsonSerializer<LootValueBounds> {
@@ -63,13 +73,13 @@ public class LootValueBounds {
         }
 
         public JsonElement serialize(LootValueBounds lootvaluebounds, Type type, JsonSerializationContext jsonserializationcontext) {
-            if (lootvaluebounds.a == lootvaluebounds.b) {
-                return new JsonPrimitive(lootvaluebounds.a);
+            if (lootvaluebounds.d == lootvaluebounds.e) {
+                return new JsonPrimitive(lootvaluebounds.d);
             } else {
                 JsonObject jsonobject = new JsonObject();
 
-                jsonobject.addProperty("min", lootvaluebounds.a);
-                jsonobject.addProperty("max", lootvaluebounds.b);
+                jsonobject.addProperty("min", lootvaluebounds.d);
+                jsonobject.addProperty("max", lootvaluebounds.e);
                 return jsonobject;
             }
         }

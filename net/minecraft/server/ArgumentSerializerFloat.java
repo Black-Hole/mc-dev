@@ -22,6 +22,7 @@ public class ArgumentSerializerFloat implements ArgumentSerializer<FloatArgument
 
     }
 
+    @Override
     public FloatArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         float f = ArgumentSerializers.a(b0) ? packetdataserializer.readFloat() : -3.4028235E38F;

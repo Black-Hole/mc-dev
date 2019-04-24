@@ -38,15 +38,13 @@ public class ArgumentMinecraftKeyRegistered implements ArgumentType<MinecraftKey
         }
     }
 
-    public static IRecipe b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+    public static IRecipe<?> b(CommandContext<CommandListenerWrapper> commandcontext, String s) throws CommandSyntaxException {
+        CraftingManager craftingmanager = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager();
         MinecraftKey minecraftkey = (MinecraftKey) commandcontext.getArgument(s, MinecraftKey.class);
-        IRecipe irecipe = ((CommandListenerWrapper) commandcontext.getSource()).getServer().getCraftingManager().a(minecraftkey);
 
-        if (irecipe == null) {
-            throw ArgumentMinecraftKeyRegistered.c.create(minecraftkey);
-        } else {
-            return irecipe;
-        }
+        return (IRecipe) craftingmanager.a(minecraftkey).orElseThrow(() -> {
+            return ArgumentMinecraftKeyRegistered.c.create(minecraftkey);
+        });
     }
 
     public static MinecraftKey c(CommandContext<CommandListenerWrapper> commandcontext, String s) {

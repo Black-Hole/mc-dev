@@ -11,10 +11,11 @@ public class DataConverterZombieType extends DataConverterEntityNameAbstract {
         super("EntityZombieSplitFix", schema, flag);
     }
 
+    @Override
     protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
         if (Objects.equals("Zombie", s)) {
             String s1 = "Zombie";
-            int i = dynamic.getInt("ZombieType");
+            int i = dynamic.get("ZombieType").asInt(0);
 
             switch (i) {
             case 0:

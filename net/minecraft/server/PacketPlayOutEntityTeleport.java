@@ -24,8 +24,9 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
         this.g = entity.onGround;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.readDouble();
         this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readDouble();
@@ -34,6 +35,7 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
         this.g = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeDouble(this.b);

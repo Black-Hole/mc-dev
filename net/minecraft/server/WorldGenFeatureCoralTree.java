@@ -1,15 +1,20 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.Dynamic;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureCoralTree extends WorldGenFeatureCoral {
 
-    public WorldGenFeatureCoralTree() {}
+    public WorldGenFeatureCoralTree(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
+    @Override
     protected boolean a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
         int i = random.nextInt(3) + 1;
@@ -22,7 +27,7 @@ public class WorldGenFeatureCoralTree extends WorldGenFeatureCoral {
             blockposition_mutableblockposition.c(EnumDirection.UP);
         }
 
-        BlockPosition blockposition1 = blockposition_mutableblockposition.h();
+        BlockPosition blockposition1 = blockposition_mutableblockposition.immutableCopy();
         int k = random.nextInt(3) + 2;
         List<EnumDirection> list = Lists.newArrayList(EnumDirection.EnumDirectionLimit.HORIZONTAL);
 

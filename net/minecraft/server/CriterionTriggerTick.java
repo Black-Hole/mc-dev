@@ -16,10 +16,12 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
 
     public CriterionTriggerTick() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerTick.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerTick.b> criteriontrigger_a) {
         CriterionTriggerTick.a criteriontriggertick_a = (CriterionTriggerTick.a) this.b.get(advancementdataplayer);
 
@@ -31,6 +33,7 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
         criteriontriggertick_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerTick.b> criteriontrigger_a) {
         CriterionTriggerTick.a criteriontriggertick_a = (CriterionTriggerTick.a) this.b.get(advancementdataplayer);
 
@@ -43,10 +46,12 @@ public class CriterionTriggerTick implements CriterionTrigger<CriterionTriggerTi
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerTick.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerTick.b();
     }

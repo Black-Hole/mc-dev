@@ -1,23 +1,26 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
     private static final IBlockData a = Blocks.BIRCH_LOG.getBlockData();
-    private static final IBlockData b = Blocks.BIRCH_LEAVES.getBlockData();
-    private final boolean c;
+    private static final IBlockData aS = Blocks.BIRCH_LEAVES.getBlockData();
+    private final boolean aT;
 
-    public WorldGenForest(boolean flag, boolean flag1) {
-        super(flag);
-        this.c = flag1;
+    public WorldGenForest(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function, boolean flag, boolean flag1) {
+        super(function, flag);
+        this.aT = flag1;
     }
 
-    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+    @Override
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
         int i = random.nextInt(3) + 5;
 
-        if (this.c) {
+        if (this.aT) {
             i += random.nextInt(7);
         }
 
@@ -26,24 +29,25 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
             int j;
             int k;
+            int l;
 
-            for (int l = blockposition.getY(); l <= blockposition.getY() + 1 + i; ++l) {
+            for (j = blockposition.getY(); j <= blockposition.getY() + 1 + i; ++j) {
                 byte b0 = 1;
 
-                if (l == blockposition.getY()) {
+                if (j == blockposition.getY()) {
                     b0 = 0;
                 }
 
-                if (l >= blockposition.getY() + 1 + i - 2) {
+                if (j >= blockposition.getY() + 1 + i - 2) {
                     b0 = 2;
                 }
 
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-                for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
-                    for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
-                        if (l >= 0 && l < 256) {
-                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
+                for (k = blockposition.getX() - b0; k <= blockposition.getX() + b0 && flag; ++k) {
+                    for (l = blockposition.getZ() - b0; l <= blockposition.getZ() + b0 && flag; ++l) {
+                        if (j >= 0 && j < 256) {
+                            if (!a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition.d(k, j, l))) {
                                 flag = false;
                             }
                         } else {
@@ -55,49 +59,39 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
 
             if (!flag) {
                 return false;
-            } else {
-                Block block = generatoraccess.getType(blockposition.down()).getBlock();
+            } else if (i(virtuallevelwritable, blockposition.down()) && blockposition.getY() < 256 - i - 1) {
+                this.a(virtuallevelwritable, blockposition.down());
 
-                if ((block == Blocks.GRASS_BLOCK || Block.d(block) || block == Blocks.FARMLAND) && blockposition.getY() < 256 - i - 1) {
-                    this.a(generatoraccess, blockposition.down());
+                for (j = blockposition.getY() - 3 + i; j <= blockposition.getY() + i; ++j) {
+                    int i1 = j - (blockposition.getY() + i);
+                    int j1 = 1 - i1 / 2;
 
-                    int i1;
+                    for (k = blockposition.getX() - j1; k <= blockposition.getX() + j1; ++k) {
+                        l = k - blockposition.getX();
 
-                    for (i1 = blockposition.getY() - 3 + i; i1 <= blockposition.getY() + i; ++i1) {
-                        int j1 = i1 - (blockposition.getY() + i);
+                        for (int k1 = blockposition.getZ() - j1; k1 <= blockposition.getZ() + j1; ++k1) {
+                            int l1 = k1 - blockposition.getZ();
 
-                        j = 1 - j1 / 2;
+                            if (Math.abs(l) != j1 || Math.abs(l1) != j1 || random.nextInt(2) != 0 && i1 != 0) {
+                                BlockPosition blockposition1 = new BlockPosition(k, j, k1);
 
-                        for (k = blockposition.getX() - j; k <= blockposition.getX() + j; ++k) {
-                            int k1 = k - blockposition.getX();
-
-                            for (int l1 = blockposition.getZ() - j; l1 <= blockposition.getZ() + j; ++l1) {
-                                int i2 = l1 - blockposition.getZ();
-
-                                if (Math.abs(k1) != j || Math.abs(i2) != j || random.nextInt(2) != 0 && j1 != 0) {
-                                    BlockPosition blockposition1 = new BlockPosition(k, i1, l1);
-                                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
-
-                                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-                                        this.a(generatoraccess, blockposition1, WorldGenForest.b);
-                                    }
+                                if (g(virtuallevelwritable, blockposition1)) {
+                                    this.a(virtuallevelwritable, blockposition1, WorldGenForest.aS);
                                 }
                             }
                         }
                     }
-
-                    for (i1 = 0; i1 < i; ++i1) {
-                        IBlockData iblockdata1 = generatoraccess.getType(blockposition.up(i1));
-
-                        if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES)) {
-                            this.a(set, generatoraccess, blockposition.up(i1), WorldGenForest.a);
-                        }
-                    }
-
-                    return true;
-                } else {
-                    return false;
                 }
+
+                for (j = 0; j < i; ++j) {
+                    if (g(virtuallevelwritable, blockposition.up(j))) {
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(j), WorldGenForest.a);
+                    }
+                }
+
+                return true;
+            } else {
+                return false;
             }
         } else {
             return false;

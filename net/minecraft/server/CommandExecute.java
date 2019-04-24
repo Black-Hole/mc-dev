@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.ResultConsumer;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
@@ -46,7 +47,7 @@ public class CommandExecute {
 
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("execute").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("run").redirect(com_mojang_brigadier_commanddispatcher.getRoot()))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("if"), true))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("unless"), false))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+        })).then(CommandDispatcher.a("run").redirect(com_mojang_brigadier_commanddispatcher.getRoot()))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("if"), true))).then(a((CommandNode) literalcommandnode, CommandDispatcher.a("unless"), false))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
@@ -57,44 +58,44 @@ public class CommandExecute {
             }
 
             return list;
-        })))).then(CommandDispatcher.a("at").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+        })))).then(CommandDispatcher.a("at").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bI()).a(entity.aO()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a((WorldServer) entity.world).a(entity.bO()).a(entity.aT()));
             }
 
             return list;
         })))).then(((LiteralArgumentBuilder) CommandDispatcher.a("store").then(a(literalcommandnode, CommandDispatcher.a("result"), true))).then(a(literalcommandnode, CommandDispatcher.a("success"), false)))).then(((LiteralArgumentBuilder) CommandDispatcher.a("positioned").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentVec3.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentVec3.a(commandcontext, "pos"));
-        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bI()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.bO()));
             }
 
             return list;
         }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("rotated").then(CommandDispatcher.a("rot", (ArgumentType) ArgumentRotation.a()).redirect(literalcommandnode, (commandcontext) -> {
             return ((CommandListenerWrapper) commandcontext.getSource()).a(ArgumentRotation.a(commandcontext, "rot").b((CommandListenerWrapper) commandcontext.getSource()));
-        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).fork(literalcommandnode, (commandcontext) -> {
+        }))).then(CommandDispatcher.a("as").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
 
             while (iterator.hasNext()) {
                 Entity entity = (Entity) iterator.next();
 
-                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aO()));
+                list.add(((CommandListenerWrapper) commandcontext.getSource()).a(entity.aT()));
             }
 
             return list;
-        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("facing").then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).fork(literalcommandnode, (commandcontext) -> {
+        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("facing").then(CommandDispatcher.a("entity").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(CommandDispatcher.a("anchor", (ArgumentType) ArgumentAnchor.a()).fork(literalcommandnode, (commandcontext) -> {
             List<CommandListenerWrapper> list = Lists.newArrayList();
             ArgumentAnchor.Anchor argumentanchor_anchor = ArgumentAnchor.a(commandcontext, "anchor");
             Iterator iterator = ArgumentEntity.c(commandcontext, "targets").iterator();
@@ -126,34 +127,34 @@ public class CommandExecute {
         }))).then(CommandDispatcher.a("max").redirect(literalcommandnode, (commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), CommandBossBar.a(commandcontext), false, flag);
         }))));
-        Iterator iterator = CommandData.a.iterator();
+        Iterator iterator = CommandData.b.iterator();
 
         while (iterator.hasNext()) {
-            CommandData.a commanddata_a = (CommandData.a) iterator.next();
+            CommandData.c commanddata_c = (CommandData.c) iterator.next();
 
-            commanddata_a.a(literalargumentbuilder, (argumentbuilder) -> {
+            commanddata_c.a(literalargumentbuilder, (argumentbuilder) -> {
                 return argumentbuilder.then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("path", (ArgumentType) ArgumentNBTKey.a()).then(CommandDispatcher.a("int").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagInt((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("float").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagFloat((float) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("short").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagShort((short) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
                     }, flag);
                 })))).then(CommandDispatcher.a("long").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagLong((long) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale")));
                     }, flag);
                 })))).then(CommandDispatcher.a("double").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagDouble((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"));
                     }, flag);
                 })))).then(CommandDispatcher.a("byte").then(CommandDispatcher.a("scale", (ArgumentType) DoubleArgumentType.doubleArg()).redirect(literalcommandnode, (commandcontext) -> {
-                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_a.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
+                    return a((CommandListenerWrapper) commandcontext.getSource(), commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"), (i) -> {
                         return new NBTTagByte((byte) ((int) ((double) i * DoubleArgumentType.getDouble(commandcontext, "scale"))));
                     }, flag);
                 }))));
@@ -193,13 +194,15 @@ public class CommandExecute {
         }, CommandExecute.d);
     }
 
-    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.c argumentnbtkey_c, IntFunction<NBTBase> intfunction, boolean flag) {
+    private static CommandListenerWrapper a(CommandListenerWrapper commandlistenerwrapper, CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h, IntFunction<NBTBase> intfunction, boolean flag) {
         return commandlistenerwrapper.a((commandcontext, flag1, i) -> {
             try {
                 NBTTagCompound nbttagcompound = commanddataaccessor.a();
                 int j = flag ? i : (flag1 ? 1 : 0);
 
-                argumentnbtkey_c.a(nbttagcompound, (NBTBase) intfunction.apply(j));
+                argumentnbtkey_h.b(nbttagcompound, () -> {
+                    return (NBTBase) intfunction.apply(j);
+                });
                 commanddataaccessor.a(nbttagcompound);
             } catch (CommandSyntaxException commandsyntaxexception) {
                 ;
@@ -209,7 +212,7 @@ public class CommandExecute {
     }
 
     private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, LiteralArgumentBuilder<CommandListenerWrapper> literalargumentbuilder, boolean flag) {
-        return ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
+        ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) literalargumentbuilder.then(CommandDispatcher.a("block").then(CommandDispatcher.a("pos", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("block", (ArgumentType) ArgumentBlockPredicate.a()), flag, (commandcontext) -> {
             return ArgumentBlockPredicate.a(commandcontext, "block").test(new ShapeDetectorBlock(((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentPosition.a(commandcontext, "pos"), true));
         }))))).then(CommandDispatcher.a("score").then(CommandDispatcher.a("target", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targetObjective", (ArgumentType) ArgumentScoreboardObjective.a()).then(CommandDispatcher.a("=").then(CommandDispatcher.a("source", (ArgumentType) ArgumentScoreholder.a()).suggests(ArgumentScoreholder.a).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("sourceObjective", (ArgumentType) ArgumentScoreboardObjective.a()), flag, (commandcontext) -> {
             return a(commandcontext, Integer::equals);
@@ -231,10 +234,31 @@ public class CommandExecute {
             });
         }))))).then(CommandDispatcher.a("matches").then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("range", (ArgumentType) ArgumentCriterionValue.a()), flag, (commandcontext) -> {
             return a(commandcontext, ArgumentCriterionValue.b.a(commandcontext, "range"));
-        }))))))).then(CommandDispatcher.a("blocks").then(CommandDispatcher.a("start", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("end", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("destination", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("all"), flag, false))).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("masked"), flag, true))))))).then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("entities", (ArgumentType) ArgumentEntity.b()).fork(commandnode, (commandcontext) -> {
+        }))))))).then(CommandDispatcher.a("blocks").then(CommandDispatcher.a("start", (ArgumentType) ArgumentPosition.a()).then(CommandDispatcher.a("end", (ArgumentType) ArgumentPosition.a()).then(((RequiredArgumentBuilder) CommandDispatcher.a("destination", (ArgumentType) ArgumentPosition.a()).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("all"), flag, false))).then(a(commandnode, (ArgumentBuilder) CommandDispatcher.a("masked"), flag, true))))))).then(CommandDispatcher.a("entity").then(((RequiredArgumentBuilder) CommandDispatcher.a("entities", (ArgumentType) ArgumentEntity.multipleEntities()).fork(commandnode, (commandcontext) -> {
             return a(commandcontext, flag, !ArgumentEntity.c(commandcontext, "entities").isEmpty());
-        })).executes(flag ? (commandcontext) -> {
-            int i = ArgumentEntity.c(commandcontext, "entities").size();
+        })).executes(a(flag, (commandcontext) -> {
+            return ArgumentEntity.c(commandcontext, "entities").size();
+        }))));
+        Iterator iterator = CommandData.c.iterator();
+
+        while (iterator.hasNext()) {
+            CommandData.c commanddata_c = (CommandData.c) iterator.next();
+
+            literalargumentbuilder.then(commanddata_c.a(CommandDispatcher.a("data"), (argumentbuilder) -> {
+                return argumentbuilder.then(((RequiredArgumentBuilder) CommandDispatcher.a("path", (ArgumentType) ArgumentNBTKey.a()).fork(commandnode, (commandcontext) -> {
+                    return a(commandcontext, flag, a(commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path")) > 0);
+                })).executes(a(flag, (commandcontext) -> {
+                    return a(commanddata_c.a(commandcontext), ArgumentNBTKey.a(commandcontext, "path"));
+                })));
+            }));
+        }
+
+        return literalargumentbuilder;
+    }
+
+    private static Command<CommandListenerWrapper> a(boolean flag, CommandExecute.a commandexecute_a) {
+        return flag ? (commandcontext) -> {
+            int i = commandexecute_a.test(commandcontext);
 
             if (i > 0) {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass_count", new Object[] { i}), false);
@@ -243,7 +267,7 @@ public class CommandExecute {
                 throw CommandExecute.b.create();
             }
         } : (commandcontext) -> {
-            int i = ArgumentEntity.c(commandcontext, "entities").size();
+            int i = commandexecute_a.test(commandcontext);
 
             if (i == 0) {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
@@ -251,7 +275,11 @@ public class CommandExecute {
             } else {
                 throw CommandExecute.c.create(i);
             }
-        })));
+        };
+    }
+
+    private static int a(CommandDataAccessor commanddataaccessor, ArgumentNBTKey.h argumentnbtkey_h) throws CommandSyntaxException {
+        return argumentnbtkey_h.b(commanddataaccessor.a());
     }
 
     private static boolean a(CommandContext<CommandListenerWrapper> commandcontext, BiPredicate<Integer, Integer> bipredicate) throws CommandSyntaxException {
@@ -283,11 +311,11 @@ public class CommandExecute {
         return (Collection) (flag1 == flag ? Collections.singleton(commandcontext.getSource()) : Collections.emptyList());
     }
 
-    private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, boolean flag, CommandExecute.a commandexecute_a) {
+    private static ArgumentBuilder<CommandListenerWrapper, ?> a(CommandNode<CommandListenerWrapper> commandnode, ArgumentBuilder<CommandListenerWrapper, ?> argumentbuilder, boolean flag, CommandExecute.b commandexecute_b) {
         return argumentbuilder.fork(commandnode, (commandcontext) -> {
-            return a(commandcontext, flag, commandexecute_a.test(commandcontext));
+            return a(commandcontext, flag, commandexecute_b.test(commandcontext));
         }).executes((commandcontext) -> {
-            if (flag == commandexecute_a.test(commandcontext)) {
+            if (flag == commandexecute_b.test(commandcontext)) {
                 ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
                 return 1;
             } else {
@@ -320,11 +348,11 @@ public class CommandExecute {
     private static int b(CommandContext<CommandListenerWrapper> commandcontext, boolean flag) throws CommandSyntaxException {
         OptionalInt optionalint = c(commandcontext, flag);
 
-        if (!optionalint.isPresent()) {
+        if (optionalint.isPresent()) {
+            throw CommandExecute.c.create(optionalint.getAsInt());
+        } else {
             ((CommandListenerWrapper) commandcontext.getSource()).sendMessage(new ChatMessage("commands.execute.conditional.pass", new Object[0]), false);
             return 1;
-        } else {
-            throw CommandExecute.c.create(optionalint.getAsInt());
         }
     }
 
@@ -390,6 +418,12 @@ public class CommandExecute {
 
     @FunctionalInterface
     interface a {
+
+        int test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
+    }
+
+    @FunctionalInterface
+    interface b {
 
         boolean test(CommandContext<CommandListenerWrapper> commandcontext) throws CommandSyntaxException;
     }

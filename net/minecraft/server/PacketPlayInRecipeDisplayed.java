@@ -10,27 +10,37 @@ public class PacketPlayInRecipeDisplayed implements Packet<PacketListenerPlayIn>
     private boolean d;
     private boolean e;
     private boolean f;
+    private boolean g;
+    private boolean h;
+    private boolean i;
+    private boolean j;
 
     public PacketPlayInRecipeDisplayed() {}
 
-    public PacketPlayInRecipeDisplayed(IRecipe irecipe) {
+    public PacketPlayInRecipeDisplayed(IRecipe<?> irecipe) {
         this.a = PacketPlayInRecipeDisplayed.Status.SHOWN;
         this.b = irecipe.getKey();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayInRecipeDisplayed.Status) packetdataserializer.a(PacketPlayInRecipeDisplayed.Status.class);
         if (this.a == PacketPlayInRecipeDisplayed.Status.SHOWN) {
-            this.b = packetdataserializer.l();
+            this.b = packetdataserializer.o();
         } else if (this.a == PacketPlayInRecipeDisplayed.Status.SETTINGS) {
             this.c = packetdataserializer.readBoolean();
             this.d = packetdataserializer.readBoolean();
             this.e = packetdataserializer.readBoolean();
             this.f = packetdataserializer.readBoolean();
+            this.g = packetdataserializer.readBoolean();
+            this.h = packetdataserializer.readBoolean();
+            this.i = packetdataserializer.readBoolean();
+            this.j = packetdataserializer.readBoolean();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         if (this.a == PacketPlayInRecipeDisplayed.Status.SHOWN) {
@@ -40,6 +50,10 @@ public class PacketPlayInRecipeDisplayed implements Packet<PacketListenerPlayIn>
             packetdataserializer.writeBoolean(this.d);
             packetdataserializer.writeBoolean(this.e);
             packetdataserializer.writeBoolean(this.f);
+            packetdataserializer.writeBoolean(this.g);
+            packetdataserializer.writeBoolean(this.h);
+            packetdataserializer.writeBoolean(this.i);
+            packetdataserializer.writeBoolean(this.j);
         }
 
     }
@@ -70,6 +84,22 @@ public class PacketPlayInRecipeDisplayed implements Packet<PacketListenerPlayIn>
 
     public boolean g() {
         return this.f;
+    }
+
+    public boolean h() {
+        return this.g;
+    }
+
+    public boolean i() {
+        return this.h;
+    }
+
+    public boolean j() {
+        return this.i;
+    }
+
+    public boolean k() {
+        return this.j;
     }
 
     public static enum Status {

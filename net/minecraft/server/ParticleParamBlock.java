@@ -6,13 +6,15 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 public class ParticleParamBlock implements ParticleParam {
 
     public static final ParticleParam.a<ParticleParamBlock> a = new ParticleParam.a<ParticleParamBlock>() {
+        @Override
         public ParticleParamBlock b(Particle<ParticleParamBlock> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
             return new ParticleParamBlock(particle, (new ArgumentBlock(stringreader, false)).a(false).getBlockData());
         }
 
+        @Override
         public ParticleParamBlock b(Particle<ParticleParamBlock> particle, PacketDataSerializer packetdataserializer) {
-            return new ParticleParamBlock(particle, (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.g()));
+            return new ParticleParamBlock(particle, (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i()));
         }
     };
     private final Particle<ParticleParamBlock> b;
@@ -23,14 +25,17 @@ public class ParticleParamBlock implements ParticleParam {
         this.c = iblockdata;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) {
         packetdataserializer.d(Block.REGISTRY_ID.getId(this.c));
     }
 
+    @Override
     public String a() {
-        return this.b().d() + " " + ArgumentBlock.a(this.c, (NBTTagCompound) null);
+        return IRegistry.PARTICLE_TYPE.getKey(this.b()) + " " + ArgumentBlock.a(this.c);
     }
 
+    @Override
     public Particle<ParticleParamBlock> b() {
         return this.b;
     }

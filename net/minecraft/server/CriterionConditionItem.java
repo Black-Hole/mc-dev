@@ -46,7 +46,9 @@ public class CriterionConditionItem {
     }
 
     public boolean a(ItemStack itemstack) {
-        if (this.b != null && !this.b.isTagged(itemstack.getItem())) {
+        if (this == CriterionConditionItem.a) {
+            return true;
+        } else if (this.b != null && !this.b.isTagged(itemstack.getItem())) {
             return false;
         } else if (this.c != null && itemstack.getItem() != this.c) {
             return false;
@@ -92,10 +94,9 @@ public class CriterionConditionItem {
                 if (jsonobject.has("item")) {
                     MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "item"));
 
-                    item = (Item) IRegistry.ITEM.get(minecraftkey);
-                    if (item == null) {
-                        throw new JsonSyntaxException("Unknown item id '" + minecraftkey + "'");
-                    }
+                    item = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
+                        return new JsonSyntaxException("Unknown item id '" + minecraftkey + "'");
+                    });
                 }
 
                 Tag<Item> tag = null;
@@ -115,11 +116,9 @@ public class CriterionConditionItem {
                 if (jsonobject.has("potion")) {
                     MinecraftKey minecraftkey2 = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
-                    if (!IRegistry.POTION.c(minecraftkey2)) {
-                        throw new JsonSyntaxException("Unknown potion '" + minecraftkey2 + "'");
-                    }
-
-                    potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey2);
+                    potionregistry = (PotionRegistry) IRegistry.POTION.getOptional(minecraftkey2).orElseThrow(() -> {
+                        return new JsonSyntaxException("Unknown potion '" + minecraftkey2 + "'");
+                    });
                 }
 
                 return new CriterionConditionItem(tag, item, criterionconditionvalue_integerrange, criterionconditionvalue_integerrange1, acriterionconditionenchantments, potionregistry, criterionconditionnbt);
@@ -218,6 +217,16 @@ public class CriterionConditionItem {
 
         public CriterionConditionItem.a a(CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange) {
             this.d = criterionconditionvalue_integerrange;
+            return this;
+        }
+
+        public CriterionConditionItem.a a(NBTTagCompound nbttagcompound) {
+            this.g = new CriterionConditionNBT(nbttagcompound);
+            return this;
+        }
+
+        public CriterionConditionItem.a a(CriterionConditionEnchantments criterionconditionenchantments) {
+            this.a.add(criterionconditionenchantments);
             return this;
         }
 

@@ -7,6 +7,7 @@ public class ResourcePackInfoDeserializer implements ResourcePackMetaParser<Reso
 
     public ResourcePackInfoDeserializer() {}
 
+    @Override
     public ResourcePackInfo a(JsonObject jsonobject) {
         IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(jsonobject.get("description"));
 
@@ -19,6 +20,7 @@ public class ResourcePackInfoDeserializer implements ResourcePackMetaParser<Reso
         }
     }
 
+    @Override
     public String a() {
         return "pack";
     }

@@ -10,20 +10,24 @@ public class Navigation extends NavigationAbstract {
         super(entityinsentient, world);
     }
 
-    protected Pathfinder a() {
+    @Override
+    protected Pathfinder a(int i) {
         this.o = new PathfinderNormal();
         this.o.a(true);
-        return new Pathfinder(this.o);
+        return new Pathfinder(this.o, i);
     }
 
-    protected boolean b() {
-        return this.a.onGround || this.r() || this.a.isPassenger();
+    @Override
+    protected boolean a() {
+        return this.a.onGround || this.p() || this.a.isPassenger();
     }
 
-    protected Vec3D c() {
-        return new Vec3D(this.a.locX, (double) this.u(), this.a.locZ);
+    @Override
+    protected Vec3D b() {
+        return new Vec3D(this.a.locX, (double) this.s(), this.a.locZ);
     }
 
+    @Override
     public PathEntity b(BlockPosition blockposition) {
         BlockPosition blockposition1;
 
@@ -54,12 +58,13 @@ public class Navigation extends NavigationAbstract {
         }
     }
 
+    @Override
     public PathEntity a(Entity entity) {
         return this.b(new BlockPosition(entity));
     }
 
-    private int u() {
-        if (this.a.isInWater() && this.t()) {
+    private int s() {
+        if (this.a.isInWater() && this.r()) {
             int i = (int) this.a.getBoundingBox().minY;
             Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
             int j = 0;
@@ -80,18 +85,19 @@ public class Navigation extends NavigationAbstract {
         }
     }
 
-    protected void E_() {
-        super.E_();
+    @Override
+    protected void D_() {
+        super.D_();
         if (this.p) {
-            if (this.b.e(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().minY + 0.5D), MathHelper.floor(this.a.locZ)))) {
+            if (this.b.f(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().minY + 0.5D), MathHelper.floor(this.a.locZ)))) {
                 return;
             }
 
-            for (int i = 0; i < this.c.d(); ++i) {
+            for (int i = 0; i < this.c.e(); ++i) {
                 PathPoint pathpoint = this.c.a(i);
 
-                if (this.b.e(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
-                    this.c.b(i - 1);
+                if (this.b.f(new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c))) {
+                    this.c.b(i);
                     return;
                 }
             }
@@ -99,6 +105,7 @@ public class Navigation extends NavigationAbstract {
 
     }
 
+    @Override
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
         int l = MathHelper.floor(vec3d.x);
         int i1 = MathHelper.floor(vec3d.z);
@@ -232,11 +239,7 @@ public class Navigation extends NavigationAbstract {
         this.o.b(flag);
     }
 
-    public void b(boolean flag) {
-        this.o.a(flag);
-    }
-
-    public boolean g() {
+    public boolean f() {
         return this.o.c();
     }
 

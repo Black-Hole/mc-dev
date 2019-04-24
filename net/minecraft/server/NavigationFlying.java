@@ -6,50 +6,56 @@ public class NavigationFlying extends NavigationAbstract {
         super(entityinsentient, world);
     }
 
-    protected Pathfinder a() {
+    @Override
+    protected Pathfinder a(int i) {
         this.o = new PathfinderFlying();
         this.o.a(true);
-        return new Pathfinder(this.o);
+        return new Pathfinder(this.o, i);
     }
 
-    protected boolean b() {
-        return this.t() && this.r() || !this.a.isPassenger();
+    @Override
+    protected boolean a() {
+        return this.r() && this.p() || !this.a.isPassenger();
     }
 
-    protected Vec3D c() {
+    @Override
+    protected Vec3D b() {
         return new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
     }
 
+    @Override
     public PathEntity a(Entity entity) {
         return this.b(new BlockPosition(entity));
     }
 
-    public void d() {
+    @Override
+    public void c() {
         ++this.e;
         if (this.m) {
-            this.l();
+            this.k();
         }
 
-        if (!this.p()) {
+        if (!this.n()) {
             Vec3D vec3d;
 
-            if (this.b()) {
-                this.o();
-            } else if (this.c != null && this.c.e() < this.c.d()) {
-                vec3d = this.c.a(this.a, this.c.e());
+            if (this.a()) {
+                this.m();
+            } else if (this.c != null && this.c.f() < this.c.e()) {
+                vec3d = this.c.a(this.a, this.c.f());
                 if (MathHelper.floor(this.a.locX) == MathHelper.floor(vec3d.x) && MathHelper.floor(this.a.locY) == MathHelper.floor(vec3d.y) && MathHelper.floor(this.a.locZ) == MathHelper.floor(vec3d.z)) {
-                    this.c.c(this.c.e() + 1);
+                    this.c.c(this.c.f() + 1);
                 }
             }
 
-            this.n();
-            if (!this.p()) {
+            PacketDebug.a(this.b, this.a, this.c, this.l);
+            if (!this.n()) {
                 vec3d = this.c.a((Entity) this.a);
                 this.a.getControllerMove().a(vec3d.x, vec3d.y, vec3d.z, this.d);
             }
         }
     }
 
+    @Override
     protected boolean a(Vec3D vec3d, Vec3D vec3d1, int i, int j, int k) {
         int l = MathHelper.floor(vec3d.x);
         int i1 = MathHelper.floor(vec3d.y);
@@ -127,7 +133,8 @@ public class NavigationFlying extends NavigationAbstract {
         this.o.a(flag);
     }
 
+    @Override
     public boolean a(BlockPosition blockposition) {
-        return this.b.getType(blockposition).q();
+        return this.b.getType(blockposition).a((IBlockAccess) this.b, blockposition, (Entity) this.a);
     }
 }

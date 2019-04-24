@@ -6,12 +6,16 @@ public interface INamableTileEntity {
 
     IChatBaseComponent getDisplayName();
 
-    boolean hasCustomName();
+    default boolean hasCustomName() {
+        return this.getCustomName() != null;
+    }
 
     default IChatBaseComponent getScoreboardDisplayName() {
         return this.getDisplayName();
     }
 
     @Nullable
-    IChatBaseComponent getCustomName();
+    default IChatBaseComponent getCustomName() {
+        return null;
+    }
 }

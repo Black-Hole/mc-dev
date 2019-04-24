@@ -1,176 +1,123 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Sets;
-import java.util.Iterator;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nullable;
+import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class PathfinderGoalSelector {
 
     private static final Logger a = LogManager.getLogger();
-    private final Set<PathfinderGoalSelector.PathfinderGoalSelectorItem> b = Sets.newLinkedHashSet();
-    private final Set<PathfinderGoalSelector.PathfinderGoalSelectorItem> c = Sets.newLinkedHashSet();
-    private final MethodProfiler d;
-    private int e;
-    private int f = 3;
-    private int g;
+    private static final PathfinderGoalWrapped b = new PathfinderGoalWrapped(Integer.MAX_VALUE, new PathfinderGoal() {
+        @Override
+        public boolean a() {
+            return false;
+        }
+    }) {
+        @Override
+        public boolean g() {
+            return false;
+        }
+    };
+    private final Map<PathfinderGoal.Type, PathfinderGoalWrapped> c = new EnumMap(PathfinderGoal.Type.class);
+    private final Set<PathfinderGoalWrapped> d = Sets.newLinkedHashSet();
+    private final GameProfilerFiller e;
+    private final EnumSet<PathfinderGoal.Type> f = EnumSet.noneOf(PathfinderGoal.Type.class);
+    private int g = 3;
 
-    public PathfinderGoalSelector(MethodProfiler methodprofiler) {
-        this.d = methodprofiler;
+    public PathfinderGoalSelector(GameProfilerFiller gameprofilerfiller) {
+        this.e = gameprofilerfiller;
     }
 
     public void a(int i, PathfinderGoal pathfindergoal) {
-        this.b.add(new PathfinderGoalSelector.PathfinderGoalSelectorItem(i, pathfindergoal));
+        this.d.add(new PathfinderGoalWrapped(i, pathfindergoal));
     }
 
     public void a(PathfinderGoal pathfindergoal) {
-        Iterator iterator = this.b.iterator();
-
-        PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem;
-        PathfinderGoal pathfindergoal1;
-
-        do {
-            if (!iterator.hasNext()) {
-                return;
-            }
-
-            pathfindergoalselector_pathfindergoalselectoritem = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
-            pathfindergoal1 = pathfindergoalselector_pathfindergoalselectoritem.a;
-        } while (pathfindergoal1 != pathfindergoal);
-
-        if (pathfindergoalselector_pathfindergoalselectoritem.c) {
-            pathfindergoalselector_pathfindergoalselectoritem.c = false;
-            pathfindergoalselector_pathfindergoalselectoritem.a.d();
-            this.c.remove(pathfindergoalselector_pathfindergoalselectoritem);
-        }
-
-        iterator.remove();
+        this.d.stream().filter((pathfindergoalwrapped) -> {
+            return pathfindergoalwrapped.j() == pathfindergoal;
+        }).filter(PathfinderGoalWrapped::g).forEach(PathfinderGoalWrapped::d);
+        this.d.removeIf((pathfindergoalwrapped) -> {
+            return pathfindergoalwrapped.j() == pathfindergoal;
+        });
     }
 
     public void doTick() {
-        this.d.enter("goalSetup");
-        Iterator iterator;
-        PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem;
+        this.e.enter("goalCleanup");
+        this.c().filter((pathfindergoalwrapped) -> {
+            boolean flag;
 
-        if (this.e++ % this.f == 0) {
-            iterator = this.b.iterator();
+            if (pathfindergoalwrapped.g()) {
+                Stream stream = pathfindergoalwrapped.i().stream();
+                EnumSet enumset = this.f;
 
-            while (iterator.hasNext()) {
-                pathfindergoalselector_pathfindergoalselectoritem = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
-                if (pathfindergoalselector_pathfindergoalselectoritem.c) {
-                    if (!this.b(pathfindergoalselector_pathfindergoalselectoritem) || !this.a(pathfindergoalselector_pathfindergoalselectoritem)) {
-                        pathfindergoalselector_pathfindergoalselectoritem.c = false;
-                        pathfindergoalselector_pathfindergoalselectoritem.a.d();
-                        this.c.remove(pathfindergoalselector_pathfindergoalselectoritem);
-                    }
-                } else if (this.b(pathfindergoalselector_pathfindergoalselectoritem) && pathfindergoalselector_pathfindergoalselectoritem.a.a()) {
-                    pathfindergoalselector_pathfindergoalselectoritem.c = true;
-                    pathfindergoalselector_pathfindergoalselectoritem.a.c();
-                    this.c.add(pathfindergoalselector_pathfindergoalselectoritem);
-                }
-            }
-        } else {
-            iterator = this.c.iterator();
-
-            while (iterator.hasNext()) {
-                pathfindergoalselector_pathfindergoalselectoritem = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
-                if (!this.a(pathfindergoalselector_pathfindergoalselectoritem)) {
-                    pathfindergoalselector_pathfindergoalselectoritem.c = false;
-                    pathfindergoalselector_pathfindergoalselectoritem.a.d();
-                    iterator.remove();
-                }
-            }
-        }
-
-        this.d.exit();
-        if (!this.c.isEmpty()) {
-            this.d.enter("goalTick");
-            iterator = this.c.iterator();
-
-            while (iterator.hasNext()) {
-                pathfindergoalselector_pathfindergoalselectoritem = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
-                pathfindergoalselector_pathfindergoalselectoritem.a.e();
-            }
-
-            this.d.exit();
-        }
-
-    }
-
-    private boolean a(PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem) {
-        return pathfindergoalselector_pathfindergoalselectoritem.a.b();
-    }
-
-    private boolean b(PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem) {
-        if (this.c.isEmpty()) {
-            return true;
-        } else if (this.b(pathfindergoalselector_pathfindergoalselectoritem.a.h())) {
-            return false;
-        } else {
-            Iterator iterator = this.c.iterator();
-
-            while (iterator.hasNext()) {
-                PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem1 = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
-
-                if (pathfindergoalselector_pathfindergoalselectoritem1 != pathfindergoalselector_pathfindergoalselectoritem) {
-                    if (pathfindergoalselector_pathfindergoalselectoritem.b >= pathfindergoalselector_pathfindergoalselectoritem1.b) {
-                        if (!this.a(pathfindergoalselector_pathfindergoalselectoritem, pathfindergoalselector_pathfindergoalselectoritem1)) {
-                            return false;
-                        }
-                    } else if (!pathfindergoalselector_pathfindergoalselectoritem1.a.f()) {
-                        return false;
-                    }
+                this.f.getClass();
+                if (!stream.anyMatch(enumset::contains) && pathfindergoalwrapped.b()) {
+                    flag = false;
+                    return flag;
                 }
             }
 
-            return true;
-        }
+            flag = true;
+            return flag;
+        }).forEach(PathfinderGoal::d);
+        this.c.forEach((pathfindergoal_type, pathfindergoalwrapped) -> {
+            if (!pathfindergoalwrapped.g()) {
+                this.c.remove(pathfindergoal_type);
+            }
+
+        });
+        this.e.exit();
+        this.e.enter("goalUpdate");
+        this.d.stream().filter((pathfindergoalwrapped) -> {
+            return !pathfindergoalwrapped.g();
+        }).filter((pathfindergoalwrapped) -> {
+            Stream stream = pathfindergoalwrapped.i().stream();
+            EnumSet enumset = this.f;
+
+            this.f.getClass();
+            return stream.noneMatch(enumset::contains);
+        }).filter((pathfindergoalwrapped) -> {
+            return pathfindergoalwrapped.i().stream().allMatch((pathfindergoal_type) -> {
+                return ((PathfinderGoalWrapped) this.c.getOrDefault(pathfindergoal_type, PathfinderGoalSelector.b)).a(pathfindergoalwrapped);
+            });
+        }).filter(PathfinderGoalWrapped::a).forEach((pathfindergoalwrapped) -> {
+            pathfindergoalwrapped.i().forEach((pathfindergoal_type) -> {
+                PathfinderGoalWrapped pathfindergoalwrapped1 = (PathfinderGoalWrapped) this.c.getOrDefault(pathfindergoal_type, PathfinderGoalSelector.b);
+
+                pathfindergoalwrapped1.d();
+                this.c.put(pathfindergoal_type, pathfindergoalwrapped);
+            });
+            pathfindergoalwrapped.c();
+        });
+        this.e.exit();
+        this.e.enter("goalTick");
+        this.c().forEach(PathfinderGoalWrapped::e);
+        this.e.exit();
     }
 
-    private boolean a(PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem, PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem1) {
-        return (pathfindergoalselector_pathfindergoalselectoritem.a.h() & pathfindergoalselector_pathfindergoalselectoritem1.a.h()) == 0;
+    public Stream<PathfinderGoalWrapped> c() {
+        return this.d.stream().filter(PathfinderGoalWrapped::g);
     }
 
-    public boolean b(int i) {
-        return (this.g & i) > 0;
+    public void a(PathfinderGoal.Type pathfindergoal_type) {
+        this.f.add(pathfindergoal_type);
     }
 
-    public void c(int i) {
-        this.g |= i;
+    public void b(PathfinderGoal.Type pathfindergoal_type) {
+        this.f.remove(pathfindergoal_type);
     }
 
-    public void d(int i) {
-        this.g &= ~i;
-    }
-
-    public void a(int i, boolean flag) {
+    public void a(PathfinderGoal.Type pathfindergoal_type, boolean flag) {
         if (flag) {
-            this.d(i);
+            this.b(pathfindergoal_type);
         } else {
-            this.c(i);
+            this.a(pathfindergoal_type);
         }
 
-    }
-
-    class PathfinderGoalSelectorItem {
-
-        public final PathfinderGoal a;
-        public final int b;
-        public boolean c;
-
-        public PathfinderGoalSelectorItem(int i, PathfinderGoal pathfindergoal) {
-            this.b = i;
-            this.a = pathfindergoal;
-        }
-
-        public boolean equals(@Nullable Object object) {
-            return this == object ? true : (object != null && this.getClass() == object.getClass() ? this.a.equals(((PathfinderGoalSelector.PathfinderGoalSelectorItem) object).a) : false);
-        }
-
-        public int hashCode() {
-            return this.a.hashCode();
-        }
     }
 }

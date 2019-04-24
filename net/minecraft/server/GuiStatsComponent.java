@@ -19,23 +19,25 @@ public class GuiStatsComponent extends JComponent {
     private int c;
     private final String[] d = new String[11];
     private final MinecraftServer e;
+    private final Timer f;
 
     public GuiStatsComponent(MinecraftServer minecraftserver) {
         this.e = minecraftserver;
         this.setPreferredSize(new Dimension(456, 246));
         this.setMinimumSize(new Dimension(456, 246));
         this.setMaximumSize(new Dimension(456, 246));
-        (new Timer(500, (actionevent) -> {
-            this.a();
-        })).start();
+        this.f = new Timer(500, (actionevent) -> {
+            this.b();
+        });
+        this.f.start();
         this.setBackground(Color.BLACK);
     }
 
-    private void a() {
+    private void b() {
         long i = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
         this.d[0] = "Memory use: " + i / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.d) * 1.0E-6D) + " ms";
+        this.d[1] = "Avg tick: " + GuiStatsComponent.a.format(this.a(this.e.f) * 1.0E-6D) + " ms";
         this.b[this.c++ & 255] = (int) (i * 100L / Runtime.getRuntime().maxMemory());
         this.repaint();
     }
@@ -77,5 +79,9 @@ public class GuiStatsComponent extends JComponent {
             }
         }
 
+    }
+
+    public void a() {
+        this.f.stop();
     }
 }

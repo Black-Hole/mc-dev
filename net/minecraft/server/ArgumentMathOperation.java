@@ -150,6 +150,7 @@ public class ArgumentMathOperation implements ArgumentType<ArgumentMathOperation
 
         int apply(int i, int j) throws CommandSyntaxException;
 
+        @Override
         default void apply(ScoreboardScore scoreboardscore, ScoreboardScore scoreboardscore1) throws CommandSyntaxException {
             scoreboardscore.setScore(this.apply(scoreboardscore.getScore(), scoreboardscore1.getScore()));
         }

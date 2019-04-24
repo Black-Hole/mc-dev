@@ -52,12 +52,10 @@ public class ArgumentParserItemStack {
         int i = this.d.getCursor();
         MinecraftKey minecraftkey = MinecraftKey.a(this.d);
 
-        if (IRegistry.ITEM.c(minecraftkey)) {
-            this.g = (Item) IRegistry.ITEM.get(minecraftkey);
-        } else {
+        this.g = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
             this.d.setCursor(i);
-            throw ArgumentParserItemStack.b.createWithContext(this.d, minecraftkey.toString());
-        }
+            return ArgumentParserItemStack.b.createWithContext(this.d, minecraftkey.toString());
+        });
     }
 
     public void f() throws CommandSyntaxException {

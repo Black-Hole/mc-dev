@@ -6,14 +6,12 @@ public class EnchantmentOxygen extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_HEAD, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 10 * i;
     }
 
-    public int b(int i) {
-        return this.a(i) + 30;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 3;
     }

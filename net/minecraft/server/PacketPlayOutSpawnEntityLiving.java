@@ -26,41 +26,18 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
         this.a = entityliving.getId();
         this.b = entityliving.getUniqueID();
-        this.c = IRegistry.ENTITY_TYPE.a((Object) entityliving.P());
+        this.c = IRegistry.ENTITY_TYPE.a((Object) entityliving.getEntityType());
         this.d = entityliving.locX;
         this.e = entityliving.locY;
         this.f = entityliving.locZ;
         this.j = (byte) ((int) (entityliving.yaw * 256.0F / 360.0F));
         this.k = (byte) ((int) (entityliving.pitch * 256.0F / 360.0F));
-        this.l = (byte) ((int) (entityliving.aS * 256.0F / 360.0F));
+        this.l = (byte) ((int) (entityliving.aM * 256.0F / 360.0F));
         double d0 = 3.9D;
-        double d1 = entityliving.motX;
-        double d2 = entityliving.motY;
-        double d3 = entityliving.motZ;
-
-        if (d1 < -3.9D) {
-            d1 = -3.9D;
-        }
-
-        if (d2 < -3.9D) {
-            d2 = -3.9D;
-        }
-
-        if (d3 < -3.9D) {
-            d3 = -3.9D;
-        }
-
-        if (d1 > 3.9D) {
-            d1 = 3.9D;
-        }
-
-        if (d2 > 3.9D) {
-            d2 = 3.9D;
-        }
-
-        if (d3 > 3.9D) {
-            d3 = 3.9D;
-        }
+        Vec3D vec3d = entityliving.getMot();
+        double d1 = MathHelper.a(vec3d.x, -3.9D, 3.9D);
+        double d2 = MathHelper.a(vec3d.y, -3.9D, 3.9D);
+        double d3 = MathHelper.a(vec3d.z, -3.9D, 3.9D);
 
         this.g = (int) (d1 * 8000.0D);
         this.h = (int) (d2 * 8000.0D);
@@ -68,10 +45,11 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.m = entityliving.getDataWatcher();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.i();
-        this.c = packetdataserializer.g();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.k();
+        this.c = packetdataserializer.i();
         this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readDouble();
         this.f = packetdataserializer.readDouble();
@@ -84,6 +62,7 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         this.n = DataWatcher.b(packetdataserializer);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);

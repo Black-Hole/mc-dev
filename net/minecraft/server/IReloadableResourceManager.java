@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public interface IReloadableResourceManager extends IResourceManager {
 
-    void a(List<IResourcePack> list);
+    CompletableFuture<Unit> a(Executor executor, Executor executor1, List<IResourcePack> list, CompletableFuture<Unit> completablefuture);
 
-    void a(IResourcePackListener iresourcepacklistener);
+    void a(IReloadListener ireloadlistener);
 }

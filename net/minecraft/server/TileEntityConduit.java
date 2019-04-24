@@ -9,13 +9,15 @@ import javax.annotation.Nullable;
 
 public class TileEntityConduit extends TileEntity implements ITickable {
 
-    private static final Block[] e = new Block[] { Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
+    private static final Block[] b = new Block[] { Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.SEA_LANTERN, Blocks.DARK_PRISMARINE};
     public int a;
-    private float f;
+    private float c;
     private boolean g;
     private boolean h;
     private final List<BlockPosition> i;
+    @Nullable
     private EntityLiving target;
+    @Nullable
     private UUID k;
     private long l;
 
@@ -28,6 +30,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         this.i = Lists.newArrayList();
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         if (nbttagcompound.hasKey("target_uuid")) {
@@ -38,6 +41,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.target != null) {
@@ -48,14 +52,17 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     @Nullable
+    @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 5, this.aa_());
+        return new PacketPlayOutTileEntityData(this.position, 5, this.b());
     }
 
-    public NBTTagCompound aa_() {
+    @Override
+    public NBTTagCompound b() {
         return this.save(new NBTTagCompound());
     }
 
+    @Override
     public void tick() {
         ++this.a;
         long i = this.world.getTime();
@@ -63,8 +70,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         if (i % 40L == 0L) {
             this.a(this.f());
             if (!this.world.isClientSide && this.c()) {
-                this.h();
-                this.i();
+                this.r();
+                this.s();
             }
         }
 
@@ -73,15 +80,15 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
 
         if (i > this.l && this.c()) {
-            this.l = i + 60L + (long) this.world.m().nextInt(40);
+            this.l = i + 60L + (long) this.world.getRandom().nextInt(40);
             this.a(SoundEffects.BLOCK_CONDUIT_AMBIENT_SHORT);
         }
 
         if (this.world.isClientSide) {
-            this.j();
-            this.m();
+            this.t();
+            this.x();
             if (this.c()) {
-                ++this.f;
+                ++this.c;
             }
         }
 
@@ -97,9 +104,9 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         for (i = -1; i <= 1; ++i) {
             for (j = -1; j <= 1; ++j) {
                 for (k = -1; k <= 1; ++k) {
-                    BlockPosition blockposition = this.position.a(i, j, k);
+                    BlockPosition blockposition = this.position.b(i, j, k);
 
-                    if (!this.world.B(blockposition)) {
+                    if (!this.world.y(blockposition)) {
                         return false;
                     }
                 }
@@ -114,9 +121,9 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                     int j1 = Math.abs(k);
 
                     if ((l > 1 || i1 > 1 || j1 > 1) && (i == 0 && (i1 == 2 || j1 == 2) || j == 0 && (l == 2 || j1 == 2) || k == 0 && (l == 2 || i1 == 2))) {
-                        BlockPosition blockposition1 = this.position.a(i, j, k);
+                        BlockPosition blockposition1 = this.position.b(i, j, k);
                         IBlockData iblockdata = this.world.getType(blockposition1);
-                        Block[] ablock = TileEntityConduit.e;
+                        Block[] ablock = TileEntityConduit.b;
                         int k1 = ablock.length;
 
                         for (int l1 = 0; l1 < k1; ++l1) {
@@ -135,7 +142,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         return this.i.size() >= 16;
     }
 
-    private void h() {
+    private void r() {
         int i = this.i.size();
         int j = i / 7 * 16;
         int k = this.position.getX();
@@ -150,7 +157,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
             while (iterator.hasNext()) {
                 EntityHuman entityhuman = (EntityHuman) iterator.next();
 
-                if (this.position.m(new BlockPosition(entityhuman)) <= (double) j && entityhuman.ao()) {
+                if (this.position.a((BaseBlockPosition) (new BlockPosition(entityhuman)), (double) j) && entityhuman.isInWaterOrRain()) {
                     entityhuman.addEffect(new MobEffect(MobEffects.CONDUIT_POWER, 260, 0, true, true));
                 }
             }
@@ -158,24 +165,24 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
     }
 
-    private void i() {
+    private void s() {
         EntityLiving entityliving = this.target;
         int i = this.i.size();
 
         if (i < 42) {
             this.target = null;
         } else if (this.target == null && this.k != null) {
-            this.target = this.l();
+            this.target = this.v();
             this.k = null;
         } else if (this.target == null) {
-            List<EntityLiving> list = this.world.a(EntityLiving.class, this.k(), (entityliving1) -> {
-                return entityliving1 instanceof IMonster && entityliving1.ao();
+            List<EntityLiving> list = this.world.a(EntityLiving.class, this.u(), (entityliving1) -> {
+                return entityliving1 instanceof IMonster && entityliving1.isInWaterOrRain();
             });
 
             if (!list.isEmpty()) {
                 this.target = (EntityLiving) list.get(this.world.random.nextInt(list.size()));
             }
-        } else if (!this.target.isAlive() || this.position.m(new BlockPosition(this.target)) > 8.0D) {
+        } else if (!this.target.isAlive() || !this.position.a((BaseBlockPosition) (new BlockPosition(this.target)), 8.0D)) {
             this.target = null;
         }
 
@@ -192,11 +199,11 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private void j() {
+    private void t() {
         if (this.k == null) {
             this.target = null;
         } else if (this.target == null || !this.target.getUniqueID().equals(this.k)) {
-            this.target = this.l();
+            this.target = this.v();
             if (this.target == null) {
                 this.k = null;
             }
@@ -204,7 +211,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private AxisAlignedBB k() {
+    private AxisAlignedBB u() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
@@ -213,15 +220,15 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     @Nullable
-    private EntityLiving l() {
-        List<EntityLiving> list = this.world.a(EntityLiving.class, this.k(), (entityliving) -> {
+    private EntityLiving v() {
+        List<EntityLiving> list = this.world.a(EntityLiving.class, this.u(), (entityliving) -> {
             return entityliving.getUniqueID().equals(this.k);
         });
 
         return list.size() == 1 ? (EntityLiving) list.get(0) : null;
     }
 
-    private void m() {
+    private void x() {
         Random random = this.world.random;
         float f = MathHelper.sin((float) (this.a + 35) * 0.1F) / 2.0F + 0.5F;
 
@@ -242,19 +249,19 @@ public class TileEntityConduit extends TileEntity implements ITickable {
                 BlockPosition blockposition1 = blockposition.b(this.position);
                 Vec3D vec3d1 = (new Vec3D((double) f1, (double) f2, (double) f3)).add((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
 
-                this.world.addParticle(Particles.W, vec3d.x, vec3d.y, vec3d.z, vec3d1.x, vec3d1.y, vec3d1.z);
+                this.world.addParticle(Particles.NAUTILUS, vec3d.x, vec3d.y, vec3d.z, vec3d1.x, vec3d1.y, vec3d1.z);
             }
         }
 
         if (this.target != null) {
             Vec3D vec3d2 = new Vec3D(this.target.locX, this.target.locY + (double) this.target.getHeadHeight(), this.target.locZ);
-            float f4 = (-0.5F + random.nextFloat()) * (3.0F + this.target.width);
+            float f4 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
 
-            f1 = -1.0F + random.nextFloat() * this.target.length;
-            f2 = (-0.5F + random.nextFloat()) * (3.0F + this.target.width);
+            f1 = -1.0F + random.nextFloat() * this.target.getHeight();
+            f2 = (-0.5F + random.nextFloat()) * (3.0F + this.target.getWidth());
             Vec3D vec3d3 = new Vec3D((double) f4, (double) f1, (double) f2);
 
-            this.world.addParticle(Particles.W, vec3d2.x, vec3d2.y, vec3d2.z, vec3d3.x, vec3d3.y, vec3d3.z);
+            this.world.addParticle(Particles.NAUTILUS, vec3d2.x, vec3d2.y, vec3d2.z, vec3d3.x, vec3d3.y, vec3d3.z);
         }
 
     }

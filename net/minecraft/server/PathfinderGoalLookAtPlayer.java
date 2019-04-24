@@ -1,28 +1,40 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
 
-    protected EntityInsentient a;
+    protected final EntityInsentient a;
     protected Entity b;
-    protected float c;
-    private int e;
-    private final float f;
-    protected Class<? extends Entity> d;
+    protected final float c;
+    private int f;
+    private final float g;
+    protected final Class<? extends EntityLiving> d;
+    protected final PathfinderTargetCondition e;
 
-    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f) {
+    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f) {
         this(entityinsentient, oclass, f, 0.02F);
     }
 
-    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f, float f1) {
+    public PathfinderGoalLookAtPlayer(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f, float f1) {
         this.a = entityinsentient;
         this.d = oclass;
         this.c = f;
-        this.f = f1;
-        this.a(2);
+        this.g = f1;
+        this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
+        if (oclass == EntityHuman.class) {
+            this.e = (new PathfinderTargetCondition()).a((double) f).b().a().d().a((entityliving) -> {
+                return IEntitySelector.b(entityinsentient).test(entityliving);
+            });
+        } else {
+            this.e = (new PathfinderTargetCondition()).a((double) f).b().a().d();
+        }
+
     }
 
+    @Override
     public boolean a() {
-        if (this.a.getRandom().nextFloat() >= this.f) {
+        if (this.a.getRandom().nextFloat() >= this.g) {
             return false;
         } else {
             if (this.a.getGoalTarget() != null) {
@@ -30,29 +42,33 @@ public class PathfinderGoalLookAtPlayer extends PathfinderGoal {
             }
 
             if (this.d == EntityHuman.class) {
-                this.b = this.a.world.a(this.a.locX, this.a.locY, this.a.locZ, (double) this.c, IEntitySelector.f.and(IEntitySelector.b(this.a)));
+                this.b = this.a.world.a(this.e, this.a, this.a.locX, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ);
             } else {
-                this.b = this.a.world.a(this.d, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c), (Entity) this.a);
+                this.b = this.a.world.a(this.d, this.e, this.a, this.a.locX, this.a.locY + (double) this.a.getHeadHeight(), this.a.locZ, this.a.getBoundingBox().grow((double) this.c, 3.0D, (double) this.c));
             }
 
             return this.b != null;
         }
     }
 
+    @Override
     public boolean b() {
-        return !this.b.isAlive() ? false : (this.a.h(this.b) > (double) (this.c * this.c) ? false : this.e > 0);
+        return !this.b.isAlive() ? false : (this.a.h(this.b) > (double) (this.c * this.c) ? false : this.f > 0);
     }
 
+    @Override
     public void c() {
-        this.e = 40 + this.a.getRandom().nextInt(40);
+        this.f = 40 + this.a.getRandom().nextInt(40);
     }
 
+    @Override
     public void d() {
         this.b = null;
     }
 
+    @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, (float) this.a.L(), (float) this.a.K());
-        --this.e;
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ);
+        --this.f;
     }
 }

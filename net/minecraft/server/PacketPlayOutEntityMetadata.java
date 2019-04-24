@@ -21,11 +21,13 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = DataWatcher.b(packetdataserializer);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         DataWatcher.a(this.b, packetdataserializer);

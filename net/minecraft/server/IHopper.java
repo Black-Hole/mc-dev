@@ -8,16 +8,16 @@ public interface IHopper extends IInventory {
     VoxelShape b = Block.a(0.0D, 16.0D, 0.0D, 16.0D, 32.0D, 16.0D);
     VoxelShape c = VoxelShapes.a(IHopper.a, IHopper.b);
 
-    default VoxelShape i() {
+    default VoxelShape O_() {
         return IHopper.c;
     }
 
     @Nullable
     World getWorld();
 
-    double G();
+    double z();
 
-    double H();
+    double A();
 
-    double I();
+    double B();
 }

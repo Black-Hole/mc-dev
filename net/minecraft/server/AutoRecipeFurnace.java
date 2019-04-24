@@ -4,13 +4,16 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import java.util.Iterator;
 
-public class AutoRecipeFurnace extends AutoRecipe {
+public class AutoRecipeFurnace<C extends IInventory> extends AutoRecipe<C> {
 
     private boolean e;
 
-    public AutoRecipeFurnace() {}
+    public AutoRecipeFurnace(ContainerRecipeBook<C> containerrecipebook) {
+        super(containerrecipebook);
+    }
 
-    protected void a(IRecipe irecipe, boolean flag) {
+    @Override
+    protected void a(IRecipe<C> irecipe, boolean flag) {
         this.e = this.d.a(irecipe);
         int i = this.b.b(irecipe, (IntList) null);
 
@@ -27,7 +30,7 @@ public class AutoRecipeFurnace extends AutoRecipe {
 
         if (this.b.a(irecipe, intarraylist, j)) {
             if (!this.e) {
-                this.a(this.d.e());
+                this.a(this.d.f());
                 this.a(0);
             }
 
@@ -35,15 +38,16 @@ public class AutoRecipeFurnace extends AutoRecipe {
         }
     }
 
+    @Override
     protected void a() {
-        this.a(this.d.e());
+        this.a(this.d.f());
         super.a();
     }
 
     protected void a(int i, IntList intlist) {
         Iterator<Integer> iterator = intlist.iterator();
         Slot slot = this.d.getSlot(0);
-        ItemStack itemstack = AutoRecipeStackManager.b((Integer) iterator.next());
+        ItemStack itemstack = AutoRecipeStackManager.a((Integer) iterator.next());
 
         if (!itemstack.isEmpty()) {
             int j = Math.min(itemstack.getMaxStackSize(), i);

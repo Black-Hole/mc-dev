@@ -12,10 +12,12 @@ public class PacketPlayOutSpawnPosition implements Packet<PacketListenerPlayOut>
         this.position = blockposition;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.position = packetdataserializer.e();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.position);
     }

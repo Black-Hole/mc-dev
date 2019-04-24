@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIceburgConfiguration> {
 
-    public WorldGenFeatureIceburg() {}
+    public WorldGenFeatureIceburg(Function<Dynamic<?>, ? extends WorldGenFeatureIceburgConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureIceburgConfiguration worldgenfeatureiceburgconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureIceburgConfiguration worldgenfeatureiceburgconfiguration) {
         blockposition = new BlockPosition(blockposition.getX(), generatoraccess.getSeaLevel(), blockposition.getZ());
         boolean flag = random.nextDouble() > 0.7D;
         IBlockData iblockdata = worldgenfeatureiceburgconfiguration.a;
@@ -84,7 +88,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
             k1 = l1 = random.nextInt(Math.max(k - 5, 1));
         }
 
-        BlockPosition blockposition1 = (new BlockPosition(0, 0, 0)).a(i1 * k1, 0, j1 * l1);
+        BlockPosition blockposition1 = new BlockPosition(i1 * k1, 0, j1 * l1);
         double d1 = flag ? d0 + 1.5707963267948966D : random.nextDouble() * 2.0D * 3.141592653589793D;
 
         int i2;
@@ -111,7 +115,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
                 double d1 = this.a(k1, l1, blockposition1, i1, j1, d0);
 
                 if (d1 < 0.0D) {
-                    BlockPosition blockposition2 = blockposition.a(k1, j, l1);
+                    BlockPosition blockposition2 = blockposition.b(k1, j, l1);
                     Block block = generatoraccess.getType(blockposition2).getBlock();
 
                     if (this.a(block) || block == Blocks.SNOW_BLOCK) {
@@ -136,18 +140,17 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
     }
 
     private void a(GeneratorAccess generatoraccess, Random random, BlockPosition blockposition, int i, int j, int k, int l, int i1, int j1, boolean flag, int k1, double d0, boolean flag1, IBlockData iblockdata) {
-        BlockPosition blockposition1 = new BlockPosition(0, 0, 0);
-        double d1 = flag ? this.a(j, l, blockposition1, j1, this.a(k, i, k1), d0) : this.a(j, l, blockposition1, i1, random);
+        double d1 = flag ? this.a(j, l, BlockPosition.ZERO, j1, this.a(k, i, k1), d0) : this.a(j, l, BlockPosition.ZERO, i1, random);
 
         if (d1 < 0.0D) {
-            BlockPosition blockposition2 = blockposition.a(j, k, l);
+            BlockPosition blockposition1 = blockposition.b(j, k, l);
             double d2 = flag ? -0.5D : (double) (-6 - random.nextInt(3));
 
             if (d1 > d2 && random.nextDouble() > 0.9D) {
                 return;
             }
 
-            this.a(blockposition2, generatoraccess, random, i - k, i, flag, flag1, iblockdata);
+            this.a(blockposition1, generatoraccess, random, i - k, i, flag, flag1, iblockdata);
         }
 
     }
@@ -230,7 +233,7 @@ public class WorldGenFeatureIceburg extends WorldGenerator<WorldGenFeatureIcebur
         for (int i1 = -l; i1 <= l; ++i1) {
             for (int j1 = -l; j1 <= l; ++j1) {
                 for (int k1 = 0; k1 <= j; ++k1) {
-                    BlockPosition blockposition1 = blockposition.a(i1, k1, j1);
+                    BlockPosition blockposition1 = blockposition.b(i1, k1, j1);
                     Block block = generatoraccess.getType(blockposition1).getBlock();
 
                     if (this.a(block) || block == Blocks.SNOW) {

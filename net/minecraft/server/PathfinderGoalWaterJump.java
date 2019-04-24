@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public class PathfinderGoalWaterJump extends PathfinderGoal {
+public class PathfinderGoalWaterJump extends PathfinderGoalWaterJumpAbstract {
 
     private static final int[] a = new int[] { 0, 1, 4, 5, 6, 7};
     private final EntityDolphin b;
@@ -10,9 +10,9 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
     public PathfinderGoalWaterJump(EntityDolphin entitydolphin, int i) {
         this.b = entitydolphin;
         this.c = i;
-        this.a(5);
     }
 
+    @Override
     public boolean a() {
         if (this.b.getRandom().nextInt(this.c) != 0) {
             return false;
@@ -37,36 +37,41 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
     }
 
     private boolean a(BlockPosition blockposition, int i, int j, int k) {
-        BlockPosition blockposition1 = blockposition.a(i * k, 0, j * k);
+        BlockPosition blockposition1 = blockposition.b(i * k, 0, j * k);
 
         return this.b.world.getFluid(blockposition1).a(TagsFluid.WATER) && !this.b.world.getType(blockposition1).getMaterial().isSolid();
     }
 
     private boolean b(BlockPosition blockposition, int i, int j, int k) {
-        return this.b.world.getType(blockposition.a(i * k, 1, j * k)).isAir() && this.b.world.getType(blockposition.a(i * k, 2, j * k)).isAir();
+        return this.b.world.getType(blockposition.b(i * k, 1, j * k)).isAir() && this.b.world.getType(blockposition.b(i * k, 2, j * k)).isAir();
     }
 
+    @Override
     public boolean b() {
-        return (this.b.motY * this.b.motY >= 0.029999999329447746D || this.b.pitch == 0.0F || Math.abs(this.b.pitch) >= 10.0F || !this.b.isInWater()) && !this.b.onGround;
+        double d0 = this.b.getMot().y;
+
+        return (d0 * d0 >= 0.029999999329447746D || this.b.pitch == 0.0F || Math.abs(this.b.pitch) >= 10.0F || !this.b.isInWater()) && !this.b.onGround;
     }
 
-    public boolean f() {
+    @Override
+    public boolean C_() {
         return false;
     }
 
+    @Override
     public void c() {
         EnumDirection enumdirection = this.b.getAdjustedDirection();
 
-        this.b.motX += (double) enumdirection.getAdjacentX() * 0.6D;
-        this.b.motY += 0.7D;
-        this.b.motZ += (double) enumdirection.getAdjacentZ() * 0.6D;
-        this.b.getNavigation().q();
+        this.b.setMot(this.b.getMot().add((double) enumdirection.getAdjacentX() * 0.6D, 0.7D, (double) enumdirection.getAdjacentZ() * 0.6D));
+        this.b.getNavigation().o();
     }
 
+    @Override
     public void d() {
         this.b.pitch = 0.0F;
     }
 
+    @Override
     public void e() {
         boolean flag = this.d;
 
@@ -80,29 +85,16 @@ public class PathfinderGoalWaterJump extends PathfinderGoal {
             this.b.a(SoundEffects.ENTITY_DOLPHIN_JUMP, 1.0F, 1.0F);
         }
 
-        if (this.b.motY * this.b.motY < 0.029999999329447746D && this.b.pitch != 0.0F) {
+        Vec3D vec3d = this.b.getMot();
+
+        if (vec3d.y * vec3d.y < 0.029999999329447746D && this.b.pitch != 0.0F) {
             this.b.pitch = this.a(this.b.pitch, 0.0F, 0.2F);
         } else {
-            double d0 = Math.sqrt(this.b.motX * this.b.motX + this.b.motY * this.b.motY + this.b.motZ * this.b.motZ);
-            double d1 = Math.sqrt(this.b.motX * this.b.motX + this.b.motZ * this.b.motZ);
-            double d2 = Math.signum(-this.b.motY) * Math.acos(d1 / d0) * 57.2957763671875D;
+            double d0 = Math.sqrt(Entity.b(vec3d));
+            double d1 = Math.signum(-vec3d.y) * Math.acos(d0 / vec3d.f()) * 57.2957763671875D;
 
-            this.b.pitch = (float) d2;
+            this.b.pitch = (float) d1;
         }
 
-    }
-
-    protected float a(float f, float f1, float f2) {
-        float f3;
-
-        for (f3 = f1 - f; f3 < -180.0F; f3 += 360.0F) {
-            ;
-        }
-
-        while (f3 >= 180.0F) {
-            f3 -= 360.0F;
-        }
-
-        return f + f2 * f3;
     }
 }

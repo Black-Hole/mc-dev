@@ -16,7 +16,7 @@ public class DataConverterSchemaV102 extends Schema {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(true, DataConverterTypes.ITEM_STACK, () -> {
-            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.q.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.n.in(schema), "BlockEntityTag", DataConverterTypes.j.in(schema), "CanDestroy", DSL.list(DataConverterTypes.p.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.p.in(schema)))), DataConverterSchemaV99.a, HookFunction.IDENTITY);
+            return DSL.hook(DSL.optionalFields("id", DataConverterTypes.r.in(schema), "tag", DSL.optionalFields("EntityTag", DataConverterTypes.o.in(schema), "BlockEntityTag", DataConverterTypes.k.in(schema), "CanDestroy", DSL.list(DataConverterTypes.q.in(schema)), "CanPlaceOn", DSL.list(DataConverterTypes.q.in(schema)))), DataConverterSchemaV99.a, HookFunction.IDENTITY);
         });
     }
 }

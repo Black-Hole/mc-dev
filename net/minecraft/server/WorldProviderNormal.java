@@ -9,21 +9,17 @@ import javax.annotation.Nullable;
 
 public class WorldProviderNormal extends WorldProvider {
 
-    public WorldProviderNormal() {}
+    public WorldProviderNormal(World world, DimensionManager dimensionmanager) {
+        super(world, dimensionmanager);
+    }
 
+    @Override
     public DimensionManager getDimensionManager() {
         return DimensionManager.OVERWORLD;
     }
 
-    public boolean a(int i, int j) {
-        return !this.b.e(i, j) && super.a(i, j);
-    }
-
-    protected void m() {
-        this.e = true;
-    }
-
-    public ChunkGenerator<? extends GeneratorSettings> getChunkGenerator() {
+    @Override
+    public ChunkGenerator<? extends GeneratorSettingsDefault> getChunkGenerator() {
         WorldType worldtype = this.b.getWorldData().getType();
         ChunkGeneratorType<GeneratorSettingsFlat, ChunkProviderFlat> chunkgeneratortype = ChunkGeneratorType.e;
         ChunkGeneratorType<GeneratorSettingsDebug, ChunkProviderDebug> chunkgeneratortype1 = ChunkGeneratorType.d;
@@ -36,16 +32,16 @@ public class WorldProviderNormal extends WorldProvider {
 
         if (worldtype == WorldType.FLAT) {
             GeneratorSettingsFlat generatorsettingsflat = GeneratorSettingsFlat.a(new Dynamic(DynamicOpsNBT.a, this.b.getWorldData().getGeneratorOptions()));
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(generatorsettingsflat.t());
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(generatorsettingsflat.v());
 
             return chunkgeneratortype.create(this.b, biomelayout.a(biomelayoutfixedconfiguration), generatorsettingsflat);
         } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
-            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.PLAINS);
+            BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration1 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.PLAINS);
 
-            return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.b());
+            return chunkgeneratortype1.create(this.b, biomelayout.a(biomelayoutfixedconfiguration1), chunkgeneratortype1.a());
         } else if (worldtype != WorldType.g) {
-            GeneratorSettingsOverworld generatorsettingsoverworld = (GeneratorSettingsOverworld) chunkgeneratortype4.b();
-            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(this.b.getWorldData()).a(generatorsettingsoverworld);
+            GeneratorSettingsOverworld generatorsettingsoverworld = (GeneratorSettingsOverworld) chunkgeneratortype4.a();
+            BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(this.b.getWorldData()).a(generatorsettingsoverworld);
 
             return chunkgeneratortype4.create(this.b, biomelayout1.a(biomelayoutoverworldconfiguration), generatorsettingsoverworld);
         } else {
@@ -54,7 +50,7 @@ public class WorldProviderNormal extends WorldProvider {
             JsonObject jsonobject = jsonelement.getAsJsonObject();
 
             if (jsonobject.has("biome_source") && jsonobject.getAsJsonObject("biome_source").has("type") && jsonobject.getAsJsonObject("biome_source").has("options")) {
-                MinecraftKey minecraftkey = new MinecraftKey(jsonobject.getAsJsonObject("biome_source").getAsJsonPrimitive("type").getAsString());
+                BiomeLayout<?, ?> biomelayout3 = (BiomeLayout) IRegistry.BIOME_SOURCE_TYPE.get(new MinecraftKey(jsonobject.getAsJsonObject("biome_source").getAsJsonPrimitive("type").getAsString()));
                 JsonObject jsonobject1 = jsonobject.getAsJsonObject("biome_source").getAsJsonObject("options");
                 BiomeBase[] abiomebase = new BiomeBase[] { Biomes.OCEAN};
 
@@ -64,34 +60,32 @@ public class WorldProviderNormal extends WorldProvider {
                     abiomebase = jsonarray.size() > 0 ? new BiomeBase[jsonarray.size()] : new BiomeBase[] { Biomes.OCEAN};
 
                     for (int i = 0; i < jsonarray.size(); ++i) {
-                        BiomeBase biomebase = (BiomeBase) IRegistry.BIOME.get(new MinecraftKey(jsonarray.get(i).getAsString()));
-
-                        abiomebase[i] = biomebase != null ? biomebase : Biomes.OCEAN;
+                        abiomebase[i] = (BiomeBase) IRegistry.BIOME.getOptional(new MinecraftKey(jsonarray.get(i).getAsString())).orElse(Biomes.OCEAN);
                     }
                 }
 
-                if (BiomeLayout.b.c().equals(minecraftkey)) {
-                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.b()).a(abiomebase[0]);
+                if (BiomeLayout.b == biomelayout3) {
+                    BiomeLayoutFixedConfiguration biomelayoutfixedconfiguration2 = ((BiomeLayoutFixedConfiguration) biomelayout.a()).a(abiomebase[0]);
 
                     worldchunkmanager = biomelayout.a(biomelayoutfixedconfiguration2);
                 }
 
-                if (BiomeLayout.a.c().equals(minecraftkey)) {
+                if (BiomeLayout.a == biomelayout3) {
                     int j = jsonobject1.has("size") ? jsonobject1.getAsJsonPrimitive("size").getAsInt() : 2;
-                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.b()).a(abiomebase).a(j);
+                    BiomeLayoutCheckerboardConfiguration biomelayoutcheckerboardconfiguration = ((BiomeLayoutCheckerboardConfiguration) biomelayout2.a()).a(abiomebase).a(j);
 
                     worldchunkmanager = biomelayout2.a(biomelayoutcheckerboardconfiguration);
                 }
 
-                if (BiomeLayout.c.c().equals(minecraftkey)) {
-                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = ((BiomeLayoutOverworldConfiguration) biomelayout1.b()).a(new GeneratorSettingsOverworld()).a(this.b.getWorldData());
+                if (BiomeLayout.c == biomelayout3) {
+                    BiomeLayoutOverworldConfiguration biomelayoutoverworldconfiguration1 = ((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(new GeneratorSettingsOverworld()).a(this.b.getWorldData());
 
                     worldchunkmanager = biomelayout1.a(biomelayoutoverworldconfiguration1);
                 }
             }
 
             if (worldchunkmanager == null) {
-                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.b()).a(Biomes.OCEAN));
+                worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.OCEAN));
             }
 
             IBlockData iblockdata = Blocks.STONE.getBlockData();
@@ -99,38 +93,31 @@ public class WorldProviderNormal extends WorldProvider {
 
             if (jsonobject.has("chunk_generator") && jsonobject.getAsJsonObject("chunk_generator").has("options")) {
                 String s;
-                Block block;
 
                 if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_block")) {
                     s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_block").getAsString();
-                    block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(s));
-                    if (block != null) {
-                        iblockdata = block.getBlockData();
-                    }
+                    iblockdata = ((Block) IRegistry.BLOCK.get(new MinecraftKey(s))).getBlockData();
                 }
 
                 if (jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").has("default_fluid")) {
                     s = jsonobject.getAsJsonObject("chunk_generator").getAsJsonObject("options").getAsJsonPrimitive("default_fluid").getAsString();
-                    block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(s));
-                    if (block != null) {
-                        iblockdata1 = block.getBlockData();
-                    }
+                    iblockdata1 = ((Block) IRegistry.BLOCK.get(new MinecraftKey(s))).getBlockData();
                 }
             }
 
             if (jsonobject.has("chunk_generator") && jsonobject.getAsJsonObject("chunk_generator").has("type")) {
-                MinecraftKey minecraftkey1 = new MinecraftKey(jsonobject.getAsJsonObject("chunk_generator").getAsJsonPrimitive("type").getAsString());
+                ChunkGeneratorType<?, ?> chunkgeneratortype5 = (ChunkGeneratorType) IRegistry.CHUNK_GENERATOR_TYPE.get(new MinecraftKey(jsonobject.getAsJsonObject("chunk_generator").getAsJsonPrimitive("type").getAsString()));
 
-                if (ChunkGeneratorType.b.d().equals(minecraftkey1)) {
-                    GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) chunkgeneratortype2.b();
+                if (ChunkGeneratorType.b == chunkgeneratortype5) {
+                    GeneratorSettingsNether generatorsettingsnether = (GeneratorSettingsNether) chunkgeneratortype2.a();
 
                     generatorsettingsnether.a(iblockdata);
                     generatorsettingsnether.b(iblockdata1);
                     return chunkgeneratortype2.create(this.b, worldchunkmanager, generatorsettingsnether);
                 }
 
-                if (ChunkGeneratorType.c.d().equals(minecraftkey1)) {
-                    GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) chunkgeneratortype3.b();
+                if (ChunkGeneratorType.c == chunkgeneratortype5) {
+                    GeneratorSettingsEnd generatorsettingsend = (GeneratorSettingsEnd) chunkgeneratortype3.a();
 
                     generatorsettingsend.a(new BlockPosition(0, 64, 0));
                     generatorsettingsend.a(iblockdata);
@@ -139,7 +126,7 @@ public class WorldProviderNormal extends WorldProvider {
                 }
             }
 
-            GeneratorSettingsOverworld generatorsettingsoverworld1 = (GeneratorSettingsOverworld) chunkgeneratortype4.b();
+            GeneratorSettingsOverworld generatorsettingsoverworld1 = (GeneratorSettingsOverworld) chunkgeneratortype4.a();
 
             generatorsettingsoverworld1.a(iblockdata);
             generatorsettingsoverworld1.b(iblockdata1);
@@ -148,6 +135,7 @@ public class WorldProviderNormal extends WorldProvider {
     }
 
     @Nullable
+    @Override
     public BlockPosition a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         for (int i = chunkcoordintpair.d(); i <= chunkcoordintpair.f(); ++i) {
             for (int j = chunkcoordintpair.e(); j <= chunkcoordintpair.g(); ++j) {
@@ -163,10 +151,11 @@ public class WorldProviderNormal extends WorldProvider {
     }
 
     @Nullable
+    @Override
     public BlockPosition a(int i, int j, boolean flag) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(i, 0, j);
         BiomeBase biomebase = this.b.getBiome(blockposition_mutableblockposition);
-        IBlockData iblockdata = biomebase.r().a();
+        IBlockData iblockdata = biomebase.q().a();
 
         if (flag && !iblockdata.getBlock().a(TagsBlock.VALID_SPAWN)) {
             return null;
@@ -180,15 +169,15 @@ public class WorldProviderNormal extends WorldProvider {
                 return null;
             } else {
                 for (int l = k + 1; l >= 0; --l) {
-                    blockposition_mutableblockposition.c(i, l, j);
+                    blockposition_mutableblockposition.d(i, l, j);
                     IBlockData iblockdata1 = this.b.getType(blockposition_mutableblockposition);
 
-                    if (!iblockdata1.s().e()) {
+                    if (!iblockdata1.p().isEmpty()) {
                         break;
                     }
 
                     if (iblockdata1.equals(iblockdata)) {
-                        return blockposition_mutableblockposition.up().h();
+                        return blockposition_mutableblockposition.up().immutableCopy();
                     }
                 }
 
@@ -197,29 +186,20 @@ public class WorldProviderNormal extends WorldProvider {
         }
     }
 
+    @Override
     public float a(long i, float f) {
-        int j = (int) (i % 24000L);
-        float f1 = ((float) j + f) / 24000.0F - 0.25F;
+        double d0 = MathHelper.h((double) i / 24000.0D - 0.25D);
+        double d1 = 0.5D - Math.cos(d0 * 3.141592653589793D) / 2.0D;
 
-        if (f1 < 0.0F) {
-            ++f1;
-        }
-
-        if (f1 > 1.0F) {
-            --f1;
-        }
-
-        float f2 = f1;
-
-        f1 = 1.0F - (float) ((Math.cos((double) f1 * 3.141592653589793D) + 1.0D) / 2.0D);
-        f1 = f2 + (f1 - f2) / 3.0F;
-        return f1;
+        return (float) (d0 * 2.0D + d1) / 3.0F;
     }
 
+    @Override
     public boolean isOverworld() {
         return true;
     }
 
+    @Override
     public boolean canRespawn() {
         return true;
     }

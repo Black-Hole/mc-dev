@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -12,17 +13,18 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RegistryMaterials<V> implements IRegistry<V> {
+public class RegistryMaterials<T> extends IRegistryWritable<T> {
 
     protected static final Logger a = LogManager.getLogger();
-    protected final RegistryID<V> b = new RegistryID<>(256);
-    protected final BiMap<MinecraftKey, V> c = HashBiMap.create();
+    protected final RegistryID<T> b = new RegistryID<>(256);
+    protected final BiMap<MinecraftKey, T> c = HashBiMap.create();
     protected Object[] d;
-    private int x;
+    private int R;
 
     public RegistryMaterials() {}
 
-    public void a(int i, MinecraftKey minecraftkey, V v0) {
+    @Override
+    public <V extends T> V a(int i, MinecraftKey minecraftkey, V v0) {
         this.b.a(v0, i);
         Validate.notNull(minecraftkey);
         Validate.notNull(v0);
@@ -32,57 +34,63 @@ public class RegistryMaterials<V> implements IRegistry<V> {
         }
 
         this.c.put(minecraftkey, v0);
-        if (this.x <= i) {
-            this.x = i + 1;
+        if (this.R <= i) {
+            this.R = i + 1;
         }
 
+        return v0;
     }
 
-    public void a(MinecraftKey minecraftkey, V v0) {
-        this.a(this.x, minecraftkey, v0);
-    }
-
-    @Nullable
-    public MinecraftKey getKey(V v0) {
-        return (MinecraftKey) this.c.inverse().get(v0);
-    }
-
-    public V getOrDefault(@Nullable MinecraftKey minecraftkey) {
-        throw new UnsupportedOperationException("No default value");
-    }
-
-    public MinecraftKey b() {
-        throw new UnsupportedOperationException("No default key");
-    }
-
-    public int a(@Nullable V v0) {
-        return this.b.getId(v0);
+    @Override
+    public <V extends T> V a(MinecraftKey minecraftkey, V v0) {
+        return this.a(this.R, minecraftkey, v0);
     }
 
     @Nullable
-    public V fromId(int i) {
+    @Override
+    public MinecraftKey getKey(T t0) {
+        return (MinecraftKey) this.c.inverse().get(t0);
+    }
+
+    @Override
+    public int a(@Nullable T t0) {
+        return this.b.getId(t0);
+    }
+
+    @Nullable
+    @Override
+    public T fromId(int i) {
         return this.b.fromId(i);
     }
 
-    public Iterator<V> iterator() {
+    public Iterator<T> iterator() {
         return this.b.iterator();
     }
 
     @Nullable
-    public V get(@Nullable MinecraftKey minecraftkey) {
+    @Override
+    public T get(@Nullable MinecraftKey minecraftkey) {
         return this.c.get(minecraftkey);
     }
 
+    @Override
+    public Optional<T> getOptional(@Nullable MinecraftKey minecraftkey) {
+        return Optional.ofNullable(this.c.get(minecraftkey));
+    }
+
+    @Override
     public Set<MinecraftKey> keySet() {
         return Collections.unmodifiableSet(this.c.keySet());
     }
 
-    public boolean d() {
+    @Override
+    public boolean c() {
         return this.c.isEmpty();
     }
 
     @Nullable
-    public V a(Random random) {
+    @Override
+    public T a(Random random) {
         if (this.d == null) {
             Collection<?> collection = this.c.values();
 
@@ -94,9 +102,5 @@ public class RegistryMaterials<V> implements IRegistry<V> {
         }
 
         return this.d[random.nextInt(this.d.length)];
-    }
-
-    public boolean c(MinecraftKey minecraftkey) {
-        return this.c.containsKey(minecraftkey);
     }
 }

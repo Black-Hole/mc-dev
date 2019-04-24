@@ -14,7 +14,7 @@ public class DataConverterVillage extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.writeFixAndRead("SavedDataVillageCropFix", this.getInputSchema().getType(DataConverterTypes.s), this.getOutputSchema().getType(DataConverterTypes.s), this::a);
+        return this.writeFixAndRead("SavedDataVillageCropFix", this.getInputSchema().getType(DataConverterTypes.t), this.getOutputSchema().getType(DataConverterTypes.t), this::a);
     }
 
     private <T> Dynamic<T> a(Dynamic<T> dynamic) {
@@ -22,7 +22,7 @@ public class DataConverterVillage extends DataFix {
     }
 
     private static <T> Dynamic<T> b(Dynamic<T> dynamic) {
-        Optional optional = dynamic.getStream().map(DataConverterVillage::a);
+        Optional optional = dynamic.asStreamOpt().map(DataConverterVillage::a);
 
         dynamic.getClass();
         return (Dynamic) optional.map(dynamic::createList).orElse(dynamic);
@@ -30,7 +30,7 @@ public class DataConverterVillage extends DataFix {
 
     private static Stream<? extends Dynamic<?>> a(Stream<? extends Dynamic<?>> stream) {
         return stream.map((dynamic) -> {
-            String s = dynamic.getString("id");
+            String s = dynamic.get("id").asString("");
 
             return "ViF".equals(s) ? c(dynamic) : ("ViDF".equals(s) ? d(dynamic) : dynamic);
         });
@@ -49,6 +49,6 @@ public class DataConverterVillage extends DataFix {
     }
 
     private static <T> Dynamic<T> a(Dynamic<T> dynamic, String s) {
-        return dynamic.get(s).flatMap(Dynamic::getNumberValue).isPresent() ? dynamic.set(s, DataConverterFlattenData.b(dynamic.getInt(s) << 4)) : dynamic;
+        return dynamic.get(s).asNumber().isPresent() ? dynamic.set(s, DataConverterFlattenData.b(dynamic.get(s).asInt(0) << 4)) : dynamic;
     }
 }

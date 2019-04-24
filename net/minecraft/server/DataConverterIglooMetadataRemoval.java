@@ -15,14 +15,14 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<?> type = this.getInputSchema().getType(DataConverterTypes.s);
-        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.s);
+        Type<?> type = this.getInputSchema().getType(DataConverterTypes.t);
+        Type<?> type1 = this.getOutputSchema().getType(DataConverterTypes.t);
 
         return this.writeFixAndRead("IglooMetadataRemovalFix", type, type1, DataConverterIglooMetadataRemoval::a);
     }
 
     private static <T> Dynamic<T> a(Dynamic<T> dynamic) {
-        boolean flag = (Boolean) dynamic.get("Children").flatMap(Dynamic::getStream).map((stream) -> {
+        boolean flag = (Boolean) dynamic.get("Children").asStreamOpt().map((stream) -> {
             return stream.allMatch(DataConverterIglooMetadataRemoval::c);
         }).orElse(false);
 
@@ -30,7 +30,7 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     private static <T> Dynamic<T> b(Dynamic<T> dynamic) {
-        Optional optional = dynamic.getStream().map((stream) -> {
+        Optional optional = dynamic.asStreamOpt().map((stream) -> {
             return stream.filter((dynamic1) -> {
                 return !c(dynamic1);
             });
@@ -41,6 +41,6 @@ public class DataConverterIglooMetadataRemoval extends DataFix {
     }
 
     private static boolean c(Dynamic<?> dynamic) {
-        return dynamic.getString("id").equals("Iglu");
+        return dynamic.get("id").asString("").equals("Iglu");
     }
 }

@@ -130,12 +130,12 @@ public class AdvancementDisplay {
     }
 
     public static AdvancementDisplay b(PacketDataSerializer packetdataserializer) {
-        IChatBaseComponent ichatbasecomponent = packetdataserializer.f();
-        IChatBaseComponent ichatbasecomponent1 = packetdataserializer.f();
-        ItemStack itemstack = packetdataserializer.k();
+        IChatBaseComponent ichatbasecomponent = packetdataserializer.h();
+        IChatBaseComponent ichatbasecomponent1 = packetdataserializer.h();
+        ItemStack itemstack = packetdataserializer.m();
         AdvancementFrameType advancementframetype = (AdvancementFrameType) packetdataserializer.a(AdvancementFrameType.class);
         int i = packetdataserializer.readInt();
-        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.l() : null;
+        MinecraftKey minecraftkey = (i & 1) != 0 ? packetdataserializer.o() : null;
         boolean flag = (i & 2) != 0;
         boolean flag1 = (i & 4) != 0;
         AdvancementDisplay advancementdisplay = new AdvancementDisplay(itemstack, ichatbasecomponent, ichatbasecomponent1, minecraftkey, advancementframetype, flag, false, flag1);
@@ -165,6 +165,10 @@ public class AdvancementDisplay {
         JsonObject jsonobject = new JsonObject();
 
         jsonobject.addProperty("item", IRegistry.ITEM.getKey(this.c.getItem()).toString());
+        if (this.c.hasTag()) {
+            jsonobject.addProperty("nbt", this.c.getTag().toString());
+        }
+
         return jsonobject;
     }
 }

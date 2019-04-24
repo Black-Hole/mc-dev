@@ -29,7 +29,7 @@ public class CommandRecipe {
         })))));
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe> collection1) throws CommandSyntaxException {
+    private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe<?>> collection1) throws CommandSyntaxException {
         int i = 0;
 
         EntityPlayer entityplayer;
@@ -51,7 +51,7 @@ public class CommandRecipe {
         }
     }
 
-    private static int b(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe> collection1) throws CommandSyntaxException {
+    private static int b(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Collection<IRecipe<?>> collection1) throws CommandSyntaxException {
         int i = 0;
 
         EntityPlayer entityplayer;

@@ -19,10 +19,12 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
 
     public CriterionTriggerFilledBucket() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerFilledBucket.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerFilledBucket.b> criteriontrigger_a) {
         CriterionTriggerFilledBucket.a criteriontriggerfilledbucket_a = (CriterionTriggerFilledBucket.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
         criteriontriggerfilledbucket_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerFilledBucket.b> criteriontrigger_a) {
         CriterionTriggerFilledBucket.a criteriontriggerfilledbucket_a = (CriterionTriggerFilledBucket.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerFilledBucket.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
 
@@ -132,6 +137,7 @@ public class CriterionTriggerFilledBucket implements CriterionTrigger<CriterionT
             return this.a.a(itemstack);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

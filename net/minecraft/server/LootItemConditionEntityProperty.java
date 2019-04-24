@@ -1,79 +1,59 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Iterator;
-import java.util.Random;
 import java.util.Set;
-import java.util.Map.Entry;
 
 public class LootItemConditionEntityProperty implements LootItemCondition {
 
-    private final LootEntityProperty[] a;
+    private final CriterionConditionEntity a;
     private final LootTableInfo.EntityTarget b;
 
-    public LootItemConditionEntityProperty(LootEntityProperty[] alootentityproperty, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        this.a = alootentityproperty;
+    private LootItemConditionEntityProperty(CriterionConditionEntity criterionconditionentity, LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        this.a = criterionconditionentity;
         this.b = loottableinfo_entitytarget;
     }
 
-    public boolean a(Random random, LootTableInfo loottableinfo) {
-        Entity entity = loottableinfo.a(this.b);
-
-        if (entity == null) {
-            return false;
-        } else {
-            LootEntityProperty[] alootentityproperty = this.a;
-            int i = alootentityproperty.length;
-
-            for (int j = 0; j < i; ++j) {
-                LootEntityProperty lootentityproperty = alootentityproperty[j];
-
-                if (!lootentityproperty.a(random, entity)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+    @Override
+    public Set<LootContextParameter<?>> a() {
+        return ImmutableSet.of(LootContextParameters.POSITION, this.b.a());
     }
 
-    public static class a extends LootItemCondition.a<LootItemConditionEntityProperty> {
+    public boolean test(LootTableInfo loottableinfo) {
+        Entity entity = (Entity) loottableinfo.getContextParameter(this.b.a());
+        BlockPosition blockposition = (BlockPosition) loottableinfo.getContextParameter(LootContextParameters.POSITION);
+
+        return blockposition != null && this.a.a(loottableinfo.d(), new Vec3D(blockposition), entity);
+    }
+
+    public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
+        return a(loottableinfo_entitytarget, CriterionConditionEntity.a.a());
+    }
+
+    public static LootItemCondition.a a(LootTableInfo.EntityTarget loottableinfo_entitytarget, CriterionConditionEntity.a criterionconditionentity_a) {
+        return () -> {
+            return new LootItemConditionEntityProperty(criterionconditionentity_a.b(), loottableinfo_entitytarget);
+        };
+    }
+
+    public static class a extends LootItemCondition.b<LootItemConditionEntityProperty> {
 
         protected a() {
             super(new MinecraftKey("entity_properties"), LootItemConditionEntityProperty.class);
         }
 
         public void a(JsonObject jsonobject, LootItemConditionEntityProperty lootitemconditionentityproperty, JsonSerializationContext jsonserializationcontext) {
-            JsonObject jsonobject1 = new JsonObject();
-            LootEntityProperty[] alootentityproperty = lootitemconditionentityproperty.a;
-            int i = alootentityproperty.length;
-
-            for (int j = 0; j < i; ++j) {
-                LootEntityProperty lootentityproperty = alootentityproperty[j];
-                LootEntityProperty.a<LootEntityProperty> lootentityproperty_a = LootEntityProperties.a(lootentityproperty);
-
-                jsonobject1.add(lootentityproperty_a.a().toString(), lootentityproperty_a.a(lootentityproperty, jsonserializationcontext));
-            }
-
-            jsonobject.add("properties", jsonobject1);
+            jsonobject.add("predicate", lootitemconditionentityproperty.a.a());
             jsonobject.add("entity", jsonserializationcontext.serialize(lootitemconditionentityproperty.b));
         }
 
+        @Override
         public LootItemConditionEntityProperty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            Set<Entry<String, JsonElement>> set = ChatDeserializer.t(jsonobject, "properties").entrySet();
-            LootEntityProperty[] alootentityproperty = new LootEntityProperty[set.size()];
-            int i = 0;
+            CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("predicate"));
 
-            Entry entry;
-
-            for (Iterator iterator = set.iterator(); iterator.hasNext(); alootentityproperty[i++] = LootEntityProperties.a(new MinecraftKey((String) entry.getKey())).a((JsonElement) entry.getValue(), jsondeserializationcontext)) {
-                entry = (Entry) iterator.next();
-            }
-
-            return new LootItemConditionEntityProperty(alootentityproperty, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
+            return new LootItemConditionEntityProperty(criterionconditionentity, (LootTableInfo.EntityTarget) ChatDeserializer.a(jsonobject, "entity", jsondeserializationcontext, LootTableInfo.EntityTarget.class));
         }
     }
 }

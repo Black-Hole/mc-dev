@@ -14,6 +14,7 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
         super(debugreportgenerator, IRegistry.ITEM);
     }
 
+    @Override
     protected void b() {
         this.a(TagsBlock.WOOL, TagsItem.WOOL);
         this.a(TagsBlock.PLANKS, TagsItem.PLANKS);
@@ -24,6 +25,7 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
         this.a(TagsBlock.WOODEN_DOORS, TagsItem.WOODEN_DOORS);
         this.a(TagsBlock.WOODEN_STAIRS, TagsItem.WOODEN_STAIRS);
         this.a(TagsBlock.WOODEN_SLABS, TagsItem.WOODEN_SLABS);
+        this.a(TagsBlock.WOODEN_FENCES, TagsItem.WOODEN_FENCES);
         this.a(TagsBlock.WOODEN_PRESSURE_PLATES, TagsItem.WOODEN_PRESSURE_PLATES);
         this.a(TagsBlock.DOORS, TagsItem.DOORS);
         this.a(TagsBlock.SAPLINGS, TagsItem.SAPLINGS);
@@ -36,15 +38,23 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
         this.a(TagsBlock.LOGS, TagsItem.LOGS);
         this.a(TagsBlock.SAND, TagsItem.SAND);
         this.a(TagsBlock.SLABS, TagsItem.SLABS);
+        this.a(TagsBlock.WALLS, TagsItem.WALLS);
         this.a(TagsBlock.STAIRS, TagsItem.STAIRS);
         this.a(TagsBlock.ANVIL, TagsItem.ANVIL);
         this.a(TagsBlock.RAILS, TagsItem.RAILS);
         this.a(TagsBlock.LEAVES, TagsItem.LEAVES);
         this.a(TagsBlock.WOODEN_TRAPDOORS, TagsItem.WOODEN_TRAPDOORS);
         this.a(TagsBlock.TRAPDOORS, TagsItem.TRAPDOORS);
+        this.a(TagsBlock.SMALL_FLOWERS, TagsItem.SMALL_FLOWERS);
+        this.a(TagsBlock.BEDS, TagsItem.BEDS);
+        this.a(TagsBlock.FENCES, TagsItem.FENCES);
         this.a(TagsItem.BANNERS).a((Object[])(Items.WHITE_BANNER, Items.ORANGE_BANNER, Items.MAGENTA_BANNER, Items.LIGHT_BLUE_BANNER, Items.YELLOW_BANNER, Items.LIME_BANNER, Items.PINK_BANNER, Items.GRAY_BANNER, Items.LIGHT_GRAY_BANNER, Items.CYAN_BANNER, Items.PURPLE_BANNER, Items.BLUE_BANNER, Items.BROWN_BANNER, Items.GREEN_BANNER, Items.RED_BANNER, Items.BLACK_BANNER));
         this.a(TagsItem.BOATS).a((Object[])(Items.OAK_BOAT, Items.SPRUCE_BOAT, Items.BIRCH_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT));
         this.a(TagsItem.FISHES).a((Object[])(Items.COD, Items.COOKED_COD, Items.SALMON, Items.COOKED_SALMON, Items.PUFFERFISH, Items.TROPICAL_FISH));
+        this.a(TagsBlock.STANDING_SIGNS, TagsItem.SIGNS);
+        this.a(TagsItem.MUSIC_DISCS).a((Object[])(Items.MUSIC_DISC_13, Items.MUSIC_DISC_CAT, Items.MUSIC_DISC_BLOCKS, Items.MUSIC_DISC_CHIRP, Items.MUSIC_DISC_FAR, Items.MUSIC_DISC_MALL, Items.MUSIC_DISC_MELLOHI, Items.MUSIC_DISC_STAL, Items.MUSIC_DISC_STRAD, Items.MUSIC_DISC_WARD, Items.MUSIC_DISC_11, Items.MUSIC_DISC_WAIT));
+        this.a(TagsItem.COALS).a((Object[])(Items.COAL, Items.CHARCOAL));
+        this.a(TagsItem.ARROWS).a((Object[])(Items.ARROW, Items.TIPPED_ARROW, Items.SPECTRAL_ARROW));
     }
 
     protected void a(Tag<Block> tag, Tag<Item> tag1) {
@@ -84,14 +94,17 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
         }
     }
 
+    @Override
     protected java.nio.file.Path a(MinecraftKey minecraftkey) {
         return this.b.b().resolve("data/" + minecraftkey.b() + "/tags/items/" + minecraftkey.getKey() + ".json");
     }
 
+    @Override
     public String a() {
         return "Item Tags";
     }
 
+    @Override
     protected void a(Tags<Item> tags) {
         TagsItem.a(tags);
     }

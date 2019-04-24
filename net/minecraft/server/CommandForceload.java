@@ -23,12 +23,16 @@ public class CommandForceload {
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("forceload").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(2);
+        })).then(((LiteralArgumentBuilder) CommandDispatcher.a("add").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(4);
-        })).then(CommandDispatcher.a("add").then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "from"), true);
         })).then(CommandDispatcher.a("to", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "to"), true);
-        }))))).then(((LiteralArgumentBuilder) CommandDispatcher.a("remove").then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
+        }))))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("remove").requires((commandlistenerwrapper) -> {
+            return commandlistenerwrapper.hasPermission(4);
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("from", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "from"), false);
         })).then(CommandDispatcher.a("to", (ArgumentType) ArgumentVec2I.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentVec2I.a(commandcontext, "from"), ArgumentVec2I.a(commandcontext, "to"), false);
@@ -41,10 +45,10 @@ public class CommandForceload {
         }))));
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, ArgumentVec2I.a argumentvec2i_a) throws CommandSyntaxException {
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(argumentvec2i_a.a >> 4, argumentvec2i_a.b >> 4);
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
-        boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).isForceLoaded(chunkcoordintpair.x, chunkcoordintpair.z);
+    private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition2D blockposition2d) throws CommandSyntaxException {
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition2d.a >> 4, blockposition2d.b >> 4);
+        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
+        boolean flag = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).getForceLoadedChunks().contains(chunkcoordintpair.pair());
 
         if (flag) {
             commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.query.success", new Object[] { chunkcoordintpair, dimensionmanager}), false);
@@ -55,8 +59,8 @@ public class CommandForceload {
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper) {
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
-        LongSet longset = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).ag();
+        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
+        LongSet longset = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager).getForceLoadedChunks();
         int i = longset.size();
 
         if (i > 0) {
@@ -75,22 +79,22 @@ public class CommandForceload {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
+        DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
         WorldServer worldserver = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager);
-        LongSet longset = worldserver.ag();
+        LongSet longset = worldserver.getForceLoadedChunks();
 
         longset.forEach((i) -> {
-            worldserver.setForceLoaded(ChunkCoordIntPair.a(i), ChunkCoordIntPair.b(i), false);
+            worldserver.setForceLoaded(ChunkCoordIntPair.getX(i), ChunkCoordIntPair.getZ(i), false);
         });
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.forceload.removed.all", new Object[] { dimensionmanager}), true);
         return 0;
     }
 
-    private static int a(CommandListenerWrapper commandlistenerwrapper, ArgumentVec2I.a argumentvec2i_a, ArgumentVec2I.a argumentvec2i_a1, boolean flag) throws CommandSyntaxException {
-        int i = Math.min(argumentvec2i_a.a, argumentvec2i_a1.a);
-        int j = Math.min(argumentvec2i_a.b, argumentvec2i_a1.b);
-        int k = Math.max(argumentvec2i_a.a, argumentvec2i_a1.a);
-        int l = Math.max(argumentvec2i_a.b, argumentvec2i_a1.b);
+    private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition2D blockposition2d, BlockPosition2D blockposition2d1, boolean flag) throws CommandSyntaxException {
+        int i = Math.min(blockposition2d.a, blockposition2d1.a);
+        int j = Math.min(blockposition2d.b, blockposition2d1.b);
+        int k = Math.max(blockposition2d.a, blockposition2d1.a);
+        int l = Math.max(blockposition2d.b, blockposition2d1.b);
 
         if (i >= -30000000 && j >= -30000000 && k < 30000000 && l < 30000000) {
             int i1 = i >> 4;
@@ -102,7 +106,7 @@ public class CommandForceload {
             if (i2 > 256L) {
                 throw CommandForceload.a.create(256, i2);
             } else {
-                DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().o().getDimensionManager();
+                DimensionManager dimensionmanager = commandlistenerwrapper.getWorld().getWorldProvider().getDimensionManager();
                 WorldServer worldserver = commandlistenerwrapper.getServer().getWorldServer(dimensionmanager);
                 ChunkCoordIntPair chunkcoordintpair = null;
                 int j2 = 0;

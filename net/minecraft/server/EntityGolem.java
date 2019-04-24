@@ -2,34 +2,40 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public abstract class EntityGolem extends EntityCreature implements IAnimal {
+public abstract class EntityGolem extends EntityCreature {
 
-    protected EntityGolem(EntityTypes<?> entitytypes, World world) {
+    protected EntityGolem(EntityTypes<? extends EntityGolem> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public void c(float f, float f1) {}
+    @Override
+    public void b(float f, float f1) {}
 
     @Nullable
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return null;
     }
 
     @Nullable
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return null;
     }
 
     @Nullable
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return null;
     }
 
-    public int z() {
+    @Override
+    public int A() {
         return 120;
     }
 
-    public boolean isTypeNotPersistent() {
+    @Override
+    public boolean isTypeNotPersistent(double d0) {
         return false;
     }
 }

@@ -15,11 +15,13 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
         packetlistenerplayin.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.slot = packetdataserializer.readShort();
-        this.b = packetdataserializer.k();
+        this.b = packetdataserializer.m();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeShort(this.slot);
         packetdataserializer.a(this.b);

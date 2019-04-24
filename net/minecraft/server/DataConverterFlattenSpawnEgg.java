@@ -71,7 +71,7 @@ public class DataConverterFlattenSpawnEgg extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
         OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.namespacedString());
         OpticFinder<?> opticfinder2 = type.findField("tag");
         OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");
@@ -85,7 +85,7 @@ public class DataConverterFlattenSpawnEgg extends DataFix {
                 Optional<String> optional1 = typed2.getOptional(opticfinder1);
 
                 if (optional1.isPresent()) {
-                    return typed.set(opticfinder, Pair.of(DataConverterTypes.q.typeName(), DataConverterFlattenSpawnEgg.a.getOrDefault(optional1.get(), "minecraft:pig_spawn_egg")));
+                    return typed.set(opticfinder, Pair.of(DataConverterTypes.r.typeName(), DataConverterFlattenSpawnEgg.a.getOrDefault(optional1.get(), "minecraft:pig_spawn_egg")));
                 }
             }
 

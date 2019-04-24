@@ -6,11 +6,15 @@ public class ItemMapEmpty extends ItemWorldMapBase {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = ItemWorldMap.createFilledMapView(world, MathHelper.floor(entityhuman.locX), MathHelper.floor(entityhuman.locZ), (byte) 0, true, false);
         ItemStack itemstack1 = entityhuman.b(enumhand);
 
-        itemstack1.subtract(1);
+        if (!entityhuman.abilities.canInstantlyBuild) {
+            itemstack1.subtract(1);
+        }
+
         if (itemstack1.isEmpty()) {
             return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         } else {

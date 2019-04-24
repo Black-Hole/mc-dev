@@ -84,7 +84,7 @@ public class StructureBoundingBox {
         this.e = 512;
     }
 
-    public boolean a(StructureBoundingBox structureboundingbox) {
+    public boolean b(StructureBoundingBox structureboundingbox) {
         return this.d >= structureboundingbox.a && this.a <= structureboundingbox.d && this.f >= structureboundingbox.c && this.c <= structureboundingbox.f && this.e >= structureboundingbox.b && this.b <= structureboundingbox.e;
     }
 
@@ -92,7 +92,7 @@ public class StructureBoundingBox {
         return this.d >= i && this.a <= k && this.f >= j && this.c <= l;
     }
 
-    public void b(StructureBoundingBox structureboundingbox) {
+    public void c(StructureBoundingBox structureboundingbox) {
         this.a = Math.min(this.a, structureboundingbox.a);
         this.b = Math.min(this.b, structureboundingbox.b);
         this.c = Math.min(this.c, structureboundingbox.c);
@@ -108,6 +108,10 @@ public class StructureBoundingBox {
         this.d += i;
         this.e += j;
         this.f += k;
+    }
+
+    public StructureBoundingBox b(int i, int j, int k) {
+        return new StructureBoundingBox(this.a + i, this.b + j, this.c + k, this.d + i, this.e + j, this.f + k);
     }
 
     public boolean b(BaseBlockPosition baseblockposition) {

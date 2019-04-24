@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 
 public class PathfinderGoalBreath extends PathfinderGoal {
@@ -8,27 +9,31 @@ public class PathfinderGoalBreath extends PathfinderGoal {
 
     public PathfinderGoalBreath(EntityCreature entitycreature) {
         this.a = entitycreature;
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
+    @Override
     public boolean a() {
         return this.a.getAirTicks() < 140;
     }
 
+    @Override
     public boolean b() {
         return this.a();
     }
 
-    public boolean f() {
+    @Override
+    public boolean C_() {
         return false;
     }
 
+    @Override
     public void c() {
         this.g();
     }
 
     private void g() {
-        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 1.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ - 1.0D), MathHelper.floor(this.a.locX + 1.0D), MathHelper.floor(this.a.locY + 8.0D), MathHelper.floor(this.a.locZ + 1.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX - 1.0D), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ - 1.0D), MathHelper.floor(this.a.locX + 1.0D), MathHelper.floor(this.a.locY + 8.0D), MathHelper.floor(this.a.locZ + 1.0D));
         BlockPosition blockposition = null;
         Iterator iterator = iterable.iterator();
 
@@ -48,15 +53,16 @@ public class PathfinderGoalBreath extends PathfinderGoal {
         this.a.getNavigation().a((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), 1.0D);
     }
 
+    @Override
     public void e() {
         this.g();
-        this.a.a(this.a.bh, this.a.bi, this.a.bj, 0.02F);
-        this.a.move(EnumMoveType.SELF, this.a.motX, this.a.motY, this.a.motZ);
+        this.a.a(0.02F, new Vec3D((double) this.a.bb, (double) this.a.bc, (double) this.a.bd));
+        this.a.move(EnumMoveType.SELF, this.a.getMot());
     }
 
     private boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
 
-        return (iworldreader.getFluid(blockposition).e() || iblockdata.getBlock() == Blocks.BUBBLE_COLUMN) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
+        return (iworldreader.getFluid(blockposition).isEmpty() || iblockdata.getBlock() == Blocks.BUBBLE_COLUMN) && iblockdata.a((IBlockAccess) iworldreader, blockposition, PathMode.LAND);
     }
 }

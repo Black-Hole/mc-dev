@@ -6,14 +6,12 @@ public class EnchantmentLure extends Enchantment {
         super(enchantment_rarity, enchantmentslottype, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 15 + (i - 1) * 9;
     }
 
-    public int b(int i) {
-        return super.a(i) + 50;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 3;
     }

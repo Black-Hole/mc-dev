@@ -5,52 +5,32 @@ import java.io.IOException;
 public class PacketPlayOutOpenWindow implements Packet<PacketListenerPlayOut> {
 
     private int a;
-    private String b;
+    private int b;
     private IChatBaseComponent c;
-    private int d;
-    private int e;
 
     public PacketPlayOutOpenWindow() {}
 
-    public PacketPlayOutOpenWindow(int i, String s, IChatBaseComponent ichatbasecomponent) {
-        this(i, s, ichatbasecomponent, 0);
-    }
-
-    public PacketPlayOutOpenWindow(int i, String s, IChatBaseComponent ichatbasecomponent, int j) {
+    public PacketPlayOutOpenWindow(int i, Containers<?> containers, IChatBaseComponent ichatbasecomponent) {
         this.a = i;
-        this.b = s;
+        this.b = IRegistry.MENU.a((Object) containers);
         this.c = ichatbasecomponent;
-        this.d = j;
     }
 
-    public PacketPlayOutOpenWindow(int i, String s, IChatBaseComponent ichatbasecomponent, int j, int k) {
-        this(i, s, ichatbasecomponent, j);
-        this.e = k;
+    @Override
+    public void a(PacketDataSerializer packetdataserializer) throws IOException {
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.i();
+        this.c = packetdataserializer.h();
+    }
+
+    @Override
+    public void b(PacketDataSerializer packetdataserializer) throws IOException {
+        packetdataserializer.d(this.a);
+        packetdataserializer.d(this.b);
+        packetdataserializer.a(this.c);
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
-    }
-
-    public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.readUnsignedByte();
-        this.b = packetdataserializer.e(32);
-        this.c = packetdataserializer.f();
-        this.d = packetdataserializer.readUnsignedByte();
-        if (this.b.equals("EntityHorse")) {
-            this.e = packetdataserializer.readInt();
-        }
-
-    }
-
-    public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.writeByte(this.a);
-        packetdataserializer.a(this.b);
-        packetdataserializer.a(this.c);
-        packetdataserializer.writeByte(this.d);
-        if (this.b.equals("EntityHorse")) {
-            packetdataserializer.writeInt(this.e);
-        }
-
     }
 }

@@ -136,10 +136,10 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
     }
 
     public static RecipeItemStack b(PacketDataSerializer packetdataserializer) {
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         return a(Stream.generate(() -> {
-            return new RecipeItemStack.StackProvider(packetdataserializer.k());
+            return new RecipeItemStack.StackProvider(packetdataserializer.m());
         }).limit((long) i));
     }
 
@@ -173,13 +173,11 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
 
             if (jsonobject.has("item")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "item"));
-                Item item = (Item) IRegistry.ITEM.get(minecraftkey);
+                Item item = (Item) IRegistry.ITEM.getOptional(minecraftkey).orElseThrow(() -> {
+                    return new JsonSyntaxException("Unknown item '" + minecraftkey + "'");
+                });
 
-                if (item == null) {
-                    throw new JsonSyntaxException("Unknown item '" + minecraftkey + "'");
-                } else {
-                    return new RecipeItemStack.StackProvider(new ItemStack(item));
-                }
+                return new RecipeItemStack.StackProvider(new ItemStack(item));
             } else if (jsonobject.has("tag")) {
                 minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "tag"));
                 Tag<Item> tag = TagsItem.a().a(minecraftkey);
@@ -203,6 +201,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
             this.a = tag;
         }
 
+        @Override
         public Collection<ItemStack> a() {
             List<ItemStack> list = Lists.newArrayList();
             Iterator iterator = this.a.a().iterator();
@@ -216,6 +215,7 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
             return list;
         }
 
+        @Override
         public JsonObject b() {
             JsonObject jsonobject = new JsonObject();
 
@@ -232,10 +232,12 @@ public final class RecipeItemStack implements Predicate<ItemStack> {
             this.a = itemstack;
         }
 
+        @Override
         public Collection<ItemStack> a() {
             return Collections.singleton(this.a);
         }
 
+        @Override
         public JsonObject b() {
             JsonObject jsonobject = new JsonObject();
 

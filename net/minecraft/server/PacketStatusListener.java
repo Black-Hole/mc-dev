@@ -12,8 +12,10 @@ public class PacketStatusListener implements PacketStatusInListener {
         this.networkManager = networkmanager;
     }
 
+    @Override
     public void a(IChatBaseComponent ichatbasecomponent) {}
 
+    @Override
     public void a(PacketStatusInStart packetstatusinstart) {
         if (this.d) {
             this.networkManager.close(PacketStatusListener.a);
@@ -23,6 +25,7 @@ public class PacketStatusListener implements PacketStatusInListener {
         }
     }
 
+    @Override
     public void a(PacketStatusInPing packetstatusinping) {
         this.networkManager.sendPacket(new PacketStatusOutPong(packetstatusinping.b()));
         this.networkManager.close(PacketStatusListener.a);

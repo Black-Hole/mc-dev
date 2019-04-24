@@ -11,16 +11,20 @@ public class ItemBucket extends Item {
         this.fluidType = fluidtype;
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = this.a(world, entityhuman, this.fluidType == FluidTypes.EMPTY);
+        MovingObjectPosition movingobjectposition = a(world, entityhuman, this.fluidType == FluidTypes.EMPTY ? RayTrace.FluidCollisionOption.SOURCE_ONLY : RayTrace.FluidCollisionOption.NONE);
 
-        if (movingobjectposition == null) {
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
             return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
-        } else if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-            BlockPosition blockposition = movingobjectposition.getBlockPosition();
+        } else if (movingobjectposition.getType() != MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
+        } else {
+            MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
+            BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
 
-            if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectposition.direction, itemstack)) {
+            if (world.a(entityhuman, blockposition) && entityhuman.a(blockposition, movingobjectpositionblock.getDirection(), itemstack)) {
                 IBlockData iblockdata;
 
                 if (this.fluidType == FluidTypes.EMPTY) {
@@ -44,9 +48,9 @@ public class ItemBucket extends Item {
                     return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 } else {
                     iblockdata = world.getType(blockposition);
-                    BlockPosition blockposition1 = this.a(iblockdata, blockposition, movingobjectposition);
+                    BlockPosition blockposition1 = iblockdata.getBlock() instanceof IFluidContainer && this.fluidType == FluidTypes.WATER ? blockposition : movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
 
-                    if (this.a(entityhuman, world, blockposition1, movingobjectposition)) {
+                    if (this.a(entityhuman, world, blockposition1, movingobjectpositionblock)) {
                         this.a(world, itemstack, blockposition1);
                         if (entityhuman instanceof EntityPlayer) {
                             CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);
@@ -61,13 +65,7 @@ public class ItemBucket extends Item {
             } else {
                 return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
             }
-        } else {
-            return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         }
-    }
-
-    private BlockPosition a(IBlockData iblockdata, BlockPosition blockposition, MovingObjectPosition movingobjectposition) {
-        return iblockdata.getBlock() instanceof IFluidContainer ? blockposition : movingobjectposition.getBlockPosition().shift(movingobjectposition.direction);
     }
 
     protected ItemStack a(ItemStack itemstack, EntityHuman entityhuman) {
@@ -93,7 +91,7 @@ public class ItemBucket extends Item {
         }
     }
 
-    public boolean a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition, @Nullable MovingObjectPosition movingobjectposition) {
+    public boolean a(@Nullable EntityHuman entityhuman, World world, BlockPosition blockposition, @Nullable MovingObjectPositionBlock movingobjectpositionblock) {
         if (!(this.fluidType instanceof FluidTypeFlowing)) {
             return false;
         } else {
@@ -103,7 +101,7 @@ public class ItemBucket extends Item {
             boolean flag1 = material.isReplaceable();
 
             if (!world.isEmpty(blockposition) && !flag && !flag1 && (!(iblockdata.getBlock() instanceof IFluidContainer) || !((IFluidContainer) iblockdata.getBlock()).canPlace(world, blockposition, iblockdata, this.fluidType))) {
-                return movingobjectposition == null ? false : this.a(entityhuman, world, movingobjectposition.getBlockPosition().shift(movingobjectposition.direction), (MovingObjectPosition) null);
+                return movingobjectpositionblock == null ? false : this.a(entityhuman, world, movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection()), (MovingObjectPositionBlock) null);
             } else {
                 if (world.worldProvider.isNether() && this.fluidType.a(TagsFluid.WATER)) {
                     int i = blockposition.getX();
@@ -113,19 +111,19 @@ public class ItemBucket extends Item {
                     world.a(entityhuman, blockposition, SoundEffects.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
 
                     for (int l = 0; l < 8; ++l) {
-                        world.addParticle(Particles.F, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D);
+                        world.addParticle(Particles.LARGE_SMOKE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D);
                     }
-                } else if (iblockdata.getBlock() instanceof IFluidContainer) {
+                } else if (iblockdata.getBlock() instanceof IFluidContainer && this.fluidType == FluidTypes.WATER) {
                     if (((IFluidContainer) iblockdata.getBlock()).place(world, blockposition, iblockdata, ((FluidTypeFlowing) this.fluidType).a(false))) {
                         this.a(entityhuman, (GeneratorAccess) world, blockposition);
                     }
                 } else {
                     if (!world.isClientSide && (flag || flag1) && !material.isLiquid()) {
-                        world.setAir(blockposition, true);
+                        world.b(blockposition, true);
                     }
 
                     this.a(entityhuman, (GeneratorAccess) world, blockposition);
-                    world.setTypeAndData(blockposition, this.fluidType.i().i(), 11);
+                    world.setTypeAndData(blockposition, this.fluidType.i().getBlockData(), 11);
                 }
 
                 return true;

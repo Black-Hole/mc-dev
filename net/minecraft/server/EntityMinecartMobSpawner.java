@@ -2,52 +2,61 @@ package net.minecraft.server;
 
 public class EntityMinecartMobSpawner extends EntityMinecartAbstract {
 
-    private final MobSpawnerAbstract a = new MobSpawnerAbstract() {
+    private final MobSpawnerAbstract b = new MobSpawnerAbstract() {
+        @Override
         public void a(int i) {
             EntityMinecartMobSpawner.this.world.broadcastEntityEffect(EntityMinecartMobSpawner.this, (byte) i);
         }
 
+        @Override
         public World a() {
             return EntityMinecartMobSpawner.this.world;
         }
 
+        @Override
         public BlockPosition b() {
             return new BlockPosition(EntityMinecartMobSpawner.this);
         }
     };
 
-    public EntityMinecartMobSpawner(World world) {
-        super(EntityTypes.SPAWNER_MINECART, world);
+    public EntityMinecartMobSpawner(EntityTypes<? extends EntityMinecartMobSpawner> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public EntityMinecartMobSpawner(World world, double d0, double d1, double d2) {
         super(EntityTypes.SPAWNER_MINECART, world, d0, d1, d2);
     }
 
-    public EntityMinecartAbstract.EnumMinecartType v() {
+    @Override
+    public EntityMinecartAbstract.EnumMinecartType getMinecartType() {
         return EntityMinecartAbstract.EnumMinecartType.SPAWNER;
     }
 
-    public IBlockData z() {
+    @Override
+    public IBlockData q() {
         return Blocks.SPAWNER.getBlockData();
     }
 
+    @Override
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a.a(nbttagcompound);
+        this.b.a(nbttagcompound);
     }
 
+    @Override
     protected void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        this.a.b(nbttagcompound);
+        this.b.b(nbttagcompound);
     }
 
+    @Override
     public void tick() {
         super.tick();
-        this.a.c();
+        this.b.c();
     }
 
-    public boolean bM() {
+    @Override
+    public boolean bS() {
         return true;
     }
 }

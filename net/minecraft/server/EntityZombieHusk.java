@@ -1,44 +1,44 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityZombieHusk extends EntityZombie {
 
-    public EntityZombieHusk(World world) {
-        super(EntityTypes.HUSK, world);
+    public EntityZombieHusk(EntityTypes<? extends EntityZombieHusk> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return super.a(generatoraccess, flag) && (flag || generatoraccess.e(new BlockPosition(this)));
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
+        return super.a(generatoraccess, enummobspawn) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(new BlockPosition(this)));
     }
 
-    protected boolean L_() {
+    @Override
+    protected boolean J_() {
         return false;
     }
 
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_HUSK_AMBIENT;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_HUSK_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_HUSK_DEATH;
     }
 
-    protected SoundEffect dA() {
+    @Override
+    protected SoundEffect getSoundStep() {
         return SoundEffects.ENTITY_HUSK_STEP;
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.ay;
-    }
-
-    public boolean B(Entity entity) {
-        boolean flag = super.B(entity);
+    @Override
+    public boolean C(Entity entity) {
+        boolean flag = super.C(entity);
 
         if (flag && this.getItemInMainHand().isEmpty() && entity instanceof EntityLiving) {
             float f = this.world.getDamageScaler(new BlockPosition(this)).b();
@@ -49,16 +49,19 @@ public class EntityZombieHusk extends EntityZombie {
         return flag;
     }
 
-    protected boolean dC() {
+    @Override
+    protected boolean dZ() {
         return true;
     }
 
-    protected void dE() {
-        this.a(new EntityZombie(this.world));
+    @Override
+    protected void eb() {
+        this.b(EntityTypes.ZOMBIE);
         this.world.a((EntityHuman) null, 1041, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
     }
 
-    protected ItemStack dB() {
+    @Override
+    protected ItemStack dY() {
         return ItemStack.a;
     }
 }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import javax.annotation.Nullable;
 
 public class PathfinderGoalRandomStroll extends PathfinderGoal {
@@ -20,30 +21,35 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
         this.a = entitycreature;
         this.e = d0;
         this.f = i;
-        this.a(1);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
+    @Override
     public boolean a() {
-        if (!this.g) {
-            if (this.a.cj() >= 100) {
-                return false;
-            }
-
-            if (this.a.getRandom().nextInt(this.f) != 0) {
-                return false;
-            }
-        }
-
-        Vec3D vec3d = this.g();
-
-        if (vec3d == null) {
+        if (this.a.isVehicle()) {
             return false;
         } else {
-            this.b = vec3d.x;
-            this.c = vec3d.y;
-            this.d = vec3d.z;
-            this.g = false;
-            return true;
+            if (!this.g) {
+                if (this.a.cv() >= 100) {
+                    return false;
+                }
+
+                if (this.a.getRandom().nextInt(this.f) != 0) {
+                    return false;
+                }
+            }
+
+            Vec3D vec3d = this.g();
+
+            if (vec3d == null) {
+                return false;
+            } else {
+                this.b = vec3d.x;
+                this.c = vec3d.y;
+                this.d = vec3d.z;
+                this.g = false;
+                return true;
+            }
         }
     }
 
@@ -52,15 +58,17 @@ public class PathfinderGoalRandomStroll extends PathfinderGoal {
         return RandomPositionGenerator.a(this.a, 10, 7);
     }
 
+    @Override
     public boolean b() {
-        return !this.a.getNavigation().p();
+        return !this.a.getNavigation().n();
     }
 
+    @Override
     public void c() {
         this.a.getNavigation().a(this.b, this.c, this.d, this.e);
     }
 
-    public void i() {
+    public void h() {
         this.g = true;
     }
 

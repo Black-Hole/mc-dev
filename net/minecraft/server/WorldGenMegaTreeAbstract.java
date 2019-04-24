@@ -1,33 +1,35 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfiguration> extends WorldGenTreeAbstract<T> {
 
     protected final int a;
-    protected final IBlockData b;
-    protected final IBlockData c;
-    protected int d;
+    protected final IBlockData aS;
+    protected final IBlockData aT;
+    protected final int aU;
 
-    public WorldGenMegaTreeAbstract(boolean flag, int i, int j, IBlockData iblockdata, IBlockData iblockdata1) {
-        super(flag);
+    public WorldGenMegaTreeAbstract(Function<Dynamic<?>, ? extends T> function, boolean flag, int i, int j, IBlockData iblockdata, IBlockData iblockdata1) {
+        super(function, flag);
         this.a = i;
-        this.d = j;
-        this.b = iblockdata;
-        this.c = iblockdata1;
+        this.aU = j;
+        this.aS = iblockdata;
+        this.aT = iblockdata1;
     }
 
     protected int a(Random random) {
         int i = random.nextInt(3) + this.a;
 
-        if (this.d > 1) {
-            i += random.nextInt(this.d);
+        if (this.aU > 1) {
+            i += random.nextInt(this.aU);
         }
 
         return i;
     }
 
-    private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
+    private boolean a(VirtualLevelReadable virtuallevelreadable, BlockPosition blockposition, int i) {
         boolean flag = true;
 
         if (blockposition.getY() >= 1 && blockposition.getY() + i + 1 <= 256) {
@@ -42,7 +44,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
 
                 for (int k = -b0; k <= b0 && flag; ++k) {
                     for (int l = -b0; l <= b0 && flag; ++l) {
-                        if (blockposition.getY() + j < 0 || blockposition.getY() + j >= 256 || !this.a(iblockaccess.getType(blockposition.a(k, j, l)).getBlock())) {
+                        if (blockposition.getY() + j < 0 || blockposition.getY() + j >= 256 || !a(virtuallevelreadable, blockposition.b(k, j, l))) {
                             flag = false;
                         }
                     }
@@ -55,26 +57,25 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
         }
     }
 
-    private boolean b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+    private boolean b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
         BlockPosition blockposition1 = blockposition.down();
-        Block block = generatoraccess.getType(blockposition1).getBlock();
 
-        if ((block == Blocks.GRASS_BLOCK || Block.d(block)) && blockposition.getY() >= 2) {
-            this.a(generatoraccess, blockposition1);
-            this.a(generatoraccess, blockposition1.east());
-            this.a(generatoraccess, blockposition1.south());
-            this.a(generatoraccess, blockposition1.south().east());
+        if (h(virtuallevelwritable, blockposition1) && blockposition.getY() >= 2) {
+            this.a(virtuallevelwritable, blockposition1);
+            this.a(virtuallevelwritable, blockposition1.east());
+            this.a(virtuallevelwritable, blockposition1.south());
+            this.a(virtuallevelwritable, blockposition1.south().east());
             return true;
         } else {
             return false;
         }
     }
 
-    protected boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
-        return this.a((IBlockAccess) generatoraccess, blockposition, i) && this.b(generatoraccess, blockposition);
+    protected boolean a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+        return this.a((VirtualLevelReadable) virtuallevelwritable, blockposition, i) && this.b(virtuallevelwritable, blockposition);
     }
 
-    protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
+    protected void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
         int j = i * i;
 
         for (int k = -i; k <= i + 1; ++k) {
@@ -83,11 +84,10 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                 int j1 = Math.min(Math.abs(l), Math.abs(l - 1));
 
                 if (i1 + j1 < 7 && i1 * i1 + j1 * j1 <= j) {
-                    BlockPosition blockposition1 = blockposition.a(k, 0, l);
-                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
+                    BlockPosition blockposition1 = blockposition.b(k, 0, l);
 
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-                        this.a(generatoraccess, blockposition1, this.c);
+                    if (g(virtuallevelwritable, blockposition1)) {
+                        this.a(virtuallevelwritable, blockposition1, this.aT);
                     }
                 }
             }
@@ -95,17 +95,16 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
 
     }
 
-    protected void c(GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
+    protected void c(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
         int j = i * i;
 
         for (int k = -i; k <= i; ++k) {
             for (int l = -i; l <= i; ++l) {
                 if (k * k + l * l <= j) {
-                    BlockPosition blockposition1 = blockposition.a(k, 0, l);
-                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
+                    BlockPosition blockposition1 = blockposition.b(k, 0, l);
 
-                    if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-                        this.a(generatoraccess, blockposition1, this.c);
+                    if (g(virtuallevelwritable, blockposition1)) {
+                        this.a(virtuallevelwritable, blockposition1, this.aT);
                     }
                 }
             }

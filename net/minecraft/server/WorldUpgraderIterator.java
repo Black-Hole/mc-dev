@@ -1,107 +1,243 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ImmutableMap.Builder;
+import com.mojang.datafixers.DataFixer;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class WorldUpgraderIterator {
 
-    private static final Pattern a = Pattern.compile("^r\\.(-?[0-9]+)\\.(-?[0-9]+)\\.mca$");
-    private final File b;
-    private final Map<DimensionManager, List<ChunkCoordIntPair>> c;
+    private static final Logger a = LogManager.getLogger();
 
-    public WorldUpgraderIterator(File file) {
-        this.b = file;
-        Builder<DimensionManager, List<ChunkCoordIntPair>> builder = ImmutableMap.builder();
-        Iterator iterator = DimensionManager.b().iterator();
+    static boolean a(java.nio.file.Path java_nio_file_path, DataFixer datafixer, String s, IProgressUpdate iprogressupdate) {
+        iprogressupdate.a(0);
+        List<File> list = Lists.newArrayList();
+        List<File> list1 = Lists.newArrayList();
+        List<File> list2 = Lists.newArrayList();
+        File file = new File(java_nio_file_path.toFile(), s);
+        File file1 = DimensionManager.NETHER.a(file);
+        File file2 = DimensionManager.THE_END.a(file);
 
-        while (iterator.hasNext()) {
-            DimensionManager dimensionmanager = (DimensionManager) iterator.next();
-
-            builder.put(dimensionmanager, this.b(dimensionmanager));
+        WorldUpgraderIterator.a.info("Scanning folders...");
+        a(file, (Collection) list);
+        if (file1.exists()) {
+            a(file1, (Collection) list1);
         }
 
-        this.c = builder.build();
+        if (file2.exists()) {
+            a(file2, (Collection) list2);
+        }
+
+        int i = list.size() + list1.size() + list2.size();
+
+        WorldUpgraderIterator.a.info("Total conversion count is {}", i);
+        WorldData worlddata = Convertable.a(java_nio_file_path, datafixer, s);
+        BiomeLayout<BiomeLayoutFixedConfiguration, WorldChunkManagerHell> biomelayout = BiomeLayout.b;
+        BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> biomelayout1 = BiomeLayout.c;
+        WorldChunkManager worldchunkmanager;
+
+        if (worlddata != null && worlddata.getType() == WorldType.FLAT) {
+            worldchunkmanager = biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.PLAINS));
+        } else {
+            worldchunkmanager = biomelayout1.a(((BiomeLayoutOverworldConfiguration) biomelayout1.a()).a(worlddata).a((GeneratorSettingsOverworld) ChunkGeneratorType.a.a()));
+        }
+
+        a(new File(file, "region"), (Iterable) list, worldchunkmanager, 0, i, iprogressupdate);
+        a(new File(file1, "region"), (Iterable) list1, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.NETHER)), list.size(), i, iprogressupdate);
+        a(new File(file2, "region"), (Iterable) list2, biomelayout.a(((BiomeLayoutFixedConfiguration) biomelayout.a()).a(Biomes.THE_END)), list.size() + list1.size(), i, iprogressupdate);
+        worlddata.d(19133);
+        if (worlddata.getType() == WorldType.NORMAL_1_1) {
+            worlddata.a(WorldType.NORMAL);
+        }
+
+        a(java_nio_file_path, s);
+        WorldNBTStorage worldnbtstorage = Convertable.a(java_nio_file_path, datafixer, s, (MinecraftServer) null);
+
+        worldnbtstorage.saveWorldData(worlddata);
+        return true;
     }
 
-    private List<ChunkCoordIntPair> b(DimensionManager dimensionmanager) {
-        ArrayList<ChunkCoordIntPair> arraylist = Lists.newArrayList();
-        File file = dimensionmanager.a(this.b);
-        List<File> list = this.b(file);
-        Iterator iterator = list.iterator();
+    private static void a(java.nio.file.Path java_nio_file_path, String s) {
+        File file = new File(java_nio_file_path.toFile(), s);
+
+        if (!file.exists()) {
+            WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+        } else {
+            File file1 = new File(file, "level.dat");
+
+            if (!file1.exists()) {
+                WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+            } else {
+                File file2 = new File(file, "level.dat_mcr");
+
+                if (!file1.renameTo(file2)) {
+                    WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+                }
+
+            }
+        }
+    }
+
+    private static void a(File file, Iterable<File> iterable, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
+        Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             File file1 = (File) iterator.next();
 
-            arraylist.addAll(this.a(file1));
+            a(file, file1, worldchunkmanager, i, j, iprogressupdate);
+            ++i;
+            int k = (int) Math.round(100.0D * (double) i / (double) j);
+
+            iprogressupdate.a(k);
         }
 
-        list.sort(File::compareTo);
-        return arraylist;
     }
 
-    private List<ChunkCoordIntPair> a(File file) {
-        List<ChunkCoordIntPair> list = Lists.newArrayList();
-        RegionFile regionfile = null;
-
-        ArrayList arraylist;
-
+    private static void a(File file, File file1, WorldChunkManager worldchunkmanager, int i, int j, IProgressUpdate iprogressupdate) {
         try {
-            Matcher matcher = WorldUpgraderIterator.a.matcher(file.getName());
+            String s = file1.getName();
+            RegionFile regionfile = new RegionFile(file1);
+            Throwable throwable = null;
 
-            if (!matcher.matches()) {
-                arraylist = list;
-                return arraylist;
-            }
+            try {
+                RegionFile regionfile1 = new RegionFile(new File(file, s.substring(0, s.length() - ".mcr".length()) + ".mca"));
+                Throwable throwable1 = null;
 
-            int i = Integer.parseInt(matcher.group(1)) << 5;
-            int j = Integer.parseInt(matcher.group(2)) << 5;
+                try {
+                    for (int k = 0; k < 32; ++k) {
+                        int l;
 
-            regionfile = new RegionFile(file);
+                        for (l = 0; l < 32; ++l) {
+                            ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(k, l);
 
-            for (int k = 0; k < 32; ++k) {
-                for (int l = 0; l < 32; ++l) {
-                    if (regionfile.b(k, l)) {
-                        list.add(new ChunkCoordIntPair(k + i, l + j));
+                            if (regionfile.d(chunkcoordintpair) && !regionfile1.d(chunkcoordintpair)) {
+                                DataInputStream datainputstream = regionfile.a(chunkcoordintpair);
+                                Throwable throwable2 = null;
+
+                                NBTTagCompound nbttagcompound;
+
+                                try {
+                                    if (datainputstream == null) {
+                                        WorldUpgraderIterator.a.warn("Failed to fetch input stream");
+                                        continue;
+                                    }
+
+                                    nbttagcompound = NBTCompressedStreamTools.a(datainputstream);
+                                } catch (Throwable throwable3) {
+                                    throwable2 = throwable3;
+                                    throw throwable3;
+                                } finally {
+                                    if (datainputstream != null) {
+                                        if (throwable2 != null) {
+                                            try {
+                                                datainputstream.close();
+                                            } catch (Throwable throwable4) {
+                                                throwable2.addSuppressed(throwable4);
+                                            }
+                                        } else {
+                                            datainputstream.close();
+                                        }
+                                    }
+
+                                }
+
+                                NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
+                                OldChunkLoader.OldChunk oldchunkloader_oldchunk = OldChunkLoader.a(nbttagcompound1);
+                                NBTTagCompound nbttagcompound2 = new NBTTagCompound();
+                                NBTTagCompound nbttagcompound3 = new NBTTagCompound();
+
+                                nbttagcompound2.set("Level", nbttagcompound3);
+                                OldChunkLoader.a(oldchunkloader_oldchunk, nbttagcompound3, worldchunkmanager);
+                                DataOutputStream dataoutputstream = regionfile1.c(chunkcoordintpair);
+                                Throwable throwable5 = null;
+
+                                try {
+                                    NBTCompressedStreamTools.a(nbttagcompound2, (DataOutput) dataoutputstream);
+                                } catch (Throwable throwable6) {
+                                    throwable5 = throwable6;
+                                    throw throwable6;
+                                } finally {
+                                    if (dataoutputstream != null) {
+                                        if (throwable5 != null) {
+                                            try {
+                                                dataoutputstream.close();
+                                            } catch (Throwable throwable7) {
+                                                throwable5.addSuppressed(throwable7);
+                                            }
+                                        } else {
+                                            dataoutputstream.close();
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                        l = (int) Math.round(100.0D * (double) (i * 1024) / (double) (j * 1024));
+                        int i1 = (int) Math.round(100.0D * (double) ((k + 1) * 32 + i * 1024) / (double) (j * 1024));
+
+                        if (i1 > l) {
+                            iprogressupdate.a(i1);
+                        }
+                    }
+                } catch (Throwable throwable8) {
+                    throwable1 = throwable8;
+                    throw throwable8;
+                } finally {
+                    if (regionfile1 != null) {
+                        if (throwable1 != null) {
+                            try {
+                                regionfile1.close();
+                            } catch (Throwable throwable9) {
+                                throwable1.addSuppressed(throwable9);
+                            }
+                        } else {
+                            regionfile1.close();
+                        }
+                    }
+
+                }
+            } catch (Throwable throwable10) {
+                throwable = throwable10;
+                throw throwable10;
+            } finally {
+                if (regionfile != null) {
+                    if (throwable != null) {
+                        try {
+                            regionfile.close();
+                        } catch (Throwable throwable11) {
+                            throwable.addSuppressed(throwable11);
+                        }
+                    } else {
+                        regionfile.close();
                     }
                 }
-            }
 
-            return list;
-        } catch (Throwable throwable) {
-            arraylist = Lists.newArrayList();
-        } finally {
-            if (regionfile != null) {
-                try {
-                    regionfile.close();
-                } catch (IOException ioexception) {
-                    ;
-                }
             }
-
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
         }
 
-        return arraylist;
     }
 
-    private List<File> b(File file) {
+    private static void a(File file, Collection<File> collection) {
         File file1 = new File(file, "region");
         File[] afile = file1.listFiles((file2, s) -> {
-            return s.endsWith(".mca");
+            return s.endsWith(".mcr");
         });
 
-        return afile != null ? Lists.newArrayList(afile) : Lists.newArrayList();
-    }
+        if (afile != null) {
+            Collections.addAll(collection, afile);
+        }
 
-    public List<ChunkCoordIntPair> a(DimensionManager dimensionmanager) {
-        return (List) this.c.get(dimensionmanager);
     }
 }

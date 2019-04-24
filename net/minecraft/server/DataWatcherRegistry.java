@@ -1,23 +1,21 @@
 package net.minecraft.server;
 
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
 public class DataWatcherRegistry {
 
-    private static final RegistryID<DataWatcherSerializer<?>> q = new RegistryID<>(16);
+    private static final RegistryID<DataWatcherSerializer<?>> t = new RegistryID<>(16);
     public static final DataWatcherSerializer<Byte> a = new DataWatcherSerializer<Byte>() {
         public void a(PacketDataSerializer packetdataserializer, Byte obyte) {
             packetdataserializer.writeByte(obyte);
         }
 
+        @Override
         public Byte a(PacketDataSerializer packetdataserializer) {
             return packetdataserializer.readByte();
-        }
-
-        public DataWatcherObject<Byte> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Byte a(Byte obyte) {
@@ -29,12 +27,9 @@ public class DataWatcherRegistry {
             packetdataserializer.d(integer);
         }
 
+        @Override
         public Integer a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.g();
-        }
-
-        public DataWatcherObject<Integer> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return packetdataserializer.i();
         }
 
         public Integer a(Integer integer) {
@@ -46,12 +41,9 @@ public class DataWatcherRegistry {
             packetdataserializer.writeFloat(ofloat);
         }
 
+        @Override
         public Float a(PacketDataSerializer packetdataserializer) {
             return packetdataserializer.readFloat();
-        }
-
-        public DataWatcherObject<Float> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Float a(Float ofloat) {
@@ -63,12 +55,9 @@ public class DataWatcherRegistry {
             packetdataserializer.a(s);
         }
 
+        @Override
         public String a(PacketDataSerializer packetdataserializer) {
             return packetdataserializer.e(32767);
-        }
-
-        public DataWatcherObject<String> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public String a(String s) {
@@ -80,12 +69,9 @@ public class DataWatcherRegistry {
             packetdataserializer.a(ichatbasecomponent);
         }
 
+        @Override
         public IChatBaseComponent a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.f();
-        }
-
-        public DataWatcherObject<IChatBaseComponent> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return packetdataserializer.h();
         }
 
         public IChatBaseComponent a(IChatBaseComponent ichatbasecomponent) {
@@ -103,12 +89,9 @@ public class DataWatcherRegistry {
 
         }
 
+        @Override
         public Optional<IChatBaseComponent> a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.readBoolean() ? Optional.of(packetdataserializer.f()) : Optional.empty();
-        }
-
-        public DataWatcherObject<Optional<IChatBaseComponent>> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return packetdataserializer.readBoolean() ? Optional.of(packetdataserializer.h()) : Optional.empty();
         }
 
         public Optional<IChatBaseComponent> a(Optional<IChatBaseComponent> optional) {
@@ -120,12 +103,9 @@ public class DataWatcherRegistry {
             packetdataserializer.a(itemstack);
         }
 
+        @Override
         public ItemStack a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.k();
-        }
-
-        public DataWatcherObject<ItemStack> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return packetdataserializer.m();
         }
 
         public ItemStack a(ItemStack itemstack) {
@@ -142,14 +122,11 @@ public class DataWatcherRegistry {
 
         }
 
+        @Override
         public Optional<IBlockData> a(PacketDataSerializer packetdataserializer) {
-            int i = packetdataserializer.g();
+            int i = packetdataserializer.i();
 
             return i == 0 ? Optional.empty() : Optional.of(Block.getByCombinedId(i));
-        }
-
-        public DataWatcherObject<Optional<IBlockData>> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Optional<IBlockData> a(Optional<IBlockData> optional) {
@@ -161,12 +138,9 @@ public class DataWatcherRegistry {
             packetdataserializer.writeBoolean(obool);
         }
 
+        @Override
         public Boolean a(PacketDataSerializer packetdataserializer) {
             return packetdataserializer.readBoolean();
-        }
-
-        public DataWatcherObject<Boolean> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Boolean a(Boolean obool) {
@@ -179,16 +153,13 @@ public class DataWatcherRegistry {
             particleparam.a(packetdataserializer);
         }
 
+        @Override
         public ParticleParam a(PacketDataSerializer packetdataserializer) {
-            return this.a(packetdataserializer, (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.g()));
+            return this.a(packetdataserializer, (Particle) IRegistry.PARTICLE_TYPE.fromId(packetdataserializer.i()));
         }
 
         private <T extends ParticleParam> T a(PacketDataSerializer packetdataserializer, Particle<T> particle) {
-            return particle.f().b(particle, packetdataserializer);
-        }
-
-        public DataWatcherObject<ParticleParam> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return particle.d().b(particle, packetdataserializer);
         }
 
         public ParticleParam a(ParticleParam particleparam) {
@@ -202,12 +173,9 @@ public class DataWatcherRegistry {
             packetdataserializer.writeFloat(vector3f.getZ());
         }
 
+        @Override
         public Vector3f a(PacketDataSerializer packetdataserializer) {
             return new Vector3f(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
-        }
-
-        public DataWatcherObject<Vector3f> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Vector3f a(Vector3f vector3f) {
@@ -219,12 +187,9 @@ public class DataWatcherRegistry {
             packetdataserializer.a(blockposition);
         }
 
+        @Override
         public BlockPosition a(PacketDataSerializer packetdataserializer) {
             return packetdataserializer.e();
-        }
-
-        public DataWatcherObject<BlockPosition> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public BlockPosition a(BlockPosition blockposition) {
@@ -240,12 +205,9 @@ public class DataWatcherRegistry {
 
         }
 
+        @Override
         public Optional<BlockPosition> a(PacketDataSerializer packetdataserializer) {
             return !packetdataserializer.readBoolean() ? Optional.empty() : Optional.of(packetdataserializer.e());
-        }
-
-        public DataWatcherObject<Optional<BlockPosition>> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public Optional<BlockPosition> a(Optional<BlockPosition> optional) {
@@ -257,12 +219,9 @@ public class DataWatcherRegistry {
             packetdataserializer.a((Enum) enumdirection);
         }
 
+        @Override
         public EnumDirection a(PacketDataSerializer packetdataserializer) {
             return (EnumDirection) packetdataserializer.a(EnumDirection.class);
-        }
-
-        public DataWatcherObject<EnumDirection> a(int i) {
-            return new DataWatcherObject<>(i, this);
         }
 
         public EnumDirection a(EnumDirection enumdirection) {
@@ -278,12 +237,9 @@ public class DataWatcherRegistry {
 
         }
 
+        @Override
         public Optional<UUID> a(PacketDataSerializer packetdataserializer) {
-            return !packetdataserializer.readBoolean() ? Optional.empty() : Optional.of(packetdataserializer.i());
-        }
-
-        public DataWatcherObject<Optional<UUID>> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return !packetdataserializer.readBoolean() ? Optional.empty() : Optional.of(packetdataserializer.k());
         }
 
         public Optional<UUID> a(Optional<UUID> optional) {
@@ -295,30 +251,73 @@ public class DataWatcherRegistry {
             packetdataserializer.a(nbttagcompound);
         }
 
+        @Override
         public NBTTagCompound a(PacketDataSerializer packetdataserializer) {
-            return packetdataserializer.j();
-        }
-
-        public DataWatcherObject<NBTTagCompound> a(int i) {
-            return new DataWatcherObject<>(i, this);
+            return packetdataserializer.l();
         }
 
         public NBTTagCompound a(NBTTagCompound nbttagcompound) {
             return nbttagcompound.clone();
         }
     };
+    public static final DataWatcherSerializer<VillagerData> q = new DataWatcherSerializer<VillagerData>() {
+        public void a(PacketDataSerializer packetdataserializer, VillagerData villagerdata) {
+            packetdataserializer.d(IRegistry.VILLAGER_TYPE.a((Object) villagerdata.getType()));
+            packetdataserializer.d(IRegistry.VILLAGER_PROFESSION.a((Object) villagerdata.getProfession()));
+            packetdataserializer.d(villagerdata.getLevel());
+        }
+
+        @Override
+        public VillagerData a(PacketDataSerializer packetdataserializer) {
+            return new VillagerData((VillagerType) IRegistry.VILLAGER_TYPE.fromId(packetdataserializer.i()), (VillagerProfession) IRegistry.VILLAGER_PROFESSION.fromId(packetdataserializer.i()), packetdataserializer.i());
+        }
+
+        public VillagerData a(VillagerData villagerdata) {
+            return villagerdata;
+        }
+    };
+    public static final DataWatcherSerializer<OptionalInt> r = new DataWatcherSerializer<OptionalInt>() {
+        public void a(PacketDataSerializer packetdataserializer, OptionalInt optionalint) {
+            packetdataserializer.d(optionalint.orElse(-1) + 1);
+        }
+
+        @Override
+        public OptionalInt a(PacketDataSerializer packetdataserializer) {
+            int i = packetdataserializer.i();
+
+            return i == 0 ? OptionalInt.empty() : OptionalInt.of(i - 1);
+        }
+
+        public OptionalInt a(OptionalInt optionalint) {
+            return optionalint;
+        }
+    };
+    public static final DataWatcherSerializer<EntityPose> s = new DataWatcherSerializer<EntityPose>() {
+        public void a(PacketDataSerializer packetdataserializer, EntityPose entitypose) {
+            packetdataserializer.a((Enum) entitypose);
+        }
+
+        @Override
+        public EntityPose a(PacketDataSerializer packetdataserializer) {
+            return (EntityPose) packetdataserializer.a(EntityPose.class);
+        }
+
+        public EntityPose a(EntityPose entitypose) {
+            return entitypose;
+        }
+    };
 
     public static void a(DataWatcherSerializer<?> datawatcherserializer) {
-        DataWatcherRegistry.q.c(datawatcherserializer);
+        DataWatcherRegistry.t.c(datawatcherserializer);
     }
 
     @Nullable
     public static DataWatcherSerializer<?> a(int i) {
-        return (DataWatcherSerializer) DataWatcherRegistry.q.fromId(i);
+        return (DataWatcherSerializer) DataWatcherRegistry.t.fromId(i);
     }
 
     public static int b(DataWatcherSerializer<?> datawatcherserializer) {
-        return DataWatcherRegistry.q.getId(datawatcherserializer);
+        return DataWatcherRegistry.t.getId(datawatcherserializer);
     }
 
     static {
@@ -338,5 +337,8 @@ public class DataWatcherRegistry {
         a(DataWatcherRegistry.h);
         a(DataWatcherRegistry.p);
         a(DataWatcherRegistry.j);
+        a(DataWatcherRegistry.q);
+        a(DataWatcherRegistry.r);
+        a(DataWatcherRegistry.s);
     }
 }

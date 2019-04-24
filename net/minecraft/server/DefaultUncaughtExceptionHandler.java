@@ -12,7 +12,6 @@ public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler
     }
 
     public void uncaughtException(Thread thread, Throwable throwable) {
-        this.a.error("Caught previously unhandled exception :");
-        this.a.error(throwable);
+        this.a.error("Caught previously unhandled exception :", throwable);
     }
 }

@@ -10,35 +10,45 @@ public abstract class AbstractDragonController implements IDragonController {
         this.a = entityenderdragon;
     }
 
+    @Override
     public boolean a() {
         return false;
     }
 
+    @Override
     public void b() {}
 
+    @Override
     public void c() {}
 
+    @Override
     public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, @Nullable EntityHuman entityhuman) {}
 
+    @Override
     public void d() {}
 
+    @Override
     public void e() {}
 
+    @Override
     public float f() {
         return 0.6F;
     }
 
     @Nullable
+    @Override
     public Vec3D g() {
         return null;
     }
 
-    public float a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f) {
+    @Override
+    public float a(DamageSource damagesource, float f) {
         return f;
     }
 
+    @Override
     public float h() {
-        float f = MathHelper.sqrt(this.a.motX * this.a.motX + this.a.motZ * this.a.motZ) + 1.0F;
+        float f = MathHelper.sqrt(Entity.b(this.a.getMot())) + 1.0F;
         float f1 = Math.min(f, 40.0F);
 
         return 0.7F / f1 / f;

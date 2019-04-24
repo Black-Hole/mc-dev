@@ -46,13 +46,13 @@ public class PlayerSelector {
     public static void a() {
         if (PlayerSelector.i.isEmpty()) {
             a("name", (argumentparserselector) -> {
-                int i = argumentparserselector.f().getCursor();
+                int i = argumentparserselector.g().getCursor();
                 boolean flag = argumentparserselector.e();
-                String s = argumentparserselector.f().readString();
+                String s = argumentparserselector.g().readString();
 
-                if (argumentparserselector.v() && !flag) {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "name");
+                if (argumentparserselector.w() && !flag) {
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "name");
                 } else {
                     if (flag) {
                         argumentparserselector.d(true);
@@ -65,99 +65,99 @@ public class PlayerSelector {
                     });
                 }
             }, (argumentparserselector) -> {
-                return !argumentparserselector.u();
+                return !argumentparserselector.v();
             }, new ChatMessage("argument.entity.options.name.description", new Object[0]));
             a("distance", (argumentparserselector) -> {
-                int i = argumentparserselector.f().getCursor();
-                CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(argumentparserselector.f());
+                int i = argumentparserselector.g().getCursor();
+                CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(argumentparserselector.g());
 
                 if ((criterionconditionvalue_floatrange.a() == null || (Float) criterionconditionvalue_floatrange.a() >= 0.0F) && (criterionconditionvalue_floatrange.b() == null || (Float) criterionconditionvalue_floatrange.b() >= 0.0F)) {
                     argumentparserselector.a(criterionconditionvalue_floatrange);
-                    argumentparserselector.g();
+                    argumentparserselector.h();
                 } else {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.c.createWithContext(argumentparserselector.f());
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.c.createWithContext(argumentparserselector.g());
                 }
             }, (argumentparserselector) -> {
-                return argumentparserselector.h().c();
+                return argumentparserselector.i().c();
             }, new ChatMessage("argument.entity.options.distance.description", new Object[0]));
             a("level", (argumentparserselector) -> {
-                int i = argumentparserselector.f().getCursor();
-                CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(argumentparserselector.f());
+                int i = argumentparserselector.g().getCursor();
+                CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(argumentparserselector.g());
 
                 if ((criterionconditionvalue_integerrange.a() == null || (Integer) criterionconditionvalue_integerrange.a() >= 0) && (criterionconditionvalue_integerrange.b() == null || (Integer) criterionconditionvalue_integerrange.b() >= 0)) {
                     argumentparserselector.a(criterionconditionvalue_integerrange);
                     argumentparserselector.a(false);
                 } else {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.d.createWithContext(argumentparserselector.f());
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.d.createWithContext(argumentparserselector.g());
                 }
             }, (argumentparserselector) -> {
-                return argumentparserselector.i().c();
+                return argumentparserselector.j().c();
             }, new ChatMessage("argument.entity.options.level.description", new Object[0]));
             a("x", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.a(argumentparserselector.f().readDouble());
-            }, (argumentparserselector) -> {
-                return argumentparserselector.l() == null;
-            }, new ChatMessage("argument.entity.options.x.description", new Object[0]));
-            a("y", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.b(argumentparserselector.f().readDouble());
+                argumentparserselector.h();
+                argumentparserselector.a(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.m() == null;
-            }, new ChatMessage("argument.entity.options.y.description", new Object[0]));
-            a("z", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.c(argumentparserselector.f().readDouble());
+            }, new ChatMessage("argument.entity.options.x.description", new Object[0]));
+            a("y", (argumentparserselector) -> {
+                argumentparserselector.h();
+                argumentparserselector.b(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.n() == null;
-            }, new ChatMessage("argument.entity.options.z.description", new Object[0]));
-            a("dx", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.d(argumentparserselector.f().readDouble());
+            }, new ChatMessage("argument.entity.options.y.description", new Object[0]));
+            a("z", (argumentparserselector) -> {
+                argumentparserselector.h();
+                argumentparserselector.c(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.o() == null;
-            }, new ChatMessage("argument.entity.options.dx.description", new Object[0]));
-            a("dy", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.e(argumentparserselector.f().readDouble());
+            }, new ChatMessage("argument.entity.options.z.description", new Object[0]));
+            a("dx", (argumentparserselector) -> {
+                argumentparserselector.h();
+                argumentparserselector.d(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.p() == null;
-            }, new ChatMessage("argument.entity.options.dy.description", new Object[0]));
-            a("dz", (argumentparserselector) -> {
-                argumentparserselector.g();
-                argumentparserselector.f(argumentparserselector.f().readDouble());
+            }, new ChatMessage("argument.entity.options.dx.description", new Object[0]));
+            a("dy", (argumentparserselector) -> {
+                argumentparserselector.h();
+                argumentparserselector.e(argumentparserselector.g().readDouble());
             }, (argumentparserselector) -> {
                 return argumentparserselector.q() == null;
+            }, new ChatMessage("argument.entity.options.dy.description", new Object[0]));
+            a("dz", (argumentparserselector) -> {
+                argumentparserselector.h();
+                argumentparserselector.f(argumentparserselector.g().readDouble());
+            }, (argumentparserselector) -> {
+                return argumentparserselector.r() == null;
             }, new ChatMessage("argument.entity.options.dz.description", new Object[0]));
             a("x_rotation", (argumentparserselector) -> {
-                argumentparserselector.a(CriterionConditionRange.a(argumentparserselector.f(), true, MathHelper::g));
-            }, (argumentparserselector) -> {
-                return argumentparserselector.j() == CriterionConditionRange.a;
-            }, new ChatMessage("argument.entity.options.x_rotation.description", new Object[0]));
-            a("y_rotation", (argumentparserselector) -> {
-                argumentparserselector.b(CriterionConditionRange.a(argumentparserselector.f(), true, MathHelper::g));
+                argumentparserselector.a(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
             }, (argumentparserselector) -> {
                 return argumentparserselector.k() == CriterionConditionRange.a;
+            }, new ChatMessage("argument.entity.options.x_rotation.description", new Object[0]));
+            a("y_rotation", (argumentparserselector) -> {
+                argumentparserselector.b(CriterionConditionRange.a(argumentparserselector.g(), true, MathHelper::g));
+            }, (argumentparserselector) -> {
+                return argumentparserselector.l() == CriterionConditionRange.a;
             }, new ChatMessage("argument.entity.options.y_rotation.description", new Object[0]));
             a("limit", (argumentparserselector) -> {
-                int i = argumentparserselector.f().getCursor();
-                int j = argumentparserselector.f().readInt();
+                int i = argumentparserselector.g().getCursor();
+                int j = argumentparserselector.g().readInt();
 
                 if (j < 1) {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.e.createWithContext(argumentparserselector.f());
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.e.createWithContext(argumentparserselector.g());
                 } else {
                     argumentparserselector.a(j);
                     argumentparserselector.e(true);
                 }
             }, (argumentparserselector) -> {
-                return !argumentparserselector.t() && !argumentparserselector.w();
+                return !argumentparserselector.u() && !argumentparserselector.x();
             }, new ChatMessage("argument.entity.options.limit.description", new Object[0]));
             a("sort", (argumentparserselector) -> {
-                int i = argumentparserselector.f().getCursor();
-                String s = argumentparserselector.f().readUnquotedString();
+                int i = argumentparserselector.g().getCursor();
+                String s = argumentparserselector.g().readUnquotedString();
 
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     return ICompletionProvider.b((Iterable) Arrays.asList("nearest", "furthest", "random", "arbitrary"), suggestionsbuilder);
@@ -202,19 +202,19 @@ public class PlayerSelector {
                     biconsumer = ArgumentParserSelector.g;
                     break;
                 default:
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.f.createWithContext(argumentparserselector.f(), s);
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.f.createWithContext(argumentparserselector.g(), s);
                 }
 
                 argumentparserselector.a(biconsumer);
                 argumentparserselector.f(true);
             }, (argumentparserselector) -> {
-                return !argumentparserselector.t() && !argumentparserselector.x();
+                return !argumentparserselector.u() && !argumentparserselector.y();
             }, new ChatMessage("argument.entity.options.sort.description", new Object[0]));
             a("gamemode", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     String s = suggestionsbuilder.getRemaining().toLowerCase(Locale.ROOT);
-                    boolean flag = !argumentparserselector.z();
+                    boolean flag = !argumentparserselector.A();
                     boolean flag1 = true;
 
                     if (!s.isEmpty()) {
@@ -245,19 +245,19 @@ public class PlayerSelector {
 
                     return suggestionsbuilder.buildFuture();
                 });
-                int i = argumentparserselector.f().getCursor();
+                int i = argumentparserselector.g().getCursor();
                 boolean flag = argumentparserselector.e();
 
-                if (argumentparserselector.z() && !flag) {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "gamemode");
+                if (argumentparserselector.A() && !flag) {
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "gamemode");
                 } else {
-                    String s = argumentparserselector.f().readUnquotedString();
+                    String s = argumentparserselector.g().readUnquotedString();
                     EnumGamemode enumgamemode = EnumGamemode.a(s, EnumGamemode.NOT_SET);
 
                     if (enumgamemode == EnumGamemode.NOT_SET) {
-                        argumentparserselector.f().setCursor(i);
-                        throw PlayerSelector.g.createWithContext(argumentparserselector.f(), s);
+                        argumentparserselector.g().setCursor(i);
+                        throw PlayerSelector.g.createWithContext(argumentparserselector.g(), s);
                     } else {
                         argumentparserselector.a(false);
                         argumentparserselector.a((entity) -> {
@@ -278,11 +278,11 @@ public class PlayerSelector {
                     }
                 }
             }, (argumentparserselector) -> {
-                return !argumentparserselector.y();
+                return !argumentparserselector.z();
             }, new ChatMessage("argument.entity.options.gamemode.description", new Object[0]));
             a("team", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
-                String s = argumentparserselector.f().readUnquotedString();
+                String s = argumentparserselector.g().readUnquotedString();
 
                 argumentparserselector.a((entity) -> {
                     if (!(entity instanceof EntityLiving)) {
@@ -301,52 +301,70 @@ public class PlayerSelector {
                 }
 
             }, (argumentparserselector) -> {
-                return !argumentparserselector.A();
+                return !argumentparserselector.B();
             }, new ChatMessage("argument.entity.options.team.description", new Object[0]));
             a("type", (argumentparserselector) -> {
                 argumentparserselector.a((suggestionsbuilder, consumer) -> {
                     ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder, String.valueOf('!'));
+                    ICompletionProvider.a((Iterable) TagsEntity.a().a(), suggestionsbuilder, "!#");
                     if (!argumentparserselector.F()) {
                         ICompletionProvider.a((Iterable) IRegistry.ENTITY_TYPE.keySet(), suggestionsbuilder);
+                        ICompletionProvider.a((Iterable) TagsEntity.a().a(), suggestionsbuilder, String.valueOf('#'));
                     }
 
                     return suggestionsbuilder.buildFuture();
                 });
-                int i = argumentparserselector.f().getCursor();
+                int i = argumentparserselector.g().getCursor();
                 boolean flag = argumentparserselector.e();
 
                 if (argumentparserselector.F() && !flag) {
-                    argumentparserselector.f().setCursor(i);
-                    throw PlayerSelector.b.createWithContext(argumentparserselector.f(), "type");
+                    argumentparserselector.g().setCursor(i);
+                    throw PlayerSelector.b.createWithContext(argumentparserselector.g(), "type");
                 } else {
-                    MinecraftKey minecraftkey = MinecraftKey.a(argumentparserselector.f());
-                    EntityTypes<? extends Entity> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.get(minecraftkey);
+                    if (flag) {
+                        argumentparserselector.D();
+                    }
 
-                    if (entitytypes == null) {
-                        argumentparserselector.f().setCursor(i);
-                        throw PlayerSelector.h.createWithContext(argumentparserselector.f(), minecraftkey.toString());
+                    MinecraftKey minecraftkey;
+
+                    if (argumentparserselector.f()) {
+                        minecraftkey = MinecraftKey.a(argumentparserselector.g());
+                        Tag<EntityTypes<?>> tag = TagsEntity.a().a(minecraftkey);
+
+                        if (tag == null) {
+                            argumentparserselector.g().setCursor(i);
+                            throw PlayerSelector.h.createWithContext(argumentparserselector.g(), minecraftkey.toString());
+                        }
+
+                        argumentparserselector.a((entity) -> {
+                            return tag.isTagged(entity.getEntityType()) != flag;
+                        });
                     } else {
+                        minecraftkey = MinecraftKey.a(argumentparserselector.g());
+                        EntityTypes<?> entitytypes = (EntityTypes) IRegistry.ENTITY_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
+                            argumentparserselector.g().setCursor(i);
+                            return PlayerSelector.h.createWithContext(argumentparserselector.g(), minecraftkey.toString());
+                        });
+
                         if (Objects.equals(EntityTypes.PLAYER, entitytypes) && !flag) {
                             argumentparserselector.a(false);
                         }
 
                         argumentparserselector.a((entity) -> {
-                            return Objects.equals(entitytypes, entity.P()) != flag;
+                            return Objects.equals(entitytypes, entity.getEntityType()) != flag;
                         });
-                        if (flag) {
-                            argumentparserselector.C();
-                        } else {
-                            argumentparserselector.a(entitytypes.c());
+                        if (!flag) {
+                            argumentparserselector.a(entitytypes);
                         }
-
                     }
+
                 }
             }, (argumentparserselector) -> {
                 return !argumentparserselector.E();
             }, new ChatMessage("argument.entity.options.type.description", new Object[0]));
             a("tag", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
-                String s = argumentparserselector.f().readUnquotedString();
+                String s = argumentparserselector.g().readUnquotedString();
 
                 argumentparserselector.a((entity) -> {
                     return "".equals(s) ? entity.getScoreboardTags().isEmpty() != flag : entity.getScoreboardTags().contains(s) != flag;
@@ -356,7 +374,7 @@ public class PlayerSelector {
             }, new ChatMessage("argument.entity.options.tag.description", new Object[0]));
             a("nbt", (argumentparserselector) -> {
                 boolean flag = argumentparserselector.e();
-                NBTTagCompound nbttagcompound = (new MojangsonParser(argumentparserselector.f())).f();
+                NBTTagCompound nbttagcompound = (new MojangsonParser(argumentparserselector.g())).f();
 
                 argumentparserselector.a((entity) -> {
                     NBTTagCompound nbttagcompound1 = entity.save(new NBTTagCompound());
@@ -375,7 +393,7 @@ public class PlayerSelector {
                 return true;
             }, new ChatMessage("argument.entity.options.nbt.description", new Object[0]));
             a("scores", (argumentparserselector) -> {
-                StringReader stringreader = argumentparserselector.f();
+                StringReader stringreader = argumentparserselector.g();
                 Map<String, CriterionConditionValue.IntegerRange> map = Maps.newHashMap();
 
                 stringreader.expect('{');
@@ -400,7 +418,7 @@ public class PlayerSelector {
                 stringreader.expect('}');
                 if (!map.isEmpty()) {
                     argumentparserselector.a((entity) -> {
-                        ScoreboardServer scoreboardserver = entity.bK().getScoreboard();
+                        ScoreboardServer scoreboardserver = entity.getMinecraftServer().getScoreboard();
                         String s1 = entity.getName();
                         Iterator iterator = map.entrySet().iterator();
 
@@ -437,7 +455,7 @@ public class PlayerSelector {
                 return !argumentparserselector.G();
             }, new ChatMessage("argument.entity.options.scores.description", new Object[0]));
             a("advancements", (argumentparserselector) -> {
-                StringReader stringreader = argumentparserselector.f();
+                StringReader stringreader = argumentparserselector.g();
                 Map<MinecraftKey, Predicate<AdvancementProgress>> map = Maps.newHashMap();
 
                 stringreader.expect('{');
@@ -517,7 +535,7 @@ public class PlayerSelector {
                         } else {
                             EntityPlayer entityplayer = (EntityPlayer) entity;
                             AdvancementDataPlayer advancementdataplayer = entityplayer.getAdvancementData();
-                            AdvancementDataWorld advancementdataworld = entityplayer.bK().getAdvancementData();
+                            AdvancementDataWorld advancementdataworld = entityplayer.getMinecraftServer().getAdvancementData();
                             Iterator iterator = map.entrySet().iterator();
 
                             Entry entry;
@@ -552,11 +570,11 @@ public class PlayerSelector {
             if (playerselector_b.b.test(argumentparserselector)) {
                 return playerselector_b.a;
             } else {
-                throw PlayerSelector.b.createWithContext(argumentparserselector.f(), s);
+                throw PlayerSelector.b.createWithContext(argumentparserselector.g(), s);
             }
         } else {
-            argumentparserselector.f().setCursor(i);
-            throw PlayerSelector.a.createWithContext(argumentparserselector.f(), s);
+            argumentparserselector.g().setCursor(i);
+            throw PlayerSelector.a.createWithContext(argumentparserselector.g(), s);
         }
     }
 

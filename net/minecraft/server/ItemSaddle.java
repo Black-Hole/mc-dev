@@ -6,11 +6,12 @@ public class ItemSaddle extends Item {
         super(item_info);
     }
 
+    @Override
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (entityliving instanceof EntityPig) {
             EntityPig entitypig = (EntityPig) entityliving;
 
-            if (!entitypig.hasSaddle() && !entitypig.isBaby()) {
+            if (entitypig.isAlive() && !entitypig.hasSaddle() && !entitypig.isBaby()) {
                 entitypig.setSaddle(true);
                 entitypig.world.a(entityhuman, entitypig.locX, entitypig.locY, entitypig.locZ, SoundEffects.ENTITY_PIG_SADDLE, SoundCategory.NEUTRAL, 0.5F, 1.0F);
                 itemstack.subtract(1);

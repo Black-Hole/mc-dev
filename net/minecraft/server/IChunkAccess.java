@@ -1,30 +1,34 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.longs.LongSet;
+import it.unimi.dsi.fastutil.shorts.ShortArrayList;
+import it.unimi.dsi.fastutil.shorts.ShortList;
 import java.util.BitSet;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 
-public interface IChunkAccess extends IBlockAccess {
+public interface IChunkAccess extends IStructureAccess {
 
     @Nullable
     IBlockData setType(BlockPosition blockposition, IBlockData iblockdata, boolean flag);
 
-    void a(BlockPosition blockposition, TileEntity tileentity);
+    void setTileEntity(BlockPosition blockposition, TileEntity tileentity);
 
     void a(Entity entity);
-
-    void a(ChunkStatus chunkstatus);
 
     @Nullable
     default ChunkSection a() {
         ChunkSection[] achunksection = this.getSections();
 
         for (int i = achunksection.length - 1; i >= 0; --i) {
-            if (achunksection[i] != Chunk.a) {
-                return achunksection[i];
+            ChunkSection chunksection = achunksection[i];
+
+            if (!ChunkSection.a(chunksection)) {
+                return chunksection;
             }
         }
 
@@ -37,13 +41,31 @@ public interface IChunkAccess extends IBlockAccess {
         return chunksection == null ? 0 : chunksection.getYPosition();
     }
 
+    Set<BlockPosition> c();
+
     ChunkSection[] getSections();
 
-    int a(EnumSkyBlock enumskyblock, BlockPosition blockposition, boolean flag);
+    @Nullable
+    LightEngine e();
 
-    int a(BlockPosition blockposition, int i, boolean flag);
+    default int a(BlockPosition blockposition, int i, boolean flag) {
+        LightEngine lightengine = this.e();
 
-    boolean c(BlockPosition blockposition);
+        if (lightengine != null && this.getChunkStatus().b(ChunkStatus.LIGHT)) {
+            int j = flag ? lightengine.a(EnumSkyBlock.SKY).b(blockposition) - i : 0;
+            int k = lightengine.a(EnumSkyBlock.BLOCK).b(blockposition);
+
+            return Math.max(k, j);
+        } else {
+            return 0;
+        }
+    }
+
+    Collection<Entry<HeightMap.Type, HeightMap>> f();
+
+    void a(HeightMap.Type heightmap_type, long[] along);
+
+    HeightMap b(HeightMap.Type heightmap_type);
 
     int a(HeightMap.Type heightmap_type, int i, int j);
 
@@ -51,30 +73,55 @@ public interface IChunkAccess extends IBlockAccess {
 
     void setLastSaved(long i);
 
-    @Nullable
-    StructureStart a(String s);
+    Map<String, StructureStart> h();
 
-    void a(String s, StructureStart structurestart);
+    void a(Map<String, StructureStart> map);
 
-    Map<String, StructureStart> e();
+    default BiomeBase getBiome(BlockPosition blockposition) {
+        int i = blockposition.getX() & 15;
+        int j = blockposition.getZ() & 15;
 
-    @Nullable
-    LongSet b(String s);
+        return this.getBiomeIndex()[j << 4 | i];
+    }
 
-    void a(String s, long i);
+    default boolean a(int i, int j) {
+        if (i < 0) {
+            i = 0;
+        }
 
-    Map<String, LongSet> f();
+        if (j >= 256) {
+            j = 255;
+        }
+
+        for (int k = i; k <= j; k += 16) {
+            if (!ChunkSection.a(this.getSections()[k >> 4])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     BiomeBase[] getBiomeIndex();
 
-    ChunkStatus i();
+    void setNeedsSaving(boolean flag);
 
-    void d(BlockPosition blockposition);
+    boolean isNeedsSaving();
 
-    void a(EnumSkyBlock enumskyblock, boolean flag, BlockPosition blockposition, int i);
+    ChunkStatus getChunkStatus();
 
-    default void e(BlockPosition blockposition) {
+    void removeTileEntity(BlockPosition blockposition);
+
+    void a(LightEngine lightengine);
+
+    default void f(BlockPosition blockposition) {
         LogManager.getLogger().warn("Trying to mark a block for PostProcessing @ {}, but this operation is not supported.", blockposition);
+    }
+
+    ShortList[] l();
+
+    default void a(short short0, int i) {
+        a(this.l(), i).add(short0);
     }
 
     default void a(NBTTagCompound nbttagcompound) {
@@ -82,7 +129,7 @@ public interface IChunkAccess extends IBlockAccess {
     }
 
     @Nullable
-    default NBTTagCompound g(BlockPosition blockposition) {
+    default NBTTagCompound i(BlockPosition blockposition) {
         throw new UnsupportedOperationException();
     }
 
@@ -90,17 +137,31 @@ public interface IChunkAccess extends IBlockAccess {
         throw new UnsupportedOperationException();
     }
 
-    default void a(HeightMap.Type... aheightmap_type) {
-        throw new UnsupportedOperationException();
+    Stream<BlockPosition> m();
+
+    TickList<Block> n();
+
+    TickList<FluidType> o();
+
+    default BitSet a(WorldGenStage.Features worldgenstage_features) {
+        throw new RuntimeException("Meaningless in this context");
     }
 
-    default List<BlockPosition> j() {
-        throw new UnsupportedOperationException();
+    ChunkConverter p();
+
+    void b(long i);
+
+    long q();
+
+    static ShortList a(ShortList[] ashortlist, int i) {
+        if (ashortlist[i] == null) {
+            ashortlist[i] = new ShortArrayList();
+        }
+
+        return ashortlist[i];
     }
 
-    TickList<Block> k();
+    boolean r();
 
-    TickList<FluidType> l();
-
-    BitSet a(WorldGenStage.Features worldgenstage_features);
+    void b(boolean flag);
 }

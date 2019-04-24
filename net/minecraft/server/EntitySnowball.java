@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
-public class EntitySnowball extends EntityProjectile {
+public class EntitySnowball extends EntityProjectileThrowable {
 
-    public EntitySnowball(World world) {
-        super(EntityTypes.SNOWBALL, world);
+    public EntitySnowball(EntityTypes<? extends EntitySnowball> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public EntitySnowball(World world, EntityLiving entityliving) {
@@ -14,15 +14,18 @@ public class EntitySnowball extends EntityProjectile {
         super(EntityTypes.SNOWBALL, d0, d1, d2, world);
     }
 
+    @Override
+    protected Item i() {
+        return Items.SNOWBALL;
+    }
+
+    @Override
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.entity != null) {
-            byte b0 = 0;
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+            Entity entity = ((MovingObjectPositionEntity) movingobjectposition).getEntity();
+            int i = entity instanceof EntityBlaze ? 3 : 0;
 
-            if (movingobjectposition.entity instanceof EntityBlaze) {
-                b0 = 3;
-            }
-
-            movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) b0);
+            entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) i);
         }
 
         if (!this.world.isClientSide) {

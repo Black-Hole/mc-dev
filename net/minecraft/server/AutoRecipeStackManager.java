@@ -40,11 +40,11 @@ public class AutoRecipeStackManager {
         return IRegistry.ITEM.a((Object) itemstack.getItem());
     }
 
-    public boolean a(int i) {
+    private boolean b(int i) {
         return this.a.get(i) > 0;
     }
 
-    public int a(int i, int j) {
+    private int a(int i, int j) {
         int k = this.a.get(i);
 
         if (k >= j) {
@@ -59,23 +59,23 @@ public class AutoRecipeStackManager {
         this.a.put(i, this.a.get(i) + j);
     }
 
-    public boolean a(IRecipe irecipe, @Nullable IntList intlist) {
+    public boolean a(IRecipe<?> irecipe, @Nullable IntList intlist) {
         return this.a(irecipe, intlist, 1);
     }
 
-    public boolean a(IRecipe irecipe, @Nullable IntList intlist, int i) {
+    public boolean a(IRecipe<?> irecipe, @Nullable IntList intlist, int i) {
         return (new AutoRecipeStackManager.a(irecipe)).a(i, intlist);
     }
 
-    public int b(IRecipe irecipe, @Nullable IntList intlist) {
+    public int b(IRecipe<?> irecipe, @Nullable IntList intlist) {
         return this.a(irecipe, Integer.MAX_VALUE, intlist);
     }
 
-    public int a(IRecipe irecipe, int i, @Nullable IntList intlist) {
+    public int a(IRecipe<?> irecipe, int i, @Nullable IntList intlist) {
         return (new AutoRecipeStackManager.a(irecipe)).b(i, intlist);
     }
 
-    public static ItemStack b(int i) {
+    public static ItemStack a(int i) {
         return i == 0 ? ItemStack.a : new ItemStack(Item.getById(i));
     }
 
@@ -85,7 +85,7 @@ public class AutoRecipeStackManager {
 
     class a {
 
-        private final IRecipe b;
+        private final IRecipe<?> b;
         private final List<RecipeItemStack> c = Lists.newArrayList();
         private final int d;
         private final int[] e;
@@ -95,7 +95,7 @@ public class AutoRecipeStackManager {
 
         public a(IRecipe irecipe) {
             this.b = irecipe;
-            this.c.addAll(irecipe.e());
+            this.c.addAll(irecipe.a());
             this.c.removeIf(RecipeItemStack::d);
             this.d = this.c.size();
             this.e = this.a();
@@ -143,7 +143,7 @@ public class AutoRecipeStackManager {
 
                 this.g.clear(0, this.d + this.f + this.d);
                 int i1 = 0;
-                List<RecipeItemStack> list = this.b.e();
+                List<RecipeItemStack> list = this.b.a();
 
                 for (int j1 = 0; j1 < list.size(); ++j1) {
                     if (flag1 && ((RecipeItemStack) list.get(j1)).d()) {
@@ -180,7 +180,7 @@ public class AutoRecipeStackManager {
             IntIterator intiterator = intavltreeset.iterator();
 
             while (intiterator.hasNext()) {
-                if (!AutoRecipeStackManager.this.a(intiterator.nextInt())) {
+                if (!AutoRecipeStackManager.this.b(intiterator.nextInt())) {
                     intiterator.remove();
                 }
             }

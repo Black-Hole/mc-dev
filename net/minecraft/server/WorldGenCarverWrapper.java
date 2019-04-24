@@ -3,21 +3,21 @@ package net.minecraft.server;
 import java.util.BitSet;
 import java.util.Random;
 
-public class WorldGenCarverWrapper<C extends WorldGenFeatureConfiguration> implements WorldGenCarver<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenCarverWrapper<WC extends WorldGenCarverConfiguration> {
 
-    private final WorldGenCarver<C> a;
-    private final C b;
+    public final WorldGenCarverAbstract<WC> a;
+    public final WC b;
 
-    public WorldGenCarverWrapper(WorldGenCarver<C> worldgencarver, C c0) {
-        this.a = worldgencarver;
-        this.b = c0;
+    public WorldGenCarverWrapper(WorldGenCarverAbstract<WC> worldgencarverabstract, WC wc) {
+        this.a = worldgencarverabstract;
+        this.b = wc;
     }
 
-    public boolean a(IBlockAccess iblockaccess, Random random, int i, int j, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return this.a.a(iblockaccess, random, i, j, this.b);
+    public boolean a(Random random, int i, int j) {
+        return this.a.a(random, i, j, this.b);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, Random random, int i, int j, int k, int l, BitSet bitset, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
-        return this.a.a(generatoraccess, random, i, j, k, l, bitset, this.b);
+    public boolean a(IChunkAccess ichunkaccess, Random random, int i, int j, int k, int l, int i1, BitSet bitset) {
+        return this.a.a(ichunkaccess, random, i, j, k, l, i1, bitset, this.b);
     }
 }

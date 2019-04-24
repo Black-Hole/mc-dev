@@ -8,12 +8,14 @@ public class WorldGenMegaTreeProviderDarkOak extends WorldGenMegaTreeProvider {
     public WorldGenMegaTreeProviderDarkOak() {}
 
     @Nullable
+    @Override
     protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
         return null;
     }
 
     @Nullable
+    @Override
     protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> a(Random random) {
-        return new WorldGenForestTree(true);
+        return new WorldGenForestTree(WorldGenFeatureEmptyConfiguration::a, true);
     }
 }

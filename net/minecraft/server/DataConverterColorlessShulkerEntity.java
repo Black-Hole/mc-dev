@@ -11,9 +11,10 @@ public class DataConverterColorlessShulkerEntity extends DataConverterNamedEntit
         super(schema, flag, "Colorless shulker entity fix", DataConverterTypes.ENTITY, "minecraft:shulker");
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), (dynamic) -> {
-            return dynamic.getByte("Color") == 10 ? dynamic.set("Color", dynamic.createByte((byte) 16)) : dynamic;
+            return dynamic.get("Color").asInt(0) == 10 ? dynamic.set("Color", dynamic.createByte((byte) 16)) : dynamic;
         });
     }
 }

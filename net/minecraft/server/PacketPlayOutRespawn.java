@@ -5,38 +5,36 @@ import java.io.IOException;
 public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
 
     private DimensionManager a;
-    private EnumDifficulty b;
-    private EnumGamemode c;
-    private WorldType d;
+    private EnumGamemode b;
+    private WorldType c;
 
     public PacketPlayOutRespawn() {}
 
-    public PacketPlayOutRespawn(DimensionManager dimensionmanager, EnumDifficulty enumdifficulty, WorldType worldtype, EnumGamemode enumgamemode) {
+    public PacketPlayOutRespawn(DimensionManager dimensionmanager, WorldType worldtype, EnumGamemode enumgamemode) {
         this.a = dimensionmanager;
-        this.b = enumdifficulty;
-        this.c = enumgamemode;
-        this.d = worldtype;
+        this.b = enumgamemode;
+        this.c = worldtype;
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = DimensionManager.a(packetdataserializer.readInt());
-        this.b = EnumDifficulty.getById(packetdataserializer.readUnsignedByte());
-        this.c = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
-        this.d = WorldType.getType(packetdataserializer.e(16));
-        if (this.d == null) {
-            this.d = WorldType.NORMAL;
+        this.b = EnumGamemode.getById(packetdataserializer.readUnsignedByte());
+        this.c = WorldType.getType(packetdataserializer.e(16));
+        if (this.c == null) {
+            this.c = WorldType.NORMAL;
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a.getDimensionID());
-        packetdataserializer.writeByte(this.b.a());
-        packetdataserializer.writeByte(this.c.getId());
-        packetdataserializer.a(this.d.name());
+        packetdataserializer.writeByte(this.b.getId());
+        packetdataserializer.a(this.c.name());
     }
 }

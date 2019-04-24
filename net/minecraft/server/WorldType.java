@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class WorldType {
 
     public static final WorldType[] types = new WorldType[16];
@@ -72,6 +74,7 @@ public class WorldType {
         return this.o;
     }
 
+    @Nullable
     public static WorldType getType(String s) {
         WorldType[] aworldtype = WorldType.types;
         int i = aworldtype.length;

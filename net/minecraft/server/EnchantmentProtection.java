@@ -13,27 +13,27 @@ public class EnchantmentProtection extends Enchantment {
 
     }
 
+    @Override
     public int a(int i) {
         return this.a.b() + (i - 1) * this.a.c();
     }
 
-    public int b(int i) {
-        return this.a(i) + this.a.c();
-    }
-
+    @Override
     public int getMaxLevel() {
         return 4;
     }
 
+    @Override
     public int a(int i, DamageSource damagesource) {
         return damagesource.ignoresInvulnerability() ? 0 : (this.a == EnchantmentProtection.DamageType.ALL ? i : (this.a == EnchantmentProtection.DamageType.FIRE && damagesource.p() ? i * 2 : (this.a == EnchantmentProtection.DamageType.FALL && damagesource == DamageSource.FALL ? i * 3 : (this.a == EnchantmentProtection.DamageType.EXPLOSION && damagesource.isExplosion() ? i * 2 : (this.a == EnchantmentProtection.DamageType.PROJECTILE && damagesource.b() ? i * 2 : 0)))));
     }
 
+    @Override
     public boolean a(Enchantment enchantment) {
         if (enchantment instanceof EnchantmentProtection) {
             EnchantmentProtection enchantmentprotection = (EnchantmentProtection) enchantment;
 
-            return this.a == enchantmentprotection.a ? false : this.a == EnchantmentProtection.DamageType.FALL || enchantmentprotection.a == EnchantmentProtection.DamageType.FALL;
+            return this.a != enchantmentprotection.a;
         } else {
             return super.a(enchantment);
         }

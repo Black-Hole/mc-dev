@@ -6,22 +6,13 @@ public abstract class NBTList<T extends NBTBase> extends AbstractList<T> impleme
 
     public NBTList() {}
 
-    public abstract int size();
+    public abstract T set(int i, T t0);
 
-    public T get(int i) {
-        return this.c(i);
-    }
+    public abstract void add(int i, T t0);
 
-    public T set(int i, T t0) {
-        T t1 = this.get(i);
+    public abstract T remove(int i);
 
-        this.a(i, t0);
-        return t1;
-    }
+    public abstract boolean a(int i, NBTBase nbtbase);
 
-    public abstract T c(int i);
-
-    public abstract void a(int i, NBTBase nbtbase);
-
-    public abstract void b(int i);
+    public abstract boolean b(int i, NBTBase nbtbase);
 }

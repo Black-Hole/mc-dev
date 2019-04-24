@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ResourcePackLoader {
+public class ResourcePackLoader implements AutoCloseable {
 
     private static final Logger a = LogManager.getLogger();
-    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}), 4);
+    private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.a().getPackVersion());
     private final String c;
     private final Supplier<IResourcePack> d;
     private final IChatBaseComponent e;
@@ -129,6 +129,8 @@ public class ResourcePackLoader {
     public int hashCode() {
         return this.c.hashCode();
     }
+
+    public void close() {}
 
     public static enum Position {
 

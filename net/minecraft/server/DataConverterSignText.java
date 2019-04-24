@@ -45,11 +45,11 @@ public class DataConverterSignText extends DataConverterNamedEntity {
     }).create();
 
     public DataConverterSignText(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntitySignTextStrictJsonFix", DataConverterTypes.j, "Sign");
+        super(schema, flag, "BlockEntitySignTextStrictJsonFix", DataConverterTypes.k, "Sign");
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic, String s) {
-        String s1 = dynamic.getString(s);
+        String s1 = dynamic.get(s).asString("");
         Object object = null;
 
         if (!"null".equals(s1) && !StringUtils.isEmpty(s1)) {
@@ -92,6 +92,7 @@ public class DataConverterSignText extends DataConverterNamedEntity {
         return dynamic.set(s, dynamic.createString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), (dynamic) -> {
             dynamic = this.a(dynamic, "Text1");

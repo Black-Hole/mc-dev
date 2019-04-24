@@ -13,7 +13,7 @@ public class AttributeModifiable implements AttributeInstance {
 
     private final AttributeMapBase a;
     private final IAttribute b;
-    private final Map<Integer, Set<AttributeModifier>> c = Maps.newHashMap();
+    private final Map<AttributeModifier.Operation, Set<AttributeModifier>> c = Maps.newEnumMap(AttributeModifier.Operation.class);
     private final Map<String, Set<AttributeModifier>> d = Maps.newHashMap();
     private final Map<UUID, AttributeModifier> e = Maps.newHashMap();
     private double f;
@@ -24,21 +24,28 @@ public class AttributeModifiable implements AttributeInstance {
         this.a = attributemapbase;
         this.b = iattribute;
         this.f = iattribute.getDefault();
+        AttributeModifier.Operation[] aattributemodifier_operation = AttributeModifier.Operation.values();
+        int i = aattributemodifier_operation.length;
 
-        for (int i = 0; i < 3; ++i) {
-            this.c.put(i, Sets.newHashSet());
+        for (int j = 0; j < i; ++j) {
+            AttributeModifier.Operation attributemodifier_operation = aattributemodifier_operation[j];
+
+            this.c.put(attributemodifier_operation, Sets.newHashSet());
         }
 
     }
 
+    @Override
     public IAttribute getAttribute() {
         return this.b;
     }
 
+    @Override
     public double b() {
         return this.f;
     }
 
+    @Override
     public void setValue(double d0) {
         if (d0 != this.b()) {
             this.f = d0;
@@ -46,42 +53,48 @@ public class AttributeModifiable implements AttributeInstance {
         }
     }
 
-    public Collection<AttributeModifier> a(int i) {
-        return (Collection) this.c.get(i);
+    @Override
+    public Collection<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation) {
+        return (Collection) this.c.get(attributemodifier_operation);
     }
 
+    @Override
     public Collection<AttributeModifier> c() {
         Set<AttributeModifier> set = Sets.newHashSet();
+        AttributeModifier.Operation[] aattributemodifier_operation = AttributeModifier.Operation.values();
+        int i = aattributemodifier_operation.length;
 
-        for (int i = 0; i < 3; ++i) {
-            set.addAll(this.a(i));
+        for (int j = 0; j < i; ++j) {
+            AttributeModifier.Operation attributemodifier_operation = aattributemodifier_operation[j];
+
+            set.addAll(this.a(attributemodifier_operation));
         }
 
         return set;
     }
 
     @Nullable
+    @Override
     public AttributeModifier a(UUID uuid) {
         return (AttributeModifier) this.e.get(uuid);
     }
 
+    @Override
     public boolean a(AttributeModifier attributemodifier) {
         return this.e.get(attributemodifier.a()) != null;
     }
 
+    @Override
     public void b(AttributeModifier attributemodifier) {
         if (this.a(attributemodifier.a()) != null) {
             throw new IllegalArgumentException("Modifier is already applied on this attribute!");
         } else {
-            Set<AttributeModifier> set = (Set) this.d.get(attributemodifier.b());
-
-            if (set == null) {
-                set = Sets.newHashSet();
-                this.d.put(attributemodifier.b(), set);
-            }
+            Set<AttributeModifier> set = (Set) this.d.computeIfAbsent(attributemodifier.b(), (s) -> {
+                return Sets.newHashSet();
+            });
 
             ((Set) this.c.get(attributemodifier.c())).add(attributemodifier);
-            ((Set) set).add(attributemodifier);
+            set.add(attributemodifier);
             this.e.put(attributemodifier.a(), attributemodifier);
             this.f();
         }
@@ -92,18 +105,22 @@ public class AttributeModifiable implements AttributeInstance {
         this.a.a((AttributeInstance) this);
     }
 
+    @Override
     public void c(AttributeModifier attributemodifier) {
-        for (int i = 0; i < 3; ++i) {
-            Set<AttributeModifier> set = (Set) this.c.get(i);
+        AttributeModifier.Operation[] aattributemodifier_operation = AttributeModifier.Operation.values();
+        int i = aattributemodifier_operation.length;
 
-            set.remove(attributemodifier);
+        for (int j = 0; j < i; ++j) {
+            AttributeModifier.Operation attributemodifier_operation = aattributemodifier_operation[j];
+
+            ((Set) this.c.get(attributemodifier_operation)).remove(attributemodifier);
         }
 
-        Set<AttributeModifier> set1 = (Set) this.d.get(attributemodifier.b());
+        Set<AttributeModifier> set = (Set) this.d.get(attributemodifier.b());
 
-        if (set1 != null) {
-            set1.remove(attributemodifier);
-            if (set1.isEmpty()) {
+        if (set != null) {
+            set.remove(attributemodifier);
+            if (set.isEmpty()) {
                 this.d.remove(attributemodifier.b());
             }
         }
@@ -112,6 +129,7 @@ public class AttributeModifiable implements AttributeInstance {
         this.f();
     }
 
+    @Override
     public void b(UUID uuid) {
         AttributeModifier attributemodifier = this.a(uuid);
 
@@ -121,6 +139,7 @@ public class AttributeModifiable implements AttributeInstance {
 
     }
 
+    @Override
     public double getValue() {
         if (this.g) {
             this.h = this.g();
@@ -135,7 +154,7 @@ public class AttributeModifiable implements AttributeInstance {
 
         AttributeModifier attributemodifier;
 
-        for (Iterator iterator = this.b(0).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
+        for (Iterator iterator = this.b(AttributeModifier.Operation.ADDITION).iterator(); iterator.hasNext(); d0 += attributemodifier.d()) {
             attributemodifier = (AttributeModifier) iterator.next();
         }
 
@@ -144,25 +163,25 @@ public class AttributeModifiable implements AttributeInstance {
         AttributeModifier attributemodifier1;
         Iterator iterator1;
 
-        for (iterator1 = this.b(1).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
+        for (iterator1 = this.b(AttributeModifier.Operation.MULTIPLY_BASE).iterator(); iterator1.hasNext(); d1 += d0 * attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
-        for (iterator1 = this.b(2).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
+        for (iterator1 = this.b(AttributeModifier.Operation.MULTIPLY_TOTAL).iterator(); iterator1.hasNext(); d1 *= 1.0D + attributemodifier1.d()) {
             attributemodifier1 = (AttributeModifier) iterator1.next();
         }
 
         return this.b.a(d1);
     }
 
-    private Collection<AttributeModifier> b(int i) {
-        Set<AttributeModifier> set = Sets.newHashSet(this.a(i));
+    private Collection<AttributeModifier> b(AttributeModifier.Operation attributemodifier_operation) {
+        Set<AttributeModifier> set = Sets.newHashSet(this.a(attributemodifier_operation));
 
         for (IAttribute iattribute = this.b.d(); iattribute != null; iattribute = iattribute.d()) {
             AttributeInstance attributeinstance = this.a.a(iattribute);
 
             if (attributeinstance != null) {
-                set.addAll(attributeinstance.a(i));
+                set.addAll(attributeinstance.a(attributemodifier_operation));
             }
         }
 

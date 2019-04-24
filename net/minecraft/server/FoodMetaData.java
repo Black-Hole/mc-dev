@@ -15,8 +15,13 @@ public class FoodMetaData {
         this.saturationLevel = Math.min(this.saturationLevel + (float) i * f * 2.0F, (float) this.foodLevel);
     }
 
-    public void a(ItemFood itemfood, ItemStack itemstack) {
-        this.eat(itemfood.getNutrition(itemstack), itemfood.getSaturationModifier(itemstack));
+    public void a(Item item, ItemStack itemstack) {
+        if (item.isFood()) {
+            FoodInfo foodinfo = item.getFoodInfo();
+
+            this.eat(foodinfo.getNutrition(), foodinfo.getSaturationModifier());
+        }
+
     }
 
     public void a(EntityHuman entityhuman) {
@@ -34,7 +39,7 @@ public class FoodMetaData {
 
         boolean flag = entityhuman.world.getGameRules().getBoolean("naturalRegeneration");
 
-        if (flag && this.saturationLevel > 0.0F && entityhuman.dx() && this.foodLevel >= 20) {
+        if (flag && this.saturationLevel > 0.0F && entityhuman.dP() && this.foodLevel >= 20) {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 10) {
                 float f = Math.min(this.saturationLevel, 6.0F);
@@ -43,7 +48,7 @@ public class FoodMetaData {
                 this.a(f);
                 this.foodTickTimer = 0;
             }
-        } else if (flag && this.foodLevel >= 18 && entityhuman.dx()) {
+        } else if (flag && this.foodLevel >= 18 && entityhuman.dP()) {
             ++this.foodTickTimer;
             if (this.foodTickTimer >= 80) {
                 entityhuman.heal(1.0F);

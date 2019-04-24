@@ -9,7 +9,8 @@ public class BlockLogAbstract extends BlockRotatable {
         this.b = materialmapcolor;
     }
 
-    public MaterialMapColor c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return iblockdata.get(BlockLogAbstract.AXIS) == EnumDirection.EnumAxis.Y ? this.b : this.l;
+    @Override
+    public MaterialMapColor e(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return iblockdata.get(BlockLogAbstract.AXIS) == EnumDirection.EnumAxis.Y ? this.b : this.t;
     }
 }

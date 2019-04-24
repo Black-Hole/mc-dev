@@ -18,16 +18,18 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
         this.d = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e(16);
         this.d = packetdataserializer.readByte();
         if (this.d == 0 || this.d == 2) {
-            this.b = packetdataserializer.f();
+            this.b = packetdataserializer.h();
             this.c = (IScoreboardCriteria.EnumScoreboardHealthDisplay) packetdataserializer.a(IScoreboardCriteria.EnumScoreboardHealthDisplay.class);
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.d);

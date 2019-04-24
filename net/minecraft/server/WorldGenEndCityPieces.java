@@ -7,16 +7,18 @@ import java.util.Random;
 
 public class WorldGenEndCityPieces {
 
-    private static final DefinedStructureInfo a = (new DefinedStructureInfo()).a(true);
-    private static final DefinedStructureInfo b = (new DefinedStructureInfo()).a(true).a(Blocks.AIR);
+    private static final DefinedStructureInfo a = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
+    private static final DefinedStructureInfo b = (new DefinedStructureInfo()).a(true).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.c);
     private static final WorldGenEndCityPieces.PieceGenerator c = new WorldGenEndCityPieces.PieceGenerator() {
+        @Override
         public void a() {}
 
+        @Override
         public boolean a(DefinedStructureManager definedstructuremanager, int i, WorldGenEndCityPieces.Piece worldgenendcitypieces_piece, BlockPosition blockposition, List<StructurePiece> list, Random random) {
             if (i > 8) {
                 return false;
             } else {
-                EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.c();
+                EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.d();
                 WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece, blockposition, "base_floor", enumblockrotation, true));
                 int j = random.nextInt(3);
 
@@ -39,10 +41,12 @@ public class WorldGenEndCityPieces {
     };
     private static final List<Tuple<EnumBlockRotation, BlockPosition>> d = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(1, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(6, -1, 1)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 5)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(5, -1, 6))});
     private static final WorldGenEndCityPieces.PieceGenerator e = new WorldGenEndCityPieces.PieceGenerator() {
+        @Override
         public void a() {}
 
+        @Override
         public boolean a(DefinedStructureManager definedstructuremanager, int i, WorldGenEndCityPieces.Piece worldgenendcitypieces_piece, BlockPosition blockposition, List<StructurePiece> list, Random random) {
-            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.c();
+            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.d();
             WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece, new BlockPosition(3 + random.nextInt(2), -3, 3 + random.nextInt(2)), "tower_base", enumblockrotation, true));
 
             worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece1, new BlockPosition(0, 7, 0), "tower_piece", enumblockrotation, true));
@@ -84,12 +88,14 @@ public class WorldGenEndCityPieces {
     private static final WorldGenEndCityPieces.PieceGenerator f = new WorldGenEndCityPieces.PieceGenerator() {
         public boolean a;
 
+        @Override
         public void a() {
             this.a = false;
         }
 
+        @Override
         public boolean a(DefinedStructureManager definedstructuremanager, int i, WorldGenEndCityPieces.Piece worldgenendcitypieces_piece, BlockPosition blockposition, List<StructurePiece> list, Random random) {
-            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.c();
+            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.d();
             int j = random.nextInt(4) + 1;
             WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece, new BlockPosition(0, 0, -4), "bridge_piece", enumblockrotation, true));
 
@@ -125,10 +131,12 @@ public class WorldGenEndCityPieces {
     };
     private static final List<Tuple<EnumBlockRotation, BlockPosition>> g = Lists.newArrayList(new Tuple[] { new Tuple<>(EnumBlockRotation.NONE, new BlockPosition(4, -1, 0)), new Tuple<>(EnumBlockRotation.CLOCKWISE_90, new BlockPosition(12, -1, 4)), new Tuple<>(EnumBlockRotation.COUNTERCLOCKWISE_90, new BlockPosition(0, -1, 8)), new Tuple<>(EnumBlockRotation.CLOCKWISE_180, new BlockPosition(8, -1, 12))});
     private static final WorldGenEndCityPieces.PieceGenerator h = new WorldGenEndCityPieces.PieceGenerator() {
+        @Override
         public void a() {}
 
+        @Override
         public boolean a(DefinedStructureManager definedstructuremanager, int i, WorldGenEndCityPieces.Piece worldgenendcitypieces_piece, BlockPosition blockposition, List<StructurePiece> list, Random random) {
-            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.c();
+            EnumBlockRotation enumblockrotation = worldgenendcitypieces_piece.b.d();
             WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece, new BlockPosition(-3, 4, -3), "fat_tower_base", enumblockrotation, true));
 
             worldgenendcitypieces_piece1 = WorldGenEndCityPieces.b(list, WorldGenEndCityPieces.b(definedstructuremanager, worldgenendcitypieces_piece1, new BlockPosition(0, 4, 0), "fat_tower_middle", enumblockrotation, true));
@@ -152,10 +160,6 @@ public class WorldGenEndCityPieces {
             return true;
         }
     };
-
-    public static void a() {
-        WorldGenFactory.a(WorldGenEndCityPieces.Piece.class, "ECP");
-    }
 
     private static WorldGenEndCityPieces.Piece b(DefinedStructureManager definedstructuremanager, WorldGenEndCityPieces.Piece worldgenendcitypieces_piece, BlockPosition blockposition, String s, EnumBlockRotation enumblockrotation, boolean flag) {
         WorldGenEndCityPieces.Piece worldgenendcitypieces_piece1 = new WorldGenEndCityPieces.Piece(definedstructuremanager, s, worldgenendcitypieces_piece.c, enumblockrotation, flag);
@@ -198,7 +202,7 @@ public class WorldGenEndCityPieces {
                     StructurePiece structurepiece = (StructurePiece) iterator.next();
 
                     structurepiece.o = j;
-                    StructurePiece structurepiece1 = StructurePiece.a(list, structurepiece.d());
+                    StructurePiece structurepiece1 = StructurePiece.a(list, structurepiece.g());
 
                     if (structurepiece1 != null && structurepiece1.o != worldgenendcitypieces_piece.o) {
                         flag = true;
@@ -225,18 +229,24 @@ public class WorldGenEndCityPieces {
 
     public static class Piece extends DefinedStructurePiece {
 
-        private String d;
-        private EnumBlockRotation e;
-        private boolean f;
-
-        public Piece() {}
+        private final String d;
+        private final EnumBlockRotation e;
+        private final boolean f;
 
         public Piece(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, boolean flag) {
-            super(0);
+            super(WorldGenFeatureStructurePieceType.Z, 0);
             this.d = s;
             this.c = blockposition;
             this.e = enumblockrotation;
             this.f = flag;
+            this.a(definedstructuremanager);
+        }
+
+        public Piece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.Z, nbttagcompound);
+            this.d = nbttagcompound.getString("Template");
+            this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
+            this.f = nbttagcompound.getBoolean("OW");
             this.a(definedstructuremanager);
         }
 
@@ -247,6 +257,7 @@ public class WorldGenEndCityPieces {
             this.a(definedstructure, this.c, definedstructureinfo);
         }
 
+        @Override
         protected void a(NBTTagCompound nbttagcompound) {
             super.a(nbttagcompound);
             nbttagcompound.setString("Template", this.d);
@@ -254,14 +265,7 @@ public class WorldGenEndCityPieces {
             nbttagcompound.setBoolean("OW", this.f);
         }
 
-        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-            super.a(nbttagcompound, definedstructuremanager);
-            this.d = nbttagcompound.getString("Template");
-            this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
-            this.f = nbttagcompound.getBoolean("OW");
-            this.a(definedstructuremanager);
-        }
-
+        @Override
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if (s.startsWith("Chest")) {
                 BlockPosition blockposition1 = blockposition.down();
@@ -270,7 +274,7 @@ public class WorldGenEndCityPieces {
                     TileEntityLootable.a(generatoraccess, random, blockposition1, LootTables.c);
                 }
             } else if (s.startsWith("Sentry")) {
-                EntityShulker entityshulker = new EntityShulker(generatoraccess.getMinecraftWorld());
+                EntityShulker entityshulker = (EntityShulker) EntityTypes.SHULKER.a(generatoraccess.getMinecraftWorld());
 
                 entityshulker.setPosition((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
                 entityshulker.g(blockposition);
@@ -278,7 +282,7 @@ public class WorldGenEndCityPieces {
             } else if (s.startsWith("Elytra")) {
                 EntityItemFrame entityitemframe = new EntityItemFrame(generatoraccess.getMinecraftWorld(), blockposition, this.e.a(EnumDirection.SOUTH));
 
-                entityitemframe.setItem(new ItemStack(Items.ELYTRA));
+                entityitemframe.setItem(new ItemStack(Items.ELYTRA), false);
                 generatoraccess.addEntity(entityitemframe);
             }
 

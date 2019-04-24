@@ -1,22 +1,26 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class WorldGenDecoratorEmerald extends WorldGenDecorator<WorldGenFeatureDecoratorEmptyConfiguration> {
+public class WorldGenDecoratorEmerald extends WorldGenDecoratorFeatureSimple<WorldGenFeatureDecoratorEmptyConfiguration> {
 
-    public WorldGenDecoratorEmerald() {}
+    public WorldGenDecoratorEmerald(Function<Dynamic<?>, ? extends WorldGenFeatureDecoratorEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, BlockPosition blockposition) {
         int i = 3 + random.nextInt(6);
 
-        for (int j = 0; j < i; ++j) {
+        return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = random.nextInt(28) + 4;
             int i1 = random.nextInt(16);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(k, l, i1), c0);
-        }
-
-        return true;
+            return blockposition.b(k, l, i1);
+        });
     }
 }

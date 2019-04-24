@@ -20,10 +20,12 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     public CriterionTriggerInventoryChanged() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerInventoryChanged.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerInventoryChanged.b> criteriontrigger_a) {
         CriterionTriggerInventoryChanged.a criteriontriggerinventorychanged_a = (CriterionTriggerInventoryChanged.a) this.b.get(advancementdataplayer);
 
@@ -35,6 +37,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
         criteriontriggerinventorychanged_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerInventoryChanged.b> criteriontrigger_a) {
         CriterionTriggerInventoryChanged.a criteriontriggerinventorychanged_a = (CriterionTriggerInventoryChanged.a) this.b.get(advancementdataplayer);
 
@@ -47,10 +50,12 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerInventoryChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         JsonObject jsonobject1 = ChatDeserializer.a(jsonobject, "slots", new JsonObject());
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject1.get("occupied"));
@@ -149,6 +154,7 @@ public class CriterionTriggerInventoryChanged implements CriterionTrigger<Criter
             return a(acriterionconditionitem);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

@@ -246,13 +246,11 @@ public class ChunkConverterPalette extends DataFix {
     }
 
     public static String a(Dynamic<?> dynamic) {
-        return dynamic.getString("Name");
+        return dynamic.get("Name").asString("");
     }
 
     public static String a(Dynamic<?> dynamic, String s) {
-        return (String) dynamic.get("Properties").map((dynamic1) -> {
-            return dynamic1.getString(s);
-        }).orElse("");
+        return dynamic.get("Properties").get(s).asString("");
     }
 
     public static int a(RegistryID<Dynamic<?>> registryid, Dynamic<?> dynamic) {
@@ -266,9 +264,9 @@ public class ChunkConverterPalette extends DataFix {
     }
 
     private Dynamic<?> b(Dynamic<?> dynamic) {
-        Optional<? extends Dynamic<?>> optional = dynamic.get("Level");
+        Optional<? extends Dynamic<?>> optional = dynamic.get("Level").get();
 
-        return optional.isPresent() && ((Dynamic) optional.get()).get("Sections").flatMap(Dynamic::getStream).isPresent() ? dynamic.set("Level", (new ChunkConverterPalette.d((Dynamic) optional.get())).a()) : dynamic;
+        return optional.isPresent() && ((Dynamic) optional.get()).get("Sections").asStreamOpt().isPresent() ? dynamic.set("Level", (new ChunkConverterPalette.d((Dynamic) optional.get())).a()) : dynamic;
     }
 
     public TypeRewriteRule makeRule() {
@@ -454,13 +452,13 @@ public class ChunkConverterPalette extends DataFix {
 
         public d(Dynamic<?> dynamic) {
             this.c = dynamic;
-            this.d = dynamic.getInt("xPos") << 4;
-            this.e = dynamic.getInt("zPos") << 4;
-            dynamic.get("TileEntities").flatMap(Dynamic::getStream).ifPresent((stream) -> {
+            this.d = dynamic.get("xPos").asInt(0) << 4;
+            this.e = dynamic.get("zPos").asInt(0) << 4;
+            dynamic.get("TileEntities").asStreamOpt().ifPresent((stream) -> {
                 stream.forEach((dynamic1) -> {
-                    int i = dynamic1.getInt("x") - this.d & 15;
-                    int j = dynamic1.getInt("y");
-                    int k = dynamic1.getInt("z") - this.e & 15;
+                    int i = dynamic1.get("x").asInt(0) - this.d & 15;
+                    int j = dynamic1.get("y").asInt(0);
+                    int k = dynamic1.get("z").asInt(0) - this.e & 15;
                     int l = j << 8 | k << 4 | i;
 
                     if (this.f.put(l, dynamic1) != null) {
@@ -469,9 +467,9 @@ public class ChunkConverterPalette extends DataFix {
 
                 });
             });
-            boolean flag = dynamic.getBoolean("convertedFromAlphaFormat");
+            boolean flag = dynamic.get("convertedFromAlphaFormat").asBoolean(false);
 
-            dynamic.get("Sections").flatMap(Dynamic::getStream).ifPresent((stream) -> {
+            dynamic.get("Sections").asStreamOpt().ifPresent((stream) -> {
                 stream.forEach((dynamic1) -> {
                     ChunkConverterPalette.c chunkconverterpalette_c = new ChunkConverterPalette.c(dynamic1);
 
@@ -547,7 +545,7 @@ public class ChunkConverterPalette extends DataFix {
                                 l |= k;
                                 dynamic1 = this.c(l);
                                 if (dynamic1 != null) {
-                                    s = Boolean.toString(dynamic1.getBoolean("powered")) + (byte) Math.min(Math.max(dynamic1.getByte("note"), 0), 24);
+                                    s = Boolean.toString(dynamic1.get("powered").asBoolean(false)) + (byte) Math.min(Math.max(dynamic1.get("note").asInt(0), 0), 24);
                                     this.a(l, (Dynamic) ChunkConverterPalette.q.getOrDefault(s, ChunkConverterPalette.q.get("false0")));
                                 }
                             }
@@ -564,7 +562,7 @@ public class ChunkConverterPalette extends DataFix {
                                 dynamic1 = this.b(l);
                                 dynamic2 = this.a(l);
                                 if (dynamic1 != null) {
-                                    i1 = dynamic1.getInt("color");
+                                    i1 = dynamic1.get("color").asInt(0);
                                     if (i1 != 14 && i1 >= 0 && i1 < 16) {
                                         s1 = ChunkConverterPalette.a(dynamic2, "facing") + ChunkConverterPalette.a(dynamic2, "occupied") + ChunkConverterPalette.a(dynamic2, "part") + i1;
                                         if (ChunkConverterPalette.s.containsKey(s1)) {
@@ -657,7 +655,7 @@ public class ChunkConverterPalette extends DataFix {
                                 l |= k;
                                 dynamic1 = this.c(l);
                                 if (dynamic1 != null) {
-                                    s = dynamic1.getString("Item") + dynamic1.getInt("Data");
+                                    s = dynamic1.get("Item").asString("") + dynamic1.get("Data").asInt(0);
                                     this.a(l, (Dynamic) ChunkConverterPalette.n.getOrDefault(s, ChunkConverterPalette.n.get("minecraft:air0")));
                                 }
                             }
@@ -673,12 +671,12 @@ public class ChunkConverterPalette extends DataFix {
                                 l |= k;
                                 dynamic1 = this.b(l);
                                 if (dynamic1 != null) {
-                                    s = String.valueOf(dynamic1.getByte("SkullType"));
+                                    s = String.valueOf(dynamic1.get("SkullType").asInt(0));
                                     s2 = ChunkConverterPalette.a(this.a(l), "facing");
                                     if (!"up".equals(s2) && !"down".equals(s2)) {
                                         s1 = s + s2;
                                     } else {
-                                        s1 = s + String.valueOf(dynamic1.getInt("Rot"));
+                                        s1 = s + String.valueOf(dynamic1.get("Rot").asInt(0));
                                     }
 
                                     dynamic1.remove("SkullType");
@@ -726,7 +724,7 @@ public class ChunkConverterPalette extends DataFix {
                                 dynamic1 = this.b(l);
                                 dynamic2 = this.a(l);
                                 if (dynamic1 != null) {
-                                    i1 = dynamic1.getInt("Base");
+                                    i1 = dynamic1.get("Base").asInt(0);
                                     if (i1 != 15 && i1 >= 0 && i1 < 16) {
                                         s1 = ChunkConverterPalette.a(dynamic2, (Integer) java_util_map_entry.getKey() == 176 ? "rotation" : "facing") + "_" + i1;
                                         if (ChunkConverterPalette.t.containsKey(s1)) {
@@ -837,15 +835,15 @@ public class ChunkConverterPalette extends DataFix {
         private final boolean e;
         private final Int2ObjectMap<IntList> f = new Int2ObjectLinkedOpenHashMap();
         private final IntList g = new IntArrayList();
-        public int a;
+        public final int a;
         private final Set<Dynamic<?>> h = Sets.newIdentityHashSet();
         private final int[] i = new int[4096];
 
         public c(Dynamic<?> dynamic) {
             this.c = dynamic.emptyList();
             this.d = dynamic;
-            this.a = dynamic.getInt("Y");
-            this.e = dynamic.get("Blocks").isPresent();
+            this.a = dynamic.get("Y").asInt(0);
+            this.e = dynamic.get("Blocks").get().isPresent();
         }
 
         public Dynamic<?> a(int i) {
@@ -870,11 +868,11 @@ public class ChunkConverterPalette extends DataFix {
             if (!this.e) {
                 return i;
             } else {
-                ByteBuffer bytebuffer = (ByteBuffer) this.d.get("Blocks").flatMap(Dynamic::getByteBuffer).get();
-                ChunkConverterPalette.a chunkconverterpalette_a = (ChunkConverterPalette.a) this.d.get("Data").flatMap(Dynamic::getByteBuffer).map((bytebuffer1) -> {
+                ByteBuffer bytebuffer = (ByteBuffer) this.d.get("Blocks").asByteBufferOpt().get();
+                ChunkConverterPalette.a chunkconverterpalette_a = (ChunkConverterPalette.a) this.d.get("Data").asByteBufferOpt().map((bytebuffer1) -> {
                     return new ChunkConverterPalette.a(DataFixUtils.toArray(bytebuffer1));
                 }).orElseGet(ChunkConverterPalette.a::new);
-                ChunkConverterPalette.a chunkconverterpalette_a1 = (ChunkConverterPalette.a) this.d.get("Add").flatMap(Dynamic::getByteBuffer).map((bytebuffer1) -> {
+                ChunkConverterPalette.a chunkconverterpalette_a1 = (ChunkConverterPalette.a) this.d.get("Add").asByteBufferOpt().map((bytebuffer1) -> {
                     return new ChunkConverterPalette.a(DataFixUtils.toArray(bytebuffer1));
                 }).orElseGet(ChunkConverterPalette.a::new);
 
@@ -931,7 +929,7 @@ public class ChunkConverterPalette extends DataFix {
                 DataBits databits = new DataBits(i, 4096);
 
                 for (int j = 0; j < this.i.length; ++j) {
-                    databits.a(j, this.i[j]);
+                    databits.b(j, this.i[j]);
                 }
 
                 dynamic = dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(databits.a())));

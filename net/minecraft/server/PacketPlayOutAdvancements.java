@@ -37,39 +37,41 @@ public class PacketPlayOutAdvancements implements Packet<PacketListenerPlayOut> 
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readBoolean();
         this.b = Maps.newHashMap();
         this.c = Sets.newLinkedHashSet();
         this.d = Maps.newHashMap();
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         MinecraftKey minecraftkey;
         int j;
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.l();
+            minecraftkey = packetdataserializer.o();
             Advancement.SerializedAdvancement advancement_serializedadvancement = Advancement.SerializedAdvancement.b(packetdataserializer);
 
             this.b.put(minecraftkey, advancement_serializedadvancement);
         }
 
-        i = packetdataserializer.g();
+        i = packetdataserializer.i();
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.l();
+            minecraftkey = packetdataserializer.o();
             this.c.add(minecraftkey);
         }
 
-        i = packetdataserializer.g();
+        i = packetdataserializer.i();
 
         for (j = 0; j < i; ++j) {
-            minecraftkey = packetdataserializer.l();
+            minecraftkey = packetdataserializer.o();
             this.d.put(minecraftkey, AdvancementProgress.b(packetdataserializer));
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeBoolean(this.a);
         packetdataserializer.d(this.b.size());

@@ -17,6 +17,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         this.c = s;
     }
 
+    @Override
     public String getText() {
         if (this.d == null) {
             this.d = (Supplier) ChatComponentKeybind.b.apply(this.c);
@@ -25,10 +26,12 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         return (String) this.d.get();
     }
 
+    @Override
     public ChatComponentKeybind g() {
         return new ChatComponentKeybind(this.c);
     }
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -41,6 +44,7 @@ public class ChatComponentKeybind extends ChatBaseComponent {
         }
     }
 
+    @Override
     public String toString() {
         return "KeybindComponent{keybind='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }

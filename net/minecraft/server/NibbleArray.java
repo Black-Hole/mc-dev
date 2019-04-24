@@ -1,12 +1,13 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class NibbleArray {
 
-    private final byte[] a;
+    @Nullable
+    protected byte[] a;
 
-    public NibbleArray() {
-        this.a = new byte[2048];
-    }
+    public NibbleArray() {}
 
     public NibbleArray(byte[] abyte) {
         this.a = abyte;
@@ -23,17 +24,25 @@ public class NibbleArray {
         this.a(this.b(i, j, k), l);
     }
 
-    private int b(int i, int j, int k) {
+    protected int b(int i, int j, int k) {
         return j << 8 | k << 4 | i;
     }
 
-    public int a(int i) {
-        int j = this.c(i);
+    private int a(int i) {
+        if (this.a == null) {
+            return 0;
+        } else {
+            int j = this.c(i);
 
-        return this.b(i) ? this.a[j] & 15 : this.a[j] >> 4 & 15;
+            return this.b(i) ? this.a[j] & 15 : this.a[j] >> 4 & 15;
+        }
     }
 
-    public void a(int i, int j) {
+    private void a(int i, int j) {
+        if (this.a == null) {
+            this.a = new byte[2048];
+        }
+
         int k = this.c(i);
 
         if (this.b(i)) {
@@ -53,6 +62,35 @@ public class NibbleArray {
     }
 
     public byte[] asBytes() {
+        if (this.a == null) {
+            this.a = new byte[2048];
+        }
+
         return this.a;
+    }
+
+    public NibbleArray b() {
+        return this.a == null ? new NibbleArray() : new NibbleArray((byte[]) this.a.clone());
+    }
+
+    public String toString() {
+        StringBuilder stringbuilder = new StringBuilder();
+
+        for (int i = 0; i < 4096; ++i) {
+            stringbuilder.append(Integer.toHexString(this.a(i)));
+            if ((i & 15) == 15) {
+                stringbuilder.append("\n");
+            }
+
+            if ((i & 255) == 255) {
+                stringbuilder.append("\n");
+            }
+        }
+
+        return stringbuilder.toString();
+    }
+
+    public boolean c() {
+        return this.a == null;
     }
 }

@@ -6,14 +6,12 @@ public class EnchantmentSweeping extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.WEAPON, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 5 + (i - 1) * 9;
     }
 
-    public int b(int i) {
-        return this.a(i) + 15;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 3;
     }

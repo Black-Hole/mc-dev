@@ -11,7 +11,7 @@ public class TagsServer<T> extends Tags<T> {
     private final IRegistry<T> a;
 
     public TagsServer(IRegistry<T> iregistry, String s, String s1) {
-        super(iregistry::c, iregistry::get, s, false, s1);
+        super(iregistry::getOptional, s, false, s1);
         this.a = iregistry;
     }
 
@@ -36,15 +36,15 @@ public class TagsServer<T> extends Tags<T> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         for (int j = 0; j < i; ++j) {
-            MinecraftKey minecraftkey = packetdataserializer.l();
-            int k = packetdataserializer.g();
+            MinecraftKey minecraftkey = packetdataserializer.o();
+            int k = packetdataserializer.i();
             List<T> list = Lists.newArrayList();
 
             for (int l = 0; l < k; ++l) {
-                list.add(this.a.fromId(packetdataserializer.g()));
+                list.add(this.a.fromId(packetdataserializer.i()));
             }
 
             this.c().put(minecraftkey, Tag.a.a().a((Collection) list).b(minecraftkey));

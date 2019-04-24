@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureSeaGrass extends WorldGenerator<WorldGenFeatureSeaGrassConfiguration> {
 
-    public WorldGenFeatureSeaGrass() {}
+    public WorldGenFeatureSeaGrass(Function<Dynamic<?>, ? extends WorldGenFeatureSeaGrassConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureSeaGrassConfiguration worldgenfeatureseagrassconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureSeaGrassConfiguration worldgenfeatureseagrassconfiguration) {
         int i = 0;
 
         for (int j = 0; j < worldgenfeatureseagrassconfiguration.a; ++j) {

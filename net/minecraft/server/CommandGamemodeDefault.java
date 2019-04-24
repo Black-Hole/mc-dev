@@ -32,7 +32,7 @@ public class CommandGamemodeDefault {
 
         minecraftserver.setGamemode(enumgamemode);
         if (minecraftserver.getForceGamemode()) {
-            Iterator iterator = minecraftserver.getPlayerList().v().iterator();
+            Iterator iterator = minecraftserver.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();

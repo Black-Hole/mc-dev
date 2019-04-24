@@ -1,16 +1,19 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenPackedIce1 extends WorldGenerator<WorldGenFeatureRadiusConfiguration> {
 
     private final Block a;
 
-    public WorldGenPackedIce1() {
+    public WorldGenPackedIce1(Function<Dynamic<?>, ? extends WorldGenFeatureRadiusConfiguration> function) {
+        super(function);
         this.a = Blocks.PACKED_ICE;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRadiusConfiguration worldgenfeatureradiusconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRadiusConfiguration worldgenfeatureradiusconfiguration) {
         while (generatoraccess.isEmpty(blockposition) && blockposition.getY() > 2) {
             blockposition = blockposition.down();
         }
@@ -31,7 +34,7 @@ public class WorldGenPackedIce1 extends WorldGenerator<WorldGenFeatureRadiusConf
                             BlockPosition blockposition1 = new BlockPosition(j, j1, k);
                             Block block = generatoraccess.getType(blockposition1).getBlock();
 
-                            if (Block.d(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
+                            if (Block.c(block) || block == Blocks.SNOW_BLOCK || block == Blocks.ICE) {
                                 generatoraccess.setTypeAndData(blockposition1, this.a.getBlockData(), 2);
                             }
                         }

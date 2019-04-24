@@ -15,10 +15,12 @@ public class PacketStatusOutServerInfo implements Packet<PacketStatusOutListener
         this.b = serverping;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.b = (ServerPing) ChatDeserializer.a(PacketStatusOutServerInfo.a, packetdataserializer.e(32767), ServerPing.class);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(PacketStatusOutServerInfo.a.toJson(this.b));
     }

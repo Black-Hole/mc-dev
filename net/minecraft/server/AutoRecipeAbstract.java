@@ -4,15 +4,15 @@ import java.util.Iterator;
 
 public interface AutoRecipeAbstract<T> {
 
-    default void a(int i, int j, int k, IRecipe irecipe, Iterator<T> iterator, int l) {
+    default void a(int i, int j, int k, IRecipe<?> irecipe, Iterator<T> iterator, int l) {
         int i1 = i;
         int j1 = j;
 
         if (irecipe instanceof ShapedRecipes) {
             ShapedRecipes shapedrecipes = (ShapedRecipes) irecipe;
 
-            i1 = shapedrecipes.g();
-            j1 = shapedrecipes.h();
+            i1 = shapedrecipes.i();
+            j1 = shapedrecipes.j();
         }
 
         int k1 = 0;

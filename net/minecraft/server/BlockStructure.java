@@ -1,26 +1,28 @@
 package net.minecraft.server;
 
-import java.util.Random;
 import javax.annotation.Nullable;
 
 public class BlockStructure extends BlockTileEntity {
 
-    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aw;
+    public static final BlockStateEnum<BlockPropertyStructureMode> a = BlockProperties.aE;
 
     protected BlockStructure(Block.Info block_info) {
         super(block_info);
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityStructure();
     }
 
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         TileEntity tileentity = world.getTileEntity(blockposition);
 
         return tileentity instanceof TileEntityStructure ? ((TileEntityStructure) tileentity).a(entityhuman) : false;
     }
 
+    @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, @Nullable EntityLiving entityliving, ItemStack itemstack) {
         if (!world.isClientSide) {
             if (entityliving != null) {
@@ -34,35 +36,35 @@ public class BlockStructure extends BlockTileEntity {
         }
     }
 
-    public int a(IBlockData iblockdata, Random random) {
-        return 0;
-    }
-
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         return (IBlockData) this.getBlockData().set(BlockStructure.a, BlockPropertyStructureMode.DATA);
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockStructure.a);
     }
 
-    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    @Override
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if (!world.isClientSide) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
-                boolean flag = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag1 = tileentitystructure.E();
+                boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
+                boolean flag2 = tileentitystructure.F();
 
-                if (flag && !flag1) {
+                if (flag1 && !flag2) {
                     tileentitystructure.d(true);
                     this.a(tileentitystructure);
-                } else if (!flag && flag1) {
+                } else if (!flag1 && flag2) {
                     tileentitystructure.d(false);
                 }
 
@@ -79,7 +81,7 @@ public class BlockStructure extends BlockTileEntity {
             tileentitystructure.c(false);
             break;
         case CORNER:
-            tileentitystructure.s();
+            tileentitystructure.D();
         case DATA:
         }
 

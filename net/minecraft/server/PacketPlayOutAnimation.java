@@ -14,11 +14,13 @@ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
         this.b = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.readUnsignedByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeByte(this.b);

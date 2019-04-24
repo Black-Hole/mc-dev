@@ -6,7 +6,9 @@ public interface DataWatcherSerializer<T> {
 
     T a(PacketDataSerializer packetdataserializer);
 
-    DataWatcherObject<T> a(int i);
+    default DataWatcherObject<T> a(int i) {
+        return new DataWatcherObject<>(i, this);
+    }
 
     T a(T t0);
 }

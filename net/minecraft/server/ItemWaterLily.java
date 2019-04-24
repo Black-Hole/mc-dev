@@ -6,21 +6,25 @@ public class ItemWaterLily extends ItemBlock {
         super(block, item_info);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         return EnumInteractionResult.PASS;
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = this.a(world, entityhuman, true);
+        MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.SOURCE_ONLY);
 
-        if (movingobjectposition == null) {
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
             return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
-            if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
-                BlockPosition blockposition = movingobjectposition.getBlockPosition();
+            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                MovingObjectPositionBlock movingobjectpositionblock = (MovingObjectPositionBlock) movingobjectposition;
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+                EnumDirection enumdirection = movingobjectpositionblock.getDirection();
 
-                if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(movingobjectposition.direction), movingobjectposition.direction, itemstack)) {
+                if (!world.a(entityhuman, blockposition) || !entityhuman.a(blockposition.shift(enumdirection), enumdirection, itemstack)) {
                     return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                 }
 
@@ -29,7 +33,7 @@ public class ItemWaterLily extends ItemBlock {
                 Material material = iblockdata.getMaterial();
                 Fluid fluid = world.getFluid(blockposition);
 
-                if ((fluid.c() == FluidTypes.WATER || material == Material.ICE) && world.isEmpty(blockposition1)) {
+                if ((fluid.getType() == FluidTypes.WATER || material == Material.ICE) && world.isEmpty(blockposition1)) {
                     world.setTypeAndData(blockposition1, Blocks.LILY_PAD.getBlockData(), 11);
                     if (entityhuman instanceof EntityPlayer) {
                         CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition1, itemstack);

@@ -20,6 +20,7 @@ public class PacketPlayOutVehicleMove implements Packet<PacketListenerPlayOut> {
         this.e = entity.pitch;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readDouble();
         this.b = packetdataserializer.readDouble();
@@ -28,6 +29,7 @@ public class PacketPlayOutVehicleMove implements Packet<PacketListenerPlayOut> {
         this.e = packetdataserializer.readFloat();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeDouble(this.a);
         packetdataserializer.writeDouble(this.b);

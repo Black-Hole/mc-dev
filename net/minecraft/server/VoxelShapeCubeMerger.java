@@ -17,6 +17,7 @@ public final class VoxelShapeCubeMerger implements VoxelShapeMerger {
         this.d = IntMath.gcd(i, j);
     }
 
+    @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
         int i = this.b / this.d;
         int j = this.c / this.d;
@@ -30,6 +31,7 @@ public final class VoxelShapeCubeMerger implements VoxelShapeMerger {
         return true;
     }
 
+    @Override
     public DoubleList a() {
         return this.a;
     }

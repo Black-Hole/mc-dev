@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 public class CriterionTriggers {
 
-    private static final Map<MinecraftKey, CriterionTrigger<?>> F = Maps.newHashMap();
+    private static final Map<MinecraftKey, CriterionTrigger<?>> J = Maps.newHashMap();
     public static final CriterionTriggerImpossible a = (CriterionTriggerImpossible) a((CriterionTrigger) (new CriterionTriggerImpossible()));
     public static final CriterionTriggerKilled b = (CriterionTriggerKilled) a((CriterionTrigger) (new CriterionTriggerKilled(new MinecraftKey("player_killed_entity"))));
     public static final CriterionTriggerKilled c = (CriterionTriggerKilled) a((CriterionTrigger) (new CriterionTriggerKilled(new MinecraftKey("entity_killed_player"))));
@@ -38,22 +38,26 @@ public class CriterionTriggers {
     public static final CriterionTriggerNetherTravel C = (CriterionTriggerNetherTravel) a((CriterionTrigger) (new CriterionTriggerNetherTravel()));
     public static final CriterionTriggerFishingRodHooked D = (CriterionTriggerFishingRodHooked) a((CriterionTrigger) (new CriterionTriggerFishingRodHooked()));
     public static final CriterionTriggerChanneledLightning E = (CriterionTriggerChanneledLightning) a((CriterionTrigger) (new CriterionTriggerChanneledLightning()));
+    public static final CriterionTriggerShotCrossbow F = (CriterionTriggerShotCrossbow) a((CriterionTrigger) (new CriterionTriggerShotCrossbow()));
+    public static final CriterionTriggerKilledByCrossbow G = (CriterionTriggerKilledByCrossbow) a((CriterionTrigger) (new CriterionTriggerKilledByCrossbow()));
+    public static final CriterionTriggerLocation H = (CriterionTriggerLocation) a((CriterionTrigger) (new CriterionTriggerLocation(new MinecraftKey("hero_of_the_village"))));
+    public static final CriterionTriggerLocation I = (CriterionTriggerLocation) a((CriterionTrigger) (new CriterionTriggerLocation(new MinecraftKey("voluntary_exile"))));
 
     private static <T extends CriterionTrigger<?>> T a(T t0) {
-        if (CriterionTriggers.F.containsKey(t0.a())) {
+        if (CriterionTriggers.J.containsKey(t0.a())) {
             throw new IllegalArgumentException("Duplicate criterion id " + t0.a());
         } else {
-            CriterionTriggers.F.put(t0.a(), t0);
+            CriterionTriggers.J.put(t0.a(), t0);
             return t0;
         }
     }
 
     @Nullable
     public static <T extends CriterionInstance> CriterionTrigger<T> a(MinecraftKey minecraftkey) {
-        return (CriterionTrigger) CriterionTriggers.F.get(minecraftkey);
+        return (CriterionTrigger) CriterionTriggers.J.get(minecraftkey);
     }
 
     public static Iterable<? extends CriterionTrigger<?>> a() {
-        return CriterionTriggers.F.values();
+        return CriterionTriggers.J.values();
     }
 }

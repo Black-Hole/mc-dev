@@ -1,9 +1,11 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalInteract extends PathfinderGoalLookAtPlayer {
 
-    public PathfinderGoalInteract(EntityInsentient entityinsentient, Class<? extends Entity> oclass, float f, float f1) {
+    public PathfinderGoalInteract(EntityInsentient entityinsentient, Class<? extends EntityLiving> oclass, float f, float f1) {
         super(entityinsentient, oclass, f, f1);
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.LOOK, PathfinderGoal.Type.MOVE));
     }
 }

@@ -34,7 +34,7 @@ public class DataConverterMinecart extends DataFix {
                 } else {
                     Typed<? extends Pair<String, ?>> typed = (Typed) taggedchoicetype.point(dynamicops, "Minecart", pair.getSecond()).orElseThrow(IllegalStateException::new);
                     Dynamic<?> dynamic = (Dynamic) typed.getOrCreate(DSL.remainderFinder());
-                    int i = dynamic.getInt("Type");
+                    int i = dynamic.get("Type").asInt(0);
                     String s;
 
                     if (i > 0 && i < DataConverterMinecart.a.size()) {

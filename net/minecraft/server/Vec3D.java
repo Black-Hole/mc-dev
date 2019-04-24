@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import java.util.EnumSet;
 
-public class Vec3D {
+public class Vec3D implements IPosition {
 
     public static final Vec3D a = new Vec3D(0.0D, 0.0D, 0.0D);
     public final double x;
@@ -23,7 +23,7 @@ public class Vec3D {
         return new Vec3D(vec3d.x - this.x, vec3d.y - this.y, vec3d.z - this.z);
     }
 
-    public Vec3D a() {
+    public Vec3D d() {
         double d0 = (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 
         return d0 < 1.0E-4D ? Vec3D.a : new Vec3D(this.x / d0, this.y / d0, this.z / d0);
@@ -78,14 +78,22 @@ public class Vec3D {
     }
 
     public Vec3D a(double d0) {
-        return new Vec3D(this.x * d0, this.y * d0, this.z * d0);
+        return this.d(d0, d0, d0);
     }
 
-    public double b() {
+    public Vec3D h(Vec3D vec3d) {
+        return this.d(vec3d.x, vec3d.y, vec3d.z);
+    }
+
+    public Vec3D d(double d0, double d1, double d2) {
+        return new Vec3D(this.x * d0, this.y * d1, this.z * d2);
+    }
+
+    public double f() {
         return (double) MathHelper.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-    public double c() {
+    public double g() {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
@@ -142,5 +150,24 @@ public class Vec3D {
         double d2 = enumset.contains(EnumDirection.EnumAxis.Z) ? (double) MathHelper.floor(this.z) : this.z;
 
         return new Vec3D(d0, d1, d2);
+    }
+
+    public double a(EnumDirection.EnumAxis enumdirection_enumaxis) {
+        return enumdirection_enumaxis.a(this.x, this.y, this.z);
+    }
+
+    @Override
+    public final double getX() {
+        return this.x;
+    }
+
+    @Override
+    public final double getY() {
+        return this.y;
+    }
+
+    @Override
+    public final double getZ() {
+        return this.z;
     }
 }

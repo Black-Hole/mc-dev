@@ -19,16 +19,16 @@ public class DataConverterTeamDisplayName extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.u.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.v.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.u))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.v))) {
             throw new IllegalStateException("Team type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("TeamDisplayNameFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
                         return dynamic.update("DisplayName", (dynamic1) -> {
-                            Optional optional = dynamic1.getStringValue().map((s) -> {
+                            Optional optional = dynamic1.asString().map((s) -> {
                                 return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
                             });
 

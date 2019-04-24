@@ -1,71 +1,74 @@
 package net.minecraft.server;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import java.util.Map;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+public abstract class ChunkMap extends LightEngineGraph {
 
-public class ChunkMap extends Long2ObjectOpenHashMap<Chunk> {
-
-    private static final Logger a = LogManager.getLogger();
-
-    public ChunkMap(int i) {
-        super(i);
+    protected ChunkMap(int i, int j, int k) {
+        super(i, j, k);
     }
 
-    public Chunk put(long i, Chunk chunk) {
-        Chunk chunk1 = (Chunk) super.put(i, chunk);
+    @Override
+    protected boolean a(long i) {
+        return i == ChunkCoordIntPair.a;
+    }
+
+    @Override
+    protected void a(long i, int j, boolean flag) {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
+        int k = chunkcoordintpair.x;
+        int l = chunkcoordintpair.z;
 
-        for (int j = chunkcoordintpair.x - 1; j <= chunkcoordintpair.x + 1; ++j) {
-            for (int k = chunkcoordintpair.z - 1; k <= chunkcoordintpair.z + 1; ++k) {
-                if (j != chunkcoordintpair.x || k != chunkcoordintpair.z) {
-                    long l = ChunkCoordIntPair.a(j, k);
-                    Chunk chunk2 = (Chunk) this.get(l);
+        for (int i1 = -1; i1 <= 1; ++i1) {
+            for (int j1 = -1; j1 <= 1; ++j1) {
+                long k1 = ChunkCoordIntPair.pair(k + i1, l + j1);
 
-                    if (chunk2 != null) {
-                        chunk.H();
-                        chunk2.H();
+                if (k1 != i) {
+                    this.b(i, k1, j, flag);
+                }
+            }
+        }
+
+    }
+
+    @Override
+    protected int a(long i, long j, int k) {
+        int l = k;
+        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
+        int i1 = chunkcoordintpair.x;
+        int j1 = chunkcoordintpair.z;
+
+        for (int k1 = -1; k1 <= 1; ++k1) {
+            for (int l1 = -1; l1 <= 1; ++l1) {
+                long i2 = ChunkCoordIntPair.pair(i1 + k1, j1 + l1);
+
+                if (i2 == i) {
+                    i2 = ChunkCoordIntPair.a;
+                }
+
+                if (i2 != j) {
+                    int j2 = this.b(i2, i, this.c(i2));
+
+                    if (l > j2) {
+                        l = j2;
+                    }
+
+                    if (l == 0) {
+                        return l;
                     }
                 }
             }
         }
 
-        return chunk1;
+        return l;
     }
 
-    public Chunk put(Long olong, Chunk chunk) {
-        return this.put(olong, chunk);
+    @Override
+    protected int b(long i, long j, int k) {
+        return i == ChunkCoordIntPair.a ? this.b(j) : k + 1;
     }
 
-    public Chunk remove(long i) {
-        Chunk chunk = (Chunk) super.remove(i);
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i);
+    protected abstract int b(long i);
 
-        for (int j = chunkcoordintpair.x - 1; j <= chunkcoordintpair.x + 1; ++j) {
-            for (int k = chunkcoordintpair.z - 1; k <= chunkcoordintpair.z + 1; ++k) {
-                if (j != chunkcoordintpair.x || k != chunkcoordintpair.z) {
-                    Chunk chunk1 = (Chunk) this.get(ChunkCoordIntPair.a(j, k));
-
-                    if (chunk1 != null) {
-                        chunk1.I();
-                    }
-                }
-            }
-        }
-
-        return chunk;
-    }
-
-    public Chunk remove(Object object) {
-        return this.remove((Long) object);
-    }
-
-    public void putAll(Map<? extends Long, ? extends Chunk> map) {
-        throw new RuntimeException("Not yet implemented");
-    }
-
-    public boolean remove(Object object, Object object1) {
-        throw new RuntimeException("Not yet implemented");
+    public void b(long i, int j, boolean flag) {
+        this.a(ChunkCoordIntPair.a, i, j, flag);
     }
 }

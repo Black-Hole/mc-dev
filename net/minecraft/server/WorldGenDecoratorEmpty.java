@@ -1,12 +1,17 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
-public class WorldGenDecoratorEmpty extends WorldGenDecorator<WorldGenFeatureDecoratorEmptyConfiguration> {
+public class WorldGenDecoratorEmpty extends WorldGenDecoratorFeatureSimple<WorldGenFeatureDecoratorEmptyConfiguration> {
 
-    public WorldGenDecoratorEmpty() {}
+    public WorldGenDecoratorEmpty(Function<Dynamic<?>, ? extends WorldGenFeatureDecoratorEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        return worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition, c0);
+    public Stream<BlockPosition> a(Random random, WorldGenFeatureDecoratorEmptyConfiguration worldgenfeaturedecoratoremptyconfiguration, BlockPosition blockposition) {
+        return Stream.of(blockposition);
     }
 }

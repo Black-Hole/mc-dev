@@ -83,19 +83,18 @@ public abstract class VoxelShape {
     }
 
     @Nullable
-    public MovingObjectPosition rayTrace(Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
+    public MovingObjectPositionBlock rayTrace(Vec3D vec3d, Vec3D vec3d1, BlockPosition blockposition) {
         if (this.isEmpty()) {
             return null;
         } else {
             Vec3D vec3d2 = vec3d1.d(vec3d);
 
-            if (vec3d2.c() < 1.0E-7D) {
+            if (vec3d2.g() < 1.0E-7D) {
                 return null;
             } else {
                 Vec3D vec3d3 = vec3d.e(vec3d2.a(0.001D));
-                Vec3D vec3d4 = vec3d.e(vec3d2.a(0.001D)).a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
 
-                return this.b(vec3d4.x, vec3d4.y, vec3d4.z) ? new MovingObjectPosition(vec3d3, EnumDirection.a(vec3d2.x, vec3d2.y, vec3d2.z), blockposition) : AxisAlignedBB.a(this.d(), vec3d, vec3d1, blockposition);
+                return this.b(vec3d3.x - (double) blockposition.getX(), vec3d3.y - (double) blockposition.getY(), vec3d3.z - (double) blockposition.getZ()) ? new MovingObjectPositionBlock(vec3d3, EnumDirection.a(vec3d2.x, vec3d2.y, vec3d2.z).opposite(), blockposition, true) : AxisAlignedBB.a(this.d(), vec3d, vec3d1, blockposition);
             }
         }
     }

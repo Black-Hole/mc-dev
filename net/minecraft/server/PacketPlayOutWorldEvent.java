@@ -13,11 +13,12 @@ public class PacketPlayOutWorldEvent implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutWorldEvent(int i, BlockPosition blockposition, int j, boolean flag) {
         this.a = i;
-        this.b = blockposition.h();
+        this.b = blockposition.immutableCopy();
         this.c = j;
         this.d = flag;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.e();
@@ -25,6 +26,7 @@ public class PacketPlayOutWorldEvent implements Packet<PacketListenerPlayOut> {
         this.d = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.a(this.b);

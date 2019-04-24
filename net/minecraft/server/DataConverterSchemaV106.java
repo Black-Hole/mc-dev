@@ -14,8 +14,8 @@ public class DataConverterSchemaV106 extends Schema {
 
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
-        schema.registerType(true, DataConverterTypes.r, () -> {
-            return DSL.optionalFields("SpawnPotentials", DSL.list(DSL.fields("Entity", DataConverterTypes.n.in(schema))), "SpawnData", DataConverterTypes.n.in(schema));
+        schema.registerType(true, DataConverterTypes.s, () -> {
+            return DSL.optionalFields("SpawnPotentials", DSL.list(DSL.fields("Entity", DataConverterTypes.o.in(schema))), "SpawnData", DataConverterTypes.o.in(schema));
         });
     }
 }

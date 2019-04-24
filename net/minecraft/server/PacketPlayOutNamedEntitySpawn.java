@@ -29,9 +29,10 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
         this.h = entityhuman.getDataWatcher();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.i();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.k();
         this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readDouble();
@@ -40,6 +41,7 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
         this.i = DataWatcher.b(packetdataserializer);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);

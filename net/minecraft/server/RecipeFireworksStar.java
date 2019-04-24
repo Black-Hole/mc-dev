@@ -28,66 +28,62 @@ public class RecipeFireworksStar extends IRecipeComplex {
         super(minecraftkey);
     }
 
-    public boolean a(IInventory iinventory, World world) {
-        if (!(iinventory instanceof InventoryCrafting)) {
-            return false;
-        } else {
-            boolean flag = false;
-            boolean flag1 = false;
-            boolean flag2 = false;
-            boolean flag3 = false;
-            boolean flag4 = false;
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
+        boolean flag = false;
+        boolean flag1 = false;
+        boolean flag2 = false;
+        boolean flag3 = false;
+        boolean flag4 = false;
 
-            for (int i = 0; i < iinventory.getSize(); ++i) {
-                ItemStack itemstack = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (!itemstack.isEmpty()) {
-                    if (RecipeFireworksStar.a.test(itemstack)) {
-                        if (flag2) {
-                            return false;
-                        }
-
-                        flag2 = true;
-                    } else if (RecipeFireworksStar.c.test(itemstack)) {
-                        if (flag4) {
-                            return false;
-                        }
-
-                        flag4 = true;
-                    } else if (RecipeFireworksStar.b.test(itemstack)) {
-                        if (flag3) {
-                            return false;
-                        }
-
-                        flag3 = true;
-                    } else if (RecipeFireworksStar.e.test(itemstack)) {
-                        if (flag) {
-                            return false;
-                        }
-
-                        flag = true;
-                    } else {
-                        if (!(itemstack.getItem() instanceof ItemDye)) {
-                            return false;
-                        }
-
-                        flag1 = true;
+            if (!itemstack.isEmpty()) {
+                if (RecipeFireworksStar.a.test(itemstack)) {
+                    if (flag2) {
+                        return false;
                     }
+
+                    flag2 = true;
+                } else if (RecipeFireworksStar.c.test(itemstack)) {
+                    if (flag4) {
+                        return false;
+                    }
+
+                    flag4 = true;
+                } else if (RecipeFireworksStar.b.test(itemstack)) {
+                    if (flag3) {
+                        return false;
+                    }
+
+                    flag3 = true;
+                } else if (RecipeFireworksStar.e.test(itemstack)) {
+                    if (flag) {
+                        return false;
+                    }
+
+                    flag = true;
+                } else {
+                    if (!(itemstack.getItem() instanceof ItemDye)) {
+                        return false;
+                    }
+
+                    flag1 = true;
                 }
             }
-
-            return flag && flag1;
         }
+
+        return flag && flag1;
     }
 
-    public ItemStack craftItem(IInventory iinventory) {
+    public ItemStack a(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = new ItemStack(Items.FIREWORK_STAR);
         NBTTagCompound nbttagcompound = itemstack.a("Explosion");
         ItemFireworks.EffectType itemfireworks_effecttype = ItemFireworks.EffectType.SMALL_BALL;
         List<Integer> list = Lists.newArrayList();
 
-        for (int i = 0; i < iinventory.getSize(); ++i) {
-            ItemStack itemstack1 = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack1 = inventorycrafting.getItem(i);
 
             if (!itemstack1.isEmpty()) {
                 if (RecipeFireworksStar.a.test(itemstack1)) {
@@ -107,11 +103,13 @@ public class RecipeFireworksStar extends IRecipeComplex {
         return itemstack;
     }
 
-    public ItemStack d() {
+    @Override
+    public ItemStack c() {
         return new ItemStack(Items.FIREWORK_STAR);
     }
 
-    public RecipeSerializer<?> a() {
-        return RecipeSerializers.h;
+    @Override
+    public RecipeSerializer<?> getRecipeSerializer() {
+        return RecipeSerializer.h;
     }
 }

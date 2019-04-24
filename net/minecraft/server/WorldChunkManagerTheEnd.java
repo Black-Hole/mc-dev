@@ -21,38 +21,34 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         this.c = new NoiseGenerator3Handler(this.d);
     }
 
-    @Nullable
-    public BiomeBase getBiome(BlockPosition blockposition, @Nullable BiomeBase biomebase) {
-        return this.a(blockposition.getX() >> 4, blockposition.getZ() >> 4);
-    }
+    @Override
+    public BiomeBase getBiome(int i, int j) {
+        int k = i >> 4;
+        int l = j >> 4;
 
-    private BiomeBase a(int i, int j) {
-        if ((long) i * (long) i + (long) j * (long) j <= 4096L) {
+        if ((long) k * (long) k + (long) l * (long) l <= 4096L) {
             return Biomes.THE_END;
         } else {
-            float f = this.c(i, j, 1, 1);
+            float f = this.c(k * 2 + 1, l * 2 + 1);
 
             return f > 40.0F ? Biomes.END_HIGHLANDS : (f >= 0.0F ? Biomes.END_MIDLANDS : (f < -20.0F ? Biomes.SMALL_END_ISLANDS : Biomes.END_BARRENS));
         }
     }
 
-    public BiomeBase[] getBiomes(int i, int j, int k, int l) {
-        return this.getBiomeBlock(i, j, k, l);
-    }
-
+    @Override
     public BiomeBase[] a(int i, int j, int k, int l, boolean flag) {
         BiomeBase[] abiomebase = new BiomeBase[k * l];
         Long2ObjectMap<BiomeBase> long2objectmap = new Long2ObjectOpenHashMap();
 
         for (int i1 = 0; i1 < k; ++i1) {
             for (int j1 = 0; j1 < l; ++j1) {
-                int k1 = i1 + i >> 4;
-                int l1 = j1 + j >> 4;
-                long i2 = ChunkCoordIntPair.a(k1, l1);
+                int k1 = i1 + i;
+                int l1 = j1 + j;
+                long i2 = ChunkCoordIntPair.pair(k1, l1);
                 BiomeBase biomebase = (BiomeBase) long2objectmap.get(i2);
 
                 if (biomebase == null) {
-                    biomebase = this.a(k1, l1);
+                    biomebase = this.getBiome(k1, l1);
                     long2objectmap.put(i2, biomebase);
                 }
 
@@ -63,6 +59,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         return abiomebase;
     }
 
+    @Override
     public Set<BiomeBase> a(int i, int j, int k) {
         int l = i - k >> 2;
         int i1 = j - k >> 2;
@@ -75,6 +72,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
     }
 
     @Nullable
+    @Override
     public BlockPosition a(int i, int j, int k, List<BiomeBase> list, Random random) {
         int l = i - k >> 2;
         int i1 = j - k >> 2;
@@ -102,34 +100,37 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         return blockposition;
     }
 
-    public float c(int i, int j, int k, int l) {
-        float f = (float) (i * 2 + k);
-        float f1 = (float) (j * 2 + l);
-        float f2 = 100.0F - MathHelper.c(f * f + f1 * f1) * 8.0F;
+    @Override
+    public float c(int i, int j) {
+        int k = i / 2;
+        int l = j / 2;
+        int i1 = i % 2;
+        int j1 = j % 2;
+        float f = 100.0F - MathHelper.c((float) (i * i + j * j)) * 8.0F;
 
-        f2 = MathHelper.a(f2, -100.0F, 80.0F);
+        f = MathHelper.a(f, -100.0F, 80.0F);
 
-        for (int i1 = -12; i1 <= 12; ++i1) {
-            for (int j1 = -12; j1 <= 12; ++j1) {
-                long k1 = (long) (i + i1);
-                long l1 = (long) (j + j1);
+        for (int k1 = -12; k1 <= 12; ++k1) {
+            for (int l1 = -12; l1 <= 12; ++l1) {
+                long i2 = (long) (k + k1);
+                long j2 = (long) (l + l1);
 
-                if (k1 * k1 + l1 * l1 > 4096L && this.c.a((double) k1, (double) l1) < -0.8999999761581421D) {
-                    float f3 = (MathHelper.e((float) k1) * 3439.0F + MathHelper.e((float) l1) * 147.0F) % 13.0F + 9.0F;
-
-                    f = (float) (k - i1 * 2);
-                    f1 = (float) (l - j1 * 2);
-                    float f4 = 100.0F - MathHelper.c(f * f + f1 * f1) * f3;
+                if (i2 * i2 + j2 * j2 > 4096L && this.c.a((double) i2, (double) j2) < -0.8999999761581421D) {
+                    float f1 = (MathHelper.e((float) i2) * 3439.0F + MathHelper.e((float) j2) * 147.0F) % 13.0F + 9.0F;
+                    float f2 = (float) (i1 - k1 * 2);
+                    float f3 = (float) (j1 - l1 * 2);
+                    float f4 = 100.0F - MathHelper.c(f2 * f2 + f3 * f3) * f1;
 
                     f4 = MathHelper.a(f4, -100.0F, 80.0F);
-                    f2 = Math.max(f2, f4);
+                    f = Math.max(f, f4);
                 }
             }
         }
 
-        return f2;
+        return f;
     }
 
+    @Override
     public boolean a(StructureGenerator<?> structuregenerator) {
         return (Boolean) this.a.computeIfAbsent(structuregenerator, (structuregenerator1) -> {
             BiomeBase[] abiomebase = this.e;
@@ -147,6 +148,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
         });
     }
 
+    @Override
     public Set<IBlockData> b() {
         if (this.b.isEmpty()) {
             BiomeBase[] abiomebase = this.e;
@@ -155,7 +157,7 @@ public class WorldChunkManagerTheEnd extends WorldChunkManager {
             for (int j = 0; j < i; ++j) {
                 BiomeBase biomebase = abiomebase[j];
 
-                this.b.add(biomebase.r().a());
+                this.b.add(biomebase.q().a());
             }
         }
 

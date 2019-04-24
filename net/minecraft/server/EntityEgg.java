@@ -1,9 +1,9 @@
 package net.minecraft.server;
 
-public class EntityEgg extends EntityProjectile {
+public class EntityEgg extends EntityProjectileThrowable {
 
-    public EntityEgg(World world) {
-        super(EntityTypes.EGG, world);
+    public EntityEgg(EntityTypes<? extends EntityEgg> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public EntityEgg(World world, EntityLiving entityliving) {
@@ -14,9 +14,10 @@ public class EntityEgg extends EntityProjectile {
         super(EntityTypes.EGG, d0, d1, d2, world);
     }
 
+    @Override
     protected void a(MovingObjectPosition movingobjectposition) {
-        if (movingobjectposition.entity != null) {
-            movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+            ((MovingObjectPositionEntity) movingobjectposition).getEntity().damageEntity(DamageSource.projectile(this, this.getShooter()), 0.0F);
         }
 
         if (!this.world.isClientSide) {
@@ -28,7 +29,7 @@ public class EntityEgg extends EntityProjectile {
                 }
 
                 for (int i = 0; i < b0; ++i) {
-                    EntityChicken entitychicken = new EntityChicken(this.world);
+                    EntityChicken entitychicken = (EntityChicken) EntityTypes.CHICKEN.a(this.world);
 
                     entitychicken.setAgeRaw(-24000);
                     entitychicken.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
@@ -40,5 +41,10 @@ public class EntityEgg extends EntityProjectile {
             this.die();
         }
 
+    }
+
+    @Override
+    protected Item i() {
+        return Items.EGG;
     }
 }

@@ -13,10 +13,12 @@ public class AttributeMapServer extends AttributeMapBase {
 
     public AttributeMapServer() {}
 
+    @Override
     public AttributeModifiable a(IAttribute iattribute) {
         return (AttributeModifiable) super.a(iattribute);
     }
 
+    @Override
     public AttributeModifiable a(String s) {
         AttributeInstance attributeinstance = super.a(s);
 
@@ -27,6 +29,7 @@ public class AttributeMapServer extends AttributeMapBase {
         return (AttributeModifiable) attributeinstance;
     }
 
+    @Override
     public AttributeInstance b(IAttribute iattribute) {
         AttributeInstance attributeinstance = super.b(iattribute);
 
@@ -37,10 +40,12 @@ public class AttributeMapServer extends AttributeMapBase {
         return attributeinstance;
     }
 
+    @Override
     protected AttributeInstance c(IAttribute iattribute) {
         return new AttributeModifiable(this, iattribute);
     }
 
+    @Override
     public void a(AttributeInstance attributeinstance) {
         if (attributeinstance.getAttribute().c()) {
             this.e.add(attributeinstance);

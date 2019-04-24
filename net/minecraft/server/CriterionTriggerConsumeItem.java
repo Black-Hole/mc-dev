@@ -19,10 +19,12 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
 
     public CriterionTriggerConsumeItem() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerConsumeItem.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerConsumeItem.b> criteriontrigger_a) {
         CriterionTriggerConsumeItem.a criteriontriggerconsumeitem_a = (CriterionTriggerConsumeItem.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
         criteriontriggerconsumeitem_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerConsumeItem.b> criteriontrigger_a) {
         CriterionTriggerConsumeItem.a criteriontriggerconsumeitem_a = (CriterionTriggerConsumeItem.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerConsumeItem.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         return new CriterionTriggerConsumeItem.b(CriterionConditionItem.a(jsonobject.get("item")));
     }
@@ -134,6 +139,7 @@ public class CriterionTriggerConsumeItem implements CriterionTrigger<CriterionTr
             return this.a.a(itemstack);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

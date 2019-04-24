@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalArrowAttack extends PathfinderGoal {
 
     private final EntityInsentient a;
@@ -29,33 +31,37 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
             this.h = j;
             this.i = f;
             this.j = f * f;
-            this.a(3);
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
     }
 
+    @Override
     public boolean a() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
-        if (entityliving == null) {
-            return false;
-        } else {
+        if (entityliving != null && entityliving.isAlive()) {
             this.c = entityliving;
             return true;
+        } else {
+            return false;
         }
     }
 
+    @Override
     public boolean b() {
-        return this.a() || !this.a.getNavigation().p();
+        return this.a() || !this.a.getNavigation().n();
     }
 
+    @Override
     public void d() {
         this.c = null;
         this.f = 0;
         this.d = -1;
     }
 
+    @Override
     public void e() {
-        double d0 = this.a.d(this.c.locX, this.c.getBoundingBox().minY, this.c.locZ);
+        double d0 = this.a.e(this.c.locX, this.c.getBoundingBox().minY, this.c.locZ);
         boolean flag = this.a.getEntitySenses().a(this.c);
 
         if (flag) {
@@ -64,8 +70,8 @@ public class PathfinderGoalArrowAttack extends PathfinderGoal {
             this.f = 0;
         }
 
-        if (d0 <= (double) this.j && this.f >= 20) {
-            this.a.getNavigation().q();
+        if (d0 <= (double) this.j && this.f >= 5) {
+            this.a.getNavigation().o();
         } else {
             this.a.getNavigation().a((Entity) this.c, this.e);
         }

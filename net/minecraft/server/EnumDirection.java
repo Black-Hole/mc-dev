@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Iterators;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -37,6 +39,13 @@ public enum EnumDirection implements INamable {
     })).toArray((i) -> {
         return new EnumDirection[i];
     });
+    private static final Long2ObjectMap<EnumDirection> r = (Long2ObjectMap) Arrays.stream(EnumDirection.n).collect(Collectors.toMap((enumdirection) -> {
+        return (new BlockPosition(enumdirection.n())).asLong();
+    }, (enumdirection) -> {
+        return enumdirection;
+    }, (enumdirection, enumdirection1) -> {
+        throw new IllegalArgumentException("Duplicate keys");
+    }, Long2ObjectOpenHashMap::new));
 
     private EnumDirection(int i, int j, int k, String s, EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection, EnumDirection.EnumAxis enumdirection_enumaxis, BaseBlockPosition baseblockposition) {
         this.g = i;
@@ -148,6 +157,11 @@ public enum EnumDirection implements INamable {
         return EnumDirection.q[MathHelper.a(i % EnumDirection.q.length)];
     }
 
+    @Nullable
+    public static EnumDirection a(BlockPosition blockposition) {
+        return (EnumDirection) EnumDirection.r.get(blockposition.asLong());
+    }
+
     public static EnumDirection fromAngle(double d0) {
         return fromType2(MathHelper.floor(d0 / 90.0D + 0.5D) & 3);
     }
@@ -199,6 +213,7 @@ public enum EnumDirection implements INamable {
         return this.j;
     }
 
+    @Override
     public String getName() {
         return this.j;
     }
@@ -216,6 +231,10 @@ public enum EnumDirection implements INamable {
         }
 
         throw new IllegalArgumentException("No such direction: " + enumdirection_enumaxisdirection + " " + enumdirection_enumaxis);
+    }
+
+    public BaseBlockPosition n() {
+        return this.m;
     }
 
     public static enum EnumDirectionLimit implements Iterable<EnumDirection>, Predicate<EnumDirection> {
@@ -267,28 +286,34 @@ public enum EnumDirection implements INamable {
     public static enum EnumAxis implements Predicate<EnumDirection>, INamable {
 
         X("x") {
+            @Override
             public int a(int i, int j, int k) {
                 return i;
             }
 
+            @Override
             public double a(double d0, double d1, double d2) {
                 return d0;
             }
         },
         Y("y") {
+            @Override
             public int a(int i, int j, int k) {
                 return j;
             }
 
+            @Override
             public double a(double d0, double d1, double d2) {
                 return d1;
             }
         },
         Z("z") {
+            @Override
             public int a(int i, int j, int k) {
                 return k;
             }
 
+            @Override
             public double a(double d0, double d1, double d2) {
                 return d2;
             }
@@ -319,6 +344,10 @@ public enum EnumDirection implements INamable {
             return this.e;
         }
 
+        public static EnumDirection.EnumAxis a(Random random) {
+            return values()[random.nextInt(values().length)];
+        }
+
         public boolean test(@Nullable EnumDirection enumdirection) {
             return enumdirection != null && enumdirection.k() == this;
         }
@@ -335,6 +364,7 @@ public enum EnumDirection implements INamable {
             }
         }
 
+        @Override
         public String getName() {
             return this.e;
         }

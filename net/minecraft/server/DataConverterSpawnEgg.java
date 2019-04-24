@@ -92,7 +92,7 @@ public class DataConverterSpawnEgg extends DataFix {
     public TypeRewriteRule makeRule() {
         Schema schema = this.getInputSchema();
         Type<?> type = schema.getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
         OpticFinder<String> opticfinder1 = DSL.fieldFinder("id", DSL.string());
         OpticFinder<?> opticfinder2 = type.findField("tag");
         OpticFinder<?> opticfinder3 = opticfinder2.type().findField("EntityTag");
@@ -103,7 +103,7 @@ public class DataConverterSpawnEgg extends DataFix {
 
             if (optional.isPresent() && Objects.equals(((Pair) optional.get()).getSecond(), "minecraft:spawn_egg")) {
                 Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
-                short short0 = dynamic.getShort("Damage");
+                short short0 = dynamic.get("Damage").asShort((short) 0);
                 Optional<? extends Typed<?>> optional1 = typed.getOptionalTyped(opticfinder2);
                 Optional<? extends Typed<?>> optional2 = optional1.flatMap((typed1) -> {
                     return typed1.getOptionalTyped(opticfinder3);

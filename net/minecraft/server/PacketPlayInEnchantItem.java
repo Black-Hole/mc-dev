@@ -13,11 +13,13 @@ public class PacketPlayInEnchantItem implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.b = packetdataserializer.readByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeByte(this.b);

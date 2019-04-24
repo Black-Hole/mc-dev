@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> extends PathfinderGoal {
 
     private final T a;
@@ -17,43 +19,48 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
         this.b = d0;
         this.c = i;
         this.d = f * f;
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
     }
 
-    public void b(int i) {
+    public void a(int i) {
         this.c = i;
     }
 
+    @Override
     public boolean a() {
         return this.a.getGoalTarget() == null ? false : this.g();
     }
 
     protected boolean g() {
-        return !this.a.getItemInMainHand().isEmpty() && this.a.getItemInMainHand().getItem() == Items.BOW;
+        return this.a.a(Items.BOW);
     }
 
+    @Override
     public boolean b() {
-        return (this.a() || !this.a.getNavigation().p()) && this.g();
+        return (this.a() || !this.a.getNavigation().n()) && this.g();
     }
 
+    @Override
     public void c() {
         super.c();
-        ((IRangedEntity) this.a).s(true);
+        this.a.q(true);
     }
 
+    @Override
     public void d() {
         super.d();
-        ((IRangedEntity) this.a).s(false);
+        this.a.q(false);
         this.f = 0;
         this.e = -1;
-        this.a.da();
+        this.a.dp();
     }
 
+    @Override
     public void e() {
         EntityLiving entityliving = this.a.getGoalTarget();
 
         if (entityliving != null) {
-            double d0 = this.a.d(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
+            double d0 = this.a.e(entityliving.locX, entityliving.getBoundingBox().minY, entityliving.locZ);
             boolean flag = this.a.getEntitySenses().a(entityliving);
             boolean flag1 = this.f > 0;
 
@@ -68,7 +75,7 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
             }
 
             if (d0 <= (double) this.d && this.f >= 20) {
-                this.a.getNavigation().q();
+                this.a.getNavigation().o();
                 ++this.i;
             } else {
                 this.a.getNavigation().a((Entity) entityliving, this.b);
@@ -102,18 +109,18 @@ public class PathfinderGoalBowShoot<T extends EntityMonster & IRangedEntity> ext
 
             if (this.a.isHandRaised()) {
                 if (!flag && this.f < -60) {
-                    this.a.da();
+                    this.a.dp();
                 } else if (flag) {
-                    int i = this.a.cY();
+                    int i = this.a.dn();
 
                     if (i >= 20) {
-                        this.a.da();
+                        this.a.dp();
                         ((IRangedEntity) this.a).a(entityliving, ItemBow.a(i));
                         this.e = this.c;
                     }
                 }
             } else if (--this.e <= 0 && this.f >= -60) {
-                this.a.c(EnumHand.MAIN_HAND);
+                this.a.c(ProjectileHelper.a(this.a, Items.BOW));
             }
 
         }

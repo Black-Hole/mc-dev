@@ -18,22 +18,22 @@ public class DataConverterHanging extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic, boolean flag, boolean flag1) {
-        if ((flag || flag1) && !dynamic.get("Facing").flatMap(Dynamic::getNumberValue).isPresent()) {
+        if ((flag || flag1) && !dynamic.get("Facing").asNumber().isPresent()) {
             int i;
 
-            if (dynamic.get("Direction").flatMap(Dynamic::getNumberValue).isPresent()) {
-                i = dynamic.getByte("Direction") % DataConverterHanging.a.length;
+            if (dynamic.get("Direction").asNumber().isPresent()) {
+                i = dynamic.get("Direction").asByte((byte) 0) % DataConverterHanging.a.length;
                 int[] aint = DataConverterHanging.a[i];
 
-                dynamic = dynamic.set("TileX", dynamic.createInt(dynamic.getInt("TileX") + aint[0]));
-                dynamic = dynamic.set("TileY", dynamic.createInt(dynamic.getInt("TileY") + aint[1]));
-                dynamic = dynamic.set("TileZ", dynamic.createInt(dynamic.getInt("TileZ") + aint[2]));
+                dynamic = dynamic.set("TileX", dynamic.createInt(dynamic.get("TileX").asInt(0) + aint[0]));
+                dynamic = dynamic.set("TileY", dynamic.createInt(dynamic.get("TileY").asInt(0) + aint[1]));
+                dynamic = dynamic.set("TileZ", dynamic.createInt(dynamic.get("TileZ").asInt(0) + aint[2]));
                 dynamic = dynamic.remove("Direction");
-                if (flag1 && dynamic.get("ItemRotation").flatMap(Dynamic::getNumberValue).isPresent()) {
-                    dynamic = dynamic.set("ItemRotation", dynamic.createByte((byte) (dynamic.getByte("ItemRotation") * 2)));
+                if (flag1 && dynamic.get("ItemRotation").asNumber().isPresent()) {
+                    dynamic = dynamic.set("ItemRotation", dynamic.createByte((byte) (dynamic.get("ItemRotation").asByte((byte) 0) * 2)));
                 }
             } else {
-                i = dynamic.getByte("Dir") % DataConverterHanging.a.length;
+                i = dynamic.get("Dir").asByte((byte) 0) % DataConverterHanging.a.length;
                 dynamic = dynamic.remove("Dir");
             }
 

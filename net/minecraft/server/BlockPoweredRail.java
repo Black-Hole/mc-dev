@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
-    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.S;
-    public static final BlockStateBoolean POWERED = BlockProperties.t;
+    public static final BlockStateEnum<BlockPropertyTrackPosition> SHAPE = BlockProperties.X;
+    public static final BlockStateBoolean POWERED = BlockProperties.w;
 
     protected BlockPoweredRail(Block.Info block_info) {
         super(true, block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPoweredRail.SHAPE, BlockPropertyTrackPosition.NORTH_SOUTH)).set(BlockPoweredRail.POWERED, false));
     }
 
     protected boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag, int i) {
@@ -96,6 +96,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         }
     }
 
+    @Override
     protected void a(IBlockData iblockdata, World world, BlockPosition blockposition, Block block) {
         boolean flag = (Boolean) iblockdata.get(BlockPoweredRail.POWERED);
         boolean flag1 = world.isBlockIndirectlyPowered(blockposition) || this.a(world, blockposition, iblockdata, true, 0) || this.a(world, blockposition, iblockdata, false, 0);
@@ -110,10 +111,12 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
 
     }
 
+    @Override
     public IBlockState<BlockPropertyTrackPosition> e() {
         return BlockPoweredRail.SHAPE;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
@@ -186,6 +189,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         }
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         BlockPropertyTrackPosition blockpropertytrackposition = (BlockPropertyTrackPosition) iblockdata.get(BlockPoweredRail.SHAPE);
 
@@ -231,6 +235,7 @@ public class BlockPoweredRail extends BlockMinecartTrackAbstract {
         return super.a(iblockdata, enumblockmirror);
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockPoweredRail.SHAPE, BlockPoweredRail.POWERED);
     }

@@ -57,7 +57,7 @@ public class ArgumentPosition implements ArgumentType<IVectorPosition> {
             if (!s.isEmpty() && s.charAt(0) == '^') {
                 object = Collections.singleton(ICompletionProvider.a.a);
             } else {
-                object = ((ICompletionProvider) commandcontext.getSource()).a(false);
+                object = ((ICompletionProvider) commandcontext.getSource()).q();
             }
 
             return ICompletionProvider.a(s, (Collection) object, suggestionsbuilder, CommandDispatcher.a(this::parse));

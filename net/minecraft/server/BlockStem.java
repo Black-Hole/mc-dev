@@ -1,31 +1,33 @@
 package net.minecraft.server;
 
 import java.util.Random;
-import javax.annotation.Nullable;
 
 public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
-    public static final BlockStateInteger AGE = BlockProperties.W;
+    public static final BlockStateInteger AGE = BlockProperties.ac;
     protected static final VoxelShape[] b = new VoxelShape[] { Block.a(7.0D, 0.0D, 7.0D, 9.0D, 2.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 4.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 6.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 8.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 10.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 12.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 14.0D, 9.0D), Block.a(7.0D, 0.0D, 7.0D, 9.0D, 16.0D, 9.0D)};
     private final BlockStemmed blockFruit;
 
     protected BlockStem(BlockStemmed blockstemmed, Block.Info block_info) {
         super(block_info);
         this.blockFruit = blockstemmed;
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockStem.AGE, 0));
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockStem.b[(Integer) iblockdata.get(BlockStem.AGE)];
     }
 
-    protected boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    protected boolean a_(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return iblockdata.getBlock() == Blocks.FARMLAND;
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        super.a(iblockdata, world, blockposition, random);
-        if (world.getLightLevel(blockposition.up(), 0) >= 9) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        super.tick(iblockdata, world, blockposition, random);
+        if (world.getLightLevel(blockposition, 0) >= 9) {
             float f = BlockCrops.a((Block) this, (IBlockAccess) world, blockposition);
 
             if (random.nextInt((int) (25.0F / f) + 1) == 0) {
@@ -49,47 +51,17 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
         }
     }
 
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        super.dropNaturally(iblockdata, world, blockposition, f, i);
-        if (!world.isClientSide) {
-            Item item = this.d();
-
-            if (item != null) {
-                int j = (Integer) iblockdata.get(BlockStem.AGE);
-
-                for (int k = 0; k < 3; ++k) {
-                    if (world.random.nextInt(15) <= j) {
-                        a(world, blockposition, new ItemStack(item));
-                    }
-                }
-
-            }
-        }
-    }
-
-    @Nullable
-    protected Item d() {
-        return this.blockFruit == Blocks.PUMPKIN ? Items.PUMPKIN_SEEDS : (this.blockFruit == Blocks.MELON ? Items.MELON_SEEDS : null);
-    }
-
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.AIR;
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        Item item = this.d();
-
-        return item == null ? ItemStack.a : new ItemStack(item);
-    }
-
+    @Override
     public boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {
         return (Integer) iblockdata.get(BlockStem.AGE) != 7;
     }
 
+    @Override
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         return true;
     }
 
+    @Override
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
         int i = Math.min(7, (Integer) iblockdata.get(BlockStem.AGE) + MathHelper.nextInt(world.random, 2, 5));
         IBlockData iblockdata1 = (IBlockData) iblockdata.set(BlockStem.AGE, i);
@@ -101,6 +73,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
 
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockStem.AGE);
     }

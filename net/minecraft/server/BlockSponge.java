@@ -9,15 +9,17 @@ public class BlockSponge extends Block {
         super(block_info);
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata1.getBlock() != iblockdata.getBlock()) {
             this.a(world, blockposition);
         }
     }
 
-    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    @Override
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         this.a(world, blockposition);
-        super.doPhysics(iblockdata, world, blockposition, block, blockposition1);
+        super.doPhysics(iblockdata, world, blockposition, block, blockposition1, flag);
     }
 
     protected void a(World world, BlockPosition blockposition) {
@@ -61,7 +63,9 @@ public class BlockSponge extends Block {
                             queue.add(new Tuple<>(blockposition2, j + 1));
                         }
                     } else if (material == Material.WATER_PLANT || material == Material.REPLACEABLE_WATER_PLANT) {
-                        iblockdata.a(world, blockposition2, 0);
+                        TileEntity tileentity = iblockdata.getBlock().isTileEntity() ? world.getTileEntity(blockposition2) : null;
+
+                        a(iblockdata, world, blockposition2, tileentity);
                         world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
                         ++i;
                         if (j < 6) {

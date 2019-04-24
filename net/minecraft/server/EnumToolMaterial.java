@@ -32,26 +32,32 @@ public enum EnumToolMaterial implements ToolMaterial {
         this.k = new LazyInitVar<>(supplier);
     }
 
+    @Override
     public int a() {
         return this.g;
     }
 
+    @Override
     public float b() {
         return this.h;
     }
 
+    @Override
     public float c() {
         return this.i;
     }
 
+    @Override
     public int d() {
         return this.f;
     }
 
+    @Override
     public int e() {
         return this.j;
     }
 
+    @Override
     public RecipeItemStack f() {
         return (RecipeItemStack) this.k.a();
     }

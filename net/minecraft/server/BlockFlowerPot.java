@@ -15,19 +15,18 @@ public class BlockFlowerPot extends Block {
         BlockFlowerPot.b.put(block, this);
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockFlowerPot.a;
     }
 
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
         Block block = item instanceof ItemBlock ? (Block) BlockFlowerPot.b.getOrDefault(((ItemBlock) item).getBlock(), Blocks.AIR) : Blocks.AIR;
@@ -46,7 +45,7 @@ public class BlockFlowerPot extends Block {
 
                 if (itemstack.isEmpty()) {
                     entityhuman.a(enumhand, itemstack1);
-                } else if (!entityhuman.d(itemstack1)) {
+                } else if (!entityhuman.g(itemstack1)) {
                     entityhuman.drop(itemstack1, false);
                 }
 
@@ -57,31 +56,17 @@ public class BlockFlowerPot extends Block {
         return true;
     }
 
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.c == Blocks.AIR ? super.a(iblockaccess, blockposition, iblockdata) : new ItemStack(this.c);
-    }
-
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Blocks.FLOWER_POT;
-    }
-
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        super.dropNaturally(iblockdata, world, blockposition, f, i);
-        if (this.c != Blocks.AIR) {
-            a(world, blockposition, new ItemStack(this.c));
-        }
-
-    }
-
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
+    @Override
     public TextureType c() {
         return TextureType.CUTOUT;
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
+    public Block d() {
+        return this.c;
     }
 }

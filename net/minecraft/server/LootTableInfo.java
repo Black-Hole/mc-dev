@@ -1,100 +1,94 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 public class LootTableInfo {
 
-    private final float a;
-    private final WorldServer b;
-    private final LootTableRegistry c;
-    @Nullable
-    private final Entity d;
-    @Nullable
-    private final EntityHuman e;
-    @Nullable
-    private final DamageSource f;
-    @Nullable
-    private final BlockPosition g;
-    private final Set<LootTable> h = Sets.newLinkedHashSet();
+    private final Random a;
+    private final float b;
+    private final WorldServer c;
+    private final LootTableRegistry d;
+    private final Set<LootTable> e;
+    private final Map<LootContextParameter<?>, Object> f;
+    private final Map<MinecraftKey, LootTableInfo.b> g;
 
-    public LootTableInfo(float f, WorldServer worldserver, LootTableRegistry loottableregistry, @Nullable Entity entity, @Nullable EntityHuman entityhuman, @Nullable DamageSource damagesource, @Nullable BlockPosition blockposition) {
-        this.a = f;
-        this.b = worldserver;
-        this.c = loottableregistry;
-        this.d = entity;
-        this.e = entityhuman;
-        this.f = damagesource;
-        this.g = blockposition;
+    private LootTableInfo(Random random, float f, WorldServer worldserver, LootTableRegistry loottableregistry, Map<LootContextParameter<?>, Object> map, Map<MinecraftKey, LootTableInfo.b> map1) {
+        this.e = Sets.newLinkedHashSet();
+        this.a = random;
+        this.b = f;
+        this.c = worldserver;
+        this.d = loottableregistry;
+        this.f = ImmutableMap.copyOf(map);
+        this.g = ImmutableMap.copyOf(map1);
+    }
+
+    public boolean hasContextParameter(LootContextParameter<?> lootcontextparameter) {
+        return this.f.containsKey(lootcontextparameter);
+    }
+
+    public void a(MinecraftKey minecraftkey, Consumer<ItemStack> consumer) {
+        LootTableInfo.b loottableinfo_b = (LootTableInfo.b) this.g.get(minecraftkey);
+
+        if (loottableinfo_b != null) {
+            loottableinfo_b.add(this, consumer);
+        }
+
     }
 
     @Nullable
-    public Entity a() {
-        return this.d;
-    }
-
-    @Nullable
-    public Entity b() {
-        return this.e;
-    }
-
-    @Nullable
-    public Entity c() {
-        return this.f == null ? null : this.f.getEntity();
-    }
-
-    @Nullable
-    public BlockPosition e() {
-        return this.g;
+    public <T> T getContextParameter(LootContextParameter<T> lootcontextparameter) {
+        return this.f.get(lootcontextparameter);
     }
 
     public boolean a(LootTable loottable) {
-        return this.h.add(loottable);
+        return this.e.add(loottable);
     }
 
     public void b(LootTable loottable) {
-        this.h.remove(loottable);
+        this.e.remove(loottable);
     }
 
-    public LootTableRegistry f() {
-        return this.c;
+    public LootTableRegistry a() {
+        return this.d;
     }
 
-    public float g() {
+    public Random b() {
         return this.a;
     }
 
-    public WorldServer h() {
+    public float c() {
         return this.b;
     }
 
-    @Nullable
-    public Entity a(LootTableInfo.EntityTarget loottableinfo_entitytarget) {
-        switch (loottableinfo_entitytarget) {
-        case THIS:
-            return this.a();
-        case KILLER:
-            return this.c();
-        case KILLER_PLAYER:
-            return this.b();
-        default:
-            return null;
-        }
+    public WorldServer d() {
+        return this.c;
     }
 
     public static enum EntityTarget {
 
-        THIS("this"), KILLER("killer"), KILLER_PLAYER("killer_player");
+        THIS("this", LootContextParameters.THIS_ENTITY), KILLER("killer", LootContextParameters.KILLER_ENTITY), DIRECT_KILLER("direct_killer", LootContextParameters.DIRECT_KILLER_ENTITY), KILLER_PLAYER("killer_player", LootContextParameters.LAST_DAMAGE_PLAYER);
 
-        private final String d;
+        private final String e;
+        private final LootContextParameter<? extends Entity> f;
 
-        private EntityTarget(String s) {
-            this.d = s;
+        private EntityTarget(String s, LootContextParameter lootcontextparameter) {
+            this.e = s;
+            this.f = lootcontextparameter;
+        }
+
+        public LootContextParameter<? extends Entity> a() {
+            return this.f;
         }
 
         public static LootTableInfo.EntityTarget a(String s) {
@@ -104,7 +98,7 @@ public class LootTableInfo {
             for (int j = 0; j < i; ++j) {
                 LootTableInfo.EntityTarget loottableinfo_entitytarget = aloottableinfo_entitytarget[j];
 
-                if (loottableinfo_entitytarget.d.equals(s)) {
+                if (loottableinfo_entitytarget.e.equals(s)) {
                     return loottableinfo_entitytarget;
                 }
             }
@@ -117,7 +111,7 @@ public class LootTableInfo {
             public a() {}
 
             public void write(JsonWriter jsonwriter, LootTableInfo.EntityTarget loottableinfo_entitytarget) throws IOException {
-                jsonwriter.value(loottableinfo_entitytarget.d);
+                jsonwriter.value(loottableinfo_entitytarget.e);
             }
 
             public LootTableInfo.EntityTarget read(JsonReader jsonreader) throws IOException {
@@ -129,43 +123,113 @@ public class LootTableInfo {
     public static class Builder {
 
         private final WorldServer a;
-        private float b;
-        private Entity c;
-        private EntityHuman d;
-        private DamageSource e;
-        private BlockPosition f;
+        private final Map<LootContextParameter<?>, Object> b = Maps.newIdentityHashMap();
+        private final Map<MinecraftKey, LootTableInfo.b> c = Maps.newHashMap();
+        private Random d;
+        private float e;
 
         public Builder(WorldServer worldserver) {
             this.a = worldserver;
         }
 
-        public LootTableInfo.Builder luck(float f) {
-            this.b = f;
+        public LootTableInfo.Builder a(Random random) {
+            this.d = random;
             return this;
         }
 
-        public LootTableInfo.Builder entity(Entity entity) {
-            this.c = entity;
+        public LootTableInfo.Builder a(long i) {
+            if (i != 0L) {
+                this.d = new Random(i);
+            }
+
             return this;
         }
 
-        public LootTableInfo.Builder killer(EntityHuman entityhuman) {
-            this.d = entityhuman;
+        public LootTableInfo.Builder a(long i, Random random) {
+            if (i == 0L) {
+                this.d = random;
+            } else {
+                this.d = new Random(i);
+            }
+
             return this;
         }
 
-        public LootTableInfo.Builder damageSource(DamageSource damagesource) {
-            this.e = damagesource;
+        public LootTableInfo.Builder a(float f) {
+            this.e = f;
             return this;
         }
 
-        public LootTableInfo.Builder position(BlockPosition blockposition) {
-            this.f = blockposition;
+        public <T> LootTableInfo.Builder set(LootContextParameter<T> lootcontextparameter, T t0) {
+            this.b.put(lootcontextparameter, t0);
             return this;
         }
 
-        public LootTableInfo build() {
-            return new LootTableInfo(this.b, this.a, this.a.getMinecraftServer().getLootTableRegistry(), this.c, this.d, this.e, this.f);
+        public <T> LootTableInfo.Builder setOptional(LootContextParameter<T> lootcontextparameter, @Nullable T t0) {
+            if (t0 == null) {
+                this.b.remove(lootcontextparameter);
+            } else {
+                this.b.put(lootcontextparameter, t0);
+            }
+
+            return this;
         }
+
+        public LootTableInfo.Builder a(MinecraftKey minecraftkey, LootTableInfo.b loottableinfo_b) {
+            LootTableInfo.b loottableinfo_b1 = (LootTableInfo.b) this.c.put(minecraftkey, loottableinfo_b);
+
+            if (loottableinfo_b1 != null) {
+                throw new IllegalStateException("Duplicated dynamic drop '" + this.c + "'");
+            } else {
+                return this;
+            }
+        }
+
+        public WorldServer a() {
+            return this.a;
+        }
+
+        public <T> T a(LootContextParameter<T> lootcontextparameter) {
+            T t0 = this.b.get(lootcontextparameter);
+
+            if (t0 == null) {
+                throw new IllegalArgumentException("No parameter " + lootcontextparameter);
+            } else {
+                return t0;
+            }
+        }
+
+        @Nullable
+        public <T> T b(LootContextParameter<T> lootcontextparameter) {
+            return this.b.get(lootcontextparameter);
+        }
+
+        public LootTableInfo build(LootContextParameterSet lootcontextparameterset) {
+            Set<LootContextParameter<?>> set = Sets.difference(this.b.keySet(), lootcontextparameterset.b());
+
+            if (!set.isEmpty()) {
+                throw new IllegalArgumentException("Parameters not allowed in this parameter set: " + set);
+            } else {
+                Set<LootContextParameter<?>> set1 = Sets.difference(lootcontextparameterset.a(), this.b.keySet());
+
+                if (!set1.isEmpty()) {
+                    throw new IllegalArgumentException("Missing required parameters: " + set1);
+                } else {
+                    Random random = this.d;
+
+                    if (random == null) {
+                        random = new Random();
+                    }
+
+                    return new LootTableInfo(random, this.e, this.a, this.a.getMinecraftServer().getLootTableRegistry(), this.b, this.c);
+                }
+            }
+        }
+    }
+
+    @FunctionalInterface
+    public interface b {
+
+        void add(LootTableInfo loottableinfo, Consumer<ItemStack> consumer);
     }
 }

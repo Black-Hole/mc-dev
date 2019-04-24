@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.doubles.AbstractDoubleList;
 
-class VoxelShapeCubePoint extends AbstractDoubleList {
+public class VoxelShapeCubePoint extends AbstractDoubleList {
 
     private final int a;
 

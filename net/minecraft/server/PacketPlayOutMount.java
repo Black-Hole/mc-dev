@@ -12,7 +12,7 @@ public class PacketPlayOutMount implements Packet<PacketListenerPlayOut> {
 
     public PacketPlayOutMount(Entity entity) {
         this.a = entity.getId();
-        List<Entity> list = entity.bP();
+        List<Entity> list = entity.getPassengers();
 
         this.b = new int[list.size()];
 
@@ -22,11 +22,13 @@ public class PacketPlayOutMount implements Packet<PacketListenerPlayOut> {
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.b();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);

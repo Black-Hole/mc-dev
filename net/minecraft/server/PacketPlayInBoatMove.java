@@ -14,11 +14,13 @@ public class PacketPlayInBoatMove implements Packet<PacketListenerPlayIn> {
         this.b = flag1;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readBoolean();
         this.b = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeBoolean(this.a);
         packetdataserializer.writeBoolean(this.b);

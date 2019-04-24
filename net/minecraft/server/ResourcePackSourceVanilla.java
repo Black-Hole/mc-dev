@@ -8,6 +8,7 @@ public class ResourcePackSourceVanilla implements ResourcePackSource {
 
     public ResourcePackSourceVanilla() {}
 
+    @Override
     public <T extends ResourcePackLoader> void a(Map<String, T> map, ResourcePackLoader.b<T> resourcepackloader_b) {
         T t0 = ResourcePackLoader.a("vanilla", false, () -> {
             return this.a;

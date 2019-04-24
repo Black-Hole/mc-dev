@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class BossBattleServer extends BossBattle {
 
     }
 
+    @Override
     public void a(BossBattle.BarColor bossbattle_barcolor) {
         if (bossbattle_barcolor != this.color) {
             super.a(bossbattle_barcolor);
@@ -35,6 +37,7 @@ public class BossBattleServer extends BossBattle {
 
     }
 
+    @Override
     public void a(BossBattle.BarStyle bossbattle_barstyle) {
         if (bossbattle_barstyle != this.style) {
             super.a(bossbattle_barstyle);
@@ -70,6 +73,7 @@ public class BossBattleServer extends BossBattle {
         return this;
     }
 
+    @Override
     public void a(IChatBaseComponent ichatbasecomponent) {
         if (!Objects.equal(ichatbasecomponent, this.title)) {
             super.a(ichatbasecomponent);
@@ -108,7 +112,7 @@ public class BossBattleServer extends BossBattle {
 
     public void b() {
         if (!this.h.isEmpty()) {
-            Iterator iterator = this.h.iterator();
+            Iterator iterator = Lists.newArrayList(this.h).iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();

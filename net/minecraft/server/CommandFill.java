@@ -53,7 +53,7 @@ public class CommandFill {
             List<BlockPosition> list = Lists.newArrayList();
             WorldServer worldserver = commandlistenerwrapper.getWorld();
             int j = 0;
-            Iterator iterator = BlockPosition.MutableBlockPosition.a(structureboundingbox.a, structureboundingbox.b, structureboundingbox.c, structureboundingbox.d, structureboundingbox.e, structureboundingbox.f).iterator();
+            Iterator iterator = BlockPosition.b(structureboundingbox.a, structureboundingbox.b, structureboundingbox.c, structureboundingbox.d, structureboundingbox.e, structureboundingbox.f).iterator();
 
             BlockPosition blockposition;
 
@@ -65,12 +65,9 @@ public class CommandFill {
                     if (argumenttilelocation1 != null) {
                         TileEntity tileentity = worldserver.getTileEntity(blockposition);
 
-                        if (tileentity != null && tileentity instanceof IInventory) {
-                            ((IInventory) tileentity).clear();
-                        }
-
+                        Clearable.a(tileentity);
                         if (argumenttilelocation1.a(worldserver, blockposition, 2)) {
-                            list.add(blockposition.h());
+                            list.add(blockposition.immutableCopy());
                             ++j;
                         }
                     }
@@ -104,7 +101,7 @@ public class CommandFill {
         }), HOLLOW((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
             return blockposition.getX() != structureboundingbox.a && blockposition.getX() != structureboundingbox.d && blockposition.getY() != structureboundingbox.b && blockposition.getY() != structureboundingbox.e && blockposition.getZ() != structureboundingbox.c && blockposition.getZ() != structureboundingbox.f ? CommandFill.b : argumenttilelocation;
         }), DESTROY((structureboundingbox, blockposition, argumenttilelocation, worldserver) -> {
-            worldserver.setAir(blockposition, true);
+            worldserver.b(blockposition, true);
             return argumenttilelocation;
         });
 

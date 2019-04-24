@@ -6,43 +6,39 @@ public class RecipeShulkerBox extends IRecipeComplex {
         super(minecraftkey);
     }
 
-    public boolean a(IInventory iinventory, World world) {
-        if (!(iinventory instanceof InventoryCrafting)) {
-            return false;
-        } else {
-            int i = 0;
-            int j = 0;
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
+        int i = 0;
+        int j = 0;
 
-            for (int k = 0; k < iinventory.getSize(); ++k) {
-                ItemStack itemstack = iinventory.getItem(k);
+        for (int k = 0; k < inventorycrafting.getSize(); ++k) {
+            ItemStack itemstack = inventorycrafting.getItem(k);
 
-                if (!itemstack.isEmpty()) {
-                    if (Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox) {
-                        ++i;
-                    } else {
-                        if (!(itemstack.getItem() instanceof ItemDye)) {
-                            return false;
-                        }
-
-                        ++j;
-                    }
-
-                    if (j > 1 || i > 1) {
+            if (!itemstack.isEmpty()) {
+                if (Block.asBlock(itemstack.getItem()) instanceof BlockShulkerBox) {
+                    ++i;
+                } else {
+                    if (!(itemstack.getItem() instanceof ItemDye)) {
                         return false;
                     }
+
+                    ++j;
+                }
+
+                if (j > 1 || i > 1) {
+                    return false;
                 }
             }
-
-            return i == 1 && j == 1;
         }
+
+        return i == 1 && j == 1;
     }
 
-    public ItemStack craftItem(IInventory iinventory) {
+    public ItemStack a(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = ItemStack.a;
-        ItemDye itemdye = (ItemDye) Items.BONE_MEAL;
+        ItemDye itemdye = (ItemDye) Items.WHITE_DYE;
 
-        for (int i = 0; i < iinventory.getSize(); ++i) {
-            ItemStack itemstack1 = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack1 = inventorycrafting.getItem(i);
 
             if (!itemstack1.isEmpty()) {
                 Item item = itemstack1.getItem();
@@ -64,7 +60,8 @@ public class RecipeShulkerBox extends IRecipeComplex {
         return itemstack2;
     }
 
-    public RecipeSerializer<?> a() {
-        return RecipeSerializers.o;
+    @Override
+    public RecipeSerializer<?> getRecipeSerializer() {
+        return RecipeSerializer.m;
     }
 }

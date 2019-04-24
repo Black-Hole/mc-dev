@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import java.util.Iterator;
-import javax.annotation.Nullable;
 
 public class InventoryCrafting implements IInventory, AutoRecipeOutput {
 
@@ -17,11 +16,13 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
         this.c = j;
     }
 
+    @Override
     public int getSize() {
         return this.items.size();
     }
 
-    public boolean P_() {
+    @Override
+    public boolean isNotEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -37,27 +38,17 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
         return false;
     }
 
+    @Override
     public ItemStack getItem(int i) {
         return i >= this.getSize() ? ItemStack.a : (ItemStack) this.items.get(i);
     }
 
-    public IChatBaseComponent getDisplayName() {
-        return new ChatMessage("container.crafting", new Object[0]);
-    }
-
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Nullable
-    public IChatBaseComponent getCustomName() {
-        return null;
-    }
-
+    @Override
     public ItemStack splitWithoutUpdate(int i) {
         return ContainerUtil.a(this.items, i);
     }
 
+    @Override
     public ItemStack splitStack(int i, int j) {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
@@ -68,51 +59,34 @@ public class InventoryCrafting implements IInventory, AutoRecipeOutput {
         return itemstack;
     }
 
+    @Override
     public void setItem(int i, ItemStack itemstack) {
         this.items.set(i, itemstack);
         this.container.a((IInventory) this);
     }
 
-    public int getMaxStackSize() {
-        return 64;
-    }
-
+    @Override
     public void update() {}
 
+    @Override
     public boolean a(EntityHuman entityhuman) {
         return true;
     }
 
-    public void startOpen(EntityHuman entityhuman) {}
-
-    public void closeContainer(EntityHuman entityhuman) {}
-
-    public boolean b(int i, ItemStack itemstack) {
-        return true;
-    }
-
-    public int getProperty(int i) {
-        return 0;
-    }
-
-    public void setProperty(int i, int j) {}
-
-    public int h() {
-        return 0;
-    }
-
+    @Override
     public void clear() {
         this.items.clear();
     }
 
-    public int n() {
+    public int f() {
         return this.c;
     }
 
-    public int U_() {
+    public int g() {
         return this.b;
     }
 
+    @Override
     public void a(AutoRecipeStackManager autorecipestackmanager) {
         Iterator iterator = this.items.iterator();
 

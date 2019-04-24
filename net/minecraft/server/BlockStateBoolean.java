@@ -12,6 +12,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         super(s, Boolean.class);
     }
 
+    @Override
     public Collection<Boolean> d() {
         return this.a;
     }
@@ -20,6 +21,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         return new BlockStateBoolean(s);
     }
 
+    @Override
     public Optional<Boolean> b(String s) {
         return !"true".equals(s) && !"false".equals(s) ? Optional.empty() : Optional.of(Boolean.valueOf(s));
     }
@@ -28,6 +30,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         return obool.toString();
     }
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -40,6 +43,7 @@ public class BlockStateBoolean extends BlockState<Boolean> {
         }
     }
 
+    @Override
     public int c() {
         return 31 * super.c() + this.a.hashCode();
     }

@@ -2,31 +2,32 @@ package net.minecraft.server;
 
 public abstract class EntityPerchable extends EntityTameableAnimal {
 
-    private int bG;
+    private int bD;
 
-    protected EntityPerchable(EntityTypes<?> entitytypes, World world) {
+    protected EntityPerchable(EntityTypes<? extends EntityPerchable> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    public boolean g(EntityHuman entityhuman) {
+    public boolean d(EntityPlayer entityplayer) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setString("id", this.getSaveID());
         this.save(nbttagcompound);
-        if (entityhuman.g(nbttagcompound)) {
-            this.world.kill(this);
+        if (entityplayer.g(nbttagcompound)) {
+            this.die();
             return true;
         } else {
             return false;
         }
     }
 
+    @Override
     public void tick() {
-        ++this.bG;
+        ++this.bD;
         super.tick();
     }
 
-    public boolean dK() {
-        return this.bG > 100;
+    public boolean eh() {
+        return this.bD > 100;
     }
 }

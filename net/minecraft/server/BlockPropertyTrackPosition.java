@@ -24,6 +24,7 @@ public enum BlockPropertyTrackPosition implements INamable {
         return this == BlockPropertyTrackPosition.ASCENDING_NORTH || this == BlockPropertyTrackPosition.ASCENDING_EAST || this == BlockPropertyTrackPosition.ASCENDING_SOUTH || this == BlockPropertyTrackPosition.ASCENDING_WEST;
     }
 
+    @Override
     public String getName() {
         return this.l;
     }

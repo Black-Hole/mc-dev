@@ -4,22 +4,27 @@ import javax.annotation.Nullable;
 
 public class BlockActionContext extends ItemActionContext {
 
-    private final BlockPosition j;
+    private final BlockPosition g;
     protected boolean a;
 
     public BlockActionContext(ItemActionContext itemactioncontext) {
-        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.getItemStack(), itemactioncontext.getClickPosition(), itemactioncontext.getClickedFace(), itemactioncontext.m(), itemactioncontext.n(), itemactioncontext.o());
+        this(itemactioncontext.getWorld(), itemactioncontext.getEntity(), itemactioncontext.n(), itemactioncontext.getItemStack(), itemactioncontext.d);
     }
 
-    protected BlockActionContext(World world, @Nullable EntityHuman entityhuman, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        super(world, entityhuman, itemstack, blockposition, enumdirection, f, f1, f2);
+    protected BlockActionContext(World world, @Nullable EntityHuman entityhuman, EnumHand enumhand, ItemStack itemstack, MovingObjectPositionBlock movingobjectpositionblock) {
+        super(world, entityhuman, enumhand, itemstack, movingobjectpositionblock);
         this.a = true;
-        this.j = this.i.shift(this.f);
-        this.a = this.getWorld().getType(this.i).a(this);
+        this.g = movingobjectpositionblock.getBlockPosition().shift(movingobjectpositionblock.getDirection());
+        this.a = world.getType(movingobjectpositionblock.getBlockPosition()).a(this);
     }
 
+    public static BlockActionContext a(BlockActionContext blockactioncontext, BlockPosition blockposition, EnumDirection enumdirection) {
+        return new BlockActionContext(blockactioncontext.getWorld(), blockactioncontext.getEntity(), blockactioncontext.n(), blockactioncontext.getItemStack(), new MovingObjectPositionBlock(new Vec3D((double) blockposition.getX() + 0.5D + (double) enumdirection.getAdjacentX() * 0.5D, (double) blockposition.getY() + 0.5D + (double) enumdirection.getAdjacentY() * 0.5D, (double) blockposition.getZ() + 0.5D + (double) enumdirection.getAdjacentZ() * 0.5D), enumdirection, blockposition, false));
+    }
+
+    @Override
     public BlockPosition getClickPosition() {
-        return this.a ? this.i : this.j;
+        return this.a ? super.getClickPosition() : this.g;
     }
 
     public boolean b() {
@@ -40,15 +45,17 @@ public class BlockActionContext extends ItemActionContext {
         if (this.a) {
             return aenumdirection;
         } else {
+            EnumDirection enumdirection = this.getClickedFace();
+
             int i;
 
-            for (i = 0; i < aenumdirection.length && aenumdirection[i] != this.f.opposite(); ++i) {
+            for (i = 0; i < aenumdirection.length && aenumdirection[i] != enumdirection.opposite(); ++i) {
                 ;
             }
 
             if (i > 0) {
                 System.arraycopy(aenumdirection, 0, aenumdirection, 1, i);
-                aenumdirection[0] = this.f.opposite();
+                aenumdirection[0] = enumdirection.opposite();
             }
 
             return aenumdirection;

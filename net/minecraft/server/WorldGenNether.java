@@ -1,16 +1,21 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.Dynamic;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenNether extends StructureGenerator<WorldGenNetherConfiguration> {
+public class WorldGenNether extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final List<BiomeBase.BiomeMeta> b = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.BLAZE, 10, 2, 3), new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_PIGMAN, 5, 4, 4), new BiomeBase.BiomeMeta(EntityTypes.WITHER_SKELETON, 8, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 2, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.MAGMA_CUBE, 3, 4, 4)});
+    private static final List<BiomeBase.BiomeMeta> a = Lists.newArrayList(new BiomeBase.BiomeMeta[] { new BiomeBase.BiomeMeta(EntityTypes.BLAZE, 10, 2, 3), new BiomeBase.BiomeMeta(EntityTypes.ZOMBIE_PIGMAN, 5, 4, 4), new BiomeBase.BiomeMeta(EntityTypes.WITHER_SKELETON, 8, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.SKELETON, 2, 5, 5), new BiomeBase.BiomeMeta(EntityTypes.MAGMA_CUBE, 3, 4, 4)});
 
-    public WorldGenNether() {}
+    public WorldGenNether(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    @Override
+    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
         int k = i >> 4;
         int l = j >> 4;
 
@@ -23,55 +28,55 @@ public class WorldGenNether extends StructureGenerator<WorldGenNetherConfigurati
         } else if (j != (l << 4) + 4 + random.nextInt(8)) {
             return false;
         } else {
-            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
+            BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
 
-            return chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.p);
+            return chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.NETHER_BRIDGE);
         }
     }
 
-    protected boolean a(GeneratorAccess generatoraccess) {
-        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
+    @Override
+    public StructureGenerator.a a() {
+        return WorldGenNether.a::new;
     }
 
-    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
-
-        return new WorldGenNether.a(generatoraccess, seededrandom, i, j, biomebase);
-    }
-
-    protected String a() {
+    @Override
+    public String b() {
         return "Fortress";
     }
 
-    public int b() {
+    @Override
+    public int c() {
         return 8;
     }
 
-    public List<BiomeBase.BiomeMeta> d() {
-        return WorldGenNether.b;
+    @Override
+    public List<BiomeBase.BiomeMeta> e() {
+        return WorldGenNether.a;
     }
 
     public static class a extends StructureStart {
 
-        public a() {}
+        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        }
 
-        public a(GeneratorAccess generatoraccess, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
-            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
-            WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(seededrandom, (i << 4) + 2, (j << 4) + 2);
+        @Override
+        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
+            WorldGenNetherPieces.WorldGenNetherPiece15 worldgennetherpieces_worldgennetherpiece15 = new WorldGenNetherPieces.WorldGenNetherPiece15(this.d, (i << 4) + 2, (j << 4) + 2);
 
-            this.a.add(worldgennetherpieces_worldgennetherpiece15);
-            worldgennetherpieces_worldgennetherpiece15.a((StructurePiece) worldgennetherpieces_worldgennetherpiece15, this.a, (Random) seededrandom);
+            this.b.add(worldgennetherpieces_worldgennetherpiece15);
+            worldgennetherpieces_worldgennetherpiece15.a((StructurePiece) worldgennetherpieces_worldgennetherpiece15, this.b, (Random) this.d);
             List list = worldgennetherpieces_worldgennetherpiece15.d;
 
             while (!list.isEmpty()) {
-                int k = seededrandom.nextInt(list.size());
+                int k = this.d.nextInt(list.size());
                 StructurePiece structurepiece = (StructurePiece) list.remove(k);
 
-                structurepiece.a((StructurePiece) worldgennetherpieces_worldgennetherpiece15, this.a, (Random) seededrandom);
+                structurepiece.a((StructurePiece) worldgennetherpieces_worldgennetherpiece15, this.b, (Random) this.d);
             }
 
-            this.a((IBlockAccess) generatoraccess);
-            this.a(generatoraccess, seededrandom, 48, 70);
+            this.b();
+            this.a(this.d, 48, 70);
         }
     }
 }

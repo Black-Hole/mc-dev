@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenHugeMushroomBrown() {}
+    public WorldGenHugeMushroomBrown(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         int i = random.nextInt(3) + 4;
 
         if (random.nextInt(12) == 0) {
@@ -18,7 +22,7 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
         if (j >= 1 && j + i + 1 < 256) {
             Block block = generatoraccess.getType(blockposition.down()).getBlock();
 
-            if (!Block.d(block) && block != Blocks.GRASS_BLOCK && block != Blocks.MYCELIUM) {
+            if (!Block.c(block) && block != Blocks.GRASS_BLOCK && block != Blocks.MYCELIUM) {
                 return false;
             } else {
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
@@ -31,7 +35,7 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
 
                     for (k = -j1; k <= j1; ++k) {
                         for (l = -j1; l <= j1; ++l) {
-                            IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.g(blockposition).d(k, i1, l));
+                            IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition.g(blockposition).e(k, i1, l));
 
                             if (!iblockdata.isAir() && !iblockdata.a(TagsBlock.LEAVES)) {
                                 return false;
@@ -40,7 +44,7 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                     }
                 }
 
-                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.p, true)).set(BlockHugeMushroom.q, false);
+                IBlockData iblockdata1 = (IBlockData) ((IBlockData) Blocks.BROWN_MUSHROOM_BLOCK.getBlockData().set(BlockHugeMushroom.e, true)).set(BlockHugeMushroom.f, false);
                 boolean flag = true;
 
                 for (k = -3; k <= 3; ++k) {
@@ -53,25 +57,25 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                         boolean flag6 = flag3 || flag4;
 
                         if (!flag5 || !flag6) {
-                            blockposition_mutableblockposition.g(blockposition).d(k, i, l);
-                            if (!generatoraccess.getType(blockposition_mutableblockposition).f(generatoraccess, blockposition_mutableblockposition)) {
+                            blockposition_mutableblockposition.g(blockposition).e(k, i, l);
+                            if (!generatoraccess.getType(blockposition_mutableblockposition).g(generatoraccess, blockposition_mutableblockposition)) {
                                 boolean flag7 = flag1 || flag6 && k == -2;
                                 boolean flag8 = flag2 || flag6 && k == 2;
                                 boolean flag9 = flag3 || flag5 && l == -2;
                                 boolean flag10 = flag4 || flag5 && l == 2;
 
-                                this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.o, flag7)).set(BlockHugeMushroom.b, flag8)).set(BlockHugeMushroom.a, flag9)).set(BlockHugeMushroom.c, flag10));
+                                this.a(generatoraccess, blockposition_mutableblockposition, (IBlockData) ((IBlockData) ((IBlockData) ((IBlockData) iblockdata1.set(BlockHugeMushroom.d, flag7)).set(BlockHugeMushroom.b, flag8)).set(BlockHugeMushroom.a, flag9)).set(BlockHugeMushroom.c, flag10));
                             }
                         }
                     }
                 }
 
-                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.p, false)).set(BlockHugeMushroom.q, false);
+                IBlockData iblockdata2 = (IBlockData) ((IBlockData) Blocks.MUSHROOM_STEM.getBlockData().set(BlockHugeMushroom.e, false)).set(BlockHugeMushroom.f, false);
 
                 for (l = 0; l < i; ++l) {
                     blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, l);
-                    if (!generatoraccess.getType(blockposition_mutableblockposition).f(generatoraccess, blockposition_mutableblockposition)) {
-                        this.a(generatoraccess, (BlockPosition) blockposition_mutableblockposition, iblockdata2);
+                    if (!generatoraccess.getType(blockposition_mutableblockposition).g(generatoraccess, blockposition_mutableblockposition)) {
+                        this.a(generatoraccess, blockposition_mutableblockposition, iblockdata2);
                     }
                 }
 

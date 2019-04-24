@@ -5,42 +5,53 @@ import javax.annotation.Nullable;
 
 public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
 
-    private final Block f;
+    private final Block g;
     private final EntityInsentient entity;
-    private int h;
+    private int i;
 
     public PathfinderGoalRemoveBlock(Block block, EntityCreature entitycreature, double d0, int i) {
         super(entitycreature, d0, 24, i);
-        this.f = block;
+        this.g = block;
         this.entity = entitycreature;
     }
 
+    @Override
     public boolean a() {
-        return !this.entity.world.getGameRules().getBoolean("mobGriefing") ? false : (this.entity.getRandom().nextInt(20) != 0 ? false : super.a());
+        if (!this.entity.world.getGameRules().getBoolean("mobGriefing")) {
+            return false;
+        } else if (this.c > 0) {
+            --this.c;
+            return false;
+        } else if (this.m()) {
+            this.c = 20;
+            return true;
+        } else {
+            this.c = this.a(this.a);
+            return false;
+        }
     }
 
-    protected int a(EntityCreature entitycreature) {
-        return 0;
+    private boolean m() {
+        return this.e != null && this.a.world.isLoaded(this.e) && this.a((IWorldReader) this.a.world, this.e) ? true : this.l();
     }
 
-    public boolean b() {
-        return super.b();
-    }
-
+    @Override
     public void d() {
         super.d();
         this.entity.fallDistance = 1.0F;
     }
 
+    @Override
     public void c() {
         super.c();
-        this.h = 0;
+        this.i = 0;
     }
 
     public void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {}
 
     public void a(World world, BlockPosition blockposition) {}
 
+    @Override
     public void e() {
         super.e();
         World world = this.entity.world;
@@ -49,45 +60,49 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         Random random = this.entity.getRandom();
 
         if (this.k() && blockposition1 != null) {
-            if (this.h > 0) {
-                this.entity.motY = 0.3D;
+            Vec3D vec3d;
+            double d0;
+
+            if (this.i > 0) {
+                vec3d = this.entity.getMot();
+                this.entity.setMot(vec3d.x, 0.3D, vec3d.z);
                 if (!world.isClientSide) {
-                    double d0 = 0.08D;
-
-                    ((WorldServer) world).a(new ParticleParamItem(Particles.C, new ItemStack(Items.EGG)), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.7D, (double) blockposition1.getZ() + 0.5D, 3, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, 0.15000000596046448D);
+                    d0 = 0.08D;
+                    ((WorldServer) world).a(new ParticleParamItem(Particles.ITEM, new ItemStack(Items.EGG)), (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.7D, (double) blockposition1.getZ() + 0.5D, 3, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, ((double) random.nextFloat() - 0.5D) * 0.08D, 0.15000000596046448D);
                 }
             }
 
-            if (this.h % 2 == 0) {
-                this.entity.motY = -0.3D;
-                if (this.h % 6 == 0) {
-                    this.a((GeneratorAccess) world, this.d);
+            if (this.i % 2 == 0) {
+                vec3d = this.entity.getMot();
+                this.entity.setMot(vec3d.x, -0.3D, vec3d.z);
+                if (this.i % 6 == 0) {
+                    this.a((GeneratorAccess) world, this.e);
                 }
             }
 
-            if (this.h > 60) {
-                world.setAir(blockposition1);
+            if (this.i > 60) {
+                world.a(blockposition1, false);
                 if (!world.isClientSide) {
                     for (int i = 0; i < 20; ++i) {
+                        d0 = random.nextGaussian() * 0.02D;
                         double d1 = random.nextGaussian() * 0.02D;
                         double d2 = random.nextGaussian() * 0.02D;
-                        double d3 = random.nextGaussian() * 0.02D;
 
-                        ((WorldServer) world).a(Particles.J, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY(), (double) blockposition1.getZ() + 0.5D, 1, d1, d2, d3, 0.15000000596046448D);
+                        ((WorldServer) world).a(Particles.POOF, (double) blockposition1.getX() + 0.5D, (double) blockposition1.getY(), (double) blockposition1.getZ() + 0.5D, 1, d0, d1, d2, 0.15000000596046448D);
                     }
 
-                    this.a(world, this.d);
+                    this.a(world, blockposition1);
                 }
             }
 
-            ++this.h;
+            ++this.i;
         }
 
     }
 
     @Nullable
     private BlockPosition a(BlockPosition blockposition, IBlockAccess iblockaccess) {
-        if (iblockaccess.getType(blockposition).getBlock() == this.f) {
+        if (iblockaccess.getType(blockposition).getBlock() == this.g) {
             return blockposition;
         } else {
             BlockPosition[] ablockposition = new BlockPosition[] { blockposition.down(), blockposition.west(), blockposition.east(), blockposition.north(), blockposition.south(), blockposition.down().down()};
@@ -97,7 +112,7 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
             for (int j = 0; j < i; ++j) {
                 BlockPosition blockposition1 = ablockposition1[j];
 
-                if (iblockaccess.getType(blockposition1).getBlock() == this.f) {
+                if (iblockaccess.getType(blockposition1).getBlock() == this.g) {
                     return blockposition1;
                 }
             }
@@ -106,9 +121,10 @@ public class PathfinderGoalRemoveBlock extends PathfinderGoalGotoTarget {
         }
     }
 
+    @Override
     protected boolean a(IWorldReader iworldreader, BlockPosition blockposition) {
         Block block = iworldreader.getType(blockposition).getBlock();
 
-        return block == this.f && iworldreader.getType(blockposition.up()).isAir() && iworldreader.getType(blockposition.up(2)).isAir();
+        return block == this.g && iworldreader.getType(blockposition.up()).isAir() && iworldreader.getType(blockposition.up(2)).isAir();
     }
 }

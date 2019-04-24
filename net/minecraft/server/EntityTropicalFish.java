@@ -4,84 +4,89 @@ import javax.annotation.Nullable;
 
 public class EntityTropicalFish extends EntityFishSchool {
 
-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityTropicalFish.class, DataWatcherRegistry.b);
-    private static final MinecraftKey[] c = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_a.png"), new MinecraftKey("textures/entity/fish/tropical_b.png")};
-    private static final MinecraftKey[] bC = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_a_pattern_1.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_2.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_3.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_4.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_5.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_6.png")};
-    private static final MinecraftKey[] bD = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_b_pattern_1.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_2.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_3.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_4.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_5.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_6.png")};
-    public static final int[] a = new int[] { a(EntityTropicalFish.Variant.STRIPEY, EnumColor.ORANGE, EnumColor.GRAY), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.GRAY, EnumColor.GRAY), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.GRAY, EnumColor.BLUE), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.GRAY), a(EntityTropicalFish.Variant.SUNSTREAK, EnumColor.BLUE, EnumColor.GRAY), a(EntityTropicalFish.Variant.KOB, EnumColor.ORANGE, EnumColor.WHITE), a(EntityTropicalFish.Variant.SPOTTY, EnumColor.PINK, EnumColor.LIGHT_BLUE), a(EntityTropicalFish.Variant.BLOCKFISH, EnumColor.PURPLE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.RED), a(EntityTropicalFish.Variant.SPOTTY, EnumColor.WHITE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.GLITTER, EnumColor.WHITE, EnumColor.GRAY), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.ORANGE), a(EntityTropicalFish.Variant.DASHER, EnumColor.CYAN, EnumColor.PINK), a(EntityTropicalFish.Variant.BRINELY, EnumColor.LIME, EnumColor.LIGHT_BLUE), a(EntityTropicalFish.Variant.BETTY, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.SNOOPER, EnumColor.GRAY, EnumColor.RED), a(EntityTropicalFish.Variant.BLOCKFISH, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.WHITE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.KOB, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.SUNSTREAK, EnumColor.GRAY, EnumColor.WHITE), a(EntityTropicalFish.Variant.DASHER, EnumColor.CYAN, EnumColor.YELLOW), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.YELLOW, EnumColor.YELLOW)};
-    private boolean bE = true;
+    private static final DataWatcherObject<Integer> c = DataWatcher.a(EntityTropicalFish.class, DataWatcherRegistry.b);
+    private static final MinecraftKey[] d = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_a.png"), new MinecraftKey("textures/entity/fish/tropical_b.png")};
+    private static final MinecraftKey[] bz = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_a_pattern_1.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_2.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_3.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_4.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_5.png"), new MinecraftKey("textures/entity/fish/tropical_a_pattern_6.png")};
+    private static final MinecraftKey[] bA = new MinecraftKey[] { new MinecraftKey("textures/entity/fish/tropical_b_pattern_1.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_2.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_3.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_4.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_5.png"), new MinecraftKey("textures/entity/fish/tropical_b_pattern_6.png")};
+    public static final int[] b = new int[] { a(EntityTropicalFish.Variant.STRIPEY, EnumColor.ORANGE, EnumColor.GRAY), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.GRAY, EnumColor.GRAY), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.GRAY, EnumColor.BLUE), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.GRAY), a(EntityTropicalFish.Variant.SUNSTREAK, EnumColor.BLUE, EnumColor.GRAY), a(EntityTropicalFish.Variant.KOB, EnumColor.ORANGE, EnumColor.WHITE), a(EntityTropicalFish.Variant.SPOTTY, EnumColor.PINK, EnumColor.LIGHT_BLUE), a(EntityTropicalFish.Variant.BLOCKFISH, EnumColor.PURPLE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.RED), a(EntityTropicalFish.Variant.SPOTTY, EnumColor.WHITE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.GLITTER, EnumColor.WHITE, EnumColor.GRAY), a(EntityTropicalFish.Variant.CLAYFISH, EnumColor.WHITE, EnumColor.ORANGE), a(EntityTropicalFish.Variant.DASHER, EnumColor.CYAN, EnumColor.PINK), a(EntityTropicalFish.Variant.BRINELY, EnumColor.LIME, EnumColor.LIGHT_BLUE), a(EntityTropicalFish.Variant.BETTY, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.SNOOPER, EnumColor.GRAY, EnumColor.RED), a(EntityTropicalFish.Variant.BLOCKFISH, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.WHITE, EnumColor.YELLOW), a(EntityTropicalFish.Variant.KOB, EnumColor.RED, EnumColor.WHITE), a(EntityTropicalFish.Variant.SUNSTREAK, EnumColor.GRAY, EnumColor.WHITE), a(EntityTropicalFish.Variant.DASHER, EnumColor.CYAN, EnumColor.YELLOW), a(EntityTropicalFish.Variant.FLOPPER, EnumColor.YELLOW, EnumColor.YELLOW)};
+    private boolean bB = true;
 
     private static int a(EntityTropicalFish.Variant entitytropicalfish_variant, EnumColor enumcolor, EnumColor enumcolor1) {
         return entitytropicalfish_variant.a() & 255 | (entitytropicalfish_variant.b() & 255) << 8 | (enumcolor.getColorIndex() & 255) << 16 | (enumcolor1.getColorIndex() & 255) << 24;
     }
 
-    public EntityTropicalFish(World world) {
-        super(EntityTypes.TROPICAL_FISH, world);
-        this.setSize(0.5F, 0.4F);
+    public EntityTropicalFish(EntityTypes<? extends EntityTropicalFish> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityTropicalFish.b, 0);
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityTropicalFish.c, 0);
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("Variant", this.getVariant());
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         this.setVariant(nbttagcompound.getInt("Variant"));
     }
 
     public void setVariant(int i) {
-        this.datawatcher.set(EntityTropicalFish.b, i);
+        this.datawatcher.set(EntityTropicalFish.c, i);
     }
 
+    @Override
     public boolean c(int i) {
-        return !this.bE;
+        return !this.bB;
     }
 
     public int getVariant() {
-        return (Integer) this.datawatcher.get(EntityTropicalFish.b);
+        return (Integer) this.datawatcher.get(EntityTropicalFish.c);
     }
 
-    protected void f(ItemStack itemstack) {
-        super.f(itemstack);
+    @Override
+    protected void i(ItemStack itemstack) {
+        super.i(itemstack);
         NBTTagCompound nbttagcompound = itemstack.getOrCreateTag();
 
         nbttagcompound.setInt("BucketVariantTag", this.getVariant());
     }
 
+    @Override
     protected ItemStack l() {
         return new ItemStack(Items.TROPICAL_FISH_BUCKET);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.aL;
-    }
-
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_TROPICAL_FISH_AMBIENT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_TROPICAL_FISH_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_TROPICAL_FISH_HURT;
     }
 
-    protected SoundEffect dz() {
+    @Override
+    protected SoundEffect getSoundFlop() {
         return SoundEffects.ENTITY_TROPICAL_FISH_FLOP;
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        Object object = super.prepare(difficultydamagescaler, groupdataentity, nbttagcompound);
+    @Override
+    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        Object object = super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, groupdataentity, nbttagcompound);
 
         if (nbttagcompound != null && nbttagcompound.hasKeyOfType("BucketVariantTag", 3)) {
             this.setVariant(nbttagcompound.getInt("BucketVariantTag"));
@@ -100,7 +105,7 @@ public class EntityTropicalFish extends EntityFishSchool {
                 k = entitytropicalfish_b.d;
                 l = entitytropicalfish_b.e;
             } else if ((double) this.random.nextFloat() < 0.9D) {
-                int i1 = EntityTropicalFish.a[this.random.nextInt(EntityTropicalFish.a.length)];
+                int i1 = EntityTropicalFish.b[this.random.nextInt(EntityTropicalFish.b.length)];
 
                 i = i1 & 255;
                 j = (i1 & '\uff00') >> 8;
@@ -108,7 +113,7 @@ public class EntityTropicalFish extends EntityFishSchool {
                 l = (i1 & -16777216) >> 24;
                 object = new EntityTropicalFish.b(this, i, j, k, l);
             } else {
-                this.bE = false;
+                this.bB = false;
                 i = this.random.nextInt(2);
                 j = this.random.nextInt(6);
                 k = this.random.nextInt(15);

@@ -50,7 +50,7 @@ public class DataConverterTrappedChest extends DataFix {
                 Type<?> type5 = ((ListType) type4).getElement();
                 OpticFinder<?> opticfinder3 = DSL.typeFinder(type5);
 
-                return TypeRewriteRule.seq((new DataConverterAddChoices(this.getOutputSchema(), "AddTrappedChestFix", DataConverterTypes.j)).makeRule(), this.fixTypeEverywhereTyped("Trapped Chest fix", type3, (typed) -> {
+                return TypeRewriteRule.seq((new DataConverterAddChoices(this.getOutputSchema(), "AddTrappedChestFix", DataConverterTypes.k)).makeRule(), this.fixTypeEverywhereTyped("Trapped Chest fix", type3, (typed) -> {
                     return typed.updateTyped(opticfinder1, (typed1) -> {
                         Optional<? extends Typed<?>> optional = typed1.getOptionalTyped(opticfinder2);
 
@@ -77,16 +77,16 @@ public class DataConverterTrappedChest extends DataFix {
                             }
 
                             Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
-                            int k = dynamic.getInt("xPos");
-                            int l = dynamic.getInt("zPos");
-                            TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.j);
+                            int k = dynamic.get("xPos").asInt(0);
+                            int l = dynamic.get("zPos").asInt(0);
+                            TaggedChoiceType<String> taggedchoicetype = this.getInputSchema().findChoiceType(DataConverterTypes.k);
 
                             return typed1.updateTyped(opticfinder, (typed3) -> {
                                 return typed3.updateTyped(taggedchoicetype.finder(), (typed4) -> {
                                     Dynamic<?> dynamic1 = (Dynamic) typed4.getOrCreate(DSL.remainderFinder());
-                                    int i1 = dynamic1.getInt("x") - (k << 4);
-                                    int j1 = dynamic1.getInt("y");
-                                    int k1 = dynamic1.getInt("z") - (l << 4);
+                                    int i1 = dynamic1.get("x").asInt(0) - (k << 4);
+                                    int j1 = dynamic1.get("y").asInt(0);
+                                    int k1 = dynamic1.get("z").asInt(0) - (l << 4);
 
                                     return intopenhashset.contains(DataConverterLeaves.a(i1, j1, k1)) ? typed4.update(taggedchoicetype.finder(), (pair) -> {
                                         return pair.mapFirst((s) -> {
@@ -109,29 +109,30 @@ public class DataConverterTrappedChest extends DataFix {
     public static final class a extends DataConverterLeaves.b {
 
         @Nullable
-        private IntSet f;
+        private IntSet e;
 
         public a(Typed<?> typed, Schema schema) {
             super(typed, schema);
         }
 
+        @Override
         protected boolean a() {
-            this.f = new IntOpenHashSet();
+            this.e = new IntOpenHashSet();
 
-            for (int i = 0; i < this.c.size(); ++i) {
-                Dynamic<?> dynamic = (Dynamic) this.c.get(i);
-                String s = dynamic.getString("Name");
+            for (int i = 0; i < this.b.size(); ++i) {
+                Dynamic<?> dynamic = (Dynamic) this.b.get(i);
+                String s = dynamic.get("Name").asString("");
 
                 if (Objects.equals(s, "minecraft:trapped_chest")) {
-                    this.f.add(i);
+                    this.e.add(i);
                 }
             }
 
-            return this.f.isEmpty();
+            return this.e.isEmpty();
         }
 
         public boolean a(int i) {
-            return this.f.contains(i);
+            return this.e.contains(i);
         }
     }
 }

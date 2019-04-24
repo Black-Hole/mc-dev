@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -20,8 +22,10 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -34,6 +38,38 @@ public class ResourcePackVanilla implements IResourcePack {
     public static java.nio.file.Path a;
     private static final Logger d = LogManager.getLogger();
     public static Class<?> b;
+    private static final Map<EnumResourcePackType, FileSystem> e = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
+        Class oclass = ResourcePackVanilla.class;
+
+        synchronized (ResourcePackVanilla.class) {
+            EnumResourcePackType[] aenumresourcepacktype = EnumResourcePackType.values();
+            int i = aenumresourcepacktype.length;
+
+            for (int j = 0; j < i; ++j) {
+                EnumResourcePackType enumresourcepacktype = aenumresourcepacktype[j];
+                URL url = ResourcePackVanilla.class.getResource("/" + enumresourcepacktype.a() + "/.mcassetsroot");
+
+                try {
+                    URI uri = url.toURI();
+
+                    if ("jar".equals(uri.getScheme())) {
+                        FileSystem filesystem;
+
+                        try {
+                            filesystem = FileSystems.getFileSystem(uri);
+                        } catch (FileSystemNotFoundException filesystemnotfoundexception) {
+                            filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+                        }
+
+                        hashmap.put(enumresourcepacktype, filesystem);
+                    }
+                } catch (IOException | URISyntaxException urisyntaxexception) {
+                    ResourcePackVanilla.d.error("Couldn't get a list of all vanilla resources", urisyntaxexception);
+                }
+            }
+
+        }
+    });
     public final Set<String> c;
 
     public ResourcePackVanilla(String... astring) {
@@ -56,6 +92,7 @@ public class ResourcePackVanilla implements IResourcePack {
         }
     }
 
+    @Override
     public InputStream a(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) throws IOException {
         InputStream inputstream = this.c(enumresourcepacktype, minecraftkey);
 
@@ -66,6 +103,7 @@ public class ResourcePackVanilla implements IResourcePack {
         }
     }
 
+    @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
         Set<MinecraftKey> set = Sets.newHashSet();
         URI uri;
@@ -119,30 +157,9 @@ public class ResourcePackVanilla implements IResourcePack {
 
                 set.addAll(this.a(i, "minecraft", java_nio_file_path, s, predicate));
             } else if ("jar".equals(uri.getScheme())) {
-                FileSystem filesystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
-                Throwable throwable = null;
+                java.nio.file.Path java_nio_file_path1 = ((FileSystem) ResourcePackVanilla.e.get(enumresourcepacktype)).getPath("/" + enumresourcepacktype.a() + "/minecraft");
 
-                try {
-                    java.nio.file.Path java_nio_file_path1 = filesystem.getPath("/" + enumresourcepacktype.a() + "/minecraft");
-
-                    set.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
-                } catch (Throwable throwable1) {
-                    throwable = throwable1;
-                    throw throwable1;
-                } finally {
-                    if (filesystem != null) {
-                        if (throwable != null) {
-                            try {
-                                filesystem.close();
-                            } catch (Throwable throwable2) {
-                                throwable.addSuppressed(throwable2);
-                            }
-                        } else {
-                            filesystem.close();
-                        }
-                    }
-
-                }
+                set.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
             } else {
                 ResourcePackVanilla.d.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
             }
@@ -200,6 +217,7 @@ public class ResourcePackVanilla implements IResourcePack {
         return ResourcePackVanilla.class.getResourceAsStream("/" + s);
     }
 
+    @Override
     public boolean b(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
         InputStream inputstream = this.c(enumresourcepacktype, minecraftkey);
         boolean flag = inputstream != null;
@@ -208,11 +226,13 @@ public class ResourcePackVanilla implements IResourcePack {
         return flag;
     }
 
+    @Override
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
         return this.c;
     }
 
     @Nullable
+    @Override
     public <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) throws IOException {
         try {
             InputStream inputstream = this.b("pack.mcmeta");
@@ -246,6 +266,7 @@ public class ResourcePackVanilla implements IResourcePack {
         }
     }
 
+    @Override
     public String a() {
         return "Default";
     }

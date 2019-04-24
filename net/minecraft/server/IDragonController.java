@@ -25,5 +25,5 @@ public interface IDragonController {
     @Nullable
     Vec3D g();
 
-    float a(EntityComplexPart entitycomplexpart, DamageSource damagesource, float f);
+    float a(DamageSource damagesource, float f);
 }

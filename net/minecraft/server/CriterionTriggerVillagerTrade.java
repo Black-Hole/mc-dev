@@ -19,10 +19,12 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
 
     public CriterionTriggerVillagerTrade() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerVillagerTrade.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerVillagerTrade.b> criteriontrigger_a) {
         CriterionTriggerVillagerTrade.a criteriontriggervillagertrade_a = (CriterionTriggerVillagerTrade.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
         criteriontriggervillagertrade_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerVillagerTrade.b> criteriontrigger_a) {
         CriterionTriggerVillagerTrade.a criteriontriggervillagertrade_a = (CriterionTriggerVillagerTrade.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerVillagerTrade.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("villager"));
         CriterionConditionItem criterionconditionitem = CriterionConditionItem.a(jsonobject.get("item"));
@@ -57,11 +62,11 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
         return new CriterionTriggerVillagerTrade.b(criterionconditionentity, criterionconditionitem);
     }
 
-    public void a(EntityPlayer entityplayer, EntityVillager entityvillager, ItemStack itemstack) {
+    public void a(EntityPlayer entityplayer, EntityVillagerAbstract entityvillagerabstract, ItemStack itemstack) {
         CriterionTriggerVillagerTrade.a criteriontriggervillagertrade_a = (CriterionTriggerVillagerTrade.a) this.b.get(entityplayer.getAdvancementData());
 
         if (criteriontriggervillagertrade_a != null) {
-            criteriontriggervillagertrade_a.a(entityplayer, entityvillager, itemstack);
+            criteriontriggervillagertrade_a.a(entityplayer, entityvillagerabstract, itemstack);
         }
 
     }
@@ -87,7 +92,7 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
             this.b.remove(criteriontrigger_a);
         }
 
-        public void a(EntityPlayer entityplayer, EntityVillager entityvillager, ItemStack itemstack) {
+        public void a(EntityPlayer entityplayer, EntityVillagerAbstract entityvillagerabstract, ItemStack itemstack) {
             List<CriterionTrigger.a<CriterionTriggerVillagerTrade.b>> list = null;
             Iterator iterator = this.b.iterator();
 
@@ -95,7 +100,7 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
 
             while (iterator.hasNext()) {
                 criteriontrigger_a = (CriterionTrigger.a) iterator.next();
-                if (((CriterionTriggerVillagerTrade.b) criteriontrigger_a.a()).a(entityplayer, entityvillager, itemstack)) {
+                if (((CriterionTriggerVillagerTrade.b) criteriontrigger_a.a()).a(entityplayer, entityvillagerabstract, itemstack)) {
                     if (list == null) {
                         list = Lists.newArrayList();
                     }
@@ -131,10 +136,11 @@ public class CriterionTriggerVillagerTrade implements CriterionTrigger<Criterion
             return new CriterionTriggerVillagerTrade.b(CriterionConditionEntity.a, CriterionConditionItem.a);
         }
 
-        public boolean a(EntityPlayer entityplayer, EntityVillager entityvillager, ItemStack itemstack) {
-            return !this.a.a(entityplayer, entityvillager) ? false : this.b.a(itemstack);
+        public boolean a(EntityPlayer entityplayer, EntityVillagerAbstract entityvillagerabstract, ItemStack itemstack) {
+            return !this.a.a(entityplayer, entityvillagerabstract) ? false : this.b.a(itemstack);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

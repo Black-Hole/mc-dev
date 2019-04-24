@@ -1,18 +1,21 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
     private static final IBlockData a = Blocks.ACACIA_LOG.getBlockData();
-    private static final IBlockData b = Blocks.ACACIA_LEAVES.getBlockData();
+    private static final IBlockData aS = Blocks.ACACIA_LEAVES.getBlockData();
 
-    public WorldGenAcaciaTree(boolean flag) {
-        super(flag);
+    public WorldGenAcaciaTree(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function, boolean flag) {
+        super(function, flag);
     }
 
-    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+    @Override
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
         int i = random.nextInt(3) + random.nextInt(3) + 5;
         boolean flag = true;
 
@@ -36,7 +39,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                 for (j = blockposition.getX() - b0; j <= blockposition.getX() + b0 && flag; ++j) {
                     for (k = blockposition.getZ() - b0; k <= blockposition.getZ() + b0 && flag; ++k) {
                         if (l >= 0 && l < 256) {
-                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j, l, k)).getBlock())) {
+                            if (!a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition.d(j, l, k))) {
                                 flag = false;
                             }
                         } else {
@@ -48,132 +51,124 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
 
             if (!flag) {
                 return false;
-            } else {
-                Block block = generatoraccess.getType(blockposition.down()).getBlock();
+            } else if (h(virtuallevelwritable, blockposition.down()) && blockposition.getY() < 256 - i - 1) {
+                this.a(virtuallevelwritable, blockposition.down());
+                EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
+                int i1 = i - random.nextInt(4) - 1;
+                int j1 = 3 - random.nextInt(3);
 
-                if ((block == Blocks.GRASS_BLOCK || Block.d(block)) && blockposition.getY() < 256 - i - 1) {
-                    this.a(generatoraccess, blockposition.down());
-                    EnumDirection enumdirection = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
-                    int i1 = i - random.nextInt(4) - 1;
+                j = blockposition.getX();
+                k = blockposition.getZ();
+                int k1 = 0;
 
-                    j = 3 - random.nextInt(3);
-                    k = blockposition.getX();
-                    int j1 = blockposition.getZ();
-                    int k1 = 0;
+                int l1;
 
-                    int l1;
-
-                    for (int i2 = 0; i2 < i; ++i2) {
-                        l1 = blockposition.getY() + i2;
-                        if (i2 >= i1 && j > 0) {
-                            k += enumdirection.getAdjacentX();
-                            j1 += enumdirection.getAdjacentZ();
-                            --j;
-                        }
-
-                        BlockPosition blockposition1 = new BlockPosition(k, l1, j1);
-                        IBlockData iblockdata = generatoraccess.getType(blockposition1);
-
-                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-                            this.a(set, generatoraccess, blockposition1);
-                            k1 = l1;
-                        }
+                for (int i2 = 0; i2 < i; ++i2) {
+                    l1 = blockposition.getY() + i2;
+                    if (i2 >= i1 && j1 > 0) {
+                        j += enumdirection.getAdjacentX();
+                        k += enumdirection.getAdjacentZ();
+                        --j1;
                     }
 
-                    BlockPosition blockposition2 = new BlockPosition(k, k1, j1);
+                    BlockPosition blockposition1 = new BlockPosition(j, l1, k);
 
-                    int j2;
-
-                    for (l1 = -3; l1 <= 3; ++l1) {
-                        for (j2 = -3; j2 <= 3; ++j2) {
-                            if (Math.abs(l1) != 3 || Math.abs(j2) != 3) {
-                                this.b(generatoraccess, blockposition2.a(l1, 0, j2));
-                            }
-                        }
+                    if (g(virtuallevelwritable, blockposition1)) {
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1);
+                        k1 = l1;
                     }
-
-                    blockposition2 = blockposition2.up();
-
-                    for (l1 = -1; l1 <= 1; ++l1) {
-                        for (j2 = -1; j2 <= 1; ++j2) {
-                            this.b(generatoraccess, blockposition2.a(l1, 0, j2));
-                        }
-                    }
-
-                    this.b(generatoraccess, blockposition2.east(2));
-                    this.b(generatoraccess, blockposition2.west(2));
-                    this.b(generatoraccess, blockposition2.south(2));
-                    this.b(generatoraccess, blockposition2.north(2));
-                    k = blockposition.getX();
-                    j1 = blockposition.getZ();
-                    EnumDirection enumdirection1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
-
-                    if (enumdirection1 != enumdirection) {
-                        l1 = i1 - random.nextInt(2) - 1;
-                        j2 = 1 + random.nextInt(3);
-                        k1 = 0;
-
-                        int k2;
-
-                        for (int l2 = l1; l2 < i && j2 > 0; --j2) {
-                            if (l2 >= 1) {
-                                k2 = blockposition.getY() + l2;
-                                k += enumdirection1.getAdjacentX();
-                                j1 += enumdirection1.getAdjacentZ();
-                                BlockPosition blockposition3 = new BlockPosition(k, k2, j1);
-                                IBlockData iblockdata1 = generatoraccess.getType(blockposition3);
-
-                                if (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES)) {
-                                    this.a(set, generatoraccess, blockposition3);
-                                    k1 = k2;
-                                }
-                            }
-
-                            ++l2;
-                        }
-
-                        if (k1 > 0) {
-                            BlockPosition blockposition4 = new BlockPosition(k, k1, j1);
-
-                            int i3;
-
-                            for (k2 = -2; k2 <= 2; ++k2) {
-                                for (i3 = -2; i3 <= 2; ++i3) {
-                                    if (Math.abs(k2) != 2 || Math.abs(i3) != 2) {
-                                        this.b(generatoraccess, blockposition4.a(k2, 0, i3));
-                                    }
-                                }
-                            }
-
-                            blockposition4 = blockposition4.up();
-
-                            for (k2 = -1; k2 <= 1; ++k2) {
-                                for (i3 = -1; i3 <= 1; ++i3) {
-                                    this.b(generatoraccess, blockposition4.a(k2, 0, i3));
-                                }
-                            }
-                        }
-                    }
-
-                    return true;
-                } else {
-                    return false;
                 }
+
+                BlockPosition blockposition2 = new BlockPosition(j, k1, k);
+
+                int j2;
+
+                for (l1 = -3; l1 <= 3; ++l1) {
+                    for (j2 = -3; j2 <= 3; ++j2) {
+                        if (Math.abs(l1) != 3 || Math.abs(j2) != 3) {
+                            this.b(virtuallevelwritable, blockposition2.b(l1, 0, j2));
+                        }
+                    }
+                }
+
+                blockposition2 = blockposition2.up();
+
+                for (l1 = -1; l1 <= 1; ++l1) {
+                    for (j2 = -1; j2 <= 1; ++j2) {
+                        this.b(virtuallevelwritable, blockposition2.b(l1, 0, j2));
+                    }
+                }
+
+                this.b(virtuallevelwritable, blockposition2.east(2));
+                this.b(virtuallevelwritable, blockposition2.west(2));
+                this.b(virtuallevelwritable, blockposition2.south(2));
+                this.b(virtuallevelwritable, blockposition2.north(2));
+                j = blockposition.getX();
+                k = blockposition.getZ();
+                EnumDirection enumdirection1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
+
+                if (enumdirection1 != enumdirection) {
+                    l1 = i1 - random.nextInt(2) - 1;
+                    j2 = 1 + random.nextInt(3);
+                    k1 = 0;
+
+                    int k2;
+
+                    for (int l2 = l1; l2 < i && j2 > 0; --j2) {
+                        if (l2 >= 1) {
+                            k2 = blockposition.getY() + l2;
+                            j += enumdirection1.getAdjacentX();
+                            k += enumdirection1.getAdjacentZ();
+                            BlockPosition blockposition3 = new BlockPosition(j, k2, k);
+
+                            if (g(virtuallevelwritable, blockposition3)) {
+                                this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3);
+                                k1 = k2;
+                            }
+                        }
+
+                        ++l2;
+                    }
+
+                    if (k1 > 0) {
+                        BlockPosition blockposition4 = new BlockPosition(j, k1, k);
+
+                        int i3;
+
+                        for (k2 = -2; k2 <= 2; ++k2) {
+                            for (i3 = -2; i3 <= 2; ++i3) {
+                                if (Math.abs(k2) != 2 || Math.abs(i3) != 2) {
+                                    this.b(virtuallevelwritable, blockposition4.b(k2, 0, i3));
+                                }
+                            }
+                        }
+
+                        blockposition4 = blockposition4.up();
+
+                        for (k2 = -1; k2 <= 1; ++k2) {
+                            for (i3 = -1; i3 <= 1; ++i3) {
+                                this.b(virtuallevelwritable, blockposition4.b(k2, 0, i3));
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            } else {
+                return false;
             }
         } else {
             return false;
         }
     }
 
-    private void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        this.a(set, generatoraccess, blockposition, WorldGenAcaciaTree.a);
+    private void a(Set<BlockPosition> set, IWorldWriter iworldwriter, BlockPosition blockposition) {
+        this.a(set, iworldwriter, blockposition, WorldGenAcaciaTree.a);
     }
 
-    private void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
-        IBlockData iblockdata = generatoraccess.getType(blockposition);
-
-        if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-            this.a(generatoraccess, blockposition, WorldGenAcaciaTree.b);
+    private void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
+        if (g(virtuallevelwritable, blockposition)) {
+            this.a((IWorldWriter) virtuallevelwritable, blockposition, WorldGenAcaciaTree.aS);
         }
 
     }

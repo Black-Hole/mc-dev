@@ -10,49 +10,53 @@ public class DedicatedPlayerList extends PlayerList {
     private static final Logger f = LogManager.getLogger();
 
     public DedicatedPlayerList(DedicatedServer dedicatedserver) {
-        super(dedicatedserver);
-        this.a(dedicatedserver.a("view-distance", 10));
-        this.maxPlayers = dedicatedserver.a("max-players", 20);
-        this.setHasWhitelist(dedicatedserver.a("white-list", false));
-        if (!dedicatedserver.H()) {
+        super(dedicatedserver, dedicatedserver.getDedicatedServerProperties().maxPlayers);
+        DedicatedServerProperties dedicatedserverproperties = dedicatedserver.getDedicatedServerProperties();
+
+        this.a(dedicatedserverproperties.viewDistance, dedicatedserverproperties.viewDistance - 2);
+        super.setHasWhitelist((Boolean) dedicatedserverproperties.whiteList.get());
+        if (!dedicatedserver.isEmbeddedServer()) {
             this.getProfileBans().a(true);
             this.getIPBans().a(true);
         }
 
-        this.B();
         this.z();
-        this.A();
+        this.x();
         this.y();
+        this.w();
+        this.A();
         this.C();
-        this.E();
-        this.D();
+        this.B();
         if (!this.getWhitelist().c().exists()) {
-            this.F();
+            this.D();
         }
 
     }
 
+    @Override
     public void setHasWhitelist(boolean flag) {
         super.setHasWhitelist(flag);
-        this.getServer().a("white-list", (Object) flag);
-        this.getServer().c_();
+        this.getServer().setHasWhitelist(flag);
     }
 
+    @Override
     public void addOp(GameProfile gameprofile) {
         super.addOp(gameprofile);
-        this.D();
+        this.B();
     }
 
+    @Override
     public void removeOp(GameProfile gameprofile) {
         super.removeOp(gameprofile);
-        this.D();
+        this.B();
     }
 
+    @Override
     public void reloadWhitelist() {
-        this.E();
+        this.C();
     }
 
-    private void y() {
+    private void w() {
         try {
             this.getIPBans().save();
         } catch (IOException ioexception) {
@@ -61,7 +65,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void z() {
+    private void x() {
         try {
             this.getProfileBans().save();
         } catch (IOException ioexception) {
@@ -70,7 +74,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void A() {
+    private void y() {
         try {
             this.getIPBans().load();
         } catch (IOException ioexception) {
@@ -79,7 +83,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void B() {
+    private void z() {
         try {
             this.getProfileBans().load();
         } catch (IOException ioexception) {
@@ -88,7 +92,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void C() {
+    private void A() {
         try {
             this.getOPs().load();
         } catch (Exception exception) {
@@ -97,7 +101,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void D() {
+    private void B() {
         try {
             this.getOPs().save();
         } catch (Exception exception) {
@@ -106,7 +110,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void E() {
+    private void C() {
         try {
             this.getWhitelist().load();
         } catch (Exception exception) {
@@ -115,7 +119,7 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
-    private void F() {
+    private void D() {
         try {
             this.getWhitelist().save();
         } catch (Exception exception) {
@@ -124,14 +128,17 @@ public class DedicatedPlayerList extends PlayerList {
 
     }
 
+    @Override
     public boolean isWhitelisted(GameProfile gameprofile) {
         return !this.getHasWhitelist() || this.isOp(gameprofile) || this.getWhitelist().isWhitelisted(gameprofile);
     }
 
+    @Override
     public DedicatedServer getServer() {
         return (DedicatedServer) super.getServer();
     }
 
+    @Override
     public boolean f(GameProfile gameprofile) {
         return this.getOPs().b(gameprofile);
     }

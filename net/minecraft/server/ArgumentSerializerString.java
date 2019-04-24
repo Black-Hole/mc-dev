@@ -12,6 +12,7 @@ public class ArgumentSerializerString implements ArgumentSerializer<StringArgume
         packetdataserializer.a((Enum) stringargumenttype.getType());
     }
 
+    @Override
     public StringArgumentType b(PacketDataSerializer packetdataserializer) {
         StringType stringtype = (StringType) packetdataserializer.a(StringType.class);
 

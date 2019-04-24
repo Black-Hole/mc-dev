@@ -26,20 +26,21 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         int i = packetdataserializer.readInt();
 
         for (int j = 0; j < i; ++j) {
             String s = packetdataserializer.e(64);
             double d0 = packetdataserializer.readDouble();
             List<AttributeModifier> list = Lists.newArrayList();
-            int k = packetdataserializer.g();
+            int k = packetdataserializer.i();
 
             for (int l = 0; l < k; ++l) {
-                UUID uuid = packetdataserializer.i();
+                UUID uuid = packetdataserializer.k();
 
-                list.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), packetdataserializer.readByte()));
+                list.add(new AttributeModifier(uuid, "Unknown synced attribute modifier", packetdataserializer.readDouble(), AttributeModifier.Operation.a(packetdataserializer.readByte())));
             }
 
             this.b.add(new PacketPlayOutUpdateAttributes.AttributeSnapshot(s, d0, list));
@@ -47,6 +48,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeInt(this.b.size());
@@ -65,7 +67,7 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
 
                 packetdataserializer.a(attributemodifier.a());
                 packetdataserializer.writeDouble(attributemodifier.d());
-                packetdataserializer.writeByte(attributemodifier.c());
+                packetdataserializer.writeByte(attributemodifier.c().a());
             }
         }
 

@@ -22,7 +22,7 @@ public class DataConverterAdvancement extends DataFix {
         return this.fixTypeEverywhereTyped("AdvancementsFix", this.getInputSchema().getType(DataConverterTypes.i), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return dynamic.updateMapValues((pair) -> {
-                    String s = (String) ((Dynamic) pair.getFirst()).getStringValue().orElse("");
+                    String s = ((Dynamic) pair.getFirst()).asString("");
 
                     return pair.mapFirst((dynamic1) -> {
                         return dynamic.createString((String) DataConverterAdvancement.a.getOrDefault(s, s));

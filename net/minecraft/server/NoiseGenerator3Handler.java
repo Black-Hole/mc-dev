@@ -4,14 +4,14 @@ import java.util.Random;
 
 public class NoiseGenerator3Handler {
 
-    private static final int[][] e = new int[][] { { 1, 1, 0}, { -1, 1, 0}, { 1, -1, 0}, { -1, -1, 0}, { 1, 0, 1}, { -1, 0, 1}, { 1, 0, -1}, { -1, 0, -1}, { 0, 1, 1}, { 0, -1, 1}, { 0, 1, -1}, { 0, -1, -1}};
-    public static final double a = Math.sqrt(3.0D);
-    private final int[] f = new int[512];
-    public double b;
-    public double c;
-    public double d;
-    private static final double g = 0.5D * (NoiseGenerator3Handler.a - 1.0D);
-    private static final double h = (3.0D - NoiseGenerator3Handler.a) / 6.0D;
+    protected static final int[][] a = new int[][] { { 1, 1, 0}, { -1, 1, 0}, { 1, -1, 0}, { -1, -1, 0}, { 1, 0, 1}, { -1, 0, 1}, { 1, 0, -1}, { -1, 0, -1}, { 0, 1, 1}, { 0, -1, 1}, { 0, 1, -1}, { 0, -1, -1}, { 1, 1, 0}, { 0, -1, 1}, { -1, 1, 0}, { 0, -1, -1}};
+    private static final double e = Math.sqrt(3.0D);
+    private static final double f = 0.5D * (NoiseGenerator3Handler.e - 1.0D);
+    private static final double g = (3.0D - NoiseGenerator3Handler.e) / 6.0D;
+    private final int[] h = new int[512];
+    public final double b;
+    public final double c;
+    public final double d;
 
     public NoiseGenerator3Handler(Random random) {
         this.b = random.nextDouble() * 256.0D;
@@ -20,44 +20,55 @@ public class NoiseGenerator3Handler {
 
         int i;
 
-        for (i = 0; i < 256; this.f[i] = i++) {
+        for (i = 0; i < 256; this.h[i] = i++) {
             ;
         }
 
         for (i = 0; i < 256; ++i) {
-            int j = random.nextInt(256 - i) + i;
-            int k = this.f[i];
+            int j = random.nextInt(256 - i);
+            int k = this.h[i];
 
-            this.f[i] = this.f[j];
-            this.f[j] = k;
-            this.f[i + 256] = this.f[i];
+            this.h[i] = this.h[j + i];
+            this.h[j + i] = k;
         }
 
     }
 
-    private static int a(double d0) {
-        return d0 > 0.0D ? (int) d0 : (int) d0 - 1;
+    private int a(int i) {
+        return this.h[i & 255];
     }
 
-    private static double a(int[] aint, double d0, double d1) {
-        return (double) aint[0] * d0 + (double) aint[1] * d1;
+    protected static double a(int[] aint, double d0, double d1, double d2) {
+        return (double) aint[0] * d0 + (double) aint[1] * d1 + (double) aint[2] * d2;
+    }
+
+    private double a(int i, double d0, double d1, double d2, double d3) {
+        double d4 = d3 - d0 * d0 - d1 * d1 - d2 * d2;
+        double d5;
+
+        if (d4 < 0.0D) {
+            d5 = 0.0D;
+        } else {
+            d4 *= d4;
+            d5 = d4 * d4 * a(NoiseGenerator3Handler.a[i], d0, d1, d2);
+        }
+
+        return d5;
     }
 
     public double a(double d0, double d1) {
-        double d2 = 0.5D * (NoiseGenerator3Handler.a - 1.0D);
-        double d3 = (d0 + d1) * d2;
-        int i = a(d0 + d3);
-        int j = a(d1 + d3);
-        double d4 = (3.0D - NoiseGenerator3Handler.a) / 6.0D;
-        double d5 = (double) (i + j) * d4;
-        double d6 = (double) i - d5;
-        double d7 = (double) j - d5;
-        double d8 = d0 - d6;
-        double d9 = d1 - d7;
+        double d2 = (d0 + d1) * NoiseGenerator3Handler.f;
+        int i = MathHelper.floor(d0 + d2);
+        int j = MathHelper.floor(d1 + d2);
+        double d3 = (double) (i + j) * NoiseGenerator3Handler.g;
+        double d4 = (double) i - d3;
+        double d5 = (double) j - d3;
+        double d6 = d0 - d4;
+        double d7 = d1 - d5;
         byte b0;
         byte b1;
 
-        if (d8 > d9) {
+        if (d6 > d7) {
             b0 = 1;
             b1 = 0;
         } else {
@@ -65,119 +76,19 @@ public class NoiseGenerator3Handler {
             b1 = 1;
         }
 
-        double d10 = d8 - (double) b0 + d4;
-        double d11 = d9 - (double) b1 + d4;
-        double d12 = d8 - 1.0D + 2.0D * d4;
-        double d13 = d9 - 1.0D + 2.0D * d4;
+        double d8 = d6 - (double) b0 + NoiseGenerator3Handler.g;
+        double d9 = d7 - (double) b1 + NoiseGenerator3Handler.g;
+        double d10 = d6 - 1.0D + 2.0D * NoiseGenerator3Handler.g;
+        double d11 = d7 - 1.0D + 2.0D * NoiseGenerator3Handler.g;
         int k = i & 255;
         int l = j & 255;
-        int i1 = this.f[k + this.f[l]] % 12;
-        int j1 = this.f[k + b0 + this.f[l + b1]] % 12;
-        int k1 = this.f[k + 1 + this.f[l + 1]] % 12;
-        double d14 = 0.5D - d8 * d8 - d9 * d9;
-        double d15;
+        int i1 = this.a(k + this.a(l)) % 12;
+        int j1 = this.a(k + b0 + this.a(l + b1)) % 12;
+        int k1 = this.a(k + 1 + this.a(l + 1)) % 12;
+        double d12 = this.a(i1, d6, d7, 0.0D, 0.5D);
+        double d13 = this.a(j1, d8, d9, 0.0D, 0.5D);
+        double d14 = this.a(k1, d10, d11, 0.0D, 0.5D);
 
-        if (d14 < 0.0D) {
-            d15 = 0.0D;
-        } else {
-            d14 *= d14;
-            d15 = d14 * d14 * a(NoiseGenerator3Handler.e[i1], d8, d9);
-        }
-
-        double d16 = 0.5D - d10 * d10 - d11 * d11;
-        double d17;
-
-        if (d16 < 0.0D) {
-            d17 = 0.0D;
-        } else {
-            d16 *= d16;
-            d17 = d16 * d16 * a(NoiseGenerator3Handler.e[j1], d10, d11);
-        }
-
-        double d18 = 0.5D - d12 * d12 - d13 * d13;
-        double d19;
-
-        if (d18 < 0.0D) {
-            d19 = 0.0D;
-        } else {
-            d18 *= d18;
-            d19 = d18 * d18 * a(NoiseGenerator3Handler.e[k1], d12, d13);
-        }
-
-        return 70.0D * (d15 + d17 + d19);
-    }
-
-    public void a(double[] adouble, double d0, double d1, int i, int j, double d2, double d3, double d4) {
-        int k = 0;
-
-        for (int l = 0; l < j; ++l) {
-            double d5 = (d1 + (double) l) * d3 + this.c;
-
-            for (int i1 = 0; i1 < i; ++i1) {
-                double d6 = (d0 + (double) i1) * d2 + this.b;
-                double d7 = (d6 + d5) * NoiseGenerator3Handler.g;
-                int j1 = a(d6 + d7);
-                int k1 = a(d5 + d7);
-                double d8 = (double) (j1 + k1) * NoiseGenerator3Handler.h;
-                double d9 = (double) j1 - d8;
-                double d10 = (double) k1 - d8;
-                double d11 = d6 - d9;
-                double d12 = d5 - d10;
-                byte b0;
-                byte b1;
-
-                if (d11 > d12) {
-                    b0 = 1;
-                    b1 = 0;
-                } else {
-                    b0 = 0;
-                    b1 = 1;
-                }
-
-                double d13 = d11 - (double) b0 + NoiseGenerator3Handler.h;
-                double d14 = d12 - (double) b1 + NoiseGenerator3Handler.h;
-                double d15 = d11 - 1.0D + 2.0D * NoiseGenerator3Handler.h;
-                double d16 = d12 - 1.0D + 2.0D * NoiseGenerator3Handler.h;
-                int l1 = j1 & 255;
-                int i2 = k1 & 255;
-                int j2 = this.f[l1 + this.f[i2]] % 12;
-                int k2 = this.f[l1 + b0 + this.f[i2 + b1]] % 12;
-                int l2 = this.f[l1 + 1 + this.f[i2 + 1]] % 12;
-                double d17 = 0.5D - d11 * d11 - d12 * d12;
-                double d18;
-
-                if (d17 < 0.0D) {
-                    d18 = 0.0D;
-                } else {
-                    d17 *= d17;
-                    d18 = d17 * d17 * a(NoiseGenerator3Handler.e[j2], d11, d12);
-                }
-
-                double d19 = 0.5D - d13 * d13 - d14 * d14;
-                double d20;
-
-                if (d19 < 0.0D) {
-                    d20 = 0.0D;
-                } else {
-                    d19 *= d19;
-                    d20 = d19 * d19 * a(NoiseGenerator3Handler.e[k2], d13, d14);
-                }
-
-                double d21 = 0.5D - d15 * d15 - d16 * d16;
-                double d22;
-
-                if (d21 < 0.0D) {
-                    d22 = 0.0D;
-                } else {
-                    d21 *= d21;
-                    d22 = d21 * d21 * a(NoiseGenerator3Handler.e[l2], d15, d16);
-                }
-
-                int i3 = k++;
-
-                adouble[i3] += 70.0D * (d18 + d20 + d22) * d4;
-            }
-        }
-
+        return 70.0D * (d12 + d13 + d14);
     }
 }

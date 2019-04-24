@@ -2,16 +2,17 @@ package net.minecraft.server;
 
 public class PathfinderGoalLookAtTradingPlayer extends PathfinderGoalLookAtPlayer {
 
-    private final EntityVillager e;
+    private final EntityVillagerAbstract f;
 
-    public PathfinderGoalLookAtTradingPlayer(EntityVillager entityvillager) {
-        super(entityvillager, EntityHuman.class, 8.0F);
-        this.e = entityvillager;
+    public PathfinderGoalLookAtTradingPlayer(EntityVillagerAbstract entityvillagerabstract) {
+        super(entityvillagerabstract, EntityHuman.class, 8.0F);
+        this.f = entityvillagerabstract;
     }
 
+    @Override
     public boolean a() {
-        if (this.e.dB()) {
-            this.b = this.e.getTrader();
+        if (this.f.dX()) {
+            this.b = this.f.getTrader();
             return true;
         } else {
             return false;

@@ -19,10 +19,12 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
 
     public CriterionTriggerEntityHurtPlayer() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerEntityHurtPlayer.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEntityHurtPlayer.b> criteriontrigger_a) {
         CriterionTriggerEntityHurtPlayer.a criteriontriggerentityhurtplayer_a = (CriterionTriggerEntityHurtPlayer.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
         criteriontriggerentityhurtplayer_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEntityHurtPlayer.b> criteriontrigger_a) {
         CriterionTriggerEntityHurtPlayer.a criteriontriggerentityhurtplayer_a = (CriterionTriggerEntityHurtPlayer.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerEntityHurtPlayer.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDamage criterionconditiondamage = CriterionConditionDamage.a(jsonobject.get("damage"));
 
@@ -132,6 +137,7 @@ public class CriterionTriggerEntityHurtPlayer implements CriterionTrigger<Criter
             return this.a.a(entityplayer, damagesource, f, f1, flag);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

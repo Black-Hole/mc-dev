@@ -1,14 +1,18 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenHellLava extends WorldGenerator<WorldGenFeatureHellFlowingLavaConfiguration> {
 
     private static final IBlockData a = Blocks.NETHERRACK.getBlockData();
 
-    public WorldGenHellLava() {}
+    public WorldGenHellLava(Function<Dynamic<?>, ? extends WorldGenFeatureHellFlowingLavaConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureHellFlowingLavaConfiguration worldgenfeaturehellflowinglavaconfiguration) {
         if (generatoraccess.getType(blockposition.up()) != WorldGenHellLava.a) {
             return false;
         } else if (!generatoraccess.getType(blockposition).isAir() && generatoraccess.getType(blockposition) != WorldGenHellLava.a) {

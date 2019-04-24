@@ -1,27 +1,34 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorNoiseHeightDouble extends WorldGenDecorator<WorldGenFeatureDecoratorNoiseConfiguration> {
 
-    public WorldGenDecoratorNoiseHeightDouble() {}
+    public WorldGenDecoratorNoiseHeightDouble(Function<Dynamic<?>, ? extends WorldGenFeatureDecoratorNoiseConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureDecoratorNoiseConfiguration worldgenfeaturedecoratornoiseconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        double d0 = BiomeBase.aJ.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenFeatureDecoratorNoiseConfiguration worldgenfeaturedecoratornoiseconfiguration, BlockPosition blockposition) {
+        double d0 = BiomeBase.e.a((double) blockposition.getX() / 200.0D, (double) blockposition.getZ() / 200.0D);
         int i = d0 < worldgenfeaturedecoratornoiseconfiguration.a ? worldgenfeaturedecoratornoiseconfiguration.b : worldgenfeaturedecoratornoiseconfiguration.c;
 
-        for (int j = 0; j < i; ++j) {
+        return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = random.nextInt(16);
-            int i1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.a(k, 0, l)).getY() * 2;
+            int i1 = generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(k, 0, l)).getY() * 2;
 
-            if (i1 > 0) {
+            if (i1 <= 0) {
+                return null;
+            } else {
                 int j1 = random.nextInt(i1);
 
-                worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition.a(k, j1, l), c0);
+                return blockposition.b(k, j1, l);
             }
-        }
-
-        return true;
+        }).filter(Objects::nonNull);
     }
 }

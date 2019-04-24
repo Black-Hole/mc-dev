@@ -20,9 +20,9 @@ public class DataConverterRecipeRename extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.v.typeName(), DSL.namespacedString());
+        Type<Pair<String, String>> type = DSL.named(DataConverterTypes.w.typeName(), DSL.namespacedString());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.v))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.w))) {
             throw new IllegalStateException("Recipe type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("Recipes renamening fix", type, (dynamicops) -> {

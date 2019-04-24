@@ -19,10 +19,12 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
 
     public CriterionTriggerLevitation() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerLevitation.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerLevitation.b> criteriontrigger_a) {
         CriterionTriggerLevitation.a criteriontriggerlevitation_a = (CriterionTriggerLevitation.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
         criteriontriggerlevitation_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerLevitation.b> criteriontrigger_a) {
         CriterionTriggerLevitation.a criteriontriggerlevitation_a = (CriterionTriggerLevitation.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerLevitation.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionDistance criterionconditiondistance = CriterionConditionDistance.a(jsonobject.get("distance"));
         CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("duration"));
@@ -135,6 +140,7 @@ public class CriterionTriggerLevitation implements CriterionTrigger<CriterionTri
             return !this.a.a(vec3d.x, vec3d.y, vec3d.z, entityplayer.locX, entityplayer.locY, entityplayer.locZ) ? false : this.b.d(i);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

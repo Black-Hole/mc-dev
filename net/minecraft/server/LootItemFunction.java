@@ -3,28 +3,23 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
-public abstract class LootItemFunction {
+public interface LootItemFunction extends LootItemUser, BiFunction<ItemStack, LootTableInfo, ItemStack> {
 
-    private final LootItemCondition[] a;
-
-    protected LootItemFunction(LootItemCondition[] alootitemcondition) {
-        this.a = alootitemcondition;
+    static Consumer<ItemStack> a(BiFunction<ItemStack, LootTableInfo, ItemStack> bifunction, Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
+        return (itemstack) -> {
+            consumer.accept(bifunction.apply(itemstack, loottableinfo));
+        };
     }
 
-    public abstract ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo);
-
-    public LootItemCondition[] b() {
-        return this.a;
-    }
-
-    public abstract static class a<T extends LootItemFunction> {
+    public abstract static class b<T extends LootItemFunction> {
 
         private final MinecraftKey a;
         private final Class<T> b;
 
-        protected a(MinecraftKey minecraftkey, Class<T> oclass) {
+        protected b(MinecraftKey minecraftkey, Class<T> oclass) {
             this.a = minecraftkey;
             this.b = oclass;
         }
@@ -39,6 +34,11 @@ public abstract class LootItemFunction {
 
         public abstract void a(JsonObject jsonobject, T t0, JsonSerializationContext jsonserializationcontext);
 
-        public abstract T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition);
+        public abstract T b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext);
+    }
+
+    public interface a {
+
+        LootItemFunction b();
     }
 }

@@ -12,10 +12,12 @@ public class PacketLoginOutDisconnect implements Packet<PacketLoginOutListener> 
         this.a = ichatbasecomponent;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = IChatBaseComponent.ChatSerializer.b(packetdataserializer.e(32767));
+        this.a = IChatBaseComponent.ChatSerializer.b(packetdataserializer.e(262144));
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }

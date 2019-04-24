@@ -1,27 +1,31 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.BitSet;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorCarveMask extends WorldGenDecorator<WorldGenDecoratorCarveMaskConfiguration> {
 
-    public WorldGenDecoratorCarveMask() {}
+    public WorldGenDecoratorCarveMask(Function<Dynamic<?>, ? extends WorldGenDecoratorCarveMaskConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, WorldGenerator<C> worldgenerator, C c0) {
-        IChunkAccess ichunkaccess = generatoraccess.y(blockposition);
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorCarveMaskConfiguration worldgendecoratorcarvemaskconfiguration, BlockPosition blockposition) {
+        IChunkAccess ichunkaccess = generatoraccess.x(blockposition);
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         BitSet bitset = ichunkaccess.a(worldgendecoratorcarvemaskconfiguration.a);
 
-        for (int i = 0; i < bitset.length(); ++i) {
-            if (bitset.get(i) && random.nextFloat() < worldgendecoratorcarvemaskconfiguration.b) {
-                int j = i & 15;
-                int k = i >> 4 & 15;
-                int l = i >> 8;
+        return IntStream.range(0, bitset.length()).filter((i) -> {
+            return bitset.get(i) && random.nextFloat() < worldgendecoratorcarvemaskconfiguration.b;
+        }).mapToObj((i) -> {
+            int j = i & 15;
+            int k = i >> 4 & 15;
+            int l = i >> 8;
 
-                worldgenerator.generate(generatoraccess, chunkgenerator, random, new BlockPosition(chunkcoordintpair.d() + j, l, chunkcoordintpair.e() + k), c0);
-            }
-        }
-
-        return true;
+            return new BlockPosition(chunkcoordintpair.d() + j, l, chunkcoordintpair.e() + k);
+        });
     }
 }

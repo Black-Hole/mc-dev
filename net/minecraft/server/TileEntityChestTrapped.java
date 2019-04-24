@@ -6,8 +6,9 @@ public class TileEntityChestTrapped extends TileEntityChest {
         super(TileEntityTypes.TRAPPED_CHEST);
     }
 
-    protected void p() {
-        super.p();
+    @Override
+    protected void onOpen() {
+        super.onOpen();
         this.world.applyPhysics(this.position.down(), this.getBlock().getBlock());
     }
 }

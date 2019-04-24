@@ -22,12 +22,12 @@ public class DataConverterBook extends DataFix {
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         return dynamic.update("pages", (dynamic1) -> {
-            Optional optional = dynamic1.getStream().map((stream) -> {
+            Optional optional = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
-                    if (!dynamic2.getStringValue().isPresent()) {
+                    if (!dynamic2.asString().isPresent()) {
                         return dynamic2;
                     } else {
-                        String s = (String) dynamic2.getStringValue().get();
+                        String s = dynamic2.asString("");
                         Object object = null;
 
                         if (!"null".equals(s) && !StringUtils.isEmpty(s)) {

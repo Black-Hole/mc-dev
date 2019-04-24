@@ -8,26 +8,30 @@ import javax.annotation.Nullable;
 public class BlockWallSign extends BlockSign {
 
     public static final BlockStateDirection FACING = BlockFacingHorizontal.FACING;
-    private static final Map<EnumDirection, VoxelShape> o = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
+    private static final Map<EnumDirection, VoxelShape> d = Maps.newEnumMap(ImmutableMap.of(EnumDirection.NORTH, Block.a(0.0D, 4.5D, 14.0D, 16.0D, 12.5D, 16.0D), EnumDirection.SOUTH, Block.a(0.0D, 4.5D, 0.0D, 16.0D, 12.5D, 2.0D), EnumDirection.EAST, Block.a(0.0D, 4.5D, 0.0D, 2.0D, 12.5D, 16.0D), EnumDirection.WEST, Block.a(14.0D, 4.5D, 0.0D, 16.0D, 12.5D, 16.0D)));
 
     public BlockWallSign(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockWallSign.FACING, EnumDirection.NORTH)).set(BlockWallSign.a, false));
     }
 
-    public String m() {
+    @Override
+    public String l() {
         return this.getItem().getName();
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (VoxelShape) BlockWallSign.o.get(iblockdata.get(BlockWallSign.FACING));
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (VoxelShape) BlockWallSign.d.get(iblockdata.get(BlockWallSign.FACING));
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         return iworldreader.getType(blockposition.shift(((EnumDirection) iblockdata.get(BlockWallSign.FACING)).opposite())).getMaterial().isBuildable();
     }
 
     @Nullable
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlockData();
         Fluid fluid = blockactioncontext.getWorld().getFluid(blockactioncontext.getClickPosition());
@@ -45,7 +49,7 @@ public class BlockWallSign extends BlockSign {
 
                 iblockdata = (IBlockData) iblockdata.set(BlockWallSign.FACING, enumdirection1);
                 if (iblockdata.canPlace(world, blockposition)) {
-                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.c() == FluidTypes.WATER);
+                    return (IBlockData) iblockdata.set(BlockWallSign.a, fluid.getType() == FluidTypes.WATER);
                 }
             }
         }
@@ -53,18 +57,22 @@ public class BlockWallSign extends BlockSign {
         return null;
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return enumdirection.opposite() == iblockdata.get(BlockWallSign.FACING) && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockWallSign.FACING, enumblockrotation.a((EnumDirection) iblockdata.get(BlockWallSign.FACING)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockWallSign.FACING)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockWallSign.FACING, BlockWallSign.a);
     }

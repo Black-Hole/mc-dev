@@ -6,6 +6,7 @@ public class ItemEnderEye extends Item {
         super(item_info);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
@@ -21,31 +22,19 @@ public class ItemEnderEye extends Item {
                 world.setTypeAndData(blockposition, iblockdata1, 2);
                 world.updateAdjacentComparators(blockposition, Blocks.END_PORTAL_FRAME);
                 itemactioncontext.getItemStack().subtract(1);
-
-                for (int i = 0; i < 16; ++i) {
-                    double d0 = (double) ((float) blockposition.getX() + (5.0F + ItemEnderEye.i.nextFloat() * 6.0F) / 16.0F);
-                    double d1 = (double) ((float) blockposition.getY() + 0.8125F);
-                    double d2 = (double) ((float) blockposition.getZ() + (5.0F + ItemEnderEye.i.nextFloat() * 6.0F) / 16.0F);
-                    double d3 = 0.0D;
-                    double d4 = 0.0D;
-                    double d5 = 0.0D;
-
-                    world.addParticle(Particles.M, d0, d1, d2, 0.0D, 0.0D, 0.0D);
-                }
-
-                world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.triggerEffect(1503, blockposition, 0);
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = BlockEnderPortalFrame.d().a(world, blockposition);
 
                 if (shapedetector_shapedetectorcollection != null) {
-                    BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().a(-3, 0, -3);
+                    BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a().b(-3, 0, -3);
 
-                    for (int j = 0; j < 3; ++j) {
-                        for (int k = 0; k < 3; ++k) {
-                            world.setTypeAndData(blockposition1.a(j, 0, k), Blocks.END_PORTAL.getBlockData(), 2);
+                    for (int i = 0; i < 3; ++i) {
+                        for (int j = 0; j < 3; ++j) {
+                            world.setTypeAndData(blockposition1.b(i, 0, j), Blocks.END_PORTAL.getBlockData(), 2);
                         }
                     }
 
-                    world.a(1038, blockposition1.a(1, 0, 1), 0);
+                    world.b(1038, blockposition1.b(1, 0, 1), 0);
                 }
 
                 return EnumInteractionResult.SUCCESS;
@@ -55,20 +44,22 @@ public class ItemEnderEye extends Item {
         }
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        MovingObjectPosition movingobjectposition = this.a(world, entityhuman, false);
+        MovingObjectPosition movingobjectposition = a(world, entityhuman, RayTrace.FluidCollisionOption.NONE);
 
-        if (movingobjectposition != null && movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(movingobjectposition.getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK && world.getType(((MovingObjectPositionBlock) movingobjectposition).getBlockPosition()).getBlock() == Blocks.END_PORTAL_FRAME) {
             return new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack);
         } else {
             entityhuman.c(enumhand);
             if (!world.isClientSide) {
-                BlockPosition blockposition = ((WorldServer) world).getChunkProvider().a(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
+                BlockPosition blockposition = world.getChunkProvider().getChunkGenerator().findNearestMapFeature(world, "Stronghold", new BlockPosition(entityhuman), 100, false);
 
                 if (blockposition != null) {
-                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + (double) (entityhuman.length / 2.0F), entityhuman.locZ);
+                    EntityEnderSignal entityendersignal = new EntityEnderSignal(world, entityhuman.locX, entityhuman.locY + (double) (entityhuman.getHeight() / 2.0F), entityhuman.locZ);
 
+                    entityendersignal.b(itemstack);
                     entityendersignal.a(blockposition);
                     world.addEntity(entityendersignal);
                     if (entityhuman instanceof EntityPlayer) {

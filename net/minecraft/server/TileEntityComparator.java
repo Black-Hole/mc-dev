@@ -8,12 +8,14 @@ public class TileEntityComparator extends TileEntity {
         super(TileEntityTypes.COMPARATOR);
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         nbttagcompound.setInt("OutputSignal", this.a);
         return nbttagcompound;
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.a = nbttagcompound.getInt("OutputSignal");

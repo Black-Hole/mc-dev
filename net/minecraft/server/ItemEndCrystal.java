@@ -8,6 +8,7 @@ public class ItemEndCrystal extends Item {
         super(item_info);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
@@ -35,7 +36,7 @@ public class ItemEndCrystal extends Item {
                         entityendercrystal.setShowingBottom(false);
                         world.addEntity(entityendercrystal);
                         if (world.worldProvider instanceof WorldProviderTheEnd) {
-                            EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).r();
+                            EnderDragonBattle enderdragonbattle = ((WorldProviderTheEnd) world.worldProvider).q();
 
                             enderdragonbattle.e();
                         }

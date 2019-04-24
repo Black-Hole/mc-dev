@@ -19,10 +19,12 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
 
     public CriterionTriggerEffectsChanged() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerEffectsChanged.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEffectsChanged.b> criteriontrigger_a) {
         CriterionTriggerEffectsChanged.a criteriontriggereffectschanged_a = (CriterionTriggerEffectsChanged.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
         criteriontriggereffectschanged_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerEffectsChanged.b> criteriontrigger_a) {
         CriterionTriggerEffectsChanged.a criteriontriggereffectschanged_a = (CriterionTriggerEffectsChanged.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerEffectsChanged.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionMobEffect criterionconditionmobeffect = CriterionConditionMobEffect.a(jsonobject.get("effects"));
 
@@ -132,6 +137,7 @@ public class CriterionTriggerEffectsChanged implements CriterionTrigger<Criterio
             return this.a.a((EntityLiving) entityplayer);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

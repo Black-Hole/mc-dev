@@ -14,13 +14,15 @@ public class ItemElytra extends Item {
         return itemstack.getDamage() < itemstack.h() - 1;
     }
 
+    @Override
     public boolean a(ItemStack itemstack, ItemStack itemstack1) {
         return itemstack1.getItem() == Items.PHANTOM_MEMBRANE;
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        EnumItemSlot enumitemslot = EntityInsentient.e(itemstack);
+        EnumItemSlot enumitemslot = EntityInsentient.h(itemstack);
         ItemStack itemstack1 = entityhuman.getEquipment(enumitemslot);
 
         if (itemstack1.isEmpty()) {

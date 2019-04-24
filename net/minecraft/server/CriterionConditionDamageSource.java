@@ -15,10 +15,11 @@ public class CriterionConditionDamageSource {
     private final Boolean f;
     private final Boolean g;
     private final Boolean h;
-    private final CriterionConditionEntity i;
+    private final Boolean i;
     private final CriterionConditionEntity j;
+    private final CriterionConditionEntity k;
 
-    public CriterionConditionDamageSource(@Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4, @Nullable Boolean obool5, @Nullable Boolean obool6, CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1) {
+    public CriterionConditionDamageSource(@Nullable Boolean obool, @Nullable Boolean obool1, @Nullable Boolean obool2, @Nullable Boolean obool3, @Nullable Boolean obool4, @Nullable Boolean obool5, @Nullable Boolean obool6, @Nullable Boolean obool7, CriterionConditionEntity criterionconditionentity, CriterionConditionEntity criterionconditionentity1) {
         this.b = obool;
         this.c = obool1;
         this.d = obool2;
@@ -26,12 +27,17 @@ public class CriterionConditionDamageSource {
         this.f = obool4;
         this.g = obool5;
         this.h = obool6;
-        this.i = criterionconditionentity;
-        this.j = criterionconditionentity1;
+        this.i = obool7;
+        this.j = criterionconditionentity;
+        this.k = criterionconditionentity1;
     }
 
     public boolean a(EntityPlayer entityplayer, DamageSource damagesource) {
-        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b != damagesource.b() ? false : (this.c != null && this.c != damagesource.isExplosion() ? false : (this.d != null && this.d != damagesource.ignoresArmor() ? false : (this.e != null && this.e != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f != damagesource.isStarvation() ? false : (this.g != null && this.g != damagesource.p() ? false : (this.h != null && this.h != damagesource.isMagic() ? false : (!this.i.a(entityplayer, damagesource.j()) ? false : this.j.a(entityplayer, damagesource.getEntity())))))))));
+        return this.a(entityplayer.getWorldServer(), new Vec3D(entityplayer.locX, entityplayer.locY, entityplayer.locZ), damagesource);
+    }
+
+    public boolean a(WorldServer worldserver, Vec3D vec3d, DamageSource damagesource) {
+        return this == CriterionConditionDamageSource.a ? true : (this.b != null && this.b != damagesource.b() ? false : (this.c != null && this.c != damagesource.isExplosion() ? false : (this.d != null && this.d != damagesource.ignoresArmor() ? false : (this.e != null && this.e != damagesource.ignoresInvulnerability() ? false : (this.f != null && this.f != damagesource.isStarvation() ? false : (this.g != null && this.g != damagesource.p() ? false : (this.h != null && this.h != damagesource.isMagic() ? false : (this.i != null && this.i != (damagesource == DamageSource.LIGHTNING) ? false : (!this.j.a(worldserver, vec3d, damagesource.j()) ? false : this.k.a(worldserver, vec3d, damagesource.getEntity()))))))))));
     }
 
     public static CriterionConditionDamageSource a(@Nullable JsonElement jsonelement) {
@@ -44,10 +50,11 @@ public class CriterionConditionDamageSource {
             Boolean obool4 = a(jsonobject, "bypasses_magic");
             Boolean obool5 = a(jsonobject, "is_fire");
             Boolean obool6 = a(jsonobject, "is_magic");
+            Boolean obool7 = a(jsonobject, "is_lightning");
             CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("direct_entity"));
             CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("source_entity"));
 
-            return new CriterionConditionDamageSource(obool, obool1, obool2, obool3, obool4, obool5, obool6, criterionconditionentity, criterionconditionentity1);
+            return new CriterionConditionDamageSource(obool, obool1, obool2, obool3, obool4, obool5, obool6, obool7, criterionconditionentity, criterionconditionentity1);
         } else {
             return CriterionConditionDamageSource.a;
         }
@@ -71,8 +78,9 @@ public class CriterionConditionDamageSource {
             this.a(jsonobject, "bypasses_magic", this.f);
             this.a(jsonobject, "is_fire", this.g);
             this.a(jsonobject, "is_magic", this.h);
-            jsonobject.add("direct_entity", this.i.a());
-            jsonobject.add("source_entity", this.j.a());
+            this.a(jsonobject, "is_lightning", this.i);
+            jsonobject.add("direct_entity", this.j.a());
+            jsonobject.add("source_entity", this.k.a());
             return jsonobject;
         }
     }
@@ -93,12 +101,13 @@ public class CriterionConditionDamageSource {
         private Boolean e;
         private Boolean f;
         private Boolean g;
-        private CriterionConditionEntity h;
+        private Boolean h;
         private CriterionConditionEntity i;
+        private CriterionConditionEntity j;
 
         public a() {
-            this.h = CriterionConditionEntity.a;
             this.i = CriterionConditionEntity.a;
+            this.j = CriterionConditionEntity.a;
         }
 
         public static CriterionConditionDamageSource.a a() {
@@ -110,13 +119,18 @@ public class CriterionConditionDamageSource {
             return this;
         }
 
+        public CriterionConditionDamageSource.a h(Boolean obool) {
+            this.h = obool;
+            return this;
+        }
+
         public CriterionConditionDamageSource.a a(CriterionConditionEntity.a criterionconditionentity_a) {
-            this.h = criterionconditionentity_a.b();
+            this.i = criterionconditionentity_a.b();
             return this;
         }
 
         public CriterionConditionDamageSource b() {
-            return new CriterionConditionDamageSource(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i);
+            return new CriterionConditionDamageSource(this.a, this.b, this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j);
         }
     }
 }

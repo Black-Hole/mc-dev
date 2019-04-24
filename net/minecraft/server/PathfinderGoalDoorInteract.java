@@ -2,29 +2,29 @@ package net.minecraft.server;
 
 public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
 
-    protected EntityInsentient a;
-    protected BlockPosition b;
-    protected boolean c;
-    private boolean d;
-    private float e;
-    private float f;
+    protected EntityInsentient entity;
+    protected BlockPosition door;
+    protected boolean f;
+    private boolean a;
+    private float b;
+    private float c;
 
     public PathfinderGoalDoorInteract(EntityInsentient entityinsentient) {
-        this.b = BlockPosition.ZERO;
-        this.a = entityinsentient;
+        this.door = BlockPosition.ZERO;
+        this.entity = entityinsentient;
         if (!(entityinsentient.getNavigation() instanceof Navigation)) {
             throw new IllegalArgumentException("Unsupported mob type for DoorInteractGoal");
         }
     }
 
     protected boolean g() {
-        if (!this.c) {
+        if (!this.f) {
             return false;
         } else {
-            IBlockData iblockdata = this.a.world.getType(this.b);
+            IBlockData iblockdata = this.entity.world.getType(this.door);
 
             if (!(iblockdata.getBlock() instanceof BlockDoor)) {
-                this.c = false;
+                this.f = false;
                 return false;
             } else {
                 return (Boolean) iblockdata.get(BlockDoor.OPEN);
@@ -33,68 +33,72 @@ public abstract class PathfinderGoalDoorInteract extends PathfinderGoal {
     }
 
     protected void a(boolean flag) {
-        if (this.c) {
-            IBlockData iblockdata = this.a.world.getType(this.b);
+        if (this.f) {
+            IBlockData iblockdata = this.entity.world.getType(this.door);
 
             if (iblockdata.getBlock() instanceof BlockDoor) {
-                ((BlockDoor) iblockdata.getBlock()).setDoor(this.a.world, this.b, flag);
+                ((BlockDoor) iblockdata.getBlock()).setDoor(this.entity.world, this.door, flag);
             }
         }
 
     }
 
+    @Override
     public boolean a() {
-        if (!this.a.positionChanged) {
+        if (!this.entity.positionChanged) {
             return false;
         } else {
-            Navigation navigation = (Navigation) this.a.getNavigation();
-            PathEntity pathentity = navigation.m();
+            Navigation navigation = (Navigation) this.entity.getNavigation();
+            PathEntity pathentity = navigation.l();
 
-            if (pathentity != null && !pathentity.b() && navigation.g()) {
-                for (int i = 0; i < Math.min(pathentity.e() + 2, pathentity.d()); ++i) {
+            if (pathentity != null && !pathentity.b() && navigation.f()) {
+                for (int i = 0; i < Math.min(pathentity.f() + 2, pathentity.e()); ++i) {
                     PathPoint pathpoint = pathentity.a(i);
 
-                    this.b = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
-                    if (this.a.d((double) this.b.getX(), this.a.locY, (double) this.b.getZ()) <= 2.25D) {
-                        this.c = this.a(this.b);
-                        if (this.c) {
+                    this.door = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
+                    if (this.entity.e((double) this.door.getX(), this.entity.locY, (double) this.door.getZ()) <= 2.25D) {
+                        this.f = a(this.entity.world, this.door);
+                        if (this.f) {
                             return true;
                         }
                     }
                 }
 
-                this.b = (new BlockPosition(this.a)).up();
-                this.c = this.a(this.b);
-                return this.c;
+                this.door = (new BlockPosition(this.entity)).up();
+                this.f = a(this.entity.world, this.door);
+                return this.f;
             } else {
                 return false;
             }
         }
     }
 
+    @Override
     public boolean b() {
-        return !this.d;
+        return !this.a;
     }
 
+    @Override
     public void c() {
-        this.d = false;
-        this.e = (float) ((double) ((float) this.b.getX() + 0.5F) - this.a.locX);
-        this.f = (float) ((double) ((float) this.b.getZ() + 0.5F) - this.a.locZ);
+        this.a = false;
+        this.b = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX);
+        this.c = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ);
     }
 
+    @Override
     public void e() {
-        float f = (float) ((double) ((float) this.b.getX() + 0.5F) - this.a.locX);
-        float f1 = (float) ((double) ((float) this.b.getZ() + 0.5F) - this.a.locZ);
-        float f2 = this.e * f + this.f * f1;
+        float f = (float) ((double) ((float) this.door.getX() + 0.5F) - this.entity.locX);
+        float f1 = (float) ((double) ((float) this.door.getZ() + 0.5F) - this.entity.locZ);
+        float f2 = this.b * f + this.c * f1;
 
         if (f2 < 0.0F) {
-            this.d = true;
+            this.a = true;
         }
 
     }
 
-    private boolean a(BlockPosition blockposition) {
-        IBlockData iblockdata = this.a.world.getType(blockposition);
+    public static boolean a(World world, BlockPosition blockposition) {
+        IBlockData iblockdata = world.getType(blockposition);
 
         return iblockdata.getBlock() instanceof BlockDoor && iblockdata.getMaterial() == Material.WOOD;
     }

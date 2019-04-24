@@ -11,17 +11,20 @@ public class BlockCoralFan extends BlockCoralFanAbstract {
         this.a = block;
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         this.a(iblockdata, (GeneratorAccess) world, blockposition);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!b_(iblockdata, world, blockposition)) {
             world.setTypeAndData(blockposition, (IBlockData) this.a.getBlockData().set(BlockCoralFan.b, false), 2);
         }
 
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if (enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition)) {
             return Blocks.AIR.getBlockData();

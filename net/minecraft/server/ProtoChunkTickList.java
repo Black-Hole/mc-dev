@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.shorts.ShortList;
 import it.unimi.dsi.fastutil.shorts.ShortListIterator;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ProtoChunkTickList<T> implements TickList<T> {
 
@@ -11,28 +12,31 @@ public class ProtoChunkTickList<T> implements TickList<T> {
     protected final Function<T, MinecraftKey> b;
     protected final Function<MinecraftKey, T> c;
     private final ChunkCoordIntPair d;
-    private final ShortList[] e = new ShortList[16];
+    private final ShortList[] e;
 
     public ProtoChunkTickList(Predicate<T> predicate, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1, ChunkCoordIntPair chunkcoordintpair) {
+        this(predicate, function, function1, chunkcoordintpair, new NBTTagList());
+    }
+
+    public ProtoChunkTickList(Predicate<T> predicate, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1, ChunkCoordIntPair chunkcoordintpair, NBTTagList nbttaglist) {
+        this.e = new ShortList[16];
         this.a = predicate;
         this.b = function;
         this.c = function1;
         this.d = chunkcoordintpair;
+
+        for (int i = 0; i < nbttaglist.size(); ++i) {
+            NBTTagList nbttaglist1 = nbttaglist.b(i);
+
+            for (int j = 0; j < nbttaglist1.size(); ++j) {
+                IChunkAccess.a(this.e, i).add(nbttaglist1.d(j));
+            }
+        }
+
     }
 
     public NBTTagList a() {
         return ChunkRegionLoader.a(this.e);
-    }
-
-    public void a(NBTTagList nbttaglist) {
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            NBTTagList nbttaglist1 = nbttaglist.f(i);
-
-            for (int j = 0; j < nbttaglist1.size(); ++j) {
-                ProtoChunk.a(this.e, i).add(nbttaglist1.g(j));
-            }
-        }
-
     }
 
     public void a(TickList<T> ticklist, Function<BlockPosition, T> function) {
@@ -53,15 +57,25 @@ public class ProtoChunkTickList<T> implements TickList<T> {
 
     }
 
+    @Override
     public boolean a(BlockPosition blockposition, T t0) {
         return false;
     }
 
+    @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        ProtoChunk.a(this.e, blockposition.getY() >> 4).add(ProtoChunk.i(blockposition));
+        IChunkAccess.a(this.e, blockposition.getY() >> 4).add(ProtoChunk.k(blockposition));
     }
 
+    @Override
     public boolean b(BlockPosition blockposition, T t0) {
         return false;
+    }
+
+    @Override
+    public void a(Stream<NextTickListEntry<T>> stream) {
+        stream.forEach((nextticklistentry) -> {
+            this.a(nextticklistentry.a, nextticklistentry.a(), 0, nextticklistentry.c);
+        });
     }
 }

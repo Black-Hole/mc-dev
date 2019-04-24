@@ -12,9 +12,10 @@ public class DataConverterArmorStand extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.getBoolean("Silent") && !dynamic.getBoolean("Marker") ? dynamic.remove("Silent") : dynamic;
+        return dynamic.get("Silent").asBoolean(false) && !dynamic.get("Marker").asBoolean(false) ? dynamic.remove("Silent") : dynamic;
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

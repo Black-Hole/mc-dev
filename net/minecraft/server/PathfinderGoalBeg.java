@@ -1,41 +1,50 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalBeg extends PathfinderGoal {
 
     private final EntityWolf a;
     private EntityHuman b;
-    private final IWorldReader c;
+    private final World c;
     private final float d;
     private int e;
+    private final PathfinderTargetCondition f;
 
     public PathfinderGoalBeg(EntityWolf entitywolf, float f) {
         this.a = entitywolf;
         this.c = entitywolf.world;
         this.d = f;
-        this.a(2);
+        this.f = (new PathfinderTargetCondition()).a((double) f).a().b().d();
+        this.a(EnumSet.of(PathfinderGoal.Type.LOOK));
     }
 
+    @Override
     public boolean a() {
-        this.b = this.c.findNearbyPlayer(this.a, (double) this.d);
+        this.b = this.c.a(this.f, (EntityLiving) this.a);
         return this.b == null ? false : this.a(this.b);
     }
 
+    @Override
     public boolean b() {
-        return !this.b.isAlive() ? false : (this.a.h(this.b) > (double) (this.d * this.d) ? false : this.e > 0 && this.a(this.b));
+        return !this.b.isAlive() ? false : (this.a.h((Entity) this.b) > (double) (this.d * this.d) ? false : this.e > 0 && this.a(this.b));
     }
 
+    @Override
     public void c() {
-        this.a.w(true);
+        this.a.v(true);
         this.e = 40 + this.a.getRandom().nextInt(40);
     }
 
+    @Override
     public void d() {
-        this.a.w(false);
+        this.a.v(false);
         this.b = null;
     }
 
+    @Override
     public void e() {
-        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.K());
+        this.a.getControllerLook().a(this.b.locX, this.b.locY + (double) this.b.getHeadHeight(), this.b.locZ, 10.0F, (float) this.a.M());
         --this.e;
     }
 
@@ -51,7 +60,7 @@ public class PathfinderGoalBeg extends PathfinderGoal {
                 return true;
             }
 
-            if (this.a.f(itemstack)) {
+            if (this.a.i(itemstack)) {
                 return true;
             }
         }

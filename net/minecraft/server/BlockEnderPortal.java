@@ -1,7 +1,5 @@
 package net.minecraft.server;
 
-import java.util.Random;
-
 public class BlockEnderPortal extends BlockTileEntity {
 
     protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
@@ -10,34 +8,21 @@ public class BlockEnderPortal extends BlockTileEntity {
         super(block_info);
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityEnderPortal();
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockEnderPortal.a;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
-    public int a(IBlockData iblockdata, Random random) {
-        return 0;
-    }
-
+    @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.bm() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
-            entity.a(DimensionManager.THE_END);
+        if (!world.isClientSide && !entity.isPassenger() && !entity.isVehicle() && entity.canPortal() && VoxelShapes.c(VoxelShapes.a(entity.getBoundingBox().d((double) (-blockposition.getX()), (double) (-blockposition.getY()), (double) (-blockposition.getZ()))), iblockdata.getShape(world, blockposition), OperatorBoolean.AND)) {
+            entity.a(world.worldProvider.getDimensionManager() == DimensionManager.THE_END ? DimensionManager.OVERWORLD : DimensionManager.THE_END);
         }
 
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return ItemStack.a;
-    }
-
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
     }
 }

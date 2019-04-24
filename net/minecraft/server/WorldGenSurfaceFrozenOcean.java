@@ -1,30 +1,34 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfaceConfigurationBase> {
+public class WorldGenSurfaceFrozenOcean extends WorldGenSurface<WorldGenSurfaceConfigurationBase> {
 
     protected static final IBlockData a = Blocks.PACKED_ICE.getBlockData();
     protected static final IBlockData b = Blocks.SNOW_BLOCK.getBlockData();
     private static final IBlockData c = Blocks.AIR.getBlockData();
     private static final IBlockData d = Blocks.GRAVEL.getBlockData();
     private static final IBlockData e = Blocks.ICE.getBlockData();
-    private NoiseGenerator3 f;
-    private NoiseGenerator3 g;
-    private long h;
+    private NoiseGenerator3 S;
+    private NoiseGenerator3 T;
+    private long U;
 
-    public WorldGenSurfaceFrozenOcean() {}
+    public WorldGenSurfaceFrozenOcean(Function<Dynamic<?>, ? extends WorldGenSurfaceConfigurationBase> function) {
+        super(function);
+    }
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
         double d1 = 0.0D;
         double d2 = 0.0D;
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-        float f = biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, 63, j));
-        double d3 = Math.min(Math.abs(d0), this.f.a((double) i * 0.1D, (double) j * 0.1D));
+        float f = biomebase.getAdjustedTemperature(blockposition_mutableblockposition.d(i, 63, j));
+        double d3 = Math.min(Math.abs(d0), this.S.a((double) i * 0.1D, (double) j * 0.1D));
 
         if (d3 > 1.8D) {
             double d4 = 0.09765625D;
-            double d5 = Math.abs(this.g.a((double) i * 0.09765625D, (double) j * 0.09765625D));
+            double d5 = Math.abs(this.T.a((double) i * 0.09765625D, (double) j * 0.09765625D));
 
             d1 = d3 * d3 * 1.2D;
             double d6 = Math.ceil(d5 * 40.0D) + 14.0D;
@@ -47,8 +51,8 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
 
         int j1 = i & 15;
         int k1 = j & 15;
-        IBlockData iblockdata2 = biomebase.r().b();
-        IBlockData iblockdata3 = biomebase.r().a();
+        IBlockData iblockdata2 = biomebase.q().b();
+        IBlockData iblockdata3 = biomebase.q().a();
         int l1 = (int) (d0 / 3.0D + 3.0D + random.nextDouble() * 0.25D);
         int i2 = -1;
         int j2 = 0;
@@ -56,7 +60,7 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
         int l2 = l + 18 + random.nextInt(10);
 
         for (int i3 = Math.max(k, (int) d1 + 1); i3 >= 0; --i3) {
-            blockposition_mutableblockposition.c(j1, i3, k1);
+            blockposition_mutableblockposition.d(j1, i3, k1);
             if (ichunkaccess.getType(blockposition_mutableblockposition).isAir() && i3 < (int) d1 && random.nextDouble() > 0.01D) {
                 ichunkaccess.setType(blockposition_mutableblockposition, WorldGenSurfaceFrozenOcean.a, false);
             } else if (ichunkaccess.getType(blockposition_mutableblockposition).getMaterial() == Material.WATER && i3 > (int) d2 && i3 < l && d2 != 0.0D && random.nextDouble() > 0.15D) {
@@ -73,12 +77,12 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
                         iblockdata3 = WorldGenSurfaceFrozenOcean.c;
                         iblockdata2 = iblockdata;
                     } else if (i3 >= l - 4 && i3 <= l + 1) {
-                        iblockdata3 = biomebase.r().a();
-                        iblockdata2 = biomebase.r().b();
+                        iblockdata3 = biomebase.q().a();
+                        iblockdata2 = biomebase.q().b();
                     }
 
                     if (i3 < l && (iblockdata3 == null || iblockdata3.isAir())) {
-                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.c(i, i3, j)) < 0.15F) {
+                        if (biomebase.getAdjustedTemperature(blockposition_mutableblockposition.d(i, i3, j)) < 0.15F) {
                             iblockdata3 = WorldGenSurfaceFrozenOcean.e;
                         } else {
                             iblockdata3 = iblockdata1;
@@ -111,14 +115,15 @@ public class WorldGenSurfaceFrozenOcean implements WorldGenSurface<WorldGenSurfa
 
     }
 
+    @Override
     public void a(long i) {
-        if (this.h != i || this.f == null || this.g == null) {
+        if (this.U != i || this.S == null || this.T == null) {
             SeededRandom seededrandom = new SeededRandom(i);
 
-            this.f = new NoiseGenerator3(seededrandom, 4);
-            this.g = new NoiseGenerator3(seededrandom, 1);
+            this.S = new NoiseGenerator3(seededrandom, 4);
+            this.T = new NoiseGenerator3(seededrandom, 1);
         }
 
-        this.h = i;
+        this.U = i;
     }
 }

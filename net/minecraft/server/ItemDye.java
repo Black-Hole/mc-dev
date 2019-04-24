@@ -14,11 +14,12 @@ public class ItemDye extends Item {
         ItemDye.a.put(enumcolor, this);
     }
 
+    @Override
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving, EnumHand enumhand) {
         if (entityliving instanceof EntitySheep) {
             EntitySheep entitysheep = (EntitySheep) entityliving;
 
-            if (!entitysheep.isSheared() && entitysheep.getColor() != this.b) {
+            if (entitysheep.isAlive() && !entitysheep.isSheared() && entitysheep.getColor() != this.b) {
                 entitysheep.setColor(this.b);
                 itemstack.subtract(1);
             }

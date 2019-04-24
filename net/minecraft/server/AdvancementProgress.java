@@ -143,7 +143,7 @@ public class AdvancementProgress implements Comparable<AdvancementProgress> {
 
     public static AdvancementProgress b(PacketDataSerializer packetdataserializer) {
         AdvancementProgress advancementprogress = new AdvancementProgress();
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         for (int j = 0; j < i; ++j) {
             advancementprogress.a.put(packetdataserializer.e(32767), CriterionProgress.b(packetdataserializer));

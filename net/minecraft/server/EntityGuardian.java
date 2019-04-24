@@ -1,36 +1,33 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class EntityGuardian extends EntityMonster {
 
-    private static final DataWatcherObject<Boolean> bF = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.i);
-    private static final DataWatcherObject<Integer> bG = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.b);
-    protected float a;
-    protected float b;
+    private static final DataWatcherObject<Boolean> b = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.i);
+    private static final DataWatcherObject<Integer> bD = DataWatcher.a(EntityGuardian.class, DataWatcherRegistry.b);
     protected float c;
-    protected float bC;
-    protected float bD;
-    private EntityLiving bH;
-    private int bI;
-    private boolean bJ;
+    protected float d;
+    protected float bz;
+    protected float bA;
+    protected float bB;
+    private EntityLiving bE;
+    private int bF;
+    private boolean bG;
     public PathfinderGoalRandomStroll goalRandomStroll;
 
-    protected EntityGuardian(EntityTypes<?> entitytypes, World world) {
+    public EntityGuardian(EntityTypes<? extends EntityGuardian> entitytypes, World world) {
         super(entitytypes, world);
-        this.b_ = 10;
-        this.setSize(0.85F, 0.85F);
+        this.f = 10;
         this.moveController = new EntityGuardian.ControllerMoveGuardian(this);
-        this.a = this.random.nextFloat();
-        this.b = this.a;
+        this.c = this.random.nextFloat();
+        this.d = this.c;
     }
 
-    public EntityGuardian(World world) {
-        this(EntityTypes.GUARDIAN, world);
-    }
-
-    protected void n() {
+    @Override
+    protected void initPathfinder() {
         PathfinderGoalMoveTowardsRestriction pathfindergoalmovetowardsrestriction = new PathfinderGoalMoveTowardsRestriction(this, 1.0D);
 
         this.goalRandomStroll = new PathfinderGoalRandomStroll(this, 1.0D, 80);
@@ -40,43 +37,48 @@ public class EntityGuardian extends EntityMonster {
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalLookAtPlayer(this, EntityGuardian.class, 12.0F, 0.01F));
         this.goalSelector.a(9, new PathfinderGoalRandomLookaround(this));
-        this.goalRandomStroll.a(3);
-        pathfindergoalmovetowardsrestriction.a(3);
+        this.goalRandomStroll.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
+        pathfindergoalmovetowardsrestriction.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget<>(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
     }
 
+    @Override
     public void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(6.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.5D);
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(16.0D);
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(30.0D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(30.0D);
     }
 
+    @Override
     protected NavigationAbstract b(World world) {
         return new NavigationGuardian(this, world);
     }
 
-    protected void x_() {
-        super.x_();
-        this.datawatcher.register(EntityGuardian.bF, false);
-        this.datawatcher.register(EntityGuardian.bG, 0);
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityGuardian.b, false);
+        this.datawatcher.register(EntityGuardian.bD, 0);
     }
 
-    public boolean ca() {
+    @Override
+    public boolean cl() {
         return true;
     }
 
+    @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.e;
     }
 
-    public boolean dB() {
-        return (Boolean) this.datawatcher.get(EntityGuardian.bF);
+    public boolean dY() {
+        return (Boolean) this.datawatcher.get(EntityGuardian.b);
     }
 
-    private void a(boolean flag) {
-        this.datawatcher.set(EntityGuardian.bF, flag);
+    private void r(boolean flag) {
+        this.datawatcher.set(EntityGuardian.b, flag);
     }
 
     public int l() {
@@ -84,26 +86,26 @@ public class EntityGuardian extends EntityMonster {
     }
 
     private void a(int i) {
-        this.datawatcher.set(EntityGuardian.bG, i);
+        this.datawatcher.set(EntityGuardian.bD, i);
     }
 
-    public boolean dC() {
-        return (Integer) this.datawatcher.get(EntityGuardian.bG) != 0;
+    public boolean dZ() {
+        return (Integer) this.datawatcher.get(EntityGuardian.bD) != 0;
     }
 
     @Nullable
-    public EntityLiving dD() {
-        if (!this.dC()) {
+    public EntityLiving ea() {
+        if (!this.dZ()) {
             return null;
         } else if (this.world.isClientSide) {
-            if (this.bH != null) {
-                return this.bH;
+            if (this.bE != null) {
+                return this.bE;
             } else {
-                Entity entity = this.world.getEntity((Integer) this.datawatcher.get(EntityGuardian.bG));
+                Entity entity = this.world.getEntity((Integer) this.datawatcher.get(EntityGuardian.bD));
 
                 if (entity instanceof EntityLiving) {
-                    this.bH = (EntityLiving) entity;
-                    return this.bH;
+                    this.bE = (EntityLiving) entity;
+                    return this.bE;
                 } else {
                     return null;
                 }
@@ -113,155 +115,171 @@ public class EntityGuardian extends EntityMonster {
         }
     }
 
+    @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         super.a(datawatcherobject);
-        if (EntityGuardian.bG.equals(datawatcherobject)) {
-            this.bI = 0;
-            this.bH = null;
+        if (EntityGuardian.bD.equals(datawatcherobject)) {
+            this.bF = 0;
+            this.bE = null;
         }
 
     }
 
-    public int z() {
+    @Override
+    public int A() {
         return 160;
     }
 
-    protected SoundEffect D() {
-        return this.aq() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
+    @Override
+    protected SoundEffect getSoundAmbient() {
+        return this.au() ? SoundEffects.ENTITY_GUARDIAN_AMBIENT : SoundEffects.ENTITY_GUARDIAN_AMBIENT_LAND;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
-        return this.aq() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
+        return this.au() ? SoundEffects.ENTITY_GUARDIAN_HURT : SoundEffects.ENTITY_GUARDIAN_HURT_LAND;
     }
 
-    protected SoundEffect cs() {
-        return this.aq() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
+    @Override
+    protected SoundEffect getSoundDeath() {
+        return this.au() ? SoundEffects.ENTITY_GUARDIAN_DEATH : SoundEffects.ENTITY_GUARDIAN_DEATH_LAND;
     }
 
+    @Override
     protected boolean playStepSound() {
         return false;
     }
 
-    public float getHeadHeight() {
-        return this.length * 0.5F;
+    @Override
+    protected float b(EntityPose entitypose, EntitySize entitysize) {
+        return entitysize.height * 0.5F;
     }
 
+    @Override
     public float a(BlockPosition blockposition, IWorldReader iworldreader) {
-        return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.A(blockposition) - 0.5F : super.a(blockposition, iworldreader);
+        return iworldreader.getFluid(blockposition).a(TagsFluid.WATER) ? 10.0F + iworldreader.w(blockposition) - 0.5F : super.a(blockposition, iworldreader);
     }
 
+    @Override
     public void movementTick() {
-        if (this.world.isClientSide) {
-            this.b = this.a;
-            if (!this.isInWater()) {
-                this.c = 2.0F;
-                if (this.motY > 0.0D && this.bJ && !this.isSilent()) {
-                    this.world.a(this.locX, this.locY, this.locZ, this.dA(), this.bV(), 1.0F, 1.0F, false);
-                }
+        if (this.isAlive()) {
+            if (this.world.isClientSide) {
+                this.d = this.c;
+                Vec3D vec3d;
 
-                this.bJ = this.motY < 0.0D && this.world.q((new BlockPosition(this)).down());
-            } else if (this.dB()) {
-                if (this.c < 0.5F) {
-                    this.c = 4.0F;
+                if (!this.isInWater()) {
+                    this.bz = 2.0F;
+                    vec3d = this.getMot();
+                    if (vec3d.y > 0.0D && this.bG && !this.isSilent()) {
+                        this.world.a(this.locX, this.locY, this.locZ, this.getSoundFlop(), this.getSoundCategory(), 1.0F, 1.0F, false);
+                    }
+
+                    this.bG = vec3d.y < 0.0D && this.world.a((new BlockPosition(this)).down(), (Entity) this);
+                } else if (this.dY()) {
+                    if (this.bz < 0.5F) {
+                        this.bz = 4.0F;
+                    } else {
+                        this.bz += (0.5F - this.bz) * 0.1F;
+                    }
                 } else {
-                    this.c += (0.5F - this.c) * 0.1F;
-                }
-            } else {
-                this.c += (0.125F - this.c) * 0.2F;
-            }
-
-            this.a += this.c;
-            this.bD = this.bC;
-            if (!this.aq()) {
-                this.bC = this.random.nextFloat();
-            } else if (this.dB()) {
-                this.bC += (0.0F - this.bC) * 0.25F;
-            } else {
-                this.bC += (1.0F - this.bC) * 0.06F;
-            }
-
-            if (this.dB() && this.isInWater()) {
-                Vec3D vec3d = this.f(0.0F);
-
-                for (int i = 0; i < 2; ++i) {
-                    this.world.addParticle(Particles.e, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width - vec3d.x * 1.5D, this.locY + this.random.nextDouble() * (double) this.length - vec3d.y * 1.5D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D);
-                }
-            }
-
-            if (this.dC()) {
-                if (this.bI < this.l()) {
-                    ++this.bI;
+                    this.bz += (0.125F - this.bz) * 0.2F;
                 }
 
-                EntityLiving entityliving = this.dD();
+                this.c += this.bz;
+                this.bB = this.bA;
+                if (!this.au()) {
+                    this.bA = this.random.nextFloat();
+                } else if (this.dY()) {
+                    this.bA += (0.0F - this.bA) * 0.25F;
+                } else {
+                    this.bA += (1.0F - this.bA) * 0.06F;
+                }
 
-                if (entityliving != null) {
-                    this.getControllerLook().a(entityliving, 90.0F, 90.0F);
-                    this.getControllerLook().a();
-                    double d0 = (double) this.w(0.0F);
-                    double d1 = entityliving.locX - this.locX;
-                    double d2 = entityliving.locY + (double) (entityliving.length * 0.5F) - (this.locY + (double) this.getHeadHeight());
-                    double d3 = entityliving.locZ - this.locZ;
-                    double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+                if (this.dY() && this.isInWater()) {
+                    vec3d = this.f(0.0F);
 
-                    d1 /= d4;
-                    d2 /= d4;
-                    d3 /= d4;
-                    double d5 = this.random.nextDouble();
+                    for (int i = 0; i < 2; ++i) {
+                        this.world.addParticle(Particles.BUBBLE, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.getWidth() - vec3d.x * 1.5D, this.locY + this.random.nextDouble() * (double) this.getHeight() - vec3d.y * 1.5D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.getWidth() - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D);
+                    }
+                }
 
-                    while (d5 < d4) {
-                        d5 += 1.8D - d0 + this.random.nextDouble() * (1.7D - d0);
-                        this.world.addParticle(Particles.e, this.locX + d1 * d5, this.locY + d2 * d5 + (double) this.getHeadHeight(), this.locZ + d3 * d5, 0.0D, 0.0D, 0.0D);
+                if (this.dZ()) {
+                    if (this.bF < this.l()) {
+                        ++this.bF;
+                    }
+
+                    EntityLiving entityliving = this.ea();
+
+                    if (entityliving != null) {
+                        this.getControllerLook().a(entityliving, 90.0F, 90.0F);
+                        this.getControllerLook().a();
+                        double d0 = (double) this.x(0.0F);
+                        double d1 = entityliving.locX - this.locX;
+                        double d2 = entityliving.locY + (double) (entityliving.getHeight() * 0.5F) - (this.locY + (double) this.getHeadHeight());
+                        double d3 = entityliving.locZ - this.locZ;
+                        double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
+
+                        d1 /= d4;
+                        d2 /= d4;
+                        d3 /= d4;
+                        double d5 = this.random.nextDouble();
+
+                        while (d5 < d4) {
+                            d5 += 1.8D - d0 + this.random.nextDouble() * (1.7D - d0);
+                            this.world.addParticle(Particles.BUBBLE, this.locX + d1 * d5, this.locY + d2 * d5 + (double) this.getHeadHeight(), this.locZ + d3 * d5, 0.0D, 0.0D, 0.0D);
+                        }
                     }
                 }
             }
-        }
 
-        if (this.aq()) {
-            this.setAirTicks(300);
-        } else if (this.onGround) {
-            this.motY += 0.5D;
-            this.motX += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F);
-            this.motZ += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F);
-            this.yaw = this.random.nextFloat() * 360.0F;
-            this.onGround = false;
-            this.impulse = true;
-        }
+            if (this.au()) {
+                this.setAirTicks(300);
+            } else if (this.onGround) {
+                this.setMot(this.getMot().add((double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F), 0.5D, (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F)));
+                this.yaw = this.random.nextFloat() * 360.0F;
+                this.onGround = false;
+                this.impulse = true;
+            }
 
-        if (this.dC()) {
-            this.yaw = this.aS;
+            if (this.dZ()) {
+                this.yaw = this.aM;
+            }
         }
 
         super.movementTick();
     }
 
-    protected SoundEffect dA() {
+    protected SoundEffect getSoundFlop() {
         return SoundEffects.ENTITY_GUARDIAN_FLOP;
     }
 
-    public float w(float f) {
-        return ((float) this.bI + f) / (float) this.l();
+    public float x(float f) {
+        return ((float) this.bF + f) / (float) this.l();
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.D;
-    }
-
-    protected boolean K_() {
+    @Override
+    protected boolean I_() {
         return true;
     }
 
+    @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox());
+        return iworldreader.i(this);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return (this.random.nextInt(20) == 0 || !generatoraccess.z(new BlockPosition(this))) && super.a(generatoraccess, flag);
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
+        return (this.random.nextInt(20) == 0 || !generatoraccess.v(new BlockPosition(this))) && super.a(generatoraccess, enummobspawn);
     }
 
+    @Override
+    protected boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn, BlockPosition blockposition) {
+        return generatoraccess.getFluid(blockposition).a(TagsFluid.WATER);
+    }
+
+    @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
-        if (!this.dB() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
+        if (!this.dY() && !damagesource.isMagic() && damagesource.j() instanceof EntityLiving) {
             EntityLiving entityliving = (EntityLiving) damagesource.j();
 
             if (!damagesource.isExplosion()) {
@@ -270,28 +288,28 @@ public class EntityGuardian extends EntityMonster {
         }
 
         if (this.goalRandomStroll != null) {
-            this.goalRandomStroll.i();
+            this.goalRandomStroll.h();
         }
 
         return super.damageEntity(damagesource, f);
     }
 
-    public int K() {
+    @Override
+    public int M() {
         return 180;
     }
 
-    public void a(float f, float f1, float f2) {
-        if (this.cP() && this.isInWater()) {
-            this.a(f, f1, f2, 0.1F);
-            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
-            this.motX *= 0.8999999761581421D;
-            this.motY *= 0.8999999761581421D;
-            this.motZ *= 0.8999999761581421D;
-            if (!this.dB() && this.getGoalTarget() == null) {
-                this.motY -= 0.005D;
+    @Override
+    public void e(Vec3D vec3d) {
+        if (this.de() && this.isInWater()) {
+            this.a(0.1F, vec3d);
+            this.move(EnumMoveType.SELF, this.getMot());
+            this.setMot(this.getMot().a(0.9D));
+            if (!this.dY() && this.getGoalTarget() == null) {
+                this.setMot(this.getMot().add(0.0D, -0.005D, 0.0D));
             }
         } else {
-            super.a(f, f1, f2);
+            super.e(vec3d);
         }
 
     }
@@ -305,49 +323,47 @@ public class EntityGuardian extends EntityMonster {
             this.i = entityguardian;
         }
 
+        @Override
         public void a() {
-            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().p()) {
-                double d0 = this.b - this.i.locX;
-                double d1 = this.c - this.i.locY;
-                double d2 = this.d - this.i.locZ;
-                double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-
-                d1 /= d3;
-                float f = (float) (MathHelper.c(d2, d0) * 57.2957763671875D) - 90.0F;
+            if (this.h == ControllerMove.Operation.MOVE_TO && !this.i.getNavigation().n()) {
+                Vec3D vec3d = new Vec3D(this.b - this.i.locX, this.c - this.i.locY, this.d - this.i.locZ);
+                double d0 = vec3d.f();
+                double d1 = vec3d.x / d0;
+                double d2 = vec3d.y / d0;
+                double d3 = vec3d.z / d0;
+                float f = (float) (MathHelper.d(vec3d.z, vec3d.x) * 57.2957763671875D) - 90.0F;
 
                 this.i.yaw = this.a(this.i.yaw, f, 90.0F);
-                this.i.aQ = this.i.yaw;
+                this.i.aK = this.i.yaw;
                 float f1 = (float) (this.e * this.i.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+                float f2 = MathHelper.g(0.125F, this.i.da(), f1);
 
-                this.i.o(this.i.cK() + (f1 - this.i.cK()) * 0.125F);
+                this.i.o(f2);
                 double d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.5D) * 0.05D;
                 double d5 = Math.cos((double) (this.i.yaw * 0.017453292F));
                 double d6 = Math.sin((double) (this.i.yaw * 0.017453292F));
+                double d7 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.75D) * 0.05D;
 
-                this.i.motX += d4 * d5;
-                this.i.motZ += d4 * d6;
-                d4 = Math.sin((double) (this.i.ticksLived + this.i.getId()) * 0.75D) * 0.05D;
-                this.i.motY += d4 * (d6 + d5) * 0.25D;
-                this.i.motY += (double) this.i.cK() * d1 * 0.1D;
+                this.i.setMot(this.i.getMot().add(d4 * d5, d7 * (d6 + d5) * 0.25D + (double) f2 * d2 * 0.1D, d4 * d6));
                 ControllerLook controllerlook = this.i.getControllerLook();
-                double d7 = this.i.locX + d0 / d3 * 2.0D;
-                double d8 = (double) this.i.getHeadHeight() + this.i.locY + d1 / d3;
-                double d9 = this.i.locZ + d2 / d3 * 2.0D;
-                double d10 = controllerlook.e();
-                double d11 = controllerlook.f();
-                double d12 = controllerlook.g();
+                double d8 = this.i.locX + d1 * 2.0D;
+                double d9 = (double) this.i.getHeadHeight() + this.i.locY + d2 / d0;
+                double d10 = this.i.locZ + d3 * 2.0D;
+                double d11 = controllerlook.d();
+                double d12 = controllerlook.e();
+                double d13 = controllerlook.f();
 
-                if (!controllerlook.b()) {
-                    d10 = d7;
+                if (!controllerlook.c()) {
                     d11 = d8;
                     d12 = d9;
+                    d13 = d10;
                 }
 
-                this.i.getControllerLook().a(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
-                this.i.a(true);
+                this.i.getControllerLook().a(MathHelper.d(0.125D, d11, d8), MathHelper.d(0.125D, d12, d9), MathHelper.d(0.125D, d13, d10), 10.0F, 40.0F);
+                this.i.r(true);
             } else {
                 this.i.o(0.0F);
-                this.i.a(false);
+                this.i.r(false);
             }
         }
     }
@@ -361,36 +377,41 @@ public class EntityGuardian extends EntityMonster {
         public PathfinderGoalGuardianAttack(EntityGuardian entityguardian) {
             this.a = entityguardian;
             this.c = entityguardian instanceof EntityGuardianElder;
-            this.a(3);
+            this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         }
 
+        @Override
         public boolean a() {
             EntityLiving entityliving = this.a.getGoalTarget();
 
             return entityliving != null && entityliving.isAlive();
         }
 
+        @Override
         public boolean b() {
-            return super.b() && (this.c || this.a.h(this.a.getGoalTarget()) > 9.0D);
+            return super.b() && (this.c || this.a.h((Entity) this.a.getGoalTarget()) > 9.0D);
         }
 
+        @Override
         public void c() {
             this.b = -10;
-            this.a.getNavigation().q();
+            this.a.getNavigation().o();
             this.a.getControllerLook().a(this.a.getGoalTarget(), 90.0F, 90.0F);
             this.a.impulse = true;
         }
 
+        @Override
         public void d() {
             this.a.a(0);
             this.a.setGoalTarget((EntityLiving) null);
-            this.a.goalRandomStroll.i();
+            this.a.goalRandomStroll.h();
         }
 
+        @Override
         public void e() {
             EntityLiving entityliving = this.a.getGoalTarget();
 
-            this.a.getNavigation().q();
+            this.a.getNavigation().o();
             this.a.getControllerLook().a(entityliving, 90.0F, 90.0F);
             if (!this.a.hasLineOfSight(entityliving)) {
                 this.a.setGoalTarget((EntityLiving) null);
@@ -429,7 +450,7 @@ public class EntityGuardian extends EntityMonster {
         }
 
         public boolean test(@Nullable EntityLiving entityliving) {
-            return (entityliving instanceof EntityHuman || entityliving instanceof EntitySquid) && entityliving.h(this.a) > 9.0D;
+            return (entityliving instanceof EntityHuman || entityliving instanceof EntitySquid) && entityliving.h((Entity) this.a) > 9.0D;
         }
     }
 }

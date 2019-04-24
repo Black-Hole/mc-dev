@@ -35,7 +35,7 @@ public class DataConverterSchemaV100 extends Schema {
         a(schema, map, "Ghast");
         a(schema, map, "PigZombie");
         schema.register(map, "Enderman", (s) -> {
-            return DSL.optionalFields("carried", DataConverterTypes.p.in(schema), a(schema));
+            return DSL.optionalFields("carried", DataConverterTypes.q.in(schema), a(schema));
         });
         a(schema, map, "CaveSpider");
         a(schema, map, "Silverfish");
@@ -73,8 +73,8 @@ public class DataConverterSchemaV100 extends Schema {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.f, () -> {
-            return DSL.optionalFields("entities", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.n.in(schema))), "blocks", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.j.in(schema))), "palette", DSL.list(DataConverterTypes.l.in(schema)));
+            return DSL.optionalFields("entities", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.o.in(schema))), "blocks", DSL.list(DSL.optionalFields("nbt", DataConverterTypes.k.in(schema))), "palette", DSL.list(DataConverterTypes.m.in(schema)));
         });
-        schema.registerType(false, DataConverterTypes.l, DSL::remainder);
+        schema.registerType(false, DataConverterTypes.m, DSL::remainder);
     }
 }

@@ -78,10 +78,9 @@ public class CriterionConditionEnchantments {
             if (jsonobject.has("enchantment")) {
                 MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "enchantment"));
 
-                enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
-                if (enchantment == null) {
-                    throw new JsonSyntaxException("Unknown enchantment '" + minecraftkey + "'");
-                }
+                enchantment = (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
+                    return new JsonSyntaxException("Unknown enchantment '" + minecraftkey + "'");
+                });
             }
 
             CriterionConditionValue.IntegerRange criterionconditionvalue_integerrange = CriterionConditionValue.IntegerRange.a(jsonobject.get("levels"));

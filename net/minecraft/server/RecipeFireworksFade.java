@@ -11,43 +11,39 @@ public class RecipeFireworksFade extends IRecipeComplex {
         super(minecraftkey);
     }
 
-    public boolean a(IInventory iinventory, World world) {
-        if (!(iinventory instanceof InventoryCrafting)) {
-            return false;
-        } else {
-            boolean flag = false;
-            boolean flag1 = false;
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
+        boolean flag = false;
+        boolean flag1 = false;
 
-            for (int i = 0; i < iinventory.getSize(); ++i) {
-                ItemStack itemstack = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack = inventorycrafting.getItem(i);
 
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.getItem() instanceof ItemDye) {
-                        flag = true;
-                    } else {
-                        if (!RecipeFireworksFade.a.test(itemstack)) {
-                            return false;
-                        }
-
-                        if (flag1) {
-                            return false;
-                        }
-
-                        flag1 = true;
+            if (!itemstack.isEmpty()) {
+                if (itemstack.getItem() instanceof ItemDye) {
+                    flag = true;
+                } else {
+                    if (!RecipeFireworksFade.a.test(itemstack)) {
+                        return false;
                     }
+
+                    if (flag1) {
+                        return false;
+                    }
+
+                    flag1 = true;
                 }
             }
-
-            return flag1 && flag;
         }
+
+        return flag1 && flag;
     }
 
-    public ItemStack craftItem(IInventory iinventory) {
+    public ItemStack a(InventoryCrafting inventorycrafting) {
         List<Integer> list = Lists.newArrayList();
         ItemStack itemstack = null;
 
-        for (int i = 0; i < iinventory.getSize(); ++i) {
-            ItemStack itemstack1 = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack1 = inventorycrafting.getItem(i);
             Item item = itemstack1.getItem();
 
             if (item instanceof ItemDye) {
@@ -66,7 +62,8 @@ public class RecipeFireworksFade extends IRecipeComplex {
         }
     }
 
-    public RecipeSerializer<?> a() {
-        return RecipeSerializers.i;
+    @Override
+    public RecipeSerializer<?> getRecipeSerializer() {
+        return RecipeSerializer.i;
     }
 }

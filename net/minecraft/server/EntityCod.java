@@ -1,36 +1,33 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityCod extends EntityFishSchool {
 
-    public EntityCod(World world) {
-        super(EntityTypes.COD, world);
-        this.setSize(0.5F, 0.3F);
+    public EntityCod(EntityTypes<? extends EntityCod> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
+    @Override
     protected ItemStack l() {
         return new ItemStack(Items.COD_BUCKET);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.aK;
-    }
-
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_COD_AMBIENT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_COD_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_COD_HURT;
     }
 
-    protected SoundEffect dz() {
+    @Override
+    protected SoundEffect getSoundFlop() {
         return SoundEffects.ENTITY_COD_FLOP;
     }
 }

@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public class PlayerInteractManager {
 
-    public World world;
+    public WorldServer world;
     public EntityPlayer player;
     private EnumGamemode gamemode;
     private boolean d;
@@ -14,12 +14,12 @@ public class PlayerInteractManager {
     private int j;
     private int k;
 
-    public PlayerInteractManager(World world) {
+    public PlayerInteractManager(WorldServer worldserver) {
         this.gamemode = EnumGamemode.NOT_SET;
         this.f = BlockPosition.ZERO;
         this.i = BlockPosition.ZERO;
         this.k = -1;
-        this.world = world;
+        this.world = worldserver;
     }
 
     public void setGameMode(EnumGamemode enumgamemode) {
@@ -65,7 +65,7 @@ public class PlayerInteractManager {
                 f = iblockdata.getDamage(this.player, this.player.world, this.i) * (float) (j + 1);
                 i = (int) (f * 10.0F);
                 if (i != this.k) {
-                    this.world.c(this.player.getId(), this.i, i);
+                    this.world.a(this.player.getId(), this.i, i);
                     this.k = i;
                 }
 
@@ -78,7 +78,7 @@ public class PlayerInteractManager {
             IBlockData iblockdata1 = this.world.getType(this.f);
 
             if (iblockdata1.isAir()) {
-                this.world.c(this.player.getId(), this.f, -1);
+                this.world.a(this.player.getId(), this.f, -1);
                 this.k = -1;
                 this.d = false;
             } else {
@@ -87,7 +87,7 @@ public class PlayerInteractManager {
                 f = iblockdata1.getDamage(this.player, this.player.world, this.i) * (float) (k + 1);
                 i = (int) (f * 10.0F);
                 if (i != this.k) {
-                    this.world.c(this.player.getId(), this.f, i);
+                    this.world.a(this.player.getId(), this.f, i);
                     this.k = i;
                 }
             }
@@ -107,7 +107,7 @@ public class PlayerInteractManager {
                     return;
                 }
 
-                if (!this.player.dy()) {
+                if (!this.player.dQ()) {
                     ItemStack itemstack = this.player.getItemInMainHand();
 
                     if (itemstack.isEmpty()) {
@@ -116,7 +116,7 @@ public class PlayerInteractManager {
 
                     ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
 
-                    if (!itemstack.a(this.world.F(), shapedetectorblock)) {
+                    if (!itemstack.a(this.world.t(), shapedetectorblock)) {
                         return;
                     }
                 }
@@ -139,7 +139,7 @@ public class PlayerInteractManager {
                 this.f = blockposition;
                 int i = (int) (f * 10.0F);
 
-                this.world.c(this.player.getId(), blockposition, i);
+                this.world.a(this.player.getId(), blockposition, i);
                 this.player.playerConnection.sendPacket(new PacketPlayOutBlockChange(this.world, blockposition));
                 this.k = i;
             }
@@ -157,7 +157,7 @@ public class PlayerInteractManager {
 
                 if (f >= 0.7F) {
                     this.d = false;
-                    this.world.c(this.player.getId(), blockposition, -1);
+                    this.world.a(this.player.getId(), blockposition, -1);
                     this.breakBlock(blockposition);
                 } else if (!this.h) {
                     this.d = false;
@@ -172,14 +172,14 @@ public class PlayerInteractManager {
 
     public void e() {
         this.d = false;
-        this.world.c(this.player.getId(), this.f, -1);
+        this.world.a(this.player.getId(), this.f, -1);
     }
 
     private boolean c(BlockPosition blockposition) {
         IBlockData iblockdata = this.world.getType(blockposition);
 
-        iblockdata.getBlock().a(this.world, blockposition, iblockdata, (EntityHuman) this.player);
-        boolean flag = this.world.setAir(blockposition);
+        iblockdata.getBlock().a((World) this.world, blockposition, iblockdata, (EntityHuman) this.player);
+        boolean flag = this.world.a(blockposition, false);
 
         if (flag) {
             iblockdata.getBlock().postBreak(this.world, blockposition, iblockdata);
@@ -191,13 +191,13 @@ public class PlayerInteractManager {
     public boolean breakBlock(BlockPosition blockposition) {
         IBlockData iblockdata = this.world.getType(blockposition);
 
-        if (!this.player.getItemInMainHand().getItem().a(iblockdata, this.world, blockposition, (EntityHuman) this.player)) {
+        if (!this.player.getItemInMainHand().getItem().a(iblockdata, (World) this.world, blockposition, (EntityHuman) this.player)) {
             return false;
         } else {
             TileEntity tileentity = this.world.getTileEntity(blockposition);
             Block block = iblockdata.getBlock();
 
-            if ((block instanceof BlockCommand || block instanceof BlockStructure) && !this.player.isCreativeAndOp()) {
+            if ((block instanceof BlockCommand || block instanceof BlockStructure || block instanceof BlockJigsaw) && !this.player.isCreativeAndOp()) {
                 this.world.notify(blockposition, iblockdata, iblockdata, 3);
                 return false;
             } else {
@@ -206,7 +206,7 @@ public class PlayerInteractManager {
                         return false;
                     }
 
-                    if (!this.player.dy()) {
+                    if (!this.player.dQ()) {
                         ItemStack itemstack = this.player.getItemInMainHand();
 
                         if (itemstack.isEmpty()) {
@@ -215,7 +215,7 @@ public class PlayerInteractManager {
 
                         ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(this.world, blockposition, false);
 
-                        if (!itemstack.a(this.world.F(), shapedetectorblock)) {
+                        if (!itemstack.a(this.world.t(), shapedetectorblock)) {
                             return false;
                         }
                     }
@@ -277,38 +277,27 @@ public class PlayerInteractManager {
         }
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
+        BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
         IBlockData iblockdata = world.getType(blockposition);
 
         if (this.gamemode == EnumGamemode.SPECTATOR) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
+            ITileInventory itileinventory = iblockdata.b(world, blockposition);
 
-            if (tileentity instanceof ITileInventory) {
-                Block block = iblockdata.getBlock();
-                ITileInventory itileinventory = (ITileInventory) tileentity;
-
-                if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {
-                    itileinventory = ((BlockChest) block).getInventory(iblockdata, world, blockposition, false);
-                }
-
-                if (itileinventory != null) {
-                    entityhuman.openContainer(itileinventory);
-                    return EnumInteractionResult.SUCCESS;
-                }
-            } else if (tileentity instanceof IInventory) {
-                entityhuman.openContainer((IInventory) tileentity);
+            if (itileinventory != null) {
+                entityhuman.openContainer(itileinventory);
                 return EnumInteractionResult.SUCCESS;
+            } else {
+                return EnumInteractionResult.PASS;
             }
-
-            return EnumInteractionResult.PASS;
         } else {
             boolean flag = !entityhuman.getItemInMainHand().isEmpty() || !entityhuman.getItemInOffHand().isEmpty();
             boolean flag1 = entityhuman.isSneaking() && flag;
 
-            if (!flag1 && iblockdata.interact(world, blockposition, entityhuman, enumhand, enumdirection, f, f1, f2)) {
+            if (!flag1 && iblockdata.interact(world, entityhuman, enumhand, movingobjectpositionblock)) {
                 return EnumInteractionResult.SUCCESS;
             } else if (!itemstack.isEmpty() && !entityhuman.getCooldownTracker().a(itemstack.getItem())) {
-                ItemActionContext itemactioncontext = new ItemActionContext(entityhuman, entityhuman.b(enumhand), blockposition, enumdirection, f, f1, f2);
+                ItemActionContext itemactioncontext = new ItemActionContext(entityhuman, enumhand, movingobjectpositionblock);
 
                 if (this.isCreative()) {
                     int i = itemstack.getCount();

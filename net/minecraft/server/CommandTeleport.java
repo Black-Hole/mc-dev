@@ -18,7 +18,7 @@ public class CommandTeleport {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         LiteralCommandNode<CommandListenerWrapper> literalcommandnode = com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("teleport").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("location", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
+        })).then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("location", (ArgumentType) ArgumentVec3.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), (IVectorPosition) null, (CommandTeleport.a) null);
         })).then(CommandDispatcher.a("rotation", (ArgumentType) ArgumentRotation.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ((CommandListenerWrapper) commandcontext.getSource()).getWorld(), ArgumentVec3.b(commandcontext, "location"), ArgumentRotation.a(commandcontext, "rotation"), (CommandTeleport.a) null);
@@ -114,7 +114,7 @@ public class CommandTeleport {
         if (entity instanceof EntityPlayer) {
             entity.stopRiding();
             if (((EntityPlayer) entity).isSleeping()) {
-                ((EntityPlayer) entity).a(true, true, false);
+                ((EntityPlayer) entity).wakeup(true, true, false);
             }
 
             if (worldserver == entity.world) {
@@ -133,14 +133,11 @@ public class CommandTeleport {
                 entity.setPositionRotation(d0, d1, d2, f2, f3);
                 entity.setHeadRotation(f2);
             } else {
-                WorldServer worldserver1 = (WorldServer) entity.world;
-
-                worldserver1.kill(entity);
+                entity.decouple();
                 entity.dimension = worldserver.worldProvider.getDimensionManager();
-                entity.dead = false;
                 Entity entity1 = entity;
 
-                entity = entity.P().a((World) worldserver);
+                entity = entity.getEntityType().a((World) worldserver);
                 if (entity == null) {
                     return;
                 }
@@ -148,12 +145,7 @@ public class CommandTeleport {
                 entity.v(entity1);
                 entity.setPositionRotation(d0, d1, d2, f2, f3);
                 entity.setHeadRotation(f2);
-                boolean flag = entity.attachedToPlayer;
-
-                entity.attachedToPlayer = true;
-                worldserver.addEntity(entity);
-                entity.attachedToPlayer = flag;
-                worldserver.entityJoinedWorld(entity, false);
+                worldserver.addEntityTeleport(entity);
                 entity1.dead = true;
             }
         }
@@ -162,8 +154,8 @@ public class CommandTeleport {
             commandteleport_a.a(commandlistenerwrapper, entity);
         }
 
-        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).dc()) {
-            entity.motY = 0.0D;
+        if (!(entity instanceof EntityLiving) || !((EntityLiving) entity).isGliding()) {
+            entity.setMot(entity.getMot().d(1.0D, 0.0D, 1.0D));
             entity.onGround = true;
         }
 

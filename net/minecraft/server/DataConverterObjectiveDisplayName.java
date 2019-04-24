@@ -19,16 +19,16 @@ public class DataConverterObjectiveDisplayName extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.u.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.t))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.u))) {
             throw new IllegalStateException("Objective type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("ObjectiveDisplayNameFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
                         return dynamic.update("DisplayName", (dynamic1) -> {
-                            Optional optional = dynamic1.getStringValue().map((s) -> {
+                            Optional optional = dynamic1.asString().map((s) -> {
                                 return IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) (new ChatComponentText(s)));
                             });
 

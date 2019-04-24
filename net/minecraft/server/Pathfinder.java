@@ -1,6 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 
@@ -9,31 +11,23 @@ public class Pathfinder {
     private final Path a = new Path();
     private final Set<PathPoint> b = Sets.newHashSet();
     private final PathPoint[] c = new PathPoint[32];
-    private PathfinderAbstract d;
+    private final int d;
+    private PathfinderAbstract e;
 
-    public Pathfinder(PathfinderAbstract pathfinderabstract) {
-        this.d = pathfinderabstract;
+    public Pathfinder(PathfinderAbstract pathfinderabstract, int i) {
+        this.e = pathfinderabstract;
+        this.d = i;
     }
 
     @Nullable
-    public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, Entity entity, float f) {
-        return this.a(iblockaccess, entityinsentient, entity.locX, entity.getBoundingBox().minY, entity.locZ, f);
-    }
-
-    @Nullable
-    public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, BlockPosition blockposition, float f) {
-        return this.a(iblockaccess, entityinsentient, (double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), f);
-    }
-
-    @Nullable
-    private PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, double d0, double d1, double d2, float f) {
+    public PathEntity a(IBlockAccess iblockaccess, EntityInsentient entityinsentient, double d0, double d1, double d2, float f) {
         this.a.a();
-        this.d.a(iblockaccess, entityinsentient);
-        PathPoint pathpoint = this.d.b();
-        PathPoint pathpoint1 = this.d.a(d0, d1, d2);
+        this.e.a(iblockaccess, entityinsentient);
+        PathPoint pathpoint = this.e.b();
+        PathPoint pathpoint1 = this.e.a(d0, d1, d2);
         PathEntity pathentity = this.a(pathpoint, pathpoint1, f);
 
-        this.d.a();
+        this.e.a();
         return pathentity;
     }
 
@@ -50,7 +44,7 @@ public class Pathfinder {
 
         while (!this.a.e()) {
             ++i;
-            if (i >= 200) {
+            if (i >= this.d) {
                 break;
             }
 
@@ -66,7 +60,7 @@ public class Pathfinder {
             }
 
             pathpoint3.i = true;
-            int j = this.d.a(this.c, pathpoint3, pathpoint1, f);
+            int j = this.e.a(this.c, pathpoint3, pathpoint1, f);
 
             for (int k = 0; k < j; ++k) {
                 PathPoint pathpoint4 = this.c[k];
@@ -76,11 +70,11 @@ public class Pathfinder {
                 pathpoint4.k = f1 + pathpoint4.l;
                 float f2 = pathpoint3.e + pathpoint4.k;
 
-                if (pathpoint4.j < f && (!pathpoint4.a() || f2 < pathpoint4.e)) {
+                if (pathpoint4.j < f && (!pathpoint4.c() || f2 < pathpoint4.e)) {
                     pathpoint4.h = pathpoint3;
                     pathpoint4.e = f2;
                     pathpoint4.f = pathpoint4.c(pathpoint1) + pathpoint4.l;
-                    if (pathpoint4.a()) {
+                    if (pathpoint4.c()) {
                         this.a.a(pathpoint4, pathpoint4.e + pathpoint4.f);
                     } else {
                         pathpoint4.g = pathpoint4.e + pathpoint4.f;
@@ -93,31 +87,23 @@ public class Pathfinder {
         if (pathpoint2 == pathpoint) {
             return null;
         } else {
-            PathEntity pathentity = this.a(pathpoint, pathpoint2);
+            PathEntity pathentity = this.a(pathpoint2);
 
             return pathentity;
         }
     }
 
-    private PathEntity a(PathPoint pathpoint, PathPoint pathpoint1) {
-        int i = 1;
+    private PathEntity a(PathPoint pathpoint) {
+        List<PathPoint> list = Lists.newArrayList();
+        PathPoint pathpoint1 = pathpoint;
 
-        PathPoint pathpoint2;
+        list.add(0, pathpoint);
 
-        for (pathpoint2 = pathpoint1; pathpoint2.h != null; pathpoint2 = pathpoint2.h) {
-            ++i;
+        while (pathpoint1.h != null) {
+            pathpoint1 = pathpoint1.h;
+            list.add(0, pathpoint1);
         }
 
-        PathPoint[] apathpoint = new PathPoint[i];
-
-        pathpoint2 = pathpoint1;
-        --i;
-
-        for (apathpoint[i] = pathpoint1; pathpoint2.h != null; apathpoint[i] = pathpoint2) {
-            pathpoint2 = pathpoint2.h;
-            --i;
-        }
-
-        return new PathEntity(apathpoint);
+        return new PathEntity(list);
     }
 }

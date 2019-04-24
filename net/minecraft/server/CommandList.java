@@ -20,12 +20,12 @@ public class CommandList {
     }
 
     private static int b(CommandListenerWrapper commandlistenerwrapper) {
-        return a(commandlistenerwrapper, EntityHuman::dC);
+        return a(commandlistenerwrapper, EntityHuman::dU);
     }
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Function<EntityPlayer, IChatBaseComponent> function) {
         PlayerList playerlist = commandlistenerwrapper.getServer().getPlayerList();
-        List<EntityPlayer> list = playerlist.v();
+        List<EntityPlayer> list = playerlist.getPlayers();
         IChatBaseComponent ichatbasecomponent = ChatComponentUtils.b(list, function);
 
         commandlistenerwrapper.sendMessage(new ChatMessage("commands.list.players", new Object[] { list.size(), playerlist.getMaxPlayers(), ichatbasecomponent}), false);

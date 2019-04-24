@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class DataConverterBedBlock extends DataFix {
@@ -46,23 +46,23 @@ public class DataConverterBedBlock extends DataFix {
         OpticFinder<List<TE>> opticfinder1 = DSL.fieldFinder("TileEntities", listtype);
         boolean flag = true;
 
-        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(DataConverterTypes.j), this.getOutputSchema().findChoiceType(DataConverterTypes.j), (dynamicops) -> {
+        return TypeRewriteRule.seq(this.fixTypeEverywhere("InjectBedBlockEntityType", this.getInputSchema().findChoiceType(DataConverterTypes.k), this.getOutputSchema().findChoiceType(DataConverterTypes.k), (dynamicops) -> {
             return (pair) -> {
                 return pair;
             };
         }), this.fixTypeEverywhereTyped("BedBlockEntityInjecter", this.getOutputSchema().getType(DataConverterTypes.c), (typed) -> {
             Typed<?> typed1 = typed.getTyped(opticfinder);
             Dynamic<?> dynamic = (Dynamic) typed1.get(DSL.remainderFinder());
-            int i = dynamic.getInt("xPos");
-            int j = dynamic.getInt("zPos");
+            int i = dynamic.get("xPos").asInt(0);
+            int j = dynamic.get("zPos").asInt(0);
             List<TE> list = Lists.newArrayList((Iterable) typed1.getOrCreate(opticfinder1));
-            List<? extends Dynamic<?>> list1 = (List) ((Stream) dynamic.get("Sections").flatMap(Dynamic::getStream).orElse(Stream.empty())).collect(Collectors.toList());
+            List<? extends Dynamic<?>> list1 = dynamic.get("Sections").asList(Function.identity());
 
             for (int k = 0; k < list1.size(); ++k) {
                 Dynamic<?> dynamic1 = (Dynamic) list1.get(k);
-                int l = ((Number) dynamic1.get("Y").flatMap(Dynamic::getNumberValue).orElse(0)).intValue();
-                Stream<Integer> stream = ((Stream) dynamic1.get("Blocks").flatMap(Dynamic::getStream).orElse(Stream.empty())).map((dynamic2) -> {
-                    return ((Number) dynamic2.getNumberValue().orElse(0)).intValue();
+                int l = dynamic1.get("Y").asInt(0);
+                Stream<Integer> stream = dynamic1.get("Blocks").asStream().map((dynamic2) -> {
+                    return dynamic2.asInt(0);
                 });
                 int i1 = 0;
 

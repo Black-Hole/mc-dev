@@ -2,7 +2,13 @@ package net.minecraft.server;
 
 public interface AreaTransformerIdentity extends AreaTransformer {
 
-    default AreaDimension a(AreaDimension areadimension) {
-        return areadimension;
+    @Override
+    default int a(int i) {
+        return i;
+    }
+
+    @Override
+    default int b(int i) {
+        return i;
     }
 }

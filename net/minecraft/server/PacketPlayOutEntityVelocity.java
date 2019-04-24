@@ -12,49 +12,30 @@ public class PacketPlayOutEntityVelocity implements Packet<PacketListenerPlayOut
     public PacketPlayOutEntityVelocity() {}
 
     public PacketPlayOutEntityVelocity(Entity entity) {
-        this(entity.getId(), entity.motX, entity.motY, entity.motZ);
+        this(entity.getId(), entity.getMot());
     }
 
-    public PacketPlayOutEntityVelocity(int i, double d0, double d1, double d2) {
+    public PacketPlayOutEntityVelocity(int i, Vec3D vec3d) {
         this.a = i;
-        double d3 = 3.9D;
+        double d0 = 3.9D;
+        double d1 = MathHelper.a(vec3d.x, -3.9D, 3.9D);
+        double d2 = MathHelper.a(vec3d.y, -3.9D, 3.9D);
+        double d3 = MathHelper.a(vec3d.z, -3.9D, 3.9D);
 
-        if (d0 < -3.9D) {
-            d0 = -3.9D;
-        }
-
-        if (d1 < -3.9D) {
-            d1 = -3.9D;
-        }
-
-        if (d2 < -3.9D) {
-            d2 = -3.9D;
-        }
-
-        if (d0 > 3.9D) {
-            d0 = 3.9D;
-        }
-
-        if (d1 > 3.9D) {
-            d1 = 3.9D;
-        }
-
-        if (d2 > 3.9D) {
-            d2 = 3.9D;
-        }
-
-        this.b = (int) (d0 * 8000.0D);
-        this.c = (int) (d1 * 8000.0D);
-        this.d = (int) (d2 * 8000.0D);
+        this.b = (int) (d1 * 8000.0D);
+        this.c = (int) (d2 * 8000.0D);
+        this.d = (int) (d3 * 8000.0D);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.readShort();
         this.c = packetdataserializer.readShort();
         this.d = packetdataserializer.readShort();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeShort(this.b);

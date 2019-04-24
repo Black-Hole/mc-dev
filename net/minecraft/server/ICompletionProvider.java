@@ -29,11 +29,17 @@ public interface ICompletionProvider {
 
     Collection<MinecraftKey> n();
 
-    Collection<MinecraftKey> o();
+    Stream<MinecraftKey> o();
 
     CompletableFuture<Suggestions> a(CommandContext<ICompletionProvider> commandcontext, SuggestionsBuilder suggestionsbuilder);
 
-    Collection<ICompletionProvider.a> a(boolean flag);
+    default Collection<ICompletionProvider.a> q() {
+        return Collections.singleton(ICompletionProvider.a.b);
+    }
+
+    default Collection<ICompletionProvider.a> r() {
+        return Collections.singleton(ICompletionProvider.a.b);
+    }
 
     boolean hasPermission(int i);
 

@@ -15,7 +15,7 @@ public class DataConverterSchemaV1451_1 extends DataConverterSchemaNamed {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.c, () -> {
-            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.n.in(schema)), "TileEntities", DSL.list(DataConverterTypes.j.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.p.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.l.in(schema))))));
+            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.o.in(schema)), "TileEntities", DSL.list(DataConverterTypes.k.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.q.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.m.in(schema))))));
         });
     }
 }

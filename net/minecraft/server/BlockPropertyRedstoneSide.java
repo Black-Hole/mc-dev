@@ -14,6 +14,7 @@ public enum BlockPropertyRedstoneSide implements INamable {
         return this.getName();
     }
 
+    @Override
     public String getName() {
         return this.d;
     }

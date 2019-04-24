@@ -1,18 +1,21 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
     private static final IBlockData a = Blocks.SPRUCE_LOG.getBlockData();
-    private static final IBlockData b = Blocks.SPRUCE_LEAVES.getBlockData();
+    private static final IBlockData aS = Blocks.SPRUCE_LEAVES.getBlockData();
 
-    public WorldGenTaiga1() {
-        super(false);
+    public WorldGenTaiga1(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function, false);
     }
 
-    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+    @Override
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
         int i = random.nextInt(5) + 7;
         int j = i - random.nextInt(2) - 3;
         int k = i - j;
@@ -24,11 +27,12 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
             int i1;
             int j1;
             int k1;
+            int l1;
 
-            for (int l1 = blockposition.getY(); l1 <= blockposition.getY() + 1 + i && flag; ++l1) {
+            for (j1 = blockposition.getY(); j1 <= blockposition.getY() + 1 + i && flag; ++j1) {
                 boolean flag1 = true;
 
-                if (l1 - blockposition.getY() < j) {
+                if (j1 - blockposition.getY() < j) {
                     i1 = 0;
                 } else {
                     i1 = l;
@@ -36,10 +40,10 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
 
                 BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-                for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1 && flag; ++j1) {
-                    for (k1 = blockposition.getZ() - i1; k1 <= blockposition.getZ() + i1 && flag; ++k1) {
-                        if (l1 >= 0 && l1 < 256) {
-                            if (!this.a(generatoraccess.getType(blockposition_mutableblockposition.c(j1, l1, k1)).getBlock())) {
+                for (k1 = blockposition.getX() - i1; k1 <= blockposition.getX() + i1 && flag; ++k1) {
+                    for (l1 = blockposition.getZ() - i1; l1 <= blockposition.getZ() + i1 && flag; ++l1) {
+                        if (j1 >= 0 && j1 < 256) {
+                            if (!a((VirtualLevelReadable) virtuallevelwritable, (BlockPosition) blockposition_mutableblockposition.d(k1, j1, l1))) {
                                 flag = false;
                             }
                         } else {
@@ -51,51 +55,43 @@ public class WorldGenTaiga1 extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
 
             if (!flag) {
                 return false;
-            } else {
-                Block block = generatoraccess.getType(blockposition.down()).getBlock();
+            } else if (h(virtuallevelwritable, blockposition.down()) && blockposition.getY() < 256 - i - 1) {
+                this.a(virtuallevelwritable, blockposition.down());
+                j1 = 0;
 
-                if ((block == Blocks.GRASS_BLOCK || Block.d(block)) && blockposition.getY() < 256 - i - 1) {
-                    this.a(generatoraccess, blockposition.down());
-                    i1 = 0;
+                for (i1 = blockposition.getY() + i; i1 >= blockposition.getY() + j; --i1) {
+                    for (int i2 = blockposition.getX() - j1; i2 <= blockposition.getX() + j1; ++i2) {
+                        k1 = i2 - blockposition.getX();
 
-                    int i2;
+                        for (l1 = blockposition.getZ() - j1; l1 <= blockposition.getZ() + j1; ++l1) {
+                            int j2 = l1 - blockposition.getZ();
 
-                    for (i2 = blockposition.getY() + i; i2 >= blockposition.getY() + j; --i2) {
-                        for (j1 = blockposition.getX() - i1; j1 <= blockposition.getX() + i1; ++j1) {
-                            k1 = j1 - blockposition.getX();
+                            if (Math.abs(k1) != j1 || Math.abs(j2) != j1 || j1 <= 0) {
+                                BlockPosition blockposition1 = new BlockPosition(i2, i1, l1);
 
-                            for (int j2 = blockposition.getZ() - i1; j2 <= blockposition.getZ() + i1; ++j2) {
-                                int k2 = j2 - blockposition.getZ();
-
-                                if (Math.abs(k1) != i1 || Math.abs(k2) != i1 || i1 <= 0) {
-                                    BlockPosition blockposition1 = new BlockPosition(j1, i2, j2);
-
-                                    if (!generatoraccess.getType(blockposition1).f(generatoraccess, blockposition1)) {
-                                        this.a(generatoraccess, blockposition1, WorldGenTaiga1.b);
-                                    }
+                                if (g(virtuallevelwritable, blockposition1)) {
+                                    this.a(virtuallevelwritable, blockposition1, WorldGenTaiga1.aS);
                                 }
                             }
                         }
-
-                        if (i1 >= 1 && i2 == blockposition.getY() + j + 1) {
-                            --i1;
-                        } else if (i1 < l) {
-                            ++i1;
-                        }
                     }
 
-                    for (i2 = 0; i2 < i - 1; ++i2) {
-                        IBlockData iblockdata = generatoraccess.getType(blockposition.up(i2));
-
-                        if (iblockdata.isAir() || iblockdata.a(TagsBlock.LEAVES)) {
-                            this.a(set, generatoraccess, blockposition.up(i2), WorldGenTaiga1.a);
-                        }
+                    if (j1 >= 1 && i1 == blockposition.getY() + j + 1) {
+                        --j1;
+                    } else if (j1 < l) {
+                        ++j1;
                     }
-
-                    return true;
-                } else {
-                    return false;
                 }
+
+                for (i1 = 0; i1 < i - 1; ++i1) {
+                    if (g(virtuallevelwritable, blockposition.up(i1))) {
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(i1), WorldGenTaiga1.a);
+                    }
+                }
+
+                return true;
+            } else {
+                return false;
             }
         } else {
             return false;

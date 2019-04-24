@@ -31,7 +31,7 @@ public class CommandEnchant {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("enchant").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) CommandDispatcher.a("enchantment", (ArgumentType) ArgumentEnchantment.a()).executes((commandcontext) -> {
+        })).then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(((RequiredArgumentBuilder) CommandDispatcher.a("enchantment", (ArgumentType) ArgumentEnchantment.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentEnchantment.a(commandcontext, "enchantment"), 1);
         })).then(CommandDispatcher.a("level", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentEnchantment.a(commandcontext, "enchantment"), IntegerArgumentType.getInteger(commandcontext, "level"));
@@ -57,7 +57,7 @@ public class CommandEnchant {
                             itemstack.addEnchantment(enchantment, i);
                             ++j;
                         } else if (collection.size() == 1) {
-                            throw CommandEnchant.c.create(itemstack.getItem().i(itemstack).getString());
+                            throw CommandEnchant.c.create(itemstack.getItem().g(itemstack).getString());
                         }
                     } else if (collection.size() == 1) {
                         throw CommandEnchant.b.create(entityliving.getDisplayName().getString());

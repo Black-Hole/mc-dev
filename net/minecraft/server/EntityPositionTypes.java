@@ -9,30 +9,20 @@ public class EntityPositionTypes {
     private static final Map<EntityTypes<?>, EntityPositionTypes.a> a = Maps.newHashMap();
 
     private static void a(EntityTypes<?> entitytypes, EntityPositionTypes.Surface entitypositiontypes_surface, HeightMap.Type heightmap_type) {
-        a(entitytypes, entitypositiontypes_surface, heightmap_type, (Tag) null);
-    }
-
-    private static void a(EntityTypes<?> entitytypes, EntityPositionTypes.Surface entitypositiontypes_surface, HeightMap.Type heightmap_type, @Nullable Tag<Block> tag) {
-        EntityPositionTypes.a.put(entitytypes, new EntityPositionTypes.a(heightmap_type, entitypositiontypes_surface, tag));
+        EntityPositionTypes.a.put(entitytypes, new EntityPositionTypes.a(heightmap_type, entitypositiontypes_surface));
     }
 
     @Nullable
-    public static EntityPositionTypes.Surface a(EntityTypes<? extends EntityInsentient> entitytypes) {
+    public static EntityPositionTypes.Surface a(EntityTypes<?> entitytypes) {
         EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
 
         return entitypositiontypes_a == null ? null : entitypositiontypes_a.b;
     }
 
-    public static HeightMap.Type b(@Nullable EntityTypes<? extends EntityInsentient> entitytypes) {
+    public static HeightMap.Type b(@Nullable EntityTypes<?> entitytypes) {
         EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
 
         return entitypositiontypes_a == null ? HeightMap.Type.MOTION_BLOCKING_NO_LEAVES : entitypositiontypes_a.a;
-    }
-
-    public static boolean a(EntityTypes<? extends EntityInsentient> entitytypes, IBlockData iblockdata) {
-        EntityPositionTypes.a entitypositiontypes_a = (EntityPositionTypes.a) EntityPositionTypes.a.get(entitytypes);
-
-        return entitypositiontypes_a == null ? false : entitypositiontypes_a.c != null && iblockdata.a(entitypositiontypes_a.c);
     }
 
     static {
@@ -44,9 +34,6 @@ public class EntityPositionTypes {
         a(EntityTypes.SALMON, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.SQUID, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.TROPICAL_FISH, EntityPositionTypes.Surface.IN_WATER, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
-        a(EntityTypes.OCELOT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING, TagsBlock.LEAVES);
-        a(EntityTypes.PARROT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING, TagsBlock.LEAVES);
-        a(EntityTypes.POLAR_BEAR, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, TagsBlock.ICE);
         a(EntityTypes.BAT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.BLAZE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.CAVE_SPIDER, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
@@ -61,11 +48,16 @@ public class EntityPositionTypes {
         a(EntityTypes.GIANT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.HORSE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.HUSK, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
+        a(EntityTypes.IRON_GOLEM, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.LLAMA, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.MAGMA_CUBE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.MOOSHROOM, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.MULE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
+        a(EntityTypes.OCELOT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING);
+        a(EntityTypes.PARROT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING);
         a(EntityTypes.PIG, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
+        a(EntityTypes.PILLAGER, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
+        a(EntityTypes.POLAR_BEAR, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.RABBIT, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.SHEEP, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.SILVERFISH, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
@@ -77,7 +69,6 @@ public class EntityPositionTypes {
         a(EntityTypes.STRAY, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.TURTLE, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.VILLAGER, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
-        a(EntityTypes.IRON_GOLEM, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.WITCH, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.WITHER, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
         a(EntityTypes.WITHER_SKELETON, EntityPositionTypes.Surface.ON_GROUND, HeightMap.Type.MOTION_BLOCKING_NO_LEAVES);
@@ -99,13 +90,10 @@ public class EntityPositionTypes {
 
         private final HeightMap.Type a;
         private final EntityPositionTypes.Surface b;
-        @Nullable
-        private final Tag<Block> c;
 
-        public a(HeightMap.Type heightmap_type, EntityPositionTypes.Surface entitypositiontypes_surface, @Nullable Tag<Block> tag) {
+        public a(HeightMap.Type heightmap_type, EntityPositionTypes.Surface entitypositiontypes_surface) {
             this.a = heightmap_type;
             this.b = entitypositiontypes_surface;
-            this.c = tag;
         }
     }
 }

@@ -13,7 +13,7 @@ public class DataConverterFlattenState extends DataFix {
     }
 
     public TypeRewriteRule makeRule() {
-        return this.fixTypeEverywhereTyped("BlockStateStructureTemplateFix", this.getInputSchema().getType(DataConverterTypes.l), (typed) -> {
+        return this.fixTypeEverywhereTyped("BlockStateStructureTemplateFix", this.getInputSchema().getType(DataConverterTypes.m), (typed) -> {
             return typed.update(DSL.remainderFinder(), DataConverterFlattenData::a);
         });
     }

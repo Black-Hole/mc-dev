@@ -5,23 +5,26 @@ import java.util.List;
 
 public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
-    public static final BlockStateBoolean POWERED = BlockProperties.t;
-    private final BlockPressurePlateBinary.EnumMobType p;
+    public static final BlockStateBoolean POWERED = BlockProperties.w;
+    private final BlockPressurePlateBinary.EnumMobType e;
 
     protected BlockPressurePlateBinary(BlockPressurePlateBinary.EnumMobType blockpressureplatebinary_enummobtype, Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
-        this.p = blockpressureplatebinary_enummobtype;
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPressurePlateBinary.POWERED, false));
+        this.e = blockpressureplatebinary_enummobtype;
     }
 
+    @Override
     protected int getPower(IBlockData iblockdata) {
         return (Boolean) iblockdata.get(BlockPressurePlateBinary.POWERED) ? 15 : 0;
     }
 
+    @Override
     protected IBlockData a(IBlockData iblockdata, int i) {
         return (IBlockData) iblockdata.set(BlockPressurePlateBinary.POWERED, i > 0);
     }
 
+    @Override
     protected void a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
             generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.8F);
@@ -31,6 +34,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     }
 
+    @Override
     protected void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
         if (this.material == Material.WOOD) {
             generatoraccess.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF, SoundCategory.BLOCKS, 0.3F, 0.7F);
@@ -40,11 +44,12 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
 
     }
 
+    @Override
     protected int b(World world, BlockPosition blockposition) {
         AxisAlignedBB axisalignedbb = BlockPressurePlateBinary.c.a(blockposition);
         List list;
 
-        switch (this.p) {
+        switch (this.e) {
         case EVERYTHING:
             list = world.getEntities((Entity) null, axisalignedbb);
             break;
@@ -70,6 +75,7 @@ public class BlockPressurePlateBinary extends BlockPressurePlateAbstract {
         return 0;
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockPressurePlateBinary.POWERED);
     }

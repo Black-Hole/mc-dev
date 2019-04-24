@@ -1,63 +1,44 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntitySkeleton extends EntitySkeletonAbstract {
 
-    public EntitySkeleton(World world) {
-        super(EntityTypes.SKELETON, world);
+    public EntitySkeleton(EntityTypes<? extends EntitySkeleton> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.av;
-    }
-
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_SKELETON_AMBIENT;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_SKELETON_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_SKELETON_DEATH;
     }
 
+    @Override
     SoundEffect l() {
         return SoundEffects.ENTITY_SKELETON_STEP;
     }
 
-    public void die(DamageSource damagesource) {
-        super.die(damagesource);
-        if (damagesource.getEntity() instanceof EntityCreeper) {
-            EntityCreeper entitycreeper = (EntityCreeper) damagesource.getEntity();
+    @Override
+    protected void dropDeathLoot(DamageSource damagesource, int i, boolean flag) {
+        super.dropDeathLoot(damagesource, i, flag);
+        Entity entity = damagesource.getEntity();
 
-            if (entitycreeper.isPowered() && entitycreeper.canCauseHeadDrop()) {
+        if (entity instanceof EntityCreeper) {
+            EntityCreeper entitycreeper = (EntityCreeper) entity;
+
+            if (entitycreeper.canCauseHeadDrop()) {
                 entitycreeper.setCausedHeadDrop();
                 this.a((IMaterial) Items.SKELETON_SKULL);
             }
         }
 
-    }
-
-    protected EntityArrow a(float f) {
-        ItemStack itemstack = this.getEquipment(EnumItemSlot.OFFHAND);
-
-        if (itemstack.getItem() == Items.SPECTRAL_ARROW) {
-            EntitySpectralArrow entityspectralarrow = new EntitySpectralArrow(this.world, this);
-
-            entityspectralarrow.a((EntityLiving) this, f);
-            return entityspectralarrow;
-        } else {
-            EntityArrow entityarrow = super.a(f);
-
-            if (itemstack.getItem() == Items.TIPPED_ARROW && entityarrow instanceof EntityTippedArrow) {
-                ((EntityTippedArrow) entityarrow).b(itemstack);
-            }
-
-            return entityarrow;
-        }
     }
 }

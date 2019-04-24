@@ -2,29 +2,31 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.OptionalInt;
 
-public class EntityFireworks extends Entity {
+public class EntityFireworks extends Entity implements IProjectile {
 
     public static final DataWatcherObject<ItemStack> FIREWORK_ITEM = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.g);
-    private static final DataWatcherObject<Integer> b = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.b);
+    private static final DataWatcherObject<OptionalInt> c = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.r);
+    private static final DataWatcherObject<Boolean> d = DataWatcher.a(EntityFireworks.class, DataWatcherRegistry.i);
     private int ticksFlown;
     public int expectedLifespan;
-    private EntityLiving e;
+    private EntityLiving ridingEntity;
 
-    public EntityFireworks(World world) {
-        super(EntityTypes.FIREWORK_ROCKET, world);
-        this.setSize(0.25F, 0.25F);
+    public EntityFireworks(EntityTypes<? extends EntityFireworks> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    protected void x_() {
+    @Override
+    protected void initDatawatcher() {
         this.datawatcher.register(EntityFireworks.FIREWORK_ITEM, ItemStack.a);
-        this.datawatcher.register(EntityFireworks.b, 0);
+        this.datawatcher.register(EntityFireworks.c, OptionalInt.empty());
+        this.datawatcher.register(EntityFireworks.d, false);
     }
 
     public EntityFireworks(World world, double d0, double d1, double d2, ItemStack itemstack) {
         super(EntityTypes.FIREWORK_ROCKET, world);
         this.ticksFlown = 0;
-        this.setSize(0.25F, 0.25F);
         this.setPosition(d0, d1, d2);
         int i = 1;
 
@@ -33,60 +35,77 @@ public class EntityFireworks extends Entity {
             i += itemstack.a("Fireworks").getByte("Flight");
         }
 
-        this.motX = this.random.nextGaussian() * 0.001D;
-        this.motZ = this.random.nextGaussian() * 0.001D;
-        this.motY = 0.05D;
+        this.setMot(this.random.nextGaussian() * 0.001D, 0.05D, this.random.nextGaussian() * 0.001D);
         this.expectedLifespan = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
     }
 
     public EntityFireworks(World world, ItemStack itemstack, EntityLiving entityliving) {
         this(world, entityliving.locX, entityliving.locY, entityliving.locZ, itemstack);
-        this.datawatcher.set(EntityFireworks.b, entityliving.getId());
-        this.e = entityliving;
+        this.datawatcher.set(EntityFireworks.c, OptionalInt.of(entityliving.getId()));
+        this.ridingEntity = entityliving;
     }
 
-    public void tick() {
-        this.N = this.locX;
-        this.O = this.locY;
-        this.P = this.locZ;
-        super.tick();
-        if (this.f()) {
-            if (this.e == null) {
-                Entity entity = this.world.getEntity((Integer) this.datawatcher.get(EntityFireworks.b));
+    public EntityFireworks(World world, ItemStack itemstack, double d0, double d1, double d2, boolean flag) {
+        this(world, d0, d1, d2, itemstack);
+        this.datawatcher.set(EntityFireworks.d, flag);
+    }
 
-                if (entity instanceof EntityLiving) {
-                    this.e = (EntityLiving) entity;
-                }
+    @Override
+    public void tick() {
+        this.H = this.locX;
+        this.I = this.locY;
+        this.J = this.locZ;
+        super.tick();
+        Vec3D vec3d;
+
+        if (this.n()) {
+            if (this.ridingEntity == null) {
+                ((OptionalInt) this.datawatcher.get(EntityFireworks.c)).ifPresent((i) -> {
+                    Entity entity = this.world.getEntity(i);
+
+                    if (entity instanceof EntityLiving) {
+                        this.ridingEntity = (EntityLiving) entity;
+                    }
+
+                });
             }
 
-            if (this.e != null) {
-                if (this.e.dc()) {
-                    Vec3D vec3d = this.e.aN();
+            if (this.ridingEntity != null) {
+                if (this.ridingEntity.isGliding()) {
+                    vec3d = this.ridingEntity.getLookDirection();
                     double d0 = 1.5D;
                     double d1 = 0.1D;
+                    Vec3D vec3d1 = this.ridingEntity.getMot();
 
-                    this.e.motX += vec3d.x * 0.1D + (vec3d.x * 1.5D - this.e.motX) * 0.5D;
-                    this.e.motY += vec3d.y * 0.1D + (vec3d.y * 1.5D - this.e.motY) * 0.5D;
-                    this.e.motZ += vec3d.z * 0.1D + (vec3d.z * 1.5D - this.e.motZ) * 0.5D;
+                    this.ridingEntity.setMot(vec3d1.add(vec3d.x * 0.1D + (vec3d.x * 1.5D - vec3d1.x) * 0.5D, vec3d.y * 0.1D + (vec3d.y * 1.5D - vec3d1.y) * 0.5D, vec3d.z * 0.1D + (vec3d.z * 1.5D - vec3d1.z) * 0.5D));
                 }
 
-                this.setPosition(this.e.locX, this.e.locY, this.e.locZ);
-                this.motX = this.e.motX;
-                this.motY = this.e.motY;
-                this.motZ = this.e.motZ;
+                this.setPosition(this.ridingEntity.locX, this.ridingEntity.locY, this.ridingEntity.locZ);
+                this.setMot(this.ridingEntity.getMot());
             }
         } else {
-            this.motX *= 1.15D;
-            this.motZ *= 1.15D;
-            this.motY += 0.04D;
-            this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
+            if (!this.i()) {
+                this.setMot(this.getMot().d(1.15D, 1.0D, 1.15D).add(0.0D, 0.04D, 0.0D));
+            }
+
+            this.move(EnumMoveType.SELF, this.getMot());
         }
 
-        float f = MathHelper.sqrt(this.motX * this.motX + this.motZ * this.motZ);
+        vec3d = this.getMot();
+        MovingObjectPosition movingobjectposition = ProjectileHelper.a(this, this.getBoundingBox().a(vec3d).g(1.0D), (entity) -> {
+            return !entity.t() && entity.isAlive() && entity.isInteractable();
+        }, RayTrace.BlockCollisionOption.COLLIDER, true);
 
-        this.yaw = (float) (MathHelper.c(this.motX, this.motZ) * 57.2957763671875D);
+        if (!this.noclip) {
+            this.a(movingobjectposition);
+            this.impulse = true;
+        }
 
-        for (this.pitch = (float) (MathHelper.c(this.motY, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
+        float f = MathHelper.sqrt(b(vec3d));
+
+        this.yaw = (float) (MathHelper.d(vec3d.x, vec3d.z) * 57.2957763671875D);
+
+        for (this.pitch = (float) (MathHelper.d(vec3d.y, (double) f) * 57.2957763671875D); this.pitch - this.lastPitch < -180.0F; this.lastPitch -= 360.0F) {
             ;
         }
 
@@ -102,38 +121,70 @@ public class EntityFireworks extends Entity {
             this.lastYaw += 360.0F;
         }
 
-        this.pitch = this.lastPitch + (this.pitch - this.lastPitch) * 0.2F;
-        this.yaw = this.lastYaw + (this.yaw - this.lastYaw) * 0.2F;
+        this.pitch = MathHelper.g(0.2F, this.lastPitch, this.pitch);
+        this.yaw = MathHelper.g(0.2F, this.lastYaw, this.yaw);
         if (this.ticksFlown == 0 && !this.isSilent()) {
             this.world.a((EntityHuman) null, this.locX, this.locY, this.locZ, SoundEffects.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.AMBIENT, 3.0F, 1.0F);
         }
 
         ++this.ticksFlown;
         if (this.world.isClientSide && this.ticksFlown % 2 < 2) {
-            this.world.addParticle(Particles.w, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.motY * 0.5D, this.random.nextGaussian() * 0.05D);
+            this.world.addParticle(Particles.FIREWORK, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.getMot().y * 0.5D, this.random.nextGaussian() * 0.05D);
         }
 
         if (!this.world.isClientSide && this.ticksFlown > this.expectedLifespan) {
-            this.world.broadcastEntityEffect(this, (byte) 17);
-            this.i();
-            this.die();
+            this.explode();
         }
 
     }
 
-    private void i() {
+    private void explode() {
+        this.world.broadcastEntityEffect(this, (byte) 17);
+        this.m();
+        this.die();
+    }
+
+    protected void a(MovingObjectPosition movingobjectposition) {
+        if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY && !this.world.isClientSide) {
+            this.explode();
+        } else if (this.z) {
+            BlockPosition blockposition;
+
+            if (movingobjectposition.getType() == MovingObjectPosition.EnumMovingObjectType.BLOCK) {
+                blockposition = new BlockPosition(((MovingObjectPositionBlock) movingobjectposition).getBlockPosition());
+            } else {
+                blockposition = new BlockPosition(this);
+            }
+
+            this.world.getType(blockposition).a(this.world, blockposition, (Entity) this);
+            if (this.l()) {
+                this.explode();
+            }
+        }
+
+    }
+
+    private boolean l() {
+        ItemStack itemstack = (ItemStack) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM);
+        NBTTagCompound nbttagcompound = itemstack.isEmpty() ? null : itemstack.b("Fireworks");
+        NBTTagList nbttaglist = nbttagcompound != null ? nbttagcompound.getList("Explosions", 10) : null;
+
+        return nbttaglist != null && !nbttaglist.isEmpty();
+    }
+
+    private void m() {
         float f = 0.0F;
         ItemStack itemstack = (ItemStack) this.datawatcher.get(EntityFireworks.FIREWORK_ITEM);
         NBTTagCompound nbttagcompound = itemstack.isEmpty() ? null : itemstack.b("Fireworks");
         NBTTagList nbttaglist = nbttagcompound != null ? nbttagcompound.getList("Explosions", 10) : null;
 
         if (nbttaglist != null && !nbttaglist.isEmpty()) {
-            f = (float) (5 + nbttaglist.size() * 2);
+            f = 5.0F + (float) (nbttaglist.size() * 2);
         }
 
         if (f > 0.0F) {
-            if (this.e != null) {
-                this.e.damageEntity(DamageSource.FIREWORKS, (float) (5 + nbttaglist.size() * 2));
+            if (this.ridingEntity != null) {
+                this.ridingEntity.damageEntity(DamageSource.FIREWORKS, 5.0F + (float) (nbttaglist.size() * 2));
             }
 
             double d0 = 5.0D;
@@ -144,13 +195,14 @@ public class EntityFireworks extends Entity {
             while (iterator.hasNext()) {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
-                if (entityliving != this.e && this.h(entityliving) <= 25.0D) {
+                if (entityliving != this.ridingEntity && this.h(entityliving) <= 25.0D) {
                     boolean flag = false;
 
                     for (int i = 0; i < 2; ++i) {
-                        MovingObjectPosition movingobjectposition = this.world.rayTrace(vec3d, new Vec3D(entityliving.locX, entityliving.locY + (double) entityliving.length * 0.5D * (double) i, entityliving.locZ), FluidCollisionOption.NEVER, true, false);
+                        Vec3D vec3d1 = new Vec3D(entityliving.locX, entityliving.locY + (double) entityliving.getHeight() * 0.5D * (double) i, entityliving.locZ);
+                        MovingObjectPositionBlock movingobjectpositionblock = this.world.rayTrace(new RayTrace(vec3d, vec3d1, RayTrace.BlockCollisionOption.COLLIDER, RayTrace.FluidCollisionOption.NONE, this));
 
-                        if (movingobjectposition == null || movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.MISS) {
+                        if (movingobjectpositionblock.getType() == MovingObjectPosition.EnumMovingObjectType.MISS) {
                             flag = true;
                             break;
                         }
@@ -167,10 +219,15 @@ public class EntityFireworks extends Entity {
 
     }
 
-    public boolean f() {
-        return (Integer) this.datawatcher.get(EntityFireworks.b) > 0;
+    private boolean n() {
+        return ((OptionalInt) this.datawatcher.get(EntityFireworks.c)).isPresent();
     }
 
+    public boolean i() {
+        return (Boolean) this.datawatcher.get(EntityFireworks.d);
+    }
+
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Life", this.ticksFlown);
         nbttagcompound.setInt("LifeTime", this.expectedLifespan);
@@ -180,8 +237,10 @@ public class EntityFireworks extends Entity {
             nbttagcompound.set("FireworksItem", itemstack.save(new NBTTagCompound()));
         }
 
+        nbttagcompound.setBoolean("ShotAtAngle", (Boolean) this.datawatcher.get(EntityFireworks.d));
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         this.ticksFlown = nbttagcompound.getInt("Life");
         this.expectedLifespan = nbttagcompound.getInt("LifeTime");
@@ -191,9 +250,35 @@ public class EntityFireworks extends Entity {
             this.datawatcher.set(EntityFireworks.FIREWORK_ITEM, itemstack);
         }
 
+        if (nbttagcompound.hasKey("ShotAtAngle")) {
+            this.datawatcher.set(EntityFireworks.d, nbttagcompound.getBoolean("ShotAtAngle"));
+        }
+
     }
 
-    public boolean bk() {
+    @Override
+    public boolean br() {
         return false;
+    }
+
+    @Override
+    public Packet<?> N() {
+        return new PacketPlayOutSpawnEntity(this);
+    }
+
+    @Override
+    public void shoot(double d0, double d1, double d2, float f, float f1) {
+        float f2 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+
+        d0 /= (double) f2;
+        d1 /= (double) f2;
+        d2 /= (double) f2;
+        d0 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d1 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d2 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d0 *= (double) f;
+        d1 *= (double) f;
+        d2 *= (double) f;
+        this.setMot(d0, d1, d2);
     }
 }

@@ -13,7 +13,8 @@ public class ItemBlockWallable extends ItemBlock {
     }
 
     @Nullable
-    protected IBlockData b(BlockActionContext blockactioncontext) {
+    @Override
+    protected IBlockData c(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.wallBlock.getPlacedState(blockactioncontext);
         IBlockData iblockdata1 = null;
         World world = blockactioncontext.getWorld();
@@ -34,9 +35,10 @@ public class ItemBlockWallable extends ItemBlock {
             }
         }
 
-        return iblockdata1 != null && world.a(iblockdata1, blockposition) ? iblockdata1 : null;
+        return iblockdata1 != null && world.a(iblockdata1, blockposition, VoxelShapeCollision.a()) ? iblockdata1 : null;
     }
 
+    @Override
     public void a(Map<Block, Item> map, Item item) {
         super.a(map, item);
         map.put(this.wallBlock, item);

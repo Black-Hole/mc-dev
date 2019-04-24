@@ -1,23 +1,23 @@
 package net.minecraft.server;
 
 import com.google.common.collect.UnmodifiableIterator;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Iterator;
 
 public class DebugReportBlocks implements DebugReportProvider {
 
-    private final DebugReportGenerator b;
+    private static final Gson b = (new GsonBuilder()).setPrettyPrinting().create();
+    private final DebugReportGenerator c;
 
     public DebugReportBlocks(DebugReportGenerator debugreportgenerator) {
-        this.b = debugreportgenerator;
+        this.c = debugreportgenerator;
     }
 
+    @Override
     public void a(HashCache hashcache) throws IOException {
         JsonObject jsonobject = new JsonObject();
         Iterator iterator = IRegistry.BLOCK.iterator();
@@ -80,36 +80,12 @@ public class DebugReportBlocks implements DebugReportProvider {
             jsonobject.add(minecraftkey.toString(), jsonobject1);
         }
 
-        java.nio.file.Path java_nio_file_path = this.b.b().resolve("reports/blocks.json");
+        java.nio.file.Path java_nio_file_path = this.c.b().resolve("reports/blocks.json");
 
-        Files.createDirectories(java_nio_file_path.getParent());
-        BufferedWriter bufferedwriter = Files.newBufferedWriter(java_nio_file_path, StandardCharsets.UTF_8);
-        Throwable throwable = null;
-
-        try {
-            String s = (new GsonBuilder()).setPrettyPrinting().create().toJson(jsonobject);
-
-            bufferedwriter.write(s);
-        } catch (Throwable throwable1) {
-            throwable = throwable1;
-            throw throwable1;
-        } finally {
-            if (bufferedwriter != null) {
-                if (throwable != null) {
-                    try {
-                        bufferedwriter.close();
-                    } catch (Throwable throwable2) {
-                        throwable.addSuppressed(throwable2);
-                    }
-                } else {
-                    bufferedwriter.close();
-                }
-            }
-
-        }
-
+        DebugReportProvider.a(DebugReportBlocks.b, hashcache, jsonobject, java_nio_file_path);
     }
 
+    @Override
     public String a() {
         return "Block List";
     }

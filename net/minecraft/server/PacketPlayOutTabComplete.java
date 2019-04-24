@@ -20,17 +20,18 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
         this.b = suggestions;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        int i = packetdataserializer.g();
-        int j = packetdataserializer.g();
+        this.a = packetdataserializer.i();
+        int i = packetdataserializer.i();
+        int j = packetdataserializer.i();
         StringRange stringrange = StringRange.between(i, i + j);
-        int k = packetdataserializer.g();
+        int k = packetdataserializer.i();
         List<Suggestion> list = Lists.newArrayListWithCapacity(k);
 
         for (int l = 0; l < k; ++l) {
             String s = packetdataserializer.e(32767);
-            IChatBaseComponent ichatbasecomponent = packetdataserializer.readBoolean() ? packetdataserializer.f() : null;
+            IChatBaseComponent ichatbasecomponent = packetdataserializer.readBoolean() ? packetdataserializer.h() : null;
 
             list.add(new Suggestion(stringrange, s, ichatbasecomponent));
         }
@@ -38,6 +39,7 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
         this.b = new Suggestions(stringrange, list);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.d(this.b.getRange().getStart());

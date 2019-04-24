@@ -6,14 +6,12 @@ public class EnchantmentWaterWorker extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.ARMOR_HEAD, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 1;
     }
 
-    public int b(int i) {
-        return this.a(i) + 40;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 1;
     }

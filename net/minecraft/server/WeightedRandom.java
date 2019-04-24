@@ -49,7 +49,7 @@ public class WeightedRandom {
 
     public static class WeightedRandomChoice {
 
-        protected int a;
+        protected final int a;
 
         public WeightedRandomChoice(int i) {
             this.a = i;

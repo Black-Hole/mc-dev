@@ -21,7 +21,7 @@ public class DataConverterBanner extends DataFix {
 
     public TypeRewriteRule makeRule() {
         Type<?> type = this.getInputSchema().getType(DataConverterTypes.ITEM_STACK);
-        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+        OpticFinder<Pair<String, String>> opticfinder = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
         OpticFinder<?> opticfinder1 = type.findField("tag");
         OpticFinder<?> opticfinder2 = opticfinder1.type().findField("BlockEntityTag");
 
@@ -41,9 +41,9 @@ public class DataConverterBanner extends DataFix {
                         Dynamic<?> dynamic1 = (Dynamic) typed1.get(DSL.remainderFinder());
                         Dynamic<?> dynamic2 = (Dynamic) typed2.getOrCreate(DSL.remainderFinder());
 
-                        if (dynamic2.get("Base").flatMap(Dynamic::getNumberValue).isPresent()) {
-                            dynamic = dynamic.set("Damage", dynamic.createShort((short) (dynamic2.getShort("Base") & 15)));
-                            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("display");
+                        if (dynamic2.get("Base").asNumber().isPresent()) {
+                            dynamic = dynamic.set("Damage", dynamic.createShort((short) (dynamic2.get("Base").asInt(0) & 15)));
+                            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("display").get();
 
                             if (optional3.isPresent()) {
                                 Dynamic<?> dynamic3 = (Dynamic) optional3.get();

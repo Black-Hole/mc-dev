@@ -4,11 +4,11 @@ public interface IWorldWriter {
 
     boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i);
 
-    boolean addEntity(Entity entity);
+    boolean a(BlockPosition blockposition, boolean flag);
 
-    boolean setAir(BlockPosition blockposition);
+    boolean b(BlockPosition blockposition, boolean flag);
 
-    void a(EnumSkyBlock enumskyblock, BlockPosition blockposition, int i);
-
-    boolean setAir(BlockPosition blockposition, boolean flag);
+    default boolean addEntity(Entity entity) {
+        return false;
+    }
 }

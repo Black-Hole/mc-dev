@@ -12,25 +12,30 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
 
     protected BlockCoralFanWallAbstract(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockCoralFanWallAbstract.a, EnumDirection.NORTH)).set(BlockCoralFanWallAbstract.b, true));
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockCoralFanWallAbstract.c.get(iblockdata.get(BlockCoralFanWallAbstract.a));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockCoralFanWallAbstract.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockCoralFanWallAbstract.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockCoralFanWallAbstract.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockCoralFanWallAbstract.a, BlockCoralFanWallAbstract.b);
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         if ((Boolean) iblockdata.get(BlockCoralFanWallAbstract.b)) {
             generatoraccess.getFluidTickList().a(blockposition, FluidTypes.WATER, FluidTypes.WATER.a((IWorldReader) generatoraccess));
@@ -39,15 +44,17 @@ public class BlockCoralFanWallAbstract extends BlockCoralFanAbstract {
         return enumdirection.opposite() == iblockdata.get(BlockCoralFanWallAbstract.a) && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : iblockdata;
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockCoralFanWallAbstract.a);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iblockdata1.c(iworldreader, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID && !b(iblockdata1.getBlock());
+        return Block.d(iblockdata1, iworldreader, blockposition1, enumdirection);
     }
 
     @Nullable
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = super.getPlacedState(blockactioncontext);
         World world = blockactioncontext.getWorld();

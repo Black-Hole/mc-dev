@@ -2,21 +2,13 @@ package net.minecraft.server;
 
 public interface IMinecraftServer {
 
-    int a(String s, int i);
+    DedicatedServerProperties getDedicatedServerProperties();
 
-    String a(String s, String s1);
+    String e_();
 
-    void a(String s, Object object);
+    int e();
 
-    void c_();
-
-    String d_();
-
-    String e();
-
-    int e_();
-
-    String m();
+    String f_();
 
     String getVersion();
 
@@ -38,7 +30,7 @@ public interface IMinecraftServer {
 
     void warning(String s);
 
-    void f(String s);
-
     void g(String s);
+
+    void h(String s);
 }

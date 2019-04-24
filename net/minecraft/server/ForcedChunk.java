@@ -7,14 +7,16 @@ public class ForcedChunk extends PersistentBase {
 
     private LongSet a = new LongOpenHashSet();
 
-    public ForcedChunk(String s) {
-        super(s);
+    public ForcedChunk() {
+        super("chunks");
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.a = new LongOpenHashSet(nbttagcompound.o("Forced"));
+        this.a = new LongOpenHashSet(nbttagcompound.getLongArray("Forced"));
     }
 
+    @Override
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("Forced", this.a.toLongArray());
         return nbttagcompound;

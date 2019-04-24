@@ -112,14 +112,14 @@ public class DataConverterLevelDataGeneratorOptions extends DataFix {
 
         return this.fixTypeEverywhereTyped("LevelDataGeneratorOptionsFix", this.getInputSchema().getType(DataConverterTypes.a), type, (typed) -> {
             Dynamic<?> dynamic = typed.write();
-            Optional<String> optional = dynamic.get("generatorOptions").flatMap(Dynamic::getStringValue);
+            Optional<String> optional = dynamic.get("generatorOptions").asString();
             Dynamic dynamic1;
 
-            if ("flat".equalsIgnoreCase(dynamic.getString("generatorName"))) {
+            if ("flat".equalsIgnoreCase(dynamic.get("generatorName").asString(""))) {
                 String s = (String) optional.orElse("");
 
                 dynamic1 = dynamic.set("generatorOptions", a(s, dynamic.getOps()));
-            } else if ("buffet".equalsIgnoreCase(dynamic.getString("generatorName")) && optional.isPresent()) {
+            } else if ("buffet".equalsIgnoreCase(dynamic.get("generatorName").asString("")) && optional.isPresent()) {
                 Dynamic<JsonElement> dynamic2 = new Dynamic(JsonOps.INSTANCE, ChatDeserializer.a((String) optional.get(), true));
 
                 dynamic1 = dynamic.set("generatorOptions", dynamic2.convert(dynamic.getOps()));

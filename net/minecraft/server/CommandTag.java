@@ -21,7 +21,7 @@ public class CommandTag {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("tag").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(CommandDispatcher.a("add").then(CommandDispatcher.a("name", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
+        })).then(((RequiredArgumentBuilder) ((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(CommandDispatcher.a("add").then(CommandDispatcher.a("name", (ArgumentType) StringArgumentType.word()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), StringArgumentType.getString(commandcontext, "name"));
         })))).then(CommandDispatcher.a("remove").then(CommandDispatcher.a("name", (ArgumentType) StringArgumentType.word()).suggests((commandcontext, suggestionsbuilder) -> {
             return ICompletionProvider.b((Iterable) a(ArgumentEntity.b(commandcontext, "targets")), suggestionsbuilder);

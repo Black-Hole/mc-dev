@@ -21,10 +21,12 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
 
     public CriterionTriggerBrewedPotion() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerBrewedPotion.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerBrewedPotion.b> criteriontrigger_a) {
         CriterionTriggerBrewedPotion.a criteriontriggerbrewedpotion_a = (CriterionTriggerBrewedPotion.a) this.b.get(advancementdataplayer);
 
@@ -36,6 +38,7 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
         criteriontriggerbrewedpotion_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerBrewedPotion.b> criteriontrigger_a) {
         CriterionTriggerBrewedPotion.a criteriontriggerbrewedpotion_a = (CriterionTriggerBrewedPotion.a) this.b.get(advancementdataplayer);
 
@@ -48,21 +51,21 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerBrewedPotion.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         PotionRegistry potionregistry = null;
 
         if (jsonobject.has("potion")) {
             MinecraftKey minecraftkey = new MinecraftKey(ChatDeserializer.h(jsonobject, "potion"));
 
-            if (!IRegistry.POTION.c(minecraftkey)) {
-                throw new JsonSyntaxException("Unknown potion '" + minecraftkey + "'");
-            }
-
-            potionregistry = (PotionRegistry) IRegistry.POTION.getOrDefault(minecraftkey);
+            potionregistry = (PotionRegistry) IRegistry.POTION.getOptional(minecraftkey).orElseThrow(() -> {
+                return new JsonSyntaxException("Unknown potion '" + minecraftkey + "'");
+            });
         }
 
         return new CriterionTriggerBrewedPotion.b(potionregistry);
@@ -144,6 +147,7 @@ public class CriterionTriggerBrewedPotion implements CriterionTrigger<CriterionT
             return this.a == null || this.a == potionregistry;
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

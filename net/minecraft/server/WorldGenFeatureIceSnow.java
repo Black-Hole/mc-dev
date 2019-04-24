@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureIceSnow extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureIceSnow() {}
+    public WorldGenFeatureIceSnow(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
 
@@ -16,7 +20,7 @@ public class WorldGenFeatureIceSnow extends WorldGenerator<WorldGenFeatureEmptyC
                 int l = blockposition.getZ() + j;
                 int i1 = generatoraccess.a(HeightMap.Type.MOTION_BLOCKING, k, l);
 
-                blockposition_mutableblockposition.c(k, i1, l);
+                blockposition_mutableblockposition.d(k, i1, l);
                 blockposition_mutableblockposition1.g(blockposition_mutableblockposition).c(EnumDirection.DOWN, 1);
                 BiomeBase biomebase = generatoraccess.getBiome(blockposition_mutableblockposition);
 
@@ -28,7 +32,7 @@ public class WorldGenFeatureIceSnow extends WorldGenerator<WorldGenFeatureEmptyC
                     generatoraccess.setTypeAndData(blockposition_mutableblockposition, Blocks.SNOW.getBlockData(), 2);
                     IBlockData iblockdata = generatoraccess.getType(blockposition_mutableblockposition1);
 
-                    if (iblockdata.b(BlockDirtSnow.a)) {
+                    if (iblockdata.b((IBlockState) BlockDirtSnow.a)) {
                         generatoraccess.setTypeAndData(blockposition_mutableblockposition1, (IBlockData) iblockdata.set(BlockDirtSnow.a, true), 2);
                     }
                 }

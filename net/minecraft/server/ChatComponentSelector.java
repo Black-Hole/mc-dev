@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ChatComponentSelector extends ChatBaseComponent {
+public class ChatComponentSelector extends ChatBaseComponent implements ChatComponentContextual {
 
     private static final Logger b = LogManager.getLogger();
     private final String c;
@@ -20,7 +20,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
         try {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(new StringReader(s));
 
-            entityselector = argumentparserselector.s();
+            entityselector = argumentparserselector.parse();
         } catch (CommandSyntaxException commandsyntaxexception) {
             ChatComponentSelector.b.warn("Invalid selector component: {}", s, commandsyntaxexception.getMessage());
         }
@@ -32,18 +32,22 @@ public class ChatComponentSelector extends ChatBaseComponent {
         return this.c;
     }
 
-    public IChatBaseComponent a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-        return (IChatBaseComponent) (this.d == null ? new ChatComponentText("") : EntitySelector.a(this.d.b(commandlistenerwrapper)));
+    @Override
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+        return (IChatBaseComponent) (commandlistenerwrapper != null && this.d != null ? EntitySelector.a(this.d.getEntities(commandlistenerwrapper)) : new ChatComponentText(""));
     }
 
+    @Override
     public String getText() {
         return this.c;
     }
 
+    @Override
     public ChatComponentSelector g() {
         return new ChatComponentSelector(this.c);
     }
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -56,6 +60,7 @@ public class ChatComponentSelector extends ChatBaseComponent {
         }
     }
 
+    @Override
     public String toString() {
         return "SelectorComponent{pattern='" + this.c + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }

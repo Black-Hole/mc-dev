@@ -22,7 +22,7 @@ public abstract class CreativeModeTab {
     public static final CreativeModeTab i = (new CreativeModeTab(8, "tools") {
     }).a(new EnchantmentSlotType[] { EnchantmentSlotType.ALL, EnchantmentSlotType.DIGGER, EnchantmentSlotType.FISHING_ROD, EnchantmentSlotType.BREAKABLE});
     public static final CreativeModeTab j = (new CreativeModeTab(9, "combat") {
-    }).a(new EnchantmentSlotType[] { EnchantmentSlotType.ALL, EnchantmentSlotType.ARMOR, EnchantmentSlotType.ARMOR_FEET, EnchantmentSlotType.ARMOR_HEAD, EnchantmentSlotType.ARMOR_LEGS, EnchantmentSlotType.ARMOR_CHEST, EnchantmentSlotType.BOW, EnchantmentSlotType.WEAPON, EnchantmentSlotType.WEARABLE, EnchantmentSlotType.BREAKABLE, EnchantmentSlotType.TRIDENT});
+    }).a(new EnchantmentSlotType[] { EnchantmentSlotType.ALL, EnchantmentSlotType.ARMOR, EnchantmentSlotType.ARMOR_FEET, EnchantmentSlotType.ARMOR_HEAD, EnchantmentSlotType.ARMOR_LEGS, EnchantmentSlotType.ARMOR_CHEST, EnchantmentSlotType.BOW, EnchantmentSlotType.WEAPON, EnchantmentSlotType.WEARABLE, EnchantmentSlotType.BREAKABLE, EnchantmentSlotType.TRIDENT, EnchantmentSlotType.CROSSBOW});
     public static final CreativeModeTab k = new CreativeModeTab(10, "brewing") {
     };
     public static final CreativeModeTab l = CreativeModeTab.f;

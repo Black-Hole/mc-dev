@@ -1,19 +1,13 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityCow extends EntityAnimal {
 
-    protected EntityCow(EntityTypes<?> entitytypes, World world) {
+    public EntityCow(EntityTypes<? extends EntityCow> entitytypes, World world) {
         super(entitytypes, world);
-        this.setSize(0.9F, 1.4F);
     }
 
-    public EntityCow(World world) {
-        this(EntityTypes.COW, world);
-    }
-
-    protected void n() {
+    @Override
+    protected void initPathfinder() {
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
@@ -24,37 +18,39 @@ public class EntityCow extends EntityAnimal {
         this.goalSelector.a(7, new PathfinderGoalRandomLookaround(this));
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(10.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_COW_AMBIENT;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_COW_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_COW_DEATH;
     }
 
+    @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
         this.a(SoundEffects.ENTITY_COW_STEP, 0.15F, 1.0F);
     }
 
-    protected float cD() {
+    @Override
+    protected float getSoundVolume() {
         return 0.4F;
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.S;
-    }
-
+    @Override
     public boolean a(EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -73,11 +69,13 @@ public class EntityCow extends EntityAnimal {
         }
     }
 
+    @Override
     public EntityCow createChild(EntityAgeable entityageable) {
-        return new EntityCow(this.world);
+        return (EntityCow) EntityTypes.COW.a(this.world);
     }
 
-    public float getHeadHeight() {
-        return this.isBaby() ? this.length : 1.3F;
+    @Override
+    protected float b(EntityPose entitypose, EntitySize entitysize) {
+        return this.isBaby() ? entitysize.height * 0.95F : 1.3F;
     }
 }

@@ -2,179 +2,114 @@ package net.minecraft.server;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Collections;
-import java.util.Iterator;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MethodProfiler {
+public class MethodProfiler implements GameProfilerFillerActive {
 
-    private static final Logger a = LogManager.getLogger();
-    private final List<String> b = Lists.newArrayList();
-    private final List<Long> c = Lists.newArrayList();
-    private boolean d;
-    private String e = "";
-    private final Map<String, Long> f = Maps.newHashMap();
-    private long g;
-    private int h;
+    private static final long a = Duration.ofMillis(100L).toNanos();
+    private static final Logger b = LogManager.getLogger();
+    private final List<String> c = Lists.newArrayList();
+    private final List<Long> d = Lists.newArrayList();
+    private final Map<String, Long> e = Maps.newHashMap();
+    private final IntSupplier f;
+    private final long g;
+    private final int h;
+    private String i = "";
+    private boolean j;
 
-    public MethodProfiler() {}
-
-    public boolean a() {
-        return this.d;
+    public MethodProfiler(long i, IntSupplier intsupplier) {
+        this.g = i;
+        this.h = intsupplier.getAsInt();
+        this.f = intsupplier;
     }
 
-    public void b() {
-        this.d = false;
-    }
-
-    public long c() {
-        return this.g;
-    }
-
-    public int d() {
-        return this.h;
-    }
-
-    public void a(int i) {
-        if (!this.d) {
-            this.d = true;
-            this.f.clear();
-            this.e = "";
-            this.b.clear();
-            this.h = i;
-            this.g = SystemUtils.getMonotonicNanos();
+    @Override
+    public void a() {
+        if (this.j) {
+            MethodProfiler.b.error("Profiler tick already started - missing endTick()?");
+        } else {
+            this.j = true;
+            this.i = "";
+            this.c.clear();
+            this.enter("root");
         }
     }
 
-    public void enter(String s) {
-        if (this.d) {
-            if (!this.e.isEmpty()) {
-                this.e = this.e + ".";
+    @Override
+    public void b() {
+        if (!this.j) {
+            MethodProfiler.b.error("Profiler tick already ended - missing startTick()?");
+        } else {
+            this.exit();
+            this.j = false;
+            if (!this.i.isEmpty()) {
+                MethodProfiler.b.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.i);
             }
 
-            this.e = this.e + s;
-            this.b.add(this.e);
-            this.c.add(SystemUtils.getMonotonicNanos());
         }
     }
 
+    @Override
+    public void enter(String s) {
+        if (!this.j) {
+            MethodProfiler.b.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
+        } else {
+            if (!this.i.isEmpty()) {
+                this.i = this.i + ".";
+            }
+
+            this.i = this.i + s;
+            this.c.add(this.i);
+            this.d.add(SystemUtils.getMonotonicNanos());
+        }
+    }
+
+    @Override
     public void a(Supplier<String> supplier) {
-        if (this.d) {
-            this.enter((String) supplier.get());
-        }
+        this.enter((String) supplier.get());
     }
 
+    @Override
     public void exit() {
-        if (this.d && !this.c.isEmpty()) {
+        if (!this.j) {
+            MethodProfiler.b.error("Cannot pop from profiler if profiler tick hasn't started - missing startTick()?");
+        } else if (this.d.isEmpty()) {
+            MethodProfiler.b.error("Tried to pop one too many times! Mismatched push() and pop()?");
+        } else {
             long i = SystemUtils.getMonotonicNanos();
-            long j = (Long) this.c.remove(this.c.size() - 1);
+            long j = (Long) this.d.remove(this.d.size() - 1);
 
-            this.b.remove(this.b.size() - 1);
+            this.c.remove(this.c.size() - 1);
             long k = i - j;
 
-            if (this.f.containsKey(this.e)) {
-                this.f.put(this.e, (Long) this.f.get(this.e) + k);
+            if (this.e.containsKey(this.i)) {
+                this.e.put(this.i, (Long) this.e.get(this.i) + k);
             } else {
-                this.f.put(this.e, k);
+                this.e.put(this.i, k);
             }
 
-            if (k > 100000000L) {
-                MethodProfiler.a.warn("Something's taking too long! '{}' took aprox {} ms", this.e, (double) k / 1000000.0D);
+            if (k > MethodProfiler.a) {
+                MethodProfiler.b.warn("Something's taking too long! '{}' took aprox {} ms", this.i, (double) k / 1000000.0D);
             }
 
-            this.e = this.b.isEmpty() ? "" : (String) this.b.get(this.b.size() - 1);
+            this.i = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);
         }
     }
 
-    public List<MethodProfiler.ProfilerInfo> b(String s) {
-        long i = this.f.containsKey("root") ? (Long) this.f.get("root") : 0L;
-        long j = this.f.containsKey(s) ? (Long) this.f.get(s) : -1L;
-        List<MethodProfiler.ProfilerInfo> list = Lists.newArrayList();
-
-        if (!s.isEmpty()) {
-            s = s + ".";
-        }
-
-        long k = 0L;
-        Iterator iterator = this.f.keySet().iterator();
-
-        while (iterator.hasNext()) {
-            String s1 = (String) iterator.next();
-
-            if (s1.length() > s.length() && s1.startsWith(s) && s1.indexOf(".", s.length() + 1) < 0) {
-                k += (Long) this.f.get(s1);
-            }
-        }
-
-        float f = (float) k;
-
-        if (k < j) {
-            k = j;
-        }
-
-        if (i < k) {
-            i = k;
-        }
-
-        Iterator iterator1 = this.f.keySet().iterator();
-
-        String s2;
-
-        while (iterator1.hasNext()) {
-            s2 = (String) iterator1.next();
-            if (s2.length() > s.length() && s2.startsWith(s) && s2.indexOf(".", s.length() + 1) < 0) {
-                long l = (Long) this.f.get(s2);
-                double d0 = (double) l * 100.0D / (double) k;
-                double d1 = (double) l * 100.0D / (double) i;
-                String s3 = s2.substring(s.length());
-
-                list.add(new MethodProfiler.ProfilerInfo(s3, d0, d1));
-            }
-        }
-
-        iterator1 = this.f.keySet().iterator();
-
-        while (iterator1.hasNext()) {
-            s2 = (String) iterator1.next();
-            this.f.put(s2, (Long) this.f.get(s2) * 999L / 1000L);
-        }
-
-        if ((float) k > f) {
-            list.add(new MethodProfiler.ProfilerInfo("unspecified", (double) ((float) k - f) * 100.0D / (double) k, (double) ((float) k - f) * 100.0D / (double) i));
-        }
-
-        Collections.sort(list);
-        list.add(0, new MethodProfiler.ProfilerInfo(s, 100.0D, (double) k * 100.0D / (double) i));
-        return list;
-    }
-
+    @Override
     public void exitEnter(String s) {
         this.exit();
         this.enter(s);
     }
 
-    public String f() {
-        return this.b.isEmpty() ? "[UNKNOWN]" : (String) this.b.get(this.b.size() - 1);
-    }
-
-    public static final class ProfilerInfo implements Comparable<MethodProfiler.ProfilerInfo> {
-
-        public double a;
-        public double b;
-        public String c;
-
-        public ProfilerInfo(String s, double d0, double d1) {
-            this.c = s;
-            this.a = d0;
-            this.b = d1;
-        }
-
-        public int compareTo(MethodProfiler.ProfilerInfo methodprofiler_profilerinfo) {
-            return methodprofiler_profilerinfo.a < this.a ? -1 : (methodprofiler_profilerinfo.a > this.a ? 1 : methodprofiler_profilerinfo.c.compareTo(this.c));
-        }
+    @Override
+    public MethodProfilerResults d() {
+        return new MethodProfilerResultsFilled(this.e, this.g, this.h, SystemUtils.getMonotonicNanos(), this.f.getAsInt());
     }
 }

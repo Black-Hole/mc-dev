@@ -11,6 +11,7 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
         super(file);
     }
 
+    @Override
     protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new WhiteListEntry(jsonobject);
     }
@@ -19,6 +20,7 @@ public class WhiteList extends JsonList<GameProfile, WhiteListEntry> {
         return this.d(gameprofile);
     }
 
+    @Override
     public String[] getEntries() {
         String[] astring = new String[this.e().size()];
         int i = 0;

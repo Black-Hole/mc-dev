@@ -26,13 +26,35 @@ public class DataBits {
         }
     }
 
-    public void a(int i, int j) {
+    public int a(int i, int j) {
         Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
         Validate.inclusiveBetween(0L, this.c, (long) j);
         int k = i * this.b;
-        int l = k / 64;
-        int i1 = ((i + 1) * this.b - 1) / 64;
-        int j1 = k % 64;
+        int l = k >> 6;
+        int i1 = (i + 1) * this.b - 1 >> 6;
+        int j1 = k ^ l << 6;
+        byte b0 = 0;
+        int k1 = b0 | (int) (this.a[l] >>> j1 & this.c);
+
+        this.a[l] = this.a[l] & ~(this.c << j1) | ((long) j & this.c) << j1;
+        if (l != i1) {
+            int l1 = 64 - j1;
+            int i2 = this.b - l1;
+
+            k1 |= (int) (this.a[i1] << l1 & this.c);
+            this.a[i1] = this.a[i1] >>> i2 << i2 | ((long) j & this.c) >> l1;
+        }
+
+        return k1;
+    }
+
+    public void b(int i, int j) {
+        Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
+        Validate.inclusiveBetween(0L, this.c, (long) j);
+        int k = i * this.b;
+        int l = k >> 6;
+        int i1 = (i + 1) * this.b - 1 >> 6;
+        int j1 = k ^ l << 6;
 
         this.a[l] = this.a[l] & ~(this.c << j1) | ((long) j & this.c) << j1;
         if (l != i1) {
@@ -47,9 +69,9 @@ public class DataBits {
     public int a(int i) {
         Validate.inclusiveBetween(0L, (long) (this.d - 1), (long) i);
         int j = i * this.b;
-        int k = j / 64;
-        int l = ((i + 1) * this.b - 1) / 64;
-        int i1 = j % 64;
+        int k = j >> 6;
+        int l = (i + 1) * this.b - 1 >> 6;
+        int i1 = j ^ k << 6;
 
         if (k == l) {
             return (int) (this.a[k] >>> i1 & this.c);

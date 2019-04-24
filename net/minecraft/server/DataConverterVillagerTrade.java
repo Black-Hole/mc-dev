@@ -16,6 +16,7 @@ public class DataConverterVillagerTrade extends DataConverterNamedEntity {
         super(schema, flag, "Villager trade fix", DataConverterTypes.ENTITY, "minecraft:villager");
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         OpticFinder<?> opticfinder = typed.getType().findField("Offers");
         OpticFinder<?> opticfinder1 = opticfinder.type().findField("Recipes");
@@ -30,7 +31,7 @@ public class DataConverterVillagerTrade extends DataConverterNamedEntity {
             OpticFinder<?> opticfinder3 = type1.findField("buy");
             OpticFinder<?> opticfinder4 = type1.findField("buyB");
             OpticFinder<?> opticfinder5 = type1.findField("sell");
-            OpticFinder<Pair<String, String>> opticfinder6 = DSL.fieldFinder("id", DSL.named(DataConverterTypes.q.typeName(), DSL.namespacedString()));
+            OpticFinder<Pair<String, String>> opticfinder6 = DSL.fieldFinder("id", DSL.named(DataConverterTypes.r.typeName(), DSL.namespacedString()));
             Function<Typed<?>, Typed<?>> function = (typed1) -> {
                 return this.a(opticfinder6, typed1);
             };

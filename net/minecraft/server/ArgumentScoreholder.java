@@ -25,7 +25,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
         ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
 
         try {
-            argumentparserselector.s();
+            argumentparserselector.parse();
         } catch (CommandSyntaxException commandsyntaxexception) {
             ;
         }
@@ -78,7 +78,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
     public ArgumentScoreholder.a parse(StringReader stringreader) throws CommandSyntaxException {
         if (stringreader.canRead() && stringreader.peek() == '@') {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
-            EntitySelector entityselector = argumentparserselector.s();
+            EntitySelector entityselector = argumentparserselector.parse();
 
             if (!this.d && entityselector.a() > 1) {
                 throw ArgumentEntity.a.create();
@@ -132,6 +132,7 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             packetdataserializer.writeByte(b0);
         }
 
+        @Override
         public ArgumentScoreholder b(PacketDataSerializer packetdataserializer) {
             byte b0 = packetdataserializer.readByte();
             boolean flag = (b0 & 1) != 0;
@@ -152,8 +153,9 @@ public class ArgumentScoreholder implements ArgumentType<ArgumentScoreholder.a> 
             this.a = entityselector;
         }
 
+        @Override
         public Collection<String> getNames(CommandListenerWrapper commandlistenerwrapper, Supplier<Collection<String>> supplier) throws CommandSyntaxException {
-            List<? extends Entity> list = this.a.b(commandlistenerwrapper);
+            List<? extends Entity> list = this.a.getEntities(commandlistenerwrapper);
 
             if (list.isEmpty()) {
                 throw ArgumentEntity.d.create();

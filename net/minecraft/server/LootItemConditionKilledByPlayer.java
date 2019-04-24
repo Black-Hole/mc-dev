@@ -1,36 +1,43 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Random;
+import java.util.Set;
 
 public class LootItemConditionKilledByPlayer implements LootItemCondition {
 
-    private final boolean a;
+    private static final LootItemConditionKilledByPlayer a = new LootItemConditionKilledByPlayer();
 
-    public LootItemConditionKilledByPlayer(boolean flag) {
-        this.a = flag;
+    private LootItemConditionKilledByPlayer() {}
+
+    @Override
+    public Set<LootContextParameter<?>> a() {
+        return ImmutableSet.of(LootContextParameters.LAST_DAMAGE_PLAYER);
     }
 
-    public boolean a(Random random, LootTableInfo loottableinfo) {
-        boolean flag = loottableinfo.b() != null;
-
-        return flag == !this.a;
+    public boolean test(LootTableInfo loottableinfo) {
+        return loottableinfo.hasContextParameter(LootContextParameters.LAST_DAMAGE_PLAYER);
     }
 
-    public static class a extends LootItemCondition.a<LootItemConditionKilledByPlayer> {
+    public static LootItemCondition.a b() {
+        return () -> {
+            return LootItemConditionKilledByPlayer.a;
+        };
+    }
+
+    public static class a extends LootItemCondition.b<LootItemConditionKilledByPlayer> {
 
         protected a() {
             super(new MinecraftKey("killed_by_player"), LootItemConditionKilledByPlayer.class);
         }
 
-        public void a(JsonObject jsonobject, LootItemConditionKilledByPlayer lootitemconditionkilledbyplayer, JsonSerializationContext jsonserializationcontext) {
-            jsonobject.addProperty("inverse", lootitemconditionkilledbyplayer.a);
-        }
+        public void a(JsonObject jsonobject, LootItemConditionKilledByPlayer lootitemconditionkilledbyplayer, JsonSerializationContext jsonserializationcontext) {}
 
+        @Override
         public LootItemConditionKilledByPlayer b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
-            return new LootItemConditionKilledByPlayer(ChatDeserializer.a(jsonobject, "inverse", false));
+            return LootItemConditionKilledByPlayer.a;
         }
     }
 }

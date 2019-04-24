@@ -1,65 +1,77 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityMagmaCube extends EntitySlime {
 
-    public EntityMagmaCube(World world) {
-        super(EntityTypes.MAGMA_CUBE, world);
-        this.fireProof = true;
+    public EntityMagmaCube(EntityTypes<? extends EntityMagmaCube> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.20000000298023224D);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
         return generatoraccess.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
+    @Override
     public boolean a(IWorldReader iworldreader) {
-        return iworldreader.a_(this, this.getBoundingBox()) && iworldreader.getCubes(this, this.getBoundingBox()) && !iworldreader.containsLiquid(this.getBoundingBox());
+        return iworldreader.i(this) && !iworldreader.containsLiquid(this.getBoundingBox());
     }
 
+    @Override
     public void setSize(int i, boolean flag) {
         super.setSize(i, flag);
-        this.getAttributeInstance(GenericAttributes.h).setValue((double) (i * 3));
+        this.getAttributeInstance(GenericAttributes.ARMOR).setValue((double) (i * 3));
     }
 
-    public float az() {
+    @Override
+    public float aE() {
         return 1.0F;
     }
 
+    @Override
     protected ParticleParam l() {
-        return Particles.y;
+        return Particles.FLAME;
     }
 
-    @Nullable
+    @Override
     protected MinecraftKey getDefaultLootTable() {
-        return this.dy() ? LootTables.a : LootTables.ap;
+        return this.ea() ? LootTables.a : this.getEntityType().g();
     }
 
+    @Override
     public boolean isBurning() {
         return false;
     }
 
-    protected int dr() {
-        return super.dr() * 4;
+    @Override
+    protected int dT() {
+        return super.dT() * 4;
     }
 
-    protected void ds() {
-        this.a *= 0.9F;
+    @Override
+    protected void dU() {
+        this.b *= 0.9F;
     }
 
-    protected void cH() {
-        this.motY = (double) (0.42F + (float) this.getSize() * 0.1F);
+    @Override
+    protected void jump() {
+        Vec3D vec3d = this.getMot();
+
+        this.setMot(vec3d.x, (double) (0.42F + (float) this.getSize() * 0.1F), vec3d.z);
         this.impulse = true;
     }
 
+    @Override
     protected void c(Tag<FluidType> tag) {
         if (tag == TagsFluid.LAVA) {
-            this.motY = (double) (0.22F + (float) this.getSize() * 0.05F);
+            Vec3D vec3d = this.getMot();
+
+            this.setMot(vec3d.x, (double) (0.22F + (float) this.getSize() * 0.05F), vec3d.z);
             this.impulse = true;
         } else {
             super.c(tag);
@@ -67,29 +79,36 @@ public class EntityMagmaCube extends EntitySlime {
 
     }
 
-    public void c(float f, float f1) {}
+    @Override
+    public void b(float f, float f1) {}
 
-    protected boolean dt() {
-        return this.cP();
+    @Override
+    protected boolean dV() {
+        return this.de();
     }
 
-    protected int du() {
-        return super.du() + 2;
+    @Override
+    protected int dW() {
+        return super.dW() + 2;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_HURT_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_HURT;
     }
 
-    protected SoundEffect cs() {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
+    @Override
+    protected SoundEffect getSoundDeath() {
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_DEATH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_DEATH;
     }
 
-    protected SoundEffect dv() {
-        return this.dy() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
+    @Override
+    protected SoundEffect getSoundSquish() {
+        return this.ea() ? SoundEffects.ENTITY_MAGMA_CUBE_SQUISH_SMALL : SoundEffects.ENTITY_MAGMA_CUBE_SQUISH;
     }
 
-    protected SoundEffect dw() {
+    @Override
+    protected SoundEffect getSoundJump() {
         return SoundEffects.ENTITY_MAGMA_CUBE_JUMP;
     }
 }

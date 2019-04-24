@@ -1,44 +1,27 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Lists;
-
 public final class BiomeIcePlains extends BiomeBase {
 
     public BiomeIcePlains() {
-        super((new BiomeBase.a()).a(new WorldGenSurfaceComposite<>(BiomeIcePlains.au, BiomeIcePlains.ai)).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.ICY).a(0.125F).b(0.05F).c(0.0F).d(0.5F).a(4159204).b(329011).a((String) null));
-        this.a(WorldGenerator.j, (WorldGenFeatureConfiguration) (new WorldGenFeatureIglooConfiguration()));
-        this.a(WorldGenerator.f, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
-        this.a(WorldGenerator.m, (WorldGenFeatureConfiguration) (new WorldGenFeatureStrongholdConfiguration()));
-        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeIcePlains.b, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.14285715F))));
-        this.a(WorldGenStage.Features.AIR, a((WorldGenCarver) BiomeIcePlains.d, (WorldGenFeatureConfiguration) (new WorldGenFeatureConfigurationChance(0.02F))));
-        this.a();
-        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.WATER), BiomeIcePlains.K, new WorldGenDecoratorLakeChanceConfiguration(4)));
-        this.a(WorldGenStage.Decoration.LOCAL_MODIFICATIONS, a(WorldGenerator.am, new WorldGenFeatureLakeConfiguration(Blocks.LAVA), BiomeIcePlains.J, new WorldGenDecoratorLakeChanceConfiguration(80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_STRUCTURES, a(WorldGenerator.ad, WorldGenFeatureConfiguration.e, BiomeIcePlains.L, new WorldGenDecoratorDungeonConfiguration(8)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIRT.getBlockData(), 33), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 256)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRAVEL.getBlockData(), 33), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 256)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GRANITE.getBlockData(), 33), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIORITE.getBlockData(), 33), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.ANDESITE.getBlockData(), 33), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(10, 0, 0, 80)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.COAL_ORE.getBlockData(), 17), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 128)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.IRON_ORE.getBlockData(), 9), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 0, 0, 64)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.GOLD_ORE.getBlockData(), 9), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(2, 0, 0, 32)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.REDSTONE_ORE.getBlockData(), 8), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(8, 0, 0, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.DIAMOND_ORE.getBlockData(), 8), BiomeIcePlains.t, new WorldGenFeatureChanceDecoratorCountConfiguration(1, 0, 0, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.an, new WorldGenFeatureOreConfiguration(WorldGenFeatureOreConfiguration.a, Blocks.LAPIS_ORE.getBlockData(), 7), BiomeIcePlains.A, new WorldGenDecoratorHeightAverageConfiguration(1, 16, 16)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.SAND, 7, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeIcePlains.h, new WorldGenDecoratorFrequencyConfiguration(3)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.CLAY, 4, 1, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.CLAY})), BiomeIcePlains.h, new WorldGenDecoratorFrequencyConfiguration(1)));
-        this.a(WorldGenStage.Decoration.UNDERGROUND_ORES, a(WorldGenerator.ai, new WorldGenFeatureCircleConfiguration(Blocks.GRAVEL, 6, 2, Lists.newArrayList(new Block[] { Blocks.DIRT, Blocks.GRASS_BLOCK})), BiomeIcePlains.h, new WorldGenDecoratorFrequencyConfiguration(1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.A, WorldGenFeatureConfiguration.e, BiomeIcePlains.s, new WorldGenDecoratorFrequencyExtraChanceConfiguration(0, 0.1F, 1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, (WorldGenFeatureComposite) a(WorldGenerator.G, BiomeIcePlains.i, new WorldGenDecoratorFrequencyConfiguration(2)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.M, new WorldGenFeatureTallGrassConfiguration(Blocks.GRASS.getBlockData()), BiomeIcePlains.j, new WorldGenDecoratorFrequencyConfiguration(1)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM), BiomeIcePlains.p, new WorldGenDecoratorChanceConfiguration(4)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.ah, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM), BiomeIcePlains.p, new WorldGenDecoratorChanceConfiguration(8)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Z, WorldGenFeatureConfiguration.e, BiomeIcePlains.j, new WorldGenDecoratorFrequencyConfiguration(10)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.Y, WorldGenFeatureConfiguration.e, BiomeIcePlains.p, new WorldGenDecoratorChanceConfiguration(32)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.WATER), BiomeIcePlains.u, new WorldGenFeatureChanceDecoratorCountConfiguration(50, 8, 8, 256)));
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.at, new WorldGenFeatureFlowingConfiguration(FluidTypes.LAVA), BiomeIcePlains.v, new WorldGenFeatureChanceDecoratorCountConfiguration(20, 8, 16, 256)));
-        this.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, a(WorldGenerator.aa, WorldGenFeatureConfiguration.e, BiomeIcePlains.n, WorldGenFeatureDecoratorConfiguration.e));
+        super((new BiomeBase.a()).a(WorldGenSurface.G, WorldGenSurface.v).a(BiomeBase.Precipitation.SNOW).a(BiomeBase.Geography.ICY).a(0.125F).b(0.05F).c(0.0F).d(0.5F).a(4159204).b(329011).a((String) null));
+        this.a(WorldGenerator.VILLAGE, (WorldGenFeatureConfiguration) (new WorldGenFeatureVillageConfiguration("village/snowy/town_centers", 6)));
+        this.a(WorldGenerator.IGLOO, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
+        this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        BiomeDecoratorGroups.a(this);
+        BiomeDecoratorGroups.c(this);
+        BiomeDecoratorGroups.d(this);
+        BiomeDecoratorGroups.f(this);
+        BiomeDecoratorGroups.g(this);
+        BiomeDecoratorGroups.h(this);
+        BiomeDecoratorGroups.l(this);
+        BiomeDecoratorGroups.F(this);
+        BiomeDecoratorGroups.U(this);
+        BiomeDecoratorGroups.W(this);
+        BiomeDecoratorGroups.Z(this);
+        BiomeDecoratorGroups.aa(this);
+        BiomeDecoratorGroups.am(this);
+        BiomeDecoratorGroups.ap(this);
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.RABBIT, 10, 2, 3));
         this.a(EnumCreatureType.CREATURE, new BiomeBase.BiomeMeta(EntityTypes.POLAR_BEAR, 1, 1, 2));
         this.a(EnumCreatureType.AMBIENT, new BiomeBase.BiomeMeta(EntityTypes.BAT, 10, 8, 8));
@@ -53,7 +36,8 @@ public final class BiomeIcePlains extends BiomeBase {
         this.a(EnumCreatureType.MONSTER, new BiomeBase.BiomeMeta(EntityTypes.STRAY, 80, 4, 4));
     }
 
-    public float e() {
+    @Override
+    public float d() {
         return 0.07F;
     }
 }

@@ -10,10 +10,10 @@ public class CommandLocate {
     private static final SimpleCommandExceptionType a = new SimpleCommandExceptionType(new ChatMessage("commands.locate.failed", new Object[0]));
 
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
-        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("locate").requires((commandlistenerwrapper) -> {
+        com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("locate").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("Village").executes((commandcontext) -> {
-            return a((CommandListenerWrapper) commandcontext.getSource(), "Village");
+        })).then(CommandDispatcher.a("Pillager_Outpost").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), "Pillager_Outpost");
         }))).then(CommandDispatcher.a("Mineshaft").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), "Mineshaft");
         }))).then(CommandDispatcher.a("Mansion").executes((commandcontext) -> {
@@ -40,6 +40,8 @@ public class CommandLocate {
             return a((CommandListenerWrapper) commandcontext.getSource(), "Buried_Treasure");
         }))).then(CommandDispatcher.a("Shipwreck").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), "Shipwreck");
+        }))).then(CommandDispatcher.a("Village").executes((commandcontext) -> {
+            return a((CommandListenerWrapper) commandcontext.getSource(), "Village");
         })));
     }
 

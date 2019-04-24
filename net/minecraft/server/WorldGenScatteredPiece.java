@@ -4,20 +4,18 @@ import java.util.Random;
 
 public abstract class WorldGenScatteredPiece extends StructurePiece {
 
-    protected int a;
-    protected int b;
-    protected int c;
+    protected final int a;
+    protected final int b;
+    protected final int c;
     protected int d = -1;
 
-    public WorldGenScatteredPiece() {}
-
-    protected WorldGenScatteredPiece(Random random, int i, int j, int k, int l, int i1, int j1) {
-        super(0);
+    protected WorldGenScatteredPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, Random random, int i, int j, int k, int l, int i1, int j1) {
+        super(worldgenfeaturestructurepiecetype, 0);
         this.a = l;
         this.b = i1;
         this.c = j1;
         this.a(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-        if (this.f().k() == EnumDirection.EnumAxis.Z) {
+        if (this.i().k() == EnumDirection.EnumAxis.Z) {
             this.n = new StructureBoundingBox(i, j, k, i + l - 1, j + i1 - 1, k + j1 - 1);
         } else {
             this.n = new StructureBoundingBox(i, j, k, i + j1 - 1, j + i1 - 1, k + l - 1);
@@ -25,18 +23,20 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
 
     }
 
+    protected WorldGenScatteredPiece(WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype, NBTTagCompound nbttagcompound) {
+        super(worldgenfeaturestructurepiecetype, nbttagcompound);
+        this.a = nbttagcompound.getInt("Width");
+        this.b = nbttagcompound.getInt("Height");
+        this.c = nbttagcompound.getInt("Depth");
+        this.d = nbttagcompound.getInt("HPos");
+    }
+
+    @Override
     protected void a(NBTTagCompound nbttagcompound) {
         nbttagcompound.setInt("Width", this.a);
         nbttagcompound.setInt("Height", this.b);
         nbttagcompound.setInt("Depth", this.c);
         nbttagcompound.setInt("HPos", this.d);
-    }
-
-    protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-        this.a = nbttagcompound.getInt("Width");
-        this.b = nbttagcompound.getInt("Height");
-        this.c = nbttagcompound.getInt("Depth");
-        this.d = nbttagcompound.getInt("HPos");
     }
 
     protected boolean a(GeneratorAccess generatoraccess, StructureBoundingBox structureboundingbox, int i) {
@@ -49,7 +49,7 @@ public abstract class WorldGenScatteredPiece extends StructurePiece {
 
             for (int l = this.n.c; l <= this.n.f; ++l) {
                 for (int i1 = this.n.a; i1 <= this.n.d; ++i1) {
-                    blockposition_mutableblockposition.c(i1, 64, l);
+                    blockposition_mutableblockposition.d(i1, 64, l);
                     if (structureboundingbox.b((BaseBlockPosition) blockposition_mutableblockposition)) {
                         j += generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition_mutableblockposition).getY();
                         ++k;

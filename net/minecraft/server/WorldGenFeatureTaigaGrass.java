@@ -1,16 +1,20 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureTaigaGrass extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureTaigaGrass() {}
+    public WorldGenFeatureTaigaGrass(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
     public IBlockData a(Random random) {
         return random.nextInt(5) > 0 ? Blocks.FERN.getBlockData() : Blocks.GRASS.getBlockData();
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         IBlockData iblockdata = this.a(random);
 
         for (IBlockData iblockdata1 = generatoraccess.getType(blockposition); (iblockdata1.isAir() || iblockdata1.a(TagsBlock.LEAVES)) && blockposition.getY() > 0; iblockdata1 = generatoraccess.getType(blockposition)) {
@@ -20,7 +24,7 @@ public class WorldGenFeatureTaigaGrass extends WorldGenerator<WorldGenFeatureEmp
         int i = 0;
 
         for (int j = 0; j < 128; ++j) {
-            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
+            BlockPosition blockposition1 = blockposition.b(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
 
             if (generatoraccess.isEmpty(blockposition1) && iblockdata.canPlace(generatoraccess, blockposition1)) {
                 generatoraccess.setTypeAndData(blockposition1, iblockdata, 2);

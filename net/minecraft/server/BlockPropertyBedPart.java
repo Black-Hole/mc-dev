@@ -14,6 +14,7 @@ public enum BlockPropertyBedPart implements INamable {
         return this.c;
     }
 
+    @Override
     public String getName() {
         return this.c;
     }

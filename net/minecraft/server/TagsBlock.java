@@ -1,15 +1,14 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class TagsBlock {
 
-    private static Tags<Block> M = new Tags<>((minecraftkey) -> {
-        return false;
-    }, (minecraftkey) -> {
-        return null;
+    private static Tags<Block> Y = new Tags<>((minecraftkey) -> {
+        return Optional.empty();
     }, "", false, "");
-    private static int N;
+    private static int Z;
     public static final Tag<Block> WOOL = a("wool");
     public static final Tag<Block> PLANKS = a("planks");
     public static final Tag<Block> STONE_BRICKS = a("stone_bricks");
@@ -19,6 +18,7 @@ public class TagsBlock {
     public static final Tag<Block> WOODEN_DOORS = a("wooden_doors");
     public static final Tag<Block> WOODEN_STAIRS = a("wooden_stairs");
     public static final Tag<Block> WOODEN_SLABS = a("wooden_slabs");
+    public static final Tag<Block> WOODEN_FENCES = a("wooden_fences");
     public static final Tag<Block> WOODEN_PRESSURE_PLATES = a("wooden_pressure_plates");
     public static final Tag<Block> WOODEN_TRAPDOORS = a("wooden_trapdoors");
     public static final Tag<Block> DOORS = a("doors");
@@ -34,10 +34,14 @@ public class TagsBlock {
     public static final Tag<Block> SAND = a("sand");
     public static final Tag<Block> STAIRS = a("stairs");
     public static final Tag<Block> SLABS = a("slabs");
+    public static final Tag<Block> WALLS = a("walls");
     public static final Tag<Block> ANVIL = a("anvil");
     public static final Tag<Block> RAILS = a("rails");
     public static final Tag<Block> LEAVES = a("leaves");
     public static final Tag<Block> TRAPDOORS = a("trapdoors");
+    public static final Tag<Block> SMALL_FLOWERS = a("small_flowers");
+    public static final Tag<Block> BEDS = a("beds");
+    public static final Tag<Block> FENCES = a("fences");
     public static final Tag<Block> FLOWER_POTS = a("flower_pots");
     public static final Tag<Block> ENDERMAN_HOLDABLE = a("enderman_holdable");
     public static final Tag<Block> ICE = a("ice");
@@ -48,14 +52,21 @@ public class TagsBlock {
     public static final Tag<Block> WALL_CORALS = a("wall_corals");
     public static final Tag<Block> CORAL_PLANTS = a("coral_plants");
     public static final Tag<Block> CORALS = a("corals");
+    public static final Tag<Block> BAMBOO_PLANTABLE_ON = a("bamboo_plantable_on");
+    public static final Tag<Block> DIRT_LIKE = a("dirt_like");
+    public static final Tag<Block> STANDING_SIGNS = a("standing_signs");
+    public static final Tag<Block> WALL_SIGNS = a("wall_signs");
+    public static final Tag<Block> SIGNS = a("signs");
+    public static final Tag<Block> DRAGON_IMMUNE = a("dragon_immune");
+    public static final Tag<Block> WITHER_IMMUNE = a("wither_immune");
 
     public static void a(Tags<Block> tags) {
-        TagsBlock.M = tags;
-        ++TagsBlock.N;
+        TagsBlock.Y = tags;
+        ++TagsBlock.Z;
     }
 
     public static Tags<Block> a() {
-        return TagsBlock.M;
+        return TagsBlock.Y;
     }
 
     private static Tag<Block> a(String s) {
@@ -72,27 +83,29 @@ public class TagsBlock {
         }
 
         public boolean a(Block block) {
-            if (this.a != TagsBlock.N) {
-                this.b = TagsBlock.M.b(this.c());
-                this.a = TagsBlock.N;
+            if (this.a != TagsBlock.Z) {
+                this.b = TagsBlock.Y.b(this.c());
+                this.a = TagsBlock.Z;
             }
 
             return this.b.isTagged(block);
         }
 
+        @Override
         public Collection<Block> a() {
-            if (this.a != TagsBlock.N) {
-                this.b = TagsBlock.M.b(this.c());
-                this.a = TagsBlock.N;
+            if (this.a != TagsBlock.Z) {
+                this.b = TagsBlock.Y.b(this.c());
+                this.a = TagsBlock.Z;
             }
 
             return this.b.a();
         }
 
+        @Override
         public Collection<Tag.b<Block>> b() {
-            if (this.a != TagsBlock.N) {
-                this.b = TagsBlock.M.b(this.c());
-                this.a = TagsBlock.N;
+            if (this.a != TagsBlock.Z) {
+                this.b = TagsBlock.Y.b(this.c());
+                this.a = TagsBlock.Z;
             }
 
             return this.b.b();

@@ -9,11 +9,13 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListene
 
     public PacketPlayOutPlayerListHeaderFooter() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.header = packetdataserializer.f();
-        this.footer = packetdataserializer.f();
+        this.header = packetdataserializer.h();
+        this.footer = packetdataserializer.h();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.header);
         packetdataserializer.a(this.footer);

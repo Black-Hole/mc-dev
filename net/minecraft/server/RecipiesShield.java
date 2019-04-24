@@ -6,55 +6,51 @@ public class RecipiesShield extends IRecipeComplex {
         super(minecraftkey);
     }
 
-    public boolean a(IInventory iinventory, World world) {
-        if (!(iinventory instanceof InventoryCrafting)) {
-            return false;
-        } else {
-            ItemStack itemstack = ItemStack.a;
-            ItemStack itemstack1 = ItemStack.a;
-
-            for (int i = 0; i < iinventory.getSize(); ++i) {
-                ItemStack itemstack2 = iinventory.getItem(i);
-
-                if (!itemstack2.isEmpty()) {
-                    if (itemstack2.getItem() instanceof ItemBanner) {
-                        if (!itemstack1.isEmpty()) {
-                            return false;
-                        }
-
-                        itemstack1 = itemstack2;
-                    } else {
-                        if (itemstack2.getItem() != Items.SHIELD) {
-                            return false;
-                        }
-
-                        if (!itemstack.isEmpty()) {
-                            return false;
-                        }
-
-                        if (itemstack2.b("BlockEntityTag") != null) {
-                            return false;
-                        }
-
-                        itemstack = itemstack2;
-                    }
-                }
-            }
-
-            if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    public ItemStack craftItem(IInventory iinventory) {
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
         ItemStack itemstack = ItemStack.a;
         ItemStack itemstack1 = ItemStack.a;
 
-        for (int i = 0; i < iinventory.getSize(); ++i) {
-            ItemStack itemstack2 = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack2 = inventorycrafting.getItem(i);
+
+            if (!itemstack2.isEmpty()) {
+                if (itemstack2.getItem() instanceof ItemBanner) {
+                    if (!itemstack1.isEmpty()) {
+                        return false;
+                    }
+
+                    itemstack1 = itemstack2;
+                } else {
+                    if (itemstack2.getItem() != Items.SHIELD) {
+                        return false;
+                    }
+
+                    if (!itemstack.isEmpty()) {
+                        return false;
+                    }
+
+                    if (itemstack2.b("BlockEntityTag") != null) {
+                        return false;
+                    }
+
+                    itemstack = itemstack2;
+                }
+            }
+        }
+
+        if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public ItemStack a(InventoryCrafting inventorycrafting) {
+        ItemStack itemstack = ItemStack.a;
+        ItemStack itemstack1 = ItemStack.a;
+
+        for (int i = 0; i < inventorycrafting.getSize(); ++i) {
+            ItemStack itemstack2 = inventorycrafting.getItem(i);
 
             if (!itemstack2.isEmpty()) {
                 if (itemstack2.getItem() instanceof ItemBanner) {
@@ -77,7 +73,8 @@ public class RecipiesShield extends IRecipeComplex {
         }
     }
 
-    public RecipeSerializer<?> a() {
-        return RecipeSerializers.n;
+    @Override
+    public RecipeSerializer<?> getRecipeSerializer() {
+        return RecipeSerializer.l;
     }
 }

@@ -8,18 +8,17 @@ public class EnchantmentDurability extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.BREAKABLE, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 5 + (i - 1) * 8;
     }
 
-    public int b(int i) {
-        return super.a(i) + 50;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 3;
     }
 
+    @Override
     public boolean canEnchant(ItemStack itemstack) {
         return itemstack.e() ? true : super.canEnchant(itemstack);
     }

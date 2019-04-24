@@ -37,14 +37,16 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.readByte();
         this.c = packetdataserializer.readByte();
-        this.d = packetdataserializer.g();
+        this.d = packetdataserializer.i();
         this.e = packetdataserializer.readByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeByte(this.b);

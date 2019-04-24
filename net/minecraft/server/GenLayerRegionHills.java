@@ -20,24 +20,27 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
     private static final int l = IRegistry.BIOME.a((Object) Biomes.SNOWY_MOUNTAINS);
     private static final int m = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
     private static final int n = IRegistry.BIOME.a((Object) Biomes.JUNGLE_HILLS);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
-    private static final int q = IRegistry.BIOME.a((Object) Biomes.PLAINS);
-    private static final int r = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
-    private static final int s = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA_HILLS);
-    private static final int t = IRegistry.BIOME.a((Object) Biomes.DARK_FOREST);
-    private static final int u = IRegistry.BIOME.a((Object) Biomes.SAVANNA);
-    private static final int v = IRegistry.BIOME.a((Object) Biomes.SAVANNA_PLATEAU);
-    private static final int w = IRegistry.BIOME.a((Object) Biomes.TAIGA);
-    private static final int x = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
-    private static final int y = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA_HILLS);
-    private static final int z = IRegistry.BIOME.a((Object) Biomes.TAIGA_HILLS);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.BAMBOO_JUNGLE);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.BAMBOO_JUNGLE_HILLS);
+    private static final int q = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
+    private static final int r = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
+    private static final int s = IRegistry.BIOME.a((Object) Biomes.PLAINS);
+    private static final int t = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
+    private static final int u = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA_HILLS);
+    private static final int v = IRegistry.BIOME.a((Object) Biomes.DARK_FOREST);
+    private static final int w = IRegistry.BIOME.a((Object) Biomes.SAVANNA);
+    private static final int x = IRegistry.BIOME.a((Object) Biomes.SAVANNA_PLATEAU);
+    private static final int y = IRegistry.BIOME.a((Object) Biomes.TAIGA);
+    private static final int z = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
+    private static final int A = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA_HILLS);
+    private static final int B = IRegistry.BIOME.a((Object) Biomes.TAIGA_HILLS);
 
     private GenLayerRegionHills() {}
 
-    public int a(WorldGenContext worldgencontext, AreaDimension areadimension, Area area, Area area1, int i, int j) {
-        int k = area.a(i + 1, j + 1);
-        int l = area1.a(i + 1, j + 1);
+    @Override
+    public int a(WorldGenContext worldgencontext, Area area, Area area1, int i, int j) {
+        int k = area.a(this.a(i + 1), this.b(j + 1));
+        int l = area1.a(this.a(i + 1), this.b(j + 1));
 
         if (k > 255) {
             GenLayerRegionHills.b.debug("old! {}", k);
@@ -49,7 +52,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         if (!GenLayers.b(k) && l >= 2 && i1 == 1) {
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(k);
 
-            if (biomebase1 == null || !biomebase1.b()) {
+            if (biomebase1 == null || !biomebase1.a()) {
                 biomebase = BiomeBase.a(biomebase1);
                 return biomebase == null ? k : IRegistry.BIOME.a((Object) biomebase);
             }
@@ -64,20 +67,22 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
                 j1 = GenLayerRegionHills.j;
             } else if (k == GenLayerRegionHills.c) {
                 j1 = GenLayerRegionHills.d;
-            } else if (k == GenLayerRegionHills.t) {
-                j1 = GenLayerRegionHills.q;
-            } else if (k == GenLayerRegionHills.w) {
-                j1 = GenLayerRegionHills.z;
-            } else if (k == GenLayerRegionHills.r) {
+            } else if (k == GenLayerRegionHills.v) {
                 j1 = GenLayerRegionHills.s;
-            } else if (k == GenLayerRegionHills.x) {
-                j1 = GenLayerRegionHills.y;
-            } else if (k == GenLayerRegionHills.q) {
+            } else if (k == GenLayerRegionHills.y) {
+                j1 = GenLayerRegionHills.B;
+            } else if (k == GenLayerRegionHills.t) {
+                j1 = GenLayerRegionHills.u;
+            } else if (k == GenLayerRegionHills.z) {
+                j1 = GenLayerRegionHills.A;
+            } else if (k == GenLayerRegionHills.s) {
                 j1 = worldgencontext.a(3) == 0 ? GenLayerRegionHills.j : GenLayerRegionHills.i;
             } else if (k == GenLayerRegionHills.k) {
                 j1 = GenLayerRegionHills.l;
             } else if (k == GenLayerRegionHills.m) {
                 j1 = GenLayerRegionHills.n;
+            } else if (k == GenLayerRegionHills.o) {
+                j1 = GenLayerRegionHills.p;
             } else if (k == GenLayers.c) {
                 j1 = GenLayers.h;
             } else if (k == GenLayers.b) {
@@ -88,12 +93,12 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
                 j1 = GenLayers.j;
             } else if (k == GenLayerRegionHills.g) {
                 j1 = GenLayerRegionHills.h;
-            } else if (k == GenLayerRegionHills.u) {
-                j1 = GenLayerRegionHills.v;
-            } else if (GenLayers.a(k, GenLayerRegionHills.p)) {
-                j1 = GenLayerRegionHills.o;
+            } else if (k == GenLayerRegionHills.w) {
+                j1 = GenLayerRegionHills.x;
+            } else if (GenLayers.a(k, GenLayerRegionHills.r)) {
+                j1 = GenLayerRegionHills.q;
             } else if ((k == GenLayers.h || k == GenLayers.g || k == GenLayers.i || k == GenLayers.j) && worldgencontext.a(3) == 0) {
-                j1 = worldgencontext.a(2) == 0 ? GenLayerRegionHills.q : GenLayerRegionHills.i;
+                j1 = worldgencontext.a(2) == 0 ? GenLayerRegionHills.s : GenLayerRegionHills.i;
             }
 
             if (i1 == 0 && j1 != k) {
@@ -104,19 +109,19 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
             if (j1 != k) {
                 int k1 = 0;
 
-                if (GenLayers.a(area.a(i + 1, j + 0), k)) {
+                if (GenLayers.a(area.a(this.a(i + 1), this.b(j + 0)), k)) {
                     ++k1;
                 }
 
-                if (GenLayers.a(area.a(i + 2, j + 1), k)) {
+                if (GenLayers.a(area.a(this.a(i + 2), this.b(j + 1)), k)) {
                     ++k1;
                 }
 
-                if (GenLayers.a(area.a(i + 0, j + 1), k)) {
+                if (GenLayers.a(area.a(this.a(i + 0), this.b(j + 1)), k)) {
                     ++k1;
                 }
 
-                if (GenLayers.a(area.a(i + 1, j + 2), k)) {
+                if (GenLayers.a(area.a(this.a(i + 1), this.b(j + 2)), k)) {
                     ++k1;
                 }
 

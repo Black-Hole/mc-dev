@@ -7,10 +7,11 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
     private int e;
     private int f;
 
-    public DemoPlayerInteractManager(World world) {
-        super(world);
+    public DemoPlayerInteractManager(WorldServer worldserver) {
+        super(worldserver);
     }
 
+    @Override
     public void a() {
         super.a();
         ++this.f;
@@ -57,6 +58,7 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
 
     }
 
+    @Override
     public void a(BlockPosition blockposition, EnumDirection enumdirection) {
         if (this.d) {
             this.f();
@@ -65,16 +67,19 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         }
     }
 
+    @Override
     public void a(BlockPosition blockposition) {
         if (!this.d) {
             super.a(blockposition);
         }
     }
 
+    @Override
     public boolean breakBlock(BlockPosition blockposition) {
         return this.d ? false : super.breakBlock(blockposition);
     }
 
+    @Override
     public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand) {
         if (this.d) {
             this.f();
@@ -84,12 +89,13 @@ public class DemoPlayerInteractManager extends PlayerInteractManager {
         }
     }
 
-    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public EnumInteractionResult a(EntityHuman entityhuman, World world, ItemStack itemstack, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (this.d) {
             this.f();
             return EnumInteractionResult.PASS;
         } else {
-            return super.a(entityhuman, world, itemstack, enumhand, blockposition, enumdirection, f, f1, f2);
+            return super.a(entityhuman, world, itemstack, enumhand, movingobjectpositionblock);
         }
     }
 }

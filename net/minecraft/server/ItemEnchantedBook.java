@@ -8,7 +8,8 @@ public class ItemEnchantedBook extends Item {
         super(item_info);
     }
 
-    public boolean a(ItemStack itemstack) {
+    @Override
+    public boolean g_(ItemStack itemstack) {
         return false;
     }
 
@@ -42,7 +43,7 @@ public class ItemEnchantedBook extends Item {
 
             nbttagcompound1.setString("id", String.valueOf(minecraftkey));
             nbttagcompound1.setShort("lvl", (short) weightedrandomenchant.level);
-            nbttaglist.add((NBTBase) nbttagcompound1);
+            nbttaglist.add(nbttagcompound1);
         }
 
         itemstack.getOrCreateTag().set("StoredEnchantments", nbttaglist);
@@ -55,6 +56,7 @@ public class ItemEnchantedBook extends Item {
         return itemstack;
     }
 
+    @Override
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         Iterator iterator;
         Enchantment enchantment;

@@ -333,15 +333,13 @@ public class ArgumentBlock {
         int i = this.i.getCursor();
 
         this.m = MinecraftKey.a(this.i);
-        if (IRegistry.BLOCK.c(this.m)) {
-            Block block = (Block) IRegistry.BLOCK.getOrDefault(this.m);
-
-            this.n = block.getStates();
-            this.o = block.getBlockData();
-        } else {
+        Block block = (Block) IRegistry.BLOCK.getOptional(this.m).orElseThrow(() -> {
             this.i.setCursor(i);
-            throw ArgumentBlock.b.createWithContext(this.i, this.m.toString());
-        }
+            return ArgumentBlock.b.createWithContext(this.i, this.m.toString());
+        });
+
+        this.n = block.getStates();
+        this.o = block.getBlockData();
     }
 
     public void f() throws CommandSyntaxException {
@@ -496,7 +494,7 @@ public class ArgumentBlock {
         }
     }
 
-    public static String a(IBlockData iblockdata, @Nullable NBTTagCompound nbttagcompound) {
+    public static String a(IBlockData iblockdata) {
         StringBuilder stringbuilder = new StringBuilder(IRegistry.BLOCK.getKey(iblockdata.getBlock()).toString());
 
         if (!iblockdata.a().isEmpty()) {
@@ -514,10 +512,6 @@ public class ArgumentBlock {
             }
 
             stringbuilder.append(']');
-        }
-
-        if (nbttagcompound != null) {
-            stringbuilder.append(nbttagcompound);
         }
 
         return stringbuilder.toString();

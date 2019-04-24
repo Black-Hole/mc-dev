@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import javax.annotation.Nullable;
+
 public class BlockEnchantmentTable extends BlockTileEntity {
 
     protected static final VoxelShape a = Block.a(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D);
@@ -8,36 +10,53 @@ public class BlockEnchantmentTable extends BlockTileEntity {
         super(block_info);
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public boolean n(IBlockData iblockdata) {
+        return true;
+    }
+
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockEnchantmentTable.a;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.MODEL;
     }
 
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return new TileEntityEnchantTable();
     }
 
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (world.isClientSide) {
             return true;
         } else {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-
-            if (tileentity instanceof TileEntityEnchantTable) {
-                entityhuman.openTileEntity((TileEntityEnchantTable) tileentity);
-            }
-
+            entityhuman.openContainer(iblockdata.b(world, blockposition));
             return true;
         }
     }
 
+    @Nullable
+    @Override
+    public ITileInventory getInventory(IBlockData iblockdata, World world, BlockPosition blockposition) {
+        TileEntity tileentity = world.getTileEntity(blockposition);
+
+        if (tileentity instanceof TileEntityEnchantTable) {
+            IChatBaseComponent ichatbasecomponent = ((INamableTileEntity) tileentity).getScoreboardDisplayName();
+
+            return new TileInventory((i, playerinventory, entityhuman) -> {
+                return new ContainerEnchantTable(i, playerinventory, ContainerAccess.at(world, blockposition));
+            }, ichatbasecomponent);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
         if (itemstack.hasName()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
@@ -49,10 +68,7 @@ public class BlockEnchantmentTable extends BlockTileEntity {
 
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return enumdirection == EnumDirection.DOWN ? EnumBlockFaceShape.SOLID : EnumBlockFaceShape.UNDEFINED;
-    }
-
+    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }

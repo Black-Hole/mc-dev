@@ -12,6 +12,10 @@ public class RecipeBook {
     protected boolean d;
     protected boolean e;
     protected boolean f;
+    protected boolean g;
+    protected boolean h;
+    protected boolean i;
+    protected boolean j;
 
     public RecipeBook() {}
 
@@ -22,8 +26,8 @@ public class RecipeBook {
         this.b.addAll(recipebook.b);
     }
 
-    public void a(IRecipe irecipe) {
-        if (!irecipe.c()) {
+    public void a(IRecipe<?> irecipe) {
+        if (!irecipe.isComplex()) {
             this.a(irecipe.getKey());
         }
 
@@ -33,7 +37,7 @@ public class RecipeBook {
         this.a.add(minecraftkey);
     }
 
-    public boolean b(@Nullable IRecipe irecipe) {
+    public boolean b(@Nullable IRecipe<?> irecipe) {
         return irecipe == null ? false : this.a.contains(irecipe.getKey());
     }
 
@@ -42,11 +46,11 @@ public class RecipeBook {
         this.b.remove(minecraftkey);
     }
 
-    public void e(IRecipe irecipe) {
+    public void e(IRecipe<?> irecipe) {
         this.b.remove(irecipe.getKey());
     }
 
-    public void f(IRecipe irecipe) {
+    public void f(IRecipe<?> irecipe) {
         this.c(irecipe.getKey());
     }
 
@@ -68,5 +72,21 @@ public class RecipeBook {
 
     public void d(boolean flag) {
         this.f = flag;
+    }
+
+    public void e(boolean flag) {
+        this.g = flag;
+    }
+
+    public void f(boolean flag) {
+        this.h = flag;
+    }
+
+    public void g(boolean flag) {
+        this.i = flag;
+    }
+
+    public void h(boolean flag) {
+        this.j = flag;
     }
 }

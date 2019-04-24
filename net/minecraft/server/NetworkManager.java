@@ -217,8 +217,12 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void a() {
         this.o();
-        if (this.packetListener instanceof ITickable) {
-            ((ITickable) this.packetListener).tick();
+        if (this.packetListener instanceof LoginListener) {
+            ((LoginListener) this.packetListener).tick();
+        }
+
+        if (this.packetListener instanceof PlayerConnection) {
+            ((PlayerConnection) this.packetListener).tick();
         }
 
         if (this.channel != null) {

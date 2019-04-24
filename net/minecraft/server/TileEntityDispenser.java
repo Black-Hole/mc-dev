@@ -17,11 +17,13 @@ public class TileEntityDispenser extends TileEntityLootable {
         this(TileEntityTypes.DISPENSER);
     }
 
+    @Override
     public int getSize() {
         return 9;
     }
 
-    public boolean P_() {
+    @Override
+    public boolean isNotEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -37,7 +39,7 @@ public class TileEntityDispenser extends TileEntityLootable {
         return false;
     }
 
-    public int p() {
+    public int r() {
         this.d((EntityHuman) null);
         int i = -1;
         int j = 1;
@@ -62,12 +64,12 @@ public class TileEntityDispenser extends TileEntityLootable {
         return -1;
     }
 
-    public IChatBaseComponent getDisplayName() {
-        IChatBaseComponent ichatbasecomponent = this.getCustomName();
-
-        return (IChatBaseComponent) (ichatbasecomponent != null ? ichatbasecomponent : new ChatMessage("container.dispenser", new Object[0]));
+    @Override
+    protected IChatBaseComponent getContainerName() {
+        return new ChatMessage("container.dispenser", new Object[0]);
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         this.items = NonNullList.a(this.getSize(), ItemStack.a);
@@ -75,45 +77,30 @@ public class TileEntityDispenser extends TileEntityLootable {
             ContainerUtil.b(nbttagcompound, this.items);
         }
 
-        if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
-            this.i = IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("CustomName"));
-        }
-
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (!this.e(nbttagcompound)) {
             ContainerUtil.a(nbttagcompound, this.items);
         }
 
-        IChatBaseComponent ichatbasecomponent = this.getCustomName();
-
-        if (ichatbasecomponent != null) {
-            nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(ichatbasecomponent));
-        }
-
         return nbttagcompound;
     }
 
-    public int getMaxStackSize() {
-        return 64;
-    }
-
-    public String getContainerName() {
-        return "minecraft:dispenser";
-    }
-
-    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
-        this.d(entityhuman);
-        return new ContainerDispenser(playerinventory, this);
-    }
-
-    protected NonNullList<ItemStack> q() {
+    @Override
+    protected NonNullList<ItemStack> f() {
         return this.items;
     }
 
+    @Override
     protected void a(NonNullList<ItemStack> nonnulllist) {
         this.items = nonnulllist;
+    }
+
+    @Override
+    protected Container createContainer(int i, PlayerInventory playerinventory) {
+        return new ContainerDispenser(i, playerinventory, this);
     }
 }

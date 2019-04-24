@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.ImmutableMap.Builder;
 import java.util.Map;
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class IScoreboardCriteria {
 
@@ -37,28 +37,23 @@ public class IScoreboardCriteria {
         IScoreboardCriteria.criteria.put(s, this);
     }
 
-    @Nullable
-    public static IScoreboardCriteria a(String s) {
+    public static Optional<IScoreboardCriteria> a(String s) {
         if (IScoreboardCriteria.criteria.containsKey(s)) {
-            return (IScoreboardCriteria) IScoreboardCriteria.criteria.get(s);
+            return Optional.of(IScoreboardCriteria.criteria.get(s));
         } else {
             int i = s.indexOf(58);
 
-            if (i < 0) {
-                return null;
-            } else {
-                StatisticWrapper<?> statisticwrapper = (StatisticWrapper) IRegistry.STATS.get(MinecraftKey.a(s.substring(0, i), '.'));
-
-                return statisticwrapper == null ? null : a(statisticwrapper, MinecraftKey.a(s.substring(i + 1), '.'));
-            }
+            return i < 0 ? Optional.empty() : IRegistry.STATS.getOptional(MinecraftKey.a(s.substring(0, i), '.')).flatMap((statisticwrapper) -> {
+                return a(statisticwrapper, MinecraftKey.a(s.substring(i + 1), '.'));
+            });
         }
     }
 
-    @Nullable
-    private static <T> IScoreboardCriteria a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
-        IRegistry<T> iregistry = statisticwrapper.a();
+    private static <T> Optional<IScoreboardCriteria> a(StatisticWrapper<T> statisticwrapper, MinecraftKey minecraftkey) {
+        Optional optional = statisticwrapper.a().getOptional(minecraftkey);
 
-        return iregistry.c(minecraftkey) ? statisticwrapper.b(iregistry.get(minecraftkey)) : null;
+        statisticwrapper.getClass();
+        return optional.map(statisticwrapper::b);
     }
 
     public String getName() {

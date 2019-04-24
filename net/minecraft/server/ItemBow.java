@@ -1,51 +1,32 @@
 package net.minecraft.server;
 
-public class ItemBow extends Item {
+import java.util.function.Predicate;
+
+public class ItemBow extends ItemProjectileWeapon {
 
     public ItemBow(Item.Info item_info) {
         super(item_info);
         this.a(new MinecraftKey("pull"), (itemstack, world, entityliving) -> {
-            return entityliving == null ? 0.0F : (entityliving.cW().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.cX()) / 20.0F);
+            return entityliving == null ? 0.0F : (entityliving.dl().getItem() != Items.BOW ? 0.0F : (float) (itemstack.k() - entityliving.dm()) / 20.0F);
         });
         this.a(new MinecraftKey("pulling"), (itemstack, world, entityliving) -> {
-            return entityliving != null && entityliving.isHandRaised() && entityliving.cW() == itemstack ? 1.0F : 0.0F;
+            return entityliving != null && entityliving.isHandRaised() && entityliving.dl() == itemstack ? 1.0F : 0.0F;
         });
     }
 
-    private ItemStack a(EntityHuman entityhuman) {
-        if (this.e_(entityhuman.b(EnumHand.OFF_HAND))) {
-            return entityhuman.b(EnumHand.OFF_HAND);
-        } else if (this.e_(entityhuman.b(EnumHand.MAIN_HAND))) {
-            return entityhuman.b(EnumHand.MAIN_HAND);
-        } else {
-            for (int i = 0; i < entityhuman.inventory.getSize(); ++i) {
-                ItemStack itemstack = entityhuman.inventory.getItem(i);
-
-                if (this.e_(itemstack)) {
-                    return itemstack;
-                }
-            }
-
-            return ItemStack.a;
-        }
-    }
-
-    protected boolean e_(ItemStack itemstack) {
-        return itemstack.getItem() instanceof ItemArrow;
-    }
-
+    @Override
     public void a(ItemStack itemstack, World world, EntityLiving entityliving, int i) {
         if (entityliving instanceof EntityHuman) {
             EntityHuman entityhuman = (EntityHuman) entityliving;
             boolean flag = entityhuman.abilities.canInstantlyBuild || EnchantmentManager.getEnchantmentLevel(Enchantments.ARROW_INFINITE, itemstack) > 0;
-            ItemStack itemstack1 = this.a(entityhuman);
+            ItemStack itemstack1 = entityhuman.f(itemstack);
 
             if (!itemstack1.isEmpty() || flag) {
                 if (itemstack1.isEmpty()) {
                     itemstack1 = new ItemStack(Items.ARROW);
                 }
 
-                int j = this.c(itemstack) - i;
+                int j = this.f_(itemstack) - i;
                 float f = a(j);
 
                 if ((double) f >= 0.1D) {
@@ -76,7 +57,9 @@ public class ItemBow extends Item {
                             entityarrow.setOnFire(100);
                         }
 
-                        itemstack.damage(1, entityhuman);
+                        itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                            entityhuman1.d(entityhuman.getRaisedHand());
+                        });
                         if (flag1 || entityhuman.abilities.canInstantlyBuild && (itemstack1.getItem() == Items.SPECTRAL_ARROW || itemstack1.getItem() == Items.TIPPED_ARROW)) {
                             entityarrow.fromPlayer = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         }
@@ -109,17 +92,20 @@ public class ItemBow extends Item {
         return f;
     }
 
-    public int c(ItemStack itemstack) {
+    @Override
+    public int f_(ItemStack itemstack) {
         return 72000;
     }
 
-    public EnumAnimation d(ItemStack itemstack) {
+    @Override
+    public EnumAnimation e_(ItemStack itemstack) {
         return EnumAnimation.BOW;
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
-        boolean flag = !this.a(entityhuman).isEmpty();
+        boolean flag = !entityhuman.f(itemstack).isEmpty();
 
         if (!entityhuman.abilities.canInstantlyBuild && !flag) {
             return flag ? new InteractionResultWrapper<>(EnumInteractionResult.PASS, itemstack) : new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
@@ -129,7 +115,8 @@ public class ItemBow extends Item {
         }
     }
 
-    public int c() {
-        return 1;
+    @Override
+    public Predicate<ItemStack> b() {
+        return ItemBow.a;
     }
 }

@@ -11,25 +11,30 @@ public class BlockBannerWall extends BlockBannerAbstract {
 
     public BlockBannerWall(EnumColor enumcolor, Block.Info block_info) {
         super(enumcolor, block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockBannerWall.a, EnumDirection.NORTH));
     }
 
-    public String m() {
+    @Override
+    public String l() {
         return this.getItem().getName();
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         return iworldreader.getType(blockposition.shift(((EnumDirection) iblockdata.get(BlockBannerWall.a)).opposite())).getMaterial().isBuildable();
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return enumdirection == ((EnumDirection) iblockdata.get(BlockBannerWall.a)).opposite() && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockBannerWall.b.get(iblockdata.get(BlockBannerWall.a));
     }
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlockData();
         World world = blockactioncontext.getWorld();
@@ -54,14 +59,17 @@ public class BlockBannerWall extends BlockBannerAbstract {
         return null;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockBannerWall.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockBannerWall.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockBannerWall.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockBannerWall.a);
     }

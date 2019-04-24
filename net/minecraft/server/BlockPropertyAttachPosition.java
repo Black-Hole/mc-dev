@@ -10,6 +10,7 @@ public enum BlockPropertyAttachPosition implements INamable {
         this.d = s;
     }
 
+    @Override
     public String getName() {
         return this.d;
     }

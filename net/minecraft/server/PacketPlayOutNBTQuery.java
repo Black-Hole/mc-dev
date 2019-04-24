@@ -16,11 +16,13 @@ public class PacketPlayOutNBTQuery implements Packet<PacketListenerPlayOut> {
         this.b = nbttagcompound;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
-        this.b = packetdataserializer.j();
+        this.a = packetdataserializer.i();
+        this.b = packetdataserializer.l();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
@@ -30,6 +32,7 @@ public class PacketPlayOutNBTQuery implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public boolean a() {
         return true;
     }

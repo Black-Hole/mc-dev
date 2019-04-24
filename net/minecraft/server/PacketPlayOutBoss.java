@@ -29,12 +29,13 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         this.i = bossbattle.isCreateFog();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
+        this.a = packetdataserializer.k();
         this.b = (PacketPlayOutBoss.Action) packetdataserializer.a(PacketPlayOutBoss.Action.class);
         switch (this.b) {
         case ADD:
-            this.c = packetdataserializer.f();
+            this.c = packetdataserializer.h();
             this.d = packetdataserializer.readFloat();
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
             this.f = (BossBattle.BarStyle) packetdataserializer.a(BossBattle.BarStyle.class);
@@ -46,7 +47,7 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
             this.d = packetdataserializer.readFloat();
             break;
         case UPDATE_NAME:
-            this.c = packetdataserializer.f();
+            this.c = packetdataserializer.h();
             break;
         case UPDATE_STYLE:
             this.e = (BossBattle.BarColor) packetdataserializer.a(BossBattle.BarColor.class);
@@ -64,6 +65,7 @@ public class PacketPlayOutBoss implements Packet<PacketListenerPlayOut> {
         this.i = (i & 4) > 0;
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);

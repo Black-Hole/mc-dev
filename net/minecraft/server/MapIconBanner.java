@@ -18,7 +18,7 @@ public class MapIconBanner {
 
     public static MapIconBanner a(NBTTagCompound nbttagcompound) {
         BlockPosition blockposition = GameProfileSerializer.c(nbttagcompound.getCompound("Pos"));
-        EnumColor enumcolor = EnumColor.a(nbttagcompound.getString("Color"));
+        EnumColor enumcolor = EnumColor.a(nbttagcompound.getString("Color"), EnumColor.WHITE);
         IChatBaseComponent ichatbasecomponent = nbttagcompound.hasKey("Name") ? IChatBaseComponent.ChatSerializer.a(nbttagcompound.getString("Name")) : null;
 
         return new MapIconBanner(blockposition, enumcolor, ichatbasecomponent);

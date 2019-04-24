@@ -6,43 +6,47 @@ public class BlockSlime extends BlockHalfTransparent {
         super(block_info);
     }
 
+    @Override
     public TextureType c() {
         return TextureType.TRANSLUCENT;
     }
 
+    @Override
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (entity.isSneaking()) {
             super.fallOn(world, blockposition, entity, f);
         } else {
-            entity.c(f, 0.0F);
+            entity.b(f, 0.0F);
         }
 
     }
 
+    @Override
     public void a(IBlockAccess iblockaccess, Entity entity) {
         if (entity.isSneaking()) {
             super.a(iblockaccess, entity);
-        } else if (entity.motY < 0.0D) {
-            entity.motY = -entity.motY;
-            if (!(entity instanceof EntityLiving)) {
-                entity.motY *= 0.8D;
+        } else {
+            Vec3D vec3d = entity.getMot();
+
+            if (vec3d.y < 0.0D) {
+                double d0 = entity instanceof EntityLiving ? 1.0D : 0.8D;
+
+                entity.setMot(vec3d.x, -vec3d.y * d0, vec3d.z);
             }
         }
 
     }
 
+    @Override
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
-        if (Math.abs(entity.motY) < 0.1D && !entity.isSneaking()) {
-            double d0 = 0.4D + Math.abs(entity.motY) * 0.2D;
+        double d0 = Math.abs(entity.getMot().y);
 
-            entity.motX *= d0;
-            entity.motZ *= d0;
+        if (d0 < 0.1D && !entity.isSneaking()) {
+            double d1 = 0.4D + d0 * 0.2D;
+
+            entity.setMot(entity.getMot().d(d1, 1.0D, d1));
         }
 
         super.stepOn(world, blockposition, entity);
-    }
-
-    public int j(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return 0;
     }
 }

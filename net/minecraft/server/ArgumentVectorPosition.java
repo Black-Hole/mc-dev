@@ -16,6 +16,7 @@ public class ArgumentVectorPosition implements IVectorPosition {
         this.c = d2;
     }
 
+    @Override
     public Vec3D a(CommandListenerWrapper commandlistenerwrapper) {
         Vec2F vec2f = commandlistenerwrapper.i();
         Vec3D vec3d = commandlistenerwrapper.k().a(commandlistenerwrapper);
@@ -35,18 +36,22 @@ public class ArgumentVectorPosition implements IVectorPosition {
         return new Vec3D(vec3d.x + d0, vec3d.y + d1, vec3d.z + d2);
     }
 
+    @Override
     public Vec2F b(CommandListenerWrapper commandlistenerwrapper) {
         return Vec2F.a;
     }
 
+    @Override
     public boolean a() {
         return true;
     }
 
+    @Override
     public boolean b() {
         return true;
     }
 
+    @Override
     public boolean c() {
         return true;
     }

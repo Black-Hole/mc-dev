@@ -33,33 +33,35 @@ public class PacketPlayOutRecipes implements Packet<PacketListenerPlayOut> {
         packetlistenerplayout.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayOutRecipes.Action) packetdataserializer.a(PacketPlayOutRecipes.Action.class);
         this.d = packetdataserializer.readBoolean();
         this.e = packetdataserializer.readBoolean();
         this.f = packetdataserializer.readBoolean();
         this.g = packetdataserializer.readBoolean();
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         this.b = Lists.newArrayList();
 
         int j;
 
         for (j = 0; j < i; ++j) {
-            this.b.add(packetdataserializer.l());
+            this.b.add(packetdataserializer.o());
         }
 
         if (this.a == PacketPlayOutRecipes.Action.INIT) {
-            i = packetdataserializer.g();
+            i = packetdataserializer.i();
             this.c = Lists.newArrayList();
 
             for (j = 0; j < i; ++j) {
-                this.c.add(packetdataserializer.l());
+                this.c.add(packetdataserializer.o());
             }
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         packetdataserializer.writeBoolean(this.d);

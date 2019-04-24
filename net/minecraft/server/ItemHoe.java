@@ -15,6 +15,7 @@ public class ItemHoe extends ItemToolMaterial {
         this.b = f;
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
@@ -29,7 +30,9 @@ public class ItemHoe extends ItemToolMaterial {
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata, 11);
                     if (entityhuman != null) {
-                        itemactioncontext.getItemStack().damage(1, entityhuman);
+                        itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
+                            entityhuman1.d(itemactioncontext.n());
+                        });
                     }
                 }
 
@@ -40,17 +43,21 @@ public class ItemHoe extends ItemToolMaterial {
         return EnumInteractionResult.PASS;
     }
 
+    @Override
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
-        itemstack.damage(1, entityliving1);
+        itemstack.damage(1, entityliving1, (entityliving2) -> {
+            entityliving2.c(EnumItemSlot.MAINHAND);
+        });
         return true;
     }
 
+    @Override
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
         Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, 0));
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) this.b, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemHoe.g, "Weapon modifier", 0.0D, AttributeModifier.Operation.ADDITION));
+            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemHoe.h, "Weapon modifier", (double) this.b, AttributeModifier.Operation.ADDITION));
         }
 
         return multimap;

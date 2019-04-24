@@ -2,9 +2,10 @@ package net.minecraft.server;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.List;
 import javax.annotation.Nullable;
 
-public class ChatComponentScore extends ChatBaseComponent {
+public class ChatComponentScore extends ChatBaseComponent implements ChatComponentContextual {
 
     private final String b;
     @Nullable
@@ -20,7 +21,7 @@ public class ChatComponentScore extends ChatBaseComponent {
         try {
             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(new StringReader(s));
 
-            entityselector = argumentparserselector.s();
+            entityselector = argumentparserselector.parse();
         } catch (CommandSyntaxException commandsyntaxexception) {
             ;
         }
@@ -32,11 +33,6 @@ public class ChatComponentScore extends ChatBaseComponent {
         return this.b;
     }
 
-    @Nullable
-    public EntitySelector j() {
-        return this.c;
-    }
-
     public String k() {
         return this.d;
     }
@@ -45,14 +41,15 @@ public class ChatComponentScore extends ChatBaseComponent {
         this.e = s;
     }
 
+    @Override
     public String getText() {
         return this.e;
     }
 
-    public void b(CommandListenerWrapper commandlistenerwrapper) {
+    private void b(CommandListenerWrapper commandlistenerwrapper) {
         MinecraftServer minecraftserver = commandlistenerwrapper.getServer();
 
-        if (minecraftserver != null && minecraftserver.D() && UtilColor.b(this.e)) {
+        if (minecraftserver != null && minecraftserver.E() && UtilColor.b(this.e)) {
             ScoreboardServer scoreboardserver = minecraftserver.getScoreboard();
             ScoreboardObjective scoreboardobjective = scoreboardserver.getObjective(this.d);
 
@@ -67,6 +64,7 @@ public class ChatComponentScore extends ChatBaseComponent {
 
     }
 
+    @Override
     public ChatComponentScore g() {
         ChatComponentScore chatcomponentscore = new ChatComponentScore(this.b, this.d);
 
@@ -74,6 +72,39 @@ public class ChatComponentScore extends ChatBaseComponent {
         return chatcomponentscore;
     }
 
+    @Override
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+        if (commandlistenerwrapper == null) {
+            return this.g();
+        } else {
+            String s;
+
+            if (this.c != null) {
+                List<? extends Entity> list = this.c.getEntities(commandlistenerwrapper);
+
+                if (list.isEmpty()) {
+                    s = this.b;
+                } else {
+                    if (list.size() != 1) {
+                        throw ArgumentEntity.a.create();
+                    }
+
+                    s = ((Entity) list.get(0)).getName();
+                }
+            } else {
+                s = this.b;
+            }
+
+            String s1 = entity != null && s.equals("*") ? entity.getName() : s;
+            ChatComponentScore chatcomponentscore = new ChatComponentScore(s1, this.d);
+
+            chatcomponentscore.b(this.e);
+            chatcomponentscore.b(commandlistenerwrapper);
+            return chatcomponentscore;
+        }
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -86,6 +117,7 @@ public class ChatComponentScore extends ChatBaseComponent {
         }
     }
 
+    @Override
     public String toString() {
         return "ScoreComponent{name='" + this.b + '\'' + "objective='" + this.d + '\'' + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }

@@ -15,10 +15,10 @@ public class DataConverterSchemaV1466 extends DataConverterSchemaNamed {
     public void registerTypes(Schema schema, Map<String, Supplier<TypeTemplate>> map, Map<String, Supplier<TypeTemplate>> map1) {
         super.registerTypes(schema, map, map1);
         schema.registerType(false, DataConverterTypes.c, () -> {
-            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.n.in(schema)), "TileEntities", DSL.list(DataConverterTypes.j.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.p.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.l.in(schema)))), "Structures", DSL.optionalFields("Starts", DSL.compoundList(DataConverterTypes.s.in(schema)))));
+            return DSL.fields("Level", DSL.optionalFields("Entities", DSL.list(DataConverterTypes.o.in(schema)), "TileEntities", DSL.list(DataConverterTypes.k.in(schema)), "TileTicks", DSL.list(DSL.fields("i", DataConverterTypes.q.in(schema))), "Sections", DSL.list(DSL.optionalFields("Palette", DSL.list(DataConverterTypes.m.in(schema)))), "Structures", DSL.optionalFields("Starts", DSL.compoundList(DataConverterTypes.t.in(schema)))));
         });
-        schema.registerType(false, DataConverterTypes.s, () -> {
-            return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.l.in(schema), "CB", DataConverterTypes.l.in(schema), "CC", DataConverterTypes.l.in(schema), "CD", DataConverterTypes.l.in(schema))), "biome", DataConverterTypes.w.in(schema));
+        schema.registerType(false, DataConverterTypes.t, () -> {
+            return DSL.optionalFields("Children", DSL.list(DSL.optionalFields("CA", DataConverterTypes.m.in(schema), "CB", DataConverterTypes.m.in(schema), "CC", DataConverterTypes.m.in(schema), "CD", DataConverterTypes.m.in(schema))), "biome", DataConverterTypes.x.in(schema));
         });
     }
 

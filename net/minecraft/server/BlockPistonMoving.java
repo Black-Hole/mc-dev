@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.Collections;
+import java.util.List;
 import javax.annotation.Nullable;
 
 public class BlockPistonMoving extends BlockTileEntity {
@@ -9,11 +11,12 @@ public class BlockPistonMoving extends BlockTileEntity {
 
     public BlockPistonMoving(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPistonMoving.a, EnumDirection.NORTH)).set(BlockPistonMoving.b, BlockPropertyPistonType.DEFAULT));
     }
 
     @Nullable
-    public TileEntity a(IBlockAccess iblockaccess) {
+    @Override
+    public TileEntity createTile(IBlockAccess iblockaccess) {
         return null;
     }
 
@@ -21,65 +24,68 @@ public class BlockPistonMoving extends BlockTileEntity {
         return new TileEntityPiston(iblockdata, enumdirection, flag, flag1);
     }
 
+    @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata.getBlock() != iblockdata1.getBlock()) {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).j();
-            } else {
-                super.remove(iblockdata, world, blockposition, iblockdata1, flag);
+                ((TileEntityPiston) tileentity).t();
             }
 
         }
     }
 
+    @Override
     public void postBreak(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
         BlockPosition blockposition1 = blockposition.shift(((EnumDirection) iblockdata.get(BlockPistonMoving.a)).opposite());
         IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
 
         if (iblockdata1.getBlock() instanceof BlockPiston && (Boolean) iblockdata1.get(BlockPiston.EXTENDED)) {
-            generatoraccess.setAir(blockposition1);
+            generatoraccess.a(blockposition1, false);
         }
 
     }
 
+    @Override
     public boolean f(IBlockData iblockdata) {
         return false;
     }
 
-    public boolean a(IBlockData iblockdata) {
+    @Override
+    public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
         return false;
     }
 
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public boolean c(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return false;
+    }
+
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         if (!world.isClientSide && world.getTileEntity(blockposition) == null) {
-            world.setAir(blockposition);
+            world.a(blockposition, false);
             return true;
         } else {
             return false;
         }
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.AIR;
+    @Override
+    public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
+        TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), (BlockPosition) loottableinfo_builder.a(LootContextParameters.POSITION));
+
+        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.s().a(loottableinfo_builder);
     }
 
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        if (!world.isClientSide) {
-            TileEntityPiston tileentitypiston = this.a((IBlockAccess) world, blockposition);
-
-            if (tileentitypiston != null) {
-                tileentitypiston.i().a(world, blockposition, 0);
-            }
-        }
-    }
-
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return VoxelShapes.a();
     }
 
-    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         TileEntityPiston tileentitypiston = this.a(iblockaccess, blockposition);
 
         return tileentitypiston != null ? tileentitypiston.a(iblockaccess, blockposition) : VoxelShapes.a();
@@ -92,26 +98,22 @@ public class BlockPistonMoving extends BlockTileEntity {
         return tileentity instanceof TileEntityPiston ? (TileEntityPiston) tileentity : null;
     }
 
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return ItemStack.a;
-    }
-
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockPistonMoving.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockPistonMoving.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockPistonMoving.a, BlockPistonMoving.b);
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
-
+    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }

@@ -18,13 +18,15 @@ public class PacketPlayOutBlockAction implements Packet<PacketListenerPlayOut> {
         this.c = j;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = packetdataserializer.readUnsignedByte();
         this.c = packetdataserializer.readUnsignedByte();
-        this.d = (Block) IRegistry.BLOCK.fromId(packetdataserializer.g());
+        this.d = (Block) IRegistry.BLOCK.fromId(packetdataserializer.i());
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeByte(this.b);

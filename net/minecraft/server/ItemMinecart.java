@@ -3,8 +3,9 @@ package net.minecraft.server;
 public class ItemMinecart extends Item {
 
     private static final IDispenseBehavior a = new DispenseBehaviorItem() {
-        private final DispenseBehaviorItem a = new DispenseBehaviorItem();
+        private final DispenseBehaviorItem b = new DispenseBehaviorItem();
 
+        @Override
         public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
             EnumDirection enumdirection = (EnumDirection) isourceblock.e().get(BlockDispenser.FACING);
             World world = isourceblock.getWorld();
@@ -24,7 +25,7 @@ public class ItemMinecart extends Item {
                 }
             } else {
                 if (!iblockdata.isAir() || !world.getType(blockposition.down()).a(TagsBlock.RAILS)) {
-                    return this.a.dispense(isourceblock, itemstack);
+                    return this.b.dispense(isourceblock, itemstack);
                 }
 
                 IBlockData iblockdata1 = world.getType(blockposition.down());
@@ -48,6 +49,7 @@ public class ItemMinecart extends Item {
             return itemstack;
         }
 
+        @Override
         protected void a(ISourceBlock isourceblock) {
             isourceblock.getWorld().triggerEffect(1000, isourceblock.getBlockPosition(), 0);
         }
@@ -60,6 +62,7 @@ public class ItemMinecart extends Item {
         BlockDispenser.a((IMaterial) this, ItemMinecart.a);
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();

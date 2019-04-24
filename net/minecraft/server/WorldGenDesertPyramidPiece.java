@@ -7,16 +7,19 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
 
     private final boolean[] e = new boolean[4];
 
-    public static void ac_() {
-        WorldGenFactory.a(WorldGenDesertPyramidPiece.class, "TeDP");
-    }
-
-    public WorldGenDesertPyramidPiece() {}
-
     public WorldGenDesertPyramidPiece(Random random, int i, int j) {
-        super(random, i, 64, j, 21, 15, 21);
+        super(WorldGenFeatureStructurePieceType.M, random, i, 64, j, 21, 15, 21);
     }
 
+    public WorldGenDesertPyramidPiece(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+        super(WorldGenFeatureStructurePieceType.M, nbttagcompound);
+        this.e[0] = nbttagcompound.getBoolean("hasPlacedChest0");
+        this.e[1] = nbttagcompound.getBoolean("hasPlacedChest1");
+        this.e[2] = nbttagcompound.getBoolean("hasPlacedChest2");
+        this.e[3] = nbttagcompound.getBoolean("hasPlacedChest3");
+    }
+
+    @Override
     protected void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
         nbttagcompound.setBoolean("hasPlacedChest0", this.e[0]);
@@ -25,14 +28,7 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
         nbttagcompound.setBoolean("hasPlacedChest3", this.e[3]);
     }
 
-    protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-        super.a(nbttagcompound, definedstructuremanager);
-        this.e[0] = nbttagcompound.getBoolean("hasPlacedChest0");
-        this.e[1] = nbttagcompound.getBoolean("hasPlacedChest1");
-        this.e[2] = nbttagcompound.getBoolean("hasPlacedChest2");
-        this.e[3] = nbttagcompound.getBoolean("hasPlacedChest3");
-    }
-
+    @Override
     public boolean a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
         this.a(generatoraccess, structureboundingbox, 0, -4, 0, this.a - 1, 0, this.c - 1, Blocks.SANDSTONE.getBlockData(), Blocks.SANDSTONE.getBlockData(), false);
 
@@ -227,7 +223,7 @@ public class WorldGenDesertPyramidPiece extends WorldGenScatteredPiece {
                 int l = enumdirection.getAdjacentX() * 2;
                 int i1 = enumdirection.getAdjacentZ() * 2;
 
-                this.e[enumdirection.get2DRotationValue()] = this.a(generatoraccess, structureboundingbox, random, 10 + l, -11, 10 + i1, LootTables.k);
+                this.e[enumdirection.get2DRotationValue()] = this.a(generatoraccess, structureboundingbox, random, 10 + l, -11, 10 + i1, LootTables.z);
             }
         }
 

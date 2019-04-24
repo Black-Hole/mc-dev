@@ -1,61 +1,56 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import java.util.BitSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nullable;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsFlat> {
+public class ChunkProviderFlat extends ChunkGenerator<GeneratorSettingsFlat> {
 
-    private static final Logger f = LogManager.getLogger();
-    private final GeneratorSettingsFlat g;
-    private final BiomeBase h;
-    private final MobSpawnerPhantom i = new MobSpawnerPhantom();
+    private final BiomeBase e = this.g();
+    private final MobSpawnerPhantom f = new MobSpawnerPhantom();
+    private final MobSpawnerCat g = new MobSpawnerCat();
 
     public ChunkProviderFlat(GeneratorAccess generatoraccess, WorldChunkManager worldchunkmanager, GeneratorSettingsFlat generatorsettingsflat) {
-        super(generatoraccess, worldchunkmanager);
-        this.g = generatorsettingsflat;
-        this.h = this.g();
+        super(generatoraccess, worldchunkmanager, generatorsettingsflat);
     }
 
     private BiomeBase g() {
-        BiomeBase biomebase = this.g.t();
-        ChunkProviderFlat.a chunkproviderflat_a = new ChunkProviderFlat.a(biomebase.q(), biomebase.c(), biomebase.p(), biomebase.h(), biomebase.l(), biomebase.getTemperature(), biomebase.getHumidity(), biomebase.n(), biomebase.o(), biomebase.s());
-        Map<String, Map<String, String>> map = this.g.u();
+        BiomeBase biomebase = ((GeneratorSettingsFlat) this.settings).v();
+        ChunkProviderFlat.a chunkproviderflat_a = new ChunkProviderFlat.a(biomebase.p(), biomebase.b(), biomebase.o(), biomebase.g(), biomebase.k(), biomebase.getTemperature(), biomebase.getHumidity(), biomebase.m(), biomebase.n(), biomebase.r());
+        Map<String, Map<String, String>> map = ((GeneratorSettingsFlat) this.settings).w();
         Iterator iterator = map.keySet().iterator();
 
         int i;
+        WorldGenFeatureConfigured worldgenfeatureconfigured;
 
         while (iterator.hasNext()) {
             String s = (String) iterator.next();
-            WorldGenFeatureComposite<?, ?>[] aworldgenfeaturecomposite = (WorldGenFeatureComposite[]) GeneratorSettingsFlat.u.get(s);
+            WorldGenFeatureConfigured<?>[] aworldgenfeatureconfigured = (WorldGenFeatureConfigured[]) GeneratorSettingsFlat.u.get(s);
 
-            if (aworldgenfeaturecomposite != null) {
-                WorldGenFeatureComposite[] aworldgenfeaturecomposite1 = aworldgenfeaturecomposite;
+            if (aworldgenfeatureconfigured != null) {
+                WorldGenFeatureConfigured[] aworldgenfeatureconfigured1 = aworldgenfeatureconfigured;
 
-                i = aworldgenfeaturecomposite.length;
+                i = aworldgenfeatureconfigured.length;
 
                 for (int j = 0; j < i; ++j) {
-                    WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite = aworldgenfeaturecomposite1[j];
+                    WorldGenFeatureConfigured<?> worldgenfeatureconfigured1 = aworldgenfeatureconfigured1[j];
 
-                    chunkproviderflat_a.a((WorldGenStage.Decoration) GeneratorSettingsFlat.t.get(worldgenfeaturecomposite), worldgenfeaturecomposite);
-                    WorldGenerator<?> worldgenerator = worldgenfeaturecomposite.a();
+                    chunkproviderflat_a.a((WorldGenStage.Decoration) GeneratorSettingsFlat.t.get(worldgenfeatureconfigured1), worldgenfeatureconfigured1);
+                    worldgenfeatureconfigured = ((WorldGenFeatureCompositeConfiguration) worldgenfeatureconfigured1.b).a;
+                    if (worldgenfeatureconfigured.a instanceof StructureGenerator) {
+                        StructureGenerator<WorldGenFeatureConfiguration> structuregenerator = (StructureGenerator) worldgenfeatureconfigured.a;
+                        WorldGenFeatureConfiguration worldgenfeatureconfiguration = biomebase.b(structuregenerator);
 
-                    if (worldgenerator instanceof StructureGenerator) {
-                        WorldGenFeatureConfiguration worldgenfeatureconfiguration = biomebase.b((StructureGenerator) worldgenerator);
-
-                        chunkproviderflat_a.a((StructureGenerator) worldgenerator, worldgenfeatureconfiguration != null ? worldgenfeatureconfiguration : (WorldGenFeatureConfiguration) GeneratorSettingsFlat.v.get(worldgenfeaturecomposite));
+                        chunkproviderflat_a.a(structuregenerator, worldgenfeatureconfiguration != null ? worldgenfeatureconfiguration : (WorldGenFeatureConfiguration) GeneratorSettingsFlat.v.get(worldgenfeatureconfigured1));
                     }
                 }
             }
         }
 
-        boolean flag = (!this.g.y() || biomebase == Biomes.THE_VOID) && map.containsKey("decoration");
+        boolean flag = (!((GeneratorSettingsFlat) this.settings).A() || biomebase == Biomes.THE_VOID) && map.containsKey("decoration");
 
         if (flag) {
             List<WorldGenStage.Decoration> list = Lists.newArrayList();
@@ -72,101 +67,63 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
                     Iterator iterator1 = biomebase.a(worldgenstage_decoration).iterator();
 
                     while (iterator1.hasNext()) {
-                        WorldGenFeatureComposite<?, ?> worldgenfeaturecomposite1 = (WorldGenFeatureComposite) iterator1.next();
-
-                        chunkproviderflat_a.a(worldgenstage_decoration, worldgenfeaturecomposite1);
+                        worldgenfeatureconfigured = (WorldGenFeatureConfigured) iterator1.next();
+                        chunkproviderflat_a.a(worldgenstage_decoration, worldgenfeatureconfigured);
                     }
                 }
+            }
+        }
+
+        IBlockData[] aiblockdata = ((GeneratorSettingsFlat) this.settings).C();
+
+        for (int l = 0; l < aiblockdata.length; ++l) {
+            IBlockData iblockdata = aiblockdata[l];
+
+            if (iblockdata != null && !HeightMap.Type.MOTION_BLOCKING.d().test(iblockdata)) {
+                ((GeneratorSettingsFlat) this.settings).a(l);
+                chunkproviderflat_a.a(WorldGenStage.Decoration.TOP_LAYER_MODIFICATION, BiomeBase.a(WorldGenerator.aN, new WorldGenFeatureFillConfiguration(l, iblockdata), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e));
             }
         }
 
         return chunkproviderflat_a;
     }
 
-    public void createChunk(IChunkAccess ichunkaccess) {
-        ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
-        int i = chunkcoordintpair.x;
-        int j = chunkcoordintpair.z;
-        BiomeBase[] abiomebase = this.c.getBiomeBlock(i * 16, j * 16, 16, 16);
+    @Override
+    public void buildBase(IChunkAccess ichunkaccess) {}
 
-        ichunkaccess.a(abiomebase);
-        this.a(i, j, ichunkaccess);
-        ichunkaccess.a(HeightMap.Type.WORLD_SURFACE_WG, HeightMap.Type.OCEAN_FLOOR_WG);
-        ichunkaccess.a(ChunkStatus.BASE);
-    }
-
-    public void addFeatures(RegionLimitedWorldAccess regionlimitedworldaccess, WorldGenStage.Features worldgenstage_features) {
-        boolean flag = true;
-        int i = regionlimitedworldaccess.a();
-        int j = regionlimitedworldaccess.b();
-        BitSet bitset = new BitSet(65536);
-        SeededRandom seededrandom = new SeededRandom();
-
-        for (int k = i - 8; k <= i + 8; ++k) {
-            for (int l = j - 8; l <= j + 8; ++l) {
-                List<WorldGenCarverWrapper<?>> list = this.h.a(WorldGenStage.Features.AIR);
-                ListIterator listiterator = list.listIterator();
-
-                while (listiterator.hasNext()) {
-                    int i1 = listiterator.nextIndex();
-                    WorldGenCarverWrapper<?> worldgencarverwrapper = (WorldGenCarverWrapper) listiterator.next();
-
-                    seededrandom.c(regionlimitedworldaccess.getMinecraftWorld().getSeed() + (long) i1, k, l);
-                    if (worldgencarverwrapper.a(regionlimitedworldaccess, seededrandom, k, l, WorldGenFeatureConfiguration.e)) {
-                        worldgencarverwrapper.a(regionlimitedworldaccess, seededrandom, k, l, i, j, bitset, WorldGenFeatureConfiguration.e);
-                    }
-                }
-            }
-        }
-
-    }
-
-    public GeneratorSettingsFlat getSettings() {
-        return this.g;
-    }
-
-    public double[] a(int i, int j) {
-        return new double[0];
-    }
-
+    @Override
     public int getSpawnHeight() {
         IChunkAccess ichunkaccess = this.a.getChunkAt(0, 0);
 
         return ichunkaccess.a(HeightMap.Type.MOTION_BLOCKING, 8, 8);
     }
 
-    public void addDecorations(RegionLimitedWorldAccess regionlimitedworldaccess) {
-        int i = regionlimitedworldaccess.a();
-        int j = regionlimitedworldaccess.b();
-        int k = i * 16;
-        int l = j * 16;
-        BlockPosition blockposition = new BlockPosition(k, 0, l);
-        SeededRandom seededrandom = new SeededRandom();
-        long i1 = seededrandom.a(regionlimitedworldaccess.getSeed(), k, l);
-        WorldGenStage.Decoration[] aworldgenstage_decoration = WorldGenStage.Decoration.values();
-        int j1 = aworldgenstage_decoration.length;
-
-        for (int k1 = 0; k1 < j1; ++k1) {
-            WorldGenStage.Decoration worldgenstage_decoration = aworldgenstage_decoration[k1];
-
-            this.h.a(worldgenstage_decoration, this, regionlimitedworldaccess, i1, seededrandom, blockposition);
-        }
-
+    @Override
+    protected BiomeBase getCarvingBiome(IChunkAccess ichunkaccess) {
+        return this.e;
     }
 
-    public void addMobs(RegionLimitedWorldAccess regionlimitedworldaccess) {}
+    @Override
+    protected BiomeBase getDecoratingBiome(RegionLimitedWorldAccess regionlimitedworldaccess, BlockPosition blockposition) {
+        return this.e;
+    }
 
-    public void a(int i, int j, IChunkAccess ichunkaccess) {
-        IBlockData[] aiblockdata = this.g.A();
+    @Override
+    public void buildNoise(GeneratorAccess generatoraccess, IChunkAccess ichunkaccess) {
+        IBlockData[] aiblockdata = ((GeneratorSettingsFlat) this.settings).C();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+        HeightMap heightmap = ichunkaccess.b(HeightMap.Type.OCEAN_FLOOR_WG);
+        HeightMap heightmap1 = ichunkaccess.b(HeightMap.Type.WORLD_SURFACE_WG);
 
-        for (int k = 0; k < aiblockdata.length; ++k) {
-            IBlockData iblockdata = aiblockdata[k];
+        for (int i = 0; i < aiblockdata.length; ++i) {
+            IBlockData iblockdata = aiblockdata[i];
 
             if (iblockdata != null) {
-                for (int l = 0; l < 16; ++l) {
-                    for (int i1 = 0; i1 < 16; ++i1) {
-                        ichunkaccess.setType(blockposition_mutableblockposition.c(l, k, i1), iblockdata, false);
+                for (int j = 0; j < 16; ++j) {
+                    for (int k = 0; k < 16; ++k) {
+                        ichunkaccess.setType(blockposition_mutableblockposition.d(j, i, k), iblockdata, false);
+                        heightmap.a(j, i, k, iblockdata);
+                        heightmap1.a(j, i, k, iblockdata);
                     }
                 }
             }
@@ -174,31 +131,42 @@ public class ChunkProviderFlat extends ChunkGeneratorAbstract<GeneratorSettingsF
 
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.a.getBiome(blockposition);
+    @Override
+    public int getBaseHeight(int i, int j, HeightMap.Type heightmap_type) {
+        IBlockData[] aiblockdata = ((GeneratorSettingsFlat) this.settings).C();
 
-        return biomebase.getMobs(enumcreaturetype);
+        for (int k = aiblockdata.length - 1; k >= 0; --k) {
+            IBlockData iblockdata = aiblockdata[k];
+
+            if (iblockdata != null && heightmap_type.d().test(iblockdata)) {
+                return k + 1;
+            }
+        }
+
+        return 0;
     }
 
-    public int a(World world, boolean flag, boolean flag1) {
-        byte b0 = 0;
-        int i = b0 + this.i.a(world, flag, flag1);
-
-        return i;
+    @Override
+    public void doMobSpawning(WorldServer worldserver, boolean flag, boolean flag1) {
+        this.f.a(worldserver, flag, flag1);
+        this.g.a(worldserver, flag, flag1);
     }
 
+    @Override
     public boolean canSpawnStructure(BiomeBase biomebase, StructureGenerator<? extends WorldGenFeatureConfiguration> structuregenerator) {
-        return this.h.a(structuregenerator);
+        return this.e.a(structuregenerator);
     }
 
     @Nullable
-    public WorldGenFeatureConfiguration getFeatureConfiguration(BiomeBase biomebase, StructureGenerator<? extends WorldGenFeatureConfiguration> structuregenerator) {
-        return this.h.b(structuregenerator);
+    @Override
+    public <C extends WorldGenFeatureConfiguration> C getFeatureConfiguration(BiomeBase biomebase, StructureGenerator<C> structuregenerator) {
+        return this.e.b(structuregenerator);
     }
 
     @Nullable
+    @Override
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition, int i, boolean flag) {
-        return !this.g.u().keySet().contains(s) ? null : super.findNearestMapFeature(world, s, blockposition, i, flag);
+        return !((GeneratorSettingsFlat) this.settings).w().keySet().contains(s.toLowerCase(Locale.ROOT)) ? null : super.findNearestMapFeature(world, s, blockposition, i, flag);
     }
 
     class a extends BiomeBase {

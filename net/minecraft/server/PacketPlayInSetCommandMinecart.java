@@ -11,12 +11,14 @@ public class PacketPlayInSetCommandMinecart implements Packet<PacketListenerPlay
 
     public PacketPlayInSetCommandMinecart() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.e(32767);
         this.c = packetdataserializer.readBoolean();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);

@@ -24,19 +24,16 @@ public class ArgumentDimension implements ArgumentType<DimensionManager> {
 
     public ArgumentDimension() {}
 
-    public <S> DimensionManager parse(StringReader stringreader) throws CommandSyntaxException {
+    public DimensionManager parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        DimensionManager dimensionmanager = DimensionManager.a(minecraftkey);
 
-        if (dimensionmanager == null) {
-            throw ArgumentDimension.a.create(minecraftkey);
-        } else {
-            return dimensionmanager;
-        }
+        return (DimensionManager) IRegistry.DIMENSION_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
+            return ArgumentDimension.a.create(minecraftkey);
+        });
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {
-        return ICompletionProvider.a(Streams.stream(DimensionManager.b()).map(DimensionManager::a), suggestionsbuilder);
+        return ICompletionProvider.a(Streams.stream(DimensionManager.a()).map(DimensionManager::a), suggestionsbuilder);
     }
 
     public Collection<String> getExamples() {

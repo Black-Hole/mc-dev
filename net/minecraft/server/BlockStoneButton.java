@@ -6,6 +6,7 @@ public class BlockStoneButton extends BlockButtonAbstract {
         super(false, block_info);
     }
 
+    @Override
     protected SoundEffect a(boolean flag) {
         return flag ? SoundEffects.BLOCK_STONE_BUTTON_CLICK_ON : SoundEffects.BLOCK_STONE_BUTTON_CLICK_OFF;
     }

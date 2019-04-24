@@ -8,6 +8,4 @@ public interface IPlayerFileData {
 
     @Nullable
     NBTTagCompound load(EntityHuman entityhuman);
-
-    String[] getSeenPlayers();
 }

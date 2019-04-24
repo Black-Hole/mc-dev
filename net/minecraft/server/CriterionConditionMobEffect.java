@@ -30,11 +30,11 @@ public class CriterionConditionMobEffect {
     }
 
     public boolean a(Entity entity) {
-        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).co()) : false);
+        return this == CriterionConditionMobEffect.a ? true : (entity instanceof EntityLiving ? this.a(((EntityLiving) entity).cA()) : false);
     }
 
     public boolean a(EntityLiving entityliving) {
-        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.co());
+        return this == CriterionConditionMobEffect.a ? true : this.a(entityliving.cA());
     }
 
     public boolean a(Map<MobEffectList, MobEffect> map) {
@@ -68,12 +68,9 @@ public class CriterionConditionMobEffect {
             while (iterator.hasNext()) {
                 Entry<String, JsonElement> entry = (Entry) iterator.next();
                 MinecraftKey minecraftkey = new MinecraftKey((String) entry.getKey());
-                MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.get(minecraftkey);
-
-                if (mobeffectlist == null) {
-                    throw new JsonSyntaxException("Unknown effect '" + minecraftkey + "'");
-                }
-
+                MobEffectList mobeffectlist = (MobEffectList) IRegistry.MOB_EFFECT.getOptional(minecraftkey).orElseThrow(() -> {
+                    return new JsonSyntaxException("Unknown effect '" + minecraftkey + "'");
+                });
                 CriterionConditionMobEffect.a criterionconditionmobeffect_a = CriterionConditionMobEffect.a.a(ChatDeserializer.m((JsonElement) entry.getValue(), (String) entry.getKey()));
 
                 map.put(mobeffectlist, criterionconditionmobeffect_a);

@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureBlueIce extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureBlueIce() {}
+    public WorldGenFeatureBlueIce(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         if (blockposition.getY() > generatoraccess.getSeaLevel() - 1) {
             return false;
         } else if (generatoraccess.getType(blockposition).getBlock() != Blocks.WATER && generatoraccess.getType(blockposition.down()).getBlock() != Blocks.WATER) {
@@ -40,7 +44,7 @@ public class WorldGenFeatureBlueIce extends WorldGenerator<WorldGenFeatureEmptyC
                     }
 
                     if (j >= 1) {
-                        BlockPosition blockposition1 = blockposition.a(random.nextInt(j) - random.nextInt(j), i, random.nextInt(j) - random.nextInt(j));
+                        BlockPosition blockposition1 = blockposition.b(random.nextInt(j) - random.nextInt(j), i, random.nextInt(j) - random.nextInt(j));
                         IBlockData iblockdata = generatoraccess.getType(blockposition1);
                         Block block = iblockdata.getBlock();
 

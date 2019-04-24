@@ -14,6 +14,7 @@ public class WhiteListEntry extends JsonListEntry<GameProfile> {
         super(b(jsonobject), jsonobject);
     }
 
+    @Override
     protected void a(JsonObject jsonobject) {
         if (this.getKey() != null) {
             jsonobject.addProperty("uuid", ((GameProfile) this.getKey()).getId() == null ? "" : ((GameProfile) this.getKey()).getId().toString());

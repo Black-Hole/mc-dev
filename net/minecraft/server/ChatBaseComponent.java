@@ -9,21 +9,24 @@ import java.util.stream.Stream;
 
 public abstract class ChatBaseComponent implements IChatBaseComponent {
 
-    protected List<IChatBaseComponent> a = Lists.newArrayList();
+    protected final List<IChatBaseComponent> a = Lists.newArrayList();
     private ChatModifier b;
 
     public ChatBaseComponent() {}
 
+    @Override
     public IChatBaseComponent addSibling(IChatBaseComponent ichatbasecomponent) {
         ichatbasecomponent.getChatModifier().setChatModifier(this.getChatModifier());
         this.a.add(ichatbasecomponent);
         return this;
     }
 
+    @Override
     public List<IChatBaseComponent> a() {
         return this.a;
     }
 
+    @Override
     public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
         this.b = chatmodifier;
         Iterator iterator = this.a.iterator();
@@ -37,6 +40,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return this;
     }
 
+    @Override
     public ChatModifier getChatModifier() {
         if (this.b == null) {
             this.b = new ChatModifier();
@@ -52,6 +56,7 @@ public abstract class ChatBaseComponent implements IChatBaseComponent {
         return this.b;
     }
 
+    @Override
     public Stream<IChatBaseComponent> c() {
         return Streams.concat(new Stream[] { Stream.of(this), this.a.stream().flatMap(IChatBaseComponent::c)});
     }

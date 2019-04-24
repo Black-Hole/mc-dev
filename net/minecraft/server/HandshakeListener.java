@@ -10,18 +10,19 @@ public class HandshakeListener implements PacketHandshakingInListener {
         this.b = networkmanager;
     }
 
+    @Override
     public void a(PacketHandshakingInSetProtocol packethandshakinginsetprotocol) {
         switch (packethandshakinginsetprotocol.b()) {
         case LOGIN:
             this.b.setProtocol(EnumProtocol.LOGIN);
             ChatMessage chatmessage;
 
-            if (packethandshakinginsetprotocol.c() > 404) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { "1.13.2"});
+            if (packethandshakinginsetprotocol.c() > SharedConstants.a().getProtocolVersion()) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_server", new Object[] { SharedConstants.a().getName()});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
-            } else if (packethandshakinginsetprotocol.c() < 404) {
-                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { "1.13.2"});
+            } else if (packethandshakinginsetprotocol.c() < SharedConstants.a().getProtocolVersion()) {
+                chatmessage = new ChatMessage("multiplayer.disconnect.outdated_client", new Object[] { SharedConstants.a().getName()});
                 this.b.sendPacket(new PacketLoginOutDisconnect(chatmessage));
                 this.b.close(chatmessage);
             } else {
@@ -38,5 +39,6 @@ public class HandshakeListener implements PacketHandshakingInListener {
 
     }
 
+    @Override
     public void a(IChatBaseComponent ichatbasecomponent) {}
 }

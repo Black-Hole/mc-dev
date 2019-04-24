@@ -14,11 +14,13 @@ public class PacketPlayOutEntityStatus implements Packet<PacketListenerPlayOut> 
         this.b = b0;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeByte(this.b);

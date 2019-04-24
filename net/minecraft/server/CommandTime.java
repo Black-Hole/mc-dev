@@ -19,9 +19,9 @@ public class CommandTime {
             return a((CommandListenerWrapper) commandcontext.getSource(), 13000);
         }))).then(CommandDispatcher.a("midnight").executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), 18000);
-        }))).then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+        }))).then(CommandDispatcher.a("time", (ArgumentType) ArgumentTime.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "time"));
-        })))).then(CommandDispatcher.a("add").then(CommandDispatcher.a("time", (ArgumentType) IntegerArgumentType.integer(0)).executes((commandcontext) -> {
+        })))).then(CommandDispatcher.a("add").then(CommandDispatcher.a("time", (ArgumentType) ArgumentTime.a()).executes((commandcontext) -> {
             return b((CommandListenerWrapper) commandcontext.getSource(), IntegerArgumentType.getInteger(commandcontext, "time"));
         })))).then(((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("query").then(CommandDispatcher.a("daytime").executes((commandcontext) -> {
             return c((CommandListenerWrapper) commandcontext.getSource(), a(((CommandListenerWrapper) commandcontext.getSource()).getWorld()));

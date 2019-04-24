@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import java.util.function.Predicate;
 
 public class PathfinderGoalEatTile extends PathfinderGoal {
@@ -12,9 +13,10 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     public PathfinderGoalEatTile(EntityInsentient entityinsentient) {
         this.b = entityinsentient;
         this.c = entityinsentient.world;
-        this.a(7);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK, PathfinderGoal.Type.JUMP));
     }
 
+    @Override
     public boolean a() {
         if (this.b.getRandom().nextInt(this.b.isBaby() ? 50 : 1000) != 0) {
             return false;
@@ -25,16 +27,19 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
         }
     }
 
+    @Override
     public void c() {
         this.d = 40;
         this.c.broadcastEntityEffect(this.b, (byte) 10);
-        this.b.getNavigation().q();
+        this.b.getNavigation().o();
     }
 
+    @Override
     public void d() {
         this.d = 0;
     }
 
+    @Override
     public boolean b() {
         return this.d > 0;
     }
@@ -43,6 +48,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
         return this.d;
     }
 
+    @Override
     public void e() {
         this.d = Math.max(0, this.d - 1);
         if (this.d == 4) {
@@ -50,10 +56,10 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
 
             if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
                 if (this.c.getGameRules().getBoolean("mobGriefing")) {
-                    this.c.setAir(blockposition, false);
+                    this.c.b(blockposition, false);
                 }
 
-                this.b.x();
+                this.b.blockEaten();
             } else {
                 BlockPosition blockposition1 = blockposition.down();
 
@@ -63,7 +69,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
                         this.c.setTypeAndData(blockposition1, Blocks.DIRT.getBlockData(), 2);
                     }
 
-                    this.b.x();
+                    this.b.blockEaten();
                 }
             }
 

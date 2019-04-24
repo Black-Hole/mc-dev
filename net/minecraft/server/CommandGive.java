@@ -40,25 +40,25 @@ public class CommandGive {
                     itemstack.setCount(1);
                     entityitem = entityplayer.drop(itemstack, false);
                     if (entityitem != null) {
-                        entityitem.t();
+                        entityitem.u();
                     }
 
                     entityplayer.world.a((EntityHuman) null, entityplayer.locX, entityplayer.locY, entityplayer.locZ, SoundEffects.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((entityplayer.getRandom().nextFloat() - entityplayer.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    entityplayer.defaultContainer.b();
+                    entityplayer.defaultContainer.c();
                 } else {
                     entityitem = entityplayer.drop(itemstack, false);
                     if (entityitem != null) {
                         entityitem.o();
-                        entityitem.b(entityplayer.getUniqueID());
+                        entityitem.setOwner(entityplayer.getUniqueID());
                     }
                 }
             }
         }
 
         if (collection.size() == 1) {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).A(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).B(), ((EntityPlayer) collection.iterator().next()).getScoreboardDisplayName()}), true);
         } else {
-            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).A(), collection.size()}), true);
+            commandlistenerwrapper.sendMessage(new ChatMessage("commands.give.success.single", new Object[] { i, argumentpredicateitemstack.a(i, false).B(), collection.size()}), true);
         }
 
         return collection.size();

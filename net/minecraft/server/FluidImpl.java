@@ -8,7 +8,8 @@ public class FluidImpl extends BlockDataAbstract<FluidType, Fluid> implements Fl
         super(fluidtype, immutablemap);
     }
 
-    public FluidType c() {
-        return (FluidType) this.e_;
+    @Override
+    public FluidType getType() {
+        return (FluidType) this.a;
     }
 }

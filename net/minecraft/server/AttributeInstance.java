@@ -12,7 +12,7 @@ public interface AttributeInstance {
 
     void setValue(double d0);
 
-    Collection<AttributeModifier> a(int i);
+    Collection<AttributeModifier> a(AttributeModifier.Operation attributemodifier_operation);
 
     Collection<AttributeModifier> c();
 

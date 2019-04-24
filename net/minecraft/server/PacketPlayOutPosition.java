@@ -27,6 +27,7 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         this.g = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readDouble();
         this.b = packetdataserializer.readDouble();
@@ -34,9 +35,10 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
         this.d = packetdataserializer.readFloat();
         this.e = packetdataserializer.readFloat();
         this.f = PacketPlayOutPosition.EnumPlayerTeleportFlags.a(packetdataserializer.readUnsignedByte());
-        this.g = packetdataserializer.g();
+        this.g = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeDouble(this.a);
         packetdataserializer.writeDouble(this.b);

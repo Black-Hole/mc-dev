@@ -30,6 +30,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.d = new ChatComponentText(s);
     }
 
+    @Override
     public String getName() {
         return this.b;
     }
@@ -78,10 +79,12 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.f;
     }
 
+    @Override
     public Collection<String> getPlayerNameSet() {
         return this.c;
     }
 
+    @Override
     public IChatBaseComponent getFormattedName(IChatBaseComponent ichatbasecomponent) {
         IChatBaseComponent ichatbasecomponent1 = (new ChatComponentText("")).addSibling(this.e).addSibling(ichatbasecomponent).addSibling(this.f);
         EnumChatFormat enumchatformat = this.getColor();
@@ -97,6 +100,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return scoreboardteambase == null ? ichatbasecomponent.h() : scoreboardteambase.getFormattedName(ichatbasecomponent);
     }
 
+    @Override
     public boolean allowFriendlyFire() {
         return this.g;
     }
@@ -119,6 +123,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         return this.i;
     }
 
+    @Override
     public ScoreboardTeamBase.EnumNameTagVisibility getDeathMessageVisibility() {
         return this.j;
     }
@@ -133,6 +138,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
+    @Override
     public ScoreboardTeamBase.EnumTeamPush getCollisionRule() {
         return this.l;
     }
@@ -161,6 +167,7 @@ public class ScoreboardTeam extends ScoreboardTeamBase {
         this.a.handleTeamChanged(this);
     }
 
+    @Override
     public EnumChatFormat getColor() {
         return this.k;
     }

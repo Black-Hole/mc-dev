@@ -1,123 +1,132 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityEndermite extends EntityMonster {
 
-    private int a;
-    private boolean b;
+    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(5.0D).e();
+    private int c;
+    private boolean d;
 
-    public EntityEndermite(World world) {
-        super(EntityTypes.ENDERMITE, world);
-        this.b_ = 3;
-        this.setSize(0.4F, 0.3F);
+    public EntityEndermite(EntityTypes<? extends EntityEndermite> entitytypes, World world) {
+        super(entitytypes, world);
+        this.f = 3;
     }
 
-    protected void n() {
+    @Override
+    protected void initPathfinder() {
         this.goalSelector.a(1, new PathfinderGoalFloat(this));
         this.goalSelector.a(2, new PathfinderGoalMeleeAttack(this, 1.0D, false));
         this.goalSelector.a(3, new PathfinderGoalRandomStrollLand(this, 1.0D));
         this.goalSelector.a(7, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));
         this.goalSelector.a(8, new PathfinderGoalRandomLookaround(this));
-        this.targetSelector.a(1, new PathfinderGoalHurtByTarget(this, true, new Class[0]));
+        this.targetSelector.a(1, (new PathfinderGoalHurtByTarget(this, new Class[0])).a());
         this.targetSelector.a(2, new PathfinderGoalNearestAttackableTarget<>(this, EntityHuman.class, true));
     }
 
-    public float getHeadHeight() {
+    @Override
+    protected float b(EntityPose entitypose, EntitySize entitysize) {
         return 0.1F;
     }
 
+    @Override
     protected void initAttributes() {
         super.initAttributes();
-        this.getAttributeInstance(GenericAttributes.maxHealth).setValue(8.0D);
+        this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(8.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.25D);
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(2.0D);
     }
 
+    @Override
     protected boolean playStepSound() {
         return false;
     }
 
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_ENDERMITE_AMBIENT;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_ENDERMITE_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_ENDERMITE_DEATH;
     }
 
+    @Override
     protected void a(BlockPosition blockposition, IBlockData iblockdata) {
         this.a(SoundEffects.ENTITY_ENDERMITE_STEP, 0.15F, 1.0F);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.as;
-    }
-
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a = nbttagcompound.getInt("Lifetime");
-        this.b = nbttagcompound.getBoolean("PlayerSpawned");
+        this.c = nbttagcompound.getInt("Lifetime");
+        this.d = nbttagcompound.getBoolean("PlayerSpawned");
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setInt("Lifetime", this.a);
-        nbttagcompound.setBoolean("PlayerSpawned", this.b);
+        nbttagcompound.setInt("Lifetime", this.c);
+        nbttagcompound.setBoolean("PlayerSpawned", this.d);
     }
 
+    @Override
     public void tick() {
-        this.aQ = this.yaw;
+        this.aK = this.yaw;
         super.tick();
     }
 
-    public void k(float f) {
+    @Override
+    public void l(float f) {
         this.yaw = f;
-        super.k(f);
+        super.l(f);
     }
 
-    public double aI() {
+    @Override
+    public double aN() {
         return 0.1D;
     }
 
     public boolean isPlayerSpawned() {
-        return this.b;
+        return this.d;
     }
 
     public void setPlayerSpawned(boolean flag) {
-        this.b = flag;
+        this.d = flag;
     }
 
+    @Override
     public void movementTick() {
         super.movementTick();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(Particles.K, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.world.addParticle(Particles.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), this.locY + this.random.nextDouble() * (double) this.getHeight(), this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.getWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
             }
         } else {
             if (!this.isPersistent()) {
-                ++this.a;
+                ++this.c;
             }
 
-            if (this.a >= 2400) {
+            if (this.c >= 2400) {
                 this.die();
             }
         }
 
     }
 
-    protected boolean K_() {
+    @Override
+    protected boolean I_() {
         return true;
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        if (super.a(generatoraccess, flag)) {
-            EntityHuman entityhuman = generatoraccess.findNearbyPlayer(this, 5.0D);
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
+        if (super.a(generatoraccess, enummobspawn)) {
+            EntityHuman entityhuman = this.world.a(EntityEndermite.b, (EntityLiving) this);
 
             return entityhuman == null;
         } else {
@@ -125,6 +134,7 @@ public class EntityEndermite extends EntityMonster {
         }
     }
 
+    @Override
     public EnumMonsterType getMonsterType() {
         return EnumMonsterType.ARTHROPOD;
     }

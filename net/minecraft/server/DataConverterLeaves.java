@@ -148,16 +148,16 @@ public class DataConverterLeaves extends DataFix {
                             }
 
                             return typed3.updateTyped(opticfinder2, (typed4) -> {
-                                return ((DataConverterLeaves.a) int2objectmap.get(((Dynamic) typed4.get(DSL.remainderFinder())).getInt("Y"))).a(typed4);
+                                return ((DataConverterLeaves.a) int2objectmap.get(((Dynamic) typed4.get(DSL.remainderFinder())).get("Y").asInt(0))).a(typed4);
                             });
                         }
                     });
 
                     if (aint[0] != 0) {
                         typed2 = typed2.update(DSL.remainderFinder(), (dynamic) -> {
-                            Dynamic<?> dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData"), dynamic.emptyMap());
+                            Dynamic<?> dynamic1 = (Dynamic) DataFixUtils.orElse(dynamic.get("UpgradeData").get(), dynamic.emptyMap());
 
-                            return dynamic.set("UpgradeData", dynamic1.set("Sides", dynamic.createByte((byte) (dynamic1.getByte("Sides") | aint[0]))));
+                            return dynamic.set("UpgradeData", dynamic1.set("Sides", dynamic.createByte((byte) (dynamic1.get("Sides").asByte((byte) 0) | aint[0]))));
                         });
                     }
 
@@ -214,41 +214,40 @@ public class DataConverterLeaves extends DataFix {
     public static final class a extends DataConverterLeaves.b {
 
         @Nullable
+        private IntSet e;
+        @Nullable
         private IntSet f;
         @Nullable
-        private IntSet g;
-        @Nullable
-        private Int2IntMap h;
+        private Int2IntMap g;
 
         public a(Typed<?> typed, Schema schema) {
             super(typed, schema);
         }
 
+        @Override
         protected boolean a() {
+            this.e = new IntOpenHashSet();
             this.f = new IntOpenHashSet();
-            this.g = new IntOpenHashSet();
-            this.h = new Int2IntOpenHashMap();
+            this.g = new Int2IntOpenHashMap();
 
-            for (int i = 0; i < this.c.size(); ++i) {
-                Dynamic<?> dynamic = (Dynamic) this.c.get(i);
-                String s = dynamic.getString("Name");
+            for (int i = 0; i < this.b.size(); ++i) {
+                Dynamic<?> dynamic = (Dynamic) this.b.get(i);
+                String s = dynamic.get("Name").asString("");
 
                 if (DataConverterLeaves.b.containsKey(s)) {
-                    boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic1) -> {
-                        return dynamic1.get("decayable");
-                    }).flatMap(Dynamic::getStringValue).orElse(""), "false");
+                    boolean flag = Objects.equals(dynamic.get("Properties").get("decayable").asString(""), "false");
 
-                    this.f.add(i);
-                    this.h.put(this.a(s, flag, 7), i);
-                    this.c.set(i, this.a(dynamic, s, flag, 7));
+                    this.e.add(i);
+                    this.g.put(this.a(s, flag, 7), i);
+                    this.b.set(i, this.a(dynamic, s, flag, 7));
                 }
 
                 if (DataConverterLeaves.c.contains(s)) {
-                    this.g.add(i);
+                    this.f.add(i);
                 }
             }
 
-            return this.f.isEmpty() && this.g.isEmpty();
+            return this.e.isEmpty() && this.f.isEmpty();
         }
 
         private Dynamic<?> a(Dynamic<?> dynamic, String s, boolean flag, int i) {
@@ -264,103 +263,99 @@ public class DataConverterLeaves extends DataFix {
         }
 
         public boolean a(int i) {
-            return this.g.contains(i);
-        }
-
-        public boolean b(int i) {
             return this.f.contains(i);
         }
 
+        public boolean b(int i) {
+            return this.e.contains(i);
+        }
+
         private int d(int i) {
-            return this.a(i) ? 0 : Integer.parseInt((String) ((Dynamic) this.c.get(i)).get("Properties").flatMap((dynamic) -> {
-                return dynamic.get("distance");
-            }).flatMap(Dynamic::getStringValue).orElse(""));
+            return this.a(i) ? 0 : Integer.parseInt(((Dynamic) this.b.get(i)).get("Properties").get("distance").asString(""));
         }
 
         private void a(int i, int j, int k) {
-            Dynamic<?> dynamic = (Dynamic) this.c.get(j);
-            String s = dynamic.getString("Name");
-            boolean flag = Objects.equals(dynamic.get("Properties").flatMap((dynamic1) -> {
-                return dynamic1.get("persistent");
-            }).flatMap(Dynamic::getStringValue).orElse(""), "true");
+            Dynamic<?> dynamic = (Dynamic) this.b.get(j);
+            String s = dynamic.get("Name").asString("");
+            boolean flag = Objects.equals(dynamic.get("Properties").get("persistent").asString(""), "true");
             int l = this.a(s, flag, k);
             int i1;
 
-            if (!this.h.containsKey(l)) {
-                i1 = this.c.size();
-                this.f.add(i1);
-                this.h.put(l, i1);
-                this.c.add(this.a(dynamic, s, flag, k));
+            if (!this.g.containsKey(l)) {
+                i1 = this.b.size();
+                this.e.add(i1);
+                this.g.put(l, i1);
+                this.b.add(this.a(dynamic, s, flag, k));
             }
 
-            i1 = this.h.get(l);
-            if (1 << this.e.c() <= i1) {
-                DataBits databits = new DataBits(this.e.c() + 1, 4096);
+            i1 = this.g.get(l);
+            if (1 << this.d.c() <= i1) {
+                DataBits databits = new DataBits(this.d.c() + 1, 4096);
 
                 for (int j1 = 0; j1 < 4096; ++j1) {
-                    databits.a(j1, this.e.a(j1));
+                    databits.b(j1, this.d.a(j1));
                 }
 
-                this.e = databits;
+                this.d = databits;
             }
 
-            this.e.a(i, i1);
+            this.d.b(i, i1);
         }
     }
 
     public abstract static class b {
 
-        final Type<Pair<String, Dynamic<?>>> a;
-        protected final OpticFinder<List<Pair<String, Dynamic<?>>>> b;
-        protected final List<Dynamic<?>> c;
-        protected final int d;
+        private final Type<Pair<String, Dynamic<?>>> e;
+        protected final OpticFinder<List<Pair<String, Dynamic<?>>>> a;
+        protected final List<Dynamic<?>> b;
+        protected final int c;
         @Nullable
-        protected DataBits e;
+        protected DataBits d;
 
         public b(Typed<?> typed, Schema schema) {
-            this.a = DSL.named(DataConverterTypes.l.typeName(), DSL.remainderType());
-            this.b = DSL.fieldFinder("Palette", DSL.list(this.a));
-            if (!Objects.equals(schema.getType(DataConverterTypes.l), this.a)) {
+            this.e = DSL.named(DataConverterTypes.m.typeName(), DSL.remainderType());
+            this.a = DSL.fieldFinder("Palette", DSL.list(this.e));
+            if (!Objects.equals(schema.getType(DataConverterTypes.m), this.e)) {
                 throw new IllegalStateException("Block state type is not what was expected.");
             } else {
-                Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.b);
+                Optional<List<Pair<String, Dynamic<?>>>> optional = typed.getOptional(this.a);
 
-                this.c = (List) optional.map((list) -> {
+                this.b = (List) optional.map((list) -> {
                     return (List) list.stream().map(Pair::getSecond).collect(Collectors.toList());
                 }).orElse(ImmutableList.of());
                 Dynamic<?> dynamic = (Dynamic) typed.get(DSL.remainderFinder());
 
-                this.d = dynamic.getInt("Y");
+                this.c = dynamic.get("Y").asInt(0);
                 this.a(dynamic);
             }
         }
 
         protected void a(Dynamic<?> dynamic) {
             if (this.a()) {
-                this.e = null;
+                this.d = null;
             } else {
-                long[] along = ((LongStream) dynamic.get("BlockStates").flatMap(Dynamic::getLongStream).get()).toArray();
-                int i = Math.max(4, DataFixUtils.ceillog2(this.c.size()));
+                long[] along = ((LongStream) dynamic.get("BlockStates").asLongStreamOpt().get()).toArray();
+                int i = Math.max(4, DataFixUtils.ceillog2(this.b.size()));
 
-                this.e = new DataBits(i, 4096, along);
+                this.d = new DataBits(i, 4096, along);
             }
 
         }
 
         public Typed<?> a(Typed<?> typed) {
             return this.b() ? typed : typed.update(DSL.remainderFinder(), (dynamic) -> {
-                return dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(this.e.a())));
-            }).set(this.b, this.c.stream().map((dynamic) -> {
-                return Pair.of(DataConverterTypes.l.typeName(), dynamic);
+                return dynamic.set("BlockStates", dynamic.createLongList(Arrays.stream(this.d.a())));
+            }).set(this.a, this.b.stream().map((dynamic) -> {
+                return Pair.of(DataConverterTypes.m.typeName(), dynamic);
             }).collect(Collectors.toList()));
         }
 
         public boolean b() {
-            return this.e == null;
+            return this.d == null;
         }
 
         public int c(int i) {
-            return this.e.a(i);
+            return this.d.a(i);
         }
 
         protected int a(String s, boolean flag, int i) {
@@ -368,7 +363,7 @@ public class DataConverterLeaves extends DataFix {
         }
 
         int c() {
-            return this.d;
+            return this.c;
         }
 
         protected abstract boolean a();

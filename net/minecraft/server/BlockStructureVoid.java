@@ -8,25 +8,18 @@ public class BlockStructureVoid extends Block {
         super(block_info);
     }
 
+    @Override
     public EnumRenderType c(IBlockData iblockdata) {
         return EnumRenderType.INVISIBLE;
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockStructureVoid.a;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {}
-
+    @Override
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
-    }
-
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
     }
 }

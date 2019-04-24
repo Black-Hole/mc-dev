@@ -8,16 +8,19 @@ public class NavigationSpider extends Navigation {
         super(entityinsentient, world);
     }
 
+    @Override
     public PathEntity b(BlockPosition blockposition) {
         this.p = blockposition;
         return super.b(blockposition);
     }
 
+    @Override
     public PathEntity a(Entity entity) {
         this.p = new BlockPosition(entity);
         return super.a(entity);
     }
 
+    @Override
     public boolean a(Entity entity, double d0) {
         PathEntity pathentity = this.a(entity);
 
@@ -30,14 +33,13 @@ public class NavigationSpider extends Navigation {
         }
     }
 
-    public void d() {
-        if (!this.p()) {
-            super.d();
+    @Override
+    public void c() {
+        if (!this.n()) {
+            super.c();
         } else {
             if (this.p != null) {
-                double d0 = (double) (this.a.width * this.a.width);
-
-                if (this.a.d(this.p) >= d0 && (this.a.locY <= (double) this.p.getY() || this.a.d(new BlockPosition(this.p.getX(), MathHelper.floor(this.a.locY), this.p.getZ())) >= d0)) {
+                if (!this.p.a((IPosition) this.a.ch(), (double) this.a.getWidth()) && (this.a.locY <= (double) this.p.getY() || !(new BlockPosition(this.p.getX(), MathHelper.floor(this.a.locY), this.p.getZ())).a((IPosition) this.a.ch(), (double) this.a.getWidth()))) {
                     this.a.getControllerMove().a((double) this.p.getX(), (double) this.p.getY(), (double) this.p.getZ(), this.d);
                 } else {
                     this.p = null;

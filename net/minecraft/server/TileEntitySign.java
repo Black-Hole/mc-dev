@@ -3,18 +3,23 @@ package net.minecraft.server;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import javax.annotation.Nullable;
 
-public class TileEntitySign extends TileEntity implements ICommandListener {
+public class TileEntitySign extends TileEntity {
 
     public final IChatBaseComponent[] lines = new IChatBaseComponent[] { new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText(""), new ChatComponentText("")};
-    public int e = -1;
+    private int c = -1;
+    private int g = -1;
+    private int h = -1;
     public boolean isEditable = true;
-    private EntityHuman g;
-    private final String[] h = new String[4];
+    private EntityHuman j;
+    private final String[] k = new String[4];
+    private EnumColor l;
 
     public TileEntitySign() {
         super(TileEntityTypes.SIGN);
+        this.l = EnumColor.BLACK;
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
 
@@ -24,12 +29,15 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
             nbttagcompound.setString("Text" + (i + 1), s);
         }
 
+        nbttagcompound.setString("Color", this.l.b());
         return nbttagcompound;
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         this.isEditable = false;
         super.load(nbttagcompound);
+        this.l = EnumColor.a(nbttagcompound.getString("Color"), EnumColor.BLACK);
 
         for (int i = 0; i < 4; ++i) {
             String s = nbttagcompound.getString("Text" + (i + 1));
@@ -45,39 +53,42 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
                 this.lines[i] = ichatbasecomponent;
             }
 
-            this.h[i] = null;
+            this.k[i] = null;
         }
 
     }
 
     public void a(int i, IChatBaseComponent ichatbasecomponent) {
         this.lines[i] = ichatbasecomponent;
-        this.h[i] = null;
+        this.k[i] = null;
     }
 
     @Nullable
+    @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        return new PacketPlayOutTileEntityData(this.position, 9, this.aa_());
+        return new PacketPlayOutTileEntityData(this.position, 9, this.b());
     }
 
-    public NBTTagCompound aa_() {
+    @Override
+    public NBTTagCompound b() {
         return this.save(new NBTTagCompound());
     }
 
+    @Override
     public boolean isFilteredNBT() {
         return true;
     }
 
-    public boolean d() {
+    public boolean c() {
         return this.isEditable;
     }
 
     public void a(EntityHuman entityhuman) {
-        this.g = entityhuman;
+        this.j = entityhuman;
     }
 
-    public EntityHuman e() {
-        return this.g;
+    public EntityHuman d() {
+        return this.j;
     }
 
     public boolean b(EntityHuman entityhuman) {
@@ -92,7 +103,7 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
                 ChatClickable chatclickable = chatmodifier.h();
 
                 if (chatclickable.a() == ChatClickable.EnumClickAction.RUN_COMMAND) {
-                    entityhuman.bK().getCommandDispatcher().a(this.a((EntityPlayer) entityhuman), chatclickable.b());
+                    entityhuman.getMinecraftServer().getCommandDispatcher().a(this.a((EntityPlayer) entityhuman), chatclickable.b());
                 }
             }
         }
@@ -100,24 +111,25 @@ public class TileEntitySign extends TileEntity implements ICommandListener {
         return true;
     }
 
-    public void sendMessage(IChatBaseComponent ichatbasecomponent) {}
-
     public CommandListenerWrapper a(@Nullable EntityPlayer entityplayer) {
         String s = entityplayer == null ? "Sign" : entityplayer.getDisplayName().getString();
         Object object = entityplayer == null ? new ChatComponentText("Sign") : entityplayer.getScoreboardDisplayName();
 
-        return new CommandListenerWrapper(this, new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D), Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityplayer);
+        return new CommandListenerWrapper(ICommandListener.DUMMY, new Vec3D((double) this.position.getX() + 0.5D, (double) this.position.getY() + 0.5D, (double) this.position.getZ() + 0.5D), Vec2F.a, (WorldServer) this.world, 2, s, (IChatBaseComponent) object, this.world.getMinecraftServer(), entityplayer);
     }
 
-    public boolean a() {
-        return false;
+    public EnumColor f() {
+        return this.l;
     }
 
-    public boolean b() {
-        return false;
-    }
-
-    public boolean B_() {
-        return false;
+    public boolean a(EnumColor enumcolor) {
+        if (enumcolor != this.f()) {
+            this.l = enumcolor;
+            this.update();
+            this.world.notify(this.getPosition(), this.getBlock(), this.getBlock(), 3);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

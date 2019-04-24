@@ -22,6 +22,7 @@ public class ArgumentSerializerDouble implements ArgumentSerializer<DoubleArgume
 
     }
 
+    @Override
     public DoubleArgumentType b(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         double d0 = ArgumentSerializers.a(b0) ? packetdataserializer.readDouble() : -1.7976931348623157E308D;

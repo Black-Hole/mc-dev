@@ -19,15 +19,17 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
         packetlistenerplayin.a(this);
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
         this.slot = packetdataserializer.readShort();
         this.button = packetdataserializer.readByte();
         this.d = packetdataserializer.readShort();
         this.shift = (InventoryClickType) packetdataserializer.a(InventoryClickType.class);
-        this.item = packetdataserializer.k();
+        this.item = packetdataserializer.m();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
         packetdataserializer.writeShort(this.slot);

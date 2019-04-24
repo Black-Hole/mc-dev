@@ -6,9 +6,10 @@ public class PathfinderGoalFollowOwnerParrot extends PathfinderGoalFollowOwner {
         super(entitytameableanimal, d0, f, f1);
     }
 
-    protected boolean a(int i, int j, int k, int l, int i1) {
-        IBlockData iblockdata = this.a.getType(new BlockPosition(i + l, k - 1, j + i1));
+    @Override
+    protected boolean a(BlockPosition blockposition) {
+        IBlockData iblockdata = this.b.getType(blockposition);
 
-        return (iblockdata.q() || iblockdata.a(TagsBlock.LEAVES)) && this.a.isEmpty(new BlockPosition(i + l, k, j + i1)) && this.a.isEmpty(new BlockPosition(i + l, k + 1, j + i1));
+        return (iblockdata.a((IBlockAccess) this.b, blockposition, (Entity) this.a) || iblockdata.a(TagsBlock.LEAVES)) && this.b.isEmpty(blockposition.up()) && this.b.isEmpty(blockposition.up(2));
     }
 }

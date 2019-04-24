@@ -33,6 +33,7 @@ public class PacketPlayOutLookAt implements Packet<PacketListenerPlayOut> {
         this.g = true;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.e = (ArgumentAnchor.Anchor) packetdataserializer.a(ArgumentAnchor.Anchor.class);
         this.a = packetdataserializer.readDouble();
@@ -40,12 +41,13 @@ public class PacketPlayOutLookAt implements Packet<PacketListenerPlayOut> {
         this.c = packetdataserializer.readDouble();
         if (packetdataserializer.readBoolean()) {
             this.g = true;
-            this.d = packetdataserializer.g();
+            this.d = packetdataserializer.i();
             this.f = (ArgumentAnchor.Anchor) packetdataserializer.a(ArgumentAnchor.Anchor.class);
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.e);
         packetdataserializer.writeDouble(this.a);

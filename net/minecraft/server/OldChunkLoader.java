@@ -98,7 +98,7 @@ public class OldChunkLoader {
                 nbttagcompound1.setByteArray("Data", nibblearray.asBytes());
                 nbttagcompound1.setByteArray("SkyLight", nibblearray1.asBytes());
                 nbttagcompound1.setByteArray("BlockLight", nibblearray2.asBytes());
-                nbttaglist.add((NBTBase) nbttagcompound1);
+                nbttaglist.add(nbttagcompound1);
             }
         }
 
@@ -108,8 +108,8 @@ public class OldChunkLoader {
 
         for (k = 0; k < 16; ++k) {
             for (j = 0; j < 16; ++j) {
-                blockposition_mutableblockposition.c(oldchunkloader_oldchunk.k << 4 | k, 0, oldchunkloader_oldchunk.l << 4 | j);
-                abyte1[j << 4 | k] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition, Biomes.b)) & 255);
+                blockposition_mutableblockposition.d(oldchunkloader_oldchunk.k << 4 | k, 0, oldchunkloader_oldchunk.l << 4 | j);
+                abyte1[j << 4 | k] = (byte) (IRegistry.BIOME.a((Object) worldchunkmanager.getBiome(blockposition_mutableblockposition)) & 255);
             }
         }
 

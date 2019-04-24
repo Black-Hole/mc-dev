@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
-public interface ITileEntityContainer extends INamableTileEntity {
+import javax.annotation.Nullable;
 
-    Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman);
+@FunctionalInterface
+public interface ITileEntityContainer {
 
-    String getContainerName();
+    @Nullable
+    Container createMenu(int i, PlayerInventory playerinventory, EntityHuman entityhuman);
 }

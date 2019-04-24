@@ -1,32 +1,33 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> {
 
     private static final IBlockData a = Blocks.OAK_LOG.getBlockData();
-    private static final IBlockData b = Blocks.OAK_LEAVES.getBlockData();
+    private static final IBlockData aS = Blocks.OAK_LEAVES.getBlockData();
 
-    public WorldGenBigTree(boolean flag) {
-        super(flag);
+    public WorldGenBigTree(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function, boolean flag) {
+        super(function, flag);
     }
 
-    private void a(GeneratorAccess generatoraccess, BlockPosition blockposition, float f) {
+    private void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, float f) {
         int i = (int) ((double) f + 0.618D);
 
         for (int j = -i; j <= i; ++j) {
             for (int k = -i; k <= i; ++k) {
                 if (Math.pow((double) Math.abs(j) + 0.5D, 2.0D) + Math.pow((double) Math.abs(k) + 0.5D, 2.0D) <= (double) (f * f)) {
-                    BlockPosition blockposition1 = blockposition.a(j, 0, k);
-                    IBlockData iblockdata = generatoraccess.getType(blockposition1);
+                    BlockPosition blockposition1 = blockposition.b(j, 0, k);
 
-                    if (iblockdata.isAir() || iblockdata.getMaterial() == Material.LEAVES) {
-                        this.a(generatoraccess, blockposition1, WorldGenBigTree.b);
+                    if (g(virtuallevelwritable, blockposition1)) {
+                        this.a(virtuallevelwritable, blockposition1, WorldGenBigTree.aS);
                     }
                 }
             }
@@ -56,18 +57,18 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return i >= 0 && i < 5 ? (i != 0 && i != 4 ? 3.0F : 2.0F) : -1.0F;
     }
 
-    private void b(GeneratorAccess generatoraccess, BlockPosition blockposition) {
+    private void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
         for (int i = 0; i < 5; ++i) {
-            this.a(generatoraccess, blockposition.up(i), this.a(i));
+            this.a(virtuallevelwritable, blockposition.up(i), this.a(i));
         }
 
     }
 
-    private int a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1, boolean flag) {
+    private int a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, BlockPosition blockposition1, boolean flag) {
         if (!flag && Objects.equals(blockposition, blockposition1)) {
             return -1;
         } else {
-            BlockPosition blockposition2 = blockposition1.a(-blockposition.getX(), -blockposition.getY(), -blockposition.getZ());
+            BlockPosition blockposition2 = blockposition1.b(-blockposition.getX(), -blockposition.getY(), -blockposition.getZ());
             int i = this.a(blockposition2);
             float f = (float) blockposition2.getX() / (float) i;
             float f1 = (float) blockposition2.getY() / (float) i;
@@ -77,8 +78,8 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                 BlockPosition blockposition3 = blockposition.a((double) (0.5F + (float) j * f), (double) (0.5F + (float) j * f1), (double) (0.5F + (float) j * f2));
 
                 if (flag) {
-                    this.a(set, generatoraccess, blockposition3, (IBlockData) WorldGenBigTree.a.set(BlockLogAbstract.AXIS, this.a(blockposition, blockposition3)));
-                } else if (!this.a(generatoraccess.getType(blockposition3).getBlock())) {
+                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, (IBlockData) WorldGenBigTree.a.set(BlockLogAbstract.AXIS, this.a(blockposition, blockposition3)));
+                } else if (!a((VirtualLevelReadable) virtuallevelwritable, blockposition3)) {
                     return j;
                 }
             }
@@ -112,14 +113,14 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return enumdirection_enumaxis;
     }
 
-    private void a(GeneratorAccess generatoraccess, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
+    private void a(VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             WorldGenBigTree.Position worldgenbigtree_position = (WorldGenBigTree.Position) iterator.next();
 
             if (this.b(i, worldgenbigtree_position.r() - blockposition.getY())) {
-                this.b(generatoraccess, worldgenbigtree_position);
+                this.b(virtuallevelwritable, worldgenbigtree_position);
             }
         }
 
@@ -129,11 +130,11 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return (double) j >= (double) i * 0.2D;
     }
 
-    private void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
-        this.a(set, generatoraccess, blockposition, blockposition.up(i), true);
+    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+        this.a(set, virtuallevelwritable, blockposition, blockposition.up(i), true);
     }
 
-    private void a(Set<BlockPosition> set, GeneratorAccess generatoraccess, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
+    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -142,20 +143,21 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), j, blockposition.getZ());
 
             if (!blockposition1.equals(worldgenbigtree_position) && this.b(i, j - blockposition.getY())) {
-                this.a(set, generatoraccess, blockposition1, worldgenbigtree_position, true);
+                this.a(set, virtuallevelwritable, blockposition1, worldgenbigtree_position, true);
             }
         }
 
     }
 
-    public boolean a(Set<BlockPosition> set, GeneratorAccess generatoraccess, Random random, BlockPosition blockposition) {
+    @Override
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
         Random random1 = new Random(random.nextLong());
-        int i = this.b(set, generatoraccess, blockposition, 5 + random1.nextInt(12));
+        int i = this.b(set, virtuallevelwritable, blockposition, 5 + random1.nextInt(12));
 
         if (i == -1) {
             return false;
         } else {
-            this.a(generatoraccess, blockposition.down());
+            this.a(virtuallevelwritable, blockposition.down());
             int j = (int) ((double) i * 0.618D);
 
             if (j >= i) {
@@ -188,14 +190,14 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                         BlockPosition blockposition1 = blockposition.a(d4, (double) (i1 - 1), d5);
                         BlockPosition blockposition2 = blockposition1.up(5);
 
-                        if (this.a(set, generatoraccess, blockposition1, blockposition2, false) == -1) {
+                        if (this.a(set, virtuallevelwritable, blockposition1, blockposition2, false) == -1) {
                             int k1 = blockposition.getX() - blockposition1.getX();
                             int l1 = blockposition.getZ() - blockposition1.getZ();
                             double d6 = (double) blockposition1.getY() - Math.sqrt((double) (k1 * k1 + l1 * l1)) * 0.381D;
                             int i2 = d6 > (double) l ? l : (int) d6;
                             BlockPosition blockposition3 = new BlockPosition(blockposition.getX(), i2, blockposition.getZ());
 
-                            if (this.a(set, generatoraccess, blockposition3, blockposition1, false) == -1) {
+                            if (this.a(set, virtuallevelwritable, blockposition3, blockposition1, false) == -1) {
                                 list.add(new WorldGenBigTree.Position(blockposition1, blockposition3.getY()));
                             }
                         }
@@ -203,20 +205,18 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                 }
             }
 
-            this.a(generatoraccess, i, blockposition, list);
-            this.a(set, generatoraccess, blockposition, j);
-            this.a(set, generatoraccess, i, blockposition, list);
+            this.a(virtuallevelwritable, i, blockposition, list);
+            this.a(set, virtuallevelwritable, blockposition, j);
+            this.a(set, virtuallevelwritable, i, blockposition, list);
             return true;
         }
     }
 
-    private int b(Set<BlockPosition> set, GeneratorAccess generatoraccess, BlockPosition blockposition, int i) {
-        Block block = generatoraccess.getType(blockposition.down()).getBlock();
-
-        if (!Block.d(block) && block != Blocks.GRASS_BLOCK && block != Blocks.FARMLAND) {
+    private int b(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+        if (!i(virtuallevelwritable, blockposition.down())) {
             return -1;
         } else {
-            int j = this.a(set, generatoraccess, blockposition, blockposition.up(i - 1), false);
+            int j = this.a(set, virtuallevelwritable, blockposition, blockposition.up(i - 1), false);
 
             return j == -1 ? i : (j < 6 ? -1 : j);
         }

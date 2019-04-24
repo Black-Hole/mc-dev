@@ -1,41 +1,40 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntityHorseDonkey extends EntityHorseChestedAbstract {
 
-    public EntityHorseDonkey(World world) {
-        super(EntityTypes.DONKEY, world);
+    public EntityHorseDonkey(EntityTypes<? extends EntityHorseDonkey> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.O;
-    }
-
-    protected SoundEffect D() {
-        super.D();
+    @Override
+    protected SoundEffect getSoundAmbient() {
+        super.getSoundAmbient();
         return SoundEffects.ENTITY_DONKEY_AMBIENT;
     }
 
-    protected SoundEffect cs() {
-        super.cs();
+    @Override
+    protected SoundEffect getSoundDeath() {
+        super.getSoundDeath();
         return SoundEffects.ENTITY_DONKEY_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
-        super.d(damagesource);
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
+        super.getSoundHurt(damagesource);
         return SoundEffects.ENTITY_DONKEY_HURT;
     }
 
+    @Override
     public boolean mate(EntityAnimal entityanimal) {
-        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.eb() && ((EntityHorseAbstract) entityanimal).eb());
+        return entityanimal == this ? false : (!(entityanimal instanceof EntityHorseDonkey) && !(entityanimal instanceof EntityHorse) ? false : this.ew() && ((EntityHorseAbstract) entityanimal).ew());
     }
 
+    @Override
     public EntityAgeable createChild(EntityAgeable entityageable) {
-        Object object = entityageable instanceof EntityHorse ? new EntityHorseMule(this.world) : new EntityHorseDonkey(this.world);
+        EntityTypes<? extends EntityHorseAbstract> entitytypes = entityageable instanceof EntityHorse ? EntityTypes.MULE : EntityTypes.DONKEY;
+        EntityHorseAbstract entityhorseabstract = (EntityHorseAbstract) entitytypes.a(this.world);
 
-        this.a(entityageable, (EntityHorseAbstract) object);
-        return (EntityAgeable) object;
+        this.a(entityageable, entityhorseabstract);
+        return entityhorseabstract;
     }
 }

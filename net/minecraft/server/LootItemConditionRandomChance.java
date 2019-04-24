@@ -3,21 +3,26 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Random;
 
 public class LootItemConditionRandomChance implements LootItemCondition {
 
     private final float a;
 
-    public LootItemConditionRandomChance(float f) {
+    private LootItemConditionRandomChance(float f) {
         this.a = f;
     }
 
-    public boolean a(Random random, LootTableInfo loottableinfo) {
-        return random.nextFloat() < this.a;
+    public boolean test(LootTableInfo loottableinfo) {
+        return loottableinfo.b().nextFloat() < this.a;
     }
 
-    public static class a extends LootItemCondition.a<LootItemConditionRandomChance> {
+    public static LootItemCondition.a a(float f) {
+        return () -> {
+            return new LootItemConditionRandomChance(f);
+        };
+    }
+
+    public static class a extends LootItemCondition.b<LootItemConditionRandomChance> {
 
         protected a() {
             super(new MinecraftKey("random_chance"), LootItemConditionRandomChance.class);
@@ -27,6 +32,7 @@ public class LootItemConditionRandomChance implements LootItemCondition {
             jsonobject.addProperty("chance", lootitemconditionrandomchance.a);
         }
 
+        @Override
         public LootItemConditionRandomChance b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
             return new LootItemConditionRandomChance(ChatDeserializer.l(jsonobject, "chance"));
         }

@@ -8,10 +8,10 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BinaryOperator;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class CommandListenerWrapper implements ICompletionProvider {
@@ -104,8 +104,8 @@ public class CommandListenerWrapper implements ICompletionProvider {
         double d1 = vec3d.y - vec3d1.y;
         double d2 = vec3d.z - vec3d1.z;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-        float f = MathHelper.g((float) (-(MathHelper.c(d1, d3) * 57.2957763671875D)));
-        float f1 = MathHelper.g((float) (MathHelper.c(d2, d0) * 57.2957763671875D) - 90.0F);
+        float f = MathHelper.g((float) (-(MathHelper.d(d1, d3) * 57.2957763671875D)));
+        float f1 = MathHelper.g((float) (MathHelper.d(d2, d0) * 57.2957763671875D) - 90.0F);
 
         return this.a(new Vec2F(f, f1));
     }
@@ -118,6 +118,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
         return this.g;
     }
 
+    @Override
     public boolean hasPermission(int i) {
         return this.f >= i;
     }
@@ -164,11 +165,11 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public void sendMessage(IChatBaseComponent ichatbasecomponent, boolean flag) {
-        if (this.base.a() && !this.j) {
+        if (this.base.shouldSendSuccess() && !this.j) {
             this.base.sendMessage(ichatbasecomponent);
         }
 
-        if (flag && this.base.B_() && !this.j) {
+        if (flag && this.base.shouldBroadcastCommands() && !this.j) {
             this.sendAdminMessage(ichatbasecomponent);
         }
 
@@ -178,7 +179,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
         IChatBaseComponent ichatbasecomponent1 = (new ChatMessage("chat.type.admin", new Object[] { this.getScoreboardDisplayName(), ichatbasecomponent})).a(new EnumChatFormat[] { EnumChatFormat.GRAY, EnumChatFormat.ITALIC});
 
         if (this.i.getGameRules().getBoolean("sendCommandFeedback")) {
-            Iterator iterator = this.i.getPlayerList().v().iterator();
+            Iterator iterator = this.i.getPlayerList().getPlayers().iterator();
 
             while (iterator.hasNext()) {
                 EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -196,7 +197,7 @@ public class CommandListenerWrapper implements ICompletionProvider {
     }
 
     public void sendFailureMessage(IChatBaseComponent ichatbasecomponent) {
-        if (this.base.b() && !this.j) {
+        if (this.base.shouldSendFailure() && !this.j) {
             this.base.sendMessage((new ChatComponentText("")).addSibling(ichatbasecomponent).a(EnumChatFormat.RED));
         }
 
@@ -209,27 +210,28 @@ public class CommandListenerWrapper implements ICompletionProvider {
 
     }
 
+    @Override
     public Collection<String> l() {
         return Lists.newArrayList(this.i.getPlayers());
     }
 
+    @Override
     public Collection<String> m() {
         return this.i.getScoreboard().f();
     }
 
+    @Override
     public Collection<MinecraftKey> n() {
         return IRegistry.SOUND_EVENT.keySet();
     }
 
-    public Collection<MinecraftKey> o() {
+    @Override
+    public Stream<MinecraftKey> o() {
         return this.i.getCraftingManager().c();
     }
 
+    @Override
     public CompletableFuture<Suggestions> a(CommandContext<ICompletionProvider> commandcontext, SuggestionsBuilder suggestionsbuilder) {
         return null;
-    }
-
-    public Collection<ICompletionProvider.a> a(boolean flag) {
-        return Collections.singleton(ICompletionProvider.a.b);
     }
 }

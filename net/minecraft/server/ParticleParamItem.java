@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 public class ParticleParamItem implements ParticleParam {
 
     public static final ParticleParam.a<ParticleParamItem> a = new ParticleParam.a<ParticleParamItem>() {
+        @Override
         public ParticleParamItem b(Particle<ParticleParamItem> particle, StringReader stringreader) throws CommandSyntaxException {
             stringreader.expect(' ');
             ArgumentParserItemStack argumentparseritemstack = (new ArgumentParserItemStack(stringreader, false)).h();
@@ -14,8 +15,9 @@ public class ParticleParamItem implements ParticleParam {
             return new ParticleParamItem(particle, itemstack);
         }
 
+        @Override
         public ParticleParamItem b(Particle<ParticleParamItem> particle, PacketDataSerializer packetdataserializer) {
-            return new ParticleParamItem(particle, packetdataserializer.k());
+            return new ParticleParamItem(particle, packetdataserializer.m());
         }
     };
     private final Particle<ParticleParamItem> b;
@@ -26,14 +28,17 @@ public class ParticleParamItem implements ParticleParam {
         this.c = itemstack;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) {
         packetdataserializer.a(this.c);
     }
 
+    @Override
     public String a() {
-        return this.b().d() + " " + (new ArgumentPredicateItemStack(this.c.getItem(), this.c.getTag())).c();
+        return IRegistry.PARTICLE_TYPE.getKey(this.b()) + " " + (new ArgumentPredicateItemStack(this.c.getItem(), this.c.getTag())).c();
     }
 
+    @Override
     public Particle<ParticleParamItem> b() {
         return this.b;
     }

@@ -12,10 +12,12 @@ public class PacketPlayInResourcePackStatus implements Packet<PacketListenerPlay
         this.status = packetplayinresourcepackstatus_enumresourcepackstatus;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.status = (PacketPlayInResourcePackStatus.EnumResourcePackStatus) packetdataserializer.a(PacketPlayInResourcePackStatus.EnumResourcePackStatus.class);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.status);
     }

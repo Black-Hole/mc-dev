@@ -52,7 +52,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public byte[] b(int i) {
-        int j = this.g();
+        int j = this.i();
 
         if (j > i) {
             throw new DecoderException("ByteArray with size " + j + " is bigger than allowed " + i);
@@ -83,7 +83,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public int[] c(int i) {
-        int j = this.g();
+        int j = this.i();
 
         if (j > i) {
             throw new DecoderException("VarIntArray with size " + j + " is bigger than allowed " + i);
@@ -91,7 +91,7 @@ public class PacketDataSerializer extends ByteBuf {
             int[] aint = new int[j];
 
             for (int k = 0; k < aint.length; ++k) {
-                aint[k] = this.g();
+                aint[k] = this.i();
             }
 
             return aint;
@@ -121,7 +121,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public IChatBaseComponent f() {
+    public IChatBaseComponent h() {
         return IChatBaseComponent.ChatSerializer.a(this.e(262144));
     }
 
@@ -130,14 +130,14 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public <T extends Enum<T>> T a(Class<T> oclass) {
-        return ((Enum[]) oclass.getEnumConstants())[this.g()];
+        return ((Enum[]) oclass.getEnumConstants())[this.i()];
     }
 
     public PacketDataSerializer a(Enum<?> oenum) {
         return this.d(oenum.ordinal());
     }
 
-    public int g() {
+    public int i() {
         int i = 0;
         int j = 0;
 
@@ -154,7 +154,7 @@ public class PacketDataSerializer extends ByteBuf {
         return i;
     }
 
-    public long h() {
+    public long j() {
         long i = 0L;
         int j = 0;
 
@@ -177,7 +177,7 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public UUID i() {
+    public UUID k() {
         return new UUID(this.readLong(), this.readLong());
     }
 
@@ -216,7 +216,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     @Nullable
-    public NBTTagCompound j() {
+    public NBTTagCompound l() {
         int i = this.readerIndex();
         byte b0 = this.readByte();
 
@@ -244,7 +244,7 @@ public class PacketDataSerializer extends ByteBuf {
             this.writeByte(itemstack.getCount());
             NBTTagCompound nbttagcompound = null;
 
-            if (item.usesDurability() || item.n()) {
+            if (item.usesDurability() || item.m()) {
                 nbttagcompound = itemstack.getTag();
             }
 
@@ -254,21 +254,21 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public ItemStack k() {
+    public ItemStack m() {
         if (!this.readBoolean()) {
             return ItemStack.a;
         } else {
-            int i = this.g();
+            int i = this.i();
             byte b0 = this.readByte();
             ItemStack itemstack = new ItemStack(Item.getById(i), b0);
 
-            itemstack.setTag(this.j());
+            itemstack.setTag(this.l());
             return itemstack;
         }
     }
 
     public String e(int i) {
-        int j = this.g();
+        int j = this.i();
 
         if (j > i * 4) {
             throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i * 4 + ")");
@@ -302,7 +302,7 @@ public class PacketDataSerializer extends ByteBuf {
         }
     }
 
-    public MinecraftKey l() {
+    public MinecraftKey o() {
         return new MinecraftKey(this.e(32767));
     }
 
@@ -311,13 +311,37 @@ public class PacketDataSerializer extends ByteBuf {
         return this;
     }
 
-    public Date m() {
+    public Date p() {
         return new Date(this.readLong());
     }
 
     public PacketDataSerializer a(Date date) {
         this.writeLong(date.getTime());
         return this;
+    }
+
+    public MovingObjectPositionBlock q() {
+        BlockPosition blockposition = this.e();
+        EnumDirection enumdirection = (EnumDirection) this.a(EnumDirection.class);
+        float f = this.readFloat();
+        float f1 = this.readFloat();
+        float f2 = this.readFloat();
+        boolean flag = this.readBoolean();
+
+        return new MovingObjectPositionBlock(new Vec3D((double) ((float) blockposition.getX() + f), (double) ((float) blockposition.getY() + f1), (double) ((float) blockposition.getZ() + f2)), enumdirection, blockposition, flag);
+    }
+
+    public void a(MovingObjectPositionBlock movingobjectpositionblock) {
+        BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+
+        this.a(blockposition);
+        this.a((Enum) movingobjectpositionblock.getDirection());
+        Vec3D vec3d = movingobjectpositionblock.getPos();
+
+        this.writeFloat((float) (vec3d.x - (double) blockposition.getX()));
+        this.writeFloat((float) (vec3d.y - (double) blockposition.getY()));
+        this.writeFloat((float) (vec3d.z - (double) blockposition.getZ()));
+        this.writeBoolean(movingobjectpositionblock.d());
     }
 
     public int capacity() {

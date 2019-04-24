@@ -21,6 +21,7 @@ public class PacketPlayInStruct implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInStruct() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = (TileEntityStructure.UpdateType) packetdataserializer.a(TileEntityStructure.UpdateType.class);
@@ -32,7 +33,7 @@ public class PacketPlayInStruct implements Packet<PacketListenerPlayIn> {
         this.h = (EnumBlockRotation) packetdataserializer.a(EnumBlockRotation.class);
         this.i = packetdataserializer.e(12);
         this.m = MathHelper.a(packetdataserializer.readFloat(), 0.0F, 1.0F);
-        this.n = packetdataserializer.h();
+        this.n = packetdataserializer.j();
         byte b0 = packetdataserializer.readByte();
 
         this.j = (b0 & 1) != 0;
@@ -40,6 +41,7 @@ public class PacketPlayInStruct implements Packet<PacketListenerPlayIn> {
         this.l = (b0 & 4) != 0;
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);

@@ -28,10 +28,11 @@ public class ResourceManagerFallback implements IResourceManager {
         this.a.add(iresourcepack);
     }
 
+    @Override
     public IResource a(MinecraftKey minecraftkey) throws IOException {
-        this.d(minecraftkey);
+        this.e(minecraftkey);
         IResourcePack iresourcepack = null;
-        MinecraftKey minecraftkey1 = c(minecraftkey);
+        MinecraftKey minecraftkey1 = d(minecraftkey);
 
         for (int i = this.a.size() - 1; i >= 0; --i) {
             IResourcePack iresourcepack1 = (IResourcePack) this.a.get(i);
@@ -60,16 +61,21 @@ public class ResourceManagerFallback implements IResourceManager {
         return (InputStream) (ResourceManagerFallback.b.isDebugEnabled() ? new ResourceManagerFallback.a(inputstream, minecraftkey, iresourcepack.a()) : inputstream);
     }
 
-    private void d(MinecraftKey minecraftkey) throws IOException {
-        if (minecraftkey.getKey().contains("..")) {
+    private void e(MinecraftKey minecraftkey) throws IOException {
+        if (!this.f(minecraftkey)) {
             throw new IOException("Invalid relative path to resource: " + minecraftkey);
         }
     }
 
-    public List<IResource> b(MinecraftKey minecraftkey) throws IOException {
-        this.d(minecraftkey);
+    private boolean f(MinecraftKey minecraftkey) {
+        return !minecraftkey.getKey().contains("..");
+    }
+
+    @Override
+    public List<IResource> c(MinecraftKey minecraftkey) throws IOException {
+        this.e(minecraftkey);
         List<IResource> list = Lists.newArrayList();
-        MinecraftKey minecraftkey1 = c(minecraftkey);
+        MinecraftKey minecraftkey1 = d(minecraftkey);
         Iterator iterator = this.a.iterator();
 
         while (iterator.hasNext()) {
@@ -89,6 +95,7 @@ public class ResourceManagerFallback implements IResourceManager {
         }
     }
 
+    @Override
     public Collection<MinecraftKey> a(String s, Predicate<String> predicate) {
         List<MinecraftKey> list = Lists.newArrayList();
         Iterator iterator = this.a.iterator();
@@ -103,7 +110,7 @@ public class ResourceManagerFallback implements IResourceManager {
         return list;
     }
 
-    static MinecraftKey c(MinecraftKey minecraftkey) {
+    static MinecraftKey d(MinecraftKey minecraftkey) {
         return new MinecraftKey(minecraftkey.b(), minecraftkey.getKey() + ".mcmeta");
     }
 

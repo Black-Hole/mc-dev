@@ -27,10 +27,12 @@ public class BlockStateInteger extends BlockState<Integer> {
         }
     }
 
+    @Override
     public Collection<Integer> d() {
         return this.a;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -43,6 +45,7 @@ public class BlockStateInteger extends BlockState<Integer> {
         }
     }
 
+    @Override
     public int c() {
         return 31 * super.c() + this.a.hashCode();
     }
@@ -51,6 +54,7 @@ public class BlockStateInteger extends BlockState<Integer> {
         return new BlockStateInteger(s, i, j);
     }
 
+    @Override
     public Optional<Integer> b(String s) {
         try {
             Integer integer = Integer.valueOf(s);

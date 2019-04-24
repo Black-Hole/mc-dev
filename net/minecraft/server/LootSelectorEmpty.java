@@ -2,21 +2,30 @@ package net.minecraft.server;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import java.util.Collection;
-import java.util.Random;
+import java.util.function.Consumer;
 
 public class LootSelectorEmpty extends LootSelectorEntry {
 
-    public LootSelectorEmpty(int i, int j, LootItemCondition[] alootitemcondition) {
-        super(i, j, alootitemcondition);
+    private LootSelectorEmpty(int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+        super(i, j, alootitemcondition, alootitemfunction);
     }
 
-    public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {}
+    @Override
+    public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {}
 
-    protected void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {}
+    public static LootSelectorEntry.a<?> a() {
+        return a(LootSelectorEmpty::new);
+    }
 
-    public static LootSelectorEmpty a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition) {
-        return new LootSelectorEmpty(i, j, alootitemcondition);
+    public static class a extends LootSelectorEntry.e<LootSelectorEmpty> {
+
+        public a() {
+            super(new MinecraftKey("empty"), LootSelectorEmpty.class);
+        }
+
+        @Override
+        protected LootSelectorEmpty b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+            return new LootSelectorEmpty(i, j, alootitemcondition, alootitemfunction);
+        }
     }
 }

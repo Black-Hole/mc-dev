@@ -10,6 +10,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ public final class ItemStack {
 
     private static final Logger c = LogManager.getLogger();
     public static final ItemStack a = new ItemStack((Item) null);
-    public static final DecimalFormat b = D();
+    public static final DecimalFormat b = F();
     private int count;
     private int e;
     @Deprecated
@@ -32,7 +33,7 @@ public final class ItemStack {
     private ShapeDetectorBlock l;
     private boolean m;
 
-    private static DecimalFormat D() {
+    private static DecimalFormat F() {
         DecimalFormat decimalformat = new DecimalFormat("#.##");
 
         decimalformat.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
@@ -46,18 +47,16 @@ public final class ItemStack {
     public ItemStack(IMaterial imaterial, int i) {
         this.item = imaterial == null ? null : imaterial.getItem();
         this.count = i;
-        this.E();
+        this.checkEmpty();
     }
 
-    private void E() {
+    private void checkEmpty() {
         this.h = false;
         this.h = this.isEmpty();
     }
 
     private ItemStack(NBTTagCompound nbttagcompound) {
-        Item item = (Item) IRegistry.ITEM.get(new MinecraftKey(nbttagcompound.getString("id")));
-
-        this.item = item == null ? Items.AIR : item;
+        this.item = (Item) IRegistry.ITEM.get(new MinecraftKey(nbttagcompound.getString("id")));
         this.count = nbttagcompound.getByte("Count");
         if (nbttagcompound.hasKeyOfType("tag", 10)) {
             this.tag = nbttagcompound.getCompound("tag");
@@ -68,7 +67,7 @@ public final class ItemStack {
             this.setDamage(this.getDamage());
         }
 
-        this.E();
+        this.checkEmpty();
     }
 
     public static ItemStack a(NBTTagCompound nbttagcompound) {
@@ -102,7 +101,7 @@ public final class ItemStack {
         BlockPosition blockposition = itemactioncontext.getClickPosition();
         ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(itemactioncontext.getWorld(), blockposition, false);
 
-        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().F(), shapedetectorblock)) {
+        if (entityhuman != null && !entityhuman.abilities.mayBuild && !this.b(itemactioncontext.getWorld().t(), shapedetectorblock)) {
             return EnumInteractionResult.PASS;
         } else {
             Item item = this.getItem();
@@ -206,16 +205,16 @@ public final class ItemStack {
         }
     }
 
-    public void damage(int i, EntityLiving entityliving) {
-        if (!(entityliving instanceof EntityHuman) || !((EntityHuman) entityliving).abilities.canInstantlyBuild) {
+    public <T extends EntityLiving> void damage(int i, T t0, Consumer<T> consumer) {
+        if (!t0.world.isClientSide && (!(t0 instanceof EntityHuman) || !((EntityHuman) t0).abilities.canInstantlyBuild)) {
             if (this.e()) {
-                if (this.isDamaged(i, entityliving.getRandom(), entityliving instanceof EntityPlayer ? (EntityPlayer) entityliving : null)) {
-                    entityliving.c(this);
+                if (this.isDamaged(i, t0.getRandom(), t0 instanceof EntityPlayer ? (EntityPlayer) t0 : null)) {
+                    consumer.accept(t0);
                     Item item = this.getItem();
 
                     this.subtract(1);
-                    if (entityliving instanceof EntityHuman) {
-                        ((EntityHuman) entityliving).b(StatisticList.ITEM_BROKEN.b(item));
+                    if (t0 instanceof EntityHuman) {
+                        ((EntityHuman) t0).b(StatisticList.ITEM_BROKEN.b(item));
                     }
 
                     this.setDamage(0);
@@ -254,7 +253,7 @@ public final class ItemStack {
     public ItemStack cloneItemStack() {
         ItemStack itemstack = new ItemStack(this.getItem(), this.count);
 
-        itemstack.d(this.B());
+        itemstack.d(this.C());
         if (this.tag != null) {
             itemstack.tag = this.tag.clone();
         }
@@ -291,7 +290,7 @@ public final class ItemStack {
     }
 
     public String j() {
-        return this.getItem().h(this);
+        return this.getItem().f(this);
     }
 
     public String toString() {
@@ -315,15 +314,19 @@ public final class ItemStack {
     }
 
     public int k() {
-        return this.getItem().c(this);
+        return this.getItem().f_(this);
     }
 
     public EnumAnimation l() {
-        return this.getItem().d(this);
+        return this.getItem().e_(this);
     }
 
     public void a(World world, EntityLiving entityliving, int i) {
         this.getItem().a(this, world, entityliving, i);
+    }
+
+    public boolean m() {
+        return this.getItem().i(this);
     }
 
     public boolean hasTag() {
@@ -359,7 +362,7 @@ public final class ItemStack {
         return this.tag != null && this.tag.hasKeyOfType(s, 10) ? this.tag.getCompound(s) : null;
     }
 
-    public void c(String s) {
+    public void removeTag(String s) {
         if (this.tag != null && this.tag.hasKey(s)) {
             this.tag.remove(s);
             if (this.tag.isEmpty()) {
@@ -394,7 +397,7 @@ public final class ItemStack {
             }
         }
 
-        return this.getItem().i(this);
+        return this.getItem().g(this);
     }
 
     public ItemStack a(@Nullable IChatBaseComponent ichatbasecomponent) {
@@ -409,13 +412,13 @@ public final class ItemStack {
         return this;
     }
 
-    public void r() {
+    public void s() {
         NBTTagCompound nbttagcompound = this.b("display");
 
         if (nbttagcompound != null) {
             nbttagcompound.remove("Name");
             if (nbttagcompound.isEmpty()) {
-                this.c("display");
+                this.removeTag("display");
             }
         }
 
@@ -431,12 +434,12 @@ public final class ItemStack {
         return nbttagcompound != null && nbttagcompound.hasKeyOfType("Name", 8);
     }
 
-    public EnumItemRarity u() {
-        return this.getItem().j(this);
+    public EnumItemRarity v() {
+        return this.getItem().h(this);
     }
 
     public boolean canEnchant() {
-        return !this.getItem().a(this) ? false : !this.hasEnchantments();
+        return !this.getItem().g_(this) ? false : !this.hasEnchantments();
     }
 
     public void addEnchantment(Enchantment enchantment, int i) {
@@ -450,7 +453,7 @@ public final class ItemStack {
 
         nbttagcompound.setString("id", String.valueOf(IRegistry.ENCHANTMENT.getKey(enchantment)));
         nbttagcompound.setShort("lvl", (short) ((byte) i));
-        nbttaglist.add((NBTBase) nbttagcompound);
+        nbttaglist.add(nbttagcompound);
     }
 
     public boolean hasEnchantments() {
@@ -461,7 +464,7 @@ public final class ItemStack {
         this.getOrCreateTag().set(s, nbtbase);
     }
 
-    public boolean x() {
+    public boolean y() {
         return this.i != null;
     }
 
@@ -470,7 +473,7 @@ public final class ItemStack {
     }
 
     @Nullable
-    public EntityItemFrame y() {
+    public EntityItemFrame z() {
         return this.h ? null : this.i;
     }
 
@@ -518,10 +521,10 @@ public final class ItemStack {
             nbttagcompound.setString("Slot", enumitemslot.getSlotName());
         }
 
-        nbttaglist.add((NBTBase) nbttagcompound);
+        nbttaglist.add(nbttagcompound);
     }
 
-    public IChatBaseComponent A() {
+    public IChatBaseComponent B() {
         IChatBaseComponent ichatbasecomponent = (new ChatComponentText("")).addSibling(this.getName());
 
         if (this.hasName()) {
@@ -533,7 +536,7 @@ public final class ItemStack {
         if (!this.h) {
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
-            ichatbasecomponent1.a(this.u().e).a((chatmodifier) -> {
+            ichatbasecomponent1.a(this.v().e).a((chatmodifier) -> {
                 chatmodifier.setChatHoverable(new ChatHoverable(ChatHoverable.EnumHoverAction.SHOW_ITEM, new ChatComponentText(nbttagcompound.toString())));
             });
         }
@@ -603,7 +606,7 @@ public final class ItemStack {
         }
     }
 
-    public int B() {
+    public int C() {
         return this.e;
     }
 
@@ -617,7 +620,7 @@ public final class ItemStack {
 
     public void setCount(int i) {
         this.count = i;
-        this.E();
+        this.checkEmpty();
     }
 
     public void add(int i) {
@@ -626,5 +629,13 @@ public final class ItemStack {
 
     public void subtract(int i) {
         this.add(-i);
+    }
+
+    public void b(World world, EntityLiving entityliving, int i) {
+        this.getItem().a(world, entityliving, this, i);
+    }
+
+    public boolean E() {
+        return this.getItem().isFood();
     }
 }

@@ -8,6 +8,16 @@ public class ItemBookAndQuill extends Item {
         super(item_info);
     }
 
+    @Override
+    public EnumInteractionResult a(ItemActionContext itemactioncontext) {
+        World world = itemactioncontext.getWorld();
+        BlockPosition blockposition = itemactioncontext.getClickPosition();
+        IBlockData iblockdata = world.getType(blockposition);
+
+        return iblockdata.getBlock() == Blocks.LECTERN ? (BlockLectern.a(world, blockposition, iblockdata, itemactioncontext.getItemStack()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.PASS) : EnumInteractionResult.PASS;
+    }
+
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 

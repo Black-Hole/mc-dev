@@ -12,10 +12,12 @@ public class PacketPlayOutTags implements Packet<PacketListenerPlayOut> {
         this.a = tagregistry;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = TagRegistry.b(packetdataserializer);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         this.a.a(packetdataserializer);
     }

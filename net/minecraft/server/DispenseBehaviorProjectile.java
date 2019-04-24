@@ -4,6 +4,7 @@ public abstract class DispenseBehaviorProjectile extends DispenseBehaviorItem {
 
     public DispenseBehaviorProjectile() {}
 
+    @Override
     public ItemStack a(ISourceBlock isourceblock, ItemStack itemstack) {
         World world = isourceblock.getWorld();
         IPosition iposition = BlockDispenser.a(isourceblock);
@@ -16,6 +17,7 @@ public abstract class DispenseBehaviorProjectile extends DispenseBehaviorItem {
         return itemstack;
     }
 
+    @Override
     protected void a(ISourceBlock isourceblock) {
         isourceblock.getWorld().triggerEffect(1002, isourceblock.getBlockPosition(), 0);
     }

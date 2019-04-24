@@ -11,6 +11,7 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInSteerVehicle() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readFloat();
         this.b = packetdataserializer.readFloat();
@@ -20,6 +21,7 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
         this.d = (b0 & 2) > 0;
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeFloat(this.a);
         packetdataserializer.writeFloat(this.b);

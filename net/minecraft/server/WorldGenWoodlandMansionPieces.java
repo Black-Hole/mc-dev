@@ -9,10 +9,6 @@ import javax.annotation.Nullable;
 
 public class WorldGenWoodlandMansionPieces {
 
-    public static void a() {
-        WorldGenFactory.a(WorldGenWoodlandMansionPieces.i.class, "WMP");
-    }
-
     public static void a(DefinedStructureManager definedstructuremanager, BlockPosition blockposition, EnumBlockRotation enumblockrotation, List<WorldGenWoodlandMansionPieces.i> list, Random random) {
         WorldGenWoodlandMansionPieces.c worldgenwoodlandmansionpieces_c = new WorldGenWoodlandMansionPieces.c(random);
         WorldGenWoodlandMansionPieces.d worldgenwoodlandmansionpieces_d = new WorldGenWoodlandMansionPieces.d(definedstructuremanager, random);
@@ -33,30 +29,37 @@ public class WorldGenWoodlandMansionPieces {
             super(null);
         }
 
+        @Override
         public String a(Random random) {
             return "1x1_b" + (random.nextInt(4) + 1);
         }
 
+        @Override
         public String b(Random random) {
             return "1x1_as" + (random.nextInt(4) + 1);
         }
 
+        @Override
         public String a(Random random, boolean flag) {
             return flag ? "1x2_c_stairs" : "1x2_c" + (random.nextInt(4) + 1);
         }
 
+        @Override
         public String b(Random random, boolean flag) {
             return flag ? "1x2_d_stairs" : "1x2_d" + (random.nextInt(5) + 1);
         }
 
+        @Override
         public String c(Random random) {
             return "1x2_se" + (random.nextInt(1) + 1);
         }
 
+        @Override
         public String d(Random random) {
             return "2x2_b" + (random.nextInt(5) + 1);
         }
 
+        @Override
         public String e(Random random) {
             return "2x2_s1";
         }
@@ -68,30 +71,37 @@ public class WorldGenWoodlandMansionPieces {
             super(null);
         }
 
+        @Override
         public String a(Random random) {
             return "1x1_a" + (random.nextInt(5) + 1);
         }
 
+        @Override
         public String b(Random random) {
             return "1x1_as" + (random.nextInt(4) + 1);
         }
 
+        @Override
         public String a(Random random, boolean flag) {
             return "1x2_a" + (random.nextInt(9) + 1);
         }
 
+        @Override
         public String b(Random random, boolean flag) {
             return "1x2_b" + (random.nextInt(5) + 1);
         }
 
+        @Override
         public String c(Random random) {
             return "1x2_s" + (random.nextInt(2) + 1);
         }
 
+        @Override
         public String d(Random random) {
             return "2x2_a" + (random.nextInt(4) + 1);
         }
 
+        @Override
         public String e(Random random) {
             return "2x2_s1";
         }
@@ -882,7 +892,7 @@ public class WorldGenWoodlandMansionPieces {
 
             enumblockrotation1 = enumblockrotation1.a(enumblockrotation);
             blockposition1 = blockposition1.a(enumblockrotation);
-            BlockPosition blockposition2 = blockposition.a(blockposition1.getX(), 0, blockposition1.getZ());
+            BlockPosition blockposition2 = blockposition.b(blockposition1.getX(), 0, blockposition1.getZ());
 
             list.add(new WorldGenWoodlandMansionPieces.i(this.a, s, blockposition2, enumblockrotation1));
         }
@@ -1007,18 +1017,16 @@ public class WorldGenWoodlandMansionPieces {
 
     public static class i extends DefinedStructurePiece {
 
-        private String d;
-        private EnumBlockRotation e;
-        private EnumBlockMirror f;
-
-        public i() {}
+        private final String d;
+        private final EnumBlockRotation e;
+        private final EnumBlockMirror f;
 
         public i(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation) {
             this(definedstructuremanager, s, blockposition, enumblockrotation, EnumBlockMirror.NONE);
         }
 
         public i(DefinedStructureManager definedstructuremanager, String s, BlockPosition blockposition, EnumBlockRotation enumblockrotation, EnumBlockMirror enumblockmirror) {
-            super(0);
+            super(WorldGenFeatureStructurePieceType.aa, 0);
             this.d = s;
             this.c = blockposition;
             this.e = enumblockrotation;
@@ -1026,31 +1034,33 @@ public class WorldGenWoodlandMansionPieces {
             this.a(definedstructuremanager);
         }
 
-        private void a(DefinedStructureManager definedstructuremanager) {
-            DefinedStructure definedstructure = definedstructuremanager.a(new MinecraftKey("woodland_mansion/" + this.d));
-            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(true).a(this.e).a(this.f);
-
-            this.a(definedstructure, this.c, definedstructureinfo);
-        }
-
-        protected void a(NBTTagCompound nbttagcompound) {
-            super.a(nbttagcompound);
-            nbttagcompound.setString("Template", this.d);
-            nbttagcompound.setString("Rot", this.b.c().name());
-            nbttagcompound.setString("Mi", this.b.b().name());
-        }
-
-        protected void a(NBTTagCompound nbttagcompound, DefinedStructureManager definedstructuremanager) {
-            super.a(nbttagcompound, definedstructuremanager);
+        public i(DefinedStructureManager definedstructuremanager, NBTTagCompound nbttagcompound) {
+            super(WorldGenFeatureStructurePieceType.aa, nbttagcompound);
             this.d = nbttagcompound.getString("Template");
             this.e = EnumBlockRotation.valueOf(nbttagcompound.getString("Rot"));
             this.f = EnumBlockMirror.valueOf(nbttagcompound.getString("Mi"));
             this.a(definedstructuremanager);
         }
 
+        private void a(DefinedStructureManager definedstructuremanager) {
+            DefinedStructure definedstructure = definedstructuremanager.a(new MinecraftKey("woodland_mansion/" + this.d));
+            DefinedStructureInfo definedstructureinfo = (new DefinedStructureInfo()).a(true).a(this.e).a(this.f).a((DefinedStructureProcessor) DefinedStructureProcessorBlockIgnore.a);
+
+            this.a(definedstructure, this.c, definedstructureinfo);
+        }
+
+        @Override
+        protected void a(NBTTagCompound nbttagcompound) {
+            super.a(nbttagcompound);
+            nbttagcompound.setString("Template", this.d);
+            nbttagcompound.setString("Rot", this.b.d().name());
+            nbttagcompound.setString("Mi", this.b.c().name());
+        }
+
+        @Override
         protected void a(String s, BlockPosition blockposition, GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox) {
             if (s.startsWith("Chest")) {
-                EnumBlockRotation enumblockrotation = this.b.c();
+                EnumBlockRotation enumblockrotation = this.b.d();
                 IBlockData iblockdata = Blocks.CHEST.getBlockData();
 
                 if ("ChestWest".equals(s)) {
@@ -1063,21 +1073,39 @@ public class WorldGenWoodlandMansionPieces {
                     iblockdata = (IBlockData) iblockdata.set(BlockChest.FACING, enumblockrotation.a(EnumDirection.NORTH));
                 }
 
-                this.a(generatoraccess, structureboundingbox, random, blockposition, LootTables.o, iblockdata);
-            } else if ("Mage".equals(s)) {
-                EntityEvoker entityevoker = new EntityEvoker(generatoraccess.getMinecraftWorld());
+                this.a(generatoraccess, structureboundingbox, random, blockposition, LootTables.D, iblockdata);
+            } else {
+                byte b0 = -1;
 
-                entityevoker.di();
-                entityevoker.setPositionRotation(blockposition, 0.0F, 0.0F);
-                generatoraccess.addEntity(entityevoker);
-                generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
-            } else if ("Warrior".equals(s)) {
-                EntityVindicator entityvindicator = new EntityVindicator(generatoraccess.getMinecraftWorld());
+                switch (s.hashCode()) {
+                case -1505748702:
+                    if (s.equals("Warrior")) {
+                        b0 = 1;
+                    }
+                    break;
+                case 2390418:
+                    if (s.equals("Mage")) {
+                        b0 = 0;
+                    }
+                }
 
-                entityvindicator.di();
-                entityvindicator.setPositionRotation(blockposition, 0.0F, 0.0F);
-                entityvindicator.prepare(generatoraccess.getDamageScaler(new BlockPosition(entityvindicator)), (GroupDataEntity) null, (NBTTagCompound) null);
-                generatoraccess.addEntity(entityvindicator);
+                EntityIllagerAbstract entityillagerabstract;
+
+                switch (b0) {
+                case 0:
+                    entityillagerabstract = (EntityIllagerAbstract) EntityTypes.EVOKER.a(generatoraccess.getMinecraftWorld());
+                    break;
+                case 1:
+                    entityillagerabstract = (EntityIllagerAbstract) EntityTypes.VINDICATOR.a(generatoraccess.getMinecraftWorld());
+                    break;
+                default:
+                    return;
+                }
+
+                entityillagerabstract.setPersistent();
+                entityillagerabstract.setPositionRotation(blockposition, 0.0F, 0.0F);
+                entityillagerabstract.prepare(generatoraccess, generatoraccess.getDamageScaler(new BlockPosition(entityillagerabstract)), EnumMobSpawn.STRUCTURE, (GroupDataEntity) null, (NBTTagCompound) null);
+                generatoraccess.addEntity(entityillagerabstract);
                 generatoraccess.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 2);
             }
 

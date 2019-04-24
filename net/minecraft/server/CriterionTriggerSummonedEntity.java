@@ -19,10 +19,12 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
 
     public CriterionTriggerSummonedEntity() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerSummonedEntity.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerSummonedEntity.b> criteriontrigger_a) {
         CriterionTriggerSummonedEntity.a criteriontriggersummonedentity_a = (CriterionTriggerSummonedEntity.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
         criteriontriggersummonedentity_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerSummonedEntity.b> criteriontrigger_a) {
         CriterionTriggerSummonedEntity.a criteriontriggersummonedentity_a = (CriterionTriggerSummonedEntity.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerSummonedEntity.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
 
@@ -132,6 +137,7 @@ public class CriterionTriggerSummonedEntity implements CriterionTrigger<Criterio
             return this.a.a(entityplayer, entity);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

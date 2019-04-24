@@ -54,11 +54,11 @@ public class MathHelper {
     }
 
     public static float e(float f) {
-        return f >= 0.0F ? f : -f;
+        return Math.abs(f);
     }
 
     public static int a(int i) {
-        return i >= 0 ? i : -i;
+        return Math.abs(i);
     }
 
     public static int f(float f) {
@@ -86,7 +86,7 @@ public class MathHelper {
     }
 
     public static double b(double d0, double d1, double d2) {
-        return d2 < 0.0D ? d0 : (d2 > 1.0D ? d1 : d0 + (d1 - d0) * d2);
+        return d2 < 0.0D ? d0 : (d2 > 1.0D ? d1 : d(d2, d0, d1));
     }
 
     public static double a(double d0, double d1) {
@@ -131,57 +131,66 @@ public class MathHelper {
         return (double) i / (double) along.length;
     }
 
+    public static boolean b(double d0, double d1) {
+        return Math.abs(d1 - d0) < 9.999999747378752E-6D;
+    }
+
     public static int b(int i, int j) {
         return Math.floorMod(i, j);
     }
 
     public static float g(float f) {
-        f %= 360.0F;
-        if (f >= 180.0F) {
-            f -= 360.0F;
+        float f1 = f % 360.0F;
+
+        if (f1 >= 180.0F) {
+            f1 -= 360.0F;
         }
 
-        if (f < -180.0F) {
-            f += 360.0F;
+        if (f1 < -180.0F) {
+            f1 += 360.0F;
         }
 
-        return f;
+        return f1;
     }
 
     public static double g(double d0) {
-        d0 %= 360.0D;
-        if (d0 >= 180.0D) {
-            d0 -= 360.0D;
+        double d1 = d0 % 360.0D;
+
+        if (d1 >= 180.0D) {
+            d1 -= 360.0D;
         }
 
-        if (d0 < -180.0D) {
-            d0 += 360.0D;
+        if (d1 < -180.0D) {
+            d1 += 360.0D;
         }
 
-        return d0;
+        return d1;
     }
 
     public static float c(float f, float f1) {
-        float f2 = g(f - f1);
-
-        return f2 < 180.0F ? f2 : f2 - 360.0F;
+        return g(f1 - f);
     }
 
     public static float d(float f, float f1) {
-        float f2 = g(f - f1);
-
-        return f2 < 180.0F ? e(f2) : e(f2 - 360.0F);
+        return e(c(f, f1));
     }
 
     public static float b(float f, float f1, float f2) {
+        float f3 = c(f, f1);
+        float f4 = a(f3, -f2, f2);
+
+        return f1 - f4;
+    }
+
+    public static float c(float f, float f1, float f2) {
         f2 = e(f2);
         return f < f1 ? a(f + f2, f, f1) : a(f - f2, f1, f);
     }
 
-    public static float c(float f, float f1, float f2) {
-        float f3 = c(f1, f);
+    public static float d(float f, float f1, float f2) {
+        float f3 = c(f, f1);
 
-        return b(f, f + f3, f2);
+        return c(f, f + f3, f2);
     }
 
     public static int c(int i) {
@@ -224,6 +233,14 @@ public class MathHelper {
         }
     }
 
+    public static double h(double d0) {
+        return d0 - (double) d(d0);
+    }
+
+    public static long a(BaseBlockPosition baseblockposition) {
+        return c(baseblockposition.getX(), baseblockposition.getY(), baseblockposition.getZ());
+    }
+
     public static long c(int i, int j, int k) {
         long l = (long) (i * 3129871) ^ (long) k * 116129781L ^ (long) j;
 
@@ -246,7 +263,7 @@ public class MathHelper {
         return (d0 - d1) / (d2 - d1);
     }
 
-    public static double c(double d0, double d1) {
+    public static double d(double d0, double d1) {
         double d2 = d1 * d1 + d0 * d0;
 
         if (Double.isNaN(d2)) {
@@ -336,6 +353,30 @@ public class MathHelper {
         }
 
         return i;
+    }
+
+    public static float g(float f, float f1, float f2) {
+        return f1 + f * (f2 - f1);
+    }
+
+    public static double d(double d0, double d1, double d2) {
+        return d1 + d0 * (d2 - d1);
+    }
+
+    public static double a(double d0, double d1, double d2, double d3, double d4, double d5) {
+        return d(d1, d(d0, d2, d3), d(d0, d4, d5));
+    }
+
+    public static double a(double d0, double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10) {
+        return d(d2, a(d0, d1, d3, d4, d5, d6), a(d0, d1, d7, d8, d9, d10));
+    }
+
+    public static double j(double d0) {
+        return d0 * d0 * d0 * (d0 * (d0 * 6.0D - 15.0D) + 10.0D);
+    }
+
+    public static int k(double d0) {
+        return d0 == 0.0D ? 0 : (d0 > 0.0D ? 1 : -1);
     }
 
     static {

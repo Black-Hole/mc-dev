@@ -6,86 +6,90 @@ import javax.annotation.Nullable;
 
 public abstract class EntityFishSchool extends EntityFish {
 
-    private EntityFishSchool a;
-    private int b = 1;
+    private EntityFishSchool b;
+    private int c = 1;
 
-    public EntityFishSchool(EntityTypes<?> entitytypes, World world) {
+    public EntityFishSchool(EntityTypes<? extends EntityFishSchool> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    protected void n() {
-        super.n();
+    @Override
+    protected void initPathfinder() {
+        super.initPathfinder();
         this.goalSelector.a(5, new PathfinderGoalFishSchool(this));
     }
 
-    public int dg() {
-        return this.dA();
+    @Override
+    public int dC() {
+        return this.dX();
     }
 
-    public int dA() {
-        return super.dg();
+    public int dX() {
+        return super.dC();
     }
 
-    protected boolean dy() {
-        return !this.dB();
+    @Override
+    protected boolean dV() {
+        return !this.dY();
     }
 
-    public boolean dB() {
-        return this.a != null && this.a.isAlive();
+    public boolean dY() {
+        return this.b != null && this.b.isAlive();
     }
 
     public EntityFishSchool a(EntityFishSchool entityfishschool) {
-        this.a = entityfishschool;
-        entityfishschool.dH();
+        this.b = entityfishschool;
+        entityfishschool.ee();
         return entityfishschool;
     }
 
-    public void dC() {
-        this.a.dI();
-        this.a = null;
+    public void dZ() {
+        this.b.ef();
+        this.b = null;
     }
 
-    private void dH() {
-        ++this.b;
+    private void ee() {
+        ++this.c;
     }
 
-    private void dI() {
-        --this.b;
+    private void ef() {
+        --this.c;
     }
 
-    public boolean dD() {
-        return this.dE() && this.b < this.dA();
+    public boolean ea() {
+        return this.eb() && this.c < this.dX();
     }
 
+    @Override
     public void tick() {
         super.tick();
-        if (this.dE() && this.world.random.nextInt(200) == 1) {
+        if (this.eb() && this.world.random.nextInt(200) == 1) {
             List<EntityFish> list = this.world.a(this.getClass(), this.getBoundingBox().grow(8.0D, 8.0D, 8.0D));
 
             if (list.size() <= 1) {
-                this.b = 1;
+                this.c = 1;
             }
         }
 
     }
 
-    public boolean dE() {
-        return this.b > 1;
+    public boolean eb() {
+        return this.c > 1;
     }
 
-    public boolean dF() {
-        return this.h(this.a) <= 121.0D;
+    public boolean ec() {
+        return this.h((Entity) this.b) <= 121.0D;
     }
 
-    public void dG() {
-        if (this.dB()) {
-            this.getNavigation().a((Entity) this.a, 1.0D);
+    public void ed() {
+        if (this.dY()) {
+            this.getNavigation().a((Entity) this.b, 1.0D);
         }
 
     }
 
     public void a(Stream<EntityFishSchool> stream) {
-        stream.limit((long) (this.dA() - this.b)).filter((entityfishschool) -> {
+        stream.limit((long) (this.dX() - this.c)).filter((entityfishschool) -> {
             return entityfishschool != this;
         }).forEach((entityfishschool) -> {
             entityfishschool.a(this);
@@ -93,8 +97,9 @@ public abstract class EntityFishSchool extends EntityFish {
     }
 
     @Nullable
-    public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
-        super.prepare(difficultydamagescaler, (GroupDataEntity) groupdataentity, nbttagcompound);
+    @Override
+    public GroupDataEntity prepare(GeneratorAccess generatoraccess, DifficultyDamageScaler difficultydamagescaler, EnumMobSpawn enummobspawn, @Nullable GroupDataEntity groupdataentity, @Nullable NBTTagCompound nbttagcompound) {
+        super.prepare(generatoraccess, difficultydamagescaler, enummobspawn, (GroupDataEntity) groupdataentity, nbttagcompound);
         if (groupdataentity == null) {
             groupdataentity = new EntityFishSchool.a(this);
         } else {

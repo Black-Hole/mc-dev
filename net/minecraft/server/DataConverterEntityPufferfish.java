@@ -13,6 +13,7 @@ public class DataConverterEntityPufferfish extends DataConverterEntityRenameAbst
         super("EntityPufferfishRenameFix", schema, flag);
     }
 
+    @Override
     protected String a(String s) {
         return Objects.equals("minecraft:puffer_fish", s) ? "minecraft:pufferfish" : s;
     }

@@ -12,10 +12,12 @@ public class PacketPlayOutHeldItemSlot implements Packet<PacketListenerPlayOut> 
         this.a = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeByte(this.a);
     }

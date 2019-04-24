@@ -1,8 +1,10 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public abstract class PathfinderGoal {
 
-    private int a;
+    private final EnumSet<PathfinderGoal.Type> a = EnumSet.noneOf(PathfinderGoal.Type.class);
 
     public PathfinderGoal() {}
 
@@ -12,7 +14,7 @@ public abstract class PathfinderGoal {
         return this.a();
     }
 
-    public boolean f() {
+    public boolean C_() {
         return true;
     }
 
@@ -22,11 +24,19 @@ public abstract class PathfinderGoal {
 
     public void e() {}
 
-    public void a(int i) {
-        this.a = i;
+    public void a(EnumSet<PathfinderGoal.Type> enumset) {
+        this.a.clear();
+        this.a.addAll(enumset);
     }
 
-    public int h() {
+    public EnumSet<PathfinderGoal.Type> i() {
         return this.a;
+    }
+
+    public static enum Type {
+
+        MOVE, LOOK, JUMP, TARGET;
+
+        private Type() {}
     }
 }

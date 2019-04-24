@@ -67,7 +67,7 @@ public class MojangsonParser {
         this.n.skipWhitespace();
         int i = this.n.getCursor();
 
-        if (this.n.peek() == '"') {
+        if (StringReader.isQuotedStringStart(this.n.peek())) {
             return new NBTTagString(this.n.readQuotedString());
         } else {
             String s = this.n.readUnquotedString();
@@ -125,7 +125,7 @@ public class MojangsonParser {
         return new NBTTagString(s);
     }
 
-    protected NBTBase d() throws CommandSyntaxException {
+    public NBTBase d() throws CommandSyntaxException {
         this.n.skipWhitespace();
         if (!this.n.canRead()) {
             throw MojangsonParser.c.createWithContext(this.n);
@@ -137,7 +137,7 @@ public class MojangsonParser {
     }
 
     protected NBTBase e() throws CommandSyntaxException {
-        return this.n.canRead(3) && this.n.peek(1) != '"' && this.n.peek(2) == ';' ? this.parseArray() : this.g();
+        return this.n.canRead(3) && !StringReader.isQuotedStringStart(this.n.peek(1)) && this.n.peek(2) == ';' ? this.parseArray() : this.g();
     }
 
     public NBTTagCompound f() throws CommandSyntaxException {
@@ -188,7 +188,7 @@ public class MojangsonParser {
                     b0 = b1;
                 } else if (b1 != b0) {
                     this.n.setCursor(i);
-                    throw MojangsonParser.d.createWithContext(this.n, NBTBase.n(b1), NBTBase.n(b0));
+                    throw MojangsonParser.d.createWithContext(this.n, NBTBase.l(b1), NBTBase.l(b0));
                 }
 
                 nbttaglist.add(nbtbase);
@@ -238,7 +238,7 @@ public class MojangsonParser {
 
                 if (b2 != b1) {
                     this.n.setCursor(i);
-                    throw MojangsonParser.e.createWithContext(this.n, NBTBase.n(b2), NBTBase.n(b0));
+                    throw MojangsonParser.e.createWithContext(this.n, NBTBase.l(b2), NBTBase.l(b0));
                 }
 
                 if (b1 == 1) {

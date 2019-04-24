@@ -6,36 +6,39 @@ import javax.annotation.Nullable;
 
 public class DebugReportRecipeSpecial {
 
-    private final RecipeSerializers.a<?> a;
+    private final RecipeSerializerComplex<?> a;
 
-    public DebugReportRecipeSpecial(RecipeSerializers.a<?> recipeserializers_a) {
-        this.a = recipeserializers_a;
+    public DebugReportRecipeSpecial(RecipeSerializerComplex<?> recipeserializercomplex) {
+        this.a = recipeserializercomplex;
     }
 
-    public static DebugReportRecipeSpecial a(RecipeSerializers.a<?> recipeserializers_a) {
-        return new DebugReportRecipeSpecial(recipeserializers_a);
+    public static DebugReportRecipeSpecial a(RecipeSerializerComplex<?> recipeserializercomplex) {
+        return new DebugReportRecipeSpecial(recipeserializercomplex);
     }
 
     public void a(Consumer<DebugReportRecipeData> consumer, final String s) {
         consumer.accept(new DebugReportRecipeData() {
-            public JsonObject a() {
-                JsonObject jsonobject = new JsonObject();
+            @Override
+            public void a(JsonObject jsonobject) {}
 
-                jsonobject.addProperty("type", DebugReportRecipeSpecial.this.a.a());
-                return jsonobject;
+            @Override
+            public RecipeSerializer<?> c() {
+                return DebugReportRecipeSpecial.this.a;
             }
 
+            @Override
             public MinecraftKey b() {
                 return new MinecraftKey(s);
             }
 
             @Nullable
-            public JsonObject c() {
+            @Override
+            public JsonObject d() {
                 return null;
             }
 
-            @Nullable
-            public MinecraftKey d() {
+            @Override
+            public MinecraftKey e() {
                 return new MinecraftKey("");
             }
         });

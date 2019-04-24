@@ -86,8 +86,8 @@ public class DebugReportRecipeShapeless {
 
     public void a(Consumer<DebugReportRecipeData> consumer, MinecraftKey minecraftkey) {
         this.a(minecraftkey);
-        this.e.a(new MinecraftKey("minecraft:recipes/root")).a("has_the_recipe", (CriterionInstance) (new CriterionTriggerRecipeUnlocked.b(minecraftkey))).a(AdvancementRewards.a.c(minecraftkey)).a(AdvancementRequirements.OR);
-        consumer.accept(new DebugReportRecipeShapeless.a(minecraftkey, this.b, this.c, this.f == null ? "" : this.f, this.d, this.e, new MinecraftKey(minecraftkey.b(), "recipes/" + this.b.q().c() + "/" + minecraftkey.getKey())));
+        this.e.a(new MinecraftKey("recipes/root")).a("has_the_recipe", (CriterionInstance) (new CriterionTriggerRecipeUnlocked.b(minecraftkey))).a(AdvancementRewards.a.c(minecraftkey)).a(AdvancementRequirements.OR);
+        consumer.accept(new DebugReportRecipeShapeless.a(minecraftkey, this.b, this.c, this.f == null ? "" : this.f, this.d, this.e, new MinecraftKey(minecraftkey.b(), "recipes/" + this.b.p().c() + "/" + minecraftkey.getKey())));
     }
 
     private void a(MinecraftKey minecraftkey) {
@@ -116,10 +116,8 @@ public class DebugReportRecipeShapeless {
             this.g = minecraftkey1;
         }
 
-        public JsonObject a() {
-            JsonObject jsonobject = new JsonObject();
-
-            jsonobject.addProperty("type", "crafting_shapeless");
+        @Override
+        public void a(JsonObject jsonobject) {
             if (!this.d.isEmpty()) {
                 jsonobject.addProperty("group", this.d);
             }
@@ -142,20 +140,27 @@ public class DebugReportRecipeShapeless {
             }
 
             jsonobject.add("result", jsonobject1);
-            return jsonobject;
         }
 
+        @Override
+        public RecipeSerializer<?> c() {
+            return RecipeSerializer.b;
+        }
+
+        @Override
         public MinecraftKey b() {
             return this.a;
         }
 
         @Nullable
-        public JsonObject c() {
+        @Override
+        public JsonObject d() {
             return this.f.b();
         }
 
         @Nullable
-        public MinecraftKey d() {
+        @Override
+        public MinecraftKey e() {
             return this.g;
         }
     }

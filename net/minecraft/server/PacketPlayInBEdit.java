@@ -10,12 +10,14 @@ public class PacketPlayInBEdit implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInBEdit() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.k();
+        this.a = packetdataserializer.m();
         this.b = packetdataserializer.readBoolean();
         this.c = (EnumHand) packetdataserializer.a(EnumHand.class);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.writeBoolean(this.b);

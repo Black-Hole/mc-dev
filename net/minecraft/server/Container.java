@@ -11,14 +11,50 @@ public abstract class Container {
 
     public NonNullList<ItemStack> items = NonNullList.a();
     public List<Slot> slots = Lists.newArrayList();
-    public int windowId;
+    private final List<ContainerProperty> d = Lists.newArrayList();
+    @Nullable
+    private final Containers<?> e;
+    public final int windowId;
     private int dragType = -1;
-    private int g;
-    private final Set<Slot> h = Sets.newHashSet();
-    protected List<ICrafting> listeners = Lists.newArrayList();
-    private final Set<EntityHuman> i = Sets.newHashSet();
+    private int h;
+    private final Set<Slot> i = Sets.newHashSet();
+    private final List<ICrafting> listeners = Lists.newArrayList();
+    private final Set<EntityHuman> k = Sets.newHashSet();
 
-    public Container() {}
+    protected Container(@Nullable Containers<?> containers, int i) {
+        this.e = containers;
+        this.windowId = i;
+    }
+
+    protected static boolean a(ContainerAccess containeraccess, EntityHuman entityhuman, Block block) {
+        return (Boolean) containeraccess.a((world, blockposition) -> {
+            return world.getType(blockposition).getBlock() != block ? false : entityhuman.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) <= 64.0D;
+        }, true);
+    }
+
+    public Containers<?> getType() {
+        if (this.e == null) {
+            throw new UnsupportedOperationException("Unable to construct this menu by type");
+        } else {
+            return this.e;
+        }
+    }
+
+    protected static void a(IInventory iinventory, int i) {
+        int j = iinventory.getSize();
+
+        if (j < i) {
+            throw new IllegalArgumentException("Container size " + j + " is smaller than expected " + i);
+        }
+    }
+
+    protected static void a(IContainerProperties icontainerproperties, int i) {
+        int j = icontainerproperties.a();
+
+        if (j < i) {
+            throw new IllegalArgumentException("Container data count " + j + " is smaller than expected " + i);
+        }
+    }
 
     protected Slot a(Slot slot) {
         slot.rawSlotIndex = this.slots.size();
@@ -27,17 +63,27 @@ public abstract class Container {
         return slot;
     }
 
+    protected ContainerProperty a(ContainerProperty containerproperty) {
+        this.d.add(containerproperty);
+        return containerproperty;
+    }
+
+    protected void a(IContainerProperties icontainerproperties) {
+        for (int i = 0; i < icontainerproperties.a(); ++i) {
+            this.a(ContainerProperty.a(icontainerproperties, i));
+        }
+
+    }
+
     public void addSlotListener(ICrafting icrafting) {
-        if (this.listeners.contains(icrafting)) {
-            throw new IllegalArgumentException("Listener already listening");
-        } else {
+        if (!this.listeners.contains(icrafting)) {
             this.listeners.add(icrafting);
-            icrafting.a(this, this.a());
-            this.b();
+            icrafting.a(this, this.b());
+            this.c();
         }
     }
 
-    public NonNullList<ItemStack> a() {
+    public NonNullList<ItemStack> b() {
         NonNullList<ItemStack> nonnulllist = NonNullList.a();
 
         for (int i = 0; i < this.slots.size(); ++i) {
@@ -47,17 +93,36 @@ public abstract class Container {
         return nonnulllist;
     }
 
-    public void b() {
-        for (int i = 0; i < this.slots.size(); ++i) {
+    public void c() {
+        int i;
+
+        for (i = 0; i < this.slots.size(); ++i) {
             ItemStack itemstack = ((Slot) this.slots.get(i)).getItem();
             ItemStack itemstack1 = (ItemStack) this.items.get(i);
 
             if (!ItemStack.matches(itemstack1, itemstack)) {
                 itemstack1 = itemstack.isEmpty() ? ItemStack.a : itemstack.cloneItemStack();
                 this.items.set(i, itemstack1);
+                Iterator iterator = this.listeners.iterator();
 
-                for (int j = 0; j < this.listeners.size(); ++j) {
-                    ((ICrafting) this.listeners.get(j)).a(this, i, itemstack1);
+                while (iterator.hasNext()) {
+                    ICrafting icrafting = (ICrafting) iterator.next();
+
+                    icrafting.a(this, i, itemstack1);
+                }
+            }
+        }
+
+        for (i = 0; i < this.d.size(); ++i) {
+            ContainerProperty containerproperty = (ContainerProperty) this.d.get(i);
+
+            if (containerproperty.c()) {
+                Iterator iterator1 = this.listeners.iterator();
+
+                while (iterator1.hasNext()) {
+                    ICrafting icrafting1 = (ICrafting) iterator1.next();
+
+                    icrafting1.setContainerData(this, i, containerproperty.b());
                 }
             }
         }
@@ -66,19 +131,6 @@ public abstract class Container {
 
     public boolean a(EntityHuman entityhuman, int i) {
         return false;
-    }
-
-    @Nullable
-    public Slot getSlot(IInventory iinventory, int i) {
-        for (int j = 0; j < this.slots.size(); ++j) {
-            Slot slot = (Slot) this.slots.get(j);
-
-            if (slot.a(iinventory, i)) {
-                return slot;
-            }
-        }
-
-        return null;
     }
 
     public Slot getSlot(int i) {
@@ -100,43 +152,43 @@ public abstract class Container {
         int l;
 
         if (inventoryclicktype == InventoryClickType.QUICK_CRAFT) {
-            int i1 = this.g;
+            int i1 = this.h;
 
-            this.g = c(j);
-            if ((i1 != 1 || this.g != 2) && i1 != this.g) {
-                this.c();
+            this.h = c(j);
+            if ((i1 != 1 || this.h != 2) && i1 != this.h) {
+                this.d();
             } else if (playerinventory.getCarried().isEmpty()) {
-                this.c();
-            } else if (this.g == 0) {
+                this.d();
+            } else if (this.h == 0) {
                 this.dragType = b(j);
                 if (a(this.dragType, entityhuman)) {
-                    this.g = 1;
-                    this.h.clear();
+                    this.h = 1;
+                    this.i.clear();
                 } else {
-                    this.c();
+                    this.d();
                 }
-            } else if (this.g == 1) {
+            } else if (this.h == 1) {
                 Slot slot = (Slot) this.slots.get(i);
 
                 itemstack1 = playerinventory.getCarried();
-                if (slot != null && a(slot, itemstack1, true) && slot.isAllowed(itemstack1) && (this.dragType == 2 || itemstack1.getCount() > this.h.size()) && this.b(slot)) {
-                    this.h.add(slot);
+                if (slot != null && a(slot, itemstack1, true) && slot.isAllowed(itemstack1) && (this.dragType == 2 || itemstack1.getCount() > this.i.size()) && this.b(slot)) {
+                    this.i.add(slot);
                 }
-            } else if (this.g == 2) {
-                if (!this.h.isEmpty()) {
+            } else if (this.h == 2) {
+                if (!this.i.isEmpty()) {
                     itemstack2 = playerinventory.getCarried().cloneItemStack();
                     k = playerinventory.getCarried().getCount();
-                    Iterator iterator = this.h.iterator();
+                    Iterator iterator = this.i.iterator();
 
                     while (iterator.hasNext()) {
                         Slot slot1 = (Slot) iterator.next();
                         ItemStack itemstack3 = playerinventory.getCarried();
 
-                        if (slot1 != null && a(slot1, itemstack3, true) && slot1.isAllowed(itemstack3) && (this.dragType == 2 || itemstack3.getCount() >= this.h.size()) && this.b(slot1)) {
+                        if (slot1 != null && a(slot1, itemstack3, true) && slot1.isAllowed(itemstack3) && (this.dragType == 2 || itemstack3.getCount() >= this.i.size()) && this.b(slot1)) {
                             ItemStack itemstack4 = itemstack2.cloneItemStack();
                             int j1 = slot1.hasItem() ? slot1.getItem().getCount() : 0;
 
-                            a(this.h, this.dragType, itemstack4, j1);
+                            a(this.i, this.dragType, itemstack4, j1);
                             l = Math.min(itemstack4.getMaxStackSize(), slot1.getMaxStackSize(itemstack4));
                             if (itemstack4.getCount() > l) {
                                 itemstack4.setCount(l);
@@ -151,12 +203,12 @@ public abstract class Container {
                     playerinventory.setCarried(itemstack2);
                 }
 
-                this.c();
+                this.d();
             } else {
-                this.c();
+                this.d();
             }
-        } else if (this.g != 0) {
-            this.c();
+        } else if (this.h != 0) {
+            this.d();
         } else {
             Slot slot2;
             int k1;
@@ -253,7 +305,7 @@ public abstract class Container {
                             }
                         }
 
-                        slot2.f();
+                        slot2.d();
                     }
                 }
             } else if (inventoryclicktype == InventoryClickType.SWAP && j >= 0 && j < 9) {
@@ -337,7 +389,7 @@ public abstract class Container {
                     }
                 }
 
-                this.b();
+                this.c();
             }
         }
 
@@ -379,22 +431,26 @@ public abstract class Container {
     }
 
     public void a(IInventory iinventory) {
-        this.b();
+        this.c();
     }
 
     public void setItem(int i, ItemStack itemstack) {
         this.getSlot(i).set(itemstack);
     }
 
+    public void a(int i, int j) {
+        ((ContainerProperty) this.d.get(i)).a(j);
+    }
+
     public boolean c(EntityHuman entityhuman) {
-        return !this.i.contains(entityhuman);
+        return !this.k.contains(entityhuman);
     }
 
     public void a(EntityHuman entityhuman, boolean flag) {
         if (flag) {
-            this.i.remove(entityhuman);
+            this.k.remove(entityhuman);
         } else {
-            this.i.add(entityhuman);
+            this.k.add(entityhuman);
         }
 
     }
@@ -430,12 +486,12 @@ public abstract class Container {
                     if (l <= itemstack.getMaxStackSize()) {
                         itemstack.setCount(0);
                         itemstack1.setCount(l);
-                        slot.f();
+                        slot.d();
                         flag1 = true;
                     } else if (itemstack1.getCount() < itemstack.getMaxStackSize()) {
                         itemstack.subtract(itemstack.getMaxStackSize() - itemstack1.getCount());
                         itemstack1.setCount(itemstack.getMaxStackSize());
-                        slot.f();
+                        slot.d();
                         flag1 = true;
                     }
                 }
@@ -473,7 +529,7 @@ public abstract class Container {
                         slot.set(itemstack.cloneAndSubtract(itemstack.getCount()));
                     }
 
-                    slot.f();
+                    slot.d();
                     flag1 = true;
                     break;
                 }
@@ -501,9 +557,9 @@ public abstract class Container {
         return i == 0 ? true : (i == 1 ? true : i == 2 && entityhuman.abilities.canInstantlyBuild);
     }
 
-    protected void c() {
-        this.g = 0;
-        this.h.clear();
+    protected void d() {
+        this.h = 0;
+        this.i.clear();
     }
 
     public static boolean a(@Nullable Slot slot, ItemStack itemstack, boolean flag) {
@@ -553,21 +609,6 @@ public abstract class Container {
 
             f /= (float) iinventory.getSize();
             return MathHelper.d(f * 14.0F) + (i > 0 ? 1 : 0);
-        }
-    }
-
-    protected void a(World world, EntityHuman entityhuman, IInventory iinventory, InventoryCraftResult inventorycraftresult) {
-        if (!world.isClientSide) {
-            EntityPlayer entityplayer = (EntityPlayer) entityhuman;
-            ItemStack itemstack = ItemStack.a;
-            IRecipe irecipe = world.getMinecraftServer().getCraftingManager().b(iinventory, world);
-
-            if (inventorycraftresult.a(world, entityplayer, irecipe) && irecipe != null) {
-                itemstack = irecipe.craftItem(iinventory);
-            }
-
-            inventorycraftresult.setItem(0, itemstack);
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutSetSlot(this.windowId, 0, itemstack));
         }
     }
 }

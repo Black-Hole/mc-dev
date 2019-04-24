@@ -6,14 +6,12 @@ public class EnchantmentFlameArrows extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 20;
     }
 
-    public int b(int i) {
-        return 50;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 1;
     }

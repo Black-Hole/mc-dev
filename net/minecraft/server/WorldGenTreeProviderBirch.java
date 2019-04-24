@@ -8,7 +8,8 @@ public class WorldGenTreeProviderBirch extends WorldGenTreeProvider {
     public WorldGenTreeProviderBirch() {}
 
     @Nullable
+    @Override
     protected WorldGenTreeAbstract<WorldGenFeatureEmptyConfiguration> b(Random random) {
-        return new WorldGenForest(true, false);
+        return new WorldGenForest(WorldGenFeatureEmptyConfiguration::a, true, false);
     }
 }

@@ -41,11 +41,14 @@ public class CommandClear {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, Collection<EntityPlayer> collection, Predicate<ItemStack> predicate, int i) throws CommandSyntaxException {
         int j = 0;
+        Iterator iterator = collection.iterator();
 
-        EntityPlayer entityplayer;
+        while (iterator.hasNext()) {
+            EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 
-        for (Iterator iterator = collection.iterator(); iterator.hasNext(); j += entityplayer.inventory.a(predicate, i)) {
-            entityplayer = (EntityPlayer) iterator.next();
+            j += entityplayer.inventory.a(predicate, i);
+            entityplayer.activeContainer.c();
+            entityplayer.broadcastCarriedItem();
         }
 
         if (j == 0) {

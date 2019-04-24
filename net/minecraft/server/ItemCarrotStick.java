@@ -6,6 +6,7 @@ public class ItemCarrotStick extends Item {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -15,8 +16,10 @@ public class ItemCarrotStick extends Item {
             if (entityhuman.isPassenger() && entityhuman.getVehicle() instanceof EntityPig) {
                 EntityPig entitypig = (EntityPig) entityhuman.getVehicle();
 
-                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dz()) {
-                    itemstack.damage(7, entityhuman);
+                if (itemstack.h() - itemstack.getDamage() >= 7 && entitypig.dW()) {
+                    itemstack.damage(7, entityhuman, (entityhuman1) -> {
+                        entityhuman1.d(enumhand);
+                    });
                     if (itemstack.isEmpty()) {
                         ItemStack itemstack1 = new ItemStack(Items.FISHING_ROD);
 

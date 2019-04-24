@@ -28,8 +28,9 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         this.a = rootcommandnode;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        PacketPlayOutCommands.a[] apacketplayoutcommands_a = new PacketPlayOutCommands.a[packetdataserializer.g()];
+        PacketPlayOutCommands.a[] apacketplayoutcommands_a = new PacketPlayOutCommands.a[packetdataserializer.i()];
         Deque<PacketPlayOutCommands.a> deque = new ArrayDeque(apacketplayoutcommands_a.length);
 
         for (int i = 0; i < apacketplayoutcommands_a.length; ++i) {
@@ -41,7 +42,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
 
         do {
             if (deque.isEmpty()) {
-                this.a = (RootCommandNode) apacketplayoutcommands_a[packetdataserializer.g()].e;
+                this.a = (RootCommandNode) apacketplayoutcommands_a[packetdataserializer.i()].e;
                 return;
             }
 
@@ -61,6 +62,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
         throw new IllegalStateException("Server sent an impossible command tree");
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         Map<CommandNode<ICompletionProvider>, Integer> map = Maps.newHashMap();
         Deque<CommandNode<ICompletionProvider>> deque = new ArrayDeque();
@@ -105,7 +107,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
     private PacketPlayOutCommands.a c(PacketDataSerializer packetdataserializer) {
         byte b0 = packetdataserializer.readByte();
         int[] aint = packetdataserializer.b();
-        int i = (b0 & 8) != 0 ? packetdataserializer.g() : 0;
+        int i = (b0 & 8) != 0 ? packetdataserializer.i() : 0;
         ArgumentBuilder<ICompletionProvider, ?> argumentbuilder = this.a(packetdataserializer, b0);
 
         return new PacketPlayOutCommands.a(argumentbuilder, b0, i, aint);
@@ -125,7 +127,7 @@ public class PacketPlayOutCommands implements Packet<PacketListenerPlayOut> {
                 RequiredArgumentBuilder<ICompletionProvider, ?> requiredargumentbuilder = RequiredArgumentBuilder.argument(s, argumenttype);
 
                 if ((b0 & 16) != 0) {
-                    requiredargumentbuilder.suggests(CompletionProviders.a(packetdataserializer.l()));
+                    requiredargumentbuilder.suggests(CompletionProviders.a(packetdataserializer.o()));
                 }
 
                 return requiredargumentbuilder;

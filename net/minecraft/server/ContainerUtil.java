@@ -27,7 +27,7 @@ public class ContainerUtil {
 
                 nbttagcompound1.setByte("Slot", (byte) i);
                 itemstack.save(nbttagcompound1);
-                nbttaglist.add((NBTBase) nbttagcompound1);
+                nbttaglist.add(nbttagcompound1);
             }
         }
 

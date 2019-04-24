@@ -3,23 +3,23 @@ package net.minecraft.server;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class BlockTall extends Block implements IFluidSource, IFluidContainer {
+public class BlockTall extends Block implements IBlockWaterlogged {
 
     public static final BlockStateBoolean NORTH = BlockSprawling.a;
     public static final BlockStateBoolean EAST = BlockSprawling.b;
     public static final BlockStateBoolean SOUTH = BlockSprawling.c;
-    public static final BlockStateBoolean WEST = BlockSprawling.o;
-    public static final BlockStateBoolean p = BlockProperties.y;
-    protected static final Map<EnumDirection, BlockStateBoolean> q = (Map) BlockSprawling.r.entrySet().stream().filter((entry) -> {
+    public static final BlockStateBoolean WEST = BlockSprawling.d;
+    public static final BlockStateBoolean e = BlockProperties.C;
+    protected static final Map<EnumDirection, BlockStateBoolean> f = (Map) BlockSprawling.g.entrySet().stream().filter((entry) -> {
         return ((EnumDirection) entry.getKey()).k().c();
     }).collect(SystemUtils.a());
-    protected final VoxelShape[] r;
-    protected final VoxelShape[] s;
+    protected final VoxelShape[] g;
+    protected final VoxelShape[] h;
 
     protected BlockTall(float f, float f1, float f2, float f3, float f4, Block.Info block_info) {
         super(block_info);
-        this.r = this.a(f, f1, f4, 0.0F, f4);
-        this.s = this.a(f, f1, f2, 0.0F, f3);
+        this.g = this.a(f, f1, f4, 0.0F, f4);
+        this.h = this.a(f, f1, f2, 0.0F, f3);
     }
 
     protected VoxelShape[] a(float f, float f1, float f2, float f3, float f4) {
@@ -43,19 +43,26 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         return avoxelshape;
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.s[this.k(iblockdata)];
+    @Override
+    public boolean b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return !(Boolean) iblockdata.get(BlockTall.e);
     }
 
-    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return this.r[this.k(iblockdata)];
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.h[this.j(iblockdata)];
+    }
+
+    @Override
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return this.g[this.j(iblockdata)];
     }
 
     private static int a(EnumDirection enumdirection) {
         return 1 << enumdirection.get2DRotationValue();
     }
 
-    protected int k(IBlockData iblockdata) {
+    protected int j(IBlockData iblockdata) {
         int i = 0;
 
         if ((Boolean) iblockdata.get(BlockTall.NORTH)) {
@@ -77,40 +84,17 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         return i;
     }
 
-    public FluidType removeFluid(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata) {
-        if ((Boolean) iblockdata.get(BlockTall.p)) {
-            generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, false), 3);
-            return FluidTypes.WATER;
-        } else {
-            return FluidTypes.EMPTY;
-        }
+    @Override
+    public Fluid g(IBlockData iblockdata) {
+        return (Boolean) iblockdata.get(BlockTall.e) ? FluidTypes.WATER.a(false) : super.g(iblockdata);
     }
 
-    public Fluid h(IBlockData iblockdata) {
-        return (Boolean) iblockdata.get(BlockTall.p) ? FluidTypes.WATER.a(false) : super.h(iblockdata);
-    }
-
-    public boolean canPlace(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata, FluidType fluidtype) {
-        return !(Boolean) iblockdata.get(BlockTall.p) && fluidtype == FluidTypes.WATER;
-    }
-
-    public boolean place(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Fluid fluid) {
-        if (!(Boolean) iblockdata.get(BlockTall.p) && fluid.c() == FluidTypes.WATER) {
-            if (!generatoraccess.e()) {
-                generatoraccess.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTall.p, true), 3);
-                generatoraccess.getFluidTickList().a(blockposition, fluid.c(), fluid.c().a((IWorldReader) generatoraccess));
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case CLOCKWISE_180:
@@ -124,6 +108,7 @@ public class BlockTall extends Block implements IFluidSource, IFluidContainer {
         }
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         switch (enumblockmirror) {
         case LEFT_RIGHT:

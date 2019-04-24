@@ -39,14 +39,11 @@ public class ArgumentScoreboardCriteria implements ArgumentType<IScoreboardCrite
         }
 
         String s = stringreader.getString().substring(i, stringreader.getCursor());
-        IScoreboardCriteria iscoreboardcriteria = IScoreboardCriteria.a(s);
 
-        if (iscoreboardcriteria == null) {
+        return (IScoreboardCriteria) IScoreboardCriteria.a(s).orElseThrow(() -> {
             stringreader.setCursor(i);
-            throw ArgumentScoreboardCriteria.a.create(s);
-        } else {
-            return iscoreboardcriteria;
-        }
+            return ArgumentScoreboardCriteria.a.create(s);
+        });
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {

@@ -8,14 +8,15 @@ public class RecipeMapExtend extends ShapedRecipes {
         super(minecraftkey, "", 3, 3, NonNullList.a(RecipeItemStack.a, RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.FILLED_MAP), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER), RecipeItemStack.a(Items.PAPER)), new ItemStack(Items.MAP));
     }
 
-    public boolean a(IInventory iinventory, World world) {
-        if (!super.a(iinventory, world)) {
+    @Override
+    public boolean a(InventoryCrafting inventorycrafting, World world) {
+        if (!super.a(inventorycrafting, world)) {
             return false;
         } else {
             ItemStack itemstack = ItemStack.a;
 
-            for (int i = 0; i < iinventory.getSize() && itemstack.isEmpty(); ++i) {
-                ItemStack itemstack1 = iinventory.getItem(i);
+            for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
+                ItemStack itemstack1 = inventorycrafting.getItem(i);
 
                 if (itemstack1.getItem() == Items.FILLED_MAP) {
                     itemstack = itemstack1;
@@ -48,11 +49,12 @@ public class RecipeMapExtend extends ShapedRecipes {
         return false;
     }
 
-    public ItemStack craftItem(IInventory iinventory) {
+    @Override
+    public ItemStack a(InventoryCrafting inventorycrafting) {
         ItemStack itemstack = ItemStack.a;
 
-        for (int i = 0; i < iinventory.getSize() && itemstack.isEmpty(); ++i) {
-            ItemStack itemstack1 = iinventory.getItem(i);
+        for (int i = 0; i < inventorycrafting.getSize() && itemstack.isEmpty(); ++i) {
+            ItemStack itemstack1 = inventorycrafting.getItem(i);
 
             if (itemstack1.getItem() == Items.FILLED_MAP) {
                 itemstack = itemstack1;
@@ -65,11 +67,13 @@ public class RecipeMapExtend extends ShapedRecipes {
         return itemstack;
     }
 
-    public boolean c() {
+    @Override
+    public boolean isComplex() {
         return true;
     }
 
-    public RecipeSerializer<?> a() {
-        return RecipeSerializers.f;
+    @Override
+    public RecipeSerializer<?> getRecipeSerializer() {
+        return RecipeSerializer.f;
     }
 }

@@ -18,14 +18,17 @@ public abstract class AttributeBase implements IAttribute {
         }
     }
 
+    @Override
     public String getName() {
         return this.b;
     }
 
+    @Override
     public double getDefault() {
         return this.c;
     }
 
+    @Override
     public boolean c() {
         return this.d;
     }
@@ -36,6 +39,7 @@ public abstract class AttributeBase implements IAttribute {
     }
 
     @Nullable
+    @Override
     public IAttribute d() {
         return this.a;
     }

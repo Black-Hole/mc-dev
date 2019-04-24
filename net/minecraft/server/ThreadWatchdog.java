@@ -25,7 +25,7 @@ public class ThreadWatchdog implements Runnable {
 
     public void run() {
         while (this.b.isRunning()) {
-            long i = this.b.ax();
+            long i = this.b.az();
             long j = SystemUtils.getMonotonicMillis();
             long k = j - i;
 
@@ -42,7 +42,7 @@ public class ThreadWatchdog implements Runnable {
                 for (int i1 = 0; i1 < l; ++i1) {
                     ThreadInfo threadinfo = athreadinfo1[i1];
 
-                    if (threadinfo.getThreadId() == this.b.ay().getId()) {
+                    if (threadinfo.getThreadId() == this.b.ax().getId()) {
                         error.setStackTrace(threadinfo.getStackTrace());
                     }
 

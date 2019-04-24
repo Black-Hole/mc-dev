@@ -18,10 +18,11 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
         return 200 + entityfishschool.getRandom().nextInt(200) % 20;
     }
 
+    @Override
     public boolean a() {
-        if (this.a.dE()) {
+        if (this.a.eb()) {
             return false;
-        } else if (this.a.dB()) {
+        } else if (this.a.dY()) {
             return true;
         } else if (this.c > 0) {
             --this.c;
@@ -29,34 +30,38 @@ public class PathfinderGoalFishSchool extends PathfinderGoal {
         } else {
             this.c = this.a(this.a);
             Predicate<EntityFishSchool> predicate = (entityfishschool) -> {
-                return entityfishschool.dD() || !entityfishschool.dB();
+                return entityfishschool.ea() || !entityfishschool.dY();
             };
             List<EntityFishSchool> list = this.a.world.a(this.a.getClass(), this.a.getBoundingBox().grow(8.0D, 8.0D, 8.0D), predicate);
-            EntityFishSchool entityfishschool = (EntityFishSchool) list.stream().filter(EntityFishSchool::dD).findAny().orElse(this.a);
+            EntityFishSchool entityfishschool = (EntityFishSchool) list.stream().filter(EntityFishSchool::ea).findAny().orElse(this.a);
 
             entityfishschool.a(list.stream().filter((entityfishschool1) -> {
-                return !entityfishschool1.dB();
+                return !entityfishschool1.dY();
             }));
-            return this.a.dB();
+            return this.a.dY();
         }
     }
 
+    @Override
     public boolean b() {
-        return this.a.dB() && this.a.dF();
+        return this.a.dY() && this.a.ec();
     }
 
+    @Override
     public void c() {
         this.b = 0;
     }
 
+    @Override
     public void d() {
-        this.a.dC();
+        this.a.dZ();
     }
 
+    @Override
     public void e() {
         if (--this.b <= 0) {
             this.b = 10;
-            this.a.dG();
+            this.a.ed();
         }
     }
 }

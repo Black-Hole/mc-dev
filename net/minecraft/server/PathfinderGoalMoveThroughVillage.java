@@ -1,121 +1,137 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 public class PathfinderGoalMoveThroughVillage extends PathfinderGoal {
 
-    private final EntityCreature a;
+    protected final EntityCreature a;
     private final double b;
     private PathEntity c;
-    private VillageDoor d;
+    private BlockPosition d;
     private final boolean e;
-    private final List<VillageDoor> f = Lists.newArrayList();
+    private final List<BlockPosition> f = Lists.newArrayList();
+    private final int g;
+    private final BooleanSupplier h;
 
-    public PathfinderGoalMoveThroughVillage(EntityCreature entitycreature, double d0, boolean flag) {
+    public PathfinderGoalMoveThroughVillage(EntityCreature entitycreature, double d0, boolean flag, int i, BooleanSupplier booleansupplier) {
         this.a = entitycreature;
         this.b = d0;
         this.e = flag;
-        this.a(1);
+        this.g = i;
+        this.h = booleansupplier;
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
         if (!(entitycreature.getNavigation() instanceof Navigation)) {
             throw new IllegalArgumentException("Unsupported mob for MoveThroughVillageGoal");
         }
     }
 
+    @Override
     public boolean a() {
         this.g();
-        if (this.e && this.a.world.L()) {
+        if (this.e && this.a.world.J()) {
             return false;
         } else {
-            Village village = this.a.world.af().getClosestVillage(new BlockPosition(this.a), 0);
+            WorldServer worldserver = (WorldServer) this.a.world;
+            BlockPosition blockposition = new BlockPosition(this.a);
 
-            if (village == null) {
+            if (!worldserver.a(blockposition, 6)) {
                 return false;
             } else {
-                this.d = this.a(village);
-                if (this.d == null) {
+                Vec3D vec3d = RandomPositionGenerator.a(this.a, 15, 7, (blockposition1) -> {
+                    if (!worldserver.b_(blockposition1)) {
+                        return Double.NEGATIVE_INFINITY;
+                    } else {
+                        Optional<BlockPosition> optional = worldserver.B().a(VillagePlaceType.a, this::a, blockposition1, 10, VillagePlace.Occupancy.IS_OCCUPIED);
+
+                        return !optional.isPresent() ? Double.NEGATIVE_INFINITY : -((BlockPosition) optional.get()).m(blockposition);
+                    }
+                });
+
+                if (vec3d == null) {
                     return false;
                 } else {
-                    Navigation navigation = (Navigation) this.a.getNavigation();
-                    boolean flag = navigation.g();
+                    Optional<BlockPosition> optional = worldserver.B().a(VillagePlaceType.a, this::a, new BlockPosition(vec3d), 10, VillagePlace.Occupancy.IS_OCCUPIED);
 
-                    navigation.a(false);
-                    this.c = navigation.b(this.d.d());
-                    navigation.a(flag);
-                    if (this.c != null) {
-                        return true;
+                    if (!optional.isPresent()) {
+                        return false;
                     } else {
-                        Vec3D vec3d = RandomPositionGenerator.a(this.a, 10, 7, new Vec3D((double) this.d.d().getX(), (double) this.d.d().getY(), (double) this.d.d().getZ()));
+                        this.d = ((BlockPosition) optional.get()).immutableCopy();
+                        Navigation navigation = (Navigation) this.a.getNavigation();
+                        boolean flag = navigation.f();
 
-                        if (vec3d == null) {
-                            return false;
-                        } else {
-                            navigation.a(false);
-                            this.c = this.a.getNavigation().a(vec3d.x, vec3d.y, vec3d.z);
+                        navigation.a(this.h.getAsBoolean());
+                        this.c = navigation.b(this.d);
+                        navigation.a(flag);
+                        if (this.c == null) {
+                            Vec3D vec3d1 = RandomPositionGenerator.a(this.a, 10, 7, new Vec3D((double) this.d.getX(), (double) this.d.getY(), (double) this.d.getZ()));
+
+                            if (vec3d1 == null) {
+                                return false;
+                            }
+
+                            navigation.a(this.h.getAsBoolean());
+                            this.c = this.a.getNavigation().a(vec3d1.x, vec3d1.y, vec3d1.z);
                             navigation.a(flag);
-                            return this.c != null;
+                            if (this.c == null) {
+                                return false;
+                            }
                         }
+
+                        for (int i = 0; i < this.c.e(); ++i) {
+                            PathPoint pathpoint = this.c.a(i);
+                            BlockPosition blockposition1 = new BlockPosition(pathpoint.a, pathpoint.b + 1, pathpoint.c);
+
+                            if (PathfinderGoalDoorInteract.a(this.a.world, blockposition1)) {
+                                this.c = this.a.getNavigation().a((double) pathpoint.a, (double) pathpoint.b, (double) pathpoint.c);
+                                break;
+                            }
+                        }
+
+                        return this.c != null;
                     }
                 }
             }
         }
     }
 
+    @Override
     public boolean b() {
-        if (this.a.getNavigation().p()) {
-            return false;
-        } else {
-            float f = this.a.width + 4.0F;
-
-            return this.a.c(this.d.d()) > (double) (f * f);
-        }
+        return this.a.getNavigation().n() ? false : !this.d.a((IPosition) this.a.ch(), (double) (this.a.getWidth() + (float) this.g));
     }
 
+    @Override
     public void c() {
         this.a.getNavigation().a(this.c, this.b);
     }
 
+    @Override
     public void d() {
-        if (this.a.getNavigation().p() || this.a.c(this.d.d()) < 16.0D) {
+        if (this.a.getNavigation().n() || this.d.a((IPosition) this.a.ch(), (double) this.g)) {
             this.f.add(this.d);
         }
 
     }
 
-    private VillageDoor a(Village village) {
-        VillageDoor villagedoor = null;
-        int i = Integer.MAX_VALUE;
-        List<VillageDoor> list = village.f();
-        Iterator iterator = list.iterator();
-
-        while (iterator.hasNext()) {
-            VillageDoor villagedoor1 = (VillageDoor) iterator.next();
-            int j = villagedoor1.b(MathHelper.floor(this.a.locX), MathHelper.floor(this.a.locY), MathHelper.floor(this.a.locZ));
-
-            if (j < i && !this.a(villagedoor1)) {
-                villagedoor = villagedoor1;
-                i = j;
-            }
-        }
-
-        return villagedoor;
-    }
-
-    private boolean a(VillageDoor villagedoor) {
+    private boolean a(BlockPosition blockposition) {
         Iterator iterator = this.f.iterator();
 
-        VillageDoor villagedoor1;
+        BlockPosition blockposition1;
 
         do {
             if (!iterator.hasNext()) {
-                return false;
+                return true;
             }
 
-            villagedoor1 = (VillageDoor) iterator.next();
-        } while (!villagedoor.d().equals(villagedoor1.d()));
+            blockposition1 = (BlockPosition) iterator.next();
+        } while (!Objects.equals(blockposition, blockposition1));
 
-        return true;
+        return false;
     }
 
     private void g() {

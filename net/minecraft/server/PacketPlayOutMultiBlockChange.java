@@ -10,7 +10,7 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
     public PacketPlayOutMultiBlockChange() {}
 
     public PacketPlayOutMultiBlockChange(int i, short[] ashort, Chunk chunk) {
-        this.a = new ChunkCoordIntPair(chunk.locX, chunk.locZ);
+        this.a = chunk.getPos();
         this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[i];
 
         for (int j = 0; j < this.b.length; ++j) {
@@ -19,16 +19,18 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
 
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = new ChunkCoordIntPair(packetdataserializer.readInt(), packetdataserializer.readInt());
-        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[packetdataserializer.g()];
+        this.b = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo[packetdataserializer.i()];
 
         for (int i = 0; i < this.b.length; ++i) {
-            this.b[i] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(packetdataserializer.readShort(), (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.g()));
+            this.b[i] = new PacketPlayOutMultiBlockChange.MultiBlockChangeInfo(packetdataserializer.readShort(), (IBlockData) Block.REGISTRY_ID.fromId(packetdataserializer.i()));
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a.x);
         packetdataserializer.writeInt(this.a.z);

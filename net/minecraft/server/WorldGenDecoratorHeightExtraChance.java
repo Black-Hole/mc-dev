@@ -1,25 +1,29 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorHeightExtraChance extends WorldGenDecorator<WorldGenDecoratorFrequencyExtraChanceConfiguration> {
 
-    public WorldGenDecoratorHeightExtraChance() {}
+    public WorldGenDecoratorHeightExtraChance(Function<Dynamic<?>, ? extends WorldGenDecoratorFrequencyExtraChanceConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorFrequencyExtraChanceConfiguration worldgendecoratorfrequencyextrachanceconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorFrequencyExtraChanceConfiguration worldgendecoratorfrequencyextrachanceconfiguration, BlockPosition blockposition) {
         int i = worldgendecoratorfrequencyextrachanceconfiguration.a;
 
         if (random.nextFloat() < worldgendecoratorfrequencyextrachanceconfiguration.b) {
             i += worldgendecoratorfrequencyextrachanceconfiguration.c;
         }
 
-        for (int j = 0; j < i; ++j) {
+        return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = random.nextInt(16);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.a(k, 0, l)), c0);
-        }
-
-        return true;
+            return generatoraccess.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition.b(k, 0, l));
+        });
     }
 }

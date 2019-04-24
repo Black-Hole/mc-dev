@@ -19,10 +19,12 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
 
     public CriterionTriggerCuredZombieVillager() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerCuredZombieVillager.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerCuredZombieVillager.b> criteriontrigger_a) {
         CriterionTriggerCuredZombieVillager.a criteriontriggercuredzombievillager_a = (CriterionTriggerCuredZombieVillager.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
         criteriontriggercuredzombievillager_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerCuredZombieVillager.b> criteriontrigger_a) {
         CriterionTriggerCuredZombieVillager.a criteriontriggercuredzombievillager_a = (CriterionTriggerCuredZombieVillager.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerCuredZombieVillager.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("zombie"));
         CriterionConditionEntity criterionconditionentity1 = CriterionConditionEntity.a(jsonobject.get("villager"));
@@ -135,6 +140,7 @@ public class CriterionTriggerCuredZombieVillager implements CriterionTrigger<Cri
             return !this.a.a(entityplayer, entityzombie) ? false : this.b.a(entityplayer, entityvillager);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

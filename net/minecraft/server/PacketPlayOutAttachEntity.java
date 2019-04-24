@@ -12,14 +12,16 @@ public class PacketPlayOutAttachEntity implements Packet<PacketListenerPlayOut> 
 
     public PacketPlayOutAttachEntity(Entity entity, @Nullable Entity entity1) {
         this.a = entity.getId();
-        this.b = entity1 != null ? entity1.getId() : -1;
+        this.b = entity1 != null ? entity1.getId() : 0;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.readInt();
         this.b = packetdataserializer.readInt();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.writeInt(this.a);
         packetdataserializer.writeInt(this.b);

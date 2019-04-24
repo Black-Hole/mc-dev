@@ -9,7 +9,8 @@ public class ItemAir extends Item {
         this.a = block;
     }
 
+    @Override
     public String getName() {
-        return this.a.m();
+        return this.a.l();
     }
 }

@@ -11,18 +11,18 @@ import java.util.stream.Stream;
 public class DataConverterBannerColour extends DataConverterNamedEntity {
 
     public DataConverterBannerColour(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityBannerColorFix", DataConverterTypes.j, "minecraft:banner");
+        super(schema, flag, "BlockEntityBannerColorFix", DataConverterTypes.k, "minecraft:banner");
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
         dynamic = dynamic.update("Base", (dynamic1) -> {
-            return dynamic1.createInt(15 - dynamic1.getNumberValue(0).intValue());
+            return dynamic1.createInt(15 - dynamic1.asInt(0));
         });
         dynamic = dynamic.update("Patterns", (dynamic1) -> {
-            Optional optional = dynamic1.getStream().map((stream) -> {
+            Optional optional = dynamic1.asStreamOpt().map((stream) -> {
                 return stream.map((dynamic2) -> {
                     return dynamic2.update("Color", (dynamic3) -> {
-                        return dynamic3.createInt(15 - dynamic3.getNumberValue(0).intValue());
+                        return dynamic3.createInt(15 - dynamic3.asInt(0));
                     });
                 });
             });
@@ -33,6 +33,7 @@ public class DataConverterBannerColour extends DataConverterNamedEntity {
         return dynamic;
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

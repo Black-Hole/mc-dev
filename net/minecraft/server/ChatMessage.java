@@ -3,6 +3,7 @@ package net.minecraft.server;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
@@ -10,8 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
-public class ChatMessage extends ChatBaseComponent {
+public class ChatMessage extends ChatBaseComponent implements ChatComponentContextual {
 
     private static final LocaleLanguage d = new LocaleLanguage();
     private static final LocaleLanguage e = LocaleLanguage.a();
@@ -19,8 +21,7 @@ public class ChatMessage extends ChatBaseComponent {
     private final Object[] g;
     private final Object h = new Object();
     private long i = -1L;
-    @VisibleForTesting
-    List<IChatBaseComponent> b = Lists.newArrayList();
+    protected final List<IChatBaseComponent> b = Lists.newArrayList();
     public static final Pattern c = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     public ChatMessage(String s, Object... aobject) {
@@ -143,6 +144,7 @@ public class ChatMessage extends ChatBaseComponent {
         }
     }
 
+    @Override
     public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
         super.setChatModifier(chatmodifier);
         Object[] aobject = this.g;
@@ -169,11 +171,13 @@ public class ChatMessage extends ChatBaseComponent {
         return this;
     }
 
+    @Override
     public Stream<IChatBaseComponent> c() {
         this.i();
         return Streams.concat(new Stream[] { this.b.stream(), this.a.stream()}).flatMap(IChatBaseComponent::c);
     }
 
+    @Override
     public String getText() {
         this.i();
         StringBuilder stringbuilder = new StringBuilder();
@@ -188,6 +192,7 @@ public class ChatMessage extends ChatBaseComponent {
         return stringbuilder.toString();
     }
 
+    @Override
     public ChatMessage g() {
         Object[] aobject = new Object[this.g.length];
 
@@ -202,6 +207,24 @@ public class ChatMessage extends ChatBaseComponent {
         return new ChatMessage(this.f, aobject);
     }
 
+    @Override
+    public IChatBaseComponent a(@Nullable CommandListenerWrapper commandlistenerwrapper, @Nullable Entity entity) throws CommandSyntaxException {
+        Object[] aobject = new Object[this.g.length];
+
+        for (int i = 0; i < aobject.length; ++i) {
+            Object object = this.g[i];
+
+            if (object instanceof IChatBaseComponent) {
+                aobject[i] = ChatComponentUtils.filterForDisplay(commandlistenerwrapper, (IChatBaseComponent) object, entity);
+            } else {
+                aobject[i] = object;
+            }
+        }
+
+        return new ChatMessage(this.f, aobject);
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) {
             return true;
@@ -214,6 +237,7 @@ public class ChatMessage extends ChatBaseComponent {
         }
     }
 
+    @Override
     public int hashCode() {
         int i = super.hashCode();
 
@@ -222,6 +246,7 @@ public class ChatMessage extends ChatBaseComponent {
         return i;
     }
 
+    @Override
     public String toString() {
         return "TranslatableComponent{key='" + this.f + '\'' + ", args=" + Arrays.toString(this.g) + ", siblings=" + this.a + ", style=" + this.getChatModifier() + '}';
     }

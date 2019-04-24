@@ -30,13 +30,10 @@ public class ArgumentEnchantment implements ArgumentType<Enchantment> {
 
     public Enchantment parse(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        Enchantment enchantment = (Enchantment) IRegistry.ENCHANTMENT.get(minecraftkey);
 
-        if (enchantment == null) {
-            throw ArgumentEnchantment.a.create(minecraftkey);
-        } else {
-            return enchantment;
-        }
+        return (Enchantment) IRegistry.ENCHANTMENT.getOptional(minecraftkey).orElseThrow(() -> {
+            return ArgumentEnchantment.a.create(minecraftkey);
+        });
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {

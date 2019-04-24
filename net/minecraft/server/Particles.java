@@ -2,121 +2,70 @@ package net.minecraft.server;
 
 public class Particles {
 
-    public static final ParticleType a;
-    public static final ParticleType b;
-    public static final ParticleType c;
-    public static final Particle<ParticleParamBlock> d;
-    public static final ParticleType e;
-    public static final ParticleType f;
-    public static final ParticleType g;
-    public static final ParticleType h;
-    public static final ParticleType i;
-    public static final ParticleType j;
-    public static final ParticleType k;
-    public static final ParticleType l;
-    public static final Particle<ParticleParamRedstone> m;
-    public static final ParticleType n;
-    public static final ParticleType o;
-    public static final ParticleType p;
-    public static final ParticleType q;
-    public static final ParticleType r;
-    public static final ParticleType s;
-    public static final ParticleType t;
-    public static final ParticleType u;
-    public static final Particle<ParticleParamBlock> v;
-    public static final ParticleType w;
-    public static final ParticleType x;
-    public static final ParticleType y;
-    public static final ParticleType z;
-    public static final ParticleType A;
-    public static final ParticleType B;
-    public static final Particle<ParticleParamItem> C;
-    public static final ParticleType D;
-    public static final ParticleType E;
-    public static final ParticleType F;
-    public static final ParticleType G;
-    public static final ParticleType H;
-    public static final ParticleType I;
-    public static final ParticleType J;
-    public static final ParticleType K;
-    public static final ParticleType L;
-    public static final ParticleType M;
-    public static final ParticleType N;
-    public static final ParticleType O;
-    public static final ParticleType P;
-    public static final ParticleType Q;
-    public static final ParticleType R;
-    public static final ParticleType S;
-    public static final ParticleType T;
-    public static final ParticleType U;
-    public static final ParticleType V;
-    public static final ParticleType W;
-    public static final ParticleType X;
+    public static final ParticleType AMBIENT_ENTITY_EFFECT = a("ambient_entity_effect", false);
+    public static final ParticleType ANGRY_VILLAGER = a("angry_villager", false);
+    public static final ParticleType BARRIER = a("barrier", false);
+    public static final Particle<ParticleParamBlock> BLOCK = a("block", ParticleParamBlock.a);
+    public static final ParticleType BUBBLE = a("bubble", false);
+    public static final ParticleType CLOUD = a("cloud", false);
+    public static final ParticleType CRIT = a("crit", false);
+    public static final ParticleType DAMAGE_INDICATOR = a("damage_indicator", true);
+    public static final ParticleType DRAGON_BREATH = a("dragon_breath", false);
+    public static final ParticleType DRIPPING_LAVA = a("dripping_lava", false);
+    public static final ParticleType FALLING_LAVA = a("falling_lava", false);
+    public static final ParticleType LANDING_LAVA = a("landing_lava", false);
+    public static final ParticleType DRIPPING_WATER = a("dripping_water", false);
+    public static final ParticleType FALLING_WATER = a("falling_water", false);
+    public static final Particle<ParticleParamRedstone> DUST = a("dust", ParticleParamRedstone.b);
+    public static final ParticleType EFFECT = a("effect", false);
+    public static final ParticleType ELDER_GUARDIAN = a("elder_guardian", true);
+    public static final ParticleType ENCHANTED_HIT = a("enchanted_hit", false);
+    public static final ParticleType ENCHANT = a("enchant", false);
+    public static final ParticleType END_ROD = a("end_rod", false);
+    public static final ParticleType ENTITY_EFFECT = a("entity_effect", false);
+    public static final ParticleType EXPLOSION_EMITTER = a("explosion_emitter", true);
+    public static final ParticleType EXPLOSION = a("explosion", true);
+    public static final Particle<ParticleParamBlock> FALLING_DUST = a("falling_dust", ParticleParamBlock.a);
+    public static final ParticleType FIREWORK = a("firework", false);
+    public static final ParticleType FISHING = a("fishing", false);
+    public static final ParticleType FLAME = a("flame", false);
+    public static final ParticleType FLASH = a("flash", false);
+    public static final ParticleType HAPPY_VILLAGER = a("happy_villager", false);
+    public static final ParticleType COMPOSTER = a("composter", false);
+    public static final ParticleType HEART = a("heart", false);
+    public static final ParticleType INSTANT_EFFECT = a("instant_effect", false);
+    public static final Particle<ParticleParamItem> ITEM = a("item", ParticleParamItem.a);
+    public static final ParticleType ITEM_SLIME = a("item_slime", false);
+    public static final ParticleType ITEM_SNOWBALL = a("item_snowball", false);
+    public static final ParticleType LARGE_SMOKE = a("large_smoke", false);
+    public static final ParticleType LAVA = a("lava", false);
+    public static final ParticleType MYCELIUM = a("mycelium", false);
+    public static final ParticleType NOTE = a("note", false);
+    public static final ParticleType POOF = a("poof", true);
+    public static final ParticleType PORTAL = a("portal", false);
+    public static final ParticleType RAIN = a("rain", false);
+    public static final ParticleType SMOKE = a("smoke", false);
+    public static final ParticleType SNEEZE = a("sneeze", false);
+    public static final ParticleType SPIT = a("spit", true);
+    public static final ParticleType SQUID_INK = a("squid_ink", true);
+    public static final ParticleType SWEEP_ATTACK = a("sweep_attack", true);
+    public static final ParticleType TOTEM_OF_UNDYING = a("totem_of_undying", false);
+    public static final ParticleType UNDERWATER = a("underwater", false);
+    public static final ParticleType SPLASH = a("splash", false);
+    public static final ParticleType WITCH = a("witch", false);
+    public static final ParticleType BUBBLE_POP = a("bubble_pop", false);
+    public static final ParticleType CURRENT_DOWN = a("current_down", false);
+    public static final ParticleType BUBBLE_COLUMN_UP = a("bubble_column_up", false);
+    public static final ParticleType NAUTILUS = a("nautilus", false);
+    public static final ParticleType DOLPHIN = a("dolphin", false);
+    public static final ParticleType CAMPFIRE_COSY_SMOKE = a("campfire_cosy_smoke", true);
+    public static final ParticleType CAMPFIRE_SIGNAL_SMOKE = a("campfire_signal_smoke", true);
 
-    private static <T extends Particle<?>> T a(String s) {
-        T t0 = (Particle) IRegistry.PARTICLE_TYPE.get(new MinecraftKey(s));
-
-        if (t0 == null) {
-            throw new IllegalStateException("Invalid or unknown particle type: " + s);
-        } else {
-            return t0;
-        }
+    private static ParticleType a(String s, boolean flag) {
+        return (ParticleType) IRegistry.a(IRegistry.PARTICLE_TYPE, s, (Object) (new ParticleType(flag)));
     }
 
-    static {
-        if (!DispenserRegistry.a()) {
-            throw new RuntimeException("Accessed particles before Bootstrap!");
-        } else {
-            a = (ParticleType) a("ambient_entity_effect");
-            b = (ParticleType) a("angry_villager");
-            c = (ParticleType) a("barrier");
-            d = a("block");
-            e = (ParticleType) a("bubble");
-            f = (ParticleType) a("bubble_column_up");
-            g = (ParticleType) a("cloud");
-            h = (ParticleType) a("crit");
-            i = (ParticleType) a("damage_indicator");
-            j = (ParticleType) a("dragon_breath");
-            k = (ParticleType) a("dripping_lava");
-            l = (ParticleType) a("dripping_water");
-            m = a("dust");
-            n = (ParticleType) a("effect");
-            o = (ParticleType) a("elder_guardian");
-            p = (ParticleType) a("enchanted_hit");
-            q = (ParticleType) a("enchant");
-            r = (ParticleType) a("end_rod");
-            s = (ParticleType) a("entity_effect");
-            t = (ParticleType) a("explosion_emitter");
-            u = (ParticleType) a("explosion");
-            v = a("falling_dust");
-            w = (ParticleType) a("firework");
-            x = (ParticleType) a("fishing");
-            y = (ParticleType) a("flame");
-            z = (ParticleType) a("happy_villager");
-            A = (ParticleType) a("heart");
-            B = (ParticleType) a("instant_effect");
-            C = a("item");
-            D = (ParticleType) a("item_slime");
-            E = (ParticleType) a("item_snowball");
-            F = (ParticleType) a("large_smoke");
-            G = (ParticleType) a("lava");
-            H = (ParticleType) a("mycelium");
-            I = (ParticleType) a("note");
-            J = (ParticleType) a("poof");
-            K = (ParticleType) a("portal");
-            L = (ParticleType) a("rain");
-            M = (ParticleType) a("smoke");
-            N = (ParticleType) a("spit");
-            O = (ParticleType) a("sweep_attack");
-            P = (ParticleType) a("totem_of_undying");
-            Q = (ParticleType) a("underwater");
-            R = (ParticleType) a("splash");
-            S = (ParticleType) a("witch");
-            T = (ParticleType) a("bubble_pop");
-            U = (ParticleType) a("current_down");
-            V = (ParticleType) a("squid_ink");
-            W = (ParticleType) a("nautilus");
-            X = (ParticleType) a("dolphin");
-        }
+    private static <T extends ParticleParam> Particle<T> a(String s, ParticleParam.a<T> particleparam_a) {
+        return (Particle) IRegistry.a(IRegistry.PARTICLE_TYPE, s, (Object) (new Particle<>(false, particleparam_a)));
     }
 }

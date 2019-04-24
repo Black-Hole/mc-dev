@@ -12,33 +12,35 @@ public abstract class BlockPressurePlateAbstract extends Block {
         super(block_info);
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return this.getPower(iblockdata) > 0 ? BlockPressurePlateAbstract.a : BlockPressurePlateAbstract.b;
     }
 
+    @Override
     public int a(IWorldReader iworldreader) {
         return 20;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
-    }
-
-    public boolean a() {
+    @Override
+    public boolean T_() {
         return true;
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return enumdirection == EnumDirection.DOWN && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
-        IBlockData iblockdata1 = iworldreader.getType(blockposition.down());
+        BlockPosition blockposition1 = blockposition.down();
 
-        return iblockdata1.q() || iblockdata1.getBlock() instanceof BlockFence;
+        return c((IBlockAccess) iworldreader, blockposition1) || a(iworldreader, blockposition1, EnumDirection.UP);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
             int i = this.getPower(iblockdata);
 
@@ -49,6 +51,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
         }
     }
 
+    @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide) {
             int i = this.getPower(iblockdata);
@@ -69,7 +72,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
             iblockdata = this.a(iblockdata, j);
             world.setTypeAndData(blockposition, iblockdata, 2);
             this.a(world, blockposition);
-            world.a(blockposition, blockposition);
+            world.m(blockposition);
         }
 
         if (!flag1 && flag) {
@@ -88,6 +91,7 @@ public abstract class BlockPressurePlateAbstract extends Block {
 
     protected abstract void b(GeneratorAccess generatoraccess, BlockPosition blockposition);
 
+    @Override
     public void remove(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (!flag && iblockdata.getBlock() != iblockdata1.getBlock()) {
             if (this.getPower(iblockdata) > 0) {
@@ -103,18 +107,22 @@ public abstract class BlockPressurePlateAbstract extends Block {
         world.applyPhysics(blockposition.down(), this);
     }
 
+    @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return this.getPower(iblockdata);
     }
 
+    @Override
     public int b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return enumdirection == EnumDirection.UP ? this.getPower(iblockdata) : 0;
     }
 
+    @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
     }
 
+    @Override
     public EnumPistonReaction getPushReaction(IBlockData iblockdata) {
         return EnumPistonReaction.DESTROY;
     }
@@ -124,8 +132,4 @@ public abstract class BlockPressurePlateAbstract extends Block {
     protected abstract int getPower(IBlockData iblockdata);
 
     protected abstract IBlockData a(IBlockData iblockdata, int i);
-
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
 }

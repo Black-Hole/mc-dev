@@ -41,6 +41,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
             public a() {}
 
+            @Override
             public ArgumentCriterionValue.a b(PacketDataSerializer packetdataserializer) {
                 return new ArgumentCriterionValue.a();
             }
@@ -69,6 +70,7 @@ public interface ArgumentCriterionValue<T extends CriterionConditionValue<?>> ex
 
             public a() {}
 
+            @Override
             public ArgumentCriterionValue.b b(PacketDataSerializer packetdataserializer) {
                 return new ArgumentCriterionValue.b();
             }

@@ -1,38 +1,33 @@
 package net.minecraft.server;
 
-import com.google.common.collect.Sets;
-import java.util.Set;
+import com.google.common.collect.UnmodifiableIterator;
+import java.util.Iterator;
 
 public class FluidTypes {
 
-    private static final Set<FluidType> f;
-    public static final FluidType EMPTY;
-    public static final FluidTypeFlowing FLOWING_WATER;
-    public static final FluidTypeFlowing WATER;
-    public static final FluidTypeFlowing FLOWING_LAVA;
-    public static final FluidTypeFlowing LAVA;
+    public static final FluidType EMPTY = a("empty", new FluidTypeEmpty());
+    public static final FluidTypeFlowing FLOWING_WATER = (FluidTypeFlowing) a("flowing_water", new FluidTypeWater.a());
+    public static final FluidTypeFlowing WATER = (FluidTypeFlowing) a("water", new FluidTypeWater.b());
+    public static final FluidTypeFlowing FLOWING_LAVA = (FluidTypeFlowing) a("flowing_lava", new FluidTypeLava.a());
+    public static final FluidTypeFlowing LAVA = (FluidTypeFlowing) a("lava", new FluidTypeLava.b());
 
-    private static FluidType a(String s) {
-        FluidType fluidtype = (FluidType) IRegistry.FLUID.getOrDefault(new MinecraftKey(s));
-
-        if (!FluidTypes.f.add(fluidtype)) {
-            throw new IllegalStateException("Invalid Fluid requested: " + s);
-        } else {
-            return fluidtype;
-        }
+    private static <T extends FluidType> T a(String s, T t0) {
+        return (FluidType) IRegistry.a((IRegistry) IRegistry.FLUID, s, (Object) t0);
     }
 
     static {
-        if (!DispenserRegistry.a()) {
-            throw new RuntimeException("Accessed Fluids before Bootstrap!");
-        } else {
-            f = Sets.newHashSet(new FluidType[] { (FluidType) null});
-            EMPTY = a("empty");
-            FLOWING_WATER = (FluidTypeFlowing) a("flowing_water");
-            WATER = (FluidTypeFlowing) a("water");
-            FLOWING_LAVA = (FluidTypeFlowing) a("flowing_lava");
-            LAVA = (FluidTypeFlowing) a("lava");
-            FluidTypes.f.clear();
+        Iterator iterator = IRegistry.FLUID.iterator();
+
+        while (iterator.hasNext()) {
+            FluidType fluidtype = (FluidType) iterator.next();
+            UnmodifiableIterator unmodifiableiterator = fluidtype.h().a().iterator();
+
+            while (unmodifiableiterator.hasNext()) {
+                Fluid fluid = (Fluid) unmodifiableiterator.next();
+
+                FluidType.c.b(fluid);
+            }
         }
+
     }
 }

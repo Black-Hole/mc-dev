@@ -1,15 +1,20 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.Dynamic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
-public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionConfiguration> {
+public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenWoodlandMansion() {}
+    public WorldGenWoodlandMansion(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
+    @Override
     protected ChunkCoordIntPair a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j, int k, int l) {
         int i1 = chunkgenerator.getSettings().p();
         int j1 = chunkgenerator.getSettings().q();
@@ -28,7 +33,8 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
         return new ChunkCoordIntPair(k2, l2);
     }
 
-    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+    @Override
+    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
         ChunkCoordIntPair chunkcoordintpair = this.a(chunkgenerator, random, i, j, 0, 0);
 
         if (i == chunkcoordintpair.x && j == chunkcoordintpair.z) {
@@ -43,7 +49,7 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
                 }
 
                 biomebase = (BiomeBase) iterator.next();
-            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.g));
+            } while (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.WOODLAND_MANSION));
 
             return false;
         } else {
@@ -51,33 +57,30 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
         }
     }
 
-    protected boolean a(GeneratorAccess generatoraccess) {
-        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
+    @Override
+    public StructureGenerator.a a() {
+        return WorldGenWoodlandMansion.a::new;
     }
 
-    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), Biomes.b);
-
-        return new WorldGenWoodlandMansion.a(generatoraccess, chunkgenerator, seededrandom, i, j, biomebase);
-    }
-
-    protected String a() {
+    @Override
+    public String b() {
         return "Mansion";
     }
 
-    public int b() {
+    @Override
+    public int c() {
         return 8;
     }
 
     public static class a extends StructureStart {
 
-        private boolean e;
+        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        }
 
-        public a() {}
-
-        public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
-            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
-            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[seededrandom.nextInt(EnumBlockRotation.values().length)];
+        @Override
+        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
+            EnumBlockRotation enumblockrotation = EnumBlockRotation.values()[this.d.nextInt(EnumBlockRotation.values().length)];
             byte b0 = 5;
             byte b1 = 5;
 
@@ -90,44 +93,41 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
                 b1 = -5;
             }
 
-            ProtoChunk protochunk = new ProtoChunk(new ChunkCoordIntPair(i, j), ChunkConverter.a);
+            int k = (i << 4) + 7;
+            int l = (j << 4) + 7;
+            int i1 = chunkgenerator.c(k, l, HeightMap.Type.WORLD_SURFACE_WG);
+            int j1 = chunkgenerator.c(k, l + b1, HeightMap.Type.WORLD_SURFACE_WG);
+            int k1 = chunkgenerator.c(k + b0, l, HeightMap.Type.WORLD_SURFACE_WG);
+            int l1 = chunkgenerator.c(k + b0, l + b1, HeightMap.Type.WORLD_SURFACE_WG);
+            int i2 = Math.min(Math.min(i1, j1), Math.min(k1, l1));
 
-            chunkgenerator.createChunk(protochunk);
-            int k = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7);
-            int l = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7, 7 + b1);
-            int i1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7);
-            int j1 = protochunk.a(HeightMap.Type.MOTION_BLOCKING, 7 + b0, 7 + b1);
-            int k1 = Math.min(Math.min(k, l), Math.min(i1, j1));
-
-            if (k1 < 60) {
-                this.e = false;
-            } else {
-                BlockPosition blockposition = new BlockPosition(i * 16 + 8, k1 + 1, j * 16 + 8);
+            if (i2 >= 60) {
+                BlockPosition blockposition = new BlockPosition(i * 16 + 8, i2 + 1, j * 16 + 8);
                 List<WorldGenWoodlandMansionPieces.i> list = Lists.newLinkedList();
 
-                WorldGenWoodlandMansionPieces.a(generatoraccess.getDataManager().h(), blockposition, enumblockrotation, list, seededrandom);
-                this.a.addAll(list);
-                this.a((IBlockAccess) generatoraccess);
-                this.e = true;
+                WorldGenWoodlandMansionPieces.a(definedstructuremanager, blockposition, enumblockrotation, list, this.d);
+                this.b.addAll(list);
+                this.b();
             }
         }
 
+        @Override
         public void a(GeneratorAccess generatoraccess, Random random, StructureBoundingBox structureboundingbox, ChunkCoordIntPair chunkcoordintpair) {
             super.a(generatoraccess, random, structureboundingbox, chunkcoordintpair);
-            int i = this.b.b;
+            int i = this.c.b;
 
             for (int j = structureboundingbox.a; j <= structureboundingbox.d; ++j) {
                 for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
                     BlockPosition blockposition = new BlockPosition(j, i, k);
 
-                    if (!generatoraccess.isEmpty(blockposition) && this.b.b((BaseBlockPosition) blockposition)) {
+                    if (!generatoraccess.isEmpty(blockposition) && this.c.b((BaseBlockPosition) blockposition)) {
                         boolean flag = false;
-                        Iterator iterator = this.a.iterator();
+                        Iterator iterator = this.b.iterator();
 
                         while (iterator.hasNext()) {
                             StructurePiece structurepiece = (StructurePiece) iterator.next();
 
-                            if (structurepiece.d().b((BaseBlockPosition) blockposition)) {
+                            if (structurepiece.g().b((BaseBlockPosition) blockposition)) {
                                 flag = true;
                                 break;
                             }
@@ -148,10 +148,6 @@ public class WorldGenWoodlandMansion extends StructureGenerator<WorldGenMansionC
                 }
             }
 
-        }
-
-        public boolean b() {
-            return this.e;
         }
     }
 }

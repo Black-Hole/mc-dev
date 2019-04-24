@@ -1,25 +1,101 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
+public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageBlock.a, LightEngineStorageBlock> {
 
-public class LightEngineBlock extends LightEngine {
+    private static final EnumDirection[] d = EnumDirection.values();
+    private final BlockPosition.MutableBlockPosition e = new BlockPosition.MutableBlockPosition();
 
-    public LightEngineBlock() {}
-
-    public EnumSkyBlock a() {
-        return EnumSkyBlock.BLOCK;
+    public LightEngineBlock(ILightAccess ilightaccess) {
+        super(ilightaccess, EnumSkyBlock.BLOCK, new LightEngineStorageBlock(ilightaccess));
     }
 
-    public void a(RegionLimitedWorldAccess regionlimitedworldaccess, IChunkAccess ichunkaccess) {
-        Iterator iterator = ichunkaccess.j().iterator();
+    private int d(long i) {
+        int j = BlockPosition.b(i);
+        int k = BlockPosition.c(i);
+        int l = BlockPosition.d(i);
+        IBlockAccess iblockaccess = this.a.b(j >> 4, l >> 4);
 
-        while (iterator.hasNext()) {
-            BlockPosition blockposition = (BlockPosition) iterator.next();
+        return iblockaccess != null ? iblockaccess.h(this.e.d(j, k, l)) : 0;
+    }
 
-            this.a((IWorldWriter) regionlimitedworldaccess, blockposition, this.b(regionlimitedworldaccess, blockposition));
-            this.a(ichunkaccess.getPos(), blockposition, this.a((IWorldReader) regionlimitedworldaccess, blockposition));
+    @Override
+    protected int b(long i, long j, int k) {
+        return j == Long.MAX_VALUE ? 15 : (i == Long.MAX_VALUE ? k + 15 - this.d(j) : (k >= 15 ? k : k + Math.max(1, this.a(i, j))));
+    }
+
+    @Override
+    protected void a(long i, int j, boolean flag) {
+        long k = SectionPosition.e(i);
+        EnumDirection[] aenumdirection = LightEngineBlock.d;
+        int l = aenumdirection.length;
+
+        for (int i1 = 0; i1 < l; ++i1) {
+            EnumDirection enumdirection = aenumdirection[i1];
+            long j1 = BlockPosition.a(i, enumdirection);
+            long k1 = SectionPosition.e(j1);
+
+            if (k == k1 || ((LightEngineStorageBlock) this.c).g(k1)) {
+                this.b(i, j1, j, flag);
+            }
         }
 
-        this.a((GeneratorAccess) regionlimitedworldaccess, ichunkaccess.getPos());
+    }
+
+    @Override
+    protected int a(long i, long j, int k) {
+        int l = k;
+
+        if (Long.MAX_VALUE != j) {
+            int i1 = this.b(Long.MAX_VALUE, i, 0);
+
+            if (k > i1) {
+                l = i1;
+            }
+
+            if (l == 0) {
+                return l;
+            }
+        }
+
+        long j1 = SectionPosition.e(i);
+        NibbleArray nibblearray = ((LightEngineStorageBlock) this.c).a(j1, true);
+        EnumDirection[] aenumdirection = LightEngineBlock.d;
+        int k1 = aenumdirection.length;
+
+        for (int l1 = 0; l1 < k1; ++l1) {
+            EnumDirection enumdirection = aenumdirection[l1];
+            long i2 = BlockPosition.a(i, enumdirection);
+
+            if (i2 != j) {
+                long j2 = SectionPosition.e(i2);
+                NibbleArray nibblearray1;
+
+                if (j1 == j2) {
+                    nibblearray1 = nibblearray;
+                } else {
+                    nibblearray1 = ((LightEngineStorageBlock) this.c).a(j2, true);
+                }
+
+                if (nibblearray1 != null) {
+                    int k2 = this.b(i2, i, this.a(nibblearray1, i2));
+
+                    if (l > k2) {
+                        l = k2;
+                    }
+
+                    if (l == 0) {
+                        return l;
+                    }
+                }
+            }
+        }
+
+        return l;
+    }
+
+    @Override
+    public void a(BlockPosition blockposition, int i) {
+        ((LightEngineStorageBlock) this.c).c();
+        this.a(Long.MAX_VALUE, blockposition.asLong(), 15 - i, true);
     }
 }

@@ -1,40 +1,17 @@
 package net.minecraft.server;
 
-public class MovingObjectPosition {
+public abstract class MovingObjectPosition {
 
-    private BlockPosition e;
-    public MovingObjectPosition.EnumMovingObjectType type;
-    public EnumDirection direction;
-    public Vec3D pos;
-    public Entity entity;
+    protected final Vec3D pos;
 
-    public MovingObjectPosition(Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition) {
-        this(MovingObjectPosition.EnumMovingObjectType.BLOCK, vec3d, enumdirection, blockposition);
-    }
-
-    public MovingObjectPosition(Entity entity) {
-        this(entity, new Vec3D(entity.locX, entity.locY, entity.locZ));
-    }
-
-    public MovingObjectPosition(MovingObjectPosition.EnumMovingObjectType movingobjectposition_enummovingobjecttype, Vec3D vec3d, EnumDirection enumdirection, BlockPosition blockposition) {
-        this.type = movingobjectposition_enummovingobjecttype;
-        this.e = blockposition;
-        this.direction = enumdirection;
-        this.pos = new Vec3D(vec3d.x, vec3d.y, vec3d.z);
-    }
-
-    public MovingObjectPosition(Entity entity, Vec3D vec3d) {
-        this.type = MovingObjectPosition.EnumMovingObjectType.ENTITY;
-        this.entity = entity;
+    protected MovingObjectPosition(Vec3D vec3d) {
         this.pos = vec3d;
     }
 
-    public BlockPosition getBlockPosition() {
-        return this.e;
-    }
+    public abstract MovingObjectPosition.EnumMovingObjectType getType();
 
-    public String toString() {
-        return "HitResult{type=" + this.type + ", blockpos=" + this.e + ", f=" + this.direction + ", pos=" + this.pos + ", entity=" + this.entity + '}';
+    public Vec3D getPos() {
+        return this.pos;
     }
 
     public static enum EnumMovingObjectType {

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +10,7 @@ import java.nio.file.LinkOption;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,6 +27,7 @@ public class HashCache {
     private int d;
     private final Map<java.nio.file.Path, String> e = Maps.newHashMap();
     private final Map<java.nio.file.Path, String> f = Maps.newHashMap();
+    private final Set<java.nio.file.Path> g = Sets.newHashSet();
 
     public HashCache(java.nio.file.Path java_nio_file_path, String s) throws IOException {
         this.b = java_nio_file_path;
@@ -81,9 +84,13 @@ public class HashCache {
         return this.e.containsKey(java_nio_file_path);
     }
 
+    public void c(java.nio.file.Path java_nio_file_path) {
+        this.g.add(java_nio_file_path);
+    }
+
     private void b() throws IOException {
         this.c().forEach((java_nio_file_path) -> {
-            if (this.b(java_nio_file_path)) {
+            if (this.b(java_nio_file_path) && !this.g.contains(java_nio_file_path)) {
                 try {
                     Files.delete(java_nio_file_path);
                 } catch (IOException ioexception) {

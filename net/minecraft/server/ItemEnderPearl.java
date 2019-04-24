@@ -6,6 +6,7 @@ public class ItemEnderPearl extends Item {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -18,6 +19,7 @@ public class ItemEnderPearl extends Item {
         if (!world.isClientSide) {
             EntityEnderPearl entityenderpearl = new EntityEnderPearl(world, entityhuman);
 
+            entityenderpearl.setItem(itemstack);
             entityenderpearl.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
             world.addEntity(entityenderpearl);
         }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nullable;
 
@@ -13,43 +14,62 @@ public class ItemBlock extends Item {
         this.a = block;
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
-        return this.a(new BlockActionContext(itemactioncontext));
+        EnumInteractionResult enuminteractionresult = this.a(new BlockActionContext(itemactioncontext));
+
+        return enuminteractionresult != EnumInteractionResult.SUCCESS && this.isFood() ? this.a(itemactioncontext.e, itemactioncontext.b, itemactioncontext.c).a() : enuminteractionresult;
     }
 
     public EnumInteractionResult a(BlockActionContext blockactioncontext) {
         if (!blockactioncontext.b()) {
             return EnumInteractionResult.FAIL;
         } else {
-            IBlockData iblockdata = this.b(blockactioncontext);
+            BlockActionContext blockactioncontext1 = this.b(blockactioncontext);
 
-            if (iblockdata == null) {
-                return EnumInteractionResult.FAIL;
-            } else if (!this.a(blockactioncontext, iblockdata)) {
+            if (blockactioncontext1 == null) {
                 return EnumInteractionResult.FAIL;
             } else {
-                BlockPosition blockposition = blockactioncontext.getClickPosition();
-                World world = blockactioncontext.getWorld();
-                EntityHuman entityhuman = blockactioncontext.getEntity();
-                ItemStack itemstack = blockactioncontext.getItemStack();
-                IBlockData iblockdata1 = world.getType(blockposition);
-                Block block = iblockdata1.getBlock();
+                IBlockData iblockdata = this.c(blockactioncontext1);
 
-                if (block == iblockdata.getBlock()) {
-                    this.a(blockposition, world, entityhuman, itemstack, iblockdata1);
-                    block.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
-                    if (entityhuman instanceof EntityPlayer) {
-                        CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                if (iblockdata == null) {
+                    return EnumInteractionResult.FAIL;
+                } else if (!this.a(blockactioncontext1, iblockdata)) {
+                    return EnumInteractionResult.FAIL;
+                } else {
+                    BlockPosition blockposition = blockactioncontext1.getClickPosition();
+                    World world = blockactioncontext1.getWorld();
+                    EntityHuman entityhuman = blockactioncontext1.getEntity();
+                    ItemStack itemstack = blockactioncontext1.getItemStack();
+                    IBlockData iblockdata1 = world.getType(blockposition);
+                    Block block = iblockdata1.getBlock();
+
+                    if (block == iblockdata.getBlock()) {
+                        iblockdata1 = this.a(blockposition, world, itemstack, iblockdata1);
+                        this.a(blockposition, world, entityhuman, itemstack, iblockdata1);
+                        block.postPlace(world, blockposition, iblockdata1, entityhuman, itemstack);
+                        if (entityhuman instanceof EntityPlayer) {
+                            CriterionTriggers.y.a((EntityPlayer) entityhuman, blockposition, itemstack);
+                        }
                     }
+
+                    SoundEffectType soundeffecttype = iblockdata1.r();
+
+                    world.a(entityhuman, blockposition, this.a(iblockdata1), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
+                    itemstack.subtract(1);
+                    return EnumInteractionResult.SUCCESS;
                 }
-
-                SoundEffectType soundeffecttype = block.getStepSound();
-
-                world.a(entityhuman, blockposition, soundeffecttype.e(), SoundCategory.BLOCKS, (soundeffecttype.a() + 1.0F) / 2.0F, soundeffecttype.b() * 0.8F);
-                itemstack.subtract(1);
-                return EnumInteractionResult.SUCCESS;
             }
         }
+    }
+
+    protected SoundEffect a(IBlockData iblockdata) {
+        return iblockdata.r().e();
+    }
+
+    @Nullable
+    public BlockActionContext b(BlockActionContext blockactioncontext) {
+        return blockactioncontext;
     }
 
     protected boolean a(BlockPosition blockposition, World world, @Nullable EntityHuman entityhuman, ItemStack itemstack, IBlockData iblockdata) {
@@ -57,14 +77,55 @@ public class ItemBlock extends Item {
     }
 
     @Nullable
-    protected IBlockData b(BlockActionContext blockactioncontext) {
+    protected IBlockData c(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlock().getPlacedState(blockactioncontext);
 
         return iblockdata != null && this.b(blockactioncontext, iblockdata) ? iblockdata : null;
     }
 
+    private IBlockData a(BlockPosition blockposition, World world, ItemStack itemstack, IBlockData iblockdata) {
+        IBlockData iblockdata1 = iblockdata;
+        NBTTagCompound nbttagcompound = itemstack.getTag();
+
+        if (nbttagcompound != null) {
+            NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("BlockStateTag");
+            BlockStateList<Block, IBlockData> blockstatelist = iblockdata.getBlock().getStates();
+            Iterator iterator = nbttagcompound1.getKeys().iterator();
+
+            while (iterator.hasNext()) {
+                String s = (String) iterator.next();
+                IBlockState<?> iblockstate = blockstatelist.a(s);
+
+                if (iblockstate != null) {
+                    String s1 = nbttagcompound1.get(s).asString();
+
+                    iblockdata1 = a(iblockdata1, iblockstate, s1);
+                }
+            }
+        }
+
+        if (iblockdata1 != iblockdata) {
+            world.setTypeAndData(blockposition, iblockdata1, 2);
+        }
+
+        return iblockdata1;
+    }
+
+    private static <T extends Comparable<T>> IBlockData a(IBlockData iblockdata, IBlockState<T> iblockstate, String s) {
+        return (IBlockData) iblockstate.b(s).map((comparable) -> {
+            return (IBlockData) iblockdata.set(iblockstate, comparable);
+        }).orElse(iblockdata);
+    }
+
     protected boolean b(BlockActionContext blockactioncontext, IBlockData iblockdata) {
-        return iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition()) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition());
+        EntityHuman entityhuman = blockactioncontext.getEntity();
+        VoxelShapeCollision voxelshapecollision = entityhuman == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a((Entity) entityhuman);
+
+        return (!this.d() || iblockdata.canPlace(blockactioncontext.getWorld(), blockactioncontext.getClickPosition())) && blockactioncontext.getWorld().a(iblockdata, blockactioncontext.getClickPosition(), voxelshapecollision);
+    }
+
+    protected boolean d() {
+        return true;
     }
 
     protected boolean a(BlockActionContext blockactioncontext, IBlockData iblockdata) {
@@ -106,10 +167,12 @@ public class ItemBlock extends Item {
         }
     }
 
+    @Override
     public String getName() {
-        return this.getBlock().m();
+        return this.getBlock().l();
     }
 
+    @Override
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         if (this.a(creativemodetab)) {
             this.getBlock().a(creativemodetab, nonnulllist);

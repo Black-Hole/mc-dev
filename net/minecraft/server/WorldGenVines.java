@@ -1,28 +1,33 @@
 package net.minecraft.server;
 
-import java.util.Iterator;
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenVines extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenVines() {}
+    private static final EnumDirection[] a = EnumDirection.values();
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public WorldGenVines(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
+
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
 
         for (int i = blockposition.getY(); i < 256; ++i) {
             blockposition_mutableblockposition.g(blockposition);
-            blockposition_mutableblockposition.d(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
+            blockposition_mutableblockposition.e(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
             blockposition_mutableblockposition.p(i);
             if (generatoraccess.isEmpty(blockposition_mutableblockposition)) {
-                Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
+                EnumDirection[] aenumdirection = WorldGenVines.a;
+                int j = aenumdirection.length;
 
-                while (iterator.hasNext()) {
-                    EnumDirection enumdirection = (EnumDirection) iterator.next();
-                    IBlockData iblockdata = (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.getDirection(enumdirection), true);
+                for (int k = 0; k < j; ++k) {
+                    EnumDirection enumdirection = aenumdirection[k];
 
-                    if (iblockdata.canPlace(generatoraccess, blockposition_mutableblockposition)) {
-                        generatoraccess.setTypeAndData(blockposition_mutableblockposition, iblockdata, 2);
+                    if (enumdirection != EnumDirection.DOWN && BlockVine.a((IBlockAccess) generatoraccess, (BlockPosition) blockposition_mutableblockposition, enumdirection)) {
+                        generatoraccess.setTypeAndData(blockposition_mutableblockposition, (IBlockData) Blocks.VINE.getBlockData().set(BlockVine.getDirection(enumdirection), true), 2);
                         break;
                     }
                 }

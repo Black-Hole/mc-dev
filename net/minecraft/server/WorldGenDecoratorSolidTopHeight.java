@@ -1,22 +1,26 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class WorldGenDecoratorSolidTopHeight extends WorldGenDecorator<WorldGenDecoratorRangeConfiguration> {
 
-    public WorldGenDecoratorSolidTopHeight() {}
+    public WorldGenDecoratorSolidTopHeight(Function<Dynamic<?>, ? extends WorldGenDecoratorRangeConfiguration> function) {
+        super(function);
+    }
 
-    public <C extends WorldGenFeatureConfiguration> boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenDecoratorRangeConfiguration worldgendecoratorrangeconfiguration, WorldGenerator<C> worldgenerator, C c0) {
+    public Stream<BlockPosition> a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, WorldGenDecoratorRangeConfiguration worldgendecoratorrangeconfiguration, BlockPosition blockposition) {
         int i = random.nextInt(worldgendecoratorrangeconfiguration.b - worldgendecoratorrangeconfiguration.a) + worldgendecoratorrangeconfiguration.a;
 
-        for (int j = 0; j < i; ++j) {
+        return IntStream.range(0, i).mapToObj((j) -> {
             int k = random.nextInt(16);
             int l = random.nextInt(16);
             int i1 = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR_WG, blockposition.getX() + k, blockposition.getZ() + l);
 
-            worldgenerator.generate(generatoraccess, chunkgenerator, random, new BlockPosition(blockposition.getX() + k, i1, blockposition.getZ() + l), c0);
-        }
-
-        return false;
+            return new BlockPosition(blockposition.getX() + k, i1, blockposition.getZ() + l);
+        });
     }
 }

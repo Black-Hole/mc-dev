@@ -1,40 +1,38 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntitySalmon extends EntityFishSchool {
 
-    public EntitySalmon(World world) {
-        super(EntityTypes.SALMON, world);
-        this.setSize(0.7F, 0.4F);
+    public EntitySalmon(EntityTypes<? extends EntitySalmon> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    public int dA() {
+    @Override
+    public int dX() {
         return 5;
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.aJ;
-    }
-
+    @Override
     protected ItemStack l() {
         return new ItemStack(Items.SALMON_BUCKET);
     }
 
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_SALMON_AMBIENT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_SALMON_DEATH;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_SALMON_HURT;
     }
 
-    protected SoundEffect dz() {
+    @Override
+    protected SoundEffect getSoundFlop() {
         return SoundEffects.ENTITY_SALMON_FLOP;
     }
 }

@@ -10,6 +10,7 @@ public enum BlockPropertyStructureMode implements INamable {
         this.e = s;
     }
 
+    @Override
     public String getName() {
         return this.e;
     }

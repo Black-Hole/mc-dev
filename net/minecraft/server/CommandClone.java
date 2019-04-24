@@ -69,9 +69,10 @@ public class CommandClone {
 
     private static int a(CommandListenerWrapper commandlistenerwrapper, BlockPosition blockposition, BlockPosition blockposition1, BlockPosition blockposition2, Predicate<ShapeDetectorBlock> predicate, CommandClone.Mode commandclone_mode) throws CommandSyntaxException {
         StructureBoundingBox structureboundingbox = new StructureBoundingBox(blockposition, blockposition1);
-        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition2.a(structureboundingbox.b()));
+        BlockPosition blockposition3 = blockposition2.a(structureboundingbox.b());
+        StructureBoundingBox structureboundingbox1 = new StructureBoundingBox(blockposition2, blockposition3);
 
-        if (!commandclone_mode.a() && structureboundingbox1.a(structureboundingbox)) {
+        if (!commandclone_mode.a() && structureboundingbox1.b(structureboundingbox)) {
             throw CommandClone.b.create();
         } else {
             int i = structureboundingbox.c() * structureboundingbox.d() * structureboundingbox.e();
@@ -81,37 +82,37 @@ public class CommandClone {
             } else {
                 WorldServer worldserver = commandlistenerwrapper.getWorld();
 
-                if (worldserver.a(structureboundingbox) && worldserver.a(structureboundingbox1)) {
+                if (worldserver.areChunksLoadedBetween(blockposition, blockposition1) && worldserver.areChunksLoadedBetween(blockposition2, blockposition3)) {
                     List<CommandClone.CommandCloneStoredTileEntity> list = Lists.newArrayList();
                     List<CommandClone.CommandCloneStoredTileEntity> list1 = Lists.newArrayList();
                     List<CommandClone.CommandCloneStoredTileEntity> list2 = Lists.newArrayList();
                     Deque<BlockPosition> deque = Lists.newLinkedList();
-                    BlockPosition blockposition3 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
+                    BlockPosition blockposition4 = new BlockPosition(structureboundingbox1.a - structureboundingbox.a, structureboundingbox1.b - structureboundingbox.b, structureboundingbox1.c - structureboundingbox.c);
 
                     int j;
 
                     for (int k = structureboundingbox.c; k <= structureboundingbox.f; ++k) {
                         for (int l = structureboundingbox.b; l <= structureboundingbox.e; ++l) {
                             for (j = structureboundingbox.a; j <= structureboundingbox.d; ++j) {
-                                BlockPosition blockposition4 = new BlockPosition(j, l, k);
-                                BlockPosition blockposition5 = blockposition4.a((BaseBlockPosition) blockposition3);
-                                ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(worldserver, blockposition4, false);
+                                BlockPosition blockposition5 = new BlockPosition(j, l, k);
+                                BlockPosition blockposition6 = blockposition5.a((BaseBlockPosition) blockposition4);
+                                ShapeDetectorBlock shapedetectorblock = new ShapeDetectorBlock(worldserver, blockposition5, false);
                                 IBlockData iblockdata = shapedetectorblock.a();
 
                                 if (predicate.test(shapedetectorblock)) {
-                                    TileEntity tileentity = worldserver.getTileEntity(blockposition4);
+                                    TileEntity tileentity = worldserver.getTileEntity(blockposition5);
 
                                     if (tileentity != null) {
                                         NBTTagCompound nbttagcompound = tileentity.save(new NBTTagCompound());
 
-                                        list1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, nbttagcompound));
-                                        deque.addLast(blockposition4);
-                                    } else if (!iblockdata.f(worldserver, blockposition4) && !iblockdata.g()) {
-                                        list2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
-                                        deque.addFirst(blockposition4);
+                                        list1.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, nbttagcompound));
+                                        deque.addLast(blockposition5);
+                                    } else if (!iblockdata.g(worldserver, blockposition5) && !Block.a(iblockdata.getCollisionShape(worldserver, blockposition5))) {
+                                        list2.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, (NBTTagCompound) null));
+                                        deque.addFirst(blockposition5);
                                     } else {
-                                        list.add(new CommandClone.CommandCloneStoredTileEntity(blockposition5, iblockdata, (NBTTagCompound) null));
-                                        deque.addLast(blockposition4);
+                                        list.add(new CommandClone.CommandCloneStoredTileEntity(blockposition6, iblockdata, (NBTTagCompound) null));
+                                        deque.addLast(blockposition5);
                                     }
                                 }
                             }
@@ -119,23 +120,23 @@ public class CommandClone {
                     }
 
                     if (commandclone_mode == CommandClone.Mode.MOVE) {
-                        BlockPosition blockposition6;
-                        Iterator iterator;
+                        Iterator iterator = deque.iterator();
 
-                        for (iterator = deque.iterator(); iterator.hasNext(); worldserver.setTypeAndData(blockposition6, Blocks.BARRIER.getBlockData(), 2)) {
-                            blockposition6 = (BlockPosition) iterator.next();
-                            TileEntity tileentity1 = worldserver.getTileEntity(blockposition6);
+                        BlockPosition blockposition7;
 
-                            if (tileentity1 instanceof IInventory) {
-                                ((IInventory) tileentity1).clear();
-                            }
+                        while (iterator.hasNext()) {
+                            blockposition7 = (BlockPosition) iterator.next();
+                            TileEntity tileentity1 = worldserver.getTileEntity(blockposition7);
+
+                            Clearable.a(tileentity1);
+                            worldserver.setTypeAndData(blockposition7, Blocks.BARRIER.getBlockData(), 2);
                         }
 
                         iterator = deque.iterator();
 
                         while (iterator.hasNext()) {
-                            blockposition6 = (BlockPosition) iterator.next();
-                            worldserver.setTypeAndData(blockposition6, Blocks.AIR.getBlockData(), 3);
+                            blockposition7 = (BlockPosition) iterator.next();
+                            worldserver.setTypeAndData(blockposition7, Blocks.AIR.getBlockData(), 3);
                         }
                     }
 
@@ -145,16 +146,14 @@ public class CommandClone {
                     list3.addAll(list1);
                     list3.addAll(list2);
                     List<CommandClone.CommandCloneStoredTileEntity> list4 = Lists.reverse(list3);
+                    Iterator iterator1 = list4.iterator();
 
-                    CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity;
-
-                    for (Iterator iterator1 = list4.iterator(); iterator1.hasNext(); worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2)) {
-                        commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
+                    while (iterator1.hasNext()) {
+                        CommandClone.CommandCloneStoredTileEntity commandclone_commandclonestoredtileentity = (CommandClone.CommandCloneStoredTileEntity) iterator1.next();
                         TileEntity tileentity2 = worldserver.getTileEntity(commandclone_commandclonestoredtileentity.a);
 
-                        if (tileentity2 instanceof IInventory) {
-                            ((IInventory) tileentity2).clear();
-                        }
+                        Clearable.a(tileentity2);
+                        worldserver.setTypeAndData(commandclone_commandclonestoredtileentity.a, Blocks.BARRIER.getBlockData(), 2);
                     }
 
                     j = 0;
@@ -189,7 +188,7 @@ public class CommandClone {
                         worldserver.update(commandclone_commandclonestoredtileentity1.a, commandclone_commandclonestoredtileentity1.b.getBlock());
                     }
 
-                    worldserver.getBlockTickList().a(structureboundingbox, blockposition3);
+                    worldserver.getBlockTickList().a(structureboundingbox, blockposition4);
                     if (j == 0) {
                         throw CommandClone.d.create();
                     } else {

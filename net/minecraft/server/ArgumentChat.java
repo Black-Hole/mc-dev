@@ -54,7 +54,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
 
         @Nullable
         public IChatBaseComponent a(CommandListenerWrapper commandlistenerwrapper) throws CommandSyntaxException {
-            return EntitySelector.a(this.c.b(commandlistenerwrapper));
+            return EntitySelector.a(this.c.getEntities(commandlistenerwrapper));
         }
     }
 
@@ -119,7 +119,7 @@ public class ArgumentChat implements ArgumentType<ArgumentChat.a> {
                         try {
                             ArgumentParserSelector argumentparserselector = new ArgumentParserSelector(stringreader);
 
-                            entityselector = argumentparserselector.s();
+                            entityselector = argumentparserselector.parse();
                         } catch (CommandSyntaxException commandsyntaxexception) {
                             if (commandsyntaxexception.getType() != ArgumentParserSelector.d && commandsyntaxexception.getType() != ArgumentParserSelector.b) {
                                 throw commandsyntaxexception;

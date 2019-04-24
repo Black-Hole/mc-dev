@@ -10,10 +10,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 public class Tag<T> {
@@ -96,6 +96,7 @@ public class Tag<T> {
             this.b = tag;
         }
 
+        @Override
         public boolean a(Function<MinecraftKey, Tag<T>> function) {
             if (this.b == null) {
                 this.b = (Tag) function.apply(this.a);
@@ -104,6 +105,7 @@ public class Tag<T> {
             return this.b != null;
         }
 
+        @Override
         public void a(Collection<T> collection) {
             if (this.b == null) {
                 throw new IllegalStateException("Cannot build unresolved tag entry");
@@ -122,6 +124,7 @@ public class Tag<T> {
             }
         }
 
+        @Override
         public void a(JsonArray jsonarray, Function<T, MinecraftKey> function) {
             jsonarray.add("#" + this.a());
         }
@@ -135,10 +138,12 @@ public class Tag<T> {
             this.a = collection;
         }
 
+        @Override
         public void a(Collection<T> collection) {
             collection.addAll(this.a);
         }
 
+        @Override
         public void a(JsonArray jsonarray, Function<T, MinecraftKey> function) {
             Iterator iterator = this.a.iterator();
 
@@ -238,7 +243,7 @@ public class Tag<T> {
             return new Tag<>(minecraftkey, this.a, this.b);
         }
 
-        public Tag.a<T> a(Predicate<MinecraftKey> predicate, Function<MinecraftKey, T> function, JsonObject jsonobject) {
+        public Tag.a<T> a(Function<MinecraftKey, Optional<T>> function, JsonObject jsonobject) {
             JsonArray jsonarray = ChatDeserializer.u(jsonobject, "values");
 
             if (ChatDeserializer.a(jsonobject, "replace", false)) {
@@ -247,27 +252,22 @@ public class Tag<T> {
 
             Iterator iterator = jsonarray.iterator();
 
-            while (true) {
-                while (iterator.hasNext()) {
-                    JsonElement jsonelement = (JsonElement) iterator.next();
-                    String s = ChatDeserializer.a(jsonelement, "value");
+            while (iterator.hasNext()) {
+                JsonElement jsonelement = (JsonElement) iterator.next();
+                String s = ChatDeserializer.a(jsonelement, "value");
 
-                    if (!s.startsWith("#")) {
-                        MinecraftKey minecraftkey = new MinecraftKey(s);
-                        T t0 = function.apply(minecraftkey);
+                if (s.startsWith("#")) {
+                    this.a(new MinecraftKey(s.substring(1)));
+                } else {
+                    MinecraftKey minecraftkey = new MinecraftKey(s);
 
-                        if (t0 == null || !predicate.test(minecraftkey)) {
-                            throw new JsonParseException("Unknown value '" + minecraftkey + "'");
-                        }
-
-                        this.a(t0);
-                    } else {
-                        this.a(new MinecraftKey(s.substring(1)));
-                    }
+                    this.a(((Optional) function.apply(minecraftkey)).orElseThrow(() -> {
+                        return new JsonParseException("Unknown value '" + minecraftkey + "'");
+                    }));
                 }
-
-                return this;
             }
+
+            return this;
         }
     }
 }

@@ -17,6 +17,6 @@ public enum EnumResourcePackVersion {
     }
 
     public static EnumResourcePackVersion a(int i) {
-        return i < 4 ? EnumResourcePackVersion.TOO_OLD : (i > 4 ? EnumResourcePackVersion.TOO_NEW : EnumResourcePackVersion.COMPATIBLE);
+        return i < SharedConstants.a().getPackVersion() ? EnumResourcePackVersion.TOO_OLD : (i > SharedConstants.a().getPackVersion() ? EnumResourcePackVersion.TOO_NEW : EnumResourcePackVersion.COMPATIBLE);
     }
 }

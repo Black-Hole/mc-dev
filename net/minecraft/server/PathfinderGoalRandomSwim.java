@@ -9,6 +9,7 @@ public class PathfinderGoalRandomSwim extends PathfinderGoalRandomStroll {
     }
 
     @Nullable
+    @Override
     protected Vec3D g() {
         Vec3D vec3d = RandomPositionGenerator.a(this.a, 10, 7);
 

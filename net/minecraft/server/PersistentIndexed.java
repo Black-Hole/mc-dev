@@ -12,11 +12,13 @@ public class PersistentIndexed extends PersistentBase {
         super(s);
     }
 
+    @Override
     public void a(NBTTagCompound nbttagcompound) {
-        this.a = new LongOpenHashSet(nbttagcompound.o("All"));
-        this.b = new LongOpenHashSet(nbttagcompound.o("Remaining"));
+        this.a = new LongOpenHashSet(nbttagcompound.getLongArray("All"));
+        this.b = new LongOpenHashSet(nbttagcompound.getLongArray("Remaining"));
     }
 
+    @Override
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         nbttagcompound.a("All", this.a.toLongArray());
         nbttagcompound.a("Remaining", this.b.toLongArray());

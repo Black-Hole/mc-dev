@@ -18,10 +18,12 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
 
     public CriterionTriggerUsedEnderEye() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerUsedEnderEye.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerUsedEnderEye.b> criteriontrigger_a) {
         CriterionTriggerUsedEnderEye.a criteriontriggerusedendereye_a = (CriterionTriggerUsedEnderEye.a) this.b.get(advancementdataplayer);
 
@@ -33,6 +35,7 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
         criteriontriggerusedendereye_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerUsedEnderEye.b> criteriontrigger_a) {
         CriterionTriggerUsedEnderEye.a criteriontriggerusedendereye_a = (CriterionTriggerUsedEnderEye.a) this.b.get(advancementdataplayer);
 
@@ -45,10 +48,12 @@ public class CriterionTriggerUsedEnderEye implements CriterionTrigger<CriterionT
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerUsedEnderEye.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionValue.FloatRange criterionconditionvalue_floatrange = CriterionConditionValue.FloatRange.a(jsonobject.get("distance"));
 

@@ -9,11 +9,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 public class ArgumentSerializers {
 
     public static void a() {
-        ArgumentRegistry.a(new MinecraftKey("brigadier:bool"), BoolArgumentType.class, new ArgumentSerializerVoid<>(BoolArgumentType::bool));
-        ArgumentRegistry.a(new MinecraftKey("brigadier:float"), FloatArgumentType.class, new ArgumentSerializerFloat());
-        ArgumentRegistry.a(new MinecraftKey("brigadier:double"), DoubleArgumentType.class, new ArgumentSerializerDouble());
-        ArgumentRegistry.a(new MinecraftKey("brigadier:integer"), IntegerArgumentType.class, new ArgumentSerializerInteger());
-        ArgumentRegistry.a(new MinecraftKey("brigadier:string"), StringArgumentType.class, new ArgumentSerializerString());
+        ArgumentRegistry.a("brigadier:bool", BoolArgumentType.class, new ArgumentSerializerVoid<>(BoolArgumentType::bool));
+        ArgumentRegistry.a("brigadier:float", FloatArgumentType.class, new ArgumentSerializerFloat());
+        ArgumentRegistry.a("brigadier:double", DoubleArgumentType.class, new ArgumentSerializerDouble());
+        ArgumentRegistry.a("brigadier:integer", IntegerArgumentType.class, new ArgumentSerializerInteger());
+        ArgumentRegistry.a("brigadier:string", StringArgumentType.class, new ArgumentSerializerString());
     }
 
     public static byte a(boolean flag, boolean flag1) {

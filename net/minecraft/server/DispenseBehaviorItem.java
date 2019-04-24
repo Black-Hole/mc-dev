@@ -4,6 +4,7 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
 
     public DispenseBehaviorItem() {}
 
+    @Override
     public final ItemStack dispense(ISourceBlock isourceblock, ItemStack itemstack) {
         ItemStack itemstack1 = this.a(isourceblock, itemstack);
 
@@ -35,12 +36,7 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
         EntityItem entityitem = new EntityItem(world, d0, d1, d2, itemstack);
         double d3 = world.random.nextDouble() * 0.1D + 0.2D;
 
-        entityitem.motX = (double) enumdirection.getAdjacentX() * d3;
-        entityitem.motY = 0.20000000298023224D;
-        entityitem.motZ = (double) enumdirection.getAdjacentZ() * d3;
-        entityitem.motX += world.random.nextGaussian() * 0.007499999832361937D * (double) i;
-        entityitem.motY += world.random.nextGaussian() * 0.007499999832361937D * (double) i;
-        entityitem.motZ += world.random.nextGaussian() * 0.007499999832361937D * (double) i;
+        entityitem.setMot(world.random.nextGaussian() * 0.007499999832361937D * (double) i + (double) enumdirection.getAdjacentX() * d3, world.random.nextGaussian() * 0.007499999832361937D * (double) i + 0.20000000298023224D, world.random.nextGaussian() * 0.007499999832361937D * (double) i + (double) enumdirection.getAdjacentZ() * d3);
         world.addEntity(entityitem);
     }
 

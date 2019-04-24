@@ -1,12 +1,16 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureKelp extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenFeatureKelp() {}
+    public WorldGenFeatureKelp(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         int i = 0;
         int j = generatoraccess.a(HeightMap.Type.OCEAN_FLOOR, blockposition.getX(), blockposition.getZ());
         BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), j, blockposition.getZ());

@@ -24,7 +24,10 @@ public final class Material {
     public static final Material SNOW_LAYER = (new Material.a(MaterialMapColor.g)).i();
     public static final Material SAND = (new Material.a(MaterialMapColor.d)).i();
     public static final Material SPONGE = (new Material.a(MaterialMapColor.t)).i();
+    public static final Material SHULKER_SHELL = (new Material.a(MaterialMapColor.z)).i();
     public static final Material WOOD = (new Material.a(MaterialMapColor.o)).e().i();
+    public static final Material BAMBOO_SAPLING = (new Material.a(MaterialMapColor.o)).e().g().c().i();
+    public static final Material BAMBOO = (new Material.a(MaterialMapColor.o)).e().g().i();
     public static final Material CLOTH = (new Material.a(MaterialMapColor.e)).e().i();
     public static final Material TNT = (new Material.a(MaterialMapColor.f)).e().j().i();
     public static final Material LEAVES = (new Material.a(MaterialMapColor.i)).e().j().g().i();
@@ -41,38 +44,38 @@ public final class Material {
     public static final Material PUMPKIN = (new Material.a(MaterialMapColor.i)).g().i();
     public static final Material DRAGON_EGG = (new Material.a(MaterialMapColor.i)).g().i();
     public static final Material CAKE = (new Material.a(MaterialMapColor.b)).g().i();
-    private final MaterialMapColor N;
-    private final EnumPistonReaction O;
-    private final boolean P;
-    private final boolean canBurn;
-    private final boolean R;
+    private final MaterialMapColor Q;
+    private final EnumPistonReaction R;
     private final boolean S;
-    private final boolean T;
+    private final boolean canBurn;
     private final boolean U;
     private final boolean V;
+    private final boolean W;
+    private final boolean X;
+    private final boolean Y;
 
     public Material(MaterialMapColor materialmapcolor, boolean flag, boolean flag1, boolean flag2, boolean flag3, boolean flag4, boolean flag5, boolean flag6, EnumPistonReaction enumpistonreaction) {
-        this.N = materialmapcolor;
-        this.S = flag;
-        this.V = flag1;
-        this.P = flag2;
-        this.T = flag3;
-        this.R = flag4;
+        this.Q = materialmapcolor;
+        this.V = flag;
+        this.Y = flag1;
+        this.S = flag2;
+        this.W = flag3;
+        this.U = flag4;
         this.canBurn = flag5;
-        this.U = flag6;
-        this.O = enumpistonreaction;
+        this.X = flag6;
+        this.R = enumpistonreaction;
     }
 
     public boolean isLiquid() {
-        return this.S;
-    }
-
-    public boolean isBuildable() {
         return this.V;
     }
 
+    public boolean isBuildable() {
+        return this.Y;
+    }
+
     public boolean isSolid() {
-        return this.P;
+        return this.S;
     }
 
     public boolean isBurnable() {
@@ -80,23 +83,23 @@ public final class Material {
     }
 
     public boolean isReplaceable() {
-        return this.U;
+        return this.X;
     }
 
     public boolean f() {
-        return this.T;
+        return this.W;
     }
 
     public boolean isAlwaysDestroyable() {
-        return this.R;
+        return this.U;
     }
 
     public EnumPistonReaction getPushReaction() {
-        return this.O;
+        return this.R;
     }
 
     public MaterialMapColor i() {
-        return this.N;
+        return this.Q;
     }
 
     public static class a {

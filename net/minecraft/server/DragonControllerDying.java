@@ -11,17 +11,19 @@ public class DragonControllerDying extends AbstractDragonController {
         super(entityenderdragon);
     }
 
+    @Override
     public void b() {
         if (this.c++ % 10 == 0) {
             float f = (this.a.getRandom().nextFloat() - 0.5F) * 8.0F;
             float f1 = (this.a.getRandom().nextFloat() - 0.5F) * 4.0F;
             float f2 = (this.a.getRandom().nextFloat() - 0.5F) * 8.0F;
 
-            this.a.world.addParticle(Particles.t, this.a.locX + (double) f, this.a.locY + 2.0D + (double) f1, this.a.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
+            this.a.world.addParticle(Particles.EXPLOSION_EMITTER, this.a.locX + (double) f, this.a.locY + 2.0D + (double) f1, this.a.locZ + (double) f2, 0.0D, 0.0D, 0.0D);
         }
 
     }
 
+    @Override
     public void c() {
         ++this.c;
         if (this.b == null) {
@@ -32,7 +34,7 @@ public class DragonControllerDying extends AbstractDragonController {
 
         double d0 = this.b.c(this.a.locX, this.a.locY, this.a.locZ);
 
-        if (d0 >= 100.0D && d0 <= 22500.0D && !this.a.positionChanged && !this.a.C) {
+        if (d0 >= 100.0D && d0 <= 22500.0D && !this.a.positionChanged && !this.a.y) {
             this.a.setHealth(1.0F);
         } else {
             this.a.setHealth(0.0F);
@@ -40,20 +42,24 @@ public class DragonControllerDying extends AbstractDragonController {
 
     }
 
+    @Override
     public void d() {
         this.b = null;
         this.c = 0;
     }
 
+    @Override
     public float f() {
         return 3.0F;
     }
 
     @Nullable
+    @Override
     public Vec3D g() {
         return this.b;
     }
 
+    @Override
     public DragonControllerPhase<DragonControllerDying> getControllerPhase() {
         return DragonControllerPhase.DYING;
     }

@@ -3,75 +3,50 @@ package net.minecraft.server;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import java.util.Collection;
-import java.util.Random;
+import java.util.function.Consumer;
 
 public class LootItem extends LootSelectorEntry {
 
-    protected final Item a;
-    protected final LootItemFunction[] b;
+    private final Item c;
 
-    public LootItem(Item item, int i, int j, LootItemFunction[] alootitemfunction, LootItemCondition[] alootitemcondition) {
-        super(i, j, alootitemcondition);
-        this.a = item;
-        this.b = alootitemfunction;
+    private LootItem(Item item, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+        super(i, j, alootitemcondition, alootitemfunction);
+        this.c = item;
     }
 
-    public void a(Collection<ItemStack> collection, Random random, LootTableInfo loottableinfo) {
-        ItemStack itemstack = new ItemStack(this.a);
-        LootItemFunction[] alootitemfunction = this.b;
-        int i = alootitemfunction.length;
+    @Override
+    public void a(Consumer<ItemStack> consumer, LootTableInfo loottableinfo) {
+        consumer.accept(new ItemStack(this.c));
+    }
 
-        for (int j = 0; j < i; ++j) {
-            LootItemFunction lootitemfunction = alootitemfunction[j];
+    public static LootSelectorEntry.a<?> a(IMaterial imaterial) {
+        return a((i, j, alootitemcondition, alootitemfunction) -> {
+            return new LootItem(imaterial.getItem(), i, j, alootitemcondition, alootitemfunction);
+        });
+    }
 
-            if (LootItemConditions.a(lootitemfunction.b(), random, loottableinfo)) {
-                itemstack = lootitemfunction.a(itemstack, random, loottableinfo);
-            }
+    public static class a extends LootSelectorEntry.e<LootItem> {
+
+        public a() {
+            super(new MinecraftKey("item"), LootItem.class);
         }
 
-        if (!itemstack.isEmpty()) {
-            if (itemstack.getCount() < this.a.getMaxStackSize()) {
-                collection.add(itemstack);
+        public void a(JsonObject jsonobject, LootItem lootitem, JsonSerializationContext jsonserializationcontext) {
+            super.a(jsonobject, (LootSelectorEntry) lootitem, jsonserializationcontext);
+            MinecraftKey minecraftkey = IRegistry.ITEM.getKey(lootitem.c);
+
+            if (minecraftkey == null) {
+                throw new IllegalArgumentException("Can't serialize unknown item " + lootitem.c);
             } else {
-                int k = itemstack.getCount();
-
-                while (k > 0) {
-                    ItemStack itemstack1 = itemstack.cloneItemStack();
-
-                    itemstack1.setCount(Math.min(itemstack.getMaxStackSize(), k));
-                    k -= itemstack1.getCount();
-                    collection.add(itemstack1);
-                }
+                jsonobject.addProperty("name", minecraftkey.toString());
             }
         }
 
-    }
+        @Override
+        protected LootItem b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition, LootItemFunction[] alootitemfunction) {
+            Item item = ChatDeserializer.i(jsonobject, "name");
 
-    protected void a(JsonObject jsonobject, JsonSerializationContext jsonserializationcontext) {
-        if (this.b != null && this.b.length > 0) {
-            jsonobject.add("functions", jsonserializationcontext.serialize(this.b));
+            return new LootItem(item, i, j, alootitemcondition, alootitemfunction);
         }
-
-        MinecraftKey minecraftkey = IRegistry.ITEM.getKey(this.a);
-
-        if (minecraftkey == null) {
-            throw new IllegalArgumentException("Can't serialize unknown item " + this.a);
-        } else {
-            jsonobject.addProperty("name", minecraftkey.toString());
-        }
-    }
-
-    public static LootItem a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, int i, int j, LootItemCondition[] alootitemcondition) {
-        Item item = ChatDeserializer.i(jsonobject, "name");
-        LootItemFunction[] alootitemfunction;
-
-        if (jsonobject.has("functions")) {
-            alootitemfunction = (LootItemFunction[]) ChatDeserializer.a(jsonobject, "functions", jsondeserializationcontext, LootItemFunction[].class);
-        } else {
-            alootitemfunction = new LootItemFunction[0];
-        }
-
-        return new LootItem(item, i, j, alootitemfunction, alootitemcondition);
     }
 }

@@ -44,7 +44,7 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutWindowItems packetplayoutwindowitems);
 
-    void a(PacketPlayOutOpenWindow packetplayoutopenwindow);
+    void a(PacketPlayOutOpenWindowHorse packetplayoutopenwindowhorse);
 
     void a(PacketPlayOutWindowData packetplayoutwindowdata);
 
@@ -53,8 +53,6 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutCustomPayload packetplayoutcustompayload);
 
     void a(PacketPlayOutKickDisconnect packetplayoutkickdisconnect);
-
-    void a(PacketPlayOutBed packetplayoutbed);
 
     void a(PacketPlayOutEntityStatus packetplayoutentitystatus);
 
@@ -118,6 +116,8 @@ public interface PacketListenerPlayOut extends PacketListener {
 
     void a(PacketPlayOutNamedSoundEffect packetplayoutnamedsoundeffect);
 
+    void a(PacketPlayOutEntitySound packetplayoutentitysound);
+
     void a(PacketPlayOutCustomSoundEffect packetplayoutcustomsoundeffect);
 
     void a(PacketPlayOutCollect packetplayoutcollect);
@@ -167,4 +167,16 @@ public interface PacketListenerPlayOut extends PacketListener {
     void a(PacketPlayOutLookAt packetplayoutlookat);
 
     void a(PacketPlayOutNBTQuery packetplayoutnbtquery);
+
+    void a(PacketPlayOutLightUpdate packetplayoutlightupdate);
+
+    void a(PacketPlayOutOpenBook packetplayoutopenbook);
+
+    void a(PacketPlayOutOpenWindow packetplayoutopenwindow);
+
+    void a(PacketPlayOutOpenWindowMerchant packetplayoutopenwindowmerchant);
+
+    void a(PacketPlayOutViewDistance packetplayoutviewdistance);
+
+    void a(PacketPlayOutViewCentre packetplayoutviewcentre);
 }

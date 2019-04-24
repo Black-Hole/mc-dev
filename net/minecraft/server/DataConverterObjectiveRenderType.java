@@ -22,18 +22,18 @@ public class DataConverterObjectiveRenderType extends DataFix {
     }
 
     protected TypeRewriteRule makeRule() {
-        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.t.typeName(), DSL.remainderType());
+        Type<Pair<String, Dynamic<?>>> type = DSL.named(DataConverterTypes.u.typeName(), DSL.remainderType());
 
-        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.t))) {
+        if (!Objects.equals(type, this.getInputSchema().getType(DataConverterTypes.u))) {
             throw new IllegalStateException("Objective type is not what was expected.");
         } else {
             return this.fixTypeEverywhere("ObjectiveRenderTypeFix", type, (dynamicops) -> {
                 return (pair) -> {
                     return pair.mapSecond((dynamic) -> {
-                        Optional<String> optional = dynamic.get("RenderType").flatMap(Dynamic::getStringValue);
+                        Optional<String> optional = dynamic.get("RenderType").asString();
 
                         if (!optional.isPresent()) {
-                            String s = dynamic.getString("CriteriaName");
+                            String s = dynamic.get("CriteriaName").asString("");
                             IScoreboardCriteria.EnumScoreboardHealthDisplay iscoreboardcriteria_enumscoreboardhealthdisplay = a(s);
 
                             return dynamic.set("RenderType", dynamic.createString(iscoreboardcriteria_enumscoreboardhealthdisplay.a()));

@@ -17,10 +17,12 @@ public class ItemSword extends ItemToolMaterial {
         return this.a;
     }
 
+    @Override
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
-        return !entityhuman.u();
+        return !entityhuman.isCreative();
     }
 
+    @Override
     public float getDestroySpeed(ItemStack itemstack, IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
@@ -33,29 +35,37 @@ public class ItemSword extends ItemToolMaterial {
         }
     }
 
+    @Override
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {
-        itemstack.damage(1, entityliving1);
+        itemstack.damage(1, entityliving1, (entityliving2) -> {
+            entityliving2.c(EnumItemSlot.MAINHAND);
+        });
         return true;
     }
 
+    @Override
     public boolean a(ItemStack itemstack, World world, IBlockData iblockdata, BlockPosition blockposition, EntityLiving entityliving) {
-        if (iblockdata.e(world, blockposition) != 0.0F) {
-            itemstack.damage(2, entityliving);
+        if (iblockdata.f(world, blockposition) != 0.0F) {
+            itemstack.damage(2, entityliving, (entityliving1) -> {
+                entityliving1.c(EnumItemSlot.MAINHAND);
+            });
         }
 
         return true;
     }
 
+    @Override
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
         return iblockdata.getBlock() == Blocks.COBWEB;
     }
 
+    @Override
     public Multimap<String, AttributeModifier> a(EnumItemSlot enumitemslot) {
         Multimap<String, AttributeModifier> multimap = super.a(enumitemslot);
 
         if (enumitemslot == EnumItemSlot.MAINHAND) {
-            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, 0));
-            multimap.put(GenericAttributes.g.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.b, 0));
+            multimap.put(GenericAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ItemSword.g, "Weapon modifier", (double) this.a, AttributeModifier.Operation.ADDITION));
+            multimap.put(GenericAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ItemSword.h, "Weapon modifier", (double) this.b, AttributeModifier.Operation.ADDITION));
         }
 
         return multimap;

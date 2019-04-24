@@ -1,11 +1,16 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,17 +18,21 @@ import org.apache.logging.log4j.Logger;
 public class LootTableRegistry implements IResourcePackListener {
 
     private static final Logger c = LogManager.getLogger();
-    private static final Gson d = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootSelector.class, new LootSelector.a()).registerTypeAdapter(LootTable.class, new LootTable.a()).registerTypeHierarchyAdapter(LootSelectorEntry.class, new LootSelectorEntry.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
+    private static final Gson d = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootValueBinomial.class, new LootValueBinomial.a()).registerTypeAdapter(LootValueConstant.class, new LootValueConstant.a()).registerTypeAdapter(LootIntegerLimit.class, new LootIntegerLimit.a()).registerTypeAdapter(LootSelector.class, new LootSelector.b()).registerTypeAdapter(LootTable.class, new LootTable.b()).registerTypeHierarchyAdapter(LootEntryAbstract.class, new LootEntries.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
     private final Map<MinecraftKey, LootTable> e = Maps.newHashMap();
+    private final Set<MinecraftKey> f;
     public static final int a = "loot_tables/".length();
     public static final int b = ".json".length();
 
-    public LootTableRegistry() {}
+    public LootTableRegistry() {
+        this.f = Collections.unmodifiableSet(this.e.keySet());
+    }
 
     public LootTable getLootTable(MinecraftKey minecraftkey) {
         return (LootTable) this.e.getOrDefault(minecraftkey, LootTable.a);
     }
 
+    @Override
     public void a(IResourceManager iresourcemanager) {
         this.e.clear();
         Iterator iterator = iresourcemanager.a("loot_tables", (s) -> {
@@ -67,5 +76,31 @@ public class LootTableRegistry implements IResourcePackListener {
             }
         }
 
+        this.e.put(LootTables.a, LootTable.a);
+        LootCollector lootcollector = new LootCollector();
+
+        this.e.forEach((minecraftkey2, loottable1) -> {
+            Map map = this.e;
+
+            this.e.getClass();
+            a(lootcollector, minecraftkey2, loottable1, map::get);
+        });
+        lootcollector.a().forEach((s1, s2) -> {
+            LootTableRegistry.c.warn("Found validation problem in " + s1 + ": " + s2);
+        });
+    }
+
+    public static void a(LootCollector lootcollector, MinecraftKey minecraftkey, LootTable loottable, Function<MinecraftKey, LootTable> function) {
+        Set<MinecraftKey> set = ImmutableSet.of(minecraftkey);
+
+        loottable.a(lootcollector.b("{" + minecraftkey.toString() + "}"), function, set, loottable.a());
+    }
+
+    public static JsonElement a(LootTable loottable) {
+        return LootTableRegistry.d.toJsonTree(loottable);
+    }
+
+    public Set<MinecraftKey> a() {
+        return this.f;
     }
 }

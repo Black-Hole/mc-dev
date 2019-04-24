@@ -20,14 +20,16 @@ public class PacketPlayOutSpawnEntityExperienceOrb implements Packet<PacketListe
         this.e = entityexperienceorb.f();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.readDouble();
         this.c = packetdataserializer.readDouble();
         this.d = packetdataserializer.readDouble();
         this.e = packetdataserializer.readShort();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeDouble(this.b);

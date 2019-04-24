@@ -1,38 +1,42 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureFlowingConfiguration> {
 
-    public WorldGenLiquids() {}
+    public WorldGenLiquids(Function<Dynamic<?>, ? extends WorldGenFeatureFlowingConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureFlowingConfiguration worldgenfeatureflowingconfiguration) {
-        if (!Block.c(generatoraccess.getType(blockposition.up()).getBlock())) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureFlowingConfiguration worldgenfeatureflowingconfiguration) {
+        if (!Block.b(generatoraccess.getType(blockposition.up()).getBlock())) {
             return false;
-        } else if (!Block.c(generatoraccess.getType(blockposition.down()).getBlock())) {
+        } else if (!Block.b(generatoraccess.getType(blockposition.down()).getBlock())) {
             return false;
         } else {
             IBlockData iblockdata = generatoraccess.getType(blockposition);
 
-            if (!iblockdata.isAir() && !Block.c(iblockdata.getBlock())) {
+            if (!iblockdata.isAir() && !Block.b(iblockdata.getBlock())) {
                 return false;
             } else {
                 int i = 0;
                 int j = 0;
 
-                if (Block.c(generatoraccess.getType(blockposition.west()).getBlock())) {
+                if (Block.b(generatoraccess.getType(blockposition.west()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.c(generatoraccess.getType(blockposition.east()).getBlock())) {
+                if (Block.b(generatoraccess.getType(blockposition.east()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.c(generatoraccess.getType(blockposition.north()).getBlock())) {
+                if (Block.b(generatoraccess.getType(blockposition.north()).getBlock())) {
                     ++j;
                 }
 
-                if (Block.c(generatoraccess.getType(blockposition.south()).getBlock())) {
+                if (Block.b(generatoraccess.getType(blockposition.south()).getBlock())) {
                     ++j;
                 }
 
@@ -55,8 +59,8 @@ public class WorldGenLiquids extends WorldGenerator<WorldGenFeatureFlowingConfig
                 }
 
                 if (j == 3 && k == 1) {
-                    generatoraccess.setTypeAndData(blockposition, worldgenfeatureflowingconfiguration.a.i().i(), 2);
-                    generatoraccess.getFluidTickList().a(blockposition, worldgenfeatureflowingconfiguration.a, 0);
+                    generatoraccess.setTypeAndData(blockposition, worldgenfeatureflowingconfiguration.a.getBlockData(), 2);
+                    generatoraccess.getFluidTickList().a(blockposition, worldgenfeatureflowingconfiguration.a.getType(), 0);
                     ++i;
                 }
 

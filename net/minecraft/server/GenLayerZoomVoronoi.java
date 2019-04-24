@@ -6,27 +6,28 @@ public enum GenLayerZoomVoronoi implements AreaTransformer2 {
 
     private GenLayerZoomVoronoi() {}
 
-    public int a(AreaContextTransformed<?> areacontexttransformed, AreaDimension areadimension, Area area, int i, int j) {
-        int k = i + areadimension.a() - 2;
-        int l = j + areadimension.b() - 2;
-        int i1 = areadimension.a() >> 2;
-        int j1 = areadimension.b() >> 2;
-        int k1 = (k >> 2) - i1;
-        int l1 = (l >> 2) - j1;
+    @Override
+    public int a(AreaContextTransformed<?> areacontexttransformed, Area area, int i, int j) {
+        int k = i - 2;
+        int l = j - 2;
+        int i1 = k >> 2;
+        int j1 = l >> 2;
+        int k1 = i1 << 2;
+        int l1 = j1 << 2;
 
-        areacontexttransformed.a((long) (k1 + i1 << 2), (long) (l1 + j1 << 2));
+        areacontexttransformed.a((long) k1, (long) l1);
         double d0 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
         double d1 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
 
-        areacontexttransformed.a((long) (k1 + i1 + 1 << 2), (long) (l1 + j1 << 2));
+        areacontexttransformed.a((long) (k1 + 4), (long) l1);
         double d2 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
         double d3 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
 
-        areacontexttransformed.a((long) (k1 + i1 << 2), (long) (l1 + j1 + 1 << 2));
+        areacontexttransformed.a((long) k1, (long) (l1 + 4));
         double d4 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D;
         double d5 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
 
-        areacontexttransformed.a((long) (k1 + i1 + 1 << 2), (long) (l1 + j1 + 1 << 2));
+        areacontexttransformed.a((long) (k1 + 4), (long) (l1 + 4));
         double d6 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
         double d7 = ((double) areacontexttransformed.a(1024) / 1024.0D - 0.5D) * 3.6D + 4.0D;
         int i2 = k & 3;
@@ -36,15 +37,16 @@ public enum GenLayerZoomVoronoi implements AreaTransformer2 {
         double d10 = ((double) j2 - d5) * ((double) j2 - d5) + ((double) i2 - d4) * ((double) i2 - d4);
         double d11 = ((double) j2 - d7) * ((double) j2 - d7) + ((double) i2 - d6) * ((double) i2 - d6);
 
-        return d8 < d9 && d8 < d10 && d8 < d11 ? area.a(k1 + 0, l1 + 0) : (d9 < d8 && d9 < d10 && d9 < d11 ? area.a(k1 + 1, l1 + 0) & 255 : (d10 < d8 && d10 < d9 && d10 < d11 ? area.a(k1 + 0, l1 + 1) : area.a(k1 + 1, l1 + 1) & 255));
+        return d8 < d9 && d8 < d10 && d8 < d11 ? area.a(this.a(k1), this.b(l1)) : (d9 < d8 && d9 < d10 && d9 < d11 ? area.a(this.a(k1 + 4), this.b(l1)) & 255 : (d10 < d8 && d10 < d9 && d10 < d11 ? area.a(this.a(k1), this.b(l1 + 4)) : area.a(this.a(k1 + 4), this.b(l1 + 4)) & 255));
     }
 
-    public AreaDimension a(AreaDimension areadimension) {
-        int i = areadimension.a() >> 2;
-        int j = areadimension.b() >> 2;
-        int k = (areadimension.c() >> 2) + 2;
-        int l = (areadimension.d() >> 2) + 2;
+    @Override
+    public int a(int i) {
+        return i >> 2;
+    }
 
-        return new AreaDimension(i, j, k, l);
+    @Override
+    public int b(int i) {
+        return i >> 2;
     }
 }

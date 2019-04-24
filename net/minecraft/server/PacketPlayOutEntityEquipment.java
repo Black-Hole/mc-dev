@@ -19,12 +19,14 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
         this.c = itemstack.cloneItemStack();
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = (EnumItemSlot) packetdataserializer.a(EnumItemSlot.class);
-        this.c = packetdataserializer.k();
+        this.c = packetdataserializer.m();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a((Enum) this.b);

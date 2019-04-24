@@ -4,41 +4,46 @@ import javax.annotation.Nullable;
 
 public class DragonControllerHold extends AbstractDragonController {
 
-    private PathEntity b;
-    private Vec3D c;
-    private boolean d;
+    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(64.0D);
+    private PathEntity c;
+    private Vec3D d;
+    private boolean e;
 
     public DragonControllerHold(EntityEnderDragon entityenderdragon) {
         super(entityenderdragon);
     }
 
+    @Override
     public DragonControllerPhase<DragonControllerHold> getControllerPhase() {
         return DragonControllerPhase.HOLDING_PATTERN;
     }
 
+    @Override
     public void c() {
-        double d0 = this.c == null ? 0.0D : this.c.c(this.a.locX, this.a.locY, this.a.locZ);
+        double d0 = this.d == null ? 0.0D : this.d.c(this.a.locX, this.a.locY, this.a.locZ);
 
-        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.C) {
+        if (d0 < 100.0D || d0 > 22500.0D || this.a.positionChanged || this.a.y) {
             this.j();
         }
 
     }
 
+    @Override
     public void d() {
-        this.b = null;
         this.c = null;
+        this.d = null;
     }
 
     @Nullable
+    @Override
     public Vec3D g() {
-        return this.c;
+        return this.d;
     }
 
     private void j() {
         int i;
 
-        if (this.b != null && this.b.b()) {
+        if (this.c != null && this.c.b()) {
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, new BlockPosition(WorldGenEndTrophy.a));
 
             i = this.a.getEnderDragonBattle() == null ? 0 : this.a.getEnderDragonBattle().c();
@@ -48,28 +53,28 @@ public class DragonControllerHold extends AbstractDragonController {
             }
 
             double d0 = 64.0D;
-            EntityHuman entityhuman = this.a.world.a(blockposition, d0, d0);
+            EntityHuman entityhuman = this.a.world.a(DragonControllerHold.b, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ());
 
             if (entityhuman != null) {
-                d0 = entityhuman.d(blockposition) / 512.0D;
+                d0 = blockposition.a(entityhuman.ch(), true) / 512.0D;
             }
 
-            if (entityhuman != null && (this.a.getRandom().nextInt(MathHelper.a((int) d0) + 2) == 0 || this.a.getRandom().nextInt(i + 2) == 0)) {
+            if (entityhuman != null && !entityhuman.abilities.isInvulnerable && (this.a.getRandom().nextInt(MathHelper.a((int) d0) + 2) == 0 || this.a.getRandom().nextInt(i + 2) == 0)) {
                 this.a(entityhuman);
                 return;
             }
         }
 
-        if (this.b == null || this.b.b()) {
+        if (this.c == null || this.c.b()) {
             int j = this.a.l();
 
             i = j;
             if (this.a.getRandom().nextInt(8) == 0) {
-                this.d = !this.d;
+                this.e = !this.e;
                 i = j + 6;
             }
 
-            if (this.d) {
+            if (this.e) {
                 ++i;
             } else {
                 --i;
@@ -86,9 +91,9 @@ public class DragonControllerHold extends AbstractDragonController {
                 i += 12;
             }
 
-            this.b = this.a.a(j, i, (PathPoint) null);
-            if (this.b != null) {
-                this.b.a();
+            this.c = this.a.a(j, i, (PathPoint) null);
+            if (this.c != null) {
+                this.c.a();
             }
         }
 
@@ -101,10 +106,10 @@ public class DragonControllerHold extends AbstractDragonController {
     }
 
     private void k() {
-        if (this.b != null && !this.b.b()) {
-            Vec3D vec3d = this.b.f();
+        if (this.c != null && !this.c.b()) {
+            Vec3D vec3d = this.c.g();
 
-            this.b.a();
+            this.c.a();
             double d0 = vec3d.x;
             double d1 = vec3d.z;
 
@@ -114,11 +119,12 @@ public class DragonControllerHold extends AbstractDragonController {
                 d2 = vec3d.y + (double) (this.a.getRandom().nextFloat() * 20.0F);
             } while (d2 < vec3d.y);
 
-            this.c = new Vec3D(d0, d2, d1);
+            this.d = new Vec3D(d0, d2, d1);
         }
 
     }
 
+    @Override
     public void a(EntityEnderCrystal entityendercrystal, BlockPosition blockposition, DamageSource damagesource, @Nullable EntityHuman entityhuman) {
         if (entityhuman != null && !entityhuman.abilities.isInvulnerable) {
             this.a(entityhuman);

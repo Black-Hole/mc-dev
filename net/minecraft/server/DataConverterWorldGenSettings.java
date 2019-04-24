@@ -35,8 +35,8 @@ public class DataConverterWorldGenSettings extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.getString("generatorName").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic1) -> {
-            Optional optional = dynamic1.getStringValue().map(this::a);
+        return dynamic.get("generatorName").asString("").equalsIgnoreCase("flat") ? dynamic.update("generatorOptions", (dynamic1) -> {
+            Optional optional = dynamic1.asString().map(this::a);
 
             dynamic1.getClass();
             return (Dynamic) DataFixUtils.orElse(optional.map(dynamic1::createString), dynamic1);
@@ -85,7 +85,7 @@ public class DataConverterWorldGenSettings extends DataFix {
                     int i1 = k + 1;
                     int j1 = list1.size() > i1 ? NumberUtils.toInt((String) list1.get(i1), 0) : 0;
 
-                    return (j == 1 ? "" : j + "*") + DataConverterFlattenData.b(l << 4 | j1).getString("Name");
+                    return (j == 1 ? "" : j + "*") + DataConverterFlattenData.b(l << 4 | j1).get("Name").asString("");
                 }).collect(Collectors.joining(",")));
 
                 while (iterator.hasNext()) {

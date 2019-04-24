@@ -8,51 +8,20 @@ public class BlockOre extends Block {
         super(block_info);
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return (IMaterial) (this == Blocks.COAL_ORE ? Items.COAL : (this == Blocks.DIAMOND_ORE ? Items.DIAMOND : (this == Blocks.LAPIS_ORE ? Items.LAPIS_LAZULI : (this == Blocks.EMERALD_ORE ? Items.EMERALD : (this == Blocks.NETHER_QUARTZ_ORE ? Items.QUARTZ : this)))));
+    protected int a(Random random) {
+        return this == Blocks.COAL_ORE ? MathHelper.nextInt(random, 0, 2) : (this == Blocks.DIAMOND_ORE ? MathHelper.nextInt(random, 3, 7) : (this == Blocks.EMERALD_ORE ? MathHelper.nextInt(random, 3, 7) : (this == Blocks.LAPIS_ORE ? MathHelper.nextInt(random, 2, 5) : (this == Blocks.NETHER_QUARTZ_ORE ? MathHelper.nextInt(random, 2, 5) : 0))));
     }
 
-    public int a(IBlockData iblockdata, Random random) {
-        return this == Blocks.LAPIS_ORE ? 4 + random.nextInt(5) : 1;
-    }
+    @Override
+    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {
+        super.dropNaturally(iblockdata, world, blockposition, itemstack);
+        if (EnchantmentManager.getEnchantmentLevel(Enchantments.SILK_TOUCH, itemstack) == 0) {
+            int i = this.a(world.random);
 
-    public int getDropCount(IBlockData iblockdata, int i, World world, BlockPosition blockposition, Random random) {
-        if (i > 0 && this != this.getDropType((IBlockData) this.getStates().a().iterator().next(), world, blockposition, i)) {
-            int j = random.nextInt(i + 2) - 1;
-
-            if (j < 0) {
-                j = 0;
+            if (i > 0) {
+                this.dropExperience(world, blockposition, i);
             }
-
-            return this.a(iblockdata, random) * (j + 1);
-        } else {
-            return this.a(iblockdata, random);
-        }
-    }
-
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        super.dropNaturally(iblockdata, world, blockposition, f, i);
-        if (this.getDropType(iblockdata, world, blockposition, i) != this) {
-            int j = 0;
-
-            if (this == Blocks.COAL_ORE) {
-                j = MathHelper.nextInt(world.random, 0, 2);
-            } else if (this == Blocks.DIAMOND_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
-            } else if (this == Blocks.EMERALD_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
-            } else if (this == Blocks.LAPIS_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
-            } else if (this == Blocks.NETHER_QUARTZ_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
-            }
-
-            this.dropExperience(world, blockposition, j);
         }
 
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return new ItemStack(this);
     }
 }

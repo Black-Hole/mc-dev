@@ -11,7 +11,8 @@ public class DataConverterGuardian extends DataConverterEntityNameAbstract {
         super("EntityElderGuardianSplitFix", schema, flag);
     }
 
+    @Override
     protected Pair<String, Dynamic<?>> a(String s, Dynamic<?> dynamic) {
-        return Pair.of(Objects.equals(s, "Guardian") && dynamic.getBoolean("Elder") ? "ElderGuardian" : s, dynamic);
+        return Pair.of(Objects.equals(s, "Guardian") && dynamic.get("Elder").asBoolean(false) ? "ElderGuardian" : s, dynamic);
     }
 }

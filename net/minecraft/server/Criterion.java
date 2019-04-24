@@ -56,7 +56,7 @@ public class Criterion {
 
     public static Map<String, Criterion> c(PacketDataSerializer packetdataserializer) {
         Map<String, Criterion> map = Maps.newHashMap();
-        int i = packetdataserializer.g();
+        int i = packetdataserializer.i();
 
         for (int j = 0; j < i; ++j) {
             map.put(packetdataserializer.e(32767), b(packetdataserializer));

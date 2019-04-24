@@ -11,10 +11,12 @@ public class OpList extends JsonList<GameProfile, OpListEntry> {
         super(file);
     }
 
+    @Override
     protected JsonListEntry<GameProfile> a(JsonObject jsonobject) {
         return new OpListEntry(jsonobject);
     }
 
+    @Override
     public String[] getEntries() {
         String[] astring = new String[this.e().size()];
         int i = 0;

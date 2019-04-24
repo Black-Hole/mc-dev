@@ -8,7 +8,8 @@ public class ItemWorldMapBase extends Item {
         super(item_info);
     }
 
-    public boolean W_() {
+    @Override
+    public boolean P_() {
         return true;
     }
 

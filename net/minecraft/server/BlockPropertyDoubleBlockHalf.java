@@ -10,6 +10,7 @@ public enum BlockPropertyDoubleBlockHalf implements INamable {
         return this.getName();
     }
 
+    @Override
     public String getName() {
         return this == BlockPropertyDoubleBlockHalf.UPPER ? "upper" : "lower";
     }

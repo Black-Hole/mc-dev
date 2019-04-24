@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -25,12 +26,13 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
         this.e = entityinsentient.getNavigation();
         this.g = f;
         this.i = f1;
-        this.a(3);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE, PathfinderGoal.Type.LOOK));
         if (!(entityinsentient.getNavigation() instanceof Navigation) && !(entityinsentient.getNavigation() instanceof NavigationFlying)) {
             throw new IllegalArgumentException("Unsupported mob type for FollowMobGoal");
         }
     }
 
+    @Override
     public boolean a() {
         List<EntityInsentient> list = this.a.world.a(EntityInsentient.class, this.a.getBoundingBox().g((double) this.i), this.b);
 
@@ -50,25 +52,29 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
         return false;
     }
 
+    @Override
     public boolean b() {
-        return this.c != null && !this.e.p() && this.a.h(this.c) > (double) (this.g * this.g);
+        return this.c != null && !this.e.n() && this.a.h((Entity) this.c) > (double) (this.g * this.g);
     }
 
+    @Override
     public void c() {
         this.f = 0;
         this.h = this.a.a(PathType.WATER);
         this.a.a(PathType.WATER, 0.0F);
     }
 
+    @Override
     public void d() {
         this.c = null;
-        this.e.q();
+        this.e.o();
         this.a.a(PathType.WATER, this.h);
     }
 
+    @Override
     public void e() {
         if (this.c != null && !this.a.isLeashed()) {
-            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.K());
+            this.a.getControllerLook().a(this.c, 10.0F, (float) this.a.M());
             if (--this.f <= 0) {
                 this.f = 10;
                 double d0 = this.a.locX - this.c.locX;
@@ -79,10 +85,10 @@ public class PathfinderGoalFollowEntity extends PathfinderGoal {
                 if (d3 > (double) (this.g * this.g)) {
                     this.e.a((Entity) this.c, this.d);
                 } else {
-                    this.e.q();
+                    this.e.o();
                     ControllerLook controllerlook = this.c.getControllerLook();
 
-                    if (d3 <= (double) this.g || controllerlook.e() == this.a.locX && controllerlook.f() == this.a.locY && controllerlook.g() == this.a.locZ) {
+                    if (d3 <= (double) this.g || controllerlook.d() == this.a.locX && controllerlook.e() == this.a.locY && controllerlook.f() == this.a.locZ) {
                         double d4 = this.c.locX - this.a.locX;
                         double d5 = this.c.locZ - this.a.locZ;
 

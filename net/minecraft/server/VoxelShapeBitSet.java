@@ -57,10 +57,12 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
         return (i * this.b + j) * this.c + k;
     }
 
+    @Override
     public boolean b(int i, int j, int k) {
         return this.d.get(this.a(i, j, k));
     }
 
+    @Override
     public void a(int i, int j, int k, boolean flag, boolean flag1) {
         this.d.set(this.a(i, j, k), flag1);
         if (flag && flag1) {
@@ -74,22 +76,27 @@ public final class VoxelShapeBitSet extends VoxelShapeDiscrete {
 
     }
 
+    @Override
     public boolean a() {
         return this.d.isEmpty();
     }
 
+    @Override
     public int a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         return enumdirection_enumaxis.a(this.e, this.f, this.g);
     }
 
+    @Override
     public int b(EnumDirection.EnumAxis enumdirection_enumaxis) {
         return enumdirection_enumaxis.a(this.h, this.i, this.j);
     }
 
+    @Override
     protected boolean a(int i, int j, int k, int l) {
         return k >= 0 && l >= 0 && i >= 0 ? (k < this.a && l < this.b && j <= this.c ? this.d.nextClearBit(this.a(k, l, i)) >= this.a(k, l, j) : false) : false;
     }
 
+    @Override
     protected void a(int i, int j, int k, int l, boolean flag) {
         this.d.set(this.a(k, l, i), this.a(k, l, j), flag);
     }

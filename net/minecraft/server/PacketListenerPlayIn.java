@@ -81,4 +81,10 @@ public interface PacketListenerPlayIn extends PacketListener {
     void a(PacketPlayInEntityNBTQuery packetplayinentitynbtquery);
 
     void a(PacketPlayInTileNBTQuery packetplayintilenbtquery);
+
+    void a(PacketPlayInSetJigsaw packetplayinsetjigsaw);
+
+    void a(PacketPlayInDifficultyChange packetplayindifficultychange);
+
+    void a(PacketPlayInDifficultyLock packetplayindifficultylock);
 }

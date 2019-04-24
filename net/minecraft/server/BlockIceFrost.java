@@ -4,15 +4,16 @@ import java.util.Random;
 
 public class BlockIceFrost extends BlockIce {
 
-    public static final BlockStateInteger a = BlockProperties.U;
+    public static final BlockStateInteger a = BlockProperties.aa;
 
     public BlockIceFrost(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockIceFrost.a, 0));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
-        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b(world, blockposition) && this.c(iblockdata, world, blockposition)) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+        if ((random.nextInt(3) == 0 || this.a(world, blockposition, 4)) && world.getLightLevel(blockposition) > 11 - (Integer) iblockdata.get(BlockIceFrost.a) - iblockdata.b((IBlockAccess) world, blockposition) && this.e(iblockdata, world, blockposition)) {
             BlockPosition.PooledBlockPosition blockposition_pooledblockposition = BlockPosition.PooledBlockPosition.r();
             Throwable throwable = null;
 
@@ -26,7 +27,7 @@ public class BlockIceFrost extends BlockIce {
                     blockposition_pooledblockposition.g(blockposition).c(enumdirection);
                     IBlockData iblockdata1 = world.getType(blockposition_pooledblockposition);
 
-                    if (iblockdata1.getBlock() == this && !this.c(iblockdata1, world, blockposition_pooledblockposition)) {
+                    if (iblockdata1.getBlock() == this && !this.e(iblockdata1, world, blockposition_pooledblockposition)) {
                         world.getBlockTickList().a(blockposition_pooledblockposition, this, MathHelper.nextInt(random, 20, 40));
                     }
                 }
@@ -53,24 +54,25 @@ public class BlockIceFrost extends BlockIce {
         }
     }
 
-    private boolean c(IBlockData iblockdata, World world, BlockPosition blockposition) {
+    private boolean e(IBlockData iblockdata, World world, BlockPosition blockposition) {
         int i = (Integer) iblockdata.get(BlockIceFrost.a);
 
         if (i < 3) {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockIceFrost.a, i + 1), 2);
             return false;
         } else {
-            this.b(iblockdata, world, blockposition);
+            this.melt(iblockdata, world, blockposition);
             return true;
         }
     }
 
-    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    @Override
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if (block == this && this.a(world, blockposition, 2)) {
-            this.b(iblockdata, world, blockposition);
+            this.melt(iblockdata, world, blockposition);
         }
 
-        super.doPhysics(iblockdata, world, blockposition, block, blockposition1);
+        super.doPhysics(iblockdata, world, blockposition, block, blockposition1, flag);
     }
 
     private boolean a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
@@ -116,11 +118,8 @@ public class BlockIceFrost extends BlockIce {
         }
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockIceFrost.a);
-    }
-
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return ItemStack.a;
     }
 }

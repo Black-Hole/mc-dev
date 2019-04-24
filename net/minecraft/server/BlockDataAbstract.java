@@ -32,15 +32,15 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
             return iblockstate.a(comparable);
         }
     };
-    protected final O e_;
-    private final ImmutableMap<IBlockState<?>, Comparable<?>> c;
-    private final int d;
-    private Table<IBlockState<?>, Comparable<?>, S> e;
+    protected final O a;
+    private final ImmutableMap<IBlockState<?>, Comparable<?>> d;
+    private final int e;
+    private Table<IBlockState<?>, Comparable<?>, S> f;
 
     protected BlockDataAbstract(O o0, ImmutableMap<IBlockState<?>, Comparable<?>> immutablemap) {
-        this.e_ = o0;
-        this.c = immutablemap;
-        this.d = immutablemap.hashCode();
+        this.a = o0;
+        this.d = immutablemap;
+        this.e = immutablemap.hashCode();
     }
 
     public <T extends Comparable<T>> S a(IBlockState<T> iblockstate) {
@@ -66,7 +66,7 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder();
 
-        stringbuilder.append(this.e_);
+        stringbuilder.append(this.a);
         if (!this.getStateMap().isEmpty()) {
             stringbuilder.append('[');
             stringbuilder.append((String) this.getStateMap().entrySet().stream().map(BlockDataAbstract.STATE_TO_VALUE).collect(Collectors.joining(",")));
@@ -77,35 +77,37 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     }
 
     public Collection<IBlockState<?>> a() {
-        return Collections.unmodifiableCollection(this.c.keySet());
+        return Collections.unmodifiableCollection(this.d.keySet());
     }
 
     public <T extends Comparable<T>> boolean b(IBlockState<T> iblockstate) {
-        return this.c.containsKey(iblockstate);
+        return this.d.containsKey(iblockstate);
     }
 
+    @Override
     public <T extends Comparable<T>> T get(IBlockState<T> iblockstate) {
-        Comparable<?> comparable = (Comparable) this.c.get(iblockstate);
+        Comparable<?> comparable = (Comparable) this.d.get(iblockstate);
 
         if (comparable == null) {
-            throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.e_);
+            throw new IllegalArgumentException("Cannot get property " + iblockstate + " as it does not exist in " + this.a);
         } else {
             return (Comparable) iblockstate.b().cast(comparable);
         }
     }
 
+    @Override
     public <T extends Comparable<T>, V extends T> S set(IBlockState<T> iblockstate, V v0) {
-        Comparable<?> comparable = (Comparable) this.c.get(iblockstate);
+        Comparable<?> comparable = (Comparable) this.d.get(iblockstate);
 
         if (comparable == null) {
-            throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.e_);
+            throw new IllegalArgumentException("Cannot set property " + iblockstate + " as it does not exist in " + this.a);
         } else if (comparable == v0) {
             return this;
         } else {
-            S s0 = this.e.get(iblockstate, v0);
+            S s0 = this.f.get(iblockstate, v0);
 
             if (s0 == null) {
-                throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on " + this.e_ + ", it is not an allowed value");
+                throw new IllegalArgumentException("Cannot set property " + iblockstate + " to " + v0 + " on " + this.a + ", it is not an allowed value");
             } else {
                 return s0;
             }
@@ -113,11 +115,11 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     }
 
     public void a(Map<Map<IBlockState<?>, Comparable<?>>, S> map) {
-        if (this.e != null) {
+        if (this.f != null) {
             throw new IllegalStateException();
         } else {
             Table<IBlockState<?>, Comparable<?>, S> table = HashBasedTable.create();
-            UnmodifiableIterator unmodifiableiterator = this.c.entrySet().iterator();
+            UnmodifiableIterator unmodifiableiterator = this.d.entrySet().iterator();
 
             while (unmodifiableiterator.hasNext()) {
                 Entry<IBlockState<?>, Comparable<?>> entry = (Entry) unmodifiableiterator.next();
@@ -128,24 +130,25 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
                     Comparable<?> comparable = (Comparable) iterator.next();
 
                     if (comparable != entry.getValue()) {
-                        table.put(iblockstate, comparable, map.get(this.b(iblockstate, comparable)));
+                        table.put(iblockstate, comparable, map.get(this.c(iblockstate, comparable)));
                     }
                 }
             }
 
-            this.e = (Table) (table.isEmpty() ? table : ArrayTable.create(table));
+            this.f = (Table) (table.isEmpty() ? table : ArrayTable.create(table));
         }
     }
 
-    private Map<IBlockState<?>, Comparable<?>> b(IBlockState<?> iblockstate, Comparable<?> comparable) {
-        Map<IBlockState<?>, Comparable<?>> map = Maps.newHashMap(this.c);
+    private Map<IBlockState<?>, Comparable<?>> c(IBlockState<?> iblockstate, Comparable<?> comparable) {
+        Map<IBlockState<?>, Comparable<?>> map = Maps.newHashMap(this.d);
 
         map.put(iblockstate, comparable);
         return map;
     }
 
+    @Override
     public ImmutableMap<IBlockState<?>, Comparable<?>> getStateMap() {
-        return this.c;
+        return this.d;
     }
 
     public boolean equals(Object object) {
@@ -153,6 +156,6 @@ public abstract class BlockDataAbstract<O, S> implements IBlockDataHolder<S> {
     }
 
     public int hashCode() {
-        return this.d;
+        return this.e;
     }
 }

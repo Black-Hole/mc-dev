@@ -1,17 +1,21 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
-public class WorldGenSurfaceNether implements WorldGenSurface<WorldGenSurfaceConfigurationBase> {
+public class WorldGenSurfaceNether extends WorldGenSurface<WorldGenSurfaceConfigurationBase> {
 
     private static final IBlockData c = Blocks.CAVE_AIR.getBlockData();
     private static final IBlockData d = Blocks.NETHERRACK.getBlockData();
     private static final IBlockData e = Blocks.GRAVEL.getBlockData();
-    private static final IBlockData f = Blocks.SOUL_SAND.getBlockData();
+    private static final IBlockData S = Blocks.SOUL_SAND.getBlockData();
     protected long a;
     protected NoiseGeneratorOctaves b;
 
-    public WorldGenSurfaceNether() {}
+    public WorldGenSurfaceNether(Function<Dynamic<?>, ? extends WorldGenSurfaceConfigurationBase> function) {
+        super(function);
+    }
 
     public void a(Random random, IChunkAccess ichunkaccess, BiomeBase biomebase, int i, int j, int k, double d0, IBlockData iblockdata, IBlockData iblockdata1, int l, long i1, WorldGenSurfaceConfigurationBase worldgensurfaceconfigurationbase) {
         int j1 = l + 1;
@@ -27,7 +31,7 @@ public class WorldGenSurfaceNether implements WorldGenSurface<WorldGenSurfaceCon
         IBlockData iblockdata3 = WorldGenSurfaceNether.d;
 
         for (int k2 = 127; k2 >= 0; --k2) {
-            blockposition_mutableblockposition.c(k1, k2, l1);
+            blockposition_mutableblockposition.d(k1, k2, l1);
             IBlockData iblockdata4 = ichunkaccess.getType(blockposition_mutableblockposition);
 
             if (iblockdata4.getBlock() != null && !iblockdata4.isAir()) {
@@ -45,8 +49,8 @@ public class WorldGenSurfaceNether implements WorldGenSurface<WorldGenSurfaceCon
                             }
 
                             if (flag) {
-                                iblockdata2 = WorldGenSurfaceNether.f;
-                                iblockdata3 = WorldGenSurfaceNether.f;
+                                iblockdata2 = WorldGenSurfaceNether.S;
+                                iblockdata3 = WorldGenSurfaceNether.S;
                             }
                         }
 
@@ -72,6 +76,7 @@ public class WorldGenSurfaceNether implements WorldGenSurface<WorldGenSurfaceCon
 
     }
 
+    @Override
     public void a(long i) {
         if (this.a != i || this.b == null) {
             this.b = new NoiseGeneratorOctaves(new SeededRandom(i), 4);

@@ -1,24 +1,25 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenFeatureRandom extends WorldGenerator<WorldGenFeatureRandomConfiguration> {
 
-    public WorldGenFeatureRandom() {}
+    public WorldGenFeatureRandom(Function<Dynamic<?>, ? extends WorldGenFeatureRandomConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomConfiguration worldgenfeaturerandomconfiguration) {
-        int i = random.nextInt(5) - 3 + worldgenfeaturerandomconfiguration.c;
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureRandomConfiguration worldgenfeaturerandomconfiguration) {
+        int i = random.nextInt(5) - 3 + worldgenfeaturerandomconfiguration.b;
 
         for (int j = 0; j < i; ++j) {
-            int k = random.nextInt(worldgenfeaturerandomconfiguration.a.length);
+            int k = random.nextInt(worldgenfeaturerandomconfiguration.a.size());
+            WorldGenFeatureConfigured<?> worldgenfeatureconfigured = (WorldGenFeatureConfigured) worldgenfeaturerandomconfiguration.a.get(k);
 
-            this.a(worldgenfeaturerandomconfiguration.a[k], worldgenfeaturerandomconfiguration.b[k], generatoraccess, chunkgenerator, random, blockposition);
+            worldgenfeatureconfigured.a(generatoraccess, chunkgenerator, random, blockposition);
         }
 
         return true;
-    }
-
-    <FC extends WorldGenFeatureConfiguration> boolean a(WorldGenerator<FC> worldgenerator, WorldGenFeatureConfiguration worldgenfeatureconfiguration, GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition) {
-        return worldgenerator.generate(generatoraccess, chunkgenerator, random, blockposition, worldgenfeatureconfiguration);
     }
 }

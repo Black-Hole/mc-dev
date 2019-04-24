@@ -4,22 +4,23 @@ import java.util.Random;
 
 public class BlockFalling extends Block {
 
-    public static boolean instaFall;
-
     public BlockFalling(Block.Info block_info) {
         super(block_info);
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         generatoraccess.getBlockTickList().a(blockposition, this, this.a((IWorldReader) generatoraccess));
         return super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (!world.isClientSide) {
             this.b(world, blockposition);
         }
@@ -28,29 +29,11 @@ public class BlockFalling extends Block {
 
     private void b(World world, BlockPosition blockposition) {
         if (canFallThrough(world.getType(blockposition.down())) && blockposition.getY() >= 0) {
-            boolean flag = true;
+            if (!world.isClientSide) {
+                EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
 
-            if (!BlockFalling.instaFall && world.areChunksLoadedBetween(blockposition.a(-32, -32, -32), blockposition.a(32, 32, 32))) {
-                if (!world.isClientSide) {
-                    EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, world.getType(blockposition));
-
-                    this.a(entityfallingblock);
-                    world.addEntity(entityfallingblock);
-                }
-            } else {
-                if (world.getType(blockposition).getBlock() == this) {
-                    world.setAir(blockposition);
-                }
-
-                BlockPosition blockposition1;
-
-                for (blockposition1 = blockposition.down(); canFallThrough(world.getType(blockposition1)) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
-                    ;
-                }
-
-                if (blockposition1.getY() > 0) {
-                    world.setTypeUpdate(blockposition1.up(), this.getBlockData());
-                }
+                this.a(entityfallingblock);
+                world.addEntity(entityfallingblock);
             }
 
         }
@@ -58,6 +41,7 @@ public class BlockFalling extends Block {
 
     protected void a(EntityFallingBlock entityfallingblock) {}
 
+    @Override
     public int a(IWorldReader iworldreader) {
         return 2;
     }

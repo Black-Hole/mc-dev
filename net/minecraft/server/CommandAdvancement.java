@@ -171,6 +171,7 @@ public class CommandAdvancement {
     static enum Action {
 
         GRANT("grant") {
+            @Override
             protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
                 AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
@@ -189,11 +190,13 @@ public class CommandAdvancement {
                 }
             }
 
+            @Override
             protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
                 return entityplayer.getAdvancementData().grantCriteria(advancement, s);
             }
         },
         REVOKE("revoke") {
+            @Override
             protected boolean a(EntityPlayer entityplayer, Advancement advancement) {
                 AdvancementProgress advancementprogress = entityplayer.getAdvancementData().getProgress(advancement);
 
@@ -212,6 +215,7 @@ public class CommandAdvancement {
                 }
             }
 
+            @Override
             protected boolean a(EntityPlayer entityplayer, Advancement advancement, String s) {
                 return entityplayer.getAdvancementData().revokeCritera(advancement, s);
             }

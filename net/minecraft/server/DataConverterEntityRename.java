@@ -14,6 +14,7 @@ public class DataConverterEntityRename extends DataConverterEntityRenameAbstract
         super("EntityTheRenameningBlock", schema, flag);
     }
 
+    @Override
     protected String a(String s) {
         if (s.startsWith("minecraft:bred_")) {
             s = "minecraft:" + s.substring("minecraft:bred_".length());

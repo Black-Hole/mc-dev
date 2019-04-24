@@ -12,12 +12,12 @@ public class DragonControllerFly extends AbstractDragonController {
         super(entityenderdragon);
     }
 
+    @Override
     public void c() {
         if (!this.b && this.c != null) {
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
-            double d0 = this.a.d(blockposition);
 
-            if (d0 > 100.0D) {
+            if (!blockposition.a((IPosition) this.a.ch(), 100.0D)) {
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
             }
         } else {
@@ -27,6 +27,7 @@ public class DragonControllerFly extends AbstractDragonController {
 
     }
 
+    @Override
     public void d() {
         this.b = true;
         this.c = null;
@@ -35,7 +36,7 @@ public class DragonControllerFly extends AbstractDragonController {
 
     private void j() {
         int i = this.a.l();
-        Vec3D vec3d = this.a.a(1.0F);
+        Vec3D vec3d = this.a.u(1.0F);
         int j = this.a.k(-vec3d.x * 40.0D, 105.0D, -vec3d.z * 40.0D);
 
         if (this.a.getEnderDragonBattle() != null && this.a.getEnderDragonBattle().c() > 0) {
@@ -58,7 +59,7 @@ public class DragonControllerFly extends AbstractDragonController {
     }
 
     private void k() {
-        Vec3D vec3d = this.c.f();
+        Vec3D vec3d = this.c.g();
 
         this.c.a();
 
@@ -72,10 +73,12 @@ public class DragonControllerFly extends AbstractDragonController {
     }
 
     @Nullable
+    @Override
     public Vec3D g() {
         return this.d;
     }
 
+    @Override
     public DragonControllerPhase<DragonControllerFly> getControllerPhase() {
         return DragonControllerPhase.TAKEOFF;
     }

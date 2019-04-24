@@ -1,29 +1,25 @@
 package net.minecraft.server;
 
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-public interface GeneratorAccess extends IWorldReader, IPersistentAccess, IWorldWriter {
+public interface GeneratorAccess extends IEntityAccess, IWorldReader, VirtualLevelWritable {
 
     long getSeed();
 
-    default float ah() {
-        return WorldProvider.a[this.o().a(this.getWorldData().getDayTime())];
+    default float aa() {
+        return WorldProvider.a[this.getWorldProvider().a(this.getWorldData().getDayTime())];
     }
 
-    default float k(float f) {
-        return this.o().a(this.getWorldData().getDayTime(), f);
+    default float j(float f) {
+        return this.getWorldProvider().a(this.getWorldData().getDayTime(), f);
     }
 
     TickList<Block> getBlockTickList();
 
     TickList<FluidType> getFluidTickList();
-
-    default IChunkAccess y(BlockPosition blockposition) {
-        return this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
-    }
-
-    IChunkAccess getChunkAt(int i, int j);
 
     World getMinecraftWorld();
 
@@ -37,15 +33,32 @@ public interface GeneratorAccess extends IWorldReader, IPersistentAccess, IWorld
 
     IChunkProvider getChunkProvider();
 
-    IDataManager getDataManager();
+    @Override
+    default boolean isChunkLoaded(int i, int j) {
+        return this.getChunkProvider().a(i, j);
+    }
 
-    Random m();
+    Random getRandom();
 
     void update(BlockPosition blockposition, Block block);
-
-    BlockPosition getSpawn();
 
     void a(@Nullable EntityHuman entityhuman, BlockPosition blockposition, SoundEffect soundeffect, SoundCategory soundcategory, float f, float f1);
 
     void addParticle(ParticleParam particleparam, double d0, double d1, double d2, double d3, double d4, double d5);
+
+    void a(@Nullable EntityHuman entityhuman, int i, BlockPosition blockposition, int j);
+
+    default void triggerEffect(int i, BlockPosition blockposition, int j) {
+        this.a((EntityHuman) null, i, blockposition, j);
+    }
+
+    @Override
+    default Stream<VoxelShape> a(@Nullable Entity entity, VoxelShape voxelshape, Set<Entity> set) {
+        return IEntityAccess.super.a(entity, voxelshape, set);
+    }
+
+    @Override
+    default boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
+        return IEntityAccess.super.a(entity, voxelshape);
+    }
 }

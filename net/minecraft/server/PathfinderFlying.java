@@ -10,16 +10,19 @@ public class PathfinderFlying extends PathfinderNormal {
 
     public PathfinderFlying() {}
 
+    @Override
     public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
         super.a(iblockaccess, entityinsentient);
         this.j = entityinsentient.a(PathType.WATER);
     }
 
+    @Override
     public void a() {
         this.b.a(PathType.WATER, this.j);
         super.a();
     }
 
+    @Override
     public PathPoint b() {
         int i;
 
@@ -29,7 +32,7 @@ public class PathfinderFlying extends PathfinderNormal {
 
             for (Block block = this.a.getType(blockposition_mutableblockposition).getBlock(); block == Blocks.WATER; block = this.a.getType(blockposition_mutableblockposition).getBlock()) {
                 ++i;
-                blockposition_mutableblockposition.c(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
+                blockposition_mutableblockposition.d(MathHelper.floor(this.b.locX), i, MathHelper.floor(this.b.locZ));
             }
         } else {
             i = MathHelper.floor(this.b.getBoundingBox().minY + 0.5D);
@@ -60,10 +63,12 @@ public class PathfinderFlying extends PathfinderNormal {
         return super.a(blockposition.getX(), i, blockposition.getZ());
     }
 
+    @Override
     public PathPoint a(double d0, double d1, double d2) {
         return super.a(MathHelper.floor(d0), MathHelper.floor(d1), MathHelper.floor(d2));
     }
 
+    @Override
     public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
         int i = 0;
         PathPoint pathpoint2 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1);
@@ -193,6 +198,7 @@ public class PathfinderFlying extends PathfinderNormal {
     }
 
     @Nullable
+    @Override
     protected PathPoint a(int i, int j, int k) {
         PathPoint pathpoint = null;
         PathType pathtype = this.a(this.b, i, j, k);
@@ -210,6 +216,7 @@ public class PathfinderFlying extends PathfinderNormal {
         return pathtype != PathType.OPEN && pathtype != PathType.WALKABLE ? pathpoint : pathpoint;
     }
 
+    @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1) {
         EnumSet<PathType> enumset = EnumSet.noneOf(PathType.class);
         PathType pathtype = PathType.BLOCKED;
@@ -242,6 +249,7 @@ public class PathfinderFlying extends PathfinderNormal {
         }
     }
 
+    @Override
     public PathType a(IBlockAccess iblockaccess, int i, int j, int k) {
         PathType pathtype = this.b(iblockaccess, i, j, k);
 
@@ -249,9 +257,11 @@ public class PathfinderFlying extends PathfinderNormal {
             Block block = iblockaccess.getType(new BlockPosition(i, j - 1, k)).getBlock();
             PathType pathtype1 = this.b(iblockaccess, i, j - 1, k);
 
-            if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.MAGMA_BLOCK && pathtype1 != PathType.LAVA) {
+            if (pathtype1 != PathType.DAMAGE_FIRE && block != Blocks.MAGMA_BLOCK && pathtype1 != PathType.LAVA && block != Blocks.CAMPFIRE) {
                 if (pathtype1 == PathType.DAMAGE_CACTUS) {
                     pathtype = PathType.DAMAGE_CACTUS;
+                } else if (pathtype1 == PathType.DAMAGE_OTHER) {
+                    pathtype = PathType.DAMAGE_OTHER;
                 } else {
                     pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER ? PathType.WALKABLE : PathType.OPEN;
                 }

@@ -9,33 +9,35 @@ public enum GenLayerDesert implements AreaTransformer7 {
     private static final int d = IRegistry.BIOME.a((Object) Biomes.WOODED_MOUNTAINS);
     private static final int e = IRegistry.BIOME.a((Object) Biomes.SNOWY_TUNDRA);
     private static final int f = IRegistry.BIOME.a((Object) Biomes.JUNGLE);
-    private static final int g = IRegistry.BIOME.a((Object) Biomes.JUNGLE_EDGE);
-    private static final int h = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
-    private static final int i = IRegistry.BIOME.a((Object) Biomes.BADLANDS_PLATEAU);
-    private static final int j = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
-    private static final int k = IRegistry.BIOME.a((Object) Biomes.PLAINS);
-    private static final int l = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
-    private static final int m = IRegistry.BIOME.a((Object) Biomes.MOUNTAIN_EDGE);
-    private static final int n = IRegistry.BIOME.a((Object) Biomes.SWAMP);
-    private static final int o = IRegistry.BIOME.a((Object) Biomes.TAIGA);
-    private static final int p = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
+    private static final int g = IRegistry.BIOME.a((Object) Biomes.BAMBOO_JUNGLE);
+    private static final int h = IRegistry.BIOME.a((Object) Biomes.JUNGLE_EDGE);
+    private static final int i = IRegistry.BIOME.a((Object) Biomes.BADLANDS);
+    private static final int j = IRegistry.BIOME.a((Object) Biomes.BADLANDS_PLATEAU);
+    private static final int k = IRegistry.BIOME.a((Object) Biomes.WOODED_BADLANDS_PLATEAU);
+    private static final int l = IRegistry.BIOME.a((Object) Biomes.PLAINS);
+    private static final int m = IRegistry.BIOME.a((Object) Biomes.GIANT_TREE_TAIGA);
+    private static final int n = IRegistry.BIOME.a((Object) Biomes.MOUNTAIN_EDGE);
+    private static final int o = IRegistry.BIOME.a((Object) Biomes.SWAMP);
+    private static final int p = IRegistry.BIOME.a((Object) Biomes.TAIGA);
+    private static final int q = IRegistry.BIOME.a((Object) Biomes.SNOWY_TAIGA);
 
     private GenLayerDesert() {}
 
+    @Override
     public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
         int[] aint = new int[1];
 
-        if (!this.a(aint, i, j, k, l, i1, GenLayerDesert.c, GenLayerDesert.m) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.j, GenLayerDesert.h) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.i, GenLayerDesert.h) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.l, GenLayerDesert.o)) {
+        if (!this.a(aint, i, j, k, l, i1, GenLayerDesert.c, GenLayerDesert.n) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.k, GenLayerDesert.i) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.j, GenLayerDesert.i) && !this.b(aint, i, j, k, l, i1, GenLayerDesert.m, GenLayerDesert.p)) {
             if (i1 == GenLayerDesert.b && (i == GenLayerDesert.e || j == GenLayerDesert.e || l == GenLayerDesert.e || k == GenLayerDesert.e)) {
                 return GenLayerDesert.d;
             } else {
-                if (i1 == GenLayerDesert.n) {
-                    if (i == GenLayerDesert.b || j == GenLayerDesert.b || l == GenLayerDesert.b || k == GenLayerDesert.b || i == GenLayerDesert.p || j == GenLayerDesert.p || l == GenLayerDesert.p || k == GenLayerDesert.p || i == GenLayerDesert.e || j == GenLayerDesert.e || l == GenLayerDesert.e || k == GenLayerDesert.e) {
-                        return GenLayerDesert.k;
+                if (i1 == GenLayerDesert.o) {
+                    if (i == GenLayerDesert.b || j == GenLayerDesert.b || l == GenLayerDesert.b || k == GenLayerDesert.b || i == GenLayerDesert.q || j == GenLayerDesert.q || l == GenLayerDesert.q || k == GenLayerDesert.q || i == GenLayerDesert.e || j == GenLayerDesert.e || l == GenLayerDesert.e || k == GenLayerDesert.e) {
+                        return GenLayerDesert.l;
                     }
 
-                    if (i == GenLayerDesert.f || k == GenLayerDesert.f || j == GenLayerDesert.f || l == GenLayerDesert.f) {
-                        return GenLayerDesert.g;
+                    if (i == GenLayerDesert.f || k == GenLayerDesert.f || j == GenLayerDesert.f || l == GenLayerDesert.f || i == GenLayerDesert.g || k == GenLayerDesert.g || j == GenLayerDesert.g || l == GenLayerDesert.g) {
+                        return GenLayerDesert.h;
                     }
                 }
 
@@ -82,8 +84,8 @@ public enum GenLayerDesert implements AreaTransformer7 {
             BiomeBase biomebase1 = (BiomeBase) IRegistry.BIOME.fromId(j);
 
             if (biomebase != null && biomebase1 != null) {
-                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.g();
-                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.g();
+                BiomeBase.EnumTemperature biomebase_enumtemperature = biomebase.f();
+                BiomeBase.EnumTemperature biomebase_enumtemperature1 = biomebase1.f();
 
                 return biomebase_enumtemperature == biomebase_enumtemperature1 || biomebase_enumtemperature == BiomeBase.EnumTemperature.MEDIUM || biomebase_enumtemperature1 == BiomeBase.EnumTemperature.MEDIUM;
             } else {

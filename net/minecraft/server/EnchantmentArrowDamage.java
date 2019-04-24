@@ -6,14 +6,12 @@ public class EnchantmentArrowDamage extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 1 + (i - 1) * 10;
     }
 
-    public int b(int i) {
-        return this.a(i) + 15;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 5;
     }

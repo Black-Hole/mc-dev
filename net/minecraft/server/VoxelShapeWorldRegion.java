@@ -15,6 +15,7 @@ public final class VoxelShapeWorldRegion extends VoxelShape {
         this.d = k;
     }
 
+    @Override
     protected DoubleList a(EnumDirection.EnumAxis enumdirection_enumaxis) {
         return new DoubleListRange(this.a.c(enumdirection_enumaxis), enumdirection_enumaxis.a(this.b, this.c, this.d));
     }

@@ -30,10 +30,12 @@ public abstract class ResourcePackAbstract implements IResourcePack {
         return file.toURI().relativize(file1.toURI()).getPath();
     }
 
+    @Override
     public InputStream a(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) throws IOException {
         return this.a(c(enumresourcepacktype, minecraftkey));
     }
 
+    @Override
     public boolean b(EnumResourcePackType enumresourcepacktype, MinecraftKey minecraftkey) {
         return this.c(c(enumresourcepacktype, minecraftkey));
     }
@@ -47,8 +49,34 @@ public abstract class ResourcePackAbstract implements IResourcePack {
     }
 
     @Nullable
+    @Override
     public <T> T a(ResourcePackMetaParser<T> resourcepackmetaparser) throws IOException {
-        return a(resourcepackmetaparser, this.a("pack.mcmeta"));
+        InputStream inputstream = this.a("pack.mcmeta");
+        Throwable throwable = null;
+
+        Object object;
+
+        try {
+            object = a(resourcepackmetaparser, inputstream);
+        } catch (Throwable throwable1) {
+            throwable = throwable1;
+            throw throwable1;
+        } finally {
+            if (inputstream != null) {
+                if (throwable != null) {
+                    try {
+                        inputstream.close();
+                    } catch (Throwable throwable2) {
+                        throwable.addSuppressed(throwable2);
+                    }
+                } else {
+                    inputstream.close();
+                }
+            }
+
+        }
+
+        return object;
     }
 
     @Nullable
@@ -95,6 +123,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
         }
     }
 
+    @Override
     public String a() {
         return this.a.getName();
     }

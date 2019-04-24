@@ -1,40 +1,39 @@
 package net.minecraft.server;
 
-import javax.annotation.Nullable;
-
 public class EntitySkeletonStray extends EntitySkeletonAbstract {
 
-    public EntitySkeletonStray(World world) {
-        super(EntityTypes.STRAY, world);
+    public EntitySkeletonStray(EntityTypes<? extends EntitySkeletonStray> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, boolean flag) {
-        return super.a(generatoraccess, flag) && (flag || generatoraccess.e(new BlockPosition(this)));
+    @Override
+    public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
+        return super.a(generatoraccess, enummobspawn) && (enummobspawn == EnumMobSpawn.SPAWNER || generatoraccess.f(new BlockPosition(this)));
     }
 
-    @Nullable
-    protected MinecraftKey getDefaultLootTable() {
-        return LootTables.ax;
-    }
-
-    protected SoundEffect D() {
+    @Override
+    protected SoundEffect getSoundAmbient() {
         return SoundEffects.ENTITY_STRAY_AMBIENT;
     }
 
-    protected SoundEffect d(DamageSource damagesource) {
+    @Override
+    protected SoundEffect getSoundHurt(DamageSource damagesource) {
         return SoundEffects.ENTITY_STRAY_HURT;
     }
 
-    protected SoundEffect cs() {
+    @Override
+    protected SoundEffect getSoundDeath() {
         return SoundEffects.ENTITY_STRAY_DEATH;
     }
 
+    @Override
     SoundEffect l() {
         return SoundEffects.ENTITY_STRAY_STEP;
     }
 
-    protected EntityArrow a(float f) {
-        EntityArrow entityarrow = super.a(f);
+    @Override
+    protected EntityArrow b(ItemStack itemstack, float f) {
+        EntityArrow entityarrow = super.b(itemstack, f);
 
         if (entityarrow instanceof EntityTippedArrow) {
             ((EntityTippedArrow) entityarrow).a(new MobEffect(MobEffects.SLOWER_MOVEMENT, 600));

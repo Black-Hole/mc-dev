@@ -6,6 +6,7 @@ public enum GenLayerSmooth implements AreaTransformer7 {
 
     private GenLayerSmooth() {}
 
+    @Override
     public int a(WorldGenContext worldgencontext, int i, int j, int k, int l, int i1) {
         boolean flag = j == l;
         boolean flag1 = i == k;

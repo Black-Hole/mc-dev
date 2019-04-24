@@ -35,6 +35,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
         return this.c;
     }
 
+    @Override
     protected InputStream a(String s) throws IOException {
         ZipFile zipfile = this.b();
         ZipEntry zipentry = zipfile.getEntry(s);
@@ -46,6 +47,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
         }
     }
 
+    @Override
     public boolean c(String s) {
         try {
             return this.b().getEntry(s) != null;
@@ -54,6 +56,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
         }
     }
 
+    @Override
     public Set<String> a(EnumResourcePackType enumresourcepacktype) {
         ZipFile zipfile;
 
@@ -101,6 +104,7 @@ public class ResourcePackFile extends ResourcePackAbstract {
 
     }
 
+    @Override
     public Collection<MinecraftKey> a(EnumResourcePackType enumresourcepacktype, String s, int i, Predicate<String> predicate) {
         ZipFile zipfile;
 

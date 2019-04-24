@@ -1,17 +1,22 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenBuriedTreasure extends StructureGenerator<WorldGenBuriedTreasureConfiguration> {
 
-    public WorldGenBuriedTreasure() {}
+    public WorldGenBuriedTreasure(Function<Dynamic<?>, ? extends WorldGenBuriedTreasureConfiguration> function) {
+        super(function);
+    }
 
-    protected boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), (BiomeBase) null);
+    @Override
+    public boolean a(ChunkGenerator<?> chunkgenerator, Random random, int i, int j) {
+        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9));
 
-        if (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.r)) {
+        if (chunkgenerator.canSpawnStructure(biomebase, WorldGenerator.BURIED_TREASURE)) {
             ((SeededRandom) random).a(chunkgenerator.getSeed(), i, j, 10387320);
-            WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration = (WorldGenBuriedTreasureConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.r);
+            WorldGenBuriedTreasureConfiguration worldgenburiedtreasureconfiguration = (WorldGenBuriedTreasureConfiguration) chunkgenerator.getFeatureConfiguration(biomebase, WorldGenerator.BURIED_TREASURE);
 
             return random.nextFloat() < worldgenburiedtreasureconfiguration.a;
         } else {
@@ -19,40 +24,40 @@ public class WorldGenBuriedTreasure extends StructureGenerator<WorldGenBuriedTre
         }
     }
 
-    protected boolean a(GeneratorAccess generatoraccess) {
-        return generatoraccess.getWorldData().shouldGenerateMapFeatures();
+    @Override
+    public StructureGenerator.a a() {
+        return WorldGenBuriedTreasure.a::new;
     }
 
-    protected StructureStart a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j) {
-        BiomeBase biomebase = chunkgenerator.getWorldChunkManager().getBiome(new BlockPosition((i << 4) + 9, 0, (j << 4) + 9), (BiomeBase) null);
-
-        return new WorldGenBuriedTreasure.a(generatoraccess, chunkgenerator, seededrandom, i, j, biomebase);
-    }
-
-    protected String a() {
+    @Override
+    public String b() {
         return "Buried_Treasure";
     }
 
-    public int b() {
+    @Override
+    public int c() {
         return 1;
     }
 
     public static class a extends StructureStart {
 
-        public a() {}
+        public a(StructureGenerator<?> structuregenerator, int i, int j, BiomeBase biomebase, StructureBoundingBox structureboundingbox, int k, long l) {
+            super(structuregenerator, i, j, biomebase, structureboundingbox, k, l);
+        }
 
-        public a(GeneratorAccess generatoraccess, ChunkGenerator<?> chunkgenerator, SeededRandom seededrandom, int i, int j, BiomeBase biomebase) {
-            super(i, j, biomebase, seededrandom, generatoraccess.getSeed());
+        @Override
+        public void a(ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, int i, int j, BiomeBase biomebase) {
             int k = i * 16;
             int l = j * 16;
             BlockPosition blockposition = new BlockPosition(k + 9, 90, l + 9);
 
-            this.a.add(new WorldGenBuriedTreasurePieces.a(blockposition));
-            this.a((IBlockAccess) generatoraccess);
+            this.b.add(new WorldGenBuriedTreasurePieces.a(blockposition));
+            this.b();
         }
 
+        @Override
         public BlockPosition a() {
-            return new BlockPosition((this.c << 4) + 9, 0, (this.d << 4) + 9);
+            return new BlockPosition((this.f() << 4) + 9, 0, (this.g() << 4) + 9);
         }
     }
 }

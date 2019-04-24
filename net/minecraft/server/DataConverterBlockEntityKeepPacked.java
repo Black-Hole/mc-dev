@@ -8,13 +8,14 @@ import com.mojang.datafixers.schemas.Schema;
 public class DataConverterBlockEntityKeepPacked extends DataConverterNamedEntity {
 
     public DataConverterBlockEntityKeepPacked(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityKeepPacked", DataConverterTypes.j, "DUMMY");
+        super(schema, flag, "BlockEntityKeepPacked", DataConverterTypes.k, "DUMMY");
     }
 
     private static Dynamic<?> a(Dynamic<?> dynamic) {
         return dynamic.set("keepPacked", dynamic.createBoolean(true));
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), DataConverterBlockEntityKeepPacked::a);
     }

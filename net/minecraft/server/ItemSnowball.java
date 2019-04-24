@@ -6,6 +6,7 @@ public class ItemSnowball extends Item {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -17,6 +18,7 @@ public class ItemSnowball extends Item {
         if (!world.isClientSide) {
             EntitySnowball entitysnowball = new EntitySnowball(world, entityhuman);
 
+            entitysnowball.setItem(itemstack);
             entitysnowball.a(entityhuman, entityhuman.pitch, entityhuman.yaw, 0.0F, 1.5F, 1.0F);
             world.addEntity(entitysnowball);
         }

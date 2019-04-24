@@ -21,11 +21,11 @@ public class CommandEffect {
     public static void a(com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> com_mojang_brigadier_commanddispatcher) {
         com_mojang_brigadier_commanddispatcher.register((LiteralArgumentBuilder) ((LiteralArgumentBuilder) ((LiteralArgumentBuilder) CommandDispatcher.a("effect").requires((commandlistenerwrapper) -> {
             return commandlistenerwrapper.hasPermission(2);
-        })).then(CommandDispatcher.a("clear").then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).executes((commandcontext) -> {
+        })).then(CommandDispatcher.a("clear").then(((RequiredArgumentBuilder) CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"));
         })).then(CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"));
-        }))))).then(CommandDispatcher.a("give").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.b()).then(((RequiredArgumentBuilder) CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
+        }))))).then(CommandDispatcher.a("give").then(CommandDispatcher.a("targets", (ArgumentType) ArgumentEntity.multipleEntities()).then(((RequiredArgumentBuilder) CommandDispatcher.a("effect", (ArgumentType) ArgumentMobEffect.a()).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), (Integer) null, 0, true);
         })).then(((RequiredArgumentBuilder) CommandDispatcher.a("seconds", (ArgumentType) IntegerArgumentType.integer(1, 1000000)).executes((commandcontext) -> {
             return a((CommandListenerWrapper) commandcontext.getSource(), ArgumentEntity.b(commandcontext, "targets"), ArgumentMobEffect.a(commandcontext, "effect"), IntegerArgumentType.getInteger(commandcontext, "seconds"), 0, true);

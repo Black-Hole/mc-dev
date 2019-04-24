@@ -2,29 +2,27 @@ package net.minecraft.server;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import java.util.Iterator;
-import java.util.Random;
-import javax.annotation.Nullable;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LootItemFunctionSmelt extends LootItemFunction {
+public class LootItemFunctionSmelt extends LootItemFunctionConditional {
 
     private static final Logger a = LogManager.getLogger();
 
-    public LootItemFunctionSmelt(LootItemCondition[] alootitemcondition) {
+    private LootItemFunctionSmelt(LootItemCondition[] alootitemcondition) {
         super(alootitemcondition);
     }
 
-    public ItemStack a(ItemStack itemstack, Random random, LootTableInfo loottableinfo) {
+    @Override
+    public ItemStack a(ItemStack itemstack, LootTableInfo loottableinfo) {
         if (itemstack.isEmpty()) {
             return itemstack;
         } else {
-            IRecipe irecipe = a(loottableinfo, itemstack);
+            Optional<FurnaceRecipe> optional = loottableinfo.d().getCraftingManager().craft(Recipes.SMELTING, new InventorySubcontainer(new ItemStack[] { itemstack}), loottableinfo.d());
 
-            if (irecipe != null) {
-                ItemStack itemstack1 = irecipe.d();
+            if (optional.isPresent()) {
+                ItemStack itemstack1 = ((FurnaceRecipe) optional.get()).c();
 
                 if (!itemstack1.isEmpty()) {
                     ItemStack itemstack2 = itemstack1.cloneItemStack();
@@ -39,31 +37,17 @@ public class LootItemFunctionSmelt extends LootItemFunction {
         }
     }
 
-    @Nullable
-    public static IRecipe a(LootTableInfo loottableinfo, ItemStack itemstack) {
-        Iterator iterator = loottableinfo.h().getCraftingManager().b().iterator();
-
-        IRecipe irecipe;
-
-        do {
-            if (!iterator.hasNext()) {
-                return null;
-            }
-
-            irecipe = (IRecipe) iterator.next();
-        } while (!(irecipe instanceof FurnaceRecipe) || !((RecipeItemStack) irecipe.e().get(0)).test(itemstack));
-
-        return irecipe;
+    public static LootItemFunctionConditional.a<?> b() {
+        return a(LootItemFunctionSmelt::new);
     }
 
-    public static class a extends LootItemFunction.a<LootItemFunctionSmelt> {
+    public static class a extends LootItemFunctionConditional.c<LootItemFunctionSmelt> {
 
         protected a() {
             super(new MinecraftKey("furnace_smelt"), LootItemFunctionSmelt.class);
         }
 
-        public void a(JsonObject jsonobject, LootItemFunctionSmelt lootitemfunctionsmelt, JsonSerializationContext jsonserializationcontext) {}
-
+        @Override
         public LootItemFunctionSmelt b(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext, LootItemCondition[] alootitemcondition) {
             return new LootItemFunctionSmelt(alootitemcondition);
         }

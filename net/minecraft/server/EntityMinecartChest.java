@@ -2,14 +2,15 @@ package net.minecraft.server;
 
 public class EntityMinecartChest extends EntityMinecartContainer {
 
-    public EntityMinecartChest(World world) {
-        super(EntityTypes.CHEST_MINECART, world);
+    public EntityMinecartChest(EntityTypes<? extends EntityMinecartChest> entitytypes, World world) {
+        super(entitytypes, world);
     }
 
     public EntityMinecartChest(World world, double d0, double d1, double d2) {
         super(EntityTypes.CHEST_MINECART, d0, d1, d2, world);
     }
 
+    @Override
     public void a(DamageSource damagesource) {
         super.a(damagesource);
         if (this.world.getGameRules().getBoolean("doEntityDrops")) {
@@ -18,28 +19,28 @@ public class EntityMinecartChest extends EntityMinecartContainer {
 
     }
 
+    @Override
     public int getSize() {
         return 27;
     }
 
-    public EntityMinecartAbstract.EnumMinecartType v() {
+    @Override
+    public EntityMinecartAbstract.EnumMinecartType getMinecartType() {
         return EntityMinecartAbstract.EnumMinecartType.CHEST;
     }
 
-    public IBlockData z() {
+    @Override
+    public IBlockData q() {
         return (IBlockData) Blocks.CHEST.getBlockData().set(BlockChest.FACING, EnumDirection.NORTH);
     }
 
-    public int B() {
+    @Override
+    public int s() {
         return 8;
     }
 
-    public String getContainerName() {
-        return "minecraft:chest";
-    }
-
-    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
-        this.f(entityhuman);
-        return new ContainerChest(playerinventory, this, entityhuman);
+    @Override
+    public Container a(int i, PlayerInventory playerinventory) {
+        return ContainerChest.a(i, playerinventory, this);
     }
 }

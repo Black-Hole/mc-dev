@@ -3,38 +3,41 @@ package net.minecraft.server;
 import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nullable;
 
 public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
 
-    private final IChatBaseComponent a;
-    private final int b;
+    private final int a;
     public final NonNullList<ItemStack> items;
-    private List<IInventoryListener> d;
-    private IChatBaseComponent e;
+    private List<IInventoryListener> c;
 
-    public InventorySubcontainer(IChatBaseComponent ichatbasecomponent, int i) {
-        this.a = ichatbasecomponent;
-        this.b = i;
+    public InventorySubcontainer(int i) {
+        this.a = i;
         this.items = NonNullList.a(i, ItemStack.a);
     }
 
+    public InventorySubcontainer(ItemStack... aitemstack) {
+        this.a = aitemstack.length;
+        this.items = NonNullList.a(ItemStack.a, aitemstack);
+    }
+
     public void a(IInventoryListener iinventorylistener) {
-        if (this.d == null) {
-            this.d = Lists.newArrayList();
+        if (this.c == null) {
+            this.c = Lists.newArrayList();
         }
 
-        this.d.add(iinventorylistener);
+        this.c.add(iinventorylistener);
     }
 
     public void b(IInventoryListener iinventorylistener) {
-        this.d.remove(iinventorylistener);
+        this.c.remove(iinventorylistener);
     }
 
+    @Override
     public ItemStack getItem(int i) {
         return i >= 0 && i < this.items.size() ? (ItemStack) this.items.get(i) : ItemStack.a;
     }
 
+    @Override
     public ItemStack splitStack(int i, int j) {
         ItemStack itemstack = ContainerUtil.a(this.items, i, j);
 
@@ -48,7 +51,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
     public ItemStack a(ItemStack itemstack) {
         ItemStack itemstack1 = itemstack.cloneItemStack();
 
-        for (int i = 0; i < this.b; ++i) {
+        for (int i = 0; i < this.a; ++i) {
             ItemStack itemstack2 = this.getItem(i);
 
             if (itemstack2.isEmpty()) {
@@ -79,6 +82,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         return itemstack1;
     }
 
+    @Override
     public ItemStack splitWithoutUpdate(int i) {
         ItemStack itemstack = (ItemStack) this.items.get(i);
 
@@ -90,6 +94,7 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         }
     }
 
+    @Override
     public void setItem(int i, ItemStack itemstack) {
         this.items.set(i, itemstack);
         if (!itemstack.isEmpty() && itemstack.getCount() > this.getMaxStackSize()) {
@@ -99,11 +104,13 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         this.update();
     }
 
+    @Override
     public int getSize() {
-        return this.b;
+        return this.a;
     }
 
-    public boolean P_() {
+    @Override
+    public boolean isNotEmpty() {
         Iterator iterator = this.items.iterator();
 
         ItemStack itemstack;
@@ -119,62 +126,31 @@ public class InventorySubcontainer implements IInventory, AutoRecipeOutput {
         return false;
     }
 
-    public IChatBaseComponent getDisplayName() {
-        return this.e != null ? this.e : this.a;
-    }
-
-    @Nullable
-    public IChatBaseComponent getCustomName() {
-        return this.e;
-    }
-
-    public boolean hasCustomName() {
-        return this.e != null;
-    }
-
-    public void a(@Nullable IChatBaseComponent ichatbasecomponent) {
-        this.e = ichatbasecomponent;
-    }
-
-    public int getMaxStackSize() {
-        return 64;
-    }
-
+    @Override
     public void update() {
-        if (this.d != null) {
-            for (int i = 0; i < this.d.size(); ++i) {
-                ((IInventoryListener) this.d.get(i)).a(this);
+        if (this.c != null) {
+            Iterator iterator = this.c.iterator();
+
+            while (iterator.hasNext()) {
+                IInventoryListener iinventorylistener = (IInventoryListener) iterator.next();
+
+                iinventorylistener.a(this);
             }
         }
 
     }
 
+    @Override
     public boolean a(EntityHuman entityhuman) {
         return true;
     }
 
-    public void startOpen(EntityHuman entityhuman) {}
-
-    public void closeContainer(EntityHuman entityhuman) {}
-
-    public boolean b(int i, ItemStack itemstack) {
-        return true;
-    }
-
-    public int getProperty(int i) {
-        return 0;
-    }
-
-    public void setProperty(int i, int j) {}
-
-    public int h() {
-        return 0;
-    }
-
+    @Override
     public void clear() {
         this.items.clear();
     }
 
+    @Override
     public void a(AutoRecipeStackManager autorecipestackmanager) {
         Iterator iterator = this.items.iterator();
 

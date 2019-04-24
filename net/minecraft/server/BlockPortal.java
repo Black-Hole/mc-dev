@@ -6,16 +6,17 @@ import javax.annotation.Nullable;
 
 public class BlockPortal extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.z;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.D;
     protected static final VoxelShape b = Block.a(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
     protected static final VoxelShape c = Block.a(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 
     public BlockPortal(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockPortal.AXIS, EnumDirection.EnumAxis.X));
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         switch ((EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS)) {
         case Z:
             return BlockPortal.c;
@@ -25,29 +26,22 @@ public class BlockPortal extends Block {
         }
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (world.worldProvider.isOverworld() && world.getGameRules().getBoolean("doMobSpawning") && random.nextInt(2000) < world.getDifficulty().a()) {
-            int i = blockposition.getY();
-
-            BlockPosition blockposition1;
-
-            for (blockposition1 = blockposition; !world.getType(blockposition1).q() && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
-                ;
+            while (world.getType(blockposition).getBlock() == this) {
+                blockposition = blockposition.down();
             }
 
-            if (i > 0 && !world.getType(blockposition1.up()).isOccluding()) {
-                Entity entity = EntityTypes.ZOMBIE_PIGMAN.a(world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition1.up(), false, false);
+            if (world.getType(blockposition).a((IBlockAccess) world, blockposition, EntityTypes.ZOMBIE_PIGMAN)) {
+                Entity entity = EntityTypes.ZOMBIE_PIGMAN.spawnCreature(world, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition.up(), EnumMobSpawn.STRUCTURE, false, false);
 
                 if (entity != null) {
-                    entity.portalCooldown = entity.aQ();
+                    entity.portalCooldown = entity.aW();
                 }
             }
         }
 
-    }
-
-    public boolean a(IBlockData iblockdata) {
-        return false;
     }
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition) {
@@ -74,6 +68,7 @@ public class BlockPortal extends Block {
         }
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
         EnumDirection.EnumAxis enumdirection_enumaxis1 = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
@@ -82,25 +77,20 @@ public class BlockPortal extends Block {
         return !flag && iblockdata1.getBlock() != this && !(new BlockPortal.Shape(generatoraccess, blockposition, enumdirection_enumaxis1)).f() ? Blocks.AIR.getBlockData() : super.updateState(iblockdata, enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
     }
 
-    public int a(IBlockData iblockdata, Random random) {
-        return 0;
-    }
-
+    @Override
     public TextureType c() {
         return TextureType.TRANSLUCENT;
     }
 
+    @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        if (!entity.isPassenger() && !entity.isVehicle() && entity.bm()) {
-            entity.e(blockposition);
+        if (!entity.isPassenger() && !entity.isVehicle() && entity.canPortal()) {
+            entity.c(blockposition);
         }
 
     }
 
-    public ItemStack a(IBlockAccess iblockaccess, BlockPosition blockposition, IBlockData iblockdata) {
-        return ItemStack.a;
-    }
-
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
@@ -118,6 +108,7 @@ public class BlockPortal extends Block {
         }
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockPortal.AXIS);
     }
@@ -175,10 +166,6 @@ public class BlockPortal extends Block {
         }
     }
 
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
-
     public static class Shape {
 
         private final GeneratorAccess a;
@@ -186,6 +173,7 @@ public class BlockPortal extends Block {
         private final EnumDirection c;
         private final EnumDirection d;
         private int e;
+        @Nullable
         private BlockPosition position;
         private int height;
         private int width;

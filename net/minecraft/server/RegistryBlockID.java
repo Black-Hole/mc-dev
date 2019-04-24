@@ -48,6 +48,7 @@ public class RegistryBlockID<T> implements Registry<T> {
     }
 
     @Nullable
+    @Override
     public final T fromId(int i) {
         return i >= 0 && i < this.c.size() ? this.c.get(i) : null;
     }

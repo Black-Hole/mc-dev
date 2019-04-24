@@ -12,26 +12,34 @@ public class BlockTorchWall extends BlockTorch {
 
     protected BlockTorchWall(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTorchWall.a, EnumDirection.NORTH));
     }
 
-    public String m() {
+    @Override
+    public String l() {
         return this.getItem().getName();
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return j(iblockdata);
+    }
+
+    public static VoxelShape j(IBlockData iblockdata) {
         return (VoxelShape) BlockTorchWall.b.get(iblockdata.get(BlockTorchWall.a));
     }
 
+    @Override
     public boolean canPlace(IBlockData iblockdata, IWorldReader iworldreader, BlockPosition blockposition) {
         EnumDirection enumdirection = (EnumDirection) iblockdata.get(BlockTorchWall.a);
         BlockPosition blockposition1 = blockposition.shift(enumdirection.opposite());
         IBlockData iblockdata1 = iworldreader.getType(blockposition1);
 
-        return iblockdata1.c(iworldreader, blockposition1, enumdirection) == EnumBlockFaceShape.SOLID && !b(iblockdata1.getBlock());
+        return Block.d(iblockdata1, iworldreader, blockposition1, enumdirection);
     }
 
     @Nullable
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlockData();
         World world = blockactioncontext.getWorld();
@@ -56,18 +64,22 @@ public class BlockTorchWall extends BlockTorch {
         return null;
     }
 
+    @Override
     public IBlockData updateState(IBlockData iblockdata, EnumDirection enumdirection, IBlockData iblockdata1, GeneratorAccess generatoraccess, BlockPosition blockposition, BlockPosition blockposition1) {
         return enumdirection.opposite() == iblockdata.get(BlockTorchWall.a) && !iblockdata.canPlace(generatoraccess, blockposition) ? Blocks.AIR.getBlockData() : iblockdata;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockTorchWall.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockTorchWall.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockTorchWall.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockTorchWall.a);
     }

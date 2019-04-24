@@ -6,18 +6,17 @@ public class EnchantmentLootBonus extends Enchantment {
         super(enchantment_rarity, enchantmentslottype, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 15 + (i - 1) * 9;
     }
 
-    public int b(int i) {
-        return super.a(i) + 50;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 3;
     }
 
+    @Override
     public boolean a(Enchantment enchantment) {
         return super.a(enchantment) && enchantment != Enchantments.SILK_TOUCH;
     }

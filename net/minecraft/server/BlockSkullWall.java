@@ -11,17 +11,20 @@ public class BlockSkullWall extends BlockSkullAbstract {
 
     protected BlockSkullWall(BlockSkull.a blockskull_a, Block.Info block_info) {
         super(blockskull_a, block_info);
-        this.v((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
+        this.o((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockSkullWall.a, EnumDirection.NORTH));
     }
 
-    public String m() {
+    @Override
+    public String l() {
         return this.getItem().getName();
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return (VoxelShape) BlockSkullWall.b.get(iblockdata.get(BlockSkullWall.a));
     }
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = this.getBlockData();
         World world = blockactioncontext.getWorld();
@@ -46,14 +49,17 @@ public class BlockSkullWall extends BlockSkullAbstract {
         return null;
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         return (IBlockData) iblockdata.set(BlockSkullWall.a, enumblockrotation.a((EnumDirection) iblockdata.get(BlockSkullWall.a)));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockMirror enumblockmirror) {
         return iblockdata.a(enumblockmirror.a((EnumDirection) iblockdata.get(BlockSkullWall.a)));
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockSkullWall.a);
     }

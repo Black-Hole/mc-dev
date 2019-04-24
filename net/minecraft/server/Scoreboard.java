@@ -338,7 +338,7 @@ public class Scoreboard {
 
     public void a(Entity entity) {
         if (entity != null && !(entity instanceof EntityHuman) && !entity.isAlive()) {
-            String s = entity.bu();
+            String s = entity.getUniqueIDString();
 
             this.resetPlayerScores(s, (ScoreboardObjective) null);
             this.removePlayerFromTeam(s);
@@ -358,7 +358,7 @@ public class Scoreboard {
                 nbttagcompound.setString("Objective", scoreboardscore.getObjective().getName());
                 nbttagcompound.setInt("Score", scoreboardscore.getScore());
                 nbttagcompound.setBoolean("Locked", scoreboardscore.g());
-                nbttaglist.add((NBTBase) nbttagcompound);
+                nbttaglist.add(nbttagcompound);
             });
         });
         return nbttaglist;

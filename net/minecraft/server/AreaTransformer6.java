@@ -4,8 +4,9 @@ public interface AreaTransformer6 extends AreaTransformer2, AreaTransformerOffse
 
     int a(WorldGenContext worldgencontext, int i);
 
-    default int a(AreaContextTransformed<?> areacontexttransformed, AreaDimension areadimension, Area area, int i, int j) {
-        int k = area.a(i + 1, j + 1);
+    @Override
+    default int a(AreaContextTransformed<?> areacontexttransformed, Area area, int i, int j) {
+        int k = area.a(this.a(i + 1), this.b(j + 1));
 
         return this.a(areacontexttransformed, k);
     }

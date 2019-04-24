@@ -16,7 +16,7 @@ public class DataConverterSchemaV1451_2 extends DataConverterSchemaNamed {
         Map<String, Supplier<TypeTemplate>> map = super.registerBlockEntities(schema);
 
         schema.register(map, "minecraft:piston", (s) -> {
-            return DSL.optionalFields("blockState", DataConverterTypes.l.in(schema));
+            return DSL.optionalFields("blockState", DataConverterTypes.m.in(schema));
         });
         return map;
     }

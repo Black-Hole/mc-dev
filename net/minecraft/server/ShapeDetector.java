@@ -4,6 +4,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.mojang.datafixers.util.Pair;
 import java.util.Iterator;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -63,7 +64,7 @@ public class ShapeDetector {
     public ShapeDetector.ShapeDetectorCollection a(IWorldReader iworldreader, BlockPosition blockposition) {
         LoadingCache<BlockPosition, ShapeDetectorBlock> loadingcache = a(iworldreader, false);
         int i = Math.max(Math.max(this.d, this.c), this.b);
-        Iterator iterator = BlockPosition.a(blockposition, blockposition.a(i - 1, i - 1, i - 1)).iterator();
+        Iterator iterator = BlockPosition.a(blockposition, blockposition.b(i - 1, i - 1, i - 1)).iterator();
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
@@ -102,7 +103,7 @@ public class ShapeDetector {
             BaseBlockPosition baseblockposition1 = new BaseBlockPosition(enumdirection1.getAdjacentX(), enumdirection1.getAdjacentY(), enumdirection1.getAdjacentZ());
             BaseBlockPosition baseblockposition2 = baseblockposition.d(baseblockposition1);
 
-            return blockposition.a(baseblockposition1.getX() * -j + baseblockposition2.getX() * i + baseblockposition.getX() * k, baseblockposition1.getY() * -j + baseblockposition2.getY() * i + baseblockposition.getY() * k, baseblockposition1.getZ() * -j + baseblockposition2.getZ() * i + baseblockposition.getZ() * k);
+            return blockposition.b(baseblockposition1.getX() * -j + baseblockposition2.getX() * i + baseblockposition.getX() * k, baseblockposition1.getY() * -j + baseblockposition2.getY() * i + baseblockposition.getY() * k, baseblockposition1.getZ() * -j + baseblockposition2.getZ() * i + baseblockposition.getZ() * k);
         } else {
             throw new IllegalArgumentException("Invalid forwards & up combination");
         }
@@ -154,6 +155,49 @@ public class ShapeDetector {
 
         public String toString() {
             return MoreObjects.toStringHelper(this).add("up", this.c).add("forwards", this.b).add("frontTopLeft", this.a).toString();
+        }
+
+        public Pair<Vec3D, Pair<Vec3D, Integer>> a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
+            EnumDirection enumdirection1 = this.getFacing();
+            EnumDirection enumdirection2 = enumdirection1.e();
+            double d2 = (double) (this.a().getY() + 1) - d0 * (double) this.e();
+            double d3;
+            double d4;
+
+            if (enumdirection2 == EnumDirection.NORTH) {
+                d3 = (double) blockposition.getX() + 0.5D;
+                d4 = (double) (this.a().getZ() + 1) - (1.0D - d1) * (double) this.d();
+            } else if (enumdirection2 == EnumDirection.SOUTH) {
+                d3 = (double) blockposition.getX() + 0.5D;
+                d4 = (double) this.a().getZ() + (1.0D - d1) * (double) this.d();
+            } else if (enumdirection2 == EnumDirection.WEST) {
+                d3 = (double) (this.a().getX() + 1) - (1.0D - d1) * (double) this.d();
+                d4 = (double) blockposition.getZ() + 0.5D;
+            } else {
+                d3 = (double) this.a().getX() + (1.0D - d1) * (double) this.d();
+                d4 = (double) blockposition.getZ() + 0.5D;
+            }
+
+            double d5;
+            double d6;
+
+            if (enumdirection1.opposite() == enumdirection) {
+                d5 = vec3d.x;
+                d6 = vec3d.z;
+            } else if (enumdirection1.opposite() == enumdirection.opposite()) {
+                d5 = -vec3d.x;
+                d6 = -vec3d.z;
+            } else if (enumdirection1.opposite() == enumdirection.e()) {
+                d5 = -vec3d.z;
+                d6 = vec3d.x;
+            } else {
+                d5 = vec3d.z;
+                d6 = -vec3d.x;
+            }
+
+            int i = (enumdirection1.get2DRotationValue() - enumdirection.opposite().get2DRotationValue()) * 90;
+
+            return Pair.of(new Vec3D(d3, d2, d4), Pair.of(new Vec3D(d5, vec3d.y, d6), i));
         }
     }
 

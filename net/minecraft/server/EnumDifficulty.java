@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import javax.annotation.Nullable;
 
 public enum EnumDifficulty {
 
@@ -28,6 +29,22 @@ public enum EnumDifficulty {
 
     public static EnumDifficulty getById(int i) {
         return EnumDifficulty.e[i % EnumDifficulty.e.length];
+    }
+
+    @Nullable
+    public static EnumDifficulty a(String s) {
+        EnumDifficulty[] aenumdifficulty = values();
+        int i = aenumdifficulty.length;
+
+        for (int j = 0; j < i; ++j) {
+            EnumDifficulty enumdifficulty = aenumdifficulty[j];
+
+            if (enumdifficulty.g.equals(s)) {
+                return enumdifficulty;
+            }
+        }
+
+        return null;
     }
 
     public String c() {

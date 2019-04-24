@@ -2,5 +2,5 @@ package net.minecraft.server;
 
 public interface AreaFactory<A extends Area> {
 
-    A make(AreaDimension areadimension);
+    A make();
 }

@@ -9,6 +9,7 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInUpdateSign() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = packetdataserializer.e();
         this.b = new String[4];
@@ -19,6 +20,7 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
 

@@ -28,20 +28,20 @@ public class DataConverterHeightmapRenaming extends DataFix {
     }
 
     private Dynamic<?> a(Dynamic<?> dynamic) {
-        Optional<? extends Dynamic<?>> optional = dynamic.get("Heightmaps");
+        Optional<? extends Dynamic<?>> optional = dynamic.get("Heightmaps").get();
 
         if (!optional.isPresent()) {
             return dynamic;
         } else {
             Dynamic<?> dynamic1 = (Dynamic) optional.get();
-            Optional<? extends Dynamic<?>> optional1 = dynamic1.get("LIQUID");
+            Optional<? extends Dynamic<?>> optional1 = dynamic1.get("LIQUID").get();
 
             if (optional1.isPresent()) {
                 dynamic1 = dynamic1.remove("LIQUID");
                 dynamic1 = dynamic1.set("WORLD_SURFACE_WG", (Dynamic) optional1.get());
             }
 
-            Optional<? extends Dynamic<?>> optional2 = dynamic1.get("SOLID");
+            Optional<? extends Dynamic<?>> optional2 = dynamic1.get("SOLID").get();
 
             if (optional2.isPresent()) {
                 dynamic1 = dynamic1.remove("SOLID");
@@ -49,14 +49,14 @@ public class DataConverterHeightmapRenaming extends DataFix {
                 dynamic1 = dynamic1.set("OCEAN_FLOOR", (Dynamic) optional2.get());
             }
 
-            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("LIGHT");
+            Optional<? extends Dynamic<?>> optional3 = dynamic1.get("LIGHT").get();
 
             if (optional3.isPresent()) {
                 dynamic1 = dynamic1.remove("LIGHT");
                 dynamic1 = dynamic1.set("LIGHT_BLOCKING", (Dynamic) optional3.get());
             }
 
-            Optional<? extends Dynamic<?>> optional4 = dynamic1.get("RAIN");
+            Optional<? extends Dynamic<?>> optional4 = dynamic1.get("RAIN").get();
 
             if (optional4.isPresent()) {
                 dynamic1 = dynamic1.remove("RAIN");

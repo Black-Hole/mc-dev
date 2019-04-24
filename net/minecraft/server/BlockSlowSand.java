@@ -10,31 +10,42 @@ public class BlockSlowSand extends Block {
         super(block_info);
     }
 
-    public VoxelShape f(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+    @Override
+    public VoxelShape b(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
         return BlockSlowSand.a;
     }
 
+    @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
-        entity.motX *= 0.4D;
-        entity.motZ *= 0.4D;
+        entity.setMot(entity.getMot().d(0.4D, 1.0D, 0.4D));
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         BlockBubbleColumn.a(world, blockposition.up(), false);
     }
 
-    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    @Override
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
+    @Override
+    public boolean isOccluding(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
+        return true;
+    }
+
+    @Override
     public int a(IWorldReader iworldreader) {
         return 20;
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
     }
 
+    @Override
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         return false;
     }

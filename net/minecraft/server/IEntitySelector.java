@@ -15,17 +15,17 @@ public final class IEntitySelector {
         return entity instanceof IInventory && entity.isAlive();
     };
     public static final Predicate<Entity> e = (entity) -> {
-        return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator() && !((EntityHuman) entity).u();
+        return !(entity instanceof EntityHuman) || !entity.t() && !((EntityHuman) entity).isCreative();
     };
     public static final Predicate<Entity> f = (entity) -> {
-        return !(entity instanceof EntityHuman) || !((EntityHuman) entity).isSpectator();
+        return !entity.t();
     };
 
     public static Predicate<Entity> a(double d0, double d1, double d2, double d3) {
         double d4 = d3 * d3;
 
         return (entity) -> {
-            return entity != null && entity.d(d0, d1, d2) <= d4;
+            return entity != null && entity.e(d0, d1, d2) <= d4;
         };
     }
 
@@ -36,7 +36,7 @@ public final class IEntitySelector {
         return (Predicate) (scoreboardteambase_enumteampush == ScoreboardTeamBase.EnumTeamPush.NEVER ? Predicates.alwaysFalse() : IEntitySelector.f.and((entity1) -> {
             if (!entity1.isCollidable()) {
                 return false;
-            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).dn())) {
+            } else if (entity.world.isClientSide && (!(entity1 instanceof EntityHuman) || !((EntityHuman) entity1).dG())) {
                 return false;
             } else {
                 ScoreboardTeamBase scoreboardteambase1 = entity1.getScoreboardTeam();
@@ -85,9 +85,8 @@ public final class IEntitySelector {
                 return false;
             } else {
                 EntityLiving entityliving = (EntityLiving) entity;
-                EnumItemSlot enumitemslot = EntityInsentient.e(this.a);
 
-                return !entityliving.getEquipment(enumitemslot).isEmpty() ? false : (entityliving instanceof EntityInsentient ? ((EntityInsentient) entityliving).dj() : (entityliving instanceof EntityArmorStand ? !((EntityArmorStand) entityliving).c(enumitemslot) : entityliving instanceof EntityHuman));
+                return entityliving.e(this.a);
             }
         }
     }

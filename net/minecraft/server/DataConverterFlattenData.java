@@ -26,7 +26,7 @@ public class DataConverterFlattenData {
         for (int k = 0; k < j; ++k) {
             String s1 = astring1[k];
             Dynamic<?> dynamic = b(s1);
-            String s2 = dynamic.getString("Name");
+            String s2 = dynamic.get("Name").asString("");
 
             DataConverterFlattenData.d.putIfAbsent(s2, i);
             DataConverterFlattenData.c.put(dynamic, i);
@@ -52,7 +52,7 @@ public class DataConverterFlattenData {
         if (i >= 0 && i < DataConverterFlattenData.b.length) {
             Dynamic<?> dynamic = DataConverterFlattenData.b[i];
 
-            return dynamic == null ? s : dynamic.getString("Name");
+            return dynamic == null ? s : dynamic.get("Name").asString("");
         } else {
             return s;
         }
@@ -62,7 +62,7 @@ public class DataConverterFlattenData {
         if (i >= 0 && i < DataConverterFlattenData.b.length) {
             Dynamic<?> dynamic = DataConverterFlattenData.b[i];
 
-            return dynamic == null ? "minecraft:air" : dynamic.getString("Name");
+            return dynamic == null ? "minecraft:air" : dynamic.get("Name").asString("");
         } else {
             return "minecraft:air";
         }

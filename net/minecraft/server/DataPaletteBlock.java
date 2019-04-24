@@ -21,7 +21,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
     private int i;
     private final ReentrantLock j = new ReentrantLock();
 
-    private void b() {
+    public void a() {
         if (this.j.isLocked() && !this.j.isHeldByCurrentThread()) {
             String s = (String) Thread.getAllStackTraces().keySet().stream().filter(Objects::nonNull).map((thread) -> {
                 return thread.getName() + ": \n\tat " + (String) Arrays.stream(thread.getStackTrace()).map(Object::toString).collect(Collectors.joining("\n\tat "));
@@ -36,7 +36,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         }
     }
 
-    private void c() {
+    public void b() {
         this.j.unlock();
     }
 
@@ -71,8 +71,9 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         }
     }
 
+    @Override
     public int onResize(int i, T t0) {
-        this.b();
+        this.a();
         DataBits databits = this.a;
         DataPalette<T> datapalette = this.h;
 
@@ -89,20 +90,34 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         }
 
         j = this.h.a(t0);
-        this.c();
+        this.b();
         return j;
     }
 
-    public void setBlock(int i, int j, int k, T t0) {
+    public T setBlock(int i, int j, int k, T t0) {
+        this.a();
+        T t1 = this.a(b(i, j, k), t0);
+
         this.b();
-        this.setBlockIndex(b(i, j, k), t0);
-        this.c();
+        return t1;
+    }
+
+    public T b(int i, int j, int k, T t0) {
+        return this.a(b(i, j, k), t0);
+    }
+
+    protected T a(int i, T t0) {
+        int j = this.h.a(t0);
+        int k = this.a.a(i, j);
+        T t1 = this.h.a(k);
+
+        return t1 == null ? this.g : t1;
     }
 
     protected void setBlockIndex(int i, T t0) {
         int j = this.h.a(t0);
 
-        this.a.a(i, j);
+        this.a.b(i, j);
     }
 
     public T a(int i, int j, int k) {
@@ -116,16 +131,15 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) {
-        this.b();
+        this.a();
         packetdataserializer.writeByte(this.i);
         this.h.b(packetdataserializer);
         packetdataserializer.a(this.a.a());
-        this.c();
+        this.b();
     }
 
-    public void a(NBTTagCompound nbttagcompound, String s, String s1) {
-        this.b();
-        NBTTagList nbttaglist = nbttagcompound.getList(s, 10);
+    public void a(NBTTagList nbttaglist, long[] along) {
+        this.a();
         int i = Math.max(4, MathHelper.d(nbttaglist.size()));
 
         if (i != this.i) {
@@ -133,7 +147,6 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         }
 
         this.h.a(nbttaglist);
-        long[] along = nbttagcompound.o(s1);
         int j = along.length * 64 / 4096;
 
         if (this.h == this.b) {
@@ -143,7 +156,7 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
             DataBits databits = new DataBits(i, 4096, along);
 
             for (int k = 0; k < 4096; ++k) {
-                this.a.a(k, this.b.a(datapalette.a(databits.a(k))));
+                this.a.b(k, this.b.a(datapalette.a(databits.a(k))));
             }
         } else if (j == this.i) {
             System.arraycopy(along, 0, this.a.a(), 0, along.length);
@@ -151,15 +164,15 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
             DataBits databits1 = new DataBits(j, 4096, along);
 
             for (int l = 0; l < 4096; ++l) {
-                this.a.a(l, databits1.a(l));
+                this.a.b(l, databits1.a(l));
             }
         }
 
-        this.c();
+        this.b();
     }
 
-    public void b(NBTTagCompound nbttagcompound, String s, String s1) {
-        this.b();
+    public void a(NBTTagCompound nbttagcompound, String s, String s1) {
+        this.a();
         DataPaletteHash<T> datapalettehash = new DataPaletteHash<>(this.d, this.i, this.c, this.e, this.f);
 
         datapalettehash.a(this.g);
@@ -177,14 +190,18 @@ public class DataPaletteBlock<T> implements DataPaletteExpandable<T> {
         DataBits databits = new DataBits(j, 4096);
 
         for (int k = 0; k < aint.length; ++k) {
-            databits.a(k, aint[k]);
+            databits.b(k, aint[k]);
         }
 
         nbttagcompound.a(s1, databits.a());
-        this.c();
+        this.b();
     }
 
-    public int a() {
+    public int c() {
         return 1 + this.h.a() + PacketDataSerializer.a(this.a.b()) + this.a.a().length * 8;
+    }
+
+    public boolean a(T t0) {
+        return this.h.b(t0);
     }
 }

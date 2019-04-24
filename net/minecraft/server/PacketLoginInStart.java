@@ -14,10 +14,12 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
         this.a = gameprofile;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = new GameProfile((UUID) null, packetdataserializer.e(16));
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a.getName());
     }

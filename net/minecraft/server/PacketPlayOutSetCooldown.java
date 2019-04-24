@@ -14,11 +14,13 @@ public class PacketPlayOutSetCooldown implements Packet<PacketListenerPlayOut> {
         this.b = i;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = Item.getById(packetdataserializer.g());
-        this.b = packetdataserializer.g();
+        this.a = Item.getById(packetdataserializer.i());
+        this.b = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(Item.getId(this.a));
         packetdataserializer.d(this.b);

@@ -14,10 +14,12 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
         this.a = uuid;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.i();
+        this.a = packetdataserializer.k();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
     }

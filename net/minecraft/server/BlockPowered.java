@@ -6,10 +6,12 @@ public class BlockPowered extends Block {
         super(block_info);
     }
 
+    @Override
     public boolean isPowerSource(IBlockData iblockdata) {
         return true;
     }
 
+    @Override
     public int a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
         return 15;
     }

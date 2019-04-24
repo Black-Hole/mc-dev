@@ -6,6 +6,7 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.TypeRewriteRule;
 import com.mojang.datafixers.Typed;
 import com.mojang.datafixers.schemas.Schema;
+import java.util.Optional;
 import java.util.UUID;
 
 public class DataConverterUUID extends DataFix {
@@ -17,8 +18,10 @@ public class DataConverterUUID extends DataFix {
     public TypeRewriteRule makeRule() {
         return this.fixTypeEverywhereTyped("EntityStringUuidFix", this.getInputSchema().getType(DataConverterTypes.ENTITY), (typed) -> {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
-                if (dynamic.get("UUID").flatMap(Dynamic::getStringValue).isPresent()) {
-                    UUID uuid = UUID.fromString(dynamic.getString("UUID"));
+                Optional<String> optional = dynamic.get("UUID").asString();
+
+                if (optional.isPresent()) {
+                    UUID uuid = UUID.fromString((String) optional.get());
 
                     return dynamic.remove("UUID").set("UUIDMost", dynamic.createLong(uuid.getMostSignificantBits())).set("UUIDLeast", dynamic.createLong(uuid.getLeastSignificantBits()));
                 } else {

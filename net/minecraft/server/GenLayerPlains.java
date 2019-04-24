@@ -9,6 +9,7 @@ public enum GenLayerPlains implements AreaTransformer6 {
 
     private GenLayerPlains() {}
 
+    @Override
     public int a(WorldGenContext worldgencontext, int i) {
         return worldgencontext.a(57) == 0 && i == GenLayerPlains.b ? GenLayerPlains.c : i;
     }

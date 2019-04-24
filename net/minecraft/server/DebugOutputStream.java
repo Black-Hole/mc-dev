@@ -8,6 +8,7 @@ public class DebugOutputStream extends RedirectStream {
         super(s, outputstream);
     }
 
+    @Override
     protected void a(String s) {
         StackTraceElement[] astacktraceelement = Thread.currentThread().getStackTrace();
         StackTraceElement stacktraceelement = astacktraceelement[Math.min(3, astacktraceelement.length)];

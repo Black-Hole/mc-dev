@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-public abstract class NoiseGenerator {
+public interface NoiseGenerator {
 
-    public NoiseGenerator() {}
+    double a(double d0, double d1, double d2, double d3);
 }

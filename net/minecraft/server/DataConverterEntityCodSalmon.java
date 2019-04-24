@@ -13,6 +13,7 @@ public class DataConverterEntityCodSalmon extends DataConverterEntityRenameAbstr
         super("EntityCodSalmonFix", schema, flag);
     }
 
+    @Override
     protected String a(String s) {
         return (String) DataConverterEntityCodSalmon.a.getOrDefault(s, s);
     }

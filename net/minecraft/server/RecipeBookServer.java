@@ -5,28 +5,29 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class RecipeBookServer extends RecipeBook {
 
-    private static final Logger g = LogManager.getLogger();
-    private final CraftingManager h;
+    private static final Logger k = LogManager.getLogger();
+    private final CraftingManager l;
 
     public RecipeBookServer(CraftingManager craftingmanager) {
-        this.h = craftingmanager;
+        this.l = craftingmanager;
     }
 
-    public int a(Collection<IRecipe> collection, EntityPlayer entityplayer) {
+    public int a(Collection<IRecipe<?>> collection, EntityPlayer entityplayer) {
         List<MinecraftKey> list = Lists.newArrayList();
         int i = 0;
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            IRecipe irecipe = (IRecipe) iterator.next();
+            IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
-            if (!this.a.contains(minecraftkey) && !irecipe.c()) {
+            if (!this.a.contains(minecraftkey) && !irecipe.isComplex()) {
                 this.a(minecraftkey);
                 this.c(minecraftkey);
                 list.add(minecraftkey);
@@ -39,13 +40,13 @@ public class RecipeBookServer extends RecipeBook {
         return i;
     }
 
-    public int b(Collection<IRecipe> collection, EntityPlayer entityplayer) {
+    public int b(Collection<IRecipe<?>> collection, EntityPlayer entityplayer) {
         List<MinecraftKey> list = Lists.newArrayList();
         int i = 0;
         Iterator iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            IRecipe irecipe = (IRecipe) iterator.next();
+            IRecipe<?> irecipe = (IRecipe) iterator.next();
             MinecraftKey minecraftkey = irecipe.getKey();
 
             if (this.a.contains(minecraftkey)) {
@@ -63,7 +64,7 @@ public class RecipeBookServer extends RecipeBook {
         entityplayer.playerConnection.sendPacket(new PacketPlayOutRecipes(packetplayoutrecipes_action, list, Collections.emptyList(), this.c, this.d, this.e, this.f));
     }
 
-    public NBTTagCompound e() {
+    public NBTTagCompound save() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
         nbttagcompound.setBoolean("isGuiOpen", this.c);
@@ -76,7 +77,7 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator.hasNext()) {
             MinecraftKey minecraftkey = (MinecraftKey) iterator.next();
 
-            nbttaglist.add((NBTBase) (new NBTTagString(minecraftkey.toString())));
+            nbttaglist.add(new NBTTagString(minecraftkey.toString()));
         }
 
         nbttagcompound.set("recipes", nbttaglist);
@@ -86,7 +87,7 @@ public class RecipeBookServer extends RecipeBook {
         while (iterator1.hasNext()) {
             MinecraftKey minecraftkey1 = (MinecraftKey) iterator1.next();
 
-            nbttaglist1.add((NBTBase) (new NBTTagString(minecraftkey1.toString())));
+            nbttaglist1.add(new NBTTagString(minecraftkey1.toString()));
         }
 
         nbttagcompound.set("toBeDisplayed", nbttaglist1);
@@ -102,12 +103,12 @@ public class RecipeBookServer extends RecipeBook {
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             MinecraftKey minecraftkey = new MinecraftKey(nbttaglist.getString(i));
-            IRecipe irecipe = this.h.a(minecraftkey);
+            Optional<? extends IRecipe<?>> optional = this.l.a(minecraftkey);
 
-            if (irecipe == null) {
-                RecipeBookServer.g.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
+            if (!optional.isPresent()) {
+                RecipeBookServer.k.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
             } else {
-                this.a(irecipe);
+                this.a((IRecipe) optional.get());
             }
         }
 
@@ -115,12 +116,12 @@ public class RecipeBookServer extends RecipeBook {
 
         for (int j = 0; j < nbttaglist1.size(); ++j) {
             MinecraftKey minecraftkey1 = new MinecraftKey(nbttaglist1.getString(j));
-            IRecipe irecipe1 = this.h.a(minecraftkey1);
+            Optional<? extends IRecipe<?>> optional1 = this.l.a(minecraftkey1);
 
-            if (irecipe1 == null) {
-                RecipeBookServer.g.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
+            if (!optional1.isPresent()) {
+                RecipeBookServer.k.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
             } else {
-                this.f(irecipe1);
+                this.f((IRecipe) optional1.get());
             }
         }
 

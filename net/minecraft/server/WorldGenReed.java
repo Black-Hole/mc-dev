@@ -1,16 +1,20 @@
 package net.minecraft.server;
 
+import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.function.Function;
 
 public class WorldGenReed extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    public WorldGenReed() {}
+    public WorldGenReed(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+        super(function);
+    }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettings> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
         int i = 0;
 
         for (int j = 0; j < 20; ++j) {
-            BlockPosition blockposition1 = blockposition.a(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
+            BlockPosition blockposition1 = blockposition.b(random.nextInt(4) - random.nextInt(4), 0, random.nextInt(4) - random.nextInt(4));
 
             if (generatoraccess.isEmpty(blockposition1)) {
                 BlockPosition blockposition2 = blockposition1.down();

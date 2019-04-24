@@ -7,7 +7,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.Dynamic;
-import com.mojang.datafixers.DSL.TypeReference;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
@@ -90,7 +89,7 @@ public final class GameProfileSerializer {
 
                 NBTTagCompound nbttagcompound2;
 
-                for (Iterator iterator1 = gameprofile.getProperties().get(s).iterator(); iterator1.hasNext(); nbttaglist.add((NBTBase) nbttagcompound2)) {
+                for (Iterator iterator1 = gameprofile.getProperties().get(s).iterator(); iterator1.hasNext(); nbttaglist.add(nbttagcompound2)) {
                     Property property = (Property) iterator1.next();
 
                     nbttagcompound2 = new NBTTagCompound();
@@ -206,7 +205,7 @@ public final class GameProfileSerializer {
         if (!nbttagcompound.hasKeyOfType("Name", 8)) {
             return Blocks.AIR.getBlockData();
         } else {
-            Block block = (Block) IRegistry.BLOCK.getOrDefault(new MinecraftKey(nbttagcompound.getString("Name")));
+            Block block = (Block) IRegistry.BLOCK.get(new MinecraftKey(nbttagcompound.getString("Name")));
             IBlockData iblockdata = block.getBlockData();
 
             if (nbttagcompound.hasKeyOfType("Properties", 10)) {
@@ -266,11 +265,11 @@ public final class GameProfileSerializer {
         return iblockstate.a(comparable);
     }
 
-    public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i) {
-        return a(datafixer, typereference, nbttagcompound, i, 1631);
+    public static NBTTagCompound a(DataFixer datafixer, DataFixTypes datafixtypes, NBTTagCompound nbttagcompound, int i) {
+        return a(datafixer, datafixtypes, nbttagcompound, i, SharedConstants.a().getWorldVersion());
     }
 
-    public static NBTTagCompound a(DataFixer datafixer, TypeReference typereference, NBTTagCompound nbttagcompound, int i, int j) {
-        return (NBTTagCompound) datafixer.update(typereference, new Dynamic(DynamicOpsNBT.a, nbttagcompound), i, j).getValue();
+    public static NBTTagCompound a(DataFixer datafixer, DataFixTypes datafixtypes, NBTTagCompound nbttagcompound, int i, int j) {
+        return (NBTTagCompound) datafixer.update(datafixtypes.a(), new Dynamic(DynamicOpsNBT.a, nbttagcompound), i, j).getValue();
     }
 }

@@ -2,13 +2,14 @@ package net.minecraft.server;
 
 public class BlockRotatable extends Block {
 
-    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.A;
+    public static final BlockStateEnum<EnumDirection.EnumAxis> AXIS = BlockProperties.E;
 
     public BlockRotatable(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
+        this.o((IBlockData) this.getBlockData().set(BlockRotatable.AXIS, EnumDirection.EnumAxis.Y));
     }
 
+    @Override
     public IBlockData a(IBlockData iblockdata, EnumBlockRotation enumblockrotation) {
         switch (enumblockrotation) {
         case COUNTERCLOCKWISE_90:
@@ -26,10 +27,12 @@ public class BlockRotatable extends Block {
         }
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockRotatable.AXIS);
     }
 
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         return (IBlockData) this.getBlockData().set(BlockRotatable.AXIS, blockactioncontext.getClickedFace().k());
     }

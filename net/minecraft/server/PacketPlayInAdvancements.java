@@ -9,14 +9,16 @@ public class PacketPlayInAdvancements implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInAdvancements() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
         this.a = (PacketPlayInAdvancements.Status) packetdataserializer.a(PacketPlayInAdvancements.Status.class);
         if (this.a == PacketPlayInAdvancements.Status.OPENED_TAB) {
-            this.b = packetdataserializer.l();
+            this.b = packetdataserializer.o();
         }
 
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         if (this.a == PacketPlayInAdvancements.Status.OPENED_TAB) {

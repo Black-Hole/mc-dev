@@ -8,10 +8,12 @@ public class PacketPlayInTeleportAccept implements Packet<PacketListenerPlayIn> 
 
     public PacketPlayInTeleportAccept() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
     }

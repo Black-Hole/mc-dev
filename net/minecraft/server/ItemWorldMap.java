@@ -20,8 +20,13 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     @Nullable
+    public static WorldMap a(ItemStack itemstack, World world) {
+        return world.a(a(e(itemstack)));
+    }
+
+    @Nullable
     public static WorldMap getSavedMap(ItemStack itemstack, World world) {
-        WorldMap worldmap = a((GeneratorAccess) world, "map_" + e(itemstack));
+        WorldMap worldmap = a(itemstack, world);
 
         if (worldmap == null && !world.isClientSide) {
             worldmap = a(itemstack, world, world.getWorldData().b(), world.getWorldData().d(), 3, false, false, world.worldProvider.getDimensionManager());
@@ -37,18 +42,17 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     private static WorldMap a(ItemStack itemstack, World world, int i, int j, int k, boolean flag, boolean flag1, DimensionManager dimensionmanager) {
-        int l = world.a(DimensionManager.OVERWORLD, "map");
-        WorldMap worldmap = new WorldMap("map_" + l);
+        int l = world.getWorldMapCount();
+        WorldMap worldmap = new WorldMap(a(l));
 
         worldmap.a(i, j, k, flag, flag1, dimensionmanager);
-        world.a(DimensionManager.OVERWORLD, worldmap.getId(), (PersistentBase) worldmap);
+        world.a(worldmap);
         itemstack.getOrCreateTag().setInt("map", l);
         return worldmap;
     }
 
-    @Nullable
-    public static WorldMap a(GeneratorAccess generatoraccess, String s) {
-        return (WorldMap) generatoraccess.a(DimensionManager.OVERWORLD, WorldMap::new, s);
+    public static String a(int i) {
+        return "map_" + i;
     }
 
     public void a(World world, Entity entity, WorldMap worldmap) {
@@ -85,6 +89,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             Chunk chunk = world.getChunkAtWorldCoords(new BlockPosition(k2, 0, l2));
 
                             if (!chunk.isEmpty()) {
+                                ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
                                 int i3 = k2 & 15;
                                 int j3 = l2 & 15;
                                 int k3 = 0;
@@ -95,14 +100,15 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
                                     l3 = l3 * l3 * 31287121 + l3 * 11;
                                     if ((l3 >> 20 & 1) == 0) {
-                                        multiset.add(Blocks.DIRT.getBlockData().d(world, BlockPosition.ZERO), 10);
+                                        multiset.add(Blocks.DIRT.getBlockData().c((IBlockAccess) world, BlockPosition.ZERO), 10);
                                     } else {
-                                        multiset.add(Blocks.STONE.getBlockData().d(world, BlockPosition.ZERO), 100);
+                                        multiset.add(Blocks.STONE.getBlockData().c((IBlockAccess) world, BlockPosition.ZERO), 100);
                                     }
 
                                     d1 = 100.0D;
                                 } else {
                                     BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
+                                    BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
 
                                     for (int i4 = 0; i4 < i; ++i4) {
                                         for (int j4 = 0; j4 < i; ++j4) {
@@ -112,19 +118,22 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                             if (k4 > 1) {
                                                 do {
                                                     --k4;
-                                                    iblockdata = chunk.getBlockData(i4 + i3, k4, j4 + j3);
-                                                    blockposition_mutableblockposition.c((chunk.locX << 4) + i4 + i3, k4, (chunk.locZ << 4) + j4 + j3);
-                                                } while (iblockdata.d(world, blockposition_mutableblockposition) == MaterialMapColor.b && k4 > 0);
+                                                    blockposition_mutableblockposition.d(chunkcoordintpair.d() + i4 + i3, k4, chunkcoordintpair.e() + j4 + j3);
+                                                    iblockdata = chunk.getType(blockposition_mutableblockposition);
+                                                } while (iblockdata.c((IBlockAccess) world, (BlockPosition) blockposition_mutableblockposition) == MaterialMapColor.b && k4 > 0);
 
-                                                if (k4 > 0 && !iblockdata.s().e()) {
+                                                if (k4 > 0 && !iblockdata.p().isEmpty()) {
                                                     int l4 = k4 - 1;
+
+                                                    blockposition_mutableblockposition1.g(blockposition_mutableblockposition);
 
                                                     IBlockData iblockdata1;
 
                                                     do {
-                                                        iblockdata1 = chunk.getBlockData(i4 + i3, l4--, j4 + j3);
+                                                        blockposition_mutableblockposition1.p(l4--);
+                                                        iblockdata1 = chunk.getType(blockposition_mutableblockposition1);
                                                         ++k3;
-                                                    } while (l4 > 0 && !iblockdata1.s().e());
+                                                    } while (l4 > 0 && !iblockdata1.p().isEmpty());
 
                                                     iblockdata = this.a(world, iblockdata, (BlockPosition) blockposition_mutableblockposition);
                                                 }
@@ -132,9 +141,9 @@ public class ItemWorldMap extends ItemWorldMapBase {
                                                 iblockdata = Blocks.BEDROCK.getBlockData();
                                             }
 
-                                            worldmap.a(world, (chunk.locX << 4) + i4 + i3, (chunk.locZ << 4) + j4 + j3);
+                                            worldmap.a(world, chunkcoordintpair.d() + i4 + i3, chunkcoordintpair.e() + j4 + j3);
                                             d1 += (double) k4 / (double) (i * i);
-                                            multiset.add(iblockdata.d(world, blockposition_mutableblockposition));
+                                            multiset.add(iblockdata.c((IBlockAccess) world, (BlockPosition) blockposition_mutableblockposition));
                                         }
                                     }
                                 }
@@ -186,13 +195,13 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     private IBlockData a(World world, IBlockData iblockdata, BlockPosition blockposition) {
-        Fluid fluid = iblockdata.s();
+        Fluid fluid = iblockdata.p();
 
-        return !fluid.e() && !Block.a(iblockdata.getCollisionShape(world, blockposition), EnumDirection.UP) ? fluid.i() : iblockdata;
+        return !fluid.isEmpty() && !Block.d(iblockdata, world, blockposition, EnumDirection.UP) ? fluid.getBlockData() : iblockdata;
     }
 
     private static boolean a(BiomeBase[] abiomebase, int i, int j, int k) {
-        return abiomebase[j * i + k * i * 128 * i].h() >= 0.0F;
+        return abiomebase[j * i + k * i * 128 * i].g() >= 0.0F;
     }
 
     public static void applySepiaFilter(World world, ItemStack itemstack) {
@@ -246,7 +255,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
                             int k1 = 3;
                             MaterialMapColor materialmapcolor = MaterialMapColor.b;
 
-                            if (biomebase.h() < 0.0F) {
+                            if (biomebase.g() < 0.0F) {
                                 materialmapcolor = MaterialMapColor.q;
                                 if (j1 > 7 && i1 % 2 == 0) {
                                     k1 = (l + (int) (MathHelper.sin((float) i1 + 0.0F) * 7.0F)) / 8 % 5;
@@ -285,28 +294,33 @@ public class ItemWorldMap extends ItemWorldMapBase {
         }
     }
 
+    @Override
     public void a(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
         if (!world.isClientSide) {
             WorldMap worldmap = getSavedMap(itemstack, world);
 
-            if (entity instanceof EntityHuman) {
-                EntityHuman entityhuman = (EntityHuman) entity;
+            if (worldmap != null) {
+                if (entity instanceof EntityHuman) {
+                    EntityHuman entityhuman = (EntityHuman) entity;
 
-                worldmap.a(entityhuman, itemstack);
+                    worldmap.a(entityhuman, itemstack);
+                }
+
+                if (!worldmap.locked && (flag || entity instanceof EntityHuman && ((EntityHuman) entity).getItemInOffHand() == itemstack)) {
+                    this.a(world, entity, worldmap);
+                }
+
             }
-
-            if (flag || entity instanceof EntityHuman && ((EntityHuman) entity).getItemInOffHand() == itemstack) {
-                this.a(world, entity, worldmap);
-            }
-
         }
     }
 
     @Nullable
+    @Override
     public Packet<?> a(ItemStack itemstack, World world, EntityHuman entityhuman) {
         return getSavedMap(itemstack, world).a(itemstack, world, entityhuman);
     }
 
+    @Override
     public void b(ItemStack itemstack, World world, EntityHuman entityhuman) {
         NBTTagCompound nbttagcompound = itemstack.getTag();
 
@@ -326,11 +340,27 @@ public class ItemWorldMap extends ItemWorldMapBase {
 
     }
 
+    @Nullable
+    public static ItemStack b(World world, ItemStack itemstack) {
+        WorldMap worldmap = getSavedMap(itemstack, world);
+
+        if (worldmap != null) {
+            ItemStack itemstack1 = itemstack.cloneItemStack();
+            WorldMap worldmap1 = a(itemstack1, world, 0, 0, worldmap.scale, worldmap.track, worldmap.unlimitedTracking, worldmap.map);
+
+            worldmap1.a(worldmap);
+            return itemstack1;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         IBlockData iblockdata = itemactioncontext.getWorld().getType(itemactioncontext.getClickPosition());
 
         if (iblockdata.a(TagsBlock.BANNERS)) {
-            if (!itemactioncontext.g.isClientSide) {
+            if (!itemactioncontext.e.isClientSide) {
                 WorldMap worldmap = getSavedMap(itemactioncontext.getItemStack(), itemactioncontext.getWorld());
 
                 worldmap.a((GeneratorAccess) itemactioncontext.getWorld(), itemactioncontext.getClickPosition());

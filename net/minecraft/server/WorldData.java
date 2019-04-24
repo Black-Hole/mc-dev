@@ -2,13 +2,13 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.mojang.datafixers.DataFixTypes;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.JsonOps;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
@@ -63,7 +63,11 @@ public class WorldData {
     private final Set<String> S;
     private final Map<DimensionManager, NBTTagCompound> T;
     private NBTTagCompound U;
-    private final GameRules V;
+    private int V;
+    private int W;
+    private UUID X;
+    private final GameRules Y;
+    private final CustomFunctionCallbackTimerQueue<MinecraftServer> Z;
 
     protected WorldData() {
         this.f = WorldType.NORMAL;
@@ -76,9 +80,10 @@ public class WorldData {
         this.R = Sets.newHashSet();
         this.S = Sets.newLinkedHashSet();
         this.T = Maps.newIdentityHashMap();
-        this.V = new GameRules();
+        this.Y = new GameRules();
+        this.Z = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
-        this.q = 1631;
+        this.q = SharedConstants.a().getWorldVersion();
         this.b(new NBTTagCompound());
     }
 
@@ -93,7 +98,8 @@ public class WorldData {
         this.R = Sets.newHashSet();
         this.S = Sets.newLinkedHashSet();
         this.T = Maps.newIdentityHashMap();
-        this.V = new GameRules();
+        this.Y = new GameRules();
+        this.Z = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = datafixer;
         NBTTagCompound nbttagcompound2;
 
@@ -175,7 +181,7 @@ public class WorldData {
         }
 
         if (nbttagcompound.hasKeyOfType("GameRules", 10)) {
-            this.V.a(nbttagcompound.getCompound("GameRules"));
+            this.Y.a(nbttagcompound.getCompound("GameRules"));
         }
 
         if (nbttagcompound.hasKeyOfType("Difficulty", 99)) {
@@ -252,6 +258,22 @@ public class WorldData {
             this.U = nbttagcompound.getCompound("CustomBossEvents");
         }
 
+        if (nbttagcompound.hasKeyOfType("ScheduledEvents", 9)) {
+            this.Z.a(nbttagcompound.getList("ScheduledEvents", 10));
+        }
+
+        if (nbttagcompound.hasKeyOfType("WanderingTraderSpawnDelay", 99)) {
+            this.V = nbttagcompound.getInt("WanderingTraderSpawnDelay");
+        }
+
+        if (nbttagcompound.hasKeyOfType("WanderingTraderSpawnChance", 99)) {
+            this.W = nbttagcompound.getInt("WanderingTraderSpawnChance");
+        }
+
+        if (nbttagcompound.hasKeyOfType("WanderingTraderId", 8)) {
+            this.X = UUID.fromString(nbttagcompound.getString("WanderingTraderId"));
+        }
+
     }
 
     public WorldData(WorldSettings worldsettings, String s) {
@@ -265,9 +287,10 @@ public class WorldData {
         this.R = Sets.newHashSet();
         this.S = Sets.newLinkedHashSet();
         this.T = Maps.newIdentityHashMap();
-        this.V = new GameRules();
+        this.Y = new GameRules();
+        this.Z = new CustomFunctionCallbackTimerQueue<>(CustomFunctionCallbackTimers.a);
         this.p = null;
-        this.q = 1631;
+        this.q = SharedConstants.a().getWorldVersion();
         this.a(worldsettings);
         this.levelName = s;
         this.G = WorldData.a;
@@ -285,7 +308,7 @@ public class WorldData {
     }
 
     public NBTTagCompound a(@Nullable NBTTagCompound nbttagcompound) {
-        this.Q();
+        this.U();
         if (nbttagcompound == null) {
             nbttagcompound = this.s;
         }
@@ -299,11 +322,11 @@ public class WorldData {
     private void a(NBTTagCompound nbttagcompound, NBTTagCompound nbttagcompound1) {
         NBTTagCompound nbttagcompound2 = new NBTTagCompound();
 
-        nbttagcompound2.setString("Name", "1.13.2");
-        nbttagcompound2.setInt("Id", 1631);
-        nbttagcompound2.setBoolean("Snapshot", false);
+        nbttagcompound2.setString("Name", SharedConstants.a().getName());
+        nbttagcompound2.setInt("Id", SharedConstants.a().getWorldVersion());
+        nbttagcompound2.setBoolean("Snapshot", !SharedConstants.a().isStable());
         nbttagcompound.set("Version", nbttagcompound2);
-        nbttagcompound.setInt("DataVersion", 1631);
+        nbttagcompound.setInt("DataVersion", SharedConstants.a().getWorldVersion());
         nbttagcompound.setLong("RandomSeed", this.e);
         nbttagcompound.setString("generatorName", this.f.b());
         nbttagcompound.setInt("generatorVersion", this.f.getVersion());
@@ -348,7 +371,7 @@ public class WorldData {
         }
 
         nbttagcompound.setBoolean("DifficultyLocked", this.H);
-        nbttagcompound.set("GameRules", this.V.a());
+        nbttagcompound.set("GameRules", this.Y.a());
         NBTTagCompound nbttagcompound3 = new NBTTagCompound();
         Iterator iterator = this.T.entrySet().iterator();
 
@@ -370,7 +393,7 @@ public class WorldData {
         while (iterator1.hasNext()) {
             String s = (String) iterator1.next();
 
-            nbttaglist.add((NBTBase) (new NBTTagString(s)));
+            nbttaglist.add(new NBTTagString(s));
         }
 
         nbttagcompound4.set("Enabled", nbttaglist);
@@ -380,13 +403,20 @@ public class WorldData {
         while (iterator2.hasNext()) {
             String s1 = (String) iterator2.next();
 
-            nbttaglist1.add((NBTBase) (new NBTTagString(s1)));
+            nbttaglist1.add(new NBTTagString(s1));
         }
 
         nbttagcompound4.set("Disabled", nbttaglist1);
         nbttagcompound.set("DataPacks", nbttagcompound4);
         if (this.U != null) {
             nbttagcompound.set("CustomBossEvents", this.U);
+        }
+
+        nbttagcompound.set("ScheduledEvents", this.Z.b());
+        nbttagcompound.setInt("WanderingTraderSpawnDelay", this.V);
+        nbttagcompound.setInt("WanderingTraderSpawnChance", this.W);
+        if (this.X != null) {
+            nbttagcompound.setString("WanderingTraderId", this.X.toString());
         }
 
     }
@@ -415,9 +445,9 @@ public class WorldData {
         return this.m;
     }
 
-    private void Q() {
+    private void U() {
         if (!this.r && this.s != null) {
-            if (this.q < 1631) {
+            if (this.q < SharedConstants.a().getWorldVersion()) {
                 if (this.p == null) {
                     throw new NullPointerException("Fixer Upper not set inside LevelData, and the player tag is not upgraded.");
                 }
@@ -431,7 +461,7 @@ public class WorldData {
     }
 
     public NBTTagCompound h() {
-        this.Q();
+        this.U();
         return this.s;
     }
 
@@ -465,7 +495,7 @@ public class WorldData {
         this.v = i;
     }
 
-    public int z() {
+    public int A() {
         return this.w;
     }
 
@@ -562,18 +592,18 @@ public class WorldData {
     }
 
     public GameRules w() {
-        return this.V;
-    }
-
-    public double B() {
-        return this.I;
+        return this.Y;
     }
 
     public double C() {
-        return this.J;
+        return this.I;
     }
 
     public double D() {
+        return this.J;
+    }
+
+    public double E() {
         return this.K;
     }
 
@@ -581,7 +611,7 @@ public class WorldData {
         this.K = d0;
     }
 
-    public long E() {
+    public long F() {
         return this.L;
     }
 
@@ -589,7 +619,7 @@ public class WorldData {
         this.L = i;
     }
 
-    public double F() {
+    public double G() {
         return this.M;
     }
 
@@ -605,7 +635,7 @@ public class WorldData {
         this.I = d0;
     }
 
-    public double G() {
+    public double H() {
         return this.N;
     }
 
@@ -613,7 +643,7 @@ public class WorldData {
         this.N = d0;
     }
 
-    public double H() {
+    public double I() {
         return this.O;
     }
 
@@ -621,11 +651,11 @@ public class WorldData {
         this.O = d0;
     }
 
-    public int I() {
+    public int J() {
         return this.P;
     }
 
-    public int J() {
+    public int K() {
         return this.Q;
     }
 
@@ -651,6 +681,10 @@ public class WorldData {
 
     public void e(boolean flag) {
         this.H = flag;
+    }
+
+    public CustomFunctionCallbackTimerQueue<MinecraftServer> z() {
+        return this.Z;
     }
 
     public void a(CrashReportSystemDetails crashreportsystemdetails) {
@@ -707,20 +741,40 @@ public class WorldData {
         this.T.put(dimensionmanager, nbttagcompound);
     }
 
-    public Set<String> N() {
+    public Set<String> O() {
         return this.R;
     }
 
-    public Set<String> O() {
+    public Set<String> P() {
         return this.S;
     }
 
     @Nullable
-    public NBTTagCompound P() {
+    public NBTTagCompound getCustomBossEvents() {
         return this.U;
     }
 
     public void c(@Nullable NBTTagCompound nbttagcompound) {
         this.U = nbttagcompound;
+    }
+
+    public int R() {
+        return this.V;
+    }
+
+    public void j(int i) {
+        this.V = i;
+    }
+
+    public int S() {
+        return this.W;
+    }
+
+    public void k(int i) {
+        this.W = i;
+    }
+
+    public void a(UUID uuid) {
+        this.X = uuid;
     }
 }

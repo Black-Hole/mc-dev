@@ -24,8 +24,9 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
         this.g = f1;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.l();
+        this.a = packetdataserializer.o();
         this.b = (SoundCategory) packetdataserializer.a(SoundCategory.class);
         this.c = packetdataserializer.readInt();
         this.d = packetdataserializer.readInt();
@@ -34,6 +35,7 @@ public class PacketPlayOutCustomSoundEffect implements Packet<PacketListenerPlay
         this.g = packetdataserializer.readFloat();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a(this.a);
         packetdataserializer.a((Enum) this.b);

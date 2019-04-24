@@ -11,7 +11,7 @@ public class GeneratorSettingsEnd extends GeneratorSettingsDefault {
         return this;
     }
 
-    public BlockPosition t() {
+    public BlockPosition v() {
         return this.t;
     }
 }

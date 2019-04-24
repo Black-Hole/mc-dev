@@ -1,13 +1,12 @@
 package net.minecraft.server;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class TagsFluid {
 
     private static Tags<FluidType> c = new Tags<>((minecraftkey) -> {
-        return false;
-    }, (minecraftkey) -> {
-        return null;
+        return Optional.empty();
     }, "", false, "");
     private static int d;
     public static final Tag<FluidType> WATER = a("water");
@@ -40,6 +39,7 @@ public class TagsFluid {
             return this.b.isTagged(fluidtype);
         }
 
+        @Override
         public Collection<FluidType> a() {
             if (this.a != TagsFluid.d) {
                 this.b = TagsFluid.c.b(this.c());
@@ -49,6 +49,7 @@ public class TagsFluid {
             return this.b.a();
         }
 
+        @Override
         public Collection<Tag.b<FluidType>> b() {
             if (this.a != TagsFluid.d) {
                 this.b = TagsFluid.c.b(this.c());

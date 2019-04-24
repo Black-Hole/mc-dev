@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class TickListServer<T> implements TickList<T> {
 
@@ -41,7 +42,7 @@ public class TickListServer<T> implements TickList<T> {
                 i = 65536;
             }
 
-            this.f.methodProfiler.enter("cleaning");
+            this.f.getMethodProfiler().enter("cleaning");
 
             NextTickListEntry nextticklistentry;
 
@@ -56,16 +57,14 @@ public class TickListServer<T> implements TickList<T> {
                 this.g.add(nextticklistentry);
             }
 
-            this.f.methodProfiler.exit();
-            this.f.methodProfiler.enter("ticking");
+            this.f.getMethodProfiler().exit();
+            this.f.getMethodProfiler().enter("ticking");
             Iterator iterator = this.g.iterator();
 
             while (iterator.hasNext()) {
                 nextticklistentry = (NextTickListEntry) iterator.next();
                 iterator.remove();
-                boolean flag = false;
-
-                if (this.f.areChunksLoadedBetween(nextticklistentry.a.a(0, 0, 0), nextticklistentry.a.a(0, 0, 0))) {
+                if (this.f.isLoaded(nextticklistentry.a)) {
                     try {
                         this.h.accept(nextticklistentry);
                     } catch (Throwable throwable) {
@@ -80,17 +79,22 @@ public class TickListServer<T> implements TickList<T> {
                 }
             }
 
-            this.f.methodProfiler.exit();
+            this.f.getMethodProfiler().exit();
             this.g.clear();
         }
     }
 
+    @Override
     public boolean b(BlockPosition blockposition, T t0) {
         return this.g.contains(new NextTickListEntry<>(blockposition, t0));
     }
 
-    public List<NextTickListEntry<T>> a(Chunk chunk, boolean flag) {
-        ChunkCoordIntPair chunkcoordintpair = chunk.getPos();
+    @Override
+    public void a(Stream<NextTickListEntry<T>> stream) {
+        stream.forEach(this::a);
+    }
+
+    public List<NextTickListEntry<T>> a(boolean flag, ChunkCoordIntPair chunkcoordintpair) {
         int i = (chunkcoordintpair.x << 4) - 2;
         int j = i + 16 + 2;
         int k = (chunkcoordintpair.z << 4) - 2;
@@ -152,23 +156,27 @@ public class TickListServer<T> implements TickList<T> {
 
     }
 
-    public NBTTagList a(Chunk chunk) {
-        List<NextTickListEntry<T>> list = this.a(chunk, false);
-        long i = this.f.getTime();
+    public NBTTagList a(ChunkCoordIntPair chunkcoordintpair) {
+        List<NextTickListEntry<T>> list = this.a(false, chunkcoordintpair);
+
+        return a(this.b, list, this.f.getTime());
+    }
+
+    public static <T> NBTTagList a(Function<T, MinecraftKey> function, Iterable<NextTickListEntry<T>> iterable, long i) {
         NBTTagList nbttaglist = new NBTTagList();
-        Iterator iterator = list.iterator();
+        Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {
             NextTickListEntry<T> nextticklistentry = (NextTickListEntry) iterator.next();
             NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-            nbttagcompound.setString("i", ((MinecraftKey) this.b.apply(nextticklistentry.a())).toString());
+            nbttagcompound.setString("i", ((MinecraftKey) function.apply(nextticklistentry.a())).toString());
             nbttagcompound.setInt("x", nextticklistentry.a.getX());
             nbttagcompound.setInt("y", nextticklistentry.a.getY());
             nbttagcompound.setInt("z", nextticklistentry.a.getZ());
             nbttagcompound.setInt("t", (int) (nextticklistentry.b - i));
             nbttagcompound.setInt("p", nextticklistentry.c.a());
-            nbttaglist.add((NBTBase) nbttagcompound);
+            nbttaglist.add(nbttagcompound);
         }
 
         return nbttaglist;
@@ -186,16 +194,15 @@ public class TickListServer<T> implements TickList<T> {
 
     }
 
+    @Override
     public boolean a(BlockPosition blockposition, T t0) {
         return this.nextTickListHash.contains(new NextTickListEntry<>(blockposition, t0));
     }
 
+    @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
         if (!this.a.test(t0)) {
-            if (this.f.isLoaded(blockposition)) {
-                this.c(blockposition, t0, i, ticklistpriority);
-            }
-
+            this.c(blockposition, t0, i, ticklistpriority);
         }
     }
 
@@ -209,6 +216,10 @@ public class TickListServer<T> implements TickList<T> {
     private void c(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
         NextTickListEntry<T> nextticklistentry = new NextTickListEntry<>(blockposition, t0, (long) i + this.f.getTime(), ticklistpriority);
 
+        this.a(nextticklistentry);
+    }
+
+    private void a(NextTickListEntry<T> nextticklistentry) {
         if (!this.nextTickListHash.contains(nextticklistentry)) {
             this.nextTickListHash.add(nextticklistentry);
             this.nextTickList.add(nextticklistentry);

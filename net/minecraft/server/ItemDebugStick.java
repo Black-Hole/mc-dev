@@ -9,6 +9,7 @@ public class ItemDebugStick extends Item {
         super(item_info);
     }
 
+    @Override
     public boolean a(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman) {
         if (!world.isClientSide) {
             this.a(entityhuman, iblockdata, world, blockposition, false, entityhuman.b(EnumHand.MAIN_HAND));
@@ -17,6 +18,7 @@ public class ItemDebugStick extends Item {
         return false;
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         EntityHuman entityhuman = itemactioncontext.getEntity();
         World world = itemactioncontext.getWorld();

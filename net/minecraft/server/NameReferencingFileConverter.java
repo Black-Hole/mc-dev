@@ -267,7 +267,7 @@ public class NameReferencingFileConverter {
 
             if (gameprofile != null && gameprofile.getId() != null) {
                 return gameprofile.getId().toString();
-            } else if (!minecraftserver.H() && minecraftserver.getOnlineMode()) {
+            } else if (!minecraftserver.isEmbeddedServer() && minecraftserver.getOnlineMode()) {
                 final List<GameProfile> list = Lists.newArrayList();
                 ProfileLookupCallback profilelookupcallback = new ProfileLookupCallback() {
                     public void onProfileLookupSucceeded(GameProfile gameprofile1) {
@@ -290,8 +290,8 @@ public class NameReferencingFileConverter {
         }
     }
 
-    public static boolean a(final DedicatedServer dedicatedserver, PropertyManager propertymanager) {
-        final File file = d(propertymanager);
+    public static boolean a(final DedicatedServer dedicatedserver) {
+        final File file = getPlayersFolder(dedicatedserver);
         final File file1 = new File(file.getParentFile(), "playerdata");
         final File file2 = new File(file.getParentFile(), "unknownplayers");
 
@@ -392,14 +392,14 @@ public class NameReferencingFileConverter {
         }
     }
 
-    public static boolean a(PropertyManager propertymanager) {
-        boolean flag = b(propertymanager);
+    public static boolean e(MinecraftServer minecraftserver) {
+        boolean flag = b();
 
-        flag = flag && c(propertymanager);
+        flag = flag && f(minecraftserver);
         return flag;
     }
 
-    private static boolean b(PropertyManager propertymanager) {
+    private static boolean b() {
         boolean flag = false;
 
         if (NameReferencingFileConverter.b.exists() && NameReferencingFileConverter.b.isFile()) {
@@ -449,8 +449,8 @@ public class NameReferencingFileConverter {
         }
     }
 
-    private static boolean c(PropertyManager propertymanager) {
-        File file = d(propertymanager);
+    private static boolean f(MinecraftServer minecraftserver) {
+        File file = getPlayersFolder(minecraftserver);
 
         if (file.exists() && file.isDirectory() && (file.list().length > 0 || !file.delete())) {
             NameReferencingFileConverter.e.warn("**** DETECTED OLD PLAYER DIRECTORY IN THE WORLD SAVE");
@@ -462,8 +462,8 @@ public class NameReferencingFileConverter {
         }
     }
 
-    private static File d(PropertyManager propertymanager) {
-        String s = propertymanager.getString("level-name", "world");
+    private static File getPlayersFolder(MinecraftServer minecraftserver) {
+        String s = minecraftserver.getWorld();
         File file = new File(s);
 
         return new File(file, "players");

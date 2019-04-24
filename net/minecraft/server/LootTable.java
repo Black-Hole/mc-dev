@@ -13,42 +13,100 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LootTable {
 
-    private static final Logger b = LogManager.getLogger();
-    public static final LootTable a = new LootTable(new LootSelector[0]);
-    private final LootSelector[] c;
+    private static final Logger c = LogManager.getLogger();
+    public static final LootTable a = new LootTable(LootContextParameterSets.EMPTY, new LootSelector[0], new LootItemFunction[0]);
+    public static final LootContextParameterSet b = LootContextParameterSets.GENERIC;
+    private final LootContextParameterSet d;
+    private final LootSelector[] e;
+    private final LootItemFunction[] f;
+    private final BiFunction<ItemStack, LootTableInfo, ItemStack> g;
 
-    public LootTable(LootSelector[] alootselector) {
-        this.c = alootselector;
+    private LootTable(LootContextParameterSet lootcontextparameterset, LootSelector[] alootselector, LootItemFunction[] alootitemfunction) {
+        this.d = lootcontextparameterset;
+        this.e = alootselector;
+        this.f = alootitemfunction;
+        this.g = LootItemFunctions.a((BiFunction[]) alootitemfunction);
     }
 
-    public List<ItemStack> populateLoot(Random random, LootTableInfo loottableinfo) {
-        List<ItemStack> list = Lists.newArrayList();
+    public static Consumer<ItemStack> a(Consumer<ItemStack> consumer) {
+        return (itemstack) -> {
+            if (itemstack.getCount() < itemstack.getMaxStackSize()) {
+                consumer.accept(itemstack);
+            } else {
+                int i = itemstack.getCount();
 
+                while (i > 0) {
+                    ItemStack itemstack1 = itemstack.cloneItemStack();
+
+                    itemstack1.setCount(Math.min(itemstack.getMaxStackSize(), i));
+                    i -= itemstack1.getCount();
+                    consumer.accept(itemstack1);
+                }
+            }
+
+        };
+    }
+
+    public void populateLootDirect(LootTableInfo loottableinfo, Consumer<ItemStack> consumer) {
         if (loottableinfo.a(this)) {
-            LootSelector[] alootselector = this.c;
+            Consumer<ItemStack> consumer1 = LootItemFunction.a(this.g, consumer, loottableinfo);
+            LootSelector[] alootselector = this.e;
             int i = alootselector.length;
 
             for (int j = 0; j < i; ++j) {
                 LootSelector lootselector = alootselector[j];
 
-                lootselector.b(list, random, loottableinfo);
+                lootselector.a(consumer1, loottableinfo);
             }
 
             loottableinfo.b(this);
         } else {
-            LootTable.b.warn("Detected infinite loop in loot tables");
+            LootTable.c.warn("Detected infinite loop in loot tables");
         }
 
+    }
+
+    public void populateLoot(LootTableInfo loottableinfo, Consumer<ItemStack> consumer) {
+        this.populateLootDirect(loottableinfo, a(consumer));
+    }
+
+    public List<ItemStack> populateLoot(LootTableInfo loottableinfo) {
+        List<ItemStack> list = Lists.newArrayList();
+
+        this.populateLoot(loottableinfo, list::add);
         return list;
     }
 
-    public void fillInventory(IInventory iinventory, Random random, LootTableInfo loottableinfo) {
-        List<ItemStack> list = this.populateLoot(random, loottableinfo);
+    public LootContextParameterSet a() {
+        return this.d;
+    }
+
+    public void a(LootCollector lootcollector, Function<MinecraftKey, LootTable> function, Set<MinecraftKey> set, LootContextParameterSet lootcontextparameterset) {
+        int i;
+
+        for (i = 0; i < this.e.length; ++i) {
+            this.e[i].a(lootcollector.b(".pools[" + i + "]"), function, set, lootcontextparameterset);
+        }
+
+        for (i = 0; i < this.f.length; ++i) {
+            this.f[i].a(lootcollector.b(".functions[" + i + "]"), function, set, lootcontextparameterset);
+        }
+
+    }
+
+    public void fillInventory(IInventory iinventory, LootTableInfo loottableinfo) {
+        List<ItemStack> list = this.populateLoot(loottableinfo);
+        Random random = loottableinfo.b();
         List<Integer> list1 = this.a(iinventory, random);
 
         this.a(list, list1.size(), random);
@@ -58,7 +116,7 @@ public class LootTable {
             ItemStack itemstack = (ItemStack) iterator.next();
 
             if (list1.isEmpty()) {
-                LootTable.b.warn("Tried to over-fill a container");
+                LootTable.c.warn("Tried to over-fill a container");
                 return;
             }
 
@@ -121,22 +179,88 @@ public class LootTable {
         return list;
     }
 
-    public static class a implements JsonDeserializer<LootTable>, JsonSerializer<LootTable> {
+    public static LootTable.a b() {
+        return new LootTable.a();
+    }
 
-        public a() {}
+    public static class b implements JsonDeserializer<LootTable>, JsonSerializer<LootTable> {
+
+        public b() {}
 
         public LootTable deserialize(JsonElement jsonelement, Type type, JsonDeserializationContext jsondeserializationcontext) throws JsonParseException {
             JsonObject jsonobject = ChatDeserializer.m(jsonelement, "loot table");
             LootSelector[] alootselector = (LootSelector[]) ChatDeserializer.a(jsonobject, "pools", new LootSelector[0], jsondeserializationcontext, LootSelector[].class);
+            LootContextParameterSet lootcontextparameterset = null;
 
-            return new LootTable(alootselector);
+            if (jsonobject.has("type")) {
+                String s = ChatDeserializer.h(jsonobject, "type");
+
+                lootcontextparameterset = LootContextParameterSets.a(new MinecraftKey(s));
+            }
+
+            LootItemFunction[] alootitemfunction = (LootItemFunction[]) ChatDeserializer.a(jsonobject, "functions", new LootItemFunction[0], jsondeserializationcontext, LootItemFunction[].class);
+
+            return new LootTable(lootcontextparameterset != null ? lootcontextparameterset : LootContextParameterSets.GENERIC, alootselector, alootitemfunction);
         }
 
         public JsonElement serialize(LootTable loottable, Type type, JsonSerializationContext jsonserializationcontext) {
             JsonObject jsonobject = new JsonObject();
 
-            jsonobject.add("pools", jsonserializationcontext.serialize(loottable.c));
+            if (loottable.d != LootTable.b) {
+                MinecraftKey minecraftkey = LootContextParameterSets.a(loottable.d);
+
+                if (minecraftkey != null) {
+                    jsonobject.addProperty("type", minecraftkey.toString());
+                } else {
+                    LootTable.c.warn("Failed to find id for param set " + loottable.d);
+                }
+            }
+
+            if (loottable.e.length > 0) {
+                jsonobject.add("pools", jsonserializationcontext.serialize(loottable.e));
+            }
+
+            if (!ArrayUtils.isEmpty(loottable.f)) {
+                jsonobject.add("functions", jsonserializationcontext.serialize(loottable.f));
+            }
+
             return jsonobject;
+        }
+    }
+
+    public static class a implements LootItemFunctionUser<LootTable.a> {
+
+        private final List<LootSelector> a = Lists.newArrayList();
+        private final List<LootItemFunction> b = Lists.newArrayList();
+        private LootContextParameterSet c;
+
+        public a() {
+            this.c = LootTable.b;
+        }
+
+        public LootTable.a a(LootSelector.a lootselector_a) {
+            this.a.add(lootselector_a.b());
+            return this;
+        }
+
+        public LootTable.a a(LootContextParameterSet lootcontextparameterset) {
+            this.c = lootcontextparameterset;
+            return this;
+        }
+
+        @Override
+        public LootTable.a b(LootItemFunction.a lootitemfunction_a) {
+            this.b.add(lootitemfunction_a.b());
+            return this;
+        }
+
+        @Override
+        public LootTable.a c() {
+            return this;
+        }
+
+        public LootTable b() {
+            return new LootTable(this.c, (LootSelector[]) this.a.toArray(new LootSelector[0]), (LootItemFunction[]) this.b.toArray(new LootItemFunction[0]));
         }
     }
 }

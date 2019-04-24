@@ -12,6 +12,7 @@ public abstract class DataConverterEntityNameAbstract extends DataConverterEntit
         super(s, schema, flag);
     }
 
+    @Override
     protected Pair<String, Typed<?>> a(String s, Typed<?> typed) {
         Pair<String, Dynamic<?>> pair = this.a(s, (Dynamic) typed.getOrCreate(DSL.remainderFinder()));
 

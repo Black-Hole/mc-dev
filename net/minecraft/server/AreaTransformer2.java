@@ -3,15 +3,15 @@ package net.minecraft.server;
 public interface AreaTransformer2 extends AreaTransformer {
 
     default <R extends Area> AreaFactory<R> a(AreaContextTransformed<R> areacontexttransformed, AreaFactory<R> areafactory) {
-        return (areadimension) -> {
-            R r0 = areafactory.make(this.a(areadimension));
+        return () -> {
+            R r0 = areafactory.make();
 
-            return areacontexttransformed.a(areadimension, (i, j) -> {
-                areacontexttransformed.a((long) (i + areadimension.a()), (long) (j + areadimension.b()));
-                return this.a(areacontexttransformed, areadimension, r0, i, j);
+            return areacontexttransformed.a((i, j) -> {
+                areacontexttransformed.a((long) i, (long) j);
+                return this.a(areacontexttransformed, r0, i, j);
             }, r0);
         };
     }
 
-    int a(AreaContextTransformed<?> areacontexttransformed, AreaDimension areadimension, Area area, int i, int j);
+    int a(AreaContextTransformed<?> areacontexttransformed, Area area, int i, int j);
 }

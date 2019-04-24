@@ -6,14 +6,12 @@ public class EnchantmentArrowKnockback extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.BOW, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 12 + (i - 1) * 20;
     }
 
-    public int b(int i) {
-        return this.a(i) + 25;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 2;
     }

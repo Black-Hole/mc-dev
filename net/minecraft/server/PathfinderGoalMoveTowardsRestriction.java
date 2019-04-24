@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.EnumSet;
+
 public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
 
     private final EntityCreature a;
@@ -11,14 +13,15 @@ public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
     public PathfinderGoalMoveTowardsRestriction(EntityCreature entitycreature, double d0) {
         this.a = entitycreature;
         this.e = d0;
-        this.a(1);
+        this.a(EnumSet.of(PathfinderGoal.Type.MOVE));
     }
 
+    @Override
     public boolean a() {
-        if (this.a.ds()) {
+        if (this.a.dH()) {
             return false;
         } else {
-            BlockPosition blockposition = this.a.dt();
+            BlockPosition blockposition = this.a.dI();
             Vec3D vec3d = RandomPositionGenerator.a(this.a, 16, 7, new Vec3D((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
 
             if (vec3d == null) {
@@ -32,10 +35,12 @@ public class PathfinderGoalMoveTowardsRestriction extends PathfinderGoal {
         }
     }
 
+    @Override
     public boolean b() {
-        return !this.a.getNavigation().p();
+        return !this.a.getNavigation().n();
     }
 
+    @Override
     public void c() {
         this.a.getNavigation().a(this.b, this.c, this.d, this.e);
     }

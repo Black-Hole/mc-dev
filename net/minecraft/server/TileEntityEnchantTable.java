@@ -3,11 +3,11 @@ package net.minecraft.server;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-public class TileEntityEnchantTable extends TileEntity implements ITileEntityContainer, ITickable {
+public class TileEntityEnchantTable extends TileEntity implements INamableTileEntity, ITickable {
 
     public int a;
-    public float e;
-    public float f;
+    public float b;
+    public float c;
     public float g;
     public float h;
     public float i;
@@ -22,6 +22,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
         super(TileEntityTypes.ENCHANTING_TABLE);
     }
 
+    @Override
     public NBTTagCompound save(NBTTagCompound nbttagcompound) {
         super.save(nbttagcompound);
         if (this.hasCustomName()) {
@@ -31,6 +32,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
         return nbttagcompound;
     }
 
+    @Override
     public void load(NBTTagCompound nbttagcompound) {
         super.load(nbttagcompound);
         if (nbttagcompound.hasKeyOfType("CustomName", 8)) {
@@ -39,6 +41,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
 
     }
 
+    @Override
     public void tick() {
         this.j = this.i;
         this.l = this.k;
@@ -48,7 +51,7 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
             double d0 = entityhuman.locX - (double) ((float) this.position.getX() + 0.5F);
             double d1 = entityhuman.locZ - (double) ((float) this.position.getZ() + 0.5F);
 
-            this.m = (float) MathHelper.c(d1, d0);
+            this.m = (float) MathHelper.d(d1, d0);
             this.i += 0.1F;
             if (this.i < 0.5F || TileEntityEnchantTable.n.nextInt(40) == 0) {
                 float f = this.g;
@@ -91,21 +94,18 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
         this.k += f1 * 0.4F;
         this.i = MathHelper.a(this.i, 0.0F, 1.0F);
         ++this.a;
-        this.f = this.e;
-        float f2 = (this.g - this.e) * 0.4F;
+        this.c = this.b;
+        float f2 = (this.g - this.b) * 0.4F;
         float f3 = 0.2F;
 
         f2 = MathHelper.a(f2, -0.2F, 0.2F);
         this.h += (f2 - this.h) * 0.9F;
-        this.e += this.h;
+        this.b += this.h;
     }
 
+    @Override
     public IChatBaseComponent getDisplayName() {
         return (IChatBaseComponent) (this.o != null ? this.o : new ChatMessage("container.enchant", new Object[0]));
-    }
-
-    public boolean hasCustomName() {
-        return this.o != null;
     }
 
     public void setCustomName(@Nullable IChatBaseComponent ichatbasecomponent) {
@@ -113,15 +113,8 @@ public class TileEntityEnchantTable extends TileEntity implements ITileEntityCon
     }
 
     @Nullable
+    @Override
     public IChatBaseComponent getCustomName() {
         return this.o;
-    }
-
-    public Container createContainer(PlayerInventory playerinventory, EntityHuman entityhuman) {
-        return new ContainerEnchantTable(playerinventory, this.world, this.position);
-    }
-
-    public String getContainerName() {
-        return "minecraft:enchanting_table";
     }
 }

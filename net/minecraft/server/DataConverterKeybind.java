@@ -140,8 +140,8 @@ public class DataConverterKeybind extends DataFix {
             return typed.update(DSL.remainderFinder(), (dynamic) -> {
                 return (Dynamic) dynamic.getMapValues().map((map) -> {
                     return dynamic.createMap((Map) map.entrySet().stream().map((entry) -> {
-                        if (((String) ((Dynamic) entry.getKey()).getStringValue().orElse("")).startsWith("key_")) {
-                            int i = Integer.parseInt((String) ((Dynamic) entry.getValue()).getStringValue().orElse(""));
+                        if (((Dynamic) entry.getKey()).asString("").startsWith("key_")) {
+                            int i = Integer.parseInt(((Dynamic) entry.getValue()).asString(""));
 
                             if (i < 0) {
                                 int j = i + 100;

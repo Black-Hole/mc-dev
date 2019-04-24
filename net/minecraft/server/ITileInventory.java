@@ -1,10 +1,6 @@
 package net.minecraft.server;
 
-public interface ITileInventory extends IInventory, ITileEntityContainer {
+public interface ITileInventory extends ITileEntityContainer {
 
-    boolean isLocked();
-
-    void setLock(ChestLock chestlock);
-
-    ChestLock getLock();
+    IChatBaseComponent getScoreboardDisplayName();
 }

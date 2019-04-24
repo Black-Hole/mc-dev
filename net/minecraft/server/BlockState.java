@@ -13,10 +13,12 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
         this.b = s;
     }
 
+    @Override
     public String a() {
         return this.b;
     }
 
+    @Override
     public Class<T> b() {
         return this.a;
     }

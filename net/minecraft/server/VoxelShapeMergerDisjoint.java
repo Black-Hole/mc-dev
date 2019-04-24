@@ -19,6 +19,7 @@ public class VoxelShapeMergerDisjoint extends AbstractDoubleList implements Voxe
         return this.a.size() + this.b.size();
     }
 
+    @Override
     public boolean a(VoxelShapeMerger.a voxelshapemerger_a) {
         return this.c ? this.b((i, j, k) -> {
             return voxelshapemerger_a.merge(j, i, k);
@@ -53,6 +54,7 @@ public class VoxelShapeMergerDisjoint extends AbstractDoubleList implements Voxe
         return i < this.a.size() ? this.a.getDouble(i) : this.b.getDouble(i - this.a.size());
     }
 
+    @Override
     public DoubleList a() {
         return this;
     }

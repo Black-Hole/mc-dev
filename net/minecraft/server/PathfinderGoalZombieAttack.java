@@ -10,23 +10,26 @@ public class PathfinderGoalZombieAttack extends PathfinderGoalMeleeAttack {
         this.d = entityzombie;
     }
 
+    @Override
     public void c() {
         super.c();
         this.e = 0;
     }
 
+    @Override
     public void d() {
         super.d();
-        this.d.s(false);
+        this.d.q(false);
     }
 
+    @Override
     public void e() {
         super.e();
         ++this.e;
         if (this.e >= 5 && this.b < 10) {
-            this.d.s(true);
+            this.d.q(true);
         } else {
-            this.d.s(false);
+            this.d.q(false);
         }
 
     }

@@ -8,6 +8,7 @@ public class CriterionInstanceAbstract implements CriterionInstance {
         this.a = minecraftkey;
     }
 
+    @Override
     public MinecraftKey a() {
         return this.a;
     }

@@ -6,20 +6,22 @@ import javax.annotation.Nullable;
 public class BlockTurtleEgg extends Block {
 
     private static final VoxelShape c = Block.a(3.0D, 0.0D, 3.0D, 12.0D, 7.0D, 12.0D);
-    private static final VoxelShape o = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
-    public static final BlockStateInteger a = BlockProperties.ad;
-    public static final BlockStateInteger b = BlockProperties.ac;
+    private static final VoxelShape d = Block.a(1.0D, 0.0D, 1.0D, 15.0D, 7.0D, 15.0D);
+    public static final BlockStateInteger a = BlockProperties.aj;
+    public static final BlockStateInteger b = BlockProperties.ai;
 
     public BlockTurtleEgg(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
+        this.o((IBlockData) ((IBlockData) ((IBlockData) this.blockStateList.getBlockData()).set(BlockTurtleEgg.a, 0)).set(BlockTurtleEgg.b, 1));
     }
 
+    @Override
     public void stepOn(World world, BlockPosition blockposition, Entity entity) {
         this.a(world, blockposition, entity, 100);
         super.stepOn(world, blockposition, entity);
     }
 
+    @Override
     public void fallOn(World world, BlockPosition blockposition, Entity entity, float f) {
         if (!(entity instanceof EntityZombie)) {
             this.a(world, blockposition, entity, 3);
@@ -44,7 +46,7 @@ public class BlockTurtleEgg extends Block {
         int i = (Integer) iblockdata.get(BlockTurtleEgg.b);
 
         if (i <= 1) {
-            world.setAir(blockposition, false);
+            world.b(blockposition, false);
         } else {
             world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.b, i - 1), 2);
             world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
@@ -52,7 +54,8 @@ public class BlockTurtleEgg extends Block {
 
     }
 
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
+    @Override
+    public void tick(IBlockData iblockdata, World world, BlockPosition blockposition, Random random) {
         if (this.a(world) && this.a((IBlockAccess) world, blockposition)) {
             int i = (Integer) iblockdata.get(BlockTurtleEgg.a);
 
@@ -61,11 +64,11 @@ public class BlockTurtleEgg extends Block {
                 world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockTurtleEgg.a, i + 1), 2);
             } else {
                 world.a((EntityHuman) null, blockposition, SoundEffects.ENTITY_TURTLE_EGG_HATCH, SoundCategory.BLOCKS, 0.7F, 0.9F + random.nextFloat() * 0.2F);
-                world.setAir(blockposition);
+                world.a(blockposition, false);
                 if (!world.isClientSide) {
                     for (int j = 0; j < (Integer) iblockdata.get(BlockTurtleEgg.b); ++j) {
                         world.triggerEffect(2001, blockposition, Block.getCombinedId(iblockdata));
-                        EntityTurtle entityturtle = new EntityTurtle(world);
+                        EntityTurtle entityturtle = (EntityTurtle) EntityTypes.TURTLE.a(world);
 
                         entityturtle.setAgeRaw(-24000);
                         entityturtle.g(blockposition);
@@ -82,7 +85,8 @@ public class BlockTurtleEgg extends Block {
         return iblockaccess.getType(blockposition.down()).getBlock() == Blocks.SAND;
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (this.a((IBlockAccess) world, blockposition) && !world.isClientSide) {
             world.triggerEffect(2005, blockposition, 0);
         }
@@ -90,51 +94,41 @@ public class BlockTurtleEgg extends Block {
     }
 
     private boolean a(World world) {
-        float f = world.k(1.0F);
+        float f = world.j(1.0F);
 
         return (double) f < 0.69D && (double) f > 0.65D ? true : world.random.nextInt(500) == 0;
     }
 
-    protected boolean X_() {
-        return true;
-    }
-
+    @Override
     public void a(World world, EntityHuman entityhuman, BlockPosition blockposition, IBlockData iblockdata, @Nullable TileEntity tileentity, ItemStack itemstack) {
         super.a(world, entityhuman, blockposition, iblockdata, tileentity, itemstack);
         this.a(world, blockposition, iblockdata);
     }
 
-    public IMaterial getDropType(IBlockData iblockdata, World world, BlockPosition blockposition, int i) {
-        return Items.AIR;
-    }
-
+    @Override
     public boolean a(IBlockData iblockdata, BlockActionContext blockactioncontext) {
         return blockactioncontext.getItemStack().getItem() == this.getItem() && (Integer) iblockdata.get(BlockTurtleEgg.b) < 4 ? true : super.a(iblockdata, blockactioncontext);
     }
 
     @Nullable
+    @Override
     public IBlockData getPlacedState(BlockActionContext blockactioncontext) {
         IBlockData iblockdata = blockactioncontext.getWorld().getType(blockactioncontext.getClickPosition());
 
         return iblockdata.getBlock() == this ? (IBlockData) iblockdata.set(BlockTurtleEgg.b, Math.min(4, (Integer) iblockdata.get(BlockTurtleEgg.b) + 1)) : super.getPlacedState(blockactioncontext);
     }
 
+    @Override
     public TextureType c() {
         return TextureType.CUTOUT;
     }
 
-    public boolean a(IBlockData iblockdata) {
-        return false;
+    @Override
+    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, VoxelShapeCollision voxelshapecollision) {
+        return (Integer) iblockdata.get(BlockTurtleEgg.b) > 1 ? BlockTurtleEgg.d : BlockTurtleEgg.c;
     }
 
-    public VoxelShape a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition) {
-        return (Integer) iblockdata.get(BlockTurtleEgg.b) > 1 ? BlockTurtleEgg.o : BlockTurtleEgg.c;
-    }
-
-    public EnumBlockFaceShape a(IBlockAccess iblockaccess, IBlockData iblockdata, BlockPosition blockposition, EnumDirection enumdirection) {
-        return EnumBlockFaceShape.UNDEFINED;
-    }
-
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockTurtleEgg.a, BlockTurtleEgg.b);
     }

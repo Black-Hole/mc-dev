@@ -14,11 +14,13 @@ public class PacketPlayOutRemoveEntityEffect implements Packet<PacketListenerPla
         this.b = mobeffectlist;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = MobEffectList.fromId(packetdataserializer.readUnsignedByte());
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.writeByte(MobEffectList.getId(this.b));

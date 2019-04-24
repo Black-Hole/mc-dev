@@ -12,9 +12,10 @@ public class DataConverterItemFrame extends DataConverterNamedEntity {
     }
 
     public Dynamic<?> a(Dynamic<?> dynamic) {
-        return dynamic.set("Facing", dynamic.createByte(a(dynamic.getByte("Facing"))));
+        return dynamic.set("Facing", dynamic.createByte(a(dynamic.get("Facing").asByte((byte) 0))));
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), this::a);
     }

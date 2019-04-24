@@ -6,6 +6,7 @@ public class ItemExpBottle extends Item {
         super(item_info);
     }
 
+    @Override
     public InteractionResultWrapper<ItemStack> a(World world, EntityHuman entityhuman, EnumHand enumhand) {
         ItemStack itemstack = entityhuman.b(enumhand);
 
@@ -17,6 +18,7 @@ public class ItemExpBottle extends Item {
         if (!world.isClientSide) {
             EntityThrownExpBottle entitythrownexpbottle = new EntityThrownExpBottle(world, entityhuman);
 
+            entitythrownexpbottle.setItem(itemstack);
             entitythrownexpbottle.a(entityhuman, entityhuman.pitch, entityhuman.yaw, -20.0F, 0.7F, 1.0F);
             world.addEntity(entitythrownexpbottle);
         }

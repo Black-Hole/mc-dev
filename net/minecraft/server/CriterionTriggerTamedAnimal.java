@@ -19,10 +19,12 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
 
     public CriterionTriggerTamedAnimal() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerTamedAnimal.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerTamedAnimal.b> criteriontrigger_a) {
         CriterionTriggerTamedAnimal.a criteriontriggertamedanimal_a = (CriterionTriggerTamedAnimal.a) this.b.get(advancementdataplayer);
 
@@ -34,6 +36,7 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
         criteriontriggertamedanimal_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerTamedAnimal.b> criteriontrigger_a) {
         CriterionTriggerTamedAnimal.a criteriontriggertamedanimal_a = (CriterionTriggerTamedAnimal.a) this.b.get(advancementdataplayer);
 
@@ -46,10 +49,12 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerTamedAnimal.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         CriterionConditionEntity criterionconditionentity = CriterionConditionEntity.a(jsonobject.get("entity"));
 
@@ -128,10 +133,15 @@ public class CriterionTriggerTamedAnimal implements CriterionTrigger<CriterionTr
             return new CriterionTriggerTamedAnimal.b(CriterionConditionEntity.a);
         }
 
+        public static CriterionTriggerTamedAnimal.b a(CriterionConditionEntity criterionconditionentity) {
+            return new CriterionTriggerTamedAnimal.b(criterionconditionentity);
+        }
+
         public boolean a(EntityPlayer entityplayer, EntityAnimal entityanimal) {
             return this.a.a(entityplayer, entityanimal);
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

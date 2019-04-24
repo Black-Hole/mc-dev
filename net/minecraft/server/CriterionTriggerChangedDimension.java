@@ -20,10 +20,12 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
 
     public CriterionTriggerChangedDimension() {}
 
+    @Override
     public MinecraftKey a() {
         return CriterionTriggerChangedDimension.a;
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerChangedDimension.b> criteriontrigger_a) {
         CriterionTriggerChangedDimension.a criteriontriggerchangeddimension_a = (CriterionTriggerChangedDimension.a) this.b.get(advancementdataplayer);
 
@@ -35,6 +37,7 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
         criteriontriggerchangeddimension_a.a(criteriontrigger_a);
     }
 
+    @Override
     public void b(AdvancementDataPlayer advancementdataplayer, CriterionTrigger.a<CriterionTriggerChangedDimension.b> criteriontrigger_a) {
         CriterionTriggerChangedDimension.a criteriontriggerchangeddimension_a = (CriterionTriggerChangedDimension.a) this.b.get(advancementdataplayer);
 
@@ -47,10 +50,12 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
 
     }
 
+    @Override
     public void a(AdvancementDataPlayer advancementdataplayer) {
         this.b.remove(advancementdataplayer);
     }
 
+    @Override
     public CriterionTriggerChangedDimension.b a(JsonObject jsonobject, JsonDeserializationContext jsondeserializationcontext) {
         DimensionManager dimensionmanager = jsonobject.has("from") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "from"))) : null;
         DimensionManager dimensionmanager1 = jsonobject.has("to") ? DimensionManager.a(new MinecraftKey(ChatDeserializer.h(jsonobject, "to"))) : null;
@@ -138,6 +143,7 @@ public class CriterionTriggerChangedDimension implements CriterionTrigger<Criter
             return this.a != null && this.a != dimensionmanager ? false : this.b == null || this.b == dimensionmanager1;
         }
 
+        @Override
         public JsonElement b() {
             JsonObject jsonobject = new JsonObject();
 

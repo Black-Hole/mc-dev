@@ -38,17 +38,15 @@ public class ArgumentParticle implements ArgumentType<ParticleParam> {
 
     public static ParticleParam b(StringReader stringreader) throws CommandSyntaxException {
         MinecraftKey minecraftkey = MinecraftKey.a(stringreader);
-        Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.get(minecraftkey);
+        Particle<?> particle = (Particle) IRegistry.PARTICLE_TYPE.getOptional(minecraftkey).orElseThrow(() -> {
+            return ArgumentParticle.a.create(minecraftkey);
+        });
 
-        if (particle == null) {
-            throw ArgumentParticle.a.create(minecraftkey);
-        } else {
-            return a(stringreader, particle);
-        }
+        return a(stringreader, particle);
     }
 
     private static <T extends ParticleParam> T a(StringReader stringreader, Particle<T> particle) throws CommandSyntaxException {
-        return particle.f().b(particle, stringreader);
+        return particle.d().b(particle, stringreader);
     }
 
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandcontext, SuggestionsBuilder suggestionsbuilder) {

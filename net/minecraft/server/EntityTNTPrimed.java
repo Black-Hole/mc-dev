@@ -7,24 +7,20 @@ public class EntityTNTPrimed extends Entity {
     private static final DataWatcherObject<Integer> FUSE_TICKS = DataWatcher.a(EntityTNTPrimed.class, DataWatcherRegistry.b);
     @Nullable
     private EntityLiving source;
-    private int c;
+    private int fuseTicks;
 
-    public EntityTNTPrimed(World world) {
-        super(EntityTypes.TNT, world);
-        this.c = 80;
-        this.j = true;
-        this.fireProof = true;
-        this.setSize(0.98F, 0.98F);
+    public EntityTNTPrimed(EntityTypes<? extends EntityTNTPrimed> entitytypes, World world) {
+        super(entitytypes, world);
+        this.fuseTicks = 80;
+        this.i = true;
     }
 
     public EntityTNTPrimed(World world, double d0, double d1, double d2, @Nullable EntityLiving entityliving) {
-        this(world);
+        this(EntityTypes.TNT, world);
         this.setPosition(d0, d1, d2);
-        float f = (float) (Math.random() * 6.2831854820251465D);
+        double d3 = world.random.nextDouble() * 6.2831854820251465D;
 
-        this.motX = (double) (-((float) Math.sin((double) f)) * 0.02F);
-        this.motY = 0.20000000298023224D;
-        this.motZ = (double) (-((float) Math.cos((double) f)) * 0.02F);
+        this.setMot(-Math.sin(d3) * 0.02D, 0.20000000298023224D, -Math.cos(d3) * 0.02D);
         this.setFuseTicks(80);
         this.lastX = d0;
         this.lastY = d1;
@@ -32,45 +28,45 @@ public class EntityTNTPrimed extends Entity {
         this.source = entityliving;
     }
 
-    protected void x_() {
+    @Override
+    protected void initDatawatcher() {
         this.datawatcher.register(EntityTNTPrimed.FUSE_TICKS, 80);
     }
 
+    @Override
     protected boolean playStepSound() {
         return false;
     }
 
+    @Override
     public boolean isInteractable() {
         return !this.dead;
     }
 
+    @Override
     public void tick() {
         this.lastX = this.locX;
         this.lastY = this.locY;
         this.lastZ = this.locZ;
         if (!this.isNoGravity()) {
-            this.motY -= 0.03999999910593033D;
+            this.setMot(this.getMot().add(0.0D, -0.04D, 0.0D));
         }
 
-        this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
-        this.motX *= 0.9800000190734863D;
-        this.motY *= 0.9800000190734863D;
-        this.motZ *= 0.9800000190734863D;
+        this.move(EnumMoveType.SELF, this.getMot());
+        this.setMot(this.getMot().a(0.98D));
         if (this.onGround) {
-            this.motX *= 0.699999988079071D;
-            this.motZ *= 0.699999988079071D;
-            this.motY *= -0.5D;
+            this.setMot(this.getMot().d(0.7D, -0.5D, 0.7D));
         }
 
-        --this.c;
-        if (this.c <= 0) {
+        --this.fuseTicks;
+        if (this.fuseTicks <= 0) {
             this.die();
             if (!this.world.isClientSide) {
                 this.explode();
             }
         } else {
-            this.at();
-            this.world.addParticle(Particles.M, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
+            this.ax();
+            this.world.addParticle(Particles.SMOKE, this.locX, this.locY + 0.5D, this.locZ, 0.0D, 0.0D, 0.0D);
         }
 
     }
@@ -78,13 +74,15 @@ public class EntityTNTPrimed extends Entity {
     private void explode() {
         float f = 4.0F;
 
-        this.world.explode(this, this.locX, this.locY + (double) (this.length / 16.0F), this.locZ, 4.0F, true);
+        this.world.explode(this, this.locX, this.locY + (double) (this.getHeight() / 16.0F), this.locZ, 4.0F, Explosion.Effect.BREAK);
     }
 
+    @Override
     protected void b(NBTTagCompound nbttagcompound) {
         nbttagcompound.setShort("Fuse", (short) this.getFuseTicks());
     }
 
+    @Override
     protected void a(NBTTagCompound nbttagcompound) {
         this.setFuseTicks(nbttagcompound.getShort("Fuse"));
     }
@@ -94,18 +92,20 @@ public class EntityTNTPrimed extends Entity {
         return this.source;
     }
 
-    public float getHeadHeight() {
+    @Override
+    protected float getHeadHeight(EntityPose entitypose, EntitySize entitysize) {
         return 0.0F;
     }
 
     public void setFuseTicks(int i) {
         this.datawatcher.set(EntityTNTPrimed.FUSE_TICKS, i);
-        this.c = i;
+        this.fuseTicks = i;
     }
 
+    @Override
     public void a(DataWatcherObject<?> datawatcherobject) {
         if (EntityTNTPrimed.FUSE_TICKS.equals(datawatcherobject)) {
-            this.c = this.i();
+            this.fuseTicks = this.i();
         }
 
     }
@@ -115,6 +115,11 @@ public class EntityTNTPrimed extends Entity {
     }
 
     public int getFuseTicks() {
-        return this.c;
+        return this.fuseTicks;
+    }
+
+    @Override
+    public Packet<?> N() {
+        return new PacketPlayOutSpawnEntity(this);
     }
 }

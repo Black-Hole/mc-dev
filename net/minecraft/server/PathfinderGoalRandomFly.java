@@ -10,6 +10,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
     }
 
     @Nullable
+    @Override
     protected Vec3D g() {
         Vec3D vec3d = null;
 
@@ -29,7 +30,7 @@ public class PathfinderGoalRandomFly extends PathfinderGoalRandomStrollLand {
         BlockPosition blockposition = new BlockPosition(this.a);
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
         BlockPosition.MutableBlockPosition blockposition_mutableblockposition1 = new BlockPosition.MutableBlockPosition();
-        Iterable<BlockPosition.MutableBlockPosition> iterable = BlockPosition.MutableBlockPosition.b(MathHelper.floor(this.a.locX - 3.0D), MathHelper.floor(this.a.locY - 6.0D), MathHelper.floor(this.a.locZ - 3.0D), MathHelper.floor(this.a.locX + 3.0D), MathHelper.floor(this.a.locY + 6.0D), MathHelper.floor(this.a.locZ + 3.0D));
+        Iterable<BlockPosition> iterable = BlockPosition.b(MathHelper.floor(this.a.locX - 3.0D), MathHelper.floor(this.a.locY - 6.0D), MathHelper.floor(this.a.locZ - 3.0D), MathHelper.floor(this.a.locX + 3.0D), MathHelper.floor(this.a.locY + 6.0D), MathHelper.floor(this.a.locZ + 3.0D));
         Iterator iterator = iterable.iterator();
 
         while (iterator.hasNext()) {

@@ -6,18 +6,17 @@ public class EnchantmentTridentChanneling extends Enchantment {
         super(enchantment_rarity, EnchantmentSlotType.TRIDENT, aenumitemslot);
     }
 
+    @Override
     public int a(int i) {
         return 25;
     }
 
-    public int b(int i) {
-        return 50;
-    }
-
+    @Override
     public int getMaxLevel() {
         return 1;
     }
 
+    @Override
     public boolean a(Enchantment enchantment) {
         return super.a(enchantment);
     }

@@ -8,9 +8,10 @@ import com.mojang.datafixers.schemas.Schema;
 public class DataConverterShulkerBoxBlock extends DataConverterNamedEntity {
 
     public DataConverterShulkerBoxBlock(Schema schema, boolean flag) {
-        super(schema, flag, "BlockEntityShulkerBoxColorFix", DataConverterTypes.j, "minecraft:shulker_box");
+        super(schema, flag, "BlockEntityShulkerBoxColorFix", DataConverterTypes.k, "minecraft:shulker_box");
     }
 
+    @Override
     protected Typed<?> a(Typed<?> typed) {
         return typed.update(DSL.remainderFinder(), (dynamic) -> {
             return dynamic.remove("Color");

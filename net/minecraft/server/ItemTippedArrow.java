@@ -8,13 +8,7 @@ public class ItemTippedArrow extends ItemArrow {
         super(item_info);
     }
 
-    public EntityArrow a(World world, ItemStack itemstack, EntityLiving entityliving) {
-        EntityTippedArrow entitytippedarrow = new EntityTippedArrow(world, entityliving);
-
-        entitytippedarrow.b(itemstack);
-        return entitytippedarrow;
-    }
-
+    @Override
     public void a(CreativeModeTab creativemodetab, NonNullList<ItemStack> nonnulllist) {
         if (this.a(creativemodetab)) {
             Iterator iterator = IRegistry.POTION.iterator();
@@ -30,7 +24,8 @@ public class ItemTippedArrow extends ItemArrow {
 
     }
 
-    public String h(ItemStack itemstack) {
+    @Override
+    public String f(ItemStack itemstack) {
         return PotionUtil.d(itemstack).b(this.getName() + ".effect.");
     }
 }

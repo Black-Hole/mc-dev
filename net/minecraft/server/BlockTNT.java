@@ -4,45 +4,43 @@ import javax.annotation.Nullable;
 
 public class BlockTNT extends Block {
 
-    public static final BlockStateBoolean a = BlockProperties.x;
+    public static final BlockStateBoolean a = BlockProperties.B;
 
     public BlockTNT(Block.Info block_info) {
         super(block_info);
-        this.v((IBlockData) this.getBlockData().set(BlockTNT.a, false));
+        this.o((IBlockData) this.getBlockData().set(BlockTNT.a, false));
     }
 
-    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1) {
+    @Override
+    public void onPlace(IBlockData iblockdata, World world, BlockPosition blockposition, IBlockData iblockdata1, boolean flag) {
         if (iblockdata1.getBlock() != iblockdata.getBlock()) {
             if (world.isBlockIndirectlyPowered(blockposition)) {
-                this.a(world, blockposition);
-                world.setAir(blockposition);
+                a(world, blockposition);
+                world.a(blockposition, false);
             }
 
         }
     }
 
-    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1) {
+    @Override
+    public void doPhysics(IBlockData iblockdata, World world, BlockPosition blockposition, Block block, BlockPosition blockposition1, boolean flag) {
         if (world.isBlockIndirectlyPowered(blockposition)) {
-            this.a(world, blockposition);
-            world.setAir(blockposition);
+            a(world, blockposition);
+            world.a(blockposition, false);
         }
 
     }
 
-    public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, float f, int i) {
-        if (!(Boolean) iblockdata.get(BlockTNT.a)) {
-            super.dropNaturally(iblockdata, world, blockposition, f, i);
-        }
-    }
-
+    @Override
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman) {
-        if (!world.e() && !entityhuman.u() && (Boolean) iblockdata.get(BlockTNT.a)) {
-            this.a(world, blockposition);
+        if (!world.e() && !entityhuman.isCreative() && (Boolean) iblockdata.get(BlockTNT.a)) {
+            a(world, blockposition);
         }
 
         super.a(world, blockposition, iblockdata, entityhuman);
     }
 
+    @Override
     public void wasExploded(World world, BlockPosition blockposition, Explosion explosion) {
         if (!world.isClientSide) {
             EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), explosion.getSource());
@@ -52,11 +50,11 @@ public class BlockTNT extends Block {
         }
     }
 
-    public void a(World world, BlockPosition blockposition) {
-        this.a(world, blockposition, (EntityLiving) null);
+    public static void a(World world, BlockPosition blockposition) {
+        a(world, blockposition, (EntityLiving) null);
     }
 
-    private void a(World world, BlockPosition blockposition, @Nullable EntityLiving entityliving) {
+    private static void a(World world, BlockPosition blockposition, @Nullable EntityLiving entityliving) {
         if (!world.isClientSide) {
             EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) ((float) blockposition.getX() + 0.5F), (double) blockposition.getY(), (double) ((float) blockposition.getZ() + 0.5F), entityliving);
 
@@ -65,17 +63,20 @@ public class BlockTNT extends Block {
         }
     }
 
-    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, EnumDirection enumdirection, float f, float f1, float f2) {
+    @Override
+    public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
         ItemStack itemstack = entityhuman.b(enumhand);
         Item item = itemstack.getItem();
 
         if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) {
-            return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, enumdirection, f, f1, f2);
+            return super.interact(iblockdata, world, blockposition, entityhuman, enumhand, movingobjectpositionblock);
         } else {
-            this.a(world, blockposition, (EntityLiving) entityhuman);
+            a(world, blockposition, (EntityLiving) entityhuman);
             world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 11);
             if (item == Items.FLINT_AND_STEEL) {
-                itemstack.damage(1, entityhuman);
+                itemstack.damage(1, entityhuman, (entityhuman1) -> {
+                    entityhuman1.d(enumhand);
+                });
             } else {
                 itemstack.subtract(1);
             }
@@ -84,23 +85,26 @@ public class BlockTNT extends Block {
         }
     }
 
+    @Override
     public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
         if (!world.isClientSide && entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
             Entity entity1 = entityarrow.getShooter();
 
             if (entityarrow.isBurning()) {
-                this.a(world, blockposition, entity1 instanceof EntityLiving ? (EntityLiving) entity1 : null);
-                world.setAir(blockposition);
+                a(world, blockposition, entity1 instanceof EntityLiving ? (EntityLiving) entity1 : null);
+                world.a(blockposition, false);
             }
         }
 
     }
 
+    @Override
     public boolean a(Explosion explosion) {
         return false;
     }
 
+    @Override
     protected void a(BlockStateList.a<Block, IBlockData> blockstatelist_a) {
         blockstatelist_a.a(BlockTNT.a);
     }

@@ -9,11 +9,13 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
 
     public PacketPlayInTabComplete() {}
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.e(32500);
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b, 32500);

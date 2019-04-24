@@ -15,12 +15,14 @@ public class ItemSpade extends ItemTool {
         super(f, f1, toolmaterial, ItemSpade.e, item_info);
     }
 
+    @Override
     public boolean canDestroySpecialBlock(IBlockData iblockdata) {
         Block block = iblockdata.getBlock();
 
         return block == Blocks.SNOW || block == Blocks.SNOW_BLOCK;
     }
 
+    @Override
     public EnumInteractionResult a(ItemActionContext itemactioncontext) {
         World world = itemactioncontext.getWorld();
         BlockPosition blockposition = itemactioncontext.getClickPosition();
@@ -35,7 +37,9 @@ public class ItemSpade extends ItemTool {
                 if (!world.isClientSide) {
                     world.setTypeAndData(blockposition, iblockdata, 11);
                     if (entityhuman != null) {
-                        itemactioncontext.getItemStack().damage(1, entityhuman);
+                        itemactioncontext.getItemStack().damage(1, entityhuman, (entityhuman1) -> {
+                            entityhuman1.d(itemactioncontext.n());
+                        });
                     }
                 }
 

@@ -16,12 +16,14 @@ public class PacketPlayOutBlockBreakAnimation implements Packet<PacketListenerPl
         this.c = j;
     }
 
+    @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.a = packetdataserializer.g();
+        this.a = packetdataserializer.i();
         this.b = packetdataserializer.e();
         this.c = packetdataserializer.readUnsignedByte();
     }
 
+    @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.d(this.a);
         packetdataserializer.a(this.b);
