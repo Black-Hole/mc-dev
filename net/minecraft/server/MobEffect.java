@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class MobEffect implements Comparable<MobEffect> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final MobEffectList b;
     private int duration;
     private int amplification;
@@ -51,7 +51,7 @@ public class MobEffect implements Comparable<MobEffect> {
 
     public boolean a(MobEffect mobeffect) {
         if (this.b != mobeffect.b) {
-            MobEffect.a.warn("This method should only be called for matching effects!");
+            MobEffect.LOGGER.warn("This method should only be called for matching effects!");
         }
 
         boolean flag = false;

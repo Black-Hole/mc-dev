@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky.a, LightEngineStorageSky> {
 
     private static final EnumDirection[] d = EnumDirection.values();
@@ -25,10 +27,57 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
             if (k >= 15) {
                 return k;
             } else {
-                int l = this.a(i, j);
-                boolean flag = i == Long.MAX_VALUE || BlockPosition.b(i) == BlockPosition.b(j) && BlockPosition.d(i) == BlockPosition.d(j) && BlockPosition.c(i) > BlockPosition.c(j);
+                AtomicInteger atomicinteger = new AtomicInteger();
+                VoxelShape voxelshape = this.a(j, atomicinteger);
 
-                return flag && k == 0 && l == 0 ? 0 : k + Math.max(1, l);
+                if (atomicinteger.get() >= 15) {
+                    return 15;
+                } else {
+                    int l = BlockPosition.b(i);
+                    int i1 = BlockPosition.c(i);
+                    int j1 = BlockPosition.d(i);
+                    int k1 = BlockPosition.b(j);
+                    int l1 = BlockPosition.c(j);
+                    int i2 = BlockPosition.d(j);
+                    boolean flag = l == k1 && j1 == i2;
+                    int j2 = Integer.signum(k1 - l);
+                    int k2 = Integer.signum(l1 - i1);
+                    int l2 = Integer.signum(i2 - j1);
+                    EnumDirection enumdirection;
+
+                    if (i == Long.MAX_VALUE) {
+                        enumdirection = EnumDirection.DOWN;
+                    } else {
+                        enumdirection = EnumDirection.a(j2, k2, l2);
+                    }
+
+                    VoxelShape voxelshape1 = this.a(i, (AtomicInteger) null);
+
+                    if (enumdirection != null) {
+                        if (VoxelShapes.b(voxelshape1, voxelshape, enumdirection)) {
+                            return 15;
+                        }
+                    } else {
+                        if (VoxelShapes.b(voxelshape1, VoxelShapes.a(), EnumDirection.DOWN)) {
+                            return 15;
+                        }
+
+                        int i3 = flag ? -1 : 0;
+                        EnumDirection enumdirection1 = EnumDirection.a(j2, i3, l2);
+
+                        if (enumdirection1 == null) {
+                            return 15;
+                        }
+
+                        if (VoxelShapes.b(VoxelShapes.a(), voxelshape, enumdirection1)) {
+                            return 15;
+                        }
+                    }
+
+                    boolean flag1 = i == Long.MAX_VALUE || flag && i1 > l1;
+
+                    return flag1 && k == 0 && atomicinteger.get() == 0 ? 0 : k + Math.max(1, atomicinteger.get());
+                }
             }
         }
     }
@@ -87,7 +136,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                     }
 
                     ++k3;
-                    if (k3 < k1 * 16) {
+                    if (k3 <= k1 * 16) {
                         continue;
                     }
                 }

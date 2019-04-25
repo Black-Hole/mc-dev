@@ -162,6 +162,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
 
                     if (entity instanceof EntityHuman && entity1 instanceof EntityHuman && !((EntityHuman) entity1).a((EntityHuman) entity)) {
                         object = null;
+                        movingobjectpositionentity = null;
                     }
                 }
 
@@ -295,7 +296,7 @@ public abstract class EntityArrow extends Entity implements IProjectile {
     protected void a(MovingObjectPositionEntity movingobjectpositionentity) {
         Entity entity = movingobjectpositionentity.getEntity();
         float f = (float) this.getMot().f();
-        int i = MathHelper.f((double) f * this.damage);
+        int i = MathHelper.f(Math.max((double) f * this.damage, 0.0D));
 
         if (this.s() > 0) {
             if (this.az == null) {

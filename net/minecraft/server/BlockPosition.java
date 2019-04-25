@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 @Immutable
 public class BlockPosition extends BaseBlockPosition implements MinecraftSerializable {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final BlockPosition ZERO = new BlockPosition(0, 0, 0);
     private static final int c = 1 + MathHelper.e(MathHelper.c(30000000));
     private static final int d = BlockPosition.c;

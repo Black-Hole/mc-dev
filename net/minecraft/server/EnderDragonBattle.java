@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EnderDragonBattle {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Predicate<Entity> b = IEntitySelector.a.and(IEntitySelector.a(0.0D, 128.0D, 0.0D, 192.0D));
     public final BossBattleServer bossBattle;
     private final WorldServer d;
@@ -144,14 +144,14 @@ public class EnderDragonBattle {
     }
 
     private void g() {
-        EnderDragonBattle.a.info("Scanning for legacy world dragon fight...");
+        EnderDragonBattle.LOGGER.info("Scanning for legacy world dragon fight...");
         boolean flag = this.i();
 
         if (flag) {
-            EnderDragonBattle.a.info("Found that the dragon has been killed in this world already.");
+            EnderDragonBattle.LOGGER.info("Found that the dragon has been killed in this world already.");
             this.l = true;
         } else {
-            EnderDragonBattle.a.info("Found that the dragon has not yet been killed in this world.");
+            EnderDragonBattle.LOGGER.info("Found that the dragon has not yet been killed in this world.");
             this.l = false;
             this.a(false);
         }
@@ -164,10 +164,10 @@ public class EnderDragonBattle {
             EntityEnderDragon entityenderdragon = (EntityEnderDragon) list.get(0);
 
             this.m = entityenderdragon.getUniqueID();
-            EnderDragonBattle.a.info("Found that there's a dragon still alive ({})", entityenderdragon);
+            EnderDragonBattle.LOGGER.info("Found that there's a dragon still alive ({})", entityenderdragon);
             this.k = false;
             if (!flag) {
-                EnderDragonBattle.a.info("But we didn't have a portal, let's remove it.");
+                EnderDragonBattle.LOGGER.info("But we didn't have a portal, let's remove it.");
                 entityenderdragon.die();
                 this.m = null;
             }
@@ -183,10 +183,10 @@ public class EnderDragonBattle {
         List<EntityEnderDragon> list = this.d.j();
 
         if (list.isEmpty()) {
-            EnderDragonBattle.a.debug("Haven't seen the dragon, respawning it");
+            EnderDragonBattle.LOGGER.debug("Haven't seen the dragon, respawning it");
             this.o();
         } else {
-            EnderDragonBattle.a.debug("Haven't seen our dragon, but found another one to use.");
+            EnderDragonBattle.LOGGER.debug("Haven't seen our dragon, but found another one to use.");
             this.m = ((EntityEnderDragon) list.get(0)).getUniqueID();
         }
 
@@ -343,7 +343,7 @@ public class EnderDragonBattle {
             worldgenender_spike = (WorldGenEnder.Spike) iterator.next();
         }
 
-        EnderDragonBattle.a.debug("Found {} end crystals still alive", this.h);
+        EnderDragonBattle.LOGGER.debug("Found {} end crystals still alive", this.h);
     }
 
     public void a(EntityEnderDragon entityenderdragon) {
@@ -417,7 +417,7 @@ public class EnderDragonBattle {
 
     public void a(EntityEnderCrystal entityendercrystal, DamageSource damagesource) {
         if (this.p != null && this.r.contains(entityendercrystal)) {
-            EnderDragonBattle.a.debug("Aborting respawn sequence");
+            EnderDragonBattle.LOGGER.debug("Aborting respawn sequence");
             this.p = null;
             this.q = 0;
             this.f();
@@ -442,14 +442,14 @@ public class EnderDragonBattle {
             BlockPosition blockposition = this.o;
 
             if (blockposition == null) {
-                EnderDragonBattle.a.debug("Tried to respawn, but need to find the portal first.");
+                EnderDragonBattle.LOGGER.debug("Tried to respawn, but need to find the portal first.");
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = this.j();
 
                 if (shapedetector_shapedetectorcollection == null) {
-                    EnderDragonBattle.a.debug("Couldn't find a portal, so we made one.");
+                    EnderDragonBattle.LOGGER.debug("Couldn't find a portal, so we made one.");
                     this.a(true);
                 } else {
-                    EnderDragonBattle.a.debug("Found the exit portal & temporarily using it.");
+                    EnderDragonBattle.LOGGER.debug("Found the exit portal & temporarily using it.");
                 }
 
                 blockposition = this.o;
@@ -470,7 +470,7 @@ public class EnderDragonBattle {
                 list.addAll(list1);
             }
 
-            EnderDragonBattle.a.debug("Found all crystals, respawning dragon.");
+            EnderDragonBattle.LOGGER.debug("Found all crystals, respawning dragon.");
             this.a((List) list);
         }
 

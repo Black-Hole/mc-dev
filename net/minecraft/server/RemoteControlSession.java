@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RemoteControlSession extends RemoteConnectionThread {
 
-    private static final Logger h = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private boolean i;
     private Socket j;
     private final byte[] k = new byte[1460];
@@ -94,7 +94,7 @@ public class RemoteControlSession extends RemoteConnectionThread {
             } catch (IOException ioexception) {
                 return;
             } catch (Exception exception1) {
-                RemoteControlSession.h.error("Exception whilst parsing RCON input", exception1);
+                RemoteControlSession.LOGGER.error("Exception whilst parsing RCON input", exception1);
                 return;
             } finally {
                 this.g();

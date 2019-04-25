@@ -705,7 +705,7 @@ public class EntityVillager extends EntityVillagerAbstract implements Reputation
                 this.bI = i + 1200L;
                 Entity entity = ((WorldServer) this.world).getEntity(this.bH);
 
-                if (entity == null || !entity.isAlive() || this.h(entity) > 80.0D) {
+                if (entity == null || !entity.isAlive() || this.h(entity) > 6400.0D) {
                     this.bH = null;
                     return true;
                 }

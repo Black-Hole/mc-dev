@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ResourceManager implements IReloadableResourceManager {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Map<String, ResourceManagerFallback> b = Maps.newHashMap();
     private final List<IReloadListener> c = Lists.newArrayList();
     private final List<IReloadListener> d = Lists.newArrayList();
@@ -110,7 +110,7 @@ public class ResourceManager implements IReloadableResourceManager {
     protected IReloadable b(Executor executor, Executor executor1, List<IReloadListener> list, CompletableFuture<Unit> completablefuture) {
         Object object;
 
-        if (ResourceManager.a.isDebugEnabled()) {
+        if (ResourceManager.LOGGER.isDebugEnabled()) {
             object = new ReloadableProfiled(this, new ArrayList(list), executor, executor1, completablefuture);
         } else {
             object = Reloadable.a(this, new ArrayList(list), executor, executor1, completablefuture);
@@ -122,7 +122,7 @@ public class ResourceManager implements IReloadableResourceManager {
 
     public IReloadable a(Executor executor, Executor executor1, CompletableFuture<Unit> completablefuture, List<IResourcePack> list) {
         this.b();
-        ResourceManager.a.info("Reloading ResourceManager: {}", list.stream().map(IResourcePack::a).collect(Collectors.joining(", ")));
+        ResourceManager.LOGGER.info("Reloading ResourceManager: {}", list.stream().map(IResourcePack::a).collect(Collectors.joining(", ")));
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {

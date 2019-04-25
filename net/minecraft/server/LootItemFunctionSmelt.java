@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionSmelt extends LootItemFunctionConditional {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private LootItemFunctionSmelt(LootItemCondition[] alootitemcondition) {
         super(alootitemcondition);
@@ -32,7 +32,7 @@ public class LootItemFunctionSmelt extends LootItemFunctionConditional {
                 }
             }
 
-            LootItemFunctionSmelt.a.warn("Couldn't smelt {} because there is no smelting recipe", itemstack);
+            LootItemFunctionSmelt.LOGGER.warn("Couldn't smelt {} because there is no smelting recipe", itemstack);
             return itemstack;
         }
     }

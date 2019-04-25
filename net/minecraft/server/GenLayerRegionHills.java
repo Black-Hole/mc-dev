@@ -7,7 +7,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
 
     INSTANCE;
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final int c = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST);
     private static final int d = IRegistry.BIOME.a((Object) Biomes.BIRCH_FOREST_HILLS);
     private static final int e = IRegistry.BIOME.a((Object) Biomes.DESERT);
@@ -43,7 +43,7 @@ public enum GenLayerRegionHills implements AreaTransformer3, AreaTransformerOffs
         int l = area1.a(this.a(i + 1), this.b(j + 1));
 
         if (k > 255) {
-            GenLayerRegionHills.b.debug("old! {}", k);
+            GenLayerRegionHills.LOGGER.debug("old! {}", k);
         }
 
         int i1 = (l - 2) % 29;

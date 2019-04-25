@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Chunk implements IChunkAccess {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final ChunkSection a = null;
     private final ChunkSection[] sections;
     private final BiomeBase[] d;
@@ -87,7 +87,7 @@ public class Chunk implements IChunkAccess {
             if (this.sections.length == achunksection.length) {
                 System.arraycopy(achunksection, 0, this.sections, 0, this.sections.length);
             } else {
-                Chunk.b.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.sections.length);
+                Chunk.LOGGER.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.sections.length);
             }
         }
 
@@ -315,7 +315,7 @@ public class Chunk implements IChunkAccess {
         int j = MathHelper.floor(entity.locZ / 16.0D);
 
         if (i != this.loc.x || j != this.loc.z) {
-            Chunk.b.warn("Wrong location! ({}, {}) should be ({}, {}), {}", i, j, this.loc.x, this.loc.z, entity);
+            Chunk.LOGGER.warn("Wrong location! ({}, {}) should be ({}, {}), {}", i, j, this.loc.x, this.loc.z, entity);
             entity.dead = true;
         }
 
@@ -731,7 +731,7 @@ public class Chunk implements IChunkAccess {
                 tileentity = ((ITileEntity) block).createTile(this.world);
             } else {
                 tileentity = null;
-                Chunk.b.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, this.getType(blockposition));
+                Chunk.LOGGER.warn("Tried to load a DUMMY block entity @ {} but found not block entity block {} at location", blockposition, this.getType(blockposition));
             }
         } else {
             tileentity = TileEntity.create(nbttagcompound);
@@ -741,7 +741,7 @@ public class Chunk implements IChunkAccess {
             tileentity.setPosition(blockposition);
             this.a(tileentity);
         } else {
-            Chunk.b.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition), blockposition);
+            Chunk.LOGGER.warn("Tried to load a block entity for block {} but failed at location {}", this.getType(blockposition), blockposition);
         }
 
         return tileentity;

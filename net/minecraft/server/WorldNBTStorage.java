@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldNBTStorage implements IPlayerFileData {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final File baseDir;
     private final File playerDir;
     private final long sessionId = SystemUtils.getMonotonicMillis();
@@ -144,7 +144,7 @@ public class WorldNBTStorage implements IPlayerFileData {
 
             file.renameTo(file1);
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to save player data for {}", entityhuman.getDisplayName().getString());
+            WorldNBTStorage.LOGGER.warn("Failed to save player data for {}", entityhuman.getDisplayName().getString());
         }
 
     }
@@ -161,7 +161,7 @@ public class WorldNBTStorage implements IPlayerFileData {
                 nbttagcompound = NBTCompressedStreamTools.a((InputStream) (new FileInputStream(file)));
             }
         } catch (Exception exception) {
-            WorldNBTStorage.b.warn("Failed to load player data for {}", entityhuman.getDisplayName().getString());
+            WorldNBTStorage.LOGGER.warn("Failed to load player data for {}", entityhuman.getDisplayName().getString());
         }
 
         if (nbttagcompound != null) {

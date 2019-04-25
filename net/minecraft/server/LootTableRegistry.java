@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootTableRegistry implements IResourcePackListener {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson d = (new GsonBuilder()).registerTypeAdapter(LootValueBounds.class, new LootValueBounds.a()).registerTypeAdapter(LootValueBinomial.class, new LootValueBinomial.a()).registerTypeAdapter(LootValueConstant.class, new LootValueConstant.a()).registerTypeAdapter(LootIntegerLimit.class, new LootIntegerLimit.a()).registerTypeAdapter(LootSelector.class, new LootSelector.b()).registerTypeAdapter(LootTable.class, new LootTable.b()).registerTypeHierarchyAdapter(LootEntryAbstract.class, new LootEntries.a()).registerTypeHierarchyAdapter(LootItemFunction.class, new LootItemFunctions.a()).registerTypeHierarchyAdapter(LootItemCondition.class, new LootItemConditions.a()).registerTypeHierarchyAdapter(LootTableInfo.EntityTarget.class, new LootTableInfo.EntityTarget.a()).create();
     private final Map<MinecraftKey, LootTable> e = Maps.newHashMap();
     private final Set<MinecraftKey> f;
@@ -72,7 +72,7 @@ public class LootTableRegistry implements IResourcePackListener {
 
                 }
             } catch (Throwable throwable3) {
-                LootTableRegistry.c.error("Couldn't read loot table {} from {}", minecraftkey1, minecraftkey, throwable3);
+                LootTableRegistry.LOGGER.error("Couldn't read loot table {} from {}", minecraftkey1, minecraftkey, throwable3);
             }
         }
 
@@ -86,7 +86,7 @@ public class LootTableRegistry implements IResourcePackListener {
             a(lootcollector, minecraftkey2, loottable1, map::get);
         });
         lootcollector.a().forEach((s1, s2) -> {
-            LootTableRegistry.c.warn("Found validation problem in " + s1 + ": " + s2);
+            LootTableRegistry.LOGGER.warn("Found validation problem in " + s1 + ": " + s2);
         });
     }
 

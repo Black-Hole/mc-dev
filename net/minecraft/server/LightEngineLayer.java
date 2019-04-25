@@ -1,6 +1,7 @@
 package net.minecraft.server;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nullable;
 
 public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S extends LightEngineStorage<M>> extends LightEngineGraph implements LightEngineLayerEventListener {
@@ -11,10 +12,8 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     protected final S c;
     private boolean e;
     private final BlockPosition.MutableBlockPosition f = new BlockPosition.MutableBlockPosition();
-    private final BlockPosition.MutableBlockPosition g = new BlockPosition.MutableBlockPosition();
-    private final BlockPosition.MutableBlockPosition h = new BlockPosition.MutableBlockPosition();
-    private final long[] i = new long[2];
-    private final IBlockAccess[] j = new IBlockAccess[2];
+    private final long[] g = new long[2];
+    private final IBlockAccess[] h = new IBlockAccess[2];
 
     public LightEngineLayer(ILightAccess ilightaccess, EnumSkyBlock enumskyblock, S s0) {
         super(16, 256, 8192);
@@ -38,72 +37,56 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
         long k = ChunkCoordIntPair.pair(i, j);
 
         for (int l = 0; l < 2; ++l) {
-            if (k == this.i[l]) {
-                return this.j[l];
+            if (k == this.g[l]) {
+                return this.h[l];
             }
         }
 
         IBlockAccess iblockaccess = this.a.b(i, j);
 
         for (int i1 = 1; i1 > 0; --i1) {
-            this.i[i1] = this.i[i1 - 1];
-            this.j[i1] = this.j[i1 - 1];
+            this.g[i1] = this.g[i1 - 1];
+            this.h[i1] = this.h[i1 - 1];
         }
 
-        this.i[0] = k;
-        this.j[0] = iblockaccess;
+        this.g[0] = k;
+        this.h[0] = iblockaccess;
         return iblockaccess;
     }
 
     private void c() {
-        Arrays.fill(this.i, ChunkCoordIntPair.a);
-        Arrays.fill(this.j, (Object) null);
+        Arrays.fill(this.g, ChunkCoordIntPair.a);
+        Arrays.fill(this.h, (Object) null);
     }
 
-    protected int a(long i, long j) {
-        this.c.c();
-        this.f.g(i);
-        this.g.g(j);
-        int k = SectionPosition.a(this.f.getX());
-        int l = SectionPosition.a(this.f.getZ());
-        int i1 = SectionPosition.a(this.g.getX());
-        int j1 = SectionPosition.a(this.g.getZ());
-        IBlockAccess iblockaccess = this.a(i1, j1);
+    protected VoxelShape a(long i, @Nullable AtomicInteger atomicinteger) {
+        if (i == Long.MAX_VALUE) {
+            if (atomicinteger != null) {
+                atomicinteger.set(0);
+            }
 
-        if (iblockaccess == null) {
-            return 16;
+            return VoxelShapes.a();
         } else {
-            IBlockData iblockdata = iblockaccess.getType(this.g);
-            IBlockAccess iblockaccess1 = this.a.getWorld();
-            int k1 = iblockdata.b(iblockaccess1, (BlockPosition) this.g);
+            int j = SectionPosition.a(BlockPosition.b(i));
+            int k = SectionPosition.a(BlockPosition.d(i));
+            IBlockAccess iblockaccess = this.a(j, k);
 
-            if (!iblockdata.g() && k1 >= 15) {
-                return 16;
+            if (iblockaccess == null) {
+                if (atomicinteger != null) {
+                    atomicinteger.set(16);
+                }
+
+                return VoxelShapes.b();
             } else {
-                IBlockAccess iblockaccess2;
+                this.f.g(i);
+                IBlockData iblockdata = iblockaccess.getType(this.f);
+                boolean flag = iblockdata.o() && iblockdata.g();
 
-                if (k == i1 && l == j1) {
-                    iblockaccess2 = iblockaccess;
-                } else {
-                    iblockaccess2 = this.a(k, l);
+                if (atomicinteger != null) {
+                    atomicinteger.set(iblockdata.b(this.a.getWorld(), (BlockPosition) this.f));
                 }
 
-                if (iblockaccess2 == null) {
-                    return 16;
-                } else {
-                    int l1 = Integer.signum(this.g.getX() - this.f.getX());
-                    int i2 = Integer.signum(this.g.getY() - this.f.getY());
-                    int j2 = Integer.signum(this.g.getZ() - this.f.getZ());
-                    EnumDirection enumdirection = EnumDirection.a((BlockPosition) this.h.d(l1, i2, j2));
-
-                    if (enumdirection == null) {
-                        return 16;
-                    } else {
-                        IBlockData iblockdata1 = iblockaccess2.getType(this.f);
-
-                        return a(iblockaccess1, iblockdata1, this.f, iblockdata, this.g, enumdirection, k1);
-                    }
-                }
+                return flag ? iblockdata.j(this.a.getWorld(), this.f) : VoxelShapes.a();
             }
         }
     }
@@ -221,6 +204,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     public void a(ChunkCoordIntPair chunkcoordintpair, boolean flag) {
         long i = SectionPosition.f(SectionPosition.b(chunkcoordintpair.x, 0, chunkcoordintpair.z));
 
+        this.c.c();
         this.c.b(i, flag);
     }
 }

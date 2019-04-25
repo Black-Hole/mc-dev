@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ChunkTaskQueueSorter implements AutoCloseable, PlayerChunk.c {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Map<Mailbox<?>, ChunkTaskQueue<? extends Function<Mailbox<Unit>, ?>>> b;
     private final Set<Mailbox<?>> c;
     private final ThreadedMailbox<PairedQueue.b> d;

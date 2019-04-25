@@ -39,7 +39,7 @@ public class SystemUtils {
     private static final AtomicInteger b = new AtomicInteger(1);
     private static final ExecutorService c = k();
     public static LongSupplier a = System::nanoTime;
-    private static final Logger d = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static <K, V> Collector<Entry<? extends K, ? extends V>, ?, Map<K, V>> a() {
         return Collectors.toMap(Entry::getKey, Entry::getValue);
@@ -88,7 +88,7 @@ public class SystemUtils {
                     System.exit(-1);
                 }
 
-                SystemUtils.d.error(String.format("Caught exception in thread %s", thread), throwable);
+                SystemUtils.LOGGER.error(String.format("Caught exception in thread %s", thread), throwable);
             }, true);
         }
 

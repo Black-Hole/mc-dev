@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ContainerAnvil extends Container {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final IInventory resultInventory;
     private final IInventory repairInventory;
     public final ContainerProperty levelCost;

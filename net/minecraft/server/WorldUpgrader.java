@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldUpgrader {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final ThreadFactory b = (new ThreadFactoryBuilder()).setDaemon(true).build();
     private final String c;
     private final boolean d;
@@ -49,7 +49,7 @@ public class WorldUpgrader {
         this.g = this.e.getDirectory();
         this.f = WorldUpgrader.b.newThread(this::i);
         this.f.setUncaughtExceptionHandler((thread, throwable) -> {
-            WorldUpgrader.a.error("Error upgrading world", throwable);
+            WorldUpgrader.LOGGER.error("Error upgrading world", throwable);
             this.o = new ChatMessage("optimizeWorld.stage.failed", new Object[0]);
         });
         this.f.start();
@@ -140,8 +140,16 @@ public class WorldUpgrader {
                                     flag1 = true;
                                 }
                             }
+                        } catch (ReportedException reportedexception) {
+                            Throwable throwable = reportedexception.getCause();
+
+                            if (!(throwable instanceof IOException)) {
+                                throw reportedexception;
+                            }
+
+                            WorldUpgrader.LOGGER.error("Error upgrading chunk {}", chunkcoordintpair, throwable);
                         } catch (IOException ioexception) {
-                            WorldUpgrader.a.error("Error upgrading chunk {}", chunkcoordintpair, ioexception);
+                            WorldUpgrader.LOGGER.error("Error upgrading chunk {}", chunkcoordintpair, ioexception);
                         }
 
                         if (flag1) {
@@ -172,13 +180,13 @@ public class WorldUpgrader {
                 try {
                     ichunkloader1.close();
                 } catch (IOException ioexception1) {
-                    WorldUpgrader.a.error("Error upgrading chunk", ioexception1);
+                    WorldUpgrader.LOGGER.error("Error upgrading chunk", ioexception1);
                 }
             }
 
             this.q.a();
             i = SystemUtils.getMonotonicMillis() - i;
-            WorldUpgrader.a.info("World optimizaton finished after {} ms", i);
+            WorldUpgrader.LOGGER.info("World optimizaton finished after {} ms", i);
             this.i = true;
         }
     }

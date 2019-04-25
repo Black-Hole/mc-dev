@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Integer> {
 
-    protected static final Logger a = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     protected final AutoRecipeStackManager b = new AutoRecipeStackManager();
     protected PlayerInventory c;
     protected ContainerRecipeBook<C> d;
@@ -65,7 +65,7 @@ public class AutoRecipe<C extends IInventory> implements AutoRecipeAbstract<Inte
 
                 itemstack1.setCount(1);
                 if (!this.c.c(j, itemstack1)) {
-                    AutoRecipe.a.error("Can't find any space for item in the inventory");
+                    AutoRecipe.LOGGER.error("Can't find any space for item in the inventory");
                 }
             }
 

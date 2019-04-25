@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 public class MinecraftVersion implements GameVersion {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final String b;
     private final String c;
     private final boolean d;
@@ -27,10 +27,10 @@ public class MinecraftVersion implements GameVersion {
 
     public MinecraftVersion() {
         this.b = UUID.randomUUID().toString().replaceAll("-", "");
-        this.c = "1.14 Pre-Release 5";
-        this.d = false;
-        this.e = 1951;
-        this.f = 476;
+        this.c = "1.14";
+        this.d = true;
+        this.e = 1952;
+        this.f = 477;
         this.g = 4;
         this.h = new Date();
         this.i = "1.14";
@@ -86,7 +86,7 @@ public class MinecraftVersion implements GameVersion {
                     }
                 }
 
-                MinecraftVersion.a.warn("Missing version information!");
+                MinecraftVersion.LOGGER.warn("Missing version information!");
                 minecraftversion = new MinecraftVersion();
             } catch (Throwable throwable4) {
                 throwable = throwable4;

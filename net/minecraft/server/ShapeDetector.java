@@ -4,7 +4,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.mojang.datafixers.util.Pair;
 import java.util.Iterator;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
@@ -109,6 +108,19 @@ public class ShapeDetector {
         }
     }
 
+    public static class c {
+
+        public final Vec3D a;
+        public final Vec3D b;
+        public final int c;
+
+        public c(Vec3D vec3d, Vec3D vec3d1, int i) {
+            this.a = vec3d;
+            this.b = vec3d1;
+            this.c = i;
+        }
+    }
+
     public static class ShapeDetectorCollection {
 
         private final BlockPosition a;
@@ -157,7 +169,7 @@ public class ShapeDetector {
             return MoreObjects.toStringHelper(this).add("up", this.c).add("forwards", this.b).add("frontTopLeft", this.a).toString();
         }
 
-        public Pair<Vec3D, Pair<Vec3D, Integer>> a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
+        public ShapeDetector.c a(EnumDirection enumdirection, BlockPosition blockposition, double d0, Vec3D vec3d, double d1) {
             EnumDirection enumdirection1 = this.getFacing();
             EnumDirection enumdirection2 = enumdirection1.e();
             double d2 = (double) (this.a().getY() + 1) - d0 * (double) this.e();
@@ -197,7 +209,7 @@ public class ShapeDetector {
 
             int i = (enumdirection1.get2DRotationValue() - enumdirection.opposite().get2DRotationValue()) * 90;
 
-            return Pair.of(new Vec3D(d3, d2, d4), Pair.of(new Vec3D(d5, vec3d.y, d6), i));
+            return new ShapeDetector.c(new Vec3D(d3, d2, d4), new Vec3D(d5, vec3d.y, d6), i);
         }
     }
 

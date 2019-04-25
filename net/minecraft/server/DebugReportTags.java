@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class DebugReportTags<T> implements DebugReportProvider {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson f = (new GsonBuilder()).setPrettyPrinting().create();
     protected final DebugReportGenerator b;
     protected final IRegistry<T> c;
@@ -92,7 +92,7 @@ public abstract class DebugReportTags<T> implements DebugReportProvider {
 
                 hashcache.a(java_nio_file_path, s1);
             } catch (IOException ioexception) {
-                DebugReportTags.e.error("Couldn't save tags to {}", java_nio_file_path, ioexception);
+                DebugReportTags.LOGGER.error("Couldn't save tags to {}", java_nio_file_path, ioexception);
             }
         }
 

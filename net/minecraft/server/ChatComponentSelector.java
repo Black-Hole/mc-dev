@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ChatComponentSelector extends ChatBaseComponent implements ChatComponentContextual {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final String c;
     @Nullable
     private final EntitySelector d;
@@ -22,7 +22,7 @@ public class ChatComponentSelector extends ChatBaseComponent implements ChatComp
 
             entityselector = argumentparserselector.parse();
         } catch (CommandSyntaxException commandsyntaxexception) {
-            ChatComponentSelector.b.warn("Invalid selector component: {}", s, commandsyntaxexception.getMessage());
+            ChatComponentSelector.LOGGER.warn("Invalid selector component: {}", s, commandsyntaxexception.getMessage());
         }
 
         this.d = entityselector;

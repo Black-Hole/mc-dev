@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Convertable {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final DateTimeFormatter b = (new DateTimeFormatterBuilder()).appendValue(ChronoField.YEAR, 4, 10, SignStyle.EXCEEDS_PAD).appendLiteral('-').appendValue(ChronoField.MONTH_OF_YEAR, 2).appendLiteral('-').appendValue(ChronoField.DAY_OF_MONTH, 2).appendLiteral('_').appendValue(ChronoField.HOUR_OF_DAY, 2).appendLiteral('-').appendValue(ChronoField.MINUTE_OF_HOUR, 2).appendLiteral('-').appendValue(ChronoField.SECOND_OF_MINUTE, 2).toFormatter();
     private final java.nio.file.Path c;
     private final java.nio.file.Path d;
@@ -97,7 +97,7 @@ public class Convertable {
 
             return new WorldData(GameProfileSerializer.a(datafixer, DataFixTypes.LEVEL, nbttagcompound1, i), datafixer, i, nbttagcompound2);
         } catch (Exception exception) {
-            Convertable.a.error("Exception reading {}", file, exception);
+            Convertable.LOGGER.error("Exception reading {}", file, exception);
             return null;
         }
     }

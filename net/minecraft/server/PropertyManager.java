@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class PropertyManager<T extends PropertyManager<T>> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public final Properties properties;
 
     public PropertyManager(Properties properties) {
@@ -51,7 +51,7 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
 
             }
         } catch (IOException ioexception) {
-            PropertyManager.a.error("Failed to load properties from file: " + java_nio_file_path);
+            PropertyManager.LOGGER.error("Failed to load properties from file: " + java_nio_file_path);
         }
 
         return properties;
@@ -82,7 +82,7 @@ public abstract class PropertyManager<T extends PropertyManager<T>> {
 
             }
         } catch (IOException ioexception) {
-            PropertyManager.a.error("Failed to store properties to file: " + java_nio_file_path);
+            PropertyManager.LOGGER.error("Failed to store properties to file: " + java_nio_file_path);
         }
 
     }

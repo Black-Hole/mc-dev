@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldLoadListenerLogger implements WorldLoadListener {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final int b;
     private int c;
     private long d;
@@ -34,14 +34,14 @@ public class WorldLoadListenerLogger implements WorldLoadListener {
 
         if (SystemUtils.getMonotonicMillis() > this.e) {
             this.e += 500L;
-            WorldLoadListenerLogger.a.info((new ChatMessage("menu.preparingSpawn", new Object[] { MathHelper.clamp(i, 0, 100)})).getString());
+            WorldLoadListenerLogger.LOGGER.info((new ChatMessage("menu.preparingSpawn", new Object[] { MathHelper.clamp(i, 0, 100)})).getString());
         }
 
     }
 
     @Override
     public void b() {
-        WorldLoadListenerLogger.a.info("Time elapsed: {} ms", SystemUtils.getMonotonicMillis() - this.d);
+        WorldLoadListenerLogger.LOGGER.info("Time elapsed: {} ms", SystemUtils.getMonotonicMillis() - this.d);
         this.e = Long.MAX_VALUE;
     }
 

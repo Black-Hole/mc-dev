@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ServerStatisticManager extends StatisticManager {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final MinecraftServer c;
     private final File d;
     private final Set<Statistic<?>> e = Sets.newHashSet();
@@ -38,9 +38,9 @@ public class ServerStatisticManager extends StatisticManager {
             try {
                 this.a(minecraftserver.aA(), org.apache.commons.io.FileUtils.readFileToString(file));
             } catch (IOException ioexception) {
-                ServerStatisticManager.b.error("Couldn't read statistics file {}", file, ioexception);
+                ServerStatisticManager.LOGGER.error("Couldn't read statistics file {}", file, ioexception);
             } catch (JsonParseException jsonparseexception) {
-                ServerStatisticManager.b.error("Couldn't parse statistics file {}", file, jsonparseexception);
+                ServerStatisticManager.LOGGER.error("Couldn't parse statistics file {}", file, jsonparseexception);
             }
         }
 
@@ -50,7 +50,7 @@ public class ServerStatisticManager extends StatisticManager {
         try {
             org.apache.commons.io.FileUtils.writeStringToFile(this.d, this.b());
         } catch (IOException ioexception) {
-            ServerStatisticManager.b.error("Couldn't save stats", ioexception);
+            ServerStatisticManager.LOGGER.error("Couldn't save stats", ioexception);
         }
 
     }
@@ -104,15 +104,15 @@ public class ServerStatisticManager extends StatisticManager {
                                             SystemUtils.a(this.a(statisticwrapper, s2), (statistic) -> {
                                                 this.a.put(statistic, nbttagcompound2.getInt(s2));
                                             }, () -> {
-                                                ServerStatisticManager.b.warn("Invalid statistic in {}: Don't know what {} is", this.d, s2);
+                                                ServerStatisticManager.LOGGER.warn("Invalid statistic in {}: Don't know what {} is", this.d, s2);
                                             });
                                         } else {
-                                            ServerStatisticManager.b.warn("Invalid statistic value in {}: Don't know what {} is for key {}", this.d, nbttagcompound2.get(s2), s2);
+                                            ServerStatisticManager.LOGGER.warn("Invalid statistic value in {}: Don't know what {} is for key {}", this.d, nbttagcompound2.get(s2), s2);
                                         }
                                     }
 
                                 }, () -> {
-                                    ServerStatisticManager.b.warn("Invalid statistic type in {}: Don't know what {} is", this.d, s1);
+                                    ServerStatisticManager.LOGGER.warn("Invalid statistic type in {}: Don't know what {} is", this.d, s1);
                                 });
                             }
                         }
@@ -121,7 +121,7 @@ public class ServerStatisticManager extends StatisticManager {
                     return;
                 }
 
-                ServerStatisticManager.b.error("Unable to parse Stat data from {}", this.d);
+                ServerStatisticManager.LOGGER.error("Unable to parse Stat data from {}", this.d);
             } catch (Throwable throwable1) {
                 throwable = throwable1;
                 throw throwable1;
@@ -141,7 +141,7 @@ public class ServerStatisticManager extends StatisticManager {
             }
 
         } catch (IOException | JsonParseException jsonparseexception) {
-            ServerStatisticManager.b.error("Unable to parse Stat data from {}", this.d, jsonparseexception);
+            ServerStatisticManager.LOGGER.error("Unable to parse Stat data from {}", this.d, jsonparseexception);
         }
     }
 

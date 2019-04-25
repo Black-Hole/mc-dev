@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LocaleLanguage {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern b = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
     private static final LocaleLanguage c = new LocaleLanguage();
     private final Map<String, String> d = Maps.newHashMap();
@@ -39,7 +39,7 @@ public class LocaleLanguage {
 
             this.e = SystemUtils.getMonotonicMillis();
         } catch (JsonParseException jsonparseexception) {
-            LocaleLanguage.a.error("Couldn't read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
+            LocaleLanguage.LOGGER.error("Couldn't read strings from /assets/minecraft/lang/en_us.json", jsonparseexception);
         }
 
     }

@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
-    private static final Logger w = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final WorldGenFeatureConfigured<?> x = BiomeBase.a(WorldGenerator.MINESHAFT, new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
     private static final WorldGenFeatureConfigured<?> y = BiomeBase.a(WorldGenerator.VILLAGE, new WorldGenFeatureVillageConfiguration("village/plains/town_centers", 6), WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
     private static final WorldGenFeatureConfigured<?> z = BiomeBase.a(WorldGenerator.STRONGHOLD, WorldGenFeatureConfiguration.e, WorldGenDecorator.h, WorldGenFeatureDecoratorConfiguration.e);
@@ -97,7 +97,7 @@ public class GeneratorSettingsFlat extends GeneratorSettingsDefault {
 
             return (Block) IRegistry.BLOCK.getOptional(minecraftkey).orElse((Object) null);
         } catch (IllegalArgumentException illegalargumentexception) {
-            GeneratorSettingsFlat.w.warn("Invalid blockstate: {}", s, illegalargumentexception);
+            GeneratorSettingsFlat.LOGGER.warn("Invalid blockstate: {}", s, illegalargumentexception);
             return null;
         }
     }

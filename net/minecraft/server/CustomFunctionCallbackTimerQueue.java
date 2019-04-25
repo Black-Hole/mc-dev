@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class CustomFunctionCallbackTimerQueue<T> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final CustomFunctionCallbackTimers<T> b;
     private final Queue<CustomFunctionCallbackTimerQueue.a<T>> c = new PriorityQueue(c());
     private UnsignedLong d;
@@ -92,7 +92,7 @@ public class CustomFunctionCallbackTimerQueue<T> {
         this.d = UnsignedLong.ZERO;
         if (!nbttaglist.isEmpty()) {
             if (nbttaglist.a_() != 10) {
-                CustomFunctionCallbackTimerQueue.a.warn("Invalid format of events: " + nbttaglist);
+                CustomFunctionCallbackTimerQueue.LOGGER.warn("Invalid format of events: " + nbttaglist);
             } else {
                 Iterator iterator = nbttaglist.iterator();
 

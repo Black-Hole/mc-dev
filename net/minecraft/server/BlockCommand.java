@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class BlockCommand extends BlockTileEntity {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final BlockStateDirection a = BlockDirectional.FACING;
     public static final BlockStateBoolean b = BlockProperties.c;
 
@@ -220,7 +220,7 @@ public class BlockCommand extends BlockTileEntity {
         if (i <= 0) {
             int j = Math.max(gamerules.c("maxCommandChainLength"), 0);
 
-            BlockCommand.c.warn("Command Block chain tried to execute more than {} steps!", j);
+            BlockCommand.LOGGER.warn("Command Block chain tried to execute more than {} steps!", j);
         }
 
     }

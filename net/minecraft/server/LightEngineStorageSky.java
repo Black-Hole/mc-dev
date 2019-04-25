@@ -154,12 +154,29 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
 
         if (nibblearray != null) {
             return nibblearray;
+        } else if (!this.n(i)) {
+            return new NibbleArray();
         } else {
-            if (this.n(i)) {
+            long j = SectionPosition.a(i, EnumDirection.UP);
+
+            int k;
+
+            for (k = ((LightEngineStorageSky.a) this.f).c.get(SectionPosition.f(i)); k != ((LightEngineStorageSky.a) this.f).b && SectionPosition.c(j) < k && !this.g(j); j = SectionPosition.a(j, EnumDirection.UP)) {
                 ;
             }
 
-            return new NibbleArray();
+            NibbleArray nibblearray1 = ((LightEngineStorageSky.a) this.f).c(j);
+
+            if (nibblearray1 != null) {
+                return new NibbleArray((new NibbleArrayFlat(nibblearray1, 0)).asBytes());
+            } else if (this.m.contains(SectionPosition.b(SectionPosition.b(i), k - 1, SectionPosition.d(i)))) {
+                return new NibbleArray();
+            } else {
+                NibbleArray nibblearray2 = new NibbleArray();
+
+                Arrays.fill(nibblearray2.asBytes(), (byte) -1);
+                return nibblearray2;
+            }
         }
     }
 

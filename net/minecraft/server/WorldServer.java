@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldServer extends World {
 
-    private static final Logger v = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final List<Entity> globalEntityList = Lists.newArrayList();
     public final Int2ObjectMap<Entity> entitiesById = new Int2ObjectLinkedOpenHashMap();
     private final Map<UUID, Entity> entitiesByUUID = Maps.newHashMap();
@@ -564,7 +564,7 @@ public class WorldServer extends World {
             ChunkCoordIntPair chunkcoordintpair = blockposition == null ? new ChunkCoordIntPair(0, 0) : new ChunkCoordIntPair(blockposition);
 
             if (blockposition == null) {
-                WorldServer.v.warn("Unable to find spawn biome");
+                WorldServer.LOGGER.warn("Unable to find spawn biome");
             }
 
             boolean flag = false;
@@ -771,7 +771,7 @@ public class WorldServer extends World {
         Entity entity = (Entity) this.entitiesByUUID.get(entityplayer.getUniqueID());
 
         if (entity != null) {
-            WorldServer.v.warn("Force-added player with duplicate UUID {}", entityplayer.getUniqueID().toString());
+            WorldServer.LOGGER.warn("Force-added player with duplicate UUID {}", entityplayer.getUniqueID().toString());
             entity.decouple();
             this.removePlayer((EntityPlayer) entity);
         }
@@ -789,7 +789,7 @@ public class WorldServer extends World {
 
     private boolean addEntity0(Entity entity) {
         if (entity.dead) {
-            WorldServer.v.warn("Tried to add entity {} but it was marked as removed already", EntityTypes.getName(entity.getEntityType()));
+            WorldServer.LOGGER.warn("Tried to add entity {} but it was marked as removed already", EntityTypes.getName(entity.getEntityType()));
             return false;
         } else if (this.isUUIDTaken(entity)) {
             return false;
@@ -821,7 +821,7 @@ public class WorldServer extends World {
         if (entity1 == null) {
             return false;
         } else {
-            WorldServer.v.warn("Keeping entity {} that already exists with UUID {}", EntityTypes.getName(entity1.getEntityType()), entity.getUniqueID().toString());
+            WorldServer.LOGGER.warn("Keeping entity {} that already exists with UUID {}", EntityTypes.getName(entity1.getEntityType()), entity.getUniqueID().toString());
             return true;
         }
     }

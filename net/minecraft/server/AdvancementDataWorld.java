@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class AdvancementDataWorld implements IResourcePackListener {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final Gson DESERIALIZER = (new GsonBuilder()).registerTypeHierarchyAdapter(Advancement.SerializedAdvancement.class, (jsonelement, type, jsondeserializationcontext) -> {
         JsonObject jsonobject = ChatDeserializer.m(jsonelement, "advancement");
 
@@ -52,7 +52,7 @@ public class AdvancementDataWorld implements IResourcePackListener {
                     Advancement.SerializedAdvancement advancement_serializedadvancement = (Advancement.SerializedAdvancement) ChatDeserializer.a(AdvancementDataWorld.DESERIALIZER, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), Advancement.SerializedAdvancement.class);
 
                     if (advancement_serializedadvancement == null) {
-                        AdvancementDataWorld.c.error("Couldn't load custom advancement {} from {} as it's empty or null", minecraftkey1, minecraftkey);
+                        AdvancementDataWorld.LOGGER.error("Couldn't load custom advancement {} from {} as it's empty or null", minecraftkey1, minecraftkey);
                     } else {
                         map.put(minecraftkey1, advancement_serializedadvancement);
                     }
@@ -74,10 +74,10 @@ public class AdvancementDataWorld implements IResourcePackListener {
 
                 }
             } catch (IllegalArgumentException | ResourceKeyInvalidException | JsonParseException jsonparseexception) {
-                AdvancementDataWorld.c.error("Parsing error loading custom advancement {}: {}", minecraftkey1, jsonparseexception.getMessage());
+                AdvancementDataWorld.LOGGER.error("Parsing error loading custom advancement {}: {}", minecraftkey1, jsonparseexception.getMessage());
                 this.f = true;
             } catch (IOException ioexception) {
-                AdvancementDataWorld.c.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
+                AdvancementDataWorld.LOGGER.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
                 this.f = true;
             }
         }

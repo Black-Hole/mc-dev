@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Optional;
 import javax.annotation.Nullable;
 
 public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
@@ -152,9 +153,8 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
         }
     }
 
-    @Nullable
-    public static BlockPosition a(IBlockAccess iblockaccess, BlockPosition blockposition, int i) {
-        EnumDirection enumdirection = (EnumDirection) iblockaccess.getType(blockposition).get(BlockBed.FACING);
+    public static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition, int i) {
+        EnumDirection enumdirection = (EnumDirection) iworldreader.getType(blockposition).get(BlockBed.FACING);
         int j = blockposition.getX();
         int k = blockposition.getY();
         int l = blockposition.getZ();
@@ -168,10 +168,11 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
             for (int j2 = j1; j2 <= l1; ++j2) {
                 for (int k2 = k1; k2 <= i2; ++k2) {
                     BlockPosition blockposition1 = new BlockPosition(j2, k, k2);
+                    Optional<Vec3D> optional = a(entitytypes, iworldreader, blockposition1);
 
-                    if (b(iblockaccess, blockposition1)) {
+                    if (optional.isPresent()) {
                         if (i <= 0) {
-                            return blockposition1;
+                            return optional;
                         }
 
                         --i;
@@ -180,14 +181,38 @@ public class BlockBed extends BlockFacingHorizontal implements ITileEntity {
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
-    protected static boolean b(IBlockAccess iblockaccess, BlockPosition blockposition) {
-        BlockPosition blockposition1 = blockposition.down();
-        BlockPosition blockposition2 = blockposition.up();
+    protected static Optional<Vec3D> a(EntityTypes<?> entitytypes, IWorldReader iworldreader, BlockPosition blockposition) {
+        VoxelShape voxelshape = iworldreader.getType(blockposition).getCollisionShape(iworldreader, blockposition);
 
-        return Block.d(iblockaccess.getType(blockposition1), iblockaccess, blockposition1, EnumDirection.UP) && iblockaccess.getType(blockposition).getCollisionShape(iblockaccess, blockposition).isEmpty() && iblockaccess.getType(blockposition2).getCollisionShape(iblockaccess, blockposition2).isEmpty();
+        if (voxelshape.c(EnumDirection.EnumAxis.Y) > 0.4375D) {
+            return Optional.empty();
+        } else {
+            BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(blockposition);
+
+            while (blockposition_mutableblockposition.getY() >= 0 && blockposition.getY() - blockposition_mutableblockposition.getY() <= 2 && iworldreader.getType(blockposition_mutableblockposition).getCollisionShape(iworldreader, blockposition_mutableblockposition).isEmpty()) {
+                blockposition_mutableblockposition.c(EnumDirection.DOWN);
+            }
+
+            VoxelShape voxelshape1 = iworldreader.getType(blockposition_mutableblockposition).getCollisionShape(iworldreader, blockposition_mutableblockposition);
+
+            if (voxelshape1.isEmpty()) {
+                return Optional.empty();
+            } else {
+                double d0 = (double) blockposition_mutableblockposition.getY() + voxelshape1.c(EnumDirection.EnumAxis.Y) + 2.0E-7D;
+
+                if ((double) blockposition.getY() - d0 > 2.0D) {
+                    return Optional.empty();
+                } else {
+                    float f = entitytypes.h() / 2.0F;
+                    Vec3D vec3d = new Vec3D((double) blockposition_mutableblockposition.getX() + 0.5D, d0, (double) blockposition_mutableblockposition.getZ() + 0.5D);
+
+                    return iworldreader.c(new AxisAlignedBB(vec3d.x - (double) f, vec3d.y, vec3d.z - (double) f, vec3d.x + (double) f, vec3d.y + (double) entitytypes.i(), vec3d.z + (double) f)) ? Optional.of(vec3d) : Optional.empty();
+                }
+            }
+        }
     }
 
     @Override

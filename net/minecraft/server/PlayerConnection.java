@@ -158,7 +158,7 @@ public class PlayerConnection implements PacketListenerPlayIn {
         NetworkManager networkmanager = this.networkManager;
 
         this.networkManager.getClass();
-        minecraftserver.f(networkmanager::handleDisconnection);
+        minecraftserver.executeSync(networkmanager::handleDisconnection);
     }
 
     @Override

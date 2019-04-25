@@ -82,7 +82,7 @@ public class ChunkProviderServer extends IChunkProvider {
 
         if (flag1) {
             completablefuture = this.getChunkFutureMainThread(i, j, chunkstatus, flag);
-            this.serverThreadQueue.c(completablefuture::isDone);
+            this.serverThreadQueue.awaitTasks(completablefuture::isDone);
         } else {
             completablefuture = CompletableFuture.supplyAsync(() -> {
                 return this.getChunkFutureMainThread(i, j, chunkstatus, flag);
@@ -158,7 +158,7 @@ public class ChunkProviderServer extends IChunkProvider {
     }
 
     public boolean runTasks() {
-        return this.serverThreadQueue.p();
+        return this.serverThreadQueue.executeNext();
     }
 
     private boolean tickDistanceManager() {
@@ -370,7 +370,7 @@ public class ChunkProviderServer extends IChunkProvider {
         }
 
         @Override
-        protected boolean c(Runnable runnable) {
+        protected boolean canExecute(Runnable runnable) {
             return true;
         }
 
@@ -380,17 +380,17 @@ public class ChunkProviderServer extends IChunkProvider {
         }
 
         @Override
-        protected Thread ax() {
+        protected Thread getThread() {
             return ChunkProviderServer.this.serverThread;
         }
 
         @Override
-        protected boolean p() {
+        protected boolean executeNext() {
             if (ChunkProviderServer.this.tickDistanceManager()) {
                 return true;
             } else {
                 ChunkProviderServer.this.lightEngine.queueUpdate();
-                return super.p();
+                return super.executeNext();
             }
         }
     }

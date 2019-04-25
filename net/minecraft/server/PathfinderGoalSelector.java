@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class PathfinderGoalSelector {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final PathfinderGoalWrapped b = new PathfinderGoalWrapped(Integer.MAX_VALUE, new PathfinderGoal() {
         @Override
         public boolean a() {

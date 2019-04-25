@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RegionFileSection<R extends MinecraftSerializable> extends RegionFileCache {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Long2ObjectMap<Optional<R>> b = new Long2ObjectOpenHashMap();
     private final LongLinkedOpenHashSet d = new LongLinkedOpenHashSet();
     private final BiFunction<Runnable, Dynamic<?>, R> e;
@@ -99,7 +99,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
 
             this.a(chunkcoordintpair, DynamicOpsNBT.a, nbttagcompound);
         } catch (IOException ioexception) {
-            RegionFileSection.a.error("Error reading data from disk", ioexception);
+            RegionFileSection.LOGGER.error("Error reading data from disk", ioexception);
         }
 
     }
@@ -146,10 +146,10 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
             try {
                 this.write(chunkcoordintpair, (NBTTagCompound) nbtbase);
             } catch (IOException ioexception) {
-                RegionFileSection.a.error("Error writing data to disk", ioexception);
+                RegionFileSection.LOGGER.error("Error writing data to disk", ioexception);
             }
         } else {
-            RegionFileSection.a.error("Expected compound tag, got {}", nbtbase);
+            RegionFileSection.LOGGER.error("Expected compound tag, got {}", nbtbase);
         }
 
     }
@@ -179,7 +179,7 @@ public class RegionFileSection<R extends MinecraftSerializable> extends RegionFi
         if (optional != null && optional.isPresent()) {
             this.d.add(i);
         } else {
-            RegionFileSection.a.warn("No data for position: {}", SectionPosition.a(i));
+            RegionFileSection.LOGGER.warn("No data for position: {}", SectionPosition.a(i));
         }
     }
 

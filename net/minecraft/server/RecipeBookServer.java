@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RecipeBookServer extends RecipeBook {
 
-    private static final Logger k = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final CraftingManager l;
 
     public RecipeBookServer(CraftingManager craftingmanager) {
@@ -106,7 +106,7 @@ public class RecipeBookServer extends RecipeBook {
             Optional<? extends IRecipe<?>> optional = this.l.a(minecraftkey);
 
             if (!optional.isPresent()) {
-                RecipeBookServer.k.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
+                RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey);
             } else {
                 this.a((IRecipe) optional.get());
             }
@@ -119,7 +119,7 @@ public class RecipeBookServer extends RecipeBook {
             Optional<? extends IRecipe<?>> optional1 = this.l.a(minecraftkey1);
 
             if (!optional1.isPresent()) {
-                RecipeBookServer.k.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
+                RecipeBookServer.LOGGER.error("Tried to load unrecognized recipe: {} removed now.", minecraftkey1);
             } else {
                 this.f((IRecipe) optional1.get());
             }

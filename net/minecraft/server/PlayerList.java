@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -24,7 +25,7 @@ public abstract class PlayerList {
     public static final File b = new File("banned-ips.json");
     public static final File c = new File("ops.json");
     public static final File d = new File("whitelist.json");
-    private static final Logger f = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
     private final MinecraftServer server;
     public final List<EntityPlayer> players = Lists.newArrayList();
@@ -74,7 +75,7 @@ public abstract class PlayerList {
             s1 = networkmanager.getSocketAddress().toString();
         }
 
-        PlayerList.f.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, entityplayer.getId(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
+        PlayerList.LOGGER.info("{}[{}] logged in with entity id {} at ({}, {}, {})", entityplayer.getDisplayName().getString(), s1, entityplayer.getId(), entityplayer.locX, entityplayer.locY, entityplayer.locZ);
         WorldData worlddata = worldserver.getWorldData();
 
         this.a(entityplayer, (EntityPlayer) null, worldserver);
@@ -151,7 +152,7 @@ public abstract class PlayerList {
                 }
 
                 if (!entityplayer.isPassenger()) {
-                    PlayerList.f.warn("Couldn't reattach entity to player");
+                    PlayerList.LOGGER.warn("Couldn't reattach entity to player");
                     worldserver.removeEntity(entity);
                     iterator1 = entity.getAllPassengers().iterator();
 
@@ -239,7 +240,7 @@ public abstract class PlayerList {
         if (entityplayer.getDisplayName().getString().equals(this.server.getSinglePlayerName()) && nbttagcompound != null) {
             nbttagcompound1 = nbttagcompound;
             entityplayer.f(nbttagcompound);
-            PlayerList.f.debug("loading single player");
+            PlayerList.LOGGER.debug("loading single player");
         } else {
             nbttagcompound1 = this.playerFileData.load(entityplayer);
         }
@@ -272,7 +273,7 @@ public abstract class PlayerList {
             Entity entity = entityplayer.getRootVehicle();
 
             if (entity.hasSinglePlayerPassenger()) {
-                PlayerList.f.debug("Removing player mount");
+                PlayerList.LOGGER.debug("Removing player mount");
                 entityplayer.stopRiding();
                 worldserver.removeEntity(entity);
                 Iterator iterator = entity.getAllPassengers().iterator();
@@ -403,10 +404,12 @@ public abstract class PlayerList {
 
         this.a(entityplayer1, entityplayer, worldserver);
         if (blockposition != null) {
-            BlockPosition blockposition1 = EntityHuman.getBed(this.server.getWorldServer(entityplayer.dimension), blockposition, flag1);
+            Optional<Vec3D> optional = EntityHuman.getBed(this.server.getWorldServer(entityplayer.dimension), blockposition, flag1);
 
-            if (blockposition1 != null) {
-                entityplayer1.setPositionRotation((double) ((float) blockposition1.getX() + 0.5F), (double) ((float) blockposition1.getY() + 0.1F), (double) ((float) blockposition1.getZ() + 0.5F), 0.0F, 0.0F);
+            if (optional.isPresent()) {
+                Vec3D vec3d = (Vec3D) optional.get();
+
+                entityplayer1.setPositionRotation(vec3d.x, vec3d.y, vec3d.z, 0.0F, 0.0F);
                 entityplayer1.setRespawnPosition(blockposition, flag1);
             } else {
                 entityplayer1.playerConnection.sendPacket(new PacketPlayOutGameStateChange(0, 0.0F));
@@ -420,10 +423,10 @@ public abstract class PlayerList {
         WorldData worlddata = entityplayer1.world.getWorldData();
 
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutRespawn(entityplayer1.dimension, worlddata.getType(), entityplayer1.playerInteractManager.getGameMode()));
-        BlockPosition blockposition2 = worldserver.getSpawn();
+        BlockPosition blockposition1 = worldserver.getSpawn();
 
         entityplayer1.playerConnection.a(entityplayer1.locX, entityplayer1.locY, entityplayer1.locZ, entityplayer1.yaw, entityplayer1.pitch);
-        entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition2));
+        entityplayer1.playerConnection.sendPacket(new PacketPlayOutSpawnPosition(blockposition1));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         entityplayer1.playerConnection.sendPacket(new PacketPlayOutExperience(entityplayer1.exp, entityplayer1.expTotal, entityplayer1.expLevel));
         this.a(entityplayer1, worldserver);

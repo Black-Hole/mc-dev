@@ -1148,21 +1148,20 @@ public abstract class EntityHuman extends EntityLiving {
         this.wakeup(true, true, false);
     }
 
-    @Nullable
-    public static BlockPosition getBed(IBlockAccess iblockaccess, BlockPosition blockposition, boolean flag) {
-        Block block = iblockaccess.getType(blockposition).getBlock();
+    public static Optional<Vec3D> getBed(IWorldReader iworldreader, BlockPosition blockposition, boolean flag) {
+        Block block = iworldreader.getType(blockposition).getBlock();
 
         if (!(block instanceof BlockBed)) {
             if (!flag) {
-                return null;
+                return Optional.empty();
             } else {
                 boolean flag1 = block.T_();
-                boolean flag2 = iblockaccess.getType(blockposition.up()).getBlock().T_();
+                boolean flag2 = iworldreader.getType(blockposition.up()).getBlock().T_();
 
-                return flag1 && flag2 ? blockposition : null;
+                return flag1 && flag2 ? Optional.of(new Vec3D((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.1D, (double) blockposition.getZ() + 0.5D)) : Optional.empty();
             }
         } else {
-            return BlockBed.a(iblockaccess, blockposition, 0);
+            return BlockBed.a(EntityTypes.PLAYER, iworldreader, blockposition, 0);
         }
     }
 

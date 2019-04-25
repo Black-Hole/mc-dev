@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityTrackerEntry {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final WorldServer b;
     private final Entity tracker;
     private final int d;
@@ -187,7 +187,7 @@ public class EntityTrackerEntry {
 
     public void a(Consumer<Packet<?>> consumer) {
         if (this.tracker.dead) {
-            EntityTrackerEntry.a.warn("Fetching addPacket for removed entity");
+            EntityTrackerEntry.LOGGER.warn("Fetching addPacket for removed entity");
         }
 
         Packet<?> packet = this.tracker.N();

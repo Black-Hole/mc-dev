@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ResourcePackLoader implements AutoCloseable {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final ResourcePackInfo b = new ResourcePackInfo((new ChatMessage("resourcePack.broken_assets", new Object[0])).a(new EnumChatFormat[] { EnumChatFormat.RED, EnumChatFormat.ITALIC}), SharedConstants.a().getPackVersion());
     private final String c;
     private final Supplier<IResourcePack> d;
@@ -34,12 +34,12 @@ public class ResourcePackLoader implements AutoCloseable {
                 ResourcePackInfo resourcepackinfo = (ResourcePackInfo) iresourcepack.a((ResourcePackMetaParser) ResourcePackInfo.a);
 
                 if (flag && resourcepackinfo == null) {
-                    ResourcePackLoader.a.error("Broken/missing pack.mcmeta detected, fudging it into existance. Please check that your launcher has downloaded all assets for the game correctly!");
+                    ResourcePackLoader.LOGGER.error("Broken/missing pack.mcmeta detected, fudging it into existance. Please check that your launcher has downloaded all assets for the game correctly!");
                     resourcepackinfo = ResourcePackLoader.b;
                 }
 
                 if (resourcepackinfo == null) {
-                    ResourcePackLoader.a.warn("Couldn't find pack meta for pack {}", s);
+                    ResourcePackLoader.LOGGER.warn("Couldn't find pack meta for pack {}", s);
                     return null;
                 }
 
@@ -64,7 +64,7 @@ public class ResourcePackLoader implements AutoCloseable {
 
             return resourcepackloader;
         } catch (IOException ioexception) {
-            ResourcePackLoader.a.warn("Couldn't get pack info for: {}", ioexception.toString());
+            ResourcePackLoader.LOGGER.warn("Couldn't get pack info for: {}", ioexception.toString());
             return null;
         }
     }

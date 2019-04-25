@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportProviderLoot implements DebugReportProvider {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson c = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private final DebugReportGenerator d;
     private final List<Pair<Supplier<Consumer<BiConsumer<MinecraftKey, LootTable.a>>>, LootContextParameterSet>> e;
@@ -59,7 +59,7 @@ public class DebugReportProviderLoot implements DebugReportProvider {
 
         if (!multimap.isEmpty()) {
             multimap.forEach((s, s1) -> {
-                DebugReportProviderLoot.b.warn("Found validation problem in " + s + ": " + s1);
+                DebugReportProviderLoot.LOGGER.warn("Found validation problem in " + s + ": " + s1);
             });
             throw new IllegalStateException("Failed to validate loot tables, see logs");
         } else {
@@ -69,7 +69,7 @@ public class DebugReportProviderLoot implements DebugReportProvider {
                 try {
                     DebugReportProvider.a(DebugReportProviderLoot.c, hashcache, LootTableRegistry.a(loottable), java_nio_file_path1);
                 } catch (IOException ioexception) {
-                    DebugReportProviderLoot.b.error("Couldn't save loot table {}", java_nio_file_path1, ioexception);
+                    DebugReportProviderLoot.LOGGER.error("Couldn't save loot table {}", java_nio_file_path1, ioexception);
                 }
 
             });

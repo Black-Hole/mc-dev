@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 public class LoginListener implements PacketLoginInListener {
 
     private static final AtomicInteger b = new AtomicInteger(0);
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Random random = new Random();
     private final byte[] e = new byte[4];
     private final MinecraftServer server;
@@ -62,11 +62,11 @@ public class LoginListener implements PacketLoginInListener {
 
     public void disconnect(IChatBaseComponent ichatbasecomponent) {
         try {
-            LoginListener.c.info("Disconnecting {}: {}", this.d(), ichatbasecomponent.getString());
+            LoginListener.LOGGER.info("Disconnecting {}: {}", this.d(), ichatbasecomponent.getString());
             this.networkManager.sendPacket(new PacketLoginOutDisconnect(ichatbasecomponent));
             this.networkManager.close(ichatbasecomponent);
         } catch (Exception exception) {
-            LoginListener.c.error("Error whilst disconnecting player", exception);
+            LoginListener.LOGGER.error("Error whilst disconnecting player", exception);
         }
 
     }
@@ -103,7 +103,7 @@ public class LoginListener implements PacketLoginInListener {
 
     @Override
     public void a(IChatBaseComponent ichatbasecomponent) {
-        LoginListener.c.info("{} lost connection: {}", this.d(), ichatbasecomponent.getString());
+        LoginListener.LOGGER.info("{} lost connection: {}", this.d(), ichatbasecomponent.getString());
     }
 
     public String d() {
@@ -143,24 +143,24 @@ public class LoginListener implements PacketLoginInListener {
 
                         LoginListener.this.i = LoginListener.this.server.getMinecraftSessionService().hasJoinedServer(new GameProfile((UUID) null, gameprofile.getName()), s, this.a());
                         if (LoginListener.this.i != null) {
-                            LoginListener.c.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
+                            LoginListener.LOGGER.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else if (LoginListener.this.server.isEmbeddedServer()) {
-                            LoginListener.c.warn("Failed to verify username but will let them in anyway!");
+                            LoginListener.LOGGER.warn("Failed to verify username but will let them in anyway!");
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.unverified_username", new Object[0]));
-                            LoginListener.c.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
+                            LoginListener.LOGGER.error("Username '{}' tried to join with an invalid session", gameprofile.getName());
                         }
                     } catch (AuthenticationUnavailableException authenticationunavailableexception) {
                         if (LoginListener.this.server.isEmbeddedServer()) {
-                            LoginListener.c.warn("Authentication servers are down but will let them in anyway!");
+                            LoginListener.LOGGER.warn("Authentication servers are down but will let them in anyway!");
                             LoginListener.this.i = LoginListener.this.a(gameprofile);
                             LoginListener.this.g = LoginListener.EnumProtocolState.READY_TO_ACCEPT;
                         } else {
                             LoginListener.this.disconnect(new ChatMessage("multiplayer.disconnect.authservers_down", new Object[0]));
-                            LoginListener.c.error("Couldn't verify username because servers are unavailable");
+                            LoginListener.LOGGER.error("Couldn't verify username because servers are unavailable");
                         }
                     }
 
@@ -174,7 +174,7 @@ public class LoginListener implements PacketLoginInListener {
                 }
             };
 
-            thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(LoginListener.c));
+            thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(LoginListener.LOGGER));
             thread.start();
         }
     }

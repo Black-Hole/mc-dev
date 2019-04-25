@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class CommandDispatcher {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> b = new com.mojang.brigadier.CommandDispatcher();
 
     public CommandDispatcher(boolean flag) {
@@ -93,7 +93,7 @@ public class CommandDispatcher {
         }
 
         this.b.findAmbiguities((commandnode, commandnode1, commandnode2, collection) -> {
-            CommandDispatcher.a.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
+            CommandDispatcher.LOGGER.warn("Ambiguity between arguments {} and {} with inputs: {}", this.b.getPath(commandnode1), this.b.getPath(commandnode2), collection);
         });
         this.b.setConsumer((commandcontext, flag1, i) -> {
             ((CommandListenerWrapper) commandcontext.getSource()).a(commandcontext, flag1, i);
@@ -155,7 +155,7 @@ public class CommandDispatcher {
             chatcomponenttext.<init>(exception.getMessage() == null ? exception.getClass().getName() : exception.getMessage());
             ChatComponentText chatcomponenttext1 = chatcomponenttext;
 
-            if (CommandDispatcher.a.isDebugEnabled()) {
+            if (CommandDispatcher.LOGGER.isDebugEnabled()) {
                 StackTraceElement[] astacktraceelement = exception.getStackTrace();
 
                 for(int k = 0; k < Math.min(astacktraceelement.length, 3); ++k) {

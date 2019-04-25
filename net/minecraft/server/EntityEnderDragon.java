@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityEnderDragon extends EntityInsentient implements IMonster {
 
-    private static final Logger bN = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final DataWatcherObject<Integer> PHASE = DataWatcher.a(EntityEnderDragon.class, DataWatcherRegistry.b);
     private static final PathfinderTargetCondition bO = (new PathfinderTargetCondition()).a(64.0D);
     public final double[][] c = new double[64][3];
@@ -707,7 +707,7 @@ public class EntityEnderDragon extends EntityInsentient implements IMonster {
         if (pathpoint3 == pathpoint2) {
             return null;
         } else {
-            EntityEnderDragon.bN.debug("Failed to find path from {} to {}", i, j);
+            EntityEnderDragon.LOGGER.debug("Failed to find path from {} to {}", i, j);
             if (pathpoint != null) {
                 pathpoint.h = pathpoint3;
                 pathpoint3 = pathpoint;

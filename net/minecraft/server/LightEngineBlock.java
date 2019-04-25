@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageBlock.a, LightEngineStorageBlock> {
 
     private static final EnumDirection[] d = EnumDirection.values();
@@ -20,7 +22,33 @@ public final class LightEngineBlock extends LightEngineLayer<LightEngineStorageB
 
     @Override
     protected int b(long i, long j, int k) {
-        return j == Long.MAX_VALUE ? 15 : (i == Long.MAX_VALUE ? k + 15 - this.d(j) : (k >= 15 ? k : k + Math.max(1, this.a(i, j))));
+        if (j == Long.MAX_VALUE) {
+            return 15;
+        } else if (i == Long.MAX_VALUE) {
+            return k + 15 - this.d(j);
+        } else if (k >= 15) {
+            return k;
+        } else {
+            int l = Integer.signum(BlockPosition.b(j) - BlockPosition.b(i));
+            int i1 = Integer.signum(BlockPosition.c(j) - BlockPosition.c(i));
+            int j1 = Integer.signum(BlockPosition.d(j) - BlockPosition.d(i));
+            EnumDirection enumdirection = EnumDirection.a(l, i1, j1);
+
+            if (enumdirection == null) {
+                return 15;
+            } else {
+                AtomicInteger atomicinteger = new AtomicInteger();
+                VoxelShape voxelshape = this.a(j, atomicinteger);
+
+                if (atomicinteger.get() >= 15) {
+                    return 15;
+                } else {
+                    VoxelShape voxelshape1 = this.a(i, (AtomicInteger) null);
+
+                    return VoxelShapes.b(voxelshape1, voxelshape, enumdirection) ? 15 : k + Math.max(1, atomicinteger.get());
+                }
+            }
+        }
     }
 
     @Override

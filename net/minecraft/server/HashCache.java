@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 public class HashCache {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final java.nio.file.Path b;
     private final java.nio.file.Path c;
     private int d;
@@ -56,7 +56,7 @@ public class HashCache {
         try {
             bufferedwriter = Files.newBufferedWriter(this.c);
         } catch (IOException ioexception) {
-            HashCache.a.warn("Unable write cachefile {}: {}", this.c, ioexception.toString());
+            HashCache.LOGGER.warn("Unable write cachefile {}: {}", this.c, ioexception.toString());
             return;
         }
 
@@ -64,7 +64,7 @@ public class HashCache {
             return (String) entry.getValue() + ' ' + this.b.relativize((java.nio.file.Path) entry.getKey());
         }).collect(Collectors.toList()), System.lineSeparator(), bufferedwriter);
         bufferedwriter.close();
-        HashCache.a.debug("Caching: cache hits: {}, created: {} removed: {}", this.d, this.f.size() - this.d, this.e.size());
+        HashCache.LOGGER.debug("Caching: cache hits: {}, created: {} removed: {}", this.d, this.f.size() - this.d, this.e.size());
     }
 
     @Nullable
@@ -94,7 +94,7 @@ public class HashCache {
                 try {
                     Files.delete(java_nio_file_path);
                 } catch (IOException ioexception) {
-                    HashCache.a.debug("Unable to delete: {} ({})", java_nio_file_path, ioexception.toString());
+                    HashCache.LOGGER.debug("Unable to delete: {} ({})", java_nio_file_path, ioexception.toString());
                 }
             }
 

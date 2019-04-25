@@ -11,7 +11,7 @@ public class DispenserRegistry {
 
     public static final PrintStream a = System.out;
     private static boolean b;
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void init() {
         if (!DispenserRegistry.b) {
@@ -67,13 +67,13 @@ public class DispenserRegistry {
             throw new IllegalArgumentException("Not bootstrapped");
         } else if (!SharedConstants.b) {
             b().forEach((s) -> {
-                DispenserRegistry.c.error("Missing translations: " + s);
+                DispenserRegistry.LOGGER.error("Missing translations: " + s);
             });
         }
     }
 
     private static void d() {
-        if (DispenserRegistry.c.isDebugEnabled()) {
+        if (DispenserRegistry.LOGGER.isDebugEnabled()) {
             System.setErr(new DebugOutputStream("STDERR", System.err));
             System.setOut(new DebugOutputStream("STDOUT", DispenserRegistry.a));
         } else {

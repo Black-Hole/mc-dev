@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class CrashReport {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final String b;
     private final Throwable c;
     private final CrashReportSystemDetails d = new CrashReportSystemDetails(this, "System Details");
@@ -185,7 +185,7 @@ public class CrashReport {
 
                 return flag1;
             } catch (Throwable throwable) {
-                CrashReport.a.error("Could not save crash report to {}", file, throwable);
+                CrashReport.LOGGER.error("Could not save crash report to {}", file, throwable);
                 flag = false;
             } finally {
                 IOUtils.closeQuietly(outputstreamwriter);

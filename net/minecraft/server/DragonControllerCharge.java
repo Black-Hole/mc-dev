@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DragonControllerCharge extends AbstractDragonController {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private Vec3D c;
     private int d;
 
@@ -17,7 +17,7 @@ public class DragonControllerCharge extends AbstractDragonController {
     @Override
     public void c() {
         if (this.c == null) {
-            DragonControllerCharge.b.warn("Aborting charge player as no target was set.");
+            DragonControllerCharge.LOGGER.warn("Aborting charge player as no target was set.");
             this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else if (this.d > 0 && this.d++ >= 10) {
             this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);

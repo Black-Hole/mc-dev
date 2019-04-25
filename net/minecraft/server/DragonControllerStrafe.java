@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DragonControllerStrafe extends AbstractDragonController {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private int c;
     private PathEntity d;
     private Vec3D e;
@@ -20,7 +20,7 @@ public class DragonControllerStrafe extends AbstractDragonController {
     @Override
     public void c() {
         if (this.f == null) {
-            DragonControllerStrafe.b.warn("Skipping player strafe phase because no player was found");
+            DragonControllerStrafe.LOGGER.warn("Skipping player strafe phase because no player was found");
             this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
         } else {
             double d0;

@@ -26,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 public class NameReferencingFileConverter {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final File a = new File("banned-ips.txt");
     public static final File b = new File("banned-players.txt");
     public static final File c = new File("ops.txt");
@@ -82,7 +82,7 @@ public class NameReferencingFileConverter {
                 try {
                     gameprofilebanlist.load();
                 } catch (FileNotFoundException filenotfoundexception) {
-                    NameReferencingFileConverter.e.warn("Could not load existing file {}", gameprofilebanlist.c().getName(), filenotfoundexception);
+                    NameReferencingFileConverter.LOGGER.warn("Could not load existing file {}", gameprofilebanlist.c().getName(), filenotfoundexception);
                 }
             }
 
@@ -96,7 +96,7 @@ public class NameReferencingFileConverter {
                         String[] astring = (String[]) map.get(gameprofile.getName().toLowerCase(Locale.ROOT));
 
                         if (astring == null) {
-                            NameReferencingFileConverter.e.warn("Could not convert user banlist entry for {}", gameprofile.getName());
+                            NameReferencingFileConverter.LOGGER.warn("Could not convert user banlist entry for {}", gameprofile.getName());
                             throw new NameReferencingFileConverter.FileConversionException("Profile not in the conversionlist");
                         } else {
                             Date date = astring.length > 1 ? NameReferencingFileConverter.b(astring[1], (Date) null) : null;
@@ -109,7 +109,7 @@ public class NameReferencingFileConverter {
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup user banlist entry for {}", gameprofile.getName(), exception);
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user banlist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
                             throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
@@ -121,10 +121,10 @@ public class NameReferencingFileConverter {
                 c(NameReferencingFileConverter.b);
                 return true;
             } catch (IOException ioexception) {
-                NameReferencingFileConverter.e.warn("Could not read old user banlist to convert it!", ioexception);
+                NameReferencingFileConverter.LOGGER.warn("Could not read old user banlist to convert it!", ioexception);
                 return false;
             } catch (NameReferencingFileConverter.FileConversionException namereferencingfileconverter_fileconversionexception) {
-                NameReferencingFileConverter.e.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
+                NameReferencingFileConverter.LOGGER.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
                 return false;
             }
         } else {
@@ -140,7 +140,7 @@ public class NameReferencingFileConverter {
                 try {
                     ipbanlist.load();
                 } catch (FileNotFoundException filenotfoundexception) {
-                    NameReferencingFileConverter.e.warn("Could not load existing file {}", ipbanlist.c().getName(), filenotfoundexception);
+                    NameReferencingFileConverter.LOGGER.warn("Could not load existing file {}", ipbanlist.c().getName(), filenotfoundexception);
                 }
             }
 
@@ -165,7 +165,7 @@ public class NameReferencingFileConverter {
                 c(NameReferencingFileConverter.a);
                 return true;
             } catch (IOException ioexception) {
-                NameReferencingFileConverter.e.warn("Could not parse old ip banlist to convert it!", ioexception);
+                NameReferencingFileConverter.LOGGER.warn("Could not parse old ip banlist to convert it!", ioexception);
                 return false;
             }
         } else {
@@ -181,7 +181,7 @@ public class NameReferencingFileConverter {
                 try {
                     oplist.load();
                 } catch (FileNotFoundException filenotfoundexception) {
-                    NameReferencingFileConverter.e.warn("Could not load existing file {}", oplist.c().getName(), filenotfoundexception);
+                    NameReferencingFileConverter.LOGGER.warn("Could not load existing file {}", oplist.c().getName(), filenotfoundexception);
                 }
             }
 
@@ -194,7 +194,7 @@ public class NameReferencingFileConverter {
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup oplist entry for {}", gameprofile.getName(), exception);
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup oplist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
                             throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
@@ -206,10 +206,10 @@ public class NameReferencingFileConverter {
                 c(NameReferencingFileConverter.c);
                 return true;
             } catch (IOException ioexception) {
-                NameReferencingFileConverter.e.warn("Could not read old oplist to convert it!", ioexception);
+                NameReferencingFileConverter.LOGGER.warn("Could not read old oplist to convert it!", ioexception);
                 return false;
             } catch (NameReferencingFileConverter.FileConversionException namereferencingfileconverter_fileconversionexception) {
-                NameReferencingFileConverter.e.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
+                NameReferencingFileConverter.LOGGER.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
                 return false;
             }
         } else {
@@ -225,7 +225,7 @@ public class NameReferencingFileConverter {
                 try {
                     whitelist.load();
                 } catch (FileNotFoundException filenotfoundexception) {
-                    NameReferencingFileConverter.e.warn("Could not load existing file {}", whitelist.c().getName(), filenotfoundexception);
+                    NameReferencingFileConverter.LOGGER.warn("Could not load existing file {}", whitelist.c().getName(), filenotfoundexception);
                 }
             }
 
@@ -238,7 +238,7 @@ public class NameReferencingFileConverter {
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup user whitelist entry for {}", gameprofile.getName(), exception);
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user whitelist entry for {}", gameprofile.getName(), exception);
                         if (!(exception instanceof ProfileNotFoundException)) {
                             throw new NameReferencingFileConverter.FileConversionException("Could not request user " + gameprofile.getName() + " from backend systems", exception);
                         }
@@ -250,10 +250,10 @@ public class NameReferencingFileConverter {
                 c(NameReferencingFileConverter.d);
                 return true;
             } catch (IOException ioexception) {
-                NameReferencingFileConverter.e.warn("Could not read old whitelist to convert it!", ioexception);
+                NameReferencingFileConverter.LOGGER.warn("Could not read old whitelist to convert it!", ioexception);
                 return false;
             } catch (NameReferencingFileConverter.FileConversionException namereferencingfileconverter_fileconversionexception) {
-                NameReferencingFileConverter.e.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
+                NameReferencingFileConverter.LOGGER.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
                 return false;
             }
         } else {
@@ -276,7 +276,7 @@ public class NameReferencingFileConverter {
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile1, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup user whitelist entry for {}", gameprofile1.getName(), exception);
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user whitelist entry for {}", gameprofile1.getName(), exception);
                     }
                 };
 
@@ -329,7 +329,7 @@ public class NameReferencingFileConverter {
                     }
 
                     public void onProfileLookupFailed(GameProfile gameprofile, Exception exception) {
-                        NameReferencingFileConverter.e.warn("Could not lookup user uuid for {}", gameprofile.getName(), exception);
+                        NameReferencingFileConverter.LOGGER.warn("Could not lookup user uuid for {}", gameprofile.getName(), exception);
                         if (exception instanceof ProfileNotFoundException) {
                             String s2 = this.a(gameprofile);
 
@@ -374,7 +374,7 @@ public class NameReferencingFileConverter {
                 a(dedicatedserver, Lists.newArrayList(astring), profilelookupcallback);
                 return true;
             } catch (NameReferencingFileConverter.FileConversionException namereferencingfileconverter_fileconversionexception) {
-                NameReferencingFileConverter.e.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
+                NameReferencingFileConverter.LOGGER.error("Conversion failed, please try again later", namereferencingfileconverter_fileconversionexception);
                 return false;
             }
         } else {
@@ -427,22 +427,22 @@ public class NameReferencingFileConverter {
         if (!flag && !flag1 && !flag2 && !flag3) {
             return true;
         } else {
-            NameReferencingFileConverter.e.warn("**** FAILED TO START THE SERVER AFTER ACCOUNT CONVERSION!");
-            NameReferencingFileConverter.e.warn("** please remove the following files and restart the server:");
+            NameReferencingFileConverter.LOGGER.warn("**** FAILED TO START THE SERVER AFTER ACCOUNT CONVERSION!");
+            NameReferencingFileConverter.LOGGER.warn("** please remove the following files and restart the server:");
             if (flag) {
-                NameReferencingFileConverter.e.warn("* {}", NameReferencingFileConverter.b.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.b.getName());
             }
 
             if (flag1) {
-                NameReferencingFileConverter.e.warn("* {}", NameReferencingFileConverter.a.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.a.getName());
             }
 
             if (flag2) {
-                NameReferencingFileConverter.e.warn("* {}", NameReferencingFileConverter.c.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.c.getName());
             }
 
             if (flag3) {
-                NameReferencingFileConverter.e.warn("* {}", NameReferencingFileConverter.d.getName());
+                NameReferencingFileConverter.LOGGER.warn("* {}", NameReferencingFileConverter.d.getName());
             }
 
             return false;
@@ -453,9 +453,9 @@ public class NameReferencingFileConverter {
         File file = getPlayersFolder(minecraftserver);
 
         if (file.exists() && file.isDirectory() && (file.list().length > 0 || !file.delete())) {
-            NameReferencingFileConverter.e.warn("**** DETECTED OLD PLAYER DIRECTORY IN THE WORLD SAVE");
-            NameReferencingFileConverter.e.warn("**** THIS USUALLY HAPPENS WHEN THE AUTOMATIC CONVERSION FAILED IN SOME WAY");
-            NameReferencingFileConverter.e.warn("** please restart the server and if the problem persists, remove the directory '{}'", file.getPath());
+            NameReferencingFileConverter.LOGGER.warn("**** DETECTED OLD PLAYER DIRECTORY IN THE WORLD SAVE");
+            NameReferencingFileConverter.LOGGER.warn("**** THIS USUALLY HAPPENS WHEN THE AUTOMATIC CONVERSION FAILED IN SOME WAY");
+            NameReferencingFileConverter.LOGGER.warn("** please restart the server and if the problem persists, remove the directory '{}'", file.getPath());
             return false;
         } else {
             return true;

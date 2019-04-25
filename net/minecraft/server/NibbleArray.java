@@ -16,6 +16,10 @@ public class NibbleArray {
         }
     }
 
+    protected NibbleArray(int i) {
+        this.a = new byte[i];
+    }
+
     public int a(int i, int j, int k) {
         return this.a(this.b(i, j, k));
     }

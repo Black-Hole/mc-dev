@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportRecipeShapeless {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Item b;
     private final int c;
     private final List<RecipeItemStack> d = Lists.newArrayList();

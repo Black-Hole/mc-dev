@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public class PacketDebug {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void a(WorldServer worldserver, ChunkCoordIntPair chunkcoordintpair) {}
 

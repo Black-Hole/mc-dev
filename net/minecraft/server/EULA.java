@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EULA {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final java.nio.file.Path b;
     private final boolean c;
 
@@ -50,7 +50,7 @@ public class EULA {
 
             return flag;
         } catch (Exception exception) {
-            EULA.a.warn("Failed to load {}", this.b);
+            EULA.LOGGER.warn("Failed to load {}", this.b);
             this.c();
             return false;
         }
@@ -89,7 +89,7 @@ public class EULA {
 
                 }
             } catch (Exception exception) {
-                EULA.a.warn("Failed to save {}", this.b, exception);
+                EULA.LOGGER.warn("Failed to save {}", this.b, exception);
             }
 
         }

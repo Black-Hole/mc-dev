@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportTagsItem extends DebugReportTags<Item> {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public DebugReportTagsItem(DebugReportGenerator debugreportgenerator) {
         super(debugreportgenerator, IRegistry.ITEM);
@@ -82,7 +82,7 @@ public class DebugReportTagsItem extends DebugReportTags<Item> {
                 Item item = block.getItem();
 
                 if (item == Items.AIR) {
-                    DebugReportTagsItem.e.warn("Itemless block copied to item tag: {}", IRegistry.BLOCK.getKey(block));
+                    DebugReportTagsItem.LOGGER.warn("Itemless block copied to item tag: {}", IRegistry.BLOCK.getKey(block));
                 } else {
                     list.add(item);
                 }

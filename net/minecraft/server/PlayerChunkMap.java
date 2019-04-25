@@ -256,7 +256,7 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
             return playerchunk.a(ChunkStatus.FULL);
         }).forEach((completablefuture) -> {
             if (flag) {
-                this.executor.c(completablefuture::isDone);
+                this.executor.awaitTasks(completablefuture::isDone);
                 ((Either) completablefuture.join()).ifLeft(this::saveChunk);
             } else {
                 ((Either) completablefuture.getNow(PlayerChunk.UNLOADED_CHUNK_ACCESS)).ifLeft(this::saveChunk);
@@ -349,9 +349,15 @@ public class PlayerChunkMap extends IChunkLoader implements PlayerChunk.d {
                         PlayerChunkMap.LOGGER.error("Chunk file at {} is missing level data, skipping", chunkcoordintpair);
                     }
                 } catch (ReportedException reportedexception) {
-                    throw reportedexception;
+                    Throwable throwable = reportedexception.getCause();
+
+                    if (!(throwable instanceof IOException)) {
+                        throw reportedexception;
+                    }
+
+                    PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, throwable);
                 } catch (Exception exception) {
-                    PlayerChunkMap.LOGGER.error("Couldn't load chunk", exception);
+                    PlayerChunkMap.LOGGER.error("Couldn't load chunk {}", chunkcoordintpair, exception);
                 }
 
                 return Either.left(new ProtoChunk(chunkcoordintpair, ChunkConverter.a));

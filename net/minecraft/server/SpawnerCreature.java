@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class SpawnerCreature {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void a(EnumCreatureType enumcreaturetype, World world, Chunk chunk, BlockPosition blockposition) {
         ChunkGenerator<?> chunkgenerator = world.getChunkProvider().getChunkGenerator();
@@ -78,7 +78,7 @@ public final class SpawnerCreature {
 
                                                         entityinsentient = (EntityInsentient) entity;
                                                     } catch (Exception exception) {
-                                                        SpawnerCreature.a.warn("Failed to create mob", exception);
+                                                        SpawnerCreature.LOGGER.warn("Failed to create mob", exception);
                                                         return;
                                                     }
 
@@ -200,7 +200,7 @@ public final class SpawnerCreature {
                             try {
                                 entity = biomebase_biomemeta.b.a(generatoraccess.getMinecraftWorld());
                             } catch (Exception exception) {
-                                SpawnerCreature.a.warn("Failed to create mob", exception);
+                                SpawnerCreature.LOGGER.warn("Failed to create mob", exception);
                                 continue;
                             }
 

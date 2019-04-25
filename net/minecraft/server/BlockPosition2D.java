@@ -15,10 +15,6 @@ public class BlockPosition2D {
         this.b = blockposition.getZ();
     }
 
-    public ChunkCoordIntPair a() {
-        return new ChunkCoordIntPair(this.a >> 4, this.b >> 4);
-    }
-
     public long b() {
         return a(this.a, this.b);
     }

@@ -12,7 +12,7 @@ import org.apache.logging.log4j.MarkerManager;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Marker b = MarkerManager.getMarker("PACKET_RECEIVED", NetworkManager.b);
     private final EnumProtocolDirection c;
 
@@ -34,8 +34,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
                     throw new IOException("Packet " + ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetdataserializer.readableBytes() + " bytes extra whilst reading packet " + i);
                 } else {
                     list.add(packet);
-                    if (PacketDecoder.a.isDebugEnabled()) {
-                        PacketDecoder.a.debug(PacketDecoder.b, " IN: [{}:{}] {}", channelhandlercontext.channel().attr(NetworkManager.c).get(), i, packet.getClass().getName());
+                    if (PacketDecoder.LOGGER.isDebugEnabled()) {
+                        PacketDecoder.LOGGER.debug(PacketDecoder.b, " IN: [{}:{}] {}", channelhandlercontext.channel().attr(NetworkManager.c).get(), i, packet.getClass().getName());
                     }
 
                 }

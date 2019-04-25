@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ChunkConverter {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final ChunkConverter a = new ChunkConverter();
     private static final EnumDirection8[] c = EnumDirection8.values();
     private final EnumSet<EnumDirection8> d;
@@ -173,7 +173,7 @@ public class ChunkConverter {
 
                 for (i = 0; i < this.e.length; ++i) {
                     if (this.e[i] != null) {
-                        ChunkConverter.b.warn("Discarding update data for section {} for chunk ({} {})", i, chunkcoordintpair.x, chunkcoordintpair.z);
+                        ChunkConverter.LOGGER.warn("Discarding update data for section {} for chunk ({} {})", i, chunkcoordintpair.x, chunkcoordintpair.z);
                     }
 
                     this.e[i] = null;

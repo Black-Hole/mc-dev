@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class StructureGenerator<C extends WorldGenFeatureConfiguration> extends WorldGenerator<C> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public StructureGenerator(Function<Dynamic<?>, ? extends C> function) {
         super(function, false);

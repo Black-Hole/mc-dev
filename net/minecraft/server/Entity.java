@@ -3,7 +3,6 @@ package net.minecraft.server;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -2030,15 +2029,15 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
                 Vec3D vec3d1 = this.getPortalOffset();
 
                 blockposition = new BlockPosition(d0, this.locY, d1);
-                Pair<Vec3D, Pair<Vec3D, Integer>> pair = worldserver1.getTravelAgent().a(blockposition, vec3d, this.getPortalDirection(), vec3d1.x, vec3d1.y, this instanceof EntityHuman);
+                ShapeDetector.c shapedetector_c = worldserver1.getTravelAgent().a(blockposition, vec3d, this.getPortalDirection(), vec3d1.x, vec3d1.y, this instanceof EntityHuman);
 
-                if (pair == null) {
+                if (shapedetector_c == null) {
                     return null;
                 }
 
-                blockposition = new BlockPosition((Vec3D) pair.getFirst());
-                vec3d = (Vec3D) ((Pair) pair.getSecond()).getFirst();
-                f = (float) (Integer) ((Pair) pair.getSecond()).getSecond();
+                blockposition = new BlockPosition(shapedetector_c.a);
+                vec3d = shapedetector_c.b;
+                f = (float) shapedetector_c.c;
             }
 
             this.world.getMethodProfiler().exitEnter("reloading");

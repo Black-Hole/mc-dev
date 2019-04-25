@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportNBT implements DebugReportProvider {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final DebugReportGenerator c;
 
     public DebugReportNBT(DebugReportGenerator debugreportgenerator) {
@@ -75,9 +75,9 @@ public class DebugReportNBT implements DebugReportProvider {
 
             }
 
-            DebugReportNBT.b.info("Converted {} from NBT to SNBT", s);
+            DebugReportNBT.LOGGER.info("Converted {} from NBT to SNBT", s);
         } catch (IOException ioexception) {
-            DebugReportNBT.b.error("Couldn't convert {} from NBT to SNBT at {}", s, java_nio_file_path, ioexception);
+            DebugReportNBT.LOGGER.error("Couldn't convert {} from NBT to SNBT at {}", s, java_nio_file_path, ioexception);
         }
 
     }

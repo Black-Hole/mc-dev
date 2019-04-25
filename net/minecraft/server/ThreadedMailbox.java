@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final AtomicInteger c = new AtomicInteger(0);
     public final PairedQueue<? super T, ? extends Runnable> a;
     private final Executor d;
@@ -107,7 +107,7 @@ public class ThreadedMailbox<T> implements Mailbox<T>, AutoCloseable, Runnable {
                 try {
                     this.d.execute(this);
                 } catch (RejectedExecutionException rejectedexecutionexception1) {
-                    ThreadedMailbox.b.error("Cound not schedule mailbox", rejectedexecutionexception1);
+                    ThreadedMailbox.LOGGER.error("Cound not schedule mailbox", rejectedexecutionexception1);
                 }
             }
         }

@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class GameProfileSerializer {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @Nullable
     public static GameProfile deserialize(NBTTagCompound nbttagcompound) {
@@ -233,7 +233,7 @@ public final class GameProfileSerializer {
         if (optional.isPresent()) {
             return (IBlockDataHolder) s0.set(iblockstate, (Comparable) optional.get());
         } else {
-            GameProfileSerializer.a.warn("Unable to read property: {} with value: {} for blockstate: {}", s, nbttagcompound.getString(s), nbttagcompound1.toString());
+            GameProfileSerializer.LOGGER.warn("Unable to read property: {} with value: {} for blockstate: {}", s, nbttagcompound.getString(s), nbttagcompound1.toString());
             return s0;
         }
     }

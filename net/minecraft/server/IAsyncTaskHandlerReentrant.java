@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 public abstract class IAsyncTaskHandlerReentrant<R extends Runnable> extends IAsyncTaskHandler<R> {
 
-    private int b;
+    private int depth;
 
     public IAsyncTaskHandlerReentrant(String s) {
         super(s);
@@ -10,21 +10,21 @@ public abstract class IAsyncTaskHandlerReentrant<R extends Runnable> extends IAs
 
     @Override
     protected boolean isNotMainThread() {
-        return this.bg() || super.isNotMainThread();
+        return this.isEntered() || super.isNotMainThread();
     }
 
-    protected boolean bg() {
-        return this.b != 0;
+    protected boolean isEntered() {
+        return this.depth != 0;
     }
 
     @Override
-    protected void h(R r0) {
-        ++this.b;
+    protected void executeTask(R r0) {
+        ++this.depth;
 
         try {
-            super.h(r0);
+            super.executeTask(r0);
         } finally {
-            --this.b;
+            --this.depth;
         }
 
     }

@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 public class HttpUtilities {
 
-    private static final Logger b = LogManager.getLogger();
-    public static final ListeningExecutorService a = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setDaemon(true).setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(HttpUtilities.b)).setNameFormat("Downloader %d").build()));
+    private static final Logger LOGGER = LogManager.getLogger();
+    public static final ListeningExecutorService a = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool((new ThreadFactoryBuilder()).setDaemon(true).setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(HttpUtilities.LOGGER)).setNameFormat("Downloader %d").build()));
 
     public static int a() {
         try {

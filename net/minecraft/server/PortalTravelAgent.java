@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Maps;
-import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.longs.LongIterator;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -16,7 +15,7 @@ import org.apache.logging.log4j.util.Supplier;
 
 public class PortalTravelAgent {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final BlockPortal b = (BlockPortal) Blocks.NETHER_PORTAL;
     private final WorldServer world;
     private final Random d;
@@ -31,16 +30,16 @@ public class PortalTravelAgent {
     public boolean a(Entity entity, float f) {
         Vec3D vec3d = entity.getPortalOffset();
         EnumDirection enumdirection = entity.getPortalDirection();
-        Pair<Vec3D, Pair<Vec3D, Integer>> pair = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
+        ShapeDetector.c shapedetector_c = this.a(new BlockPosition(entity), entity.getMot(), enumdirection, vec3d.x, vec3d.y, entity instanceof EntityHuman);
 
-        if (pair == null) {
+        if (shapedetector_c == null) {
             return false;
         } else {
-            Vec3D vec3d1 = (Vec3D) pair.getFirst();
-            Vec3D vec3d2 = (Vec3D) ((Pair) pair.getSecond()).getFirst();
+            Vec3D vec3d1 = shapedetector_c.a;
+            Vec3D vec3d2 = shapedetector_c.b;
 
             entity.setMot(vec3d2);
-            entity.yaw = f + (float) (Integer) ((Pair) pair.getSecond()).getSecond();
+            entity.yaw = f + (float) shapedetector_c.c;
             if (entity instanceof EntityPlayer) {
                 ((EntityPlayer) entity).playerConnection.a(vec3d1.x, vec3d1.y, vec3d1.z, entity.yaw, entity.pitch);
                 ((EntityPlayer) entity).playerConnection.syncPosition();
@@ -53,7 +52,7 @@ public class PortalTravelAgent {
     }
 
     @Nullable
-    public Pair<Vec3D, Pair<Vec3D, Integer>> a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
+    public ShapeDetector.c a(BlockPosition blockposition, Vec3D vec3d, EnumDirection enumdirection, double d0, double d1, boolean flag) {
         boolean flag1 = true;
         boolean flag2 = true;
         BlockPosition blockposition1 = null;
@@ -102,7 +101,7 @@ public class PortalTravelAgent {
             } else {
                 if (flag2) {
                     this.e.put(blockposition2d, new PortalTravelAgent.ChunkCoordinatesPortal(blockposition1, this.world.getTime()));
-                    Logger logger = PortalTravelAgent.a;
+                    Logger logger = PortalTravelAgent.LOGGER;
                     Supplier[] asupplier = new Supplier[2];
                     WorldProvider worldprovider = this.world.getWorldProvider();
 
@@ -111,7 +110,7 @@ public class PortalTravelAgent {
                         return blockposition2d;
                     };
                     logger.debug("Adding nether portal ticket for {}:{}", asupplier);
-                    this.world.getChunkProvider().addTicket(TicketType.PORTAL, blockposition2d.a(), 3, blockposition2d);
+                    this.world.getChunkProvider().addTicket(TicketType.PORTAL, new ChunkCoordIntPair(blockposition1), 3, blockposition2d);
                 }
 
                 ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = PortalTravelAgent.b.c((GeneratorAccess) this.world, blockposition1);
@@ -328,9 +327,9 @@ public class PortalTravelAgent {
             Entry<BlockPosition2D, PortalTravelAgent.ChunkCoordinatesPortal> entry = (Entry) iterator.next();
             PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) entry.getValue();
 
-            if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.b < j) {
+            if (portaltravelagent_chunkcoordinatesportal.b < j) {
                 BlockPosition2D blockposition2d = (BlockPosition2D) entry.getKey();
-                Logger logger = PortalTravelAgent.a;
+                Logger logger = PortalTravelAgent.LOGGER;
                 Supplier[] asupplier = new Supplier[2];
                 WorldProvider worldprovider = this.world.getWorldProvider();
 
@@ -339,14 +338,14 @@ public class PortalTravelAgent {
                     return blockposition2d;
                 };
                 logger.debug("Removing nether portal ticket for {}:{}", asupplier);
-                this.world.getChunkProvider().removeTicket(TicketType.PORTAL, blockposition2d.a(), 3, blockposition2d);
+                this.world.getChunkProvider().removeTicket(TicketType.PORTAL, new ChunkCoordIntPair(portaltravelagent_chunkcoordinatesportal.a), 3, blockposition2d);
                 iterator.remove();
             }
         }
 
     }
 
-    public class ChunkCoordinatesPortal {
+    static class ChunkCoordinatesPortal {
 
         public final BlockPosition a;
         public long b;

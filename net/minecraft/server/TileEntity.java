@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class TileEntity {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final TileEntityTypes<?> b;
     @Nullable
     protected World world;
@@ -63,7 +63,7 @@ public abstract class TileEntity {
             try {
                 return tileentitytypes.a();
             } catch (Throwable throwable) {
-                TileEntity.a.error("Failed to create block entity {}", s, throwable);
+                TileEntity.LOGGER.error("Failed to create block entity {}", s, throwable);
                 return null;
             }
         }).map((tileentity) -> {
@@ -71,11 +71,11 @@ public abstract class TileEntity {
                 tileentity.load(nbttagcompound);
                 return tileentity;
             } catch (Throwable throwable) {
-                TileEntity.a.error("Failed to load data for block entity {}", s, throwable);
+                TileEntity.LOGGER.error("Failed to load data for block entity {}", s, throwable);
                 return null;
             }
         }).orElseGet(() -> {
-            TileEntity.a.warn("Skipping BlockEntity with id {}", s);
+            TileEntity.LOGGER.warn("Skipping BlockEntity with id {}", s);
             return null;
         });
     }

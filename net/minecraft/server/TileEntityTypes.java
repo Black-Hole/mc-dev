@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class TileEntityTypes<T extends TileEntity> {
 
-    private static final Logger G = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final TileEntityTypes<TileEntityFurnaceFurnace> FURNACE = a("furnace", TileEntityTypes.a.a(TileEntityFurnaceFurnace::new));
     public static final TileEntityTypes<TileEntityChest> CHEST = a("chest", TileEntityTypes.a.a(TileEntityChest::new));
     public static final TileEntityTypes<TileEntityChestTrapped> TRAPPED_CHEST = a("trapped_chest", TileEntityTypes.a.a(TileEntityChestTrapped::new));
@@ -60,7 +60,7 @@ public class TileEntityTypes<T extends TileEntity> {
                 throw illegalstateexception;
             }
 
-            TileEntityTypes.G.warn("No data fixer registered for block entity {}", s);
+            TileEntityTypes.LOGGER.warn("No data fixer registered for block entity {}", s);
         }
 
         return (TileEntityTypes) IRegistry.a(IRegistry.BLOCK_ENTITY_TYPE, s, (Object) tileentitytypes_a.a(type));

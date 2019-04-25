@@ -27,11 +27,15 @@ public class AutoRecipeStackManager {
     }
 
     public void b(ItemStack itemstack) {
-        if (!itemstack.isEmpty()) {
-            int i = c(itemstack);
-            int j = itemstack.getCount();
+        this.a(itemstack, 64);
+    }
 
-            this.b(i, j);
+    public void a(ItemStack itemstack, int i) {
+        if (!itemstack.isEmpty()) {
+            int j = c(itemstack);
+            int k = Math.min(i, itemstack.getCount());
+
+            this.b(j, k);
         }
 
     }

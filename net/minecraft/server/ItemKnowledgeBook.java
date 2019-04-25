@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ItemKnowledgeBook extends Item {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public ItemKnowledgeBook(Item.Info item_info) {
         super(item_info);
@@ -34,7 +34,7 @@ public class ItemKnowledgeBook extends Item {
                     Optional<? extends IRecipe<?>> optional = craftingmanager.a(new MinecraftKey(s));
 
                     if (!optional.isPresent()) {
-                        ItemKnowledgeBook.a.error("Invalid recipe: {}", s);
+                        ItemKnowledgeBook.LOGGER.error("Invalid recipe: {}", s);
                         return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
                     }
 
@@ -47,7 +47,7 @@ public class ItemKnowledgeBook extends Item {
 
             return new InteractionResultWrapper<>(EnumInteractionResult.SUCCESS, itemstack);
         } else {
-            ItemKnowledgeBook.a.error("Tag not valid: {}", nbttagcompound);
+            ItemKnowledgeBook.LOGGER.error("Tag not valid: {}", nbttagcompound);
             return new InteractionResultWrapper<>(EnumInteractionResult.FAIL, itemstack);
         }
     }

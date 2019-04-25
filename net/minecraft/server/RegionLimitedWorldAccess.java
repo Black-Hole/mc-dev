@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RegionLimitedWorldAccess implements GeneratorAccess {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final List<IChunkAccess> b;
     private final int c;
     private final int d;
@@ -88,8 +88,8 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             IChunkAccess ichunkaccess1 = (IChunkAccess) this.b.get(0);
             IChunkAccess ichunkaccess2 = (IChunkAccess) this.b.get(this.b.size() - 1);
 
-            RegionLimitedWorldAccess.a.error("Requested chunk : {} {}", i, j);
-            RegionLimitedWorldAccess.a.error("Region bounds : {} {} | {} {}", ichunkaccess1.getPos().x, ichunkaccess1.getPos().z, ichunkaccess2.getPos().x, ichunkaccess2.getPos().z);
+            RegionLimitedWorldAccess.LOGGER.error("Requested chunk : {} {}", i, j);
+            RegionLimitedWorldAccess.LOGGER.error("Region bounds : {} {} | {} {}", ichunkaccess1.getPos().x, ichunkaccess1.getPos().z, ichunkaccess2.getPos().x, ichunkaccess2.getPos().z);
             if (ichunkaccess != null) {
                 throw new RuntimeException(String.format("Chunk is not of correct status. Expecting %s, got %s | %s %s", chunkstatus, ichunkaccess.getChunkStatus(), i, j));
             } else {
@@ -196,7 +196,7 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
             }
 
             if (ichunkaccess.getType(blockposition).getBlock() instanceof ITileEntity) {
-                RegionLimitedWorldAccess.a.warn("Tried to access a block entity before it was created. {}", blockposition);
+                RegionLimitedWorldAccess.LOGGER.warn("Tried to access a block entity before it was created. {}", blockposition);
             }
 
             return null;

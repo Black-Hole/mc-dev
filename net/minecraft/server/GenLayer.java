@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GenLayer {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final AreaLazy b;
 
     public GenLayer(AreaFactory<AreaLazy> areafactory) {
@@ -34,7 +34,7 @@ public class GenLayer {
             if (SharedConstants.b) {
                 throw new IllegalStateException("Unknown biome id: " + i);
             } else {
-                GenLayer.a.warn("Unknown biome id: ", i);
+                GenLayer.LOGGER.warn("Unknown biome id: ", i);
                 return Biomes.b;
             }
         } else {

@@ -36,7 +36,7 @@ import org.apache.logging.log4j.Logger;
 public class ResourcePackVanilla implements IResourcePack {
 
     public static java.nio.file.Path a;
-    private static final Logger d = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static Class<?> b;
     private static final Map<EnumResourcePackType, FileSystem> e = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
         Class oclass = ResourcePackVanilla.class;
@@ -64,7 +64,7 @@ public class ResourcePackVanilla implements IResourcePack {
                         hashmap.put(enumresourcepacktype, filesystem);
                     }
                 } catch (IOException | URISyntaxException urisyntaxexception) {
-                    ResourcePackVanilla.d.error("Couldn't get a list of all vanilla resources", urisyntaxexception);
+                    ResourcePackVanilla.LOGGER.error("Couldn't get a list of all vanilla resources", urisyntaxexception);
                 }
             }
 
@@ -141,7 +141,7 @@ public class ResourcePackVanilla implements IResourcePack {
             URL url = ResourcePackVanilla.class.getResource("/" + enumresourcepacktype.a() + "/.mcassetsroot");
 
             if (url == null) {
-                ResourcePackVanilla.d.error("Couldn't find .mcassetsroot, cannot load vanilla resources");
+                ResourcePackVanilla.LOGGER.error("Couldn't find .mcassetsroot, cannot load vanilla resources");
                 return set;
             }
 
@@ -161,12 +161,12 @@ public class ResourcePackVanilla implements IResourcePack {
 
                 set.addAll(this.a(i, "minecraft", java_nio_file_path1, s, predicate));
             } else {
-                ResourcePackVanilla.d.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
+                ResourcePackVanilla.LOGGER.error("Unsupported scheme {} trying to list vanilla resources (NYI?)", uri);
             }
         } catch (NoSuchFileException | FileNotFoundException filenotfoundexception) {
             ;
         } catch (IOException | URISyntaxException urisyntaxexception1) {
-            ResourcePackVanilla.d.error("Couldn't get a list of all vanilla resources", urisyntaxexception1);
+            ResourcePackVanilla.LOGGER.error("Couldn't get a list of all vanilla resources", urisyntaxexception1);
         }
 
         return set;

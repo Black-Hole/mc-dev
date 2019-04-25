@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 public class NBTTagCompound implements NBTBase {
 
-    private static final Logger f = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Pattern g = Pattern.compile("[A-Za-z0-9._+-]+");
     private final Map<String, NBTBase> map = Maps.newHashMap();
 
@@ -332,7 +332,7 @@ public class NBTTagCompound implements NBTBase {
         StringBuilder stringbuilder = new StringBuilder("{");
         Collection<String> collection = this.map.keySet();
 
-        if (NBTTagCompound.f.isDebugEnabled()) {
+        if (NBTTagCompound.LOGGER.isDebugEnabled()) {
             List<String> list = Lists.newArrayList(this.map.keySet());
 
             Collections.sort(list);
@@ -470,7 +470,7 @@ public class NBTTagCompound implements NBTBase {
             ChatComponentText chatcomponenttext = new ChatComponentText("{");
             Collection<String> collection = this.map.keySet();
 
-            if (NBTTagCompound.f.isDebugEnabled()) {
+            if (NBTTagCompound.LOGGER.isDebugEnabled()) {
                 List<String> list = Lists.newArrayList(this.map.keySet());
 
                 Collections.sort(list);

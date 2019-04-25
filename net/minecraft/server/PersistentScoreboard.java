@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class PersistentScoreboard extends PersistentBase {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private Scoreboard b;
     private NBTTagCompound c;
 
@@ -156,7 +156,7 @@ public class PersistentScoreboard extends PersistentBase {
     @Override
     public NBTTagCompound b(NBTTagCompound nbttagcompound) {
         if (this.b == null) {
-            PersistentScoreboard.a.warn("Tried to save scoreboard without having a scoreboard...");
+            PersistentScoreboard.LOGGER.warn("Tried to save scoreboard without having a scoreboard...");
             return nbttagcompound;
         } else {
             nbttagcompound.set("Objectives", this.e());

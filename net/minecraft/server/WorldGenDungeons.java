@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final EntityTypes<?>[] aS = new EntityTypes[] { EntityTypes.SKELETON, EntityTypes.ZOMBIE, EntityTypes.ZOMBIE, EntityTypes.SPIDER};
     private static final IBlockData aT = Blocks.CAVE_AIR.getBlockData();
 
@@ -127,7 +127,7 @@ public class WorldGenDungeons extends WorldGenerator<WorldGenFeatureEmptyConfigu
             if (tileentity instanceof TileEntityMobSpawner) {
                 ((TileEntityMobSpawner) tileentity).getSpawner().setMobName(this.a(random));
             } else {
-                WorldGenDungeons.a.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
+                WorldGenDungeons.LOGGER.error("Failed to fetch mob spawner entity at ({}, {}, {})", blockposition.getX(), blockposition.getY(), blockposition.getZ());
             }
 
             return true;

@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 public class MethodProfiler implements GameProfilerFillerActive {
 
     private static final long a = Duration.ofMillis(100L).toNanos();
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final List<String> c = Lists.newArrayList();
     private final List<Long> d = Lists.newArrayList();
     private final Map<String, Long> e = Maps.newHashMap();
@@ -32,7 +32,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
     @Override
     public void a() {
         if (this.j) {
-            MethodProfiler.b.error("Profiler tick already started - missing endTick()?");
+            MethodProfiler.LOGGER.error("Profiler tick already started - missing endTick()?");
         } else {
             this.j = true;
             this.i = "";
@@ -44,12 +44,12 @@ public class MethodProfiler implements GameProfilerFillerActive {
     @Override
     public void b() {
         if (!this.j) {
-            MethodProfiler.b.error("Profiler tick already ended - missing startTick()?");
+            MethodProfiler.LOGGER.error("Profiler tick already ended - missing startTick()?");
         } else {
             this.exit();
             this.j = false;
             if (!this.i.isEmpty()) {
-                MethodProfiler.b.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.i);
+                MethodProfiler.LOGGER.error("Profiler tick ended before path was fully popped (remainder: '{}'). Mismatched push/pop?", this.i);
             }
 
         }
@@ -58,7 +58,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
     @Override
     public void enter(String s) {
         if (!this.j) {
-            MethodProfiler.b.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
+            MethodProfiler.LOGGER.error("Cannot push '{}' to profiler if profiler tick hasn't started - missing startTick()?", s);
         } else {
             if (!this.i.isEmpty()) {
                 this.i = this.i + ".";
@@ -78,9 +78,9 @@ public class MethodProfiler implements GameProfilerFillerActive {
     @Override
     public void exit() {
         if (!this.j) {
-            MethodProfiler.b.error("Cannot pop from profiler if profiler tick hasn't started - missing startTick()?");
+            MethodProfiler.LOGGER.error("Cannot pop from profiler if profiler tick hasn't started - missing startTick()?");
         } else if (this.d.isEmpty()) {
-            MethodProfiler.b.error("Tried to pop one too many times! Mismatched push() and pop()?");
+            MethodProfiler.LOGGER.error("Tried to pop one too many times! Mismatched push() and pop()?");
         } else {
             long i = SystemUtils.getMonotonicNanos();
             long j = (Long) this.d.remove(this.d.size() - 1);
@@ -95,7 +95,7 @@ public class MethodProfiler implements GameProfilerFillerActive {
             }
 
             if (k > MethodProfiler.a) {
-                MethodProfiler.b.warn("Something's taking too long! '{}' took aprox {} ms", this.i, (double) k / 1000000.0D);
+                MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", this.i, (double) k / 1000000.0D);
             }
 
             this.i = this.c.isEmpty() ? "" : (String) this.c.get(this.c.size() - 1);

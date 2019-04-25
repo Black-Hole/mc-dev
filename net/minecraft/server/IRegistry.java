@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class IRegistry<T> implements Registry<T> {
 
-    protected static final Logger e = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     private static final Map<MinecraftKey, Supplier<?>> a = Maps.newLinkedHashMap();
     public static final IRegistryWritable<IRegistryWritable<?>> f = new RegistryMaterials<>();
     public static final IRegistry<SoundEffect> SOUND_EVENT = a("sound_event", (IRegistryWritable) (new RegistryMaterials<>()), () -> {
@@ -180,13 +180,13 @@ public abstract class IRegistry<T> implements Registry<T> {
     static {
         IRegistry.a.entrySet().forEach((entry) -> {
             if (((Supplier) entry.getValue()).get() == null) {
-                IRegistry.e.error("Unable to bootstrap registry '{}'", entry.getKey());
+                IRegistry.LOGGER.error("Unable to bootstrap registry '{}'", entry.getKey());
             }
 
         });
         IRegistry.f.forEach((iregistrywritable) -> {
             if (iregistrywritable.c()) {
-                IRegistry.e.error("Registry '{}' was empty after loading", IRegistry.f.getKey(iregistrywritable));
+                IRegistry.LOGGER.error("Registry '{}' was empty after loading", IRegistry.f.getKey(iregistrywritable));
                 if (SharedConstants.b) {
                     throw new IllegalStateException("Registry: '" + IRegistry.f.getKey(iregistrywritable) + "' is empty, not allowed, fix me!");
                 }

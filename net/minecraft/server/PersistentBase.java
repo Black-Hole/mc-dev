@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class PersistentBase {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final String id;
     private boolean c;
 
@@ -68,7 +68,7 @@ public abstract class PersistentBase {
 
                 }
             } catch (IOException ioexception) {
-                PersistentBase.a.error("Could not save data {}", this, ioexception);
+                PersistentBase.LOGGER.error("Could not save data {}", this, ioexception);
             }
 
             this.a(false);

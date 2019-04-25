@@ -34,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 public class ServerGUI extends JComponent {
 
     private static final Font a = new Font("Monospaced", 0, 12);
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final DedicatedServer c;
     private Thread d;
     private final Collection<Runnable> e = Lists.newArrayList();
@@ -79,7 +79,7 @@ public class ServerGUI extends JComponent {
             this.add(this.e(), "Center");
             this.add(this.c(), "West");
         } catch (Exception exception) {
-            ServerGUI.b.error("Couldn't build server GUI", exception);
+            ServerGUI.LOGGER.error("Couldn't build server GUI", exception);
         }
 
     }
@@ -139,7 +139,7 @@ public class ServerGUI extends JComponent {
             }
 
         });
-        this.d.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(ServerGUI.b));
+        this.d.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(ServerGUI.LOGGER));
         this.d.setDaemon(true);
         return jpanel;
     }

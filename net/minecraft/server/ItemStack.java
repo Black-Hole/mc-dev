@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class ItemStack {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final ItemStack a = new ItemStack((Item) null);
     public static final DecimalFormat b = F();
     private int count;
@@ -74,7 +74,7 @@ public final class ItemStack {
         try {
             return new ItemStack(nbttagcompound);
         } catch (RuntimeException runtimeexception) {
-            ItemStack.c.debug("Tried to load invalid item: {}", nbttagcompound, runtimeexception);
+            ItemStack.LOGGER.debug("Tried to load invalid item: {}", nbttagcompound, runtimeexception);
             return ItemStack.a;
         }
     }

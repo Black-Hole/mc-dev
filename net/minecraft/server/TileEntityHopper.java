@@ -70,15 +70,17 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
     @Override
     public void tick() {
         if (this.world != null && !this.world.isClientSide) {
-            --this.j;
-            this.k = this.world.getTime();
-            if (!this.v()) {
-                this.setCooldown(0);
-                this.a(() -> {
-                    return a((IHopper) this);
-                });
-            }
+            if (this.getBlock().getBlock() == Blocks.HOPPER) {
+                --this.j;
+                this.k = this.world.getTime();
+                if (!this.v()) {
+                    this.setCooldown(0);
+                    this.a(() -> {
+                        return a((IHopper) this);
+                    });
+                }
 
+            }
         }
     }
 

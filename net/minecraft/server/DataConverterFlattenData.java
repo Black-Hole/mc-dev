@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DataConverterFlattenData {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Dynamic<?>[] b = new Dynamic[4095];
     private static final Object2IntMap<Dynamic<?>> c = (Object2IntMap) DataFixUtils.make(new Object2IntOpenHashMap(), (object2intopenhashmap) -> {
         object2intopenhashmap.defaultReturnValue(-1);
@@ -72,7 +72,7 @@ public class DataConverterFlattenData {
         try {
             return new Dynamic(DynamicOpsNBT.a, MojangsonParser.parse(s.replace('\'', '"')));
         } catch (Exception exception) {
-            DataConverterFlattenData.a.error("Parsing {}", s, exception);
+            DataConverterFlattenData.LOGGER.error("Parsing {}", s, exception);
             throw new RuntimeException(exception);
         }
     }

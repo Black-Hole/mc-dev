@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LightEngineThreaded extends LightEngine implements AutoCloseable {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final ThreadedMailbox<Runnable> b;
     private final ObjectList<Pair<LightEngineThreaded.Update, Runnable>> c = new ObjectArrayList();
     private final PlayerChunkMap d;
@@ -46,7 +46,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
         this.a(blockposition.getX() >> 4, blockposition.getZ() >> 4, LightEngineThreaded.Update.POST_UPDATE, SystemUtils.a(() -> {
             super.a(blockposition1);
         }, () -> {
-            return "checkBlock " + blockposition;
+            return "checkBlock " + blockposition1;
         }));
     }
 
@@ -110,7 +110,6 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
 
         this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
-            super.a(chunkcoordintpair, true);
             ChunkSection[] achunksection = ichunkaccess.getSections();
 
             for (int i = 0; i < 16; ++i) {
@@ -121,6 +120,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
                 }
             }
 
+            super.a(chunkcoordintpair, true);
             if (!flag) {
                 ichunkaccess.m().forEach((blockposition) -> {
                     super.a(blockposition, ichunkaccess.h(blockposition));

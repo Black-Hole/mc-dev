@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GenericAttributes {
 
-    private static final Logger l = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final IAttribute MAX_HEALTH = (new AttributeRanged((IAttribute) null, "generic.maxHealth", 20.0D, 0.0D, 1024.0D)).a("Max Health").a(true);
     public static final IAttribute FOLLOW_RANGE = (new AttributeRanged((IAttribute) null, "generic.followRange", 32.0D, 0.0D, 2048.0D)).a("Follow Range");
     public static final IAttribute KNOCKBACK_RESISTANCE = (new AttributeRanged((IAttribute) null, "generic.knockbackResistance", 0.0D, 0.0D, 1.0D)).a("Knockback Resistance");
@@ -77,7 +77,7 @@ public class GenericAttributes {
             AttributeInstance attributeinstance = attributemapbase.a(nbttagcompound.getString("Name"));
 
             if (attributeinstance == null) {
-                GenericAttributes.l.warn("Ignoring unknown attribute '{}'", nbttagcompound.getString("Name"));
+                GenericAttributes.LOGGER.warn("Ignoring unknown attribute '{}'", nbttagcompound.getString("Name"));
             } else {
                 a(attributeinstance, nbttagcompound);
             }
@@ -116,7 +116,7 @@ public class GenericAttributes {
 
             return new AttributeModifier(uuid, nbttagcompound.getString("Name"), nbttagcompound.getDouble("Amount"), attributemodifier_operation);
         } catch (Exception exception) {
-            GenericAttributes.l.warn("Unable to create attribute: {}", exception.getMessage());
+            GenericAttributes.LOGGER.warn("Unable to create attribute: {}", exception.getMessage());
             return null;
         }
     }

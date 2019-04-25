@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportRecipe implements DebugReportProvider {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson c = (new GsonBuilder()).setPrettyPrinting().create();
     private final DebugReportGenerator d;
 
@@ -79,7 +79,7 @@ public class DebugReportRecipe implements DebugReportProvider {
 
             hashcache.a(java_nio_file_path, s1);
         } catch (IOException ioexception) {
-            DebugReportRecipe.b.error("Couldn't save recipe {}", java_nio_file_path, ioexception);
+            DebugReportRecipe.LOGGER.error("Couldn't save recipe {}", java_nio_file_path, ioexception);
         }
 
     }
@@ -117,7 +117,7 @@ public class DebugReportRecipe implements DebugReportProvider {
 
             hashcache.a(java_nio_file_path, s1);
         } catch (IOException ioexception) {
-            DebugReportRecipe.b.error("Couldn't save recipe advancement {}", java_nio_file_path, ioexception);
+            DebugReportRecipe.LOGGER.error("Couldn't save recipe advancement {}", java_nio_file_path, ioexception);
         }
 
     }

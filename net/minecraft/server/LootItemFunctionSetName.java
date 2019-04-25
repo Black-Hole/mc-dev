@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionSetName extends LootItemFunctionConditional {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final IChatBaseComponent c;
     @Nullable
     private final LootTableInfo.EntityTarget d;
@@ -40,7 +40,7 @@ public class LootItemFunctionSetName extends LootItemFunctionConditional {
                     try {
                         return ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity);
                     } catch (CommandSyntaxException commandsyntaxexception) {
-                        LootItemFunctionSetName.a.warn("Failed to resolve text component", commandsyntaxexception);
+                        LootItemFunctionSetName.LOGGER.warn("Failed to resolve text component", commandsyntaxexception);
                         return ichatbasecomponent;
                     }
                 };

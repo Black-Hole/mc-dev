@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionSetDamage extends LootItemFunctionConditional {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final LootValueBounds c;
 
     private LootItemFunctionSetDamage(LootItemCondition[] alootitemcondition, LootValueBounds lootvaluebounds) {
@@ -23,7 +23,7 @@ public class LootItemFunctionSetDamage extends LootItemFunctionConditional {
 
             itemstack.setDamage(MathHelper.d(f * (float) itemstack.h()));
         } else {
-            LootItemFunctionSetDamage.a.warn("Couldn't set damage of loot item {}", itemstack);
+            LootItemFunctionSetDamage.LOGGER.warn("Couldn't set damage of loot item {}", itemstack);
         }
 
         return itemstack;

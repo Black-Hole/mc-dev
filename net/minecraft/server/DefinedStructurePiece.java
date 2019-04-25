@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class DefinedStructurePiece extends StructurePiece {
 
-    private static final Logger d = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     protected DefinedStructure a;
     protected DefinedStructureInfo b;
     protected BlockPosition c;
@@ -76,10 +76,10 @@ public abstract class DefinedStructurePiece extends StructurePiece {
                         if (iblockdata1 != null) {
                             iblockdata = iblockdata1;
                         } else {
-                            DefinedStructurePiece.d.error("Error while parsing blockstate {} in jigsaw block @ {}", s, definedstructure_blockinfo1.a);
+                            DefinedStructurePiece.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", s, definedstructure_blockinfo1.a);
                         }
                     } catch (CommandSyntaxException commandsyntaxexception) {
-                        DefinedStructurePiece.d.error("Error while parsing blockstate {} in jigsaw block @ {}", s, definedstructure_blockinfo1.a);
+                        DefinedStructurePiece.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", s, definedstructure_blockinfo1.a);
                     }
 
                     generatoraccess.setTypeAndData(definedstructure_blockinfo1.a, iblockdata, 3);

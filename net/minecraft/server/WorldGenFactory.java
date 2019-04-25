@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldGenFactory {
 
-    private static final Logger p = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final StructureGenerator<?> a = a("Mineshaft", WorldGenerator.MINESHAFT);
     public static final StructureGenerator<?> b = a("Pillager_Outpost", WorldGenerator.PILLAGER_OUTPOST);
     public static final StructureGenerator<?> c = a("Fortress", WorldGenerator.NETHER_BRIDGE);
@@ -40,7 +40,7 @@ public class WorldGenFactory {
             StructureGenerator<?> structuregenerator = (StructureGenerator) IRegistry.STRUCTURE_FEATURE.get(new MinecraftKey(s.toLowerCase(Locale.ROOT)));
 
             if (structuregenerator == null) {
-                WorldGenFactory.p.error("Unknown feature id: {}", s);
+                WorldGenFactory.LOGGER.error("Unknown feature id: {}", s);
                 return null;
             } else {
                 int i = nbttagcompound.getInt("ChunkX");
@@ -58,21 +58,21 @@ public class WorldGenFactory {
                         WorldGenFeatureStructurePieceType worldgenfeaturestructurepiecetype = (WorldGenFeatureStructurePieceType) IRegistry.STRUCTURE_PIECE.get(new MinecraftKey(s1.toLowerCase(Locale.ROOT)));
 
                         if (worldgenfeaturestructurepiecetype == null) {
-                            WorldGenFactory.p.error("Unknown structure piece id: {}", s1);
+                            WorldGenFactory.LOGGER.error("Unknown structure piece id: {}", s1);
                         } else {
                             try {
                                 StructurePiece structurepiece = worldgenfeaturestructurepiecetype.load(definedstructuremanager, nbttagcompound1);
 
                                 structurestart.b.add(structurepiece);
                             } catch (Exception exception) {
-                                WorldGenFactory.p.error("Exception loading structure piece with id {}", s1, exception);
+                                WorldGenFactory.LOGGER.error("Exception loading structure piece with id {}", s1, exception);
                             }
                         }
                     }
 
                     return structurestart;
                 } catch (Exception exception1) {
-                    WorldGenFactory.p.error("Failed Start with id {}", s, exception1);
+                    WorldGenFactory.LOGGER.error("Failed Start with id {}", s, exception1);
                     return null;
                 }
             }

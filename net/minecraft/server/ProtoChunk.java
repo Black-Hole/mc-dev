@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ProtoChunk implements IChunkAccess {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final ChunkCoordIntPair b;
     private boolean c;
     private BiomeBase[] d;
@@ -73,7 +73,7 @@ public class ProtoChunk implements IChunkAccess {
             if (this.j.length == achunksection.length) {
                 System.arraycopy(achunksection, 0, this.j, 0, this.j.length);
             } else {
-                ProtoChunk.a.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.j.length);
+                ProtoChunk.LOGGER.warn("Could not set level chunk sections, array length is {} instead of {}", achunksection.length, this.j.length);
             }
         }
 

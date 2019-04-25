@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 public class Resource implements IResource {
 
-    private static final Logger b = LogManager.getLogger();
-    public static final Executor a = Executors.newSingleThreadExecutor((new ThreadFactoryBuilder()).setDaemon(true).setNameFormat("Resource IO {0}").setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(Resource.b)).build());
+    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Executor a = Executors.newSingleThreadExecutor((new ThreadFactoryBuilder()).setDaemon(true).setNameFormat("Resource IO {0}").setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(Resource.LOGGER)).build());
     private final String c;
     private final MinecraftKey d;
     private final InputStream e;

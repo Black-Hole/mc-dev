@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class CustomFunctionData implements IResourcePackListener {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final MinecraftKey d = new MinecraftKey("tick");
     private static final MinecraftKey e = new MinecraftKey("load");
     public static final int a = "functions/".length();
@@ -164,7 +164,7 @@ public class CustomFunctionData implements IResourcePackListener {
 
         CompletableFuture.allOf((CompletableFuture[]) list.toArray(new CompletableFuture[0])).join();
         if (!this.g.isEmpty()) {
-            CustomFunctionData.c.info("Loaded {} custom command functions", this.g.size());
+            CustomFunctionData.LOGGER.info("Loaded {} custom command functions", this.g.size());
         }
 
         this.j.a((Map) this.j.a(iresourcemanager, this.server.aT()).join());
@@ -175,7 +175,7 @@ public class CustomFunctionData implements IResourcePackListener {
     @Nullable
     private CustomFunction a(CustomFunction customfunction, @Nullable Throwable throwable, MinecraftKey minecraftkey) {
         if (throwable != null) {
-            CustomFunctionData.c.error("Couldn't load function at {}", minecraftkey, throwable);
+            CustomFunctionData.LOGGER.error("Couldn't load function at {}", minecraftkey, throwable);
             return null;
         } else {
             Map map = this.g;

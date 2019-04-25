@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class EntityPotion extends EntityProjectile {
 
     private static final DataWatcherObject<ItemStack> f = DataWatcher.a(EntityPotion.class, DataWatcherRegistry.g);
-    private static final Logger g = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final Predicate<EntityLiving> e = EntityPotion::a;
 
     public EntityPotion(EntityTypes<? extends EntityPotion> entitytypes, World world) {
@@ -35,7 +35,7 @@ public class EntityPotion extends EntityProjectile {
 
         if (itemstack.getItem() != Items.SPLASH_POTION && itemstack.getItem() != Items.LINGERING_POTION) {
             if (this.world != null) {
-                EntityPotion.g.error("ThrownPotion entity {} has no item?!", this.getId());
+                EntityPotion.LOGGER.error("ThrownPotion entity {} has no item?!", this.getId());
             }
 
             return new ItemStack(Items.SPLASH_POTION);

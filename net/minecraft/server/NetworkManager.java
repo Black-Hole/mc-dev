@@ -29,7 +29,7 @@ import org.apache.logging.log4j.MarkerManager;
 
 public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
-    private static final Logger g = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final Marker a = MarkerManager.getMarker("NETWORK");
     public static final Marker b = MarkerManager.getMarker("NETWORK_PACKETS", NetworkManager.a);
     public static final AttributeKey<EnumProtocol> c = AttributeKey.valueOf("protocol");
@@ -70,7 +70,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
         try {
             this.setProtocol(EnumProtocol.HANDSHAKING);
         } catch (Throwable throwable) {
-            NetworkManager.g.fatal(throwable);
+            NetworkManager.LOGGER.fatal(throwable);
         }
 
     }
@@ -78,7 +78,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void setProtocol(EnumProtocol enumprotocol) {
         this.channel.attr(NetworkManager.c).set(enumprotocol);
         this.channel.config().setAutoRead(true);
-        NetworkManager.g.debug("Enabled auto read");
+        NetworkManager.LOGGER.debug("Enabled auto read");
     }
 
     public void channelInactive(ChannelHandlerContext channelhandlercontext) throws Exception {
@@ -87,26 +87,26 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void exceptionCaught(ChannelHandlerContext channelhandlercontext, Throwable throwable) {
         if (throwable instanceof SkipEncodeException) {
-            NetworkManager.g.debug("Skipping packet due to errors", throwable.getCause());
+            NetworkManager.LOGGER.debug("Skipping packet due to errors", throwable.getCause());
         } else {
             boolean flag = !this.v;
 
             this.v = true;
             if (this.channel.isOpen()) {
                 if (throwable instanceof TimeoutException) {
-                    NetworkManager.g.debug("Timeout", throwable);
+                    NetworkManager.LOGGER.debug("Timeout", throwable);
                     this.close(new ChatMessage("disconnect.timeout", new Object[0]));
                 } else {
                     ChatMessage chatmessage = new ChatMessage("disconnect.genericReason", new Object[] { "Internal Exception: " + throwable});
 
                     if (flag) {
-                        NetworkManager.g.debug("Failed to sent packet", throwable);
+                        NetworkManager.LOGGER.debug("Failed to sent packet", throwable);
                         this.sendPacket(new PacketPlayOutKickDisconnect(chatmessage), (future) -> {
                             this.close(chatmessage);
                         });
                         this.stopReading();
                     } else {
-                        NetworkManager.g.debug("Double fault", throwable);
+                        NetworkManager.LOGGER.debug("Double fault", throwable);
                         this.close(chatmessage);
                     }
                 }
@@ -134,7 +134,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void setPacketListener(PacketListener packetlistener) {
         Validate.notNull(packetlistener, "packetListener", new Object[0]);
-        NetworkManager.g.debug("Set listener of {} to {}", this, packetlistener);
+        NetworkManager.LOGGER.debug("Set listener of {} to {}", this, packetlistener);
         this.packetListener = packetlistener;
     }
 
@@ -164,7 +164,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
 
         ++this.r;
         if (enumprotocol1 != enumprotocol) {
-            NetworkManager.g.debug("Disabled auto read");
+            NetworkManager.LOGGER.debug("Disabled auto read");
             this.channel.config().setAutoRead(false);
         }
 
@@ -309,7 +309,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet<?>> {
     public void handleDisconnection() {
         if (this.channel != null && !this.channel.isOpen()) {
             if (this.p) {
-                NetworkManager.g.warn("handleDisconnection() called twice");
+                NetworkManager.LOGGER.warn("handleDisconnection() called twice");
             } else {
                 this.p = true;
                 if (this.j() != null) {

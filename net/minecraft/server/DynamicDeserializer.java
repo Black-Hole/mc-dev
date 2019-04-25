@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 public interface DynamicDeserializer<T> {
 
-    Logger a = LogManager.getLogger();
+    Logger LOGGER = LogManager.getLogger();
 
     T deserialize(Dynamic<?> dynamic);
 
@@ -17,7 +17,7 @@ public interface DynamicDeserializer<T> {
         if (u0 != null) {
             object = u0.deserialize(dynamic);
         } else {
-            DynamicDeserializer.a.error("Unknown type {}, replacing with {}", dynamic.get(s).asString(""), v0);
+            DynamicDeserializer.LOGGER.error("Unknown type {}, replacing with {}", dynamic.get(s).asString(""), v0);
             object = v0;
         }
 

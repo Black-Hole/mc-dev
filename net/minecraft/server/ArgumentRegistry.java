@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ArgumentRegistry {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Class<?>, ArgumentRegistry.a<?>> b = Maps.newHashMap();
     private static final Map<MinecraftKey, ArgumentRegistry.a<?>> c = Maps.newHashMap();
 
@@ -90,7 +90,7 @@ public class ArgumentRegistry {
         ArgumentRegistry.a<T> argumentregistry_a = a(t0);
 
         if (argumentregistry_a == null) {
-            ArgumentRegistry.a.error("Could not serialize {} ({}) - will not be sent to client!", t0, t0.getClass());
+            ArgumentRegistry.LOGGER.error("Could not serialize {} ({}) - will not be sent to client!", t0, t0.getClass());
             packetdataserializer.a(new MinecraftKey(""));
         } else {
             packetdataserializer.a(argumentregistry_a.c);
@@ -104,7 +104,7 @@ public class ArgumentRegistry {
         ArgumentRegistry.a<?> argumentregistry_a = a(minecraftkey);
 
         if (argumentregistry_a == null) {
-            ArgumentRegistry.a.error("Could not deserialize {}", minecraftkey);
+            ArgumentRegistry.LOGGER.error("Could not deserialize {}", minecraftkey);
             return null;
         } else {
             return argumentregistry_a.b.b(packetdataserializer);
@@ -115,7 +115,7 @@ public class ArgumentRegistry {
         ArgumentRegistry.a<T> argumentregistry_a = a(t0);
 
         if (argumentregistry_a == null) {
-            ArgumentRegistry.a.error("Could not serialize argument {} ({})!", t0, t0.getClass());
+            ArgumentRegistry.LOGGER.error("Could not serialize argument {} ({})!", t0, t0.getClass());
             jsonobject.addProperty("type", "unknown");
         } else {
             jsonobject.addProperty("type", "argument");
@@ -140,7 +140,7 @@ public class ArgumentRegistry {
         } else if (commandnode instanceof ArgumentCommandNode) {
             a(jsonobject, ((ArgumentCommandNode) commandnode).getType());
         } else {
-            ArgumentRegistry.a.error("Could not serialize node {} ({})!", commandnode, commandnode.getClass());
+            ArgumentRegistry.LOGGER.error("Could not serialize node {} ({})!", commandnode, commandnode.getClass());
             jsonobject.addProperty("type", "unknown");
         }
 

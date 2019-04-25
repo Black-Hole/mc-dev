@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DataWatcher {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<Class<? extends Entity>, Integer> b = Maps.newHashMap();
     private final Entity c;
     private final Map<Integer, DataWatcher.Item<?>> d = Maps.newHashMap();
@@ -31,12 +31,12 @@ public class DataWatcher {
     }
 
     public static <T> DataWatcherObject<T> a(Class<? extends Entity> oclass, DataWatcherSerializer<T> datawatcherserializer) {
-        if (DataWatcher.a.isDebugEnabled()) {
+        if (DataWatcher.LOGGER.isDebugEnabled()) {
             try {
                 Class<?> oclass1 = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
                 if (!oclass1.equals(oclass)) {
-                    DataWatcher.a.debug("defineId called for: {} from {}", oclass, oclass1, new RuntimeException());
+                    DataWatcher.LOGGER.debug("defineId called for: {} from {}", oclass, oclass1, new RuntimeException());
                 }
             } catch (ClassNotFoundException classnotfoundexception) {
                 ;

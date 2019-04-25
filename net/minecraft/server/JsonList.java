@@ -32,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 
 public class JsonList<K, V extends JsonListEntry<K>> {
 
-    protected static final Logger a = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     protected final Gson b;
     private final File c;
     private final Map<String, V> d = Maps.newHashMap();
@@ -77,7 +77,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         try {
             this.save();
         } catch (IOException ioexception) {
-            JsonList.a.warn("Could not save the list after adding a user.", ioexception);
+            JsonList.LOGGER.warn("Could not save the list after adding a user.", ioexception);
         }
 
     }
@@ -94,7 +94,7 @@ public class JsonList<K, V extends JsonListEntry<K>> {
         try {
             this.save();
         } catch (IOException ioexception) {
-            JsonList.a.warn("Could not save the list after removing a user.", ioexception);
+            JsonList.LOGGER.warn("Could not save the list after removing a user.", ioexception);
         }
 
     }

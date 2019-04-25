@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ResourcePackFolder extends ResourcePackAbstract {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final boolean c = SystemUtils.g() == SystemUtils.OS.WINDOWS;
     private static final CharMatcher d = CharMatcher.is('\\');
 
@@ -129,7 +129,7 @@ public class ResourcePackFolder extends ResourcePackAbstract {
                     try {
                         list.add(new MinecraftKey(s, s1 + file1.getName()));
                     } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
-                        ResourcePackFolder.b.error(resourcekeyinvalidexception.getMessage());
+                        ResourcePackFolder.LOGGER.error(resourcekeyinvalidexception.getMessage());
                     }
                 }
             }

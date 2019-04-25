@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ResourceManagerFallback implements IResourceManager {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     protected final List<IResourcePack> a = Lists.newArrayList();
     private final EnumResourcePackType c;
 
@@ -58,7 +58,7 @@ public class ResourceManagerFallback implements IResourceManager {
     protected InputStream a(MinecraftKey minecraftkey, IResourcePack iresourcepack) throws IOException {
         InputStream inputstream = iresourcepack.a(this.c, minecraftkey);
 
-        return (InputStream) (ResourceManagerFallback.b.isDebugEnabled() ? new ResourceManagerFallback.a(inputstream, minecraftkey, iresourcepack.a()) : inputstream);
+        return (InputStream) (ResourceManagerFallback.LOGGER.isDebugEnabled() ? new ResourceManagerFallback.a(inputstream, minecraftkey, iresourcepack.a()) : inputstream);
     }
 
     private void e(MinecraftKey minecraftkey) throws IOException {
@@ -135,7 +135,7 @@ public class ResourceManagerFallback implements IResourceManager {
 
         protected void finalize() throws Throwable {
             if (!this.c) {
-                ResourceManagerFallback.b.warn(this.b);
+                ResourceManagerFallback.LOGGER.warn(this.b);
             }
 
             super.finalize();

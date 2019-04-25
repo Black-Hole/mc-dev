@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class ChatComponentNBT extends ChatBaseComponent implements ChatComponentContextual {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     protected final boolean b;
     protected final String c;
     @Nullable
@@ -69,7 +69,7 @@ public abstract class ChatComponentNBT extends ChatBaseComponent implements Chat
 
                     return Stream.of(ChatComponentUtils.filterForDisplay(commandlistenerwrapper, ichatbasecomponent, entity));
                 } catch (Exception exception) {
-                    ChatComponentNBT.e.warn("Failed to parse component: " + s, exception);
+                    ChatComponentNBT.LOGGER.warn("Failed to parse component: " + s, exception);
                     return Stream.of();
                 }
             }).reduce((ichatbasecomponent, ichatbasecomponent1) -> {

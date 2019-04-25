@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ChunkRegionLoader {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static ProtoChunk loadChunk(World world, DefinedStructureManager definedstructuremanager, VillagePlace villageplace, ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
         ChunkGenerator<?> chunkgenerator = world.getChunkProvider().getChunkGenerator();
@@ -27,7 +27,7 @@ public class ChunkRegionLoader {
         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(nbttagcompound1.getInt("xPos"), nbttagcompound1.getInt("zPos"));
 
         if (!Objects.equals(chunkcoordintpair, chunkcoordintpair1)) {
-            ChunkRegionLoader.a.error("Chunk file at {} is in the wrong location; relocating. (Expected {}, got {})", chunkcoordintpair, chunkcoordintpair, chunkcoordintpair1);
+            ChunkRegionLoader.LOGGER.error("Chunk file at {} is in the wrong location; relocating. (Expected {}, got {})", chunkcoordintpair, chunkcoordintpair, chunkcoordintpair1);
         }
 
         BiomeBase[] abiomebase = new BiomeBase[256];

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public interface IBlockDataHolder<C> {
 
-    Logger b = LogManager.getLogger();
+    Logger LOGGER = LogManager.getLogger();
 
     <T extends Comparable<T>> T get(IBlockState<T> iblockstate);
 
@@ -25,7 +25,7 @@ public interface IBlockDataHolder<C> {
         if (optional.isPresent()) {
             return (IBlockDataHolder) s0.set(iblockstate, (Comparable) optional.get());
         } else {
-            IBlockDataHolder.b.warn("Unable to read property: {} with value: {} for input: {}", s, s2, s1);
+            IBlockDataHolder.LOGGER.warn("Unable to read property: {} with value: {} for input: {}", s, s2, s1);
             return s0;
         }
     }

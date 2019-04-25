@@ -607,12 +607,12 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     private boolean canSleepForTick() {
-        return this.bg() || SystemUtils.getMonotonicMillis() < (this.ac ? this.ab : this.nextTick);
+        return this.isEntered() || SystemUtils.getMonotonicMillis() < (this.ac ? this.ab : this.nextTick);
     }
 
     protected void sleepForTick() {
-        this.bf();
-        this.c(() -> {
+        this.executeAll();
+        this.awaitTasks(() -> {
             return !this.canSleepForTick();
         });
     }
@@ -622,12 +622,12 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         return new TickTask(this.ticks, runnable);
     }
 
-    protected boolean c(TickTask ticktask) {
+    protected boolean canExecute(TickTask ticktask) {
         return ticktask.a() + 3 < this.ticks || this.canSleepForTick();
     }
 
     @Override
-    public boolean p() {
+    public boolean executeNext() {
         boolean flag = this.aW();
 
         this.ac = flag;
@@ -635,7 +635,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     private boolean aW() {
-        if (super.p()) {
+        if (super.executeNext()) {
             return true;
         } else {
             if (this.canSleepForTick()) {
@@ -1306,7 +1306,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     }
 
     @Override
-    public Thread ax() {
+    public Thread getThread() {
         return this.serverThread;
     }
 
@@ -1368,7 +1368,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         });
         CompletableFuture<Unit> completablefuture = this.ae.a(this.executorService, this, list1, CompletableFuture.completedFuture(Unit.INSTANCE));
 
-        this.c(completablefuture::isDone);
+        this.awaitTasks(completablefuture::isDone);
         worlddata.P().clear();
         worlddata.O().clear();
         this.resourcePackRepository.d().forEach((resourcepackloader1) -> {

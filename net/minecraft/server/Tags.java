@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Tags<T> {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson b = new Gson();
     private static final int c = ".json".length();
     private final Map<MinecraftKey, Tag<T>> d = Maps.newHashMap();
@@ -85,7 +85,7 @@ public class Tags<T> {
                             JsonObject jsonobject = (JsonObject) ChatDeserializer.a(Tags.b, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
 
                             if (jsonobject == null) {
-                                Tags.a.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.h, minecraftkey1, minecraftkey, iresource.d());
+                                Tags.LOGGER.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.h, minecraftkey1, minecraftkey, iresource.d());
                             } else {
                                 Tag.a<T> tag_a = (Tag.a) map.getOrDefault(minecraftkey1, Tag.a.a());
 
@@ -93,13 +93,13 @@ public class Tags<T> {
                                 map.put(minecraftkey1, tag_a);
                             }
                         } catch (RuntimeException | IOException ioexception) {
-                            Tags.a.error("Couldn't read {} tag list {} from {} in data pack {}", this.h, minecraftkey1, minecraftkey, iresource.d(), ioexception);
+                            Tags.LOGGER.error("Couldn't read {} tag list {} from {} in data pack {}", this.h, minecraftkey1, minecraftkey, iresource.d(), ioexception);
                         } finally {
                             IOUtils.closeQuietly(iresource);
                         }
                     }
                 } catch (IOException ioexception1) {
-                    Tags.a.error("Couldn't read {} tag list {} from {}", this.h, minecraftkey1, minecraftkey, ioexception1);
+                    Tags.LOGGER.error("Couldn't read {} tag list {} from {}", this.h, minecraftkey1, minecraftkey, ioexception1);
                 }
             }
 
@@ -132,7 +132,7 @@ public class Tags<T> {
 
                 while (iterator.hasNext()) {
                     entry = (Entry) iterator.next();
-                    Tags.a.error("Couldn't load {} tag {} as it either references another tag that doesn't exist, or ultimately references itself", this.h, entry.getKey());
+                    Tags.LOGGER.error("Couldn't load {} tag {} as it either references another tag that doesn't exist, or ultimately references itself", this.h, entry.getKey());
                 }
             }
 

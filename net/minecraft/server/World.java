@@ -16,7 +16,7 @@ import org.apache.logging.log4j.util.Supplier;
 
 public abstract class World implements IIBlockAccess, GeneratorAccess, AutoCloseable {
 
-    protected static final Logger e = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     private static final EnumDirection[] a = EnumDirection.values();
     public final List<TileEntity> tileEntityList = Lists.newArrayList();
     public final List<TileEntity> tileEntityListTick = Lists.newArrayList();
@@ -366,7 +366,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     public boolean a(TileEntity tileentity) {
         if (this.tickingTileEntities) {
-            World.e.error("Adding block entity while ticking: {} @ {}", new Supplier[] { () -> {
+            World.LOGGER.error("Adding block entity while ticking: {} @ {}", new Supplier[] { () -> {
                         return IRegistry.BLOCK_ENTITY_TYPE.getKey(tileentity.q());
                     }, tileentity::getPosition});
         }

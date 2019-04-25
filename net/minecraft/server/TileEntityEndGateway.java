@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 public class TileEntityEndGateway extends TileEntityEnderPortal implements ITickable {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public long age;
     private int c;
     public BlockPosition exitPortal;
@@ -129,7 +129,7 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
     private BlockPosition s() {
         BlockPosition blockposition = a(this.world, this.exitPortal, 5, false);
 
-        TileEntityEndGateway.a.debug("Best exit position for portal at {} is {}", this.exitPortal, blockposition);
+        TileEntityEndGateway.LOGGER.debug("Best exit position for portal at {} is {}", this.exitPortal, blockposition);
         return blockposition.up();
     }
 
@@ -140,27 +140,27 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         int i;
 
         for (i = 16; a(this.world, vec3d1).b() > 0 && i-- > 0; vec3d1 = vec3d1.e(vec3d.a(-16.0D))) {
-            TileEntityEndGateway.a.debug("Skipping backwards past nonempty chunk at {}", vec3d1);
+            TileEntityEndGateway.LOGGER.debug("Skipping backwards past nonempty chunk at {}", vec3d1);
         }
 
         for (i = 16; a(this.world, vec3d1).b() == 0 && i-- > 0; vec3d1 = vec3d1.e(vec3d.a(16.0D))) {
-            TileEntityEndGateway.a.debug("Skipping forward past empty chunk at {}", vec3d1);
+            TileEntityEndGateway.LOGGER.debug("Skipping forward past empty chunk at {}", vec3d1);
         }
 
-        TileEntityEndGateway.a.debug("Found chunk at {}", vec3d1);
+        TileEntityEndGateway.LOGGER.debug("Found chunk at {}", vec3d1);
         Chunk chunk = a(this.world, vec3d1);
 
         this.exitPortal = a(chunk);
         if (this.exitPortal == null) {
             this.exitPortal = new BlockPosition(vec3d1.x + 0.5D, 75.0D, vec3d1.z + 0.5D);
-            TileEntityEndGateway.a.debug("Failed to find suitable block, settling on {}", this.exitPortal);
+            TileEntityEndGateway.LOGGER.debug("Failed to find suitable block, settling on {}", this.exitPortal);
             WorldGenerator.END_ISLAND.generate(this.world, this.world.getChunkProvider().getChunkGenerator(), new Random(this.exitPortal.asLong()), this.exitPortal, WorldGenFeatureConfiguration.e);
         } else {
-            TileEntityEndGateway.a.debug("Found block at {}", this.exitPortal);
+            TileEntityEndGateway.LOGGER.debug("Found block at {}", this.exitPortal);
         }
 
         this.exitPortal = a(this.world, this.exitPortal, 16, true);
-        TileEntityEndGateway.a.debug("Creating portal at {}", this.exitPortal);
+        TileEntityEndGateway.LOGGER.debug("Creating portal at {}", this.exitPortal);
         this.exitPortal = this.exitPortal.up(10);
         this.b(this.exitPortal);
         this.update();

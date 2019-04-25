@@ -125,10 +125,6 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             boolean flag = this.levels > 0 && !this.c.isEmpty();
 
             this.c = this.g;
-            if (!this.c.isEmpty() && this.world.getTime() % 80L == 0L) {
-                this.a(i, j, k);
-            }
-
             if (!this.world.isClientSide) {
                 if (i1 < this.levels) {
                     Iterator iterator = this.world.a(EntityPlayer.class, (new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k)).grow(10.0D, 5.0D, 10.0D)).iterator();
@@ -148,9 +144,15 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             }
         }
 
-        if (this.world.getTime() % 80L == 0L && this.levels > 0 && !this.c.isEmpty()) {
-            this.applyEffects();
-            this.a(SoundEffects.BLOCK_BEACON_AMBIENT);
+        if (this.world.getTime() % 80L == 0L) {
+            if (!this.c.isEmpty()) {
+                this.a(i, j, k);
+            }
+
+            if (this.levels > 0 && !this.c.isEmpty()) {
+                this.applyEffects();
+                this.a(SoundEffects.BLOCK_BEACON_AMBIENT);
+            }
         }
 
     }

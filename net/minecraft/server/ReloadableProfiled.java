@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
 
-    private static final Logger d = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Stopwatch e = Stopwatch.createUnstarted();
 
     public ReloadableProfiled(IResourceManager iresourcemanager, List<IReloadListener> list, Executor executor, Executor executor1, CompletableFuture<Unit> completablefuture) {
@@ -53,7 +53,7 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
         this.e.stop();
         int i = 0;
 
-        ReloadableProfiled.d.info("Resource reload finished after " + this.e.elapsed(TimeUnit.MILLISECONDS) + " ms");
+        ReloadableProfiled.LOGGER.info("Resource reload finished after " + this.e.elapsed(TimeUnit.MILLISECONDS) + " ms");
 
         int j;
 
@@ -67,23 +67,23 @@ public class ReloadableProfiled extends Reloadable<ReloadableProfiled.a> {
             int l = k + j;
             String s = reloadableprofiled_a.a;
 
-            ReloadableProfiled.d.info(s + " took approximately " + l + " ms (" + k + " ms preparing, " + j + " ms applying)");
+            ReloadableProfiled.LOGGER.info(s + " took approximately " + l + " ms (" + k + " ms preparing, " + j + " ms applying)");
             String s1 = methodprofilerresults.e();
 
             if (s1.length() > 0) {
-                ReloadableProfiled.d.debug(s + " preparations:\n" + s1);
+                ReloadableProfiled.LOGGER.debug(s + " preparations:\n" + s1);
             }
 
             String s2 = methodprofilerresults1.e();
 
             if (s2.length() > 0) {
-                ReloadableProfiled.d.debug(s + " reload:\n" + s2);
+                ReloadableProfiled.LOGGER.debug(s + " reload:\n" + s2);
             }
 
-            ReloadableProfiled.d.info("----------");
+            ReloadableProfiled.LOGGER.info("----------");
         }
 
-        ReloadableProfiled.d.info("Total blocking time: " + i + " ms");
+        ReloadableProfiled.LOGGER.info("Total blocking time: " + i + " ms");
     }
 
     public static class a {

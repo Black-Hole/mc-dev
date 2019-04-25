@@ -158,8 +158,8 @@ public enum EnumDirection implements INamable {
     }
 
     @Nullable
-    public static EnumDirection a(BlockPosition blockposition) {
-        return (EnumDirection) EnumDirection.r.get(blockposition.asLong());
+    public static EnumDirection a(int i, int j, int k) {
+        return (EnumDirection) EnumDirection.r.get(BlockPosition.a(i, j, k));
     }
 
     public static EnumDirection fromAngle(double d0) {

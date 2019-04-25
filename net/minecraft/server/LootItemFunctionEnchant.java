@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionEnchant extends LootItemFunctionConditional {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final List<Enchantment> c;
 
     private LootItemFunctionEnchant(LootItemCondition[] alootitemcondition, Collection<Enchantment> collection) {
@@ -44,7 +44,7 @@ public class LootItemFunctionEnchant extends LootItemFunctionConditional {
             }
 
             if (list.isEmpty()) {
-                LootItemFunctionEnchant.a.warn("Couldn't find a compatible enchantment for {}", itemstack);
+                LootItemFunctionEnchant.LOGGER.warn("Couldn't find a compatible enchantment for {}", itemstack);
                 return itemstack;
             }
 

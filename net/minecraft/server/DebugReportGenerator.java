@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportGenerator {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Collection<java.nio.file.Path> b;
     private final java.nio.file.Path c;
     private final List<DebugReportProvider> d = Lists.newArrayList();
@@ -41,15 +41,15 @@ public class DebugReportGenerator {
         while (iterator.hasNext()) {
             DebugReportProvider debugreportprovider = (DebugReportProvider) iterator.next();
 
-            DebugReportGenerator.a.info("Starting provider: {}", debugreportprovider.a());
+            DebugReportGenerator.LOGGER.info("Starting provider: {}", debugreportprovider.a());
             stopwatch1.start();
             debugreportprovider.a(hashcache);
             stopwatch1.stop();
-            DebugReportGenerator.a.info("{} finished after {} ms", debugreportprovider.a(), stopwatch1.elapsed(TimeUnit.MILLISECONDS));
+            DebugReportGenerator.LOGGER.info("{} finished after {} ms", debugreportprovider.a(), stopwatch1.elapsed(TimeUnit.MILLISECONDS));
             stopwatch1.reset();
         }
 
-        DebugReportGenerator.a.info("All providers took: {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        DebugReportGenerator.LOGGER.info("All providers took: {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         hashcache.a();
     }
 

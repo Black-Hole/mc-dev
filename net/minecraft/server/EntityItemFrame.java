@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityItemFrame extends EntityHanging {
 
-    private static final Logger e = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.g);
     private static final DataWatcherObject<Integer> g = DataWatcher.a(EntityItemFrame.class, DataWatcherRegistry.b);
     private float ar = 1.0F;
@@ -269,7 +269,7 @@ public class EntityItemFrame extends EntityHanging {
             ItemStack itemstack = ItemStack.a(nbttagcompound1);
 
             if (itemstack.isEmpty()) {
-                EntityItemFrame.e.warn("Unable to load item from: {}", nbttagcompound1);
+                EntityItemFrame.LOGGER.warn("Unable to load item from: {}", nbttagcompound1);
             }
 
             ItemStack itemstack1 = this.getItem();

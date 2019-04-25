@@ -23,10 +23,10 @@ import org.apache.logging.log4j.Logger;
 
 public class CraftingManager implements IResourcePackListener {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final int a = "recipes/".length();
     public static final int b = ".json".length();
-    public Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> recipes = (Map) SystemUtils.a((Object) Maps.newHashMap(), CraftingManager::a);
+    public Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> recipes = (Map) SystemUtils.a((Object) Maps.newHashMap(), CraftingManager::initializeRecipeMap);
     private boolean e;
 
     public CraftingManager() {}
@@ -36,7 +36,7 @@ public class CraftingManager implements IResourcePackListener {
         Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
         this.e = false;
-        a(this.recipes);
+        initializeRecipeMap(this.recipes);
         Iterator iterator = iresourcemanager.a("recipes", (s) -> {
             return s.endsWith(".json");
         }).iterator();
@@ -54,7 +54,7 @@ public class CraftingManager implements IResourcePackListener {
                     JsonObject jsonobject = (JsonObject) ChatDeserializer.a(gson, IOUtils.toString(iresource.b(), StandardCharsets.UTF_8), JsonObject.class);
 
                     if (jsonobject == null) {
-                        CraftingManager.c.error("Couldn't load recipe {} as it's null or empty", minecraftkey1);
+                        CraftingManager.LOGGER.error("Couldn't load recipe {} as it's null or empty", minecraftkey1);
                     } else {
                         this.addRecipe(a(minecraftkey1, jsonobject));
                     }
@@ -76,15 +76,15 @@ public class CraftingManager implements IResourcePackListener {
 
                 }
             } catch (IllegalArgumentException | JsonParseException jsonparseexception) {
-                CraftingManager.c.error("Parsing error loading recipe {}", minecraftkey1, jsonparseexception);
+                CraftingManager.LOGGER.error("Parsing error loading recipe {}", minecraftkey1, jsonparseexception);
                 this.e = true;
             } catch (IOException ioexception) {
-                CraftingManager.c.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
+                CraftingManager.LOGGER.error("Couldn't read custom advancement {} from {}", minecraftkey1, minecraftkey, ioexception);
                 this.e = true;
             }
         }
 
-        CraftingManager.c.info("Loaded {} recipes", this.recipes.size());
+        CraftingManager.LOGGER.info("Loaded {} recipes", this.recipes.size());
     }
 
     public void addRecipe(IRecipe<?> irecipe) {
@@ -157,7 +157,7 @@ public class CraftingManager implements IResourcePackListener {
         })).a(minecraftkey, jsonobject);
     }
 
-    private static void a(Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> map) {
+    public static void initializeRecipeMap(Map<Recipes<?>, Map<MinecraftKey, IRecipe<?>>> map) {
         map.clear();
         Iterator iterator = IRegistry.RECIPE_TYPE.iterator();
 

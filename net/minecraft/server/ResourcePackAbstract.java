@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class ResourcePackAbstract implements IResourcePack {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     protected final File a;
 
     public ResourcePackAbstract(File file) {
@@ -45,7 +45,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
     protected abstract boolean c(String s);
 
     protected void d(String s) {
-        ResourcePackAbstract.b.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", s, this.a);
+        ResourcePackAbstract.LOGGER.warn("ResourcePack: ignored non-lowercase namespace: {} in {}", s, this.a);
     }
 
     @Nullable
@@ -107,7 +107,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
 
             }
         } catch (JsonParseException | IOException ioexception) {
-            ResourcePackAbstract.b.error("Couldn't load {} metadata", resourcepackmetaparser.a(), ioexception);
+            ResourcePackAbstract.LOGGER.error("Couldn't load {} metadata", resourcepackmetaparser.a(), ioexception);
             return null;
         }
 
@@ -117,7 +117,7 @@ public abstract class ResourcePackAbstract implements IResourcePack {
             try {
                 return resourcepackmetaparser.a(ChatDeserializer.t(jsonobject, resourcepackmetaparser.a()));
             } catch (JsonParseException jsonparseexception) {
-                ResourcePackAbstract.b.error("Couldn't load {} metadata", resourcepackmetaparser.a(), jsonparseexception);
+                ResourcePackAbstract.LOGGER.error("Couldn't load {} metadata", resourcepackmetaparser.a(), jsonparseexception);
                 return null;
             }
         }

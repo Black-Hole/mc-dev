@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityTypes<T extends Entity> {
 
-    private static final Logger aY = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final EntityTypes<EntityAreaEffectCloud> AREA_EFFECT_CLOUD = a("area_effect_cloud", EntityTypes.a.a(EntityAreaEffectCloud::new, EnumCreatureType.MISC).c().a(6.0F, 0.5F));
     public static final EntityTypes<EntityArmorStand> ARMOR_STAND = a("armor_stand", EntityTypes.a.a(EntityArmorStand::new, EnumCreatureType.MISC).a(0.5F, 1.975F));
     public static final EntityTypes<EntityTippedArrow> ARROW = a("arrow", EntityTypes.a.a(EntityTippedArrow::new, EnumCreatureType.MISC).a(0.5F, 0.5F));
@@ -291,7 +291,7 @@ public class EntityTypes<T extends Entity> {
         }), (entity) -> {
             entity.f(nbttagcompound);
         }, () -> {
-            EntityTypes.aY.warn("Skipping Entity with id {}", nbttagcompound.getString("id"));
+            EntityTypes.LOGGER.warn("Skipping Entity with id {}", nbttagcompound.getString("id"));
         });
     }
 
@@ -332,7 +332,7 @@ public class EntityTypes<T extends Entity> {
         try {
             return a(nbttagcompound, world);
         } catch (RuntimeException runtimeexception) {
-            EntityTypes.aY.warn("Exception loading entity: ", runtimeexception);
+            EntityTypes.LOGGER.warn("Exception loading entity: ", runtimeexception);
             return Optional.empty();
         }
     }
@@ -413,7 +413,7 @@ public class EntityTypes<T extends Entity> {
                         throw illegalstateexception;
                     }
 
-                    EntityTypes.aY.warn("No data fixer registered for entity {}", s);
+                    EntityTypes.LOGGER.warn("No data fixer registered for entity {}", s);
                 }
             }
 

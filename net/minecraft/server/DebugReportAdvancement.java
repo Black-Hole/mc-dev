@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DebugReportAdvancement implements DebugReportProvider {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson c = (new GsonBuilder()).setPrettyPrinting().create();
     private final DebugReportGenerator d;
     private final List<Consumer<Consumer<Advancement>>> e = ImmutableList.of(new DebugReportAdvancementTheEnd(), new DebugReportAdvancementHusbandry(), new DebugReportAdvancementAdventure(), new DebugReportAdvancementNether(), new DebugReportAdvancementStory());
@@ -36,7 +36,7 @@ public class DebugReportAdvancement implements DebugReportProvider {
                 try {
                     DebugReportProvider.a(DebugReportAdvancement.c, hashcache, advancement.a().b(), java_nio_file_path1);
                 } catch (IOException ioexception) {
-                    DebugReportAdvancement.b.error("Couldn't save advancement {}", java_nio_file_path1, ioexception);
+                    DebugReportAdvancement.LOGGER.error("Couldn't save advancement {}", java_nio_file_path1, ioexception);
                 }
 
             }

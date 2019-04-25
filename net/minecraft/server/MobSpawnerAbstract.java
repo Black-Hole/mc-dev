@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class MobSpawnerAbstract {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public int spawnDelay = 20;
     private final List<MobSpawnerData> mobs = Lists.newArrayList();
     private MobSpawnerData spawnData = new MobSpawnerData();
@@ -35,7 +35,7 @@ public abstract class MobSpawnerAbstract {
         } catch (ResourceKeyInvalidException resourcekeyinvalidexception) {
             BlockPosition blockposition = this.b();
 
-            MobSpawnerAbstract.a.warn("Invalid entity id '{}' at spawner {}:[{},{},{}]", s, this.a().worldProvider.getDimensionManager(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            MobSpawnerAbstract.LOGGER.warn("Invalid entity id '{}' at spawner {}:[{},{},{}]", s, this.a().worldProvider.getDimensionManager(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
             return null;
         }
     }

@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DefinedStructureManager implements IResourcePackListener {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Map<MinecraftKey, DefinedStructure> b = Maps.newHashMap();
     private final DataFixer c;
     private final MinecraftServer d;
@@ -91,7 +91,7 @@ public class DefinedStructureManager implements IResourcePackListener {
         } catch (FileNotFoundException filenotfoundexception) {
             return null;
         } catch (Throwable throwable3) {
-            DefinedStructureManager.a.error("Couldn't load structure {}: {}", minecraftkey, throwable3.toString());
+            DefinedStructureManager.LOGGER.error("Couldn't load structure {}: {}", minecraftkey, throwable3.toString());
             return null;
         }
     }
@@ -133,7 +133,7 @@ public class DefinedStructureManager implements IResourcePackListener {
             } catch (FileNotFoundException filenotfoundexception) {
                 return null;
             } catch (IOException ioexception) {
-                DefinedStructureManager.a.error("Couldn't load structure from {}", java_nio_file_path, ioexception);
+                DefinedStructureManager.LOGGER.error("Couldn't load structure from {}", java_nio_file_path, ioexception);
                 return null;
             }
         }
@@ -167,7 +167,7 @@ public class DefinedStructureManager implements IResourcePackListener {
                 try {
                     Files.createDirectories(Files.exists(java_nio_file_path1, new LinkOption[0]) ? java_nio_file_path1.toRealPath() : java_nio_file_path1);
                 } catch (IOException ioexception) {
-                    DefinedStructureManager.a.error("Failed to create parent directory: {}", java_nio_file_path1);
+                    DefinedStructureManager.LOGGER.error("Failed to create parent directory: {}", java_nio_file_path1);
                     return false;
                 }
 

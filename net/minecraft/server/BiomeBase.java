@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class BiomeBase {
 
-    public static final Logger a = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public static final Set<BiomeBase> b = Sets.newHashSet();
     public static final RegistryBlockID<BiomeBase> c = new RegistryBlockID<>();
     protected static final NoiseGenerator3 d = new NoiseGenerator3(new Random(1234L), 1);

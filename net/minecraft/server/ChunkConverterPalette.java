@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ChunkConverterPalette extends DataFix {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final BitSet b = new BitSet(256);
     private static final BitSet c = new BitSet(256);
     private static final Dynamic<?> d = DataConverterFlattenData.b("{Name:'minecraft:pumpkin'}");
@@ -462,7 +462,7 @@ public class ChunkConverterPalette extends DataFix {
                     int l = j << 8 | k << 4 | i;
 
                     if (this.f.put(l, dynamic1) != null) {
-                        ChunkConverterPalette.a.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.d, this.e, i, j, k);
+                        ChunkConverterPalette.LOGGER.warn("In chunk: {}x{} found a duplicate block entity at position: [{}, {}, {}]", this.d, this.e, i, j, k);
                     }
 
                 });

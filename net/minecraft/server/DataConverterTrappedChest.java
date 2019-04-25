@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DataConverterTrappedChest extends DataFix {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public DataConverterTrappedChest(Schema schema, boolean flag) {
         super(schema, flag);
@@ -91,7 +91,7 @@ public class DataConverterTrappedChest extends DataFix {
                                     return intopenhashset.contains(DataConverterLeaves.a(i1, j1, k1)) ? typed4.update(taggedchoicetype.finder(), (pair) -> {
                                         return pair.mapFirst((s) -> {
                                             if (!Objects.equals(s, "minecraft:chest")) {
-                                                DataConverterTrappedChest.a.warn("Block Entity was expected to be a chest");
+                                                DataConverterTrappedChest.LOGGER.warn("Block Entity was expected to be a chest");
                                             }
 
                                             return "minecraft:trapped_chest";

@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Block implements IMaterial {
 
-    protected static final Logger l = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     public static final RegistryBlockID<IBlockData> REGISTRY_ID = new RegistryBlockID<>();
     private static final EnumDirection[] a = new EnumDirection[] { EnumDirection.WEST, EnumDirection.EAST, EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.DOWN, EnumDirection.UP};
     private static final VoxelShape b = VoxelShapes.a(VoxelShapes.b(), a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);

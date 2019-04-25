@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootItemFunctionExplorationMap extends LootItemFunctionConditional {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final MapIcon.Type a = MapIcon.Type.MANSION;
     private final String d;
     private final MapIcon.Type e;
@@ -103,7 +103,7 @@ public class LootItemFunctionExplorationMap extends LootItemFunctionConditional 
             try {
                 mapicon_type = MapIcon.Type.valueOf(s1.toUpperCase(Locale.ROOT));
             } catch (IllegalArgumentException illegalargumentexception) {
-                LootItemFunctionExplorationMap.c.error("Error while parsing loot table decoration entry. Found {}. Defaulting to " + LootItemFunctionExplorationMap.a, s1);
+                LootItemFunctionExplorationMap.LOGGER.error("Error while parsing loot table decoration entry. Found {}. Defaulting to " + LootItemFunctionExplorationMap.a, s1);
             }
 
             byte b0 = ChatDeserializer.a(jsonobject, "zoom", (byte) 2);

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldUpgraderIterator {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     static boolean a(java.nio.file.Path java_nio_file_path, DataFixer datafixer, String s, IProgressUpdate iprogressupdate) {
         iprogressupdate.a(0);
@@ -27,7 +27,7 @@ public class WorldUpgraderIterator {
         File file1 = DimensionManager.NETHER.a(file);
         File file2 = DimensionManager.THE_END.a(file);
 
-        WorldUpgraderIterator.a.info("Scanning folders...");
+        WorldUpgraderIterator.LOGGER.info("Scanning folders...");
         a(file, (Collection) list);
         if (file1.exists()) {
             a(file1, (Collection) list1);
@@ -39,7 +39,7 @@ public class WorldUpgraderIterator {
 
         int i = list.size() + list1.size() + list2.size();
 
-        WorldUpgraderIterator.a.info("Total conversion count is {}", i);
+        WorldUpgraderIterator.LOGGER.info("Total conversion count is {}", i);
         WorldData worlddata = Convertable.a(java_nio_file_path, datafixer, s);
         BiomeLayout<BiomeLayoutFixedConfiguration, WorldChunkManagerHell> biomelayout = BiomeLayout.b;
         BiomeLayout<BiomeLayoutOverworldConfiguration, WorldChunkManagerOverworld> biomelayout1 = BiomeLayout.c;
@@ -70,17 +70,17 @@ public class WorldUpgraderIterator {
         File file = new File(java_nio_file_path.toFile(), s);
 
         if (!file.exists()) {
-            WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+            WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
         } else {
             File file1 = new File(file, "level.dat");
 
             if (!file1.exists()) {
-                WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+                WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
             } else {
                 File file2 = new File(file, "level.dat_mcr");
 
                 if (!file1.renameTo(file2)) {
-                    WorldUpgraderIterator.a.warn("Unable to create level.dat_mcr backup");
+                    WorldUpgraderIterator.LOGGER.warn("Unable to create level.dat_mcr backup");
                 }
 
             }
@@ -127,7 +127,7 @@ public class WorldUpgraderIterator {
 
                                 try {
                                     if (datainputstream == null) {
-                                        WorldUpgraderIterator.a.warn("Failed to fetch input stream");
+                                        WorldUpgraderIterator.LOGGER.warn("Failed to fetch input stream");
                                         continue;
                                     }
 

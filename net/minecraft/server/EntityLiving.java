@@ -2588,13 +2588,13 @@ public abstract class EntityLiving extends Entity {
 
             if (iblockdata.getBlock() instanceof BlockBed) {
                 this.world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBed.OCCUPIED, false), 3);
-                BlockPosition blockposition1 = BlockBed.a(this.world, blockposition, 0);
+                Vec3D vec3d = (Vec3D) BlockBed.a(this.getEntityType(), (IWorldReader) this.world, blockposition, 0).orElseGet(() -> {
+                    BlockPosition blockposition1 = blockposition.up();
 
-                if (blockposition1 == null) {
-                    blockposition1 = blockposition.up();
-                }
+                    return new Vec3D((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.1D, (double) blockposition1.getZ() + 0.5D);
+                });
 
-                this.setPosition((double) ((float) blockposition1.getX() + 0.5F), (double) ((float) blockposition1.getY() + 0.1F), (double) ((float) blockposition1.getZ() + 0.5F));
+                this.setPosition(vec3d.x, vec3d.y, vec3d.z);
             }
 
         });

@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ServerConnection {
 
-    private static final Logger d = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final LazyInitVar<NioEventLoopGroup> a = new LazyInitVar<>(() -> {
         return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
     });
@@ -55,11 +55,11 @@ public class ServerConnection {
             if (Epoll.isAvailable() && this.e.W()) {
                 oclass = EpollServerSocketChannel.class;
                 lazyinitvar = ServerConnection.b;
-                ServerConnection.d.info("Using epoll channel type");
+                ServerConnection.LOGGER.info("Using epoll channel type");
             } else {
                 oclass = NioServerSocketChannel.class;
                 lazyinitvar = ServerConnection.a;
-                ServerConnection.d.info("Using default channel type");
+                ServerConnection.LOGGER.info("Using default channel type");
             }
 
             this.f.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer<Channel>() {
@@ -91,7 +91,7 @@ public class ServerConnection {
             try {
                 channelfuture.channel().close().sync();
             } catch (InterruptedException interruptedexception) {
-                ServerConnection.d.error("Interrupted whilst closing channel");
+                ServerConnection.LOGGER.error("Interrupted whilst closing channel");
             }
         }
 
@@ -119,7 +119,7 @@ public class ServerConnection {
                                 throw new ReportedException(crashreport);
                             }
 
-                            ServerConnection.d.warn("Failed to handle packet for {}", networkmanager.getSocketAddress(), exception);
+                            ServerConnection.LOGGER.warn("Failed to handle packet for {}", networkmanager.getSocketAddress(), exception);
                             ChatComponentText chatcomponenttext = new ChatComponentText("Internal server error");
 
                             networkmanager.sendPacket(new PacketPlayOutKickDisconnect(chatcomponenttext), (future) -> {

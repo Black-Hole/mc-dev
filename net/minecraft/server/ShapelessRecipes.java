@@ -49,7 +49,7 @@ public class ShapelessRecipes implements RecipeCrafting {
 
             if (!itemstack.isEmpty()) {
                 ++i;
-                autorecipestackmanager.b(itemstack);
+                autorecipestackmanager.a(itemstack, 1);
             }
         }
 

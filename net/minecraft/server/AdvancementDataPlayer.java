@@ -34,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 
 public class AdvancementDataPlayer {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Gson b = (new GsonBuilder()).registerTypeAdapter(AdvancementProgress.class, new AdvancementProgress.a()).registerTypeAdapter(MinecraftKey.class, new MinecraftKey.a()).setPrettyPrinting().create();
     private static final TypeToken<Map<MinecraftKey, AdvancementProgress>> c = new TypeToken<Map<MinecraftKey, AdvancementProgress>>() {
     };
@@ -160,7 +160,7 @@ public class AdvancementDataPlayer {
                         Advancement advancement = this.d.getAdvancementData().a((MinecraftKey) entry.getKey());
 
                         if (advancement == null) {
-                            AdvancementDataPlayer.a.warn("Ignored advancement '{}' in progress file {} - it doesn't exist anymore?", entry.getKey(), this.e);
+                            AdvancementDataPlayer.LOGGER.warn("Ignored advancement '{}' in progress file {} - it doesn't exist anymore?", entry.getKey(), this.e);
                         } else {
                             this.a(advancement, (AdvancementProgress) entry.getValue());
                         }
@@ -183,9 +183,9 @@ public class AdvancementDataPlayer {
 
                 }
             } catch (JsonParseException jsonparseexception) {
-                AdvancementDataPlayer.a.error("Couldn't parse player advancements in {}", this.e, jsonparseexception);
+                AdvancementDataPlayer.LOGGER.error("Couldn't parse player advancements in {}", this.e, jsonparseexception);
             } catch (IOException ioexception) {
-                AdvancementDataPlayer.a.error("Couldn't access player advancements in {}", this.e, ioexception);
+                AdvancementDataPlayer.LOGGER.error("Couldn't access player advancements in {}", this.e, ioexception);
             }
         }
 
@@ -260,7 +260,7 @@ public class AdvancementDataPlayer {
 
             }
         } catch (IOException ioexception) {
-            AdvancementDataPlayer.a.error("Couldn't save player advancements to {}", this.e, ioexception);
+            AdvancementDataPlayer.LOGGER.error("Couldn't save player advancements to {}", this.e, ioexception);
         }
 
     }

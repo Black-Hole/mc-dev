@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 public class RegistryMaterials<T> extends IRegistryWritable<T> {
 
-    protected static final Logger a = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
     protected final RegistryID<T> b = new RegistryID<>(256);
     protected final BiMap<MinecraftKey, T> c = HashBiMap.create();
     protected Object[] d;
@@ -30,7 +30,7 @@ public class RegistryMaterials<T> extends IRegistryWritable<T> {
         Validate.notNull(v0);
         this.d = null;
         if (this.c.containsKey(minecraftkey)) {
-            RegistryMaterials.a.debug("Adding duplicate key '{}' to registry", minecraftkey);
+            RegistryMaterials.LOGGER.debug("Adding duplicate key '{}' to registry", minecraftkey);
         }
 
         this.c.put(minecraftkey, v0);

@@ -13,6 +13,6 @@ public class DebugOutputStream extends RedirectStream {
         StackTraceElement[] astacktraceelement = Thread.currentThread().getStackTrace();
         StackTraceElement stacktraceelement = astacktraceelement[Math.min(3, astacktraceelement.length)];
 
-        DebugOutputStream.a.info("[{}]@.({}:{}): {}", this.b, stacktraceelement.getFileName(), stacktraceelement.getLineNumber(), s);
+        DebugOutputStream.LOGGER.info("[{}]@.({}:{}): {}", this.b, stacktraceelement.getFileName(), stacktraceelement.getLineNumber(), s);
     }
 }

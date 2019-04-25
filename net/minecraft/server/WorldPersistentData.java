@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldPersistentData {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public final Map<String, PersistentBase> data = Maps.newHashMap();
     private final DataFixer c;
     private final File d;
@@ -60,7 +60,7 @@ public class WorldPersistentData {
                     this.data.put(s, persistentbase);
                 }
             } catch (Exception exception) {
-                WorldPersistentData.a.error("Error loading saved data: {}", s, exception);
+                WorldPersistentData.LOGGER.error("Error loading saved data: {}", s, exception);
             }
         }
 

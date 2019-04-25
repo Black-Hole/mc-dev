@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class WorldGenFeatureDefinedStructureJigsawPlacement {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final WorldGenFeatureDefinedStructurePoolTemplates a = new WorldGenFeatureDefinedStructurePoolTemplates();
 
     public static void a(MinecraftKey minecraftkey, int i, WorldGenFeatureDefinedStructureJigsawPlacement.a worldgenfeaturedefinedstructurejigsawplacement_a, ChunkGenerator<?> chunkgenerator, DefinedStructureManager definedstructuremanager, BlockPosition blockposition, List<StructurePiece> list, Random random) {
@@ -225,7 +225,7 @@ public class WorldGenFeatureDefinedStructureJigsawPlacement {
                         }
                     }
                 } else {
-                    WorldGenFeatureDefinedStructureJigsawPlacement.b.warn("Empty or none existent pool: {}", definedstructure_blockinfo.c.getString("target_pool"));
+                    WorldGenFeatureDefinedStructureJigsawPlacement.LOGGER.warn("Empty or none existent pool: {}", definedstructure_blockinfo.c.getString("target_pool"));
                 }
             }
 

@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class EntityAreaEffectCloud extends Entity {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final DataWatcherObject<Float> c = DataWatcher.a(EntityAreaEffectCloud.class, DataWatcherRegistry.c);
     private static final DataWatcherObject<Integer> COLOR = DataWatcher.a(EntityAreaEffectCloud.class, DataWatcherRegistry.b);
     private static final DataWatcherObject<Boolean> e = DataWatcher.a(EntityAreaEffectCloud.class, DataWatcherRegistry.i);
@@ -343,7 +343,7 @@ public class EntityAreaEffectCloud extends Entity {
             try {
                 this.setParticle(ArgumentParticle.b(new StringReader(nbttagcompound.getString("Particle"))));
             } catch (CommandSyntaxException commandsyntaxexception) {
-                EntityAreaEffectCloud.b.warn("Couldn't load custom particle {}", nbttagcompound.getString("Particle"), commandsyntaxexception);
+                EntityAreaEffectCloud.LOGGER.warn("Couldn't load custom particle {}", nbttagcompound.getString("Particle"), commandsyntaxexception);
             }
         }
 

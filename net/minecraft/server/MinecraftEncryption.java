@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 public class MinecraftEncryption {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static KeyPair b() {
         try {
@@ -35,7 +35,7 @@ public class MinecraftEncryption {
             return keypairgenerator.generateKeyPair();
         } catch (NoSuchAlgorithmException nosuchalgorithmexception) {
             nosuchalgorithmexception.printStackTrace();
-            MinecraftEncryption.a.error("Key pair generation failed!");
+            MinecraftEncryption.LOGGER.error("Key pair generation failed!");
             return null;
         }
     }
@@ -80,7 +80,7 @@ public class MinecraftEncryption {
             ;
         }
 
-        MinecraftEncryption.a.error("Public key reconstitute failed!");
+        MinecraftEncryption.LOGGER.error("Public key reconstitute failed!");
         return null;
     }
 
@@ -101,7 +101,7 @@ public class MinecraftEncryption {
             badpaddingexception.printStackTrace();
         }
 
-        MinecraftEncryption.a.error("Cipher data failed!");
+        MinecraftEncryption.LOGGER.error("Cipher data failed!");
         return null;
     }
 
@@ -119,7 +119,7 @@ public class MinecraftEncryption {
             nosuchpaddingexception.printStackTrace();
         }
 
-        MinecraftEncryption.a.error("Cipher creation failed!");
+        MinecraftEncryption.LOGGER.error("Cipher creation failed!");
         return null;
     }
 

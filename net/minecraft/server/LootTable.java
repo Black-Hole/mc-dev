@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LootTable {
 
-    private static final Logger c = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     public static final LootTable a = new LootTable(LootContextParameterSets.EMPTY, new LootSelector[0], new LootItemFunction[0]);
     public static final LootContextParameterSet b = LootContextParameterSets.GENERIC;
     private final LootContextParameterSet d;
@@ -71,7 +71,7 @@ public class LootTable {
 
             loottableinfo.b(this);
         } else {
-            LootTable.c.warn("Detected infinite loop in loot tables");
+            LootTable.LOGGER.warn("Detected infinite loop in loot tables");
         }
 
     }
@@ -116,7 +116,7 @@ public class LootTable {
             ItemStack itemstack = (ItemStack) iterator.next();
 
             if (list1.isEmpty()) {
-                LootTable.c.warn("Tried to over-fill a container");
+                LootTable.LOGGER.warn("Tried to over-fill a container");
                 return;
             }
 
@@ -212,7 +212,7 @@ public class LootTable {
                 if (minecraftkey != null) {
                     jsonobject.addProperty("type", minecraftkey.toString());
                 } else {
-                    LootTable.c.warn("Failed to find id for param set " + loottable.d);
+                    LootTable.LOGGER.warn("Failed to find id for param set " + loottable.d);
                 }
             }
 

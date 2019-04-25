@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Map<String, Long> b;
     private final long c;
     private final int d;
@@ -127,7 +127,7 @@ public class MethodProfilerResultsFilled implements MethodProfilerResults {
 
             return flag1;
         } catch (Throwable throwable) {
-            MethodProfilerResultsFilled.a.error("Could not save profiler results to {}", file, throwable);
+            MethodProfilerResultsFilled.LOGGER.error("Could not save profiler results to {}", file, throwable);
             flag = false;
         } finally {
             IOUtils.closeQuietly(outputstreamwriter);

@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DataConverterSchemaV99 extends Schema {
 
-    private static final Logger b = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final Map<String, String> c = (Map) DataFixUtils.make(Maps.newHashMap(), (hashmap) -> {
         hashmap.put("minecraft:furnace", "Furnace");
         hashmap.put("minecraft:lit_furnace", "Furnace");
@@ -277,7 +277,7 @@ public class DataConverterSchemaV99 extends Schema {
                 String s2 = (String) map.get(DataConverterSchemaNamed.a(s1));
 
                 if (s2 == null) {
-                    DataConverterSchemaV99.b.warn("Unable to resolve BlockEntity for ItemStack: {}", s1);
+                    DataConverterSchemaV99.LOGGER.warn("Unable to resolve BlockEntity for ItemStack: {}", s1);
                     return dynamic2;
                 } else {
                     return dynamic2.set("id", dynamic.createString(s2));

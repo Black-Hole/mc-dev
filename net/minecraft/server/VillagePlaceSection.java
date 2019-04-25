@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 public class VillagePlaceSection implements MinecraftSerializable {
 
-    private static final Logger a = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private final Short2ObjectMap<VillagePlaceRecord> b = new Short2ObjectOpenHashMap();
     private final Map<VillagePlaceType, Set<VillagePlaceRecord>> c = Maps.newHashMap();
     private final Runnable d;
@@ -40,7 +40,7 @@ public class VillagePlaceSection implements MinecraftSerializable {
                 this.a(new VillagePlaceRecord(dynamic1, runnable));
             });
         } catch (Exception exception) {
-            VillagePlaceSection.a.error("Failed to load POI chunk", exception);
+            VillagePlaceSection.LOGGER.error("Failed to load POI chunk", exception);
             this.a();
             this.e = false;
         }
@@ -57,7 +57,7 @@ public class VillagePlaceSection implements MinecraftSerializable {
 
     public void a(BlockPosition blockposition, VillagePlaceType villageplacetype) {
         if (this.a(new VillagePlaceRecord(blockposition, villageplacetype, this.d))) {
-            VillagePlaceSection.a.debug(String.format("Added POI of type %s @ %s", villageplacetype, blockposition));
+            VillagePlaceSection.LOGGER.debug(String.format("Added POI of type %s @ %s", villageplacetype, blockposition));
             this.d.run();
         }
 
@@ -88,10 +88,10 @@ public class VillagePlaceSection implements MinecraftSerializable {
         VillagePlaceRecord villageplacerecord = (VillagePlaceRecord) this.b.remove(SectionPosition.b(blockposition));
 
         if (villageplacerecord == null) {
-            VillagePlaceSection.a.error("POI data mismatch: never registered at " + blockposition);
+            VillagePlaceSection.LOGGER.error("POI data mismatch: never registered at " + blockposition);
         } else {
             ((Set) this.c.get(villageplacerecord.g())).remove(villageplacerecord);
-            VillagePlaceSection.a.debug(String.format("Removed POI of type %s @ %s", villageplacerecord.g(), villageplacerecord.f()));
+            VillagePlaceSection.LOGGER.debug(String.format("Removed POI of type %s @ %s", villageplacerecord.g(), villageplacerecord.f()));
             this.d.run();
         }
     }

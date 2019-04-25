@@ -19,25 +19,29 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
     @Override
     public void tick() {
-        boolean flag = (Boolean) this.getBlock().get(BlockCampfire.b);
-        boolean flag1 = this.world.isClientSide;
+        IBlockData iblockdata = this.hasWorld() ? this.getBlock() : null;
 
-        if (flag1) {
-            if (flag) {
-                this.r();
-            }
+        if (iblockdata != null && iblockdata.getBlock() == Blocks.CAMPFIRE) {
+            boolean flag = (Boolean) iblockdata.get(BlockCampfire.b);
+            boolean flag1 = this.world.isClientSide;
 
-        } else {
-            if (flag) {
-                this.f();
+            if (flag1) {
+                if (flag) {
+                    this.r();
+                }
+
             } else {
-                for (int i = 0; i < this.items.size(); ++i) {
-                    if (this.cookingTimes[i] > 0) {
-                        this.cookingTimes[i] = MathHelper.clamp(this.cookingTimes[i] - 2, 0, this.cookingTotalTimes[i]);
+                if (flag) {
+                    this.f();
+                } else {
+                    for (int i = 0; i < this.items.size(); ++i) {
+                        if (this.cookingTimes[i] > 0) {
+                            this.cookingTimes[i] = MathHelper.clamp(this.cookingTimes[i] - 2, 0, this.cookingTotalTimes[i]);
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 

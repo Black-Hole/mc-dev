@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class RemoteConnectionThread implements Runnable {
 
-    private static final Logger h = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final AtomicInteger i = new AtomicInteger(0);
     protected boolean a;
     protected final IMinecraftServer b;
@@ -33,7 +33,7 @@ public abstract class RemoteConnectionThread implements Runnable {
 
     public synchronized void a() {
         this.d = new Thread(this, this.c + " #" + RemoteConnectionThread.i.incrementAndGet());
-        this.d.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.h));
+        this.d.setUncaughtExceptionHandler(new ThreadNamedUncaughtExceptionHandler(RemoteConnectionThread.LOGGER));
         this.d.start();
         this.a = true;
     }
