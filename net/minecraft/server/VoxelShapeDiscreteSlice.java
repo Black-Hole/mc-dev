@@ -1,6 +1,6 @@
 package net.minecraft.server;
 
-final class VoxelShapeDiscreteSlice extends VoxelShapeDiscrete {
+public final class VoxelShapeDiscreteSlice extends VoxelShapeDiscrete {
 
     private final VoxelShapeDiscrete d;
     private final int e;
@@ -10,7 +10,7 @@ final class VoxelShapeDiscreteSlice extends VoxelShapeDiscrete {
     private final int i;
     private final int j;
 
-    public VoxelShapeDiscreteSlice(VoxelShapeDiscrete voxelshapediscrete, int i, int j, int k, int l, int i1, int j1) {
+    protected VoxelShapeDiscreteSlice(VoxelShapeDiscrete voxelshapediscrete, int i, int j, int k, int l, int i1, int j1) {
         super(l - i, i1 - j, j1 - k);
         this.d = voxelshapediscrete;
         this.e = i;

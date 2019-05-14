@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import org.apache.logging.log4j.LogManager;
@@ -15,8 +17,8 @@ public class MethodProfiler implements GameProfilerFillerActive {
     private static final long a = Duration.ofMillis(100L).toNanos();
     private static final Logger LOGGER = LogManager.getLogger();
     private final List<String> c = Lists.newArrayList();
-    private final List<Long> d = Lists.newArrayList();
-    private final Map<String, Long> e = Maps.newHashMap();
+    private final LongList d = new LongArrayList();
+    private final Object2LongMap<String> e = new Object2LongOpenHashMap();
     private final IntSupplier f;
     private final long g;
     private final int h;
@@ -83,17 +85,12 @@ public class MethodProfiler implements GameProfilerFillerActive {
             MethodProfiler.LOGGER.error("Tried to pop one too many times! Mismatched push() and pop()?");
         } else {
             long i = SystemUtils.getMonotonicNanos();
-            long j = (Long) this.d.remove(this.d.size() - 1);
+            long j = this.d.removeLong(this.d.size() - 1);
 
             this.c.remove(this.c.size() - 1);
             long k = i - j;
 
-            if (this.e.containsKey(this.i)) {
-                this.e.put(this.i, (Long) this.e.get(this.i) + k);
-            } else {
-                this.e.put(this.i, k);
-            }
-
+            this.e.put(this.i, this.e.getLong(this.i) + k);
             if (k > MethodProfiler.a) {
                 MethodProfiler.LOGGER.warn("Something's taking too long! '{}' took aprox {} ms", this.i, (double) k / 1000000.0D);
             }

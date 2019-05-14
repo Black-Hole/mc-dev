@@ -1,18 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
-
 public class BehaviorOutsideCelebrate extends BehaviorOutside {
 
     public BehaviorOutsideCelebrate(float f) {
         super(f);
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
     @Override

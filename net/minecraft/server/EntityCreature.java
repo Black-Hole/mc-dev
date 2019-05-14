@@ -29,7 +29,7 @@ public abstract class EntityCreature extends EntityInsentient {
         Entity entity = this.getLeashHolder();
 
         if (entity != null && entity.world == this.world) {
-            this.a(new BlockPosition((int) entity.locX, (int) entity.locY, (int) entity.locZ), 5);
+            this.a(new BlockPosition(entity), 5);
             float f = this.g(entity);
 
             if (this instanceof EntityTameableAnimal && ((EntityTameableAnimal) this).isSitting()) {

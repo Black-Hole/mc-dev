@@ -4,12 +4,12 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 import java.util.stream.Stream;
 
-final class PlayerMap {
+public final class PlayerMap {
 
     private final Set<EntityPlayer> a = Sets.newHashSet();
     private final Set<EntityPlayer> b = Sets.newHashSet();
 
-    PlayerMap() {}
+    public PlayerMap() {}
 
     public Stream<EntityPlayer> a(long i) {
         return this.a.stream();

@@ -15,7 +15,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         int i = random.nextInt(4) + 5;
 
         blockposition = virtuallevelwritable.getHighestBlockYAt(HeightMap.Type.OCEAN_FLOOR, blockposition);
@@ -82,7 +82,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                             if (Math.abs(l) != j1 || Math.abs(l1) != j1 || random.nextInt(2) != 0 && i1 != 0) {
                                 blockposition1 = new BlockPosition(k, j, k1);
                                 if (g(virtuallevelwritable, blockposition1) || j(virtuallevelwritable, blockposition1)) {
-                                    this.a((IWorldWriter) virtuallevelwritable, blockposition1, WorldGenSwampTree.aS);
+                                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, WorldGenSwampTree.aS, structureboundingbox);
                                 }
                             }
                         }
@@ -93,7 +93,7 @@ public class WorldGenSwampTree extends WorldGenTreeAbstract<WorldGenFeatureEmpty
                     BlockPosition blockposition2 = blockposition.up(j);
 
                     if (g(virtuallevelwritable, blockposition2) || e(virtuallevelwritable, blockposition2)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition2, WorldGenSwampTree.a);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition2, WorldGenSwampTree.a, structureboundingbox);
                     }
                 }
 

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.mojang.datafixers.Dynamic;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 
 public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfiguration> extends WorldGenTreeAbstract<T> {
@@ -75,7 +76,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
         return this.a((VirtualLevelReadable) virtuallevelwritable, blockposition, i) && this.b(virtuallevelwritable, blockposition);
     }
 
-    protected void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+    protected void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         int j = i * i;
 
         for (int k = -i; k <= i + 1; ++k) {
@@ -87,7 +88,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                     BlockPosition blockposition1 = blockposition.b(k, 0, l);
 
                     if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(virtuallevelwritable, blockposition1, this.aT);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aT, structureboundingbox);
                     }
                 }
             }
@@ -95,7 +96,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
 
     }
 
-    protected void c(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+    protected void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         int j = i * i;
 
         for (int k = -i; k <= i; ++k) {
@@ -104,7 +105,7 @@ public abstract class WorldGenMegaTreeAbstract<T extends WorldGenFeatureConfigur
                     BlockPosition blockposition1 = blockposition.b(k, 0, l);
 
                     if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(virtuallevelwritable, blockposition1, this.aT);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aT, structureboundingbox);
                     }
                 }
             }

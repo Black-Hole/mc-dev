@@ -36,7 +36,7 @@ public class PersistentRaid extends PersistentBase {
                 iterator.remove();
                 this.b();
             } else {
-                raid.p();
+                raid.o();
             }
         }
 
@@ -44,14 +44,11 @@ public class PersistentRaid extends PersistentBase {
             this.b();
         }
 
+        PacketDebug.a(this.b, this.a.values());
     }
 
     public static boolean a(EntityRaider entityraider, Raid raid) {
         return entityraider != null && raid != null && raid.i() != null ? entityraider.isAlive() && entityraider.ej() && entityraider.cv() <= 2400 && entityraider.world.getWorldProvider().getDimensionManager() == raid.i().getWorldProvider().getDimensionManager() : false;
-    }
-
-    public static boolean a(EntityLiving entityliving, BlockPosition blockposition, int i) {
-        return blockposition.m(new BlockPosition(entityliving.locX, entityliving.locY, entityliving.locZ)) < (double) (i * i + 24);
     }
 
     @Nullable
@@ -67,7 +64,7 @@ public class PersistentRaid extends PersistentBase {
                 BlockPosition blockposition = new BlockPosition(entityplayer);
                 Optional<BlockPosition> optional = this.b.B().b((villageplacetype) -> {
                     return villageplacetype == VillagePlaceType.r;
-                }, Objects::nonNull, blockposition, 15, VillagePlace.Occupancy.ANY);
+                }, Objects::nonNull, blockposition, 48, VillagePlace.Occupancy.ANY);
 
                 if (!optional.isPresent()) {
                     optional = Optional.of(blockposition);
@@ -76,13 +73,13 @@ public class PersistentRaid extends PersistentBase {
                 Raid raid = this.a(entityplayer.getWorldServer(), (BlockPosition) optional.get());
                 boolean flag = false;
 
-                if (!raid.k()) {
-                    if (!this.a.containsKey(raid.u())) {
-                        this.a.put(raid.u(), raid);
+                if (!raid.j()) {
+                    if (!this.a.containsKey(raid.t())) {
+                        this.a.put(raid.t(), raid);
                     }
 
                     flag = true;
-                } else if (raid.n() < raid.m()) {
+                } else if (raid.m() < raid.l()) {
                     flag = true;
                 } else {
                     entityplayer.removeEffect(MobEffects.BAD_OMEN);
@@ -120,7 +117,7 @@ public class PersistentRaid extends PersistentBase {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompound(i);
             Raid raid = new Raid(this.b, nbttagcompound1);
 
-            this.a.put(raid.u(), raid);
+            this.a.put(raid.t(), raid);
         }
 
     }
@@ -145,7 +142,7 @@ public class PersistentRaid extends PersistentBase {
     }
 
     public static String a(WorldProvider worldprovider) {
-        return "raids" + worldprovider.getDimensionManager().c();
+        return "raids" + worldprovider.getDimensionManager().getSuffix();
     }
 
     private int e() {
@@ -153,16 +150,16 @@ public class PersistentRaid extends PersistentBase {
     }
 
     @Nullable
-    public Raid a(BlockPosition blockposition) {
+    public Raid a(BlockPosition blockposition, int i) {
         Raid raid = null;
-        double d0 = 2.147483647E9D;
+        double d0 = (double) i;
         Iterator iterator = this.a.values().iterator();
 
         while (iterator.hasNext()) {
             Raid raid1 = (Raid) iterator.next();
-            double d1 = raid1.t().m(blockposition);
+            double d1 = raid1.s().m(blockposition);
 
-            if (raid1.v() && d1 < d0) {
+            if (raid1.u() && d1 < d0) {
                 raid = raid1;
                 d0 = d1;
             }

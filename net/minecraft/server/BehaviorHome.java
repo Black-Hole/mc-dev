@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
-import java.util.Set;
 
 public class BehaviorHome extends Behavior<EntityLiving> {
 
@@ -13,14 +11,10 @@ public class BehaviorHome extends Behavior<EntityLiving> {
     private Optional<BlockPosition> d = Optional.empty();
 
     public BehaviorHome(int i, float f, int j) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.HOME, MemoryStatus.REGISTERED, MemoryModuleType.HIDING_PLACE, MemoryStatus.REGISTERED));
         this.b = i;
         this.a = f;
         this.c = j;
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.HOME, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.HIDING_PLACE, MemoryStatus.REGISTERED));
     }
 
     @Override
@@ -52,7 +46,7 @@ public class BehaviorHome extends Behavior<EntityLiving> {
                 return true;
             }, VillagePlace.Occupancy.ANY, new BlockPosition(entityliving), this.b, entityliving.getRandom());
             if (!optional.isPresent()) {
-                Optional<GlobalPos> optional1 = behaviorcontroller.c(MemoryModuleType.HOME);
+                Optional<GlobalPos> optional1 = behaviorcontroller.getMemory(MemoryModuleType.HOME);
 
                 if (optional1.isPresent()) {
                     optional = Optional.of(((GlobalPos) optional1.get()).b());
@@ -61,13 +55,13 @@ public class BehaviorHome extends Behavior<EntityLiving> {
         }
 
         if (optional.isPresent()) {
-            behaviorcontroller.b(MemoryModuleType.PATH);
-            behaviorcontroller.b(MemoryModuleType.LOOK_TARGET);
-            behaviorcontroller.b(MemoryModuleType.BREED_TARGET);
-            behaviorcontroller.b(MemoryModuleType.INTERACTION_TARGET);
-            behaviorcontroller.a(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
+            behaviorcontroller.removeMemory(MemoryModuleType.PATH);
+            behaviorcontroller.removeMemory(MemoryModuleType.LOOK_TARGET);
+            behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
+            behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
+            behaviorcontroller.setMemory(MemoryModuleType.HIDING_PLACE, (Object) GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), (BlockPosition) optional.get()));
             if (!((BlockPosition) optional.get()).a((IPosition) entityliving.ch(), (double) this.c)) {
-                behaviorcontroller.a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.a, this.c)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget((BlockPosition) optional.get(), this.a, this.c)));
             }
         }
 

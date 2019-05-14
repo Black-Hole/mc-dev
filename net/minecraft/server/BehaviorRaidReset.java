@@ -1,16 +1,11 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorRaidReset extends Behavior<EntityLiving> {
 
-    public BehaviorRaidReset() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of();
+    public BehaviorRaidReset() {
+        super(ImmutableMap.of());
     }
 
     @Override
@@ -24,7 +19,7 @@ public class BehaviorRaidReset extends Behavior<EntityLiving> {
         Raid raid = worldserver.c_(new BlockPosition(entityliving));
 
         if (raid == null || raid.d() || raid.f()) {
-            behaviorcontroller.b(Activity.b);
+            behaviorcontroller.b(Activity.IDLE);
             behaviorcontroller.a(worldserver.getDayTime(), worldserver.getTime());
         }
 

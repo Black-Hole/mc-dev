@@ -196,7 +196,7 @@ public class EntityBlaze extends EntityMonster {
                     if (this.b > 1) {
                         float f = MathHelper.c(MathHelper.sqrt(d0)) * 0.5F;
 
-                        this.a.world.a((EntityHuman) null, 1018, new BlockPosition((int) this.a.locX, (int) this.a.locY, (int) this.a.locZ), 0);
+                        this.a.world.a((EntityHuman) null, 1018, new BlockPosition(this.a), 0);
 
                         for (int i = 0; i < 1; ++i) {
                             EntitySmallFireball entitysmallfireball = new EntitySmallFireball(this.a.world, this.a, d1 + this.a.getRandom().nextGaussian() * (double) f, d2, d3 + this.a.getRandom().nextGaussian() * (double) f);

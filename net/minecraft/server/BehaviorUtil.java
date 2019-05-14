@@ -12,13 +12,13 @@ public class BehaviorUtil {
     }
 
     public static boolean a(BehaviorController<?> behaviorcontroller, EntityLiving entityliving) {
-        return behaviorcontroller.c(MemoryModuleType.VISIBLE_MOBS).filter((list) -> {
+        return behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).filter((list) -> {
             return list.contains(entityliving);
         }).isPresent();
     }
 
     public static boolean a(BehaviorController<?> behaviorcontroller, MemoryModuleType<? extends EntityLiving> memorymoduletype, EntityTypes<?> entitytypes) {
-        return behaviorcontroller.c(memorymoduletype).filter((entityliving) -> {
+        return behaviorcontroller.getMemory(memorymoduletype).filter((entityliving) -> {
             return entityliving.getEntityType() == entitytypes;
         }).filter(EntityLiving::isAlive).filter((entityliving) -> {
             return a(behaviorcontroller, entityliving);
@@ -31,7 +31,7 @@ public class BehaviorUtil {
     }
 
     public static void c(EntityLiving entityliving, EntityLiving entityliving1) {
-        entityliving.getBehaviorController().a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
+        entityliving.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
     }
 
     public static void d(EntityLiving entityliving, EntityLiving entityliving1) {
@@ -46,8 +46,8 @@ public class BehaviorUtil {
         BehaviorPositionEntity behaviorpositionentity = new BehaviorPositionEntity(entityliving1);
         MemoryTarget memorytarget = new MemoryTarget(behaviorpositionentity, f, i);
 
-        entityliving.getBehaviorController().a(MemoryModuleType.LOOK_TARGET, (Object) behaviorpositionentity);
-        entityliving.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) memorytarget);
+        entityliving.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) behaviorpositionentity);
+        entityliving.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) memorytarget);
     }
 
     public static void a(EntityLiving entityliving, ItemStack itemstack, EntityLiving entityliving1) {
@@ -65,12 +65,12 @@ public class BehaviorUtil {
     }
 
     public static SectionPosition a(WorldServer worldserver, SectionPosition sectionposition, int i) {
-        int j = worldserver.a(sectionposition);
+        int j = worldserver.b(sectionposition);
         Stream stream = SectionPosition.a(sectionposition, i).filter((sectionposition1) -> {
-            return worldserver.a(sectionposition1) < j;
+            return worldserver.b(sectionposition1) < j;
         });
 
         worldserver.getClass();
-        return (SectionPosition) stream.min(Comparator.comparingInt(worldserver::a)).orElse(sectionposition);
+        return (SectionPosition) stream.min(Comparator.comparingInt(worldserver::b)).orElse(sectionposition);
     }
 }

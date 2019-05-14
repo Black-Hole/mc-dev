@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> extends Behavior<E> {
@@ -17,6 +15,7 @@ public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> ex
     private final MemoryModuleType<T> g;
 
     public BehaviorInteract(EntityTypes<? extends T> entitytypes, int i, Predicate<E> predicate, Predicate<T> predicate1, MemoryModuleType<T> memorymoduletype, float f, int j) {
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, memorymoduletype, MemoryStatus.VALUE_ABSENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
         this.c = entitytypes;
         this.b = f;
         this.d = i * i;
@@ -35,13 +34,8 @@ public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> ex
     }
 
     @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(this.g, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
-    }
-
-    @Override
     protected boolean a(WorldServer worldserver, E e0) {
-        return this.f.test(e0) && ((List) e0.getBehaviorController().c(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving) -> {
+        return this.f.test(e0) && ((List) e0.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).get()).stream().anyMatch((entityliving) -> {
             return this.c.equals(entityliving.getEntityType()) && this.e.test(entityliving);
         });
     }
@@ -50,7 +44,7 @@ public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> ex
     protected void a(WorldServer worldserver, E e0, long i) {
         BehaviorController<?> behaviorcontroller = e0.getBehaviorController();
 
-        behaviorcontroller.c(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
+        behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
             list.stream().filter((entityliving) -> {
                 return this.c.equals(entityliving.getEntityType());
             }).map((entityliving) -> {
@@ -58,9 +52,9 @@ public class BehaviorInteract<E extends EntityLiving, T extends EntityLiving> ex
             }).filter((entityliving) -> {
                 return entityliving.h((Entity) e0) <= (double) this.d;
             }).filter(this.e).findFirst().ifPresent((entityliving) -> {
-                behaviorcontroller.a(this.g, (Object) entityliving);
-                behaviorcontroller.a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
-                behaviorcontroller.a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving), this.b, this.a)));
+                behaviorcontroller.setMemory(this.g, (Object) entityliving);
+                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
+                behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving), this.b, this.a)));
             });
         });
     }

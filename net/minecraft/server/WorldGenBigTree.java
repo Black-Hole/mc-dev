@@ -18,7 +18,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         super(function, flag);
     }
 
-    private void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, float f) {
+    private void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, float f, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         int i = (int) ((double) f + 0.618D);
 
         for (int j = -i; j <= i; ++j) {
@@ -27,7 +27,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                     BlockPosition blockposition1 = blockposition.b(j, 0, k);
 
                     if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(virtuallevelwritable, blockposition1, WorldGenBigTree.aS);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, WorldGenBigTree.aS, structureboundingbox);
                     }
                 }
             }
@@ -57,14 +57,14 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return i >= 0 && i < 5 ? (i != 0 && i != 4 ? 3.0F : 2.0F) : -1.0F;
     }
 
-    private void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
+    private void a(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         for (int i = 0; i < 5; ++i) {
-            this.a(virtuallevelwritable, blockposition.up(i), this.a(i));
+            this.a(virtuallevelwritable, blockposition.up(i), this.a(i), structureboundingbox, set);
         }
 
     }
 
-    private int a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, BlockPosition blockposition1, boolean flag) {
+    private int a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, BlockPosition blockposition1, boolean flag, StructureBoundingBox structureboundingbox) {
         if (!flag && Objects.equals(blockposition, blockposition1)) {
             return -1;
         } else {
@@ -78,7 +78,7 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                 BlockPosition blockposition3 = blockposition.a((double) (0.5F + (float) j * f), (double) (0.5F + (float) j * f1), (double) (0.5F + (float) j * f2));
 
                 if (flag) {
-                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, (IBlockData) WorldGenBigTree.a.set(BlockLogAbstract.AXIS, this.a(blockposition, blockposition3)));
+                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, (IBlockData) WorldGenBigTree.a.set(BlockLogAbstract.AXIS, this.a(blockposition, blockposition3)), structureboundingbox);
                 } else if (!a((VirtualLevelReadable) virtuallevelwritable, blockposition3)) {
                     return j;
                 }
@@ -113,14 +113,14 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return enumdirection_enumaxis;
     }
 
-    private void a(VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
+    private void a(VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
             WorldGenBigTree.Position worldgenbigtree_position = (WorldGenBigTree.Position) iterator.next();
 
             if (this.b(i, worldgenbigtree_position.r() - blockposition.getY())) {
-                this.b(virtuallevelwritable, worldgenbigtree_position);
+                this.a(virtuallevelwritable, worldgenbigtree_position, structureboundingbox, set);
             }
         }
 
@@ -130,11 +130,11 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
         return (double) j >= (double) i * 0.2D;
     }
 
-    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
-        this.a(set, virtuallevelwritable, blockposition, blockposition.up(i), true);
+    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox) {
+        this.a(set, virtuallevelwritable, blockposition, blockposition.up(i), true, structureboundingbox);
     }
 
-    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list) {
+    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, int i, BlockPosition blockposition, List<WorldGenBigTree.Position> list, StructureBoundingBox structureboundingbox) {
         Iterator iterator = list.iterator();
 
         while (iterator.hasNext()) {
@@ -143,16 +143,16 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
             BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), j, blockposition.getZ());
 
             if (!blockposition1.equals(worldgenbigtree_position) && this.b(i, j - blockposition.getY())) {
-                this.a(set, virtuallevelwritable, blockposition1, worldgenbigtree_position, true);
+                this.a(set, virtuallevelwritable, blockposition1, worldgenbigtree_position, true, structureboundingbox);
             }
         }
 
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         Random random1 = new Random(random.nextLong());
-        int i = this.b(set, virtuallevelwritable, blockposition, 5 + random1.nextInt(12));
+        int i = this.b(set, virtuallevelwritable, blockposition, 5 + random1.nextInt(12), structureboundingbox);
 
         if (i == -1) {
             return false;
@@ -190,14 +190,14 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                         BlockPosition blockposition1 = blockposition.a(d4, (double) (i1 - 1), d5);
                         BlockPosition blockposition2 = blockposition1.up(5);
 
-                        if (this.a(set, virtuallevelwritable, blockposition1, blockposition2, false) == -1) {
+                        if (this.a(set, virtuallevelwritable, blockposition1, blockposition2, false, structureboundingbox) == -1) {
                             int k1 = blockposition.getX() - blockposition1.getX();
                             int l1 = blockposition.getZ() - blockposition1.getZ();
                             double d6 = (double) blockposition1.getY() - Math.sqrt((double) (k1 * k1 + l1 * l1)) * 0.381D;
                             int i2 = d6 > (double) l ? l : (int) d6;
                             BlockPosition blockposition3 = new BlockPosition(blockposition.getX(), i2, blockposition.getZ());
 
-                            if (this.a(set, virtuallevelwritable, blockposition3, blockposition1, false) == -1) {
+                            if (this.a(set, virtuallevelwritable, blockposition3, blockposition1, false, structureboundingbox) == -1) {
                                 list.add(new WorldGenBigTree.Position(blockposition1, blockposition3.getY()));
                             }
                         }
@@ -205,18 +205,18 @@ public class WorldGenBigTree extends WorldGenTreeAbstract<WorldGenFeatureEmptyCo
                 }
             }
 
-            this.a(virtuallevelwritable, i, blockposition, list);
-            this.a(set, virtuallevelwritable, blockposition, j);
-            this.a(set, virtuallevelwritable, i, blockposition, list);
+            this.a(virtuallevelwritable, i, blockposition, list, structureboundingbox, set);
+            this.a(set, virtuallevelwritable, blockposition, j, structureboundingbox);
+            this.a(set, virtuallevelwritable, i, blockposition, list, structureboundingbox);
             return true;
         }
     }
 
-    private int b(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+    private int b(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox) {
         if (!i(virtuallevelwritable, blockposition.down())) {
             return -1;
         } else {
-            int j = this.a(set, virtuallevelwritable, blockposition, blockposition.up(i - 1), false);
+            int j = this.a(set, virtuallevelwritable, blockposition, blockposition.up(i - 1), false, structureboundingbox);
 
             return j == -1 ? i : (j < 6 ? -1 : j);
         }

@@ -1,11 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class BehaviorStrollInside extends Behavior<EntityCreature> {
@@ -13,12 +11,8 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
     private final float a;
 
     public BehaviorStrollInside(float f) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.a = f;
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
@@ -39,7 +33,7 @@ public class BehaviorStrollInside extends Behavior<EntityCreature> {
         }).findFirst();
 
         optional.ifPresent((blockposition1) -> {
-            entitycreature.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.a, 0)));
+            entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition1, this.a, 0)));
         });
     }
 }

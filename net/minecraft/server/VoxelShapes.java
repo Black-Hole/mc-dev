@@ -206,50 +206,38 @@ public final class VoxelShapes {
                 int i1 = flag ? MathHelper.floor(axisalignedbb.b(enumdirection_enumaxis2) - 1.0E-7D) - 1 : MathHelper.floor(axisalignedbb.a(enumdirection_enumaxis2) + 1.0E-7D) + 1;
                 int j1 = a(d0, d1, d2);
                 int k1 = flag ? 1 : -1;
-                int l1 = Integer.MAX_VALUE;
-                int i2 = Integer.MAX_VALUE;
-                IChunkAccess ichunkaccess = null;
-                int j2 = i1;
+                int l1 = i1;
 
                 while (true) {
                     if (flag) {
-                        if (j2 > j1) {
+                        if (l1 > j1) {
                             break;
                         }
-                    } else if (j2 < j1) {
+                    } else if (l1 < j1) {
                         break;
                     }
 
-                    for (int k2 = i; k2 <= j; ++k2) {
-                        for (int l2 = k; l2 <= l; ++l2) {
-                            int i3 = 0;
+                    for (int i2 = i; i2 <= j; ++i2) {
+                        for (int j2 = k; j2 <= l; ++j2) {
+                            int k2 = 0;
 
-                            if (k2 == i || k2 == j) {
-                                ++i3;
+                            if (i2 == i || i2 == j) {
+                                ++k2;
                             }
 
-                            if (l2 == k || l2 == l) {
-                                ++i3;
+                            if (j2 == k || j2 == l) {
+                                ++k2;
                             }
 
-                            if (j2 == i1 || j2 == j1) {
-                                ++i3;
+                            if (l1 == i1 || l1 == j1) {
+                                ++k2;
                             }
 
-                            if (i3 < 3) {
-                                blockposition_mutableblockposition.a(enumaxiscycle1, k2, l2, j2);
-                                int j3 = blockposition_mutableblockposition.getX() >> 4;
-                                int k3 = blockposition_mutableblockposition.getZ() >> 4;
+                            if (k2 < 3) {
+                                blockposition_mutableblockposition.a(enumaxiscycle1, i2, j2, l1);
+                                IBlockData iblockdata = iworldreader.getType(blockposition_mutableblockposition);
 
-                                if (j3 != l1 || k3 != i2) {
-                                    ichunkaccess = iworldreader.getChunkAt(j3, k3);
-                                    l1 = j3;
-                                    i2 = k3;
-                                }
-
-                                IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
-
-                                if ((i3 != 1 || iblockdata.f()) && (i3 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
+                                if ((k2 != 1 || iblockdata.f()) && (k2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
                                     d0 = iblockdata.b((IBlockAccess) iworldreader, blockposition_mutableblockposition, voxelshapecollision).a(enumdirection_enumaxis2, axisalignedbb.d((double) (-blockposition_mutableblockposition.getX()), (double) (-blockposition_mutableblockposition.getY()), (double) (-blockposition_mutableblockposition.getZ())), d0);
                                     if (Math.abs(d0) < 1.0E-7D) {
                                         return 0.0D;
@@ -261,7 +249,7 @@ public final class VoxelShapes {
                         }
                     }
 
-                    j2 += k1;
+                    l1 += k1;
                 }
 
                 double[] adouble = new double[] { d0};

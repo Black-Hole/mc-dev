@@ -237,7 +237,7 @@ public class EntityPillager extends EntityIllagerAbstract implements ICrossbow, 
     @Override
     public void a(int i, boolean flag) {
         Raid raid = this.ek();
-        boolean flag1 = this.random.nextFloat() <= raid.w();
+        boolean flag1 = this.random.nextFloat() <= raid.v();
 
         if (flag1) {
             ItemStack itemstack = new ItemStack(Items.CROSSBOW);

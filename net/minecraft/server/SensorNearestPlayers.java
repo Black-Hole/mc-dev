@@ -21,12 +21,12 @@ public class SensorNearestPlayers extends Sensor<EntityLiving> {
         List<EntityHuman> list = (List) stream.sorted(Comparator.comparingDouble(entityliving::h)).collect(Collectors.toList());
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        behaviorcontroller.a(MemoryModuleType.NEAREST_PLAYERS, (Object) list);
+        behaviorcontroller.setMemory(MemoryModuleType.NEAREST_PLAYERS, (Object) list);
         MemoryModuleType memorymoduletype = MemoryModuleType.NEAREST_VISIBLE_PLAYER;
         Stream stream1 = list.stream();
 
         entityliving.getClass();
-        behaviorcontroller.a(memorymoduletype, stream1.filter(entityliving::hasLineOfSight).findFirst());
+        behaviorcontroller.setMemory(memorymoduletype, stream1.filter(entityliving::hasLineOfSight).findFirst());
     }
 
     @Override

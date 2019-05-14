@@ -5,7 +5,7 @@ public class ContainerCartography extends Container {
     private final ContainerAccess containerAccess;
     private boolean e;
     public final IInventory inventory;
-    private final InventoryCraftResult f;
+    private final InventoryCraftResult resultInventory;
 
     public ContainerCartography(int i, PlayerInventory playerinventory) {
         this(i, playerinventory, ContainerAccess.a);
@@ -20,7 +20,7 @@ public class ContainerCartography extends Container {
                 super.update();
             }
         };
-        this.f = new InventoryCraftResult() {
+        this.resultInventory = new InventoryCraftResult() {
             @Override
             public void update() {
                 ContainerCartography.this.a((IInventory) this);
@@ -42,7 +42,7 @@ public class ContainerCartography extends Container {
                 return item == Items.PAPER || item == Items.MAP || item == Items.df;
             }
         });
-        this.a(new Slot(this.f, 2, 145, 39) {
+        this.a(new Slot(this.resultInventory, 2, 145, 39) {
             @Override
             public boolean isAllowed(ItemStack itemstack) {
                 return false;
@@ -108,10 +108,10 @@ public class ContainerCartography extends Container {
     public void a(IInventory iinventory) {
         ItemStack itemstack = this.inventory.getItem(0);
         ItemStack itemstack1 = this.inventory.getItem(1);
-        ItemStack itemstack2 = this.f.getItem(2);
+        ItemStack itemstack2 = this.resultInventory.getItem(2);
 
         if (!itemstack2.isEmpty() && (itemstack.isEmpty() || itemstack1.isEmpty())) {
-            this.f.splitWithoutUpdate(2);
+            this.resultInventory.splitWithoutUpdate(2);
         } else if (!itemstack.isEmpty() && !itemstack1.isEmpty()) {
             this.a(itemstack, itemstack1, itemstack2);
         }
@@ -137,7 +137,7 @@ public class ContainerCartography extends Container {
                     this.c();
                 } else {
                     if (item != Items.MAP) {
-                        this.f.splitWithoutUpdate(2);
+                        this.resultInventory.splitWithoutUpdate(2);
                         this.c();
                         return;
                     }
@@ -148,7 +148,7 @@ public class ContainerCartography extends Container {
                 }
 
                 if (!ItemStack.matches(itemstack3, itemstack2)) {
-                    this.f.setItem(2, itemstack3);
+                    this.resultInventory.setItem(2, itemstack3);
                     this.c();
                 }
 
@@ -233,7 +233,7 @@ public class ContainerCartography extends Container {
     @Override
     public void b(EntityHuman entityhuman) {
         super.b(entityhuman);
-        this.f.splitWithoutUpdate(2);
+        this.resultInventory.splitWithoutUpdate(2);
         this.containerAccess.a((world, blockposition) -> {
             this.a(entityhuman, entityhuman.world, this.inventory);
         });

@@ -23,14 +23,14 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     protected final List<TileEntity> tileEntityListPending = Lists.newArrayList();
     protected final List<TileEntity> tileEntityListUnload = Lists.newArrayList();
     private final long b = 16777215L;
-    private final Thread c;
+    private final Thread serverThread;
     private int d;
     protected int j = (new Random()).nextInt();
     protected final int k = 1013904223;
-    protected float l;
-    protected float m;
-    protected float n;
-    protected float o;
+    protected float lastRainLevel;
+    protected float rainLevel;
+    protected float lastThunderLevel;
+    protected float thunderLevel;
     private int v;
     public final Random random = new Random();
     public WorldProvider worldProvider;
@@ -48,7 +48,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         this.chunkProvider = (IChunkProvider) bifunction.apply(this, this.worldProvider);
         this.isClientSide = flag;
         this.worldBorder = this.worldProvider.getWorldBorder();
-        this.c = Thread.currentThread();
+        this.serverThread = Thread.currentThread();
     }
 
     @Override
@@ -86,10 +86,10 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public static boolean isValidLocation(BlockPosition blockposition) {
-        return !isInsideWorld(blockposition) && blockposition.getX() >= -30000000 && blockposition.getZ() >= -30000000 && blockposition.getX() < 30000000 && blockposition.getZ() < 30000000;
+        return !isOutsideWorld(blockposition) && blockposition.getX() >= -30000000 && blockposition.getZ() >= -30000000 && blockposition.getX() < 30000000 && blockposition.getZ() < 30000000;
     }
 
-    public static boolean isInsideWorld(BlockPosition blockposition) {
+    public static boolean isOutsideWorld(BlockPosition blockposition) {
         return b(blockposition.getY());
     }
 
@@ -119,7 +119,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     @Override
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
-        if (isInsideWorld(blockposition)) {
+        if (isOutsideWorld(blockposition)) {
             return false;
         } else if (!this.isClientSide && this.worldData.getType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             return false;
@@ -316,7 +316,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     @Override
     public IBlockData getType(BlockPosition blockposition) {
-        if (isInsideWorld(blockposition)) {
+        if (isOutsideWorld(blockposition)) {
             return Blocks.VOID_AIR.getBlockData();
         } else {
             Chunk chunk = this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4);
@@ -327,7 +327,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        if (isInsideWorld(blockposition)) {
+        if (isOutsideWorld(blockposition)) {
             return FluidTypes.EMPTY.i();
         } else {
             Chunk chunk = this.getChunkAtWorldCoords(blockposition);
@@ -421,12 +421,17 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
             if (!tileentity.isRemoved() && tileentity.hasWorld()) {
                 BlockPosition blockposition = tileentity.getPosition();
 
-                if (this.isLoaded(blockposition) && this.getWorldBorder().a(blockposition)) {
+                if (this.chunkProvider.a(blockposition) && this.getWorldBorder().a(blockposition)) {
                     try {
                         gameprofilerfiller.a(() -> {
                             return String.valueOf(TileEntityTypes.a(tileentity.q()));
                         });
-                        ((ITickable) tileentity).tick();
+                        if (tileentity.q().a(this.getType(blockposition).getBlock())) {
+                            ((ITickable) tileentity).tick();
+                        } else {
+                            tileentity.r();
+                        }
+
                         gameprofilerfiller.exit();
                     } catch (Throwable throwable) {
                         CrashReport crashreport = CrashReport.a(throwable, "Ticking block entity");
@@ -629,9 +634,9 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        if (isInsideWorld(blockposition)) {
+        if (isOutsideWorld(blockposition)) {
             return null;
-        } else if (!this.isClientSide && Thread.currentThread() != this.c) {
+        } else if (!this.isClientSide && Thread.currentThread() != this.serverThread) {
             return null;
         } else {
             TileEntity tileentity = null;
@@ -666,7 +671,7 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public void setTileEntity(BlockPosition blockposition, @Nullable TileEntity tileentity) {
-        if (!isInsideWorld(blockposition)) {
+        if (!isOutsideWorld(blockposition)) {
             if (tileentity != null && !tileentity.isRemoved()) {
                 if (this.tickingTileEntities) {
                     tileentity.setPosition(blockposition);
@@ -710,11 +715,11 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public boolean o(BlockPosition blockposition) {
-        return isInsideWorld(blockposition) ? false : this.chunkProvider.a(blockposition.getX() >> 4, blockposition.getZ() >> 4);
+        return isOutsideWorld(blockposition) ? false : this.chunkProvider.a(blockposition.getX() >> 4, blockposition.getZ() >> 4);
     }
 
     public boolean a(BlockPosition blockposition, Entity entity) {
-        if (isInsideWorld(blockposition)) {
+        if (isOutsideWorld(blockposition)) {
             return false;
         } else {
             IChunkAccess ichunkaccess = this.getChunkAt(blockposition.getX() >> 4, blockposition.getZ() >> 4, ChunkStatus.FULL, false);
@@ -737,9 +742,9 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     protected void N() {
         if (this.worldData.hasStorm()) {
-            this.m = 1.0F;
+            this.rainLevel = 1.0F;
             if (this.worldData.isThundering()) {
-                this.o = 1.0F;
+                this.thunderLevel = 1.0F;
             }
         }
 
@@ -836,39 +841,34 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
         return this;
     }
 
-    @Override
-    public int a(BlockPosition blockposition, EnumDirection enumdirection) {
-        return this.getType(blockposition).c(this, blockposition, enumdirection);
-    }
-
     public WorldType P() {
         return this.worldData.getType();
     }
 
     public int getBlockPower(BlockPosition blockposition) {
         byte b0 = 0;
-        int i = Math.max(b0, this.a(blockposition.down(), EnumDirection.DOWN));
+        int i = Math.max(b0, this.c(blockposition.down(), EnumDirection.DOWN));
 
         if (i >= 15) {
             return i;
         } else {
-            i = Math.max(i, this.a(blockposition.up(), EnumDirection.UP));
+            i = Math.max(i, this.c(blockposition.up(), EnumDirection.UP));
             if (i >= 15) {
                 return i;
             } else {
-                i = Math.max(i, this.a(blockposition.north(), EnumDirection.NORTH));
+                i = Math.max(i, this.c(blockposition.north(), EnumDirection.NORTH));
                 if (i >= 15) {
                     return i;
                 } else {
-                    i = Math.max(i, this.a(blockposition.south(), EnumDirection.SOUTH));
+                    i = Math.max(i, this.c(blockposition.south(), EnumDirection.SOUTH));
                     if (i >= 15) {
                         return i;
                     } else {
-                        i = Math.max(i, this.a(blockposition.west(), EnumDirection.WEST));
+                        i = Math.max(i, this.c(blockposition.west(), EnumDirection.WEST));
                         if (i >= 15) {
                             return i;
                         } else {
-                            i = Math.max(i, this.a(blockposition.east(), EnumDirection.EAST));
+                            i = Math.max(i, this.c(blockposition.east(), EnumDirection.EAST));
                             return i >= 15 ? i : i;
                         }
                     }
@@ -980,11 +980,11 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
     }
 
     public float f(float f) {
-        return MathHelper.g(f, this.n, this.o) * this.h(f);
+        return MathHelper.g(f, this.lastThunderLevel, this.thunderLevel) * this.h(f);
     }
 
     public float h(float f) {
-        return MathHelper.g(f, this.l, this.m);
+        return MathHelper.g(f, this.lastRainLevel, this.rainLevel);
     }
 
     public boolean U() {
@@ -1014,7 +1014,6 @@ public abstract class World implements IIBlockAccess, GeneratorAccess, AutoClose
 
     public void b(int i, BlockPosition blockposition, int j) {}
 
-    @Override
     public int getHeight() {
         return this.worldProvider.h() ? 128 : 256;
     }

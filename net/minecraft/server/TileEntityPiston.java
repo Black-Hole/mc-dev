@@ -59,14 +59,14 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return this.c ? f - 1.0F : 1.0F - f;
     }
 
-    private IBlockData v() {
+    private IBlockData x() {
         return !this.c() && this.f() && this.a.getBlock() instanceof BlockPiston ? (IBlockData) ((IBlockData) Blocks.PISTON_HEAD.getBlockData().set(BlockPistonExtension.TYPE, this.a.getBlock() == Blocks.STICKY_PISTON ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT)).set(BlockPistonExtension.FACING, this.a.get(BlockPiston.FACING)) : this.a;
     }
 
     private void f(float f) {
-        EnumDirection enumdirection = this.r();
+        EnumDirection enumdirection = this.s();
         double d0 = (double) (f - this.i);
-        VoxelShape voxelshape = this.v().getCollisionShape(this.world, this.getPosition());
+        VoxelShape voxelshape = this.x().getCollisionShape(this.world, this.getPosition());
 
         if (!voxelshape.isEmpty()) {
             List<AxisAlignedBB> list = voxelshape.d();
@@ -130,7 +130,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         }
     }
 
-    public EnumDirection r() {
+    public EnumDirection s() {
         return this.c ? this.b : this.b.opposite();
     }
 
@@ -227,11 +227,11 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         return enumdirection.c() == EnumDirection.EnumAxisDirection.POSITIVE ? axisalignedbb.maxZ - axisalignedbb1.minZ : axisalignedbb1.maxZ - axisalignedbb.minZ;
     }
 
-    public IBlockData s() {
+    public IBlockData t() {
         return this.a;
     }
 
-    public void t() {
+    public void u() {
         if (this.j < 1.0F && this.world != null) {
             this.i = 1.0F;
             this.j = this.i;
@@ -321,7 +321,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
 
         EnumDirection enumdirection = (EnumDirection) TileEntityPiston.h.get();
 
-        if ((double) this.i < 1.0D && enumdirection == this.r()) {
+        if ((double) this.i < 1.0D && enumdirection == this.s()) {
             return voxelshape;
         } else {
             IBlockData iblockdata;
@@ -341,7 +341,7 @@ public class TileEntityPiston extends TileEntity implements ITickable {
         }
     }
 
-    public long u() {
+    public long v() {
         return this.k;
     }
 }

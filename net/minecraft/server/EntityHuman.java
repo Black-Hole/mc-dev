@@ -262,7 +262,7 @@ public abstract class EntityHuman extends EntityLiving {
                 entitypose1 = entitypose;
             }
 
-            this.b(entitypose1);
+            this.setPose(entitypose1);
         }
     }
 

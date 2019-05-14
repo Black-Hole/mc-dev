@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 public abstract class VoxelShape {
 
     protected final VoxelShapeDiscrete a;
+    @Nullable
+    private VoxelShape[] b;
 
     VoxelShape(VoxelShapeDiscrete voxelshapediscrete) {
         this.a = voxelshapediscrete;
@@ -101,19 +103,36 @@ public abstract class VoxelShape {
 
     public VoxelShape a(EnumDirection enumdirection) {
         if (!this.isEmpty() && this != VoxelShapes.b()) {
-            EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
-            EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
-            DoubleList doublelist = this.a(enumdirection_enumaxis);
+            VoxelShape voxelshape;
 
-            if (doublelist.size() == 2 && DoubleMath.fuzzyEquals(doublelist.getDouble(0), 0.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(doublelist.getDouble(1), 1.0D, 1.0E-7D)) {
-                return this;
+            if (this.b != null) {
+                voxelshape = this.b[enumdirection.ordinal()];
+                if (voxelshape != null) {
+                    return voxelshape;
+                }
             } else {
-                int i = this.a(enumdirection_enumaxis, enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? 0.9999999D : 1.0E-7D);
-
-                return new VoxelShapeSlice(this, enumdirection_enumaxis, i);
+                this.b = new VoxelShape[6];
             }
+
+            voxelshape = this.b(enumdirection);
+            this.b[enumdirection.ordinal()] = voxelshape;
+            return voxelshape;
         } else {
             return this;
+        }
+    }
+
+    private VoxelShape b(EnumDirection enumdirection) {
+        EnumDirection.EnumAxis enumdirection_enumaxis = enumdirection.k();
+        EnumDirection.EnumAxisDirection enumdirection_enumaxisdirection = enumdirection.c();
+        DoubleList doublelist = this.a(enumdirection_enumaxis);
+
+        if (doublelist.size() == 2 && DoubleMath.fuzzyEquals(doublelist.getDouble(0), 0.0D, 1.0E-7D) && DoubleMath.fuzzyEquals(doublelist.getDouble(1), 1.0D, 1.0E-7D)) {
+            return this;
+        } else {
+            int i = this.a(enumdirection_enumaxis, enumdirection_enumaxisdirection == EnumDirection.EnumAxisDirection.POSITIVE ? 0.9999999D : 1.0E-7D);
+
+            return new VoxelShapeSlice(this, enumdirection_enumaxis, i);
         }
     }
 

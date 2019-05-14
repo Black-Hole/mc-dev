@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorSwim extends Behavior<EntityInsentient> {
 
@@ -10,6 +8,7 @@ public class BehaviorSwim extends Behavior<EntityInsentient> {
     private final float b;
 
     public BehaviorSwim(float f, float f1) {
+        super(ImmutableMap.of());
         this.a = f;
         this.b = f1;
     }
@@ -20,11 +19,6 @@ public class BehaviorSwim extends Behavior<EntityInsentient> {
 
     protected boolean g(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
         return this.a(worldserver, entityinsentient);
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of();
     }
 
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {

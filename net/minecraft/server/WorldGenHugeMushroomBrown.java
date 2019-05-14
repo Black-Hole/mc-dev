@@ -4,13 +4,13 @@ import com.mojang.datafixers.Dynamic;
 import java.util.Random;
 import java.util.function.Function;
 
-public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmptyConfiguration> {
+public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenHugeMushroomConfiguration> {
 
-    public WorldGenHugeMushroomBrown(Function<Dynamic<?>, ? extends WorldGenFeatureEmptyConfiguration> function) {
+    public WorldGenHugeMushroomBrown(Function<Dynamic<?>, ? extends WorldGenHugeMushroomConfiguration> function) {
         super(function);
     }
 
-    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenFeatureEmptyConfiguration worldgenfeatureemptyconfiguration) {
+    public boolean a(GeneratorAccess generatoraccess, ChunkGenerator<? extends GeneratorSettingsDefault> chunkgenerator, Random random, BlockPosition blockposition, WorldGenHugeMushroomConfiguration worldgenhugemushroomconfiguration) {
         int i = random.nextInt(3) + 4;
 
         if (random.nextInt(12) == 0) {
@@ -75,7 +75,11 @@ public class WorldGenHugeMushroomBrown extends WorldGenerator<WorldGenFeatureEmp
                 for (l = 0; l < i; ++l) {
                     blockposition_mutableblockposition.g(blockposition).c(EnumDirection.UP, l);
                     if (!generatoraccess.getType(blockposition_mutableblockposition).g(generatoraccess, blockposition_mutableblockposition)) {
-                        this.a(generatoraccess, blockposition_mutableblockposition, iblockdata2);
+                        if (worldgenhugemushroomconfiguration.a) {
+                            generatoraccess.setTypeAndData(blockposition_mutableblockposition, iblockdata2, 3);
+                        } else {
+                            this.a(generatoraccess, blockposition_mutableblockposition, iblockdata2);
+                        }
                     }
                 }
 

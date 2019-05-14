@@ -55,8 +55,8 @@ public abstract class WorldGenerator<FC extends WorldGenFeatureConfiguration> {
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> DESERT_WELL = a("desert_well", new WorldGenDesertWell(WorldGenFeatureEmptyConfiguration::a));
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> FOSSIL = a("fossil", new WorldGenFossils(WorldGenFeatureEmptyConfiguration::a));
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> HELL_FIRE = a("hell_fire", new WorldGenFire(WorldGenFeatureEmptyConfiguration::a));
-    public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> HUGE_RED_MUSHROOM = a("huge_red_mushroom", new WorldGenHugeMushroomRed(WorldGenFeatureEmptyConfiguration::a));
-    public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> HUGE_BROWN_MUSHROOM = a("huge_brown_mushroom", new WorldGenHugeMushroomBrown(WorldGenFeatureEmptyConfiguration::a));
+    public static final WorldGenerator<WorldGenHugeMushroomConfiguration> HUGE_RED_MUSHROOM = a("huge_red_mushroom", new WorldGenHugeMushroomRed(WorldGenHugeMushroomConfiguration::a));
+    public static final WorldGenerator<WorldGenHugeMushroomConfiguration> HUGE_BROWN_MUSHROOM = a("huge_brown_mushroom", new WorldGenHugeMushroomBrown(WorldGenHugeMushroomConfiguration::a));
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> ICE_SPIKE = a("ice_spike", new WorldGenPackedIce2(WorldGenFeatureEmptyConfiguration::a));
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> GLOWSTONE_BLOB = a("glowstone_blob", new WorldGenLightStone1(WorldGenFeatureEmptyConfiguration::a));
     public static final WorldGenerator<WorldGenFeatureEmptyConfiguration> MELON = a("melon", new WorldGenMelon(WorldGenFeatureEmptyConfiguration::a));

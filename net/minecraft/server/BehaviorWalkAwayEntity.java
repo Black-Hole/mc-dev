@@ -1,8 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorWalkAwayEntity extends Behavior<EntityCreature> {
 
@@ -10,23 +8,19 @@ public class BehaviorWalkAwayEntity extends Behavior<EntityCreature> {
     private final float b;
 
     public BehaviorWalkAwayEntity(MemoryModuleType<? extends Entity> memorymoduletype, float f) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, memorymoduletype, MemoryStatus.VALUE_PRESENT));
         this.a = memorymoduletype;
         this.b = f;
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
-        Entity entity = (Entity) entitycreature.getBehaviorController().c(this.a).get();
+        Entity entity = (Entity) entitycreature.getBehaviorController().getMemory(this.a).get();
 
         return entitycreature.h(entity) < 16.0D;
     }
 
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(this.a, MemoryStatus.VALUE_PRESENT));
-    }
-
     protected void a(WorldServer worldserver, EntityCreature entitycreature, long i) {
-        Entity entity = (Entity) entitycreature.getBehaviorController().c(this.a).get();
+        Entity entity = (Entity) entitycreature.getBehaviorController().getMemory(this.a).get();
 
         a(entitycreature, entity, this.b);
     }
@@ -39,7 +33,7 @@ public class BehaviorWalkAwayEntity extends Behavior<EntityCreature> {
             Vec3D vec3d3 = RandomPositionGenerator.a(entitycreature, 16, 7, vec3d2, 0.3141592741012573D);
 
             if (vec3d3 != null) {
-                entitycreature.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d3, f, 0)));
+                entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d3, f, 0)));
                 return;
             }
         }

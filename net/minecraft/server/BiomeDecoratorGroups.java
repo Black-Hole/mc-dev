@@ -209,7 +209,7 @@ public class BiomeDecoratorGroups {
     }
 
     public static void Q(BiomeBase biomebase) {
-        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_BOOLEAN_SELECTOR, new WorldGenFeatureChoiceConfiguration(WorldGenerator.HUGE_RED_MUSHROOM, WorldGenFeatureConfiguration.e, WorldGenerator.HUGE_BROWN_MUSHROOM, WorldGenFeatureConfiguration.e), WorldGenDecorator.a, new WorldGenDecoratorFrequencyConfiguration(1)));
+        biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.RANDOM_BOOLEAN_SELECTOR, new WorldGenFeatureChoiceConfiguration(WorldGenerator.HUGE_RED_MUSHROOM, new WorldGenHugeMushroomConfiguration(false), WorldGenerator.HUGE_BROWN_MUSHROOM, new WorldGenHugeMushroomConfiguration(false)), WorldGenDecorator.a, new WorldGenDecoratorFrequencyConfiguration(1)));
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.BUSH, new WorldGenFeatureMushroomConfiguration(Blocks.BROWN_MUSHROOM.getBlockData()), WorldGenDecorator.s, new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.25F)));
         biomebase.a(WorldGenStage.Decoration.VEGETAL_DECORATION, BiomeBase.a(WorldGenerator.BUSH, new WorldGenFeatureMushroomConfiguration(Blocks.RED_MUSHROOM.getBlockData()), WorldGenDecorator.t, new WorldGenDecoratorFrequencyChanceConfiguration(1, 0.125F)));
     }

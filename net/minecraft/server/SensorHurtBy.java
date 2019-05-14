@@ -12,14 +12,14 @@ public class SensorHurtBy extends Sensor<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
         if (entityliving.cD() != null) {
-            behaviorcontroller.a(MemoryModuleType.HURT_BY, (Object) entityliving.cD());
-            Entity entity = ((DamageSource) behaviorcontroller.c(MemoryModuleType.HURT_BY).get()).getEntity();
+            behaviorcontroller.setMemory(MemoryModuleType.HURT_BY, (Object) entityliving.cD());
+            Entity entity = ((DamageSource) behaviorcontroller.getMemory(MemoryModuleType.HURT_BY).get()).getEntity();
 
             if (entity instanceof EntityLiving) {
-                behaviorcontroller.a(MemoryModuleType.HURT_BY_ENTITY, (Object) ((EntityLiving) entity));
+                behaviorcontroller.setMemory(MemoryModuleType.HURT_BY_ENTITY, (Object) ((EntityLiving) entity));
             }
         } else {
-            behaviorcontroller.b(MemoryModuleType.HURT_BY);
+            behaviorcontroller.removeMemory(MemoryModuleType.HURT_BY);
         }
 
     }

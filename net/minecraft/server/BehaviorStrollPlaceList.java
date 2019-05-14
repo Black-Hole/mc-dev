@@ -1,11 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
@@ -20,6 +18,7 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
     private GlobalPos g;
 
     public BehaviorStrollPlaceList(MemoryModuleType<List<GlobalPos>> memorymoduletype, float f, int i, int j, MemoryModuleType<GlobalPos> memorymoduletype1) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, memorymoduletype, MemoryStatus.VALUE_PRESENT, memorymoduletype1, MemoryStatus.VALUE_PRESENT));
         this.a = memorymoduletype;
         this.c = f;
         this.d = i;
@@ -28,8 +27,8 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
-        Optional<List<GlobalPos>> optional = entityvillager.getBehaviorController().c(this.a);
-        Optional<GlobalPos> optional1 = entityvillager.getBehaviorController().c(this.b);
+        Optional<List<GlobalPos>> optional = entityvillager.getBehaviorController().getMemory(this.a);
+        Optional<GlobalPos> optional1 = entityvillager.getBehaviorController().getMemory(this.b);
 
         if (optional.isPresent() && optional1.isPresent()) {
             List<GlobalPos> list = (List) optional.get();
@@ -43,14 +42,9 @@ public class BehaviorStrollPlaceList extends Behavior<EntityVillager> {
         return false;
     }
 
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED), Pair.of(this.a, MemoryStatus.VALUE_PRESENT), Pair.of(this.b, MemoryStatus.VALUE_PRESENT));
-    }
-
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         if (i > this.f && this.g != null) {
-            entityvillager.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.g.b(), this.c, this.d)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(this.g.b(), this.c, this.d)));
             this.f = i + 100L;
         }
 

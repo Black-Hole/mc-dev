@@ -1,15 +1,13 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.datafixers.util.Pair;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
@@ -33,12 +31,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     private long d;
 
     public BehaviorVillageHeroGift(int i) {
-        super(i);
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryStatus.VALUE_PRESENT), i);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -57,7 +50,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
         this.d = i;
         EntityHuman entityhuman = (EntityHuman) this.c(entityvillager).get();
 
-        entityvillager.getBehaviorController().a(MemoryModuleType.INTERACTION_TARGET, (Object) entityhuman);
+        entityvillager.getBehaviorController().setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityhuman);
         BehaviorUtil.c(entityvillager, entityhuman);
     }
 
@@ -82,9 +75,9 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
         this.b = a(worldserver);
-        entityvillager.getBehaviorController().b(MemoryModuleType.INTERACTION_TARGET);
-        entityvillager.getBehaviorController().b(MemoryModuleType.WALK_TARGET);
-        entityvillager.getBehaviorController().b(MemoryModuleType.LOOK_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
     }
 
     private void a(EntityVillager entityvillager, EntityLiving entityliving) {
@@ -121,7 +114,7 @@ public class BehaviorVillageHeroGift extends Behavior<EntityVillager> {
     }
 
     private Optional<EntityHuman> c(EntityVillager entityvillager) {
-        return entityvillager.getBehaviorController().c(MemoryModuleType.NEAREST_VISIBLE_PLAYER).filter(this::a);
+        return entityvillager.getBehaviorController().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).filter(this::a);
     }
 
     private boolean a(EntityHuman entityhuman) {

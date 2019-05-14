@@ -46,7 +46,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public boolean dZ() {
+    public boolean ea() {
         return false;
     }
 
@@ -58,7 +58,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
         if (flag) {
             itemstack.a(entityhuman, (EntityLiving) this, enumhand);
             return true;
-        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dX() && !this.isBaby()) {
+        } else if (itemstack.getItem() != Items.VILLAGER_SPAWN_EGG && this.isAlive() && !this.dY() && !this.isBaby()) {
             if (enumhand == EnumHand.MAIN_HAND) {
                 entityhuman.a(StatisticList.TALKED_TO_VILLAGER);
             }
@@ -129,7 +129,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Override
     protected void b(MerchantRecipe merchantrecipe) {
-        if (merchantrecipe.q()) {
+        if (merchantrecipe.isRewardExp()) {
             int i = 3 + this.random.nextInt(4);
 
             this.world.addEntity(new EntityExperienceOrb(this.world, this.locX, this.locY + 0.5D, this.locZ, i));
@@ -139,7 +139,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
     @Override
     protected SoundEffect getSoundAmbient() {
-        return this.dX() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
+        return this.dY() ? SoundEffects.ENTITY_WANDERING_TRADER_TRADE : SoundEffects.ENTITY_WANDERING_TRADER_AMBIENT;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    protected SoundEffect ea() {
+    protected SoundEffect eb() {
         return SoundEffects.ENTITY_WANDERING_TRADER_YES;
     }
 
@@ -178,9 +178,16 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.bB > 0 && !this.dX() && --this.bB == 0) {
+    public void movementTick() {
+        super.movementTick();
+        if (!this.world.isClientSide) {
+            this.eh();
+        }
+
+    }
+
+    private void eh() {
+        if (this.bB > 0 && !this.dY() && --this.bB == 0) {
             this.die();
         }
 
@@ -191,7 +198,7 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
     }
 
     @Nullable
-    private BlockPosition eh() {
+    private BlockPosition ei() {
         return this.bA;
     }
 
@@ -216,14 +223,14 @@ public class EntityVillagerTrader extends EntityVillagerAbstract {
 
         @Override
         public boolean a() {
-            BlockPosition blockposition = this.a.eh();
+            BlockPosition blockposition = this.a.ei();
 
             return blockposition != null && this.a(blockposition, this.b);
         }
 
         @Override
         public void e() {
-            BlockPosition blockposition = this.a.eh();
+            BlockPosition blockposition = this.a.ei();
 
             if (blockposition != null && EntityVillagerTrader.this.navigation.n()) {
                 if (this.a(blockposition, 10.0D)) {

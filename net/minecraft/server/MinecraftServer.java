@@ -127,7 +127,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
     private final CircularTimer ap;
     private boolean aq;
     private boolean forceUpgrade;
-    private boolean as;
+    private boolean eraseCache;
     private float at;
     public final Executor executorService;
     @Nullable
@@ -203,7 +203,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             WorldData worlddata = this.getConvertable().b(this.getWorld());
 
             if (worlddata != null) {
-                WorldUpgrader worldupgrader = new WorldUpgrader(this.getWorld(), this.getConvertable(), worlddata, this.as);
+                WorldUpgrader worldupgrader = new WorldUpgrader(this.getWorld(), this.getConvertable(), worlddata, this.eraseCache);
                 IChatBaseComponent ichatbasecomponent = null;
 
                 while (!worldupgrader.b()) {
@@ -263,7 +263,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
 
             worlddata = new WorldData(worldsettings, s1);
         } else {
-            worlddata.a(s1);
+            worlddata.setName(s1);
             worldsettings = new WorldSettings(worlddata);
         }
 
@@ -379,11 +379,11 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         chunkproviderserver.addTicket(TicketType.START, new ChunkCoordIntPair(blockposition), 11, Unit.INSTANCE);
 
         while (chunkproviderserver.b() != 441) {
-            this.nextTick += 100L;
+            this.nextTick = SystemUtils.getMonotonicMillis() + 10L;
             this.sleepForTick();
         }
 
-        this.nextTick += 100L;
+        this.nextTick = SystemUtils.getMonotonicMillis() + 10L;
         this.sleepForTick();
         Iterator iterator = DimensionManager.a().iterator();
 
@@ -404,7 +404,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             }
         }
 
-        this.nextTick += 100L;
+        this.nextTick = SystemUtils.getMonotonicMillis() + 10L;
         this.sleepForTick();
         worldloadlistener.b();
         chunkproviderserver.getLightEngine().a(5);
@@ -854,7 +854,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
             dedicatedserver.e(optionset.has(optionspec2));
             dedicatedserver.f(optionset.has(optionspec3));
             dedicatedserver.setForceUpgrade(optionset.has(optionspec4));
-            dedicatedserver.c(optionset.has(optionspec5));
+            dedicatedserver.setEraseCache(optionset.has(optionspec5));
             dedicatedserver.c((String) optionset.valueOf(optionspec11));
             boolean flag = !optionset.has(optionspec) && !optionset.valuesOf(nonoptionargumentspec).contains("nogui");
 
@@ -885,8 +885,8 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
         this.forceUpgrade = flag;
     }
 
-    protected void c(boolean flag) {
-        this.as = flag;
+    protected void setEraseCache(boolean flag) {
+        this.eraseCache = flag;
     }
 
     public void startServerThread() {

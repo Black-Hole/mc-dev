@@ -10,8 +10,8 @@ public class PathfinderTurtle extends PathfinderNormal {
     public PathfinderTurtle() {}
 
     @Override
-    public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
-        super.a(iblockaccess, entityinsentient);
+    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
+        super.a(iworldreader, entityinsentient);
         entityinsentient.a(PathType.WATER, 0.0F);
         this.k = entityinsentient.a(PathType.WALKABLE);
         entityinsentient.a(PathType.WALKABLE, 6.0F);
@@ -37,73 +37,73 @@ public class PathfinderTurtle extends PathfinderNormal {
     }
 
     @Override
-    public int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f) {
+    public int a(PathPoint[] apathpoint, PathPoint pathpoint) {
         int i = 0;
         boolean flag = true;
         BlockPosition blockposition = new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
         double d0 = this.a(blockposition);
-        PathPoint pathpoint2 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, 1, d0);
-        PathPoint pathpoint3 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, 1, d0);
-        PathPoint pathpoint4 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, 1, d0);
-        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1, 1, d0);
-        PathPoint pathpoint6 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c, 0, d0);
-        PathPoint pathpoint7 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c, 1, d0);
+        PathPoint pathpoint1 = this.a(pathpoint.a, pathpoint.b, pathpoint.c + 1, 1, d0);
+        PathPoint pathpoint2 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c, 1, d0);
+        PathPoint pathpoint3 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c, 1, d0);
+        PathPoint pathpoint4 = this.a(pathpoint.a, pathpoint.b, pathpoint.c - 1, 1, d0);
+        PathPoint pathpoint5 = this.a(pathpoint.a, pathpoint.b + 1, pathpoint.c, 0, d0);
+        PathPoint pathpoint6 = this.a(pathpoint.a, pathpoint.b - 1, pathpoint.c, 1, d0);
 
-        if (pathpoint2 != null && !pathpoint2.i && pathpoint2.a(pathpoint1) < f) {
+        if (pathpoint1 != null && !pathpoint1.i) {
+            apathpoint[i++] = pathpoint1;
+        }
+
+        if (pathpoint2 != null && !pathpoint2.i) {
             apathpoint[i++] = pathpoint2;
         }
 
-        if (pathpoint3 != null && !pathpoint3.i && pathpoint3.a(pathpoint1) < f) {
+        if (pathpoint3 != null && !pathpoint3.i) {
             apathpoint[i++] = pathpoint3;
         }
 
-        if (pathpoint4 != null && !pathpoint4.i && pathpoint4.a(pathpoint1) < f) {
+        if (pathpoint4 != null && !pathpoint4.i) {
             apathpoint[i++] = pathpoint4;
         }
 
-        if (pathpoint5 != null && !pathpoint5.i && pathpoint5.a(pathpoint1) < f) {
+        if (pathpoint5 != null && !pathpoint5.i) {
             apathpoint[i++] = pathpoint5;
         }
 
-        if (pathpoint6 != null && !pathpoint6.i && pathpoint6.a(pathpoint1) < f) {
+        if (pathpoint6 != null && !pathpoint6.i) {
             apathpoint[i++] = pathpoint6;
         }
 
-        if (pathpoint7 != null && !pathpoint7.i && pathpoint7.a(pathpoint1) < f) {
-            apathpoint[i++] = pathpoint7;
-        }
-
-        boolean flag1 = pathpoint5 == null || pathpoint5.m == PathType.OPEN || pathpoint5.l != 0.0F;
-        boolean flag2 = pathpoint2 == null || pathpoint2.m == PathType.OPEN || pathpoint2.l != 0.0F;
-        boolean flag3 = pathpoint4 == null || pathpoint4.m == PathType.OPEN || pathpoint4.l != 0.0F;
-        boolean flag4 = pathpoint3 == null || pathpoint3.m == PathType.OPEN || pathpoint3.l != 0.0F;
-        PathPoint pathpoint8;
+        boolean flag1 = pathpoint4 == null || pathpoint4.l == PathType.OPEN || pathpoint4.k != 0.0F;
+        boolean flag2 = pathpoint1 == null || pathpoint1.l == PathType.OPEN || pathpoint1.k != 0.0F;
+        boolean flag3 = pathpoint3 == null || pathpoint3.l == PathType.OPEN || pathpoint3.k != 0.0F;
+        boolean flag4 = pathpoint2 == null || pathpoint2.l == PathType.OPEN || pathpoint2.k != 0.0F;
+        PathPoint pathpoint7;
 
         if (flag1 && flag4) {
-            pathpoint8 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1, 1, d0);
-            if (pathpoint8 != null && !pathpoint8.i && pathpoint8.a(pathpoint1) < f) {
-                apathpoint[i++] = pathpoint8;
+            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c - 1, 1, d0);
+            if (pathpoint7 != null && !pathpoint7.i) {
+                apathpoint[i++] = pathpoint7;
             }
         }
 
         if (flag1 && flag3) {
-            pathpoint8 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1, 1, d0);
-            if (pathpoint8 != null && !pathpoint8.i && pathpoint8.a(pathpoint1) < f) {
-                apathpoint[i++] = pathpoint8;
+            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c - 1, 1, d0);
+            if (pathpoint7 != null && !pathpoint7.i) {
+                apathpoint[i++] = pathpoint7;
             }
         }
 
         if (flag2 && flag4) {
-            pathpoint8 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1, 1, d0);
-            if (pathpoint8 != null && !pathpoint8.i && pathpoint8.a(pathpoint1) < f) {
-                apathpoint[i++] = pathpoint8;
+            pathpoint7 = this.a(pathpoint.a - 1, pathpoint.b, pathpoint.c + 1, 1, d0);
+            if (pathpoint7 != null && !pathpoint7.i) {
+                apathpoint[i++] = pathpoint7;
             }
         }
 
         if (flag2 && flag3) {
-            pathpoint8 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1, 1, d0);
-            if (pathpoint8 != null && !pathpoint8.i && pathpoint8.a(pathpoint1) < f) {
-                apathpoint[i++] = pathpoint8;
+            pathpoint7 = this.a(pathpoint.a + 1, pathpoint.b, pathpoint.c + 1, 1, d0);
+            if (pathpoint7 != null && !pathpoint7.i) {
+                apathpoint[i++] = pathpoint7;
             }
         }
 
@@ -136,8 +136,8 @@ public class PathfinderTurtle extends PathfinderNormal {
 
             if (f >= 0.0F) {
                 pathpoint = this.a(i, j, k);
-                pathpoint.m = pathtype;
-                pathpoint.l = Math.max(pathpoint.l, f);
+                pathpoint.l = pathtype;
+                pathpoint.k = Math.max(pathpoint.k, f);
             }
 
             if (pathtype != PathType.WATER && pathtype != PathType.WALKABLE) {
@@ -156,15 +156,15 @@ public class PathfinderTurtle extends PathfinderNormal {
 
                     if (pathtype1 == PathType.BLOCKED) {
                         pathpoint = this.a(i, j, k);
-                        pathpoint.m = PathType.WALKABLE;
-                        pathpoint.l = Math.max(pathpoint.l, f);
+                        pathpoint.l = PathType.WALKABLE;
+                        pathpoint.k = Math.max(pathpoint.k, f);
                         return pathpoint;
                     }
 
                     if (pathtype1 == PathType.WATER) {
                         pathpoint = this.a(i, j, k);
-                        pathpoint.m = PathType.WATER;
-                        pathpoint.l = Math.max(pathpoint.l, f);
+                        pathpoint.l = PathType.WATER;
+                        pathpoint.k = Math.max(pathpoint.k, f);
                         return pathpoint;
                     }
 
@@ -180,8 +180,8 @@ public class PathfinderTurtle extends PathfinderNormal {
                         f = this.b.a(pathtype);
                         if (pathtype != PathType.OPEN && f >= 0.0F) {
                             pathpoint = this.a(i, j, k);
-                            pathpoint.m = pathtype;
-                            pathpoint.l = Math.max(pathpoint.l, f);
+                            pathpoint.l = pathtype;
+                            pathpoint.k = Math.max(pathpoint.k, f);
                             break;
                         }
 
@@ -194,7 +194,7 @@ public class PathfinderTurtle extends PathfinderNormal {
                 return pathpoint;
             } else {
                 if (j < this.b.world.getSeaLevel() - 10 && pathpoint != null) {
-                    ++pathpoint.l;
+                    ++pathpoint.k;
                 }
 
                 return pathpoint;

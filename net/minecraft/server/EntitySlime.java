@@ -233,7 +233,7 @@ public class EntitySlime extends EntityInsentient implements IMonster {
 
     @Override
     public boolean a(GeneratorAccess generatoraccess, EnumMobSpawn enummobspawn) {
-        BlockPosition blockposition = new BlockPosition(MathHelper.floor(this.locX), 0, MathHelper.floor(this.locZ));
+        BlockPosition blockposition = new BlockPosition(this.locX, 0.0D, this.locZ);
 
         if (generatoraccess.getWorldData().getType() == WorldType.FLAT && this.random.nextInt(4) != 1) {
             return false;

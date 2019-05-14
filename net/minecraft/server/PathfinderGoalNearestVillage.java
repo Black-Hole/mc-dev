@@ -33,7 +33,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
                 return false;
             } else {
                 Vec3D vec3d = RandomPositionGenerator.a(this.a, 15, 7, (blockposition1) -> {
-                    return (double) (-worldserver.a(SectionPosition.a(blockposition1)));
+                    return (double) (-worldserver.b(SectionPosition.a(blockposition1)));
                 });
 
                 this.c = vec3d == null ? null : new BlockPosition(vec3d);
@@ -59,7 +59,7 @@ public class PathfinderGoalNearestVillage extends PathfinderGoal {
 
                 vec3d = vec3d2.a(0.4D).e(vec3d);
                 Vec3D vec3d3 = vec3d.d(vec3d1).d().a(10.0D).e(vec3d1);
-                BlockPosition blockposition = new BlockPosition((int) vec3d3.x, (int) vec3d3.y, (int) vec3d3.z);
+                BlockPosition blockposition = new BlockPosition(vec3d3);
 
                 blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition);
                 if (!navigationabstract.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), 1.0D)) {

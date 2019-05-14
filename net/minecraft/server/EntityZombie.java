@@ -198,7 +198,7 @@ public class EntityZombie extends EntityMonster {
 
     protected void eb() {
         this.b(EntityTypes.DROWNED);
-        this.world.a((EntityHuman) null, 1040, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
+        this.world.a((EntityHuman) null, 1040, new BlockPosition(this), 0);
     }
 
     protected void b(EntityTypes<? extends EntityZombie> entitytypes) {
@@ -381,7 +381,7 @@ public class EntityZombie extends EntityMonster {
             entityzombievillager.prepare(this.world, this.world.getDamageScaler(new BlockPosition(entityzombievillager)), EnumMobSpawn.CONVERSION, new EntityZombie.GroupDataZombie(false), (NBTTagCompound) null);
             entityzombievillager.setVillagerData(entityvillager.getVillagerData());
             entityzombievillager.setOffers(entityvillager.getOffers().a());
-            entityzombievillager.a(entityvillager.dV());
+            entityzombievillager.a(entityvillager.getExperience());
             entityzombievillager.setBaby(entityvillager.isBaby());
             entityzombievillager.setNoAI(entityvillager.isNoAI());
             if (entityvillager.hasCustomName()) {

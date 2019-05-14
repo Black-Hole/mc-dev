@@ -8,6 +8,7 @@ public final class BiomeIcePlains extends BiomeBase {
         this.a(WorldGenerator.IGLOO, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
         this.a(WorldGenerator.MINESHAFT, (WorldGenFeatureConfiguration) (new WorldGenMineshaftConfiguration(0.004D, WorldGenMineshaft.Type.NORMAL)));
         this.a(WorldGenerator.STRONGHOLD, (WorldGenFeatureConfiguration) WorldGenFeatureConfiguration.e);
+        this.a(WorldGenerator.PILLAGER_OUTPOST, (WorldGenFeatureConfiguration) (new WorldGenFeaturePillagerOutpostConfiguration(0.004D)));
         BiomeDecoratorGroups.a(this);
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);

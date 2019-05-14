@@ -28,7 +28,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         int i = this.a(random);
         boolean flag = true;
 
@@ -87,7 +87,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
                             if (Math.abs(j1) != k || Math.abs(i2) != k || random.nextInt(2) != 0 && j != 0) {
                                 blockposition1 = new BlockPosition(l1, i1, k1);
                                 if (g(virtuallevelwritable, blockposition1) || j(virtuallevelwritable, blockposition1)) {
-                                    this.a((IWorldWriter) virtuallevelwritable, blockposition1, this.aW);
+                                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aW, structureboundingbox);
                                 }
                             }
                         }
@@ -96,7 +96,7 @@ public class WorldGenTrees extends WorldGenTreeAbstract<WorldGenFeatureEmptyConf
 
                 for (i1 = 0; i1 < i; ++i1) {
                     if (g(virtuallevelwritable, blockposition.up(i1)) || j(virtuallevelwritable, blockposition.up(i1))) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(i1), this.aV);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(i1), this.aV, structureboundingbox);
                         if (this.aU && i1 > 0) {
                             if (random.nextInt(3) > 0 && b(virtuallevelwritable, blockposition.b(-1, i1, 0))) {
                                 this.a((IWorldWriter) virtuallevelwritable, blockposition.b(-1, i1, 0), BlockVine.EAST);

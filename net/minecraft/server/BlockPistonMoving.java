@@ -30,7 +30,7 @@ public class BlockPistonMoving extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).t();
+                ((TileEntityPiston) tileentity).u();
             }
 
         }
@@ -76,7 +76,7 @@ public class BlockPistonMoving extends BlockTileEntity {
     public List<ItemStack> a(IBlockData iblockdata, LootTableInfo.Builder loottableinfo_builder) {
         TileEntityPiston tileentitypiston = this.a((IBlockAccess) loottableinfo_builder.a(), (BlockPosition) loottableinfo_builder.a(LootContextParameters.POSITION));
 
-        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.s().a(loottableinfo_builder);
+        return tileentitypiston == null ? Collections.emptyList() : tileentitypiston.t().a(loottableinfo_builder);
     }
 
     @Override

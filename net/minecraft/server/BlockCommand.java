@@ -34,9 +34,9 @@ public class BlockCommand extends BlockTileEntity {
                 boolean flag2 = tileentitycommand.d();
 
                 tileentitycommand.a(flag1);
-                if (!flag2 && !tileentitycommand.f() && tileentitycommand.t() != TileEntityCommand.Type.SEQUENCE) {
+                if (!flag2 && !tileentitycommand.f() && tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
                     if (flag1) {
-                        tileentitycommand.r();
+                        tileentitycommand.s();
                         world.getBlockTickList().a(blockposition, this, this.a((IWorldReader) world));
                     }
 
@@ -54,14 +54,14 @@ public class BlockCommand extends BlockTileEntity {
                 TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
                 boolean flag = !UtilColor.b(commandblocklistenerabstract.getCommand());
-                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.t();
+                TileEntityCommand.Type tileentitycommand_type = tileentitycommand.u();
                 boolean flag1 = tileentitycommand.g();
 
                 if (tileentitycommand_type == TileEntityCommand.Type.AUTO) {
-                    tileentitycommand.r();
+                    tileentitycommand.s();
                     if (flag1) {
                         this.a(iblockdata, world, blockposition, commandblocklistenerabstract, flag);
-                    } else if (tileentitycommand.u()) {
+                    } else if (tileentitycommand.v()) {
                         commandblocklistenerabstract.a(0);
                     }
 
@@ -71,7 +71,7 @@ public class BlockCommand extends BlockTileEntity {
                 } else if (tileentitycommand_type == TileEntityCommand.Type.REDSTONE) {
                     if (flag1) {
                         this.a(iblockdata, world, blockposition, commandblocklistenerabstract, flag);
-                    } else if (tileentitycommand.u()) {
+                    } else if (tileentitycommand.v()) {
                         commandblocklistenerabstract.a(0);
                     }
                 }
@@ -139,7 +139,7 @@ public class BlockCommand extends BlockTileEntity {
                     tileentitycommand.b(this == Blocks.CHAIN_COMMAND_BLOCK);
                 }
 
-                if (tileentitycommand.t() == TileEntityCommand.Type.SEQUENCE) {
+                if (tileentitycommand.u() == TileEntityCommand.Type.SEQUENCE) {
                     boolean flag = world.isBlockIndirectlyPowered(blockposition);
 
                     tileentitycommand.a(flag);
@@ -198,20 +198,20 @@ public class BlockCommand extends BlockTileEntity {
 
             TileEntityCommand tileentitycommand = (TileEntityCommand) tileentity;
 
-            if (tileentitycommand.t() != TileEntityCommand.Type.SEQUENCE) {
+            if (tileentitycommand.u() != TileEntityCommand.Type.SEQUENCE) {
                 break;
             }
 
             if (tileentitycommand.d() || tileentitycommand.f()) {
                 CommandBlockListenerAbstract commandblocklistenerabstract = tileentitycommand.getCommandBlock();
 
-                if (tileentitycommand.r()) {
+                if (tileentitycommand.s()) {
                     if (!commandblocklistenerabstract.a(world)) {
                         break;
                     }
 
                     world.updateAdjacentComparators(blockposition_mutableblockposition, block);
-                } else if (tileentitycommand.u()) {
+                } else if (tileentitycommand.v()) {
                     commandblocklistenerabstract.a(0);
                 }
             }

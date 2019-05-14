@@ -68,9 +68,9 @@ public class VillageSiege {
                     for (int i = 0; i < 10; ++i) {
                         float f = this.a.random.nextFloat() * 6.2831855F;
 
-                        this.f = blockposition.getX() + (int) (MathHelper.cos(f) * 32.0F);
+                        this.f = blockposition.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F);
                         this.g = blockposition.getY();
-                        this.h = blockposition.getZ() + (int) (MathHelper.sin(f) * 32.0F);
+                        this.h = blockposition.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F);
                     }
 
                     Vec3D vec3d = this.a(new BlockPosition(this.f, this.g, this.h));

@@ -1,10 +1,12 @@
 package net.minecraft.server;
 
+import com.google.common.collect.Streams;
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
+import java.util.Spliterators.AbstractSpliterator;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 public interface IWorldReader extends IIBlockAccess {
@@ -57,7 +59,9 @@ public interface IWorldReader extends IIBlockAccess {
 
     boolean a(@Nullable Entity entity, VoxelShape voxelshape);
 
-    int a(BlockPosition blockposition, EnumDirection enumdirection);
+    default int c(BlockPosition blockposition, EnumDirection enumdirection) {
+        return this.getType(blockposition).c(this, blockposition, enumdirection);
+    }
 
     boolean e();
 
@@ -90,18 +94,18 @@ public interface IWorldReader extends IIBlockAccess {
     }
 
     default boolean c(AxisAlignedBB axisalignedbb) {
-        return this.b((Entity) null, axisalignedbb, Collections.emptySet()).allMatch(VoxelShape::isEmpty);
+        return this.a((Entity) null, axisalignedbb, Collections.emptySet());
     }
 
     default boolean getCubes(Entity entity) {
-        return this.b(entity, entity.getBoundingBox(), Collections.emptySet()).allMatch(VoxelShape::isEmpty);
+        return this.a(entity, entity.getBoundingBox(), Collections.emptySet());
     }
 
     default boolean getCubes(Entity entity, AxisAlignedBB axisalignedbb) {
-        return this.b(entity, axisalignedbb, Collections.emptySet()).allMatch(VoxelShape::isEmpty);
+        return this.a(entity, axisalignedbb, Collections.emptySet());
     }
 
-    default boolean a(Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+    default boolean a(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
         return this.b(entity, axisalignedbb, set).allMatch(VoxelShape::isEmpty);
     }
 
@@ -109,84 +113,77 @@ public interface IWorldReader extends IIBlockAccess {
         return Stream.empty();
     }
 
-    default Stream<VoxelShape> b(@Nullable Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
-        VoxelShape voxelshape = VoxelShapes.a(axisalignedbb);
-        VoxelShapeCollision voxelshapecollision;
-        Stream stream;
+    default Stream<VoxelShape> b(@Nullable final Entity entity, AxisAlignedBB axisalignedbb, Set<Entity> set) {
+        final VoxelShape voxelshape = VoxelShapes.a(axisalignedbb);
+        final int i = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.X) - 1.0E-7D) - 1;
+        final int j = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.X) + 1.0E-7D) + 1;
+        final int k = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Y) - 1.0E-7D) - 1;
+        final int l = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.Y) + 1.0E-7D) + 1;
+        final int i1 = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Z) - 1.0E-7D) - 1;
+        final int j1 = MathHelper.floor(voxelshape.c(EnumDirection.EnumAxis.Z) + 1.0E-7D) + 1;
+        final VoxelShapeCollision voxelshapecollision = entity == null ? VoxelShapeCollision.a() : VoxelShapeCollision.a(entity);
+        final CursorPosition cursorposition = new CursorPosition(i, k, i1, j, l, j1);
+        final BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
-        if (entity == null) {
-            voxelshapecollision = VoxelShapeCollision.a();
-            stream = Stream.empty();
-        } else {
-            voxelshapecollision = VoxelShapeCollision.a(entity);
-            VoxelShape voxelshape1 = this.getWorldBorder().a();
-            boolean flag = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().shrink(1.0E-7D)), OperatorBoolean.AND);
-            boolean flag1 = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().g(1.0E-7D)), OperatorBoolean.AND);
+        return Streams.concat(new Stream[] { StreamSupport.stream(new AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, 0) {
+                    boolean a = entity == null;
 
-            if (!flag && flag1) {
-                stream = Stream.concat(Stream.of(voxelshape1), this.a(entity, voxelshape, set));
-            } else {
-                stream = this.a(entity, voxelshape, set);
-            }
-        }
+                    public boolean tryAdvance(Consumer<? super VoxelShape> consumer) {
+                        if (!this.a) {
+                            this.a = true;
+                            VoxelShape voxelshape1 = IWorldReader.this.getWorldBorder().a();
+                            boolean flag = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().shrink(1.0E-7D)), OperatorBoolean.AND);
+                            boolean flag1 = VoxelShapes.c(voxelshape1, VoxelShapes.a(entity.getBoundingBox().g(1.0E-7D)), OperatorBoolean.AND);
 
-        int i = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.X)) - 1;
-        int j = MathHelper.f(voxelshape.c(EnumDirection.EnumAxis.X)) + 1;
-        int k = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Y)) - 1;
-        int l = MathHelper.f(voxelshape.c(EnumDirection.EnumAxis.Y)) + 1;
-        int i1 = MathHelper.floor(voxelshape.b(EnumDirection.EnumAxis.Z)) - 1;
-        int j1 = MathHelper.f(voxelshape.c(EnumDirection.EnumAxis.Z)) + 1;
-        VoxelShapeBitSet voxelshapebitset = new VoxelShapeBitSet(j - i, l - k, j1 - i1);
-        Predicate<VoxelShape> predicate = (voxelshape2) -> {
-            return !voxelshape2.isEmpty() && VoxelShapes.c(voxelshape, voxelshape2, OperatorBoolean.AND);
-        };
-        AtomicReference<ChunkCoordIntPair> atomicreference = new AtomicReference(new ChunkCoordIntPair(i >> 4, i1 >> 4));
-        AtomicReference<IChunkAccess> atomicreference1 = new AtomicReference(this.getChunkAt(i >> 4, i1 >> 4, this.O(), false));
-        Stream<VoxelShape> stream1 = BlockPosition.a(i, k, i1, j - 1, l - 1, j1 - 1).map((blockposition) -> {
-            int k1 = blockposition.getX();
-            int l1 = blockposition.getY();
-            int i2 = blockposition.getZ();
+                            if (!flag && flag1) {
+                                consumer.accept(voxelshape1);
+                                return true;
+                            }
+                        }
 
-            if (World.b(l1)) {
-                return VoxelShapes.a();
-            } else {
-                boolean flag2 = k1 == i || k1 == j - 1;
-                boolean flag3 = l1 == k || l1 == l - 1;
-                boolean flag4 = i2 == i1 || i2 == j1 - 1;
-                ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) atomicreference.get();
-                int j2 = k1 >> 4;
-                int k2 = i2 >> 4;
-                IChunkAccess ichunkaccess;
+                        while (cursorposition.a()) {
+                            int k1 = cursorposition.b();
+                            int l1 = cursorposition.c();
+                            int i2 = cursorposition.d();
+                            int j2 = 0;
 
-                if (chunkcoordintpair.x == j2 && chunkcoordintpair.z == k2) {
-                    ichunkaccess = (IChunkAccess) atomicreference1.get();
-                } else {
-                    ichunkaccess = this.getChunkAt(j2, k2, this.O(), false);
-                    atomicreference.set(new ChunkCoordIntPair(j2, k2));
-                    atomicreference1.set(ichunkaccess);
-                }
+                            if (k1 == i || k1 == j) {
+                                ++j2;
+                            }
 
-                if ((!flag2 || !flag3) && (!flag3 || !flag4) && (!flag4 || !flag2) && ichunkaccess != null) {
-                    VoxelShape voxelshape2 = ichunkaccess.getType(blockposition).b((IBlockAccess) this, blockposition, voxelshapecollision);
-                    VoxelShape voxelshape3 = VoxelShapes.a().a((double) (-k1), (double) (-l1), (double) (-i2));
+                            if (l1 == k || l1 == l) {
+                                ++j2;
+                            }
 
-                    if (VoxelShapes.c(voxelshape3, voxelshape2, OperatorBoolean.AND)) {
-                        return VoxelShapes.a();
-                    } else if (voxelshape2 == VoxelShapes.b()) {
-                        voxelshapebitset.a(k1 - i, l1 - k, i2 - i1, true, true);
-                        return VoxelShapes.a();
-                    } else {
-                        return voxelshape2.a((double) k1, (double) l1, (double) i2);
+                            if (i2 == i1 || i2 == j1) {
+                                ++j2;
+                            }
+
+                            if (j2 < 3) {
+                                int k2 = k1 >> 4;
+                                int l2 = i2 >> 4;
+                                IChunkAccess ichunkaccess = IWorldReader.this.getChunkAt(k2, l2, IWorldReader.this.O(), false);
+
+                                if (ichunkaccess != null) {
+                                    blockposition_mutableblockposition.d(k1, l1, i2);
+                                    IBlockData iblockdata = ichunkaccess.getType(blockposition_mutableblockposition);
+
+                                    if ((j2 != 1 || iblockdata.f()) && (j2 != 2 || iblockdata.getBlock() == Blocks.MOVING_PISTON)) {
+                                        VoxelShape voxelshape2 = IWorldReader.this.getType(blockposition_mutableblockposition).b((IBlockAccess) IWorldReader.this, blockposition_mutableblockposition, voxelshapecollision);
+                                        VoxelShape voxelshape3 = voxelshape2.a((double) k1, (double) l1, (double) i2);
+
+                                        if (VoxelShapes.c(voxelshape, voxelshape3, OperatorBoolean.AND)) {
+                                            consumer.accept(voxelshape3);
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return false;
                     }
-                } else {
-                    return VoxelShapes.a();
-                }
-            }
-        });
-
-        return Stream.concat(stream, Stream.concat(stream1, Stream.generate(() -> {
-            return new VoxelShapeWorldRegion(voxelshapebitset, i, k, i1);
-        }).limit(1L)).filter(predicate));
+                }, false), this.a(entity, voxelshape, set)});
     }
 
     default boolean y(BlockPosition blockposition) {

@@ -30,14 +30,14 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     @Override
     public void tick() {
-        this.r();
+        this.s();
         if (this.i == TileEntityShulkerBox.AnimationPhase.OPENING || this.i == TileEntityShulkerBox.AnimationPhase.CLOSING) {
-            this.u();
+            this.v();
         }
 
     }
 
-    protected void r() {
+    protected void s() {
         this.k = this.j;
         switch (this.i) {
         case CLOSED:
@@ -46,10 +46,10 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         case OPENING:
             this.j += 0.1F;
             if (this.j >= 1.0F) {
-                this.u();
+                this.v();
                 this.i = TileEntityShulkerBox.AnimationPhase.OPENED;
                 this.j = 1.0F;
-                this.v();
+                this.x();
             }
             break;
         case CLOSING:
@@ -57,7 +57,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             if (this.j <= 0.0F) {
                 this.i = TileEntityShulkerBox.AnimationPhase.CLOSED;
                 this.j = 0.0F;
-                this.v();
+                this.x();
             }
             break;
         case OPENED:
@@ -66,7 +66,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
 
     }
 
-    public TileEntityShulkerBox.AnimationPhase s() {
+    public TileEntityShulkerBox.AnimationPhase t() {
         return this.i;
     }
 
@@ -86,7 +86,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         return this.b(enumdirection).a((double) enumdirection1.getAdjacentX(), (double) enumdirection1.getAdjacentY(), (double) enumdirection1.getAdjacentZ());
     }
 
-    private void u() {
+    private void v() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         if (iblockdata.getBlock() instanceof BlockShulkerBox) {
@@ -152,12 +152,12 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
             this.c = j;
             if (j == 0) {
                 this.i = TileEntityShulkerBox.AnimationPhase.CLOSING;
-                this.v();
+                this.x();
             }
 
             if (j == 1) {
                 this.i = TileEntityShulkerBox.AnimationPhase.OPENING;
-                this.v();
+                this.x();
             }
 
             return true;
@@ -166,7 +166,7 @@ public class TileEntityShulkerBox extends TileEntityLootable implements IWorldIn
         }
     }
 
-    private void v() {
+    private void x() {
         this.getBlock().a(this.getWorld(), this.getPosition(), 3);
     }
 

@@ -40,4 +40,12 @@ public abstract class IChunkProvider implements ILightAccess, AutoCloseable {
     public boolean a(Entity entity) {
         return true;
     }
+
+    public boolean a(ChunkCoordIntPair chunkcoordintpair) {
+        return true;
+    }
+
+    public boolean a(BlockPosition blockposition) {
+        return true;
+    }
 }

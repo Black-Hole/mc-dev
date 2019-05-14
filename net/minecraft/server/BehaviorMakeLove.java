@@ -1,21 +1,14 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
-import java.util.Set;
 
 public class BehaviorMakeLove extends Behavior<EntityVillager> {
 
     private long a;
 
     public BehaviorMakeLove() {
-        super(350, 350);
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.BREED_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT), 350, 350);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -51,8 +44,8 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
                     return;
                 }
 
-                entityvillager.en();
-                entityvillager1.en();
+                entityvillager.em();
+                entityvillager1.em();
                 Optional<EntityVillager> optional1 = this.a(entityvillager, entityvillager1);
 
                 if (optional1.isPresent()) {
@@ -73,17 +66,17 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        entityvillager.getBehaviorController().b(MemoryModuleType.BREED_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.BREED_TARGET);
     }
 
     private EntityVillager a(EntityVillager entityvillager) {
-        return (EntityVillager) entityvillager.getBehaviorController().c(MemoryModuleType.BREED_TARGET).get();
+        return (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.BREED_TARGET).get();
     }
 
     private boolean b(EntityVillager entityvillager) {
         BehaviorController<EntityVillager> behaviorcontroller = entityvillager.getBehaviorController();
 
-        if (!behaviorcontroller.c(MemoryModuleType.BREED_TARGET).isPresent()) {
+        if (!behaviorcontroller.getMemory(MemoryModuleType.BREED_TARGET).isPresent()) {
             return false;
         } else {
             EntityVillager entityvillager1 = this.a(entityvillager);
@@ -117,6 +110,6 @@ public class BehaviorMakeLove extends Behavior<EntityVillager> {
     private void a(WorldServer worldserver, EntityVillager entityvillager, BlockPosition blockposition) {
         GlobalPos globalpos = GlobalPos.a(worldserver.getWorldProvider().getDimensionManager(), blockposition);
 
-        entityvillager.getBehaviorController().a(MemoryModuleType.HOME, (Object) globalpos);
+        entityvillager.getBehaviorController().setMemory(MemoryModuleType.HOME, (Object) globalpos);
     }
 }

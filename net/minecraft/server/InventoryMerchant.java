@@ -123,7 +123,7 @@ public class InventoryMerchant implements IInventory {
                 if (merchantrecipe != null && !merchantrecipe.isFullyUsed()) {
                     this.recipe = merchantrecipe;
                     this.setItem(2, merchantrecipe.f());
-                    this.e = merchantrecipe.n();
+                    this.e = merchantrecipe.getXp();
                 } else {
                     this.setItem(2, ItemStack.a);
                     this.e = 0;

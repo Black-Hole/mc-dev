@@ -24,7 +24,7 @@ public class ProtoChunk implements IChunkAccess {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final ChunkCoordIntPair b;
-    private boolean c;
+    private volatile boolean c;
     private BiomeBase[] d;
     @Nullable
     private volatile LightEngine e;
@@ -48,9 +48,9 @@ public class ProtoChunk implements IChunkAccess {
     public ProtoChunk(ChunkCoordIntPair chunkcoordintpair, ChunkConverter chunkconverter) {
         this(chunkcoordintpair, chunkconverter, (ChunkSection[]) null, new ProtoChunkTickList<>((block) -> {
             return block == null || block.getBlockData().isAir();
-        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::get, chunkcoordintpair), new ProtoChunkTickList<>((fluidtype) -> {
+        }, chunkcoordintpair), new ProtoChunkTickList<>((fluidtype) -> {
             return fluidtype == null || fluidtype == FluidTypes.EMPTY;
-        }, IRegistry.FLUID::getKey, IRegistry.FLUID::get, chunkcoordintpair));
+        }, chunkcoordintpair));
     }
 
     public ProtoChunk(ChunkCoordIntPair chunkcoordintpair, ChunkConverter chunkconverter, @Nullable ChunkSection[] achunksection, ProtoChunkTickList<Block> protochunkticklist, ProtoChunkTickList<FluidType> protochunkticklist1) {
@@ -390,7 +390,7 @@ public class ProtoChunk implements IChunkAccess {
 
     @Override
     public void f(BlockPosition blockposition) {
-        if (!World.isInsideWorld(blockposition)) {
+        if (!World.isOutsideWorld(blockposition)) {
             IChunkAccess.a(this.m, blockposition.getY() >> 4).add(k(blockposition));
         }
 

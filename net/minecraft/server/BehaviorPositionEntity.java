@@ -13,7 +13,7 @@ public class BehaviorPositionEntity implements BehaviorPosition {
 
     @Override
     public BlockPosition a() {
-        return new BlockPosition(this.a.locX, this.a.locY, this.a.locZ);
+        return new BlockPosition(this.a);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class BehaviorPositionEntity implements BehaviorPosition {
 
     @Override
     public boolean a(EntityLiving entityliving) {
-        Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().c(MemoryModuleType.VISIBLE_MOBS);
+        Optional<List<EntityLiving>> optional = entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS);
 
         return this.a.isAlive() && optional.isPresent() && ((List) optional.get()).contains(this.a);
     }

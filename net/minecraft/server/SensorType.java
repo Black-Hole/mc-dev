@@ -14,11 +14,9 @@ public class SensorType<U extends Sensor<?>> {
     public static final SensorType<SensorVillagerBabies> h = a("villager_babies", SensorVillagerBabies::new);
     public static final SensorType<SensorSecondaryPlaces> i = a("secondary_pois", SensorSecondaryPlaces::new);
     private final Supplier<U> j;
-    private final MinecraftKey k;
 
-    private SensorType(Supplier<U> supplier, String s) {
+    private SensorType(Supplier<U> supplier) {
         this.j = supplier;
-        this.k = new MinecraftKey(s);
     }
 
     public U a() {
@@ -26,6 +24,6 @@ public class SensorType<U extends Sensor<?>> {
     }
 
     private static <U extends Sensor<?>> SensorType<U> a(String s, Supplier<U> supplier) {
-        return (SensorType) IRegistry.a((IRegistry) IRegistry.SENSOR_TYPE, new MinecraftKey(s), (Object) (new SensorType<>(supplier, s)));
+        return (SensorType) IRegistry.a((IRegistry) IRegistry.SENSOR_TYPE, new MinecraftKey(s), (Object) (new SensorType<>(supplier)));
     }
 }

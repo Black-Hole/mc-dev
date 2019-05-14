@@ -32,9 +32,9 @@ public class SensorSecondaryPlaces extends Sensor<EntityVillager> {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
         if (!list.isEmpty()) {
-            behaviorcontroller.a(MemoryModuleType.SECONDARY_JOB_SITE, (Object) list);
+            behaviorcontroller.setMemory(MemoryModuleType.SECONDARY_JOB_SITE, (Object) list);
         } else {
-            behaviorcontroller.b(MemoryModuleType.SECONDARY_JOB_SITE);
+            behaviorcontroller.removeMemory(MemoryModuleType.SECONDARY_JOB_SITE);
         }
 
     }

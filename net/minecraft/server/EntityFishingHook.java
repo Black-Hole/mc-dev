@@ -301,7 +301,7 @@ public class EntityFishingHook extends Entity {
                     d0 = this.locX + (double) (MathHelper.sin(f1) * f2 * 0.1F);
                     d1 = (double) ((float) MathHelper.floor(this.getBoundingBox().minY) + 1.0F);
                     d2 = this.locZ + (double) (MathHelper.cos(f1) * f2 * 0.1F);
-                    block = worldserver.getType(new BlockPosition((int) d0, (int) d1 - 1, (int) d2)).getBlock();
+                    block = worldserver.getType(new BlockPosition(d0, d1 - 1.0D, d2)).getBlock();
                     if (block == Blocks.WATER) {
                         worldserver.a(Particles.SPLASH, d0, d1, d2, 2 + this.random.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D);
                     }

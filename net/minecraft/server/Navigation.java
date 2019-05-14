@@ -40,7 +40,7 @@ public class Navigation extends NavigationAbstract {
                 return super.b(blockposition1.up());
             }
 
-            while (blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).isAir()) {
+            while (blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).isAir()) {
                 blockposition1 = blockposition1.up();
             }
 
@@ -50,7 +50,7 @@ public class Navigation extends NavigationAbstract {
         if (!this.b.getType(blockposition).getMaterial().isBuildable()) {
             return super.b(blockposition);
         } else {
-            for (blockposition1 = blockposition.up(); blockposition1.getY() < this.b.getHeight() && this.b.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
+            for (blockposition1 = blockposition.up(); blockposition1.getY() < this.b.getBuildHeight() && this.b.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
                 ;
             }
 
@@ -65,8 +65,8 @@ public class Navigation extends NavigationAbstract {
 
     private int s() {
         if (this.a.isInWater() && this.r()) {
-            int i = (int) this.a.getBoundingBox().minY;
-            Block block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
+            int i = MathHelper.floor(this.a.getBoundingBox().minY);
+            Block block = this.b.getType(new BlockPosition(this.a.locX, (double) i, this.a.locZ)).getBlock();
             int j = 0;
 
             do {
@@ -75,13 +75,13 @@ public class Navigation extends NavigationAbstract {
                 }
 
                 ++i;
-                block = this.b.getType(new BlockPosition(MathHelper.floor(this.a.locX), i, MathHelper.floor(this.a.locZ))).getBlock();
+                block = this.b.getType(new BlockPosition(this.a.locX, (double) i, this.a.locZ)).getBlock();
                 ++j;
             } while (j <= 16);
 
-            return (int) this.a.getBoundingBox().minY;
+            return MathHelper.floor(this.a.getBoundingBox().minY);
         } else {
-            return (int) (this.a.getBoundingBox().minY + 0.5D);
+            return MathHelper.floor(this.a.getBoundingBox().minY + 0.5D);
         }
     }
 
@@ -89,7 +89,7 @@ public class Navigation extends NavigationAbstract {
     protected void D_() {
         super.D_();
         if (this.p) {
-            if (this.b.f(new BlockPosition(MathHelper.floor(this.a.locX), (int) (this.a.getBoundingBox().minY + 0.5D), MathHelper.floor(this.a.locZ)))) {
+            if (this.b.f(new BlockPosition(this.a.locX, this.a.getBoundingBox().minY + 0.5D, this.a.locZ))) {
                 return;
             }
 
@@ -122,7 +122,7 @@ public class Navigation extends NavigationAbstract {
             d1 *= d3;
             i += 2;
             k += 2;
-            if (!this.a(l, (int) vec3d.y, i1, i, j, k, vec3d, d0, d1)) {
+            if (!this.a(l, MathHelper.floor(vec3d.y), i1, i, j, k, vec3d, d0, d1)) {
                 return false;
             } else {
                 i -= 2;
@@ -163,7 +163,7 @@ public class Navigation extends NavigationAbstract {
                         i1 += k1;
                         k2 = i2 - i1;
                     }
-                } while (this.a(l, (int) vec3d.y, i1, i, j, k, vec3d, d0, d1));
+                } while (this.a(l, MathHelper.floor(vec3d.y), i1, i, j, k, vec3d, d0, d1));
 
                 return false;
             }

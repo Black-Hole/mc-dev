@@ -400,5 +400,12 @@ public class DataConverterRegistry {
         Schema schema92 = datafixerbuilder.addSchema(1948, DataConverterRegistry.b);
 
         datafixerbuilder.addFixer(new DataConverterOminousBannerRename(schema92, false));
+        Schema schema93 = datafixerbuilder.addSchema(1953, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterOminousBannerBlockEntityRename(schema93, false));
+        Schema schema94 = datafixerbuilder.addSchema(1955, DataConverterRegistry.b);
+
+        datafixerbuilder.addFixer(new DataConverterVillagerLevelXp(schema94, false));
+        datafixerbuilder.addFixer(new DataConverterZombieVillagerLevelXp(schema94, false));
     }
 }

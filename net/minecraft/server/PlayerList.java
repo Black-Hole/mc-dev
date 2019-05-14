@@ -39,7 +39,7 @@ public abstract class PlayerList {
     public IPlayerFileData playerFileData;
     private boolean hasWhitelist;
     protected final int maxPlayers;
-    private int s;
+    private int viewDistance;
     private EnumGamemode t;
     private boolean u;
     private int v;
@@ -81,7 +81,7 @@ public abstract class PlayerList {
         this.a(entityplayer, (EntityPlayer) null, worldserver);
         PlayerConnection playerconnection = new PlayerConnection(this.server, networkmanager, entityplayer);
 
-        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.s, worldserver.getGameRules().getBoolean("reducedDebugInfo")));
+        playerconnection.sendPacket(new PacketPlayOutLogin(entityplayer.getId(), entityplayer.playerInteractManager.getGameMode(), worlddata.isHardcore(), worldserver.worldProvider.getDimensionManager(), this.getMaxPlayers(), worlddata.getType(), this.viewDistance, worldserver.getGameRules().getBoolean("reducedDebugInfo")));
         playerconnection.sendPacket(new PacketPlayOutCustomPayload(PacketPlayOutCustomPayload.a, (new PacketDataSerializer(Unpooled.buffer())).a(this.getServer().getServerModName())));
         playerconnection.sendPacket(new PacketPlayOutServerDifficulty(worlddata.getDifficulty(), worlddata.isDifficultyLocked()));
         playerconnection.sendPacket(new PacketPlayOutAbilities(entityplayer.abilities));
@@ -685,7 +685,7 @@ public abstract class PlayerList {
     }
 
     public int getViewDistance() {
-        return this.s;
+        return this.viewDistance;
     }
 
     public MinecraftServer getServer() {
@@ -764,7 +764,7 @@ public abstract class PlayerList {
     }
 
     public void a(int i, int j) {
-        this.s = i;
+        this.viewDistance = i;
         this.sendAll(new PacketPlayOutViewDistance(i));
         Iterator iterator = this.server.getWorlds().iterator();
 

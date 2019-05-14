@@ -3,11 +3,11 @@ package net.minecraft.server;
 import java.util.EnumSet;
 import javax.annotation.Nullable;
 
-public class EntityLLamaTrader extends EntityLlama {
+public class EntityLlamaTrader extends EntityLlama {
 
     private int bJ;
 
-    public EntityLLamaTrader(EntityTypes<? extends EntityLLamaTrader> entitytypes, World world) {
+    public EntityLlamaTrader(EntityTypes<? extends EntityLlamaTrader> entitytypes, World world) {
         super(entitytypes, world);
     }
 
@@ -35,7 +35,7 @@ public class EntityLLamaTrader extends EntityLlama {
     protected void initPathfinder() {
         super.initPathfinder();
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 2.0D));
-        this.targetSelector.a(1, new EntityLLamaTrader.a(this));
+        this.targetSelector.a(1, new EntityLlamaTrader.a(this));
     }
 
     public void v(int i) {
@@ -52,19 +52,35 @@ public class EntityLLamaTrader extends EntityLlama {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.bJ > 0 && --this.bJ == 0 && this.getLeashHolder() instanceof EntityVillagerTrader) {
-            EntityVillagerTrader entityvillagertrader = (EntityVillagerTrader) this.getLeashHolder();
-            int i = entityvillagertrader.eg();
-
-            if (i - 1 > 0) {
-                this.bJ = i - 1;
-            } else {
-                this.die();
-            }
+    public void movementTick() {
+        super.movementTick();
+        if (!this.world.isClientSide) {
+            this.eK();
         }
 
+    }
+
+    private void eK() {
+        if (this.eL()) {
+            this.bJ = this.eM() ? ((EntityVillagerTrader) this.getLeashHolder()).eg() - 1 : this.bJ - 1;
+            if (this.bJ <= 0) {
+                this.unleash(true, false);
+                this.die();
+            }
+
+        }
+    }
+
+    private boolean eL() {
+        return !this.isTamed() && !this.eN() && !this.hasSinglePlayerPassenger();
+    }
+
+    private boolean eM() {
+        return this.getLeashHolder() instanceof EntityVillagerTrader;
+    }
+
+    private boolean eN() {
+        return this.isLeashed() && !this.eM();
     }
 
     @Nullable

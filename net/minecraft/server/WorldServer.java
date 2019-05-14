@@ -13,7 +13,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -143,30 +142,30 @@ public class WorldServer extends World {
                 this.worldData.setStorm(flag2);
             }
 
-            this.n = this.o;
+            this.lastThunderLevel = this.thunderLevel;
             if (this.worldData.isThundering()) {
-                this.o = (float) ((double) this.o + 0.01D);
+                this.thunderLevel = (float) ((double) this.thunderLevel + 0.01D);
             } else {
-                this.o = (float) ((double) this.o - 0.01D);
+                this.thunderLevel = (float) ((double) this.thunderLevel - 0.01D);
             }
 
-            this.o = MathHelper.a(this.o, 0.0F, 1.0F);
-            this.l = this.m;
+            this.thunderLevel = MathHelper.a(this.thunderLevel, 0.0F, 1.0F);
+            this.lastRainLevel = this.rainLevel;
             if (this.worldData.hasStorm()) {
-                this.m = (float) ((double) this.m + 0.01D);
+                this.rainLevel = (float) ((double) this.rainLevel + 0.01D);
             } else {
-                this.m = (float) ((double) this.m - 0.01D);
+                this.rainLevel = (float) ((double) this.rainLevel - 0.01D);
             }
 
-            this.m = MathHelper.a(this.m, 0.0F, 1.0F);
+            this.rainLevel = MathHelper.a(this.rainLevel, 0.0F, 1.0F);
         }
 
-        if (this.l != this.m) {
-            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(7, this.m)), this.worldProvider.getDimensionManager());
+        if (this.lastRainLevel != this.rainLevel) {
+            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(7, this.rainLevel)), this.worldProvider.getDimensionManager());
         }
 
-        if (this.n != this.o) {
-            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(8, this.o)), this.worldProvider.getDimensionManager());
+        if (this.lastThunderLevel != this.thunderLevel) {
+            this.server.getPlayerList().a((Packet) (new PacketPlayOutGameStateChange(8, this.thunderLevel)), this.worldProvider.getDimensionManager());
         }
 
         if (flag != this.isRaining()) {
@@ -176,8 +175,8 @@ public class WorldServer extends World {
                 this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(1, 0.0F));
             }
 
-            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(7, this.m));
-            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(8, this.o));
+            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(7, this.rainLevel));
+            this.server.getPlayerList().sendAll(new PacketPlayOutGameStateChange(8, this.thunderLevel));
         }
 
         if (this.getWorldData().isHardcore() && this.getDifficulty() != EnumDifficulty.HARD) {
@@ -389,7 +388,7 @@ public class WorldServer extends World {
 
     protected BlockPosition a(BlockPosition blockposition) {
         BlockPosition blockposition1 = this.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING, blockposition);
-        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getHeight(), blockposition1.getZ()))).g(3.0D);
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB(blockposition1, new BlockPosition(blockposition1.getX(), this.getBuildHeight(), blockposition1.getZ()))).g(3.0D);
         List<EntityLiving> list = this.a(EntityLiving.class, axisalignedbb, (entityliving) -> {
             return entityliving != null && entityliving.isAlive() && this.f(entityliving.getChunkCoordinates());
         });
@@ -720,7 +719,7 @@ public class WorldServer extends World {
             if (!(entity instanceof EntityInsentient) || !((EntityInsentient) entity).isPersistent()) {
                 EnumCreatureType enumcreaturetype = entity.getEntityType().d();
 
-                if (enumcreaturetype != EnumCreatureType.MISC) {
+                if (enumcreaturetype != EnumCreatureType.MISC && this.getChunkProvider().a(entity)) {
                     object2intmap.computeInt(enumcreaturetype, (enumcreaturetype1, integer) -> {
                         return 1 + (integer == null ? 0 : integer);
                     });
@@ -924,8 +923,8 @@ public class WorldServer extends World {
 
     public void removePlayer(EntityPlayer entityplayer) {
         entityplayer.die();
-        this.everyoneSleeping();
         this.removeEntity(entityplayer);
+        this.everyoneSleeping();
     }
 
     public void strikeLightning(EntityLightning entitylightning) {
@@ -1050,12 +1049,6 @@ public class WorldServer extends World {
         IBlockData iblockdata = this.getType(blockactiondata.a());
 
         return iblockdata.getBlock() == blockactiondata.b() ? iblockdata.a(this, blockactiondata.a(), blockactiondata.c(), blockactiondata.d()) : false;
-    }
-
-    @Override
-    public void close() throws IOException {
-        this.chunkProvider.close();
-        super.close();
     }
 
     @Override
@@ -1231,11 +1224,12 @@ public class WorldServer extends World {
 
     @Override
     public void a(BlockPosition blockposition, IBlockData iblockdata, IBlockData iblockdata1) {
-        BlockPosition blockposition1 = blockposition.immutableCopy();
         Optional<VillagePlaceType> optional = VillagePlaceType.b(iblockdata);
         Optional<VillagePlaceType> optional1 = VillagePlaceType.b(iblockdata1);
 
         if (!Objects.equals(optional, optional1)) {
+            BlockPosition blockposition1 = blockposition.immutableCopy();
+
             optional.ifPresent((villageplacetype) -> {
                 this.getMinecraftServer().execute(() -> {
                     this.B().a(blockposition1);
@@ -1259,11 +1253,15 @@ public class WorldServer extends World {
         return this.a(blockposition, 1);
     }
 
-    public boolean a(BlockPosition blockposition, int i) {
-        return i > 6 ? false : this.a(SectionPosition.a(blockposition)) <= i;
+    public boolean a(SectionPosition sectionposition) {
+        return this.b_(sectionposition.t());
     }
 
-    public int a(SectionPosition sectionposition) {
+    public boolean a(BlockPosition blockposition, int i) {
+        return i > 6 ? false : this.b(SectionPosition.a(blockposition)) <= i;
+    }
+
+    public int b(SectionPosition sectionposition) {
         return this.B().a(sectionposition);
     }
 
@@ -1273,7 +1271,9 @@ public class WorldServer extends World {
 
     @Nullable
     public Raid c_(BlockPosition blockposition) {
-        return this.c.a(blockposition);
+        Raid raid = this.c.a(blockposition, 9216);
+
+        return this.b_(blockposition) ? raid : null;
     }
 
     public boolean d_(BlockPosition blockposition) {

@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TileEntityBell extends TileEntity implements ITickable {
 
@@ -20,7 +21,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
     @Override
     public boolean setProperty(int i, int j) {
         if (i == 1) {
-            this.c();
+            this.d();
             this.j = 0;
             this.c = EnumDirection.fromType1(j);
             this.a = 0;
@@ -37,26 +38,30 @@ public class TileEntityBell extends TileEntity implements ITickable {
             ++this.a;
         }
 
-        BlockPosition blockposition = this.getPosition();
-
         if (this.a >= 50) {
             this.b = false;
             this.a = 0;
         }
 
-        if (this.a >= 5 && this.j == 0) {
-            this.a(this.world, blockposition);
+        if (this.a >= 5 && this.j == 0 && this.f()) {
+            this.i = true;
+            this.c();
         }
 
         if (this.i) {
             if (this.j < 40) {
                 ++this.j;
             } else {
+                this.b(this.world);
+                this.c(this.world);
                 this.i = false;
-                this.b(this.world, blockposition);
             }
         }
 
+    }
+
+    private void c() {
+        this.world.a((EntityHuman) null, this.getPosition(), SoundEffects.BLOCK_BELL_RESONATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public void a(EnumDirection enumdirection) {
@@ -72,7 +77,7 @@ public class TileEntityBell extends TileEntity implements ITickable {
         this.world.playBlockAction(blockposition, this.getBlock().getBlock(), 1, enumdirection.a());
     }
 
-    private void c() {
+    private void d() {
         BlockPosition blockposition = this.getPosition();
 
         if (this.world.getTime() > this.g + 60L || this.h == null) {
@@ -89,61 +94,69 @@ public class TileEntityBell extends TileEntity implements ITickable {
                 EntityLiving entityliving = (EntityLiving) iterator.next();
 
                 if (entityliving.isAlive() && !entityliving.dead && blockposition.a((IPosition) entityliving.ch(), 32.0D)) {
-                    entityliving.getBehaviorController().a(MemoryModuleType.HEARD_BELL_TIME, (Object) this.world.getTime());
+                    entityliving.getBehaviorController().setMemory(MemoryModuleType.HEARD_BELL_TIME, (Object) this.world.getTime());
                 }
             }
         }
 
     }
 
-    private void a(World world, BlockPosition blockposition) {
+    private boolean f() {
+        BlockPosition blockposition = this.getPosition();
         Iterator iterator = this.h.iterator();
 
-        while (iterator.hasNext()) {
-            EntityLiving entityliving = (EntityLiving) iterator.next();
+        EntityLiving entityliving;
 
-            if (entityliving.isAlive() && !entityliving.dead && blockposition.a((IPosition) entityliving.ch(), 32.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS)) {
-                this.i = true;
+        do {
+            if (!iterator.hasNext()) {
+                return false;
             }
-        }
 
-        if (this.i) {
-            world.a((EntityHuman) null, blockposition, SoundEffects.BLOCK_BELL_RESONATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-        }
+            entityliving = (EntityLiving) iterator.next();
+        } while (!entityliving.isAlive() || entityliving.dead || !blockposition.a((IPosition) entityliving.ch(), 32.0D) || !entityliving.getEntityType().a(TagsEntity.RADIERS));
 
+        return true;
     }
 
-    private void b(World world, BlockPosition blockposition) {
-        int i = 16700985;
-        int j = (int) this.h.stream().filter((entityliving) -> {
-            return blockposition.a((IPosition) entityliving.ch(), 32.0D);
-        }).count();
-        Iterator iterator = this.h.iterator();
-
-        while (iterator.hasNext()) {
-            EntityLiving entityliving = (EntityLiving) iterator.next();
-
-            if (entityliving.isAlive() && !entityliving.dead && blockposition.a((IPosition) entityliving.ch(), 32.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS)) {
-                if (!world.isClientSide) {
-                    entityliving.addEffect(new MobEffect(MobEffects.GLOWING, 60));
-                } else {
-                    float f = 1.0F;
-                    float f1 = MathHelper.sqrt((entityliving.locX - (double) blockposition.getX()) * (entityliving.locX - (double) blockposition.getX()) + (entityliving.locZ - (double) blockposition.getZ()) * (entityliving.locZ - (double) blockposition.getZ()));
-                    double d0 = (double) ((float) blockposition.getX() + 0.5F) + (double) (1.0F / f1) * (entityliving.locX - (double) blockposition.getX());
-                    double d1 = (double) ((float) blockposition.getZ() + 0.5F) + (double) (1.0F / f1) * (entityliving.locZ - (double) blockposition.getZ());
-                    int k = MathHelper.clamp((j - 21) / -2, 3, 15);
-
-                    for (int l = 0; l < k; ++l) {
-                        i += 5;
-                        double d2 = (double) (i >> 16 & 255) / 255.0D;
-                        double d3 = (double) (i >> 8 & 255) / 255.0D;
-                        double d4 = (double) (i & 255) / 255.0D;
-
-                        world.addParticle(Particles.ENTITY_EFFECT, d0, (double) ((float) blockposition.getY() + 0.5F), d1, d2, d3, d4);
-                    }
-                }
-            }
+    private void b(World world) {
+        if (!world.isClientSide) {
+            this.h.stream().filter(this::a).forEach(this::b);
         }
+    }
 
+    private void c(World world) {
+        if (world.isClientSide) {
+            BlockPosition blockposition = this.getPosition();
+            AtomicInteger atomicinteger = new AtomicInteger(16700985);
+            int i = (int) this.h.stream().filter((entityliving) -> {
+                return blockposition.a((IPosition) entityliving.ch(), 48.0D);
+            }).count();
+
+            this.h.stream().filter(this::a).forEach((entityliving) -> {
+                float f = 1.0F;
+                float f1 = MathHelper.sqrt((entityliving.locX - (double) blockposition.getX()) * (entityliving.locX - (double) blockposition.getX()) + (entityliving.locZ - (double) blockposition.getZ()) * (entityliving.locZ - (double) blockposition.getZ()));
+                double d0 = (double) ((float) blockposition.getX() + 0.5F) + (double) (1.0F / f1) * (entityliving.locX - (double) blockposition.getX());
+                double d1 = (double) ((float) blockposition.getZ() + 0.5F) + (double) (1.0F / f1) * (entityliving.locZ - (double) blockposition.getZ());
+                int j = MathHelper.clamp((i - 21) / -2, 3, 15);
+
+                for (int k = 0; k < j; ++k) {
+                    atomicinteger.addAndGet(5);
+                    double d2 = (double) (atomicinteger.get() >> 16 & 255) / 255.0D;
+                    double d3 = (double) (atomicinteger.get() >> 8 & 255) / 255.0D;
+                    double d4 = (double) (atomicinteger.get() & 255) / 255.0D;
+
+                    world.addParticle(Particles.ENTITY_EFFECT, d0, (double) ((float) blockposition.getY() + 0.5F), d1, d2, d3, d4);
+                }
+
+            });
+        }
+    }
+
+    private boolean a(EntityLiving entityliving) {
+        return entityliving.isAlive() && !entityliving.dead && this.getPosition().a((IPosition) entityliving.ch(), 48.0D) && entityliving.getEntityType().a(TagsEntity.RADIERS);
+    }
+
+    private void b(EntityLiving entityliving) {
+        entityliving.addEffect(new MobEffect(MobEffects.GLOWING, 60));
     }
 }

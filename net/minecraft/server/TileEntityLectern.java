@@ -26,7 +26,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
                 ItemStack itemstack = TileEntityLectern.this.book.cloneAndSubtract(j);
 
                 if (TileEntityLectern.this.book.isEmpty()) {
-                    TileEntityLectern.this.s();
+                    TileEntityLectern.this.t();
                 }
 
                 return itemstack;
@@ -41,7 +41,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
                 ItemStack itemstack = TileEntityLectern.this.book;
 
                 TileEntityLectern.this.book = ItemStack.a;
-                TileEntityLectern.this.s();
+                TileEntityLectern.this.t();
                 return itemstack;
             } else {
                 return ItemStack.a;
@@ -116,7 +116,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
         this.a(itemstack, (EntityHuman) null);
     }
 
-    private void s() {
+    private void t() {
         this.page = 0;
         this.maxPage = 0;
         BlockLectern.a(this.getWorld(), this.getPosition(), this.getBlock(), false);
@@ -144,7 +144,7 @@ public class TileEntityLectern extends TileEntity implements Clearable, ITileInv
         return this.page;
     }
 
-    public int r() {
+    public int s() {
         float f = this.maxPage > 1 ? (float) this.getPage() / ((float) this.maxPage - 1.0F) : 1.0F;
 
         return MathHelper.d(f * 14.0F) + (this.f() ? 1 : 0);

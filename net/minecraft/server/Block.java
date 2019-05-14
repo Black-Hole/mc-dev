@@ -1,5 +1,8 @@
 package net.minecraft.server;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import it.unimi.dsi.fastutil.objects.Object2ByteLinkedOpenHashMap;
 import java.util.Collections;
 import java.util.Iterator;
@@ -16,8 +19,13 @@ public class Block implements IMaterial {
     protected static final Logger LOGGER = LogManager.getLogger();
     public static final RegistryBlockID<IBlockData> REGISTRY_ID = new RegistryBlockID<>();
     private static final EnumDirection[] a = new EnumDirection[] { EnumDirection.WEST, EnumDirection.EAST, EnumDirection.NORTH, EnumDirection.SOUTH, EnumDirection.DOWN, EnumDirection.UP};
-    private static final VoxelShape b = VoxelShapes.a(VoxelShapes.b(), a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);
-    private static final VoxelShape c = a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
+    private static final LoadingCache<VoxelShape, Boolean> b = CacheBuilder.newBuilder().maximumSize(512L).weakKeys().build(new CacheLoader<VoxelShape, Boolean>() {
+        public Boolean load(VoxelShape voxelshape) {
+            return !VoxelShapes.c(VoxelShapes.b(), voxelshape, OperatorBoolean.NOT_SAME);
+        }
+    });
+    private static final VoxelShape c = VoxelShapes.a(VoxelShapes.b(), a(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D), OperatorBoolean.ONLY_FIRST);
+    private static final VoxelShape d = a(6.0D, 0.0D, 6.0D, 10.0D, 10.0D, 10.0D);
     protected final int n;
     public final float strength;
     protected final float durability;
@@ -29,14 +37,14 @@ public class Block implements IMaterial {
     protected final BlockStateList<Block, IBlockData> blockStateList;
     private IBlockData blockData;
     protected final boolean v;
-    private final boolean f;
+    private final boolean g;
     @Nullable
-    private MinecraftKey g;
+    private MinecraftKey h;
     @Nullable
     private String name;
     @Nullable
-    private Item i;
-    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> j = ThreadLocal.withInitial(() -> {
+    private Item j;
+    private static final ThreadLocal<Object2ByteLinkedOpenHashMap<Block.a>> k = ThreadLocal.withInitial(() -> {
         Object2ByteLinkedOpenHashMap<Block.a> object2bytelinkedopenhashmap = new Object2ByteLinkedOpenHashMap<Block.a>(200) {
             protected void rehash(int i) {}
         };
@@ -211,8 +219,8 @@ public class Block implements IMaterial {
         this.strength = block_info.g;
         this.q = block_info.h;
         this.frictionFactor = block_info.i;
-        this.f = block_info.k;
-        this.g = block_info.j;
+        this.g = block_info.k;
+        this.h = block_info.j;
         this.blockStateList = blockstatelist_a.a(IBlockData::new);
         this.o((IBlockData) this.blockStateList.getBlockData());
     }
@@ -301,13 +309,13 @@ public class Block implements IMaterial {
     public static boolean c(IBlockAccess iblockaccess, BlockPosition blockposition) {
         IBlockData iblockdata = iblockaccess.getType(blockposition);
 
-        return !iblockdata.a(TagsBlock.LEAVES) && !VoxelShapes.c(iblockdata.getCollisionShape(iblockaccess, blockposition).a(EnumDirection.UP), Block.b, OperatorBoolean.ONLY_SECOND);
+        return !iblockdata.a(TagsBlock.LEAVES) && !VoxelShapes.c(iblockdata.getCollisionShape(iblockaccess, blockposition).a(EnumDirection.UP), Block.c, OperatorBoolean.ONLY_SECOND);
     }
 
     public static boolean a(IWorldReader iworldreader, BlockPosition blockposition, EnumDirection enumdirection) {
         IBlockData iblockdata = iworldreader.getType(blockposition);
 
-        return !iblockdata.a(TagsBlock.LEAVES) && !VoxelShapes.c(iblockdata.getCollisionShape(iworldreader, blockposition).a(enumdirection), Block.c, OperatorBoolean.ONLY_SECOND);
+        return !iblockdata.a(TagsBlock.LEAVES) && !VoxelShapes.c(iblockdata.getCollisionShape(iworldreader, blockposition).a(enumdirection), Block.d, OperatorBoolean.ONLY_SECOND);
     }
 
     public static boolean d(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -321,7 +329,7 @@ public class Block implements IMaterial {
     }
 
     public static boolean a(VoxelShape voxelshape) {
-        return !VoxelShapes.c(VoxelShapes.b(), voxelshape, OperatorBoolean.NOT_SAME);
+        return (Boolean) Block.b.getUnchecked(voxelshape);
     }
 
     @Deprecated
@@ -396,13 +404,13 @@ public class Block implements IMaterial {
     public void dropNaturally(IBlockData iblockdata, World world, BlockPosition blockposition, ItemStack itemstack) {}
 
     public MinecraftKey i() {
-        if (this.g == null) {
+        if (this.h == null) {
             MinecraftKey minecraftkey = IRegistry.BLOCK.getKey(this);
 
-            this.g = new MinecraftKey(minecraftkey.b(), "blocks/" + minecraftkey.getKey());
+            this.h = new MinecraftKey(minecraftkey.b(), "blocks/" + minecraftkey.getKey());
         }
 
-        return this.g;
+        return this.h;
     }
 
     @Deprecated
@@ -655,15 +663,15 @@ public class Block implements IMaterial {
 
     @Override
     public Item getItem() {
-        if (this.i == null) {
-            this.i = Item.getItemOf(this);
+        if (this.j == null) {
+            this.j = Item.getItemOf(this);
         }
 
-        return this.i;
+        return this.j;
     }
 
     public boolean p() {
-        return this.f;
+        return this.g;
     }
 
     public String toString() {
@@ -730,7 +738,7 @@ public class Block implements IMaterial {
             block_info.b = block.t;
             block_info.d = block.stepSound;
             block_info.i = block.m();
-            block_info.k = block.f;
+            block_info.k = block.g;
             return block_info;
         }
 

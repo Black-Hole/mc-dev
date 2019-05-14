@@ -4,13 +4,13 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import java.util.Arrays;
 
-final class VoxelShapeArray extends VoxelShape {
+public final class VoxelShapeArray extends VoxelShape {
 
     private final DoubleList b;
     private final DoubleList c;
     private final DoubleList d;
 
-    VoxelShapeArray(VoxelShapeDiscrete voxelshapediscrete, double[] adouble, double[] adouble1, double[] adouble2) {
+    protected VoxelShapeArray(VoxelShapeDiscrete voxelshapediscrete, double[] adouble, double[] adouble1, double[] adouble2) {
         this(voxelshapediscrete, (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble, voxelshapediscrete.b() + 1)), (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble1, voxelshapediscrete.c() + 1)), (DoubleList) DoubleArrayList.wrap(Arrays.copyOf(adouble2, voxelshapediscrete.d() + 1)));
     }
 

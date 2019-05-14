@@ -30,22 +30,19 @@ public class MemoryModuleType<U> {
     public static final MemoryModuleType<EntityVillager.a> GOLEM_SPAWN_CONDITIONS = a("golem_spawn_conditions", Optional.empty());
     public static final MemoryModuleType<GlobalPos> HIDING_PLACE = a("hiding_place", Optional.empty());
     public static final MemoryModuleType<Long> HEARD_BELL_TIME = a("heard_bell_time", Optional.empty());
-    private final Optional<Function<Dynamic<?>, U>> x;
+    public static final MemoryModuleType<Long> CANT_REACH_WALK_TARGET_SINCE = a("cant_reach_walk_target_since", Optional.empty());
+    private final Optional<Function<Dynamic<?>, U>> y;
 
     private MemoryModuleType(Optional<Function<Dynamic<?>, U>> optional) {
-        this.x = optional;
-    }
-
-    public MinecraftKey a() {
-        return IRegistry.MEMORY_MODULE_TYPE.getKey(this);
+        this.y = optional;
     }
 
     public String toString() {
-        return this.a().toString();
+        return IRegistry.MEMORY_MODULE_TYPE.getKey(this).toString();
     }
 
-    public Optional<Function<Dynamic<?>, U>> b() {
-        return this.x;
+    public Optional<Function<Dynamic<?>, U>> a() {
+        return this.y;
     }
 
     private static <U> MemoryModuleType<U> a(String s, Optional<Function<Dynamic<?>, U>> optional) {

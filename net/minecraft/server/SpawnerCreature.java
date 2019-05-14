@@ -38,7 +38,7 @@ public final class SpawnerCreature {
 
                     while (true) {
                         if (j2 < l1) {
-                            label92:
+                            label96:
                             {
                                 j1 += world.random.nextInt(6) - world.random.nextInt(6);
                                 k1 += world.random.nextInt(6) - world.random.nextInt(6);
@@ -50,11 +50,11 @@ public final class SpawnerCreature {
                                 if (entityhuman != null && entityhuman.e((double) f, (double) k, (double) f1) > 576.0D && !blockposition.a((IPosition) (new Vec3D((double) f, (double) k, (double) f1)), 24.0D)) {
                                     ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(blockposition_mutableblockposition);
 
-                                    if (Objects.equals(chunkcoordintpair, chunk.getPos())) {
+                                    if (Objects.equals(chunkcoordintpair, chunk.getPos()) || world.getChunkProvider().a(chunkcoordintpair)) {
                                         if (biomebase_biomemeta == null) {
                                             biomebase_biomemeta = a(chunkgenerator, enumcreaturetype, world.random, (BlockPosition) blockposition_mutableblockposition);
                                             if (biomebase_biomemeta == null) {
-                                                break label92;
+                                                break label96;
                                             }
 
                                             l1 = biomebase_biomemeta.c + world.random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
@@ -93,7 +93,7 @@ public final class SpawnerCreature {
                                                         }
 
                                                         if (entityinsentient.c(i2)) {
-                                                            break label92;
+                                                            break label96;
                                                         }
                                                     }
                                                 }

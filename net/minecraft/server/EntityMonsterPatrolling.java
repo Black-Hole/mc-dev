@@ -151,7 +151,7 @@ public abstract class EntityMonsterPatrolling extends EntityMonster {
 
                     vec3d = vec3d2.b(90.0F).a(0.4D).e(vec3d);
                     Vec3D vec3d3 = vec3d.d(vec3d1).d().a(10.0D).e(vec3d1);
-                    BlockPosition blockposition = new BlockPosition((int) vec3d3.x, (int) vec3d3.y, (int) vec3d3.z);
+                    BlockPosition blockposition = new BlockPosition(vec3d3);
 
                     blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition);
                     if (!navigationabstract.a((double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), flag ? this.c : this.b)) {

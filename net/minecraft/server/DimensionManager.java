@@ -8,25 +8,25 @@ import javax.annotation.Nullable;
 
 public class DimensionManager implements MinecraftSerializable {
 
-    public static final DimensionManager OVERWORLD = a("overworld", new DimensionManager(1, "", "", WorldProviderNormal::new, true));
-    public static final DimensionManager NETHER = a("the_nether", new DimensionManager(0, "_nether", "DIM-1", WorldProviderHell::new, false));
-    public static final DimensionManager THE_END = a("the_end", new DimensionManager(2, "_end", "DIM1", WorldProviderTheEnd::new, false));
-    private final int d;
-    private final String e;
-    private final String f;
-    private final BiFunction<World, DimensionManager, ? extends WorldProvider> g;
-    private final boolean h;
+    public static final DimensionManager OVERWORLD = register("overworld", new DimensionManager(1, "", "", WorldProviderNormal::new, true));
+    public static final DimensionManager NETHER = register("the_nether", new DimensionManager(0, "_nether", "DIM-1", WorldProviderHell::new, false));
+    public static final DimensionManager THE_END = register("the_end", new DimensionManager(2, "_end", "DIM1", WorldProviderTheEnd::new, false));
+    private final int id;
+    private final String suffix;
+    public final String folder;
+    public final BiFunction<World, DimensionManager, ? extends WorldProvider> providerFactory;
+    private final boolean hasSkyLight;
 
-    private static DimensionManager a(String s, DimensionManager dimensionmanager) {
-        return (DimensionManager) IRegistry.a(IRegistry.DIMENSION_TYPE, dimensionmanager.d, s, dimensionmanager);
+    public static DimensionManager register(String s, DimensionManager dimensionmanager) {
+        return (DimensionManager) IRegistry.a(IRegistry.DIMENSION_TYPE, dimensionmanager.id, s, dimensionmanager);
     }
 
     public DimensionManager(int i, String s, String s1, BiFunction<World, DimensionManager, ? extends WorldProvider> bifunction, boolean flag) {
-        this.d = i;
-        this.e = s;
-        this.f = s1;
-        this.g = bifunction;
-        this.h = flag;
+        this.id = i;
+        this.suffix = s;
+        this.folder = s1;
+        this.providerFactory = bifunction;
+        this.hasSkyLight = flag;
     }
 
     public static DimensionManager a(Dynamic<?> dynamic) {
@@ -38,19 +38,19 @@ public class DimensionManager implements MinecraftSerializable {
     }
 
     public int getDimensionID() {
-        return this.d + -1;
+        return this.id + -1;
     }
 
-    public String c() {
-        return this.e;
+    public String getSuffix() {
+        return this.suffix;
     }
 
     public File a(File file) {
-        return this.f.isEmpty() ? file : new File(file, this.f);
+        return this.folder.isEmpty() ? file : new File(file, this.folder);
     }
 
     public WorldProvider getWorldProvider(World world) {
-        return (WorldProvider) this.g.apply(world, this);
+        return (WorldProvider) this.providerFactory.apply(world, this);
     }
 
     public String toString() {
@@ -73,7 +73,7 @@ public class DimensionManager implements MinecraftSerializable {
     }
 
     public boolean hasSkyLight() {
-        return this.h;
+        return this.hasSkyLight;
     }
 
     @Override

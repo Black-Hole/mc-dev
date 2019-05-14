@@ -113,11 +113,11 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         if (!this.world.isClientSide && !this.d()) {
             this.c = 100;
             if (this.exitPortal == null && this.world.worldProvider instanceof WorldProviderTheEnd) {
-                this.t();
+                this.u();
             }
 
             if (this.exitPortal != null) {
-                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.s();
+                BlockPosition blockposition = this.exactTeleport ? this.exitPortal : this.t();
 
                 entity.enderTeleportTo((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D);
             }
@@ -126,14 +126,14 @@ public class TileEntityEndGateway extends TileEntityEnderPortal implements ITick
         }
     }
 
-    private BlockPosition s() {
+    private BlockPosition t() {
         BlockPosition blockposition = a(this.world, this.exitPortal, 5, false);
 
         TileEntityEndGateway.LOGGER.debug("Best exit position for portal at {} is {}", this.exitPortal, blockposition);
         return blockposition.up();
     }
 
-    private void t() {
+    private void u() {
         Vec3D vec3d = (new Vec3D((double) this.getPosition().getX(), 0.0D, (double) this.getPosition().getZ())).d();
         Vec3D vec3d1 = vec3d.a(1024.0D);
 

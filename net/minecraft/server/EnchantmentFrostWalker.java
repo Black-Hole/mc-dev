@@ -42,7 +42,7 @@ public class EnchantmentFrostWalker extends Enchantment {
 
                         if (iblockdata2.getMaterial() == Material.WATER && (Integer) iblockdata2.get(BlockFluids.LEVEL) == 0 && iblockdata.canPlace(world, blockposition1) && world.a(iblockdata, blockposition1, VoxelShapeCollision.a())) {
                             world.setTypeUpdate(blockposition1, iblockdata);
-                            world.getBlockTickList().a(blockposition1.immutableCopy(), Blocks.FROSTED_ICE, MathHelper.nextInt(entityliving.getRandom(), 60, 120));
+                            world.getBlockTickList().a(blockposition1, Blocks.FROSTED_ICE, MathHelper.nextInt(entityliving.getRandom(), 60, 120));
                         }
                     }
                 }

@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 
 public class Schedule {
 
-    public static final Schedule a = a("empty").a(0, Activity.b).a();
-    public static final Schedule b = a("simple").a(5000, Activity.c).a(11000, Activity.e).a();
-    public static final Schedule c = a("villager_baby").a(10, Activity.b).a(3000, Activity.d).a(6000, Activity.b).a(10000, Activity.d).a(12000, Activity.e).a();
-    public static final Schedule d = a("villager_default").a(10, Activity.b).a(2000, Activity.c).a(9000, Activity.f).a(11000, Activity.b).a(12000, Activity.e).a();
+    public static final Schedule EMPTY = a("empty").a(0, Activity.IDLE).a();
+    public static final Schedule SIMPLE = a("simple").a(5000, Activity.WORK).a(11000, Activity.REST).a();
+    public static final Schedule VILLAGER_BABY = a("villager_baby").a(10, Activity.IDLE).a(3000, Activity.PLAY).a(6000, Activity.IDLE).a(10000, Activity.PLAY).a(12000, Activity.REST).a();
+    public static final Schedule VILLAGER_DEFAULT = a("villager_default").a(10, Activity.IDLE).a(2000, Activity.WORK).a(9000, Activity.MEET).a(11000, Activity.IDLE).a(12000, Activity.REST).a();
     private final Map<Activity, ScheduleActivity> e = Maps.newHashMap();
 
     public Schedule() {}
 
     protected static ScheduleBuilder a(String s) {
-        Schedule schedule = (Schedule) IRegistry.SCHEDULE.a(new MinecraftKey(s), (Object) (new Schedule()));
+        Schedule schedule = (Schedule) IRegistry.a(IRegistry.SCHEDULE, s, (Object) (new Schedule()));
 
         return new ScheduleBuilder(schedule);
     }
@@ -43,6 +43,6 @@ public class Schedule {
     public Activity a(int i) {
         return (Activity) this.e.entrySet().stream().max(Comparator.comparingDouble((entry) -> {
             return (double) ((ScheduleActivity) entry.getValue()).a(i);
-        })).map(Entry::getKey).orElse(Activity.b);
+        })).map(Entry::getKey).orElse(Activity.IDLE);
     }
 }

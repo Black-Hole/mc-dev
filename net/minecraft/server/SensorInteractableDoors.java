@@ -30,9 +30,9 @@ public class SensorInteractableDoors extends Sensor<EntityLiving> {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
         if (!list.isEmpty()) {
-            behaviorcontroller.a(MemoryModuleType.INTERACTABLE_DOORS, (Object) list);
+            behaviorcontroller.setMemory(MemoryModuleType.INTERACTABLE_DOORS, (Object) list);
         } else {
-            behaviorcontroller.b(MemoryModuleType.INTERACTABLE_DOORS);
+            behaviorcontroller.removeMemory(MemoryModuleType.INTERACTABLE_DOORS);
         }
 
     }

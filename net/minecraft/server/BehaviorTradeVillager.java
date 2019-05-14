@@ -1,7 +1,7 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -9,11 +9,8 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
 
     private Set<Item> a = ImmutableSet.of();
 
-    public BehaviorTradeVillager() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
+    public BehaviorTradeVillager() {
+        super(ImmutableMap.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -25,19 +22,19 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).get();
+        EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
         BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
         this.a = a(entityvillager, entityvillager1);
     }
 
     protected void d(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).get();
+        EntityVillager entityvillager1 = (EntityVillager) entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
         if (entityvillager.h((Entity) entityvillager1) <= 5.0D) {
             BehaviorUtil.a((EntityLiving) entityvillager, (EntityLiving) entityvillager1);
             entityvillager.a(entityvillager1, i);
-            if (entityvillager.eo() && entityvillager1.ep()) {
+            if (entityvillager.en() && entityvillager1.eo()) {
                 a(entityvillager, EntityVillager.bA.keySet(), entityvillager1);
             }
 
@@ -49,7 +46,7 @@ public class BehaviorTradeVillager extends Behavior<EntityVillager> {
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        entityvillager.getBehaviorController().b(MemoryModuleType.INTERACTION_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
     }
 
     private static Set<Item> a(EntityVillager entityvillager, EntityVillager entityvillager1) {

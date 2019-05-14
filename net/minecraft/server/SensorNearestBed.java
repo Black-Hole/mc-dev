@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 public class SensorNearestBed extends Sensor<EntityInsentient> {
 
     public SensorNearestBed() {
-        super(100);
+        super(200);
     }
 
     @Override
@@ -17,7 +17,9 @@ public class SensorNearestBed extends Sensor<EntityInsentient> {
     }
 
     protected void a(WorldServer worldserver, EntityInsentient entityinsentient) {
-        entityinsentient.getBehaviorController().a(MemoryModuleType.NEAREST_BED, this.b(worldserver, entityinsentient));
+        if (entityinsentient.isBaby()) {
+            entityinsentient.getBehaviorController().setMemory(MemoryModuleType.NEAREST_BED, this.b(worldserver, entityinsentient));
+        }
     }
 
     private Optional<BlockPosition> b(WorldServer worldserver, EntityInsentient entityinsentient) {
@@ -28,7 +30,7 @@ public class SensorNearestBed extends Sensor<EntityInsentient> {
             } else {
                 PathEntity pathentity = entityinsentient.getNavigation().b(blockposition);
 
-                return pathentity != null && pathentity.h();
+                return pathentity != null && pathentity.a(blockposition);
             }
         };
 

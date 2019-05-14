@@ -94,11 +94,11 @@ public class EntityCat extends EntityTameableAnimal {
         return (Boolean) this.datawatcher.get(EntityCat.bH);
     }
 
-    public EnumColor ei() {
+    public EnumColor getCollarColor() {
         return EnumColor.fromColorIndex((Integer) this.datawatcher.get(EntityCat.bI));
     }
 
-    public void a(EnumColor enumcolor) {
+    public void setCollarColor(EnumColor enumcolor) {
         this.datawatcher.set(EntityCat.bI, enumcolor.getColorIndex());
     }
 
@@ -115,7 +115,7 @@ public class EntityCat extends EntityTameableAnimal {
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
         nbttagcompound.setInt("CatType", this.getCatType());
-        nbttagcompound.setByte("CollarColor", (byte) this.ei().getColorIndex());
+        nbttagcompound.setByte("CollarColor", (byte) this.getCollarColor().getColorIndex());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class EntityCat extends EntityTameableAnimal {
         super.a(nbttagcompound);
         this.setCatType(nbttagcompound.getInt("CatType"));
         if (nbttagcompound.hasKeyOfType("CollarColor", 99)) {
-            this.a(EnumColor.fromColorIndex(nbttagcompound.getInt("CollarColor")));
+            this.setCollarColor(EnumColor.fromColorIndex(nbttagcompound.getInt("CollarColor")));
         }
 
     }
@@ -256,9 +256,9 @@ public class EntityCat extends EntityTameableAnimal {
                 entitycat.setOwnerUUID(this.getOwnerUUID());
                 entitycat.setTamed(true);
                 if (this.random.nextBoolean()) {
-                    entitycat.a(this.ei());
+                    entitycat.setCollarColor(this.getCollarColor());
                 } else {
-                    entitycat.a(((EntityCat) entityageable).ei());
+                    entitycat.setCollarColor(((EntityCat) entityageable).getCollarColor());
                 }
             }
         }
@@ -307,8 +307,8 @@ public class EntityCat extends EntityTameableAnimal {
                 if (item instanceof ItemDye) {
                     EnumColor enumcolor = ((ItemDye) item).d();
 
-                    if (enumcolor != this.ei()) {
-                        this.a(enumcolor);
+                    if (enumcolor != this.getCollarColor()) {
+                        this.setCollarColor(enumcolor);
                         if (!entityhuman.abilities.canInstantlyBuild) {
                             itemstack.subtract(1);
                         }

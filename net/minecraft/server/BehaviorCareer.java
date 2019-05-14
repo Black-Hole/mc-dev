@@ -1,16 +1,11 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorCareer extends Behavior<EntityVillager> {
 
-    public BehaviorCareer() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT));
+    public BehaviorCareer() {
+        super(ImmutableMap.of(MemoryModuleType.JOB_SITE, MemoryStatus.VALUE_PRESENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -18,7 +13,7 @@ public class BehaviorCareer extends Behavior<EntityVillager> {
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().c(MemoryModuleType.JOB_SITE).get();
+        GlobalPos globalpos = (GlobalPos) entityvillager.getBehaviorController().getMemory(MemoryModuleType.JOB_SITE).get();
         MinecraftServer minecraftserver = worldserver.getMinecraftServer();
 
         minecraftserver.getWorldServer(globalpos.a()).B().c(globalpos.b()).ifPresent((villageplacetype) -> {

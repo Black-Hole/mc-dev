@@ -39,11 +39,20 @@ public abstract class IAsyncTaskHandler<R extends Runnable> implements Mailbox<R
         return this.b;
     }
 
-    private CompletableFuture<Object> executeFuture(Runnable runnable) {
+    private CompletableFuture<Void> executeFuture(Runnable runnable) {
         return CompletableFuture.supplyAsync(() -> {
             runnable.run();
             return null;
         }, this);
+    }
+
+    public CompletableFuture<Void> e(Runnable runnable) {
+        if (this.isNotMainThread()) {
+            return this.executeFuture(runnable);
+        } else {
+            runnable.run();
+            return CompletableFuture.completedFuture((Object) null);
+        }
     }
 
     public void executeSync(Runnable runnable) {

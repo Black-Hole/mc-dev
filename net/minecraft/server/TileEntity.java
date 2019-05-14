@@ -3,6 +3,7 @@ package net.minecraft.server;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Supplier;
 
 public abstract class TileEntity {
 
@@ -14,6 +15,7 @@ public abstract class TileEntity {
     protected boolean f;
     @Nullable
     private IBlockData c;
+    private boolean g;
 
     public TileEntity(TileEntityTypes<?> tileentitytypes) {
         this.position = BlockPosition.ZERO;
@@ -156,5 +158,14 @@ public abstract class TileEntity {
 
     public TileEntityTypes<?> q() {
         return this.b;
+    }
+
+    public void r() {
+        if (!this.g) {
+            this.g = true;
+            TileEntity.LOGGER.warn("Block entity invalid: {} @ {}", new Supplier[] { () -> {
+                        return IRegistry.BLOCK_ENTITY_TYPE.getKey(this.q());
+                    }, this::getPosition});
+        }
     }
 }

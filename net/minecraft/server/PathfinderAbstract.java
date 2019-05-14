@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public abstract class PathfinderAbstract {
 
-    protected IBlockAccess a;
+    protected IWorldReader a;
     protected EntityInsentient b;
     protected final Int2ObjectMap<PathPoint> c = new Int2ObjectOpenHashMap();
     protected int d;
@@ -17,8 +17,8 @@ public abstract class PathfinderAbstract {
 
     public PathfinderAbstract() {}
 
-    public void a(IBlockAccess iblockaccess, EntityInsentient entityinsentient) {
-        this.a = iblockaccess;
+    public void a(IWorldReader iworldreader, EntityInsentient entityinsentient) {
+        this.a = iworldreader;
         this.b = entityinsentient;
         this.c.clear();
         this.d = MathHelper.d(entityinsentient.getWidth() + 1.0F);
@@ -41,7 +41,7 @@ public abstract class PathfinderAbstract {
 
     public abstract PathPoint a(double d0, double d1, double d2);
 
-    public abstract int a(PathPoint[] apathpoint, PathPoint pathpoint, PathPoint pathpoint1, float f);
+    public abstract int a(PathPoint[] apathpoint, PathPoint pathpoint);
 
     public abstract PathType a(IBlockAccess iblockaccess, int i, int j, int k, EntityInsentient entityinsentient, int l, int i1, int j1, boolean flag, boolean flag1);
 

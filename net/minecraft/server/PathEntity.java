@@ -97,20 +97,14 @@ public class PathEntity {
         }
     }
 
-    public boolean h() {
+    public boolean a(BlockPosition blockposition) {
         PathPoint pathpoint = this.c();
 
-        return pathpoint != null && this.a(pathpoint.b());
-    }
-
-    public boolean a(Vec3D vec3d) {
-        PathPoint pathpoint = this.c();
-
-        return pathpoint == null ? false : pathpoint.a == (int) vec3d.x && pathpoint.b == (int) vec3d.y && pathpoint.c == (int) vec3d.z;
+        return pathpoint == null ? false : blockposition.a(new BaseBlockPosition(pathpoint.a, pathpoint.b, pathpoint.c), 2.0D);
     }
 
     @Nullable
-    public PathPoint k() {
+    public PathPoint j() {
         return this.d;
     }
 

@@ -73,8 +73,21 @@ public class EntityItem extends Entity {
                 }
             }
 
-            this.move(EnumMoveType.SELF, this.getMot());
-            boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
+            if (!this.onGround || b(this.getMot()) > 9.999999747378752E-6D || (this.ticksLived + this.getId()) % 4 == 0) {
+                this.move(EnumMoveType.SELF, this.getMot());
+                float f = 0.98F;
+
+                if (this.onGround) {
+                    f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.98F;
+                }
+
+                this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
+                if (this.onGround) {
+                    this.setMot(this.getMot().d(1.0D, -0.5D, 1.0D));
+                }
+            }
+
+            boolean flag = MathHelper.floor(this.lastX) != MathHelper.floor(this.locX) || MathHelper.floor(this.lastY) != MathHelper.floor(this.locY) || MathHelper.floor(this.lastZ) != MathHelper.floor(this.locZ);
             int i = flag ? 2 : 40;
 
             if (this.ticksLived % i == 0) {
@@ -86,17 +99,6 @@ public class EntityItem extends Entity {
                 if (!this.world.isClientSide && this.z()) {
                     this.mergeNearby();
                 }
-            }
-
-            float f = 0.98F;
-
-            if (this.onGround) {
-                f = this.world.getType(new BlockPosition(this.locX, this.getBoundingBox().minY - 1.0D, this.locZ)).getBlock().m() * 0.98F;
-            }
-
-            this.setMot(this.getMot().d((double) f, 0.98D, (double) f));
-            if (this.onGround) {
-                this.setMot(this.getMot().d(1.0D, -0.5D, 1.0D));
             }
 
             if (this.age != -32768) {

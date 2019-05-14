@@ -111,8 +111,8 @@ public class WorldGenEnder extends WorldGenerator<WorldGenFeatureEndSpikeConfigu
             List<WorldGenEnder.Spike> list1 = Lists.newArrayList();
 
             for (int i = 0; i < 10; ++i) {
-                int j = (int) (42.0D * Math.cos(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
-                int k = (int) (42.0D * Math.sin(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
+                int j = MathHelper.floor(42.0D * Math.cos(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
+                int k = MathHelper.floor(42.0D * Math.sin(2.0D * (-3.141592653589793D + 0.3141592653589793D * (double) i)));
                 int l = (Integer) list.get(i);
                 int i1 = 2 + l / 3;
                 int j1 = 76 + l * 3;

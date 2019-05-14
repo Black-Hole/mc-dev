@@ -152,7 +152,7 @@ public class RandomPositionGenerator {
         } else {
             BlockPosition blockposition1;
 
-            for (blockposition1 = blockposition.up(); blockposition1.getY() < entitycreature.world.getHeight() && entitycreature.world.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
+            for (blockposition1 = blockposition.up(); blockposition1.getY() < entitycreature.world.getBuildHeight() && entitycreature.world.getType(blockposition1).getMaterial().isBuildable(); blockposition1 = blockposition1.up()) {
                 ;
             }
 

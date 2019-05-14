@@ -95,7 +95,7 @@ public class SecondaryWorldData extends WorldData {
     public void setSpawn(BlockPosition blockposition) {}
 
     @Override
-    public void a(String s) {}
+    public void setName(String s) {}
 
     @Override
     public void d(int i) {}

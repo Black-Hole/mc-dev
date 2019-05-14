@@ -62,8 +62,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
         int j = this.f_(itemstack) - i;
         float f = a(j, itemstack);
 
-        if (f >= 1.0F && !d(itemstack)) {
-            a(entityliving, itemstack);
+        if (f >= 1.0F && !d(itemstack) && a(entityliving, itemstack)) {
             a(itemstack, true);
             SoundCategory soundcategory = entityliving instanceof EntityHuman ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
 
@@ -72,7 +71,7 @@ public class ItemCrossbow extends ItemProjectileWeapon {
 
     }
 
-    private static void a(EntityLiving entityliving, ItemStack itemstack) {
+    private static boolean a(EntityLiving entityliving, ItemStack itemstack) {
         int i = EnchantmentManager.getEnchantmentLevel(Enchantments.MULTISHOT, itemstack);
         int j = i == 0 ? 1 : 3;
         boolean flag = entityliving instanceof EntityHuman && ((EntityHuman) entityliving).abilities.canInstantlyBuild;
@@ -89,25 +88,33 @@ public class ItemCrossbow extends ItemProjectileWeapon {
                 itemstack2 = itemstack1.cloneItemStack();
             }
 
-            a(entityliving, itemstack, itemstack1, k > 0, flag);
+            if (!a(entityliving, itemstack, itemstack1, k > 0, flag)) {
+                return false;
+            }
         }
 
+        return true;
     }
 
-    private static void a(EntityLiving entityliving, ItemStack itemstack, ItemStack itemstack1, boolean flag, boolean flag1) {
-        boolean flag2 = flag1 && itemstack1.getItem() instanceof ItemArrow;
-        ItemStack itemstack2;
-
-        if (!flag2 && !flag1 && !flag) {
-            itemstack2 = itemstack1.cloneAndSubtract(1);
-            if (itemstack1.isEmpty() && entityliving instanceof EntityHuman) {
-                ((EntityHuman) entityliving).inventory.f(itemstack1);
-            }
+    private static boolean a(EntityLiving entityliving, ItemStack itemstack, ItemStack itemstack1, boolean flag, boolean flag1) {
+        if (itemstack1.isEmpty()) {
+            return false;
         } else {
-            itemstack2 = itemstack1.cloneItemStack();
-        }
+            boolean flag2 = flag1 && itemstack1.getItem() instanceof ItemArrow;
+            ItemStack itemstack2;
 
-        b(itemstack, itemstack2);
+            if (!flag2 && !flag1 && !flag) {
+                itemstack2 = itemstack1.cloneAndSubtract(1);
+                if (itemstack1.isEmpty() && entityliving instanceof EntityHuman) {
+                    ((EntityHuman) entityliving).inventory.f(itemstack1);
+                }
+            } else {
+                itemstack2 = itemstack1.cloneItemStack();
+            }
+
+            b(itemstack, itemstack2);
+            return true;
+        }
     }
 
     public static boolean d(ItemStack itemstack) {

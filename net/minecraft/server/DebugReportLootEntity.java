@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.util.Iterator;
@@ -11,7 +12,8 @@ import java.util.function.Consumer;
 public class DebugReportLootEntity implements Consumer<BiConsumer<MinecraftKey, LootTable.a>> {
 
     private static final CriterionConditionEntity.a a = CriterionConditionEntity.a.a().a(CriterionConditionEntityFlags.a.a().a(true).b());
-    private final Map<MinecraftKey, LootTable.a> b = Maps.newHashMap();
+    private static final Set<EntityTypes<?>> b = ImmutableSet.of(EntityTypes.PLAYER, EntityTypes.ARMOR_STAND, EntityTypes.IRON_GOLEM, EntityTypes.SNOW_GOLEM, EntityTypes.VILLAGER);
+    private final Map<MinecraftKey, LootTable.a> c = Maps.newHashMap();
 
     public DebugReportLootEntity() {}
 
@@ -111,12 +113,12 @@ public class DebugReportLootEntity implements Consumer<BiConsumer<MinecraftKey, 
             EntityTypes<?> entitytypes = (EntityTypes) iterator.next();
             MinecraftKey minecraftkey = entitytypes.g();
 
-            if (entitytypes != EntityTypes.PLAYER && entitytypes != EntityTypes.ARMOR_STAND && entitytypes.d() == EnumCreatureType.MISC) {
-                if (minecraftkey != LootTables.a && this.b.remove(minecraftkey) != null) {
+            if (!DebugReportLootEntity.b.contains(entitytypes) && entitytypes.d() == EnumCreatureType.MISC) {
+                if (minecraftkey != LootTables.a && this.c.remove(minecraftkey) != null) {
                     throw new IllegalStateException(String.format("Weird loottable '%s' for '%s', not a LivingEntity so should not have loot", minecraftkey, IRegistry.ENTITY_TYPE.getKey(entitytypes)));
                 }
             } else if (minecraftkey != LootTables.a && set.add(minecraftkey)) {
-                LootTable.a loottable_a = (LootTable.a) this.b.remove(minecraftkey);
+                LootTable.a loottable_a = (LootTable.a) this.c.remove(minecraftkey);
 
                 if (loottable_a == null) {
                     throw new IllegalStateException(String.format("Missing loottable '%s' for '%s'", minecraftkey, IRegistry.ENTITY_TYPE.getKey(entitytypes)));
@@ -126,7 +128,7 @@ public class DebugReportLootEntity implements Consumer<BiConsumer<MinecraftKey, 
             }
         }
 
-        this.b.forEach(biconsumer::accept);
+        this.c.forEach(biconsumer::accept);
     }
 
     private void a(EntityTypes<?> entitytypes, LootTable.a loottable_a) {
@@ -134,6 +136,6 @@ public class DebugReportLootEntity implements Consumer<BiConsumer<MinecraftKey, 
     }
 
     private void a(MinecraftKey minecraftkey, LootTable.a loottable_a) {
-        this.b.put(minecraftkey, loottable_a);
+        this.c.put(minecraftkey, loottable_a);
     }
 }

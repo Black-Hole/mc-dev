@@ -5,7 +5,7 @@ public class PathPoint {
     public final int a;
     public final int b;
     public final int c;
-    private final int n;
+    private final int m;
     public int d = -1;
     public float e;
     public float f;
@@ -14,15 +14,14 @@ public class PathPoint {
     public boolean i;
     public float j;
     public float k;
-    public float l;
-    public PathType m;
+    public PathType l;
 
     public PathPoint(int i, int j, int k) {
-        this.m = PathType.BLOCKED;
+        this.l = PathType.BLOCKED;
         this.a = i;
         this.b = j;
         this.c = k;
-        this.n = b(i, j, k);
+        this.m = b(i, j, k);
     }
 
     public PathPoint a(int i, int j, int k) {
@@ -37,7 +36,6 @@ public class PathPoint {
         pathpoint.j = this.j;
         pathpoint.k = this.k;
         pathpoint.l = this.l;
-        pathpoint.m = this.m;
         return pathpoint;
     }
 
@@ -61,30 +59,18 @@ public class PathPoint {
         return f * f + f1 * f1 + f2 * f2;
     }
 
-    public float c(PathPoint pathpoint) {
-        float f = (float) Math.abs(pathpoint.a - this.a);
-        float f1 = (float) Math.abs(pathpoint.b - this.b);
-        float f2 = (float) Math.abs(pathpoint.c - this.c);
-
-        return f + f1 + f2;
-    }
-
-    public Vec3D b() {
-        return new Vec3D((double) this.a, (double) this.b, (double) this.c);
-    }
-
     public boolean equals(Object object) {
         if (!(object instanceof PathPoint)) {
             return false;
         } else {
             PathPoint pathpoint = (PathPoint) object;
 
-            return this.n == pathpoint.n && this.a == pathpoint.a && this.b == pathpoint.b && this.c == pathpoint.c;
+            return this.m == pathpoint.m && this.a == pathpoint.a && this.b == pathpoint.b && this.c == pathpoint.c;
         }
     }
 
     public int hashCode() {
-        return this.n;
+        return this.m;
     }
 
     public boolean c() {

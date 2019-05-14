@@ -1,23 +1,18 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.datafixers.util.Pair;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 public class BehaviorPlay extends Behavior<EntityCreature> {
 
-    public BehaviorPlay() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED));
+    public BehaviorPlay() {
+        super(ImmutableMap.of(MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.REGISTERED));
     }
 
     protected boolean a(WorldServer worldserver, EntityCreature entitycreature) {
@@ -47,7 +42,7 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
             Vec3D vec3d = RandomPositionGenerator.b(entitycreature, 20, 8);
 
             if (vec3d != null && worldserver.b_(new BlockPosition(vec3d))) {
-                entitycreature.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, 0.6F, 0)));
+                entitycreature.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(vec3d, 0.6F, 0)));
                 return;
             }
         }
@@ -57,9 +52,9 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
     private static void a(EntityCreature entitycreature, EntityLiving entityliving) {
         BehaviorController<?> behaviorcontroller = entitycreature.getBehaviorController();
 
-        behaviorcontroller.a(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving);
-        behaviorcontroller.a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
-        behaviorcontroller.a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving), 0.6F, 1)));
+        behaviorcontroller.setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving);
+        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
+        behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorPositionEntity(entityliving), 0.6F, 1)));
     }
 
     private Optional<EntityLiving> a(EntityCreature entitycreature) {
@@ -86,31 +81,31 @@ public class BehaviorPlay extends Behavior<EntityCreature> {
     }
 
     private List<EntityLiving> d(EntityCreature entitycreature) {
-        return (List) entitycreature.getBehaviorController().c(MemoryModuleType.VISIBLE_VILLAGER_BABIES).get();
+        return (List) entitycreature.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_VILLAGER_BABIES).get();
     }
 
     private EntityLiving a(EntityLiving entityliving) {
-        return (EntityLiving) entityliving.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).get();
+        return (EntityLiving) entityliving.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).get();
     }
 
     @Nullable
     private EntityLiving b(EntityLiving entityliving) {
-        return (EntityLiving) ((List) entityliving.getBehaviorController().c(MemoryModuleType.VISIBLE_VILLAGER_BABIES).get()).stream().filter((entityliving1) -> {
+        return (EntityLiving) ((List) entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_VILLAGER_BABIES).get()).stream().filter((entityliving1) -> {
             return this.a(entityliving, entityliving1);
         }).findAny().orElse((Object) null);
     }
 
     private boolean c(EntityLiving entityliving) {
-        return entityliving.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).isPresent();
+        return entityliving.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).isPresent();
     }
 
     private boolean a(EntityLiving entityliving, EntityLiving entityliving1) {
-        return entityliving1.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).filter((entityliving2) -> {
+        return entityliving1.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).filter((entityliving2) -> {
             return entityliving2 == entityliving;
         }).isPresent();
     }
 
     private boolean e(EntityCreature entitycreature) {
-        return entitycreature.getBehaviorController().a(MemoryModuleType.VISIBLE_VILLAGER_BABIES);
+        return entitycreature.getBehaviorController().hasMemory(MemoryModuleType.VISIBLE_VILLAGER_BABIES);
     }
 }

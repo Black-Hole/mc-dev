@@ -169,10 +169,16 @@ public class EntityIronGolem extends EntityGolem {
         if (!iblockdata.a((IBlockAccess) iworldreader, blockposition1, (Entity) this)) {
             return false;
         } else {
-            BlockPosition blockposition2 = blockposition.up();
-            IBlockData iblockdata1 = iworldreader.getType(blockposition2);
+            for (int i = 1; i < 3; ++i) {
+                BlockPosition blockposition2 = blockposition.up(i);
+                IBlockData iblockdata1 = iworldreader.getType(blockposition2);
 
-            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.p()) && SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.i()) && iworldreader.i(this);
+                if (!SpawnerCreature.a((IBlockAccess) iworldreader, blockposition2, iblockdata1, iblockdata1.p())) {
+                    return false;
+                }
+            }
+
+            return SpawnerCreature.a((IBlockAccess) iworldreader, blockposition, iworldreader.getType(blockposition), FluidTypes.EMPTY.i()) && iworldreader.i(this);
         }
     }
 }

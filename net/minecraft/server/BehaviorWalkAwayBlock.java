@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
+import java.util.Optional;
 
 public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
 
@@ -10,31 +9,37 @@ public class BehaviorWalkAwayBlock extends Behavior<EntityVillager> {
     private final float b;
     private final int c;
     private final int d;
+    private final int e;
 
-    public BehaviorWalkAwayBlock(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i, int j) {
+    public BehaviorWalkAwayBlock(MemoryModuleType<GlobalPos> memorymoduletype, float f, int i, int j, int k) {
+        super(ImmutableMap.of(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, memorymoduletype, MemoryStatus.VALUE_PRESENT));
         this.a = memorymoduletype;
         this.b = f;
         this.c = i;
         this.d = j;
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(this.a, MemoryStatus.VALUE_PRESENT));
+        this.e = k;
     }
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
-        behaviorcontroller.c(this.a).ifPresent((globalpos) -> {
-            if (this.a(worldserver, entityvillager, globalpos)) {
+        behaviorcontroller.getMemory(this.a).ifPresent((globalpos) -> {
+            if (!this.a(worldserver, entityvillager, globalpos) && !this.a(worldserver, entityvillager)) {
+                if (!this.b(worldserver, entityvillager, globalpos)) {
+                    behaviorcontroller.setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.b(), this.b, this.c)));
+                }
+            } else {
                 entityvillager.a(this.a);
-                behaviorcontroller.b(this.a);
-            } else if (!this.b(worldserver, entityvillager, globalpos)) {
-                behaviorcontroller.a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(globalpos.b(), this.b, this.c)));
+                behaviorcontroller.removeMemory(this.a);
             }
 
         });
+    }
+
+    private boolean a(WorldServer worldserver, EntityVillager entityvillager) {
+        Optional<Long> optional = entityvillager.getBehaviorController().getMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+
+        return optional.isPresent() ? worldserver.getTime() - (Long) optional.get() > (long) this.e : false;
     }
 
     private boolean a(WorldServer worldserver, EntityVillager entityvillager, GlobalPos globalpos) {

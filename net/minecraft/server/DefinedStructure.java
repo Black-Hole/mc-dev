@@ -274,24 +274,7 @@ public class DefinedStructure {
                             voxelshapebitset.a(blockposition5.getX() - i2, blockposition5.getY() - j2, blockposition5.getZ() - k2, true, true);
                         }
 
-                        voxelshapebitset.a((enumdirection, l2, i3, j3) -> {
-                            BlockPosition blockposition6 = new BlockPosition(i2 + l2, j2 + i3, k2 + j3);
-                            BlockPosition blockposition7 = blockposition6.shift(enumdirection);
-                            IBlockData iblockdata2 = generatoraccess.getType(blockposition6);
-                            IBlockData iblockdata3 = generatoraccess.getType(blockposition7);
-                            IBlockData iblockdata4 = iblockdata2.updateState(enumdirection, iblockdata3, generatoraccess, blockposition6, blockposition7);
-
-                            if (iblockdata2 != iblockdata4) {
-                                generatoraccess.setTypeAndData(blockposition6, iblockdata4, i & -2 | 16);
-                            }
-
-                            IBlockData iblockdata5 = iblockdata3.updateState(enumdirection.opposite(), iblockdata4, generatoraccess, blockposition7, blockposition6);
-
-                            if (iblockdata3 != iblockdata5) {
-                                generatoraccess.setTypeAndData(blockposition7, iblockdata5, i & -2 | 16);
-                            }
-
-                        });
+                        a(generatoraccess, i, voxelshapebitset, i2, j2, k2);
                     }
 
                     iterator1 = list2.iterator();
@@ -329,6 +312,27 @@ public class DefinedStructure {
                 return false;
             }
         }
+    }
+
+    public static void a(GeneratorAccess generatoraccess, int i, VoxelShapeDiscrete voxelshapediscrete, int j, int k, int l) {
+        voxelshapediscrete.a((enumdirection, i1, j1, k1) -> {
+            BlockPosition blockposition = new BlockPosition(j + i1, k + j1, l + k1);
+            BlockPosition blockposition1 = blockposition.shift(enumdirection);
+            IBlockData iblockdata = generatoraccess.getType(blockposition);
+            IBlockData iblockdata1 = generatoraccess.getType(blockposition1);
+            IBlockData iblockdata2 = iblockdata.updateState(enumdirection, iblockdata1, generatoraccess, blockposition, blockposition1);
+
+            if (iblockdata != iblockdata2) {
+                generatoraccess.setTypeAndData(blockposition, iblockdata2, i & -2 | 16);
+            }
+
+            IBlockData iblockdata3 = iblockdata1.updateState(enumdirection.opposite(), iblockdata2, generatoraccess, blockposition1, blockposition);
+
+            if (iblockdata1 != iblockdata3) {
+                generatoraccess.setTypeAndData(blockposition1, iblockdata3, i & -2 | 16);
+            }
+
+        });
     }
 
     public static List<DefinedStructure.BlockInfo> a(GeneratorAccess generatoraccess, BlockPosition blockposition, DefinedStructureInfo definedstructureinfo, List<DefinedStructure.BlockInfo> list) {

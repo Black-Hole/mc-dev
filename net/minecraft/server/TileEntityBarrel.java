@@ -123,12 +123,12 @@ public class TileEntityBarrel extends TileEntityLootable {
                 this.a(iblockdata, true);
             }
 
-            this.r();
+            this.s();
         }
 
     }
 
-    private void r() {
+    private void s() {
         this.world.getBlockTickList().a(this.getPosition(), this.getBlock().getBlock(), 5);
     }
 
@@ -139,7 +139,7 @@ public class TileEntityBarrel extends TileEntityLootable {
 
         this.b = TileEntityChest.a(this.world, this, i, j, k);
         if (this.b > 0) {
-            this.r();
+            this.s();
         } else {
             IBlockData iblockdata = this.getBlock();
 

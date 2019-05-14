@@ -117,7 +117,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
 
     @Override
     protected int c(long i) {
-        return i == Long.MAX_VALUE ? 0 : 15 - this.c.h(i);
+        return i == Long.MAX_VALUE ? 0 : 15 - this.c.i(i);
     }
 
     protected int a(NibbleArray nibblearray, long i) {
@@ -171,7 +171,7 @@ public abstract class LightEngineLayer<M extends LightEngineStorageArray<M>, S e
     @Nullable
     @Override
     public NibbleArray a(SectionPosition sectionposition) {
-        return this.c.a(sectionposition.v(), false);
+        return this.c.h(sectionposition.v());
     }
 
     @Override

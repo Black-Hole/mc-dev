@@ -36,7 +36,7 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
             }
 
             if (!this.a.dT()) {
-                Vec3D vec3d = new Vec3D(raid.t());
+                Vec3D vec3d = new Vec3D(raid.s());
                 Vec3D vec3d1 = new Vec3D(this.a.locX, this.a.locY, this.a.locZ);
                 Vec3D vec3d2 = vec3d1.d(vec3d);
 
@@ -54,7 +54,7 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
     }
 
     private void a(Raid raid) {
-        if (raid.v()) {
+        if (raid.u()) {
             Set<EntityRaider> set = Sets.newHashSet();
             List<EntityRaider> list = this.a.world.a(EntityRaider.class, this.a.getBoundingBox().g(16.0D), (entityraider) -> {
                 return !entityraider.el() && PersistentRaid.a(entityraider, raid);
@@ -66,7 +66,7 @@ public class PathfinderGoalRaid<T extends EntityRaider> extends PathfinderGoal {
             while (iterator.hasNext()) {
                 EntityRaider entityraider = (EntityRaider) iterator.next();
 
-                raid.a(raid.l(), entityraider, (BlockPosition) null, true);
+                raid.a(raid.k(), entityraider, (BlockPosition) null, true);
             }
         }
 

@@ -161,14 +161,14 @@ public class ProtoChunkExtension extends ProtoChunk {
     public ProtoChunkTickList<Block> n() {
         return new ProtoChunkTickList<>((block) -> {
             return block.getBlockData().isAir();
-        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::get, this.getPos());
+        }, this.getPos());
     }
 
     @Override
     public ProtoChunkTickList<FluidType> o() {
         return new ProtoChunkTickList<>((fluidtype) -> {
             return fluidtype == FluidTypes.EMPTY;
-        }, IRegistry.FLUID::getKey, IRegistry.FLUID::get, this.getPos());
+        }, this.getPos());
     }
 
     @Override

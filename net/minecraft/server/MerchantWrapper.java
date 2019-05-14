@@ -42,17 +42,17 @@ public class MerchantWrapper implements IMerchant {
     }
 
     @Override
-    public int dV() {
+    public int getExperience() {
         return this.d;
     }
 
     @Override
-    public void q(int i) {
+    public void r(int i) {
         this.d = i;
     }
 
     @Override
-    public boolean dZ() {
+    public boolean ea() {
         return true;
     }
 }

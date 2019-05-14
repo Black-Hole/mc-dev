@@ -107,10 +107,10 @@ public class TileEntityStructure extends TileEntity {
         }
 
         this.seed = nbttagcompound.getLong("seed");
-        this.J();
+        this.K();
     }
 
-    private void J() {
+    private void K() {
         if (this.world != null) {
             BlockPosition blockposition = this.getPosition();
             IBlockData iblockdata = this.world.getType(blockposition);
@@ -211,7 +211,7 @@ public class TileEntityStructure extends TileEntity {
         this.seed = i;
     }
 
-    public boolean A() {
+    public boolean B() {
         if (this.usageMode != BlockPropertyStructureMode.SAVE) {
             return false;
         } else {
@@ -309,7 +309,7 @@ public class TileEntityStructure extends TileEntity {
         return structureboundingbox;
     }
 
-    public boolean B() {
+    public boolean C() {
         return this.b(true);
     }
 
@@ -343,7 +343,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean C() {
+    public boolean D() {
         return this.c(true);
     }
 
@@ -402,7 +402,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public void D() {
+    public void E() {
         if (this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
             DefinedStructureManager definedstructuremanager = worldserver.r();
@@ -411,7 +411,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean E() {
+    public boolean F() {
         if (this.usageMode == BlockPropertyStructureMode.LOAD && !this.world.isClientSide && this.structureName != null) {
             WorldServer worldserver = (WorldServer) this.world;
             DefinedStructureManager definedstructuremanager = worldserver.r();
@@ -426,7 +426,7 @@ public class TileEntityStructure extends TileEntity {
         }
     }
 
-    public boolean F() {
+    public boolean G() {
         return this.powered;
     }
 

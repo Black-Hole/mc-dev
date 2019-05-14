@@ -457,21 +457,21 @@ public class PlayerConnection implements PacketListenerPlayIn {
                     String s = tileentitystructure.getStructureName();
 
                     if (packetplayinstruct.c() == TileEntityStructure.UpdateType.SAVE_AREA) {
-                        if (tileentitystructure.B()) {
+                        if (tileentitystructure.C()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.save_success", new Object[] { s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.save_failure", new Object[] { s})), false);
                         }
                     } else if (packetplayinstruct.c() == TileEntityStructure.UpdateType.LOAD_AREA) {
-                        if (!tileentitystructure.E()) {
+                        if (!tileentitystructure.F()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_not_found", new Object[] { s})), false);
-                        } else if (tileentitystructure.C()) {
+                        } else if (tileentitystructure.D()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_success", new Object[] { s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.load_prepare", new Object[] { s})), false);
                         }
                     } else if (packetplayinstruct.c() == TileEntityStructure.UpdateType.SCAN_AREA) {
-                        if (tileentitystructure.A()) {
+                        if (tileentitystructure.B()) {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.size_success", new Object[] { s})), false);
                         } else {
                             this.player.a((IChatBaseComponent) (new ChatMessage("structure_block.size_failure", new Object[0])), false);

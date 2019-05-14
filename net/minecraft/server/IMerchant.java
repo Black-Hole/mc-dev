@@ -18,11 +18,11 @@ public interface IMerchant {
 
     World getWorld();
 
-    int dV();
+    int getExperience();
 
-    void q(int i);
+    void r(int i);
 
-    boolean dZ();
+    boolean ea();
 
     default void openTrade(EntityHuman entityhuman, IChatBaseComponent ichatbasecomponent, int i) {
         OptionalInt optionalint = entityhuman.openContainer(new TileInventory((j, playerinventory, entityhuman1) -> {
@@ -33,7 +33,7 @@ public interface IMerchant {
             MerchantRecipeList merchantrecipelist = this.getOffers();
 
             if (!merchantrecipelist.isEmpty()) {
-                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.dV(), this.dZ());
+                entityhuman.openTrade(optionalint.getAsInt(), merchantrecipelist, i, this.getExperience(), this.ea());
             }
         }
 

@@ -17,7 +17,7 @@ public class DragonControllerFly extends AbstractDragonController {
         if (!this.b && this.c != null) {
             BlockPosition blockposition = this.a.world.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, WorldGenEndTrophy.a);
 
-            if (!blockposition.a((IPosition) this.a.ch(), 100.0D)) {
+            if (!blockposition.a((IPosition) this.a.ch(), 10.0D)) {
                 this.a.getDragonControllerManager().setControllerPhase(DragonControllerPhase.HOLDING_PATTERN);
             }
         } else {

@@ -20,7 +20,7 @@ public class EntityMushroomCow extends EntityCow {
         UUID uuid = entitylightning.getUniqueID();
 
         if (!uuid.equals(this.bD)) {
-            this.a(this.dV() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
+            this.setVariant(this.getVariant() == EntityMushroomCow.Type.RED ? EntityMushroomCow.Type.BROWN : EntityMushroomCow.Type.RED);
             this.bD = uuid;
             this.a(SoundEffects.ENTITY_MOOSHROOM_CONVERT, 2.0F, 1.0F);
         }
@@ -87,7 +87,7 @@ public class EntityMushroomCow extends EntityCow {
                     this.world.addEntity(entitycow);
 
                     for (i = 0; i < 5; ++i) {
-                        this.world.addEntity(new EntityItem(this.world, this.locX, this.locY + (double) this.getHeight(), this.locZ, new ItemStack(this.dV().d.getBlock())));
+                        this.world.addEntity(new EntityItem(this.world, this.locX, this.locY + (double) this.getHeight(), this.locZ, new ItemStack(this.getVariant().d.getBlock())));
                     }
 
                     itemstack.damage(1, entityhuman, (entityhuman1) -> {
@@ -98,7 +98,7 @@ public class EntityMushroomCow extends EntityCow {
 
                 return true;
             } else {
-                if (this.dV() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a(TagsItem.SMALL_FLOWERS)) {
+                if (this.getVariant() == EntityMushroomCow.Type.BROWN && itemstack.getItem().a(TagsItem.SMALL_FLOWERS)) {
                     if (this.bA != null) {
                         for (int j = 0; j < 2; ++j) {
                             this.world.addParticle(Particles.SMOKE, this.locX + (double) (this.random.nextFloat() / 2.0F), this.locY + (double) (this.getHeight() / 2.0F), this.locZ + (double) (this.random.nextFloat() / 2.0F), 0.0D, (double) (this.random.nextFloat() / 5.0F), 0.0D);
@@ -128,7 +128,7 @@ public class EntityMushroomCow extends EntityCow {
     @Override
     public void b(NBTTagCompound nbttagcompound) {
         super.b(nbttagcompound);
-        nbttagcompound.setString("Type", this.dV().c);
+        nbttagcompound.setString("Type", this.getVariant().c);
         if (this.bA != null) {
             nbttagcompound.setByte("EffectId", (byte) MobEffectList.getId(this.bA));
             nbttagcompound.setInt("EffectDuration", this.bB);
@@ -139,7 +139,7 @@ public class EntityMushroomCow extends EntityCow {
     @Override
     public void a(NBTTagCompound nbttagcompound) {
         super.a(nbttagcompound);
-        this.a(EntityMushroomCow.Type.b(nbttagcompound.getString("Type")));
+        this.setVariant(EntityMushroomCow.Type.b(nbttagcompound.getString("Type")));
         if (nbttagcompound.hasKeyOfType("EffectId", 1)) {
             this.bA = MobEffectList.fromId(nbttagcompound.getByte("EffectId"));
         }
@@ -156,11 +156,11 @@ public class EntityMushroomCow extends EntityCow {
         return Pair.of(blockflowers.d(), blockflowers.e());
     }
 
-    private void a(EntityMushroomCow.Type entitymushroomcow_type) {
+    public void setVariant(EntityMushroomCow.Type entitymushroomcow_type) {
         this.datawatcher.set(EntityMushroomCow.bz, entitymushroomcow_type.c);
     }
 
-    public EntityMushroomCow.Type dV() {
+    public EntityMushroomCow.Type getVariant() {
         return EntityMushroomCow.Type.b((String) this.datawatcher.get(EntityMushroomCow.bz));
     }
 
@@ -168,13 +168,13 @@ public class EntityMushroomCow extends EntityCow {
     public EntityMushroomCow createChild(EntityAgeable entityageable) {
         EntityMushroomCow entitymushroomcow = (EntityMushroomCow) EntityTypes.MOOSHROOM.a(this.world);
 
-        entitymushroomcow.a(this.a((EntityMushroomCow) entityageable));
+        entitymushroomcow.setVariant(this.a((EntityMushroomCow) entityageable));
         return entitymushroomcow;
     }
 
     private EntityMushroomCow.Type a(EntityMushroomCow entitymushroomcow) {
-        EntityMushroomCow.Type entitymushroomcow_type = this.dV();
-        EntityMushroomCow.Type entitymushroomcow_type1 = entitymushroomcow.dV();
+        EntityMushroomCow.Type entitymushroomcow_type = this.getVariant();
+        EntityMushroomCow.Type entitymushroomcow_type1 = entitymushroomcow.getVariant();
         EntityMushroomCow.Type entitymushroomcow_type2;
 
         if (entitymushroomcow_type == entitymushroomcow_type1 && this.random.nextInt(1024) == 0) {

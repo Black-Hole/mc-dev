@@ -30,21 +30,22 @@ public class BlockBell extends BlockTileEntity {
             Entity entity1 = ((EntityArrow) entity).getShooter();
             EntityHuman entityhuman = entity1 instanceof EntityHuman ? (EntityHuman) entity1 : null;
 
-            this.a(world, iblockdata, world.getTileEntity(movingobjectpositionblock.getBlockPosition()), movingobjectpositionblock, entityhuman);
+            this.a(world, iblockdata, world.getTileEntity(movingobjectpositionblock.getBlockPosition()), movingobjectpositionblock, entityhuman, true);
         }
 
     }
 
     @Override
     public boolean interact(IBlockData iblockdata, World world, BlockPosition blockposition, EntityHuman entityhuman, EnumHand enumhand, MovingObjectPositionBlock movingobjectpositionblock) {
-        return this.a(world, iblockdata, world.getTileEntity(blockposition), movingobjectpositionblock, entityhuman);
+        return this.a(world, iblockdata, world.getTileEntity(blockposition), movingobjectpositionblock, entityhuman, true);
     }
 
-    public boolean a(World world, IBlockData iblockdata, @Nullable TileEntity tileentity, MovingObjectPositionBlock movingobjectpositionblock, @Nullable EntityHuman entityhuman) {
+    public boolean a(World world, IBlockData iblockdata, @Nullable TileEntity tileentity, MovingObjectPositionBlock movingobjectpositionblock, @Nullable EntityHuman entityhuman, boolean flag) {
         EnumDirection enumdirection = movingobjectpositionblock.getDirection();
         BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+        boolean flag1 = !flag || this.a(iblockdata, enumdirection, movingobjectpositionblock.getPos().y - (double) blockposition.getY());
 
-        if (!world.isClientSide && tileentity instanceof TileEntityBell && this.a(iblockdata, enumdirection, movingobjectpositionblock.getPos().y - (double) blockposition.getY())) {
+        if (!world.isClientSide && tileentity instanceof TileEntityBell && flag1) {
             ((TileEntityBell) tileentity).a(enumdirection);
             this.a(world, blockposition);
             if (entityhuman != null) {

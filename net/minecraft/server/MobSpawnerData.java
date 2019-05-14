@@ -2,12 +2,12 @@ package net.minecraft.server;
 
 public class MobSpawnerData extends WeightedRandom.WeightedRandomChoice {
 
-    private final NBTTagCompound b;
+    private final NBTTagCompound entity;
 
     public MobSpawnerData() {
         super(1);
-        this.b = new NBTTagCompound();
-        this.b.setString("id", "minecraft:pig");
+        this.entity = new NBTTagCompound();
+        this.entity.setString("id", "minecraft:pig");
     }
 
     public MobSpawnerData(NBTTagCompound nbttagcompound) {
@@ -16,24 +16,24 @@ public class MobSpawnerData extends WeightedRandom.WeightedRandomChoice {
 
     public MobSpawnerData(int i, NBTTagCompound nbttagcompound) {
         super(i);
-        this.b = nbttagcompound;
+        this.entity = nbttagcompound;
     }
 
     public NBTTagCompound a() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        if (!this.b.hasKeyOfType("id", 8)) {
-            this.b.setString("id", "minecraft:pig");
-        } else if (!this.b.getString("id").contains(":")) {
-            this.b.setString("id", (new MinecraftKey(this.b.getString("id"))).toString());
+        if (!this.entity.hasKeyOfType("id", 8)) {
+            this.entity.setString("id", "minecraft:pig");
+        } else if (!this.entity.getString("id").contains(":")) {
+            this.entity.setString("id", (new MinecraftKey(this.entity.getString("id"))).toString());
         }
 
-        nbttagcompound.set("Entity", this.b);
+        nbttagcompound.set("Entity", this.entity);
         nbttagcompound.setInt("Weight", this.a);
         return nbttagcompound;
     }
 
-    public NBTTagCompound b() {
-        return this.b;
+    public NBTTagCompound getEntity() {
+        return this.entity;
     }
 }

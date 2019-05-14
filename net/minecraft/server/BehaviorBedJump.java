@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 public class BehaviorBedJump extends Behavior<EntityInsentient> {
@@ -16,12 +14,8 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
     private int e;
 
     public BehaviorBedJump(float f) {
+        super(ImmutableMap.of(MemoryModuleType.NEAREST_BED, MemoryStatus.VALUE_PRESENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.a = f;
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.NEAREST_BED, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityInsentient entityinsentient) {
@@ -72,7 +66,7 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
     }
 
     private void a(EntityInsentient entityinsentient, BlockPosition blockposition) {
-        entityinsentient.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.a, 0)));
+        entityinsentient.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.a, 0)));
     }
 
     private boolean b(WorldServer worldserver, EntityInsentient entityinsentient) {
@@ -95,7 +89,7 @@ public class BehaviorBedJump extends Behavior<EntityInsentient> {
     }
 
     private Optional<BlockPosition> a(EntityInsentient entityinsentient) {
-        return entityinsentient.getBehaviorController().c(MemoryModuleType.NEAREST_BED);
+        return entityinsentient.getBehaviorController().getMemory(MemoryModuleType.NEAREST_BED);
     }
 
     private boolean e(WorldServer worldserver, EntityInsentient entityinsentient) {

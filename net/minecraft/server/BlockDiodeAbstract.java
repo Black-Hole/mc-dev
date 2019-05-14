@@ -124,7 +124,7 @@ public abstract class BlockDiodeAbstract extends BlockFacingHorizontal {
         IBlockData iblockdata = iworldreader.getType(blockposition);
         Block block = iblockdata.getBlock();
 
-        return this.q(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.a(blockposition, enumdirection))) : 0;
+        return this.q(iblockdata) ? (block == Blocks.REDSTONE_BLOCK ? 15 : (block == Blocks.REDSTONE_WIRE ? (Integer) iblockdata.get(BlockRedstoneWire.POWER) : iworldreader.c(blockposition, enumdirection))) : 0;
     }
 
     @Override

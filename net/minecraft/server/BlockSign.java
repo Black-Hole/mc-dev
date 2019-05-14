@@ -45,7 +45,7 @@ public abstract class BlockSign extends BlockTileEntity implements IBlockWaterlo
                 ItemStack itemstack = entityhuman.b(enumhand);
 
                 if (itemstack.getItem() instanceof ItemDye && entityhuman.abilities.mayBuild) {
-                    boolean flag = tileentitysign.a(((ItemDye) itemstack.getItem()).d());
+                    boolean flag = tileentitysign.setColor(((ItemDye) itemstack.getItem()).d());
 
                     if (flag && !entityhuman.isCreative()) {
                         itemstack.subtract(1);

@@ -21,10 +21,10 @@ import javax.annotation.Nullable;
 
 public class BehaviorController<E extends EntityLiving> implements MinecraftSerializable {
 
-    private final Map<MemoryModuleType<?>, Optional<?>> a = Maps.newHashMap();
-    private final Map<SensorType<? extends Sensor<? super E>>, Sensor<? super E>> b = Maps.newLinkedHashMap();
+    private final Map<MemoryModuleType<?>, Optional<?>> memories = Maps.newHashMap();
+    private final Map<SensorType<? extends Sensor<? super E>>, Sensor<? super E>> sensors = Maps.newLinkedHashMap();
     private final Map<Integer, Map<Activity, Set<Behavior<? super E>>>> c = Maps.newTreeMap();
-    private Schedule d;
+    private Schedule schedule;
     private final Map<Activity, Set<Pair<MemoryModuleType<?>, MemoryStatus>>> e;
     private Set<Activity> f;
     private final Set<Activity> g;
@@ -32,25 +32,25 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
     private long i;
 
     public <T> BehaviorController(Collection<MemoryModuleType<?>> collection, Collection<SensorType<? extends Sensor<? super E>>> collection1, Dynamic<T> dynamic) {
-        this.d = Schedule.a;
+        this.schedule = Schedule.EMPTY;
         this.e = Maps.newHashMap();
         this.f = Sets.newHashSet();
         this.g = Sets.newHashSet();
-        this.h = Activity.b;
+        this.h = Activity.IDLE;
         this.i = -9999L;
         collection.forEach((memorymoduletype) -> {
-            Optional optional = (Optional) this.a.put(memorymoduletype, Optional.empty());
+            Optional optional = (Optional) this.memories.put(memorymoduletype, Optional.empty());
         });
         collection1.forEach((sensortype) -> {
-            Sensor sensor = (Sensor) this.b.put(sensortype, sensortype.a());
+            Sensor sensor = (Sensor) this.sensors.put(sensortype, sensortype.a());
         });
-        this.b.values().forEach((sensor) -> {
+        this.sensors.values().forEach((sensor) -> {
             Iterator iterator = sensor.a().iterator();
 
             while (iterator.hasNext()) {
                 MemoryModuleType<?> memorymoduletype = (MemoryModuleType) iterator.next();
 
-                this.a.put(memorymoduletype, Optional.empty());
+                this.memories.put(memorymoduletype, Optional.empty());
             }
 
         });
@@ -64,49 +64,49 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
 
     }
 
-    public boolean a(MemoryModuleType<?> memorymoduletype) {
+    public boolean hasMemory(MemoryModuleType<?> memorymoduletype) {
         return this.a(memorymoduletype, MemoryStatus.VALUE_PRESENT);
     }
 
     private <T, U> void a(MemoryModuleType<U> memorymoduletype, Dynamic<T> dynamic) {
-        this.a(memorymoduletype, ((Function) memorymoduletype.b().orElseThrow(RuntimeException::new)).apply(dynamic));
+        this.setMemory(memorymoduletype, ((Function) memorymoduletype.a().orElseThrow(RuntimeException::new)).apply(dynamic));
     }
 
-    public void b(MemoryModuleType<?> memorymoduletype) {
-        this.a(memorymoduletype, Optional.empty());
+    public <U> void removeMemory(MemoryModuleType<U> memorymoduletype) {
+        this.setMemory(memorymoduletype, Optional.empty());
     }
 
-    public <U> void a(MemoryModuleType<U> memorymoduletype, @Nullable U u0) {
-        this.a(memorymoduletype, Optional.ofNullable(u0));
+    public <U> void setMemory(MemoryModuleType<U> memorymoduletype, @Nullable U u0) {
+        this.setMemory(memorymoduletype, Optional.ofNullable(u0));
     }
 
-    public <U> void a(MemoryModuleType<U> memorymoduletype, Optional<U> optional) {
-        if (this.a.containsKey(memorymoduletype)) {
+    public <U> void setMemory(MemoryModuleType<U> memorymoduletype, Optional<U> optional) {
+        if (this.memories.containsKey(memorymoduletype)) {
             if (optional.isPresent() && this.a(optional.get())) {
-                this.b(memorymoduletype);
+                this.removeMemory(memorymoduletype);
             } else {
-                this.a.put(memorymoduletype, optional);
+                this.memories.put(memorymoduletype, optional);
             }
         }
 
     }
 
-    public <U> Optional<U> c(MemoryModuleType<U> memorymoduletype) {
-        return (Optional) this.a.get(memorymoduletype);
+    public <U> Optional<U> getMemory(MemoryModuleType<U> memorymoduletype) {
+        return (Optional) this.memories.get(memorymoduletype);
     }
 
     public boolean a(MemoryModuleType<?> memorymoduletype, MemoryStatus memorystatus) {
-        Optional<?> optional = (Optional) this.a.get(memorymoduletype);
+        Optional<?> optional = (Optional) this.memories.get(memorymoduletype);
 
         return optional == null ? false : memorystatus == MemoryStatus.REGISTERED || memorystatus == MemoryStatus.VALUE_PRESENT && optional.isPresent() || memorystatus == MemoryStatus.VALUE_ABSENT && !optional.isPresent();
     }
 
-    public Schedule b() {
-        return this.d;
+    public Schedule getSchedule() {
+        return this.schedule;
     }
 
-    public void a(Schedule schedule) {
-        this.d = schedule;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public void a(Set<Activity> set) {
@@ -118,7 +118,7 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
         return this.c.values().stream().flatMap((map) -> {
             return map.values().stream();
         }).flatMap(Collection::stream).filter((behavior) -> {
-            return behavior.b() == Behavior.Status.RUNNING;
+            return behavior.a() == Behavior.Status.RUNNING;
         });
     }
 
@@ -133,7 +133,7 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
     public void a(long i, long j) {
         if (j - this.i > 20L) {
             this.i = j;
-            Activity activity = this.b().a((int) (i % 24000L));
+            Activity activity = this.getSchedule().a((int) (i % 24000L));
 
             if (!this.g.contains(activity)) {
                 this.a(activity);
@@ -166,11 +166,11 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
     }
 
     public BehaviorController<E> f() {
-        BehaviorController<E> behaviorcontroller = new BehaviorController<>(this.a.keySet(), this.b.keySet(), new Dynamic(DynamicOpsNBT.a, new NBTTagCompound()));
+        BehaviorController<E> behaviorcontroller = new BehaviorController<>(this.memories.keySet(), this.sensors.keySet(), new Dynamic(DynamicOpsNBT.a, new NBTTagCompound()));
 
-        this.a.forEach((memorymoduletype, optional) -> {
+        this.memories.forEach((memorymoduletype, optional) -> {
             optional.ifPresent((object) -> {
-                Optional optional1 = (Optional) behaviorcontroller.a.put(memorymoduletype, Optional.of(object));
+                Optional optional1 = (Optional) behaviorcontroller.memories.put(memorymoduletype, Optional.of(object));
             });
         });
         return behaviorcontroller;
@@ -192,17 +192,17 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
 
     @Override
     public <T> T a(DynamicOps<T> dynamicops) {
-        T t0 = dynamicops.createMap((Map) this.a.entrySet().stream().filter((entry) -> {
-            return ((MemoryModuleType) entry.getKey()).b().isPresent() && ((Optional) entry.getValue()).isPresent();
+        T t0 = dynamicops.createMap((Map) this.memories.entrySet().stream().filter((entry) -> {
+            return ((MemoryModuleType) entry.getKey()).a().isPresent() && ((Optional) entry.getValue()).isPresent();
         }).map((entry) -> {
-            return Pair.of(dynamicops.createString(((MemoryModuleType) entry.getKey()).a().toString()), ((MinecraftSerializable) ((Optional) entry.getValue()).get()).a(dynamicops));
+            return Pair.of(dynamicops.createString(IRegistry.MEMORY_MODULE_TYPE.getKey(entry.getKey()).toString()), ((MinecraftSerializable) ((Optional) entry.getValue()).get()).a(dynamicops));
         }).collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)));
 
         return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("memories"), t0));
     }
 
     private void c(WorldServer worldserver, E e0) {
-        this.b.values().forEach((sensor) -> {
+        this.sensors.values().forEach((sensor) -> {
             sensor.b(worldserver, e0);
         });
     }
@@ -215,7 +215,7 @@ public class BehaviorController<E extends EntityLiving> implements MinecraftSeri
         }).filter((entry) -> {
             return this.g.contains(entry.getKey());
         }).map(Entry::getValue).flatMap(Collection::stream).filter((behavior) -> {
-            return behavior.b() == Behavior.Status.STOPPED;
+            return behavior.a() == Behavior.Status.STOPPED;
         }).forEach((behavior) -> {
             behavior.b(worldserver, e0, i);
         });

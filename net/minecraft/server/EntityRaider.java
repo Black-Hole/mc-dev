@@ -61,7 +61,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
                         Raid raid1 = ((WorldServer) this.world).c_(new BlockPosition(this));
 
                         if (raid1 != null && PersistentRaid.a(this, raid1)) {
-                            raid1.a(raid1.l(), this, (BlockPosition) null, true);
+                            raid1.a(raid1.k(), this, (BlockPosition) null, true);
                         }
                     }
                 } else {
@@ -152,7 +152,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     }
 
     public boolean el() {
-        return this.ek() != null && this.ek().v();
+        return this.ek() != null && this.ek().u();
     }
 
     public void a(int i) {
@@ -173,7 +173,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
         nbttagcompound.setInt("Wave", this.bz);
         nbttagcompound.setBoolean("CanJoinRaid", this.bA);
         if (this.d != null) {
-            nbttagcompound.setInt("RaidId", this.d.u());
+            nbttagcompound.setInt("RaidId", this.d.t());
         }
 
     }
@@ -244,7 +244,7 @@ public abstract class EntityRaider extends EntityMonsterPatrolling {
     @Override
     public boolean damageEntity(DamageSource damagesource, float f) {
         if (this.el()) {
-            this.ek().q();
+            this.ek().p();
         }
 
         return super.damageEntity(damagesource, f);

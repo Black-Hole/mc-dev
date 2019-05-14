@@ -365,8 +365,8 @@ public class EnderDragonBattle {
     private void n() {
         if (!this.e.isEmpty()) {
             int i = (Integer) this.e.remove(this.e.size() - 1);
-            int j = (int) (96.0D * Math.cos(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
-            int k = (int) (96.0D * Math.sin(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
+            int j = MathHelper.floor(96.0D * Math.cos(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
+            int k = MathHelper.floor(96.0D * Math.sin(2.0D * (-3.141592653589793D + 0.15707963267948966D * (double) i)));
 
             this.a(new BlockPosition(j, 75, k));
         }

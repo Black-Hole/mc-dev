@@ -17,7 +17,7 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         int i = random.nextInt(3) + 5;
 
         if (this.aT) {
@@ -76,7 +76,7 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
                                 BlockPosition blockposition1 = new BlockPosition(k, j, k1);
 
                                 if (g(virtuallevelwritable, blockposition1)) {
-                                    this.a(virtuallevelwritable, blockposition1, WorldGenForest.aS);
+                                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, WorldGenForest.aS, structureboundingbox);
                                 }
                             }
                         }
@@ -85,7 +85,7 @@ public class WorldGenForest extends WorldGenTreeAbstract<WorldGenFeatureEmptyCon
 
                 for (j = 0; j < i; ++j) {
                     if (g(virtuallevelwritable, blockposition.up(j))) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(j), WorldGenForest.a);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition.up(j), WorldGenForest.a, structureboundingbox);
                     }
                 }
 

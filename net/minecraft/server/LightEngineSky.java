@@ -17,7 +17,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
             return 15;
         } else {
             if (i == Long.MAX_VALUE) {
-                if (!((LightEngineStorageSky) this.c).l(j)) {
+                if (!((LightEngineStorageSky) this.c).m(j)) {
                     return 15;
                 }
 
@@ -194,7 +194,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                     }
                 }
             } else if (enumdirection != EnumDirection.DOWN) {
-                for (i2 = BlockPosition.f(i2); !((LightEngineStorageSky) this.c).g(j2) && !((LightEngineStorageSky) this.c).m(j2); i2 = BlockPosition.a(i2, 0, 16, 0)) {
+                for (i2 = BlockPosition.f(i2); !((LightEngineStorageSky) this.c).g(j2) && !((LightEngineStorageSky) this.c).n(j2); i2 = BlockPosition.a(i2, 0, 16, 0)) {
                     j2 = SectionPosition.a(j2, EnumDirection.UP);
                 }
 
@@ -206,7 +206,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
                     if (nibblearray2 != null) {
                         l2 = this.b(i2, i, this.a(nibblearray2, i2));
                     } else {
-                        l2 = ((LightEngineStorageSky) this.c).n(j2) ? 0 : 15;
+                        l2 = ((LightEngineStorageSky) this.c).o(j2) ? 0 : 15;
                     }
 
                     if (l > l2) {
@@ -231,7 +231,7 @@ public final class LightEngineSky extends LightEngineLayer<LightEngineStorageSky
         if (((LightEngineStorageSky) this.c).g(j)) {
             super.f(i);
         } else {
-            for (i = BlockPosition.f(i); !((LightEngineStorageSky) this.c).g(j) && !((LightEngineStorageSky) this.c).m(j); i = BlockPosition.a(i, 0, 16, 0)) {
+            for (i = BlockPosition.f(i); !((LightEngineStorageSky) this.c).g(j) && !((LightEngineStorageSky) this.c).n(j); i = BlockPosition.a(i, 0, 16, 0)) {
                 j = SectionPosition.a(j, EnumDirection.UP);
             }
 

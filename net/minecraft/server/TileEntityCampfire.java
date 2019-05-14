@@ -19,29 +19,25 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
     @Override
     public void tick() {
-        IBlockData iblockdata = this.hasWorld() ? this.getBlock() : null;
+        boolean flag = (Boolean) this.getBlock().get(BlockCampfire.b);
+        boolean flag1 = this.world.isClientSide;
 
-        if (iblockdata != null && iblockdata.getBlock() == Blocks.CAMPFIRE) {
-            boolean flag = (Boolean) iblockdata.get(BlockCampfire.b);
-            boolean flag1 = this.world.isClientSide;
+        if (flag1) {
+            if (flag) {
+                this.s();
+            }
 
-            if (flag1) {
-                if (flag) {
-                    this.r();
-                }
-
+        } else {
+            if (flag) {
+                this.f();
             } else {
-                if (flag) {
-                    this.f();
-                } else {
-                    for (int i = 0; i < this.items.size(); ++i) {
-                        if (this.cookingTimes[i] > 0) {
-                            this.cookingTimes[i] = MathHelper.clamp(this.cookingTimes[i] - 2, 0, this.cookingTotalTimes[i]);
-                        }
+                for (int i = 0; i < this.items.size(); ++i) {
+                    if (this.cookingTimes[i] > 0) {
+                        this.cookingTimes[i] = MathHelper.clamp(this.cookingTimes[i] - 2, 0, this.cookingTotalTimes[i]);
                     }
                 }
-
             }
+
         }
     }
 
@@ -61,14 +57,14 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
 
                     InventoryUtils.dropItem(this.world, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ(), itemstack1);
                     this.items.set(i, ItemStack.a);
-                    this.s();
+                    this.t();
                 }
             }
         }
 
     }
 
-    private void r() {
+    private void s() {
         World world = this.getWorld();
 
         if (world != null) {
@@ -161,7 +157,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
                 this.cookingTotalTimes[j] = i;
                 this.cookingTimes[j] = 0;
                 this.items.set(j, itemstack.cloneAndSubtract(1));
-                this.s();
+                this.t();
                 return true;
             }
         }
@@ -169,7 +165,7 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
         return false;
     }
 
-    private void s() {
+    private void t() {
         this.update();
         this.getWorld().notify(this.getPosition(), this.getBlock(), this.getBlock(), 3);
     }
@@ -184,6 +180,6 @@ public class TileEntityCampfire extends TileEntity implements Clearable, ITickab
             InventoryUtils.a(this.getWorld(), this.getPosition(), this.getItems());
         }
 
-        this.s();
+        this.t();
     }
 }

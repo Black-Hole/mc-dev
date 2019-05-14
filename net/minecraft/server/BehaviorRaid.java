@@ -1,16 +1,11 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorRaid extends Behavior<EntityLiving> {
 
-    public BehaviorRaid() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of();
+    public BehaviorRaid() {
+        super(ImmutableMap.of());
     }
 
     @Override
@@ -25,11 +20,11 @@ public class BehaviorRaid extends Behavior<EntityLiving> {
 
         if (raid != null) {
             if (raid.c() && !raid.b()) {
-                behaviorcontroller.b(Activity.h);
-                behaviorcontroller.a(Activity.h);
+                behaviorcontroller.b(Activity.RAID);
+                behaviorcontroller.a(Activity.RAID);
             } else {
-                behaviorcontroller.b(Activity.i);
-                behaviorcontroller.a(Activity.i);
+                behaviorcontroller.b(Activity.PRE_RAID);
+                behaviorcontroller.a(Activity.PRE_RAID);
             }
         }
 

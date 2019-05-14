@@ -196,7 +196,7 @@ public class BlockLectern extends BlockTileEntity {
             TileEntity tileentity = world.getTileEntity(blockposition);
 
             if (tileentity instanceof TileEntityLectern) {
-                return ((TileEntityLectern) tileentity).r();
+                return ((TileEntityLectern) tileentity).s();
             }
         }
 

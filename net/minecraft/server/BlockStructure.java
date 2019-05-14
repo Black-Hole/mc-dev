@@ -59,7 +59,7 @@ public class BlockStructure extends BlockTileEntity {
             if (tileentity instanceof TileEntityStructure) {
                 TileEntityStructure tileentitystructure = (TileEntityStructure) tileentity;
                 boolean flag1 = world.isBlockIndirectlyPowered(blockposition);
-                boolean flag2 = tileentitystructure.F();
+                boolean flag2 = tileentitystructure.G();
 
                 if (flag1 && !flag2) {
                     tileentitystructure.d(true);
@@ -81,7 +81,7 @@ public class BlockStructure extends BlockTileEntity {
             tileentitystructure.c(false);
             break;
         case CORNER:
-            tileentitystructure.D();
+            tileentitystructure.E();
         case DATA:
         }
 

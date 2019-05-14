@@ -15,7 +15,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         int i = random.nextInt(3) + random.nextInt(3) + 5;
         boolean flag = true;
 
@@ -74,7 +74,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                     BlockPosition blockposition1 = new BlockPosition(j, l1, k);
 
                     if (g(virtuallevelwritable, blockposition1)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, structureboundingbox);
                         k1 = l1;
                     }
                 }
@@ -86,7 +86,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                 for (l1 = -3; l1 <= 3; ++l1) {
                     for (j2 = -3; j2 <= 3; ++j2) {
                         if (Math.abs(l1) != 3 || Math.abs(j2) != 3) {
-                            this.b(virtuallevelwritable, blockposition2.b(l1, 0, j2));
+                            this.a(set, virtuallevelwritable, blockposition2.b(l1, 0, j2), structureboundingbox);
                         }
                     }
                 }
@@ -95,14 +95,14 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
 
                 for (l1 = -1; l1 <= 1; ++l1) {
                     for (j2 = -1; j2 <= 1; ++j2) {
-                        this.b(virtuallevelwritable, blockposition2.b(l1, 0, j2));
+                        this.a(set, virtuallevelwritable, blockposition2.b(l1, 0, j2), structureboundingbox);
                     }
                 }
 
-                this.b(virtuallevelwritable, blockposition2.east(2));
-                this.b(virtuallevelwritable, blockposition2.west(2));
-                this.b(virtuallevelwritable, blockposition2.south(2));
-                this.b(virtuallevelwritable, blockposition2.north(2));
+                this.a(set, virtuallevelwritable, blockposition2.east(2), structureboundingbox);
+                this.a(set, virtuallevelwritable, blockposition2.west(2), structureboundingbox);
+                this.a(set, virtuallevelwritable, blockposition2.south(2), structureboundingbox);
+                this.a(set, virtuallevelwritable, blockposition2.north(2), structureboundingbox);
                 j = blockposition.getX();
                 k = blockposition.getZ();
                 EnumDirection enumdirection1 = EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random);
@@ -122,7 +122,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                             BlockPosition blockposition3 = new BlockPosition(j, k2, k);
 
                             if (g(virtuallevelwritable, blockposition3)) {
-                                this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3);
+                                this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, structureboundingbox);
                                 k1 = k2;
                             }
                         }
@@ -138,7 +138,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                         for (k2 = -2; k2 <= 2; ++k2) {
                             for (i3 = -2; i3 <= 2; ++i3) {
                                 if (Math.abs(k2) != 2 || Math.abs(i3) != 2) {
-                                    this.b(virtuallevelwritable, blockposition4.b(k2, 0, i3));
+                                    this.a(set, virtuallevelwritable, blockposition4.b(k2, 0, i3), structureboundingbox);
                                 }
                             }
                         }
@@ -147,7 +147,7 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
 
                         for (k2 = -1; k2 <= 1; ++k2) {
                             for (i3 = -1; i3 <= 1; ++i3) {
-                                this.b(virtuallevelwritable, blockposition4.b(k2, 0, i3));
+                                this.a(set, virtuallevelwritable, blockposition4.b(k2, 0, i3), structureboundingbox);
                             }
                         }
                     }
@@ -162,13 +162,13 @@ public class WorldGenAcaciaTree extends WorldGenTreeAbstract<WorldGenFeatureEmpt
         }
     }
 
-    private void a(Set<BlockPosition> set, IWorldWriter iworldwriter, BlockPosition blockposition) {
-        this.a(set, iworldwriter, blockposition, WorldGenAcaciaTree.a);
+    private void a(Set<BlockPosition> set, IWorldWriter iworldwriter, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
+        this.a(set, iworldwriter, blockposition, WorldGenAcaciaTree.a, structureboundingbox);
     }
 
-    private void b(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition) {
+    private void a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         if (g(virtuallevelwritable, blockposition)) {
-            this.a((IWorldWriter) virtuallevelwritable, blockposition, WorldGenAcaciaTree.aS);
+            this.a(set, (IWorldWriter) virtuallevelwritable, blockposition, WorldGenAcaciaTree.aS, structureboundingbox);
         }
 
     }

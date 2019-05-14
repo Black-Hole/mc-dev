@@ -134,6 +134,20 @@ public class BlockCampfire extends BlockTileEntity implements IBlockWaterlogged 
         }
     }
 
+    @Override
+    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
+        if (!world.isClientSide && entity instanceof EntityArrow) {
+            EntityArrow entityarrow = (EntityArrow) entity;
+
+            if (entityarrow.isBurning() && !(Boolean) iblockdata.get(BlockCampfire.b)) {
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+
+                world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockProperties.r, true), 11);
+            }
+        }
+
+    }
+
     public static void a(World world, BlockPosition blockposition, boolean flag, boolean flag1) {
         Random random = world.getRandom();
         ParticleType particletype = flag ? Particles.CAMPFIRE_SIGNAL_SMOKE : Particles.CAMPFIRE_COSY_SMOKE;

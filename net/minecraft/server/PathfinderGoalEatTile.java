@@ -21,7 +21,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
         if (this.b.getRandom().nextInt(this.b.isBaby() ? 50 : 1000) != 0) {
             return false;
         } else {
-            BlockPosition blockposition = new BlockPosition(this.b.locX, this.b.locY, this.b.locZ);
+            BlockPosition blockposition = new BlockPosition(this.b);
 
             return PathfinderGoalEatTile.a.test(this.c.getType(blockposition)) ? true : this.c.getType(blockposition.down()).getBlock() == Blocks.GRASS_BLOCK;
         }
@@ -52,7 +52,7 @@ public class PathfinderGoalEatTile extends PathfinderGoal {
     public void e() {
         this.d = Math.max(0, this.d - 1);
         if (this.d == 4) {
-            BlockPosition blockposition = new BlockPosition(this.b.locX, this.b.locY, this.b.locZ);
+            BlockPosition blockposition = new BlockPosition(this.b);
 
             if (PathfinderGoalEatTile.a.test(this.c.getType(blockposition))) {
                 if (this.c.getGameRules().getBoolean("mobGriefing")) {

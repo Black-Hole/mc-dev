@@ -117,7 +117,7 @@ public class EntityBat extends EntityAmbient {
             }
 
             if (this.d == null || this.random.nextInt(30) == 0 || this.d.a((IPosition) this.ch(), 2.0D)) {
-                this.d = new BlockPosition((int) this.locX + this.random.nextInt(7) - this.random.nextInt(7), (int) this.locY + this.random.nextInt(6) - 2, (int) this.locZ + this.random.nextInt(7) - this.random.nextInt(7));
+                this.d = new BlockPosition(this.locX + (double) this.random.nextInt(7) - (double) this.random.nextInt(7), this.locY + (double) this.random.nextInt(6) - 2.0D, this.locZ + (double) this.random.nextInt(7) - (double) this.random.nextInt(7));
             }
 
             double d0 = (double) this.d.getX() + 0.5D - this.locX;

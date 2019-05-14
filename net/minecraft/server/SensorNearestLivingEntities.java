@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
 
-    private static final PathfinderTargetCondition b = (new PathfinderTargetCondition()).a(16.0D).b().d().c();
+    private static final PathfinderTargetCondition a = (new PathfinderTargetCondition()).a(16.0D).b().d().c();
 
     public SensorNearestLivingEntities() {}
 
@@ -23,14 +23,14 @@ public class SensorNearestLivingEntities extends Sensor<EntityLiving> {
         list.sort(Comparator.comparingDouble(entityliving::h));
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        behaviorcontroller.a(MemoryModuleType.MOBS, (Object) list);
+        behaviorcontroller.setMemory(MemoryModuleType.MOBS, (Object) list);
         MemoryModuleType memorymoduletype = MemoryModuleType.VISIBLE_MOBS;
         Stream stream = list.stream().filter((entityliving1) -> {
-            return SensorNearestLivingEntities.b.a(entityliving, entityliving1);
+            return SensorNearestLivingEntities.a.a(entityliving, entityliving1);
         });
 
         entityliving.getClass();
-        behaviorcontroller.a(memorymoduletype, stream.filter(entityliving::hasLineOfSight).collect(Collectors.toList()));
+        behaviorcontroller.setMemory(memorymoduletype, stream.filter(entityliving::hasLineOfSight).collect(Collectors.toList()));
     }
 
     @Override

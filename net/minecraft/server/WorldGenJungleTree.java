@@ -12,13 +12,13 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         int i = this.a(random);
 
         if (!this.a(virtuallevelwritable, blockposition, i)) {
             return false;
         } else {
-            this.d(virtuallevelwritable, blockposition.up(i), 2);
+            this.c(virtuallevelwritable, blockposition.up(i), 2, structureboundingbox, set);
 
             for (int j = blockposition.getY() + i - 2 - random.nextInt(4); j > blockposition.getY() + i / 2; j -= 2 + random.nextInt(4)) {
                 float f = random.nextFloat() * 6.2831855F;
@@ -30,7 +30,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                 for (i1 = 0; i1 < 5; ++i1) {
                     k = blockposition.getX() + (int) (1.5F + MathHelper.cos(f) * (float) i1);
                     l = blockposition.getZ() + (int) (1.5F + MathHelper.sin(f) * (float) i1);
-                    this.a(set, (IWorldWriter) virtuallevelwritable, new BlockPosition(k, j - 3 + i1 / 2, l), this.aS);
+                    this.a(set, (IWorldWriter) virtuallevelwritable, new BlockPosition(k, j - 3 + i1 / 2, l), this.aS, structureboundingbox);
                 }
 
                 i1 = 1 + random.nextInt(2);
@@ -39,7 +39,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                 for (int k1 = j - i1; k1 <= j1; ++k1) {
                     int l1 = k1 - j1;
 
-                    this.c(virtuallevelwritable, new BlockPosition(k, k1, l), 1 - l1);
+                    this.b(virtuallevelwritable, new BlockPosition(k, k1, l), 1 - l1, structureboundingbox, set);
                 }
             }
 
@@ -47,7 +47,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                 BlockPosition blockposition1 = blockposition.up(i2);
 
                 if (a((VirtualLevelReadable) virtuallevelwritable, blockposition1)) {
-                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aS);
+                    this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.aS, structureboundingbox);
                     if (i2 > 0) {
                         this.a(virtuallevelwritable, random, blockposition1.west(), BlockVine.EAST);
                         this.a(virtuallevelwritable, random, blockposition1.north(), BlockVine.SOUTH);
@@ -58,7 +58,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                     BlockPosition blockposition2 = blockposition1.east();
 
                     if (a((VirtualLevelReadable) virtuallevelwritable, blockposition2)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition2, this.aS);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition2, this.aS, structureboundingbox);
                         if (i2 > 0) {
                             this.a(virtuallevelwritable, random, blockposition2.east(), BlockVine.WEST);
                             this.a(virtuallevelwritable, random, blockposition2.north(), BlockVine.SOUTH);
@@ -68,7 +68,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                     BlockPosition blockposition3 = blockposition1.south().east();
 
                     if (a((VirtualLevelReadable) virtuallevelwritable, blockposition3)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, this.aS);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition3, this.aS, structureboundingbox);
                         if (i2 > 0) {
                             this.a(virtuallevelwritable, random, blockposition3.east(), BlockVine.WEST);
                             this.a(virtuallevelwritable, random, blockposition3.south(), BlockVine.NORTH);
@@ -78,7 +78,7 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
                     BlockPosition blockposition4 = blockposition1.south();
 
                     if (a((VirtualLevelReadable) virtuallevelwritable, blockposition4)) {
-                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition4, this.aS);
+                        this.a(set, (IWorldWriter) virtuallevelwritable, blockposition4, this.aS, structureboundingbox);
                         if (i2 > 0) {
                             this.a(virtuallevelwritable, random, blockposition4.west(), BlockVine.EAST);
                             this.a(virtuallevelwritable, random, blockposition4.south(), BlockVine.NORTH);
@@ -98,11 +98,11 @@ public class WorldGenJungleTree extends WorldGenMegaTreeAbstract<WorldGenFeature
 
     }
 
-    private void d(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i) {
+    private void c(VirtualLevelWritable virtuallevelwritable, BlockPosition blockposition, int i, StructureBoundingBox structureboundingbox, Set<BlockPosition> set) {
         boolean flag = true;
 
         for (int j = -2; j <= 0; ++j) {
-            this.b(virtuallevelwritable, blockposition.up(j), i + 1 - j);
+            this.a(virtuallevelwritable, blockposition.up(j), i + 1 - j, structureboundingbox, set);
         }
 
     }

@@ -11,7 +11,7 @@ public final class BiomeRoofedForest extends BiomeBase {
         BiomeDecoratorGroups.c(this);
         BiomeDecoratorGroups.d(this);
         BiomeDecoratorGroups.f(this);
-        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.HUGE_BROWN_MUSHROOM, WorldGenerator.HUGE_RED_MUSHROOM, WorldGenerator.DARK_OAK_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.025F, 0.05F, 0.6666667F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.G, WorldGenFeatureDecoratorConfiguration.e));
+        this.a(WorldGenStage.Decoration.VEGETAL_DECORATION, a(WorldGenerator.RANDOM_SELECTOR, new WorldGenFeatureRandomChoiceConfiguration(new WorldGenerator[] { WorldGenerator.HUGE_BROWN_MUSHROOM, WorldGenerator.HUGE_RED_MUSHROOM, WorldGenerator.DARK_OAK_TREE, WorldGenerator.FANCY_TREE}, new WorldGenFeatureConfiguration[] { new WorldGenHugeMushroomConfiguration(false), new WorldGenHugeMushroomConfiguration(false), WorldGenFeatureConfiguration.e, WorldGenFeatureConfiguration.e}, new float[] { 0.025F, 0.05F, 0.6666667F, 0.1F}, WorldGenerator.NORMAL_TREE, WorldGenFeatureConfiguration.e), WorldGenDecorator.G, WorldGenFeatureDecoratorConfiguration.e));
         BiomeDecoratorGroups.N(this);
         BiomeDecoratorGroups.g(this);
         BiomeDecoratorGroups.h(this);

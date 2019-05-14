@@ -102,7 +102,7 @@ public class BlockStepAbstract extends Block implements IBlockWaterlogged {
     public boolean a(IBlockData iblockdata, IBlockAccess iblockaccess, BlockPosition blockposition, PathMode pathmode) {
         switch (pathmode) {
         case LAND:
-            return iblockdata.get(BlockStepAbstract.a) == BlockPropertySlabType.BOTTOM;
+            return false;
         case WATER:
             return iblockaccess.getFluid(blockposition).a(TagsFluid.WATER);
         case AIR:

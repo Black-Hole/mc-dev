@@ -1,14 +1,17 @@
 package net.minecraft.server;
 
+import java.util.Random;
 import java.util.Set;
 
 public abstract class Sensor<E extends EntityLiving> {
 
+    private static final Random a = new Random();
     private final int b;
-    protected long a;
+    private long c;
 
     public Sensor(int i) {
         this.b = i;
+        this.c = (long) Sensor.a.nextInt(i);
     }
 
     public Sensor() {
@@ -16,8 +19,8 @@ public abstract class Sensor<E extends EntityLiving> {
     }
 
     public final void b(WorldServer worldserver, E e0) {
-        if (worldserver.getTime() - this.a >= (long) this.b) {
-            this.a = worldserver.getTime();
+        if (--this.c <= 0L) {
+            this.c = (long) this.b;
             this.a(worldserver, e0);
         }
 

@@ -38,11 +38,11 @@ public class WorldData {
     private int t;
     private String levelName;
     private int v;
-    private int w;
-    private boolean x;
-    private int y;
-    private boolean z;
-    private int A;
+    private int clearWeatherTime;
+    private boolean raining;
+    private int rainTime;
+    private boolean thundering;
+    private int thunderTime;
     private EnumGamemode B;
     private boolean C;
     private boolean D;
@@ -157,11 +157,11 @@ public class WorldData {
         this.o = nbttagcompound.getLong("SizeOnDisk");
         this.levelName = nbttagcompound.getString("LevelName");
         this.v = nbttagcompound.getInt("version");
-        this.w = nbttagcompound.getInt("clearWeatherTime");
-        this.y = nbttagcompound.getInt("rainTime");
-        this.x = nbttagcompound.getBoolean("raining");
-        this.A = nbttagcompound.getInt("thunderTime");
-        this.z = nbttagcompound.getBoolean("thundering");
+        this.clearWeatherTime = nbttagcompound.getInt("clearWeatherTime");
+        this.rainTime = nbttagcompound.getInt("rainTime");
+        this.raining = nbttagcompound.getBoolean("raining");
+        this.thunderTime = nbttagcompound.getInt("thunderTime");
+        this.thundering = nbttagcompound.getBoolean("thundering");
         this.D = nbttagcompound.getBoolean("hardcore");
         if (nbttagcompound.hasKeyOfType("initialized", 99)) {
             this.F = nbttagcompound.getBoolean("initialized");
@@ -349,11 +349,11 @@ public class WorldData {
         nbttagcompound.setLong("LastPlayed", SystemUtils.getTimeMillis());
         nbttagcompound.setString("LevelName", this.levelName);
         nbttagcompound.setInt("version", this.v);
-        nbttagcompound.setInt("clearWeatherTime", this.w);
-        nbttagcompound.setInt("rainTime", this.y);
-        nbttagcompound.setBoolean("raining", this.x);
-        nbttagcompound.setInt("thunderTime", this.A);
-        nbttagcompound.setBoolean("thundering", this.z);
+        nbttagcompound.setInt("clearWeatherTime", this.clearWeatherTime);
+        nbttagcompound.setInt("rainTime", this.rainTime);
+        nbttagcompound.setBoolean("raining", this.raining);
+        nbttagcompound.setInt("thunderTime", this.thunderTime);
+        nbttagcompound.setBoolean("thundering", this.thundering);
         nbttagcompound.setBoolean("hardcore", this.D);
         nbttagcompound.setBoolean("allowCommands", this.E);
         nbttagcompound.setBoolean("initialized", this.F);
@@ -483,7 +483,7 @@ public class WorldData {
         return this.levelName;
     }
 
-    public void a(String s) {
+    public void setName(String s) {
         this.levelName = s;
     }
 
@@ -496,43 +496,43 @@ public class WorldData {
     }
 
     public int A() {
-        return this.w;
+        return this.clearWeatherTime;
     }
 
     public void g(int i) {
-        this.w = i;
+        this.clearWeatherTime = i;
     }
 
     public boolean isThundering() {
-        return this.z;
+        return this.thundering;
     }
 
     public void setThundering(boolean flag) {
-        this.z = flag;
+        this.thundering = flag;
     }
 
     public int getThunderDuration() {
-        return this.A;
+        return this.thunderTime;
     }
 
     public void setThunderDuration(int i) {
-        this.A = i;
+        this.thunderTime = i;
     }
 
     public boolean hasStorm() {
-        return this.x;
+        return this.raining;
     }
 
     public void setStorm(boolean flag) {
-        this.x = flag;
+        this.raining = flag;
     }
 
     public int getWeatherDuration() {
-        return this.y;
+        return this.rainTime;
     }
 
     public void setWeatherDuration(int i) {
-        this.y = i;
+        this.rainTime = i;
     }
 
     public EnumGamemode getGameType() {
@@ -724,7 +724,7 @@ public class WorldData {
             return String.format("0x%05X - %s", this.v, s);
         });
         crashreportsystemdetails.a("Level weather", () -> {
-            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", this.y, this.x, this.A, this.z);
+            return String.format("Rain time: %d (now: %b), thunder time: %d (now: %b)", this.rainTime, this.raining, this.thunderTime, this.thundering);
         });
         crashreportsystemdetails.a("Level game mode", () -> {
             return String.format("Game mode: %s (ID %d). Hardcore: %b. Cheats: %b", this.B.b(), this.B.getId(), this.D, this.E);

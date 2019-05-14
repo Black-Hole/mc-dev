@@ -49,10 +49,6 @@ public class VillagerData {
         return dynamicops.createMap(ImmutableMap.of(dynamicops.createString("type"), dynamicops.createString(IRegistry.VILLAGER_TYPE.getKey(this.b).toString()), dynamicops.createString("profession"), dynamicops.createString(IRegistry.VILLAGER_PROFESSION.getKey(this.c).toString()), dynamicops.createString("level"), dynamicops.createInt(this.d)));
     }
 
-    public static int b(int i) {
-        return d(i) ? VillagerData.a[i - 1] : 0;
-    }
-
     public static int c(int i) {
         return d(i) ? VillagerData.a[i] : 0;
     }

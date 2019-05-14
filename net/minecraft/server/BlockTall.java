@@ -1,5 +1,7 @@
 package net.minecraft.server;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,6 +17,7 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }).collect(SystemUtils.a());
     protected final VoxelShape[] g;
     protected final VoxelShape[] h;
+    private final Object2IntMap<IBlockData> i = new Object2IntOpenHashMap();
 
     protected BlockTall(float f, float f1, float f2, float f3, float f4, Block.Info block_info) {
         super(block_info);
@@ -63,25 +66,27 @@ public class BlockTall extends Block implements IBlockWaterlogged {
     }
 
     protected int j(IBlockData iblockdata) {
-        int i = 0;
+        return this.i.computeIntIfAbsent(iblockdata, (iblockdata1) -> {
+            int i = 0;
 
-        if ((Boolean) iblockdata.get(BlockTall.NORTH)) {
-            i |= a(EnumDirection.NORTH);
-        }
+            if ((Boolean) iblockdata1.get(BlockTall.NORTH)) {
+                i |= a(EnumDirection.NORTH);
+            }
 
-        if ((Boolean) iblockdata.get(BlockTall.EAST)) {
-            i |= a(EnumDirection.EAST);
-        }
+            if ((Boolean) iblockdata1.get(BlockTall.EAST)) {
+                i |= a(EnumDirection.EAST);
+            }
 
-        if ((Boolean) iblockdata.get(BlockTall.SOUTH)) {
-            i |= a(EnumDirection.SOUTH);
-        }
+            if ((Boolean) iblockdata1.get(BlockTall.SOUTH)) {
+                i |= a(EnumDirection.SOUTH);
+            }
 
-        if ((Boolean) iblockdata.get(BlockTall.WEST)) {
-            i |= a(EnumDirection.WEST);
-        }
+            if ((Boolean) iblockdata1.get(BlockTall.WEST)) {
+                i |= a(EnumDirection.WEST);
+            }
 
-        return i;
+            return i;
+        });
     }
 
     @Override

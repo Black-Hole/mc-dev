@@ -138,7 +138,7 @@ public class EntityVindicator extends EntityIllagerAbstract {
             b0 = 2;
         }
 
-        boolean flag1 = this.random.nextFloat() <= raid.w();
+        boolean flag1 = this.random.nextFloat() <= raid.v();
 
         if (flag1) {
             Map<Enchantment, Integer> map = Maps.newHashMap();

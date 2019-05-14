@@ -67,7 +67,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
 
     public boolean a(GeneratorAccess generatoraccess, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         generatoraccess.a(blockposition, false);
-        WorldGenerator<WorldGenFeatureEmptyConfiguration> worldgenerator = null;
+        WorldGenerator<WorldGenHugeMushroomConfiguration> worldgenerator = null;
 
         if (this == Blocks.BROWN_MUSHROOM) {
             worldgenerator = WorldGenerator.HUGE_BROWN_MUSHROOM;
@@ -75,7 +75,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
             worldgenerator = WorldGenerator.HUGE_RED_MUSHROOM;
         }
 
-        if (worldgenerator != null && worldgenerator.generate(generatoraccess, generatoraccess.getChunkProvider().getChunkGenerator(), random, blockposition, WorldGenFeatureConfiguration.e)) {
+        if (worldgenerator != null && worldgenerator.generate(generatoraccess, generatoraccess.getChunkProvider().getChunkGenerator(), random, blockposition, new WorldGenHugeMushroomConfiguration(true))) {
             return true;
         } else {
             generatoraccess.setTypeAndData(blockposition, iblockdata, 3);

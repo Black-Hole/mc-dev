@@ -109,6 +109,7 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
     public CompletableFuture<IChunkAccess> a(IChunkAccess ichunkaccess, boolean flag) {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
 
+        ichunkaccess.b(false);
         this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.PRE_UPDATE, SystemUtils.a(() -> {
             ChunkSection[] achunksection = ichunkaccess.getSections();
 
@@ -127,12 +128,12 @@ public class LightEngineThreaded extends LightEngine implements AutoCloseable {
                 });
             }
 
-            ichunkaccess.b(true);
             this.d.c(chunkcoordintpair);
         }, () -> {
             return "lightChunk " + chunkcoordintpair + " " + flag;
         }));
         return CompletableFuture.supplyAsync(() -> {
+            ichunkaccess.b(true);
             return ichunkaccess;
         }, (runnable) -> {
             this.a(chunkcoordintpair.x, chunkcoordintpair.z, LightEngineThreaded.Update.POST_UPDATE, runnable);

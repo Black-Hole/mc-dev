@@ -42,7 +42,7 @@ public class Chunk implements IChunkAccess {
     private TickList<FluidType> p;
     private boolean q;
     private long lastSaved;
-    private boolean s;
+    private volatile boolean s;
     private long t;
     @Nullable
     private Supplier<PlayerChunk.State> u;
@@ -50,6 +50,10 @@ public class Chunk implements IChunkAccess {
     private Consumer<Chunk> v;
     private final ChunkCoordIntPair loc;
     private volatile boolean x;
+
+    public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase) {
+        this(world, chunkcoordintpair, abiomebase, ChunkConverter.a, TickListEmpty.a(), TickListEmpty.a(), 0L, (ChunkSection[]) null, (Consumer) null);
+    }
 
     public Chunk(World world, ChunkCoordIntPair chunkcoordintpair, BiomeBase[] abiomebase, ChunkConverter chunkconverter, TickList<Block> ticklist, TickList<FluidType> ticklist1, long i, @Nullable ChunkSection[] achunksection, @Nullable Consumer<Chunk> consumer) {
         this.sections = new ChunkSection[16];
@@ -551,7 +555,7 @@ public class Chunk implements IChunkAccess {
         return this.d;
     }
 
-    public void c(boolean flag) {
+    public void setLoaded(boolean flag) {
         this.loaded = flag;
     }
 
@@ -690,24 +694,7 @@ public class Chunk implements IChunkAccess {
             }
         }
 
-        if (this.o instanceof ProtoChunkTickList) {
-            ((ProtoChunkTickList) this.o).a(this.world.getBlockTickList(), (blockposition1) -> {
-                return this.getType(blockposition1).getBlock();
-            });
-        } else if (this.o instanceof TickListChunk) {
-            this.world.getBlockTickList().a(((TickListChunk) this.o).a());
-            this.o = TickListEmpty.a();
-        }
-
-        if (this.p instanceof ProtoChunkTickList) {
-            ((ProtoChunkTickList) this.p).a(this.world.getFluidTickList(), (blockposition1) -> {
-                return this.getFluid(blockposition1).getType();
-            });
-        } else if (this.p instanceof TickListChunk) {
-            this.world.getFluidTickList().a(((TickListChunk) this.p).a());
-            this.p = TickListEmpty.a();
-        }
-
+        this.B();
         Iterator iterator = Sets.newHashSet(this.e.keySet()).iterator();
 
         while (iterator.hasNext()) {
@@ -757,10 +744,40 @@ public class Chunk implements IChunkAccess {
         return this.n;
     }
 
+    public void B() {
+        if (this.o instanceof ProtoChunkTickList) {
+            ((ProtoChunkTickList) this.o).a(this.world.getBlockTickList(), (blockposition) -> {
+                return this.getType(blockposition).getBlock();
+            });
+            this.o = TickListEmpty.a();
+        } else if (this.o instanceof TickListChunk) {
+            this.world.getBlockTickList().a(((TickListChunk) this.o).a());
+            this.o = TickListEmpty.a();
+        }
+
+        if (this.p instanceof ProtoChunkTickList) {
+            ((ProtoChunkTickList) this.p).a(this.world.getFluidTickList(), (blockposition) -> {
+                return this.getFluid(blockposition).getType();
+            });
+            this.p = TickListEmpty.a();
+        } else if (this.p instanceof TickListChunk) {
+            this.world.getFluidTickList().a(((TickListChunk) this.p).a());
+            this.p = TickListEmpty.a();
+        }
+
+    }
+
     public void a(WorldServer worldserver) {
-        this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(true, this.loc));
-        this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(true, this.loc));
-        this.setNeedsSaving(true);
+        if (this.o == TickListEmpty.a()) {
+            this.o = new TickListChunk<>(IRegistry.BLOCK::getKey, worldserver.getBlockTickList().a(true, this.loc));
+            this.setNeedsSaving(true);
+        }
+
+        if (this.p == TickListEmpty.a()) {
+            this.p = new TickListChunk<>(IRegistry.FLUID::getKey, worldserver.getFluidTickList().a(true, this.loc));
+            this.setNeedsSaving(true);
+        }
+
     }
 
     @Override

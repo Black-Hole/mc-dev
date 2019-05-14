@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class BehaviorLookInteract extends Behavior<EntityLiving> {
@@ -14,6 +12,7 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
     private final Predicate<EntityLiving> d;
 
     public BehaviorLookInteract(EntityTypes<?> entitytypes, int i, Predicate<EntityLiving> predicate, Predicate<EntityLiving> predicate1) {
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
         this.a = entitytypes;
         this.b = i * i;
         this.c = predicate1;
@@ -29,11 +28,6 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
     }
 
     @Override
-    public Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED), Pair.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.VISIBLE_MOBS, MemoryStatus.VALUE_PRESENT));
-    }
-
-    @Override
     public boolean a(WorldServer worldserver, EntityLiving entityliving) {
         return this.d.test(entityliving) && this.b(entityliving).stream().anyMatch(this::a);
     }
@@ -43,12 +37,12 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
         super.a(worldserver, entityliving, i);
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-        behaviorcontroller.c(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
+        behaviorcontroller.getMemory(MemoryModuleType.VISIBLE_MOBS).ifPresent((list) -> {
             list.stream().filter((entityliving1) -> {
                 return entityliving1.h((Entity) entityliving) <= (double) this.b;
             }).filter(this::a).findFirst().ifPresent((entityliving1) -> {
-                behaviorcontroller.a(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving1);
-                behaviorcontroller.a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
+                behaviorcontroller.setMemory(MemoryModuleType.INTERACTION_TARGET, (Object) entityliving1);
+                behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving1)));
             });
         });
     }
@@ -58,6 +52,6 @@ public class BehaviorLookInteract extends Behavior<EntityLiving> {
     }
 
     private List<EntityLiving> b(EntityLiving entityliving) {
-        return (List) entityliving.getBehaviorController().c(MemoryModuleType.VISIBLE_MOBS).get();
+        return (List) entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).get();
     }
 }

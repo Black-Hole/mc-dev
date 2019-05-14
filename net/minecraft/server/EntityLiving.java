@@ -521,7 +521,7 @@ public abstract class EntityLiving extends Entity {
 
             this.d(blockposition);
             this.a(blockposition);
-            this.datawatcher.set(EntityLiving.X, EntityPose.SLEEPING);
+            this.datawatcher.set(EntityLiving.POSE, EntityPose.SLEEPING);
         }
 
         if (nbttagcompound.hasKeyOfType("Brain", 10)) {
@@ -1090,7 +1090,7 @@ public abstract class EntityLiving extends Entity {
             }
 
             this.world.broadcastEntityEffect(this, (byte) 3);
-            this.b(EntityPose.DYING);
+            this.setPose(EntityPose.DYING);
         }
     }
 
@@ -2458,7 +2458,7 @@ public abstract class EntityLiving extends Entity {
 
     @Override
     public boolean bj() {
-        return super.bj() || !this.isGliding() && this.Z() == EntityPose.FALL_FLYING;
+        return super.bj() || !this.isGliding() && this.getPose() == EntityPose.FALL_FLYING;
     }
 
     public boolean a(double d0, double d1, double d2, boolean flag) {
@@ -2561,7 +2561,7 @@ public abstract class EntityLiving extends Entity {
             this.world.setTypeAndData(blockposition, (IBlockData) iblockdata.set(BlockBed.OCCUPIED, true), 3);
         }
 
-        this.b(EntityPose.SLEEPING);
+        this.setPose(EntityPose.SLEEPING);
         this.a(blockposition);
         this.d(blockposition);
         this.setMot(Vec3D.a);
@@ -2598,7 +2598,7 @@ public abstract class EntityLiving extends Entity {
             }
 
         });
-        this.b(EntityPose.STANDING);
+        this.setPose(EntityPose.STANDING);
         this.dw();
     }
 

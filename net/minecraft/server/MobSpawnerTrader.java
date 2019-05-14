@@ -98,7 +98,7 @@ public class MobSpawnerTrader {
         BlockPosition blockposition = this.a(new BlockPosition(entityvillagertrader), i);
 
         if (blockposition != null) {
-            EntityLLamaTrader entityllamatrader = (EntityLLamaTrader) EntityTypes.TRADER_LLAMA.spawnCreature(this.b, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition, EnumMobSpawn.EVENT, false, false);
+            EntityLlamaTrader entityllamatrader = (EntityLlamaTrader) EntityTypes.TRADER_LLAMA.spawnCreature(this.b, (NBTTagCompound) null, (IChatBaseComponent) null, (EntityHuman) null, blockposition, EnumMobSpawn.EVENT, false, false);
 
             if (entityllamatrader != null) {
                 entityllamatrader.setLeashHolder(entityvillagertrader, true);

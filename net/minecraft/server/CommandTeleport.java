@@ -47,7 +47,7 @@ public class CommandTeleport {
         while (iterator.hasNext()) {
             Entity entity1 = (Entity) iterator.next();
 
-            a(commandlistenerwrapper, entity1, commandlistenerwrapper.getWorld(), entity.locX, entity.locY, entity.locZ, EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class), entity.yaw, entity.pitch, (CommandTeleport.a) null);
+            a(commandlistenerwrapper, entity1, (WorldServer) entity.world, entity.locX, entity.locY, entity.locZ, EnumSet.noneOf(PacketPlayOutPosition.EnumPlayerTeleportFlags.class), entity.yaw, entity.pitch, (CommandTeleport.a) null);
         }
 
         if (collection.size() == 1) {

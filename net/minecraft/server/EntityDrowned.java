@@ -174,7 +174,7 @@ public class EntityDrowned extends EntityZombie implements IRangedEntity {
         PathEntity pathentity = this.getNavigation().l();
 
         if (pathentity != null) {
-            PathPoint pathpoint = pathentity.k();
+            PathPoint pathpoint = pathentity.j();
 
             if (pathpoint != null) {
                 double d0 = this.e((double) pathpoint.a, (double) pathpoint.b, (double) pathpoint.c);

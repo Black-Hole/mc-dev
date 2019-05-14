@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,8 +21,8 @@ public class ChunkRegionLoader {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static ProtoChunk loadChunk(World world, DefinedStructureManager definedstructuremanager, VillagePlace villageplace, ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
-        ChunkGenerator<?> chunkgenerator = world.getChunkProvider().getChunkGenerator();
+    public static ProtoChunk loadChunk(WorldServer worldserver, DefinedStructureManager definedstructuremanager, VillagePlace villageplace, ChunkCoordIntPair chunkcoordintpair, NBTTagCompound nbttagcompound) {
+        ChunkGenerator<?> chunkgenerator = worldserver.getChunkProvider().getChunkGenerator();
         WorldChunkManager worldchunkmanager = chunkgenerator.getWorldChunkManager();
         NBTTagCompound nbttagcompound1 = nbttagcompound.getCompound("Level");
         ChunkCoordIntPair chunkcoordintpair1 = new ChunkCoordIntPair(nbttagcompound1.getInt("xPos"), nbttagcompound1.getInt("zPos"));
@@ -51,17 +52,17 @@ public class ChunkRegionLoader {
         ChunkConverter chunkconverter = nbttagcompound1.hasKeyOfType("UpgradeData", 10) ? new ChunkConverter(nbttagcompound1.getCompound("UpgradeData")) : ChunkConverter.a;
         ProtoChunkTickList<Block> protochunkticklist = new ProtoChunkTickList<>((block) -> {
             return block == null || block.getBlockData().isAir();
-        }, IRegistry.BLOCK::getKey, IRegistry.BLOCK::get, chunkcoordintpair, nbttagcompound1.getList("ToBeTicked", 9));
+        }, chunkcoordintpair, nbttagcompound1.getList("ToBeTicked", 9));
         ProtoChunkTickList<FluidType> protochunkticklist1 = new ProtoChunkTickList<>((fluidtype) -> {
             return fluidtype == null || fluidtype == FluidTypes.EMPTY;
-        }, IRegistry.FLUID::getKey, IRegistry.FLUID::get, chunkcoordintpair, nbttagcompound1.getList("LiquidsToBeTicked", 9));
+        }, chunkcoordintpair, nbttagcompound1.getList("LiquidsToBeTicked", 9));
         boolean flag = nbttagcompound1.getBoolean("isLightOn");
         NBTTagList nbttaglist = nbttagcompound1.getList("Sections", 10);
         boolean flag1 = true;
         ChunkSection[] achunksection = new ChunkSection[16];
-        boolean flag2 = world.getWorldProvider().g();
-        IChunkProvider ichunkprovider = world.getChunkProvider();
-        LightEngine lightengine = ichunkprovider.getLightEngine();
+        boolean flag2 = worldserver.getWorldProvider().g();
+        ChunkProviderServer chunkproviderserver = worldserver.getChunkProvider();
+        LightEngine lightengine = chunkproviderserver.getLightEngine();
 
         for (int k = 0; k < nbttaglist.size(); ++k) {
             NBTTagCompound nbttagcompound2 = nbttaglist.getCompound(k);
@@ -95,7 +96,34 @@ public class ChunkRegionLoader {
         Object object;
 
         if (chunkstatus_type == ChunkStatus.Type.LEVELCHUNK) {
-            object = new Chunk(world.getMinecraftWorld(), chunkcoordintpair, abiomebase, chunkconverter, protochunkticklist, protochunkticklist1, l, achunksection, (chunk) -> {
+            NBTTagList nbttaglist1;
+            Function function;
+            RegistryBlocks registryblocks;
+            Object object1;
+
+            if (nbttagcompound1.hasKeyOfType("TileTicks", 9)) {
+                nbttaglist1 = nbttagcompound1.getList("TileTicks", 10);
+                function = IRegistry.BLOCK::getKey;
+                registryblocks = IRegistry.BLOCK;
+                registryblocks.getClass();
+                object1 = TickListChunk.a(nbttaglist1, function, registryblocks::get);
+            } else {
+                object1 = protochunkticklist;
+            }
+
+            Object object2;
+
+            if (nbttagcompound1.hasKeyOfType("LiquidTicks", 9)) {
+                nbttaglist1 = nbttagcompound1.getList("LiquidTicks", 10);
+                function = IRegistry.FLUID::getKey;
+                registryblocks = IRegistry.FLUID;
+                registryblocks.getClass();
+                object2 = TickListChunk.a(nbttaglist1, function, registryblocks::get);
+            } else {
+                object2 = protochunkticklist1;
+            }
+
+            object = new Chunk(worldserver.getMinecraftWorld(), chunkcoordintpair, abiomebase, chunkconverter, (TickList) object1, (TickList) object2, l, achunksection, (chunk) -> {
                 loadEntities(nbttagcompound1, chunk);
             });
         } else {
@@ -147,16 +175,16 @@ public class ChunkRegionLoader {
             ((IChunkAccess) object).setNeedsSaving(true);
         }
 
-        NBTTagList nbttaglist1 = nbttagcompound1.getList("PostProcessing", 9);
+        NBTTagList nbttaglist2 = nbttagcompound1.getList("PostProcessing", 9);
 
-        NBTTagList nbttaglist2;
+        NBTTagList nbttaglist3;
         int i1;
 
-        for (int j1 = 0; j1 < nbttaglist1.size(); ++j1) {
-            nbttaglist2 = nbttaglist1.b(j1);
+        for (int j1 = 0; j1 < nbttaglist2.size(); ++j1) {
+            nbttaglist3 = nbttaglist2.b(j1);
 
-            for (i1 = 0; i1 < nbttaglist2.size(); ++i1) {
-                ((IChunkAccess) object).a(nbttaglist2.d(i1), j1);
+            for (i1 = 0; i1 < nbttaglist3.size(); ++i1) {
+                ((IChunkAccess) object).a(nbttaglist3.d(i1), j1);
             }
         }
 
@@ -165,28 +193,28 @@ public class ChunkRegionLoader {
         } else {
             ProtoChunk protochunk1 = (ProtoChunk) object;
 
-            nbttaglist2 = nbttagcompound1.getList("Entities", 10);
+            nbttaglist3 = nbttagcompound1.getList("Entities", 10);
 
-            for (i1 = 0; i1 < nbttaglist2.size(); ++i1) {
-                protochunk1.b(nbttaglist2.getCompound(i1));
+            for (i1 = 0; i1 < nbttaglist3.size(); ++i1) {
+                protochunk1.b(nbttaglist3.getCompound(i1));
             }
 
-            NBTTagList nbttaglist3 = nbttagcompound1.getList("TileEntities", 10);
+            NBTTagList nbttaglist4 = nbttagcompound1.getList("TileEntities", 10);
 
             NBTTagCompound nbttagcompound5;
 
-            for (int k1 = 0; k1 < nbttaglist3.size(); ++k1) {
-                nbttagcompound5 = nbttaglist3.getCompound(k1);
+            for (int k1 = 0; k1 < nbttaglist4.size(); ++k1) {
+                nbttagcompound5 = nbttaglist4.getCompound(k1);
                 ((IChunkAccess) object).a(nbttagcompound5);
             }
 
-            NBTTagList nbttaglist4 = nbttagcompound1.getList("Lights", 9);
+            NBTTagList nbttaglist5 = nbttagcompound1.getList("Lights", 9);
 
-            for (int l1 = 0; l1 < nbttaglist4.size(); ++l1) {
-                NBTTagList nbttaglist5 = nbttaglist4.b(l1);
+            for (int l1 = 0; l1 < nbttaglist5.size(); ++l1) {
+                NBTTagList nbttaglist6 = nbttaglist5.b(l1);
 
-                for (int i2 = 0; i2 < nbttaglist5.size(); ++i2) {
-                    protochunk1.b(nbttaglist5.d(i2), l1);
+                for (int i2 = 0; i2 < nbttaglist6.size(); ++i2) {
+                    protochunk1.b(nbttaglist6.d(i2), l1);
                 }
             }
 
@@ -204,7 +232,7 @@ public class ChunkRegionLoader {
         }
     }
 
-    public static NBTTagCompound saveChunk(World world, IChunkAccess ichunkaccess) {
+    public static NBTTagCompound saveChunk(WorldServer worldserver, IChunkAccess ichunkaccess) {
         ChunkCoordIntPair chunkcoordintpair = ichunkaccess.getPos();
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         NBTTagCompound nbttagcompound1 = new NBTTagCompound();
@@ -213,7 +241,7 @@ public class ChunkRegionLoader {
         nbttagcompound.set("Level", nbttagcompound1);
         nbttagcompound1.setInt("xPos", chunkcoordintpair.x);
         nbttagcompound1.setInt("zPos", chunkcoordintpair.z);
-        nbttagcompound1.setLong("LastUpdate", world.getTime());
+        nbttagcompound1.setLong("LastUpdate", worldserver.getTime());
         nbttagcompound1.setLong("InhabitedTime", ichunkaccess.q());
         nbttagcompound1.setString("Status", ichunkaccess.getChunkStatus().d());
         ChunkConverter chunkconverter = ichunkaccess.p();
@@ -224,7 +252,7 @@ public class ChunkRegionLoader {
 
         ChunkSection[] achunksection = ichunkaccess.getSections();
         NBTTagList nbttaglist = new NBTTagList();
-        LightEngine lightengine = world.getChunkProvider().getLightEngine();
+        LightEngineThreaded lightenginethreaded = worldserver.getChunkProvider().getLightEngine();
 
         NBTTagCompound nbttagcompound2;
 
@@ -232,8 +260,8 @@ public class ChunkRegionLoader {
             ChunkSection chunksection = (ChunkSection) Arrays.stream(achunksection).filter((chunksection1) -> {
                 return chunksection1 != null && chunksection1.getYPosition() >> 4 == i;
             }).findFirst().orElse(Chunk.a);
-            NibbleArray nibblearray = lightengine.a(EnumSkyBlock.BLOCK).a(SectionPosition.a(chunkcoordintpair, i));
-            NibbleArray nibblearray1 = lightengine.a(EnumSkyBlock.SKY).a(SectionPosition.a(chunkcoordintpair, i));
+            NibbleArray nibblearray = lightenginethreaded.a(EnumSkyBlock.BLOCK).a(SectionPosition.a(chunkcoordintpair, i));
+            NibbleArray nibblearray1 = lightenginethreaded.a(EnumSkyBlock.SKY).a(SectionPosition.a(chunkcoordintpair, i));
 
             if (chunksection != Chunk.a || nibblearray != null || nibblearray1 != null) {
                 nbttagcompound2 = new NBTTagCompound();
@@ -272,10 +300,11 @@ public class ChunkRegionLoader {
         NBTTagList nbttaglist1 = new NBTTagList();
         Iterator iterator = ichunkaccess.c().iterator();
 
+        NBTTagCompound nbttagcompound3;
+
         while (iterator.hasNext()) {
             BlockPosition blockposition = (BlockPosition) iterator.next();
             TileEntity tileentity = ichunkaccess.getTileEntity(blockposition);
-            NBTTagCompound nbttagcompound3;
 
             if (tileentity != null) {
                 nbttagcompound3 = new NBTTagCompound();
@@ -300,7 +329,6 @@ public class ChunkRegionLoader {
         nbttagcompound1.set("TileEntities", nbttaglist1);
         NBTTagList nbttaglist2 = new NBTTagList();
         NBTTagCompound nbttagcompound4;
-        Iterator iterator1;
 
         if (ichunkaccess.getChunkStatus().getType() == ChunkStatus.Type.LEVELCHUNK) {
             Chunk chunk = (Chunk) ichunkaccess;
@@ -308,10 +336,10 @@ public class ChunkRegionLoader {
             chunk.d(false);
 
             for (int k = 0; k < chunk.getEntitySlices().length; ++k) {
-                Iterator iterator2 = chunk.getEntitySlices()[k].iterator();
+                Iterator iterator1 = chunk.getEntitySlices()[k].iterator();
 
-                while (iterator2.hasNext()) {
-                    Entity entity = (Entity) iterator2.next();
+                while (iterator1.hasNext()) {
+                    Entity entity = (Entity) iterator1.next();
 
                     nbttagcompound4 = new NBTTagCompound();
                     if (entity.d(nbttagcompound4)) {
@@ -324,10 +352,10 @@ public class ChunkRegionLoader {
             ProtoChunk protochunk = (ProtoChunk) ichunkaccess;
 
             nbttaglist2.addAll(protochunk.y());
-            iterator1 = ichunkaccess.c().iterator();
+            Iterator iterator2 = ichunkaccess.c().iterator();
 
-            while (iterator1.hasNext()) {
-                BlockPosition blockposition1 = (BlockPosition) iterator1.next();
+            while (iterator2.hasNext()) {
+                BlockPosition blockposition1 = (BlockPosition) iterator2.next();
                 TileEntity tileentity1 = ichunkaccess.getTileEntity(blockposition1);
 
                 if (tileentity1 != null) {
@@ -354,44 +382,39 @@ public class ChunkRegionLoader {
         }
 
         nbttagcompound1.set("Entities", nbttaglist2);
-        if (world.getBlockTickList() instanceof TickListServer) {
-            nbttagcompound1.set("TileTicks", ((TickListServer) world.getBlockTickList()).a(chunkcoordintpair));
+        TickList<Block> ticklist = ichunkaccess.n();
+
+        if (ticklist instanceof ProtoChunkTickList) {
+            nbttagcompound1.set("ToBeTicked", ((ProtoChunkTickList) ticklist).a());
+        } else if (ticklist instanceof TickListChunk) {
+            nbttagcompound1.set("TileTicks", ((TickListChunk) ticklist).a(worldserver.getTime()));
+        } else {
+            nbttagcompound1.set("TileTicks", worldserver.getBlockTickList().a(chunkcoordintpair));
         }
 
-        if (ichunkaccess.n() instanceof ProtoChunkTickList) {
-            nbttagcompound1.set("ToBeTicked", ((ProtoChunkTickList) ichunkaccess.n()).a());
-        }
+        TickList<FluidType> ticklist1 = ichunkaccess.o();
 
-        if (ichunkaccess.n() instanceof TickListChunk) {
-            nbttagcompound1.set("TileTicks", ((TickListChunk) ichunkaccess.n()).a(world.getTime()));
-        }
-
-        if (world.getFluidTickList() instanceof TickListServer) {
-            nbttagcompound1.set("LiquidTicks", ((TickListServer) world.getFluidTickList()).a(chunkcoordintpair));
-        }
-
-        if (ichunkaccess.o() instanceof ProtoChunkTickList) {
-            nbttagcompound1.set("LiquidsToBeTicked", ((ProtoChunkTickList) ichunkaccess.o()).a());
-        }
-
-        if (ichunkaccess.o() instanceof TickListChunk) {
-            nbttagcompound1.set("LiquidTicks", ((TickListChunk) ichunkaccess.o()).a(world.getTime()));
+        if (ticklist1 instanceof ProtoChunkTickList) {
+            nbttagcompound1.set("LiquidsToBeTicked", ((ProtoChunkTickList) ticklist1).a());
+        } else if (ticklist1 instanceof TickListChunk) {
+            nbttagcompound1.set("LiquidTicks", ((TickListChunk) ticklist1).a(worldserver.getTime()));
+        } else {
+            nbttagcompound1.set("LiquidTicks", worldserver.getFluidTickList().a(chunkcoordintpair));
         }
 
         nbttagcompound1.set("PostProcessing", a(ichunkaccess.l()));
-        NBTTagCompound nbttagcompound5 = new NBTTagCompound();
+        nbttagcompound3 = new NBTTagCompound();
+        Iterator iterator3 = ichunkaccess.f().iterator();
 
-        iterator1 = ichunkaccess.f().iterator();
-
-        while (iterator1.hasNext()) {
-            Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator1.next();
+        while (iterator3.hasNext()) {
+            Entry<HeightMap.Type, HeightMap> entry = (Entry) iterator3.next();
 
             if (ichunkaccess.getChunkStatus().h().contains(entry.getKey())) {
-                nbttagcompound5.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
+                nbttagcompound3.set(((HeightMap.Type) entry.getKey()).a(), new NBTTagLongArray(((HeightMap) entry.getValue()).a()));
             }
         }
 
-        nbttagcompound1.set("Heightmaps", nbttagcompound5);
+        nbttagcompound1.set("Heightmaps", nbttagcompound3);
         nbttagcompound1.set("Structures", a(chunkcoordintpair, ichunkaccess.h(), ichunkaccess.v()));
         return nbttagcompound;
     }
@@ -437,14 +460,6 @@ public class ChunkRegionLoader {
                     chunk.a(tileentity);
                 }
             }
-        }
-
-        if (nbttagcompound.hasKeyOfType("TileTicks", 9) && world.getBlockTickList() instanceof TickListServer) {
-            ((TickListServer) world.getBlockTickList()).a(nbttagcompound.getList("TileTicks", 10));
-        }
-
-        if (nbttagcompound.hasKeyOfType("LiquidTicks", 9) && world.getFluidTickList() instanceof TickListServer) {
-            ((TickListServer) world.getFluidTickList()).a(nbttagcompound.getList("LiquidTicks", 10));
         }
 
     }

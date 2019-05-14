@@ -9,49 +9,45 @@ import java.util.stream.Stream;
 public class ProtoChunkTickList<T> implements TickList<T> {
 
     protected final Predicate<T> a;
-    protected final Function<T, MinecraftKey> b;
-    protected final Function<MinecraftKey, T> c;
-    private final ChunkCoordIntPair d;
-    private final ShortList[] e;
+    private final ChunkCoordIntPair b;
+    private final ShortList[] c;
 
-    public ProtoChunkTickList(Predicate<T> predicate, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1, ChunkCoordIntPair chunkcoordintpair) {
-        this(predicate, function, function1, chunkcoordintpair, new NBTTagList());
+    public ProtoChunkTickList(Predicate<T> predicate, ChunkCoordIntPair chunkcoordintpair) {
+        this(predicate, chunkcoordintpair, new NBTTagList());
     }
 
-    public ProtoChunkTickList(Predicate<T> predicate, Function<T, MinecraftKey> function, Function<MinecraftKey, T> function1, ChunkCoordIntPair chunkcoordintpair, NBTTagList nbttaglist) {
-        this.e = new ShortList[16];
+    public ProtoChunkTickList(Predicate<T> predicate, ChunkCoordIntPair chunkcoordintpair, NBTTagList nbttaglist) {
+        this.c = new ShortList[16];
         this.a = predicate;
-        this.b = function;
-        this.c = function1;
-        this.d = chunkcoordintpair;
+        this.b = chunkcoordintpair;
 
         for (int i = 0; i < nbttaglist.size(); ++i) {
             NBTTagList nbttaglist1 = nbttaglist.b(i);
 
             for (int j = 0; j < nbttaglist1.size(); ++j) {
-                IChunkAccess.a(this.e, i).add(nbttaglist1.d(j));
+                IChunkAccess.a(this.c, i).add(nbttaglist1.d(j));
             }
         }
 
     }
 
     public NBTTagList a() {
-        return ChunkRegionLoader.a(this.e);
+        return ChunkRegionLoader.a(this.c);
     }
 
     public void a(TickList<T> ticklist, Function<BlockPosition, T> function) {
-        for (int i = 0; i < this.e.length; ++i) {
-            if (this.e[i] != null) {
-                ShortListIterator shortlistiterator = this.e[i].iterator();
+        for (int i = 0; i < this.c.length; ++i) {
+            if (this.c[i] != null) {
+                ShortListIterator shortlistiterator = this.c[i].iterator();
 
                 while (shortlistiterator.hasNext()) {
                     Short oshort = (Short) shortlistiterator.next();
-                    BlockPosition blockposition = ProtoChunk.a(oshort, i, this.d);
+                    BlockPosition blockposition = ProtoChunk.a(oshort, i, this.b);
 
                     ticklist.a(blockposition, function.apply(blockposition), 0);
                 }
 
-                this.e[i].clear();
+                this.c[i].clear();
             }
         }
 
@@ -64,7 +60,7 @@ public class ProtoChunkTickList<T> implements TickList<T> {
 
     @Override
     public void a(BlockPosition blockposition, T t0, int i, TickListPriority ticklistpriority) {
-        IChunkAccess.a(this.e, blockposition.getY() >> 4).add(ProtoChunk.k(blockposition));
+        IChunkAccess.a(this.c, blockposition.getY() >> 4).add(ProtoChunk.k(blockposition));
     }
 
     @Override

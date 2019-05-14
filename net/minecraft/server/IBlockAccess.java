@@ -21,7 +21,7 @@ public interface IBlockAccess {
         return 15;
     }
 
-    default int getHeight() {
+    default int getBuildHeight() {
         return 256;
     }
 

@@ -19,48 +19,50 @@ public class PlayerChunk {
     private static final List<ChunkStatus> CHUNK_STATUSES = ChunkStatus.a();
     private static final PlayerChunk.State[] CHUNK_STATES = PlayerChunk.State.values();
     private final AtomicReferenceArray<CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>>> statusFutures;
+    private volatile CompletableFuture<Either<Chunk, PlayerChunk.Failure>> fullChunkFuture;
     private volatile CompletableFuture<Either<Chunk, PlayerChunk.Failure>> tickingFuture;
     private volatile CompletableFuture<Either<Chunk, PlayerChunk.Failure>> entityTickingFuture;
     private CompletableFuture<IChunkAccess> chunkSave;
-    private int k;
-    private int l;
-    private int m;
+    private int oldTicketLevel;
+    private int ticketLevel;
+    private int n;
     private final ChunkCoordIntPair location;
     private final short[] dirtyBlocks;
     private int dirtyCount;
-    private int q;
     private int r;
     private int s;
     private int t;
+    private int u;
     private final LightEngine lightEngine;
-    private final PlayerChunk.c v;
+    private final PlayerChunk.c w;
     public final PlayerChunk.d players;
-    private boolean x;
+    private boolean hasBeenLoaded;
 
     public PlayerChunk(ChunkCoordIntPair chunkcoordintpair, int i, LightEngine lightengine, PlayerChunk.c playerchunk_c, PlayerChunk.d playerchunk_d) {
         this.statusFutures = new AtomicReferenceArray(PlayerChunk.CHUNK_STATUSES.size());
+        this.fullChunkFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         this.tickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         this.chunkSave = CompletableFuture.completedFuture((Object) null);
         this.dirtyBlocks = new short[64];
         this.location = chunkcoordintpair;
         this.lightEngine = lightengine;
-        this.v = playerchunk_c;
+        this.w = playerchunk_c;
         this.players = playerchunk_d;
-        this.k = PlayerChunkMap.GOLDEN_TICKET + 1;
-        this.l = this.k;
-        this.m = this.k;
+        this.oldTicketLevel = PlayerChunkMap.GOLDEN_TICKET + 1;
+        this.ticketLevel = this.oldTicketLevel;
+        this.n = this.oldTicketLevel;
         this.a(i);
     }
 
-    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> a(ChunkStatus chunkstatus) {
+    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> getStatusFutureUnchecked(ChunkStatus chunkstatus) {
         CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = (CompletableFuture) this.statusFutures.get(chunkstatus.c());
 
         return completablefuture == null ? PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE : completablefuture;
     }
 
-    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> b(ChunkStatus chunkstatus) {
-        return b(this.l).b(chunkstatus) ? this.a(chunkstatus) : PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE;
+    public CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> getStatusFuture(ChunkStatus chunkstatus) {
+        return b(this.ticketLevel).b(chunkstatus) ? this.getStatusFutureUnchecked(chunkstatus) : PlayerChunk.UNLOADED_CHUNK_ACCESS_FUTURE;
     }
 
     public CompletableFuture<Either<Chunk, PlayerChunk.Failure>> a() {
@@ -87,7 +89,7 @@ public class PlayerChunk {
         Chunk chunk = this.getChunk();
 
         if (chunk != null) {
-            this.q |= 1 << (j >> 4);
+            this.r |= 1 << (j >> 4);
             if (this.dirtyCount < 64) {
                 short short0 = (short) (i << 12 | k << 8 | j);
 
@@ -109,36 +111,36 @@ public class PlayerChunk {
         if (chunk != null) {
             chunk.setNeedsSaving(true);
             if (enumskyblock == EnumSkyBlock.SKY) {
-                this.t |= 1 << i - -1;
+                this.u |= 1 << i - -1;
             } else {
-                this.s |= 1 << i - -1;
+                this.t |= 1 << i - -1;
             }
 
         }
     }
 
     public void a(Chunk chunk) {
-        if (this.dirtyCount != 0 || this.t != 0 || this.s != 0) {
+        if (this.dirtyCount != 0 || this.u != 0 || this.t != 0) {
             World world = chunk.getWorld();
 
             if (this.dirtyCount == 64) {
-                this.r = -1;
+                this.s = -1;
             }
 
             int i;
             int j;
 
-            if (this.t != 0 || this.s != 0) {
-                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.t & ~this.r, this.s & ~this.r), true);
-                i = this.t & this.r;
-                j = this.s & this.r;
+            if (this.u != 0 || this.t != 0) {
+                this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, this.u & ~this.s, this.t & ~this.s), true);
+                i = this.u & this.s;
+                j = this.t & this.s;
                 if (i != 0 || j != 0) {
                     this.a(new PacketPlayOutLightUpdate(chunk.getPos(), this.lightEngine, i, j), false);
                 }
 
+                this.u = 0;
                 this.t = 0;
-                this.s = 0;
-                this.r &= ~(this.t & this.s);
+                this.s &= ~(this.u & this.t);
             }
 
             int k;
@@ -154,7 +156,7 @@ public class PlayerChunk {
                     this.a(world, blockposition);
                 }
             } else if (this.dirtyCount == 64) {
-                this.a(new PacketPlayOutMapChunk(chunk, this.q), false);
+                this.a(new PacketPlayOutMapChunk(chunk, this.r), false);
             } else if (this.dirtyCount != 0) {
                 this.a(new PacketPlayOutMultiBlockChange(this.dirtyCount, this.dirtyBlocks, chunk), false);
 
@@ -171,7 +173,7 @@ public class PlayerChunk {
             }
 
             this.dirtyCount = 0;
-            this.q = 0;
+            this.r = 0;
         }
     }
 
@@ -206,7 +208,7 @@ public class PlayerChunk {
             }
         }
 
-        if (b(this.l).b(chunkstatus)) {
+        if (b(this.ticketLevel).b(chunkstatus)) {
             CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture1 = playerchunkmap.a(this, chunkstatus);
 
             this.a(completablefuture1);
@@ -231,39 +233,37 @@ public class PlayerChunk {
         return this.location;
     }
 
-    public int i() {
-        return this.l;
+    public int getTicketLevel() {
+        return this.ticketLevel;
     }
 
     public int j() {
-        return this.m;
+        return this.n;
     }
 
     private void d(int i) {
-        this.m = i;
+        this.n = i;
     }
 
     public void a(int i) {
-        this.l = i;
+        this.ticketLevel = i;
     }
 
     protected void a(PlayerChunkMap playerchunkmap) {
-        ChunkStatus chunkstatus = b(this.k);
-        ChunkStatus chunkstatus1 = b(this.l);
-
-        this.x |= chunkstatus1.b(ChunkStatus.FULL);
-        boolean flag = this.k <= PlayerChunkMap.GOLDEN_TICKET;
-        boolean flag1 = this.l <= PlayerChunkMap.GOLDEN_TICKET;
-        PlayerChunk.State playerchunk_state = c(this.k);
-        PlayerChunk.State playerchunk_state1 = c(this.l);
-        boolean flag2 = playerchunk_state.a(PlayerChunk.State.TICKING);
-        boolean flag3 = playerchunk_state1.a(PlayerChunk.State.TICKING);
+        ChunkStatus chunkstatus = b(this.oldTicketLevel);
+        ChunkStatus chunkstatus1 = b(this.ticketLevel);
+        boolean flag = this.oldTicketLevel <= PlayerChunkMap.GOLDEN_TICKET;
+        boolean flag1 = this.ticketLevel <= PlayerChunkMap.GOLDEN_TICKET;
+        PlayerChunk.State playerchunk_state = c(this.oldTicketLevel);
+        PlayerChunk.State playerchunk_state1 = c(this.ticketLevel);
 
         if (flag1) {
             for (int i = flag ? chunkstatus.c() + 1 : 0; i <= chunkstatus1.c(); ++i) {
                 this.a((ChunkStatus) PlayerChunk.CHUNK_STATUSES.get(i), playerchunkmap);
             }
         }
+
+        CompletableFuture completablefuture;
 
         if (flag) {
             Either<IChunkAccess, PlayerChunk.Failure> either = Either.right(new PlayerChunk.Failure() {
@@ -273,8 +273,7 @@ public class PlayerChunk {
             });
 
             for (int j = flag1 ? chunkstatus1.c() + 1 : 0; j <= chunkstatus.c(); ++j) {
-                CompletableFuture<Either<IChunkAccess, PlayerChunk.Failure>> completablefuture = (CompletableFuture) this.statusFutures.get(j);
-
+                completablefuture = (CompletableFuture) this.statusFutures.get(j);
                 if (completablefuture != null) {
                     completablefuture.complete(either);
                 } else {
@@ -283,24 +282,41 @@ public class PlayerChunk {
             }
         }
 
+        boolean flag2 = playerchunk_state.a(PlayerChunk.State.BORDER);
+        boolean flag3 = playerchunk_state1.a(PlayerChunk.State.BORDER);
+
+        this.hasBeenLoaded |= flag3;
         if (!flag2 && flag3) {
+            this.fullChunkFuture = playerchunkmap.b(this);
+            this.a(this.fullChunkFuture);
+        }
+
+        if (flag2 && !flag3) {
+            completablefuture = this.fullChunkFuture;
+            this.fullChunkFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
+            this.a(completablefuture.thenApply((either1) -> {
+                playerchunkmap.getClass();
+                return either1.ifLeft(playerchunkmap::a);
+            }));
+        }
+
+        boolean flag4 = playerchunk_state.a(PlayerChunk.State.TICKING);
+        boolean flag5 = playerchunk_state1.a(PlayerChunk.State.TICKING);
+
+        if (!flag4 && flag5) {
             this.tickingFuture = playerchunkmap.a(this);
             this.a(this.tickingFuture);
         }
 
-        if (flag2 && !flag3) {
-            CompletableFuture<Either<Chunk, PlayerChunk.Failure>> completablefuture1 = this.tickingFuture;
-
+        if (flag4 && !flag5) {
+            this.tickingFuture.complete(PlayerChunk.UNLOADED_CHUNK);
             this.tickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
-            completablefuture1.thenAccept((either1) -> {
-                either1.ifLeft(playerchunkmap::a);
-            });
         }
 
-        boolean flag4 = playerchunk_state.a(PlayerChunk.State.ENTITY_TICKING);
-        boolean flag5 = playerchunk_state1.a(PlayerChunk.State.ENTITY_TICKING);
+        boolean flag6 = playerchunk_state.a(PlayerChunk.State.ENTITY_TICKING);
+        boolean flag7 = playerchunk_state1.a(PlayerChunk.State.ENTITY_TICKING);
 
-        if (!flag4 && flag5) {
+        if (!flag6 && flag7) {
             if (this.entityTickingFuture != PlayerChunk.UNLOADED_CHUNK_FUTURE) {
                 throw new IllegalStateException();
             }
@@ -309,29 +325,29 @@ public class PlayerChunk {
             this.a(this.entityTickingFuture);
         }
 
-        if (flag4 && !flag5) {
+        if (flag6 && !flag7) {
             this.entityTickingFuture.complete(PlayerChunk.UNLOADED_CHUNK);
             this.entityTickingFuture = PlayerChunk.UNLOADED_CHUNK_FUTURE;
         }
 
-        this.v.a(this.location, this::j, this.l, this::d);
-        this.k = this.l;
+        this.w.a(this.location, this::j, this.ticketLevel, this::d);
+        this.oldTicketLevel = this.ticketLevel;
     }
 
     public static ChunkStatus b(int i) {
-        return i <= 33 ? ChunkStatus.FULL : ChunkStatus.a(i - 33 - 1);
+        return i < 33 ? ChunkStatus.FULL : ChunkStatus.a(i - 33);
     }
 
     public static PlayerChunk.State c(int i) {
-        return PlayerChunk.CHUNK_STATES[MathHelper.clamp(33 - i, 0, PlayerChunk.CHUNK_STATES.length - 1)];
+        return PlayerChunk.CHUNK_STATES[MathHelper.clamp(33 - i + 1, 0, PlayerChunk.CHUNK_STATES.length - 1)];
     }
 
-    public boolean k() {
-        return this.x;
+    public boolean hasBeenLoaded() {
+        return this.hasBeenLoaded;
     }
 
     public void l() {
-        this.x = b(this.l).b(ChunkStatus.FULL);
+        this.hasBeenLoaded = c(this.ticketLevel).a(PlayerChunk.State.BORDER);
     }
 
     public void a(ProtoChunkExtension protochunkextension) {
@@ -371,7 +387,7 @@ public class PlayerChunk {
 
     public static enum State {
 
-        BORDER, TICKING, ENTITY_TICKING;
+        INACCESSIBLE, BORDER, TICKING, ENTITY_TICKING;
 
         private State() {}
 

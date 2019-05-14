@@ -106,7 +106,7 @@ public class BlockPiston extends BlockDirectional {
                 if (tileentity instanceof TileEntityPiston) {
                     TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity;
 
-                    if (tileentitypiston.c() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.u() || ((WorldServer) world).b())) {
+                    if (tileentitypiston.c() && (tileentitypiston.a(0.0F) < 0.5F || world.getTime() == tileentitypiston.v() || ((WorldServer) world).b())) {
                         b0 = 2;
                     }
                 }
@@ -179,7 +179,7 @@ public class BlockPiston extends BlockDirectional {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
             if (tileentity instanceof TileEntityPiston) {
-                ((TileEntityPiston) tileentity).t();
+                ((TileEntityPiston) tileentity).u();
             }
 
             world.setTypeAndData(blockposition, (IBlockData) ((IBlockData) Blocks.MOVING_PISTON.getBlockData().set(BlockPistonMoving.a, enumdirection)).set(BlockPistonMoving.b, this.sticky ? BlockPropertyPistonType.STICKY : BlockPropertyPistonType.DEFAULT), 3);
@@ -197,7 +197,7 @@ public class BlockPiston extends BlockDirectional {
                         TileEntityPiston tileentitypiston = (TileEntityPiston) tileentity1;
 
                         if (tileentitypiston.d() == enumdirection && tileentitypiston.c()) {
-                            tileentitypiston.t();
+                            tileentitypiston.u();
                             flag1 = true;
                         }
                     }
@@ -228,7 +228,7 @@ public class BlockPiston extends BlockDirectional {
         } else if (!world.getWorldBorder().a(blockposition)) {
             return false;
         } else if (blockposition.getY() >= 0 && (enumdirection != EnumDirection.DOWN || blockposition.getY() != 0)) {
-            if (blockposition.getY() <= world.getHeight() - 1 && (enumdirection != EnumDirection.UP || blockposition.getY() != world.getHeight() - 1)) {
+            if (blockposition.getY() <= world.getBuildHeight() - 1 && (enumdirection != EnumDirection.UP || blockposition.getY() != world.getBuildHeight() - 1)) {
                 if (block != Blocks.PISTON && block != Blocks.STICKY_PISTON) {
                     if (iblockdata.f(world, blockposition) == -1.0F) {
                         return false;

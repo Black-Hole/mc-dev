@@ -95,7 +95,7 @@ public class ControllerMove {
             f = (float) (MathHelper.d(d1, d0) * 57.2957763671875D) - 90.0F;
             this.a.yaw = this.a(this.a.yaw, f, 90.0F);
             this.a.o((float) (this.e * this.a.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue()));
-            BlockPosition blockposition = new BlockPosition(this.a.locX, this.a.locY, this.a.locZ);
+            BlockPosition blockposition = new BlockPosition(this.a);
             IBlockData iblockdata = this.a.world.getType(blockposition);
             VoxelShape voxelshape = iblockdata.getCollisionShape(this.a.world, blockposition);
 

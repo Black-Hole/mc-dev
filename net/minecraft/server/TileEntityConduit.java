@@ -70,8 +70,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         if (i % 40L == 0L) {
             this.a(this.f());
             if (!this.world.isClientSide && this.c()) {
-                this.r();
                 this.s();
+                this.t();
             }
         }
 
@@ -85,8 +85,8 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
 
         if (this.world.isClientSide) {
-            this.t();
-            this.x();
+            this.u();
+            this.y();
             if (this.c()) {
                 ++this.c;
             }
@@ -142,13 +142,13 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         return this.i.size() >= 16;
     }
 
-    private void r() {
+    private void s() {
         int i = this.i.size();
         int j = i / 7 * 16;
         int k = this.position.getX();
         int l = this.position.getY();
         int i1 = this.position.getZ();
-        AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) k, (double) l, (double) i1, (double) (k + 1), (double) (l + 1), (double) (i1 + 1))).g((double) j).b(0.0D, (double) this.world.getHeight(), 0.0D);
+        AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double) k, (double) l, (double) i1, (double) (k + 1), (double) (l + 1), (double) (i1 + 1))).g((double) j).b(0.0D, (double) this.world.getBuildHeight(), 0.0D);
         List<EntityHuman> list = this.world.a(EntityHuman.class, axisalignedbb);
 
         if (!list.isEmpty()) {
@@ -165,17 +165,17 @@ public class TileEntityConduit extends TileEntity implements ITickable {
         }
     }
 
-    private void s() {
+    private void t() {
         EntityLiving entityliving = this.target;
         int i = this.i.size();
 
         if (i < 42) {
             this.target = null;
         } else if (this.target == null && this.k != null) {
-            this.target = this.v();
+            this.target = this.x();
             this.k = null;
         } else if (this.target == null) {
-            List<EntityLiving> list = this.world.a(EntityLiving.class, this.u(), (entityliving1) -> {
+            List<EntityLiving> list = this.world.a(EntityLiving.class, this.v(), (entityliving1) -> {
                 return entityliving1 instanceof IMonster && entityliving1.isInWaterOrRain();
             });
 
@@ -199,11 +199,11 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private void t() {
+    private void u() {
         if (this.k == null) {
             this.target = null;
         } else if (this.target == null || !this.target.getUniqueID().equals(this.k)) {
-            this.target = this.v();
+            this.target = this.x();
             if (this.target == null) {
                 this.k = null;
             }
@@ -211,7 +211,7 @@ public class TileEntityConduit extends TileEntity implements ITickable {
 
     }
 
-    private AxisAlignedBB u() {
+    private AxisAlignedBB v() {
         int i = this.position.getX();
         int j = this.position.getY();
         int k = this.position.getZ();
@@ -220,15 +220,15 @@ public class TileEntityConduit extends TileEntity implements ITickable {
     }
 
     @Nullable
-    private EntityLiving v() {
-        List<EntityLiving> list = this.world.a(EntityLiving.class, this.u(), (entityliving) -> {
+    private EntityLiving x() {
+        List<EntityLiving> list = this.world.a(EntityLiving.class, this.v(), (entityliving) -> {
             return entityliving.getUniqueID().equals(this.k);
         });
 
         return list.size() == 1 ? (EntityLiving) list.get(0) : null;
     }
 
-    private void x() {
+    private void y() {
         Random random = this.world.random;
         float f = MathHelper.sin((float) (this.a + 35) * 0.1F) / 2.0F + 0.5F;
 

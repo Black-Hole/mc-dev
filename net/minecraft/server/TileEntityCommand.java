@@ -59,7 +59,7 @@ public class TileEntityCommand extends TileEntity {
     @Nullable
     @Override
     public PacketPlayOutTileEntityData getUpdatePacket() {
-        if (this.s()) {
+        if (this.t()) {
             this.c(false);
             NBTTagCompound nbttagcompound = this.save(new NBTTagCompound());
 
@@ -94,11 +94,11 @@ public class TileEntityCommand extends TileEntity {
         boolean flag1 = this.b;
 
         this.b = flag;
-        if (!flag1 && flag && !this.a && this.world != null && this.t() != TileEntityCommand.Type.SEQUENCE) {
+        if (!flag1 && flag && !this.a && this.world != null && this.u() != TileEntityCommand.Type.SEQUENCE) {
             Block block = this.getBlock().getBlock();
 
             if (block instanceof BlockCommand) {
-                this.r();
+                this.s();
                 this.world.getBlockTickList().a(this.position, block, block.a((IWorldReader) this.world));
             }
         }
@@ -109,9 +109,9 @@ public class TileEntityCommand extends TileEntity {
         return this.c;
     }
 
-    public boolean r() {
+    public boolean s() {
         this.c = true;
-        if (this.u()) {
+        if (this.v()) {
             BlockPosition blockposition = this.position.shift(((EnumDirection) this.world.getType(this.position).get(BlockCommand.a)).opposite());
 
             if (this.world.getType(blockposition).getBlock() instanceof BlockCommand) {
@@ -126,7 +126,7 @@ public class TileEntityCommand extends TileEntity {
         return this.c;
     }
 
-    public boolean s() {
+    public boolean t() {
         return this.g;
     }
 
@@ -134,13 +134,13 @@ public class TileEntityCommand extends TileEntity {
         this.g = flag;
     }
 
-    public TileEntityCommand.Type t() {
+    public TileEntityCommand.Type u() {
         Block block = this.getBlock().getBlock();
 
         return block == Blocks.COMMAND_BLOCK ? TileEntityCommand.Type.REDSTONE : (block == Blocks.REPEATING_COMMAND_BLOCK ? TileEntityCommand.Type.AUTO : (block == Blocks.CHAIN_COMMAND_BLOCK ? TileEntityCommand.Type.SEQUENCE : TileEntityCommand.Type.REDSTONE));
     }
 
-    public boolean u() {
+    public boolean v() {
         IBlockData iblockdata = this.world.getType(this.getPosition());
 
         return iblockdata.getBlock() instanceof BlockCommand ? (Boolean) iblockdata.get(BlockCommand.b) : false;

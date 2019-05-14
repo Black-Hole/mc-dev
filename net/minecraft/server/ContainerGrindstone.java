@@ -210,11 +210,11 @@ public class ContainerGrindstone extends Container {
         }).collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
         EnchantmentManager.a(map, itemstack1);
+        itemstack1.setRepairCost(0);
         if (itemstack1.getItem() == Items.ENCHANTED_BOOK && map.size() == 0) {
             itemstack1 = new ItemStack(Items.BOOK);
+            itemstack1.a(itemstack.getName());
         }
-
-        itemstack1.setRepairCost(0);
 
         for (int k = 0; k < map.size(); ++k) {
             itemstack1.setRepairCost(ContainerAnvil.d(itemstack1.getRepairCost()));

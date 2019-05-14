@@ -12,8 +12,8 @@ public abstract class MobSpawnerAbstract {
 
     private static final Logger LOGGER = LogManager.getLogger();
     public int spawnDelay = 20;
-    private final List<MobSpawnerData> mobs = Lists.newArrayList();
-    private MobSpawnerData spawnData = new MobSpawnerData();
+    public final List<MobSpawnerData> mobs = Lists.newArrayList();
+    public MobSpawnerData spawnData = new MobSpawnerData();
     private double e;
     private double f;
     public int minSpawnDelay = 200;
@@ -28,7 +28,7 @@ public abstract class MobSpawnerAbstract {
 
     @Nullable
     public MinecraftKey getMobName() {
-        String s = this.spawnData.b().getString("id");
+        String s = this.spawnData.getEntity().getString("id");
 
         try {
             return UtilColor.b(s) ? null : new MinecraftKey(s);
@@ -41,7 +41,7 @@ public abstract class MobSpawnerAbstract {
     }
 
     public void setMobName(EntityTypes<?> entitytypes) {
-        this.spawnData.b().setString("id", IRegistry.ENTITY_TYPE.getKey(entitytypes).toString());
+        this.spawnData.getEntity().setString("id", IRegistry.ENTITY_TYPE.getKey(entitytypes).toString());
     }
 
     private boolean h() {
@@ -83,7 +83,7 @@ public abstract class MobSpawnerAbstract {
                 boolean flag = false;
 
                 for (int i = 0; i < this.spawnCount; ++i) {
-                    NBTTagCompound nbttagcompound = this.spawnData.b();
+                    NBTTagCompound nbttagcompound = this.spawnData.getEntity();
                     Optional<EntityTypes<?>> optional = EntityTypes.a(nbttagcompound);
 
                     if (!optional.isPresent()) {
@@ -123,7 +123,7 @@ public abstract class MobSpawnerAbstract {
                                 continue;
                             }
 
-                            if (this.spawnData.b().d() == 1 && this.spawnData.b().hasKeyOfType("id", 8)) {
+                            if (this.spawnData.getEntity().d() == 1 && this.spawnData.getEntity().hasKeyOfType("id", 8)) {
                                 ((EntityInsentient) entity).prepare(world, world.getDamageScaler(new BlockPosition(entity)), EnumMobSpawn.SPAWNER, (GroupDataEntity) null, (NBTTagCompound) null);
                             }
                         }
@@ -169,7 +169,7 @@ public abstract class MobSpawnerAbstract {
         }
 
         if (!this.mobs.isEmpty()) {
-            this.a((MobSpawnerData) WeightedRandom.a(this.a().random, this.mobs));
+            this.setSpawnData((MobSpawnerData) WeightedRandom.a(this.a().random, this.mobs));
         }
 
         this.a(1);
@@ -187,9 +187,9 @@ public abstract class MobSpawnerAbstract {
         }
 
         if (nbttagcompound.hasKeyOfType("SpawnData", 10)) {
-            this.a(new MobSpawnerData(1, nbttagcompound.getCompound("SpawnData")));
+            this.setSpawnData(new MobSpawnerData(1, nbttagcompound.getCompound("SpawnData")));
         } else if (!this.mobs.isEmpty()) {
-            this.a((MobSpawnerData) WeightedRandom.a(this.a().random, this.mobs));
+            this.setSpawnData((MobSpawnerData) WeightedRandom.a(this.a().random, this.mobs));
         }
 
         if (nbttagcompound.hasKeyOfType("MinSpawnDelay", 99)) {
@@ -226,7 +226,7 @@ public abstract class MobSpawnerAbstract {
             nbttagcompound.setShort("MaxNearbyEntities", (short) this.maxNearbyEntities);
             nbttagcompound.setShort("RequiredPlayerRange", (short) this.requiredPlayerRange);
             nbttagcompound.setShort("SpawnRange", (short) this.spawnRange);
-            nbttagcompound.set("SpawnData", this.spawnData.b().clone());
+            nbttagcompound.set("SpawnData", this.spawnData.getEntity().clone());
             NBTTagList nbttaglist = new NBTTagList();
 
             if (this.mobs.isEmpty()) {
@@ -255,7 +255,7 @@ public abstract class MobSpawnerAbstract {
         }
     }
 
-    public void a(MobSpawnerData mobspawnerdata) {
+    public void setSpawnData(MobSpawnerData mobspawnerdata) {
         this.spawnData = mobspawnerdata;
     }
 

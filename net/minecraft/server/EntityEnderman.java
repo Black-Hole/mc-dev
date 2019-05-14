@@ -180,7 +180,7 @@ public class EntityEnderman extends EntityMonster {
         return this.k(d0, d1, d2);
     }
 
-    protected boolean a(Entity entity) {
+    private boolean a(Entity entity) {
         Vec3D vec3d = new Vec3D(this.locX - entity.locX, this.getBoundingBox().minY + (double) (this.getHeight() / 2.0F) - entity.locY + (double) entity.getHeadHeight(), this.locZ - entity.locZ);
 
         vec3d = vec3d.d();
@@ -193,14 +193,24 @@ public class EntityEnderman extends EntityMonster {
     }
 
     private boolean k(double d0, double d1, double d2) {
-        boolean flag = this.a(d0, d1, d2, true);
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(d0, d1, d2);
 
-        if (flag) {
-            this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
-            this.a(SoundEffects.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+        while (blockposition_mutableblockposition.getY() > 0 && !this.world.getType(blockposition_mutableblockposition).getMaterial().isSolid()) {
+            blockposition_mutableblockposition.c(EnumDirection.DOWN);
         }
 
-        return flag;
+        if (!this.world.getType(blockposition_mutableblockposition).getMaterial().isSolid()) {
+            return false;
+        } else {
+            boolean flag = this.a(d0, d1, d2, true);
+
+            if (flag) {
+                this.world.a((EntityHuman) null, this.lastX, this.lastY, this.lastZ, SoundEffects.ENTITY_ENDERMAN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+                this.a(SoundEffects.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+            }
+
+            return flag;
+        }
     }
 
     @Override

@@ -3,56 +3,59 @@ package net.minecraft.server;
 import java.time.Duration;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GameProfiler implements GameProfilerFiller {
 
-    private static final long a = Duration.ofMillis(300L).toNanos();
-    private final IntSupplier b;
-    private final GameProfiler.b c = new GameProfiler.b();
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final long b = Duration.ofMillis(300L).toNanos();
+    private final IntSupplier c;
     private final GameProfiler.b d = new GameProfiler.b();
+    private final GameProfiler.b e = new GameProfiler.b();
 
     public GameProfiler(IntSupplier intsupplier) {
-        this.b = intsupplier;
+        this.c = intsupplier;
     }
 
     public GameProfiler.a d() {
-        return this.c;
+        return this.d;
     }
 
     @Override
     public void a() {
-        this.c.a.a();
         this.d.a.a();
+        this.e.a.a();
     }
 
     @Override
     public void b() {
-        this.c.a.b();
         this.d.a.b();
+        this.e.a.b();
     }
 
     @Override
     public void enter(String s) {
-        this.c.a.enter(s);
         this.d.a.enter(s);
+        this.e.a.enter(s);
     }
 
     @Override
     public void a(Supplier<String> supplier) {
-        this.c.a.a(supplier);
         this.d.a.a(supplier);
+        this.e.a.a(supplier);
     }
 
     @Override
     public void exit() {
-        this.c.a.exit();
         this.d.a.exit();
+        this.e.a.exit();
     }
 
     @Override
     public void exitEnter(String s) {
-        this.c.a.exitEnter(s);
         this.d.a.exitEnter(s);
+        this.e.a.exitEnter(s);
     }
 
     class b implements GameProfiler.a {
@@ -79,7 +82,7 @@ public class GameProfiler implements GameProfilerFiller {
         @Override
         public void d() {
             if (this.a == GameProfilerDisabled.a) {
-                this.a = new MethodProfiler(SystemUtils.getMonotonicNanos(), GameProfiler.this.b);
+                this.a = new MethodProfiler(SystemUtils.getMonotonicNanos(), GameProfiler.this.c);
             }
 
         }

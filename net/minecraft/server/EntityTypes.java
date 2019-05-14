@@ -83,13 +83,13 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityHorseSkeleton> SKELETON_HORSE = a("skeleton_horse", EntityTypes.a.a(EntityHorseSkeleton::new, EnumCreatureType.CREATURE).a(1.3964844F, 1.6F));
     public static final EntityTypes<EntitySlime> SLIME = a("slime", EntityTypes.a.a(EntitySlime::new, EnumCreatureType.MONSTER).a(2.04F, 2.04F));
     public static final EntityTypes<EntitySmallFireball> SMALL_FIREBALL = a("small_fireball", EntityTypes.a.a(EntitySmallFireball::new, EnumCreatureType.MISC).a(0.3125F, 0.3125F));
-    public static final EntityTypes<EntitySnowman> SNOW_GOLEM = a("snow_golem", EntityTypes.a.a(EntitySnowman::new, EnumCreatureType.CREATURE).a(0.7F, 1.9F));
+    public static final EntityTypes<EntitySnowman> SNOW_GOLEM = a("snow_golem", EntityTypes.a.a(EntitySnowman::new, EnumCreatureType.MISC).a(0.7F, 1.9F));
     public static final EntityTypes<EntitySnowball> SNOWBALL = a("snowball", EntityTypes.a.a(EntitySnowball::new, EnumCreatureType.MISC).a(0.25F, 0.25F));
     public static final EntityTypes<EntitySpectralArrow> SPECTRAL_ARROW = a("spectral_arrow", EntityTypes.a.a(EntitySpectralArrow::new, EnumCreatureType.MISC).a(0.5F, 0.5F));
     public static final EntityTypes<EntitySpider> SPIDER = a("spider", EntityTypes.a.a(EntitySpider::new, EnumCreatureType.MONSTER).a(1.4F, 0.9F));
     public static final EntityTypes<EntitySquid> SQUID = a("squid", EntityTypes.a.a(EntitySquid::new, EnumCreatureType.WATER_CREATURE).a(0.8F, 0.8F));
     public static final EntityTypes<EntitySkeletonStray> STRAY = a("stray", EntityTypes.a.a(EntitySkeletonStray::new, EnumCreatureType.MONSTER).a(0.6F, 1.99F));
-    public static final EntityTypes<EntityLLamaTrader> TRADER_LLAMA = a("trader_llama", EntityTypes.a.a(EntityLLamaTrader::new, EnumCreatureType.CREATURE).a(0.9F, 1.87F));
+    public static final EntityTypes<EntityLlamaTrader> TRADER_LLAMA = a("trader_llama", EntityTypes.a.a(EntityLlamaTrader::new, EnumCreatureType.CREATURE).a(0.9F, 1.87F));
     public static final EntityTypes<EntityTropicalFish> TROPICAL_FISH = a("tropical_fish", EntityTypes.a.a(EntityTropicalFish::new, EnumCreatureType.WATER_CREATURE).a(0.5F, 0.4F));
     public static final EntityTypes<EntityTurtle> TURTLE = a("turtle", EntityTypes.a.a(EntityTurtle::new, EnumCreatureType.CREATURE).a(1.2F, 0.4F));
     public static final EntityTypes<EntityEgg> EGG = a("egg", EntityTypes.a.a(EntityEgg::new, EnumCreatureType.MISC).a(0.25F, 0.25F));
@@ -98,8 +98,8 @@ public class EntityTypes<T extends Entity> {
     public static final EntityTypes<EntityPotion> POTION = a("potion", EntityTypes.a.a(EntityPotion::new, EnumCreatureType.MISC).a(0.25F, 0.25F));
     public static final EntityTypes<EntityThrownTrident> TRIDENT = a("trident", EntityTypes.a.a(EntityThrownTrident::new, EnumCreatureType.MISC).a(0.5F, 0.5F));
     public static final EntityTypes<EntityVex> VEX = a("vex", EntityTypes.a.a(EntityVex::new, EnumCreatureType.MONSTER).c().a(0.4F, 0.8F));
-    public static final EntityTypes<EntityVillager> VILLAGER = a("villager", EntityTypes.a.a(EntityVillager::new, EnumCreatureType.CREATURE).a(0.6F, 1.95F));
-    public static final EntityTypes<EntityIronGolem> IRON_GOLEM = a("iron_golem", EntityTypes.a.a(EntityIronGolem::new, EnumCreatureType.CREATURE).a(1.4F, 2.7F));
+    public static final EntityTypes<EntityVillager> VILLAGER = a("villager", EntityTypes.a.a(EntityVillager::new, EnumCreatureType.MISC).a(0.6F, 1.95F));
+    public static final EntityTypes<EntityIronGolem> IRON_GOLEM = a("iron_golem", EntityTypes.a.a(EntityIronGolem::new, EnumCreatureType.MISC).a(1.4F, 2.7F));
     public static final EntityTypes<EntityVindicator> VINDICATOR = a("vindicator", EntityTypes.a.a(EntityVindicator::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F));
     public static final EntityTypes<EntityPillager> PILLAGER = a("pillager", EntityTypes.a.a(EntityPillager::new, EnumCreatureType.MONSTER).a(0.6F, 1.95F));
     public static final EntityTypes<EntityVillagerTrader> WANDERING_TRADER = a("wandering_trader", EntityTypes.a.a(EntityVillagerTrader::new, EnumCreatureType.CREATURE).a(0.6F, 1.95F));

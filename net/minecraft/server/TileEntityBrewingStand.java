@@ -88,7 +88,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             this.update();
         }
 
-        boolean flag = this.r();
+        boolean flag = this.s();
         boolean flag1 = this.brewTime > 0;
         ItemStack itemstack1 = (ItemStack) this.items.get(3);
 
@@ -97,7 +97,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
             boolean flag2 = this.brewTime == 0;
 
             if (flag2 && flag) {
-                this.s();
+                this.t();
                 this.update();
             } else if (!flag) {
                 this.brewTime = 0;
@@ -146,7 +146,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         return aboolean;
     }
 
-    private boolean r() {
+    private boolean s() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         if (itemstack.isEmpty()) {
@@ -166,7 +166,7 @@ public class TileEntityBrewingStand extends TileEntityContainer implements IWorl
         }
     }
 
-    private void s() {
+    private void t() {
         ItemStack itemstack = (ItemStack) this.items.get(3);
 
         for (int i = 0; i < 3; ++i) {

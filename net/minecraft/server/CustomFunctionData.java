@@ -26,11 +26,12 @@ public class CustomFunctionData implements IResourcePackListener {
     public static final int b = ".mcfunction".length();
     private final MinecraftServer server;
     private final Map<MinecraftKey, CustomFunction> g = Maps.newHashMap();
-    private final ArrayDeque<CustomFunctionData.a> h = new ArrayDeque();
-    private boolean i;
-    private final Tags<CustomFunction> j = new Tags<>(this::a, "tags/functions", true, "function");
-    private final List<CustomFunction> k = Lists.newArrayList();
-    private boolean l;
+    private boolean h;
+    private final ArrayDeque<CustomFunctionData.a> i = new ArrayDeque();
+    private final List<CustomFunctionData.a> j = Lists.newArrayList();
+    private final Tags<CustomFunction> k = new Tags<>(this::a, "tags/functions", true, "function");
+    private final List<CustomFunction> l = Lists.newArrayList();
+    private boolean m;
 
     public CustomFunctionData(MinecraftServer minecraftserver) {
         this.server = minecraftserver;
@@ -61,7 +62,7 @@ public class CustomFunctionData implements IResourcePackListener {
         MinecraftKey minecraftkey = CustomFunctionData.d;
 
         gameprofiler.a(minecraftkey::toString);
-        Iterator iterator = this.k.iterator();
+        Iterator iterator = this.l.iterator();
 
         while (iterator.hasNext()) {
             CustomFunction customfunction = (CustomFunction) iterator.next();
@@ -70,8 +71,8 @@ public class CustomFunctionData implements IResourcePackListener {
         }
 
         this.server.getMethodProfiler().exit();
-        if (this.l) {
-            this.l = false;
+        if (this.m) {
+            this.m = false;
             Collection<CustomFunction> collection = this.g().b(CustomFunctionData.e).a();
 
             gameprofiler = this.server.getMethodProfiler();
@@ -93,30 +94,38 @@ public class CustomFunctionData implements IResourcePackListener {
     public int a(CustomFunction customfunction, CommandListenerWrapper commandlistenerwrapper) {
         int i = this.b();
 
-        if (this.i) {
-            if (this.h.size() < i) {
-                this.h.addFirst(new CustomFunctionData.a(this, commandlistenerwrapper, new CustomFunction.d(customfunction)));
+        if (this.h) {
+            if (this.i.size() + this.j.size() < i) {
+                this.j.add(new CustomFunctionData.a(this, commandlistenerwrapper, new CustomFunction.d(customfunction)));
             }
 
             return 0;
         } else {
             try {
-                this.i = true;
+                this.h = true;
                 int j = 0;
                 CustomFunction.c[] acustomfunction_c = customfunction.b();
 
                 int k;
 
                 for (k = acustomfunction_c.length - 1; k >= 0; --k) {
-                    this.h.push(new CustomFunctionData.a(this, commandlistenerwrapper, acustomfunction_c[k]));
+                    this.i.push(new CustomFunctionData.a(this, commandlistenerwrapper, acustomfunction_c[k]));
                 }
 
-                while (!this.h.isEmpty()) {
+                while (!this.i.isEmpty()) {
                     try {
-                        CustomFunctionData.a customfunctiondata_a = (CustomFunctionData.a) this.h.removeFirst();
+                        CustomFunctionData.a customfunctiondata_a = (CustomFunctionData.a) this.i.removeFirst();
 
                         this.server.getMethodProfiler().a(customfunctiondata_a::toString);
-                        customfunctiondata_a.a(this.h, i);
+                        customfunctiondata_a.a(this.i, i);
+                        if (!this.j.isEmpty()) {
+                            List list = Lists.reverse(this.j);
+                            ArrayDeque arraydeque = this.i;
+
+                            this.i.getClass();
+                            list.forEach(arraydeque::addFirst);
+                            this.j.clear();
+                        }
                     } finally {
                         this.server.getMethodProfiler().exit();
                     }
@@ -131,8 +140,9 @@ public class CustomFunctionData implements IResourcePackListener {
                 k = j;
                 return k;
             } finally {
-                this.h.clear();
-                this.i = false;
+                this.i.clear();
+                this.j.clear();
+                this.h = false;
             }
         }
     }
@@ -140,8 +150,8 @@ public class CustomFunctionData implements IResourcePackListener {
     @Override
     public void a(IResourceManager iresourcemanager) {
         this.g.clear();
-        this.k.clear();
-        this.j.b();
+        this.l.clear();
+        this.k.b();
         Collection<MinecraftKey> collection = iresourcemanager.a("functions", (s) -> {
             return s.endsWith(".mcfunction");
         });
@@ -167,9 +177,9 @@ public class CustomFunctionData implements IResourcePackListener {
             CustomFunctionData.LOGGER.info("Loaded {} custom command functions", this.g.size());
         }
 
-        this.j.a((Map) this.j.a(iresourcemanager, this.server.aT()).join());
-        this.k.addAll(this.j.b(CustomFunctionData.d).a());
-        this.l = true;
+        this.k.a((Map) this.k.a(iresourcemanager, this.server.aT()).join());
+        this.l.addAll(this.k.b(CustomFunctionData.d).a());
+        this.m = true;
     }
 
     @Nullable
@@ -225,7 +235,7 @@ public class CustomFunctionData implements IResourcePackListener {
     }
 
     public Tags<CustomFunction> g() {
-        return this.j;
+        return this.k;
     }
 
     public static class a {

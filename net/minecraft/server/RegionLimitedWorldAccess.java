@@ -266,11 +266,6 @@ public class RegionLimitedWorldAccess implements GeneratorAccess {
     }
 
     @Override
-    public int a(BlockPosition blockposition, EnumDirection enumdirection) {
-        return this.getType(blockposition).c(this, blockposition, enumdirection);
-    }
-
-    @Override
     public boolean e() {
         return false;
     }

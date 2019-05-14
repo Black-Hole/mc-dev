@@ -17,7 +17,7 @@ public class SensorVillagerBabies extends Sensor<EntityLiving> {
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving) {
-        entityliving.getBehaviorController().a(MemoryModuleType.VISIBLE_VILLAGER_BABIES, (Object) this.a(entityliving));
+        entityliving.getBehaviorController().setMemory(MemoryModuleType.VISIBLE_VILLAGER_BABIES, (Object) this.a(entityliving));
     }
 
     private List<EntityLiving> a(EntityLiving entityliving) {
@@ -29,6 +29,6 @@ public class SensorVillagerBabies extends Sensor<EntityLiving> {
     }
 
     private List<EntityLiving> c(EntityLiving entityliving) {
-        return (List) entityliving.getBehaviorController().c(MemoryModuleType.VISIBLE_MOBS).orElse(Lists.newArrayList());
+        return (List) entityliving.getBehaviorController().getMemory(MemoryModuleType.VISIBLE_MOBS).orElse(Lists.newArrayList());
     }
 }

@@ -17,11 +17,11 @@ public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmpt
     }
 
     @Override
-    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition) {
+    public boolean a(Set<BlockPosition> set, VirtualLevelWritable virtuallevelwritable, Random random, BlockPosition blockposition, StructureBoundingBox structureboundingbox) {
         blockposition = virtuallevelwritable.getHighestBlockYAt(HeightMap.Type.MOTION_BLOCKING_NO_LEAVES, blockposition).down();
         if (h(virtuallevelwritable, blockposition)) {
             blockposition = blockposition.up();
-            this.a(set, (IWorldWriter) virtuallevelwritable, blockposition, this.aS);
+            this.a(set, (IWorldWriter) virtuallevelwritable, blockposition, this.aS, structureboundingbox);
 
             for (int i = blockposition.getY(); i <= blockposition.getY() + 2; ++i) {
                 int j = i - blockposition.getY();
@@ -37,7 +37,7 @@ public class WorldGenGroundBush extends WorldGenTreeAbstract<WorldGenFeatureEmpt
                             BlockPosition blockposition1 = new BlockPosition(l, i, j1);
 
                             if (g(virtuallevelwritable, blockposition1)) {
-                                this.a(virtuallevelwritable, blockposition1, this.a);
+                                this.a(set, (IWorldWriter) virtuallevelwritable, blockposition1, this.a, structureboundingbox);
                             }
                         }
                     }

@@ -2,14 +2,14 @@ package net.minecraft.server;
 
 import java.util.Objects;
 
-final class Ticket<T> implements Comparable<Ticket<?>> {
+public final class Ticket<T> implements Comparable<Ticket<?>> {
 
     private final TicketType<T> a;
     private final int b;
     private final T c;
     private final long d;
 
-    Ticket(TicketType<T> tickettype, int i, T t0, long j) {
+    protected Ticket(TicketType<T> tickettype, int i, T t0, long j) {
         this.a = tickettype;
         this.b = i;
         this.c = t0;

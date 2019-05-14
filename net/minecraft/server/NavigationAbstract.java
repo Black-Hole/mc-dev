@@ -92,12 +92,14 @@ public abstract class NavigationAbstract {
 
     @Nullable
     protected PathEntity a(BlockPosition blockposition, double d0, double d1, double d2, int i, boolean flag) {
-        if (!this.a()) {
+        if (this.a.locY < 0.0D) {
+            return null;
+        } else if (!this.a()) {
             return null;
         } else if (this.c != null && !this.c.b() && blockposition.equals(this.q)) {
             return this.c;
         } else {
-            this.q = blockposition;
+            this.q = blockposition.immutableCopy();
             float f = this.i();
 
             this.b.getMethodProfiler().enter("pathfind");
@@ -181,33 +183,12 @@ public abstract class NavigationAbstract {
 
     protected void m() {
         Vec3D vec3d = this.b();
-        int i = this.c.e();
-
-        for (int j = this.c.f(); j < this.c.e(); ++j) {
-            if ((double) this.c.a(j).b != Math.floor(vec3d.y)) {
-                i = j;
-                break;
-            }
-        }
 
         this.l = this.a.getWidth() > 0.75F ? this.a.getWidth() / 2.0F : 0.75F - this.a.getWidth() / 2.0F;
         Vec3D vec3d1 = this.c.g();
 
         if (Math.abs(this.a.locX - (vec3d1.x + 0.5D)) < (double) this.l && Math.abs(this.a.locZ - (vec3d1.z + 0.5D)) < (double) this.l && Math.abs(this.a.locY - vec3d1.y) < 1.0D) {
             this.c.c(this.c.f() + 1);
-        }
-
-        if (this.a.world.getTime() % 5L == 0L) {
-            int k = MathHelper.f(this.a.getWidth());
-            int l = MathHelper.f(this.a.getHeight());
-            int i1 = k;
-
-            for (int j1 = i - 1; j1 >= this.c.f(); --j1) {
-                if (this.a(vec3d, this.c.a(this.a, j1), k, l, i1)) {
-                    this.c.c(j1);
-                    break;
-                }
-            }
         }
 
         this.a(vec3d);

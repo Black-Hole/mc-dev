@@ -94,7 +94,7 @@ public class ChunkConverter {
             int l = chunkcoordintpair.e() + (flag6 && (flag2 || flag3) ? 14 : (flag5 ? 0 : 15));
             EnumDirection[] aenumdirection = EnumDirection.values();
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
-            Iterator iterator = BlockPosition.b(i, 0, k, j, world.getHeight() - 1, l).iterator();
+            Iterator iterator = BlockPosition.b(i, 0, k, j, world.getBuildHeight() - 1, l).iterator();
 
             while (iterator.hasNext()) {
                 BlockPosition blockposition = (BlockPosition) iterator.next();

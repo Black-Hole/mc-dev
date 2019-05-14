@@ -2,9 +2,9 @@ package net.minecraft.server;
 
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 
-final class VoxelShapeCube extends VoxelShape {
+public final class VoxelShapeCube extends VoxelShape {
 
-    VoxelShapeCube(VoxelShapeDiscrete voxelshapediscrete) {
+    protected VoxelShapeCube(VoxelShapeDiscrete voxelshapediscrete) {
         super(voxelshapediscrete);
     }
 

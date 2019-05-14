@@ -57,7 +57,7 @@ public class EntityZombieHusk extends EntityZombie {
     @Override
     protected void eb() {
         this.b(EntityTypes.ZOMBIE);
-        this.world.a((EntityHuman) null, 1041, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
+        this.world.a((EntityHuman) null, 1041, new BlockPosition(this), 0);
     }
 
     @Override

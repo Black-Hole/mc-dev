@@ -1,11 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 public class BehaviorTradePlayer extends Behavior<EntityVillager> {
@@ -18,23 +16,23 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
     private int e;
 
     public BehaviorTradePlayer(int i, int j) {
-        super(i, j);
+        super(ImmutableMap.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT), i, j);
     }
 
     public boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
 
-        if (!behaviorcontroller.c(MemoryModuleType.INTERACTION_TARGET).isPresent()) {
+        if (!behaviorcontroller.getMemory(MemoryModuleType.INTERACTION_TARGET).isPresent()) {
             return false;
         } else {
-            EntityLiving entityliving = (EntityLiving) behaviorcontroller.c(MemoryModuleType.INTERACTION_TARGET).get();
+            EntityLiving entityliving = (EntityLiving) behaviorcontroller.getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
             return entityliving.getEntityType() == EntityTypes.PLAYER && entityvillager.isAlive() && entityliving.isAlive() && !entityvillager.isBaby() && entityvillager.h((Entity) entityliving) <= 17.0D;
         }
     }
 
     public boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        return this.a(worldserver, entityvillager) && this.e > 0 && entityvillager.getBehaviorController().c(MemoryModuleType.INTERACTION_TARGET).isPresent();
+        return this.a(worldserver, entityvillager) && this.e > 0 && entityvillager.getBehaviorController().getMemory(MemoryModuleType.INTERACTION_TARGET).isPresent();
     }
 
     public void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -61,14 +59,9 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
 
     public void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
         super.f(worldserver, entityvillager, i);
-        entityvillager.getBehaviorController().b(MemoryModuleType.INTERACTION_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.INTERACTION_TARGET);
         entityvillager.setSlot(EnumItemSlot.MAINHAND, ItemStack.a);
         this.a = null;
-    }
-
-    @Override
-    public Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.INTERACTION_TARGET, MemoryStatus.VALUE_PRESENT));
     }
 
     private void a(EntityLiving entityliving, EntityVillager entityvillager) {
@@ -114,9 +107,9 @@ public class BehaviorTradePlayer extends Behavior<EntityVillager> {
 
     private EntityLiving c(EntityVillager entityvillager) {
         BehaviorController<?> behaviorcontroller = entityvillager.getBehaviorController();
-        EntityLiving entityliving = (EntityLiving) behaviorcontroller.c(MemoryModuleType.INTERACTION_TARGET).get();
+        EntityLiving entityliving = (EntityLiving) behaviorcontroller.getMemory(MemoryModuleType.INTERACTION_TARGET).get();
 
-        behaviorcontroller.a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
+        behaviorcontroller.setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorPositionEntity(entityliving)));
         return entityliving;
     }
 

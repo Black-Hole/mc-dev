@@ -208,11 +208,6 @@ public class Tag<T> {
             return this;
         }
 
-        public Tag.a<T> a(MinecraftKey minecraftkey) {
-            this.a.add(new Tag.c<>(minecraftkey));
-            return this;
-        }
-
         public Tag.a<T> a(Tag<T> tag) {
             this.a.add(new Tag.c<>(tag));
             return this;
@@ -245,11 +240,7 @@ public class Tag<T> {
 
         public Tag.a<T> a(Function<MinecraftKey, Optional<T>> function, JsonObject jsonobject) {
             JsonArray jsonarray = ChatDeserializer.u(jsonobject, "values");
-
-            if (ChatDeserializer.a(jsonobject, "replace", false)) {
-                this.a.clear();
-            }
-
+            List<Tag.b<T>> list = Lists.newArrayList();
             Iterator iterator = jsonarray.iterator();
 
             while (iterator.hasNext()) {
@@ -257,16 +248,21 @@ public class Tag<T> {
                 String s = ChatDeserializer.a(jsonelement, "value");
 
                 if (s.startsWith("#")) {
-                    this.a(new MinecraftKey(s.substring(1)));
+                    list.add(new Tag.c<>(new MinecraftKey(s.substring(1))));
                 } else {
                     MinecraftKey minecraftkey = new MinecraftKey(s);
 
-                    this.a(((Optional) function.apply(minecraftkey)).orElseThrow(() -> {
+                    list.add(new Tag.d<>(Collections.singleton(((Optional) function.apply(minecraftkey)).orElseThrow(() -> {
                         return new JsonParseException("Unknown value '" + minecraftkey + "'");
-                    }));
+                    }))));
                 }
             }
 
+            if (ChatDeserializer.a(jsonobject, "replace", false)) {
+                this.a.clear();
+            }
+
+            this.a.addAll(list);
             return this;
         }
     }

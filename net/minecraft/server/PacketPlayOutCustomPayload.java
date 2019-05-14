@@ -16,14 +16,15 @@ public class PacketPlayOutCustomPayload implements Packet<PacketListenerPlayOut>
     public static final MinecraftKey j = new MinecraftKey("debug/village_sections");
     public static final MinecraftKey k = new MinecraftKey("debug/goal_selector");
     public static final MinecraftKey l = new MinecraftKey("debug/brain");
-    private MinecraftKey m;
-    private PacketDataSerializer n;
+    public static final MinecraftKey m = new MinecraftKey("debug/raids");
+    private MinecraftKey n;
+    private PacketDataSerializer o;
 
     public PacketPlayOutCustomPayload() {}
 
     public PacketPlayOutCustomPayload(MinecraftKey minecraftkey, PacketDataSerializer packetdataserializer) {
-        this.m = minecraftkey;
-        this.n = packetdataserializer;
+        this.n = minecraftkey;
+        this.o = packetdataserializer;
         if (packetdataserializer.writerIndex() > 1048576) {
             throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
         }
@@ -31,11 +32,11 @@ public class PacketPlayOutCustomPayload implements Packet<PacketListenerPlayOut>
 
     @Override
     public void a(PacketDataSerializer packetdataserializer) throws IOException {
-        this.m = packetdataserializer.o();
+        this.n = packetdataserializer.o();
         int i = packetdataserializer.readableBytes();
 
         if (i >= 0 && i <= 1048576) {
-            this.n = new PacketDataSerializer(packetdataserializer.readBytes(i));
+            this.o = new PacketDataSerializer(packetdataserializer.readBytes(i));
         } else {
             throw new IOException("Payload may not be larger than 1048576 bytes");
         }
@@ -43,8 +44,8 @@ public class PacketPlayOutCustomPayload implements Packet<PacketListenerPlayOut>
 
     @Override
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a(this.m);
-        packetdataserializer.writeBytes(this.n.copy());
+        packetdataserializer.a(this.n);
+        packetdataserializer.writeBytes(this.o.copy());
     }
 
     public void a(PacketListenerPlayOut packetlistenerplayout) {

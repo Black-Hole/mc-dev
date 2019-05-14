@@ -41,9 +41,9 @@ public class PacketPlayOutExplosion implements Packet<PacketListenerPlayOut> {
         int i = packetdataserializer.readInt();
 
         this.e = Lists.newArrayListWithCapacity(i);
-        int j = (int) this.a;
-        int k = (int) this.b;
-        int l = (int) this.c;
+        int j = MathHelper.floor(this.a);
+        int k = MathHelper.floor(this.b);
+        int l = MathHelper.floor(this.c);
 
         for (int i1 = 0; i1 < i; ++i1) {
             int j1 = packetdataserializer.readByte() + j;
@@ -65,9 +65,9 @@ public class PacketPlayOutExplosion implements Packet<PacketListenerPlayOut> {
         packetdataserializer.writeFloat((float) this.c);
         packetdataserializer.writeFloat(this.d);
         packetdataserializer.writeInt(this.e.size());
-        int i = (int) this.a;
-        int j = (int) this.b;
-        int k = (int) this.c;
+        int i = MathHelper.floor(this.a);
+        int j = MathHelper.floor(this.b);
+        int k = MathHelper.floor(this.c);
         Iterator iterator = this.e.iterator();
 
         while (iterator.hasNext()) {

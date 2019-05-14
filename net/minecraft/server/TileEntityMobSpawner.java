@@ -21,8 +21,8 @@ public class TileEntityMobSpawner extends TileEntity implements ITickable {
         }
 
         @Override
-        public void a(MobSpawnerData mobspawnerdata) {
-            super.a(mobspawnerdata);
+        public void setSpawnData(MobSpawnerData mobspawnerdata) {
+            super.setSpawnData(mobspawnerdata);
             if (this.a() != null) {
                 IBlockData iblockdata = this.a().getType(this.b());
 

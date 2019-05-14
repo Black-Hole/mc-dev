@@ -56,7 +56,7 @@ public class SlotMerchantResult extends Slot {
                 this.a.setItem(1, itemstack2);
             }
 
-            this.h.q(this.h.dV() + merchantrecipe.n());
+            this.h.r(this.h.getExperience() + merchantrecipe.getXp());
         }
 
         return itemstack;

@@ -1,16 +1,11 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorPanic extends Behavior<EntityLiving> {
 
-    public BehaviorPanic() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of();
+    public BehaviorPanic() {
+        super(ImmutableMap.of());
     }
 
     @Override
@@ -18,24 +13,24 @@ public class BehaviorPanic extends Behavior<EntityLiving> {
         if (b(entityliving) || a(entityliving)) {
             BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
 
-            if (!behaviorcontroller.c(Activity.g)) {
-                behaviorcontroller.b(MemoryModuleType.PATH);
-                behaviorcontroller.b(MemoryModuleType.WALK_TARGET);
-                behaviorcontroller.b(MemoryModuleType.LOOK_TARGET);
-                behaviorcontroller.b(MemoryModuleType.BREED_TARGET);
-                behaviorcontroller.b(MemoryModuleType.INTERACTION_TARGET);
+            if (!behaviorcontroller.c(Activity.PANIC)) {
+                behaviorcontroller.removeMemory(MemoryModuleType.PATH);
+                behaviorcontroller.removeMemory(MemoryModuleType.WALK_TARGET);
+                behaviorcontroller.removeMemory(MemoryModuleType.LOOK_TARGET);
+                behaviorcontroller.removeMemory(MemoryModuleType.BREED_TARGET);
+                behaviorcontroller.removeMemory(MemoryModuleType.INTERACTION_TARGET);
             }
 
-            behaviorcontroller.a(Activity.g);
+            behaviorcontroller.a(Activity.PANIC);
         }
 
     }
 
     public static boolean a(EntityLiving entityliving) {
-        return entityliving.getBehaviorController().a(MemoryModuleType.NEAREST_HOSTILE);
+        return entityliving.getBehaviorController().hasMemory(MemoryModuleType.NEAREST_HOSTILE);
     }
 
     public static boolean b(EntityLiving entityliving) {
-        return entityliving.getBehaviorController().a(MemoryModuleType.HURT_BY);
+        return entityliving.getBehaviorController().hasMemory(MemoryModuleType.HURT_BY);
     }
 }

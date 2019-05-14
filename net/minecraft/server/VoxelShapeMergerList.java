@@ -4,13 +4,13 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 
-final class VoxelShapeMergerList implements VoxelShapeMerger {
+public final class VoxelShapeMergerList implements VoxelShapeMerger {
 
     private final DoubleArrayList a;
     private final IntArrayList b;
     private final IntArrayList c;
 
-    VoxelShapeMergerList(DoubleList doublelist, DoubleList doublelist1, boolean flag, boolean flag1) {
+    protected VoxelShapeMergerList(DoubleList doublelist, DoubleList doublelist1, boolean flag, boolean flag1) {
         int i = 0;
         int j = 0;
         double d0 = Double.NaN;

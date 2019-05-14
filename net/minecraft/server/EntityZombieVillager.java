@@ -22,7 +22,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
     protected void initDatawatcher() {
         super.initDatawatcher();
         this.datawatcher.register(EntityZombieVillager.CONVERTING, false);
-        this.datawatcher.register(EntityZombieVillager.c, new VillagerData(VillagerType.c, VillagerProfession.NONE, 1));
+        this.datawatcher.register(EntityZombieVillager.c, new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
     }
 
     @Override
@@ -58,8 +58,6 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
 
         if (nbttagcompound.hasKeyOfType("Xp", 3)) {
             this.bC = nbttagcompound.getInt("Xp");
-        } else {
-            this.bC = VillagerData.b(this.getVillagerData().getLevel());
         }
 
     }
@@ -129,7 +127,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
             entityvillager.b(new MerchantRecipeList(this.bB));
         }
 
-        entityvillager.t(this.bC);
+        entityvillager.setExperience(this.bC);
         entityvillager.prepare(worldserver, worldserver.getDamageScaler(new BlockPosition(entityvillager)), EnumMobSpawn.CONVERSION, (GroupDataEntity) null, (NBTTagCompound) null);
         if (this.isBaby()) {
             entityvillager.setAgeRaw(-24000);
@@ -153,7 +151,7 @@ public class EntityZombieVillager extends EntityZombie implements VillagerDataHo
         }
 
         entityvillager.addEffect(new MobEffect(MobEffects.CONFUSION, 200, 0));
-        worldserver.a((EntityHuman) null, 1027, new BlockPosition((int) this.locX, (int) this.locY, (int) this.locZ), 0);
+        worldserver.a((EntityHuman) null, 1027, new BlockPosition(this), 0);
     }
 
     protected int getConversionProgress() {

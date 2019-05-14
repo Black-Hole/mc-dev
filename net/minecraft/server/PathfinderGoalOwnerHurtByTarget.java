@@ -16,9 +16,7 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
 
     @Override
     public boolean a() {
-        if (!this.a.isTamed()) {
-            return false;
-        } else {
+        if (this.a.isTamed() && !this.a.isSitting()) {
             EntityLiving entityliving = this.a.getOwner();
 
             if (entityliving == null) {
@@ -29,6 +27,8 @@ public class PathfinderGoalOwnerHurtByTarget extends PathfinderGoalTarget {
 
                 return i != this.c && this.a(this.b, PathfinderTargetCondition.a) && this.a.a(this.b, entityliving);
             }
+        } else {
+            return false;
         }
     }
 

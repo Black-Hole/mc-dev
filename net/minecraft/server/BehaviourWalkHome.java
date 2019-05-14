@@ -1,9 +1,7 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class BehaviourWalkHome extends Behavior<EntityLiving> {
@@ -12,12 +10,8 @@ public class BehaviourWalkHome extends Behavior<EntityLiving> {
     private long b;
 
     public BehaviourWalkHome(float f) {
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT));
         this.a = f;
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.HOME, MemoryStatus.VALUE_ABSENT));
     }
 
     @Override
@@ -51,13 +45,13 @@ public class BehaviourWalkHome extends Behavior<EntityLiving> {
                 blockposition_mutableblockposition.c(EnumDirection.DOWN);
             }
 
-            PathEntity pathentity = entitycreature.getNavigation().b(blockposition_mutableblockposition.immutableCopy());
+            PathEntity pathentity = entitycreature.getNavigation().b(blockposition_mutableblockposition);
 
-            return pathentity != null && pathentity.h();
+            return pathentity != null && pathentity.a((BlockPosition) blockposition_mutableblockposition);
         };
 
         villageplace.b(VillagePlaceType.q.c(), predicate, new BlockPosition(entityliving), 48, VillagePlace.Occupancy.ANY).ifPresent((blockposition) -> {
-            entityliving.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.a, 1)));
+            entityliving.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(blockposition, this.a, 1)));
             PacketDebug.c(worldserver, blockposition);
         });
     }

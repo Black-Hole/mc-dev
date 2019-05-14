@@ -8,8 +8,8 @@ public class MerchantRecipe {
     public int uses;
     public int maxUses;
     public boolean rewardExp;
-    private int g;
-    private int h;
+    private int specialPrice;
+    private int demand;
     public float priceMultiplier;
     public int xp;
 
@@ -38,8 +38,8 @@ public class MerchantRecipe {
             this.priceMultiplier = nbttagcompound.getFloat("priceMultiplier");
         }
 
-        this.g = nbttagcompound.getInt("specialPrice");
-        this.h = nbttagcompound.getInt("demand");
+        this.specialPrice = nbttagcompound.getInt("specialPrice");
+        this.demand = nbttagcompound.getInt("demand");
     }
 
     public MerchantRecipe(ItemStack itemstack, ItemStack itemstack1, int i, int j, float f) {
@@ -69,9 +69,9 @@ public class MerchantRecipe {
     public ItemStack getBuyItem1() {
         int i = this.buyingItem1.getCount();
         ItemStack itemstack = this.buyingItem1.cloneItemStack();
-        int j = Math.max(0, MathHelper.d((float) (i * this.h) * this.priceMultiplier));
+        int j = Math.max(0, MathHelper.d((float) (i * this.demand) * this.priceMultiplier));
 
-        itemstack.setCount(MathHelper.clamp(i + j + this.g, 1, this.buyingItem1.getItem().getMaxStackSize()));
+        itemstack.setCount(MathHelper.clamp(i + j + this.specialPrice, 1, this.buyingItem1.getItem().getMaxStackSize()));
         return itemstack;
     }
 
@@ -84,22 +84,22 @@ public class MerchantRecipe {
     }
 
     public void e() {
-        this.h = this.h + this.uses - (this.maxUses - this.uses);
+        this.demand = this.demand + this.uses - (this.maxUses - this.uses);
     }
 
     public ItemStack f() {
         return this.sellingItem.cloneItemStack();
     }
 
-    public int g() {
+    public int getUses() {
         return this.uses;
     }
 
-    public void h() {
+    public void resetUses() {
         this.uses = 0;
     }
 
-    public int i() {
+    public int getMaxUses() {
         return this.maxUses;
     }
 
@@ -107,27 +107,27 @@ public class MerchantRecipe {
         ++this.uses;
     }
 
-    public void increaseUses(int i) {
-        this.g += i;
+    public void increaseSpecialPrice(int i) {
+        this.specialPrice += i;
     }
 
-    public void k() {
-        this.g = 0;
+    public void setSpecialPrice() {
+        this.specialPrice = 0;
     }
 
-    public int l() {
-        return this.g;
+    public int getSpecialPrice() {
+        return this.specialPrice;
     }
 
-    public void b(int i) {
-        this.g = i;
+    public void setSpecialPrice(int i) {
+        this.specialPrice = i;
     }
 
-    public float m() {
+    public float getPriceMultiplier() {
         return this.priceMultiplier;
     }
 
-    public int n() {
+    public int getXp() {
         return this.xp;
     }
 
@@ -139,7 +139,7 @@ public class MerchantRecipe {
         this.uses = this.maxUses;
     }
 
-    public boolean q() {
+    public boolean isRewardExp() {
         return this.rewardExp;
     }
 
@@ -154,8 +154,8 @@ public class MerchantRecipe {
         nbttagcompound.setBoolean("rewardExp", this.rewardExp);
         nbttagcompound.setInt("xp", this.xp);
         nbttagcompound.setFloat("priceMultiplier", this.priceMultiplier);
-        nbttagcompound.setInt("specialPrice", this.g);
-        nbttagcompound.setInt("demand", this.h);
+        nbttagcompound.setInt("specialPrice", this.specialPrice);
+        nbttagcompound.setInt("demand", this.demand);
         return nbttagcompound;
     }
 

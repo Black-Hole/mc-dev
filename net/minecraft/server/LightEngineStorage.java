@@ -49,9 +49,16 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         return m0.c(i);
     }
 
+    @Nullable
+    public NibbleArray h(long i) {
+        NibbleArray nibblearray = (NibbleArray) this.i.get(i);
+
+        return nibblearray != null ? nibblearray : this.a(i, false);
+    }
+
     protected abstract int d(long i);
 
-    protected int h(long i) {
+    protected int i(long i) {
         long j = SectionPosition.e(i);
         NibbleArray nibblearray = this.a(j, true);
 
@@ -107,9 +114,9 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
             if (this.n.contains(i)) {
                 this.n.remove(i);
             } else {
-                this.f.a(i, this.i(i));
+                this.f.a(i, this.j(i));
                 this.g.add(i);
-                this.j(i);
+                this.k(i);
 
                 for (int l = -1; l <= 1; ++l) {
                     for (int i1 = -1; i1 <= 1; ++i1) {
@@ -128,7 +135,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         this.j = !this.n.isEmpty();
     }
 
-    protected NibbleArray i(long i) {
+    protected NibbleArray j(long i) {
         NibbleArray nibblearray = (NibbleArray) this.i.get(i);
 
         return nibblearray != null ? nibblearray : new NibbleArray();
@@ -173,7 +180,7 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
 
             while (longiterator.hasNext()) {
                 i = (Long) longiterator.next();
-                this.k(i);
+                this.l(i);
             }
 
             this.n.clear();
@@ -269,9 +276,9 @@ public abstract class LightEngineStorage<M extends LightEngineStorageArray<M>> e
         }
     }
 
-    protected void j(long i) {}
-
     protected void k(long i) {}
+
+    protected void l(long i) {}
 
     protected void b(long i, boolean flag) {}
 

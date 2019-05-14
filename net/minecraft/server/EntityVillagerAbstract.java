@@ -7,25 +7,39 @@ import javax.annotation.Nullable;
 
 public abstract class EntityVillagerAbstract extends EntityAgeable implements NPC, IMerchant {
 
+    private static final DataWatcherObject<Integer> bA = DataWatcher.a(EntityVillagerAbstract.class, DataWatcherRegistry.b);
     @Nullable
     private EntityHuman tradingPlayer;
     @Nullable
     protected MerchantRecipeList trades;
     private final InventorySubcontainer inventory = new InventorySubcontainer(8);
-    private int bC;
 
     public EntityVillagerAbstract(EntityTypes<? extends EntityVillagerAbstract> entitytypes, World world) {
         super(entitytypes, world);
     }
 
-    @Override
     public int dV() {
+        return (Integer) this.datawatcher.get(EntityVillagerAbstract.bA);
+    }
+
+    public void q(int i) {
+        this.datawatcher.set(EntityVillagerAbstract.bA, i);
+    }
+
+    @Override
+    public int getExperience() {
         return 0;
     }
 
     @Override
     protected float b(EntityPose entitypose, EntitySize entitysize) {
         return this.isBaby() ? 0.81F : 1.62F;
+    }
+
+    @Override
+    protected void initDatawatcher() {
+        super.initDatawatcher();
+        this.datawatcher.register(EntityVillagerAbstract.bA, 0);
     }
 
     @Override
@@ -39,7 +53,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return this.tradingPlayer;
     }
 
-    public boolean dX() {
+    public boolean dY() {
         return this.tradingPlayer != null;
     }
 
@@ -54,13 +68,13 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     }
 
     @Override
-    public void q(int i) {}
+    public void r(int i) {}
 
     @Override
     public void a(MerchantRecipe merchantrecipe) {
         merchantrecipe.increaseUses();
         this.e = -this.A();
-        this.a(this.ea(), this.getSoundVolume(), this.cU());
+        this.a(this.eb(), this.getSoundVolume(), this.cU());
         this.b(merchantrecipe);
         if (this.tradingPlayer instanceof EntityPlayer) {
             CriterionTriggers.s.a((EntityPlayer) this.tradingPlayer, this, merchantrecipe.getSellingItem());
@@ -71,7 +85,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     protected abstract void b(MerchantRecipe merchantrecipe);
 
     @Override
-    public boolean dZ() {
+    public boolean ea() {
         return true;
     }
 
@@ -84,7 +98,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
 
     }
 
-    protected SoundEffect ea() {
+    protected SoundEffect eb() {
         return SoundEffects.ENTITY_VILLAGER_YES;
     }
 
@@ -92,7 +106,7 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
         return flag ? SoundEffects.ENTITY_VILLAGER_YES : SoundEffects.ENTITY_VILLAGER_NO;
     }
 
-    public void eb() {
+    public void ec() {
         this.a(SoundEffects.ENTITY_VILLAGER_CELEBRATE, this.getSoundVolume(), this.cU());
     }
 
@@ -140,14 +154,6 @@ public abstract class EntityVillagerAbstract extends EntityAgeable implements NP
     @Override
     public boolean a(EntityHuman entityhuman) {
         return false;
-    }
-
-    public int ec() {
-        return this.bC;
-    }
-
-    public void r(int i) {
-        this.bC = i;
     }
 
     public InventorySubcontainer getInventory() {

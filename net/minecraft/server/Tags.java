@@ -87,10 +87,11 @@ public class Tags<T> {
                             if (jsonobject == null) {
                                 Tags.LOGGER.error("Couldn't load {} tag list {} from {} in data pack {} as it's empty or null", this.h, minecraftkey1, minecraftkey, iresource.d());
                             } else {
-                                Tag.a<T> tag_a = (Tag.a) map.getOrDefault(minecraftkey1, Tag.a.a());
-
-                                tag_a.a(this.e, jsonobject);
-                                map.put(minecraftkey1, tag_a);
+                                ((Tag.a) map.computeIfAbsent(minecraftkey1, (minecraftkey2) -> {
+                                    return (Tag.a) SystemUtils.a((Object) Tag.a.a(), (tag_a) -> {
+                                        tag_a.a(this.g);
+                                    });
+                                })).a(this.e, jsonobject);
                             }
                         } catch (RuntimeException | IOException ioexception) {
                             Tags.LOGGER.error("Couldn't read {} tag list {} from {} in data pack {}", this.h, minecraftkey1, minecraftkey, iresource.d(), ioexception);
@@ -141,7 +142,7 @@ public class Tags<T> {
             while (iterator1.hasNext()) {
                 Entry<MinecraftKey, Tag.a<T>> entry1 = (Entry) iterator1.next();
 
-                this.a(((Tag.a) entry1.getValue()).a(this.g).b((MinecraftKey) entry1.getKey()));
+                this.a(((Tag.a) entry1.getValue()).b((MinecraftKey) entry1.getKey()));
             }
 
             return;

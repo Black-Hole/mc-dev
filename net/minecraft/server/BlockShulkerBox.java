@@ -46,7 +46,7 @@ public class BlockShulkerBox extends BlockTileEntity {
                 TileEntityShulkerBox tileentityshulkerbox = (TileEntityShulkerBox) tileentity;
                 boolean flag;
 
-                if (tileentityshulkerbox.s() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
+                if (tileentityshulkerbox.t() == TileEntityShulkerBox.AnimationPhase.CLOSED) {
                     AxisAlignedBB axisalignedbb = VoxelShapes.b().getBoundingBox().b((double) (0.5F * (float) enumdirection.getAdjacentX()), (double) (0.5F * (float) enumdirection.getAdjacentY()), (double) (0.5F * (float) enumdirection.getAdjacentZ())).a((double) enumdirection.getAdjacentX(), (double) enumdirection.getAdjacentY(), (double) enumdirection.getAdjacentZ());
 
                     flag = world.c(axisalignedbb.a(blockposition.shift(enumdirection)));

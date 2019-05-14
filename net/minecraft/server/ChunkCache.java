@@ -2,7 +2,7 @@ package net.minecraft.server;
 
 import javax.annotation.Nullable;
 
-public class ChunkCache implements IIBlockAccess {
+public class ChunkCache implements IWorldReader {
 
     protected final int a;
     protected final int b;
@@ -42,49 +42,109 @@ public class ChunkCache implements IIBlockAccess {
 
     }
 
-    @Nullable
-    private IChunkAccess e(BlockPosition blockposition) {
-        int i = (blockposition.getX() >> 4) - this.a;
-        int j = (blockposition.getZ() >> 4) - this.b;
+    @Override
+    public int getLightLevel(BlockPosition blockposition, int i) {
+        return this.e.getLightLevel(blockposition, i);
+    }
 
-        return i >= 0 && i < this.c.length && j >= 0 && j < this.c[i].length ? this.c[i][j] : null;
+    @Nullable
+    @Override
+    public IChunkAccess getChunkAt(int i, int j, ChunkStatus chunkstatus, boolean flag) {
+        int k = i - this.a;
+        int l = j - this.b;
+
+        if (k >= 0 && k < this.c.length && l >= 0 && l < this.c[k].length) {
+            IChunkAccess ichunkaccess = this.c[k][l];
+
+            return (IChunkAccess) (ichunkaccess != null ? ichunkaccess : new ChunkEmpty(this.e, new ChunkCoordIntPair(i, j)));
+        } else {
+            return new ChunkEmpty(this.e, new ChunkCoordIntPair(i, j));
+        }
+    }
+
+    @Override
+    public boolean isChunkLoaded(int i, int j) {
+        int k = i - this.a;
+        int l = j - this.b;
+
+        return k >= 0 && k < this.c.length && l >= 0 && l < this.c[k].length;
+    }
+
+    @Override
+    public BlockPosition getHighestBlockYAt(HeightMap.Type heightmap_type, BlockPosition blockposition) {
+        return this.e.getHighestBlockYAt(heightmap_type, blockposition);
+    }
+
+    @Override
+    public int a(HeightMap.Type heightmap_type, int i, int j) {
+        return this.e.a(heightmap_type, i, j);
+    }
+
+    @Override
+    public int c() {
+        return this.e.c();
+    }
+
+    @Override
+    public WorldBorder getWorldBorder() {
+        return this.e.getWorldBorder();
+    }
+
+    @Override
+    public boolean a(@Nullable Entity entity, VoxelShape voxelshape) {
+        return true;
+    }
+
+    @Override
+    public boolean e() {
+        return false;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return this.e.getSeaLevel();
+    }
+
+    @Override
+    public WorldProvider getWorldProvider() {
+        return this.e.getWorldProvider();
     }
 
     @Nullable
     @Override
     public TileEntity getTileEntity(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.e(blockposition);
+        IChunkAccess ichunkaccess = this.x(blockposition);
 
-        return ichunkaccess == null ? null : ichunkaccess.getTileEntity(blockposition);
+        return ichunkaccess.getTileEntity(blockposition);
     }
 
     @Override
     public IBlockData getType(BlockPosition blockposition) {
-        if (World.isInsideWorld(blockposition)) {
+        if (World.isOutsideWorld(blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {
-            IChunkAccess ichunkaccess = this.e(blockposition);
+            IChunkAccess ichunkaccess = this.x(blockposition);
 
-            return ichunkaccess != null ? ichunkaccess.getType(blockposition) : Blocks.BEDROCK.getBlockData();
+            return ichunkaccess.getType(blockposition);
         }
     }
 
     @Override
     public Fluid getFluid(BlockPosition blockposition) {
-        if (World.isInsideWorld(blockposition)) {
+        if (World.isOutsideWorld(blockposition)) {
             return FluidTypes.EMPTY.i();
         } else {
-            IChunkAccess ichunkaccess = this.e(blockposition);
+            IChunkAccess ichunkaccess = this.x(blockposition);
 
-            return ichunkaccess != null ? ichunkaccess.getFluid(blockposition) : FluidTypes.EMPTY.i();
+            return ichunkaccess.getFluid(blockposition);
         }
     }
 
     @Override
     public BiomeBase getBiome(BlockPosition blockposition) {
-        IChunkAccess ichunkaccess = this.e(blockposition);
+        IChunkAccess ichunkaccess = this.x(blockposition);
 
-        return ichunkaccess == null ? Biomes.PLAINS : ichunkaccess.getBiome(blockposition);
+        return ichunkaccess.getBiome(blockposition);
     }
 
     @Override

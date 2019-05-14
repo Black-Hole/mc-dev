@@ -72,7 +72,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     public boolean inWater;
     protected double Q;
     protected boolean R;
-    protected boolean S;
+    protected boolean inLava;
     public int noDamageTicks;
     protected boolean justCreated;
     protected final DataWatcher datawatcher;
@@ -82,7 +82,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     private static final DataWatcherObject<Boolean> aA = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> aB = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
     private static final DataWatcherObject<Boolean> aC = DataWatcher.a(Entity.class, DataWatcherRegistry.i);
-    protected static final DataWatcherObject<EntityPose> X = DataWatcher.a(Entity.class, DataWatcherRegistry.s);
+    protected static final DataWatcherObject<EntityPose> POSE = DataWatcher.a(Entity.class, DataWatcherRegistry.s);
     public boolean inChunk;
     public int chunkX;
     public int chunkY;
@@ -137,7 +137,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.datawatcher.register(Entity.az, Optional.empty());
         this.datawatcher.register(Entity.aB, false);
         this.datawatcher.register(Entity.aC, false);
-        this.datawatcher.register(Entity.X, EntityPose.STANDING);
+        this.datawatcher.register(Entity.POSE, EntityPose.STANDING);
         this.initDatawatcher();
         this.headHeight = this.getHeadHeight(EntityPose.STANDING, this.size);
     }
@@ -203,12 +203,12 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
         this.dead = true;
     }
 
-    protected void b(EntityPose entitypose) {
-        this.datawatcher.set(Entity.X, entitypose);
+    protected void setPose(EntityPose entitypose) {
+        this.datawatcher.set(Entity.POSE, entitypose);
     }
 
-    public EntityPose Z() {
-        return (EntityPose) this.datawatcher.get(Entity.X);
+    public EntityPose getPose() {
+        return (EntityPose) this.datawatcher.get(Entity.POSE);
     }
 
     protected void setYawPitch(float f, float f1) {
@@ -438,7 +438,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
             }
 
             try {
-                this.S = false;
+                this.inLava = false;
                 this.checkBlockCollisions();
             } catch (Throwable throwable) {
                 CrashReport crashreport = CrashReport.a(throwable, "Checking entity block collision");
@@ -1014,11 +1014,11 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void aB() {
-        this.S = true;
+        this.inLava = true;
     }
 
     public boolean aC() {
-        return this.S;
+        return this.inLava;
     }
 
     public void a(float f, Vec3D vec3d) {
@@ -1042,7 +1042,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public float aE() {
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(MathHelper.floor(this.locX), 0, MathHelper.floor(this.locZ));
+        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition(this.locX, 0.0D, this.locZ);
 
         if (this.world.isLoaded(blockposition_mutableblockposition)) {
             blockposition_mutableblockposition.p(MathHelper.floor(this.locY + (double) this.getHeadHeight()));
@@ -1767,7 +1767,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public boolean bj() {
-        return this.Z() == EntityPose.SWIMMING;
+        return this.getPose() == EntityPose.SWIMMING;
     }
 
     public void setSwimming(boolean flag) {
@@ -2170,7 +2170,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
     }
 
     public void a(DataWatcherObject<?> datawatcherobject) {
-        if (Entity.X.equals(datawatcherobject)) {
+        if (Entity.POSE.equals(datawatcherobject)) {
             this.updateSize();
         }
 
@@ -2178,7 +2178,7 @@ public abstract class Entity implements INamableTileEntity, ICommandListener {
 
     public void updateSize() {
         EntitySize entitysize = this.size;
-        EntityPose entitypose = this.Z();
+        EntityPose entitypose = this.getPose();
         EntitySize entitysize1 = this.a(entitypose);
 
         this.size = entitysize1;

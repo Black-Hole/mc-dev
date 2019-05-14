@@ -306,7 +306,7 @@ public abstract class ChunkMapDistance {
                 PlayerChunk playerchunk = ChunkMapDistance.this.b(i);
 
                 if (playerchunk != null) {
-                    return playerchunk.i();
+                    return playerchunk.getTicketLevel();
                 }
             }
 
@@ -316,7 +316,7 @@ public abstract class ChunkMapDistance {
         @Override
         protected void a(long i, int j) {
             PlayerChunk playerchunk = ChunkMapDistance.this.b(i);
-            int k = playerchunk == null ? PlayerChunkMap.GOLDEN_TICKET + 1 : playerchunk.i();
+            int k = playerchunk == null ? PlayerChunkMap.GOLDEN_TICKET + 1 : playerchunk.getTicketLevel();
 
             if (k != j) {
                 playerchunk = ChunkMapDistance.this.a(i, j, playerchunk, k);

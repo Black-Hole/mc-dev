@@ -6,58 +6,58 @@ import java.util.Map;
 
 public interface VillagerType {
 
-    VillagerType a = a("desert");
-    VillagerType b = a("jungle");
-    VillagerType c = a("plains");
-    VillagerType d = a("savanna");
-    VillagerType e = a("snow");
-    VillagerType f = a("swamp");
-    VillagerType g = a("taiga");
+    VillagerType DESERT = a("desert");
+    VillagerType JUNGLE = a("jungle");
+    VillagerType PLAINS = a("plains");
+    VillagerType SAVANNA = a("savanna");
+    VillagerType SNOW = a("snow");
+    VillagerType SWAMP = a("swamp");
+    VillagerType TAIGA = a("taiga");
     Map<BiomeBase, VillagerType> h = (Map) SystemUtils.a((Object) Maps.newHashMap(), (hashmap) -> {
-        hashmap.put(Biomes.BADLANDS, VillagerType.a);
-        hashmap.put(Biomes.BADLANDS_PLATEAU, VillagerType.a);
-        hashmap.put(Biomes.DESERT, VillagerType.a);
-        hashmap.put(Biomes.DESERT_HILLS, VillagerType.a);
-        hashmap.put(Biomes.DESERT_LAKES, VillagerType.a);
-        hashmap.put(Biomes.ERODED_BADLANDS, VillagerType.a);
-        hashmap.put(Biomes.MODIFIED_BADLANDS_PLATEAU, VillagerType.a);
-        hashmap.put(Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, VillagerType.a);
-        hashmap.put(Biomes.WOODED_BADLANDS_PLATEAU, VillagerType.a);
-        hashmap.put(Biomes.BAMBOO_JUNGLE, VillagerType.b);
-        hashmap.put(Biomes.BAMBOO_JUNGLE_HILLS, VillagerType.b);
-        hashmap.put(Biomes.JUNGLE, VillagerType.b);
-        hashmap.put(Biomes.JUNGLE_EDGE, VillagerType.b);
-        hashmap.put(Biomes.JUNGLE_HILLS, VillagerType.b);
-        hashmap.put(Biomes.MODIFIED_JUNGLE, VillagerType.b);
-        hashmap.put(Biomes.MODIFIED_JUNGLE_EDGE, VillagerType.b);
-        hashmap.put(Biomes.SAVANNA_PLATEAU, VillagerType.d);
-        hashmap.put(Biomes.SAVANNA, VillagerType.d);
-        hashmap.put(Biomes.SHATTERED_SAVANNA, VillagerType.d);
-        hashmap.put(Biomes.SHATTERED_SAVANNA_PLATEAU, VillagerType.d);
-        hashmap.put(Biomes.DEEP_FROZEN_OCEAN, VillagerType.e);
-        hashmap.put(Biomes.FROZEN_OCEAN, VillagerType.e);
-        hashmap.put(Biomes.FROZEN_RIVER, VillagerType.e);
-        hashmap.put(Biomes.ICE_SPIKES, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_BEACH, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_MOUNTAINS, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_TAIGA, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_TAIGA_HILLS, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_TAIGA_MOUNTAINS, VillagerType.e);
-        hashmap.put(Biomes.SNOWY_TUNDRA, VillagerType.e);
-        hashmap.put(Biomes.SWAMP, VillagerType.f);
-        hashmap.put(Biomes.SWAMP_HILLS, VillagerType.f);
-        hashmap.put(Biomes.GIANT_SPRUCE_TAIGA, VillagerType.g);
-        hashmap.put(Biomes.GIANT_SPRUCE_TAIGA_HILLS, VillagerType.g);
-        hashmap.put(Biomes.GIANT_TREE_TAIGA, VillagerType.g);
-        hashmap.put(Biomes.GIANT_TREE_TAIGA_HILLS, VillagerType.g);
-        hashmap.put(Biomes.GRAVELLY_MOUNTAINS, VillagerType.g);
-        hashmap.put(Biomes.MODIFIED_GRAVELLY_MOUNTAINS, VillagerType.g);
-        hashmap.put(Biomes.MOUNTAIN_EDGE, VillagerType.g);
-        hashmap.put(Biomes.MOUNTAINS, VillagerType.g);
-        hashmap.put(Biomes.TAIGA, VillagerType.g);
-        hashmap.put(Biomes.TAIGA_HILLS, VillagerType.g);
-        hashmap.put(Biomes.TAIGA_MOUNTAINS, VillagerType.g);
-        hashmap.put(Biomes.WOODED_MOUNTAINS, VillagerType.g);
+        hashmap.put(Biomes.BADLANDS, VillagerType.DESERT);
+        hashmap.put(Biomes.BADLANDS_PLATEAU, VillagerType.DESERT);
+        hashmap.put(Biomes.DESERT, VillagerType.DESERT);
+        hashmap.put(Biomes.DESERT_HILLS, VillagerType.DESERT);
+        hashmap.put(Biomes.DESERT_LAKES, VillagerType.DESERT);
+        hashmap.put(Biomes.ERODED_BADLANDS, VillagerType.DESERT);
+        hashmap.put(Biomes.MODIFIED_BADLANDS_PLATEAU, VillagerType.DESERT);
+        hashmap.put(Biomes.MODIFIED_WOODED_BADLANDS_PLATEAU, VillagerType.DESERT);
+        hashmap.put(Biomes.WOODED_BADLANDS_PLATEAU, VillagerType.DESERT);
+        hashmap.put(Biomes.BAMBOO_JUNGLE, VillagerType.JUNGLE);
+        hashmap.put(Biomes.BAMBOO_JUNGLE_HILLS, VillagerType.JUNGLE);
+        hashmap.put(Biomes.JUNGLE, VillagerType.JUNGLE);
+        hashmap.put(Biomes.JUNGLE_EDGE, VillagerType.JUNGLE);
+        hashmap.put(Biomes.JUNGLE_HILLS, VillagerType.JUNGLE);
+        hashmap.put(Biomes.MODIFIED_JUNGLE, VillagerType.JUNGLE);
+        hashmap.put(Biomes.MODIFIED_JUNGLE_EDGE, VillagerType.JUNGLE);
+        hashmap.put(Biomes.SAVANNA_PLATEAU, VillagerType.SAVANNA);
+        hashmap.put(Biomes.SAVANNA, VillagerType.SAVANNA);
+        hashmap.put(Biomes.SHATTERED_SAVANNA, VillagerType.SAVANNA);
+        hashmap.put(Biomes.SHATTERED_SAVANNA_PLATEAU, VillagerType.SAVANNA);
+        hashmap.put(Biomes.DEEP_FROZEN_OCEAN, VillagerType.SNOW);
+        hashmap.put(Biomes.FROZEN_OCEAN, VillagerType.SNOW);
+        hashmap.put(Biomes.FROZEN_RIVER, VillagerType.SNOW);
+        hashmap.put(Biomes.ICE_SPIKES, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_BEACH, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_MOUNTAINS, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_TAIGA, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_TAIGA_HILLS, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_TAIGA_MOUNTAINS, VillagerType.SNOW);
+        hashmap.put(Biomes.SNOWY_TUNDRA, VillagerType.SNOW);
+        hashmap.put(Biomes.SWAMP, VillagerType.SWAMP);
+        hashmap.put(Biomes.SWAMP_HILLS, VillagerType.SWAMP);
+        hashmap.put(Biomes.GIANT_SPRUCE_TAIGA, VillagerType.TAIGA);
+        hashmap.put(Biomes.GIANT_SPRUCE_TAIGA_HILLS, VillagerType.TAIGA);
+        hashmap.put(Biomes.GIANT_TREE_TAIGA, VillagerType.TAIGA);
+        hashmap.put(Biomes.GIANT_TREE_TAIGA_HILLS, VillagerType.TAIGA);
+        hashmap.put(Biomes.GRAVELLY_MOUNTAINS, VillagerType.TAIGA);
+        hashmap.put(Biomes.MODIFIED_GRAVELLY_MOUNTAINS, VillagerType.TAIGA);
+        hashmap.put(Biomes.MOUNTAIN_EDGE, VillagerType.TAIGA);
+        hashmap.put(Biomes.MOUNTAINS, VillagerType.TAIGA);
+        hashmap.put(Biomes.TAIGA, VillagerType.TAIGA);
+        hashmap.put(Biomes.TAIGA_HILLS, VillagerType.TAIGA);
+        hashmap.put(Biomes.TAIGA_MOUNTAINS, VillagerType.TAIGA);
+        hashmap.put(Biomes.WOODED_MOUNTAINS, VillagerType.TAIGA);
     });
 
     static VillagerType a(final String s) {
@@ -69,6 +69,6 @@ public interface VillagerType {
     }
 
     static VillagerType a(BiomeBase biomebase) {
-        return (VillagerType) VillagerType.h.getOrDefault(biomebase, VillagerType.c);
+        return (VillagerType) VillagerType.h.getOrDefault(biomebase, VillagerType.PLAINS);
     }
 }

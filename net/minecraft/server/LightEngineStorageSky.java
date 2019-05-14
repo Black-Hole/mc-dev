@@ -49,7 +49,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
     }
 
     @Override
-    protected void j(long i) {
+    protected void k(long i) {
         int j = SectionPosition.c(i);
 
         if (((LightEngineStorageSky.a) this.f).b > j) {
@@ -83,7 +83,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
     }
 
     @Override
-    protected void k(long i) {
+    protected void l(long i) {
         long j = SectionPosition.f(i);
         boolean flag = this.o.contains(j);
 
@@ -149,33 +149,25 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
     }
 
     @Override
-    protected NibbleArray i(long i) {
+    protected NibbleArray j(long i) {
         NibbleArray nibblearray = (NibbleArray) this.i.get(i);
 
         if (nibblearray != null) {
             return nibblearray;
-        } else if (!this.n(i)) {
-            return new NibbleArray();
         } else {
             long j = SectionPosition.a(i, EnumDirection.UP);
+            int k = ((LightEngineStorageSky.a) this.f).c.get(SectionPosition.f(i));
 
-            int k;
+            if (k != ((LightEngineStorageSky.a) this.f).b && SectionPosition.c(j) < k) {
+                NibbleArray nibblearray1;
 
-            for (k = ((LightEngineStorageSky.a) this.f).c.get(SectionPosition.f(i)); k != ((LightEngineStorageSky.a) this.f).b && SectionPosition.c(j) < k && !this.g(j); j = SectionPosition.a(j, EnumDirection.UP)) {
-                ;
-            }
+                while ((nibblearray1 = this.a(j, true)) == null) {
+                    j = SectionPosition.a(j, EnumDirection.UP);
+                }
 
-            NibbleArray nibblearray1 = ((LightEngineStorageSky.a) this.f).c(j);
-
-            if (nibblearray1 != null) {
                 return new NibbleArray((new NibbleArrayFlat(nibblearray1, 0)).asBytes());
-            } else if (this.m.contains(SectionPosition.b(SectionPosition.b(i), k - 1, SectionPosition.d(i)))) {
-                return new NibbleArray();
             } else {
-                NibbleArray nibblearray2 = new NibbleArray();
-
-                Arrays.fill(nibblearray2.asBytes(), (byte) -1);
-                return nibblearray2;
+                return new NibbleArray();
             }
         }
     }
@@ -295,7 +287,7 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         return i >= ((LightEngineStorageSky.a) this.f).b;
     }
 
-    protected boolean l(long i) {
+    protected boolean m(long i) {
         int j = BlockPosition.c(i);
 
         if ((j & 15) != 15) {
@@ -314,14 +306,14 @@ public class LightEngineStorageSky extends LightEngineStorage<LightEngineStorage
         }
     }
 
-    protected boolean m(long i) {
+    protected boolean n(long i) {
         long j = SectionPosition.f(i);
         int k = ((LightEngineStorageSky.a) this.f).c.get(j);
 
         return k == ((LightEngineStorageSky.a) this.f).b || SectionPosition.c(i) >= k;
     }
 
-    protected boolean n(long i) {
+    protected boolean o(long i) {
         long j = SectionPosition.f(i);
 
         return this.o.contains(j);

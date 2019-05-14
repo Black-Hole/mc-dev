@@ -13,6 +13,11 @@ public class PathfinderGoalSit extends PathfinderGoal {
     }
 
     @Override
+    public boolean b() {
+        return this.willSit;
+    }
+
+    @Override
     public boolean a() {
         if (!this.entity.isTamed()) {
             return false;

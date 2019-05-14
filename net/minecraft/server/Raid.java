@@ -2,6 +2,7 @@ package net.minecraft.server;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -11,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -26,7 +28,7 @@ public class Raid {
     private final Map<Integer, Set<EntityRaider>> h = Maps.newHashMap();
     private final Set<UUID> i = Sets.newHashSet();
     private long j;
-    private final BlockPosition k;
+    private BlockPosition k;
     private final WorldServer l;
     private boolean m;
     private final int n;
@@ -93,7 +95,7 @@ public class Raid {
     }
 
     public boolean b() {
-        return this.c() && this.s() == 0 && this.u > 0;
+        return this.c() && this.r() == 0 && this.u > 0;
     }
 
     public boolean c() {
@@ -116,23 +118,25 @@ public class Raid {
         return this.l;
     }
 
-    public boolean k() {
+    public boolean j() {
         return this.m;
     }
 
-    public int l() {
+    public int k() {
         return this.r;
     }
 
-    private Predicate<EntityPlayer> x() {
+    private Predicate<EntityPlayer> w() {
         return (entityplayer) -> {
-            return entityplayer.isAlive() && entityplayer.getWorldServer().a(new BlockPosition(entityplayer), 2);
+            BlockPosition blockposition = new BlockPosition(entityplayer);
+
+            return entityplayer.isAlive() && entityplayer.getWorldServer().b_(blockposition) && this.s().m(blockposition) <= 9216.0D;
         };
     }
 
-    private void y() {
+    private void x() {
         Set<EntityPlayer> set = Sets.newHashSet();
-        Iterator iterator = this.l.a(this.x()).iterator();
+        Iterator iterator = this.l.a(this.w()).iterator();
 
         while (iterator.hasNext()) {
             EntityPlayer entityplayer = (EntityPlayer) iterator.next();
@@ -154,37 +158,37 @@ public class Raid {
 
     }
 
-    public int m() {
+    public int l() {
         return 5;
     }
 
-    public int n() {
+    public int m() {
         return this.p;
     }
 
     public void a(EntityHuman entityhuman) {
         if (entityhuman.hasEffect(MobEffects.BAD_OMEN)) {
             this.p += entityhuman.getEffect(MobEffects.BAD_OMEN).getAmplifier() + 1;
-            this.p = MathHelper.clamp(this.p, 0, this.m());
+            this.p = MathHelper.clamp(this.p, 0, this.l());
         }
 
         entityhuman.removeEffect(MobEffects.BAD_OMEN);
     }
 
-    public void o() {
+    public void n() {
         this.q = false;
         this.s.b();
         this.x = Raid.Status.STOPPED;
     }
 
-    public void p() {
+    public void o() {
         if (!this.d()) {
             if (this.x == Raid.Status.ONGOING) {
                 boolean flag = this.q;
 
                 this.q = this.l.isLoaded(this.k);
                 if (this.l.getDifficulty() == EnumDifficulty.PEACEFUL) {
-                    this.o();
+                    this.n();
                     return;
                 }
 
@@ -197,22 +201,24 @@ public class Raid {
                 }
 
                 if (!this.l.b_(this.k)) {
+                    this.y();
+                }
+
+                if (!this.l.b_(this.k)) {
                     if (this.r > 0) {
                         this.x = Raid.Status.LOSS;
                     } else {
-                        this.o();
+                        this.n();
                     }
-
-                    return;
                 }
 
                 ++this.j;
                 if (this.j >= 48000L) {
-                    this.o();
+                    this.n();
                     return;
                 }
 
-                int i = this.s();
+                int i = this.r();
 
                 if (i == 0 && this.z()) {
                     if (this.u > 0) {
@@ -229,7 +235,7 @@ public class Raid {
                         }
 
                         if (this.u == 300 || this.u % 20 == 0) {
-                            this.y();
+                            this.x();
                         }
 
                         --this.u;
@@ -242,7 +248,7 @@ public class Raid {
                 }
 
                 if (this.j % 20L == 0L) {
-                    this.y();
+                    this.x();
                     this.E();
                     if (i > 0) {
                         if (i <= 2) {
@@ -273,12 +279,12 @@ public class Raid {
                     }
 
                     if (j > 3) {
-                        this.o();
+                        this.n();
                         break;
                     }
                 }
 
-                if (this.k() && !this.z() && i == 0) {
+                if (this.j() && !this.z() && i == 0) {
                     if (this.t < 40) {
                         ++this.t;
                     } else {
@@ -308,12 +314,12 @@ public class Raid {
             } else if (this.a()) {
                 ++this.y;
                 if (this.y >= 600) {
-                    this.o();
+                    this.n();
                     return;
                 }
 
                 if (this.y % 20 == 0) {
-                    this.y();
+                    this.x();
                     this.s.setVisible(true);
                     if (this.e()) {
                         this.s.setProgress(0.0F);
@@ -325,6 +331,16 @@ public class Raid {
             }
 
         }
+    }
+
+    private void y() {
+        Stream<SectionPosition> stream = SectionPosition.a(SectionPosition.a(this.k), 2);
+        WorldServer worldserver = this.l;
+
+        this.l.getClass();
+        stream.filter(worldserver::a).map(SectionPosition::t).min(Comparator.comparingDouble((blockposition) -> {
+            return blockposition.m(this.k);
+        })).ifPresent(this::c);
     }
 
     private Optional<BlockPosition> d(int i) {
@@ -344,7 +360,7 @@ public class Raid {
     }
 
     private boolean A() {
-        return this.l() == this.w;
+        return this.k() == this.w;
     }
 
     private boolean B() {
@@ -352,11 +368,11 @@ public class Raid {
     }
 
     private boolean C() {
-        return this.l() > this.w;
+        return this.k() > this.w;
     }
 
     private boolean D() {
-        return this.A() && this.s() == 0 && this.B();
+        return this.A() && this.r() == 0 && this.B();
     }
 
     private void E() {
@@ -369,20 +385,19 @@ public class Raid {
 
             while (iterator1.hasNext()) {
                 EntityRaider entityraider = (EntityRaider) iterator1.next();
+                BlockPosition blockposition = new BlockPosition(entityraider);
 
-                if (!entityraider.dead && entityraider.dimension == this.l.getWorldProvider().getDimensionManager()) {
-                    if (entityraider.ticksLived <= 600) {
-                        continue;
+                if (!entityraider.dead && entityraider.dimension == this.l.getWorldProvider().getDimensionManager() && this.k.m(blockposition) < 12544.0D) {
+                    if (entityraider.ticksLived > 600) {
+                        if (!this.l.b_(blockposition) && entityraider.cv() > 2400) {
+                            entityraider.b(entityraider.eo() + 1);
+                        }
+
+                        if (entityraider.eo() >= 30) {
+                            hashset.add(entityraider);
+                        }
                     }
                 } else {
-                    entityraider.b(30);
-                }
-
-                if (!PersistentRaid.a(entityraider, this.k, 32) && entityraider.cv() > 2400) {
-                    entityraider.b(entityraider.eo() + 1);
-                }
-
-                if (entityraider.eo() >= 30) {
                     hashset.add(entityraider);
                 }
             }
@@ -411,7 +426,7 @@ public class Raid {
             double d0 = vec3d.x + (double) (13.0F / f1) * (vec3d1.x - vec3d.x);
             double d1 = vec3d.z + (double) (13.0F / f1) * (vec3d1.z - vec3d.z);
 
-            if (f1 <= 64.0F || PersistentRaid.a(entityhuman, this.k, 32)) {
+            if (f1 <= 64.0F || this.l.b_(new BlockPosition(entityhuman))) {
                 ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutNamedSoundEffect(SoundEffects.EVENT_RAID_HORN, SoundCategory.NEUTRAL, d0, entityhuman.locY, d1, 64.0F, 1.0F));
             }
         }
@@ -468,7 +483,7 @@ public class Raid {
 
         this.z = Optional.empty();
         ++this.r;
-        this.q();
+        this.p();
         this.G();
     }
 
@@ -491,11 +506,11 @@ public class Raid {
 
     }
 
-    public void q() {
-        this.s.setProgress(MathHelper.a(this.r() / this.o, 0.0F, 1.0F));
+    public void p() {
+        this.s.setProgress(MathHelper.a(this.q() / this.o, 0.0F, 1.0F));
     }
 
-    public float r() {
+    public float q() {
         float f = 0.0F;
         Iterator iterator = this.h.values().iterator();
 
@@ -513,10 +528,10 @@ public class Raid {
     }
 
     private boolean F() {
-        return this.u == 0 && (this.r < this.w || this.D()) && this.s() == 0;
+        return this.u == 0 && (this.r < this.w || this.D()) && this.r() == 0;
     }
 
-    public int s() {
+    public int r() {
         return this.h.values().stream().mapToInt(Set::size).sum();
     }
 
@@ -532,7 +547,7 @@ public class Raid {
                 }
 
                 entityraider.a((Raid) null);
-                this.q();
+                this.p();
                 this.G();
             }
         }
@@ -565,8 +580,8 @@ public class Raid {
 
         for (int l = 0; l < j; ++l) {
             float f = this.l.random.nextFloat() * 6.2831855F;
-            int i1 = this.k.getX() + (int) (MathHelper.cos(f) * 32.0F * (float) k) + this.l.random.nextInt(5);
-            int j1 = this.k.getZ() + (int) (MathHelper.sin(f) * 32.0F * (float) k) + this.l.random.nextInt(5);
+            int i1 = this.k.getX() + MathHelper.d(MathHelper.cos(f) * 32.0F * (float) k) + this.l.random.nextInt(5);
+            int j1 = this.k.getZ() + MathHelper.d(MathHelper.sin(f) * 32.0F * (float) k) + this.l.random.nextInt(5);
             int k1 = this.l.a(HeightMap.Type.WORLD_SURFACE, i1, j1);
 
             blockposition_mutableblockposition.d(i1, k1, j1);
@@ -609,7 +624,7 @@ public class Raid {
             this.o += entityraider.getHealth();
         }
 
-        this.q();
+        this.p();
         this.G();
         return true;
     }
@@ -624,11 +639,15 @@ public class Raid {
         this.g.remove(i);
     }
 
-    public BlockPosition t() {
+    public BlockPosition s() {
         return this.k;
     }
 
-    public int u() {
+    private void c(BlockPosition blockposition) {
+        this.k = blockposition;
+    }
+
+    public int t() {
         return this.n;
     }
 
@@ -670,7 +689,7 @@ public class Raid {
         return j > 0 ? random.nextInt(j + 1) : 0;
     }
 
-    public boolean v() {
+    public boolean u() {
         return this.q;
     }
 
@@ -717,8 +736,8 @@ public class Raid {
         }
     }
 
-    public float w() {
-        int i = this.n();
+    public float v() {
+        int i = this.m();
 
         return i == 2 ? 0.1F : (i == 3 ? 0.25F : (i == 4 ? 0.5F : (i == 5 ? 0.75F : 0.0F)));
     }

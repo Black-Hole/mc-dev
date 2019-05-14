@@ -86,12 +86,14 @@ public class BlockTNT extends Block {
     }
 
     @Override
-    public void a(IBlockData iblockdata, World world, BlockPosition blockposition, Entity entity) {
+    public void a(World world, IBlockData iblockdata, MovingObjectPositionBlock movingobjectpositionblock, Entity entity) {
         if (!world.isClientSide && entity instanceof EntityArrow) {
             EntityArrow entityarrow = (EntityArrow) entity;
             Entity entity1 = entityarrow.getShooter();
 
             if (entityarrow.isBurning()) {
+                BlockPosition blockposition = movingobjectpositionblock.getBlockPosition();
+
                 a(world, blockposition, entity1 instanceof EntityLiving ? (EntityLiving) entity1 : null);
                 world.a(blockposition, false);
             }

@@ -106,7 +106,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
                     this.g.add(tileentitybeacon_beaconcolortracker);
                 }
             } else {
-                if (iblockdata.b((IBlockAccess) this.world, blockposition) >= 15 && block != Blocks.BEDROCK) {
+                if (tileentitybeacon_beaconcolortracker == null || iblockdata.b((IBlockAccess) this.world, blockposition) >= 15 && block != Blocks.BEDROCK) {
                     this.g.clear();
                     this.i = l;
                     break;
@@ -197,7 +197,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
             }
 
             int i = (9 + this.levels * 2) * 20;
-            AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.position)).g(d0).b(0.0D, (double) this.world.getHeight(), 0.0D);
+            AxisAlignedBB axisalignedbb = (new AxisAlignedBB(this.position)).g(d0).b(0.0D, (double) this.world.getBuildHeight(), 0.0D);
             List<EntityHuman> list = this.world.a(EntityHuman.class, axisalignedbb);
             Iterator iterator = list.iterator();
 
@@ -263,6 +263,7 @@ public class TileEntityBeacon extends TileEntity implements ITileInventory, ITic
         super.save(nbttagcompound);
         nbttagcompound.setInt("Primary", MobEffectList.getId(this.primaryEffect));
         nbttagcompound.setInt("Secondary", MobEffectList.getId(this.secondaryEffect));
+        nbttagcompound.setInt("Levels", this.levels);
         if (this.customName != null) {
             nbttagcompound.setString("CustomName", IChatBaseComponent.ChatSerializer.a(this.customName));
         }

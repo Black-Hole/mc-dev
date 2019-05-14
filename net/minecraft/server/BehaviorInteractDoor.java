@@ -1,7 +1,6 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,18 +8,15 @@ import java.util.stream.Stream;
 
 public class BehaviorInteractDoor extends Behavior<EntityLiving> {
 
-    public BehaviorInteractDoor() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.PATH, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.INTERACTABLE_DOORS, MemoryStatus.VALUE_PRESENT));
+    public BehaviorInteractDoor() {
+        super(ImmutableMap.of(MemoryModuleType.PATH, MemoryStatus.VALUE_PRESENT, MemoryModuleType.INTERACTABLE_DOORS, MemoryStatus.VALUE_PRESENT));
     }
 
     @Override
     protected void a(WorldServer worldserver, EntityLiving entityliving, long i) {
         BehaviorController<?> behaviorcontroller = entityliving.getBehaviorController();
-        PathEntity pathentity = (PathEntity) behaviorcontroller.c(MemoryModuleType.PATH).get();
-        List<GlobalPos> list = (List) behaviorcontroller.c(MemoryModuleType.INTERACTABLE_DOORS).get();
+        PathEntity pathentity = (PathEntity) behaviorcontroller.getMemory(MemoryModuleType.PATH).get();
+        List<GlobalPos> list = (List) behaviorcontroller.getMemory(MemoryModuleType.INTERACTABLE_DOORS).get();
         List<BlockPosition> list1 = (List) pathentity.d().stream().map((pathpoint) -> {
             return new BlockPosition(pathpoint.a, pathpoint.b, pathpoint.c);
         }).collect(Collectors.toList());

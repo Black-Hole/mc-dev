@@ -1,11 +1,9 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 public class BehaviorCelebrate extends Behavior<EntityVillager> {
@@ -14,21 +12,16 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
     private Raid a;
 
     public BehaviorCelebrate(int i, int j) {
-        super(i, j);
+        super(ImmutableMap.of(), i, j);
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
         this.a = worldserver.c_(new BlockPosition(entityvillager));
-        return this.a != null && this.a.e() && worldserver.f(new BlockPosition(entityvillager));
+        return this.a != null && this.a.e() && BehaviorOutside.b(worldserver, entityvillager);
     }
 
     protected boolean g(WorldServer worldserver, EntityVillager entityvillager, long i) {
         return this.a != null && !this.a.d();
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of();
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
@@ -40,10 +33,10 @@ public class BehaviorCelebrate extends Behavior<EntityVillager> {
         Random random = entityvillager.getRandom();
 
         if (random.nextInt(100) == 0) {
-            entityvillager.eb();
+            entityvillager.ec();
         }
 
-        if (random.nextInt(200) == 0 && worldserver.f(new BlockPosition(entityvillager))) {
+        if (random.nextInt(200) == 0 && BehaviorOutside.b(worldserver, entityvillager)) {
             EnumColor enumcolor = EnumColor.values()[random.nextInt(EnumColor.values().length)];
             int j = random.nextInt(3);
             ItemStack itemstack = this.a(enumcolor, j);

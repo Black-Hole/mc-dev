@@ -1,32 +1,25 @@
 package net.minecraft.server;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import java.util.Set;
+import com.google.common.collect.ImmutableMap;
 
 public class BehaviorLook extends Behavior<EntityInsentient> {
 
     public BehaviorLook(int i, int j) {
-        super(i, j);
-    }
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_PRESENT), i, j);
     }
 
     protected boolean g(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        return entityinsentient.getBehaviorController().c(MemoryModuleType.LOOK_TARGET).filter((behaviorposition) -> {
+        return entityinsentient.getBehaviorController().getMemory(MemoryModuleType.LOOK_TARGET).filter((behaviorposition) -> {
             return behaviorposition.a(entityinsentient);
         }).isPresent();
     }
 
     protected void f(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        entityinsentient.getBehaviorController().b(MemoryModuleType.LOOK_TARGET);
+        entityinsentient.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
     }
 
     protected void d(WorldServer worldserver, EntityInsentient entityinsentient, long i) {
-        entityinsentient.getBehaviorController().c(MemoryModuleType.LOOK_TARGET).ifPresent((behaviorposition) -> {
+        entityinsentient.getBehaviorController().getMemory(MemoryModuleType.LOOK_TARGET).ifPresent((behaviorposition) -> {
             entityinsentient.getControllerLook().a(behaviorposition.b());
         });
     }

@@ -1,5 +1,6 @@
 package net.minecraft.server;
 
+import java.util.Collection;
 import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +24,8 @@ public class PacketDebug {
     public static void a(GeneratorAccess generatoraccess, StructureStart structurestart) {}
 
     public static void a(World world, EntityInsentient entityinsentient, PathfinderGoalSelector pathfindergoalselector) {}
+
+    public static void a(WorldServer worldserver, Collection<Raid> collection) {}
 
     public static void a(EntityLiving entityliving) {}
 }

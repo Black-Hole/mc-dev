@@ -1,8 +1,7 @@
 package net.minecraft.server;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,11 +17,8 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
     private long d;
     private int e;
 
-    public BehaviorFarm() {}
-
-    @Override
-    protected Set<Pair<MemoryModuleType<?>, MemoryStatus>> a() {
-        return ImmutableSet.of(Pair.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT), Pair.of(MemoryModuleType.SECONDARY_JOB_SITE, MemoryStatus.VALUE_PRESENT));
+    public BehaviorFarm() {
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT, MemoryModuleType.SECONDARY_JOB_SITE, MemoryStatus.VALUE_PRESENT));
     }
 
     protected boolean a(WorldServer worldserver, EntityVillager entityvillager) {
@@ -31,15 +27,15 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
         } else if (entityvillager.getVillagerData().getProfession() != VillagerProfession.FARMER) {
             return false;
         } else {
-            Set<BlockPosition> set = (Set) ((List) entityvillager.getBehaviorController().c(MemoryModuleType.SECONDARY_JOB_SITE).get()).stream().map(GlobalPos::b).collect(Collectors.toSet());
+            Set<BlockPosition> set = (Set) ((List) entityvillager.getBehaviorController().getMemory(MemoryModuleType.SECONDARY_JOB_SITE).get()).stream().map(GlobalPos::b).collect(Collectors.toSet());
             BlockPosition blockposition = new BlockPosition(entityvillager);
             Stream stream = ImmutableList.of(blockposition.down(), blockposition.south(), blockposition.north(), blockposition.east(), blockposition.west()).stream();
 
             set.getClass();
             List<BlockPosition> list = (List) stream.filter(set::contains).collect(Collectors.toList());
 
-            this.b = entityvillager.eq();
-            this.c = entityvillager.ep();
+            this.b = entityvillager.ep();
+            this.c = entityvillager.eo();
             List<BlockPosition> list1 = (List) list.stream().map(BlockPosition::up).filter((blockposition1) -> {
                 return this.a(worldserver.getType(blockposition1));
             }).collect(Collectors.toList());
@@ -61,15 +57,15 @@ public class BehaviorFarm extends Behavior<EntityVillager> {
 
     protected void a(WorldServer worldserver, EntityVillager entityvillager, long i) {
         if (i > this.d && this.a != null) {
-            entityvillager.getBehaviorController().a(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.a)));
-            entityvillager.getBehaviorController().a(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.a), 0.5F, 1)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.LOOK_TARGET, (Object) (new BehaviorTarget(this.a)));
+            entityvillager.getBehaviorController().setMemory(MemoryModuleType.WALK_TARGET, (Object) (new MemoryTarget(new BehaviorTarget(this.a), 0.5F, 1)));
         }
 
     }
 
     protected void f(WorldServer worldserver, EntityVillager entityvillager, long i) {
-        entityvillager.getBehaviorController().b(MemoryModuleType.LOOK_TARGET);
-        entityvillager.getBehaviorController().b(MemoryModuleType.WALK_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.LOOK_TARGET);
+        entityvillager.getBehaviorController().removeMemory(MemoryModuleType.WALK_TARGET);
         this.e = 0;
         this.d = i + 40L;
     }
